@@ -22,6 +22,9 @@ You will need the following things properly installed on your computer.
 * `cd watchtower-ui`
 * `yarn install`
 
+Use `yarn web` to launch ui/web workspace app.
+Use `yarn desktop` to launch ui/desktop workspace app.
+
 ## Contributing
 
 ### Branching
