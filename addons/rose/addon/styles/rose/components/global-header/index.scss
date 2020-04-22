@@ -1,0 +1,16 @@
+%global-header {
+  color: var(--white);
+  background: #191A1C linear-gradient(90deg, #191A1C 0%, #1B212D 100%);
+
+  %global-header-logo {
+    margin: 0.5rem 1rem;
+  }
+}
+
+.global-header {
+  @extend %global-header;
+
+  .global-header-logo {
+    @extend %global-header-logo;
+  }
+}

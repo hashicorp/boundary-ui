@@ -1,0 +1,16 @@
+@import 'variables';
+@import 'components';
+
+html {
+  background-color: var(--subtle);
+  color: var(--stark);
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  padding: 1rem;
+}
