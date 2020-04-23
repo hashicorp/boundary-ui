@@ -51,7 +51,6 @@ List of available project commands.  `yarn run <command-name>`
 |---------------------|--------------------------------------------------------------------------------------------------------------------|
 | commit              | Replaces `git commit`, ensures checks pass before commit is allowed and normalizes commit messages across authors. |
 | compliance:licenses | Checks that all dependencies have OSS-compatible licenses.                                                         |
-| doc                 | Executes all doc-related commands.                                                                                 |
 | doc:toc             | Automatically generates a table of contents for the README file.                                                   |
 
 ## Contributing
