@@ -3,7 +3,7 @@ on: [push]
 jobs:
 
   compliance:
-    name: Dependency License Compliance
+    name: License Compliance
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,7 +14,7 @@ jobs:
       - run: yarn run compliance:licenses
 
   audit:
-    name: Dependency Security Audit
+    name: Security Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
