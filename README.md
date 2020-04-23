@@ -93,7 +93,7 @@ confidence about the state of the project.
 ### Building ToC
 
 To autogenerate a ToC (table of contents) for this README,
-run `npm run build:toc`.  Please update the ToC whenever editing the structure
+run `yarn doc:toc`.  Please update the ToC whenever editing the structure
 of README.
 
 ### Committing
@@ -101,7 +101,7 @@ of README.
 Instead of the default `git commit`, we prescribe a custom command that ensures
 linting and other checks pass before a commit may be completed.  It also ensures
 that all contributors author consistent commit messages.  To get started with a
-commit, stage your files as usual.  Then run `yarn run commit` and follow the
+commit, stage your files as usual.  Then run `yarn commit` and follow the
 on-screen instructions to author your message.
 
 #### License Checking
