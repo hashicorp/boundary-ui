@@ -93,7 +93,7 @@ confidence about the state of the project.
 ### Building ToC
 
 To autogenerate a ToC (table of contents) for this README,
-run `npm run build:toc`.  Please update the ToC whenever editing the structure
+run `npm run doc:toc`.  Please update the ToC whenever editing the structure
 of README.
 
 ### Committing
