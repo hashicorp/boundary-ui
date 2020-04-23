@@ -13,6 +13,7 @@ subproject, e.g. running or testing.
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
 - [Contributing](#contributing)
   - [Branching](#branching)
   - [Building ToC](#building-toc)
@@ -39,6 +40,16 @@ You will need the following things properly installed on your computer.
 * `git clone <repository-url>` this repository
 * `cd watchtower-ui`
 * `yarn install`
+
+## Yarn Commands
+
+List of available project commands.  `yarn run <command-name>`
+
+| Command             | Description                                                                                                        |
+|---------------------|--------------------------------------------------------------------------------------------------------------------|
+| commit              | Replaces `git commit`, ensures checks pass before commit is allowed and normalizes commit messages across authors. |
+| compliance:licenses | Checks that all dependencies have OSS-compatible licenses.                                                         |
+| build:toc           | Automatically generates a ToC for the README file.                                                                 |
 
 ## Contributing
 
