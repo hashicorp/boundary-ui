@@ -3,6 +3,23 @@
 This monorepo contains multiple projects, including UIs and addons, used by
 Project Watchtower.
 
+This top-level repository provides limited common tasks, such as installation
+and commit assistance.  However, most tasks must be executed from within a
+subproject, e.g. running or testing.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Contributing](#contributing)
+  - [Branching](#branching)
+  - [Building ToC](#building-toc)
+  - [Committing](#committing)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Prerequisites
 
 You will need the following things properly installed on your computer.
@@ -58,6 +75,12 @@ of Gitflow is that it's easy to track the project's release history, since
 _every commit to `master` is a release by definition_.  The well-defined nature
 of releases assists in cross-team collaboration, ensuring everyone has
 confidence about the state of the project.
+
+### Building ToC
+
+To autogenerate a ToC (table of contents) for this README,
+run `npm run build:toc`.  Please update the ToC whenever editing the structure
+of README.
 
 ### Committing
 

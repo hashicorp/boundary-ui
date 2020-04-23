@@ -8,10 +8,12 @@
     "ui/*"
   ],
   "scripts": {
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "build:toc": "doctoc README.md"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.1.0",
+    "doctoc": "^1.4.0",
     "git-cz": "^4.3.1"
   },
   "config": {
