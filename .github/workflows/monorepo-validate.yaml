@@ -1,0 +1,25 @@
+name: Validate Monorepo
+on: [push]
+jobs:
+
+  compliance:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: yarn install
+      - run: yarn run compliance:licenses
+
+  audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: yarn install
+      - run: yarn audit
