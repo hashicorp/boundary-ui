@@ -1,5 +1,7 @@
 # Project Watchtower UI Monorepo
 
+![Validate Monorepo](https://github.com/hashicorp/watchtower-ui/workflows/Validate%20Monorepo/badge.svg)
+
 This monorepo contains multiple projects, including UIs and addons, used by
 Project Watchtower.
 
