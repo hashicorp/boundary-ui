@@ -17,6 +17,7 @@ subproject, e.g. running or testing.
   - [Branching](#branching)
   - [Building ToC](#building-toc)
   - [Committing](#committing)
+    - [License Checking](#license-checking)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -89,6 +90,15 @@ linting and other checks pass before a commit may be completed.  It also ensures
 that all contributors author consistent commit messages.  To get started with a
 commit, stage your files as usual.  Then run `yarn run commit` and follow the
 on-screen instructions to author your message.
+
+#### License Checking
+
+The licenses of dependencies are checking against a whitelist before every
+commit.  This helps catch undesirable licenses sooner (e.g. GPL).  If your
+commit fails due to an non-whitelisted license, you may add it to the whitelist
+in `package.json` _as long as it is not a GPL variant or UNLICENSED_.
+The change will be verified upon PR.  GPL variants and UNLICENSED dependencies
+will not be accepted.
 
 [nvie-git]: https://nvie.com/posts/a-successful-git-branching-model/
 [github-flow]: https://guides.github.com/introduction/flow/
