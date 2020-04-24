@@ -7,6 +7,7 @@ Project Watchtower UIs.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Add Styles to an App](#add-styles-to-an-app)
 - [Installation](#installation)
 - [Yarn Commands](#yarn-commands)
 - [Linting](#linting)
@@ -16,6 +17,12 @@ Project Watchtower UIs.
   - [Building ToC](#building-toc)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Add Styles to an App
+
+Add this addon to an Ember application's `devDependencies` as:
+`"rose": "*"`, for applications included in this monorepo.  Application's
+may then import rose styles by adding `@import 'rose';` to their stylesheets.
 
 ## Installation
 
