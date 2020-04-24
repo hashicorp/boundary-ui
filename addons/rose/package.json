@@ -12,7 +12,8 @@
     "lint:js": "eslint .",
     "start": "ember serve",
     "test": "ember test",
-    "test:all": "ember try:each"
+    "test:all": "ember try:each",
+    "doc:toc": "doctoc README.md"
   },
   "dependencies": {
     "ember-cli-babel": "^7.17.2",
@@ -24,6 +25,7 @@
     "@glimmer/tracking": "^1.0.0",
     "babel-eslint": "^10.0.3",
     "broccoli-asset-rev": "^3.0.0",
+    "doctoc": "^1.4.0",
     "ember-auto-import": "^1.5.3",
     "ember-cli": "~3.16.1",
     "ember-cli-dependency-checker": "^3.2.0",

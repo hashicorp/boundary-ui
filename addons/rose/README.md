@@ -3,6 +3,20 @@
 This addon contains common styles and components shared by
 Project Watchtower UIs.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
+- [Linting](#linting)
+- [Running tests](#running-tests)
+- [Running the dummy application](#running-the-dummy-application)
+- [Contributing](#contributing)
+  - [Building ToC](#building-toc)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Installation
 
 See monorepo README for installation instructions.
@@ -21,6 +35,9 @@ List of available project commands.  `yarn run <command-name>`
 | start | Runs the dummy app local server. |
 | test | Runs all tests. |
 | test:all | Runs tests across multiple Ember versions with ember-try. |
+| doc:toc | Automatically generates a table of contents for this README file. |
+
+Additional commands in the monorepo package may affect this projects.
 
 ## Linting
 
@@ -38,3 +55,13 @@ List of available project commands.  `yarn run <command-name>`
 
 * `yarn start`
 * Visit the dummy application at [http://localhost:4200](http://localhost:4200).
+
+## Contributing
+
+See monorepo README for more contribution instructions.
+
+### Building ToC
+
+To autogenerate a ToC (table of contents) for this README,
+run `yarn doc:toc`.  Please update the ToC whenever editing the structure
+of README.
