@@ -18,7 +18,6 @@
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "format:sass": "prettier --write {addon,app}/**/*.scss",
     "start": "ember serve",
-    "pretest": "yarn lint",
     "test": "ember test",
     "test:all": "ember try:each",
     "doc:toc": "doctoc README.md"
