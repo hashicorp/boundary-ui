@@ -19,6 +19,8 @@ libpeerconnection.log
 npm-debug.log*
 testem.log
 yarn-error.log
+storybook-static
+**/.storybook/*.html
 
 # ember-try
 .node_modules.ember-try

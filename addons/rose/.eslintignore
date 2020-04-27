@@ -5,12 +5,14 @@
 # compiled output
 /dist/
 /tmp/
+/storybook-static/
 
 # dependencies
 /bower_components/
 /node_modules/
 
 # misc
+main.js
 /coverage/
 !.*
 

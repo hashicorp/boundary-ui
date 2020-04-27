@@ -20,9 +20,13 @@
     "start": "ember serve",
     "test": "ember test",
     "test:all": "ember try:each",
+    "prestorybook": "yarn build && yarn storybook:build",
+    "storybook": "start-storybook -p 6006 -s dist",
+    "storybook:build": "build-storybook -s dist",
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "babel-loader": "^8.1.0",
     "ember-cli-babel": "^7.17.2",
     "ember-cli-htmlbars": "^4.2.2"
   },
@@ -30,6 +34,12 @@
     "@ember/optional-features": "^1.3.0",
     "@glimmer/component": "^1.0.0",
     "@glimmer/tracking": "^1.0.0",
+    "@storybook/addon-actions": "^5.3.18",
+    "@storybook/addon-knobs": "^5.3.18",
+    "@storybook/addon-links": "^5.3.18",
+    "@storybook/addon-storysource": "^5.3.18",
+    "@storybook/ember": "^5.3.18",
+    "@storybook/ember-cli-storybook": "^0.2.1",
     "babel-eslint": "^10.0.3",
     "broccoli-asset-rev": "^3.0.0",
     "doctoc": "^1.4.0",
