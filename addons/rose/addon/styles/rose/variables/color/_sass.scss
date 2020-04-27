@@ -1,4 +1,4 @@
-@use "sass:map";
+@use 'sass:map';
 
 /**
  * SASS variables defining colors.  These should not be consumed
@@ -19,12 +19,16 @@ $colors: (
   blue: #1563ff,
   red: #c73445,
   black: rgb(0, 0, 0),
-  white: rgb(255, 255, 255)
+  white: rgb(255, 255, 255),
 ) !default;
 
 $color-values: (
-  white: (500: map.get($colors, white)),
-  black: (500: map.get($colors, black)),
+  white: (
+    500: map.get($colors, white),
+  ),
+  black: (
+    500: map.get($colors, black),
+  ),
   ui-gray: (
     010: #fbfbfc,
     050: #f7f8fa,
@@ -34,30 +38,30 @@ $color-values: (
     500: map.get($colors, ui-gray),
     600: #626873,
     800: #373a42,
-    900: #1f2124
+    900: #1f2124,
   ),
   ui-cool-gray: (
     500: map.get($colors, ui-cool-gray),
     800: #1d2126,
-    900: #060708
+    900: #060708,
   ),
   green: (
     010: #fafdfa,
     100: #c6e9c9,
     500: map.get($colors, green),
-    800: #15501a
+    800: #15501a,
   ),
   yellow: (
     010: #fffdf6,
     100: #fdeeba,
     500: map.get($colors, yellow),
-    800: #725a01
+    800: #725a01,
   ),
   orange: (
     010: #fffcfa,
     100: #fde0c8,
     500: map.get($colors, orange),
-    800: #724119
+    800: #724119,
   ),
   blue: (
     010: #fbfcff,
@@ -69,14 +73,14 @@ $color-values: (
     600: #0f4fd1,
     700: #0e40a3,
     800: #0a2d74,
-    900: #061b46
+    900: #061b46,
   ),
   red: (
     010: #fdfafb,
     100: #efc7cc,
     500: map.get($colors, red),
-    800: #5b1820
-  )
+    800: #5b1820,
+  ),
 ) !default;
 
 // tokens: brand
@@ -90,7 +94,7 @@ $brand: (
   gray-4: #7f7f86,
   gray-3: #4c4c53,
   gray-2: #323339,
-  gray-1: #1d1e23
+  gray-1: #1d1e23,
 ) !default;
 
 // functions to simplify color lookups

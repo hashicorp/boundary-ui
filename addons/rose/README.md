@@ -39,6 +39,10 @@ List of available project commands.  `yarn run <command-name>`
 | lint | Runs all lint commands. |
 | lint:hbs | Lints template `hbs` files. |
 | lint:js | Lints `js` files. |
+| lint:sass | Lints `scss` files. |
+| format | Runs all auto-formatters. |
+| format:js | Auto-formats `js` files using Prettier. |
+| format:sass | Auto-formats `scss` files using Prettier. |
 | start | Runs the dummy app local server. |
 | test | Runs all tests. |
 | test:all | Runs tests across multiple Ember versions with ember-try. |
@@ -51,6 +55,13 @@ Additional commands in the monorepo package may affect this projects.
 * `yarn lint:hbs`
 * `yarn lint:js`
 * `yarn lint:js --fix`
+
+## Formatting
+
+Before submitting your work, be sure to run auto-formatters
+(see commands above).  This helps to ensure consistency among authors.
+
+* `yarn format`
 
 ## Running tests
 

@@ -14,6 +14,9 @@
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "lint:sass": "sass-lint -v -q",
+    "format": "npm run format:js && npm run format:sass",
+    "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
+    "format:sass": "prettier --write {addon,app}/**/*.scss",
     "start": "ember serve",
     "pretest": "yarn lint",
     "test": "ember test",
@@ -52,6 +55,7 @@
     "eslint-plugin-ember": "^7.7.2",
     "eslint-plugin-node": "^11.0.0",
     "loader.js": "^4.7.0",
+    "prettier": "^2.0.5",
     "qunit-dom": "^1.0.0",
     "sass": "^1.26.5",
     "sass-lint": "^1.13.1"

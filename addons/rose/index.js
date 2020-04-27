@@ -22,8 +22,8 @@ module.exports = {
     const styleTree = mergeTrees([
       new Funnel(stylePath, {
         destDir: this.name,
-        include: ['**/*']
-      })
+        include: ['**/*'],
+      }),
     ]);
 
     // Setup default sassOptions on the running application
@@ -33,6 +33,5 @@ module.exports = {
 
     // Include the addon styles
     app.options.sassOptions.includePaths.push(styleTree);
-  }
-
+  },
 };
