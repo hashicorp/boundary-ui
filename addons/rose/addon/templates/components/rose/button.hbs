@@ -1,0 +1,8 @@
+<button
+  ...attributes
+  type={{if @submit "submit" "button"}}
+  disabled={{if @disabled "disabled"}}
+  class={{if  @style (concat "rose-button-" @style)}}
+  >
+  {{yield}}
+</button>

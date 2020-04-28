@@ -31,10 +31,14 @@ You will need the following things properly installed on your computer.
 * [Git][git]
 * [Node.js][node]
 * [Yarn][yarn] installed globally
+* [Google Chrome][chrome]
+* [Firefox][firefox]
 
 [git]: https://git-scm.com/
 [node]: https://nodejs.org/
 [yarn]: https://classic.yarnpkg.com/lang/en/
+[chrome]: https://google.com/chrome/
+[firefox]: https://firefox.com/
 [yarn-workspaces]: https://classic.yarnpkg.com/en/docs/workspaces/
 
 ## Installation

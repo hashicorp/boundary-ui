@@ -1,0 +1,56 @@
+@use '../utilities/button';
+
+@include button.button-style(
+  'primary',
+  (
+    color: var(--white),
+    background-color: var(--info),
+    border-color: var(--info-starker-2),
+    box-shadow: 0px 4px 4px rgba(var(--stark-components), var(--opacity-2)),
+    text-shadow: 0px 1px 1px rgba(var(--black-components), var(--opacity-2)),
+  ),
+  (
+    background-color: var(--info-subtler-1),
+    box-shadow: (
+      0px 4px 4px rgba(var(--stark-components), var(--opacity-3)),
+      0px 4px 8px rgba(var(--stark-components), var(--opacity-4)),
+    ),
+  ),
+  (
+    background-color: var(--info-starker-1),
+    box-shadow: none,
+  ),
+  (
+    opacity: var(--opacity-1),
+    box-shadow: none,
+  )
+);
+
+@include button.button-style(
+  'secondary',
+  (
+    color: var(--ui-gray-starker-3),
+    background-color: var(--ui-gray-subtler-5),
+    border-color: var(--ui-gray-subtler-2),
+    box-shadow: 0px 4px 4px rgba(var(--stark-components), var(--opacity-2)),
+  ),
+  (
+    color: var(--ui-gray-starker-4),
+    background-color: var(--subtle),
+    border-color: var(--ui-gray-starker-1),
+    box-shadow: (
+      0px 4px 4px rgba(var(--stark-components), var(--opacity-3)),
+      0px 4px 8px rgba(var(--stark-components), var(--opacity-4)),
+    ),
+  ),
+  (
+    color: var(--ui-gray-starker-4),
+    background-color: var(--ui-gray-subtler-3),
+    border-color: var(--ui-gray-starker-1),
+    box-shadow: none,
+  ),
+  (
+    opacity: var(--opacity-1),
+    box-shadow: none,
+  )
+);
