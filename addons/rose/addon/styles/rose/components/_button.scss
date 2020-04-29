@@ -89,3 +89,21 @@
     box-shadow: none,
   )
 );
+
+@include button.button-style(
+  'ghost',
+  (
+    color: var(--info),
+    border-color: transparent,
+    background-color: var(--subtle)
+  ),
+  (
+    background-color: var(--ui-gray-subtler-5),
+  ),
+  (
+    background-color: var(--ui-gray-subtler-4),
+  ),
+  (
+    opacity: var(--opacity-1),
+  )
+);
