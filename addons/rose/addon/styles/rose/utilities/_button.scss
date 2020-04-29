@@ -68,6 +68,9 @@
     @if $disabled {
       &:disabled {
         cursor: not-allowed;
+        @if map.get($disabled, 'border-color') {
+          border-color: map.get($disabled, 'border-color');
+        }
         @if map.get($disabled, 'opacity') {
           opacity: map.get($disabled, 'opacity');
         }
