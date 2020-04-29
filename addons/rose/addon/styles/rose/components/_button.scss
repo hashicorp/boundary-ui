@@ -54,3 +54,38 @@
     box-shadow: none,
   )
 );
+
+@include button.button-style(
+  'warning',
+  (
+    color: var(--failure),
+    background-color: var(--subtle),
+    border-color: var(--failure),
+    box-shadow: 0px 4px 4px rgba(var(--stark-components), var(--opacity-2)),
+  ),
+  (
+    color: var(--white),
+    border-color: var(--failure-starker-1),
+    background-color: var(--failure),
+    box-shadow: (
+      0px 4px 4px rgba(var(--stark-components), var(--opacity-3)),
+      0px 4px 8px rgba(var(--stark-components), var(--opacity-4)),
+    ),
+    text-shadow: 0px 1px 1px rgba(var(--black-components), var(--opacity-2)),
+  ),
+  (
+    color: var(--white),
+    border-color: var(--ui-gray-starker-2),
+    background-color: var(--failure-starker-1),
+    box-shadow: (
+      0px 4px 4px rgba(var(--stark-components), var(--opacity-3)),
+      0px 4px 8px rgba(var(--stark-components), var(--opacity-4)),
+    ),
+    text-shadow: 0px 1px 1px rgba(var(--black-components), var(--opacity-2)),
+  ),
+  (
+    border-color: var(--ui-gray-subtler-2),
+    opacity: var(--opacity-1),
+    box-shadow: none,
+  )
+);
