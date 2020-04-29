@@ -107,3 +107,30 @@
     opacity: var(--opacity-1),
   )
 );
+
+.rose-button-inline-link-action {
+  color: var(--info);
+  border: 0;
+  background: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  display: inline;
+  font-size: 1rem;
+  font-weight: 600;
+
+  &:not(:disabled) {
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active {
+      color: var(--info-starker-1);
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--opacity-1);
+  }
+
+}

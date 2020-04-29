@@ -28,6 +28,7 @@ export const Normal = () => ({
         secondary: 'secondary',
         warning: 'warning',
         ghost: 'ghost',
+        'inline-link-action': 'inline-link-action',
       },
       'primary'
     ),
