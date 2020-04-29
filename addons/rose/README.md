@@ -11,6 +11,8 @@ Project Watchtower UIs.
 - [Installation](#installation)
 - [Yarn Commands](#yarn-commands)
 - [Linting](#linting)
+- [Formatting](#formatting)
+- [Building Components](#building-components)
 - [Running tests](#running-tests)
 - [Running the dummy application](#running-the-dummy-application)
 - [Contributing](#contributing)
@@ -44,6 +46,7 @@ List of available project commands.  `yarn run <command-name>`
 | format:js | Auto-formats `js` files using Prettier. |
 | format:sass | Auto-formats `scss` files using Prettier. |
 | start | Runs the dummy app local server. |
+| storybook | Runs the Storybook local server on port 6006.  Be sure to start the standard server (see above) in a separate terminal. |
 | test | Runs all tests. |
 | test:all | Runs tests across multiple Ember versions with ember-try. |
 | doc:toc | Automatically generates a table of contents for this README file. |
@@ -62,6 +65,13 @@ Before submitting your work, be sure to run auto-formatters
 (see commands above).  This helps to ensure consistency among authors.
 
 * `yarn format`
+
+## Building Components
+
+To build a new component, start by generating it on the command line with
+`ember g component rose/component-name`.  Then manually add a Storybook story in
+`stories/component-name.stories.js`.  Use the Storybook UI during component
+development (see Yarn commands).
 
 ## Running tests
 
