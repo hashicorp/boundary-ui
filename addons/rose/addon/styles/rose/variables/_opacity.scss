@@ -5,6 +5,7 @@
 
 // Light Mode
 :root {
+  --opacity-5: 0.025;
   --opacity-4: 0.05;
   --opacity-3: 0.1;
   --opacity-2: 0.25;
@@ -16,6 +17,7 @@
 // light mode.
 @media (prefers-color-scheme: dark) {
   :root {
+    --opacity-5: 0.025;
     --opacity-4: 0.025;
     --opacity-3: 0.05;
     --opacity-2: 0.125;

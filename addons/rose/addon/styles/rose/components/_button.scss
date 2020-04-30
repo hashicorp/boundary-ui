@@ -95,7 +95,7 @@
   (
     color: var(--info),
     border-color: transparent,
-    background-color: var(--subtle)
+    background-color: var(--subtle),
   ),
   (
     background-color: var(--ui-gray-subtler-5),
@@ -132,5 +132,4 @@
     cursor: not-allowed;
     opacity: var(--opacity-1);
   }
-
 }

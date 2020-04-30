@@ -79,12 +79,6 @@
 // Dark Mode
 @media (prefers-color-scheme: dark) {
   :root {
-    // opacities
-    --opacity-4: 0.025;
-    --opacity-3: 0.05;
-    --opacity-2: 0.15;
-    --opacity-1: 0.35;
-
     // poles
     --subtle: #{color(ui-cool-gray, 800)};
     --stark: var(--white);
