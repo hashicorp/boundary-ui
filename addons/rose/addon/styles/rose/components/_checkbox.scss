@@ -1,0 +1,26 @@
+@use '../utilities/checkbox';
+
+@include checkbox.checkbox-style(
+  'default',
+  (
+    color: var(--stark),
+    border-color: var(--ui-border),
+    background-color: var(--subtle),
+  ),
+  (
+    border-color: var(--ui-gray),
+  ),
+  (
+    border-color: var(--info),
+  ),
+  (
+    border-color: var(--failure),
+  ),
+  (
+    border-color: var(--info),
+  ),
+  (
+    border-color: var(--ui-border),
+    background-color: var(--ui-gray-subtler-4),
+  )
+);
