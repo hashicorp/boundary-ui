@@ -9,22 +9,8 @@ export const Colors = () => ({
     <style type="text/css">
       body {
         padding: 2rem;
-        font-family: sans-serif;
-        line-height: 1.5rem;
         color: var(--stark);
         background-color: var(--subtle);
-      }
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-      }
-      h2 {
-        font-size: 1.5rem;
-        margin: 1rem 0;
-      }
-      h3 {
-        font-size: 0.85rem;
-        margin: 0.5rem 0;
       }
       p {
         max-width: 725px;
@@ -33,7 +19,6 @@ export const Colors = () => ({
       code {
         display: block;
         font-size: 0.55rem;
-        font-family: "Andale Mono", monospace;
         max-width: 100%;
         overflow-x: scroll;
         color: var(--ui-gray);
@@ -266,4 +251,188 @@ export const Colors = () => ({
       ],
     },
   },
+});
+
+export const Sizing = () => ({
+  template: hbs`
+    <style type="text/css">
+      body {
+        padding: 2rem;
+        color: var(--stark);
+        background-color: var(--subtle);
+      }
+      p {
+        max-width: 725px;
+        margin-bottom: 2rem;
+      }
+      pre {
+        color: #333;
+        background-color: #EEE;
+        padding: 1rem;
+        margin-bottom: 2rem;
+      }
+      thead {
+        font-weight: bold;
+      }
+      tr {
+        border-bottom: 1px solid #EEE;
+      }
+      th,
+      td {
+        padding: 0.5rem 3rem 0.5rem 0.25rem;
+        text-align: left;
+      }
+      .number-col {
+        text-align: right;
+      }
+    </style>
+    <section>
+      <h1>Sizing</h1>
+      <p>
+        Use sizing function for things like margins,
+        padding, and borders.  Sizes are returned in rem units rather than
+        pixels, but have been calibrated with pixel equivalents in mind.
+      </p>
+      <p>
+        To use the rems sizing function, first import the sizing module,
+        then use it in your code wherever you normally specify a size:
+      </p>
+<pre>
+@import "variables/sizing";
+border: sizing.rems(xxxxs) solid;</pre>
+      <table>
+        <thead>
+          <tr>
+            <th scope="column">Name</th>
+            <th scope="column" class="number-col">PX Equiv.</th>
+            <th scope="column">SCSS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each sizes as |size|}}
+            <tr>
+              <th scope="row">
+                <code>{{size.code}}</code>
+              </th>
+              <td class="number-col">{{size.pixels}}</td>
+              <td>
+                <code>sizing.rems({{size.code}})</code>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+  `,
+  context: {
+    sizes: [
+      {code: 'xxl', pixels: 48},
+      {code: 'xl', pixels: 36},
+      {code: 'l', pixels: 24},
+      {code: 'm', pixels: 16, isBase: true},
+      {code: 's', pixels: 12},
+      {code: 'xs', pixels: 8},
+      {code: 'off-xs', pixels: 5},
+      {code: 'xxs', pixels: 4},
+      {code: 'xxxs', pixels: 2},
+      {code: 'xxxxs', pixels: 1},
+    ]
+  }
+});
+
+export const Typography = () => ({
+  template: hbs`
+    <style type="text/css">
+      body {
+        padding: 2rem;
+        color: var(--stark);
+        background-color: var(--subtle);
+      }
+      p {
+        max-width: 725px;
+        margin-bottom: 2rem;
+      }
+      pre {
+        color: #333;
+        background-color: #EEE;
+        padding: 1rem;
+        margin-bottom: 2rem;
+      }
+      thead {
+        font-weight: bold;
+      }
+      tr {
+        border-bottom: 1px solid #EEE;
+      }
+      th,
+      td {
+        padding: 0.5rem 3rem 0.5rem 0.25rem;
+        text-align: left;
+      }
+      .number-col {
+        text-align: right;
+      }
+      hr {
+        margin: 1rem;
+        border: 0.25px solid #DDD;
+        background: none;
+      }
+    </style>
+    <section>
+      <h1>Typography</h1>
+      <p>
+        Paragraphs and headings are preconfigured for typography and margin.
+      </p>
+      <p>
+        To specify custom typography, use the SCSS variables and mixin.
+        The <code>type</code> mixin accepts two parameters:  a font size name
+        (required) and an optional font weight name (normal, semibold, bold).
+        This mixin sets both font size and line height, and optionally weight.
+      </p>
+<pre>
+@import "utilities/type";
+.my-component {
+  @include type.type(m, bold);
+}</pre>
+      <table>
+        <thead>
+          <tr>
+            <th scope="column">Name</th>
+            <th scope="column" class="number-col">Font Size</th>
+            <th scope="column">SCSS</th>
+            <th scope="column">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each sizes as |size|}}
+            <tr>
+              <th scope="row">
+                <code>{{size.code}}</code>
+              </th>
+              <td class="number-col">{{size.pixels}}</td>
+              <td>
+                <code>@include type.type({{size.code}});</code>
+              </td>
+              <td>
+                {{size.note}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+  `,
+  context: {
+    sizes: [
+      {code: 'xl', pixels: 28},
+      {code: 'l', pixels: 20},
+      {code: 'm', pixels: 16},
+      {code: 's', pixels: 14},
+      {code: 'xs', pixels: 12},
+      {code: 'h1', pixels: 28, note: 'Same as xl, but different line height.'},
+      {code: 'h2', pixels: 20, note: 'Same as l, but different line height.'},
+      {code: 'h3', pixels: 16, note: 'Same as m, but different line height.'},
+      {code: 'button', pixels: 13}
+    ]
+  }
 });

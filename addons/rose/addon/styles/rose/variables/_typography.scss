@@ -1,0 +1,89 @@
+@use 'sass:map';
+@use 'sizing';
+
+/**
+ * SASS variables defining typography.
+ */
+
+$family-primary:
+  system-ui,
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  'Roboto',
+  'Oxygen',
+  'Ubuntu',
+  'Cantarell',
+  'Fira Sans',
+  'Droid Sans',
+  'Helvetica Neue',
+  sans-serif;
+
+$family-monospace:
+  'SFMono-Regular',
+  Consolas,
+  'Liberation Mono',
+  Menlo,
+  Courier,
+  monospace;
+
+// Available font weights by name
+$font-weights: (
+  normal: 400,
+  semibold: 600,
+  bold: 700
+);
+
+// unitless value to start, but think pixels or points
+$base-font-size: 16;
+
+// Font sizes don't quite match up with the size scale, so they're recalculated.
+$font-sizes: (
+  xl: sizing.size(m) * 1.75,  // 28
+  l: sizing.size(m) * 1.25,   // 20
+  m: sizing.size(m),          // 16
+  s: sizing.size(m) * 0.875,  // 14
+  xs: sizing.size(m) * 0.75,  // 12
+
+  h1: sizing.size(m) * 1.75,  // 28
+  h2: sizing.size(m) * 1.25,  // 20
+  h3: sizing.size(m),         // 16
+
+  button: sizing.size(m) * 0.8125       // 13
+);
+
+// Line height expressed as ratio.
+$line-heights: (
+  xl: 36 / 28,
+  l: 24 / 20,
+  m: 20 / 16,
+  s: 18 / 14,
+  xs: 16 / 12,
+
+  h1: 48 / 28,
+  h2: 36 / 20,
+  h3: 24 / 16,
+
+  button: 24 / 13
+);
+
+/**
+ * Returns a named font size in rem units.
+ */
+@function font-size($name) {
+  @return map.get($font-sizes, $name) * 1rem;
+}
+
+/**
+ * Returns a named line height as a unitless value.
+ */
+@function line-height($name) {
+  @return map.get($line-heights, $name);
+}
+
+/**
+ * Returns a named font weight.
+ */
+@function font-weight($name) {
+  @return map.get($font-weights, $name);
+}
