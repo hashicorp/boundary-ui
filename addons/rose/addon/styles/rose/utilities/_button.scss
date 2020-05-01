@@ -1,14 +1,14 @@
 @use 'sass:map';
+@use 'type' as typography;
+@use '../variables/sizing';
 
 @mixin button {
+  @include typography.type(button, semibold);
   display: flex;
   flex-direction: row;
-  padding: 5px 24px;
-  line-height: 1.846; // targeting 24px
-  border-radius: 2px;
-  border: 1px solid;
-  font-size: 0.8125rem;
-  font-weight: 600;
+  padding: sizing.rems(off-xs) sizing.rems(l);
+  border-radius: sizing.rems(xxxs);
+  border: sizing.rems(xxxxs) solid;
 }
 
 @mixin button-style($name, $default, $hover: &, $active: &, $disabled: &) {

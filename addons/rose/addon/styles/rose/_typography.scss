@@ -1,0 +1,45 @@
+@use 'variables/typography';
+@use 'variables/sizing';
+@use 'utilities/type' as type-mixins;
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: typography.$family-primary;
+  // This is the only time we'll explicitly use pixels.  All other sizes are
+  // expressed in rem units.
+  font-size: typography.$base-font-size * 1px;
+  line-height: typography.line-height(m);
+}
+
+pre,
+code {
+  font-family: typography.$family-monospace;
+}
+
+h1,
+.h1 {
+  @include type-mixins.type(h1, bold);
+  margin-top: sizing.rems(m);
+  margin-bottom: sizing.rems(xs);
+}
+
+h2,
+.h2 {
+  @include type-mixins.type(h2, bold);
+  margin-top: sizing.rems(m);
+  margin-bottom: sizing.rems(xs);
+}
+
+h3,
+.h3 {
+  @include type-mixins.type(h3, bold);
+  margin-top: sizing.rems(m);
+  margin-bottom: sizing.rems(xs);
+}
+
+p {
+  margin-bottom: sizing.rems(m);
+}

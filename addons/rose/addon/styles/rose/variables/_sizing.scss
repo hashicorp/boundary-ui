@@ -1,0 +1,32 @@
+@use 'sass:map';
+
+/**
+ * SASS variables for size and scale.
+ */
+
+$size-coefficients: (
+  xxl:   3,      // 48
+  xl:    2.25,   // 36
+  l:     1.5,    // 24
+  m:     1,      // 16 - base
+  s:     0.75,   // 12
+  xs:    0.5,    //  8
+  off-xs:0.3125, //  5
+  xxs:   0.25,   //  4
+  xxxs:  0.125,  //  2
+  xxxxs: 0.0625  //  1
+);
+
+/**
+ * Returns a size coefficient.
+ */
+@function size($name) {
+  @return map.get($size-coefficients, $name);
+}
+
+/**
+ * Returns a value in rem units equal to the requested size.
+ */
+@function rems($name) {
+  @return size($name) * 1rem;
+}
