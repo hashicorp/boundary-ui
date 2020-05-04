@@ -1,5 +1,5 @@
 import { hbs } from 'ember-cli-htmlbars';
-import { text, boolean } from '@storybook/addon-knobs';
+import { text, boolean, select } from '@storybook/addon-knobs';
 
 export default {
   title: 'Rose::Form::Input',
@@ -8,6 +8,7 @@ export default {
 export const Normal = () => ({
   template: hbs`
     <Rose::Form::Input
+      @type={{type}}
       @value={{value}}
       @label={{label}}
       @helperText={{helperText}}
@@ -17,6 +18,16 @@ export const Normal = () => ({
       />
   `,
   context: {
+    type: select(
+      'type',
+      {
+        text: 'text',
+        email: 'email',
+        number: 'number',
+        password: 'password',
+      },
+      'text'
+    ),
     value: text('value', 'Value'),
     label: text('label', 'Label'),
     helperText: text('helperText', 'Helper text'),

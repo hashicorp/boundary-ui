@@ -2,10 +2,11 @@ import Component from '@ember/component';
 import layout from '../../../templates/components/rose/form/input';
 
 /**
- * A simple HTML `<button>` element.
+ * A simple HTML `<input>` element.
  *
  * @example
  *  <Rose::Form::Input
+ *    @type="text"
  *    @value="Text"
  *    @label="Label"
  *    @helperText="Helper text"
