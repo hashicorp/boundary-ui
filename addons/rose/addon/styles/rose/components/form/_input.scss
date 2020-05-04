@@ -7,14 +7,14 @@
   .rose-form-input-label {
     @include type.type(s, semibold);
     display: block;
-    padding-bottom: sizing.rems(xxs);
+    margin-bottom: sizing.rems(xxs);
   }
 
   .rose-form-input-helper-text {
     @include type.type(xs);
     display: block;
     color: var(--ui-gray);
-    padding-bottom: sizing.rems(xxs);
+    margin-bottom: sizing.rems(xxs);
   }
 
   .rose-form-input-field {
