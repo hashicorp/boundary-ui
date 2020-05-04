@@ -1,11 +1,12 @@
 import Component from '@ember/component';
-import layout from '../../../templates/components/rose/form/input';
+import layout from '../../../templates/components/rose/form/textarea';
 
 /**
- * A simple HTML `<input>` element.
+ * A `<textarea>` element essentially identical to `Rose::Form::Input` except
+ * for the field element.
  *
  * @example
- *  <Rose::Form::Input
+ *  <Rose::Form::Textarea
  *    @value="Text"
  *    @label="Label"
  *    @helperText="Helper text"
