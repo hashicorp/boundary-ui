@@ -38,6 +38,7 @@
     }
 
     &:disabled {
+      cursor: not-allowed;
       color: var(--ui-gray);
       background-color: var(--ui-gray-subtler-6);
     }
