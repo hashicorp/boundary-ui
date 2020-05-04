@@ -1,0 +1,64 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-form-input {
+  margin-bottom: sizing.rems(m);
+
+  .rose-form-input-label {
+    @include type.type(s, semibold);
+    display: block;
+    margin-bottom: sizing.rems(xxs);
+  }
+
+  .rose-form-input-helper-text {
+    @include type.type(xs);
+    display: block;
+    color: var(--ui-gray);
+    margin-bottom: sizing.rems(xxs);
+  }
+
+  .rose-form-input-field {
+    @include type.type(m);
+    padding: sizing.rems(xs);
+    color: var(--stark);
+    background-color: var(--subtle);
+    border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+    border-radius: sizing.rems(xxxs);
+    box-shadow: inset 0px 3px 1px
+      rgba(var(--stark-components), var(--opacity-4));
+
+    &:not(:disabled):not([readonly]) {
+      &:hover {
+        border-color: var(--ui-gray);
+      }
+
+      &:focus {
+        border-color: var(--info);
+      }
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: var(--ui-gray);
+      background-color: var(--ui-gray-subtler-6);
+    }
+
+    &[readonly] {
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
+
+  &.error {
+    color: var(--failure);
+
+    .rose-form-input-helper-text {
+      color: currentColor;
+    }
+
+    .rose-form-input-field {
+      color: var(--failure);
+      border-color: currentColor;
+    }
+  }
+}

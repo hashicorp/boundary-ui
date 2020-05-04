@@ -1,0 +1,19 @@
+<div class="rose-form-input{{if @error " error"}}">
+
+  <label class="rose-form-input-label">
+    {{@label}}
+  </label>
+
+  {{#if @helperText}}
+    <span class="rose-form-input-helper-text">{{@helperText}}</span>
+  {{/if}}
+
+  <Input
+    ...attributes
+    class="rose-form-input-field"
+    @type={{@type}}
+    @value={{@value}} />
+
+  {{yield}}
+
+</div>

@@ -326,18 +326,18 @@ border: sizing.rems(xxxxs) solid;</pre>
   `,
   context: {
     sizes: [
-      {code: 'xxl', pixels: 48},
-      {code: 'xl', pixels: 36},
-      {code: 'l', pixels: 24},
-      {code: 'm', pixels: 16, isBase: true},
-      {code: 's', pixels: 12},
-      {code: 'xs', pixels: 8},
-      {code: 'off-xs', pixels: 5},
-      {code: 'xxs', pixels: 4},
-      {code: 'xxxs', pixels: 2},
-      {code: 'xxxxs', pixels: 1},
-    ]
-  }
+      { code: 'xxl', pixels: 48 },
+      { code: 'xl', pixels: 36 },
+      { code: 'l', pixels: 24 },
+      { code: 'm', pixels: 16, isBase: true },
+      { code: 's', pixels: 12 },
+      { code: 'xs', pixels: 8 },
+      { code: 'off-xs', pixels: 5 },
+      { code: 'xxs', pixels: 4 },
+      { code: 'xxxs', pixels: 2 },
+      { code: 'xxxxs', pixels: 1 },
+    ],
+  },
 });
 
 export const Typography = () => ({
@@ -424,15 +424,19 @@ export const Typography = () => ({
   `,
   context: {
     sizes: [
-      {code: 'xl', pixels: 28},
-      {code: 'l', pixels: 20},
-      {code: 'm', pixels: 16},
-      {code: 's', pixels: 14},
-      {code: 'xs', pixels: 12},
-      {code: 'h1', pixels: 28, note: 'Same as xl, but different line height.'},
-      {code: 'h2', pixels: 20, note: 'Same as l, but different line height.'},
-      {code: 'h3', pixels: 16, note: 'Same as m, but different line height.'},
-      {code: 'button', pixels: 13}
-    ]
-  }
+      { code: 'xl', pixels: 28 },
+      { code: 'l', pixels: 20 },
+      { code: 'm', pixels: 16 },
+      { code: 's', pixels: 14 },
+      { code: 'xs', pixels: 12 },
+      {
+        code: 'h1',
+        pixels: 28,
+        note: 'Same as xl, but different line height.',
+      },
+      { code: 'h2', pixels: 20, note: 'Same as l, but different line height.' },
+      { code: 'h3', pixels: 16, note: 'Same as m, but different line height.' },
+      { code: 'button', pixels: 13 },
+    ],
+  },
 });
