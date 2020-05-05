@@ -7,7 +7,7 @@ export default {
 
 export const Normal = () => ({
   template: hbs`
-    <Rose::Icon @name={{name}} />
+    <Rose::Icon @name={{name}} @size={{size}} />
 
     <br>
 
@@ -24,6 +24,16 @@ export const Normal = () => ({
         'unfold-less': 'unfold-less',
       },
       'check-circle-outline'
+    ),
+
+    size: select(
+      'size',
+      {
+        'large (24px / default)': 'large',
+        'medium (16px)': 'medium',
+        'small (12px)': 'small',
+      },
+      'large'
     ),
   },
 });

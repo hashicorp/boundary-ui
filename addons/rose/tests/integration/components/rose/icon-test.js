@@ -10,4 +10,9 @@ module('Integration | Component | rose/icon', function (hooks) {
     await render(hbs`<Rose::Icon @name="unfold-more" />`);
     assert.ok(find('svg'));
   });
+
+  test('it supports optional @size', async function (assert) {
+    await render(hbs`<Rose::Icon @name="unfold-more" @size="small" />`);
+    assert.ok(find('.small'));
+  });
 });
