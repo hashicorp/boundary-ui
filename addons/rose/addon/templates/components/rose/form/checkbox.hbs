@@ -1,0 +1,16 @@
+<div class="rose-form-checkbox{{if @error " error"}}">
+
+  <Input
+    ...attributes
+    class="rose-form-checkbox-field"
+    id={{@id}}
+    @type="checkbox"
+    @checked={{if @checked true false}} />
+
+  <label class="rose-form-checkbox-label" for={{@id}}>
+    {{@label}}
+  </label>
+
+  {{yield}}
+
+</div>

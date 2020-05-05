@@ -1,0 +1,122 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-form-checkbox {
+  position: relative;
+  margin-bottom: sizing.rems(xs);
+  color: var(--ui-gray);
+
+  .rose-form-checkbox-label {
+    // label styles
+    @include type.type(s, semibold);
+    color: currentColor;
+    padding-left: sizing.rems(l);
+
+    // custom checkbox styles
+    &::before {
+      position: absolute;
+      top: sizing.rems(xxxs);
+      left: 0;
+      display: block;
+      width: sizing.rems(m);
+      height: sizing.rems(m);
+      pointer-events: none;
+      content: ' ';
+      border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+      border-radius: sizing.rems(xxxs);
+    }
+
+    &::after {
+      position: absolute;
+      top: -#{sizing.rems(xxxxs)};
+      left: -#{sizing.rems(xxxs) + sizing.rems(xxxxs)};
+      display: block;
+      width: sizing.rems(l);
+      height: sizing.rems(l);
+      transform: scale(0.9);
+      pointer-events: none;
+      content: ' ';
+      background: no-repeat 50%/50% 50%;
+    }
+  }
+
+  .rose-form-checkbox-field {
+    // mostly this just visually hides the native checkbox
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    width: sizing.rems(m);
+    height: sizing.rems(m);
+    opacity: 0;
+
+    // Visual states for custom checkbox.
+    // Yeah.  It's complicated.
+    &:not(:disabled) {
+      &:hover {
+        ~ .rose-form-checkbox-label {
+          &::before {
+            border-color: var(--ui-gray);
+          }
+        }
+      }
+
+      &:focus {
+        ~ .rose-form-checkbox-label {
+          &::before {
+            border-color: var(--info);
+          }
+        }
+      }
+
+      &:checked {
+        ~ .rose-form-checkbox-label {
+          &::before {
+            border-color: var(--info);
+          }
+          &::after {
+            background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 8 8'><path fill='%231563ff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
+          }
+        }
+      }
+    }
+
+    &:disabled {
+      ~ .rose-form-checkbox-label {
+        &::before {
+          border-color: var(--ui-gray-subtler-2);
+          background-color: var(--ui-gray-subtler-4);
+        }
+      }
+
+      &:checked {
+        ~ .rose-form-checkbox-label {
+          &::after {
+            background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 8 8'><path fill='%23bac1cc' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
+          }
+        }
+      }
+    }
+  }
+
+  &.error {
+    color: var(--failure);
+
+    .rose-form-checkbox-field {
+      &:not(:disabled):not(:focus) {
+        ~ .rose-form-checkbox-label {
+          &::before {
+            border-color: var(--failure);
+          }
+        }
+
+        &:checked {
+          ~ .rose-form-checkbox-label {
+            &::after {
+              background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 8 8'><path fill='%23c73445' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
+            }
+          }
+        }
+      }
+    }
+  }
+}
