@@ -1,0 +1,9 @@
+@use 'variables/sizing';
+
+.rose-icon {
+  > svg {
+    width: sizing.rems(l);
+    height: sizing.rems(l);
+    vertical-align: top;
+  }
+}
