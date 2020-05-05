@@ -1,5 +1,4 @@
-Dummy app index template
-
+<h2>Button</h2>
 <Rose::Button @style="primary">Primary</Rose::Button>
 <br>
 <Rose::Button @style="primary" @disabled={{true}}>Primary</Rose::Button>
@@ -10,7 +9,7 @@ Dummy app index template
 <Rose::Button @style="secondary" @disabled={{true}}>Secondary</Rose::Button>
 <br>
 
-
+<h2>Form</h2>
 <Rose::Form::Input
   @label="Label"
   @value="Read only"
@@ -61,5 +60,32 @@ Dummy app index template
   @label="Label"
   @helperText="Helper text"
   @value="Text"
+  disabled={{true}}
+  />
+
+<h2>Checkbox</h2>
+<Rose::Form::Checkbox
+  @id="checkbox-1"
+  @label="Label"
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-2"
+  @error={{true}}
+  @label="Error"
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-3"
+  @checked={{true}}
+  @label="Checked"
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-4"
+  @label="Disabled"
+  disabled={{true}}
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-5"
+  @checked={{true}}
+  @label="Disabled + Checked"
   disabled={{true}}
   />
