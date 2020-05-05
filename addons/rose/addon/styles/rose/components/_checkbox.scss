@@ -1,6 +1,12 @@
+@use '../variables/sizing';
 @use '../utilities/type' as typography;
 
+$checkbox-check-height: sizing.rems(xs) - sizing.rems(xxxs);
+$checkbox-check-size: sizing.rems(xxxxs) + (sizing.rems(xxxs) / 3);
+$checkbox-check-left-position: sizing.rems(xxs) - (sizing.rems(xxs) / 3);
+
 .rose-checkbox {
+  @include typography.type(m);
   color: var(--stark);
   background-color: var(--subtle);
 
@@ -11,23 +17,22 @@
     position: relative;
     padding: 0;
     margin: 0;
-    border: 1px solid var(--ui-border);
-    border-radius: 2px;
-    width: 16px;
-    height: 16px;
-    vertical-align: -1px;
+    border: sizing.rems(xxxxs) solid var(--ui-border);
+    border-radius: sizing.rems(xxxs);
+    width: 14px;
+    height: 14px;
     background-color: var(--subtle);
 
     &::before {
       content: '';
       position: absolute;
-      left: 4px;
-      top: 1px;
-      width: 3px;
-      height: 8px;
+      left: $checkbox-check-left-position;
+      width: sizing.rems(xxxs);
+      height: $checkbox-check-height;
       border: solid;
-      border-width: 0 2px 2px 0;
+      border-width: 0 $checkbox-check-size $checkbox-check-size 0;
       border-color: var(--info);
+      border-radius: sizing.rems(xxxxs);
       -webkit-transform: rotate(45deg);
       transform: rotate(45deg);
       visibility: hidden;
@@ -66,7 +71,6 @@
       border-color: var(--failure);
 
       &:focus {
-        outline: none;
         border-color: var(--info);
       }
 
