@@ -1,5 +1,4 @@
-Dummy app index template
-
+<h2>Button</h2>
 <Rose::Button @style="primary">Primary</Rose::Button>
 <br>
 <Rose::Button @style="primary" @disabled={{true}}>Primary</Rose::Button>
@@ -63,11 +62,9 @@ Dummy app index template
   disabled={{true}}
   />
 
-<h1>Checkbox</h1>
-<Rose::Checkbox></Rose::Checkbox>
-<Rose::Checkbox>Label</Rose::Checkbox>
+<h2>Checkbox</h2>
+<Rose::Checkbox @id="default">Label</Rose::Checkbox>
 <Rose::Checkbox @error={{true}}>Error</Rose::Checkbox>
 <Rose::Checkbox @checked={{true}}>Checked</Rose::Checkbox>
 <Rose::Checkbox @disabled={{true}}>Disabled</Rose::Checkbox>
 <Rose::Checkbox @disabled={{true}} @checked={{true}}>Disabled + Checked</Rose::Checkbox>
-<Rose::Checkbox @style="default">Default style</Rose::Checkbox>

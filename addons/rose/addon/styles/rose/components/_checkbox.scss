@@ -1,26 +1,78 @@
-@use '../utilities/checkbox';
+@use '../utilities/type' as typography;
 
-@include checkbox.checkbox-style(
-  'default',
-  (
-    color: var(--stark),
-    border-color: var(--ui-border),
-    background-color: var(--subtle),
-  ),
-  (
-    border-color: var(--ui-gray),
-  ),
-  (
-    border-color: var(--info),
-  ),
-  (
-    border-color: var(--failure),
-  ),
-  (
-    border-color: var(--info),
-  ),
-  (
-    border-color: var(--ui-border),
-    background-color: var(--ui-gray-subtler-4),
-  )
-);
+.rose-checkbox {
+  color: var(--stark);
+  background-color: var(--subtle);
+
+  .rose-checkbox-input {
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-block;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--ui-border);
+    border-radius: 2px;
+    width: 16px;
+    height: 16px;
+    vertical-align: -1px;
+    background-color: var(--subtle);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 3px;
+      height: 8px;
+      border: solid;
+      border-width: 0 2px 2px 0;
+      border-color: var(--info);
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+      visibility: hidden;
+    }
+
+    &:checked {
+      border-color: var(--info);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      border-color: var(--ui-border);
+      background-color: var(--ui-gray-subtler-4);
+
+      &::before {
+        border-color: var(--ui-border);
+      }
+    }
+
+    &:checked::before {
+      visibility: visible;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--info);
+    }
+
+    &:hover {
+      border-color: var(--ui-gray);
+    }
+  }
+
+  &.error {
+    .rose-checkbox-input {
+      border-color: var(--failure);
+
+      &:focus {
+        outline: none;
+        border-color: var(--info);
+      }
+
+      &:disabled {
+        border-color: var(--ui-border);
+      }
+    }
+  }
+}

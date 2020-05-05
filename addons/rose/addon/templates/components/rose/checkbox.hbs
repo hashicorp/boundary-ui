@@ -1,9 +1,15 @@
-<label class={{concat "rose-checkbox-" (if @style @style "default")}}>
-  <input type="checkbox"
+<div class="rose-checkbox{{if @error " error"}}">
+  <Input @type="checkbox"
+    id={{if @id (concat @id "-checkbox")}}
     ...attributes
-    checked={{if @checked "checked"}}
-    disabled={{if @disabled "disabled"}}
-    class="{{if @error "error"}}"
-  />
-  {{yield}}
-</label>
+    name={{@name}}
+    disabled={{@disabled}}
+    form={{@form}}
+    class="rose-checkbox-input"
+    value={{@value}}
+    @checked={{@checked}} />
+
+  <label class="rose-checkbox-label" for={{if @id (concat @id "-checkbox")}}>
+    {{yield}}
+  </label>
+</div>

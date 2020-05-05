@@ -9,7 +9,6 @@ module('Integration | Component | rose/checkbox', function (hooks) {
   test('it renders without label', async function (assert) {
     await render(hbs`<Rose::Checkbox />`);
     assert.equal(this.element.textContent.trim(), '');
-    assert.equal(this.element.querySelector('input').type, 'checkbox');
   });
 
   test('it renders a checkbox', async function (assert) {
@@ -22,6 +21,21 @@ module('Integration | Component | rose/checkbox', function (hooks) {
     assert.equal(this.element.textContent.trim(), 'Label');
   });
 
+  test('it renders in a div wrapper', async function (assert) {
+    await render(hbs`<Rose::Checkbox />`);
+    assert.ok(this.element.querySelector('div.rose-checkbox'));
+  });
+
+  test('it renders a checkbox class', async function (assert) {
+    await render(hbs`<Rose::Checkbox />`);
+    assert.ok(this.element.querySelector('input.rose-checkbox-input'));
+  });
+
+  test('it renders a label class', async function (assert) {
+    await render(hbs`<Rose::Checkbox />`);
+    assert.ok(this.element.querySelector('label.rose-checkbox-label'));
+  });
+
   test('it is not checked', async function (assert) {
     await render(hbs`<Rose::Checkbox />`);
     assert.equal(this.element.querySelector('input').checked, false);
@@ -32,11 +46,6 @@ module('Integration | Component | rose/checkbox', function (hooks) {
     assert.equal(this.element.querySelector('input').disabled, false);
   });
 
-  test('it renders with default style', async function (assert) {
-    await render(hbs`<Rose::Checkbox />`);
-    assert.equal(this.element.querySelector('label').className, 'rose-checkbox-default');
-  });
-
   test('it is checked when @checked={{true}}', async function (assert) {
     await render(hbs`<Rose::Checkbox @checked={{true}} />`);
     assert.equal(this.element.querySelector('input').checked, true);
@@ -44,7 +53,7 @@ module('Integration | Component | rose/checkbox', function (hooks) {
 
   test('it marks error when @error={{true}}', async function (assert) {
     await render(hbs`<Rose::Checkbox @error={{true}} />`);
-    assert.equal(this.element.querySelector('input').className, 'error');
+    assert.ok(this.element.querySelector('div.error'));
   });
 
   test('it is disabled when @disabled={{true}}', async function (assert) {
@@ -58,10 +67,5 @@ module('Integration | Component | rose/checkbox', function (hooks) {
     );
     assert.equal(this.element.querySelector('input').checked, true);
     assert.equal(this.element.querySelector('input').disabled, true);
-  });
-
-  test('it adds a style class when @style defines it', async function (assert) {
-    await render(hbs`<Rose::Checkbox @style="primary" />`);
-    assert.equal(this.element.querySelector('label').className, 'rose-checkbox-primary');
   });
 });

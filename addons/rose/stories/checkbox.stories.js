@@ -1,5 +1,5 @@
 import { hbs } from 'ember-cli-htmlbars';
-import { text, boolean, select } from '@storybook/addon-knobs';
+import { text, boolean } from '@storybook/addon-knobs';
 
 export default {
   title: 'Rose::Checkbox',
@@ -8,19 +8,23 @@ export default {
 export const Normal = () => ({
   template: hbs`
     <Rose::Checkbox
+      @id={{id}}
+      @name={{name}}
+      @form={{form}}
       @checked={{checked}}
       @disabled={{disabled}}
       @error={{error}}
-      @style={{style}}
       >
-      {{text}}
+      {{label}}
     </Rose::Checkbox>
   `,
   context: {
-    text: text('text', 'Checkbox 🛎'),
+    label: text('text', 'Checkbox 🛎'),
+    id: text('text', 'Identifier'),
+    name: text('text', 'name'),
+    form: text('text', 'form'),
     checked: boolean('checked', false),
     disabled: boolean('disabled', false),
-    error: boolean('error', false),
-    style: select('style', { default: 'default'}, 'default')
+    error: boolean('error', false)
   },
 });
