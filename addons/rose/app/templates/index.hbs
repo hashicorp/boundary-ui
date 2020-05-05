@@ -64,8 +64,28 @@
   />
 
 <h2>Checkbox</h2>
-<Rose::Checkbox @id="default">Label</Rose::Checkbox>
-<Rose::Checkbox @error={{true}}>Error</Rose::Checkbox>
-<Rose::Checkbox @checked={{true}}>Checked</Rose::Checkbox>
-<Rose::Checkbox @disabled={{true}}>Disabled</Rose::Checkbox>
-<Rose::Checkbox @disabled={{true}} @checked={{true}}>Disabled + Checked</Rose::Checkbox>
+<Rose::Form::Checkbox
+  @id="checkbox-1"
+  @label="Label"
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-2"
+  @error={{true}}
+  @label="Error"
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-3"
+  @checked={{true}}
+  @label="Checked"
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-4"
+  @label="Disabled"
+  disabled={{true}}
+  />
+<Rose::Form::Checkbox
+  @id="checkbox-5"
+  @checked={{true}}
+  @label="Disabled + Checked"
+  disabled={{true}}
+  />
