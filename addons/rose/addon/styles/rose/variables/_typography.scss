@@ -40,7 +40,8 @@ $font-sizes: (
   // 20
     h3: sizing.size(m),
   // 16
-    button: sizing.size(m) * 0.8125 // 13,,,,
+    button: sizing.size(m) * 0.8125,
+  // 13
 );
 
 // Line height expressed as ratio.
