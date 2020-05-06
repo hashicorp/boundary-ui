@@ -7,6 +7,7 @@ import layout from '../../../templates/components/rose/form/textarea';
  *
  * @example
  *  <Rose::Form::Textarea
+ *    @id="fieldId"
  *    @value="Text"
  *    @label="Label"
  *    @helperText="Helper text"
