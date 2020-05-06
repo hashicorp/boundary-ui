@@ -24,6 +24,16 @@
       text-shadow: map.get($default, 'text-shadow');
     }
 
+    > .rose-button-icon-left {
+      margin-left: -(sizing.rems(xs));
+      margin-right: sizing.rems(xxs);
+    }
+
+    > .rose-button-icon-right {
+      margin-left: sizing.rems(xxs);
+      margin-right: -(sizing.rems(xs));
+    }
+
     &:not(:disabled) {
       @if $hover {
         &:hover {

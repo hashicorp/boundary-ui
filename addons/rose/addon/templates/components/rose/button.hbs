@@ -4,5 +4,25 @@
   disabled={{if @disabled "disabled"}}
   class={{if  @style (concat "rose-button-" @style)}}
   >
-  {{yield}}
+
+  {{#if @iconLeft}}
+    <Rose::Icon
+      @name={{@iconLeft}}
+      @size="medium"
+      class="rose-button-icon-left"
+    />
+  {{/if}}
+
+  <span class="rose-button-body">
+    {{yield}}
+  </span>
+
+  {{#if @iconRight}}
+    <Rose::Icon
+      @name={{@iconRight}}
+      @size="medium"
+      class="rose-button-icon-right"
+    />
+  {{/if}}
+
 </button>

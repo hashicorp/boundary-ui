@@ -13,23 +13,30 @@ module('Integration | Component | rose/button', function (hooks) {
 
   test('it is type="button" by default', async function (assert) {
     await render(hbs`<Rose::Button>Button</Rose::Button>`);
-    assert.equal(await find('button').type, 'button');
+    assert.equal(find('button').type, 'button');
   });
 
   test('it is type="submit" when @submit={{true}}', async function (assert) {
     await render(hbs`<Rose::Button @submit={{true}} />`);
-    assert.equal(await find('button').type, 'submit');
+    assert.equal(find('button').type, 'submit');
   });
 
   test('it is disabled when @disabled={{true}}', async function (assert) {
     await render(hbs`<Rose::Button @disabled={{true}} />`);
-    assert.equal(await find('button').disabled, true);
+    assert.equal(find('button').disabled, true);
   });
 
   test('it adds a style class', async function (assert) {
     await render(hbs`<Rose::Button @style="primary" />`);
-    assert.ok(await find('button.rose-button-primary'));
+    assert.ok(find('.rose-button-primary'));
     await render(hbs`<Rose::Button @style="secondary" />`);
-    assert.ok(await find('button.rose-button-secondary'));
+    assert.ok(find('.rose-button-secondary'));
+  });
+
+  test('it supports left and right icons', async function (assert) {
+    await render(hbs`<Rose::Button @iconLeft="chevron-left" />`);
+    assert.ok(find('.rose-button-icon-left'));
+    await render(hbs`<Rose::Button @iconRight="chevron-left" />`);
+    assert.ok(find('.rose-button-icon-right'));
   });
 });
