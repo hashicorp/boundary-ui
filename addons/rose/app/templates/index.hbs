@@ -17,6 +17,28 @@ Dummy app index template
 <br>
 
 <h2>Form</h2>
+<Rose::Form::Select
+  @label="Label"
+  @helperText="Helper text"
+  @onChange={{fn this.selectChange}}
+  as |select|
+>
+  <select.option>Choose an option</select.option>
+  <select.option @value="value-1">Value 1</select.option>
+  <select.option @value="value-2">Value 2</select.option>
+  <select.option @value="value-3">Value 3</select.option>
+</Rose::Form::Select>
+
+<Rose::Form::Select
+  disabled={{true}}
+  @label="Label"
+  @helperText="Helper text"
+  @onChange={{fn this.selectChange}}
+  as |select|
+>
+  <select.option>Choose an option</select.option>
+</Rose::Form::Select>
+
 <Rose::Form::Input
   @label="Label"
   @value="Read only"

@@ -1,0 +1,22 @@
+<div class="rose-form-select{{if @error " error"}}">
+
+  <label class="rose-form-select-label" for={{@id}}>
+    {{@label}}
+  </label>
+
+  {{#if @helperText}}
+    <span class="rose-form-select-helper-text">{{@helperText}}</span>
+  {{/if}}
+
+  <XSelect
+    ...attributes
+    class="rose-form-select-field"
+    id={{@id}}
+    @value={{@value}}
+    @onChange={{@onChange}}
+    as |xs|
+  >
+    {{yield xs}}
+  </XSelect>
+
+</div>

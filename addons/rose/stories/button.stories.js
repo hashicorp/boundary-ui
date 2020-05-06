@@ -12,7 +12,7 @@ export const Normal = () => ({
       @submit={{submit}}
       @disabled={{disabled}}
       @style={{style}}
-      {{action onClick}}
+      {{on "click" onClick}}
       >
       {{text}}
     </Rose::Button>
