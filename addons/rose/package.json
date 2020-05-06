@@ -63,6 +63,7 @@
     "ember-source": "~3.12.0",
     "ember-source-channel-url": "^2.0.1",
     "ember-try": "^1.4.0",
+    "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774",
     "eslint-plugin-ember": "^7.7.2",
     "eslint-plugin-node": "^11.0.0",
     "loader.js": "^4.7.0",
