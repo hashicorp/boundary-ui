@@ -6,6 +6,7 @@ import layout from '../../../templates/components/rose/form/input';
  *
  * @example
  *  <Rose::Form::Input
+ *    @id="fieldId"
  *    @type="text"
  *    @value="Text"
  *    @label="Label"

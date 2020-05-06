@@ -1,6 +1,6 @@
 <div class="rose-form-input{{if @error " error"}}">
 
-  <label class="rose-form-input-label">
+  <label class="rose-form-input-label" for={{@id}}>
     {{@label}}
   </label>
 
@@ -10,6 +10,7 @@
 
   <Textarea
     ...attributes
+    id={{@id}}
     class="rose-form-input-field"
     @value={{@value}} />
 
