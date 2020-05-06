@@ -1,0 +1,131 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+$radio-svg: (
+  'default': "<svg viewBox='0 0 24 24' fill='%23aaaaaa' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' /></svg>",
+
+  'hover': "<svg viewBox='0 0 24 24' fill='%236f7682' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' /></svg>",
+
+  'focus': "<svg viewBox='0 0 24 24' fill='%231563ff' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' /></svg>",
+
+  'checked': "<svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%231563ff'/></svg>",
+
+  'disabled': "<svg viewBox='0 0 24 24' fill='%23bac1cc' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' /></svg>",
+
+  'disabled-checked': "<svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%23bac1cc'/></svg>",
+
+  'error': "<svg viewBox='0 0 24 24' fill='%23c73445' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' /></svg>",
+
+  'error-checked': "<svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%23c73445'/></svg>",
+);
+
+$data-svg-prefix: 'data:image/svg+xml;utf-8,';
+
+.rose-form-radio {
+  position: relative;
+  margin-bottom: sizing.rems(xs);
+  color: var(--ui-gray);
+
+  .rose-form-radio-label {
+    @include type.type(s, semibold);
+    color: currentColor;
+    padding-left: sizing.rems(l);
+
+    &::before {
+      position: absolute;
+      left: 0;
+      display: block;
+      width: sizing.rems(m);
+      height: sizing.rems(m);
+      pointer-events: none;
+      content: ' ';
+    }
+
+    &::after {
+      position: absolute;
+      top: -#{sizing.rems(xxs)};
+      left: -#{sizing.rems(xxxs) + sizing.rems(xxxxs)};
+      display: block;
+      width: sizing.rems(l);
+      height: sizing.rems(l);
+      transform: scale(2);
+      pointer-events: none;
+      content: ' ';
+      background: no-repeat 50%/50% 50%;
+      background-image: url($data-svg-prefix + map-get($radio-svg, 'default'));
+    }
+  }
+
+  .rose-form-radio-field {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    width: sizing.rems(m);
+    height: sizing.rems(m);
+    opacity: 0;
+
+    &:not(:disabled) {
+      &:hover {
+        ~ .rose-form-radio-label {
+          &::after {
+            background-image: url($data-svg-prefix + map-get($radio-svg, 'hover'));
+          }
+        }
+      }
+
+      &:focus {
+        ~ .rose-form-radio-label {
+          &::after {
+            background-image: url($data-svg-prefix + map-get($radio-svg, 'focus'));
+          }
+        }
+      }
+
+      &:checked {
+        ~ .rose-form-radio-label {
+          &::after {
+            background-image: url($data-svg-prefix + map-get($radio-svg, 'checked'));
+          }
+        }
+      }
+    }
+
+    &:disabled {
+      ~ .rose-form-radio-label {
+        &::after {
+          background-image: url($data-svg-prefix + map-get($radio-svg, 'disabled'));
+        }
+      }
+
+      &:checked {
+        ~ .rose-form-radio-label {
+          &::after {
+            background-image: url($data-svg-prefix + map-get($radio-svg, 'disabled-checked'));
+          }
+        }
+      }
+    }
+  }
+
+  &.error {
+    color: var(--failure);
+
+    .rose-form-radio-field {
+      &:not(:disabled):not(:focus) {
+        ~ .rose-form-radio-label {
+          &::after {
+            background-image: url($data-svg-prefix + map-get($radio-svg, 'error'));
+          }
+        }
+
+        &:checked {
+          ~ .rose-form-radio-label {
+            &::after {
+              background-image: url($data-svg-prefix + map-get($radio-svg, 'error-checked'));
+            }
+          }
+        }
+      }
+    }
+  }
+}
