@@ -10,7 +10,17 @@
   border-radius: sizing.rems(xxxs);
   border: sizing.rems(xxxxs) solid;
 
-  &.rose-button-icon-only {
+  &.has-icon-left > .rose-icon:first-child {
+    margin-left: -(sizing.rems(xs));
+    margin-right: sizing.rems(xxs);
+  }
+
+  &.has-icon-right > .rose-icon:last-child {
+    margin-left: sizing.rems(xxs);
+    margin-right: -(sizing.rems(xs));
+  }
+
+  &.has-icon-only {
     padding-right: sizing.rems(s);
     padding-left: sizing.rems(s);
     .rose-button-body {
@@ -35,16 +45,6 @@
     }
     @if map.get($default, 'text-shadow') {
       text-shadow: map.get($default, 'text-shadow');
-    }
-
-    > .rose-button-icon-left {
-      margin-left: -(sizing.rems(xs));
-      margin-right: sizing.rems(xxs);
-    }
-
-    > .rose-button-icon-right {
-      margin-left: sizing.rems(xxs);
-      margin-right: -(sizing.rems(xs));
     }
 
     &:not(:disabled) {
