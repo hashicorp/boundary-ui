@@ -39,4 +39,10 @@ module('Integration | Component | rose/button', function (hooks) {
     await render(hbs`<Rose::Button @iconRight="chevron-left" />`);
     assert.ok(find('.rose-button-icon-right'));
   });
+
+  test('it supports an icon-only type', async function (assert) {
+    await render(hbs`<Rose::Button @iconOnly="chevron-left" />`);
+    assert.ok(find('.rose-button-icon-only'));
+    assert.ok(find('.rose-button-icon-only .rose-icon'));
+  });
 });

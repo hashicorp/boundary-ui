@@ -11,6 +11,7 @@ const icons = {
   'alert-circle-fill': 'alert-circle-fill',
   'chevron-right': 'chevron-right',
   'copy-action': 'copy-action',
+  'lock-closed': 'lock-closed',
 };
 
 export const Normal = () => ({
@@ -44,7 +45,7 @@ export const Normal = () => ({
     iconLeft: select('iconLeft', icons, 'copy-action'),
     iconRight: select('iconRight', icons, 'chevron-right'),
     onClick: action('clicked'),
-  }
+  },
 });
 
 export const IconOnly = () => ({
@@ -56,12 +57,12 @@ export const IconOnly = () => ({
     <Rose::Button
       @style="secondary"
       @iconOnly={{iconOnly}}
-      >
+    >
       {{text}}
     </Rose::Button>
   `,
   context: {
     text: text('text', 'Button'),
-    iconOnly: select('iconOnly', icons, 'copy-action'),
-  }
+    iconOnly: select('iconOnly', icons, 'lock-closed'),
+  },
 });
