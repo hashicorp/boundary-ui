@@ -2,18 +2,20 @@ import Component from '@ember/component';
 import layout from '../../../../templates/components/rose/form/radio/radio';
 
 /**
-  * A HTML `<input type="radio">` element.
-  *
-  * @example
-  * <Rose::Form::Radio
-  *   @id="fieldId"
-  *   @label="label"
-  *   name="fieldName"
-  *   disabled={{true}}
-  *   @checked={{true}}
-  *   @error={{true}}
-  *   />
-  */
+ * A `<input type="radio">` element.
+ * `value` and `variable` must be equal to select
+ *  radiofield.
+ *
+ * @example
+ * <Rose::Form::Radio::Radio
+ *   @id="fieldId"
+ *   @label="label"
+ *   @error={{true}}
+ *   @value="fieldValue"
+ *   @variable="fieldValue"
+ *   @disabled={{true}}
+ *   />
+ */
 export default Component.extend({
   layout,
   tagName: '',

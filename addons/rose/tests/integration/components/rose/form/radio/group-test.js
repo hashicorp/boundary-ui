@@ -1,26 +1,54 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, click, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/form/radio/group', function(hooks) {
+module('Integration | Component | rose/form/radio/group', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
-    await render(hbs`{{rose/form/radio/group}}`);
-
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
+  test('it renders', async function (assert) {
     await render(hbs`
-      {{#rose/form/radio/group}}
-        template block text
-      {{/rose/form/radio/group}}
+      <Rose::Form::Radio::Group @name="bird" as |radioGroup|>
+        <radioGroup.radio
+          @id="bird-1"
+          @label="Pegion"
+          @value="pegion"
+        />
+        <radioGroup.radio
+          @id="bird-2"
+          @label="flamingo"
+          @value="flamingo"
+        />
+      </Rose::Form::Radio::Group>
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(findAll('input').length, 2);
+    assert.equal(findAll('input')[0].name, 'bird');
+    assert.equal(findAll('input')[1].name, 'bird');
+  });
+
+  test('it renders with @variable value selected', async function (assert) {
+    await render(hbs`
+      <Rose::Form::Radio::Group @name="bird" @variable="flamingo" as |radioGroup|>
+        <radioGroup.radio
+          @id="bird-1"
+          @label="Pegion"
+          @value="pegion"
+        />
+        <radioGroup.radio
+          @id="bird-2"
+          @label="flamingo"
+          @value="flamingo"
+        />
+      </Rose::Form::Radio::Group>
+    `);
+
+    assert.equal(findAll('#bird-1')[0].checked, false);
+    assert.equal(findAll('#bird-2')[0].checked, true);
+
+    await click(findAll('#bird-1')[0]);
+
+    assert.equal(findAll('#bird-1')[0].checked, true);
+    assert.equal(findAll('#bird-2')[0].checked, false);
   });
 });

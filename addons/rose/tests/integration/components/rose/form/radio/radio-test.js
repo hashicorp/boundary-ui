@@ -1,26 +1,59 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/form/radio/radio', function(hooks) {
+module('Integration | Component | rose/form/radio/radio', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it renders', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio />`);
+    assert.ok(await find('input'));
+    assert.equal(await find('input').type, 'radio');
+  });
 
-    await render(hbs`{{rose/form/radio/radio}}`);
+  test('it renders with label', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio @label="Label"/>`);
+    assert.equal(await find('label').textContent.trim(), 'Label');
+  });
 
-    assert.equal(this.element.textContent.trim(), '');
+  test('it is checked when @value and @variable values match', async function (assert) {
+    await render(
+      hbs`<Rose::Form::Radio::Radio @value="tree" @variable="tree"/>`
+    );
+    assert.equal(await find('input').checked, true);
+  });
 
-    // Template block usage:
-    await render(hbs`
-      {{#rose/form/radio/radio}}
-        template block text
-      {{/rose/form/radio/radio}}
-    `);
+  test('it is not checked when @value and @variable values are different', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio @value="tree"/>`);
+    assert.equal(await find('input').checked, false);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    await render(hbs`<Rose::Form::Radio::Radio @variable="tree"/>`);
+    assert.equal(await find('input').checked, false);
+
+    await render(
+      hbs`<Rose::Form::Radio::Radio @value="root" @variable="tree"/>`
+    );
+    assert.equal(await find('input').checked, false);
+  });
+
+  test('it is not disabled by default', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio />`);
+    assert.equal(await find('input').disabled, false);
+  });
+
+  test('it is not in error state by default', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio />`);
+    assert.notOk(await find('.error'));
+  });
+
+  test('it is disabled when @disabled={{true}}', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio @disabled={{true}}/>`);
+    assert.equal(await find('input').disabled, true);
+  });
+
+  test('it is in error state when @error={{true}}', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio @error={{true}} />`);
+    assert.ok(await find('.error'));
   });
 });
