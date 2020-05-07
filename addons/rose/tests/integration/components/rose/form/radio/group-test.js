@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, findAll } from '@ember/test-helpers';
+import { render, click, find, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | rose/form/radio/group', function (hooks) {
@@ -43,12 +43,12 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
       </Rose::Form::Radio::Group>
     `);
 
-    assert.equal(findAll('#bird-1')[0].checked, false);
-    assert.equal(findAll('#bird-2')[0].checked, true);
+    assert.equal(find('#bird-1').checked, false);
+    assert.equal(find('#bird-2').checked, true);
 
-    await click(findAll('#bird-1')[0]);
+    await click(find('#bird-1'));
 
-    assert.equal(findAll('#bird-1')[0].checked, true);
-    assert.equal(findAll('#bird-2')[0].checked, false);
+    assert.equal(find('#bird-1').checked, true);
+    assert.equal(find('#bird-2').checked, false);
   });
 });
