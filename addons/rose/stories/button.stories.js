@@ -46,3 +46,22 @@ export const Normal = () => ({
     onClick: action('clicked'),
   }
 });
+
+export const IconOnly = () => ({
+  template: hbs`
+    <p>Icon-only buttons visually hide their text, revealing just an icon.
+    It's still important to include meaningful text in the body of the
+    button for accessibility purposes.</p>
+
+    <Rose::Button
+      @style="secondary"
+      @iconOnly={{iconOnly}}
+      >
+      {{text}}
+    </Rose::Button>
+  `,
+  context: {
+    text: text('text', 'Button'),
+    iconOnly: select('iconOnly', icons, 'copy-action'),
+  }
+});

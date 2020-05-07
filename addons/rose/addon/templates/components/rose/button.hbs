@@ -2,7 +2,7 @@
   ...attributes
   type={{if @submit "submit" "button"}}
   disabled={{if @disabled "disabled"}}
-  class={{if  @style (concat "rose-button-" @style)}}
+  class="{{if  @style (concat "rose-button-" @style)}} {{if @iconOnly "rose-button-icon-only"}}"
   >
 
   {{#if @iconLeft}}
@@ -16,6 +16,14 @@
   <span class="rose-button-body">
     {{yield}}
   </span>
+
+  {{#if @iconOnly}}
+    <Rose::Icon
+      @name={{@iconOnly}}
+      @size="medium"
+      class="rose-button-icon-only"
+    />
+  {{/if}}
 
   {{#if @iconRight}}
     <Rose::Icon
