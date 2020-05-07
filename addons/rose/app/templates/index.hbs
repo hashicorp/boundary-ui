@@ -120,6 +120,25 @@ Dummy app index template
   />
 
 <h2>Radio</h2>
+
+<Rose::Form::Radio::Group @name="color" @variable="green" as |radioGroup|>
+  <radioGroup.radio
+    @id="red-radio"
+    @label="Red"
+    @value="red"
+  />
+  <radioGroup.radio
+    @id="green-radio"
+    @label="Green"
+    @value="green"
+  />
+  <radioGroup.radio
+    @id="blue-radio"
+    @label="Blue"
+    @value="blue"
+  />
+</Rose::Form::Radio::Group>
+
 <Rose::Form::Radio
   @id="radio-1"
   @label="Label"
