@@ -1,0 +1,36 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Icon" component="Icon" />
+
+# Icon
+
+Renders a simple icon from [Structure Icons][structure-icons].
+
+[structure-icons]: https://github.com/hashicorp/structure-icons
+
+```htmlbars
+<Rose::Icon @name={{name}} @size={{size}} />
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+      <Rose::Icon @name={{name}} @size={{size}} />
+    `,
+    context: {
+      name: select(
+        'name',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'check-circle-outline'
+      ),
+    }
+  }}</Story>
+</Preview>

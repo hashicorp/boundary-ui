@@ -1,0 +1,44 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Textarea" component="Form/Textarea" />
+
+# Form Textarea
+
+Renders a simple form textarea.
+
+```htmlbars
+<Rose::Form::Textarea
+  @value="Descriptive content"
+  @label="Description"
+  @helperText="Enter a description"
+  @error={{false}}
+  disabled={{false}}
+  readonly={{false}}
+/>
+```
+
+<Preview>
+  <Story name="Basic" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Textarea
+        @value={{value}}
+        @label={{label}}
+        @helperText={{helperText}}
+        @error={{error}}
+        disabled={{disabled}}
+        readonly={{read-only}}
+        />
+    `,
+    context: {
+      value: text('value', 'Value'),
+      label: text('label', 'Label'),
+      helperText: text('helperText', 'Helper text'),
+      disabled: boolean('disabled', false),
+      'read-only': boolean('readonly', false),
+      error: boolean('error', false),
+    }
+  }}</Story>
+</Preview>

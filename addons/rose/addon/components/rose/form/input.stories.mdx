@@ -1,0 +1,56 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Input" component="Form/Input" />
+
+# Form Input
+
+Renders a simple form input.
+
+```htmlbars
+<Rose::Form::Input
+  @type="email"
+  @value="info@example.com"
+  @label="Email"
+  @helperText="Enter your email"
+  @error={{false}}
+  disabled={{false}}
+  readonly={{false}}
+/>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+      <Rose::Form::Input
+        @type={{type}}
+        @value={{value}}
+        @label={{label}}
+        @helperText={{helperText}}
+        @error={{error}}
+        disabled={{disabled}}
+        readonly={{read-only}}
+        />
+    `,
+    context: {
+      type: select(
+        'type',
+        {
+          text: 'text',
+          email: 'email',
+          number: 'number',
+          password: 'password',
+        },
+        'text'
+      ),
+      value: text('value', 'Value'),
+      label: text('label', 'Label'),
+      helperText: text('helperText', 'Helper text'),
+      disabled: boolean('disabled', false),
+      'read-only': boolean('readonly', false),
+      error: boolean('error', false),
+    }
+  }}</Story>
+</Preview>

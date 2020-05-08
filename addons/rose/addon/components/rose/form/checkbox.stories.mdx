@@ -1,0 +1,44 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Checkbox" component="Form/Checkbox" />
+
+# Form Checkobx
+
+Renders a form input checkbox.
+
+```htmlbars
+<Rose::Form::Checkbox
+  @id="form-field-1"
+  name="boolean-value"
+  @label="Yes?"
+  @checked={{false}}
+  @error={{false}}
+  disabled={{false}}
+  />
+```
+
+<Preview>
+  <Story name="Basic" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Checkbox
+        @id={{id}}
+        name={{name}}
+        @label={{label}}
+        @checked={{checked}}
+        @error={{error}}
+        disabled={{disabled}}
+        />
+    `,
+    context: {
+      label: text('text', 'Checkbox 🛎'),
+      id: text('id', 'checkbox-1'),
+      name: text('name', 'checkbox-1'),
+      checked: boolean('checked', false),
+      error: boolean('error', false),
+      disabled: boolean('disabled', false),
+    }
+  }}</Story>
+</Preview>
