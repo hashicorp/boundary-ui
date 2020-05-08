@@ -2,7 +2,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { select } from '@storybook/addon-knobs';
 
 export default {
-  title: 'Rose::Icon',
+  title: 'Icon',
 };
 
 export const Normal = () => ({

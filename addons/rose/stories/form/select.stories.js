@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
 export default {
-  title: 'Rose::Form::Select',
+  title: 'Form/Select',
 };
 
 export const Normal = () => ({

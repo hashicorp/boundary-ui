@@ -2,7 +2,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
 export default {
-  title: 'Rose::Form::Input',
+  title: 'Form/Input',
 };
 
 export const Normal = () => ({

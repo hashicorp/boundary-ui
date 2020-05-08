@@ -2,7 +2,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { text, boolean } from '@storybook/addon-knobs';
 
 export default {
-  title: 'Rose::Form::Checkbox',
+  title: 'Form/Checkbox',
 };
 
 export const Normal = () => ({
