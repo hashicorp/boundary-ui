@@ -17,22 +17,22 @@ module('Integration | Component | rose/form/radio/radio', function (hooks) {
     assert.equal(await find('label').textContent.trim(), 'Label');
   });
 
-  test('it is checked when @value and @variable values match', async function (assert) {
+  test('it is checked when @value and @selectedValue values match', async function (assert) {
     await render(
-      hbs`<Rose::Form::Radio::Radio @value="tree" @variable="tree"/>`
+      hbs`<Rose::Form::Radio::Radio @value="tree" @selectedValue="tree"/>`
     );
     assert.equal(await find('input').checked, true);
   });
 
-  test('it is not checked when @value and @variable values are different', async function (assert) {
+  test('it is not checked when @value and @selectedValue values are different', async function (assert) {
     await render(hbs`<Rose::Form::Radio::Radio @value="tree"/>`);
     assert.equal(await find('input').checked, false);
 
-    await render(hbs`<Rose::Form::Radio::Radio @variable="tree"/>`);
+    await render(hbs`<Rose::Form::Radio::Radio @selectedValue="tree"/>`);
     assert.equal(await find('input').checked, false);
 
     await render(
-      hbs`<Rose::Form::Radio::Radio @value="root" @variable="tree"/>`
+      hbs`<Rose::Form::Radio::Radio @value="root" @selectedValue="tree"/>`
     );
     assert.equal(await find('input').checked, false);
   });

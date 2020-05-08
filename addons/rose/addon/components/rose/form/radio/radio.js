@@ -3,7 +3,7 @@ import layout from '../../../../templates/components/rose/form/radio/radio';
 
 /**
  * A `<input type="radio">` element.
- * `value` and `variable` must be equal to select
+ * `value` and `selectedValue` must be equal to select
  *  radiofield.
  *
  * @example
@@ -12,7 +12,7 @@ import layout from '../../../../templates/components/rose/form/radio/radio';
  *   @label="label"
  *   @error={{true}}
  *   @value="fieldValue"
- *   @variable="fieldValue"
+ *   @selectedValue="fieldValue"
  *   @disabled={{true}}
  *   />
  */

@@ -12,7 +12,7 @@ export const Normal = () => ({
       @label={{label}}
       @error={{error}}
       @value={{value}}
-      @variable={{variable}}
+      @selectedValue={{selectedValue}}
       @disabled={{disabled}}
       />
   `,
@@ -20,10 +20,10 @@ export const Normal = () => ({
     id: text('id', 'radio-1'),
     label: text('text', 'Radiofield'),
     error: boolean('error', false),
-    value: text('value', 'value and variable must match to select radiofield'),
-    variable: text(
-      'variable',
-      'value and variable must match to select radiofield'
+    value: text('value', 'value and selectedValue must match to select radiofield'),
+    selectedValue: text(
+      'selectedValue',
+      'value and selectedValue must match to select radiofield'
     ),
     disabled: boolean('disabled', false),
   },

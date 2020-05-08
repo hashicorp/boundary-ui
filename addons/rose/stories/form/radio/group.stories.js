@@ -7,7 +7,7 @@ export default {
 
 export const Normal = () => ({
   template: hbs`
-    <Rose::Form::Radio::Group @name={{name}} @variable={{variable}} as |radioGroup|>
+    <Rose::Form::Radio::Group @name={{name}} @selectedValue={{selectedValue}} as |radioGroup|>
       <radioGroup.radio
         @id="firstField"
         @label={{firstFieldLabel}}
@@ -27,7 +27,7 @@ export const Normal = () => ({
   `,
   context: {
     name: text('name', 'Groupname'),
-    variable: text('variable', 'disagree'),
+    selectedValue: text('selectedValue', 'disagree'),
 
     firstFieldLabel: text('first radiofield label', 'Agree'),
     firstFieldValue: text('first radiofield value', 'agree'),
