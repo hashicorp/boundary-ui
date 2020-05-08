@@ -1,0 +1,147 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+
+<Meta title="Style Guide|Typography" />
+
+# Typography
+
+To specify custom typography, use the SCSS mixin.
+The <code>type</code> mixin accepts two parameters:  a font size name
+(required) and an optional font weight name (normal, semibold, bold).
+This mixin sets both font size and line height, and optionally weight.
+
+For example...
+
+```scss
+@import "utilities/type";
+.my-component {
+  @include type.type(m, bold);
+}
+```
+
+<table>
+<thead>
+<tr>
+<th scope="column">Name</th>
+<th scope="column" class="number-col">Font Size</th>
+<th scope="column">SCSS</th>
+<th scope="column">Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">
+<code>xl</code>
+</th>
+<td class="number-col">28</td>
+<td>
+<code>@include type.type(xl);</code>
+</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">
+<code>l</code>
+</th>
+<td class="number-col">20</td>
+<td>
+<code>@include type.type(l);</code>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<th scope="row">
+<code>m</code>
+</th>
+<td class="number-col">16</td>
+<td>
+<code>@include type.type(m);</code>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<th scope="row">
+<code>s</code>
+</th>
+<td class="number-col">14</td>
+<td>
+<code>@include type.type(s);</code>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<th scope="row">
+<code>xs</code>
+</th>
+<td class="number-col">12</td>
+<td>
+<code>@include type.type(xs);</code>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<th scope="row">
+<code>h1</code>
+</th>
+<td class="number-col">28</td>
+<td>
+<code>@include type.type(h1);</code>
+</td>
+<td>
+Same as xl, but different line height.
+</td>
+</tr>
+
+<tr>
+<th scope="row">
+<code>h2</code>
+</th>
+<td class="number-col">20</td>
+<td>
+<code>@include type.type(h2);</code>
+</td>
+<td>
+Same as l, but different line height.
+</td>
+</tr>
+
+<tr>
+<th scope="row">
+<code>h3</code>
+</th>
+<td class="number-col">16</td>
+<td>
+<code>@include type.type(h3);</code>
+</td>
+<td>
+Same as m, but different line height.
+</td>
+</tr>
+
+<tr>
+<th scope="row">
+<code>button</code>
+</th>
+<td class="number-col">13</td>
+<td>
+<code>@include type.type(button);</code>
+</td>
+<td>
+
+</td>
+</tr>
+
+</tbody>
+</table>
