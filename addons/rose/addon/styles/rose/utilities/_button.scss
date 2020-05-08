@@ -9,6 +9,29 @@
   padding: sizing.rems(off-xs) sizing.rems(l);
   border-radius: sizing.rems(xxxs);
   border: sizing.rems(xxxxs) solid;
+
+  &.has-icon-left > .rose-icon:first-child {
+    margin-left: -(sizing.rems(xs));
+    margin-right: sizing.rems(xxs);
+  }
+
+  &.has-icon-right > .rose-icon:last-child {
+    margin-left: sizing.rems(xxs);
+    margin-right: -(sizing.rems(xs));
+  }
+
+  &.has-icon-only {
+    padding-right: sizing.rems(s);
+    padding-left: sizing.rems(s);
+    .rose-button-body {
+      position: absolute;
+      top: -1000px;
+      left: -1000px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+  }
 }
 
 @mixin button-style($name, $default, $hover: &, $active: &, $disabled: &) {

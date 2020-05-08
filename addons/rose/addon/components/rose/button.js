@@ -10,4 +10,6 @@ import layout from '../../templates/components/rose/button';
  */
 export default Component.extend({
   layout,
+
+  tagName: '',
 });
