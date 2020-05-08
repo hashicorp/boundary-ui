@@ -1,0 +1,93 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Style Guide|Sizing" />
+
+# Sizing
+
+Use sizing function for things like margins,
+padding, and borders.  Sizes are returned in rem units rather than
+pixels, but have been calibrated with pixel equivalents in mind.
+
+To use the rems sizing function, first import the sizing module,
+then use it in your code wherever you normally specify a size.  For example...
+
+```scss
+@import "variables/sizing";
+border: sizing.rems(xxxxs) solid;
+```
+
+<table>
+<thead>
+<tr>
+<th scope="column">Name</th>
+<th scope="column" class="number-col">PX Equiv.</th>
+<th scope="column">SCSS</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<th scope="row"><code>xxl</code></th>
+<td class="number-col">48</td>
+<td><code>sizing.rems(xxl)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>xl</code></th>
+<td class="number-col">36</td>
+<td><code>sizing.rems(xl)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>l</code></th>
+<td class="number-col">24</td>
+<td><code>sizing.rems(l)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>m</code></th>
+<td class="number-col">16</td>
+<td><code>sizing.rems(m)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>s</code></th>
+<td class="number-col">12</td>
+<td><code>sizing.rems(s)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>xs</code></th>
+<td class="number-col">8</td>
+<td><code>sizing.rems(xs)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>off-xs</code></th>
+<td class="number-col">5</td>
+<td><code>sizing.rems(off-xs)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>xxs</code></th>
+<td class="number-col">4</td>
+<td><code>sizing.rems(xxs)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>xxxs</code></th>
+<td class="number-col">2</td>
+<td><code>sizing.rems(xxxs)</code></td>
+</tr>
+
+<tr>
+<th scope="row"><code>xxxxs</code></th>
+<td class="number-col">1</td>
+<td><code>sizing.rems(xxxxs)</code></td>
+</tr>
+
+</tbody>
+</table>
