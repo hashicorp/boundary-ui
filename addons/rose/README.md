@@ -70,7 +70,7 @@ Before submitting your work, be sure to run auto-formatters
 
 To build a new component, start by generating it on the command line with
 `ember g component rose/component-name`.  Then manually add a Storybook story in
-`stories/component-name.stories.js`.  Use the Storybook UI during component
+`component-name.stories.mdx`.  Use the Storybook UI during component
 development (see Yarn commands).
 
 ## Running tests
