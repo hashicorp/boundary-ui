@@ -118,3 +118,53 @@ Dummy app index template
   @label="Disabled + Checked"
   disabled={{true}}
   />
+
+<h2>Radio field</h2>
+<Rose::Form::Radio::Radio
+  @id="radio-1"
+  @label="Label"
+  @value="radio-1"
+  />
+<Rose::Form::Radio::Radio
+  @id="radio-2"
+  @error={{true}}
+  @label="Error"
+  @value="radio-2"
+  />
+<Rose::Form::Radio::Radio
+  @id="radio-3"
+  @label="Checked"
+  />
+
+<Rose::Form::Radio::Radio
+  @id="radio-4"
+  @label="Disabled"
+  @disabled={{true}}
+  @value="radio-4"
+  />
+<Rose::Form::Radio::Radio
+  @id="radio-5"
+  @label="Disabled + Checked"
+  @value="radio-5"
+  @variable="radio-5"
+  @disabled={{true}}
+  />
+
+<h2>Radio field group</h2>
+<Rose::Form::Radio::Group @name="color" @variable="green" as |radioGroup|>
+  <radioGroup.radio
+    @id="red-radio"
+    @label="Red"
+    @value="red"
+  />
+  <radioGroup.radio
+    @id="green-radio"
+    @label="Green"
+    @value="green"
+  />
+  <radioGroup.radio
+    @id="blue-radio"
+    @label="Blue"
+    @value="blue"
+  />
+</Rose::Form::Radio::Group>

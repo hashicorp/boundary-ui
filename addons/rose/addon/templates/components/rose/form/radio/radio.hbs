@@ -1,0 +1,19 @@
+<div class="rose-form-radio{{if @error " error"}}">
+
+  <RadioButton
+    ...attributes
+    @radioClass="rose-form-radio-field"
+    @radioId={{@id}}
+    type="radio"
+    @name={{@name}}
+    @value={{@value}}
+    @groupValue={{@selectedValue}}
+    @disabled={{@disabled}}/>
+
+  <label class="rose-form-radio-label" for={{@id}}>
+    {{@label}}
+  </label>
+
+  {{yield}}
+
+</div>
