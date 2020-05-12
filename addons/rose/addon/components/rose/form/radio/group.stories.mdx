@@ -1,0 +1,62 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { text } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Radio/Group" component="Form/Radio/Group" />
+
+# Form radiofield group
+
+Renders a form radiofield group.
+
+```htmlbars
+<Rose::Form::Radio::Group @name={{name}} @selectedValue="disagree" as |radioGroup|>
+  <radioGroup.radio
+    @id="agree-radiofield"
+    @label="Agree"
+    @value="agree"
+  />
+  <radioGroup.radio
+    @id="disagree-radiofield"
+    @label="disagree"
+    @value="disagree"
+  />
+  <radioGroup.radio
+    @id="maybe-radiofield"
+    @label="maybe"
+    @value="maybe"
+  />
+</Rose::Form::Radio::Group>
+```
+<Preview>
+  <Story name="Basic" height="10rem">{{
+  template: hbs`
+    <Rose::Form::Radio::Group @name={{name}} @selectedValue={{selectedValue}} as |radioGroup|>
+      <radioGroup.radio
+        @id="firstField"
+        @label={{firstFieldLabel}}
+        @value={{firstFieldValue}}
+      />
+      <radioGroup.radio
+        @id="secondField"
+        @label={{secondFieldLabel}}
+        @value={{secondFieldValue}}
+      />
+      <radioGroup.radio
+        @id="thirdField"
+        @label={{thirdFieldLabel}}
+        @value={{thirdFieldValue}}
+      />
+    </Rose::Form::Radio::Group>
+  `,
+  context: {
+    name: text('name', 'mustagree'),
+    selectedValue: text('selectedValue', 'disagree'),
+    firstFieldLabel: text('first label', 'Agree'),
+    firstFieldValue: text('first value', 'agree'),
+    secondFieldLabel: text('second label', 'Maybe'),
+    secondFieldValue: text('second value', 'maybe'),
+    thirdFieldLabel: text('third label', 'Disagree'),
+    thirdFieldValue: text('third value', 'disagree'),
+  }
+  }}</Story>
+</Preview>
