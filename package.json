@@ -8,9 +8,11 @@
     "ui/*"
   ],
   "scripts": {
-    "lint": "yarn lint:addons:rose",
+    "lint": "yarn lint:addons:api && yarn lint:addons:rose",
+    "lint:addons:api": "echo \"\n\nlint: addons/api\n\" && cd addons/api && yarn lint",
     "lint:addons:rose": "echo \"\n\nlint: addons/rose\n\" && cd addons/rose && yarn lint",
-    "test": "yarn test:addons:rose",
+    "test": "yarn test:addons:api && yarn test:addons:rose",
+    "test:addons:api": "echo \"\n\ntest: addons/api\n\" && cd addons/api && yarn test",
     "test:addons:rose": "echo \"\n\ntest: addons/rose\n\" && cd addons/rose && yarn test",
     "precommit": "yarn compliance:licenses && yarn audit && yarn lint && yarn test",
     "commit": "git-cz",
