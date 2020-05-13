@@ -31,12 +31,12 @@ module('Unit | Service | scope class', function (hooks) {
   test('it serializes to JSON', function (assert) {
     assert.expect(2);
     let scope = new Scope({ id: 1 });
-    assert.deepEqual(JSON.parse(scope.toJSON()), {
+    assert.deepEqual(scope.toJSON(), {
       org: { id: 1 },
       project: null,
     });
     scope = new Scope({ id: 1 }, { id: 2 });
-    assert.deepEqual(JSON.parse(scope.toJSON()), {
+    assert.deepEqual(scope.toJSON(), {
       org: { id: 1 },
       project: { id: 2 },
     });
@@ -47,9 +47,8 @@ module('Unit | Service | scope', function (hooks) {
   setupTest(hooks);
 
   test('it returns nulls when scope is not set', function (assert) {
-    assert.expect(3);
+    assert.expect(2);
     const service = this.owner.lookup('service:scope');
-    assert.equal(service.scope, null);
     assert.equal(service.org, null);
     assert.equal(service.project, null);
   });
@@ -63,5 +62,35 @@ module('Unit | Service | scope', function (hooks) {
     service.project = project;
     assert.equal(service.org, service.scope.org);
     assert.equal(service.project, service.scope.project);
+  });
+
+  test('it persists changes to scope', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:scope');
+    const org = { id: 1 };
+    const project = { id: 2 };
+    service.org = org;
+    service.project = project;
+    assert.equal(service.fetchScope().org.id, 1);
+    assert.equal(service.fetchScope().project.id, 2);
+  });
+
+  test('it initializes to the persisted scope, if any', function (assert) {
+    assert.expect(4);
+    const service = this.owner.lookup('service:scope');
+    const org = { id: 1 };
+    const project = { id: 2 };
+    service.org = org;
+    service.project = project;
+    // first, persist a scope directly, without setting it on the service
+    const sneakyScope = new Scope({ id: 3 }, { id: 4 });
+    service.saveScope(sneakyScope);
+    // establish that the service scope wasn't changed...
+    assert.equal(service.scope.org.id, 1);
+    assert.equal(service.scope.project.id, 2);
+    // finally, call init and check that the scope changed
+    service.init();
+    assert.equal(service.scope.org.id, 3);
+    assert.equal(service.scope.project.id, 4);
   });
 });

@@ -108,7 +108,8 @@ export default class StorageService extends Service {
    * @return {any}
    */
   getItem(key) {
-    return this.storage.getItem(this.qualifiedKey(key));
+    const value = this.storage.getItem(this.qualifiedKey(key));
+    if (value) return JSON.parse(value);
   }
 
   /**
@@ -116,7 +117,7 @@ export default class StorageService extends Service {
    * @param {string} key
    */
   setItem(key, value) {
-    this.storage.setItem(this.qualifiedKey(key), value);
+    this.storage.setItem(this.qualifiedKey(key), JSON.stringify(value));
   }
 
   /**
