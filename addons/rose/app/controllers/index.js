@@ -3,8 +3,8 @@ import { action } from '@ember/object';
 
 export default class IndexController extends Controller {
   @action
-  selectChange(value) {
+  selectChange(/*value*/) {
     // eslint-disable-next-line no-console
-    console.log(value);
+    //console.log(value);
   }
 }
