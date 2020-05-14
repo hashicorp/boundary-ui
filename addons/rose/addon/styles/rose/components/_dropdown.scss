@@ -1,0 +1,108 @@
+@use '../variables/sizing';
+@use '../utilities/type' as typography;
+
+//start: ember-basic-dropdown styles
+$ember-basic-dropdown-content-background-color: #fff !default;
+$ember-basic-dropdown-content-z-index: 1000 !default;
+$ember-basic-dropdown-overlay-background: rgba(0, 0, 0, 0.5) !default;
+$ember-basic-dropdown-overlay-pointer-events: none !default;
+
+.ember-basic-dropdown {
+  position: relative;
+}
+.ember-basic-dropdown,
+.ember-basic-dropdown-content,
+.ember-basic-dropdown-content * {
+  box-sizing: border-box;
+}
+.ember-basic-dropdown-content {
+  position: absolute;
+  width: auto;
+  z-index: $ember-basic-dropdown-content-z-index;
+  background-color: $ember-basic-dropdown-content-background-color;
+}
+.ember-basic-dropdown-content--left {
+  left: 0;
+}
+.ember-basic-dropdown-content--right {
+  right: 0;
+}
+
+.ember-basic-dropdown-overlay {
+  position: fixed;
+  background: $ember-basic-dropdown-overlay-background;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  pointer-events: $ember-basic-dropdown-overlay-pointer-events;
+}
+
+.ember-basic-dropdown-content-wormhole-origin {
+  display: inline;
+}
+//end: ember-basic-dropdown styles
+
+.rose-dropdown {
+  .rose-dropdown-label {
+    @include typography.type(s, semibold);
+    display: inline-block;
+    padding: sizing.rems(xs) sizing.rems(m);
+    border-radius: sizing.rems(xxxs);
+    border: sizing.rems(xxxxs) solid;
+    color: var(--ui-gray-starker-3);
+    background-color: var(--ui-gray-subtler-5);
+    box-sizing: border-box;
+    box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs)
+      rgba(var(--stark-components), var(--opacity-2));
+    border-color: var(--ui-gray-subtler-2);
+    height: sizing.rems(l) + sizing.rems(s);
+
+    &:hover {
+      border-color: var(--ui-gray-starker-1);
+      background-color: var(--subtle);
+    }
+
+    &:focus {
+      border-color: var(--ui-gray-starker-1);
+      background-color: var(--ui-gray-subtler-3);
+      outline: none;
+    }
+
+    .rose-dropdown-icon {
+      display: inline-block;
+      width: sizing.rems(m);
+      height: sizing.rems(m);
+      position: relative;
+      vertical-align: sub;
+      &.rose-dropdown-icon-chevron {
+        background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z' fill='currentColor'></path></svg>");
+      }
+
+      &.rose-dropdown-icon-user {
+        width: sizing.rems(m) + sizing.rems(xxs);
+        height: sizing.rems(m) + sizing.rems(xxs);
+        vertical-align: middle;
+        background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M3 5v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5a2 2 0 0 0-2 2zm12 5c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z' fill='currentColor'></path></svg>");
+      }
+    }
+  }
+}
+
+.rose-dropdown-options {
+  border-radius: sizing.rems(xxxs);
+  border: sizing.rems(xxxxs) solid;
+  border-color: var(--ui-gray-subtler-2);
+  box-sizing: border-box;
+  box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs)
+    rgba(var(--stark-components), var(--opacity-2));
+  margin: 0;
+
+  .rose-dropdown-item {
+    cursor: pointer;
+    padding: sizing.rems(s) (sizing.rems(xxl) * 2) sizing.rems(xs)
+      sizing.rems(xs);
+    display: block;
+  }
+}

@@ -119,6 +119,28 @@ Dummy app index template
   disabled={{true}}
   />
 
+<h2>Dropdown</h2>
+<Rose::Dropdown id="sdf" @label="Dropdown" as |dropdown|>
+  <dropdown.option>Menu Item</dropdown.option>
+  <dropdown.option>Menu Item</dropdown.option>
+  <dropdown.option>Menu Item</dropdown.option>
+</Rose::Dropdown>
+
+<Rose::Dropdown @label="Right-aligned Dropdown" @position="right" as |dropdown|>
+  <dropdown.option>Menu Item</dropdown.option>
+</Rose::Dropdown>
+
+<Rose::Dropdown @icon="user" />
+
+<Rose::Dropdown @icon="user" @hideIcon={{true}} as |dropdown|>
+  <dropdown.option>Menu Item</dropdown.option>
+</Rose::Dropdown>
+
+<Rose::Dropdown @label="User" @icon="user" @hideIcon={{true}} as |dropdown|>
+  <dropdown.option>Menu Item</dropdown.option>
+</Rose::Dropdown>
+
+
 <h2>Radio field</h2>
 <Rose::Form::Radio::Radio
   @id="radio-1"

@@ -8,7 +8,6 @@
 }
 .swatch {
   width: 9rem;
-  //border: 1px solid var(--ui-gray-subtler-4);
   border-radius: 4px;
   margin: 0 0.5rem 0.5rem 0 !important;
   box-shadow: 0px 3px 6px rgba(var(--stark-components), var(--opacity-3));
@@ -32,4 +31,8 @@
 .swatch-detail {
   border-top: 1px solid var(--ui-gray-subtler-4);
   padding: 0.5rem;
+}
+
+body {
+  padding: 0 20px;
 }

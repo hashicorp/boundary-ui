@@ -1,0 +1,13 @@
+<span class="rose-dropdown" ...attributes>
+  <BasicDropdown @horizontalPosition={{@position}} as |dropdown|>
+    <dropdown.Trigger class="rose-dropdown-label">
+      {{@label}}
+      {{#if @icon}}<span class={{concat "rose-dropdown-icon rose-dropdown-icon-" @icon}} />{{/if}}
+      {{#unless @hideIcon}}<span class="rose-dropdown-icon rose-dropdown-icon-chevron" />{{/unless}}
+    </dropdown.Trigger>
+
+    <dropdown.Content class="rose-dropdown-options">
+      {{yield (hash option=(component 'rose/dropdown/item'))}}
+    </dropdown.Content>
+  </BasicDropdown>
+</span>

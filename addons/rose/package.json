@@ -44,6 +44,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "doctoc": "^1.4.0",
     "ember-auto-import": "^1.5.3",
+    "ember-basic-dropdown": "^2.0.15",
     "ember-cli": "~3.16.1",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-eslint": "^5.1.0",

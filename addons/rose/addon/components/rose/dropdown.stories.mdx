@@ -1,0 +1,96 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Dropdown" component="Dropdown" />
+
+# Dropdown
+
+A dropdown component wrapped on top of ember-basic-dropdown.
+
+```htmlbars
+<Rose::Dropdown @label="Dropdown" as |dropdown|>
+  <dropdown.option>Menu Item</dropdown.option>
+  <dropdown.option>Menu Item</dropdown.option>
+  <dropdown.option>Menu Item</dropdown.option>
+</Rose::Dropdown>
+```
+
+<Preview>
+  <Story name="Advanced">{{
+    template: hbs`
+      <Rose::Dropdown @label={{label}} @position={{position}} @hideIcon={{hideIcon}} @icon={{icon}} as |dropdown|>
+        <dropdown.option>1</dropdown.option>
+        <dropdown.option>2</dropdown.option>
+        <dropdown.option>3</dropdown.option>
+      </Rose::Dropdown>
+    `,
+    context: {
+      label: text('label', 'Dropdown'),
+      item: text('item', 'Menu Item'),
+      hideIcon: boolean('hideIcon', false),
+      position: select(
+        'position',
+        {
+          default: 'left',
+          right: 'right',
+        },
+        'default'
+      ),
+      icon: select(
+        'icon',
+        {
+          'chevron': 'chevron',
+          'user': 'user',
+          'none': '',
+        },
+        'user'
+      )
+    },
+  }}</Story>
+</Preview>
+
+Dropbowns can just be icons, however, icons need to be selected from an existing list. Currently, only chevron and user are available.
+
+<Preview>
+  <Story name="Dropdown Icon Only">{{
+    template: hbs`
+      <Rose::Dropdown as |dropdown|>
+        <dropdown.option>{{option}}</dropdown.option>
+      </Rose::Dropdown>
+    `,
+    context: {
+      label: text('label', 'Dropdown'),
+      hideIcon: boolean('hideIcon', true),
+      position: select(
+        'position',
+        {
+          default: 'left',
+          right: 'right',
+        },
+        'default'
+      ),
+    },
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="User Icon Only">{{
+    template: hbs`
+      <Rose::Dropdown @icon={{icon}} as |dropdown|>
+        <dropdown.option>{{option}}</dropdown.option>
+      </Rose::Dropdown>
+    `,
+    context: {
+      icon: select(
+        'icon',
+        {
+          'chevron': 'chevron',
+          'user': 'user',
+        },
+        'user'
+      )
+    },
+  }}</Story>
+</Preview>
