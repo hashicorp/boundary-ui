@@ -89,7 +89,6 @@ export { Scope };
  *  const project = this.scope.project;
  */
 export default class ScopeService extends Service {
-
   /**
    * The currently selected scope.  This is an internal member only.
    * @type {?Scope}
@@ -121,5 +120,4 @@ export default class ScopeService extends Service {
   set project(project) {
     this.scope = new Scope(this.org, project);
   }
-
 }
