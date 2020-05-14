@@ -84,7 +84,7 @@ export default class StorageService extends Service {
   }
 
   /**
-   * Returns the storage namespace, which is the applications `modulePrefix`.
+   * Returns the storage namespace, which is the application's `modulePrefix`.
    * @return {string}
    */
   get namespace() {

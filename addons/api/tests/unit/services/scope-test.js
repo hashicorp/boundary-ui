@@ -63,34 +63,4 @@ module('Unit | Service | scope', function (hooks) {
     assert.equal(service.org, service.scope.org);
     assert.equal(service.project, service.scope.project);
   });
-
-  test('it persists changes to scope', function (assert) {
-    assert.expect(2);
-    const service = this.owner.lookup('service:scope');
-    const org = { id: 1 };
-    const project = { id: 2 };
-    service.org = org;
-    service.project = project;
-    assert.equal(service.fetchScope().org.id, 1);
-    assert.equal(service.fetchScope().project.id, 2);
-  });
-
-  test('it initializes to the persisted scope, if any', function (assert) {
-    assert.expect(4);
-    const service = this.owner.lookup('service:scope');
-    const org = { id: 1 };
-    const project = { id: 2 };
-    service.org = org;
-    service.project = project;
-    // first, persist a scope directly, without setting it on the service
-    const sneakyScope = new Scope({ id: 3 }, { id: 4 });
-    service.saveScope(sneakyScope);
-    // establish that the service scope wasn't changed...
-    assert.equal(service.scope.org.id, 1);
-    assert.equal(service.scope.project.id, 2);
-    // finally, call init and check that the scope changed
-    service.init();
-    assert.equal(service.scope.org.id, 3);
-    assert.equal(service.scope.project.id, 4);
-  });
 });

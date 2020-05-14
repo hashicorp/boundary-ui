@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { computed } from '@ember/object';
-import { inject as service } from '@ember/service';
 
 /**
  * This module includes two parts:
@@ -30,13 +29,15 @@ class Scope {
   #project = null;
 
   /**
-   * Initializes an instance of `Scope` with optional org and/or project.
+   * Initializes an instance of `Scope` with optional org and project.
+   * A scope with only project is invalid and in thi scenario, project will
+   * be null.
    * @param {?object} org
    * @param {?object} project
    */
   constructor(org = null, project = null) {
     if (org) this.#org = org;
-    if (project) this.#project = project;
+    if (org && project) this.#project = project;
   }
 
   /**
@@ -48,16 +49,15 @@ class Scope {
   }
 
   /**
-   * Project for this scope.  If org is null, so is project.
+   * Project for this scope.
    * @type {?object}
    */
   get project() {
-    return this.org ? this.#project : null;
+    return this.#project;
   }
 
   /**
-   * Returns the JSON serialization of this scope.  This is necessary because
-   * scopes may be persisted in storage with their JSON representation.
+   * Returns the JSON representation of this scope.
    * @return {?object}
    */
   toJSON() {
@@ -69,26 +69,26 @@ class Scope {
 export { Scope };
 
 /**
- * The scope service manages and persists the current scope.  To interact with
- * this service, get and set `service.org` or `service.project` directly, rather
- * than using the tracked `scope` member, which is internal.
+ * The scope service manages the current scope, making it available throughout
+ * the Ember application.  Use `service.org` and `service.project` directly,
+ * rather than interacting with the internal `scope` member.
  *
- * A scope is valid only if the user has access to the organization and project
- * specified in the scope, and they exist.  However, validating against
- * available organizations and projects is outside the scope (tee hee) of this
- * service because it is used by the adapter mixin to generate API paths, which
- * could lead to problems were this service to attempt to fetch data.
+ * @example
+ *  // inject the scope service
+ *  import { inject as service } from '@ember/service';
+ *  class MyClass {
+ *    @service scope;
+ *  }
  *
- * For now, should an invalid scope arise, it is left to the user to refresh,
- * since they are likely to encounter 404s.  This is an acceptable tradeoff for
- * an initial release because invalid scopes are considered uncommon.
+ *  // set an org, project, or both
+ *  this.scope.org = {id: 1};
+ *  this.scope.project = {id: 2};
+ *
+ *  // retrieve the org and/or project
+ *  const org = this.scope.org;
+ *  const project = this.scope.project;
  */
 export default class ScopeService extends Service {
-  /**
-   * The storage service is used to persist the current scope.
-   * @type {StorageService}
-   */
-  @service storage;
 
   /**
    * The currently selected scope.  This is an internal member only.
@@ -98,7 +98,7 @@ export default class ScopeService extends Service {
 
   /**
    * When setting org, `service.org = {...}`, a new scope is instantiated,
-   * since scopes are immutable.  Also persists scope on set.
+   * since scopes are immutable.
    * @type {?object}
    */
   @computed('scope.org')
@@ -107,12 +107,11 @@ export default class ScopeService extends Service {
   }
   set org(org) {
     this.scope = new Scope(org, this.project);
-    this.saveScope(this.scope);
   }
 
   /**
    * When setting project, `service.project = {...}`, a new scope is
-   * instantiated, since scopes are immutable.  Also persists scope on set.
+   * instantiated, since scopes are immutable.
    * @type {?object}
    */
   @computed('scope.project')
@@ -121,31 +120,6 @@ export default class ScopeService extends Service {
   }
   set project(project) {
     this.scope = new Scope(this.org, project);
-    this.saveScope(this.scope);
   }
 
-  /**
-   * Saves the current scope into storage.
-   */
-  saveScope(scope) {
-    this.storage.setItem('scope', scope);
-  }
-
-  /**
-   * Retrieves a saved scope from storage, if any.
-   * @return {?Scope}
-   */
-  fetchScope() {
-    const json = this.storage.getItem('scope');
-    if (json) return new Scope(json.org, json.project);
-  }
-
-  /**
-   * Initializes the service's current scope from storage, if any.
-   */
-  init() {
-    const savedScope = this.fetchScope();
-    if (savedScope) this.scope = savedScope;
-    super.init(...arguments);
-  }
 }
