@@ -7,7 +7,21 @@ import { inject as service } from '@ember/service';
  * reported by `ScopeService`.
  */
 export default Mixin.create({
+  // =services
+
   scope: service(),
+
+  // =properties
+
+  /**
+   * If true and the current scope has a project, will include the project in
+   * the resource path.  Set to false for resources that are scoped exclusively
+   * to org.
+   * @type {boolean}
+   */
+  includeProject: true,
+
+  // =methods
 
   /**
    * Appends a scope path to the URL prefix, if a scope is set.
@@ -33,7 +47,7 @@ export default Mixin.create({
     const { org, project } = this.scope;
     const scopePath = [];
     if (org) scopePath.push('orgs', org.id);
-    if (project) scopePath.push('projects', project.id);
+    if (project && this.includeProject) scopePath.push('projects', project.id);
     return scopePath.join('/');
   },
 });

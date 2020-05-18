@@ -50,4 +50,19 @@ module('Unit | Mixin | scope-adapter', function (hooks) {
     url = adapter._buildURL('model', 1);
     assert.equal(url, '/api/v1/models/1');
   });
+
+  test('it does not add a project scope to basic URLs when includeProject is false', function (assert) {
+    assert.expect(1);
+    const service = this.owner.lookup('service:scope');
+    service.org = { id: 1 };
+    service.project = { id: 2 };
+    const ScopeAdapter = RESTAdapter.extend(ScopeAdapterMixin, {
+      namespace: 'api/v1',
+      includeProject: false,
+    });
+    this.owner.register('adapter:scope', ScopeAdapter);
+    const adapter = this.owner.lookup('adapter:scope');
+    let url = adapter._buildURL('model', 1);
+    assert.equal(url, '/api/v1/orgs/1/models/1');
+  });
 });
