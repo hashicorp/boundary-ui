@@ -1,5 +1,7 @@
 'use strict';
 
+const APP_NAME = process.env.APP_NAME || 'Application Name';
+
 module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'core',
@@ -22,6 +24,8 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+
+    appName: APP_NAME,
 
     contentSecurityPolicyHeader: 'Content-Security-Policy',
     contentSecurityPolicyMeta: true,

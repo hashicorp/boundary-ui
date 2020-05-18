@@ -8,11 +8,11 @@ The core UI for Project Watchtower.
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
 - [Running / Development](#running--development)
-  - [Code Generators](#code-generators)
-  - [Running Tests](#running-tests)
-  - [Linting](#linting)
   - [Building](#building)
+    - [Environment Variables](#environment-variables)
+  - [Running Tests](#running-tests)
   - [Deploying](#deploying)
 - [Further Reading / Useful Links](#further-reading--useful-links)
 
@@ -64,6 +64,14 @@ To build the project, without running it, execute one of the following commands:
 
 * `yarn run build` (development)
 * `yarn run build:production` (production)
+
+#### Environment Variables
+
+These environment variables may be used to customized the build.
+
+| Variable | Default Value | Description |
+| -------- | ------------- | ----------- |
+| `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 
 ### Running Tests
 
