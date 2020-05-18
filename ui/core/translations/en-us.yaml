@@ -1,0 +1,4 @@
+app:
+  name: 'Application Name'
+example:
+  text: 'Example'
