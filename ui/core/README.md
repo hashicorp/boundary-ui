@@ -44,8 +44,10 @@ List of available project commands.  `yarn run <command-name>`
 | lint | Runs all lint commands. |
 | lint:hbs | Lints `hbs` template files. |
 | lint:js | Lints `js` files. |
+| lint:sass | Lints `scss` files. |
 | format | Runs all auto-formatters. |
 | format:js | Auto-formats `js` files using Prettier. |
+| format:sass | Auto-formats `scss` files using Prettier. |
 | start | Runs the dummy app local server. |
 | test | Runs all tests in random order, with coverage reporting. |
 | doc:toc | Automatically generates a table of contents for this README file. |
