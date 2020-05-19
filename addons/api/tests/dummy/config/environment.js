@@ -21,6 +21,10 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+
+    api: {
+      namespace: '/api/addon/v1',
+    },
   };
 
   if (environment === 'development') {
