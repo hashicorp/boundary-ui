@@ -1,0 +1,14 @@
+<details class="rose-header-dropdown"
+  open={{this.isOpen}}
+  ...attributes
+  {{did-insert this.addClickOutside}}
+  {{will-destroy this.removeClickOutside}}
+  {{on 'toggle' this.toggle}}>
+  {{yield (hash
+    isOpen=this.isOpen
+    trigger=(component 'rose/header/dropdown/trigger'
+    isOpen=this.isOpen)
+    content=(component 'rose/header/dropdown/content' isOpen=this.isOpen
+    position=@position)
+  )}}
+</details>

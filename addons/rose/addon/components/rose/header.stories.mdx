@@ -1,0 +1,73 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Header" component="Header" />
+
+# Header
+
+A header component that allows three distinct sections to be configured: brand, navigation, and utilities.
+
+```htmlbars
+<Rose::Header name="main header" as |header|>
+  <header.brand />
+
+  <header.navigation as |nav|>
+    <nav.dropdown as |dropdown|>
+      <dropdown.trigger>Org name</dropdown.trigger>
+      <dropdown.content as |content|>
+        <content.link @route="about">link</content.link>
+        <content.button>button</content.button>
+      </dropdown.content>
+    </nav.dropdown>
+    <nav.link @route="about">Section</nav.link>
+  </header.navigation>
+
+  <header.utilities as |utilities|>
+    <utilities.dropdown as |dropdown|>
+      <dropdown.trigger>Click me</dropdown.trigger>
+      <dropdown.content as |content|>
+        <content.link @route="about">link</content.link>
+        <content.button>button</content.button>
+      </dropdown.content>
+    </utilities.dropdown>
+  </header.utilities>
+</Rose::Header>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+    <Rose::Header name="main header" as |header|>
+      <header.brand />
+      <header.navigation as |nav|>
+        <nav.dropdown @isOpen={{open-dropdown}} as |dropdown|>
+          <dropdown.trigger>{{navigation-dropdown-label}}</dropdown.trigger>
+          <dropdown.content as |content|>
+            <content.link @route="about">{{navigation-dropdown-link-label}}</content.link>
+            <content.button>{{navigation-dropdown-button-label}}</content.button>
+          </dropdown.content>
+        </nav.dropdown>
+        <nav.link @route="about">{{navigation-link-label}}</nav.link>
+      </header.navigation>
+      <header.utilities as |utilities|>
+        <utilities.dropdown @isOpen={{open-dropdown}} as |dropdown|>
+          <dropdown.trigger><Rose::Icon @name="user-square-outline" /></dropdown.trigger>
+          <dropdown.content as |content|>
+            <content.link @route="about">link</content.link>
+            <content.button>button</content.button>
+          </dropdown.content>
+        </utilities.dropdown>
+      </header.utilities>
+    </Rose::Header>
+    `,
+    context: {
+      'navigation-dropdown-label': text('navigation-dropdown-label', 'Org Name'),
+      'navigation-dropdown-link-label': text('navigation-dropdown-link-label', 'Menu Item'),
+      'navigation-dropdown-button-label': text('navigation-dropdown-button-label', 'Menu Item'),
+      'navigation-link-label': text('navigation-link-label', 'Section'),
+      'open-dropdown': boolean('open-dropdown', false),
+    },
+  }}</Story>
+</Preview>

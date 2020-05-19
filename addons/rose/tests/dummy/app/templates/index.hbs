@@ -1,3 +1,29 @@
+<Rose::Header name="main header" as |header|>
+  <header.brand />
+
+  <header.navigation as |nav|>
+    <nav.dropdown as |dropdown|>
+      <dropdown.trigger>Org name</dropdown.trigger>
+      <dropdown.content as |content|>
+        <content.link @route="about">link</content.link>
+        <content.button>button</content.button>
+      </dropdown.content>
+    </nav.dropdown>
+    <nav.link @route="about">Section</nav.link>
+  </header.navigation>
+
+  <header.utilities as |utilities|>
+    <utilities.dropdown as |dropdown|>
+      <dropdown.trigger>Click me</dropdown.trigger>
+      <dropdown.content as |content|>
+        <content.link @route="about">link</content.link>
+        <content.button>button</content.button>
+      </dropdown.content>
+    </utilities.dropdown>
+  </header.utilities>
+</Rose::Header>
+
+
 Dummy app index template
 
 <h2>Icon</h2>
