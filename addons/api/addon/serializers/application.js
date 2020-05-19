@@ -1,6 +1,6 @@
 import RESTSerializer from '@ember-data/serializer/rest';
 import { underscore } from '@ember/string';
-import { copy } from '@ember/object/internals';
+import { copy } from 'ember-copy';
 
 /**
  * Manages serialization/normalization of data to/from the API.
