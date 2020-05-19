@@ -1,3 +1,3 @@
 import GeneratedProjectModel from '../generated/models/project';
 
-export default class OrgModel extends GeneratedProjectModel {}
+export default class ProjectModel extends GeneratedProjectModel {}

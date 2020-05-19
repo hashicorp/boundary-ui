@@ -1,4 +1,2 @@
-app:
-  name: 'Application Name'
-example:
-  text: 'Example'
+resources:
+  projects: Projects

@@ -25,6 +25,10 @@ module.exports = function (environment) {
       // when it is created
     },
 
+    api: {
+      namespace: 'api/v1',
+    },
+
     appName: APP_NAME,
 
     contentSecurityPolicyHeader: 'Content-Security-Policy',
@@ -38,8 +42,8 @@ module.exports = function (environment) {
       'img-src': ["'self'"],
       'style-src': ["'self'"],
       'media-src': ["'self'"],
-      'manifest-src': ["'self'"]
-    }
+      'manifest-src': ["'self'"],
+    },
   };
 
   // Unsafe policy is necessary in development and test environments, but should
@@ -60,10 +64,10 @@ module.exports = function (environment) {
       componentOptions: {
         axeOptions: {
           checks: {
-            'color-contrast': { options: { noScroll: true } }
-          }
-        }
-      }
+            'color-contrast': { options: { noScroll: true } },
+          },
+        },
+      },
     };
 
     enableUnsafeCSP();
