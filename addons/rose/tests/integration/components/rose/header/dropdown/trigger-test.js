@@ -25,11 +25,6 @@ module('Integration | Component | rose/header/dropdown/trigger', function(hooks)
     assert.ok(find('.rose-header-dropdown-trigger').className.match('dropdown-trigger'));
   });
 
-  test('it is open when @isOpen={{true}}', async function(assert) {
-    await render(hbs`<Rose::Header::Dropdown::Trigger @isOpen={{true}} />`);
-    assert.ok(find('.rose-header-dropdown-open'));
-  });
-
   test('it renders chevron', async function(assert) {
     await render(hbs`<Rose::Header::Dropdown::Trigger />`);
     assert.ok(find('.rose-header-dropdown-chevron'));

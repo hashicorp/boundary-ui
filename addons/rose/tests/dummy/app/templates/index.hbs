@@ -13,7 +13,7 @@
   </header.navigation>
 
   <header.utilities as |utilities|>
-    <utilities.dropdown as |dropdown|>
+    <utilities.dropdown @alignRight={{true}} as |dropdown|>
       <dropdown.trigger>Click me</dropdown.trigger>
       <dropdown.content as |content|>
         <content.link @route="about">link</content.link>

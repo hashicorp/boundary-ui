@@ -1,4 +1,5 @@
 @use '../variables/sizing';
+@use '../variables/media';
 @use '../utilities/type';
 
 $brand-hashicorp: "data:image/svg+xml;utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 106.86 113.14' fill='%23ffffff'><g id='Layer_2' data-name='Layer 2'><g id='Logo'><polygon points='44.54 0 0 25.69 0 25.71 0 87.41 16.73 97.07 16.73 35.35 44.54 19.3 44.54 0'/><polygon points='62.32 0 62.32 49.15 44.54 49.15 44.54 30.81 27.8 40.47 27.8 103.44 44.54 113.12 44.54 64.11 62.32 64.11 62.32 82.33 79.05 72.67 79.05 9.66 62.32 0'/><polygon points='62.32 113.14 106.86 87.45 106.86 87.43 106.86 25.73 90.12 16.07 90.12 77.79 62.32 93.84 62.32 113.14'/></g></g></svg>";
@@ -14,38 +15,38 @@ $dropdown-chevron: (
   grid-template-areas: 'brand navigation utilities';
   grid-template-columns: 0.01fr auto 1fr;
   grid-gap: sizing.rems(xxxs);
-  background: var(--stark);
-  color: var(--subtle);
-  padding: sizing.rems(xxs) 0;
+  background: var(--black);
+  color: var(--white);
 
   .rose-header-brand {
     grid-area: brand;
-    margin: sizing.rems(xs) 0 sizing.rems(xs) sizing.rems(m);
-    padding: 0 sizing.rems(m);
-    height: sizing.rems(l) + sizing.rems(xxs);
+    width: sizing.rems(l);
+    height: sizing.rems(l);
     background-image: url($brand-hashicorp);
     background-repeat: no-repeat;
+    margin: sizing.rems(xxs);
   }
 
   .rose-header-navigation {
     grid-area: navigation;
 
-    .wrapper {
+    .rose-header-navigation-flex {
       display: flex;
       flex-wrap: wrap;
     }
 
     .rose-header-navigation-link {
-      padding: sizing.rems(xs) sizing.rems(s) sizing.rems(xxxs) sizing.rems(s);
       text-decoration: none;
       display: block;
-      color: var(--subtle);
-      height: sizing.rems(l);
+      color: var(--white);
       border: 1px solid var(--stark);
       border-radius: sizing.rems(xxs);
       text-align: center;
-      margin-top: sizing.rems(xxs);
+      padding: sizing.rems(xxs) sizing.rems(s);
+      position: relative;
+      top: sizing.rems(xxxs);
       cursor: pointer;
+      margin: 0 sizing.rems(xs);
 
       &:hover {
         background: var(--ui-gray-starker-3);
@@ -60,7 +61,7 @@ $dropdown-chevron: (
   .rose-header-utilities {
     grid-area: utilities;
 
-    .wrapper {
+    .rose-header-utilities-flex {
       margin-right: sizing.rems(s);
       display: flex;
       flex-wrap: wrap;
@@ -70,25 +71,24 @@ $dropdown-chevron: (
 
   .rose-header-navigation, .rose-header-utilities {
     .rose-header-dropdown {
-      height: sizing.rems(m) + sizing.rems(xxxs);
-
-      .rose-header-dropdown-trigger {
-        height: sizing.rems(m) + sizing.rems(xxxs);
-        padding: sizing.rems(xs) sizing.rems(xxs);
-        border-radius: sizing.rems(xxxs);
-        color: var(--subtle);
-        margin: sizing.rems(xxs) sizing.rems(xxs) 0 0;
-        cursor: pointer;
-
-        &.rose-header-dropdown-open {
-          background: var(--subtle);
+      &[open] {
+        .rose-header-dropdown-trigger {
+          background: var(--white);
           color: var(--ui-gray-starker-4);
 
           .rose-header-dropdown-chevron {
             background-image: url(map-get($dropdown-chevron, 'open'));
           }
         }
+      }
 
+      .rose-header-dropdown-trigger {
+        padding: sizing.rems(xxs) sizing.rems(s);
+        border-radius: sizing.rems(xxxs);
+        color: var(--white);
+        position: relative;
+        top: sizing.rems(xxxs);
+        cursor: pointer;
         &::-webkit-details-marker {
           display: none;
         }
@@ -110,29 +110,29 @@ $dropdown-chevron: (
 
       .rose-header-dropdown-content {
         position: absolute;
-        background-color: var(--subtle);
+        background-color: var(--white);
         border-radius: sizing.rems(xxxs);
         border: 1px solid var(--ui-gray-subtler-2);
+        padding-right: sizing.rems(xl);
+        margin-top: sizing.rems(xxxs);
 
         &.rose-header-dropdown-content-right {
-          right: sizing.rems(m);
+          right: sizing.rems(s);
         }
 
         .rose-header-dropdown-content-link{
-          padding: sizing.rems(s) (sizing.rems(xl) * 3) sizing.rems(xxs) sizing.rems(s);
+          padding: sizing.rems(xs) sizing.rems(s);
           text-decoration: none;
           display: block;
           color: var(--ui-gray-starker-4);
           height: sizing.rems(l);
         }
 
-
         .rose-header-dropdown-content-button {
           button {
             cursor: pointer;
-            padding: sizing.rems(s) (sizing.rems(xl) * 3) sizing.rems(xs) sizing.rems(s);
+            padding: sizing.rems(xs) sizing.rems(s);
             color: var(--ui-gray-starker-4);
-            box-shadow: none;
             display: inline-block;
             border: none;
             text-decoration: none;
@@ -146,8 +146,7 @@ $dropdown-chevron: (
   }
 }
 
-//TODO: Where do media query sizes live?
-@media (max-width: 768px) {
+@media (max-width: media.width(small)) {
   .rose-header {
     grid-template-columns: 1fr 3fr;
     grid-template-areas:

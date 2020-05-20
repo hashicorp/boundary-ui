@@ -24,20 +24,11 @@ module('Integration | Component | rose/header/dropdown/content', function(hooks)
     assert.ok(find('.rose-header-dropdown-content').className.match('universe'));
   });
 
-  test('it is open when @isOpen={{true}}', async function(assert) {
-    this.set('isOpen', false);
-    await render(hbs`<Rose::Header::Dropdown::Content @isOpen={{this.isOpen}} />`);
-    assert.notOk(find('.rose-header-dropdown-open'));
-
-    this.set('isOpen', true);
-    assert.ok(find('.rose-header-dropdown-open'));
-  });
-
-  test('it is positioned right when @position={{true}}', async function(assert) {
+  test('it is positioned right when @alignRight={{true}}', async function(assert) {
     await render(hbs`<Rose::Header::Dropdown::Content />`);
     assert.notOk(find('.rose-header-dropdown-content-right'));
 
-    await render(hbs`<Rose::Header::Dropdown::Content @position="{{true}}"/>`);
+    await render(hbs`<Rose::Header::Dropdown::Content @alignRight="{{true}}"/>`);
     assert.ok(find('.rose-header-dropdown-content-right'));
   });
 

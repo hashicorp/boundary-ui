@@ -40,22 +40,6 @@ module('Integration | Component | rose/header/dropdown', function(hooks) {
     assert.equal(findAll('button').length, 3);
   });
 
-  test('it is opened when @isOpen={{true}}', async function(assert) {
-    this.set('isOpen', false);
-    await render(hbs`<Rose::Header::Dropdown @isOpen={{this.isOpen}} as |dropdown|>
-      <dropdown.trigger>Click me</dropdown.trigger>
-      <dropdown.content as |content|>
-        <content.button />
-      </dropdown.content>
-    </Rose::Header::Dropdown>`);
-    assert.notOk(find('.rose-header-dropdown-trigger.rose-header-dropdown-open'));
-    assert.notOk(find('.rose-header-dropdown-content.rose-header-dropdown-open'));
-
-    this.set('isOpen', true);
-    assert.ok(find('.rose-header-dropdown-trigger.rose-header-dropdown-open'));
-    assert.ok(find('.rose-header-dropdown-content.rose-header-dropdown-open'));
-  });
-
   test('it is toggled on click on trigger content', async function(assert) {
     await render(hbs`<Rose::Header::Dropdown id="dropdown" as |dropdown|>
       <dropdown.trigger id="trigger">Click me</dropdown.trigger>
@@ -64,19 +48,12 @@ module('Integration | Component | rose/header/dropdown', function(hooks) {
       </dropdown.content>
     </Rose::Header::Dropdown>`);
     assert.notOk(find('#dropdown').open);
-    assert.notOk(find('.rose-header-dropdown-trigger.rose-header-dropdown-open'));
-    assert.notOk(find('.rose-header-dropdown-content.rose-header-dropdown-open'));
 
     await click('#trigger');
-
     assert.ok(find('#dropdown').open);
-    assert.ok(find('.rose-header-dropdown-trigger.rose-header-dropdown-open'));
-    assert.ok(find('.rose-header-dropdown-content.rose-header-dropdown-open'));
 
     await click('#trigger');
     assert.notOk(find('#dropdown').open);
-    assert.notOk(find('.rose-header-dropdown-trigger.rose-header-dropdown-open'));
-    assert.notOk(find('.rose-header-dropdown-content.rose-header-dropdown-open'));
   });
 
   test('it is closed with outside click is triggered', async function(assert) {

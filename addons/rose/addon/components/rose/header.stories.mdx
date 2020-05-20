@@ -42,7 +42,7 @@ A header component that allows three distinct sections to be configured: brand, 
     <Rose::Header name="main header" as |header|>
       <header.brand />
       <header.navigation as |nav|>
-        <nav.dropdown @isOpen={{open-dropdown}} as |dropdown|>
+        <nav.dropdown as |dropdown|>
           <dropdown.trigger>{{navigation-dropdown-label}}</dropdown.trigger>
           <dropdown.content as |content|>
             <content.link @route="about">{{navigation-dropdown-link-label}}</content.link>
@@ -52,7 +52,7 @@ A header component that allows three distinct sections to be configured: brand, 
         <nav.link @route="about">{{navigation-link-label}}</nav.link>
       </header.navigation>
       <header.utilities as |utilities|>
-        <utilities.dropdown @isOpen={{open-dropdown}} as |dropdown|>
+        <utilities.dropdown @alignRight={{true}} as |dropdown|>
           <dropdown.trigger><Rose::Icon @name="user-square-outline" /></dropdown.trigger>
           <dropdown.content as |content|>
             <content.link @route="about">link</content.link>
@@ -67,7 +67,6 @@ A header component that allows three distinct sections to be configured: brand, 
       'navigation-dropdown-link-label': text('navigation-dropdown-link-label', 'Menu Item'),
       'navigation-dropdown-button-label': text('navigation-dropdown-button-label', 'Menu Item'),
       'navigation-link-label': text('navigation-link-label', 'Section'),
-      'open-dropdown': boolean('open-dropdown', false),
     },
   }}</Story>
 </Preview>
