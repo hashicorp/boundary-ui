@@ -1,7 +1,7 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Application Name';
-const API_HOST = process.env.API_HOST || 'http://localhost:9200';
+const API_HOST = process.env.API_HOST || '';
 
 module.exports = function (environment) {
   let ENV = {
