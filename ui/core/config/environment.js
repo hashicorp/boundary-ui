@@ -1,6 +1,7 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Application Name';
+const API_HOST = process.env.API_HOST || 'http://localhost:9200';
 
 module.exports = function (environment) {
   let ENV = {
@@ -26,6 +27,7 @@ module.exports = function (environment) {
     },
 
     api: {
+      host: API_HOST,
       namespace: 'v1',
     },
 
@@ -71,6 +73,11 @@ module.exports = function (environment) {
     };
 
     enableUnsafeCSP();
+    // TODO: should provide an env var to explicitly add a host to CSP
+    // at build time for any environment (not just development),
+    // rather than automatically include API_HOST.  Changes to CSP should
+    // be explicit.
+    if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
   }
 
   if (environment === 'test') {

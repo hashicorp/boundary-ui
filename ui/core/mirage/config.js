@@ -21,5 +21,8 @@ export default function() {
     https://www.ember-cli-mirage.com/docs/route-handlers/shorthands
   */
 
+  if (config.api.host) this.passthrough(`${config.api.host}/**`);
+  this.passthrough();
+
   this.get('/orgs/:org_id/projects');
 }

@@ -6,6 +6,13 @@ export default class ApplicationAdapter extends RESTAdapter {
   // =attributes
 
   /**
+   * Sets host to the `api.host` string in the application's config,
+   * if set.
+   * @type {string}
+   */
+  host = get(config, 'api.host');
+
+  /**
    * Sets namespace to the `api.namespace` string in the application's config,
    * if set.
    * @type {string}

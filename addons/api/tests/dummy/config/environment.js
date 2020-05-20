@@ -23,7 +23,8 @@ module.exports = function (environment) {
     },
 
     api: {
-      namespace: '/api/addon/v1',
+      host: '',
+      namespace: 'v1',
     },
   };
 

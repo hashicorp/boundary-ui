@@ -72,6 +72,7 @@ These environment variables may be used to customized the build.
 | Variable | Default Value | Description |
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
+| `API_HOST` | | The host of the API, if different than UI (e.g. https://example.net:1234). |
 
 ### Running Tests
 
