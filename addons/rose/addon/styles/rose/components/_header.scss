@@ -5,8 +5,10 @@
 $brand-hashicorp: "data:image/svg+xml;utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 106.86 113.14' fill='%23ffffff'><g id='Layer_2' data-name='Layer 2'><g id='Logo'><polygon points='44.54 0 0 25.69 0 25.71 0 87.41 16.73 97.07 16.73 35.35 44.54 19.3 44.54 0'/><polygon points='62.32 0 62.32 49.15 44.54 49.15 44.54 30.81 27.8 40.47 27.8 103.44 44.54 113.12 44.54 64.11 62.32 64.11 62.32 82.33 79.05 72.67 79.05 9.66 62.32 0'/><polygon points='62.32 113.14 106.86 87.45 106.86 87.43 106.86 25.73 90.12 16.07 90.12 77.79 62.32 93.84 62.32 113.14'/></g></g></svg>";
 
 $dropdown-chevron: (
-  'default': "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ebeef2' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>",
-  'open': "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231f2124' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>",
+  'default':
+    "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ebeef2' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>",
+  'open':
+    "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231f2124' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>",
 );
 
 .rose-header {
@@ -69,7 +71,8 @@ $dropdown-chevron: (
     }
   }
 
-  .rose-header-navigation, .rose-header-utilities {
+  .rose-header-navigation,
+  .rose-header-utilities {
     .rose-header-dropdown {
       &[open] {
         .rose-header-dropdown-trigger {
@@ -104,7 +107,7 @@ $dropdown-chevron: (
 
         .rose-icon {
           position: relative;
-          top: - sizing.rems(xxs);
+          top: -sizing.rems(xxs);
         }
       }
 
@@ -120,7 +123,7 @@ $dropdown-chevron: (
           right: sizing.rems(s);
         }
 
-        .rose-header-dropdown-content-link{
+        .rose-header-dropdown-content-link {
           padding: sizing.rems(xs) sizing.rems(s);
           text-decoration: none;
           display: block;

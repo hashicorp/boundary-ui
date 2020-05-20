@@ -9,7 +9,7 @@ export default Component.extend({
   // Uses details widget state to close dropdown
   @action
   close(element) {
-    if(element.open) {
+    if (element.open) {
       element.open = false;
     }
   },

@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/header/brand', function(hooks) {
+module('Integration | Component | rose/header/brand', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
