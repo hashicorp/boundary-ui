@@ -33,7 +33,7 @@ export default class ApplicationSerializer extends RESTSerializer {
   /**
    * In our API, array payloads are always rooted under the same key `items`.
    * Ember Data normally expects them to be rooted under their model name,
-   * e.g. `{hostCatalogs: [...]}`.  This method makes this transformation to
+   * e.g. `{hostCatalogs: […]}`.  This method makes this transformation to
    * accommodate Ember Data.
    *
    * @override
@@ -56,6 +56,38 @@ export default class ApplicationSerializer extends RESTSerializer {
     transformedPayload[payloadKey] = copy(payload.items, true);
     // Return the result of normalizing the transformed payload.
     return super.normalizeArrayResponse(
+      store,
+      primaryModelClass,
+      transformedPayload,
+      id,
+      requestType
+    );
+  }
+
+  /**
+   * In our API, singluar resources are _unrooted_, whereas Ember Data expects
+   * them to be rooted under their model name, e.g. `{project: {…}}`.
+   * This method makes this transformation to accommodate Ember Data.
+   *
+   * @method normalizeSingleResponse
+   * @param {Store} store
+   * @param {Model} primaryModelClass
+   * @param {Object} payload
+   * @param {String|Number} id
+   * @param {String} requestType
+   * @return {Object} JSON-API Document
+   */
+  normalizeSingleResponse(store, primaryModelClass, payload, id, requestType) {
+    // Setup a new payload data structure.
+    const transformedPayload = {};
+    // Find the Ember-data-expected root key name.
+    const payloadKey = this.payloadKeyFromModelName(
+      primaryModelClass.modelName
+    );
+    // Copy the unrooted payload under the expected root key name.
+    transformedPayload[payloadKey] = copy(payload);
+    // Return the result of normalizing the transformed payload.
+    return super.normalizeSingleResponse(
       store,
       primaryModelClass,
       transformedPayload,

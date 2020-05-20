@@ -67,4 +67,29 @@ module('Unit | Serializer | application', function (hooks) {
       ],
     });
   });
+
+  test('it normalizes single, unrooted records', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('project');
+    const projectModelClass = store.createRecord('project').constructor;
+    const payload = {
+      id: '1',
+      name: 'Project 1'
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      projectModelClass,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'project',
+        attributes: { name: 'Project 1' },
+        relationships: {},
+      }
+    });
+  });
 });
