@@ -26,7 +26,7 @@ module.exports = function (environment) {
     },
 
     api: {
-      namespace: 'api/v1',
+      namespace: 'v1',
     },
 
     appName: APP_NAME,
