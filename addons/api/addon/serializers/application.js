@@ -20,6 +20,8 @@ export default class ApplicationSerializer extends RESTSerializer {
   /**
    * If an attribute is annotated as readOnly in the model, don't serialize it.
    * Otherwise delegate to default attribute serializer.
+   *
+   * @override
    * @method serializeAttribute
    * @param {Snapshot} snapshot
    * @param {Object} json
@@ -28,6 +30,23 @@ export default class ApplicationSerializer extends RESTSerializer {
    */
   serializeAttribute(snapshot, json, key, { options }) {
     return options.readOnly ? null : super.serializeAttribute(...arguments);
+  }
+
+  /**
+   * In our API, request payloads are unrooted.  But Ember Data roots request
+   * payloads for this adapter by default.  Instead of assigned a root key
+   * on the outgoing hash, we copy the serialized attributes into it.
+   *
+   * @override
+   * @method serializeIntoHash
+   * @param {Object} hash
+   * @param {Model} typeClass
+   * @param {Snapshot} snapshot
+   * @param {Object} options
+   */
+  serializeIntoHash(hash, typeClass, snapshot, options) {
+    const serialized = this.serialize(snapshot, options);
+    Object.assign(hash, serialized);
   }
 
   /**

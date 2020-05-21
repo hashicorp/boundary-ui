@@ -75,7 +75,7 @@ module('Unit | Serializer | application', function (hooks) {
     const projectModelClass = store.createRecord('project').constructor;
     const payload = {
       id: '1',
-      name: 'Project 1'
+      name: 'Project 1',
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -89,7 +89,7 @@ module('Unit | Serializer | application', function (hooks) {
         type: 'project',
         attributes: { name: 'Project 1' },
         relationships: {},
-      }
+      },
     });
   });
 });
