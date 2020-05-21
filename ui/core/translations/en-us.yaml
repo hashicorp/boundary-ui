@@ -1,4 +1,12 @@
-app:
-  name: 'Application Name'
-example:
-  text: 'Example'
+actions:
+  cancel: Cancel
+  delete: Delete
+  save: Save
+resources:
+  projects: Projects
+titles:
+  new: New
+form:
+  label:
+    name: Name
+    description: Description

@@ -1,0 +1,39 @@
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+
+module('Unit | Model | base', function (hooks) {
+  setupTest(hooks);
+
+  // Replace this with your real tests.
+  test('it exists', function (assert) {
+    let store = this.owner.lookup('service:store');
+    let model = store.createRecord('base', {});
+    assert.ok(model);
+  });
+
+  test('it has canSave and cannotSave attributes', function (assert) {
+    assert.expect(8);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '1',
+        type: 'project',
+        attributes: {},
+      },
+    });
+    const model = store.peekRecord('project', '1');
+    assert.equal(model.canSave, false);
+    assert.equal(model.cannotSave, true);
+    // Should be able to save if dirty
+    model.name = 'Project';
+    assert.equal(model.hasDirtyAttributes, true);
+    assert.equal(model.canSave, true);
+    assert.equal(model.cannotSave, false);
+    // Should not be able to save while currently saving
+    model.transitionTo('updated.inFlight');
+    assert.equal(model.isSaving, true);
+    assert.equal(model.canSave, false);
+    assert.equal(model.cannotSave, true);
+    model.transitionTo('loaded');
+  });
+});

@@ -1,6 +1,7 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Application Name';
+const API_HOST = process.env.API_HOST || '';
 
 module.exports = function (environment) {
   let ENV = {
@@ -25,6 +26,11 @@ module.exports = function (environment) {
       // when it is created
     },
 
+    api: {
+      host: API_HOST,
+      namespace: 'v1',
+    },
+
     appName: APP_NAME,
 
     contentSecurityPolicyHeader: 'Content-Security-Policy',
@@ -38,8 +44,8 @@ module.exports = function (environment) {
       'img-src': ["'self'"],
       'style-src': ["'self'"],
       'media-src': ["'self'"],
-      'manifest-src': ["'self'"]
-    }
+      'manifest-src': ["'self'"],
+    },
   };
 
   // Unsafe policy is necessary in development and test environments, but should
@@ -60,13 +66,18 @@ module.exports = function (environment) {
       componentOptions: {
         axeOptions: {
           checks: {
-            'color-contrast': { options: { noScroll: true } }
-          }
-        }
-      }
+            'color-contrast': { options: { noScroll: true } },
+          },
+        },
+      },
     };
 
     enableUnsafeCSP();
+    // TODO: should provide an env var to explicitly add a host to CSP
+    // at build time for any environment (not just development),
+    // rather than automatically include API_HOST.  Changes to CSP should
+    // be explicit.
+    if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
   }
 
   if (environment === 'test') {

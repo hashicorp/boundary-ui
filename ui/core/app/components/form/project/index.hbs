@@ -1,0 +1,46 @@
+<form
+  ...attributes
+  novalidate
+  method="post"
+  {{on "submit" @submit}}>
+
+  <Rose::Form::Input
+    @id="name"
+    name="name"
+    @type="name"
+    @value={{@model.name}}
+    @label={{t "form.label.name"}}
+    @error={{false}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+  />
+
+  <Rose::Form::Textarea
+    @id="description"
+    name="description"
+    @type="description"
+    @value={{@model.description}}
+    @label={{t "form.label.description"}}
+    @error={{false}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+  />
+
+  <section class="form-actions">
+    <Rose::Button
+      @disabled={{@model.cannotSave}}
+      @submit={{true}}
+      @style="primary"
+    >
+      {{t 'actions.save'}}
+    </Rose::Button>
+
+    <Rose::Button
+      @disabled={{@model.cannotSave}}
+      @style="secondary"
+      {{on "click" @cancel}}
+    >
+      {{t 'actions.cancel'}}
+    </Rose::Button>
+  </section>
+</form>
