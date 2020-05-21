@@ -1,0 +1,8 @@
+<details class="rose-header-dropdown" ...attributes
+  {{on-click-outside this.close}}>
+
+  {{yield (hash
+    trigger=(component 'rose/header/dropdown/trigger')
+    content=(component 'rose/header/dropdown/content' alignRight=@alignRight)
+  )}}
+</details>

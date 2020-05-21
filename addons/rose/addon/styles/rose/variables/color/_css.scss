@@ -74,6 +74,8 @@
   --ui-gray-starker-2: #{color(ui-gray, 700)};
   --ui-gray-starker-3: #{color(ui-gray, 800)};
   --ui-gray-starker-4: #{color(ui-gray, 900)};
+
+  --ui-header-subtler: #{color(ui-cool-gray, 700)};
 }
 
 // Dark Mode
@@ -131,5 +133,7 @@
     --ui-gray-starker-2: #{color(ui-gray, 100)};
     --ui-gray-starker-3: #{color(ui-gray, 050)};
     --ui-gray-starker-4: #{color(ui-gray, 010)};
+
+    --ui-header-subtler: #{color(ui-cool-gray, 100)};
   }
 }

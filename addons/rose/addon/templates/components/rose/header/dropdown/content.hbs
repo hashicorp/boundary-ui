@@ -1,0 +1,6 @@
+<span class="rose-header-dropdown-content {{if @alignRight "rose-header-dropdown-content-right"}}" ...attributes>
+  {{yield (hash
+    link=(component 'link-to' class="rose-header-dropdown-content-link")
+    button=(component 'rose/header/dropdown/content/button')
+  )}}
+</span>
