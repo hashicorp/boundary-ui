@@ -22,7 +22,7 @@ module('Unit | Serializer | application', function (hooks) {
     assert.deepEqual(serializedRecord, {
       name: 'Project',
       description: 'Description',
-      disabled: false,
+      //disabled: false,  // TODO:  disabled is temporarily disabled
     });
   });
 
