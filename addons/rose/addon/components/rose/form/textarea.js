@@ -18,4 +18,5 @@ import layout from '../../../templates/components/rose/form/textarea';
  */
 export default Component.extend({
   layout,
+  tagName: ''
 });
