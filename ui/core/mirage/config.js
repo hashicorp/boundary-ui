@@ -7,7 +7,7 @@ export default function() {
   // make this `/api`, for example, if your API is namespaced
   this.namespace = config.api.namespace;
   // delay for each request, automatically set to 0 during testing
-  this.timing = 50;
+  this.timing = 350;
 
   /*
     Shorthand cheatsheet:
@@ -25,4 +25,8 @@ export default function() {
   this.passthrough();
 
   this.get('/orgs/:org_id/projects');
+  this.post('/orgs/:org_id/projects');
+  this.get('/orgs/:org_id/projects/:id');
+  this.patch('/orgs/:org_id/projects/:id');
+  this.del('/orgs/:org_id/projects/:id');
 }

@@ -1,0 +1,19 @@
+<LinkTo @route='orgs.org.projects'>{{t "resources.projects"}}</LinkTo>
+>
+<LinkTo @route='orgs.org.projects.project'>{{@model.name}}</LinkTo>
+
+<h2>{{@model.name}}</h2>
+
+<Form::Project
+  @model={{@model}}
+  @submit={{route-action "save" @model}}
+  @cancel={{route-action "cancel" @model}}
+/>
+
+<Rose::Button
+  @style="warning"
+  @disabled={{@model.canSave}}
+  {{on "click" (route-action "delete" @model)}}
+>
+  {{t 'actions.delete'}}
+</Rose::Button>

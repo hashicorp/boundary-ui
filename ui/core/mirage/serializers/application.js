@@ -40,6 +40,22 @@ export default RestSerializer.extend({
     // If array, root it under a standard `items` key
     if (json.length) json = {items: json};
     return json;
+  },
+
+  /**
+   * Adds a root to the payload, since `root: false` doesn't appear to affect
+   * the normalize method.
+   * @param {object} json
+   * @return {object}
+   */
+  normalize(json) {
+    let newJSON = json;
+    if (this.modelName) {
+      newJSON = {};
+      newJSON[this.modelName] = json;
+    }
+    const value = RestSerializer.prototype.normalize.apply(this, [newJSON]);
+    return value;
   }
 
 });

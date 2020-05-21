@@ -1,2 +1,12 @@
+actions:
+  cancel: Cancel
+  delete: Delete
+  save: Save
 resources:
   projects: Projects
+titles:
+  new: New
+form:
+  label:
+    name: Name
+    description: Description
