@@ -1,19 +1,24 @@
-<LinkTo @route='orgs.org.projects'>{{t "resources.projects"}}</LinkTo>
->
-<LinkTo @route='orgs.org.projects.project'>{{@model.name}}</LinkTo>
+<div class="project-overview">
+  <div class="breadcrumbs">
+    <LinkTo @route='orgs.org.projects'>{{t "resources.projects"}}</LinkTo>
+    >
+    <LinkTo @route='orgs.org.projects.project'>{{@model.name}}</LinkTo>
+  </div>
 
-<h2>{{@model.name}}</h2>
+  <h2>{{@model.name}}</h2>
 
-<Form::Project
-  @model={{@model}}
-  @submit={{route-action "save" @model}}
-  @cancel={{route-action "cancel" @model}}
-/>
+  <Form::Project
+    @model={{@model}}
+    @submit={{route-action "save" @model}}
+    @cancel={{route-action "cancel" @model}}
+    class="project-new-form"
+  />
 
-<Rose::Button
-  @style="warning"
-  @disabled={{@model.canSave}}
-  {{on "click" (route-action "delete" @model)}}
->
-  {{t 'actions.delete'}}
-</Rose::Button>
+  <Rose::Button
+    @style="warning"
+    @disabled={{@model.canSave}}
+    {{on "click" (route-action "delete" @model)}}
+  >
+    {{t 'actions.delete'}}
+  </Rose::Button>
+</div>
