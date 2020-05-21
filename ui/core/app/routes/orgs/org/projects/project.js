@@ -69,5 +69,4 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
       throw e;
     }
   }
-
 }

@@ -1,1 +1,74 @@
 @import 'rose';
+
+.projects-overview {
+  margin: 0 10px;
+
+  .projects {
+    display: flex;
+    padding: 20px 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .project {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 10px;
+
+      a {
+        text-decoration: none;
+        text-transform: capitalize;
+        color: #000;
+        cursor: pointer;
+        padding: 20px 30px 20px 20px;
+        border: 1px solid #bac1cc;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.project-new-link {
+  cursor: pointer;
+  text-decoration: none;
+  padding: 10px;
+  color: #ffffff;
+  text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+  background: #1563ff;
+  border: 1px solid #082766;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+  position: absolute;
+  right: 10px;
+  top: 70px;
+  display: inline-block;
+}
+
+.project-overview,
+.project-new {
+  margin: 0 10px;
+  .breadcrumbs,
+  .breadcrumbs a {
+    color: #6f7682;
+    text-decoration: none;
+  }
+
+  .project-new-form {
+    .form-actions {
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      float: right;
+
+      button {
+        margin-right: 10px;
+      }
+    }
+
+    input,
+    textarea {
+      box-sizing: border-box;
+      width: 100%;
+    }
+  }
+}
