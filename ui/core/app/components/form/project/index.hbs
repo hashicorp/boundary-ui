@@ -1,4 +1,5 @@
 <form
+  ...attributes
   novalidate
   method="post"
   {{on "submit" @submit}}>
@@ -25,20 +26,21 @@
     readonly={{false}}
   />
 
-  <Rose::Button
-    @disabled={{@model.cannotSave}}
-    @submit={{true}}
-    @style="primary"
-  >
-    {{t 'actions.save'}}
-  </Rose::Button>
+  <section class="form-actions">
+    <Rose::Button
+      @disabled={{@model.cannotSave}}
+      @submit={{true}}
+      @style="primary"
+    >
+      {{t 'actions.save'}}
+    </Rose::Button>
 
-  <Rose::Button
-    @disabled={{@model.cannotSave}}
-    @style="secondary"
-    {{on "click" @cancel}}
-  >
-    {{t 'actions.cancel'}}
-  </Rose::Button>
-
+    <Rose::Button
+      @disabled={{@model.cannotSave}}
+      @style="secondary"
+      {{on "click" @cancel}}
+    >
+      {{t 'actions.cancel'}}
+    </Rose::Button>
+  </section>
 </form>

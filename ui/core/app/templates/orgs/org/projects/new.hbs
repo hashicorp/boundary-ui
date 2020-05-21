@@ -1,11 +1,16 @@
-<LinkTo @route='orgs.org.projects'>{{t "resources.projects"}}</LinkTo>
->
-<LinkTo @route='orgs.org.projects.new'>{{t "titles.new"}}</LinkTo>
+<div class="project-new">
+  <div class="breadcrumbs">
+    <LinkTo @route='orgs.org.projects'>{{t "resources.projects"}}</LinkTo>
+    >
+    <LinkTo @route='orgs.org.projects.new'>{{t "titles.new"}}</LinkTo>
+  </div>
 
-<h2>{{t "titles.new"}}</h2>
+  <h2>{{t "titles.new"}}</h2>
 
-<Form::Project
-  @model={{@model}}
-  @submit={{route-action "save" @model}}
-  @cancel={{route-action "cancel" @model}}
-/>
+  <Form::Project
+    @model={{@model}}
+    @submit={{route-action "save" @model}}
+    @cancel={{route-action "cancel" @model}}
+    class="project-new-form"
+  />
+</div>

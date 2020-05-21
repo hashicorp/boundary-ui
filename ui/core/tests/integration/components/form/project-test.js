@@ -20,5 +20,4 @@ module('Integration | Component | form/project', function (hooks) {
 
     assert.ok(find('form'));
   });
-
 });

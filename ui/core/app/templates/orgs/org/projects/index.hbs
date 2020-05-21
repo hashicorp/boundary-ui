@@ -1,13 +1,15 @@
-<h2>{{t "resources.projects"}}</h2>
+<div class="projects-overview">
+  <h2>{{t "resources.projects"}}</h2>
 
-<LinkTo @route="orgs.org.projects.new">{{t "titles.new"}}</LinkTo>
+  <LinkTo @route="orgs.org.projects.new" class="project-new-link">{{t "titles.new"}}</LinkTo>
 
-<ul>
-  {{#each @model as |project|}}
-    <li>
-      <LinkTo @route="orgs.org.projects.project" @model={{project}}>
-        {{project.name}}
-      </LinkTo>
-    </li>
-  {{/each}}
-</ul>
+  <ul class="projects">
+    {{#each @model as |project|}}
+      <li class="project">
+        <LinkTo @route="orgs.org.projects.project" @model={{project}}>
+          {{project.name}}
+        </LinkTo>
+      </li>
+    {{/each}}
+  </ul>
+</div>
