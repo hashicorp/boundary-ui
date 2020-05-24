@@ -16,7 +16,7 @@
     "lint:sass": "sass-lint -v -q",
     "format": "npm run format:js && npm run format:sass",
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
-    "format:sass": "prettier --write {addon,app}/**/*.scss",
+    "format:sass": "prettier --write addon/**/*.scss",
     "start": "ember serve",
     "test": "ember test",
     "test:all": "ember try:each",

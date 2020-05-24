@@ -1,0 +1,31 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-header-brand {
+  grid-area: brand;
+  display: flex;
+  align-items: center;
+  color: var(--white);
+  text-decoration: none;
+  padding: 10px;
+  margin: 0 10px;
+
+  svg {
+    // 28px... header sizes do not follow the sizing system
+    $logoSize: sizing.rems(l) + sizing.rems(xxs);
+    display: block;
+    width: $logoSize;
+  }
+
+  .rose-header-brand-text {
+    @include type.type(m, normal);
+    margin: 0;
+    white-space: nowrap;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+}

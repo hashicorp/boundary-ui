@@ -1,6 +1,8 @@
 <Rose::Header name="main header" as |header|>
-  <header.brand />
 
+  <header.brand @logo="logo" @text="Product Name" />
+
+  {{!--
   <header.navigation as |nav|>
     <nav.dropdown as |dropdown|>
       <dropdown.trigger>Org name</dropdown.trigger>
@@ -21,6 +23,7 @@
       </dropdown.content>
     </utilities.dropdown>
   </header.utilities>
+  --}}
 </Rose::Header>
 
 

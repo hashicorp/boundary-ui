@@ -18,5 +18,5 @@ import layout from '../../../templates/components/rose/form/input';
  */
 export default Component.extend({
   layout,
-  tagName: ''
+  tagName: '',
 });
