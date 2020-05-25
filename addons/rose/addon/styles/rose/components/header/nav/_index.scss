@@ -1,0 +1,18 @@
+@use '../../../variables/media';
+
+@import 'link';
+
+.rose-header-nav {
+  grid-area: nav;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px 0;
+}
+
+@media (max-width: media.width(small)) {
+  .rose-header-nav {
+    padding: 10px 20px;
+    background: var(--ui-header-subtler);
+  }
+}

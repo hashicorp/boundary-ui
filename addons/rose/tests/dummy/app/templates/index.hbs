@@ -1,9 +1,14 @@
-<Rose::Header name="main header" as |header|>
+<Rose::Header as |header|>
 
   <header.brand @logo="logo" @text="Product Name" />
 
+  <header.nav as |nav|>
+    <nav.link @route="index">Section</nav.link>
+    <nav.link @route="about">Section</nav.link>
+  </header.nav>
+
   {{!--
-  <header.navigation as |nav|>
+  <header.nav as |nav|>
     <nav.dropdown as |dropdown|>
       <dropdown.trigger>Org name</dropdown.trigger>
       <dropdown.content as |content|>
@@ -12,7 +17,7 @@
       </dropdown.content>
     </nav.dropdown>
     <nav.link @route="about">Section</nav.link>
-  </header.navigation>
+  </header.nav>
 
   <header.utilities as |utilities|>
     <utilities.dropdown @alignRight={{true}} as |dropdown|>

@@ -16,26 +16,26 @@ module('Integration | Component | rose/header', function (hooks) {
       <header.brand></header.brand>
     </Rose::Header>`);
     assert.ok(find('.rose-header-brand'));
-    assert.notOk(find('.rose-header-navigation'));
+    assert.notOk(find('.rose-header-nav'));
     assert.notOk(find('.rose-header-utilities'));
   });
 
-  test('it renders with navigation', async function (assert) {
+  test('it renders with nav', async function (assert) {
     await render(hbs`<Rose::Header as |header| >
-      <header.navigation />
+      <header.nav />
     </Rose::Header>`);
-    assert.ok(find('.rose-header-navigation'));
+    assert.ok(find('.rose-header-nav'));
     assert.notOk(find('.rose-header-brand'));
     assert.notOk(find('.rose-header-utilities'));
   });
 
-  test('it renders with navigation elements', async function (assert) {
+  test('it renders with nav elements', async function (assert) {
     await render(hbs`<Rose::Header as |header| >
-      <header.navigation as |nav|>
+      <header.nav as |nav|>
         <nav.link @route="about"/>
-      </header.navigation>
+      </header.nav>
     </Rose::Header>`);
-    assert.ok(find('.rose-header-navigation-link'));
+    assert.ok(find('.rose-header-nav-link'));
   });
 
   test('it renders with utilities', async function (assert) {
@@ -43,7 +43,7 @@ module('Integration | Component | rose/header', function (hooks) {
       <header.utilities />
     </Rose::Header>`);
     assert.notOk(find('.rose-header-brand'));
-    assert.notOk(find('.rose-header-navigation'));
+    assert.notOk(find('.rose-header-nav'));
     assert.ok(find('.rose-header-utilities'));
   });
 

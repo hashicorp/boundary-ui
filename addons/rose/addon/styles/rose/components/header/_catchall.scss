@@ -1,12 +1,12 @@
-.rose-header-navigation {
-  grid-area: navigation;
+.rose-header-nav {
+  grid-area: nav;
 
-  .rose-header-navigation-flex {
+  .rose-header-nav-flex {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .rose-header-navigation-link {
+  .rose-header-nav-link {
     text-decoration: none;
     display: block;
     color: var(--white);
@@ -40,7 +40,7 @@
   }
 }
 
-.rose-header-navigation,
+.rose-header-nav,
 .rose-header-utilities {
   .rose-header-dropdown {
     &[open] {
@@ -117,14 +117,14 @@
     grid-template-columns: 1fr 3fr;
     grid-template-areas:
       'brand utilities'
-      'navigation navigation';
+      'nav nav';
     padding-bottom: 0;
 
-    .rose-header-navigation {
+    .rose-header-nav {
       background: var(--ui-header-subtler);
       padding: sizing.rems(xs) sizing.rems(s);
 
-      .rose-header-navigation-link {
+      .rose-header-nav-link {
         border: 1px solid var(--ui-gray-subtler);
 
         &:hover {

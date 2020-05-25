@@ -7,13 +7,13 @@ import { text, boolean } from '@storybook/addon-knobs';
 
 # Header
 
-A header component that allows three distinct sections to be configured: brand, navigation, and utilities.
+A header component that allows three distinct sections to be configured: brand, nav, and utilities.
 
 ```htmlbars
-<Rose::Header name="main header" as |header|>
+<Rose::Header as |header|>
   <header.brand @logo="logo" @text="Product Name" />
 
-  <header.navigation as |nav|>
+  <header.nav as |nav|>
     <nav.dropdown as |dropdown|>
       <dropdown.trigger>Org name</dropdown.trigger>
       <dropdown.content as |content|>
@@ -22,7 +22,7 @@ A header component that allows three distinct sections to be configured: brand, 
       </dropdown.content>
     </nav.dropdown>
     <nav.link @route="about">Section</nav.link>
-  </header.navigation>
+  </header.nav>
 
   <header.utilities as |utilities|>
     <utilities.dropdown as |dropdown|>
@@ -39,18 +39,18 @@ A header component that allows three distinct sections to be configured: brand, 
 <Preview>
   <Story name="Basic">{{
     template: hbs`
-    <Rose::Header name="main header" as |header|>
+    <Rose::Header as |header|>
       <header.brand @logo="logo" @text="Product Name" />
-      <header.navigation as |nav|>
+      <header.nav as |nav|>
         <nav.dropdown as |dropdown|>
-          <dropdown.trigger>{{navigation-dropdown-label}}</dropdown.trigger>
+          <dropdown.trigger>{{nav-dropdown-label}}</dropdown.trigger>
           <dropdown.content as |content|>
-            <content.link @route="about">{{navigation-dropdown-link-label}}</content.link>
-            <content.button>{{navigation-dropdown-button-label}}</content.button>
+            <content.link @route="about">{{nav-dropdown-link-label}}</content.link>
+            <content.button>{{nav-dropdown-button-label}}</content.button>
           </dropdown.content>
         </nav.dropdown>
-        <nav.link @route="about">{{navigation-link-label}}</nav.link>
-      </header.navigation>
+        <nav.link @route="about">{{nav-link-label}}</nav.link>
+      </header.nav>
       <header.utilities as |utilities|>
         <utilities.dropdown @alignRight={{true}} as |dropdown|>
           <dropdown.trigger><Rose::Icon @name="user-square-outline" /></dropdown.trigger>
@@ -63,10 +63,10 @@ A header component that allows three distinct sections to be configured: brand, 
     </Rose::Header>
     `,
     context: {
-      'navigation-dropdown-label': text('navigation-dropdown-label', 'Org Name'),
-      'navigation-dropdown-link-label': text('navigation-dropdown-link-label', 'Menu Item'),
-      'navigation-dropdown-button-label': text('navigation-dropdown-button-label', 'Menu Item'),
-      'navigation-link-label': text('navigation-link-label', 'Section'),
+      'nav-dropdown-label': text('nav-dropdown-label', 'Org Name'),
+      'nav-dropdown-link-label': text('nav-dropdown-link-label', 'Menu Item'),
+      'nav-dropdown-button-label': text('nav-dropdown-button-label', 'Menu Item'),
+      'nav-link-label': text('nav-link-label', 'Section'),
     },
   }}</Story>
 </Preview>
