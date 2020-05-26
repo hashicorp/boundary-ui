@@ -14,13 +14,12 @@ A header component that allows three distinct sections to be configured: brand, 
   <header.brand @logo="logo" @text="Product Name" />
 
   <header.nav as |nav|>
-    <nav.dropdown as |dropdown|>
-      <dropdown.trigger>Org name</dropdown.trigger>
-      <dropdown.content as |content|>
-        <content.link @route="about">link</content.link>
-        <content.button>button</content.button>
-      </dropdown.content>
+    <nav.dropdown @text="org-name" as |dropdown|>
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.button>Button menu item</dropdown.button>
     </nav.dropdown>
+    <nav.link @route="index">Section</nav.link>
     <nav.link @route="about">Section</nav.link>
   </header.nav>
 
@@ -42,14 +41,13 @@ A header component that allows three distinct sections to be configured: brand, 
     <Rose::Header as |header|>
       <header.brand @logo="logo" @text="Product Name" />
       <header.nav as |nav|>
-        <nav.dropdown as |dropdown|>
-          <dropdown.trigger>{{nav-dropdown-label}}</dropdown.trigger>
-          <dropdown.content as |content|>
-            <content.link @route="about">{{nav-dropdown-link-label}}</content.link>
-            <content.button>{{nav-dropdown-button-label}}</content.button>
-          </dropdown.content>
+        <nav.dropdown @text="org-name" as |dropdown|>
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
         </nav.dropdown>
-        <nav.link @route="about">{{nav-link-label}}</nav.link>
+        <nav.link @route="index">Section</nav.link>
+        <nav.link @route="about">Section</nav.link>
       </header.nav>
       <header.utilities as |utilities|>
         <utilities.dropdown @alignRight={{true}} as |dropdown|>
@@ -63,7 +61,7 @@ A header component that allows three distinct sections to be configured: brand, 
     </Rose::Header>
     `,
     context: {
-      'nav-dropdown-label': text('nav-dropdown-label', 'Org Name'),
+      'nav-dropdown-label': text('nav-dropdown-label', 'org-name'),
       'nav-dropdown-link-label': text('nav-dropdown-link-label', 'Menu Item'),
       'nav-dropdown-button-label': text('nav-dropdown-button-label', 'Menu Item'),
       'nav-link-label': text('nav-link-label', 'Section'),

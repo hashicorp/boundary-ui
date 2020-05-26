@@ -1,8 +1,18 @@
-<details class="rose-header-dropdown" ...attributes
-  {{on-click-outside this.close}}>
+<details
+  ...attributes
+  class="rose-header-dropdown{{if @alignRight " dropdown-right"}}"
+  {{on-click-outside this.close}}
+>
 
-  {{yield (hash
-    trigger=(component 'rose/header/dropdown/trigger')
-    content=(component 'rose/header/dropdown/content' alignRight=@alignRight)
-  )}}
+  <summary class="rose-header-dropdown-trigger">
+    {{@text}}
+  </summary>
+
+  <div class="rose-header-dropdown-content">
+    {{yield (hash
+      link=(component "link-to" class="rose-header-dropdown-link")
+      button=(component "rose/button" style="header-dropdown")
+    )}}
+  </div>
+
 </details>

@@ -3,22 +3,16 @@
   <header.brand @logo="logo" @text="Product Name" />
 
   <header.nav as |nav|>
+    <nav.dropdown @text="org-name" as |dropdown|>
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.button>Button menu item</dropdown.button>
+    </nav.dropdown>
     <nav.link @route="index">Section</nav.link>
     <nav.link @route="about">Section</nav.link>
   </header.nav>
 
   {{!--
-  <header.nav as |nav|>
-    <nav.dropdown as |dropdown|>
-      <dropdown.trigger>Org name</dropdown.trigger>
-      <dropdown.content as |content|>
-        <content.link @route="about">link</content.link>
-        <content.button>button</content.button>
-      </dropdown.content>
-    </nav.dropdown>
-    <nav.link @route="about">Section</nav.link>
-  </header.nav>
-
   <header.utilities as |utilities|>
     <utilities.dropdown @alignRight={{true}} as |dropdown|>
       <dropdown.trigger><Rose::Icon @name="user-square-outline" /></dropdown.trigger>

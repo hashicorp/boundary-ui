@@ -1,0 +1,76 @@
+@use 'sass:map';
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+$dropdown-chevron: (
+  'default':
+    "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ebeef2' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>",
+);
+
+.rose-header-dropdown {
+  position: relative;
+
+  .rose-header-dropdown-trigger {
+    cursor: default;
+    color: var(--white);
+    background: url(map.get($dropdown-chevron, default)) no-repeat right center;
+    margin-right: sizing.rems(s);
+    padding-right: sizing.rems(l);
+
+    // Hide default twistie triangle
+    // Webkit / Chromium
+    &::-webkit-details-marker {
+      display: none;
+    }
+    // Firefox
+    list-style-type: none;
+    &::marker {
+      display: none;
+    }
+  }
+
+  .rose-header-dropdown-content {
+    $xs: sizing.rems(xs); // 8
+    $xxs: sizing.rems(xxs); // 4
+    position: absolute;
+    padding: $xxs 0;
+    border: 1px solid var(--ui-gray-subtler-2);
+    border-radius: sizing.rems(xxxs);
+    background: var(--subtle);
+    box-shadow: 0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3)),
+      0 $xxs $xs rgba(var(--stark-components), var(--opacity-4));
+  }
+
+  &.dropdown-right {
+    .rose-header-dropdown-content {
+      right: 0;
+    }
+  }
+
+  .rose-header-dropdown-link,
+  .rose-button-header-dropdown {
+    @include type.type(m, normal);
+    display: block;
+    // Targeting min-width of 200
+    min-width: (sizing.rems(m) + sizing.rems(xxs)) * 10;
+    padding: 0 sizing.rems(s);
+    margin: 0;
+    border: 0;
+    color: var(--stark);
+    background-color: transparent;
+    // target line height is 36, which is not a standard line height for this
+    // font size
+    $lineHeight: 36 / 16;
+    line-height: $lineHeight;
+    text-align: left;
+    text-decoration: none;
+
+    &:hover {
+      background-color: var(--ui-gray-subtler-4);
+    }
+  }
+
+  .rose-button-header-dropdown {
+    width: 100%;
+  }
+}
