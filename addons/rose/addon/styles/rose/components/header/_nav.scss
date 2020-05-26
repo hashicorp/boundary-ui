@@ -1,7 +1,5 @@
-@use '../../../variables/sizing';
-@use '../../../variables/media';
-
-@import 'link';
+@use '../../variables/sizing';
+@use '../../variables/media';
 
 .rose-header-nav {
   grid-area: nav;

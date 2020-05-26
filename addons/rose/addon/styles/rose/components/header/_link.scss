@@ -1,5 +1,5 @@
-@use '../../../variables/sizing';
-@use '../../../utilities/type';
+@use '../../variables/sizing';
+@use '../../utilities/type';
 
 .rose-header-nav-link {
   @include type.type(s, semibold);
