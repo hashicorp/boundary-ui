@@ -1,7 +1,7 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
-import { text, boolean } from '@storybook/addon-knobs';
+import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Header" component="Header" />
 
@@ -24,12 +24,14 @@ A header component that allows three distinct sections to be configured: brand, 
   </header.nav>
 
   <header.utilities as |utilities|>
-    <utilities.dropdown as |dropdown|>
-      <dropdown.trigger>Click me</dropdown.trigger>
-      <dropdown.content as |content|>
-        <content.link @route="about">link</content.link>
-        <content.button>button</content.button>
-      </dropdown.content>
+    <utilities.dropdown
+      @text="user@example.net"
+      @iconOnly={{true}}
+      @icon="user-square-fill" as |dropdown|
+    >
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.button>Button menu item</dropdown.button>
     </utilities.dropdown>
   </header.utilities>
 </Rose::Header>
@@ -39,7 +41,7 @@ A header component that allows three distinct sections to be configured: brand, 
   <Story name="Basic">{{
     template: hbs`
     <Rose::Header as |header|>
-      <header.brand @logo="logo" @text="Product Name" />
+      <header.brand @logo="logo" @text={{brandName}} />
       <header.nav as |nav|>
         <nav.dropdown @text="org-name" as |dropdown|>
           <dropdown.link @route="index">Menu item</dropdown.link>
@@ -50,21 +52,31 @@ A header component that allows three distinct sections to be configured: brand, 
         <nav.link @route="about">Section</nav.link>
       </header.nav>
       <header.utilities as |utilities|>
-        <utilities.dropdown @alignRight={{true}} as |dropdown|>
-          <dropdown.trigger><Rose::Icon @name="user-square-outline" /></dropdown.trigger>
-          <dropdown.content as |content|>
-            <content.link @route="about">link</content.link>
-            <content.button>button</content.button>
-          </dropdown.content>
+        <utilities.dropdown
+          @text="user@example.net"
+          @iconOnly={{true}}
+          @icon={{dropdownIcon}} as |dropdown|
+        >
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
         </utilities.dropdown>
       </header.utilities>
     </Rose::Header>
     `,
     context: {
-      'nav-dropdown-label': text('nav-dropdown-label', 'org-name'),
-      'nav-dropdown-link-label': text('nav-dropdown-link-label', 'Menu Item'),
-      'nav-dropdown-button-label': text('nav-dropdown-button-label', 'Menu Item'),
-      'nav-link-label': text('nav-link-label', 'Section'),
+      brandName: text('brandName', 'Brand Name'),
+      dropdownIcon: select(
+        'dropdownIcon',
+        {
+          'user-square-fill': 'user-square-fill',
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'user-square-fill'
+      ),
     },
   }}</Story>
 </Preview>

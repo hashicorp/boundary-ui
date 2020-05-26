@@ -12,10 +12,30 @@ $dropdown-chevron: (
 
   .rose-header-dropdown-trigger {
     cursor: default;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
     color: var(--white);
     background: url(map.get($dropdown-chevron, default)) no-repeat right center;
+    background-size: sizing.rems(m);
     margin-right: sizing.rems(s);
-    padding-right: sizing.rems(l);
+    padding-right: sizing.rems(l) - sizing.rems(xxs);
+    $lineHeight: 48 / 16;
+    line-height: $lineHeight;
+
+    &.icon-only {
+      padding-right: sizing.rems(m);
+
+      .rose-header-dropdown-trigger-text {
+        // TODO: factor out into visually-hidden mixin utility
+        position: absolute;
+        left: -1000px;
+        top: -1000px;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+    }
 
     // Hide default twistie triangle
     // Webkit / Chromium
@@ -26,6 +46,15 @@ $dropdown-chevron: (
     list-style-type: none;
     &::marker {
       display: none;
+    }
+
+    .rose-icon {
+      display: inline-block;
+      height: var(--size);
+
+      > svg {
+        vertical-align: top;
+      }
     }
   }
 

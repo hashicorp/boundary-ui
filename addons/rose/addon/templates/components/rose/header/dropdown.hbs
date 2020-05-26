@@ -4,8 +4,22 @@
   {{on-click-outside this.close}}
 >
 
-  <summary class="rose-header-dropdown-trigger">
-    {{@text}}
+  <summary
+    class="rose-header-dropdown-trigger{{if @iconOnly " icon-only"}}"
+    title={{@text}}
+  >
+
+    {{#if @icon}}
+      <Rose::Icon
+        @name={{@icon}}
+        @size="large"
+      />
+    {{/if}}
+
+    <span class="rose-header-dropdown-trigger-text">
+      {{@text}}
+    </span>
+
   </summary>
 
   <div class="rose-header-dropdown-content">

@@ -1,7 +1,5 @@
-<span class="rose-header-utilities">
-  <span class="rose-header-utilities-flex">
-    {{yield (hash
-      dropdown=(component 'rose/header/dropdown' position="true")
-    )}}
-  </span>
-</span>
+<div class="rose-header-utilities">
+  {{yield (hash
+    dropdown=(component 'rose/header/dropdown' alignRight=true)
+  )}}
+</div>

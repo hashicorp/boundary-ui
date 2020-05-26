@@ -27,6 +27,21 @@ module('Integration | Component | rose/header/dropdown', function (hooks) {
     );
   });
 
+  test('it supports an icon', async function (assert) {
+    await render(hbs`<Rose::Header::Dropdown @icon="user-square-fill" />`);
+    assert.ok(find('svg'));
+  });
+
+  test('it supports icon-only display', async function (assert) {
+    await render(hbs`<Rose::Header::Dropdown @iconOnly={{true}} />`);
+    assert.ok(find('.icon-only'));
+  });
+
+  test('it supports right-aligned content', async function (assert) {
+    await render(hbs`<Rose::Header::Dropdown @alignRight={{true}} />`);
+    assert.ok(find('.dropdown-right'));
+  });
+
   test('it renders with content', async function (assert) {
     await render(hbs`<Rose::Header::Dropdown @text="Click me" as |dropdown|>
       <dropdown.link @route="about"/>

@@ -12,7 +12,6 @@
 .rose-header-nav,
 .rose-header-utilities {
   .rose-header-dropdown {
-
     .rose-header-dropdown-content {
       position: absolute;
       background-color: var(--white);
@@ -24,7 +23,6 @@
       &.rose-header-dropdown-content-right {
         right: sizing.rems(s);
       }
-
     }
   }
 }
