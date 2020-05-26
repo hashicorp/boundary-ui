@@ -1,3 +1,4 @@
+@use '../../../variables/sizing';
 @use '../../../variables/media';
 
 @import 'link';
@@ -7,12 +8,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 10px 0;
-}
 
-@media (max-width: media.width(small)) {
-  .rose-header-nav {
-    padding: 10px 20px;
+  @media (max-width: media.width(small)) {
+    padding: 0 20px;
     background: var(--ui-header-subtler);
   }
 }

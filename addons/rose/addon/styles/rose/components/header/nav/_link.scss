@@ -10,11 +10,12 @@
   text-decoration: none;
 
   color: var(--white);
-  opacity: 0.5;
+  opacity: 0.75;
 
   // again, nonstandard sizing for header stuff
+  margin: 10px 0;
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: sizing.rems(xxs);
 
   &.active {
     opacity: 1;
