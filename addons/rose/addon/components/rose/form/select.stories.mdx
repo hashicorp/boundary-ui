@@ -12,17 +12,20 @@ Renders a form select element.
 ```htmlbars
 <Rose::Form::Select
   @id="select-id"
+  @name="select-name"
   @value="green"
   @label="Color"
   @helperText="Set your desired color"
   @disabled={{false}}
   @error={{false}}
-  as |select|
+  as |Field|
 >
-  <select.option>Choose a color</select.option>
-  <select.option @value="red">Red</select.option>
-  <select.option @value="green">Green</select.option>
-  <select.option @value="blue">Blue</select.option>
+  <Field as |select|>
+    <select.option>Choose a color</select.option>
+    <select.option @value="red">Red</select.option>
+    <select.option @value="green">Green</select.option>
+    <select.option @value="blue">Blue</select.option>
+  </Field>
 </Rose::Form::Select>
 ```
 
@@ -31,18 +34,21 @@ Renders a form select element.
     template: hbs`
       <Rose::Form::Select
         @id={{id}}
+        @name={{name}}
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}
         @disabled={{disabled}}
         @error={{error}}
         @onChange={{fn onChange}}
-        as |select|
+        as |Field|
       >
-        <select.option>Choose an option</select.option>
-        <select.option @value="value-1">Value 1</select.option>
-        <select.option @value="value-2">Value 2</select.option>
-        <select.option @value="value-3">Value 3</select.option>
+        <Field as |select|>
+          <select.option>Choose an option</select.option>
+          <select.option @value="value-1">Value 1</select.option>
+          <select.option @value="value-2">Value 2</select.option>
+          <select.option @value="value-3">Value 3</select.option>
+        </Field>
       </Rose::Form::Select>
     `,
     context: {
@@ -56,7 +62,8 @@ Renders a form select element.
         },
         null
       ),
-      id: text('id', 'field-id'),
+      id: text('id', 'select-id'),
+      name: text('name', 'select-name'),
       label: text('label', 'Label'),
       helperText: text('helperText', 'Helper text'),
       disabled: boolean('disabled', false),

@@ -30,12 +30,14 @@ and actions.
     @label="Label"
     @helperText="Helper text"
     @onChange={{fn this.actionHandler}}
-    as |select|
+    as |Field|
   >
-    <select.option>Choose an option</select.option>
-    <select.option @value="value-1">Value 1</select.option>
-    <select.option @value="value-2">Value 2</select.option>
-    <select.option @value="value-3">Value 3</select.option>
+    <Field as |select|>
+      <select.option>Choose an option</select.option>
+      <select.option @value="value-1">Value 1</select.option>
+      <select.option @value="value-2">Value 2</select.option>
+      <select.option @value="value-3">Value 3</select.option>
+    </Field>
   </form.select>
   <form.radioGroup @name="color" @selectedValue="green" as |radioGroup|>
     <radioGroup.radio
@@ -84,12 +86,14 @@ and actions.
           @label="Label"
           @helperText="Helper text"
           @onChange={{selectChange}}
-          as |select|
+          as |Field|
         >
-          <select.option>Choose an option</select.option>
-          <select.option @value="value-1">Value 1</select.option>
-          <select.option @value="value-2">Value 2</select.option>
-          <select.option @value="value-3">Value 3</select.option>
+          <Field as |select|>
+            <select.option>Choose an option</select.option>
+            <select.option @value="value-1">Value 1</select.option>
+            <select.option @value="value-2">Value 2</select.option>
+            <select.option @value="value-3">Value 3</select.option>
+          </Field>
         </form.select>
         <form.radioGroup @name="color" @selectedValue="green" as |radioGroup|>
           <radioGroup.radio

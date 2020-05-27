@@ -41,7 +41,14 @@ module('Integration | Component | rose/form', function (hooks) {
       >
         <form.input @label="Input" name="input-field" />
         <form.textarea @label="Textarea" name="textarea-field" />
-        <form.select @label="Select" name="select-field" @onChange={{this.select}} />
+        <form.select
+          @label="Select"
+          @name="select-field"
+          @onChange={{this.select}}
+          as |Field|
+        >
+          <Field />
+        </form.select>
         <form.checkbox @label="Checkbox" name="checkbox-field" />
         <form.radioGroup @name="radio-group-field" @selectedValue="green" as |radioGroup|>
           <radioGroup.radio

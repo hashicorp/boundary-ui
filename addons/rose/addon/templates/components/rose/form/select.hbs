@@ -8,16 +8,12 @@
     <span class="rose-form-select-helper-text">{{@helperText}}</span>
   {{/if}}
 
-  <XSelect
-    ...attributes
-    class="rose-form-select-field"
-    id={{@id}}
-    disabled={{@disabled}}
-    @value={{@value}}
-    @onChange={{@onChange}}
-    as |xs|
-  >
-    {{yield xs}}
-  </XSelect>
+  {{yield (component 'rose/form/select/select'
+    id=@id
+    name=@name
+    disabled=@disabled
+    value=@value
+    onChange=@onChange
+  )}}
 
 </div>

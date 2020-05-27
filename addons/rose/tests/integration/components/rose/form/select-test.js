@@ -12,12 +12,14 @@ module('Integration | Component | rose/form/select', function (hooks) {
       <Rose::Form::Select
         @label="Label"
         @onChange={{fn this.onChange}}
-        as |select|
+        as |Field|
       >
-        <select.option>Choose an option</select.option>
-        <select.option @value="value-1">Value 1</select.option>
-        <select.option @value="value-2">Value 2</select.option>
-        <select.option @value="value-3">Value 3</select.option>
+        <Field as |select|>
+          <select.option>Choose an option</select.option>
+          <select.option @value="value-1">Value 1</select.option>
+          <select.option @value="value-2">Value 2</select.option>
+          <select.option @value="value-3">Value 3</select.option>
+        </Field>
       </Rose::Form::Select>
     `);
     assert.equal(find('label').textContent.trim(), 'Label');
@@ -32,9 +34,11 @@ module('Integration | Component | rose/form/select', function (hooks) {
         @label="Label"
         @helperText="Helper text"
         @onChange={{fn this.onChange}}
-        as |select|
+        as |Field|
       >
-        <select.option>Choose an option</select.option>
+        <Field as |select|>
+          <select.option>Choose an option</select.option>
+        </Field>
       </Rose::Form::Select>
     `);
     assert.equal(
@@ -49,9 +53,11 @@ module('Integration | Component | rose/form/select', function (hooks) {
       <Rose::Form::Select
         @onChange={{fn this.onChange}}
         @disabled={{true}}
-        as |select|
+        as |Field|
       >
-        <select.option>Choose an option</select.option>
+        <Field as |select|>
+          <select.option>Choose an option</select.option>
+        </Field>
       </Rose::Form::Select>
     `);
     assert.ok(find('[disabled]'));
@@ -64,10 +70,12 @@ module('Integration | Component | rose/form/select', function (hooks) {
       <Rose::Form::Select
         @onChange={{fn this.onChange}}
         @value={{value}}
-        as |select|
+        as |Field|
       >
-        <select.option @value="value-1">value-1</select.option>
-        <select.option @value="value-2">value-2</select.option>
+        <Field as |select|>
+          <select.option @value="value-1">value-1</select.option>
+          <select.option @value="value-2">value-2</select.option>
+        </Field>
       </Rose::Form::Select>
     `);
     assert.equal(find('select').value, 'value-1');
@@ -91,12 +99,14 @@ module('Integration | Component | rose/form/select', function (hooks) {
     this.onChange = this.onChange1;
     await render(hbs`
       <Rose::Form::Select
-        name="my-select"
+        @name="my-select"
         @onChange={{fn this.onChange}}
-        as |select|
+        as |Field|
       >
-        <select.option>Choose an option</select.option>
-        <select.option @value="value-1">value-1</select.option>
+        <Field as |select|>
+          <select.option>Choose an option</select.option>
+          <select.option @value="value-1">value-1</select.option>
+        </Field>
       </Rose::Form::Select>
     `);
     await fillIn('[name="my-select"]', 'value-1');
