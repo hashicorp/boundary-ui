@@ -31,7 +31,7 @@ module('Integration | Component | rose/form/input', function (hooks) {
   });
 
   test('it supports disabled attribute', async function (assert) {
-    await render(hbs`<Rose::Form::Input disabled={{true}} />`);
+    await render(hbs`<Rose::Form::Input @disabled={{true}} />`);
     assert.ok(await find('[disabled]'));
   });
 

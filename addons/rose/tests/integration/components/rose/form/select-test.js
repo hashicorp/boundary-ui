@@ -48,7 +48,7 @@ module('Integration | Component | rose/form/select', function (hooks) {
     await render(hbs`
       <Rose::Form::Select
         @onChange={{fn this.onChange}}
-        disabled={{true}}
+        @disabled={{true}}
         as |select|
       >
         <select.option>Choose an option</select.option>

@@ -32,8 +32,8 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     assert.ok(await find('.error'));
   });
 
-  test('it is disabled when disabled={{true}}', async function (assert) {
-    await render(hbs`<Rose::Form::Checkbox disabled={{true}} />`);
+  test('it is disabled when @disabled={{true}}', async function (assert) {
+    await render(hbs`<Rose::Form::Checkbox @disabled={{true}} />`);
     assert.equal(await find('input').disabled, true);
   });
 });

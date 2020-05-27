@@ -21,7 +21,7 @@ module('Integration | Component | rose/form/textarea', function (hooks) {
   });
 
   test('it supports disabled attribute', async function (assert) {
-    await render(hbs`<Rose::Form::Textarea disabled={{true}} />`);
+    await render(hbs`<Rose::Form::Textarea @disabled={{true}} />`);
     assert.ok(await find('[disabled]'));
   });
 
