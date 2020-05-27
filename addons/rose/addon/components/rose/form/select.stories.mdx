@@ -11,7 +11,6 @@ Renders a form select element.
 
 ```htmlbars
 <Rose::Form::Select
-  @id="select-id"
   @name="select-name"
   @value="green"
   @label="Color"
@@ -33,7 +32,6 @@ Renders a form select element.
   <Story name="Basic" height="10rem">{{
     template: hbs`
       <Rose::Form::Select
-        @id={{id}}
         @name={{name}}
         @value={{value}}
         @label={{label}}
@@ -62,7 +60,6 @@ Renders a form select element.
         },
         null
       ),
-      id: text('id', 'select-id'),
       name: text('name', 'select-name'),
       label: text('label', 'Label'),
       helperText: text('helperText', 'Helper text'),

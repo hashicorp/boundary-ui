@@ -3,12 +3,12 @@
   <Input
     ...attributes
     class="rose-form-checkbox-field"
-    id={{@id}}
+    id={{this.id}}
     disabled={{@disabled}}
     @type="checkbox"
     @checked={{if @checked true false}} />
 
-  <label class="rose-form-checkbox-label" for={{@id}}>
+  <label class="rose-form-checkbox-label" for={{this.id}}>
     {{@label}}
   </label>
 

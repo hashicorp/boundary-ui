@@ -1,6 +1,6 @@
 <div class="rose-form-select{{if @error " error"}}">
 
-  <label class="rose-form-select-label" for={{@id}}>
+  <label class="rose-form-select-label" for={{this.id}}>
     {{@label}}
   </label>
 
@@ -9,7 +9,7 @@
   {{/if}}
 
   {{yield (component 'rose/form/select/select'
-    id=@id
+    id=this.id
     name=@name
     disabled=@disabled
     value=@value

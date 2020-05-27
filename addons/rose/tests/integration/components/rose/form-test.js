@@ -52,7 +52,6 @@ module('Integration | Component | rose/form', function (hooks) {
         <form.checkbox @label="Checkbox" name="checkbox-field" />
         <form.radioGroup @name="radio-group-field" @selectedValue="green" as |radioGroup|>
           <radioGroup.radio
-            @id="red-radio"
             @label="Red"
             @value="red"
           />

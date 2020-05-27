@@ -132,17 +132,14 @@ Dummy app index template
   <h3>Radio Group</h3>
   <form.radioGroup @name="color" @selectedValue={{this.color}} as |radioGroup|>
     <radioGroup.radio
-      @id="red-radio"
       @label="Red"
       @value="red"
     />
     <radioGroup.radio
-      @id="green-radio"
       @label="Green"
       @value="green"
     />
     <radioGroup.radio
-      @id="blue-radio"
       @label="Blue"
       @value="blue"
       @disabled={{true}}
@@ -151,26 +148,21 @@ Dummy app index template
 
   <h3>Checkboxes</h3>
   <form.checkbox
-    @id="checkbox-1"
     @label="Label"
     />
   <form.checkbox
-    @id="checkbox-2"
     @error={{true}}
     @label="Error"
     />
   <form.checkbox
-    @id="checkbox-3"
     @checked={{true}}
     @label="Checked"
     />
   <form.checkbox
-    @id="checkbox-4"
     @label="Disabled"
     disabled={{true}}
     />
   <form.checkbox
-    @id="checkbox-5"
     @checked={{true}}
     @label="Disabled + Checked"
     disabled={{true}}

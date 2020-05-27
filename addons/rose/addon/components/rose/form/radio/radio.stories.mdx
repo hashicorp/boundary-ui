@@ -10,7 +10,6 @@ Renders a form radiofield.
 
 ```htmlbars
 <Rose::Form::Radio::Radio
-  @id="yes-radiofield"
   @label="Yes"
   @error={{false}}
   @value="yes-agree"
@@ -23,7 +22,6 @@ Renders a form radiofield.
   <Story name="Basic" height="10rem">{{
     template: hbs`
       <Rose::Form::Radio::Radio
-        @id={{id}}
         @label={{label}}
         @error={{error}}
         @value={{value}}
@@ -32,7 +30,6 @@ Renders a form radiofield.
         />
     `,
     context: {
-      id: text('id', 'radio-1'),
       label: text('text', 'Radiofield'),
       error: boolean('error', false),
       value: text('value', 'value and selectedValue must match to select radiofield'),
