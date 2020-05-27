@@ -50,7 +50,7 @@ Dummy app index template
 <Rose::Form::Select
   @label="Label"
   @helperText="Helper text"
-  @onChange={{fn this.selectChange}}
+  @onChange={{fn this.actionHandler}}
   as |select|
 >
   <select.option>Choose an option</select.option>
@@ -63,11 +63,17 @@ Dummy app index template
   disabled={{true}}
   @label="Label"
   @helperText="Helper text"
-  @onChange={{fn this.selectChange}}
+  @onChange={{fn this.actionHandler}}
   as |select|
 >
   <select.option>Choose an option</select.option>
 </Rose::Form::Select>
+
+<h3>Form Actions</h3>
+<Rose::Form::Actions
+  @submitText="Save"
+  @cancelText="Cancel"
+  @cancel={{this.actionHandler}} />
 
 <Rose::Form::Input
   @label="Label"

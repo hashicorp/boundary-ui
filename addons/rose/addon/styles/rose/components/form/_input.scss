@@ -2,7 +2,7 @@
 @use '../../utilities/type';
 
 .rose-form-input {
-  margin-bottom: sizing.rems(m);
+  margin-bottom: sizing.rems(l);
 
   .rose-form-input-label {
     @include type.type(s, semibold);

@@ -2,7 +2,7 @@
 @use '../../utilities/type';
 
 .rose-form-select {
-  margin-bottom: sizing.rems(m);
+  margin-bottom: sizing.rems(l);
 
   .rose-form-select-label {
     @include type.type(s, semibold);
