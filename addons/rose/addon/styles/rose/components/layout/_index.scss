@@ -1,0 +1,34 @@
+@use '../../variables/media';
+
+.rose-layout-page {
+  display: grid;
+  grid-template-areas:
+    'header header header header'
+    'sidebar main main main';
+  grid-template-columns: 0.5fr repeat(3, 1fr);
+  grid-template-rows: 0.1fr auto;
+  height: 100vh;
+}
+
+.rose-layout-header {
+  grid-area: header;
+}
+
+.rose-layout-main {
+  grid-area: main;
+}
+
+.rose-layout-sidebar {
+  grid-area: sidebar;
+}
+
+@media (max-width: media.width(small)) {
+  .rose-layout-page {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'header'
+      'sidebar'
+      'main';
+    padding-bottom: 0;
+  }
+}

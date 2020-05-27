@@ -1,200 +1,205 @@
-<Rose::Header as |header|>
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <Rose::Header as |header|>
+      <header.brand @logo="logo" @text="Product Name" />
 
-  <header.brand @logo="logo" @text="Product Name" />
-
-  <header.nav as |nav|>
-    <nav.dropdown @text="org-name" as |dropdown|>
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
-      <dropdown.button>Button menu item</dropdown.button>
-    </nav.dropdown>
-    <nav.link @route="index">Section</nav.link>
-    <nav.link @route="about">Section</nav.link>
-  </header.nav>
+      <header.nav as |nav|>
+        <nav.dropdown @text="org-name" as |dropdown|>
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </nav.dropdown>
+        <nav.link @route="index">Section</nav.link>
+        <nav.link @route="about">Section</nav.link>
+      </header.nav>
 
 
-  <header.utilities as |utilities|>
-    <utilities.dropdown
-      @text="user@example.net"
-      @iconOnly={{true}}
-      @icon="user-square-fill" as |dropdown|
+      <header.utilities as |utilities|>
+        <utilities.dropdown
+          @text="user@example.net"
+          @iconOnly={{true}}
+          @icon="user-square-fill" as |dropdown|
+        >
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </utilities.dropdown>
+      </header.utilities>
+
+    </Rose::Header>
+  </page.header>
+  <page.sidebar />
+  <page.main>
+    Dummy app index template
+
+    <h2>Icon</h2>
+    <Rose::Icon @name="alert-circle-fill" />
+    <Rose::Icon @name="alert-circle-fill" @size="medium" />
+    <Rose::Icon @name="alert-circle-fill" @size="small" />
+
+    <h2>Button</h2>
+    <Rose::Button @style="primary">Primary</Rose::Button>
+    <br>
+    <Rose::Button @style="primary" @disabled={{true}}>Primary</Rose::Button>
+    <br>
+
+    <Rose::Button @style="secondary">Secondary</Rose::Button>
+    <br>
+    <Rose::Button @style="secondary" @disabled={{true}}>Secondary</Rose::Button>
+    <br>
+
+    <h2>Form</h2>
+    <Rose::Form::Select
+      @label="Label"
+      @helperText="Helper text"
+      @onChange={{fn this.selectChange}}
+      as |select|
     >
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
-      <dropdown.button>Button menu item</dropdown.button>
-    </utilities.dropdown>
-  </header.utilities>
+      <select.option>Choose an option</select.option>
+      <select.option @value="value-1">Value 1</select.option>
+      <select.option @value="value-2">Value 2</select.option>
+      <select.option @value="value-3">Value 3</select.option>
+    </Rose::Form::Select>
 
-</Rose::Header>
+    <Rose::Form::Select
+      disabled={{true}}
+      @label="Label"
+      @helperText="Helper text"
+      @onChange={{fn this.selectChange}}
+      as |select|
+    >
+      <select.option>Choose an option</select.option>
+    </Rose::Form::Select>
 
+    <Rose::Form::Input
+      @label="Label"
+      @value="Read only"
+      readonly={{true}}
+      />
 
-Dummy app index template
+    <Rose::Form::Input
+      @label="Label"
+      @helperText="Helper text"
+      @value="Text"
+      />
 
-<h2>Icon</h2>
-<Rose::Icon @name="alert-circle-fill" />
-<Rose::Icon @name="alert-circle-fill" @size="medium" />
-<Rose::Icon @name="alert-circle-fill" @size="small" />
+    <Rose::Form::Input
+      @label="Label"
+      @helperText="Helper text"
+      @value="Text"
+      @error={{true}}
+      />
 
-<h2>Button</h2>
-<Rose::Button @style="primary">Primary</Rose::Button>
-<br>
-<Rose::Button @style="primary" @disabled={{true}}>Primary</Rose::Button>
-<br>
-
-<Rose::Button @style="secondary">Secondary</Rose::Button>
-<br>
-<Rose::Button @style="secondary" @disabled={{true}}>Secondary</Rose::Button>
-<br>
-
-<h2>Form</h2>
-<Rose::Form::Select
-  @label="Label"
-  @helperText="Helper text"
-  @onChange={{fn this.selectChange}}
-  as |select|
->
-  <select.option>Choose an option</select.option>
-  <select.option @value="value-1">Value 1</select.option>
-  <select.option @value="value-2">Value 2</select.option>
-  <select.option @value="value-3">Value 3</select.option>
-</Rose::Form::Select>
-
-<Rose::Form::Select
-  disabled={{true}}
-  @label="Label"
-  @helperText="Helper text"
-  @onChange={{fn this.selectChange}}
-  as |select|
->
-  <select.option>Choose an option</select.option>
-</Rose::Form::Select>
-
-<Rose::Form::Input
-  @label="Label"
-  @value="Read only"
-  readonly={{true}}
-  />
-
-<Rose::Form::Input
-  @label="Label"
-  @helperText="Helper text"
-  @value="Text"
-  />
-
-<Rose::Form::Input
-  @label="Label"
-  @helperText="Helper text"
-  @value="Text"
-  @error={{true}}
-  />
-
-<Rose::Form::Input
-  @label="Label"
-  @helperText="Helper text"
-  @value="Text"
-  disabled={{true}}
-  />
+    <Rose::Form::Input
+      @label="Label"
+      @helperText="Helper text"
+      @value="Text"
+      disabled={{true}}
+      />
 
 
-<Rose::Form::Textarea
-  @label="Label"
-  @value="Read only"
-  readonly={{true}}
-  />
+    <Rose::Form::Textarea
+      @label="Label"
+      @value="Read only"
+      readonly={{true}}
+      />
 
-<Rose::Form::Textarea
-  @label="Label"
-  @helperText="Helper text"
-  @value="Text"
-  />
+    <Rose::Form::Textarea
+      @label="Label"
+      @helperText="Helper text"
+      @value="Text"
+      />
 
-<Rose::Form::Textarea
-  @label="Label"
-  @helperText="Helper text"
-  @value="Text"
-  @error={{true}}
-  />
+    <Rose::Form::Textarea
+      @label="Label"
+      @helperText="Helper text"
+      @value="Text"
+      @error={{true}}
+      />
 
-<Rose::Form::Textarea
-  @label="Label"
-  @helperText="Helper text"
-  @value="Text"
-  disabled={{true}}
-  />
+    <Rose::Form::Textarea
+      @label="Label"
+      @helperText="Helper text"
+      @value="Text"
+      disabled={{true}}
+      />
 
-<h2>Checkbox</h2>
-<Rose::Form::Checkbox
-  @id="checkbox-1"
-  @label="Label"
-  />
-<Rose::Form::Checkbox
-  @id="checkbox-2"
-  @error={{true}}
-  @label="Error"
-  />
-<Rose::Form::Checkbox
-  @id="checkbox-3"
-  @checked={{true}}
-  @label="Checked"
-  />
-<Rose::Form::Checkbox
-  @id="checkbox-4"
-  @label="Disabled"
-  disabled={{true}}
-  />
-<Rose::Form::Checkbox
-  @id="checkbox-5"
-  @checked={{true}}
-  @label="Disabled + Checked"
-  disabled={{true}}
-  />
+    <h2>Checkbox</h2>
+    <Rose::Form::Checkbox
+      @id="checkbox-1"
+      @label="Label"
+      />
+    <Rose::Form::Checkbox
+      @id="checkbox-2"
+      @error={{true}}
+      @label="Error"
+      />
+    <Rose::Form::Checkbox
+      @id="checkbox-3"
+      @checked={{true}}
+      @label="Checked"
+      />
+    <Rose::Form::Checkbox
+      @id="checkbox-4"
+      @label="Disabled"
+      disabled={{true}}
+      />
+    <Rose::Form::Checkbox
+      @id="checkbox-5"
+      @checked={{true}}
+      @label="Disabled + Checked"
+      disabled={{true}}
+      />
 
-<h2>Radio field</h2>
-<Rose::Form::Radio::Radio
-  @id="radio-1"
-  @label="Label"
-  @value="radio-1"
-  />
-<Rose::Form::Radio::Radio
-  @id="radio-2"
-  @error={{true}}
-  @label="Error"
-  @value="radio-2"
-  />
-<Rose::Form::Radio::Radio
-  @id="radio-3"
-  @label="Checked"
-  />
+    <h2>Radio field</h2>
+    <Rose::Form::Radio::Radio
+      @id="radio-1"
+      @label="Label"
+      @value="radio-1"
+      />
+    <Rose::Form::Radio::Radio
+      @id="radio-2"
+      @error={{true}}
+      @label="Error"
+      @value="radio-2"
+      />
+    <Rose::Form::Radio::Radio
+      @id="radio-3"
+      @label="Checked"
+      />
 
-<Rose::Form::Radio::Radio
-  @id="radio-4"
-  @label="Disabled"
-  @disabled={{true}}
-  @value="radio-4"
-  />
-<Rose::Form::Radio::Radio
-  @id="radio-5"
-  @label="Disabled + Checked"
-  @value="radio-5"
-  @variable="radio-5"
-  @disabled={{true}}
-  />
+    <Rose::Form::Radio::Radio
+      @id="radio-4"
+      @label="Disabled"
+      @disabled={{true}}
+      @value="radio-4"
+      />
+    <Rose::Form::Radio::Radio
+      @id="radio-5"
+      @label="Disabled + Checked"
+      @value="radio-5"
+      @variable="radio-5"
+      @disabled={{true}}
+      />
 
-<h2>Radio field group</h2>
-<Rose::Form::Radio::Group @name="color" @variable="green" as |radioGroup|>
-  <radioGroup.radio
-    @id="red-radio"
-    @label="Red"
-    @value="red"
-  />
-  <radioGroup.radio
-    @id="green-radio"
-    @label="Green"
-    @value="green"
-  />
-  <radioGroup.radio
-    @id="blue-radio"
-    @label="Blue"
-    @value="blue"
-  />
-</Rose::Form::Radio::Group>
+    <h2>Radio field group</h2>
+    <Rose::Form::Radio::Group @name="color" @variable="green" as |radioGroup|>
+      <radioGroup.radio
+        @id="red-radio"
+        @label="Red"
+        @value="red"
+      />
+      <radioGroup.radio
+        @id="green-radio"
+        @label="Green"
+        @value="green"
+      />
+      <radioGroup.radio
+        @id="blue-radio"
+        @label="Blue"
+        @value="blue"
+      />
+    </Rose::Form::Radio::Group>
+
+  </page.main>
+</Rose::Layout::Page>

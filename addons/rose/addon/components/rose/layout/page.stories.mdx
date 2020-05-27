@@ -1,0 +1,30 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Layout|Page" component="Page" />
+
+# Layout|Page
+
+A page layout/positioning component that allows three distinct sections to be configured: header, sidebar, and main.
+
+```htmlbars
+<Rose::Layout::Page as |page|>
+  <page.header />
+  <page.sidebar />
+  <page.main />
+</Rose::Layout::Page>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+    <Rose::Layout::Page as |page|>
+      <page.header style="background: var(--success);">Header</page.header>
+      <page.sidebar style="background: var(--alert);">Sidebar</page.sidebar>
+      <page.main style="background: var(--warn);">Main</page.main>
+    </Rose::Layout::Page>
+    `,
+  }}</Story>
+</Preview>
