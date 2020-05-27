@@ -20,25 +20,35 @@ module('Integration | Component | rose/header/dropdown', function (hooks) {
   });
 
   test('it renders with trigger', async function (assert) {
-    await render(hbs`<Rose::Header::Dropdown as |dropdown|>
-      <dropdown.trigger>Click me</dropdown.trigger>
-    </Rose::Header::Dropdown>`);
-    assert.ok(find('.rose-header-dropdown-trigger'));
+    await render(hbs`<Rose::Header::Dropdown @text="Click me" />`);
     assert.equal(
       find('.rose-header-dropdown-trigger').textContent.trim(),
       'Click me'
     );
   });
 
+  test('it supports an icon', async function (assert) {
+    await render(hbs`<Rose::Header::Dropdown @icon="user-square-fill" />`);
+    assert.ok(find('svg'));
+  });
+
+  test('it supports icon-only display', async function (assert) {
+    await render(hbs`<Rose::Header::Dropdown @iconOnly={{true}} />`);
+    assert.ok(find('.icon-only'));
+  });
+
+  test('it supports right-aligned content', async function (assert) {
+    await render(hbs`<Rose::Header::Dropdown @alignRight={{true}} />`);
+    assert.ok(find('.dropdown-right'));
+  });
+
   test('it renders with content', async function (assert) {
-    await render(hbs`<Rose::Header::Dropdown as |dropdown|>
-      <dropdown.content as |content|>
-        <content.link @route="about"/>
-        <content.link @route="about"/>
-        <content.button />
-        <content.button />
-        <content.button />
-      </dropdown.content>
+    await render(hbs`<Rose::Header::Dropdown @text="Click me" as |dropdown|>
+      <dropdown.link @route="about"/>
+      <dropdown.link @route="about"/>
+      <dropdown.button />
+      <dropdown.button />
+      <dropdown.button />
     </Rose::Header::Dropdown>`);
     assert.ok(find('.rose-header-dropdown-content'));
     assert.equal(findAll('a').length, 2);
@@ -46,32 +56,24 @@ module('Integration | Component | rose/header/dropdown', function (hooks) {
   });
 
   test('it is toggled on click on trigger content', async function (assert) {
-    await render(hbs`<Rose::Header::Dropdown id="dropdown" as |dropdown|>
-      <dropdown.trigger id="trigger">Click me</dropdown.trigger>
-      <dropdown.content as |content|>
-        <content.button />
-      </dropdown.content>
-    </Rose::Header::Dropdown>`);
+    await render(hbs`<Rose::Header::Dropdown id="dropdown" />`);
+
     assert.notOk(find('#dropdown').open);
-
-    await click('#trigger');
+    await click('summary');
     assert.ok(find('#dropdown').open);
-
-    await click('#trigger');
+    await click('summary');
     assert.notOk(find('#dropdown').open);
   });
 
   test('it is closed with outside click is triggered', async function (assert) {
-    await render(hbs`<div id="wrapper"><Rose::Header::Dropdown id="dropdown" as |dropdown|>
-      <dropdown.trigger id="trigger">Click me</dropdown.trigger>
-      <dropdown.content as |content|>
-        <content.button />
-      </dropdown.content>
-    </Rose::Header::Dropdown></div>`);
+    await render(hbs`
+      <div id="wrapper">
+        <Rose::Header::Dropdown id="dropdown" />
+      </div>
+    `);
 
-    await click('#trigger');
+    await click('summary');
     assert.ok(find('#dropdown').open);
-
     await click('#wrapper');
     assert.notOk(find('#dropdown').open);
   });

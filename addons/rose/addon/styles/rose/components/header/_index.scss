@@ -1,0 +1,26 @@
+@use '../../variables/sizing';
+@use '../../variables/media';
+@use '../../utilities/type';
+
+@import 'brand';
+@import 'nav';
+@import 'utilities';
+@import 'link';
+@import 'dropdown';
+
+.rose-header {
+  display: grid;
+  grid-template-areas: 'brand nav utilities';
+  grid-template-columns: 0.01fr auto 1fr;
+  background: var(--black) linear-gradient(90deg, #191a1c 0%, #1b212d 100%);
+}
+
+@media (max-width: media.width(small)) {
+  .rose-header {
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas:
+      'brand utilities'
+      'nav nav';
+    padding-bottom: 0;
+  }
+}

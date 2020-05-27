@@ -1,0 +1,29 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-header-nav-link {
+  @include type.type(s, semibold);
+
+  // target line height is 16, which is not a standard line height
+  $lineHeight: 16 / 14;
+  line-height: $lineHeight;
+  text-decoration: none;
+
+  color: var(--white);
+  opacity: 0.75;
+
+  // again, nonstandard sizing for header stuff
+  margin: 10px 0;
+  padding: 6px 12px;
+  border-radius: sizing.rems(xxs);
+
+  &.active {
+    opacity: 1;
+    background: #{color(ui-gray, 800)};
+  }
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+}

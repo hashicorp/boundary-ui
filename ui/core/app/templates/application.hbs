@@ -1,9 +1,8 @@
 <HeadLayout />
+{{title (app-name)}}
 
 <Rose::Header as |header|>
-  <header.brand />
+  <header.brand @logo="logo" @text={{app-name}} />
 </Rose::Header>
-
-{{title (app-name)}}
 
 {{outlet}}

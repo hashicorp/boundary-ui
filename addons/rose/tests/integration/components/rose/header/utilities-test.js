@@ -11,10 +11,10 @@ module('Integration | Component | rose/header/utilities', function (hooks) {
     assert.ok(find('.rose-header-utilities'));
   });
 
-  test('it renders navigation dropdown elements', async function (assert) {
-    await render(hbs`<Rose::Header::Utilities as |navigation| >
-      <navigation.dropdown />
-      <navigation.dropdown />
+  test('it renders nav dropdown elements', async function (assert) {
+    await render(hbs`<Rose::Header::Utilities as |nav| >
+      <nav.dropdown />
+      <nav.dropdown />
     </Rose::Header::Utilities>`);
     assert.equal(findAll('.rose-header-dropdown').length, 2);
   });

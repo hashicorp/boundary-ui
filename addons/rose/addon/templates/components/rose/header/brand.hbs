@@ -1,1 +1,16 @@
-<span class="rose-header-brand" />
+<LinkTo
+  ...attributes
+  class="rose-header-brand"
+  title={{@text}}
+  @route={{if @route @route "index"}}
+>
+
+  {{#if @logo}}
+    {{inline-svg @logo}}
+  {{/if}}
+
+  {{#if @text}}
+    <h1 class="rose-header-brand-text">{{@text}}</h1>
+  {{/if}}
+
+</LinkTo>
