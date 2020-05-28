@@ -5,6 +5,7 @@
   disabled={{@disabled}}
   @value={{@value}}
   @onChange={{@onChange}}
+  aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}}"
   as |xs|
 >
   {{yield xs}}

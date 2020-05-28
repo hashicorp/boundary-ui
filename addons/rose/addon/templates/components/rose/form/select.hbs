@@ -5,7 +5,11 @@
   </label>
 
   {{#if @helperText}}
-    <span class="rose-form-select-helper-text">{{@helperText}}</span>
+    <span
+      class="rose-form-select-helper-text"
+      id="helper-text-{{this.id}}">
+      {{@helperText}}
+    </span>
   {{/if}}
 
   {{yield (component 'rose/form/select/select'
@@ -14,6 +18,7 @@
     disabled=@disabled
     value=@value
     onChange=@onChange
+    helperText=@helperText
   )}}
 
 </div>

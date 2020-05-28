@@ -14,10 +14,13 @@ module('Integration | Component | rose/form/input', function (hooks) {
 
   test('it displays optional helper text', async function (assert) {
     await render(hbs`<Rose::Form::Input @helperText="Help me" />`);
-    assert.equal(
-      await find('.rose-form-input-helper-text').textContent.trim(),
-      'Help me'
-    );
+    const fieldEl = find('input');
+    const id = fieldEl.id;
+    const helperId = `helper-text-${id}`;
+    const helperTextEl = find('.rose-form-input-helper-text');
+    assert.equal(helperTextEl.textContent.trim(), 'Help me');
+    assert.equal(helperTextEl.id, helperId);
+    assert.equal(fieldEl.getAttribute('aria-describedby'), helperId);
   });
 
   test('it is type="text" by default', async function (assert) {

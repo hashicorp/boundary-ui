@@ -32,7 +32,7 @@ module('Integration | Component | rose/form/select', function (hooks) {
     await render(hbs`
       <Rose::Form::Select
         @label="Label"
-        @helperText="Helper text"
+        @helperText="Help me"
         @onChange={{fn this.onChange}}
         as |Field|
       >
@@ -41,10 +41,13 @@ module('Integration | Component | rose/form/select', function (hooks) {
         </Field>
       </Rose::Form::Select>
     `);
-    assert.equal(
-      find('.rose-form-select-helper-text').textContent.trim(),
-      'Helper text'
-    );
+    const fieldEl = find('select');
+    const id = fieldEl.id;
+    const helperId = `helper-text-${id}`;
+    const helperTextEl = find('.rose-form-select-helper-text');
+    assert.equal(helperTextEl.textContent.trim(), 'Help me');
+    assert.equal(helperTextEl.id, helperId);
+    assert.equal(fieldEl.getAttribute('aria-describedby'), helperId);
   });
 
   test('it supports disabled attribute', async function (assert) {

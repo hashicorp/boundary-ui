@@ -5,7 +5,11 @@
   </label>
 
   {{#if @helperText}}
-    <span class="rose-form-input-helper-text">{{@helperText}}</span>
+    <span
+      class="rose-form-input-helper-text"
+      id="helper-text-{{this.id}}">
+      {{@helperText}}
+    </span>
   {{/if}}
 
   <Textarea
@@ -13,7 +17,8 @@
     class="rose-form-input-field"
     id={{this.id}}
     disabled={{@disabled}}
-    @value={{@value}} />
+    @value={{@value}}
+    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}}" />
 
   {{yield}}
 
