@@ -28,20 +28,20 @@ module('Integration | Component | rose/layout/page', function (hooks) {
     await render(hbs`<Rose::Layout::Page as |page|>
       <page.header />
     </Rose::Layout::Page>`);
-    assert.ok(find('header'));
+    assert.ok(find('.rose-layout-header'));
   });
 
   test('it renders with main', async function (assert) {
     await render(hbs`<Rose::Layout::Page as |page|>
       <page.main />
     </Rose::Layout::Page>`);
-    assert.ok(find('main'));
+    assert.ok(find('.rose-layout-main'));
   });
 
   test('it renders with sidebar', async function (assert) {
     await render(hbs`<Rose::Layout::Page as |page|>
       <page.sidebar />
     </Rose::Layout::Page>`);
-    assert.ok(find('aside'));
+    assert.ok(find('.rose-layout-sidebar'));
   });
 });

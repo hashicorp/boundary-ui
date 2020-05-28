@@ -5,8 +5,8 @@
   grid-template-areas:
     'header header header header'
     'sidebar main main main';
-  grid-template-columns: 0.5fr repeat(3, 1fr);
-  grid-template-rows: 0.1fr auto;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
   height: 100vh;
 }
 
