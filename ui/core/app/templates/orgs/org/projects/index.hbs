@@ -13,6 +13,7 @@
     {{#each @model as |project|}}
       <li class="project">
         <Rose::Card::Link @title={{project.name}}
+          @subtitle={{project.id}}
           @description={{project.description}}
           @route="orgs.org.projects.project"
           @model={{project}}

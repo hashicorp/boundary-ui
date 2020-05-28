@@ -31,7 +31,10 @@
     @include type.type(m, semibold);
     color: var(--stark);
     margin: 0;
-    padding-bottom: sizing.rems(xs);
+  }
+
+  .rose-card-link-subtitle {
+    color: var(--ui-gray);
   }
 
   .rose-card-link-description {
