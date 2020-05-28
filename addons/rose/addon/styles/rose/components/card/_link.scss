@@ -1,0 +1,40 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-card-link {
+  @include type.type(s);
+  border: 1px solid var(--ui-gray-subtler-2);
+  border-radius: sizing.rems(xxxs);
+  color: var(--ui-gray);
+  padding: sizing.rems(s);
+  display: inline-grid;
+
+  a {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &:hover {
+    border-color: var(--ui-gray);
+  }
+
+  &:focus-within {
+    border-color: var(--info);
+  }
+
+  .rose-card-link-title {
+    @include type.type(m, semibold);
+    color: var(--stark);
+    margin: 0;
+    padding-bottom: sizing.rems(xs);
+  }
+
+  .rose-card-link-description {
+    margin: 0;
+  }
+}
