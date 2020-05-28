@@ -3,10 +3,10 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/form/errors', function(hooks) {
+module('Integration | Component | rose/form/errors', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     assert.expect(3);
     await render(hbs`
       <Rose::Form::Errors as |errors|>
@@ -15,7 +15,13 @@ module('Integration | Component | rose/form/errors', function(hooks) {
       <//Rose::Form::Errors>
     `);
     assert.ok(find('.rose-form-errors'));
-    assert.equal(find('.rose-form-error-message:first-child').textContent.trim(), 'An error occurred.');
-    assert.equal(find('.rose-form-error-message:last-child').textContent.trim(), 'Another error occurred.');
+    assert.equal(
+      find('.rose-form-error-message:first-child').textContent.trim(),
+      'An error occurred.'
+    );
+    assert.equal(
+      find('.rose-form-error-message:last-child').textContent.trim(),
+      'Another error occurred.'
+    );
   });
 });

@@ -19,6 +19,7 @@
 
   .rose-form-input-field {
     @include type.type(m);
+    margin-bottom: sizing.rems(xs);
     padding: sizing.rems(xs);
     color: var(--stark);
     background-color: var(--subtle);

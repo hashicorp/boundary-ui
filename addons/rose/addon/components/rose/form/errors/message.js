@@ -6,5 +6,5 @@ import layout from '../../../../templates/components/rose/form/errors/message';
  */
 export default Component.extend({
   layout,
-  tagName: ''
+  tagName: '',
 });

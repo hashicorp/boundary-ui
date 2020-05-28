@@ -17,14 +17,14 @@ Renders a form select element.
   @helperText="Set your desired color"
   @disabled={{false}}
   @error={{false}}
-  as |Field|
+  as |field|
 >
-  <Field as |select|>
+  <field.field as |select|>
     <select.option>Choose a color</select.option>
     <select.option @value="red">Red</select.option>
     <select.option @value="green">Green</select.option>
     <select.option @value="blue">Blue</select.option>
-  </Field>
+  </field.field>
 </Rose::Form::Select>
 ```
 
@@ -37,16 +37,16 @@ Renders a form select element.
         @label={{label}}
         @helperText={{helperText}}
         @disabled={{disabled}}
-        @error={{error}}
+        @error={{false}}
         @onChange={{fn onChange}}
-        as |Field|
+        as |field|
       >
-        <Field as |select|>
+        <field.field as |select|>
           <select.option>Choose an option</select.option>
           <select.option @value="value-1">Value 1</select.option>
           <select.option @value="value-2">Value 2</select.option>
           <select.option @value="value-3">Value 3</select.option>
-        </Field>
+        </field.field>
       </Rose::Form::Select>
     `,
     context: {
@@ -64,7 +64,50 @@ Renders a form select element.
       label: text('label', 'Label'),
       helperText: text('helperText', 'Helper text'),
       disabled: boolean('disabled', false),
-      error: boolean('error', false),
+      onChange: action('changed'),
+    }
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Select with Errors" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Select
+        @name={{name}}
+        @value={{value}}
+        @label={{label}}
+        @helperText={{helperText}}
+        @disabled={{disabled}}
+        @error={{true}}
+        @onChange={{fn onChange}}
+        as |field|
+      >
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+          <select.option @value="value-1">Value 1</select.option>
+          <select.option @value="value-2">Value 2</select.option>
+          <select.option @value="value-3">Value 3</select.option>
+        </field.field>
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Select>
+    `,
+    context: {
+      value: select(
+        'value',
+        {
+          null: null,
+          'value-1': 'value-1',
+          'value-2': 'value-2',
+          'value-3': 'value-3',
+        },
+        null
+      ),
+      name: text('name', 'select-name'),
+      label: text('label', 'Label'),
+      helperText: text('helperText', 'Helper text'),
+      disabled: boolean('disabled', false),
       onChange: action('changed'),
     }
   }}</Story>

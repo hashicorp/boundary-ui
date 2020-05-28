@@ -45,9 +45,9 @@ module('Integration | Component | rose/form', function (hooks) {
           @label="Select"
           @name="select-field"
           @onChange={{this.select}}
-          as |Field|
+          as |field|
         >
-          <Field />
+          <field.field />
         </form.select>
         <form.checkbox @label="Checkbox" name="checkbox-field" />
         <form.radioGroup @name="radio-group-field" @selectedValue="green" as |radioGroup|>

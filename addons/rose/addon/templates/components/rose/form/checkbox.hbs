@@ -6,12 +6,15 @@
     id={{this.id}}
     disabled={{@disabled}}
     @type="checkbox"
-    @checked={{if @checked true false}} />
+    @checked={{if @checked true false}}
+    aria-describedby="{{if @error (concat 'errors-' this.id)}}" />
 
   <label class="rose-form-checkbox-label" for={{this.id}}>
     {{@label}}
   </label>
 
-  {{yield}}
+  {{yield (hash
+    errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
+  )}}
 
 </div>

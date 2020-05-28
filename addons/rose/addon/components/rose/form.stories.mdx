@@ -10,58 +10,8 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 A component for building accessible forms.  Yields contextual fields
 and actions.
 
-```htmlbars
-<Rose::Form
-  @onSubmit={{this.submit}}
-  @cancel={{this.cancel}}
-  @disabled={{false}}
-  as |form|>
-  <form.input
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    />
-  <form.textarea
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    />
-  <form.select
-    @label="Label"
-    @helperText="Helper text"
-    @onChange={{fn this.actionHandler}}
-    as |Field|
-  >
-    <Field as |select|>
-      <select.option>Choose an option</select.option>
-      <select.option @value="value-1">Value 1</select.option>
-      <select.option @value="value-2">Value 2</select.option>
-      <select.option @value="value-3">Value 3</select.option>
-    </Field>
-  </form.select>
-  <form.radioGroup @name="color" @selectedValue="green" as |radioGroup|>
-    <radioGroup.radio
-      @label="Red"
-      @value="red"
-    />
-    <radioGroup.radio
-      @label="Green"
-      @value="green"
-    />
-    <radioGroup.radio
-      @label="Blue"
-      @value="blue"
-    />
-  </form.radioGroup>
-  <form.checkbox
-    @label="Label"
-    />
-  <form.actions @submitText="Save" @cancelText="Cancel" @showCancel={{true}} />
-</Rose::Form>
-```
-
 <Preview>
-  <Story name="Form">{{
+  <Story name="Form" height="35rem">{{
     template: hbs`
       <Rose::Form
         @onSubmit={{submit}}
@@ -82,14 +32,14 @@ and actions.
           @label="Label"
           @helperText="Helper text"
           @onChange={{selectChange}}
-          as |Field|
+          as |field|
         >
-          <Field as |select|>
+          <field.field as |select|>
             <select.option>Choose an option</select.option>
             <select.option @value="value-1">Value 1</select.option>
             <select.option @value="value-2">Value 2</select.option>
             <select.option @value="value-3">Value 3</select.option>
-          </Field>
+          </field.field>
         </form.select>
         <form.radioGroup @name="color" @selectedValue="green" as |radioGroup|>
           <radioGroup.radio
@@ -120,3 +70,54 @@ and actions.
     },
   }}</Story>
 </Preview>
+
+
+```htmlbars
+<Rose::Form
+  @onSubmit={{this.submit}}
+  @cancel={{this.cancel}}
+  @disabled={{false}}
+  as |form|>
+  <form.input
+    @label="Label"
+    @helperText="Helper text"
+    @value="Text"
+    />
+  <form.textarea
+    @label="Label"
+    @helperText="Helper text"
+    @value="Text"
+    />
+  <form.select
+    @label="Label"
+    @helperText="Helper text"
+    @onChange={{fn this.actionHandler}}
+    as |field|
+  >
+    <field.field as |select|>
+      <select.option>Choose an option</select.option>
+      <select.option @value="value-1">Value 1</select.option>
+      <select.option @value="value-2">Value 2</select.option>
+      <select.option @value="value-3">Value 3</select.option>
+    </field.field>
+  </form.select>
+  <form.radioGroup @name="color" @selectedValue="green" as |radioGroup|>
+    <radioGroup.radio
+      @label="Red"
+      @value="red"
+    />
+    <radioGroup.radio
+      @label="Green"
+      @value="green"
+    />
+    <radioGroup.radio
+      @label="Blue"
+      @value="blue"
+    />
+  </form.radioGroup>
+  <form.checkbox
+    @label="Label"
+    />
+  <form.actions @submitText="Save" @cancelText="Cancel" @showCancel={{true}} />
+</Rose::Form>
+```

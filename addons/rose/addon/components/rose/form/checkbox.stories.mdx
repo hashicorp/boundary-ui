@@ -20,7 +20,7 @@ Renders a form input checkbox.
 ```
 
 <Preview>
-  <Story name="Basic" height="10rem">{{
+  <Story name="Basic Checkbox" height="10rem">{{
     template: hbs`
       <Rose::Form::Checkbox
         name={{name}}
@@ -35,6 +35,31 @@ Renders a form input checkbox.
       name: text('name', 'checkbox-1'),
       checked: boolean('checked', false),
       error: boolean('error', false),
+      disabled: boolean('disabled', false),
+    }
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Checkbox with errors" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Checkbox
+        name={{name}}
+        @label={{label}}
+        @checked={{checked}}
+        @error={{true}}
+        @disabled={{disabled}}
+        as |field|
+      >
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Checkbox>
+    `,
+    context: {
+      label: text('text', 'Checkbox 🛎'),
+      name: text('name', 'checkbox-1'),
+      checked: boolean('checked', false),
       disabled: boolean('disabled', false),
     }
   }}</Story>

@@ -24,6 +24,7 @@
     appearance: none;
     vertical-align: middle;
     display: inline-block;
+    margin-bottom: sizing.rems(xs);
     padding: sizing.rems(xs) sizing.rems(xxl) sizing.rems(xs) sizing.rems(xs);
     border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
     border-radius: sizing.rems(xxxs);

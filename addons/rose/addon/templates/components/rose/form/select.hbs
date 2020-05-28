@@ -12,13 +12,17 @@
     </span>
   {{/if}}
 
-  {{yield (component 'rose/form/select/select'
-    id=this.id
-    name=@name
-    disabled=@disabled
-    value=@value
-    onChange=@onChange
-    helperText=@helperText
+  {{yield (hash
+    field=(component 'rose/form/select/select'
+      id=this.id
+      name=@name
+      disabled=@disabled
+      value=@value
+      onChange=@onChange
+      helperText=@helperText
+      error=@error
+    )
+    errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
   )}}
 
 </div>

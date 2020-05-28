@@ -18,8 +18,10 @@
     id={{this.id}}
     disabled={{@disabled}}
     @value={{@value}}
-    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}}" />
+    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 
-  {{yield}}
+  {{yield (hash
+    errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
+  )}}
 
 </div>

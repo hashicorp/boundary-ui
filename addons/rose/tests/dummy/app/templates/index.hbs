@@ -107,25 +107,25 @@ Dummy app index template
     @label="Label"
     @helperText="Helper text"
     @onChange={{fn this.actionHandler}}
-    as |Field|
+    as |field|
   >
-    <Field as |select|>
+    <field.field as |select|>
       <select.option>Choose an option</select.option>
       <select.option @value="value-1">Value 1</select.option>
       <select.option @value="value-2">Value 2</select.option>
       <select.option @value="value-3">Value 3</select.option>
-    </Field>
+    </field.field>
   </form.select>
   <form.select
 
     @label="Label"
     @helperText="Helper text"
     @onChange={{fn this.actionHandler}}
-    as |Field|
+    as |field|
   >
-    <Field as |select|>
+    <field.field as |select|>
       <select.option>Choose an option</select.option>
-    </Field>
+    </field.field>
   </form.select>
 
 
