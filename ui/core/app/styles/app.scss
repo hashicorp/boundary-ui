@@ -12,17 +12,7 @@
     .project {
       display: flex;
       flex-direction: row;
-      margin-bottom: 10px;
-
-      a {
-        text-decoration: none;
-        text-transform: capitalize;
-        color: #000;
-        cursor: pointer;
-        padding: 20px 30px 20px 20px;
-        border: 1px solid #bac1cc;
-        margin-right: 10px;
-      }
+      padding: 10px;
     }
   }
 }

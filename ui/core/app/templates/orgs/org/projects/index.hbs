@@ -12,9 +12,11 @@
   <ul class="projects">
     {{#each @model as |project|}}
       <li class="project">
-        <LinkTo @route="orgs.org.projects.project" @model={{project}}>
-          {{project.name}}
-        </LinkTo>
+        <Rose::Card::Link @title={{project.name}}
+          @description={{project.description}}
+          @route="orgs.org.projects.project"
+          @model={{project}}
+        />
       </li>
     {{/each}}
   </ul>
