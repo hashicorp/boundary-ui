@@ -6,13 +6,21 @@
   border: 1px solid var(--ui-gray-subtler-2);
   border-radius: sizing.rems(xxxs);
   color: var(--ui-gray);
-  padding: sizing.rems(s);
-  display: inline-grid;
+  display: inline-flex;
+  flex-direction: column;
 
   a {
     text-decoration: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    padding: sizing.rems(s);
+    // TODO: Figure out better method of defining card dimensions
+    min-height: sizing.rems(m) * 6; //6 rems
+    max-width: sizing.rems(m) * 12; //12 rems
 
     &:focus {
       outline: none;
@@ -21,8 +29,12 @@
 
   &:hover {
     border-color: var(--ui-gray);
+    background-color: var(--ui-gray-subtler-5);
   }
 
+  &:active {
+    background-color: var(--ui-gray-subtler-4);
+  }
   &:focus-within {
     border-color: var(--info);
   }
@@ -35,10 +47,14 @@
 
   .rose-card-link-subtitle {
     color: var(--ui-gray);
+    margin: 0;
   }
 
   .rose-card-link-description {
-    margin: 0;
+    margin: auto 0 0;
     color: var(--ui-gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
