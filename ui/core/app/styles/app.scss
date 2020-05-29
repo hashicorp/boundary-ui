@@ -1,10 +1,11 @@
 @use 'rose/variables/sizing';
 
 @import 'rose';
+@import 'notify';
 
 .projects-overview {
   margin: sizing.rems(l);
-  
+
   .projects {
     display: flex;
     padding: 20px 0;

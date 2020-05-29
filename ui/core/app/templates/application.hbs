@@ -31,3 +31,14 @@
 
   <page.sidebar />
 </Rose::Layout::Page>
+
+<EmberNotify @closeAfter={{4000}} as |message close|>
+  <Rose::Notification
+    @style={{message.type}}
+    @heading={{t (concat 'states.' message.type)}}
+    @dismiss={{close}}
+    @dismissText={{t 'actions.dismiss'}}
+  >
+    {{message.text}}
+  </Rose::Notification>
+</EmberNotify>

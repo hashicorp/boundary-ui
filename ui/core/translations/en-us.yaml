@@ -1,11 +1,17 @@
 actions:
   cancel: Cancel
   delete: Delete
+  dismiss: Dismiss
   save: Save
 resources:
   projects: Projects
 titles:
   new: New
+states:
+  info: Info
+  success: Success
+  warning: Warning
+  error: Error
 form:
   label:
     name: Name
