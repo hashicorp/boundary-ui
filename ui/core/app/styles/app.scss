@@ -1,8 +1,10 @@
+@use 'rose/variables/sizing';
+
 @import 'rose';
 
 .projects-overview {
-  margin: 0 10px;
-
+  margin: sizing.rems(l);
+  
   .projects {
     display: flex;
     padding: 20px 0;
@@ -19,7 +21,8 @@
 
 .project-overview,
 .project-new {
-  margin: 0 10px;
+  margin: sizing.rems(l);
+
   .breadcrumbs,
   .breadcrumbs a {
     color: #6f7682;
