@@ -20,11 +20,7 @@
     padding: sizing.rems(s);
     // TODO: Figure out better method of defining card dimensions
     min-height: sizing.rems(m) * 6; //6 rems
-    max-width: sizing.rems(m) * 12; //12 rems
-
-    &:focus {
-      outline: none;
-    }
+    width: sizing.rems(m) * 12; //12 rems
   }
 
   &:hover {
@@ -35,14 +31,20 @@
   &:active {
     background-color: var(--ui-gray-subtler-4);
   }
+
   &:focus-within {
     border-color: var(--info);
   }
 
   .rose-card-link-title {
+    $truncate-line-count: 3;
     @include type.type(m, semibold);
     color: var(--stark);
     margin: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $truncate-line-count;
+    overflow: hidden;
   }
 
   .rose-card-link-subtitle {
