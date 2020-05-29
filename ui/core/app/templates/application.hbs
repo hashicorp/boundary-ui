@@ -1,8 +1,14 @@
-<HeadLayout />
-{{title (app-name)}}
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <Rose::Header as |header|>
+      <header.brand @logo="logo" @text={{app-name}} />
+    </Rose::Header>
+  </page.header>
 
-<Rose::Header as |header|>
-  <header.brand @logo="logo" @text={{app-name}} />
-</Rose::Header>
+  <page.main>
+    {{title (app-name)}}
+    {{outlet}}
+  </page.main>
 
-{{outlet}}
+  <page.sidebar />
+</Rose::Layout::Page>
