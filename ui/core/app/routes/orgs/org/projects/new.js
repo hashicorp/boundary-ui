@@ -31,9 +31,7 @@ export default class OrgsOrgProjectsNewRoute extends Route {
    * @param {Event} e
    */
   @action
-  async save(project, e) {
-    // Prevent default behavior, since this was trigger from a form submission.
-    e.preventDefault();
+  async save(project) {
     try {
       await project.save();
       this.transitionTo('orgs.org.projects.project', project);

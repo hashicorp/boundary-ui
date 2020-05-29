@@ -44,9 +44,7 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
    * @param {Event} e
    */
   @action
-  async save(project, e) {
-    // Prevent default behavior, since this was trigger from a form submission.
-    e.preventDefault();
+  async save(project) {
     try {
       await project.save();
     } catch (e) {
