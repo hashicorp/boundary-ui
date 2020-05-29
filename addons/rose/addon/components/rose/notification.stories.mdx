@@ -1,0 +1,84 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Notification" component="Notification" />
+
+# Notification
+
+Notifications come in four semantic styles:  `info` (default), `success`,
+`warning`, and `failure`.  Heading text is required.  Additional block content
+is optional.
+
+Notifications may be made dismissible by passing a `@dismiss` function into
+the component.  Dismissible notifications _must_ also have `@dismissText`.
+This component does not handle dismissal though.  Be sure your `@dismiss`
+handler takes appropriate action and hides the notification.
+
+```htmlbars
+<Rose::Notification
+  @style="info"
+  @heading="Alert Notification"
+  @dismiss={{dismissHandler}}
+  @dismissText="Dismiss"
+>
+  An error occurred.
+</Rose::Notification>
+```
+
+<Preview>
+  <Story name="Basic Notification">{{
+    template: hbs`
+      <Rose::Notification
+        @style="info"
+        @heading="Notification without dismissal"
+      >
+        Some useful information.
+      </Rose::Notification>
+    `,
+    context: {}
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Basic Notifications with Dismissal" height="30rem">{{
+    template: hbs`
+      <Rose::Notification
+        @style="info"
+        @heading="Dismissible Notification"
+        @dismiss={{dismiss}}
+        @dismissText="Dismiss"
+      >
+        Some useful information.
+      </Rose::Notification>
+      <Rose::Notification
+        @style="success"
+        @heading="Success"
+        @dismiss={{dismiss}}
+        @dismissText="Dismiss"
+      >
+        Good job!
+      </Rose::Notification>
+      <Rose::Notification
+        @style="warning"
+        @heading="Warning"
+        @dismiss={{dismiss}}
+        @dismissText="Dismiss"
+      >
+        Careful now.
+      </Rose::Notification>
+      <Rose::Notification
+        @style="failure"
+        @heading="Error"
+        @dismiss={{dismiss}}
+        @dismissText="Dismiss"
+      >
+        An error occurred.
+      </Rose::Notification>
+    `,
+    context: {
+      dismiss: action('dismiss'),
+    }
+  }}</Story>
+</Preview>
