@@ -1,0 +1,62 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-card-link {
+  @include type.type(s);
+  border: 1px solid var(--ui-gray-subtler-2);
+  border-radius: sizing.rems(xxxs);
+  color: var(--ui-gray);
+  display: inline-flex;
+  flex-direction: column;
+
+  a {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    padding: sizing.rems(s);
+    // TODO: Figure out better method of defining card dimensions
+    min-height: sizing.rems(m) * 6; //6 rems
+    width: sizing.rems(m) * 12; //12 rems
+  }
+
+  &:hover {
+    border-color: var(--ui-gray);
+    background-color: var(--ui-gray-subtler-5);
+  }
+
+  &:active {
+    background-color: var(--ui-gray-subtler-4);
+  }
+
+  &:focus-within {
+    border-color: var(--info);
+  }
+
+  .rose-card-link-title {
+    $truncate-line-count: 3;
+    @include type.type(m, semibold);
+    color: var(--stark);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $truncate-line-count;
+    overflow: hidden;
+  }
+
+  .rose-card-link-subtitle {
+    color: var(--ui-gray);
+    margin: 0;
+  }
+
+  .rose-card-link-description {
+    margin: auto 0 0;
+    color: var(--ui-gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
