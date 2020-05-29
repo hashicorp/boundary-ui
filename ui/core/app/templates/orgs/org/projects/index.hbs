@@ -1,7 +1,13 @@
 <div class="projects-overview">
   <h2>{{t "resources.projects"}}</h2>
-
-  <LinkTo @route="orgs.org.projects.new" class="project-new-link">{{t "titles.new"}}</LinkTo>
+  <Rose::Button
+    class="project-new-link"
+    @style="primary"
+    @iconLeft="plus-plain"
+    {{on "click" (route-action "new")}}
+  >
+    {{t 'titles.new'}}
+  </Rose::Button>
 
   <ul class="projects">
     {{#each @model as |project|}}

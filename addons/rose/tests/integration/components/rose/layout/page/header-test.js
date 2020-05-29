@@ -8,6 +8,7 @@ module('Integration | Component | rose/layout/page/header', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Layout::Page::Header />`);
+    assert.ok(find('header'));
     assert.ok(find('.rose-layout-header'));
   });
 

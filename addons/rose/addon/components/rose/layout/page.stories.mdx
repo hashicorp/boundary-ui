@@ -22,40 +22,9 @@ Sidebar's content width determines it's column width.
   <Story name="Basic">{{
     template: hbs`
     <Rose::Layout::Page as |page|>
-      <page.header style="border: 1px solid var(--success);">Header</page.header>
-      <page.main style="border: 1px solid var(--action);">Main</page.main>
-      <page.sidebar style="border: 1px solid var(--alert);">Sidebar</page.sidebar>
-    </Rose::Layout::Page>
-    `,
-  }}</Story>
-</Preview>
-
-Header, main, and sidebar components are optional.
-<Preview>
-  <Story name="Header">{{
-    template: hbs`
-    <Rose::Layout::Page as |page|>
-      <page.header style="border: 1px solid var(--success);">Header</page.header>
-    </Rose::Layout::Page>
-    `,
-  }}</Story>
-</Preview>
-
-<Preview>
-  <Story name="Main">{{
-    template: hbs`
-    <Rose::Layout::Page as |page|>
-      <page.main style="border: 1px solid var(--action);">Main</page.main>
-    </Rose::Layout::Page>
-    `,
-  }}</Story>
-</Preview>
-
-<Preview>
-  <Story name="Sidebar">{{
-    template: hbs`
-    <Rose::Layout::Page as |page|>
-      <page.sidebar style="border: 1px solid var(--alert);">Sidebar</page.sidebar>
+      <page.header style="background: var(--brand-gray-5);">Header</page.header>
+      <page.main style="background: var(--brand-gray-7);">Main</page.main>
+      <page.sidebar style="background: var(--brand-gray-6);">Sidebar</page.sidebar>
     </Rose::Layout::Page>
     `,
   }}</Story>

@@ -5,7 +5,8 @@
   grid-template-areas:
     'header header header header'
     'sidebar main main main';
-  grid-template-columns: auto 1fr;
+  // Define static grid column for sidebar
+  grid-template-columns: 12rem auto 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
 }
@@ -25,6 +26,7 @@
 @media (max-width: media.width(small)) {
   .rose-layout-page {
     grid-template-columns: 1fr;
+    grid-template-rows: 0.1fr auto 1fr;
     grid-template-areas:
       'header'
       'sidebar'
