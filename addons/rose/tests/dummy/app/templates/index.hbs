@@ -30,6 +30,15 @@
 
 Dummy app index template
 
+<Rose::Notification
+  @style="failure"
+  @heading="Error"
+  @dismiss={{this.actionHandler}}
+  @dismissText="Dismiss"
+>
+  An error occurred.
+</Rose::Notification>
+
 <h2>Icon</h2>
 <Rose::Icon @name="alert-circle-fill" />
 <Rose::Icon @name="alert-circle-fill" @size="medium" />
