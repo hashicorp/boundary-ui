@@ -15,20 +15,20 @@ Renders a simple form textarea.
   @label="Description"
   @helperText="Enter a description"
   @error={{false}}
-  disabled={{false}}
+  @disabled={{false}}
   readonly={{false}}
 />
 ```
 
 <Preview>
-  <Story name="Basic" height="10rem">{{
+  <Story name="Basic Textarea" height="10rem">{{
     template: hbs`
       <Rose::Form::Textarea
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}
-        @error={{error}}
-        disabled={{disabled}}
+        @error={{false}}
+        @disabled={{disabled}}
         readonly={{read-only}}
         />
     `,
@@ -38,7 +38,32 @@ Renders a simple form textarea.
       helperText: text('helperText', 'Helper text'),
       disabled: boolean('disabled', false),
       'read-only': boolean('readonly', false),
-      error: boolean('error', false),
+    }
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Textarea with Errors" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Textarea
+        @value={{value}}
+        @label={{label}}
+        @helperText={{helperText}}
+        @error={{true}}
+        @disabled={{disabled}}
+        readonly={{read-only}}
+        as |field|>
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Textarea>
+    `,
+    context: {
+      value: text('value', 'Value'),
+      label: text('label', 'Label'),
+      helperText: text('helperText', 'Helper text'),
+      disabled: boolean('disabled', false),
+      'read-only': boolean('readonly', false),
     }
   }}</Story>
 </Preview>

@@ -14,9 +14,32 @@ module('Integration | Component | rose/form/input', function (hooks) {
 
   test('it displays optional helper text', async function (assert) {
     await render(hbs`<Rose::Form::Input @helperText="Help me" />`);
+    const fieldEl = find('input');
+    const id = fieldEl.id;
+    const helperId = `helper-text-${id}`;
+    const helperTextEl = find('.rose-form-input-helper-text');
+    assert.equal(helperTextEl.textContent.trim(), 'Help me');
+    assert.equal(helperTextEl.id, helperId);
+    assert.equal(fieldEl.getAttribute('aria-describedby').trim(), helperId);
+  });
+
+  test('it displays optional errors', async function (assert) {
+    await render(hbs`
+      <Rose::Form::Input @error={{true}} as |field|>
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Input>
+    `);
+    const fieldEl = find('input');
+    const id = fieldEl.id;
+    const errorsId = `errors-${id}`;
+    const errorMessageEl = find('.rose-form-errors');
+    assert.equal(errorMessageEl.id, errorsId);
+    assert.equal(errorMessageEl.textContent.trim(), 'An error occurred.');
     assert.equal(
-      await find('.rose-form-input-helper-text').textContent.trim(),
-      'Help me'
+      fieldEl.getAttribute('aria-describedby').split(' ')[1],
+      errorsId
     );
   });
 
@@ -31,7 +54,7 @@ module('Integration | Component | rose/form/input', function (hooks) {
   });
 
   test('it supports disabled attribute', async function (assert) {
-    await render(hbs`<Rose::Form::Input disabled={{true}} />`);
+    await render(hbs`<Rose::Form::Input @disabled={{true}} />`);
     assert.ok(await find('[disabled]'));
   });
 

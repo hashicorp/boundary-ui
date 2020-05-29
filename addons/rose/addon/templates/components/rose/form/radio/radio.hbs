@@ -3,14 +3,15 @@
   <RadioButton
     ...attributes
     @radioClass="rose-form-radio-field"
-    @radioId={{@id}}
+    @radioId={{this.id}}
     type="radio"
+    disabled={{@disabled}}
     @name={{@name}}
     @value={{@value}}
     @groupValue={{@selectedValue}}
     @disabled={{@disabled}}/>
 
-  <label class="rose-form-radio-label" for={{@id}}>
+  <label class="rose-form-radio-label" for={{this.id}}>
     {{@label}}
   </label>
 
