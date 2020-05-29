@@ -6,6 +6,11 @@
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
 
+  .rose-form-errors {
+    margin-top: sizing.rems(xs);
+    margin-bottom: sizing.rems(xs);
+  }
+
   .rose-form-checkbox-label {
     // label styles
     @include type.type(s, semibold);

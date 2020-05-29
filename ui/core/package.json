@@ -22,7 +22,7 @@
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
     "clean:coverage": "rm -rf coverage_*",
-    "pretest": "yarn clean:coverage && yarn lint",
+    "pretest": "yarn clean:coverage",
     "test": "COVERAGE=true ember exam --random",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
@@ -65,6 +65,7 @@
     "ember-resolver": "^7.0.0",
     "ember-route-action-helper": "^2.0.8",
     "ember-source": "~3.16.0",
+    "ember-uuid": "^2.1.0",
     "ember-welcome-page": "^4.0.0",
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774",
     "eslint-plugin-ember": "^7.7.2",

@@ -12,12 +12,14 @@ module('Integration | Component | rose/form/select', function (hooks) {
       <Rose::Form::Select
         @label="Label"
         @onChange={{fn this.onChange}}
-        as |select|
+        as |field|
       >
-        <select.option>Choose an option</select.option>
-        <select.option @value="value-1">Value 1</select.option>
-        <select.option @value="value-2">Value 2</select.option>
-        <select.option @value="value-3">Value 3</select.option>
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+          <select.option @value="value-1">Value 1</select.option>
+          <select.option @value="value-2">Value 2</select.option>
+          <select.option @value="value-3">Value 3</select.option>
+        </field.field>
       </Rose::Form::Select>
     `);
     assert.equal(find('label').textContent.trim(), 'Label');
@@ -30,16 +32,51 @@ module('Integration | Component | rose/form/select', function (hooks) {
     await render(hbs`
       <Rose::Form::Select
         @label="Label"
-        @helperText="Helper text"
+        @helperText="Help me"
         @onChange={{fn this.onChange}}
-        as |select|
+        as |field|
       >
-        <select.option>Choose an option</select.option>
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+        </field.field>
       </Rose::Form::Select>
     `);
+    const fieldEl = find('select');
+    const id = fieldEl.id;
+    const helperId = `helper-text-${id}`;
+    const helperTextEl = find('.rose-form-select-helper-text');
+    assert.equal(helperTextEl.textContent.trim(), 'Help me');
+    assert.equal(helperTextEl.id, helperId);
+    assert.equal(fieldEl.getAttribute('aria-describedby').trim(), helperId);
+  });
+
+  test('it displays optional errors', async function (assert) {
+    this.onChange = () => {};
+    await render(hbs`
+      <Rose::Form::Select
+        @label="Label"
+        @helperText="Help me"
+        @onChange={{fn this.onChange}}
+        @error={{true}}
+        as |field|
+      >
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+        </field.field>
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Select>
+    `);
+    const fieldEl = find('select');
+    const id = fieldEl.id;
+    const errorsId = `errors-${id}`;
+    const errorMessageEl = find('.rose-form-errors');
+    assert.equal(errorMessageEl.id, errorsId);
+    assert.equal(errorMessageEl.textContent.trim(), 'An error occurred.');
     assert.equal(
-      find('.rose-form-select-helper-text').textContent.trim(),
-      'Helper text'
+      fieldEl.getAttribute('aria-describedby').split(' ')[1],
+      errorsId
     );
   });
 
@@ -48,10 +85,12 @@ module('Integration | Component | rose/form/select', function (hooks) {
     await render(hbs`
       <Rose::Form::Select
         @onChange={{fn this.onChange}}
-        disabled={{true}}
-        as |select|
+        @disabled={{true}}
+        as |field|
       >
-        <select.option>Choose an option</select.option>
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+        </field.field>
       </Rose::Form::Select>
     `);
     assert.ok(find('[disabled]'));
@@ -64,10 +103,12 @@ module('Integration | Component | rose/form/select', function (hooks) {
       <Rose::Form::Select
         @onChange={{fn this.onChange}}
         @value={{value}}
-        as |select|
+        as |field|
       >
-        <select.option @value="value-1">value-1</select.option>
-        <select.option @value="value-2">value-2</select.option>
+        <field.field as |select|>
+          <select.option @value="value-1">value-1</select.option>
+          <select.option @value="value-2">value-2</select.option>
+        </field.field>
       </Rose::Form::Select>
     `);
     assert.equal(find('select').value, 'value-1');
@@ -91,12 +132,14 @@ module('Integration | Component | rose/form/select', function (hooks) {
     this.onChange = this.onChange1;
     await render(hbs`
       <Rose::Form::Select
-        name="my-select"
+        @name="my-select"
         @onChange={{fn this.onChange}}
-        as |select|
+        as |field|
       >
-        <select.option>Choose an option</select.option>
-        <select.option @value="value-1">value-1</select.option>
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+          <select.option @value="value-1">value-1</select.option>
+        </field.field>
       </Rose::Form::Select>
     `);
     await fillIn('[name="my-select"]', 'value-1');

@@ -1,0 +1,105 @@
+@use '../variables/sizing';
+@use '../utilities/type';
+
+.rose-notification {
+  $s: sizing.rems(s); // 12
+  $xs: sizing.rems(xs); // 8
+  $xxs: sizing.rems(xxs); // 4
+  $xxxs: sizing.rems(xxxs); // 2
+  $xxxxs: sizing.rems(xxxxs); // 1
+
+  position: relative;
+  padding: sizing.rems(m);
+  margin-bottom: sizing.rems(m);
+  border: sizing.rems(xxxxs) solid;
+  border-radius: $xxxs;
+  box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
+    0 $xxs $xxs rgba(var(--stark-components), var(--opacity-4));
+
+  .rose-notification-icon {
+    position: relative;
+    top: $xxxxs;
+  }
+
+  .rose-notification-header {
+    @include type.type(m, semibold);
+  }
+
+  .rose-notification-body {
+    @include type.type(s);
+    // hack alert, because the icons are still hard to work with
+    margin-left: sizing.rems(m) + $xxs;
+  }
+
+  .rose-notification-dismiss {
+    position: absolute;
+    color: currentColor;
+    background-color: transparent;
+    border-radius: $xxxs;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+
+    top: sizing.rems(s);
+    right: sizing.rems(s);
+
+    .rose-icon {
+      display: block;
+      padding: $xxs;
+    }
+
+    .rose-notification-dismiss-text {
+      position: absolute;
+      top: -1000px;
+      left: -1000px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    &:hover {
+      background-color: rgba(var(--stark-components), var(--opacity-3))
+    }
+
+    &:active {
+      background-color: rgba(var(--stark-components), var(--opacity-2))
+    }
+  }
+
+  --icon-color: var(--info);
+  --header-color: var(--info-starker-1);
+  --border-color: var(--info-subtler-1);
+  --background-color: var(--info-subtler-3);
+
+  border-color: var(--border-color);
+  background-color: var(--background-color);
+
+  .rose-notification-icon {
+    color: var(--icon-color);
+  }
+
+  .rose-notification-header {
+    color: var(--header-color);
+  }
+
+  &.is-failure {
+    --icon-color: var(--failure);
+    --header-color: var(--failure);
+    --border-color: var(--failure-subtler-1);
+    --background-color: var(--failure-subtler-2);
+  }
+
+  &.is-success {
+    --icon-color: var(--success);
+    --header-color: var(--success-starker-1);
+    --border-color: var(--success-subtler-1);
+    --background-color: var(--success-subtler-2);
+  }
+
+  &.is-warning {
+    --icon-color: var(--warning);
+    --header-color: var(--warning-starker-1);
+    --border-color: var(--warning-subtler-1);
+    --background-color: var(--warning-subtler-2);
+  }
+}

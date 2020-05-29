@@ -4,18 +4,25 @@
 
 @mixin button {
   @include typography.type(button, semibold);
-  display: flex;
-  flex-direction: row;
+  display: inline-block;
+  margin-bottom: sizing.rems(l);
+  margin-right: sizing.rems(xs);
   padding: sizing.rems(off-xs) sizing.rems(l);
   border-radius: sizing.rems(xxxs);
   border: sizing.rems(xxxxs) solid;
+  background: none;
 
-  &.has-icon-left > .rose-icon:first-child {
+  .rose-button-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &.has-icon-left .rose-icon:first-child {
     margin-left: -(sizing.rems(xs));
     margin-right: sizing.rems(xxs);
   }
 
-  &.has-icon-right > .rose-icon:last-child {
+  &.has-icon-right .rose-icon:last-child {
     margin-left: sizing.rems(xxs);
     margin-right: -(sizing.rems(xs));
   }

@@ -12,6 +12,23 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     assert.ok(await find('input'));
   });
 
+  test('it displays optional errors', async function (assert) {
+    await render(hbs`
+      <Rose::Form::Checkbox @error={{true}} as |field|>
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Checkbox>
+    `);
+    const fieldEl = find('input');
+    const id = fieldEl.id;
+    const errorsId = `errors-${id}`;
+    const errorMessageEl = find('.rose-form-errors');
+    assert.equal(errorMessageEl.id, errorsId);
+    assert.equal(errorMessageEl.textContent.trim(), 'An error occurred.');
+    assert.equal(fieldEl.getAttribute('aria-describedby').trim(), errorsId);
+  });
+
   test('it is not checked by default', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox />`);
     assert.equal(await find('input').checked, false);
@@ -32,8 +49,8 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     assert.ok(await find('.error'));
   });
 
-  test('it is disabled when disabled={{true}}', async function (assert) {
-    await render(hbs`<Rose::Form::Checkbox disabled={{true}} />`);
+  test('it is disabled when @disabled={{true}}', async function (assert) {
+    await render(hbs`<Rose::Form::Checkbox @disabled={{true}} />`);
     assert.equal(await find('input').disabled, true);
   });
 });

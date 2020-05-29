@@ -11,33 +11,55 @@ Renders a form input checkbox.
 
 ```htmlbars
 <Rose::Form::Checkbox
-  @id="form-field-1"
   name="boolean-value"
   @label="Yes?"
   @checked={{false}}
   @error={{false}}
-  disabled={{false}}
+  @disabled={{false}}
   />
 ```
 
 <Preview>
-  <Story name="Basic" height="10rem">{{
+  <Story name="Basic Checkbox" height="10rem">{{
     template: hbs`
       <Rose::Form::Checkbox
-        @id={{id}}
         name={{name}}
         @label={{label}}
         @checked={{checked}}
         @error={{error}}
-        disabled={{disabled}}
+        @disabled={{disabled}}
         />
     `,
     context: {
       label: text('text', 'Checkbox 🛎'),
-      id: text('id', 'checkbox-1'),
       name: text('name', 'checkbox-1'),
       checked: boolean('checked', false),
       error: boolean('error', false),
+      disabled: boolean('disabled', false),
+    }
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Checkbox with errors" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Checkbox
+        name={{name}}
+        @label={{label}}
+        @checked={{checked}}
+        @error={{true}}
+        @disabled={{disabled}}
+        as |field|
+      >
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Checkbox>
+    `,
+    context: {
+      label: text('text', 'Checkbox 🛎'),
+      name: text('name', 'checkbox-1'),
+      checked: boolean('checked', false),
       disabled: boolean('disabled', false),
     }
   }}</Story>

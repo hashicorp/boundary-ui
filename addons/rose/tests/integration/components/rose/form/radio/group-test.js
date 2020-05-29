@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, find, findAll } from '@ember/test-helpers';
+import { render, click, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | rose/form/radio/group', function (hooks) {
@@ -10,12 +10,12 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
     await render(hbs`
       <Rose::Form::Radio::Group @name="bird" as |radioGroup|>
         <radioGroup.radio
-          @id="bird-1"
+          @name="bird"
           @label="Pegion"
           @value="pegion"
         />
         <radioGroup.radio
-          @id="bird-2"
+          @name="bird"
           @label="flamingo"
           @value="flamingo"
         />
@@ -31,37 +31,37 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
     await render(hbs`
       <Rose::Form::Radio::Group @name="bird" @selectedValue="flamingo" as |radioGroup|>
         <radioGroup.radio
-          @id="bird-1"
+          @name="bird"
           @label="Pegion"
           @value="pegion"
         />
         <radioGroup.radio
-          @id="bird-2"
+          @name="bird"
           @label="flamingo"
           @value="flamingo"
         />
       </Rose::Form::Radio::Group>
     `);
 
-    assert.equal(find('#bird-1').checked, false);
-    assert.equal(find('#bird-2').checked, true);
+    assert.equal(findAll('[type="radio"]')[0].checked, false);
+    assert.equal(findAll('[type="radio"]')[1].checked, true);
 
-    await click(find('#bird-1'));
+    await click(findAll('[type="radio"]')[0]);
 
-    assert.equal(find('#bird-1').checked, true);
-    assert.equal(find('#bird-2').checked, false);
+    assert.equal(findAll('[type="radio"]')[0].checked, true);
+    assert.equal(findAll('[type="radio"]')[1].checked, false);
   });
 
   test('it reflects active radiofield value in @selectedValue', async function (assert) {
     await render(hbs`
       <Rose::Form::Radio::Group @name="bird" @selectedValue={{this.selectedValue}} as |radioGroup|>
         <radioGroup.radio
-          @id="bird-1"
+          @name="bird"
           @label="Pegion"
           @value="pegion"
         />
         <radioGroup.radio
-          @id="bird-2"
+          @name="bird"
           @label="flamingo"
           @value="flamingo"
         />
@@ -70,10 +70,10 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
 
     assert.notOk(this.selectedValue);
 
-    await click(find('#bird-1'));
+    await click(findAll('[type="radio"]')[0]);
     assert.equal(this.selectedValue, 'pegion');
 
-    await click(find('#bird-2'));
+    await click(findAll('[type="radio"]')[1]);
     assert.equal(this.selectedValue, 'flamingo');
   });
 
@@ -82,31 +82,31 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
     await render(hbs`
       <Rose::Form::Radio::Group @name="bird" @selectedValue={{this.selectedValue}} as |radioGroup|>
         <radioGroup.radio
-          @id="bird-1"
+          @name="bird"
           @label="Pegion"
           @value="pegion"
         />
         <radioGroup.radio
-          @id="bird-2"
+          @name="bird"
           @label="flamingo"
           @value="flamingo"
         />
       </Rose::Form::Radio::Group>
     `);
 
-    assert.equal(find('#bird-1').checked, false);
-    assert.equal(find('#bird-2').checked, false);
+    assert.equal(findAll('[type="radio"]')[0].checked, false);
+    assert.equal(findAll('[type="radio"]')[1].checked, false);
 
     this.set('selectedValue', 'flamingo');
-    assert.equal(find('#bird-1').checked, false);
-    assert.equal(find('#bird-2').checked, true);
+    assert.equal(findAll('[type="radio"]')[0].checked, false);
+    assert.equal(findAll('[type="radio"]')[1].checked, true);
 
     this.set('selectedValue', 'pegion');
-    assert.equal(find('#bird-1').checked, true);
-    assert.equal(find('#bird-2').checked, false);
+    assert.equal(findAll('[type="radio"]')[0].checked, true);
+    assert.equal(findAll('[type="radio"]')[1].checked, false);
 
     this.set('selectedValue', 'dog');
-    assert.equal(find('#bird-1').checked, false);
-    assert.equal(find('#bird-2').checked, false);
+    assert.equal(findAll('[type="radio"]')[0].checked, false);
+    assert.equal(findAll('[type="radio"]')[1].checked, false);
   });
 });

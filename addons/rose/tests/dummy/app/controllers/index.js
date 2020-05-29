@@ -2,9 +2,11 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 
 export default class IndexController extends Controller {
+  color = 'green';
+
   @action
-  selectChange(/*value*/) {
+  actionHandler(/*value*/) {
     // eslint-disable-next-line no-console
-    //console.log(value);
+    //console.log('action handled');
   }
 }
