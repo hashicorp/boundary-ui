@@ -1,0 +1,60 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { text } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Card|Link" component="Link" />
+
+# Card Link
+
+Card link component wraps content with `LinkTo` component. Supports title and description.
+
+```html
+<Rose::Card::Link @title='Card title' @description='Card description' @route='about'/>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+      <Rose::Card::Link
+        @title={{title}}
+        @description={{description}}
+      />
+    `,
+    context: {
+      title: text('title', 'Card title'),
+      description: text('description', 'Card description'),
+    },
+  }}</Story>
+</Preview>
+
+`@route` defaults to 'index' when not supplied.
+
+`@title` and `@description` are optional. Card expands to fit content.
+
+```html
+<Rose::Card::Link @title='Card title'/>
+```
+<Preview>
+  <Story name="Title">{{
+    template: hbs`
+      <Rose::Card::Link @title={{title}} />
+    `,
+    context: {
+      title: text('title', 'Card title'),
+    },
+  }}</Story>
+</Preview>
+
+```html
+<Rose::Card::Link @description='Card description'/>
+```
+<Preview>
+  <Story name="Description">{{
+    template: hbs`
+      <Rose::Card::Link @description={{description}} />
+    `,
+    context: {
+      description: text('description', 'Card description'),
+    },
+  }}</Story>
+</Preview>
