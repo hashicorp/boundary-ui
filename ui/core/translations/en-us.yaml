@@ -10,3 +10,8 @@ form:
   label:
     name: Name
     description: Description
+dev:
+  default-org: Default Org
+  menu-item: Menu item
+  button-menu-item: Button menu item
+  section: Section

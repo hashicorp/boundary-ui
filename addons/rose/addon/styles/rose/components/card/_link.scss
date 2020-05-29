@@ -24,8 +24,13 @@
   }
 
   &:hover {
+    $s: sizing.rems(s); // 12
+    $xs: sizing.rems(xs); // 8
+    $xxs: sizing.rems(xxs); // 4
     border-color: var(--ui-gray);
     background-color: var(--ui-gray-subtler-5);
+    box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
+      0 $xxs $xxs rgba(var(--stark-components), var(--opacity-4));
   }
 
   &:active {
