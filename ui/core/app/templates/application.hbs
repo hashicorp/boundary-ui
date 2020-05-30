@@ -29,7 +29,15 @@
     {{outlet}}
   </page.main>
 
-  <page.sidebar />
+  <page.sidebar>
+    <Rose::Nav::Primary @title={{t 'dev.title'}} as |nav|>
+      <nav.link @route="orgs" class="active">{{t 'dev.item-name'}}</nav.link>
+      <nav.link @route="index">{{t 'dev.item-name'}}</nav.link>
+      <nav.link @route="index">{{t 'dev.item-name'}}</nav.link>
+      <nav.link @route="index">{{t 'dev.item-name'}}</nav.link>
+    </Rose::Nav::Primary>
+  </page.sidebar>
+
 </Rose::Layout::Page>
 
 <EmberNotify @closeAfter={{4000}} as |message close|>

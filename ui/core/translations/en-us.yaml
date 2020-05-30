@@ -21,3 +21,5 @@ dev:
   menu-item: Menu item
   button-menu-item: Button menu item
   section: Section
+  title: Title
+  item-name: Item Name

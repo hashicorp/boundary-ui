@@ -3,6 +3,10 @@
 @import 'rose';
 @import 'notify';
 
+.rose-nav-primary {
+  margin-top: sizing.rems(xxl);
+}
+
 .projects-overview {
   margin: sizing.rems(l);
 

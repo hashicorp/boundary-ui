@@ -1,187 +1,202 @@
-<Rose::Header as |header|>
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <Rose::Header as |header|>
 
-  <header.brand @logo="logo" @text="Product Name" />
+      <header.brand @logo="logo" @text="Product Name" />
 
-  <header.nav as |nav|>
-    <nav.dropdown @text="org-name" as |dropdown|>
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
-      <dropdown.button>Button menu item</dropdown.button>
-    </nav.dropdown>
-    <nav.link @route="index">Section</nav.link>
-    <nav.link @route="about">Section</nav.link>
-  </header.nav>
+      <header.nav as |nav|>
+        <nav.dropdown @text="org-name" as |dropdown|>
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </nav.dropdown>
+        <nav.link @route="index">Section</nav.link>
+        <nav.link @route="about">Section</nav.link>
+      </header.nav>
 
 
-  <header.utilities as |utilities|>
-    <utilities.dropdown
-      @text="user@example.net"
-      @iconOnly={{true}}
-      @icon="user-square-fill" as |dropdown|
+      <header.utilities as |utilities|>
+        <utilities.dropdown
+          @text="user@example.net"
+          @iconOnly={{true}}
+          @icon="user-square-fill" as |dropdown|
+        >
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </utilities.dropdown>
+      </header.utilities>
+
+    </Rose::Header>
+  </page.header>
+
+  <page.sidebar>
+    <Rose::Nav::Primary @title="Title" as |nav|>
+      <nav.link @route="index">Item Name</nav.link>
+      <nav.link @route="about">Item Name</nav.link>
+      <nav.link @route="about">Item Name</nav.link>
+      <nav.link @route="about">Item Name</nav.link>
+    </Rose::Nav::Primary>
+  </page.sidebar>
+
+  <page.main>
+
+    Dummy app index template
+
+    <Rose::Notification
+      @style="error"
+      @heading="Error"
+      @dismiss={{this.actionHandler}}
+      @dismissText="Dismiss"
     >
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
-      <dropdown.button>Button menu item</dropdown.button>
-    </utilities.dropdown>
-  </header.utilities>
+      An error occurred.
+    </Rose::Notification>
 
-</Rose::Header>
+    <h2>Icon</h2>
+    <Rose::Icon @name="alert-circle-fill" />
+    <Rose::Icon @name="alert-circle-fill" @size="medium" />
+    <Rose::Icon @name="alert-circle-fill" @size="small" />
 
+    <h2>Button</h2>
+    <Rose::Button @style="primary">Primary</Rose::Button>
+    <br>
+    <Rose::Button @style="primary" @disabled={{true}}>Primary</Rose::Button>
+    <br>
 
-Dummy app index template
+    <Rose::Button @style="secondary">Secondary</Rose::Button>
+    <br>
+    <Rose::Button @style="secondary" @disabled={{true}}>Secondary</Rose::Button>
+    <br>
 
-<Rose::Notification
-  @style="error"
-  @heading="Error"
-  @dismiss={{this.actionHandler}}
-  @dismissText="Dismiss"
->
-  An error occurred.
-</Rose::Notification>
+    <h2>Form</h2>
+    <Rose::Form
+      @onSubmit={{this.actionHandler}}
+      @cancel={{this.actionHandler}}
+      @disabled={{false}}
+      as |form|
+    >
 
-<h2>Icon</h2>
-<Rose::Icon @name="alert-circle-fill" />
-<Rose::Icon @name="alert-circle-fill" @size="medium" />
-<Rose::Icon @name="alert-circle-fill" @size="small" />
+      <h3>Inputs</h3>
+      <form.input
+        @label="Label"
+        @value="Read only"
+        readonly={{true}}
+        />
+      <form.input
+        @label="Label"
+        @helperText="Helper text"
+        @value="Text"
+        />
+      <form.input
+        @label="Label"
+        @helperText="Helper text"
+        @value="Text"
+        @error={{true}}
+        />
+      <form.input
+        @label="Label"
+        @helperText="Helper text"
+        @value="Text"
+        disabled={{true}}
+        />
 
-<h2>Button</h2>
-<Rose::Button @style="primary">Primary</Rose::Button>
-<br>
-<Rose::Button @style="primary" @disabled={{true}}>Primary</Rose::Button>
-<br>
+      <h3>Textareas</h3>
+      <form.textarea
+        @label="Label"
+        @value="Read only"
+        readonly={{true}}
+        />
+      <form.textarea
+        @label="Label"
+        @helperText="Helper text"
+        @value="Text"
+        />
+      <form.textarea
+        @label="Label"
+        @helperText="Helper text"
+        @value="Text"
+        @error={{true}}
+        />
+      <form.textarea
+        @label="Label"
+        @helperText="Helper text"
+        @value="Text"
+        disabled={{true}}
+        />
 
-<Rose::Button @style="secondary">Secondary</Rose::Button>
-<br>
-<Rose::Button @style="secondary" @disabled={{true}}>Secondary</Rose::Button>
-<br>
+      <h3>Selects</h3>
+      <form.select
+        @label="Label"
+        @helperText="Helper text"
+        @onChange={{fn this.actionHandler}}
+        as |field|
+      >
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+          <select.option @value="value-1">Value 1</select.option>
+          <select.option @value="value-2">Value 2</select.option>
+          <select.option @value="value-3">Value 3</select.option>
+        </field.field>
+      </form.select>
+      <form.select
 
-<h2>Form</h2>
-<Rose::Form
-  @onSubmit={{this.actionHandler}}
-  @cancel={{this.actionHandler}}
-  @disabled={{false}}
-  as |form|
->
-
-  <h3>Inputs</h3>
-  <form.input
-    @label="Label"
-    @value="Read only"
-    readonly={{true}}
-    />
-  <form.input
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    />
-  <form.input
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    @error={{true}}
-    />
-  <form.input
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    disabled={{true}}
-    />
-
-  <h3>Textareas</h3>
-  <form.textarea
-    @label="Label"
-    @value="Read only"
-    readonly={{true}}
-    />
-  <form.textarea
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    />
-  <form.textarea
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    @error={{true}}
-    />
-  <form.textarea
-    @label="Label"
-    @helperText="Helper text"
-    @value="Text"
-    disabled={{true}}
-    />
-
-  <h3>Selects</h3>
-  <form.select
-    @label="Label"
-    @helperText="Helper text"
-    @onChange={{fn this.actionHandler}}
-    as |field|
-  >
-    <field.field as |select|>
-      <select.option>Choose an option</select.option>
-      <select.option @value="value-1">Value 1</select.option>
-      <select.option @value="value-2">Value 2</select.option>
-      <select.option @value="value-3">Value 3</select.option>
-    </field.field>
-  </form.select>
-  <form.select
-
-    @label="Label"
-    @helperText="Helper text"
-    @onChange={{fn this.actionHandler}}
-    as |field|
-  >
-    <field.field as |select|>
-      <select.option>Choose an option</select.option>
-    </field.field>
-  </form.select>
+        @label="Label"
+        @helperText="Helper text"
+        @onChange={{fn this.actionHandler}}
+        as |field|
+      >
+        <field.field as |select|>
+          <select.option>Choose an option</select.option>
+        </field.field>
+      </form.select>
 
 
-  <h3>Radio Group</h3>
-  <form.radioGroup @name="color" @selectedValue={{this.color}} as |radioGroup|>
-    <radioGroup.radio
-      @label="Red"
-      @value="red"
-    />
-    <radioGroup.radio
-      @label="Green"
-      @value="green"
-    />
-    <radioGroup.radio
-      @label="Blue"
-      @value="blue"
-      @disabled={{true}}
-    />
-  </form.radioGroup>
+      <h3>Radio Group</h3>
+      <form.radioGroup @name="color" @selectedValue={{this.color}} as |radioGroup|>
+        <radioGroup.radio
+          @label="Red"
+          @value="red"
+        />
+        <radioGroup.radio
+          @label="Green"
+          @value="green"
+        />
+        <radioGroup.radio
+          @label="Blue"
+          @value="blue"
+          @disabled={{true}}
+        />
+      </form.radioGroup>
 
-  <h3>Checkboxes</h3>
-  <form.checkbox
-    @label="Label"
-    />
-  <form.checkbox
-    @error={{true}}
-    @label="Error"
-    />
-  <form.checkbox
-    @checked={{true}}
-    @label="Checked"
-    />
-  <form.checkbox
-    @label="Disabled"
-    disabled={{true}}
-    />
-  <form.checkbox
-    @checked={{true}}
-    @label="Disabled + Checked"
-    disabled={{true}}
-    />
+      <h3>Checkboxes</h3>
+      <form.checkbox
+        @label="Label"
+        />
+      <form.checkbox
+        @error={{true}}
+        @label="Error"
+        />
+      <form.checkbox
+        @checked={{true}}
+        @label="Checked"
+        />
+      <form.checkbox
+        @label="Disabled"
+        disabled={{true}}
+        />
+      <form.checkbox
+        @checked={{true}}
+        @label="Disabled + Checked"
+        disabled={{true}}
+        />
 
-  <form.actions
-    @submitText="Save"
-    @cancelText="Cancel" />
-</Rose::Form>
+      <form.actions
+        @submitText="Save"
+        @cancelText="Cancel" />
+    </Rose::Form>
 
-<Rose::Card::Link @title="I'm a card" />
-<Rose::Card::Link @title="I'm a card" @description="I'm a description" />
-<Rose::Card::Link @title="I'm a card" @description="I'm a description" @subtitle="I'm a subtitle"/>
+    <Rose::Card::Link @title="I'm a card" />
+    <Rose::Card::Link @title="I'm a card" @description="I'm a description" />
+    <Rose::Card::Link @title="I'm a card" @description="I'm a description" @subtitle="I'm a subtitle"/>
+  </page.main>
+</Rose::Layout::Page>

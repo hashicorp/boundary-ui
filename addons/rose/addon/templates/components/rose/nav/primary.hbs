@@ -1,0 +1,17 @@
+<nav
+  ...attributes
+  class="rose-nav-primary"
+  id={{this.id}}
+  aria-labelledby={{if @title (concat "title-" this.id)}}>
+
+  {{#if @title}}
+    <span class="rose-nav-title" id="title-{{this.id}}">
+      {{@title}}
+    </span>
+  {{/if}}
+
+  {{yield (hash
+    link=(component "link-to" class="rose-nav-link")
+  )}}
+
+</nav>
