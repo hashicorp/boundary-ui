@@ -52,7 +52,7 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
       this.notify.success('Save succeeded.');
     } catch (e) {
       // TODO: replace with translated strings
-      this.notify.error('An error occurred.');
+      this.notify.error('An error occurred.', {closeAfter: null});
     }
   }
 
@@ -69,7 +69,7 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
       this.notify.success('Deleted project succesfully.');
     } catch (e) {
       // TODO: replace with translated strings
-      this.notify.error('An error occurred.');
+      this.notify.error('An error occurred.', {closeAfter: null});
     }
   }
 }

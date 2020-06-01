@@ -6,7 +6,7 @@ export default class OrgsOrgProjectsNewRoute extends Route {
   // =services
 
   @service notify;
-  
+
   // =methods
 
   /**
@@ -44,7 +44,7 @@ export default class OrgsOrgProjectsNewRoute extends Route {
       this.notify.success('Project created.');
     } catch (e) {
       // TODO: replace with translated strings
-      this.notify.error('Project could not be created.');
+      this.notify.error('Project could not be created.', {closeAfter: null});
     }
   }
 }

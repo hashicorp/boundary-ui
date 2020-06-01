@@ -7,6 +7,18 @@
   margin-top: sizing.rems(xxl);
 }
 
+.rose-form {
+  width: 66%;
+  
+  .rose-form-input {
+    width: 100%;
+
+    .rose-form-input-field {
+      width: 100%;
+    }
+  }
+}
+
 .projects-overview {
   margin: sizing.rems(l);
 
