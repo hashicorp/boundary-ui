@@ -1,0 +1,23 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Layout" component="PageHeader" />
+
+# Layout|Page Header
+
+A page layout/positioning component that configures a single column grid for use as a header.
+
+```htmlbars
+<Rose::Layout::PageHeader />
+```
+
+<Preview>
+  <Story name="Page Header">{{
+    template: hbs`
+    <Rose::Layout::PageHeader style="background: var(--brand-gray-5); padding: 1rem;">
+      Page Header
+    </Rose::Layout::PageHeader>
+    `,
+  }}</Story>
+</Preview>
