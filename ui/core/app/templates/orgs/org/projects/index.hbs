@@ -1,11 +1,16 @@
 <div class="projects-overview">
-
-  <h2>{{t "resources.projects"}}</h2>
-
-  <LinkTo @route="orgs.org.projects.new">
-    <Rose::Icon @name="plus-circle-outline" @size="medium" />
-    {{t "titles.new"}}
-  </LinkTo>
+  <Rose::Layout::PageHeader>
+    <Rose::PageHeader::Title @text={{t "resources.projects"}} />
+    <Rose::PageHeader::Utilities as |utility|>
+      <utility.action
+        @style="primary"
+        @iconLeft="plus-plain"
+        {{on "click" (route-action "new")}}
+      >
+        {{t 'titles.new'}}
+      </utility.action>
+    </Rose::PageHeader::Utilities>
+  </Rose::Layout::PageHeader>
 
   <ul class="projects">
     {{#each @model as |project|}}

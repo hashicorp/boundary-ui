@@ -18,6 +18,10 @@
     </nav.link>
   </Rose::Nav::Tabs>
 
+  <Rose::Layout::PageHeader>
+    <Rose::PageHeader::Title @text={{@model.name}} />
+  </Rose::Layout::PageHeader>
+
   <Form::Project
     @model={{@model}}
     @submit={{route-action "save" @model}}

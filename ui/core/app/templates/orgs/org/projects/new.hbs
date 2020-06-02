@@ -7,7 +7,9 @@
     <LinkTo @route='orgs.org.projects.new'>{{t "titles.new"}}</LinkTo>
   </div>
 
-  <h2>{{t "titles.new"}}</h2>
+  <Rose::Layout::PageHeader>
+    <Rose::PageHeader::Title @text={{t "titles.new"}} />
+  </Rose::Layout::PageHeader>
 
   <Form::Project
     @model={{@model}}
