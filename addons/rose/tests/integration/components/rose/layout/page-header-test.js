@@ -3,21 +3,26 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/layout/page-header', function(hooks) {
+module('Integration | Component | rose/layout/page-header', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     await render(hbs`<Rose::Layout::PageHeader />`);
     assert.ok(find('.rose-layout-page-header'));
   });
 
-  test('it renders with html attributes', async function(assert) {
+  test('it renders with html attributes', async function (assert) {
     await render(hbs`<Rose::Layout::PageHeader id="page-header"/>`);
     assert.ok(find('#page-header'));
   });
 
-  test('it renders with content', async function(assert) {
-    await render(hbs`<Rose::Layout::PageHeader>Page header content</Rose::Layout::PageHeader>`);
-    assert.equal(find('.rose-layout-page-header').textContent.trim(), 'Page header content');
+  test('it renders with content', async function (assert) {
+    await render(
+      hbs`<Rose::Layout::PageHeader>Page header content</Rose::Layout::PageHeader>`
+    );
+    assert.equal(
+      find('.rose-layout-page-header').textContent.trim(),
+      'Page header content'
+    );
   });
 });

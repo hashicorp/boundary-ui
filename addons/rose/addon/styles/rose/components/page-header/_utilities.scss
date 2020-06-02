@@ -1,0 +1,8 @@
+.rose-page-header-utilities {
+  grid-area: utilities;
+
+  // Remove margin to align action buttons with h1 text
+  button {
+    margin-bottom: 0;
+  }
+}

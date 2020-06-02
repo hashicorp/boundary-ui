@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../../../../../templates/components/rose/layout/main/header/title';
+import layout from '../../../templates/components/rose/page-header/utilities';
 
 export default Component.extend({
   layout,

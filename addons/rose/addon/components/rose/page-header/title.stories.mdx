@@ -1,0 +1,62 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|PageHeader|Title" component="Title" />
+
+# Title
+
+A header title component with ability to configure dropdown using `Rose::Header::Dropdown`. To be used with `Rose::Layout::PageHeader`.
+
+```html
+<Rose::Layout::PageHeader style="border: 1px solid var(--brand-gray-5);">
+  <Rose::PageHeader::Title as |title| >
+    <title.dropdown
+      @text="Page Header Title"
+      @icon="user-square-fill" as |dropdown|
+    >
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.button>Button menu item</dropdown.button>
+    </title.dropdown>
+  </Rose::PageHeader::Title>
+</Rose::Layout::PageHeader>
+```
+
+<Preview>
+  <Story name="Title">{{
+    template: hbs`
+    <Rose::Layout::PageHeader style="border: 1px solid var(--brand-gray-5);">
+      <Rose::PageHeader::Title as |title| >
+        <title.dropdown
+          @text={{pageTitle}}
+          @icon={{dropdownIcon}} as |dropdown|
+        >
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </title.dropdown>
+      </Rose::PageHeader::Title>
+    </Rose::Layout::PageHeader>
+    `,
+    context: {
+      pageTitle: text('pageTitle', 'Page Section Title'),
+      dropdownIcon: select(
+        'dropdownIcon',
+        {
+          'user-square-fill': 'user-square-fill',
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'user-square-fill'
+      ),
+    },
+  }}</Story>
+</Preview>
+
+Title can be configured to be a level 1 heading with optional icon.
+
+```html
+<Rose::PageHeader::Title @text="Page Header Title" @icon="alert-circle-fill" />
+```
