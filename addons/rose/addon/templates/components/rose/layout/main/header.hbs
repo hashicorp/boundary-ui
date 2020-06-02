@@ -1,0 +1,11 @@
+<div ...attributes class="rose-layout-main-header" >
+  {{yield (hash
+    title=(component 'rose/layout/main/header/title')
+  )}}
+
+  <div class="rose-layout-main-header-actions">
+    {{yield (hash
+      action=(component 'rose/button')
+    )}}
+  </div>
+</div>

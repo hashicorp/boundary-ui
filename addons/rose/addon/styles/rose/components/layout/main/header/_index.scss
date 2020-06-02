@@ -1,0 +1,75 @@
+@use '../../../../utilities/type' as typography;
+@use '../../../../variables/sizing';
+@use '../../../../variables/media';
+
+.rose-layout-main-header {
+  display: grid;
+  grid-template-areas: 'title title actions';
+  grid-template-columns: 1fr auto;
+
+  .rose-layout-main-header-title {
+    display: inline-block;
+    grid-area: title;
+
+    .rose-layout-main-header-title-text {
+      display: inline-block;
+      color: var(--stark);
+    }
+
+    .rose-layout-main-header-title-icon {
+      vertical-align: sub;
+
+      svg {
+        width: sizing.rems(l);
+        width: sizing.rems(l);
+      }
+    }
+  }
+
+  .rose-header-dropdown {
+    .rose-header-dropdown-trigger-text {
+      // Apply heading level 1 style to text to fit page section style spec
+      //  Duplicate of h1 style defined in typography
+      @include typography.type(h1, bold);
+      margin-top: sizing.rems(m);
+      margin-bottom: sizing.rems(xs);
+
+      margin-right: sizing.rems(xs);
+    }
+
+    .rose-header-dropdown-trigger {
+      background-size: sizing.rems(l);
+      background-position: right (sizing.rems(m) + sizing.rems(s));
+    }
+
+    .rose-icon > svg {
+      vertical-align: sub;
+    }
+  }
+
+  .rose-layout-main-header-actions {
+    grid-area: actions;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    // Remove margin to align action buttons with h1 text
+    button {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (max-width: media.width(small)) {
+  .rose-layout-main-header {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      'title'
+      'actions';
+
+    .rose-layout-main-header-actions {
+      flex-wrap: wrap;
+    }
+  }
+}

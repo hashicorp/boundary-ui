@@ -1,6 +1,6 @@
 <details
   ...attributes
-  class="rose-header-dropdown{{if @alignRight " dropdown-right"}}"
+  class="rose-header-dropdown{{if @alignRight " dropdown-right"}} {{if  @style (concat "rose-header-dropdown-" @style) "rose-header-dropdown-light"}}"
   {{on-click-outside this.close}}
 >
 
