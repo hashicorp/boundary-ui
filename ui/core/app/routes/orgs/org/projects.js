@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
+import BreadCrumbRoute from 'rose/mixins/bread-crumb-route';
 
-export default class OrgsOrgProjectsRoute extends Route {
+export default class OrgsOrgProjectsRoute extends Route.extend(
+  BreadCrumbRoute
+) {
+  breadCrumb = 'Projects';
+
   // =methods
 
   /**

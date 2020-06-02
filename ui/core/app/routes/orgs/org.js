@@ -1,10 +1,15 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import BreadCrumbRoute from 'rose/mixins/bread-crumb-route';
 
-export default class OrgsOrgRoute extends Route {
+export default class OrgsOrgRoute extends Route.extend(BreadCrumbRoute) {
   // =services
 
   @service scope;
+
+  // =attributes
+
+  breadCrumb = 'Org';
 
   // =methods
 

@@ -1,12 +1,21 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import BreadCrumbRoute from 'rose/mixins/bread-crumb-route';
 
-export default class OrgsOrgProjectsProjectRoute extends Route {
+export default class OrgsOrgProjectsProjectRoute extends Route.extend(
+  BreadCrumbRoute
+) {
   // =services
 
   @service scope;
   @service notify;
+
+  // TODO:  this might need to go on controller after all, since this
+  // is dynamic content
+  get breadCrumb() {
+    return this.currentModel.name;
+  }
 
   // =methods
 
@@ -52,7 +61,7 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
       this.notify.success('Save succeeded.');
     } catch (e) {
       // TODO: replace with translated strings
-      this.notify.error('An error occurred.', {closeAfter: null});
+      this.notify.error('An error occurred.', { closeAfter: null });
     }
   }
 
@@ -69,7 +78,7 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
       this.notify.success('Deleted project succesfully.');
     } catch (e) {
       // TODO: replace with translated strings
-      this.notify.error('An error occurred.', {closeAfter: null});
+      this.notify.error('An error occurred.', { closeAfter: null });
     }
   }
 }
