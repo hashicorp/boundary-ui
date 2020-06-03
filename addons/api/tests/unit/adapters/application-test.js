@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import config from 'ember-get-config';
 import RESTAdapter from '@ember-data/adapter/rest';
+import { InvalidError } from '@ember-data/adapter/error';
 
 module('Unit | Adapter | application', function (hooks) {
   setupTest(hooks);
@@ -27,5 +28,45 @@ module('Unit | Adapter | application', function (hooks) {
       assert.equal(type, 'PATCH');
     };
     adapter.ajax('/', 'PUT');
+  });
+
+  test('it correctly identifies 400 responses as invalid', function (assert) {
+    assert.expect(2);
+    const adapter = this.owner.lookup('adapter:application');
+    assert.ok(adapter.isInvalid(400));
+    assert.notOk(adapter.isInvalid(401));
+  });
+
+  test('it returns an proper InvalidError from handleResponse', function (assert) {
+    assert.expect(3);
+    const adapter = this.owner.lookup('adapter:application');
+    let payload = {
+      status: 400,
+      code: 'invalid_argument',
+      message: 'The request was invalid.',
+    };
+    let handledResponse = adapter.handleResponse(400, {}, payload);
+    assert.ok(handledResponse instanceof InvalidError);
+    assert.equal(handledResponse.errors.length, 1);
+    assert.equal(handledResponse.message, 'The request was invalid.');
+  });
+
+  test('it returns field-level errors in InvalidError from handleResponse', function (assert) {
+    assert.expect(1);
+    const adapter = this.owner.lookup('adapter:application');
+    let payload = {
+      status: 400,
+      code: 'invalid_argument',
+      message: 'The request was invalid.',
+      details: {
+        fields: [{ name: 'name', message: 'Name is wrong.' }],
+      },
+    };
+    let handledResponse = adapter.handleResponse(400, {}, payload);
+    assert.equal(
+      handledResponse.errors.length,
+      2,
+      'A base error plus one field error'
+    );
   });
 });
