@@ -18,7 +18,7 @@ export default Mixin.create({
    */
   setupController(controller) {
     if (super.setupController) super.setupController(...arguments);
-    controller.breadCrumb = this.breadCrumb;
+    controller.set('breadCrumb', this.breadCrumb);
   }
 
 });
