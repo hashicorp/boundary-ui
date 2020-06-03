@@ -1,0 +1,43 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Tab" component="Tab" />
+
+# Tab
+
+A tab item component with ability to configure icon, title, and badge sections.
+
+```html
+<Rose::Tab @title="Tab item" @badge="3" @icon="info-circle-outline" @disabled={{false}} />
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+    <Rose::Tab
+      @title={{title}}
+      @badge={{badge}}
+      @icon={{icon}}
+      @disabled={{disabled}}
+    />`,
+    context: {
+      title: text('title', 'Tab item'),
+      badge: text('badge', '3'),
+      icon: select(
+        'icon',
+        {
+          'info-circle-outline': 'info-circle-outline',
+          'user-square-fill': 'user-square-fill',
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'info-circle-outline'
+      ),
+      disabled: boolean('disabled', false)
+    },
+  }}</Story>
+</Preview>

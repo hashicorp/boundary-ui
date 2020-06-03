@@ -1,0 +1,22 @@
+<div ...attributes class="rose-tab">
+  <LinkTo
+    title={{@title}}
+    @route={{if @route @route "index"}}
+    @model={{@model}}
+    class={{concat "rose-tab-link" (if @disabled " rose-tab-link-disabled")}}
+  >
+    {{#if @icon}}
+      <span class="rose-tab-icon">{{inline-svg @icon}}</span>
+    {{/if}}
+
+    {{#if @title}}
+      <span class="rose-tab-title">{{@title}}</span>
+    {{/if}}
+
+    {{#if @badge}}
+      <span class="rose-tab-badge">{{@badge}}</span>
+    {{/if}}
+  </LinkTo>
+
+  {{yield}}
+</div>

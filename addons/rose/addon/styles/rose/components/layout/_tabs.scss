@@ -1,0 +1,8 @@
+@use '../../variables/sizing';
+
+.rose-layout-tabs {
+  border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}

@@ -33,6 +33,5 @@ export default Component.extend({
     }
 
     return icon;
-  }
-
+  },
 });

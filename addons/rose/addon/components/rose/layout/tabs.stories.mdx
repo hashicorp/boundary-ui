@@ -1,0 +1,26 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Layout" component="Tabs" />
+
+# Tabs
+
+A tabs layout component to hold `Rose::Tab` definitions.
+
+```html
+<Rose::Layout::Tabs>
+  <Rose::Tab @title="Tab item" @badge="3" @icon="info-circle-outline" @disabled={{false}} />
+</Rose::Layout::Tabs>
+```
+
+<Preview>
+  <Story name="Tabs">{{
+    template: hbs`
+    <Rose::Layout::Tabs>
+      <Rose::Tab @title="Text" />
+      <Rose::Tab @title="Text" />
+      <Rose::Tab @title="Text" />
+    </Rose::Layout::Tabs>`,
+  }}</Story>
+</Preview>

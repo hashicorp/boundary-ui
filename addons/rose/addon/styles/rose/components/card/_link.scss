@@ -3,7 +3,7 @@
 
 .rose-card-link {
   @include type.type(s);
-  border: 1px solid var(--ui-gray-subtler-2);
+  border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   border-radius: sizing.rems(xxxs);
   color: var(--ui-gray);
   display: inline-flex;
