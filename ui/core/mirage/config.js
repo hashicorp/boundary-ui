@@ -1,4 +1,5 @@
 import config from '../config/environment';
+import { Response } from 'miragejs';
 
 export default function() {
 
@@ -27,6 +28,32 @@ export default function() {
   this.get('/orgs/:org_id/projects');
   this.post('/orgs/:org_id/projects');
   this.get('/orgs/:org_id/projects/:id');
-  this.patch('/orgs/:org_id/projects/:id');
+  this.patch('/orgs/:org_id/projects/:id', () => {
+    // return new Response(400, {}, {
+    //   "status": 400,
+    //   "code": "invalid_argument",
+    //   "message": "The request contained invalid fields.",
+    //   "details": {
+    //     "request_id": "abc123",
+    //     "TraceId": "0123-4567",
+    //     "fields": [
+    //       {
+    //         "name": "name",
+    //         "message": "name is required"
+    //       },
+    //       {
+    //         "name": "description",
+    //         "message": "The description must not be more than 1 trillion characters long."
+    //       }
+    //     ]
+    //   }
+    // });
+
+    return new Response(409, {}, {
+      "status": 409,
+      "code": "invalid_argument",
+      "message": "The request was awful."
+    });
+  });
   this.del('/orgs/:org_id/projects/:id');
 }
