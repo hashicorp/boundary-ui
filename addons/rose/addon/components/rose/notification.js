@@ -20,7 +20,7 @@ export default Component.extend({
   get icon() {
     let icon = 'info-circle-fill';
 
-    switch(this.style) {
+    switch (this.style) {
       case 'failure':
         icon = 'cancel-square-fill';
         break;
@@ -33,6 +33,5 @@ export default Component.extend({
     }
 
     return icon;
-  }
-
+  },
 });

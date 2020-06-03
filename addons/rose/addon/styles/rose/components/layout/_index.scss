@@ -1,5 +1,7 @@
 @use '../../variables/media';
 
+@import 'tabs';
+
 .rose-layout-page {
   display: grid;
   grid-template-areas:

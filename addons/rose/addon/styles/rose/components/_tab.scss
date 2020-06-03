@@ -1,0 +1,53 @@
+@use '../variables/sizing';
+@use '../utilities/type';
+
+.rose-tab {
+  @include type.type(s);
+  display: inline-block;
+  background-color: var(--subtle);
+
+  .rose-tab-link {
+    text-decoration: none;
+    color: var(--ui-gray);
+    display: inline-block;
+    padding: sizing.rems(s) sizing.rems(m);
+    border-bottom: sizing.rems(xxxs) solid var(--subtle);
+
+    &.rose-tab-link-disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      color: var(--ui-gray-subtler-2);
+    }
+
+    &:active {
+      color: var(--action);
+      border-color: var(--action);
+      background-color: var(--subtle);
+    }
+
+    &:hover {
+      color: var(--ui-gray);
+      border-color: var(--ui-gray-subtler-2);
+      background-color: var(--ui-gray-subtler-4);
+    }
+
+    &:hover:active {
+      color: var(--action);
+      border-color: var(--action);
+      background-color: var(--ui-gray-subtler-4);
+    }
+  }
+
+  .rose-tab-icon {
+    svg {
+      width: sizing.rems(m);
+      height: sizing.rems(m);
+      vertical-align: sub;
+    }
+  }
+
+  .rose-tab-badge {
+    @include type.type(xs);
+    margin-left: sizing.rems(xxs);
+  }
+}
