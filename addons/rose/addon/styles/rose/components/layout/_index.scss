@@ -1,3 +1,4 @@
+@use '../../variables/sizing';
 @use '../../variables/media';
 
 @import 'tabs';
@@ -8,7 +9,7 @@
     'header header header header'
     'sidebar main main main';
   // Define static grid column for sidebar
-  grid-template-columns: 12rem auto 1fr;
+  grid-template-columns: 16rem auto 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
 }
@@ -23,6 +24,7 @@
 
 .rose-layout-sidebar {
   grid-area: sidebar;
+  border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
 }
 
 @media (max-width: media.width(small)) {

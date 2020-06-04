@@ -6,6 +6,7 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
   // =services
 
   @service scope;
+  @service notify;
 
   // =methods
 
@@ -44,14 +45,14 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
    * @param {Event} e
    */
   @action
-  async save(project, e) {
-    // Prevent default behavior, since this was trigger from a form submission.
-    e.preventDefault();
+  async save(project) {
     try {
       await project.save();
+      // TODO: replace with translated strings
+      this.notify.success('Save succeeded.');
     } catch (e) {
-      // TODO: error handling
-      throw e;
+      // TODO: replace with translated strings
+      this.notify.error('An error occurred.', {closeAfter: null});
     }
   }
 
@@ -64,9 +65,11 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
     try {
       await project.destroyRecord();
       this.transitionTo('orgs.org.projects');
+      // TODO: replace with translated strings
+      this.notify.success('Deleted project succesfully.');
     } catch (e) {
-      // TODO: error handling
-      throw e;
+      // TODO: replace with translated strings
+      this.notify.error('An error occurred.', {closeAfter: null});
     }
   }
 }

@@ -1,12 +1,25 @@
 actions:
   cancel: Cancel
   delete: Delete
+  dismiss: Dismiss
   save: Save
 resources:
   projects: Projects
 titles:
   new: New
+states:
+  info: Info
+  success: Success
+  warning: Warning
+  error: Error
 form:
   label:
     name: Name
     description: Description
+dev:
+  default-org: Default Org
+  menu-item: Menu item
+  button-menu-item: Button menu item
+  section: Section
+  title: Title
+  item-name: Item Name

@@ -1,7 +1,12 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class OrgsOrgProjectsNewRoute extends Route {
+  // =services
+
+  @service notify;
+
   // =methods
 
   /**
@@ -31,15 +36,15 @@ export default class OrgsOrgProjectsNewRoute extends Route {
    * @param {Event} e
    */
   @action
-  async save(project, e) {
-    // Prevent default behavior, since this was trigger from a form submission.
-    e.preventDefault();
+  async save(project) {
     try {
       await project.save();
       this.transitionTo('orgs.org.projects.project', project);
+      // TODO: replace with translated strings
+      this.notify.success('Project created.');
     } catch (e) {
-      // TODO: error handling
-      throw e;
+      // TODO: replace with translated strings
+      this.notify.error('Project could not be created.', {closeAfter: null});
     }
   }
 }

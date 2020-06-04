@@ -1,14 +1,53 @@
+<HeadLayout />
+
+{{title (app-name)}}
+
 <Rose::Layout::Page as |page|>
   <page.header>
     <Rose::Header as |header|>
-      <header.brand @logo="logo" @text={{app-name}} />
+      <header.brand @logo="logo-hashi" @text={{app-name}} />
+      <header.nav as |nav|>
+        <nav.dropdown @text={{t 'dev.default-org'}} as |dropdown|>
+          <dropdown.link @route="index">{{t 'dev.menu-item'}}</dropdown.link>
+          <dropdown.link @route="orgs">{{t 'dev.menu-item'}}</dropdown.link>
+          <dropdown.button>{{t 'dev.button-menu-item'}}</dropdown.button>
+        </nav.dropdown>
+        <nav.link @route="index">{{t 'dev.section'}}</nav.link>
+        <nav.link @route="index">{{t 'dev.section'}}</nav.link>
+      </header.nav>
+      <header.utilities as |utilities|>
+        <utilities.dropdown
+          @text="user@example.net"
+          @iconOnly={{true}}
+          @icon="user-square-fill" as |dropdown|
+        >
+          <dropdown.link @route="index">{{t 'dev.menu-item'}}</dropdown.link>
+          <dropdown.button>{{t 'dev.button-menu-item'}}</dropdown.button>
+        </utilities.dropdown>
+      </header.utilities>
     </Rose::Header>
   </page.header>
 
   <page.main>
-    {{title (app-name)}}
     {{outlet}}
   </page.main>
 
-  <page.sidebar />
+  <page.sidebar>
+    <Rose::Nav::Sidebar @title={{t 'dev.title'}} as |nav|>
+      <nav.link @route="orgs" class="active">{{t 'dev.item-name'}}</nav.link>
+      <nav.link @route="index">{{t 'dev.item-name'}}</nav.link>
+    </Rose::Nav::Sidebar>
+  </page.sidebar>
+
 </Rose::Layout::Page>
+
+<EmberNotify @closeAfter={{4000}} as |message close|>
+  <Rose::Notification
+    @style={{message.type}}
+    @heading={{t (concat 'states.' message.type)}}
+    @dismiss={{close}}
+    @dismissText={{t 'actions.dismiss'}}
+  >
+    {{message.text}}
+  </Rose::Notification>
+</EmberNotify>
