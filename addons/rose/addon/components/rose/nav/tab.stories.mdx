@@ -3,20 +3,20 @@ import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Tab" component="Tab" />
+<Meta title="Rose|Nav|Tab" component="Tab" />
 
 # Tab
 
 A tab item component with ability to configure icon, title, and badge sections.
 
 ```html
-<Rose::Tab @title="Tab item" @badge="3" @icon="info-circle-outline" @disabled={{false}} />
+<Rose::Nav::Tab @title="Tab item" @badge="3" @icon="info-circle-outline" @disabled={{false}} />
 ```
 
 <Preview>
   <Story name="Basic">{{
     template: hbs`
-    <Rose::Tab
+    <Rose::Nav::Tab
       @title={{title}}
       @badge={{badge}}
       @icon={{icon}}
