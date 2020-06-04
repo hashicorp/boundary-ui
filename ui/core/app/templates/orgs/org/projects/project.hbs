@@ -7,7 +7,11 @@
     <LinkTo @route='orgs.org.projects.project'>{{@model.name}}</LinkTo>
   </div>
 
-  <h2>{{@model.name}}</h2>
+  <h2>{{t "resources.project.settings"}}</h2>
+
+  <div class="tabs">
+    <Rose::Nav::Tab @title={{t "nav.overview"}} @route='orgs.org.projects.project' @model={{@model}} />
+  </div>
 
   <Form::Project
     @model={{@model}}

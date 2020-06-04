@@ -19,7 +19,7 @@
       color: var(--ui-gray-subtler-2);
     }
 
-    &:active {
+    &:active, &.active {
       color: var(--action);
       border-color: var(--action);
       background-color: var(--subtle);
