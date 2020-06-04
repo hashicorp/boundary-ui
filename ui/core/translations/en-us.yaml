@@ -5,6 +5,8 @@ actions:
   save: Save
 resources:
   projects: Projects
+  project:
+    settings: Project Settings
 titles:
   new: New
 states:
@@ -16,6 +18,8 @@ form:
   label:
     name: Name
     description: Description
+nav:
+  overview: Overview
 dev:
   default-org: Default Org
   menu-item: Menu item
