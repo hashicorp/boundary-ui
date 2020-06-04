@@ -21,7 +21,7 @@ export default Component.extend({
     let icon = 'info-circle-fill';
 
     switch(this.style) {
-      case 'failure':
+      case 'error':
         icon = 'cancel-square-fill';
         break;
       case 'success':

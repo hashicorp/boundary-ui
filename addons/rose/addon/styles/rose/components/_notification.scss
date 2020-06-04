@@ -82,7 +82,7 @@
     color: var(--header-color);
   }
 
-  &.is-failure {
+  &.is-error {
     --icon-color: var(--failure);
     --header-color: var(--failure);
     --border-color: var(--failure-subtler-1);
