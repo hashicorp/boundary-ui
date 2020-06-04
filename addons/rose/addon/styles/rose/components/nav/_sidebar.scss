@@ -1,7 +1,7 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 
-.rose-nav-primary {
+.rose-nav-sidebar {
   $threePX: sizing.rems(xxxs) + sizing.rems(xxxxs);
 
   .rose-nav-title {

@@ -3,19 +3,19 @@ import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Nav/Primary" component="Nav/Primary" />
+<Meta title="Rose|Nav/Sidebar" component="Nav/Sidebar" />
 
-# Primary Navigation
+# Sidebar Navigation
 
 A simple navigation component intended for use in the sidebar layout region.
 
 <Preview>
-  <Story name="Basic Primary Nav" height="8rem">{{
+  <Story name="Basic Sidebar Nav" height="8rem">{{
     template: hbs`
-      <Rose::Nav::Primary @title={{title}} as |nav|>
+      <Rose::Nav::Sidebar @title={{title}} as |nav|>
         <nav.link @route="index" class="active">Item Name</nav.link>
         <nav.link @route="index">Item Name</nav.link>
-      </Rose::Nav::Primary>
+      </Rose::Nav::Sidebar>
     `,
     context: {
       title: text('title', 'Title'),
@@ -27,8 +27,8 @@ _Note_:  do not assign the `active` class directly.  This is done by the link
 component automatically.  We use it in this story for illustrative purposes.
 
 ```htmlbars
-<Rose::Nav::Primary @title="Title" as |nav|>
+<Rose::Nav::Sidebar @title="Title" as |nav|>
   <nav.link @route="index">Item Name</nav.link>
   <nav.link @route="about">Item Name</nav.link>
-</Rose::Nav::Primary>
+</Rose::Nav::Sidebar>
 ```
