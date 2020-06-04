@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../../../templates/components/rose/nav/primary';
+import layout from '../../../templates/components/rose/nav/sidebar';
 import ComponentAutoId from '../../../mixins/component-auto-id';
 
 /**

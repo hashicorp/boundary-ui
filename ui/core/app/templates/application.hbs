@@ -33,10 +33,10 @@
   </page.main>
 
   <page.sidebar>
-    <Rose::Nav::Primary @title={{t 'dev.title'}} as |nav|>
+    <Rose::Nav::Sidebar @title={{t 'dev.title'}} as |nav|>
       <nav.link @route="orgs" class="active">{{t 'dev.item-name'}}</nav.link>
       <nav.link @route="index">{{t 'dev.item-name'}}</nav.link>
-    </Rose::Nav::Primary>
+    </Rose::Nav::Sidebar>
   </page.sidebar>
 
 </Rose::Layout::Page>
