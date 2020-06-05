@@ -10,7 +10,7 @@ Router.map(function () {
   this.route('orgs', function () {
     this.route('org', { path: ':org_id' }, function () {
       this.route('projects', function () {
-        this.route('project', { path: ':project_id' });
+        this.route('project', { path: ':project_id' }, function() {});
         this.route('new');
       });
     });
