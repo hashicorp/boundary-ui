@@ -42,9 +42,9 @@ export default class OrgsOrgProjectsNewRoute extends Route {
       this.transitionTo('orgs.org.projects.project', project);
       // TODO: replace with translated strings
       this.notify.success('Project created.');
-    } catch (e) {
+    } catch (error) {
       // TODO: replace with translated strings
-      this.notify.error('Project could not be created.', {closeAfter: null});
+      this.notify.error(error.message, { closeAfter: null });
     }
   }
 }
