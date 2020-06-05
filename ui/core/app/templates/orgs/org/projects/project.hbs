@@ -7,20 +7,18 @@
     <LinkTo @route='orgs.org.projects.project'>{{@model.name}}</LinkTo>
   </div>
 
-  <h2>{{t "resources.project.settings"}}</h2>
+  <Rose::Layout::PageHeader>
+    <Rose::PageHeader::Title @text={{t "resources.project.settings"}} />
+  </Rose::Layout::PageHeader>
 
   <Rose::Nav::Tabs as |nav|>
     <nav.link @route='orgs.org.projects.project'>
-      {{t 'dev.item-name'}}
+      {{t "nav.overview"}}
     </nav.link>
     <nav.link @route='index'>
       {{t 'dev.item-name'}}
     </nav.link>
   </Rose::Nav::Tabs>
-
-  <Rose::Layout::PageHeader>
-    <Rose::PageHeader::Title @text={{@model.name}} />
-  </Rose::Layout::PageHeader>
 
   <Form::Project
     @model={{@model}}

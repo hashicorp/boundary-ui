@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../../../../templates/components/rose/layout/page/sidebar';
+import layout from '../../../templates/components/rose/layout/global';
 
 export default Component.extend({
   layout,

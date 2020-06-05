@@ -1,5 +1,5 @@
-<Rose::Layout::Page as |page|>
-  <page.header>
+<Rose::Layout::Global as |global|>
+  <global.header>
     <Rose::Header as |header|>
 
       <header.brand @logo="logo" @text="Product Name" />
@@ -28,18 +28,18 @@
       </header.utilities>
 
     </Rose::Header>
-  </page.header>
+  </global.header>
 
-  <page.sidebar>
+  <global.navigation>
     <Rose::Nav::Sidebar @title="Title" as |nav|>
       <nav.link @route="index">Item Name</nav.link>
       <nav.link @route="about">Item Name</nav.link>
       <nav.link @route="about">Item Name</nav.link>
       <nav.link @route="about">Item Name</nav.link>
     </Rose::Nav::Sidebar>
-  </page.sidebar>
+  </global.navigation>
 
-  <page.main>
+  <global.body>
 
     Dummy app index template
 
@@ -198,5 +198,5 @@
     <Rose::Card::Link @title="I'm a card" />
     <Rose::Card::Link @title="I'm a card" @description="I'm a description" />
     <Rose::Card::Link @title="I'm a card" @description="I'm a description" @subtitle="I'm a subtitle"/>
-  </page.main>
-</Rose::Layout::Page>
+  </global.body>
+</Rose::Layout::Global>

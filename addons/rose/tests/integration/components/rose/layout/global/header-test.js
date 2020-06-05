@@ -3,24 +3,24 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/layout/page/main', function (hooks) {
+module('Integration | Component | rose/layout/global/header', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    await render(hbs`<Rose::Layout::Page::Main />`);
-    assert.ok(find('main'));
-    assert.ok(find('.rose-layout-main'));
+    await render(hbs`<Rose::Layout::Global::Header />`);
+    assert.ok(find('header'));
+    assert.ok(find('.rose-layout-global-header'));
   });
 
   test('it renders with attributes', async function (assert) {
-    await render(hbs`<Rose::Layout::Page::Main id="main"/>`);
-    assert.ok(find('#main'));
+    await render(hbs`<Rose::Layout::Global::Header id="header"/>`);
+    assert.ok(find('#header'));
   });
 
   test('it renders with content', async function (assert) {
-    await render(hbs`<Rose::Layout::Page::Main>
+    await render(hbs`<Rose::Layout::Global::Header>
       <button id="content" />
-    </Rose::Layout::Page::Main>`);
+    </Rose::Layout::Global::Header>`);
     assert.ok(find('#content'));
   });
 });

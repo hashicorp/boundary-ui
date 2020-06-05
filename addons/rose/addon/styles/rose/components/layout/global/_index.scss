@@ -1,0 +1,29 @@
+@use '../../../variables/sizing';
+@use '../../../variables/media';
+
+@import 'header';
+@import 'body';
+@import 'navigation';
+
+.rose-layout-global {
+  display: grid;
+  grid-template-areas:
+    'header header header header'
+    'navigation body body body';
+  // Define 16rem static grid column for navigation
+  grid-template-columns: (sizing.rems(m) * 16) auto 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+
+@media (max-width: media.width(small)) {
+  .rose-layout-global {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.1fr auto 1fr;
+    grid-template-areas:
+      'header'
+      'navigation'
+      'body';
+    padding-bottom: 0;
+  }
+}
