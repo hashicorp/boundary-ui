@@ -1,0 +1,18 @@
+<div class="project-overview">
+
+  <h2>{{t "resources.host-catalog"}}</h2>
+
+  <Form::HostCatalog
+    @model={{@model}}
+    @submit={{route-action "save" @model}}
+    @cancel={{route-action "cancel" @model}}
+  />
+
+  <Rose::Button
+    @style="warning"
+    @disabled={{@model.canSave}}
+    {{on "click" (route-action "delete" @model)}}
+  >
+    {{t 'actions.delete'}}
+  </Rose::Button>
+</div>

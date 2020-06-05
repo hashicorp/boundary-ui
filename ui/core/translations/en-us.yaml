@@ -7,6 +7,8 @@ resources:
   projects: Projects
   project:
     settings: Project Settings
+  host-catalog: Host Catalog
+  host-catalogs: Host Catalogs
 titles:
   new: New
 states:

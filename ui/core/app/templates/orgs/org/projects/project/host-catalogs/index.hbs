@@ -1,0 +1,18 @@
+<div class="projects-overview">
+
+  <h2>{{t "resources.host-catalogs"}}</h2>
+
+  <ul>
+    {{#each @model as |hostCatalog|}}
+      <li>
+        <LinkTo
+          @route="orgs.org.projects.project.host-catalogs.host-catalog"
+          @model={{hostCatalog}}
+        >
+          {{hostCatalog.name}}
+        </LinkTo>
+      </li>
+    {{/each}}
+  </ul>
+
+</div>
