@@ -10,24 +10,22 @@ export default function() {
   // delay for each request, automatically set to 0 during testing
   this.timing = 350;
 
-  /*
-    Shorthand cheatsheet:
-
-    this.get('/posts');
-    this.post('/posts');
-    this.get('/posts/:id');
-    this.put('/posts/:id'); // or this.patch
-    this.del('/posts/:id');
-
-    https://www.ember-cli-mirage.com/docs/route-handlers/shorthands
-  */
-
+  // Allow any configured API host to passthrough, which is useful in
+  // development for testing against a locally running backend.
   if (config.api.host) this.passthrough(`${config.api.host}/**`);
   this.passthrough();
 
+  // project
   this.get('/orgs/:org_id/projects');
   this.post('/orgs/:org_id/projects');
   this.get('/orgs/:org_id/projects/:id');
   this.patch('/orgs/:org_id/projects/:id');
   this.del('/orgs/:org_id/projects/:id');
+
+  // host-catalog
+  this.get('/orgs/:org_id/projects/:project_id/host-catalogs');
+  this.post('/orgs/:org_id/projects/:project_id/host-catalogs');
+  this.get('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
+  this.patch('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
+  this.del('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
 }
