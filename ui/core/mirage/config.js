@@ -1,4 +1,5 @@
 import config from '../config/environment';
+//import { Response } from 'miragejs';
 
 export default function() {
 

@@ -41,7 +41,7 @@ module.exports = function (environment) {
       'frame-src': ["'self'"],
       'font-src': ["'self'"],
       'connect-src': ["'self'"],
-      'img-src': ["'self'", "data:"],
+      'img-src': ["'self'", 'data:'],
       'style-src': ["'self'"],
       'media-src': ["'self'"],
       'manifest-src': ["'self'"],
