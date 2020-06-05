@@ -9,9 +9,14 @@
 
   <h2>{{t "resources.project.settings"}}</h2>
 
-  <div class="tabs">
-    <Rose::Nav::Tab @title={{t "nav.overview"}} @route='orgs.org.projects.project' @model={{@model}} />
-  </div>
+  <Rose::Nav::Tabs as |nav|>
+    <nav.link @route='orgs.org.projects.project'>
+      {{t 'dev.item-name'}}
+    </nav.link>
+    <nav.link @route='index'>
+      {{t 'dev.item-name'}}
+    </nav.link>
+  </Rose::Nav::Tabs>
 
   <Form::Project
     @model={{@model}}

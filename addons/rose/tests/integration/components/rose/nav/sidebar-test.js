@@ -3,11 +3,11 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/nav/sidebar', function(hooks) {
+module('Integration | Component | rose/nav/sidebar', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    assert.expect(2)
+  test('it renders', async function (assert) {
+    assert.expect(2);
     await render(hbs`
       <Rose::Nav::Sidebar @title="Title" as |nav|>
         <nav.link @route="index">Item Name</nav.link>
@@ -18,7 +18,7 @@ module('Integration | Component | rose/nav/sidebar', function(hooks) {
   });
 
   test('it associates title with nav via aria-labelledby', async function (assert) {
-    assert.expect(2)
+    assert.expect(2);
     await render(hbs`
       <Rose::Nav::Sidebar @title="Title" as |nav|>
         <nav.link @route="index">Item Name</nav.link>

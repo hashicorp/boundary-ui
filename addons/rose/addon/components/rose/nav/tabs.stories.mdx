@@ -1,0 +1,31 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Nav|Tabs" component="Nav/Tabs" />
+
+# Tabs Navigation
+
+A simple tabbed navigation component.
+
+```html
+<Rose::Nav::Tabs as |nav|>
+  <nav.link @route='index' class="active">Text</nav.link>
+  <nav.link @route='index'>Text</nav.link>
+  <nav.link @route='index'>Text</nav.link>
+</Rose::Nav::Tabs>
+```
+
+<Preview>
+  <Story name="Basic Tabs">{{
+    template: hbs`
+      <Rose::Nav::Tabs as |nav|>
+        <nav.link @route='index' class="active">Text</nav.link>
+        <nav.link @route='index'>Text</nav.link>
+        <nav.link @route='index'>Text</nav.link>
+      </Rose::Nav::Tabs>
+    `,
+    context: {},
+  }}</Story>
+</Preview>
