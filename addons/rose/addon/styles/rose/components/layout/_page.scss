@@ -1,0 +1,48 @@
+@use '../../variables/sizing';
+@use '../../variables/media';
+
+.rose-layout-page {
+  display: grid;
+  grid-template-areas:
+    'breadcrumbs breadcrumbs breadcrumbs'
+    'header header actions'
+    'navigation navigation navigation'
+    'body body body';
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr;
+
+  .rose-layout-page-breadcrumbs {
+    grid-area: breadcrumbs;
+  }
+
+  .rose-layout-page-header {
+    grid-area: header;
+  }
+
+  .rose-layout-page-actions {
+    grid-area: actions;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .rose-layout-page-navigation {
+    grid-area: navigation;
+  }
+
+  .rose-layout-page-body {
+    grid-area: body;
+  }
+}
+
+@media (max-width: media.width(small)) {
+  .rose-layout-page {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'breadcrumbs'
+      'header'
+      'actions'
+      'navigation'
+      'body';
+  }
+}

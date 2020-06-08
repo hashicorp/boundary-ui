@@ -1,9 +1,5 @@
-<HeadLayout />
-
-{{title (app-name)}}
-
-<Rose::Layout::Page as |page|>
-  <page.header>
+<Rose::Layout::Global as |global|>
+  <global.header>
     <Rose::Header as |header|>
       <header.brand @logo="logo-hashi" @text={{app-name}} />
       <header.nav as |nav|>
@@ -26,20 +22,20 @@
         </utilities.dropdown>
       </header.utilities>
     </Rose::Header>
-  </page.header>
+  </global.header>
 
-  <page.main>
+  <global.body>
     {{outlet}}
-  </page.main>
+  </global.body>
 
-  <page.sidebar>
+  <global.navigation>
     <Rose::Nav::Sidebar @title={{t 'dev.title'}} as |nav|>
       <nav.link @route="orgs" class="active">{{t 'dev.item-name'}}</nav.link>
       <nav.link @route="index">{{t 'dev.item-name'}}</nav.link>
     </Rose::Nav::Sidebar>
-  </page.sidebar>
+  </global.navigation>
 
-</Rose::Layout::Page>
+</Rose::Layout::Global>
 
 <EmberNotify @closeAfter={{4000}} as |message close|>
   <Rose::Notification
