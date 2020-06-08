@@ -5,14 +5,11 @@
     <LinkTo @route='orgs.org.projects.project'>{{@model.name}}</LinkTo>
   </div>
 
-  <h2>{{t "resources.project.settings"}}</h2>
+  <h2>{{t "resources.project"}}</h2>
 
   <Rose::Nav::Tabs as |nav|>
     <nav.link @route='orgs.org.projects.project'>
-      {{t 'dev.item-name'}}
-    </nav.link>
-    <nav.link @route='index'>
-      {{t 'dev.item-name'}}
+      {{t 'titles.settings'}}
     </nav.link>
   </Rose::Nav::Tabs>
 

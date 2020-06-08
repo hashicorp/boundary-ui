@@ -28,6 +28,21 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
     return super.afterModel(...arguments);
   }
 
+  /**
+   * Renders the project-specific sidebar template.
+   * @override
+   * @param {object} controller
+   * @param {object} model
+   */
+  renderTemplate(controller, model) {
+    this.render('orgs/org/projects/project/_sidebar', {
+      into: 'application',
+      outlet: 'sidebar',
+      model: model
+    });
+    super.renderTemplate(...arguments);
+  }
+
   // =actions
 
   /**

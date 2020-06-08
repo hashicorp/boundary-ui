@@ -5,12 +5,13 @@ actions:
   save: Save
 resources:
   projects: Projects
-  project:
-    settings: Project Settings
+  project: Project
   host-catalog: Host Catalog
   host-catalogs: Host Catalogs
 titles:
   new: New
+  overview: Overview
+  settings: Settings
 states:
   info: Info
   success: Success
@@ -20,8 +21,6 @@ form:
   label:
     name: Name
     description: Description
-nav:
-  overview: Overview
 dev:
   default-org: Default Org
   menu-item: Menu item
