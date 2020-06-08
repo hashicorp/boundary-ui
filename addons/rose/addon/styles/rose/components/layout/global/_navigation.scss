@@ -1,0 +1,6 @@
+@use '../../../variables/sizing';
+
+.rose-layout-global-navigation {
+  grid-area: navigation;
+  border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+}

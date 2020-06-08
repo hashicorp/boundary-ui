@@ -1,22 +1,24 @@
-<div class="projects-overview">
+<Rose::Layout::Page class="projects-overview" as |page|>
+  <page.header>
+    <h2>{{t "resources.projects"}}</h2>
+  </page.header>
 
-  <h2>{{t "resources.projects"}}</h2>
+  <page.actions>
+    <LinkTo @route="orgs.org.projects.new">{{t 'titles.new'}}</LinkTo>
+  </page.actions>
 
-  <LinkTo @route="orgs.org.projects.new">
-    <Rose::Icon @name="plus-circle-outline" @size="medium" />
-    {{t "titles.new"}}
-  </LinkTo>
-
-  <ul class="projects">
-    {{#each @model as |project|}}
-      <li class="project">
-        <Rose::Card::Link @title={{project.name}}
-          @subtitle={{project.id}}
-          @description={{project.description}}
-          @route="orgs.org.projects.project"
-          @model={{project}}
-        />
-      </li>
-    {{/each}}
-  </ul>
-</div>
+  <page.body>
+    <ul class="projects">
+      {{#each @model as |project|}}
+        <li class="project">
+          <Rose::Card::Link @title={{project.name}}
+            @subtitle={{project.id}}
+            @description={{project.description}}
+            @route="orgs.org.projects.project"
+            @model={{project}}
+          />
+        </li>
+      {{/each}}
+    </ul>
+  </page.body>
+</Rose::Layout::Page>

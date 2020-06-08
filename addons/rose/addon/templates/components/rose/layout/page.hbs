@@ -1,7 +1,9 @@
 <div ...attributes class="rose-layout-page">
   {{yield (hash
+    breadcrumbs=(component 'rose/layout/page/breadcrumbs')
     header=(component 'rose/layout/page/header')
-    main=(component 'rose/layout/page/main')
-    sidebar=(component 'rose/layout/page/sidebar')
+    actions=(component 'rose/layout/page/actions')
+    navigation=(component 'rose/layout/page/navigation')
+    body=(component 'rose/layout/page/body')
   )}}
 </div>
