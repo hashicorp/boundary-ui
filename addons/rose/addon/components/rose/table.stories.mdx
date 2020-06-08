@@ -1,0 +1,57 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Table" component="Table" />
+
+# Table
+
+A table component to display data in structure of rows and columns. It supports `header` and `body` optional definitions. Each definition allows for a table row to be defined with table cells.
+
+```htmlbars
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.cell @text="Address" />
+      <row.cell @text="Host Set" />
+      <row.cell @text="Name" />
+      <row.cell @text="Description" />
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell @text="1.1.1.1" />
+      <row.cell @text="host-set-1, host-set-2" />
+      <row.cell @text="optional name" />
+      <row.cell @text="description" />
+    </body.row>
+  </table.body>
+</Rose::Table>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.cell @text="Address" />
+          <row.cell @text="Host Set" />
+          <row.cell @text="Name" />
+          <row.cell @text="Description" />
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        <body.row as |row|>
+          <row.cell @text="1.1.1.1" />
+          <row.cell @text="host-set-1, host-set-2" />
+          <row.cell @text="optional name" />
+          <row.cell @text="description" />
+        </body.row>
+      </table.body>
+    </Rose::Table>
+    `,
+    context: {}
+  }}</Story>
+</Preview>

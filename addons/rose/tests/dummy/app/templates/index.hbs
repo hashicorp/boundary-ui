@@ -205,5 +205,24 @@
     <Rose::Card::Link @title="I'm a card" />
     <Rose::Card::Link @title="I'm a card" @description="I'm a description" />
     <Rose::Card::Link @title="I'm a card" @description="I'm a description" @subtitle="I'm a subtitle"/>
+
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.cell @text="Address" />
+          <row.cell @text="Host Set" />
+          <row.cell @text="Name" />
+          <row.cell @text="Description" />
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        <body.row as |row|>
+          <row.cell @text="1.1.1.1" />
+          <row.cell @text="host-set-1, host-set-2" />
+          <row.cell @text="optional name" />
+          <row.cell @text="description" />
+        </body.row>
+      </table.body>
+    </Rose::Table>
   </global.body>
 </Rose::Layout::Global>
