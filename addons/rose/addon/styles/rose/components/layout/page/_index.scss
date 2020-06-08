@@ -1,0 +1,31 @@
+@use '../../../variables/sizing';
+@use '../../../variables/media';
+
+@import 'breadcrumbs';
+@import 'header';
+@import 'actions';
+@import 'navigation';
+@import 'body';
+
+.rose-layout-page {
+  display: grid;
+  grid-template-areas:
+    'breadcrumbs breadcrumbs breadcrumbs'
+    'header header actions'
+    'navigation navigation navigation'
+    'body body body';
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr;
+}
+
+@media (max-width: media.width(small)) {
+  .rose-layout-page {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'breadcrumbs'
+      'header'
+      'actions'
+      'navigation'
+      'body';
+  }
+}

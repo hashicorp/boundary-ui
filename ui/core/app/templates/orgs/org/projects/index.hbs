@@ -1,6 +1,9 @@
-<div class="projects-overview">
-  <Rose::Layout::PageHeader>
+<Rose::Layout::Page class="projects-overview" as |page|>
+  <page.header>
     <Rose::PageHeader::Title @text={{t "resources.projects"}} />
+  </page.header>
+
+  <page.actions>
     <Rose::PageHeader::Utilities as |utility|>
       <utility.action
         @style="primary"
@@ -10,18 +13,20 @@
         {{t 'titles.new'}}
       </utility.action>
     </Rose::PageHeader::Utilities>
-  </Rose::Layout::PageHeader>
+  </page.actions>
 
-  <ul class="projects">
-    {{#each @model as |project|}}
-      <li class="project">
-        <Rose::Card::Link @title={{project.name}}
-          @subtitle={{project.id}}
-          @description={{project.description}}
-          @route="orgs.org.projects.project"
-          @model={{project}}
-        />
-      </li>
-    {{/each}}
-  </ul>
-</div>
+  <page.body>
+    <ul class="projects">
+      {{#each @model as |project|}}
+        <li class="project">
+          <Rose::Card::Link @title={{project.name}}
+            @subtitle={{project.id}}
+            @description={{project.description}}
+            @route="orgs.org.projects.project"
+            @model={{project}}
+          />
+        </li>
+      {{/each}}
+    </ul>
+  </page.body>
+</Rose::Layout::Page>

@@ -9,23 +9,19 @@ import { action } from '@storybook/addon-actions';
 An component comprised of `Rose::Button` as actions. To be used with `Rose::Layout::PageHeader`.
 
 ```html
-<Rose::Layout::PageHeader style="border: 1px solid var(--brand-gray-5);">
-  <Rose::PageHeader::Utilities as |utilities|>
-    <utilities.action @style="secondary">Secondary</utilities.action>
-    <utilities.action @style="primary">Primary</utilities.action>
-  </Rose::PageHeader::Utilities>
-</Rose::Layout::PageHeader>
+<Rose::PageHeader::Utilities as |utilities|>
+  <utilities.action @style="secondary">Secondary</utilities.action>
+  <utilities.action @style="primary">Primary</utilities.action>
+</Rose::PageHeader::Utilities>
 ```
 
 <Preview>
   <Story name="Utilities">{{
     template: hbs`
-    <Rose::Layout::PageHeader style="border: 1px solid var(--brand-gray-5);">
-      <Rose::PageHeader::Utilities as |utilities|>
-        <utilities.action @style="secondary">Secondary</utilities.action>
-        <utilities.action @style="primary">Primary</utilities.action>
-      </Rose::PageHeader::Utilities>
-    </Rose::Layout::PageHeader>
+    <Rose::PageHeader::Utilities as |utilities|>
+      <utilities.action @style="secondary">Secondary</utilities.action>
+      <utilities.action @style="primary">Primary</utilities.action>
+    </Rose::PageHeader::Utilities>
     `,
   }}</Story>
 </Preview>
