@@ -1,18 +1,16 @@
 <Rose::Layout::Page class="projects-overview" as |page|>
   <page.header>
-    <Rose::PageHeader::Title @text={{t "resources.projects"}} />
+    <h1>{{t "resources.projects"}}</h1>
   </page.header>
 
   <page.actions>
-    <Rose::PageHeader::Utilities as |utility|>
-      <utility.action
-        @style="primary"
-        @iconLeft="plus-plain"
-        {{on "click" (route-action "new")}}
-      >
-        {{t 'titles.new'}}
-      </utility.action>
-    </Rose::PageHeader::Utilities>
+    <Rose::Button
+      @style="primary"
+      @iconLeft="plus-plain"
+      {{on "click" (route-action "new")}}
+    >
+      {{t 'titles.new'}}
+    </Rose::Button>
   </page.actions>
 
   <page.body>

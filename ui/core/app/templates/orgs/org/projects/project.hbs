@@ -1,3 +1,5 @@
+{{title @model.name}}
+
 <Rose::Layout::Page class="project-overview" as |page|>
   <page.breadcrumbs>
     <div class="breadcrumbs">
@@ -8,7 +10,7 @@
   </page.breadcrumbs>
 
   <page.header>
-    <Rose::PageHeader::Title @text={{t "resources.project.settings"}} />
+    <h1>{{t "resources.project.settings"}}</h1>
   </page.header>
 
   <page.navigation>
