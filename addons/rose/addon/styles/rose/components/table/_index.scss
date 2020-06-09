@@ -2,7 +2,7 @@
 @use '../../utilities/type';
 
 .rose-table {
-  @include type.type(xs, normal);
+  @include type.type(s, normal);
   width: 100%;
 
   .rose-table-header {
