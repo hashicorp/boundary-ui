@@ -36,4 +36,11 @@ module('Integration | Component | rose/table', function (hooks) {
     </Rose::Table>`);
     assert.ok(find('tbody'));
   });
+
+  test('it renders with footer', async function (assert) {
+    await render(hbs`<Rose::Table as |table|>
+      <table.footer />
+    </Rose::Table>`);
+    assert.ok(find('tfoot'));
+  });
 });

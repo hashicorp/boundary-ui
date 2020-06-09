@@ -4,7 +4,7 @@
     {{yield}}
   </th>
 {{else}}
-  <td ...attributes class="rose-table-cell rose-table-body-cell">
+  <td ...attributes class="{{concat "rose-table-cell" (if @footer " rose-table-footer-cell" " rose-table-body-cell")}}">
     {{@text}}
     {{yield}}
   </td>

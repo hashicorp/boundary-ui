@@ -7,7 +7,7 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 
 # Table
 
-A table component to display data in structure of rows and columns. It supports `header` and `body` optional definitions. Each definition allows for a table row to be defined with table cells.
+A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table row to be defined with table cells.
 
 ```htmlbars
 <Rose::Table as |table|>
@@ -27,6 +27,11 @@ A table component to display data in structure of rows and columns. It supports 
       <row.cell @text="description" />
     </body.row>
   </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell @text="Footer" />
+    </footer.row>
+  </table.footer>
 </Rose::Table>
 ```
 
@@ -50,6 +55,11 @@ A table component to display data in structure of rows and columns. It supports 
           <row.cell @text="description" />
         </body.row>
       </table.body>
+      <table.footer as |footer|>
+        <footer.row as |row|>
+          <row.cell @text="Footer" />
+        </footer.row>
+      </table.footer>
     </Rose::Table>
     `,
     context: {}
