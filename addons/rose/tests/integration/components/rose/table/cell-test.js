@@ -18,6 +18,13 @@ module('Integration | Component | rose/table/cell', function (hooks) {
     assert.ok(find('#cell'));
   });
 
+  test('it renders with content', async function (assert) {
+    await render(hbs`<Rose::Table::Cell>
+      Cell content
+    </Rose::Table::Cell>`);
+    assert.equal(find('.rose-table-cell').textContent.trim(), 'Cell content');
+  });
+
   test('it renders as header cell', async function (assert) {
     await render(hbs`<Rose::Table::Cell @header={{true}}/>`);
     assert.ok(find('.rose-table-cell'));
