@@ -10,9 +10,24 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 A set of cards arranged side-by-side.
 
 <Preview>
-  <Story name="Basic Cards">{{
+  <Story name="Basic Cards" height="20rem">{{
     template: hbs`
       <Rose::Cards as |cards|>
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+        />
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+        />
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+        />
         <cards.link
           @route="index"
           @title="Card Title"
