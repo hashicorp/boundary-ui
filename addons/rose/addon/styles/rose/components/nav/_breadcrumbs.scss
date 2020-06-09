@@ -1,0 +1,26 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-nav-breadcrumbs {
+  @include type.type(s, normal);
+
+  .rose-nav-breadcrumbs-link {
+    --color: var(--ui-gray);
+    color: var(--color);
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      --color: var(--action);
+    }
+
+    &:after {
+      content: '\002F'; // "/"
+      margin-left: sizing.rems(xxs);
+    }
+
+    &:last-child:after {
+      content: '';
+    }
+  }
+}

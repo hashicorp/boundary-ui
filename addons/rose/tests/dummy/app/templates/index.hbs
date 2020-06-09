@@ -1,23 +1,7 @@
-<Rose::Table as |table|>
-  <table.header as |header|>
-    <header.row as |row|>
-      <row.cell>Address</row.cell>
-      <row.cell>Host Set</row.cell>
-      <row.cell>Name</row.cell>
-      <row.cell>Description</row.cell>
-    </header.row>
-  </table.header>
-  <table.body as |body|>
-    <body.row as |row|>
-      <row.cell>1.1.1.1</row.cell>
-      <row.cell>host-set-1, host-set-2</row.cell>
-      <row.cell>optional name</row.cell>
-      <row.cell>description</row.cell>
-    </body.row>
-  </table.body>
-  <table.footer as |footer|>
-    <footer.row as |row|>
-      <row.cell>Footer</row.cell>
-    </footer.row>
-  </table.footer>
-</Rose::Table>
+<Rose::Nav::Breadcrumbs as |breadcrumbs|>
+  <breadcrumbs.link @route="about">Level 1</breadcrumbs.link>
+  <breadcrumbs.link @route="index">Level 2</breadcrumbs.link>
+  <breadcrumbs.link @route="about">Level 3</breadcrumbs.link>
+  <breadcrumbs.link @route="about">Level 4</breadcrumbs.link>
+  <breadcrumbs.link @route="about">Level 5</breadcrumbs.link>
+</Rose::Nav::Breadcrumbs>
