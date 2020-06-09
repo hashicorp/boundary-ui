@@ -16,7 +16,7 @@
 
     &:after {
       content: '\002F'; // "/"
-      margin-left: sizing.rems(xxs);
+      margin-left: sizing.rems(xs);
     }
 
     &:last-child:after {
