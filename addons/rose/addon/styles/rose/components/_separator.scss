@@ -1,0 +1,8 @@
+@use '../variables/sizing';
+
+.rose-separator {
+  background-color: var(--ui-gray-subtler-3);
+  border: 0;
+  height: sizing.rems(xxxxs);
+  margin: sizing.rems(l) 0;
+}
