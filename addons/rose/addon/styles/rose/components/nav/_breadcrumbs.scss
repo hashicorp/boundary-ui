@@ -3,6 +3,8 @@
 
 .rose-nav-breadcrumbs {
   @include type.type(s, normal);
+  display: flex;
+  flex-wrap: wrap;
 
   .rose-nav-breadcrumbs-link {
     --color: var(--ui-gray);
@@ -12,14 +14,18 @@
 
     &:hover {
       --color: var(--action);
+
+      &::after {
+        color: var(--ui-gray);
+      }
     }
 
-    &:after {
+    &::after {
       content: '\002F'; // "/"
-      margin-left: sizing.rems(xs);
+      margin: 0 sizing.rems(xs);
     }
 
-    &:last-child:after {
+    &:last-child::after {
       content: '';
     }
   }
