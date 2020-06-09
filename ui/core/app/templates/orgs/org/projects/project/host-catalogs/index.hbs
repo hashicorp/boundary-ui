@@ -1,0 +1,30 @@
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <h2>{{t "resources.host-catalogs"}}</h2>
+  </page.header>
+
+  <page.actions>
+    <LinkTo
+      @route="orgs.org.projects.project.host-catalogs.new"
+    >
+      {{t 'titles.new'}}
+    </LinkTo>
+  </page.actions>
+
+  <page.body>
+    <ul>
+      {{#each @model as |hostCatalog|}}
+        <li>
+          <LinkTo
+            @route="orgs.org.projects.project.host-catalogs.host-catalog"
+            @model={{hostCatalog}}
+          >
+            {{hostCatalog.name}}
+          </LinkTo>
+        </li>
+      {{/each}}
+    </ul>
+  </page.body>
+
+</Rose::Layout::Page>

@@ -11,6 +11,7 @@ module('Acceptance | projects', function (hooks) {
 
   test('visiting projects', async function (assert) {
     assert.expect(1);
+    this.server.createList('project', 1);
     await visit('/orgs/1/projects');
     await a11yAudit();
     assert.equal(currentURL(), '/orgs/1/projects');

@@ -4,13 +4,7 @@
   </page.header>
 
   <page.actions>
-    <Rose::Button
-      @style="primary"
-      @iconLeft="plus-plain"
-      {{on "click" (route-action "new")}}
-    >
-      {{t 'titles.new'}}
-    </Rose::Button>
+    <LinkTo @route="orgs.org.projects.new">{{t 'titles.new'}}</LinkTo>
   </page.actions>
 
   <page.body>
