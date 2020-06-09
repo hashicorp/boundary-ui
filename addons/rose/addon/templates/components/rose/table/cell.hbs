@@ -1,0 +1,9 @@
+{{#if @header}}
+  <th ...attributes class="rose-table-cell rose-table-header-cell">
+    {{yield}}
+  </th>
+{{else}}
+  <td ...attributes class="{{concat "rose-table-cell" (if @footer " rose-table-footer-cell" " rose-table-body-cell")}}">
+    {{yield}}
+  </td>
+{{/if}}

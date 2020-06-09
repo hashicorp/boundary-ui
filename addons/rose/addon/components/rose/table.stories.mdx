@@ -1,0 +1,67 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Table" component="Table" />
+
+# Table
+
+A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table row to be defined with table cells.
+
+```htmlbars
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.cell>Address</row.cell>
+      <row.cell>Host Set</row.cell>
+      <row.cell>Name</row.cell>
+      <row.cell>Description</row.cell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.cell>Address</row.cell>
+          <row.cell>Host Set</row.cell>
+          <row.cell>Name</row.cell>
+          <row.cell>Description</row.cell>
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        <body.row as |row|>
+          <row.cell>1.1.1.1</row.cell>
+          <row.cell>host-set-1, host-set-2</row.cell>
+          <row.cell>optional name</row.cell>
+          <row.cell>description</row.cell>
+        </body.row>
+      </table.body>
+      <table.footer as |footer|>
+        <footer.row as |row|>
+          <row.cell>Footer</row.cell>
+        </footer.row>
+      </table.footer>
+    </Rose::Table>
+    `,
+    context: {}
+  }}</Story>
+</Preview>
