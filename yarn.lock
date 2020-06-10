@@ -7058,6 +7058,13 @@ ember-auto-import@^1.2.15, ember-auto-import@^1.2.19, ember-auto-import@^1.5.3:
     walk-sync "^0.3.3"
     webpack "~4.28"
 
+ember-breadcrumbs@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/ember-breadcrumbs/-/ember-breadcrumbs-0.2.3.tgz#a95e02b73fdc2150f3d552e84a479d6dc96a8b31"
+  integrity sha512-QUiPXwAlTeiXykF5RnyilEgcj9NSFGciAawktImv6V6Lq9sNfmJHZAYZXAg8U/wA1tw7CG0fQl991K+jtuBTKQ==
+  dependencies:
+    ember-cli-babel "^7.10.0"
+
 ember-cli-addon-docs-yuidoc@^0.2.3:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/ember-cli-addon-docs-yuidoc/-/ember-cli-addon-docs-yuidoc-0.2.4.tgz#dd8f5cf4982e8492b255fb677e9d771925e27dce"

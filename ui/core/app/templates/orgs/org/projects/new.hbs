@@ -1,10 +1,6 @@
-<Rose::Layout::Page class="project-new" as |page|>
+<Rose::Layout::Page as |page|>
   <page.breadcrumbs>
-    <div class="breadcrumbs">
-      <LinkTo @route='orgs.org.projects'>{{t "resources.projects"}}</LinkTo>
-      >
-      <LinkTo @route='orgs.org.projects.new'>{{t "titles.new"}}</LinkTo>
-    </div>
+    <BreadCrumbs />
   </page.breadcrumbs>
 
   <page.header>
@@ -16,7 +12,6 @@
       @model={{@model}}
       @submit={{route-action "save" @model}}
       @cancel={{route-action "cancel" @model}}
-      class="project-new-form"
     />
   </page.body>
 </Rose::Layout::Page>
