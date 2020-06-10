@@ -1,4 +1,5 @@
 <Rose::Layout::Page class="projects-overview" as |page|>
+
   <page.header>
     <h2>{{t "resources.projects"}}</h2>
   </page.header>
@@ -8,17 +9,17 @@
   </page.actions>
 
   <page.body>
-    <ul class="projects">
+    <Rose::Cards as |cards|>
       {{#each @model as |project|}}
-        <li class="project">
-          <Rose::Card::Link @title={{project.name}}
-            @subtitle={{project.id}}
-            @description={{project.description}}
-            @route="orgs.org.projects.project"
-            @model={{project}}
-          />
-        </li>
+        <cards.link
+          @title={{project.name}}
+          @subtitle={{project.id}}
+          @description={{project.description}}
+          @route="orgs.org.projects.project"
+          @model={{project}}
+        />
       {{/each}}
-    </ul>
+    </Rose::Cards>
   </page.body>
+
 </Rose::Layout::Page>
