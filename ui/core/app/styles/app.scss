@@ -21,19 +21,6 @@
 
 .projects-overview {
   margin: sizing.rems(l);
-
-  .projects {
-    display: flex;
-    padding: 20px 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    .project {
-      display: flex;
-      flex-direction: row;
-      padding: 10px 10px 10px 0;
-    }
-  }
 }
 
 .project-overview,
