@@ -18,30 +18,30 @@ module('Integration | Component | rose/layout/global', function (hooks) {
   });
 
   test('it renders with content', async function (assert) {
-    await render(hbs`<Rose::Layout::Global as |global|>
+    await render(hbs`<Rose::Layout::Global as |layout|>
       <button id="content" />
     </Rose::Layout::Global>`);
     assert.ok(find('#content'));
   });
 
   test('it renders with header', async function (assert) {
-    await render(hbs`<Rose::Layout::Global as |global|>
-      <global.header />
+    await render(hbs`<Rose::Layout::Global as |layout|>
+      <layout.header />
     </Rose::Layout::Global>`);
     assert.ok(find('.rose-layout-global-header'));
   });
 
   test('it renders with main', async function (assert) {
-    await render(hbs`<Rose::Layout::Global as |global|>
-      <global.body />
+    await render(hbs`<Rose::Layout::Global as |layout|>
+      <layout.body />
     </Rose::Layout::Global>`);
     assert.ok(find('.rose-layout-global-body'));
   });
 
   test('it renders with sidebar', async function (assert) {
-    await render(hbs`<Rose::Layout::Global as |global|>
-      <global.navigation />
+    await render(hbs`<Rose::Layout::Global as |layout|>
+      <layout.sidebar />
     </Rose::Layout::Global>`);
-    assert.ok(find('.rose-layout-global-navigation'));
+    assert.ok(find('.rose-layout-global-sidebar'));
   });
 });

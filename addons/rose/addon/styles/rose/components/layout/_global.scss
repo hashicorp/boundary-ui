@@ -1,9 +1,5 @@
-@use '../../../variables/sizing';
-@use '../../../variables/media';
-
-@import 'header';
-@import 'body';
-@import 'navigation';
+@use '../../variables/sizing';
+@use '../../variables/media';
 
 .rose-layout-global {
   display: grid;
@@ -14,6 +10,21 @@
   grid-template-columns: (sizing.rems(m) * 16) auto 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
+
+  .rose-layout-global-body {
+    grid-area: body;
+    padding: sizing.rems(l);
+  }
+
+  .rose-layout-global-header {
+    grid-area: header;
+  }
+
+  .rose-layout-global-sidebar {
+    grid-area: navigation;
+    border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+  }
+
 }
 
 @media (max-width: media.width(small)) {
