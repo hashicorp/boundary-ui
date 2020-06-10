@@ -1,5 +1,5 @@
-<Rose::Layout::Global as |global|>
-  <global.header>
+<Rose::Layout::Global as |layout|>
+  <layout.header>
     <Rose::Header as |header|>
 
       <header.brand @logo="logo" @text="Product Name" />
@@ -28,18 +28,18 @@
       </header.utilities>
 
     </Rose::Header>
-  </global.header>
+  </layout.header>
 
-  <global.navigation>
+  <layout.sidebar>
     <Rose::Nav::Sidebar @title="Title" as |nav|>
       <nav.link @route="index">Item Name</nav.link>
       <nav.link @route="about">Item Name</nav.link>
       <nav.link @route="about">Item Name</nav.link>
       <nav.link @route="about">Item Name</nav.link>
     </Rose::Nav::Sidebar>
-  </global.navigation>
+  </layout.sidebar>
 
-  <global.body>
+  <layout.body>
     <Rose::Layout::Page as |page|>
       <page.breadcrumbs>Breadcrumbs</page.breadcrumbs>
       <page.header>Header</page.header>
@@ -229,5 +229,5 @@
         </footer.row>
       </table.footer>
     </Rose::Table>
-  </global.body>
+  </layout.body>
 </Rose::Layout::Global>

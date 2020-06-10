@@ -1,0 +1,25 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Anonymous" component="Anonymous" />
+
+# Anonymous
+
+The anonymous component is a simple `<div>` with no attributes of its own.
+It is used by other components that need to yield contextual components.
+This component should not be instantiated directly.
+
+For example, layout components may yield an anonymous component to configure
+various layout regions:
+
+```htmlbars
+<div ...attributes class="rose-layout-global">
+  {{yield (hash
+    header=(component "rose/anonymous" tagName="header" class="rose-layout-global-header")
+    sidebar=(component "rose/anonymous" tagName="aside" class="rose-layout-global-sidebar")
+    body=(component "rose/anonymous" tagName="main" class="rose-layout-global-body")
+  )}}
+</div>
+```

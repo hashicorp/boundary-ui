@@ -10,20 +10,20 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 A top-level layout/positioning component that allows three distinct sections to be configured: header, navigation, and body.
 
 ```htmlbars
-<Rose::Layout::Global as |global|>
-  <global.header />
-  <global.body />
-  <global.navigation />
+<Rose::Layout::Global as |layout|>
+  <layout.header />
+  <layout.sidebar />
+  <layout.body />
 </Rose::Layout::Global>
 ```
 
 <Preview>
   <Story name="Global">{{
     template: hbs`
-    <Rose::Layout::Global as |global|>
-      <global.header style="background: var(--brand-gray-5);">Header</global.header>
-      <global.body style="background: var(--brand-gray-7);">Body</global.body>
-      <global.navigation style="background: var(--brand-gray-6);">Navigation</global.navigation>
+    <Rose::Layout::Global as |layout|>
+      <layout.header style="background: var(--brand-gray-5);">Header</layout.header>
+      <layout.sidebar style="background: var(--brand-gray-6);">Sidebar</layout.sidebar>
+      <layout.body style="background: var(--brand-gray-7);">Body</layout.body>
     </Rose::Layout::Global>
     `,
   }}</Story>
