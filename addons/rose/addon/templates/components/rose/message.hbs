@@ -1,0 +1,25 @@
+<div ...attributes class="rose-message">
+  {{#if @title}}
+    <div class="rose-message-title">
+      {{#if @icon}}
+        <div class="rose-message-icon">{{inline-svg @icon}}</div>
+      {{/if}}
+
+      <div class="rose-message-title-text">
+        {{@title}}
+
+        {{#if @subtitle}}
+          <div class="rose-message-subtitle">{{@subtitle}}</div>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if @description}}
+    <div class="rose-message-description">{{@description}}</div>
+  {{/if}}
+
+  {{yield (hash
+    link=(component 'rose/message/link')
+  )}}
+</div>

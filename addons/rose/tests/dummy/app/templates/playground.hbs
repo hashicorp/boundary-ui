@@ -229,5 +229,13 @@
         </footer.row>
       </table.footer>
     </Rose::Table>
+
+    <Rose::Nav::Breadcrumbs as |breadcrumbs|>
+      <breadcrumbs.link @route="about">Level 1</breadcrumbs.link>
+      <breadcrumbs.link @route="index">Level 2</breadcrumbs.link>
+      <breadcrumbs.link @route="about">Level 3</breadcrumbs.link>
+      <breadcrumbs.link @route="about">Level 4</breadcrumbs.link>
+      <breadcrumbs.link @route="about">Level 5</breadcrumbs.link>
+    </Rose::Nav::Breadcrumbs>
   </layout.body>
 </Rose::Layout::Global>
