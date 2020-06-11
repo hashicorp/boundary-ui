@@ -6,5 +6,5 @@ import layout from '../../templates/components/rose/anonymous';
  * that yield simple contextual components, such as layouts yielding regions.
  */
 export default Component.extend({
-  layout
+  layout,
 });

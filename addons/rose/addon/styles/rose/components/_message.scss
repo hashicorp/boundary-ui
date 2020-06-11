@@ -3,81 +3,76 @@
 @use '../variables/media';
 
 .rose-message {
-  @include type.type(s, normal);
-  display: grid;
-  grid-template-areas:
-    'title title title'
-    'description description description'
-    'left-link . right-link';
-  grid-auto-columns: auto 1fr;
-  color: var(--ui-gray);
-  width: sizing.rems(m) * 16; //16 rems/320 px
+  --message-color: var(--ui-gray-starker-1);
+  display: flex;
+  flex-direction: column;
+  color: var(--message-color);
+  width: sizing.rems(l) * 15; //16 rems/320 px
+  margin-bottom: sizing.rems(l);
 
-  .rose-message-title {
-    @include type.type(m, semibold);
-    grid-area: title;
+  // Icons always need tweaking
+  .rose-icon {
+    --size: #{sizing.rems(m)};
+    > svg {
+      vertical-align: text-bottom;
+    }
+  }
 
-    .rose-message-title-text {
-      display: inline-block;
+  .rose-message-header {
+    display: grid;
+    grid-template-areas:
+      'icon title'
+      'icon subtitle';
+    grid-auto-columns: auto 1fr;
+    margin-bottom: sizing.rems(m);
+
+    .rose-icon {
+      // targeting 40px
+      --size: #{sizing.rems(xl) + sizing.rems(xxs)};
+      grid-area: icon;
+      margin-right: sizing.rems(s);
     }
 
-    .rose-message-icon {
-      display: inline;
-      svg {
-        vertical-align: top;
-        width: sizing.rems(m) * 2; // 40px
-      }
+    .rose-message-title {
+      @include type.type(l, semibold);
+      grid-area: title;
+      margin: 0;
     }
 
     .rose-message-subtitle {
-      @include type.type(xs, normal);
-      $lineHeight: 16 / 15;
-      line-height: $lineHeight; // 16px
-      vertical-align: bottom;
+      @include type.type(s, normal);
+      grid-area: subtitle;
+      margin: 0;
     }
   }
 
-  .rose-message-description {
-    grid-area: description;
-    margin: sizing.rems(xs) 0;
-  }
-
-  .rose-message-link {
-    @include type.type(xs, semibold);
-    text-decoration: none;
-    cursor: pointer;
-    --color: var(--ui-gray);
-    color: var(--color);
-    margin: sizing.rems(xs) 0;
-
-    svg {
-      vertical-align: top;
-      width: sizing.rems(m);
-      height: sizing.rems(m);
-    }
-
-    &.rose-message-link-left-align {
-      grid-area: left-link;
-      --color: var(--action);
-    }
-
-    &.rose-message-link-right-align {
-      grid-area: right-link;
-    }
-
-    &:hover {
-      --color: var(--action);
-    }
-  }
-}
-
-@media (max-width: media.width(small)) {
-  .rose-message {
+  .rose-message-body {
+    display: grid;
     grid-template-areas:
-      'title'
-      'description'
-      'right-link'
-      'left-link';
-    grid-auto-columns: auto 1fr;
+      'description description'
+      'left-link right-link';
+
+    .rose-message-description {
+      grid-area: description;
+      margin-bottom: sizing.rems(l);
+    }
+
+    .rose-message-link {
+      @include type.type(s);
+      grid-area: left-link;
+      color: var(--action);
+
+      text-decoration: none;
+
+      & + .rose-message-link {
+        grid-area: right-link;
+        text-align: right;
+        color: var(--message-color);
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

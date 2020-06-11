@@ -1,4 +1,4 @@
-@use 'variables/sizing';
+@use '../variables/sizing';
 
 .rose-icon {
   --size: #{sizing.rems(l)};
