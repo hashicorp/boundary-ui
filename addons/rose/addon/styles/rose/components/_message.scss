@@ -58,7 +58,7 @@
     }
 
     .rose-message-link {
-      @include type.type(s);
+      @include type.type(s, semibold);
       grid-area: left-link;
       color: var(--action);
 
