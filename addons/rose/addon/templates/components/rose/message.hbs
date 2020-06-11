@@ -1,0 +1,27 @@
+<article
+  ...attributes
+  class="rose-message"
+>
+
+  {{#if @title}}
+    <header class="rose-message-header">
+      {{#if @icon}}
+        <Rose::Icon @name={{@icon}} />
+      {{/if}}
+
+      <h2 class="rose-message-title">{{@title}}</h2>
+
+      {{#if @subtitle}}
+        <h3 class="rose-message-subtitle">{{@subtitle}}</h3>
+      {{/if}}
+    </header>
+  {{/if}}
+
+  <section class="rose-message-body">
+    {{yield (hash
+      description=(component "rose/anonymous" tagName="p" class="rose-message-description")
+      link=(component "link-to" class="rose-message-link")
+    )}}
+  </section>
+
+</article>
