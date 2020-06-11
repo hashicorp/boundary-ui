@@ -1,13 +1,42 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-//import { render } from '@ember/test-helpers';
-//import { hbs } from 'ember-cli-htmlbars';
+import { render, find, findAll } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | bread-crumbs', function(hooks) {
   setupRenderingTest(hooks);
 
-  // TODO:  need bread crumbs tests
   test('it renders', async function(assert) {
-    assert.ok(true);
+    this.set('breadCrumbs', [{label: 'Level 1'}]);
+
+    await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
+    assert.equal(find('.rose-nav-breadcrumbs').textContent.trim(), 'Level 1');
+  });
+
+  test('it renders with model', async function(assert) {
+    this.set('breadCrumbs', [{
+      label: 'Level 2',
+      path: 'orgs.org.projects.project',
+      model: {project_id: 'project'}}
+    ]);
+
+    await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
+    assert.equal(find('.rose-nav-breadcrumbs').textContent.trim(), 'Level 2');
+  });
+
+  test('it renders multiple breadCrumbs', async function(assert) {
+    this.set('breadCrumbs', [{
+      label: 'Level 1'
+    },{
+      label: 'Level 2'
+    }, {
+      label: 'Level 3'
+    }]);
+
+    await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
+    assert.equal(findAll('a').length, 3);
+    assert.equal(findAll('a')[0].textContent.trim(), 'Level 1');
+    assert.equal(findAll('a')[1].textContent.trim(), 'Level 2');
+    assert.equal(findAll('a')[2].textContent.trim(), 'Level 3');
   });
 });
