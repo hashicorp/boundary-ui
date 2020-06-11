@@ -1,7 +1,7 @@
 <div ...attributes class="rose-layout-global">
   {{yield (hash
-    header=(component 'rose/layout/global/header')
-    body=(component 'rose/layout/global/body')
-    navigation=(component 'rose/layout/global/navigation')
+    header=(component "rose/anonymous" tagName="header" class="rose-layout-global-header")
+    sidebar=(component "rose/anonymous" tagName="aside" class="rose-layout-global-sidebar")
+    body=(component "rose/anonymous" tagName="main" class="rose-layout-global-body")
   )}}
 </div>

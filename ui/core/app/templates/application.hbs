@@ -1,5 +1,6 @@
-<Rose::Layout::Global as |global|>
-  <global.header>
+<Rose::Layout::Global as |layout|>
+
+  <layout.header>
     <Rose::Header as |header|>
       <header.brand @logo="logo-hashi" @text={{app-name}} />
       <header.nav as |nav|>
@@ -22,17 +23,11 @@
         </utilities.dropdown>
       </header.utilities>
     </Rose::Header>
-  </global.header>
+  </layout.header>
 
-  <global.body>
-    {{outlet}}
-  </global.body>
+  <layout.sidebar>{{outlet "sidebar"}}</layout.sidebar>
 
-  <global.navigation>
-
-    {{outlet "sidebar"}}
-
-  </global.navigation>
+  <layout.body>{{outlet}}</layout.body>
 
 </Rose::Layout::Global>
 
