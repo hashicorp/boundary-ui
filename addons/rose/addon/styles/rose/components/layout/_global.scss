@@ -13,6 +13,7 @@
 
   .rose-layout-global-body {
     grid-area: body;
+    margin: 0 sizing.rems(m);
   }
 
   .rose-layout-global-header {

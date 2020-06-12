@@ -1,7 +1,6 @@
-<Rose::Layout::Page as |page|>
-
+<Rose::Layout::Page class="host-catalogs" as |page|>
   <page.header>
-    <h2>{{t "resources.host-catalogs"}}</h2>
+    <h2>{{t 'resources.host-catalogs'}}</h2>
   </page.header>
 
   <page.actions>
@@ -13,7 +12,16 @@
   </page.actions>
 
   <page.body>
+    <div class="description">{{t 'descriptions.host-catalogs'}}</div>
+
     <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.cell>{{t 'table.headers.name'}}</row.cell>
+          <row.cell>{{t 'table.headers.type'}}</row.cell>
+          <row.cell>{{t 'table.headers.description'}}</row.cell>
+        </header.row>
+      </table.header>
       <table.body as |body|>
         {{#each @model as |hostCatalog|}}
           <body.row as |row|>
@@ -25,6 +33,8 @@
                 {{hostCatalog.name}}
               </LinkTo>
             </row.cell>
+            <row.cell>{{hostCatalog.type}}</row.cell>
+            <row.cell>{{hostCatalog.description}}</row.cell>
           </body.row>
         {{/each}}
       </table.body>
