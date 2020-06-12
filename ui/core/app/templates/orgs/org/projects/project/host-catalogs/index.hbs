@@ -12,14 +12,14 @@
   </page.actions>
 
   <page.body>
-    <div class="description">{{t 'descriptions.host-catalogs'}}</div>
+    <p>{{t 'descriptions.host-catalogs'}}</p>
 
     <Rose::Table as |table|>
       <table.header as |header|>
         <header.row as |row|>
-          <row.cell>{{t 'table.headers.name'}}</row.cell>
-          <row.cell>{{t 'table.headers.type'}}</row.cell>
-          <row.cell>{{t 'table.headers.description'}}</row.cell>
+          <row.cell>{{t 'form.label.name'}}</row.cell>
+          <row.cell>{{t 'form.label.type'}}</row.cell>
+          <row.cell>{{t 'form.label.description'}}</row.cell>
         </header.row>
       </table.header>
       <table.body as |body|>

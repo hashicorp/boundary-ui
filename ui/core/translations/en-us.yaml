@@ -23,11 +23,7 @@ form:
   label:
     name: Name
     description: Description
-table:
-  headers:
     type: Type
-    name: Name
-    description: Description
 dev:
   default-org: Default Org
   menu-item: Menu item
