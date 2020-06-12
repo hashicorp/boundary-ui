@@ -8,6 +8,7 @@ module('Integration | Component | rose/layout/centered', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Layout::Centered />`);
+    assert.ok(find('section'));
     assert.ok(find('.rose-layout-centered'));
     assert.notOk(find('.rose-layout-centered-body'));
   });
@@ -18,8 +19,8 @@ module('Integration | Component | rose/layout/centered', function (hooks) {
   });
 
   test('it renders with content', async function (assert) {
-    await render(hbs`<Rose::Layout::Centered as |layout|>
-      <layout.body>Layout content</layout.body>
+    await render(hbs`<Rose::Layout::Centered>
+      Layout content
     </Rose::Layout::Centered>`);
     assert.equal(
       find('.rose-layout-centered').textContent.trim(),
