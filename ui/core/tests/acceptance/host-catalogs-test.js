@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find, findAll } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -10,29 +10,12 @@ module('Acceptance | host catalogs', function(hooks) {
   setupMirage(hooks);
 
   test('visiting host catalogs', async function (assert) {
-    assert.expect(5);
+    assert.expect(1);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
     await visit('/orgs/1/projects/1/host-catalogs');
     await a11yAudit();
     assert.equal(currentURL(), '/orgs/1/projects/1/host-catalogs');
-
-    assert.equal(findAll('.rose-layout-page-breadcrumbs a').length, 3);
-    assert.equal(
-      findAll('.rose-layout-page-breadcrumbs a')[0].textContent.trim(),
-      'Projects',
-      'Displays project breadcrumb'
-    );
-    assert.equal(
-      findAll('.rose-layout-page-breadcrumbs a')[1].textContent.trim(),
-      this.server.db.projects[0].name,
-      'Displays project name breadcrumb'
-    );
-    assert.equal(
-      findAll('.rose-layout-page-breadcrumbs a')[2].textContent.trim(),
-      'Host Catalogs',
-      'Displays hostcatalog breadcrumb'
-    );
   });
 
   test('can navigate to host catalog form', async function(assert) {

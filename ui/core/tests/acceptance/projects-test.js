@@ -10,16 +10,11 @@ module('Acceptance | projects', function (hooks) {
   setupMirage(hooks);
 
   test('visiting projects', async function (assert) {
-    assert.expect(2);
+    assert.expect(1);
     this.server.createList('project', 1);
     await visit('/orgs/1/projects');
     await a11yAudit();
     assert.equal(currentURL(), '/orgs/1/projects');
-    assert.equal(
-      find('.rose-layout-page-breadcrumbs').textContent.trim(),
-      'Projects',
-      'Displays breadcrumbs'
-    );
   });
 
   test('saving a new project with invalid fields displays error messages', async function (assert) {
