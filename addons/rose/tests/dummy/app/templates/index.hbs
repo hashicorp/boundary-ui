@@ -1,46 +1,12 @@
-<Rose::Message @title="You are not authorized" @subtitle="Error 403" @icon="disabled" as |message|>
-  <message.description>
-    You must be granted permissions to view this data.
-    Ask your administrator if you think you should have access.
-  </message.description>
-  <message.link @route="index">
-    <Rose::Icon @name="chevron-left" />
-    Go back
-  </message.link>
-  <message.link @route="index">Need help?</message.link>
-</Rose::Message>
+<Rose::Layout::Centered />
 
-<Rose::Message @title="Page Not Found" @subtitle="Error 404" @icon="help-circle-outline" as |message|>
-  <message.description>
-    Sorry, we couldn't find the page you were looking for. You can go back or to one of the links below.
-  </message.description>
-  <message.link @route="index">
-    <Rose::Icon @name="chevron-left" />
-    Go back
-  </message.link>
-  <message.link @route="index">Need help?</message.link>
-</Rose::Message>
-
-<Rose::Message @title="Something went wrong" @subtitle="Error 500" @icon="alert-circle-outline" as |message|>
-  <message.description>
-    We ran into a problem and could not continue. You can ask your administrator or try again later.
-  </message.description>
-  <message.link @route="index">
-    <Rose::Icon @name="refresh-default" />
-    Try Again
-  </message.link>
-  <message.link @route="index">Need help?</message.link>
-</Rose::Message>
-
-<Rose::Message @title="No logs received yet" as |message|>
-  <message.description>
-    Your logs will appear here when we start receiving them. If your server is currently outputting logs, check your configuration.
-  </message.description>
-</Rose::Message>
-
-<Rose::Message @title="Welcome to Namespaces" as |message|>
-  <message.description>
-    Namespaces allow you to create distinct areas with their own separate policies, mounts, tokens, and identity entities.
-  </message.description>
-  <message.link @route="index">Add a namespace</message.link>
-</Rose::Message>
+<Rose::Layout::Centered as |layout|>
+  <layout.body>
+    <Rose::Message @title="Welcome to Namespaces" as |message|>
+      <message.description>
+        Namespaces allow you to create distinct areas with their own separate policies, mounts, tokens, and identity entities.
+      </message.description>
+      <message.link @route="index">Add a namespace</message.link>
+    </Rose::Message>
+  </layout.body>
+</Rose::Layout::Centered>

@@ -1,0 +1,25 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Layout|Centered" component="Centered" />
+
+# Layout|Centered
+
+A left and right centered layout/positioning component that allows a boby section to be configured
+
+```htmlbars
+<Rose::Layout::Centered as |layout|>
+  <layout.body />
+</Rose::Layout::Centered>
+```
+
+<Preview>
+  <Story name="Centered">{{
+    template: hbs`
+    <Rose::Layout::Centered as |layout|>
+      <layout.body style="background: var(--brand-gray-7);">Centered Body</layout.body>
+    </Rose::Layout::Centered>
+    `,
+  }}</Story>
+</Preview>

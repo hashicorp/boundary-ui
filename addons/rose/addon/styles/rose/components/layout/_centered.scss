@@ -1,0 +1,11 @@
+@use '../../variables/sizing';
+
+.rose-layout-centered {
+  display: flex;
+  flex-direction: column;
+
+  .rose-layout-centered-body {
+    margin: auto;
+    padding: sizing.rems(l) + sizing.rems(xxs) 0; //35px
+  }
+}
