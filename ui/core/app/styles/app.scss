@@ -19,14 +19,12 @@
   }
 }
 
-.projects-overview {
-  margin: sizing.rems(l);
+.rose-layout-global-body {
+  margin: 0 sizing.rems(m);
 }
 
 .project-overview,
 .project-new {
-  margin: sizing.rems(l);
-
   .breadcrumbs,
   .breadcrumbs a {
     color: #6f7682;

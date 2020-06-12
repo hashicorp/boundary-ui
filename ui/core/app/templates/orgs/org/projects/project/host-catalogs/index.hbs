@@ -13,18 +13,22 @@
   </page.actions>
 
   <page.body>
-    <ul>
-      {{#each @model as |hostCatalog|}}
-        <li>
-          <LinkTo
-            @route="orgs.org.projects.project.host-catalogs.host-catalog"
-            @model={{hostCatalog}}
-          >
-            {{hostCatalog.name}}
-          </LinkTo>
-        </li>
-      {{/each}}
-    </ul>
+    <Rose::Table as |table|>
+      <table.body as |body|>
+        {{#each @model as |hostCatalog|}}
+          <body.row as |row|>
+            <row.cell>
+              <LinkTo
+                @route="orgs.org.projects.project.host-catalogs.host-catalog"
+                @model={{hostCatalog}}
+              >
+                {{hostCatalog.name}}
+              </LinkTo>
+            </row.cell>
+          </body.row>
+        {{/each}}
+      </table.body>
+    </Rose::Table>
   </page.body>
 
 </Rose::Layout::Page>
