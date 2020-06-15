@@ -13,13 +13,14 @@ import { inject as service } from '@ember/service';
  * by looking for the presence of a cookie with name specified in `cookieName`.
  *
  * This authenticator should not be used directly because it does not specify
- * `cookieName`.  To use, create an application session store and extend this
- * class, being sure to specify a `cookieName`.
+ * `cookiePath` or `cookieName`.  To use, create an application session store
+ * and extend this class, being sure to specify these attributes.
  *
  * @example
  *
  *   import CookieSessionStore from 'auth/session-stores/cookie';
  *   export default class ApplicationSessionStore extends CookieSessionStore {
+ *     cookiePath = '/';
  *     cookieName = 'auth-token';
  *   }
  *
@@ -87,10 +88,9 @@ export default class CookieSessionStore extends BaseSessionStore {
    */
   persist(data) {
     const authenticator = get(data, 'authenticated.authenticator');
+    const path = this.cookiePath;
     if (authenticator) {
-      this.cookies.write(this.authenticatorCookieName, authenticator, {
-        path: '/',
-      });
+      this.cookies.write(this.authenticatorCookieName, authenticator, { path });
     } else {
       this.clear();
     }
@@ -124,7 +124,8 @@ export default class CookieSessionStore extends BaseSessionStore {
    * cookie as well as the authenticator name cookie.
    */
   clear() {
-    this.cookies.clear(this.cookieName, { path: '/' });
-    this.cookies.clear(this.authenticatorCookieName, { path: '/' });
+    const path = this.cookiePath;
+    this.cookies.clear(this.cookieName, { path });
+    this.cookies.clear(this.authenticatorCookieName, { path });
   }
 }
