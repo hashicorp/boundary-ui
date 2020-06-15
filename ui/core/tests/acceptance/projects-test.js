@@ -17,6 +17,26 @@ module('Acceptance | projects', function (hooks) {
     assert.equal(currentURL(), '/orgs/1/projects');
   });
 
+  test('can create new projects', async function (assert) {
+    assert.expect(3);
+    assert.equal(this.server.db.projects.length, 0);
+    await visit('/orgs/1/projects/new');
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.equal(currentURL(), '/orgs/1/projects/1');
+    assert.equal(this.server.db.projects.length, 1);
+  });
+
+  test('can cancel create new projects', async function (assert) {
+    assert.expect(3);
+    assert.equal(this.server.db.projects.length, 0);
+    await visit('/orgs/1/projects/new');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(currentURL(), '/orgs/1/projects');
+    assert.equal(this.server.db.projects.length, 0);
+  });
+
   test('saving a new project with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.post('/orgs/:org_id/projects', () => {
