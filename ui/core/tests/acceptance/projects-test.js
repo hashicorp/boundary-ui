@@ -73,6 +73,34 @@ module('Acceptance | projects', function (hooks) {
     );
   });
 
+  test('can save changes to existing project', async function (assert) {
+    assert.expect(2);
+    this.server.createList('project', 1, {name: 'MyProject'});
+    await visit('/orgs/1/projects/1');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), '/orgs/1/projects/1');
+    assert.equal(this.server.db.projects[0].name, 'random string');
+  });
+
+  test('can cancel changes to existing project', async function (assert) {
+    assert.expect(1);
+    this.server.createList('project', 1, {name: 'MyProject'});
+    await visit('/orgs/1/projects/1');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(find('[name="name"]').value, 'MyProject');
+  });
+
+  test('can delete project', async function(assert) {
+    assert.expect(2);
+    this.server.createList('project', 1);
+    assert.equal(this.server.db.projects.length, 1);
+    await visit('/orgs/1/projects/1');
+    await click('.rose-button-warning');
+    assert.equal(this.server.db.projects.length, 0);
+  });
+
   test('saving an existing project with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.createList('project', 1);
