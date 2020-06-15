@@ -1,8 +1,13 @@
-<Rose::Layout::Centered>
-  <Rose::Message @title="Welcome to Namespaces" as |message|>
-    <message.description>
-      Namespaces allow you to create distinct areas with their own separate policies, mounts, tokens, and identity entities.
-    </message.description>
-    <message.link @route="index">Add a namespace</message.link>
-  </Rose::Message>
-</Rose::Layout::Centered>
+<Rose::LinkButton @style="primary">Primary</Rose::LinkButton>
+<Rose::LinkButton @style="secondary">Secondary</Rose::LinkButton>
+<Rose::LinkButton @style="warning">Warning</Rose::LinkButton>
+<Rose::LinkButton @style="ghost">Ghost</Rose::LinkButton>
+<br />
+<Rose::LinkButton @style="primary" @disabled={{true}}>Primary</Rose::LinkButton>
+<Rose::LinkButton @style="secondary" @disabled={{true}}>Secondary</Rose::LinkButton>
+<Rose::LinkButton @style="warning" @disabled={{true}}>Warning</Rose::LinkButton>
+<Rose::LinkButton @style="ghost" @disabled={{true}}>Ghost</Rose::LinkButton>
+<br />
+<Rose::LinkButton @style="primary" @iconLeft="help-circle-outline">Left Icon</Rose::LinkButton>
+<Rose::LinkButton @style="primary" @iconRight="help-circle-outline">Right Icon</Rose::LinkButton>
+<Rose::LinkButton @style="primary" @iconOnly="help-circle-outline" />

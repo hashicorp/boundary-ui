@@ -1,0 +1,40 @@
+// Link button uses rose-button styling
+.rose-link-button {
+  text-decoration: none;
+
+  // Modify link disabled state to match button disabled state
+  &.disabled {
+    cursor: not-allowed;
+    opacity: var(--opacity-1);
+    box-shadow: none;
+
+    &:hover {
+      opacity: var(--opacity-1);
+      box-shadow: none;
+    }
+
+    &.rose-button-primary:hover {
+      color: var(--white);
+      background-color: var(--info);
+      border-color: var(--info-starker-2);
+    }
+
+    &.rose-button-secondary:hover {
+      color: var(--ui-gray-starker-3);
+      border-color: var(--ui-gray-subtler-2);
+      background-color: var(--ui-gray-subtler-5);
+    }
+
+    &.rose-button-warning:hover {
+      color: var(--failure);
+      border-color: var(--failure);
+      background-color: var(--subtle);
+      text-shadow: none;
+    }
+
+    &.rose-button-ghost:hover {
+      color: var(--info);
+      border-color: var(--subtle);
+    }
+  }
+}

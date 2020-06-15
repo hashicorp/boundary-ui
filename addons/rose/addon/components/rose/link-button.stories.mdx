@@ -1,0 +1,103 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|LinkButton" component="LinkButton" />
+
+# LinkButton
+
+An achor element component styled to mimic `Rose::Button` component.
+Styles supported: primary, secondary, warning, and ghost.
+
+```html
+<Rose::LinkButton @style="primary" @iconRight="chevron-right">
+  Content
+</Rose::LinkButton>
+```
+
+<Preview>
+  <Story name="Advanced">{{
+    template: hbs`
+      <Rose::LinkButton
+        @disabled={{disabled}}
+        @style={{style}}
+        @iconLeft={{iconLeft}}
+        @iconRight={{iconRight}}
+      >
+        {{text}}
+      </Rose::LinkButton>
+    `,
+    context: {
+      text: text('text', 'Content'),
+      disabled: boolean('disabled', false),
+      style: select(
+        'style',
+        {
+          primary: 'primary',
+          secondary: 'secondary',
+          warning: 'warning',
+          ghost: 'ghost',
+          'inline-link-action': 'inline-link-action',
+        },
+        'primary'
+      ),
+      iconLeft: select(
+        'iconLeft',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+        },
+        'copy-action'
+      ),
+      iconRight: select(
+        'iconRight',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'chevron-right': 'chevron-right',
+          'copy-action': 'copy-action',
+          'search': 'search',
+        },
+        'chevron-right'
+      ),
+    },
+  }}</Story>
+</Preview>
+
+Similar to `Rose::Button`, icon only link button is supported.
+
+```html
+<Rose::LinkButton @style="primary" @iconOnly="help-circle-outline" />
+```
+
+<Preview>
+  <Story name="Icon Only">{{
+    template: hbs`
+    <Rose::LinkButton @style={{style}} @iconOnly={{iconOnly}} />
+    `,
+    context: {
+      style: select(
+        'style',
+        {
+          primary: 'primary',
+          secondary: 'secondary',
+          warning: 'warning',
+          ghost: 'ghost',
+          'inline-link-action': 'inline-link-action',
+        },
+        'primary'
+      ),
+      iconOnly: select(
+        'iconOnly',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'help-circle-outline': 'help-circle-outline',
+          'plus-circle-fill': 'plus-circle-fill',
+          'user-square-outline': 'user-square-outline',
+        },
+        'help-circle-outline'
+      ),
+    },
+  }}</Story>
+</Preview>
