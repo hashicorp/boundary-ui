@@ -1,7 +1,6 @@
-<Rose::Layout::Page as |page|>
-
+<Rose::Layout::Page class="host-catalogs" as |page|>
   <page.header>
-    <h2>{{t "resources.host-catalogs"}}</h2>
+    <h2>{{t 'resources.host-catalogs'}}</h2>
   </page.header>
 
   <page.actions>
@@ -13,18 +12,33 @@
   </page.actions>
 
   <page.body>
-    <ul>
-      {{#each @model as |hostCatalog|}}
-        <li>
-          <LinkTo
-            @route="orgs.org.projects.project.host-catalogs.host-catalog"
-            @model={{hostCatalog}}
-          >
-            {{hostCatalog.name}}
-          </LinkTo>
-        </li>
-      {{/each}}
-    </ul>
+    <p>{{t 'descriptions.host-catalogs'}}</p>
+
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.cell>{{t 'form.label.name'}}</row.cell>
+          <row.cell>{{t 'form.label.type'}}</row.cell>
+          <row.cell>{{t 'form.label.description'}}</row.cell>
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        {{#each @model as |hostCatalog|}}
+          <body.row as |row|>
+            <row.cell>
+              <LinkTo
+                @route="orgs.org.projects.project.host-catalogs.host-catalog"
+                @model={{hostCatalog}}
+              >
+                {{hostCatalog.name}}
+              </LinkTo>
+            </row.cell>
+            <row.cell>{{hostCatalog.type}}</row.cell>
+            <row.cell>{{hostCatalog.description}}</row.cell>
+          </body.row>
+        {{/each}}
+      </table.body>
+    </Rose::Table>
   </page.body>
 
 </Rose::Layout::Page>

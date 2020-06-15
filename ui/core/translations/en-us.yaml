@@ -12,6 +12,8 @@ titles:
   new: New
   overview: Overview
   settings: Settings
+descriptions:
+  host-catalogs: Overview of collections of hosts and host sets.
 states:
   info: Info
   success: Success
@@ -21,6 +23,7 @@ form:
   label:
     name: Name
     description: Description
+    type: Type
 dev:
   default-org: Default Org
   menu-item: Menu item
