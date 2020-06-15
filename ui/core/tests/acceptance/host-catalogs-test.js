@@ -23,7 +23,7 @@ module('Acceptance | host catalogs', function(hooks) {
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
     await visit('/orgs/1/projects/1/host-catalogs');
-    await click('main ul li:first-child a');
+    await click('main .rose-table-cell:first-child a');
     await a11yAudit();
     assert.equal(currentURL(), '/orgs/1/projects/1/host-catalogs/1');
   });
