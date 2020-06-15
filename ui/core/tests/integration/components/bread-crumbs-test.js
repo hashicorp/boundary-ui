@@ -10,15 +10,20 @@ module('Integration | Component | bread-crumbs', function(hooks) {
     this.set('breadCrumbs', [{label: 'Level 1'}]);
 
     await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
+    // Default index route
+    assert.ok(find('.rose-nav-breadcrumbs a').href.match(/#$/));
     assert.equal(find('.rose-nav-breadcrumbs').textContent.trim(), 'Level 1');
   });
 
   test('it renders with model', async function(assert) {
+    let store = this.owner.lookup('service:store');
+    let project = store.createRecord('project', {id: '1234'});
+
     this.set('breadCrumbs', [{
       label: 'Level 2',
       path: 'orgs.org.projects.project',
-      model: {project_id: 'project'}}
-    ]);
+      model: project
+    }]);
 
     await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
     assert.equal(find('.rose-nav-breadcrumbs').textContent.trim(), 'Level 2');
