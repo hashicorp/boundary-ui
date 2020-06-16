@@ -1,0 +1,15 @@
+{{#if this.breadCrumbs}}
+  <Rose::Nav::Breadcrumbs as |crumbs|>
+    {{#each this.breadCrumbs as |crumb|}}
+      {{#if crumb.model}}
+        <crumbs.link @route={{crumb.path}} @model={{crumb.model}}>
+          {{crumb.label}}
+        </crumbs.link>
+      {{else}}
+        <crumbs.link @route={{crumb.path}}>
+          {{crumb.label}}
+        </crumbs.link>
+      {{/if}}
+    {{/each}}
+  </Rose::Nav::Breadcrumbs>
+{{/if}}
