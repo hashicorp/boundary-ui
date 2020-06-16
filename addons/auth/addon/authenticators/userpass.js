@@ -43,7 +43,7 @@ export default class UserpassAuthenticator extends BaseAuthenticator {
    * @param {string} password
    * @return {Promise}
    */
-  async authenticate(username, password) {
+  async authenticate({ username, password }) {
     const response = await fetch(this.authEndpoint, {
       method: 'post',
       body: JSON.stringify({ username, password }),

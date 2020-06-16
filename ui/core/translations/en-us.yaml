@@ -3,6 +3,8 @@ actions:
   delete: Delete
   dismiss: Dismiss
   save: Save
+  login: Login
+  logout: Logout
 resources:
   projects: Projects
   project: Project
@@ -24,6 +26,8 @@ form:
     name: Name
     description: Description
     type: Type
+    username: Username
+    password: Password
 dev:
   default-org: Default Org
   menu-item: Menu item

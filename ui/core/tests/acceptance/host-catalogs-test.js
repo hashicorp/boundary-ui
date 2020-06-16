@@ -3,11 +3,14 @@ import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 
 module('Acceptance | host catalogs', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  hooks.beforeEach(() => authenticateSession());
 
   test('visiting host catalogs', async function (assert) {
     assert.expect(1);

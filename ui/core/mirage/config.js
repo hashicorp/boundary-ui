@@ -1,5 +1,5 @@
 import config from '../config/environment';
-//import { Response } from 'miragejs';
+import loginHandler from './route-handlers/login';
 
 export default function() {
 
@@ -14,6 +14,9 @@ export default function() {
   // development for testing against a locally running backend.
   if (config.api.host) this.passthrough(`${config.api.host}/**`);
   this.passthrough();
+
+  // login:  userpass
+  this.post('/orgs/:org_id/login', loginHandler);
 
   // project
   this.get('/orgs/:org_id/projects');

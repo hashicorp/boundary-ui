@@ -2,6 +2,7 @@
 
 const APP_NAME = process.env.APP_NAME || 'Application Name';
 const API_HOST = process.env.API_HOST || '';
+const USERPASS_COOKIE_NAME = process.env.USERPASS_COOKIE_NAME || 'token-share-1';
 
 module.exports = function (environment) {
   let ENV = {
@@ -29,6 +30,10 @@ module.exports = function (environment) {
     api: {
       host: API_HOST,
       namespace: 'v1',
+    },
+
+    auth: {
+      userpassCookieName: USERPASS_COOKIE_NAME
     },
 
     appName: APP_NAME,

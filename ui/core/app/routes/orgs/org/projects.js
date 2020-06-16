@@ -1,6 +1,15 @@
 import Route from '@ember/routing/route';
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default class OrgsOrgProjectsRoute extends Route {
+export default class OrgsOrgProjectsRoute extends Route.extend(AuthenticatedRouteMixin) {
+
+  // =attributes
+
+  /**
+   * @type {string}
+   */
+  authenticationRoute = 'orgs.org.login';
+
   // =methods
 
   /**
