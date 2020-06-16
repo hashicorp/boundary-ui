@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | breadcrumbs', function (hooks) {
   setupApplicationTest(hooks);
@@ -27,6 +28,7 @@ module('Acceptance | breadcrumbs', function (hooks) {
     hostCatalogsURL = `${projectURL}/host-catalogs`;
     newHostCatalogURL = `${hostCatalogsURL}/new`;
     hostCatalogURL = `${hostCatalogsURL}/${hostCatalog.id}`;
+    authenticateSession();
   });
 
   test('can navigate via breadcrumbs to projects from project', async function (assert) {
