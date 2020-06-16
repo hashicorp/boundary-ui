@@ -1,30 +1,35 @@
-<div class="project-overview">
-  <div class="breadcrumbs">
-    <LinkTo @route='orgs.org.projects'>{{t "resources.projects"}}</LinkTo>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.project"}}</h2>
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='orgs.org.projects.project'>
+        {{t 'titles.settings'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.body>
+    <Form::Project
+      @model={{@model}}
+      @submit={{route-action "save" @model}}
+      @cancel={{route-action "cancel" @model}}
+    />
+
+    <Rose::Button
+      @style="warning"
+      @disabled={{@model.canSave}}
+      {{on "click" (route-action "delete" @model)}}
     >
-    <LinkTo @route='orgs.org.projects.project'>{{@model.name}}</LinkTo>
-  </div>
+      {{t 'actions.delete'}}
+    </Rose::Button>
+  </page.body>
 
-  <h2>{{t "resources.project"}}</h2>
-
-  <Rose::Nav::Tabs as |nav|>
-    <nav.link @route='orgs.org.projects.project'>
-      {{t 'titles.settings'}}
-    </nav.link>
-  </Rose::Nav::Tabs>
-
-  <Form::Project
-    @model={{@model}}
-    @submit={{route-action "save" @model}}
-    @cancel={{route-action "cancel" @model}}
-    class="project-new-form"
-  />
-
-  <Rose::Button
-    @style="warning"
-    @disabled={{@model.canSave}}
-    {{on "click" (route-action "delete" @model)}}
-  >
-    {{t 'actions.delete'}}
-  </Rose::Button>
-</div>
+</Rose::Layout::Page>

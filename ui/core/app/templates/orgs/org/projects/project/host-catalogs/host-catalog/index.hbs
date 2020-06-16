@@ -1,18 +1,27 @@
-<div class="project-overview">
+<Rose::Layout::Page as |page|>
 
-  <h2>{{t "resources.host-catalog"}}</h2>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
 
-  <Form::HostCatalog
-    @model={{@model}}
-    @submit={{route-action "save" @model}}
-    @cancel={{route-action "cancel" @model}}
-  />
+  <page.header>
+    <h2>{{t "resources.host-catalog"}}</h2>
+  </page.header>
 
-  <Rose::Button
-    @style="warning"
-    @disabled={{@model.canSave}}
-    {{on "click" (route-action "delete" @model)}}
-  >
-    {{t 'actions.delete'}}
-  </Rose::Button>
-</div>
+  <page.body>
+    <Form::HostCatalog
+      @model={{@model}}
+      @submit={{route-action "save" @model}}
+      @cancel={{route-action "cancel" @model}}
+    />
+
+    <Rose::Button
+      @style="warning"
+      @disabled={{@model.canSave}}
+      {{on "click" (route-action "delete" @model)}}
+    >
+      {{t 'actions.delete'}}
+    </Rose::Button>
+  </page.body>
+
+</Rose::Layout::Page>

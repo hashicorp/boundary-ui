@@ -18,31 +18,3 @@
     }
   }
 }
-
-.project-overview,
-.project-new {
-  .breadcrumbs,
-  .breadcrumbs a {
-    color: #6f7682;
-    text-decoration: none;
-  }
-
-  .project-new-form {
-    .form-actions {
-      display: flex;
-      flex-direction: row;
-      position: relative;
-      float: right;
-
-      button {
-        margin-right: 10px;
-      }
-    }
-
-    input,
-    textarea {
-      box-sizing: border-box;
-      width: 100%;
-    }
-  }
-}
