@@ -1,7 +1,8 @@
-<Rose::Nav::Breadcrumbs as |breadcrumbs|>
-  <breadcrumbs.link @route="about">Level 1</breadcrumbs.link>
-  <breadcrumbs.link @route="index">Level 2</breadcrumbs.link>
-  <breadcrumbs.link @route="about">Level 3</breadcrumbs.link>
-  <breadcrumbs.link @route="about">Level 4</breadcrumbs.link>
-  <breadcrumbs.link @route="about">Level 5</breadcrumbs.link>
-</Rose::Nav::Breadcrumbs>
+<Rose::Layout::Centered>
+  <Rose::Message @title="Welcome to Namespaces" as |message|>
+    <message.description>
+      Namespaces allow you to create distinct areas with their own separate policies, mounts, tokens, and identity entities.
+    </message.description>
+    <message.link @route="index">Add a namespace</message.link>
+  </Rose::Message>
+</Rose::Layout::Centered>
