@@ -9,6 +9,7 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 
 An achor element component styled to mimic `Rose::Button` component.
 Styles supported: primary, secondary, warning, and ghost.
+Disabling link button is not supported as it is an action on form components only.
 
 ```html
 <Rose::LinkButton @style="primary" @iconRight="chevron-right">
@@ -20,7 +21,6 @@ Styles supported: primary, secondary, warning, and ghost.
   <Story name="Advanced">{{
     template: hbs`
       <Rose::LinkButton
-        @disabled={{disabled}}
         @style={{style}}
         @iconLeft={{iconLeft}}
         @iconRight={{iconRight}}
@@ -30,7 +30,6 @@ Styles supported: primary, secondary, warning, and ghost.
     `,
     context: {
       text: text('text', 'Content'),
-      disabled: boolean('disabled', false),
       style: select(
         'style',
         {
