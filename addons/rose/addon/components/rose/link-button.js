@@ -1,17 +1,32 @@
-import Component from '@ember/component';
+import LinkComponent from '@ember/routing/link-component';
 import layout from '../../templates/components/rose/link-button';
+import { computed } from '@ember/object';
 
 /**
  * An achor element based on `rose-button` component styles
  * An empty model cannot be passed in to `link-to` component when a route
- * is defined. Thus, `link-button` body content is separated to avoid
- * duplication when checked for model existence.
+ * is defined. Thus, `link-to` component is used to generate this component.
  *
  * @example
  *  <Rose::LinkButton @submit={{true}} @style="primary">Save</Rose::LinkButton>
  *  <Rose::LinkButton @disabled={{true}} @style="secondary">Disabled</Rose::LinkButton>
  */
-export default Component.extend({
+export default LinkComponent.extend({
   layout,
-  tagName: '',
+  tagName: 'a',
+  classNames: ['rose-link-button'],
+  classNameBindings: [
+    'linkButtonStyle',
+    'iconOnly:has-icon-only',
+    'iconLeft:has-icon-left',
+    'iconRight:has-icon-right',
+  ],
+  linkButtonStyle: computed(function () {
+    let styleClassName = '';
+    if (this.style) {
+      styleClassName = `rose-button-${this.style}`;
+    }
+
+    return styleClassName;
+  }),
 });
