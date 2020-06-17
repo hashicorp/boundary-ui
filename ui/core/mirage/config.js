@@ -28,4 +28,8 @@ export default function() {
   this.get('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
   this.patch('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
   this.del('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
+
+  // Uncomment the following line and the Response import above
+  // Then change the response code to simulate error responses
+  //this.get('/orgs/:org_id/projects', () => new Response(401));
 }

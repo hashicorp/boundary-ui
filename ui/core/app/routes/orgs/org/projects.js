@@ -7,11 +7,7 @@ export default class OrgsOrgProjectsRoute extends Route {
    * Returns all projects from the store.
    * @return {Promise[ProjectModel]}
    */
-  async model() {
-    try {
-      return await this.store.findAll('project');
-    } catch (e) {
-      return [];
-    }
+  model() {
+    return this.store.findAll('project');
   }
 }
