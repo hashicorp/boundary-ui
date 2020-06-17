@@ -6,8 +6,7 @@
   grid-template-areas:
     'header header header header'
     'navigation body body body';
-  // Define 16rem static grid column for navigation
-  grid-template-columns: (sizing.rems(m) * 16) auto 1fr;
+  grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
 
