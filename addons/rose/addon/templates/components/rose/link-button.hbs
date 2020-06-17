@@ -1,33 +1,22 @@
-<LinkTo
-  ...attributes
-  @route={{@route}}
-  class="rose-link-button {{if  @style (concat "rose-button-" @style)}} {{if @iconLeft "has-icon-left"}} {{if @iconRight "has-icon-right"}} {{if @iconOnly "has-icon-only"}}"
-  >
-
-  <span class="rose-button-wrapper">
-    {{#if @iconLeft}}
-      <Rose::Icon
-        @name={{@iconLeft}}
-        @size="medium"
-      />
-    {{/if}}
-
-    <span class="rose-button-body">
+{{#if @model}}
+  <LinkTo
+    ...attributes
+    @route={{if @route @route "index"}}
+    @model={{@model}}
+    class="rose-link-button {{if  @style (concat "rose-button-" @style)}} {{if @iconLeft "has-icon-left"}} {{if @iconRight "has-icon-right"}} {{if @iconOnly "has-icon-only"}}"
+    >
+    <Rose::LinkButton::Body @iconOnly={{@iconOnly}} @iconLeft={{@iconLeft}} @iconRight={{@iconRight}}>
       {{yield}}
-    </span>
-
-    {{#if @iconOnly}}
-      <Rose::Icon
-        @name={{@iconOnly}}
-        @size="medium"
-      />
-    {{/if}}
-
-    {{#if @iconRight}}
-      <Rose::Icon
-        @name={{@iconRight}}
-        @size="medium"
-      />
-    {{/if}}
-  </span>
-</LinkTo>
+    </Rose::LinkButton::Body>
+  </LinkTo>
+{{else}}
+  <LinkTo
+    ...attributes
+    @route={{if @route @route "index"}}
+    class="rose-link-button {{if  @style (concat "rose-button-" @style)}} {{if @iconLeft "has-icon-left"}} {{if @iconRight "has-icon-right"}} {{if @iconOnly "has-icon-only"}}"
+    >
+    <Rose::LinkButton::Body @iconOnly={{@iconOnly}} @iconLeft={{@iconLeft}} @iconRight={{@iconRight}}>
+      {{yield}}
+    </Rose::LinkButton::Body>
+  </LinkTo>
+{{/if}}
