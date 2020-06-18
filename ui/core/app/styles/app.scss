@@ -5,6 +5,8 @@
 
 .rose-nav-sidebar {
   margin-top: sizing.rems(xxl);
+  // Define 16rem static width for sidebar
+  width: sizing.rems(m) * 16;
 }
 
 .rose-form {

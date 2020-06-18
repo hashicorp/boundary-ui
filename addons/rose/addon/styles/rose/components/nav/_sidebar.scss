@@ -3,8 +3,6 @@
 
 .rose-nav-sidebar {
   $threePX: sizing.rems(xxxs) + sizing.rems(xxxxs);
-  // Define 16rem static width for sidebar
-  width: sizing.rems(m) * 16;
 
   .rose-nav-title {
     @include type.type(xs, semibold);
