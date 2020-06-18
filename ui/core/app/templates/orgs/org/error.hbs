@@ -13,27 +13,45 @@
   *                   we don't distinguish it yet
 
 --}}
-
 {{#each @model.errors as |error|}}
-
   {{#if error.isUnauthenticated}}
     {{!-- error.status === 401 --}}
+    <Rose::Message @title={{t 'titles.unauthenticated-error'}} @subtitle={{error.status}} @icon="disabled" as |message|>
+      <message.description>{{error.message}} {{t 'descriptions.unauthenticated-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
   {{/if}}
 
   {{#if error.isForbidden}}
     {{!-- error.status === 403 --}}
+    <Rose::Message @title={{t 'titles.forbidden-error'}} @subtitle={{error.status}} @icon="disabled" as |message|>
+      <message.description>{{error.message}} {{t 'descriptions.forbidden-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
   {{/if}}
 
   {{#if error.isNotFound}}
     {{!-- error.status === 404 --}}
+    <Rose::Message @title={{t 'titles.notfound-error'}} @subtitle={{error.status}} @icon="help-circle-outline" as |message|>
+      <message.description>{{error.message}} {{t 'descriptions.notfound-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
   {{/if}}
 
   {{#if error.isServer}}
     {{!-- error.status === 500 --}}
+    <Rose::Message @title={{t 'titles.server-error'}} @subtitle={{error.status}} @icon="alert-circle-outline" as |message|>
+      <message.description>{{error.message}} {{t 'descriptions.server-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
   {{/if}}
 
   {{#if error.isUnknown}}
-    {{!-- error.status === 🤷 --}}
+    {{!-- error.status === 🤷 everything else --}}
+    <Rose::Message @title={{t 'titles.unknown-error'}} @subtitle={{error.status}} @icon="alert-circle-outline" as |message|>
+      <message.description>{{error.message}} {{t 'descriptions.unknown-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
   {{/if}}
 
 {{/each}}
