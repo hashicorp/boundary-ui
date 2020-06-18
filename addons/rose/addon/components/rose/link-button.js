@@ -13,7 +13,6 @@ import { computed } from '@ember/object';
  */
 export default LinkComponent.extend({
   layout,
-  tagName: 'a',
   classNames: ['rose-link-button'],
   classNameBindings: [
     'linkButtonStyle',
@@ -22,11 +21,6 @@ export default LinkComponent.extend({
     'iconRight:has-icon-right',
   ],
   linkButtonStyle: computed(function () {
-    let styleClassName = '';
-    if (this.style) {
-      styleClassName = `rose-button-${this.style}`;
-    }
-
-    return styleClassName;
+    return this.style ? `rose-button-${this.style}` : '';
   }),
 });
