@@ -57,9 +57,10 @@ export default class CookieSessionStore extends BaseSessionStore {
    * @type {boolean}
    */
   get sessionExists() {
-    const token = this.cookies.exists(this.cookieName);
-    const authenticator = this.authenticatorName;
-    return token && !!authenticator;
+    const tokenExists = this.cookies.exists(this.cookieName);
+    const authenticatorExists =
+      this.cookies.exists(this.authenticatorCookieName);
+    return tokenExists && authenticatorExists;
   }
 
   // =methods
