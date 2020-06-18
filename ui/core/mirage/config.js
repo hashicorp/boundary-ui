@@ -32,6 +32,14 @@ export default function() {
   this.patch('/orgs/:org_id/projects/:id');
   this.del('/orgs/:org_id/projects/:id');
 
+  // Auth & IAM resources
+
+  this.get('/orgs/:org_id/auth-methods');
+  this.post('/orgs/:org_id/auth-methods');
+  this.get('/orgs/:org_id/auth-methods/:id');
+  this.patch('/orgs/:org_id/auth-methods/:id');
+  this.del('/orgs/:org_id/auth-methods/:id');
+
   // Other resources
   // host-catalog
 

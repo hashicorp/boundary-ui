@@ -34,4 +34,9 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   updated_time;
 
+  @attr('boolean', {
+    description: 'Whether the resource is disabled',
+  })
+  disabled;
+
 }
