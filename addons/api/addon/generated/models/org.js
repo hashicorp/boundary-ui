@@ -4,7 +4,7 @@ import { attr } from '@ember-data/model';
 /**
  *
  */
-export default class GeneratedOrganizationModel extends BaseModel {
+export default class GeneratedOrgModel extends BaseModel {
 
   // =attributes
 

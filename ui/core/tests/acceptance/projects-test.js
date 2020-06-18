@@ -10,7 +10,10 @@ module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(() => authenticateSession());
+  hooks.beforeEach(function () {
+    authenticateSession();
+    this.server.create('org');
+  });
 
   test('visiting projects', async function (assert) {
     assert.expect(1);

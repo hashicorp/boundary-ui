@@ -8,6 +8,7 @@ module('Acceptance | breadcrumbs', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let org;
   let project;
   let hostCatalog;
   let projectsURL;
@@ -20,9 +21,10 @@ module('Acceptance | breadcrumbs', function (hooks) {
   let crumbPath;
 
   hooks.beforeEach(function () {
+    org = this.server.create('org');
     project = this.server.create('project');
     hostCatalog = this.server.create('host-catalog');
-    projectsURL = `/orgs/1/projects`;
+    projectsURL = `/orgs/${org.id}/projects`;
     newProjectURL = `${projectsURL}/new`;
     projectURL = `${projectsURL}/${project.id}`;
     hostCatalogsURL = `${projectURL}/host-catalogs`;
@@ -38,7 +40,7 @@ module('Acceptance | breadcrumbs', function (hooks) {
     crumbPath = new URL(find('.rose-nav-breadcrumbs-link:last-child').href).pathname;
     assert.equal(crumbPath, projectURL, 'Last crumb has expected URL.');
     await click(find('.rose-nav-breadcrumbs-link:first-child'));
-    assert.equal(currentURL(), '/orgs/1/projects', 'After navigating via breadcrumbs, we are one level up.');
+    assert.equal(currentURL(), projectsURL, 'After navigating via breadcrumbs, we are one level up.');
   });
 
   test('can navigate via breadcrumbs to projects from new project', async function (assert) {
@@ -48,7 +50,7 @@ module('Acceptance | breadcrumbs', function (hooks) {
     crumbPath = new URL(find('.rose-nav-breadcrumbs-link:last-child').href).pathname;
     assert.equal(crumbPath, newProjectURL, 'Last crumb has expected URL.');
     await click(find('.rose-nav-breadcrumbs-link:first-child'));
-    assert.equal(currentURL(), '/orgs/1/projects', 'After navigating via breadcrumbs, we are one level up.');
+    assert.equal(currentURL(), projectsURL, 'After navigating via breadcrumbs, we are one level up.');
   });
 
   test('can navigate via breadcrumbs to project from host catalogs', async function (assert) {

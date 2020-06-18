@@ -15,17 +15,37 @@ export default function() {
   if (config.api.host) this.passthrough(`${config.api.host}/**`);
   this.passthrough();
 
-  // login:  userpass
-  this.post('/orgs/:org_id/login', loginHandler);
+  // Scope resources
+  // org
+
+  this.get('/orgs');
+  this.post('/orgs');
+  this.get('/orgs/:id');
+  this.patch('/orgs/:id');
+  this.del('/orgs/:id');
 
   // project
+
   this.get('/orgs/:org_id/projects');
   this.post('/orgs/:org_id/projects');
   this.get('/orgs/:org_id/projects/:id');
   this.patch('/orgs/:org_id/projects/:id');
   this.del('/orgs/:org_id/projects/:id');
 
+  // Auth & IAM resources
+
+  // org-level authentication
+  this.post('/orgs/:org_id/login', loginHandler);
+
+  this.get('/orgs/:org_id/auth-methods');
+  this.post('/orgs/:org_id/auth-methods');
+  this.get('/orgs/:org_id/auth-methods/:id');
+  this.patch('/orgs/:org_id/auth-methods/:id');
+  this.del('/orgs/:org_id/auth-methods/:id');
+
+  // Other resources
   // host-catalog
+
   this.get('/orgs/:org_id/projects/:project_id/host-catalogs');
   this.post('/orgs/:org_id/projects/:project_id/host-catalogs');
   this.get('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
