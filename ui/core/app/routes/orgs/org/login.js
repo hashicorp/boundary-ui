@@ -9,6 +9,7 @@ export default class OrgsOrgLoginRoute extends Route.extend(UnauthenticatedRoute
 
   @service session;
   @service notify;
+  @service intl;
 
   // =attributes
 
@@ -35,10 +36,8 @@ export default class OrgsOrgLoginRoute extends Route.extend(UnauthenticatedRoute
     try {
       await this.session.authenticate('authenticator:userpass', creds);
     } catch (e) {
-      this.notify.error(`
-        Sorry, authentication was unsuccessful and we cannot give a reason.
-        Check your credentials and try again.
-      `, { closeAfter: null });
+      const errorMessage = this.intl.t('errors.authentication-failed');
+      this.notify.error(errorMessage, { closeAfter: null });
     }
   }
 

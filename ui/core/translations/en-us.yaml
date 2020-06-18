@@ -28,6 +28,8 @@ form:
     type: Type
     username: Username
     password: Password
+errors:
+  authentication-failed: Sorry, authentication was unsuccessful and we cannot give a reason. Check your credentials and try again.
 dev:
   default-org: Default Org
   menu-item: Menu item
