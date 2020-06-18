@@ -9,6 +9,10 @@ module('Acceptance | host catalogs', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  hooks.beforeEach(function () {
+    this.server.create('org');
+  });
+
   test('visiting host catalogs', async function (assert) {
     assert.expect(1);
     this.server.createList('project', 1);
