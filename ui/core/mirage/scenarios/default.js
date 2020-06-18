@@ -1,14 +1,19 @@
 export default function(server) {
 
-  // Scope resources (org and project) have their relationship modelled.
+  // Scope resources
 
-  server.createList('project', 3);
+  server.createList('org', 3);
+  server.createList('project', 6);
 
-  // For simplicity, other resources have their relationships modelled _except_
-  // their relationships to scope.  These leads to the situation where the UI
-  // displays _all subresources_ as if they belong to _every scope_.  This is
-  // a tradeoff due to the complexity of relationship modelling.
+  // Auth
 
-  server.createList('host-catalog', 3);
+  // Auth methods exist both at the global scope and the org scope.
+  // For simplicity we don't scope our mock auth methods and just return the
+  // same items for request at all scopes.
+  server.createList('auth-method', 3);
+
+  // Other resources
+
+  server.createList('host-catalog', 6);
 
 }

@@ -4,7 +4,7 @@ import { attr } from '@ember-data/model';
 /**
  *
  */
-export default class GeneratedOrganizationModel extends BaseModel {
+export default class GeneratedAuthMethodModel extends BaseModel {
 
   // =attributes
 
@@ -33,5 +33,10 @@ export default class GeneratedOrganizationModel extends BaseModel {
     readOnly: true,
   })
   updated_time;
+
+  @attr('boolean', {
+    description: 'Whether the resource is disabled',
+  })
+  disabled;
 
 }
