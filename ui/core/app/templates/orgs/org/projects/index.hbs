@@ -9,7 +9,9 @@
   </page.header>
 
   <page.actions>
-    <Rose::LinkButton @route="orgs.org.projects.new" @style="primary">{{t 'titles.new'}}</Rose::LinkButton>
+    {{#if @model}}
+      <Rose::LinkButton @route="orgs.org.projects.new" @style="primary">{{t 'titles.new'}}</Rose::LinkButton>
+    {{/if}}
   </page.actions>
 
   <page.body>
@@ -31,9 +33,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.empty-set'}} as |message|>
+        <Rose::Message @title={{t 'titles.projects-welcome'}} as |message|>
           <message.description>
-            {{t 'descriptions.empty-set'}}
+            {{t 'descriptions.projects-welcome'}}
           </message.description>
           <message.link @route="orgs.org.projects.new">
             <Rose::Icon @name="plus-circle-outline" />
