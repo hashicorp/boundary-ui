@@ -12,7 +12,7 @@ Styles supported: primary, secondary, warning, and ghost.
 Disabling link button is not supported as it is an action on form components only.
 
 ```html
-<Rose::LinkButton @style="primary" @iconRight="chevron-right">
+<Rose::LinkButton @route="index" @style="primary" @iconRight="chevron-right">
   Content
 </Rose::LinkButton>
 ```
@@ -21,6 +21,7 @@ Disabling link button is not supported as it is an action on form components onl
   <Story name="Advanced">{{
     template: hbs`
       <Rose::LinkButton
+        @route="index"
         @style={{style}}
         @iconLeft={{iconLeft}}
         @iconRight={{iconRight}}
@@ -67,13 +68,13 @@ Disabling link button is not supported as it is an action on form components onl
 Similar to `Rose::Button`, icon only link button is supported.
 
 ```html
-<Rose::LinkButton @style="primary" @iconOnly="help-circle-outline" />
+<Rose::LinkButton @route="index" @style="primary" @iconOnly="help-circle-outline" />
 ```
 
 <Preview>
   <Story name="Icon Only">{{
     template: hbs`
-    <Rose::LinkButton @style={{style}} @iconOnly={{iconOnly}} />
+    <Rose::LinkButton @route="" @style={{style}} @iconOnly={{iconOnly}} />
     `,
     context: {
       style: select(
