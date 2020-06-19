@@ -6,42 +6,63 @@
 
   <page.header>
     <h2>{{t 'resources.host-catalogs'}}</h2>
+    <p>{{t 'descriptions.host-catalogs'}}</p>
   </page.header>
 
   <page.actions>
-    <Rose::LinkButton @route="orgs.org.projects.project.host-catalogs.new" @style="primary">
-      {{t 'titles.new'}}
-    </Rose::LinkButton>
+    {{#if @model}}
+      <Rose::LinkButton @route="orgs.org.projects.project.host-catalogs.new" @style="primary">
+        {{t 'titles.new'}}
+      </Rose::LinkButton>
+    {{/if}}
   </page.actions>
 
   <page.body>
-    <p>{{t 'descriptions.host-catalogs'}}</p>
 
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.cell>{{t 'form.label.name'}}</row.cell>
-          <row.cell>{{t 'form.label.type'}}</row.cell>
-          <row.cell>{{t 'form.label.description'}}</row.cell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each @model as |hostCatalog|}}
-          <body.row as |row|>
-            <row.cell>
-              <LinkTo
-                @route="orgs.org.projects.project.host-catalogs.host-catalog"
-                @model={{hostCatalog}}
-              >
-                {{hostCatalog.name}}
-              </LinkTo>
-            </row.cell>
-            <row.cell>{{hostCatalog.type}}</row.cell>
-            <row.cell>{{hostCatalog.description}}</row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
+    {{#if @model}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.cell>{{t 'form.label.name'}}</row.cell>
+            <row.cell>{{t 'form.label.type'}}</row.cell>
+            <row.cell>{{t 'form.label.description'}}</row.cell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |hostCatalog|}}
+            <body.row as |row|>
+              <row.cell>
+                <LinkTo
+                  @route="orgs.org.projects.project.host-catalogs.host-catalog"
+                  @model={{hostCatalog}}
+                >
+                  {{hostCatalog.name}}
+                </LinkTo>
+              </row.cell>
+              <row.cell>{{hostCatalog.type}}</row.cell>
+              <row.cell>{{hostCatalog.description}}</row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t 'titles.host-catalogs-welcome'}} as |message|>
+          <message.description>
+            {{t 'descriptions.host-catalogs-welcome'}}
+          </message.description>
+          <message.link @route="orgs.org.projects.project.host-catalogs.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t 'titles.new'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+
   </page.body>
 
 </Rose::Layout::Page>

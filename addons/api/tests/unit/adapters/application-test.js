@@ -38,23 +38,37 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it returns an proper InvalidError from handleResponse', function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     const adapter = this.owner.lookup('adapter:application');
-    let payload = {
+    const payload = {
       status: 400,
       code: 'invalid_argument',
       message: 'The request was invalid.',
     };
-    let handledResponse = adapter.handleResponse(400, {}, payload);
+    const handledResponse = adapter.handleResponse(400, {}, payload);
     assert.ok(handledResponse instanceof InvalidError);
     assert.equal(handledResponse.errors.length, 1);
     assert.equal(handledResponse.message, 'The request was invalid.');
+    assert.ok(handledResponse.errors[0].isInvalid);
+  });
+
+  test('it assigns convenience booleans for error types', function (assert) {
+    assert.expect(6);
+    const adapter = this.owner.lookup('adapter:application');
+    const getResponse = (status) =>
+      adapter.handleResponse(status, {}, { status });
+    assert.ok(getResponse(401).errors[0].isUnauthenticated);
+    assert.ok(getResponse(403).errors[0].isForbidden);
+    assert.ok(getResponse(404).errors[0].isNotFound);
+    assert.ok(getResponse(500).errors[0].isServer);
+    assert.ok(getResponse(0).errors[0].isUnknown);
+    assert.ok(getResponse(false).errors[0].isUnknown);
   });
 
   test('it returns field-level errors in InvalidError from handleResponse', function (assert) {
     assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
-    let payload = {
+    const payload = {
       status: 400,
       code: 'invalid_argument',
       message: 'The request was invalid.',
@@ -62,7 +76,7 @@ module('Unit | Adapter | application', function (hooks) {
         fields: [{ name: 'name', message: 'Name is wrong.' }],
       },
     };
-    let handledResponse = adapter.handleResponse(400, {}, payload);
+    const handledResponse = adapter.handleResponse(400, {}, payload);
     assert.equal(
       handledResponse.errors.length,
       2,

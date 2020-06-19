@@ -4,6 +4,7 @@ import { get } from '@ember/object';
 import { InvalidError } from '@ember-data/adapter/error';
 import { dasherize } from '@ember/string';
 import { pluralize } from 'ember-inflector';
+import { isArray } from '@ember/array';
 
 export default class ApplicationAdapter extends RESTAdapter {
   // =attributes
@@ -92,6 +93,53 @@ export default class ApplicationAdapter extends RESTAdapter {
   }
 
   /**
+   * Add convenience booleans to each error within the errors list indicating
+   * the type of error that occurred. This is useful in downstream templates,
+   * e.g. `{{if error.isForbidden}}`.
+   *
+   * Error booleans are attached based on the error status code:
+   *
+   *   - `401 isUnauthenticated`:  the session isn't authenticated
+   *   - `403 isForbidden`:  the session is authenticated but does not have
+   *                         permission to perform the requested action
+   *   - `404 isNotFound`:  the requested resource could not be found
+   *   - `500 isServer`:  an internal server error occurred
+   *   - `isUnknown`:  an error occurred, but we don't know which or
+   *                   we don't distinguish it yet
+   *
+   * @override
+   * @method normalizeErrorResponse
+   * @param  {Number} status
+   * @param  {Object} headers
+   * @param  {Object} payload
+   * @return {Array} errors payload
+   */
+  normalizeErrorResponse(/*status, headers, payload*/) {
+    const errors = super.normalizeErrorResponse(...arguments);
+    if (isArray(errors)) {
+      errors.forEach(error => {
+        switch (Number(error.status)) {
+          case 401:
+            error.isUnauthenticated = true;
+            break;
+          case 403:
+            error.isForbidden = true;
+            break;
+          case 404:
+            error.isNotFound = true;
+            break;
+          case 500:
+            error.isServer = true;
+            break;
+          default:
+            error.isUnknown = true;
+        }
+      });
+    }
+    return errors;
+  }
+
+  /**
    * Normalizes the errors found in a payload from our API into JSON API
    * error format.
    *
@@ -103,6 +151,7 @@ export default class ApplicationAdapter extends RESTAdapter {
     // Normalize the primary error message into "base", which is an error
     // that applies to the whole model instance
     const baseError = {
+      isInvalid: true,
       status: payload.source,
       code: payload.code,
       detail: payload.message,

@@ -36,7 +36,7 @@ export default class OrgsOrgLoginRoute extends Route.extend(UnauthenticatedRoute
     try {
       await this.session.authenticate('authenticator:userpass', creds);
     } catch (e) {
-      const errorMessage = this.intl.t('errors.authentication-failed');
+      const errorMessage = this.intl.t('errors.titles.authentication-failed');
       this.notify.error(errorMessage, { closeAfter: null });
     }
   }
