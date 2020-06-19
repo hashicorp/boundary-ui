@@ -18,7 +18,9 @@ Router.map(function () {
         });
         this.route('new');
       });
-      this.route('login');
+      this.route('login', function() {
+        this.route('method', {path: ':auth_method_id'});
+      });
     });
   });
 });

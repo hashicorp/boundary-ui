@@ -1,23 +1,9 @@
-<Rose::Form
-  @onSubmit={{route-action "authenticate" this.username this.password}}
-  @cancel={{false}}
-  as |form|
->
+<Rose::Nav::Tabs as |nav|>
+  {{#each @model as |authMethod|}}
+    <nav.link @route="orgs.org.login.method" @model={{authMethod}}>
+      {{authMethod.type}}
+    </nav.link>
+  {{/each}}
+</Rose::Nav::Tabs>
 
-  <form.input
-    name="username"
-    @type="text"
-    @value={{this.username}}
-    @label={{t "form.label.username"}} />
-
-  <form.input
-    name="password"
-    @type="password"
-    @value={{this.password}}
-    @label={{t "form.label.password"}} />
-
-  <form.actions
-    @submitText={{t "actions.save"}}
-    @showCancel={{false}} />
-
-</Rose::Form>
+{{outlet}}

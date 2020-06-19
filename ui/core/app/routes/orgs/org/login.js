@@ -1,15 +1,17 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
 
+/**
+ * The org-scoped login route has two primary responsibilities:
+ *
+ * 1. If already authenticated, redirect to the org's projects index.
+ * 2. If unauthenticated, load all auth methods and display method navigation.
+ *
+ * Actual authentication occurs in the `orgs.org.login.method` route, which
+ * corresponds to a specific auth method.
+ *
+ */
 export default class OrgsOrgLoginRoute extends Route.extend(UnauthenticatedRouteMixin) {
-
-  // =services
-
-  @service session;
-  @service notify;
-  @service intl;
 
   // =attributes
 
@@ -20,25 +22,10 @@ export default class OrgsOrgLoginRoute extends Route.extend(UnauthenticatedRoute
    */
   routeIfAlreadyAuthenticated = 'orgs.org.projects';
 
-  // =actions
+  // =methods
 
-  /**
-   * Delegates authentication to the `userpass` authenticator.
-   * If authentication fails, notifies with an alert.
-   */
-  @action
-  async authenticate(username, password) {
-    const creds = { username, password };
-    this.controller.setProperties({
-      username: null,
-      password: null
-    });
-    try {
-      await this.session.authenticate('authenticator:userpass', creds);
-    } catch (e) {
-      const errorMessage = this.intl.t('errors.titles.authentication-failed');
-      this.notify.error(errorMessage, { closeAfter: null });
-    }
+  model() {
+    return this.store.findAll('auth-method');
   }
 
 }
