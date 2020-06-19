@@ -43,10 +43,13 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @param {string} password
    * @return {Promise}
    */
-  async authenticate({ username, password }) {
+  async authenticate(creds, authMethodID) {
     const response = await fetch(this.authEndpoint, {
       method: 'post',
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({
+        auth_method_id: authMethodID,
+        credentials: creds
+      })
     });
     return response.status < 400 ? resolve() : reject();
   }

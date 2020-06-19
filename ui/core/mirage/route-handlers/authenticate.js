@@ -11,8 +11,8 @@ import { Response } from 'miragejs';
  * @return {Response}
  */
 export default function authenticateHandler(schema, request) {
-  const { username } = JSON.parse(request.requestBody);
-  if (username === 'error') {
+  const payload = JSON.parse(request.requestBody);
+  if (payload.credentials.username === 'error') {
     return new Response(400);
   } else {
     const cookieName = config.auth.passwordCookieName;

@@ -13,9 +13,31 @@ module('Unit | Authenticator | password', function (hooks) {
     this.server.post(authenticator.authEndpoint, () => {
       return new Response(200);
     });
-    await authenticator.authenticate('username', 'password').then(() => {
+    await authenticator.authenticate({}).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
+  });
+
+  test('it authenticates with the expected payload', async function (assert) {
+    assert.expect(1);
+    const authenticator = this.owner.lookup('authenticator:password');
+    this.server.post(authenticator.authEndpoint, (schema, request) => {
+      const json = JSON.parse(request.requestBody);
+      assert.deepEqual(json, {
+        auth_method_id: '123',
+        credentials: {
+          username: 'foo',
+          password: 'bar'
+        }
+      });
+      return new Response(200);
+    });
+    const creds = {
+      username: 'foo',
+      password: 'bar'
+    };
+    const authMethodID = '123';
+    await authenticator.authenticate(creds, authMethodID);
   });
 
   test('it rejects if the endpoint sends an error status code', async function (assert) {
@@ -24,7 +46,7 @@ module('Unit | Authenticator | password', function (hooks) {
     this.server.post(authenticator.authEndpoint, () => {
       return new Response(400);
     });
-    await authenticator.authenticate('username', 'password').catch(() => {
+    await authenticator.authenticate({}).catch(() => {
       assert.ok(true, 'authentication failed');
     });
   });
