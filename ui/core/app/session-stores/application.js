@@ -13,6 +13,6 @@ export default class ApplicationSessionStore extends CookieSessionStore {
   /**
    * @type {string}
    */
-  cookieName = config.auth.userpassCookieName;
+  cookieName = config.auth.passwordCookieName;
 
 }

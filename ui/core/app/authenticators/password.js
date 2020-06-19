@@ -1,4 +1,4 @@
-import BaseUserPassAuthenticator from 'auth/authenticators/userpass';
+import BasePasswordAuthenticator from 'auth/authenticators/password';
 import { inject as service } from '@ember/service';
 import config from '../config/environment';
 
@@ -6,7 +6,7 @@ import config from '../config/environment';
  * A username/password authenticator that authenticates with an
  * org-scoped endpoint.
  */
-export default class UserPassAuthenticator extends BaseUserPassAuthenticator {
+export default class PasswordAuthenticator extends BasePasswordAuthenticator {
 
   // =services
 

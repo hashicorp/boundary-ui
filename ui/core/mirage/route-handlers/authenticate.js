@@ -15,7 +15,7 @@ export default function authenticateHandler(schema, request) {
   if (username === 'error') {
     return new Response(400);
   } else {
-    const cookieName = config.auth.userpassCookieName;
+    const cookieName = config.auth.passwordCookieName;
     const cookieValue = v1();
     const cookiePath = config.rootURL;
     document.cookie = `${cookieName}=${cookieValue};path=${cookiePath}`;

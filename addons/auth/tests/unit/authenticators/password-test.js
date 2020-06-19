@@ -3,13 +3,13 @@ import { setupTest } from 'ember-qunit';
 import { Response } from 'miragejs';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
-module('Unit | Authenticator | userpass', function (hooks) {
+module('Unit | Authenticator | password', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
   test('it authenticates to the specified authEndpoint', async function (assert) {
     assert.expect(1);
-    const authenticator = this.owner.lookup('authenticator:userpass');
+    const authenticator = this.owner.lookup('authenticator:password');
     this.server.post(authenticator.authEndpoint, () => {
       return new Response(200);
     });
@@ -20,7 +20,7 @@ module('Unit | Authenticator | userpass', function (hooks) {
 
   test('it rejects if the endpoint sends an error status code', async function (assert) {
     assert.expect(1);
-    const authenticator = this.owner.lookup('authenticator:userpass');
+    const authenticator = this.owner.lookup('authenticator:password');
     this.server.post(authenticator.authEndpoint, () => {
       return new Response(400);
     });

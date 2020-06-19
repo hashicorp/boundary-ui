@@ -16,13 +16,13 @@ import fetch from 'fetch';
  *
  * @example
  *
- *   import UserpassAuthenticator from 'auth/authenticators/userpass';
- *   export default class ApplicationAuthenticator extends UserpassAuthenticator {
+ *   import PasswordAuthenticator from 'auth/authenticators/password';
+ *   export default class ApplicationAuthenticator extends PasswordAuthenticator {
  *     authEndpoint = '/api/authenticate';
  *   }
  *
  */
-export default class UserpassAuthenticator extends BaseAuthenticator {
+export default class PasswordAuthenticator extends BaseAuthenticator {
   // =methods
 
   /**

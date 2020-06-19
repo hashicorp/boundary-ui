@@ -18,7 +18,7 @@ export default class OrgsOrgAuthenticateMethodRoute extends Route {
   // =actions
 
   /**
-   * Delegates authentication to the `userpass` authenticator.
+   * Delegates authentication to the `password` authenticator.
    * If authentication fails, notifies with an alert.
    */
   @action
@@ -28,7 +28,7 @@ export default class OrgsOrgAuthenticateMethodRoute extends Route {
       password: null
     });
     try {
-      await this.session.authenticate('authenticator:userpass', creds);
+      await this.session.authenticate('authenticator:password', creds);
     } catch (e) {
       const errorMessage = this.intl.t('errors.titles.authentication-failed');
       this.notify.error(errorMessage, { closeAfter: null });
