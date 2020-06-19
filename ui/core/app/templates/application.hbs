@@ -14,7 +14,7 @@
         <nav.link @route="index">{{t 'dev.section'}}</nav.link>
       </header.nav>
       --}}
-      
+
       {{#if this.session.isAuthenticated}}
         <header.utilities as |utilities|>
           <utilities.dropdown
@@ -23,7 +23,7 @@
             @icon="user-square-fill" as |dropdown|
           >
             <dropdown.button {{on "click" (route-action "invalidateSession")}}>
-              {{t 'actions.logout'}}
+              {{t 'actions.deauthenticate'}}
             </dropdown.button>
           </utilities.dropdown>
         </header.utilities>

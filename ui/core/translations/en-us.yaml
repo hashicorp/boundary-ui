@@ -4,7 +4,7 @@ actions:
   dismiss: Dismiss
   save: Save
   authenticate: Authenticate
-  logout: Logout
+  deauthenticate: Deauthenticate
 resources:
   projects: Projects
   project: Project
