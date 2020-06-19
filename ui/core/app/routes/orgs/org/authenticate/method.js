@@ -7,7 +7,7 @@ import { action } from '@ember/object';
  * authentication UI and delegating authentication to the proper
  * Ember Simple Auth authenticator.
  */
-export default class OrgsOrgLoginMethodRoute extends Route {
+export default class OrgsOrgAuthenticateMethodRoute extends Route {
 
   // =services
 

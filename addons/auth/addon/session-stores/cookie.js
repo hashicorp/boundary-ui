@@ -80,8 +80,8 @@ export default class CookieSessionStore extends BaseSessionStore {
   /**
    * While the primary session cookie is persisted by the server, not the
    * application, we still need to "remember" the name of the authenticator
-   * used to login to properly restore a session.  Thus when this method is
-   * called with an authenticator name, we save it into a cookie with name
+   * used to authenticate to properly restore a session.  Thus when this method
+   * is called with an authenticator name, we save it into a cookie with name
    * `authenticatorCookieName`.  If this method is called without an
    * authenticator, all related cookies are cleared.
    * @param {object} data
@@ -101,7 +101,7 @@ export default class CookieSessionStore extends BaseSessionStore {
   /**
    * If a session exists (as reported by `sessionExists`), then this method
    * resolves with the authentication object expected by Ember Simple Auth,
-   * which must specify the name of the authenticator used to login.
+   * which must specify the name of the authenticator used to authenticate.
    *
    * If the session does not exist, all related cookies are cleared and this
    * method rejects.

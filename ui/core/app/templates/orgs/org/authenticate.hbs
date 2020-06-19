@@ -1,6 +1,6 @@
 <Rose::Nav::Tabs as |nav|>
   {{#each @model as |authMethod|}}
-    <nav.link @route="orgs.org.login.method" @model={{authMethod}}>
+    <nav.link @route="orgs.org.authenticate.method" @model={{authMethod}}>
       {{authMethod.type}}
     </nav.link>
   {{/each}}

@@ -18,7 +18,7 @@ import fetch from 'fetch';
  *
  *   import UserpassAuthenticator from 'auth/authenticators/userpass';
  *   export default class ApplicationAuthenticator extends UserpassAuthenticator {
- *     authEndpoint = '/api/login';
+ *     authEndpoint = '/api/authenticate';
  *   }
  *
  */

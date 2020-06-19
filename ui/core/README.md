@@ -73,7 +73,7 @@ These environment variables may be used to customized the build.
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 | `API_HOST` | | The host of the API, if different than UI (e.g. https://example.net:1234). |
-| `USERPASS_COOKIE_NAME` | token-share-1 | The name of the visible cookie sent by the server after successful login. |
+| `USERPASS_COOKIE_NAME` | token-share-1 | The name of the visible cookie sent by the server after successful authenticate. |
 
 ### Running Tests
 

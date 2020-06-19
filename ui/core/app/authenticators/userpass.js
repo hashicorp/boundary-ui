@@ -15,14 +15,14 @@ export default class UserPassAuthenticator extends BaseUserPassAuthenticator {
   // =attributes
 
   /**
-   * The endpoint for login is scoped to org and depends on the configured
-   * host and namespace.
+   * The endpoint for authenticate is scoped to org and depends on the
+   * configured host and namespace.
    * @type {string}
    */
   get authEndpoint() {
     const { namespace } = config.api;
     const orgId = this.scope.org.id;
-    return `/${namespace}/orgs/${orgId}/login`;
+    return `/${namespace}/orgs/${orgId}/authenticate`;
   }
 
 }

@@ -3,7 +3,7 @@ actions:
   delete: Delete
   dismiss: Dismiss
   save: Save
-  login: Login
+  authenticate: Authenticate
   logout: Logout
 resources:
   projects: Projects

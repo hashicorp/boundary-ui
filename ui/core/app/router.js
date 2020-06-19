@@ -18,10 +18,10 @@ Router.map(function () {
         });
         this.route('new');
       });
-      this.route('login', function() {
+      this.route('authenticate', function() {
         this.route('method', {path: ':auth_method_id'});
       });
     });
-    this.route('login', function() {});
+    this.route('authenticate', function() {});
   });
 });

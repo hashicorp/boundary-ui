@@ -8,7 +8,7 @@ export default class OrgsOrgProjectsRoute extends Route.extend(AuthenticatedRout
   /**
    * @type {string}
    */
-  authenticationRoute = 'orgs.org.login';
+  authenticationRoute = 'orgs.org.authenticate';
 
   // =methods
 

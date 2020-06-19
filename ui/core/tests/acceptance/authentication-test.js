@@ -20,13 +20,13 @@ module('Acceptance | authentication', function(hooks) {
     invalidateSession();
     org = this.server.create('org');
     method = this.server.create('auth-method');
-    orgsAuthURL = '/orgs/login';
-    authURL = `/orgs/${org.id}/login`
-    authMethodURL = `/orgs/${org.id}/login/${method.id}`
+    orgsAuthURL = '/orgs/authenticate';
+    authURL = `/orgs/${org.id}/authenticate`
+    authMethodURL = `/orgs/${org.id}/authenticate/${method.id}`
     projectsURL = `/orgs/${org.id}/projects`
   });
 
-  test('visiting orgs login redirects to first org auth route (and thus its first auth method) while not authenticated', async function(assert) {
+  test('visiting orgs authenticate redirects to first org auth route (and thus its first auth method) while not authenticated', async function(assert) {
     assert.expect(2);
     await visit(orgsAuthURL);
     await a11yAudit();
@@ -34,7 +34,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), authMethodURL);
   });
 
-  test('visiting orgs login without available orgs shows a message', async function(assert) {
+  test('visiting orgs authenticate without available orgs shows a message', async function(assert) {
     assert.expect(3);
     org.destroy();
     await visit(orgsAuthURL);
@@ -44,7 +44,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.ok(find('.rose-message'));
   });
 
-  test('visiting org login without available auth methods shows a message', async function(assert) {
+  test('visiting org authenticate without available auth methods shows a message', async function(assert) {
     assert.expect(3);
     method.destroy();
     await visit(authURL);
@@ -54,7 +54,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.ok(find('.rose-message'));
   });
 
-  test('visiting org login redirects to first auth method while not authenticated', async function(assert) {
+  test('visiting org authenticate redirects to first auth method while not authenticated', async function(assert) {
     assert.expect(2);
     await visit(authURL);
     await a11yAudit();
@@ -62,7 +62,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), authMethodURL);
   });
 
-  test('visiting login method while not authenticated', async function(assert) {
+  test('visiting authenticate method while not authenticated', async function(assert) {
     assert.expect(2);
     await visit(authMethodURL);
     await a11yAudit();
@@ -70,7 +70,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), authMethodURL);
   });
 
-  test('visiting non-login while not authenticated redirects to first auth method', async function(assert) {
+  test('visiting non-authenticate while not authenticated redirects to first auth method', async function(assert) {
     assert.expect(2);
     await visit(projectsURL);
     await a11yAudit();
@@ -78,7 +78,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), authMethodURL);
   });
 
-  test('visiting login while authenticated redirects', async function(assert) {
+  test('visiting authenticate while authenticated redirects', async function(assert) {
     assert.expect(2);
     authenticateSession();
     await visit(authMethodURL);
@@ -86,7 +86,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), projectsURL);
   });
 
-  test('can login while unauthenticated', async function(assert) {
+  test('can authenticate while unauthenticated', async function(assert) {
     assert.expect(4);
     await visit(authMethodURL);
     assert.notOk(currentSession().isAuthenticated);
@@ -102,12 +102,12 @@ module('Acceptance | authentication', function(hooks) {
     assert.expect(5);
     await visit(authMethodURL);
     assert.notOk(currentSession().isAuthenticated, 'Session is not authenticated');
-    assert.equal(currentURL(), authMethodURL, 'Login is current page');
+    assert.equal(currentURL(), authMethodURL, 'Authenticate is current page');
     await fillIn('[name="username"]', 'error');
     await fillIn('[name="password"]', 'error');
     await click('[type="submit"]');
     assert.notOk(currentSession().isAuthenticated, 'Session is still not authenticated');
-    assert.equal(currentURL(), authMethodURL, 'Login is still current page');
+    assert.equal(currentURL(), authMethodURL, 'Authenticate is still current page');
     assert.ok(find('.rose-notification'), 'Notification is visible');
   });
 

@@ -10,7 +10,7 @@ import { Response } from 'miragejs';
  * @param {object} request
  * @return {Response}
  */
-export default function loginHandler(schema, request) {
+export default function authenticateHandler(schema, request) {
   const { username } = JSON.parse(request.requestBody);
   if (username === 'error') {
     return new Response(400);

@@ -2,16 +2,16 @@ import Route from '@ember/routing/route';
 import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
 
 /**
- * The org-scoped login route has two primary responsibilities:
+ * The org-scoped authenticate route has two primary responsibilities:
  *
  * 1. If already authenticated, redirect to the org's projects index.
  * 2. If unauthenticated, load all auth methods and display method navigation.
  *
- * Actual authentication occurs in the `orgs.org.login.method` route, which
- * corresponds to a specific auth method.
+ * Actual authentication occurs in the `orgs.org.authenticate.method` route,
+ * which corresponds to a specific auth method.
  *
  */
-export default class OrgsOrgLoginRoute extends Route.extend(UnauthenticatedRouteMixin) {
+export default class OrgsOrgAuthenticateRoute extends Route.extend(UnauthenticatedRouteMixin) {
 
   // =attributes
 

@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-export default class OrgsLoginRoute extends Route {
+export default class OrgsAuthenticateRoute extends Route {
 
   // =methods
 
@@ -10,7 +10,7 @@ export default class OrgsLoginRoute extends Route {
    */
   redirect(orgs) {
     if (orgs.firstObject) {
-      this.transitionTo('orgs.org.login', orgs.firstObject);
+      this.transitionTo('orgs.org.authenticate', orgs.firstObject);
     }
   }
 

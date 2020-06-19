@@ -1,5 +1,5 @@
 import config from '../config/environment';
-import loginHandler from './route-handlers/login';
+import authenticateHandler from './route-handlers/authenticate';
 // import { Response } from 'miragejs';
 
 export default function() {
@@ -36,7 +36,7 @@ export default function() {
   // Auth & IAM resources
 
   // org-level authentication
-  this.post('/orgs/:org_id/login', loginHandler);
+  this.post('/orgs/:org_id/authenticate', authenticateHandler);
 
   this.get('/orgs/:org_id/auth-methods');
   this.post('/orgs/:org_id/auth-methods');
