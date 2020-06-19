@@ -36,7 +36,8 @@ export default function() {
   // Auth & IAM resources
 
   // org-level authentication
-  this.post('/orgs/:org_id/authenticate', authenticateHandler);
+  // eslint-disable-next-line no-useless-escape
+  this.post('/orgs/:org_id\:authenticate', authenticateHandler);
 
   this.get('/orgs/:org_id/auth-methods');
   this.post('/orgs/:org_id/auth-methods');
