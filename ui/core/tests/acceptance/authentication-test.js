@@ -11,6 +11,7 @@ module('Acceptance | authentication', function(hooks) {
 
   let org;
   let method;
+  let orgsAuthURL;
   let authURL;
   let authMethodURL;
   let projectsURL;
@@ -19,9 +20,28 @@ module('Acceptance | authentication', function(hooks) {
     invalidateSession();
     org = this.server.create('org');
     method = this.server.create('auth-method');
+    orgsAuthURL = '/orgs/login';
     authURL = `/orgs/${org.id}/login`
     authMethodURL = `/orgs/${org.id}/login/${method.id}`
     projectsURL = `/orgs/${org.id}/projects`
+  });
+
+  test('visiting orgs login redirects to first org auth route (and thus its first auth method) while not authenticated', async function(assert) {
+    assert.expect(2);
+    await visit(orgsAuthURL);
+    await a11yAudit();
+    assert.notOk(currentSession().isAuthenticated);
+    assert.equal(currentURL(), authMethodURL);
+  });
+
+  test('visiting orgs login without available orgs shows a message', async function(assert) {
+    assert.expect(3);
+    org.destroy();
+    await visit(orgsAuthURL);
+    await a11yAudit();
+    assert.notOk(currentSession().isAuthenticated);
+    assert.equal(currentURL(), orgsAuthURL);
+    assert.ok(find('.rose-message'));
   });
 
   test('visiting org login without available auth methods shows a message', async function(assert) {

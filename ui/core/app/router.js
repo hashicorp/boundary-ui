@@ -22,5 +22,6 @@ Router.map(function () {
         this.route('method', {path: ':auth_method_id'});
       });
     });
+    this.route('login', function() {});
   });
 });
