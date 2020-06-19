@@ -24,8 +24,20 @@ export default class OrgsOrgAuthenticateRoute extends Route.extend(Unauthenticat
 
   // =methods
 
+  /**
+   * Returns all auth methods from the store.
+   * @return {Promise[AuthMethod]}
+   */
   model() {
     return this.store.findAll('auth-method');
+  }
+
+  /**
+   * Adds the current org to the controller scope, for display to users.
+   */
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.set('org', this.modelFor('orgs.org'));
   }
 
 }

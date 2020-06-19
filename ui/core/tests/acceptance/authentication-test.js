@@ -26,11 +26,13 @@ module('Acceptance | authentication', function(hooks) {
     projectsURL = `/orgs/${org.id}/projects`
   });
 
-  test('visiting orgs authenticate redirects to first org auth route (and thus its first auth method) while not authenticated', async function(assert) {
-    assert.expect(2);
+  test('can navigate from orgs list to org-specific auth methods list (which auto-redirects to first auth method)', async function(assert) {
+    assert.expect(3);
     await visit(orgsAuthURL);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
+    assert.equal(currentURL(), orgsAuthURL);
+    await click('main a');
     assert.equal(currentURL(), authMethodURL);
   });
 
