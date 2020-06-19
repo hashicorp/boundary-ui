@@ -1,5 +1,6 @@
 import { RestSerializer } from 'ember-cli-mirage';
 import { underscore } from '@ember/string';
+import { isArray } from '@ember/array';
 
 /**
  * Manages serialization/normalization of data into and out of the mock API.
@@ -38,7 +39,7 @@ export default RestSerializer.extend({
   serialize() {
     let json = RestSerializer.prototype.serialize.apply(this, arguments);
     // If array, root it under a standard `items` key
-    if (json.length) json = {items: json};
+    if (isArray(json)) json = {items: json};
     return json;
   },
 

@@ -9,13 +9,12 @@ export default class OrgsOrgRoute extends Route {
   // =methods
 
   /**
-   * Returns a mock organization object containing the specified ID.
-   * TODO:  load a real org instance from the API.
+   * Returns an org by id.
    * @param {object} params
-   * @return {object}
+   * @return {Promise{OrgModel}}
    */
   model({ org_id: id }) {
-    return { id };
+    return this.store.findRecord('org', id);
   }
 
   /**

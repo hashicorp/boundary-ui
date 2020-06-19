@@ -9,6 +9,10 @@ module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  hooks.beforeEach(function () {
+    this.server.create('org');
+  });
+
   test('visiting projects', async function (assert) {
     assert.expect(1);
     this.server.createList('project', 1);
