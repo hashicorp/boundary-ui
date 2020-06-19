@@ -5,7 +5,6 @@ actions:
   save: Save
   login: Login
   logout: Logout
-  help: Need help?
 resources:
   projects: Projects
   project: Project
@@ -18,6 +17,7 @@ titles:
   empty-set: No Items Yet
   projects-welcome: Welcome to Projects
   host-catalogs-welcome: Welcome to Host Catalogs
+  help: Need help?
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
