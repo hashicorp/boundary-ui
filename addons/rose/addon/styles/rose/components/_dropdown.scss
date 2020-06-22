@@ -1,0 +1,111 @@
+@use '../variables/sizing';
+@use '../utilities/type';
+@use '../utilities/dropdown';
+
+.rose-dropdown {
+  position: relative;
+  display: inline-block;
+
+  .rose-dropdown-trigger {
+    @include type.type(button, semibold);
+    cursor: default;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    margin-right: sizing.rems(s);
+    padding: 0 sizing.rems(xl) 0 sizing.rems(l);
+    $lineHeight: 36 / 13;
+    line-height: $lineHeight;
+
+    //color: var(--subtle);
+    background: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>")
+      no-repeat right sizing.rems(s) center;
+    background-size: sizing.rems(m);
+
+    &:hover {
+      background-color: var(--ui-gray-subtler-5);
+    }
+
+    &:not(.has-icon-only) .rose-icon:first-child {
+      margin-left: -(sizing.rems(xs));
+      margin-right: sizing.rems(xxs);
+    }
+
+    &.has-icon-only {
+      padding-right: sizing.rems(l);
+      padding-left: sizing.rems(s);
+      background-position: right sizing.rems(xs) center;
+
+      .rose-dropdown-trigger-text {
+        position: absolute;
+        top: -1000px;
+        left: -1000px;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+    }
+
+    // Hide default twistie triangle
+    // Webkit / Chromium
+    &::-webkit-details-marker {
+      display: none;
+    }
+    // Firefox
+    list-style-type: none;
+    &::marker {
+      display: none;
+    }
+  }
+
+  .rose-dropdown-trigger:active,
+  &[open] > .rose-dropdown-trigger {
+    background-color: var(--ui-gray-subtler-4);
+  }
+
+  .rose-dropdown-content {
+    $xs: sizing.rems(xs); // 8
+    $xxs: sizing.rems(xxs); // 4
+    position: absolute;
+    padding: $xxs 0;
+    border: 1px solid var(--ui-gray-subtler-2);
+    border-radius: sizing.rems(xxxs);
+    background: var(--subtle);
+    box-shadow: 0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3)),
+      0 $xxs $xs rgba(var(--stark-components), var(--opacity-4));
+    z-index: 99;
+  }
+
+  &.dropdown-right {
+    .rose-dropdown-content {
+      right: 0;
+    }
+  }
+
+  .rose-dropdown-link,
+  .rose-button-dropdown {
+    @include type.type(m, normal);
+    display: block;
+    // Targeting min-width of 200
+    min-width: (sizing.rems(m) + sizing.rems(xxs)) * 10;
+    padding: 0 sizing.rems(s);
+    margin: 0;
+    border: 0;
+    color: var(--stark);
+    background-color: transparent;
+    // target line height is 36, which is not a standard line height for this
+    // font size
+    $lineHeight: 36 / 16;
+    line-height: $lineHeight;
+    text-align: left;
+    text-decoration: none;
+
+    &:hover {
+      background-color: var(--ui-gray-subtler-4);
+    }
+  }
+
+  .rose-button-dropdown {
+    width: 100%;
+  }
+}
