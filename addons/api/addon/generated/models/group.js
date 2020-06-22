@@ -2,9 +2,9 @@ import BaseModel from '../../models/base';
 import { attr } from '@ember-data/model';
 
 /**
- * Role contains all fields related to a Role resource
- */
-export default class GeneratedRoleModel extends BaseModel {
+ * Group contains all fields related to a Group resource
+*/
+export default class GeneratedGroupModel extends BaseModel {
   // = attributes
 
   @attr('string', {
