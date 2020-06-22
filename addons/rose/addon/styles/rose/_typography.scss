@@ -43,3 +43,8 @@ h3,
 p {
   margin-bottom: sizing.rems(m);
 }
+
+b,
+strong {
+  font-weight: typography.font-weight(bold);
+}

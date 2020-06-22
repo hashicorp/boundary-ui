@@ -5,6 +5,8 @@ actions:
   save: Save
   authenticate: Authenticate
   deauthenticate: Deauthenticate
+  choose-org: Choose Org
+  choose-different-org: Choose a Different Org
 resources:
   projects: Projects
   project: Project
@@ -57,6 +59,9 @@ auth:
     no-orgs: No organizations were found.  To authenticate, ask your administrator to create an organization and grant you access.
     no-methods: No authentication methods were found for this organization.  Switch organizations and try again.
     choose-org: Choose an organization to authenticate.
+    authenticating-with-org: "You're authenticating with {name}."
+  method-types:
+    password: Password
 dev:
   default-org: Default Org
   menu-item: Menu item

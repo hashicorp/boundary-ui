@@ -36,6 +36,16 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), authMethodURL);
   });
 
+  test('can navigate among org-specific auth methods (to the same route with a different org)', async function(assert) {
+    assert.expect(2);
+    const anotherOrg = this.server.create('org');
+    await visit(authMethodURL);
+    await a11yAudit();
+    assert.equal(currentURL(), authMethodURL);
+    await click('.rose-dropdown-link:nth-child(2)');
+    assert.equal(currentURL(), `/orgs/${anotherOrg.id}/authenticate/${method.id}`);
+  });
+
   test('visiting orgs authenticate without available orgs shows a message', async function(assert) {
     assert.expect(3);
     org.destroy();

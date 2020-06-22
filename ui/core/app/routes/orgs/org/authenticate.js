@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
+import { hash } from 'rsvp';
 
 /**
  * The org-scoped authenticate route has two primary responsibilities:
@@ -25,19 +26,16 @@ export default class OrgsOrgAuthenticateRoute extends Route.extend(Unauthenticat
   // =methods
 
   /**
-   * Returns all auth methods from the store.
-   * @return {Promise[AuthMethod]}
+   * Returns all auth methods for the current org, along with the current org
+   * and all orgs (for org navigation).
+   * @return {Promise} `{org, orgs, authMethods}`
    */
   model() {
-    return this.store.findAll('auth-method');
-  }
-
-  /**
-   * Adds the current org to the controller scope, for display to users.
-   */
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.set('org', this.modelFor('orgs.org'));
+    return hash({
+      org: this.modelFor('orgs.org'),
+      orgs: this.modelFor('orgs'),
+      authMethods: this.store.findAll('auth-method')
+    });
   }
 
 }

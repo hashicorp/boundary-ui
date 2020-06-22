@@ -1,4 +1,5 @@
 @use 'rose/variables/sizing';
+@use 'rose/variables/media';
 
 @import 'rose';
 @import 'notify';
@@ -16,5 +17,13 @@
     .rose-form-input-field {
       width: 100%;
     }
+  }
+}
+
+#authentication-view {
+  width: 30rem;
+
+  @media (max-width: media.width(small)) {
+    width: 100%;
   }
 }

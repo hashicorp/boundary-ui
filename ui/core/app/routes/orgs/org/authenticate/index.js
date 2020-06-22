@@ -8,7 +8,7 @@ export default class OrgsOrgAuthenticateIndexRoute extends Route {
    * Redirects to the auth method route using the first auth method instance.
    * @param {[AuthMethodModel]} authMethods
    */
-  redirect(authMethods) {
+  redirect({ authMethods }) {
     if (authMethods.firstObject) {
       this.transitionTo('orgs.org.authenticate.method',
         authMethods.firstObject);
