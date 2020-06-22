@@ -72,4 +72,17 @@ module('Integration | Component | rose/dropdown', function (hooks) {
     await click('#wrapper');
     assert.notOk(find('#dropdown').open);
   });
+
+  test('it is closed when inside content is clicked', async function (assert) {
+    await render(hbs`
+      <Rose::Dropdown as |dropdown|>
+        <dropdown.button>Button</dropdown.button>
+      </Rose::Dropdown>
+    `);
+
+    await click('summary');
+    assert.ok(find('.rose-dropdown').open);
+    await click('button');
+    assert.notOk(find('.rose-dropdown').open);
+  });
 });
