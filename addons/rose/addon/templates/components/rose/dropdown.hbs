@@ -1,0 +1,32 @@
+<details
+  ...attributes
+  class="rose-dropdown"
+  {{on-click-outside this.close}}
+>
+
+  <summary
+    class="rose-dropdown-trigger{{if @iconOnly " has-icon-only"}}"
+    title={{@text}}
+  >
+
+    {{#if @icon}}
+      <Rose::Icon
+        @name={{@icon}}
+        @size="medium"
+      />
+    {{/if}}
+
+    <span class="rose-dropdown-trigger-text">
+      {{@text}}
+    </span>
+
+  </summary>
+
+  <div class="rose-dropdown-content">
+    {{yield (hash
+      link=(component "link-to" class="rose-dropdown-link")
+      button=(component "rose/button" style="dropdown")
+    )}}
+  </div>
+
+</details>
