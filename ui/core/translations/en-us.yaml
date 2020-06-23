@@ -48,6 +48,11 @@ errors:
     notfound-error: We could not find the requested resource. You can ask your administrator or try again later.
     server-error: We ran into a problem and could not continue. You can ask your administrator or try again later.
     unknown-error: Please contact your administrator or try again later.
+notify:
+  save-success: Save succeeded.
+  user:
+    create-success: User created succesfully.
+    delete-success: Deleted user successfully.
 dev:
   default-org: Default Org
   menu-item: Menu item
