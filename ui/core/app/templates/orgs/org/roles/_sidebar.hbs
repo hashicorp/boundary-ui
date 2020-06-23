@@ -1,0 +1,18 @@
+<Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
+
+  <nav.link
+    @route="orgs.org.projects"
+  >
+    {{t "resources.projects"}}
+  </nav.link>
+
+</Rose::Nav::Sidebar>
+<Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
+
+  <nav.link
+    @route="orgs.org.roles"
+  >
+    {{t "resources.roles"}}
+  </nav.link>
+
+</Rose::Nav::Sidebar>
