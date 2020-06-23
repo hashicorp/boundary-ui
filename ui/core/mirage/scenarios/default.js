@@ -12,6 +12,9 @@ export default function(server) {
   // same items for request at all scopes.
   server.createList('auth-method', 3);
 
+  // User
+  server.createList('user', 5);
+
   // Other resources
 
   server.createList('host-catalog', 6);
