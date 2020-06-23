@@ -39,12 +39,16 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * Posts credentials to the URL specified in `authEndpoint` and resolves
    * if a success HTTP status code is received, otherwise rejects.
    * @override
-   * @param {string} username
-   * @param {string} password
+   * @param {object} creds
+   * @param {string} authMethodId ID of the auth method to use
+   * @param {boolean} requestCookies request cookie tokens (default `true`)
    * @return {Promise}
    */
-  async authenticate(creds, authMethodID) {
-    const response = await fetch(this.authEndpoint, {
+  async authenticate(creds, authMethodID, requestCookies=true) {
+    const url = requestCookies ?
+      `${this.authEndpoint}?token_type=cookie` :
+      this.authEndpoint;
+    const response = await fetch(url, {
       method: 'post',
       body: JSON.stringify({
         auth_method_id: authMethodID,

@@ -8,12 +8,25 @@ module('Unit | Authenticator | password', function (hooks) {
   setupMirage(hooks);
 
   test('it authenticates to the specified authEndpoint', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.authEndpoint, () => {
+    this.server.post(authenticator.authEndpoint, (schema, request) => {
+      assert.ok(request.url.includes('?token_type=cookie'), 'Requested cookie tokens by default');
       return new Response(200);
     });
-    await authenticator.authenticate({}).then(() => {
+    await authenticator.authenticate({}, '').then(() => {
+      assert.ok(true, 'authentication succeeded');
+    });
+  });
+
+  test('it can authenticate without requesting cookies', async function (assert) {
+    assert.expect(2);
+    const authenticator = this.owner.lookup('authenticator:password');
+    this.server.post(authenticator.authEndpoint, (schema, request) => {
+      assert.notOk(request.url.includes('?token_type=cookie'), 'Did not request cookie tokens');
+      return new Response(200);
+    });
+    await authenticator.authenticate({}, '', false).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
   });
