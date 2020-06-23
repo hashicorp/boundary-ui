@@ -40,6 +40,14 @@ export default function() {
   this.patch('/orgs/:org_id/auth-methods/:id');
   this.del('/orgs/:org_id/auth-methods/:id');
 
+  // IAM : Users
+
+  this.get('/orgs/:org_id/users');
+  this.post('/orgs/:org_id/users');
+  this.get('/orgs/:org_id/users/:id');
+  this.patch('/orgs/:org_id/users/:id');
+  this.del('/orgs/:org_id/users/:id');
+
   // Other resources
   // host-catalog
 
