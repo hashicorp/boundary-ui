@@ -14,19 +14,5 @@ export default class OrgsOrgRolesRoute extends Route {
       // Error: Assertion Failed: You made a 'findAll' request for 'role' records, but the adapter's response did not have any data
     });
   }
-
-  /**
-   * Renders the roles-specific sidebar template.
-   * @override
-   * @param {object} controller
-   * @param {object} model
-   */
-  renderTemplate(controller, model) {
-    this.render('orgs/org/roles/_sidebar', {
-      into: 'application',
-      outlet: 'sidebar',
-      model: model
-    });
-    super.renderTemplate(...arguments);
-  }
+  
 }
