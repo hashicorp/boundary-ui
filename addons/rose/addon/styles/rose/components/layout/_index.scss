@@ -1,3 +1,13 @@
+@use '../../variables/sizing';
+
 @import 'global';
+@import 'sidebar';
 @import 'page';
 @import 'centered';
+
+// TODO:  this is prescriptive and can be removed if it becomes a problem,
+// but used here reflects the fact that the "main" element, of which there
+// can only be one per page, generally has padding in Structure layouts.
+main {
+  padding: sizing.rems(l);
+}

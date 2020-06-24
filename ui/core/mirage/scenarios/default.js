@@ -12,6 +12,10 @@ export default function(server) {
   // same items for request at all scopes.
   server.createList('auth-method', 3);
 
+  // IAM
+  // Roles
+  server.createList('role', 5);
+
   // Other resources
 
   server.createList('host-catalog', 6);

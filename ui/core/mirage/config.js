@@ -40,6 +40,13 @@ export default function() {
   this.patch('/orgs/:org_id/auth-methods/:id');
   this.del('/orgs/:org_id/auth-methods/:id');
 
+  // role
+  this.get('/orgs/:org_id/roles');
+  this.post('/orgs/:org_id/roles');
+  this.get('/orgs/:org_id/roles/:id');
+  this.patch('/orgs/:org_id/roles/:id');
+  this.del('/orgs/:org_id/roles/:id');
+
   // Other resources
   // host-catalog
 
