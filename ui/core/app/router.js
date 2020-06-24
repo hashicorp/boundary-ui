@@ -26,6 +26,6 @@ Router.map(function () {
         this.route('method', {path: ':auth_method_id'});
       });
     });
-    this.route('authenticate');
+    this.route('authenticate', function() {});
   });
 });
