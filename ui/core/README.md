@@ -10,7 +10,7 @@ The core UI for Project Watchtower.
 - [Installation](#installation)
 - [Yarn Commands](#yarn-commands)
 - [Running / Development](#running--development)
-  - [Building](#building)
+  - [Building for Production](#building-for-production)
     - [Environment Variables](#environment-variables)
   - [Running Tests](#running-tests)
   - [Deploying](#deploying)
