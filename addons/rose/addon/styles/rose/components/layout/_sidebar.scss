@@ -1,0 +1,27 @@
+@use '../../variables/sizing';
+@use '../../variables/media';
+
+.rose-layout-sidebar {
+  --sidebar-width: #{sizing.rems(m) * 16};
+  display: flex;
+  flex-grow: 1;
+
+  .rose-layout-sidebar-body {
+    flex: 1;
+  }
+
+  .rose-layout-sidebar-sidebar {
+    width: var(--sidebar-width);
+    border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+  }
+}
+
+@media (max-width: media.width(small)) {
+  .rose-layout-sidebar {
+    flex-direction: column;
+
+    .rose-layout-sidebar-sidebar {
+      width: auto;
+    }
+  }
+}

@@ -25,9 +25,16 @@
     </Rose::Header>
   </layout.header>
 
-  <layout.sidebar>{{outlet "sidebar"}}</layout.sidebar>
-
-  <layout.body>{{outlet}}</layout.body>
+  <layout.body>
+    <Rose::Layout::Sidebar as |sidebarLayout|>
+      <sidebarLayout.sidebar>
+        {{outlet "sidebar"}}
+      </sidebarLayout.sidebar>
+      <sidebarLayout.body @tagName="main">
+        {{outlet}}
+      </sidebarLayout.body>
+    </Rose::Layout::Sidebar>
+  </layout.body>
 
 </Rose::Layout::Global>
 

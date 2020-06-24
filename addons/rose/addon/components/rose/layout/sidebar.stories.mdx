@@ -1,0 +1,33 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Layout|Sidebar" component="SidebarLayout" />
+
+# Layout|Sidebar
+
+A top-level layout/positioning component that allows two distinct sections to
+be configured: header and body.
+
+```htmlbars
+<Rose::Layout::Sidebar as |layout|>
+  <layout.sidebar>
+    sidebar content
+  </layout.sidebar>
+  <layout.body>
+    body content
+  </layout.body>
+</Rose::Layout::Sidebar>
+```
+
+<Preview>
+  <Story name="SidebarLayout">{{
+    template: hbs`
+      <Rose::Layout::Sidebar as |layout|>
+        <layout.sidebar style="background: var(--brand-gray-7);">Body</layout.sidebar>
+        <layout.body style="background: var(--brand-gray-5);">Sidebar</layout.body>
+      </Rose::Layout::Sidebar>
+    `,
+  }}</Story>
+</Preview>
