@@ -19,6 +19,7 @@ subproject, e.g. running or testing.
 - [Contributing](#contributing)
   - [Branching](#branching)
   - [Building ToC](#building-toc)
+  - [Building Core UI for Production](#building-core-ui-for-production)
   - [Committing](#committing)
     - [License Checking](#license-checking)
 
