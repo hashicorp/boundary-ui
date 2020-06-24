@@ -10,7 +10,7 @@ The core UI for Project Watchtower.
 - [Installation](#installation)
 - [Yarn Commands](#yarn-commands)
 - [Running / Development](#running--development)
-  - [Building](#building)
+  - [Building for Production](#building-for-production)
     - [Environment Variables](#environment-variables)
   - [Running Tests](#running-tests)
   - [Deploying](#deploying)
@@ -58,12 +58,18 @@ List of available project commands.  `yarn run <command-name>`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 * Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
-### Building
+### Building for Production
 
-To build the project, without running it, execute one of the following commands:
+Before executing a build, be sure to set any environment variables necessary
+for your target environment (see next section).  To build this UI for
+production, run the following commads from this folder:
 
-* `yarn run build` (development)
-* `yarn run build:production` (production)
+```bash
+yarn install
+yarn build:production
+```
+
+The static production assets are saved into the `dist/` folder.
 
 #### Environment Variables
 

@@ -1,0 +1,6 @@
+<div ...attributes class="rose-layout-sidebar">
+  {{yield (hash
+    body=(component "rose/anonymous" class="rose-layout-sidebar-body")
+    sidebar=(component "rose/anonymous" tagName="aside" class="rose-layout-sidebar-sidebar")
+  )}}
+</div>

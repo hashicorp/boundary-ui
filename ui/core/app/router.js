@@ -18,6 +18,10 @@ Router.map(function () {
         });
         this.route('new');
       });
+      this.route('roles', function() {
+        this.route('role', { path: ':role_id' }, function() {});
+        this.route('new');
+      });
       this.route('authenticate', function() {
         this.route('method', {path: ':auth_method_id'});
       });

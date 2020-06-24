@@ -1,40 +1,31 @@
 <Rose::Layout::Centered>
-  <Rose::Layout::Page id="authentication-view" as |page|>
+  <main id="authentication-view">
 
     {{#if @model}}
-      <page.header>
-        <h2>{{t 'actions.authenticate'}}</h2>
-        <p>{{t "auth.descriptions.choose-org"}}</p>
-      </page.header>
-
-      <page.navigation>
-        <Rose::Dropdown
-          @text={{t 'actions.choose-org'}}
-          @icon="user-organization"
-        as |dropdown|>
-          {{#each @model as |org|}}
-            <dropdown.link @route="orgs.org.authenticate" @model={{org}}>
-              {{org.name}}
-            </dropdown.link>
-          {{/each}}
-        </Rose::Dropdown>
-      </page.navigation>
+      <h2>{{t 'actions.authenticate'}}</h2>
+      <p>{{t "auth.descriptions.choose-org"}}</p>
+      <Rose::Dropdown
+        @text={{t 'actions.choose-org'}}
+        @icon="user-organization"
+      as |dropdown|>
+        {{#each @model as |org|}}
+          <dropdown.link @route="orgs.org.authenticate" @model={{org}}>
+            {{org.name}}
+          </dropdown.link>
+        {{/each}}
+      </Rose::Dropdown>
     {{/if}}
 
-    <page.body>
-      {{#unless @model}}
-        <Rose::Layout::Centered>
-          <Rose::Message
-            @title={{t "auth.titles.no-orgs"}}
-            @icon="alert-circle-outline"
-          as |message|>
-            <message.description>
-              {{t "auth.descriptions.no-orgs"}}
-            </message.description>
-          </Rose::Message>
-        </Rose::Layout::Centered>
-      {{/unless}}
-    </page.body>
+    {{#unless @model}}
+      <Rose::Message
+        @title={{t "auth.titles.no-orgs"}}
+        @icon="alert-circle-outline"
+      as |message|>
+        <message.description>
+          {{t "auth.descriptions.no-orgs"}}
+        </message.description>
+      </Rose::Message>
+    {{/unless}}
 
-  </Rose::Layout::Page>
+  </main>
 </Rose::Layout::Centered>

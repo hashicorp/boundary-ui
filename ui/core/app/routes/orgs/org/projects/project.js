@@ -36,7 +36,7 @@ export default class OrgsOrgProjectsProjectRoute extends Route {
    */
   renderTemplate(controller, model) {
     this.render('orgs/org/projects/project/_sidebar', {
-      into: 'application',
+      into: 'orgs/org',
       outlet: 'sidebar',
       model: model
     });
