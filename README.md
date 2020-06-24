@@ -104,7 +104,17 @@ of README.
 ### Building Core UI for Production
 
 See ui/core/README.md Building for Production for more information on how to
-build the Core UI.
+build the Core UI.  Be sure to set build-related environment variables as
+necessary for your target environment, as described in the Core UI readme.
+
+To quickly produce a production build of Core UI, run from this folder:
+
+```bash
+yarn install
+yarn build:production:core
+```
+
+Assets are saved to `ui/core/dist/`.
 
 ### Committing
 
