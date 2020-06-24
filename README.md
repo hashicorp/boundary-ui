@@ -100,6 +100,11 @@ To autogenerate a ToC (table of contents) for this README,
 run `yarn doc:toc`.  Please update the ToC whenever editing the structure
 of README.
 
+### Building Core UI for Production
+
+See ui/core/README.md Building for Production for more information on how to
+build the Core UI.
+
 ### Committing
 
 Instead of the default `git commit`, we prescribe a custom command that ensures
