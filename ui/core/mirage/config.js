@@ -47,6 +47,13 @@ export default function() {
   this.patch('/orgs/:org_id/roles/:id');
   this.del('/orgs/:org_id/roles/:id');
 
+  // group
+  this.get('/orgs/:org_id/groups');
+  this.post('/orgs/:org_id/groups');
+  this.get('/orgs/:org_id/groups/:id');
+  this.patch('/orgs/:org_id/groups/:id');
+  this.del('/orgs/:org_id/groups/:id');
+
   // Other resources
   // host-catalog
 
