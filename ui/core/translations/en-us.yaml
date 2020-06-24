@@ -61,6 +61,7 @@ notify:
     delete-success: Deleted role successfully.
   group:
     create-success: Group created succesfully.
+    delete-success: Deleted group successfully.
 dev:
   default-org: Default Org
   menu-item: Menu item
