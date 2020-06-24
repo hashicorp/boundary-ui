@@ -15,6 +15,9 @@ export default function(server) {
   // User
   server.createList('user', 5);
 
+  // Role
+  server.createList('role', 5);
+
   // Other resources
 
   server.createList('host-catalog', 6);

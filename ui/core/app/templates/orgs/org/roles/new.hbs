@@ -1,0 +1,17 @@
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "titles.new"}}</h2>
+  </page.header>
+
+  <page.body>
+    <Form::Role
+      @model={{@model}}
+      @submit={{route-action "save" @model}}
+      @cancel={{route-action "cancel" @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>

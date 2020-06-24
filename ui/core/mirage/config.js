@@ -41,12 +41,18 @@ export default function() {
   this.del('/orgs/:org_id/auth-methods/:id');
 
   // IAM : Users
-
   this.get('/orgs/:org_id/users');
   this.post('/orgs/:org_id/users');
   this.get('/orgs/:org_id/users/:id');
   this.patch('/orgs/:org_id/users/:id');
   this.del('/orgs/:org_id/users/:id');
+  
+  // IAM: Roles
+  this.get('/orgs/:org_id/roles');
+  this.post('/orgs/:org_id/roles');
+  this.get('/orgs/:org_id/roles/:id');
+  this.patch('/orgs/:org_id/roles/:id');
+  this.del('/orgs/:org_id/roles/:id');
 
   // Other resources
   // host-catalog
