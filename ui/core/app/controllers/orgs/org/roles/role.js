@@ -1,18 +1,12 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default class OrgsOrgRolesRoleController extends Controller {
-  // =services
-
-  @service intl;
-
   // =attributes
 
   /**
    * @type {string}
    */
-  get breadCrumb() {
-    return this.intl.t('resources.role');
-  }
+  @alias('model.name') breadCrumb;
 
 }

@@ -8,11 +8,7 @@ export default class OrgsOrgRolesRoute extends Route {
    * @return {Promise[RoleModel]}
    */
   model() {
-    return this.store.findAll('role').catch(() => {
-      // FIX ME: API response of "{}" generates following error:
-      // Error while processing route: orgs.org.roles.index
-      // Error: Assertion Failed: You made a 'findAll' request for 'role' records, but the adapter's response did not have any data
-    });
+    return this.store.findAll('role');
   }
-  
+
 }
