@@ -5,6 +5,11 @@
 
 .rose-nav-sidebar {
   margin-top: sizing.rems(xxl);
+  margin-bottom: sizing.rems(l);
+
+  & + .rose-nav-sidebar {
+    margin-top: 0;
+  }
 }
 
 .rose-form {
