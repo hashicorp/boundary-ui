@@ -3,9 +3,12 @@ import { setupTest } from 'ember-qunit';
 import config from 'ember-get-config';
 import RESTAdapter from '@ember-data/adapter/rest';
 import { InvalidError } from '@ember-data/adapter/error';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { Response } from 'miragejs';
 
 module('Unit | Adapter | application', function (hooks) {
   setupTest(hooks);
+  setupMirage(hooks);
 
   test('its namespace is equal to the configured namespace', function (assert) {
     assert.expect(2);
@@ -24,10 +27,21 @@ module('Unit | Adapter | application', function (hooks) {
     assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     // TODO this is icky, should be changed to a spy or stub
+    const originalAjax = RESTAdapter.prototype.ajax;
     RESTAdapter.prototype.ajax = (url, type) => {
       assert.equal(type, 'PATCH');
+      RESTAdapter.prototype.ajax = originalAjax;
     };
     adapter.ajax('/', 'PUT');
+  });
+
+  test('it prenormalizes "empty" responses into a form that the fetch-manager will not reject', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const adapter = store.adapterFor('project');
+    this.server.get('/v1/projects', () => new Response({}));
+    const prenormalized = await adapter.findAll(store, {modelName: 'project'}, null, []);
+    assert.deepEqual(prenormalized, {items: []});
   });
 
   test('it correctly identifies 400 responses as invalid', function (assert) {

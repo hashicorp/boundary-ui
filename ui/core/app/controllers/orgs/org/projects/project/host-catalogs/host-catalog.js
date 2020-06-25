@@ -8,6 +8,6 @@ export default class OrgsOrgProjectsProjectHostCatalogsHostCatalogController ext
   /**
    * @type {string}
    */
-  @alias('model.name') breadCrumb;
+  @alias('model.displayName') breadCrumb;
 
 }
