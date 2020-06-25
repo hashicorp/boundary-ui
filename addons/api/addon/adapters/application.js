@@ -6,6 +6,37 @@ import { dasherize } from '@ember/string';
 import { pluralize } from 'ember-inflector';
 import { isArray } from '@ember/array';
 
+/**
+ * Returns false if the payload is an empty object, true otherwise.
+ * Taken from Ember Data fetch-manager.
+ * @param {object} adapterPayload
+ * @return {boolean}
+ */
+function payloadIsNotBlank(adapterPayload) {
+  if (Array.isArray(adapterPayload)) {
+    return true;
+  } else {
+    return Object.keys(adapterPayload || {}).length !== 0;
+  }
+}
+
+/**
+ * If the resonse is not empty, returns the response.  Otherwise, returns
+ * a new payload containing an empty `items` array, as expected by
+ * the serializer.
+ *
+ * Normally this would be performed 100% inside the serializer.
+ * However, the fetch manager, which we cannot easily override, glues the
+ * adapter and serializers together.  Before it forwards a response from the
+ * adapter on to the serializer, it checks for an "empty" response.  If the
+ * response is empty, fetch manager throws and error and never forwards it on.
+ * @param {object} response
+ * @return {object}
+ */
+function prenormalizeArrayResponse(response) {
+  return payloadIsNotBlank(response) ? response : {items: []};
+}
+
 export default class ApplicationAdapter extends RESTAdapter {
   // =attributes
 
@@ -34,6 +65,26 @@ export default class ApplicationAdapter extends RESTAdapter {
    */
   pathForType(type) {
     return dasherize(pluralize(type));
+  }
+
+  /**
+   * Intercepts "empty" responses and adds an empty `items` array.
+   * @override
+   * @method findAll
+   * @return {Promise} promise
+   */
+  findAll() {
+    return super.findAll(...arguments).then(prenormalizeArrayResponse);
+  }
+
+  /**
+   * Intercepts "empty" responses and adds an empty `items` array.
+   * @override
+   * @method query
+   * @return {Promise} promise
+   */
+  query() {
+    return super.query(...arguments).then(prenormalizeArrayResponse);
   }
 
   /**
