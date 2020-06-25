@@ -7,6 +7,6 @@ export default class OrgsOrgRolesRoleController extends Controller {
   /**
    * @type {string}
    */
-  @alias('model.name') breadCrumb;
+  @alias('model.displayName') breadCrumb;
 
 }
