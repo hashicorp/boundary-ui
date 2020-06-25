@@ -7,23 +7,22 @@ import { pluralize } from 'ember-inflector';
 import { isArray } from '@ember/array';
 
 /**
- * Returns false if the payload is an empty object, true otherwise.
- * Taken from Ember Data fetch-manager.
+ * Returns true if the payload is an empty object, false otherwise.
+ * Taken from Ember Data fetch-manager and "positivized" the name.
  * @param {object} adapterPayload
  * @return {boolean}
  */
-function payloadIsNotBlank(adapterPayload) {
+function payloadIsBlank(adapterPayload) {
   if (Array.isArray(adapterPayload)) {
-    return true;
+    return false;
   } else {
-    return Object.keys(adapterPayload || {}).length !== 0;
+    return Object.keys(adapterPayload || {}).length === 0;
   }
 }
 
 /**
- * If the resonse is not empty, returns the response.  Otherwise, returns
- * a new payload containing an empty `items` array, as expected by
- * the serializer.
+ * If the resonse is empty, returns a new payload containing an empty `items`
+ * array, as expected by the serializer.  Otherwise, returns the response.
  *
  * Normally this would be performed 100% inside the serializer.
  * However, the fetch manager, which we cannot easily override, glues the
@@ -34,7 +33,7 @@ function payloadIsNotBlank(adapterPayload) {
  * @return {object}
  */
 function prenormalizeArrayResponse(response) {
-  return payloadIsNotBlank(response) ? response : {items: []};
+  return payloadIsBlank(response) ? {items: []} : response;
 }
 
 export default class ApplicationAdapter extends RESTAdapter {
