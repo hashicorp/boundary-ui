@@ -40,8 +40,10 @@ export default class OrgsOrgAuthenticateMethodRoute extends Route {
       username: null,
       password: null
     });
+    const requestCookies = false;
     try {
-      await this.session.authenticate(authenticatorName, creds, authMethodId);
+      await this.session.authenticate(
+        authenticatorName, creds, authMethodId, requestCookies);
     } catch (e) {
       const errorMessage = this.intl.t('errors.titles.authentication-failed');
       this.notify.error(errorMessage, { closeAfter: null });

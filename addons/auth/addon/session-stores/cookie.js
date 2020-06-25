@@ -5,14 +5,15 @@ import { inject as service } from '@ember/service';
 
 /**
  *
- * This session store is intended for use with Ember Simple Auth.
+ * This session store is intended for use with Ember Simple Auth when requesting
+ * that the server send cookies (see authenticators).
  *
  * The cookie session store is used to maintain session state for auth servers
  * that send cookies.  In this strategy, the server sets any cookies needed for
  * future authorization.  This store determines if a session is authenticated
  * by looking for the presence of a cookie with name specified in `cookieName`.
  *
- * This authenticator should not be used directly because it does not specify
+ * This session store should not be used directly because it does not specify
  * `cookiePath` or `cookieName`.  To use, create an application session store
  * and extend this class, being sure to specify these attributes.
  *

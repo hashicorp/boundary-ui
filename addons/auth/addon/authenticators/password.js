@@ -38,6 +38,10 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   /**
    * Posts credentials to the URL specified in `authEndpoint` and resolves
    * if a success HTTP status code is received, otherwise rejects.
+   *
+   * If requesting cookies, be sure to use the cookie session store.  Otherwise
+   * use the local storage session store.
+   *
    * @override
    * @param {object} creds
    * @param {string} authMethodId ID of the auth method to use
@@ -55,6 +59,7 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
         credentials: creds
       })
     });
-    return response.status < 400 ? resolve() : reject();
+    const json = await response.json();
+    return response.status < 400 ? resolve(json) : reject();
   }
 }
