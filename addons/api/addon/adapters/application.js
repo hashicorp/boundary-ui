@@ -37,6 +37,23 @@ export default class ApplicationAdapter extends RESTAdapter {
   }
 
   /**
+   * Get the headers specified on the application adapter (if any) and
+   * merge them into the headers for this request.
+    @method ajaxOptions
+    @private
+    @param {String} url
+    @param {String} type The request type GET, POST, PUT, DELETE etc.
+    @param {Object} options
+    @return {Object}
+  */
+  ajaxOptions(url, method, options={}) {
+    const applicationAdapter = this.store.adapterFor('application');
+    const applicationHeaders = get(applicationAdapter, 'headers');
+    options.headers = Object.assign({}, applicationHeaders, options.headers);
+    return super.ajaxOptions(url, method, options);
+  }
+
+  /**
    * Overrides default ajax method by rewritting PUT requests as PATCH.
    * PATCH is the request method used by our API for updates.
    *
