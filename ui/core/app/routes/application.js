@@ -14,14 +14,18 @@ export default class ApplicationRoute extends Route.extend(ApplicationRouteMixin
 
   @service session;
 
-  // =attributes
+  // =methods
 
   /**
-   * @type {string}
+   * After becoming authenticated, does nothing.  This overrides the default
+   * behavior of the ApplicationRouteMixin, which is to redirect after auth.
+   * We'll handle this redirect manually in the orgs.org.authenticate.method
+   * route handler.
+   * @override
    */
-  routeAfterAuthentication = 'orgs.org.projects';
-
-  // =methods
+  sessionAuthenticated() {
+    // no op
+  }
 
   /**
    * When the session ends, redirect to authenticate and reload the page to
