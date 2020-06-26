@@ -123,7 +123,7 @@ Optionally, you may build the UI within a container.  Execute the
 following command:
 
 ```bash
-docker-compose run build_production
+./build_production.sh
 ```
 
 Assets are saved to `ui/core/dist/`.
