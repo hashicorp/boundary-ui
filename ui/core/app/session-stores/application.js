@@ -8,19 +8,28 @@ export default class ApplicationSessionStore extends LocalStorageSessionStore {
   @service store;
 
   /**
-   * If the auth data includes a token, apply it as a bearer token in the
+   * If the auth sessionData includes a token, apply it as a bearer token in the
    * application adapter's Authorization header.  Otherwise clear the header.
-   * @param {object} data
-   * @reutnr {object}
+   * @param {object} sessionData
+   * @return {object}
    */
-  persist(data) {
-    const token = get(data, 'authenticated.token');
+  persist(sessionData) {
+    this.addTokenToAuthorization(sessionData);
+    return super.persist(...arguments);
+  }
+
+  /**
+   * If the session has a full token, it is added as a bearer token to the
+   * `Authroization` header for all API requests.
+   * @param {object} sessionData
+   */
+  addTokenToAuthorization(sessionData) {
+    const token = get(sessionData, 'authenticated.token');
     const adapter = this.store.adapterFor('application');
     const headers = get(adapter, 'headers');
     if (!headers) adapter.headers = {};
     adapter.headers.Authorization = null;
     if (token) adapter.headers.Authorization = `Bearer ${token}`;
-    return super.persist(...arguments);
   }
 
 }
