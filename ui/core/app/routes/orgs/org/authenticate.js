@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
+import { inject as service } from '@ember/service';
 import { hash } from 'rsvp';
 
 /**
@@ -12,18 +12,20 @@ import { hash } from 'rsvp';
  * which corresponds to a specific auth method.
  *
  */
-export default class OrgsOrgAuthenticateRoute extends Route.extend(UnauthenticatedRouteMixin) {
+export default class OrgsOrgAuthenticateRoute extends Route.extend() {
 
-  // =attributes
+  // =services
 
-  /**
-   * If the session is already authenticated, `UnauthenticatedRouteMixin` will
-   * redirect to the projects index.
-   * @type {string}
-   */
-  routeIfAlreadyAuthenticated = 'orgs.org.projects';
+  @service session;
 
   // =methods
+
+  /**
+   * Redirects to projects index if already authenticated.
+   */
+  redirect() {
+    if (this.session.isAuthenticated) this.transitionTo('orgs.org.projects');
+  }
 
   /**
    * Returns all auth methods for the current org, along with the current org
