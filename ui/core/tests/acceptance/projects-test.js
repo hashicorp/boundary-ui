@@ -15,6 +15,14 @@ module('Acceptance | projects', function (hooks) {
     this.server.create('org');
   });
 
+  test('visiting an org index redirects to its projects', async function (assert) {
+    assert.expect(1);
+    this.server.createList('project', 1);
+    await visit('/orgs/1');
+    await a11yAudit();
+    assert.equal(currentURL(), '/orgs/1/projects');
+  });
+
   test('visiting projects', async function (assert) {
     assert.expect(1);
     this.server.createList('project', 1);
