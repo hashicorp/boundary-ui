@@ -112,7 +112,7 @@ To quickly produce a production build of Core UI, run from this folder:
 
 ```bash
 yarn install
-yarn build:production:core
+yarn build:production:ui:core
 ```
 
 Assets are saved to `ui/core/dist/`.
