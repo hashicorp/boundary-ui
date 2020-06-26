@@ -11,7 +11,8 @@ module('Unit | Authenticator | password', function (hooks) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
     this.server.post(authenticator.authEndpoint, (schema, request) => {
-      assert.ok(request.url.includes('?token_type=cookie'), 'Requested cookie tokens by default');
+      const json = JSON.parse(request.requestBody);
+      assert.ok(json.token_type, 'Requested token cookies by default');
       return new Response(200);
     });
     await authenticator.authenticate({}, '').then(() => {
@@ -23,7 +24,8 @@ module('Unit | Authenticator | password', function (hooks) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
     this.server.post(authenticator.authEndpoint, (schema, request) => {
-      assert.notOk(request.url.includes('?token_type=cookie'), 'Did not request cookie tokens');
+      const json = JSON.parse(request.requestBody);
+      assert.notOk(json.token_type, 'Did not request tokens cookies');
       return new Response(200);
     });
     await authenticator.authenticate({}, '', false).then(() => {
@@ -38,7 +40,8 @@ module('Unit | Authenticator | password', function (hooks) {
       const json = JSON.parse(request.requestBody);
       assert.deepEqual(json, {
         auth_method_id: '123',
-        credentials: {
+        token_type: 'cookie',
+        password_credentials: {
           username: 'foo',
           password: 'bar'
         }

@@ -12,7 +12,7 @@ import { Response } from 'miragejs';
 //  */
 // export default function authenticateHandler(schema, request) {
 //   const payload = JSON.parse(request.requestBody);
-//   if (payload.credentials.username === 'error') {
+//   if (payload.password_credentials.username === 'error') {
 //     return new Response(400);
 //   } else {
 //     const cookieName = config.auth.passwordCookieName;
@@ -25,13 +25,12 @@ import { Response } from 'miragejs';
 
 export default function authenticateHandler(schema, request) {
   const payload = JSON.parse(request.requestBody);
-  if (payload.credentials.username === 'error') {
+  if (payload.password_credentials.username === 'error') {
     return new Response(400);
   } else {
     return new Response(200, {}, {
       id: 'token123',
       token: 'thetokenstring',
-      token_type: 'token',
       user_id: 'user123',
       auth_method_id: 'authmethod123',
       created_time: '',

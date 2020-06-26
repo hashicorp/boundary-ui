@@ -49,14 +49,13 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @return {Promise}
    */
   async authenticate(creds, authMethodID, requestCookies=true) {
-    const url = requestCookies ?
-      `${this.authEndpoint}?token_type=cookie` :
-      this.authEndpoint;
+    const url = this.authEndpoint;
     const response = await fetch(url, {
       method: 'post',
       body: JSON.stringify({
         auth_method_id: authMethodID,
-        credentials: creds
+        token_type: requestCookies ? 'cookie' : null,
+        password_credentials: creds
       })
     });
     const json = await response.json();
