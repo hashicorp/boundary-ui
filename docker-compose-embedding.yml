@@ -1,3 +1,7 @@
+# Note: this will change the permissions of the files in this directory after
+# running to allow for easy deletion, so this should only be run as part of
+# watchtower's build task.
+
 version: '3.8'
 
 services:
@@ -15,7 +19,7 @@ services:
   build_production:
     <<: *node
     entrypoint: bash
-    command: '-c "yarn install && yarn build:production:ui:core"'
+    command: '-c "yarn install && yarn build:production:ui:core && chmod -R 777 ."'
 
 volumes:
   icu_node_modules:
