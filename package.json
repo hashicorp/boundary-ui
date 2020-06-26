@@ -8,7 +8,7 @@
     "ui/*"
   ],
   "scripts": {
-    "build:production:core": "cd ui/core && yarn build:production",
+    "build:production:ui:core": "cd ui/core && yarn build:production",
     "lint": "yarn lint:addons:api && yarn lint:addons:auth && yarn lint:addons:rose && yarn lint:ui:core",
     "lint:addons:api": "echo \"\n\nlint: addons/api\n\" && cd addons/api && yarn lint",
     "lint:addons:auth": "echo \"\n\nlint: addons/auth\n\" && cd addons/auth && yarn lint",

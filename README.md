@@ -20,6 +20,7 @@ subproject, e.g. running or testing.
   - [Branching](#branching)
   - [Building ToC](#building-toc)
   - [Building Core UI for Production](#building-core-ui-for-production)
+    - [Building with a Container](#building-with-a-container)
   - [Committing](#committing)
     - [License Checking](#license-checking)
 
@@ -111,7 +112,18 @@ To quickly produce a production build of Core UI, run from this folder:
 
 ```bash
 yarn install
-yarn build:production:core
+yarn build:production:ui:core
+```
+
+Assets are saved to `ui/core/dist/`.
+
+#### Building with a Container
+
+Optionally, you may build the UI within a container.  Execute the
+following command:
+
+```bash
+./build_production.sh
 ```
 
 Assets are saved to `ui/core/dist/`.
