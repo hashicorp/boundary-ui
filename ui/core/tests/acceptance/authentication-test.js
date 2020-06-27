@@ -11,6 +11,7 @@ module('Acceptance | authentication', function(hooks) {
 
   let org;
   let method;
+  let orgsURL;
   let orgsAuthURL;
   let authURL;
   let authMethodURL;
@@ -20,6 +21,7 @@ module('Acceptance | authentication', function(hooks) {
     invalidateSession();
     org = this.server.create('org');
     method = this.server.create('auth-method');
+    orgsURL = '/orgs';
     orgsAuthURL = '/orgs/authenticate';
     authURL = `/orgs/${org.id}/authenticate`
     authMethodURL = `/orgs/${org.id}/authenticate/${method.id}`
@@ -54,6 +56,12 @@ module('Acceptance | authentication', function(hooks) {
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), orgsAuthURL);
     assert.ok(find('.rose-message'));
+  });
+
+  test('visiting orgs index redirects to orgs authenticate', async function(assert) {
+    assert.expect(1);
+    await visit(orgsURL);
+    assert.equal(currentURL(), orgsAuthURL);
   });
 
   test('visiting orgs authenticate while authenticated with an org scope redirects to that org', async function(assert) {
