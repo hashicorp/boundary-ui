@@ -56,6 +56,17 @@ module('Acceptance | authentication', function(hooks) {
     assert.ok(find('.rose-message'));
   });
 
+  test('visiting orgs authenticate while authenticated with an org scope redirects to that org', async function(assert) {
+    assert.expect(2);
+    // firstly, authenticate and include an org scope in the session...
+    authenticateSession({ org_id: org.id });
+    // Attempt to visit the /orgs/authenticate route...
+    await visit(orgsAuthURL);
+    assert.ok(currentSession().isAuthenticated);
+    // And be redirected to the org we authenticated with...
+    assert.equal(currentURL(), projectsURL);
+  });
+
   test('visiting org authenticate without available auth methods shows a message', async function(assert) {
     assert.expect(3);
     method.destroy();

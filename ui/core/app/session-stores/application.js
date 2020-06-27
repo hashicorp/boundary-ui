@@ -6,6 +6,7 @@ import { get } from '@ember/object';
 export default class ApplicationSessionStore extends LocalStorageSessionStore {
 
   @service store;
+  @service scope;
 
   /**
    * If the auth sessionData includes a token, apply it as a bearer token in the
@@ -15,6 +16,7 @@ export default class ApplicationSessionStore extends LocalStorageSessionStore {
    */
   persist(sessionData) {
     this.addTokenToAuthorization(sessionData);
+    this.addOrgToSession(sessionData);
     return super.persist(...arguments);
   }
 
@@ -30,6 +32,15 @@ export default class ApplicationSessionStore extends LocalStorageSessionStore {
     if (!headers) adapter.headers = {};
     adapter.headers.Authorization = null;
     if (token) adapter.headers.Authorization = `Bearer ${token}`;
+  }
+
+  /**
+   * @param {object} sessionData
+   */
+  addOrgToSession(sessionData) {
+    const orgID = get(this.scope, 'org.id');
+    const authenticated = get(sessionData, 'authenticated');
+    if (orgID && authenticated) authenticated.org_id = orgID;
   }
 
 }
