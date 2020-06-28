@@ -143,13 +143,22 @@ module('Acceptance | authentication', function(hooks) {
   });
 
   test('logging out while authenticated redirects to first auth method', async function(assert) {
-    assert.expect(4);
-    authenticateSession();
-    await visit(projectsURL);
+    assert.expect(6);
+    await visit(authMethodURL);
+    assert.notOk(currentSession().isAuthenticated);
+    await fillIn('[name="username"]', 'admin');
+    await fillIn('[name="password"]', 'admin');
+    await click('[type="submit"]');
     assert.ok(currentSession().isAuthenticated);
     assert.equal(currentURL(), projectsURL);
+    // this is defined here since the authenticator will call deauthenticate
+    // multiple times
+    this.server.post('/orgs/:org_id:deauthenticate', () => {
+      assert.ok(true, 'deauthentication was requested');
+    });
     await click('.rose-button-header-dropdown');
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodURL);
   });
+
 });

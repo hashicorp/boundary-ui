@@ -4,6 +4,7 @@ import Ember from 'ember';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { later } from '@ember/runloop';
 
 /**
  * Entry route for the application.
@@ -44,8 +45,10 @@ export default class ApplicationRoute extends Route.extend(ApplicationRouteMixin
     const document = getOwner(this).lookup('service:-document').documentElement;
     // defaultView === window, but without using globals directly
     const { location } = document.parentNode.defaultView;
+    // Wait a beat, then reload the page...
+    // This is mostly to give the deauth request a chance to fire.
     /* istanbul ignore if */
-    if (!Ember.testing) location.reload();
+    if (!Ember.testing) later(location, location.reload, 150);
   }
 
   // =actions

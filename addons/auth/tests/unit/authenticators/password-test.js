@@ -66,4 +66,26 @@ module('Unit | Authenticator | password', function (hooks) {
       assert.ok(true, 'authentication failed');
     });
   });
+
+  test('it deauthenticates on invalidation', async function (assert) {
+    assert.expect(1);
+    const authenticator = this.owner.lookup('authenticator:password');
+    this.server.post(authenticator.deauthEndpoint, () => {
+      assert.ok(true, 'deauthentication occurred');
+      return new Response(200);
+    });
+    await authenticator.invalidate();
+  });
+
+  test('it invalidation succeeds even if the deauthentication request fails', async function (assert) {
+    assert.expect(2);
+    const authenticator = this.owner.lookup('authenticator:password');
+    this.server.post(authenticator.deauthEndpoint, () => {
+      assert.ok(true, 'deauthentication was requested');
+      return new Response(500);
+    });
+    await authenticator.invalidate()
+      .then(() => assert.ok(true))
+      .catch(() => assert.notOk(true, 'uh oh, this should not happen'));
+  });
 });

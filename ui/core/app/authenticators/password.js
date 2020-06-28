@@ -15,16 +15,31 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
   // =attributes
 
   /**
-   * The endpoint for authenticate is scoped to org and depends on the
-   * configured host and namespace.
+   * The endpoint is scoped to org and depends on the API configuration.
    * @type {string}
    */
-  get authEndpoint() {
+  get endpoint() {
     const adapter = getOwner(this).lookup('adapter:application');
     const { id: orgId } = this.scope.org;
     const orgURL = adapter.buildURL('org', orgId);
-    const authenticateURL = `${orgURL}:authenticate`;
+    const authenticateURL = `${orgURL}`;
     return authenticateURL;
+  }
+
+  /**
+   * Same as endpoint, with an `:authenticate` suffix.
+   * @type {string}
+   */
+  get authEndpoint() {
+    return `${this.endpoint}:authenticate`
+  }
+
+  /**
+   * Same as endpoint, with an `:deauthenticate` suffix.
+   * @type {string}
+   */
+  get deauthEndpoint() {
+    return `${this.endpoint}:deauthenticate`
   }
 
 }

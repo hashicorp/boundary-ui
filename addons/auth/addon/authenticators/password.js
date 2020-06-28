@@ -10,15 +10,20 @@ import fetch from 'fetch';
  * specified in the `authEndpoint` URL.  If the HTTP response code is in the
  * success range, authentication resolves.  Otherwise it rejects.
  *
+ * Upon session invalidation, deauthentication is attempted at the
+ * `deauthEndpoint`, but is not guaranteed.
+ *
  * This authenticator should not be used directly because it does not specify
- * an `authEndpoint` of its own.  To use, generate an application authenticator
- * in your app `authenticators/application.js` and extend this class.
+ * an `authEndpoint` or `deauthEndpoint` of its own.  To use, generate an
+ * application authenticator in your app `authenticators/application.js` and
+ * extend this class.
  *
  * @example
  *
  *   import PasswordAuthenticator from 'auth/authenticators/password';
  *   export default class ApplicationAuthenticator extends PasswordAuthenticator {
  *     authEndpoint = '/api/authenticate';
+ *     deauthEndpoint = '/api/deauthenticate';
  *   }
  *
  */
@@ -49,16 +54,26 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @return {Promise}
    */
   async authenticate(creds, authMethodID, requestCookies=true) {
-    const url = this.authEndpoint;
-    const response = await fetch(url, {
-      method: 'post',
-      body: JSON.stringify({
-        auth_method_id: authMethodID,
-        token_type: requestCookies ? 'cookie' : null,
-        password_credentials: creds
-      })
+    const body = JSON.stringify({
+      auth_method_id: authMethodID,
+      token_type: requestCookies ? 'cookie' : null,
+      password_credentials: creds
     });
+    const response = await fetch(this.authEndpoint, { method: 'post', body });
     const json = await response.json();
     return response.status < 400 ? resolve(json) : reject();
+  }
+
+  /**
+   * Posts to the `deauthEntpoint` on a best-effort basis and then returns.
+   * Deauthentication with the server is not guaranteed and request failures
+   * are ignored.
+   *
+   * @override
+   * @return {Promise}
+   */
+  invalidate() {
+    fetch(this.deauthEndpoint, { method: 'post' }).catch(() => { /* no op */ });
+    return super.invalidate(...arguments);
   }
 }

@@ -23,20 +23,32 @@ import { Response } from 'miragejs';
 //   }
 // }
 
-export default function authenticateHandler(schema, request) {
+/**
+ * Mirage doesn't distinguish between `/path:authenticate` and
+ * `/path:deauthenticate`, so we use the presence of a request body to indicate
+ * an authentication request and its absence to indicate deauthentication.
+ */
+export function authHandler(schema, request) {
   const payload = JSON.parse(request.requestBody);
-  if (payload.password_credentials.username === 'error') {
-    return new Response(400);
+  const isAuthenticationRequest = payload;
+  if (isAuthenticationRequest) {
+    // this is an auth request
+    if (payload.password_credentials.username === 'error') {
+      return new Response(400);
+    } else {
+      return new Response(200, {}, {
+        id: 'token123',
+        token: 'thetokenstring',
+        user_id: 'user123',
+        auth_method_id: 'authmethod123',
+        created_time: '',
+        updated_time: '',
+        last_used_time: '',
+        expiration_time: ''
+      });
+    }
   } else {
-    return new Response(200, {}, {
-      id: 'token123',
-      token: 'thetokenstring',
-      user_id: 'user123',
-      auth_method_id: 'authmethod123',
-      created_time: '',
-      updated_time: '',
-      last_used_time: '',
-      expiration_time: ''
-    });
+    // this is a deauth request
+    return new Response(200);
   }
 }
