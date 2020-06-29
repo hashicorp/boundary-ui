@@ -4,8 +4,8 @@ export default class OrgsOrgGroupsRoute extends Route {
   // =methods
 
   /**
-   * Returns all roles from store.
-   * @return {Promise[RoleModel]}
+   * Returns all groups from store.
+   * @return {Promise[GroupModel]}
    */
   model() {
     return this.store.findAll('group');

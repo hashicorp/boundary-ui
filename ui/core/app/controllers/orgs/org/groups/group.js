@@ -7,6 +7,6 @@ export default class OrgsOrgGroupsGroupController extends Controller {
   /**
    * @type {string}
    */
-  @alias('model.name') breadCrumb;
+  @alias('model.displayName') breadCrumb;
 
 }
