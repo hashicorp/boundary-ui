@@ -7,6 +7,9 @@ dist: trusty
 
 addons:
   chrome: stable
+  apt:
+    packages:
+      - xvfb
 
 cache:
   yarn: true
@@ -26,6 +29,9 @@ before_install:
 
 install:
   - yarn install --non-interactive
+  - cd electron-app && yarn install --non-interactive
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
 script:
   - yarn lint:hbs

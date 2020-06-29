@@ -4,8 +4,8 @@ module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'connect-client',
     environment,
-    rootURL: '/',
-    locationType: 'auto',
+    rootURL: process.env.EMBER_CLI_ELECTRON ? '' : '/',
+    locationType: process.env.EMBER_CLI_ELECTRON ? 'hash' : 'auto',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
