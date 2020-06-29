@@ -2,7 +2,7 @@
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
-  @error={{true}}
+  @error={{@model.errors.base}}
   as |form|
 >
 

@@ -28,6 +28,11 @@ Router.map(function () {
         this.route('role', { path: ':role_id' }, function() {});
         this.route('new');
       });
+
+      this.route('groups', function() {
+        this.route('group', { path: ':group_id' }, function() {});
+        this.route('new');
+      });
     });
   });
 });
