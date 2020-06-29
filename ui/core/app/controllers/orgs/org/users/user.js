@@ -7,5 +7,5 @@ export default class OrgsOrgUsersUserController extends Controller {
   /**
    * @type {string}
    */
-  @alias('model.name') breadCrumb;
+  @alias('model.displayName') breadCrumb;
 }
