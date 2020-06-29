@@ -5,6 +5,8 @@ actions:
   save: Save
   help: Need help?
 resources:
+  user: User
+  users: Users 
   role: Role
   roles: Roles
   group: Group
@@ -22,6 +24,7 @@ titles:
   empty-set: No Items Yet
   projects-welcome: Welcome to Projects
   host-catalogs-welcome: Welcome to Host Catalogs
+  users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
   groups-welcome: Welcome to Groups
 descriptions:
@@ -29,6 +32,7 @@ descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   projects-welcome: Projects allow you to create and manage host catalogs. To start, create a project.
   host-catalogs-welcome: Host catalogs allow you to configure to collect and create hosts and host sets. To start, create a host catalog.
+  users-welcome: Users are authorized to access Watchtower.
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
   groups-welcome: Groups are collections of users.
 states:
@@ -56,6 +60,9 @@ errors:
     unknown-error: Please contact your administrator or try again later.
 notify:
   save-success: Save succeeded.
+  user:
+    create-success: User created succesfully.
+    delete-success: Deleted user successfully.
   role:
     create-success: Role created succesfully.
     delete-success: Deleted role successfully.

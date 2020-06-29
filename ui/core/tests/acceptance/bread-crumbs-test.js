@@ -10,10 +10,12 @@ module('Acceptance | breadcrumbs', function (hooks) {
   let org;
   let project;
   let hostCatalog;
+  let user;
   let role;
   let group;
   let projectsURL, projectURL, newProjectURL;
   let hostCatalogsURL, hostCatalogURL, newHostCatalogURL;
+  let usersURL, userURL, newUserURL;
   let rolesURL, roleURL, newRoleURL;
   let groupsURL, groupURL, newGroupURL;
 
@@ -22,6 +24,8 @@ module('Acceptance | breadcrumbs', function (hooks) {
   hooks.beforeEach(function () {
     org = this.server.create('org');
     project = this.server.create('project');
+    user = this.server.create('user');
+
     hostCatalog = this.server.create('host-catalog');
     role = this.server.create('role');
     group = this.server.create('group');
@@ -41,6 +45,10 @@ module('Acceptance | breadcrumbs', function (hooks) {
     groupsURL = `/orgs/${org.id}/groups`;
     newGroupURL = `${groupsURL}/new`;
     groupURL = `${groupsURL}/${group.id}`;
+
+    usersURL = `/orgs/${org.id}/users`;
+    newUserURL = `${usersURL}/${user.id}`;
+    userURL = `${usersURL}/new`;
   });
 
   test('can navigate via breadcrumbs to projects from project', async function (assert) {
@@ -131,5 +139,25 @@ module('Acceptance | breadcrumbs', function (hooks) {
     assert.equal(crumbPath, newGroupURL, 'Last crumb has expected URL.');
     await click(find('.rose-nav-breadcrumbs-link:first-child'));
     assert.equal(currentURL(), groupsURL, 'After navigating via breadcrumbs, we are one level up.');
+  });
+
+  test('can navigate via breadcrumbs to users from user', async function (assert) {
+    assert.expect(3);
+    await visit(userURL);
+    assert.equal(currentURL(), userURL, 'We begin on the expected page.');
+    crumbPath = new URL(find('.rose-nav-breadcrumbs-link:last-child').href).pathname;
+    assert.equal(crumbPath, userURL, 'Last crumb has expected URL.');
+    await click(find('.rose-nav-breadcrumbs-link:first-child'));
+    assert.equal(currentURL(), usersURL, 'After navigating via breadcrumbs, we are one level up.');
+  });
+
+  test('can navigate via breadcrumbs to users from new user', async function (assert) {
+    assert.expect(3);
+    await visit(newUserURL);
+    assert.equal(currentURL(), newUserURL, 'We begin on th expected page.');
+    crumbPath = new URL(find('.rose-nav-breadcrumbs-link:last-child').href).pathname;
+    assert.equal(crumbPath, newUserURL, 'Last crumb has expected URL.');
+    await click(find('.rose-nav-breadcrumbs-link:first-child'));
+    assert.equal(currentURL(), usersURL, 'After navigating via breadcrumbs, we are one level up.');
   });
 });
