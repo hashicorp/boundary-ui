@@ -2,10 +2,9 @@
   "name": "connect-client",
   "version": "0.0.0",
   "private": true,
-  "description": "Small description for connect-client goes here",
-  "repository": "",
-  "license": "MIT",
-  "author": "",
+  "description": "Connect client for Project Watchtower.",
+  "license": "MPL-2.0",
+  "author": "HashiCorp",
   "directories": {
     "doc": "doc",
     "test": "tests"
