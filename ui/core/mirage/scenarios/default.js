@@ -17,6 +17,8 @@ export default function(server) {
 
   // Role
   server.createList('role', 5);
+  // Groups
+  server.createList('group', 5);
 
   // Other resources
 

@@ -12,6 +12,8 @@ resources:
   users: Users
   role: Role
   roles: Roles
+  group: Group
+  groups: Groups
   projects: Projects
   project: Project
   host-catalog: Host Catalog
@@ -28,6 +30,7 @@ titles:
   help: Need help?
   users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
+  groups-welcome: Welcome to Groups
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -35,6 +38,7 @@ descriptions:
   host-catalogs-welcome: Host catalogs allow you to configure to collect and create hosts and host sets. To start, create a host catalog.
   users-welcome: Users are authorized to access Watchtower.
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
+  groups-welcome: Groups are collections of users.
 states:
   info: Info
   success: Success
@@ -80,6 +84,9 @@ notify:
   role:
     create-success: Role created succesfully.
     delete-success: Deleted role successfully.
+  group:
+    create-success: Group created succesfully.
+    delete-success: Deleted group successfully.
 dev:
   default-org: Default Org
   menu-item: Menu item
