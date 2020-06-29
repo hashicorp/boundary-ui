@@ -11,6 +11,23 @@ module('Unit | Model | base', function (hooks) {
     assert.ok(model);
   });
 
+  test('it has a displayName attribute', function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'project',
+        attributes: {},
+      },
+    });
+    const model = store.peekRecord('project', '123abc');
+    assert.equal(model.name, null);
+    assert.equal(model.displayName, '123abc');
+    model.name = 'Test';
+    assert.equal(model.displayName, 'Test');
+  });
+
   test('it has canSave and cannotSave attributes', function (assert) {
     assert.expect(8);
     const store = this.owner.lookup('service:store');
