@@ -2,7 +2,10 @@
   "name": "connect-client",
   "productName": "connect-client",
   "version": "0.0.0",
-  "description": "Small description for connect-client goes here",
+  "private": "true",
+  "description": "Electron UI for client for Project Watchtower.",
+  "license": "MPL-2.0",
+  "author": "HashiCorp",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -12,8 +15,6 @@
     "lint": "echo \"No linting configured\""
   },
   "keywords": [],
-  "author": "",
-  "license": "MIT",
   "config": {
     "forge": {
       "packagerConfig": {
