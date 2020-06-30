@@ -1,6 +1,9 @@
 'use strict';
 
-module.exports = function(environment) {
+const APP_NAME = process.env.APP_NAME || 'Application Name';
+const API_HOST = process.env.API_HOST || '';
+
+module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'connect-client',
     environment,
@@ -11,16 +14,24 @@ module.exports = function(environment) {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
-      EXTEND_PROTOTYPES: {
-        // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+      EXTEND_PROTOTYPES: false,
+      // EXTEND_PROTOTYPES: {
+      //   // Prevent Ember Data from overriding Date.parse.
+      //   Date: false
+      // }
     },
 
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
+    },
+
+    api: {
+      host: API_HOST,
+      namespace: 'v1',
+    },
+
+    appName: APP_NAME,
   };
 
   if (environment === 'development') {
