@@ -39,8 +39,8 @@ List of available project commands.  `yarn run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
-| build | Builds the UI in development mode. |
-| build:production | Builds the UI for production. |
+| build:development | Builds the UI in development mode. |
+| build | Builds the UI for production. |
 | lint | Runs all lint commands. |
 | lint:hbs | Lints `hbs` template files. |
 | lint:js | Lints `js` files. |
@@ -66,7 +66,7 @@ production, run the following commads from this folder:
 
 ```bash
 yarn install
-yarn build:production
+yarn build
 ```
 
 The static production assets are saved into the `dist/` folder.

@@ -33,8 +33,8 @@ List of available project commands.  `yarn run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
-| build | Builds the dummy app in development mode. |
-| build:production | Builds the dummy app for production. |
+| build:development | Builds the dummy app in development mode. |
+| build | Builds the dummy app for production. |
 | lint | Runs all lint commands. |
 | lint:js | Lints `js` files. |
 | format | Runs all auto-formatters. |

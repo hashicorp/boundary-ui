@@ -16,10 +16,10 @@ services:
       - 'icu_ui_core_node_modules:/src/ui/core/node_modules'
     working_dir: /src
 
-  build_production:
+  build:
     <<: *node
     entrypoint: bash
-    command: '-c "yarn install && yarn build:production:ui:core && chmod -R 777 ."'
+    command: '-c "yarn install && yarn build:ui:core && chmod -R 777 ."'
 
 volumes:
   icu_node_modules:

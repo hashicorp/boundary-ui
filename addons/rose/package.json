@@ -8,8 +8,8 @@
     "ember-addon"
   ],
   "scripts": {
-    "build": "ember build",
-    "build:production": "ember build --environment=production",
+    "build:development": "ember build",
+    "build": "ember build --environment=production",
     "lint": "yarn lint:hbs && yarn lint:js && yarn lint:sass",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
