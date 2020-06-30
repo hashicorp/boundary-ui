@@ -112,7 +112,7 @@ To quickly produce a production build of Core UI, run from this folder:
 
 ```bash
 yarn install
-yarn build:production:ui:core
+yarn build:ui:core
 ```
 
 Assets are saved to `ui/core/dist/`.
@@ -123,7 +123,7 @@ Optionally, you may build the UI within a container.  Execute the
 following command:
 
 ```bash
-./build_production.sh
+docker-compose -f docker-compose-embedding.yml run build
 ```
 
 Assets are saved to `ui/core/dist/`.
