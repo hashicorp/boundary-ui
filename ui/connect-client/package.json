@@ -1,7 +1,6 @@
 {
   "name": "connect-client",
   "version": "0.0.0",
-  "private": true,
   "description": "Client UI for Project Watchtower.",
   "license": "MPL-2.0",
   "author": "HashiCorp",
@@ -13,7 +12,7 @@
     "doc:toc": "doctoc README.md",
     "build": "ember build --environment=production",
     "build:development": "ember build",
-    "lint": "yarn lint:hbs && yarn lint:js",
+    "lint": "yarn lint:hbs && yarn lint:js && yarn lint:sass",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "lint:sass": "sass-lint -v -q",
