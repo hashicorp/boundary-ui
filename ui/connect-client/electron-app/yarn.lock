@@ -1055,6 +1055,11 @@ electron@9.0.5:
     "@types/node" "^12.0.12"
     extract-zip "^1.0.3"
 
+ember-inspector@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ember-inspector/-/ember-inspector-4.1.0.tgz#c9e60da5738c9cc322e08198813225fc5fa381ca"
+  integrity sha512-767L3a1iFe3Rt5gpPBBTHNMXxSlNffnk0UYjGrEFmWlbkpYkN3bCN4sv9TvVtimvxwTlX/E5Eo/xX7Q565/V+Q==
+
 emoji-regex@^7.0.1:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
