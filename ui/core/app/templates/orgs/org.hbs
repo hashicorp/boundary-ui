@@ -12,6 +12,10 @@
       {{outlet "sidebar"}}
 
     <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
+      <nav.link @route="orgs.org.users">
+        {{t "resources.users"}}
+      </nav.link>
+
       <nav.link @route="orgs.org.groups">
         {{t "resources.groups"}}
       </nav.link>
