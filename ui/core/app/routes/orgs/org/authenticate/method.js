@@ -25,6 +25,15 @@ export default class OrgsOrgAuthenticateMethodRoute extends Route {
   model({ auth_method_id: id }) {
     return this.store.findRecord('auth-method', id);
   }
+  /*
+  // for integration testing
+  model({ auth_method_id: id }) {
+    return {
+      id: 'foobar',
+      type: 'password'
+    };
+  }
+  */
 
   // =actions
 
@@ -37,7 +46,7 @@ export default class OrgsOrgAuthenticateMethodRoute extends Route {
     const authenticatorName = 'authenticator:password'
     const authMethodId = this.currentModel.id;
     this.controller.setProperties({
-      username: null,
+      identification: null,
       password: null
     });
     const requestCookies = false;

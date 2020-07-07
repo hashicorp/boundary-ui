@@ -6,7 +6,7 @@ import fetch from 'fetch';
  *
  * This authenticator is intended for use with Ember Simple Auth.
  *
- * Username/password base authenticator sends credentials to an endpoint
+ * Simple id/password base authenticator sends credentials to an endpoint
  * specified in the `authEndpoint` URL.  If the HTTP response code is in the
  * success range, authentication resolves.  Otherwise it rejects.
  *
@@ -49,15 +49,17 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    *
    * @override
    * @param {object} creds
+   * @param {string} creds.identification is sent to server as `name`
+   * @param {string} creds.password
    * @param {string} authMethodId ID of the auth method to use
    * @param {boolean} requestCookies request cookie tokens (default `true`)
    * @return {Promise}
    */
-  async authenticate(creds, authMethodID, requestCookies=true) {
+  async authenticate({identification: name, password}, authMethodID, requestCookies=true) {
     const body = JSON.stringify({
       auth_method_id: authMethodID,
       token_type: requestCookies ? 'cookie' : null,
-      password_credentials: creds
+      password_credential: { name, password }
     });
     const response = await fetch(this.authEndpoint, { method: 'post', body });
     const json = await response.json();

@@ -122,7 +122,7 @@ module('Acceptance | authentication', function(hooks) {
     await visit(authMethodURL);
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodURL);
-    await fillIn('[name="username"]', 'admin');
+    await fillIn('[name="identification"]', 'admin');
     await fillIn('[name="password"]', 'admin');
     await click('[type="submit"]');
     assert.ok(currentSession().isAuthenticated);
@@ -134,7 +134,7 @@ module('Acceptance | authentication', function(hooks) {
     await visit(authMethodURL);
     assert.notOk(currentSession().isAuthenticated, 'Session is not authenticated');
     assert.equal(currentURL(), authMethodURL, 'Authenticate is current page');
-    await fillIn('[name="username"]', 'error');
+    await fillIn('[name="identification"]', 'error');
     await fillIn('[name="password"]', 'error');
     await click('[type="submit"]');
     assert.notOk(currentSession().isAuthenticated, 'Session is still not authenticated');
@@ -146,7 +146,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.expect(6);
     await visit(authMethodURL);
     assert.notOk(currentSession().isAuthenticated);
-    await fillIn('[name="username"]', 'admin');
+    await fillIn('[name="identification"]', 'admin');
     await fillIn('[name="password"]', 'admin');
     await click('[type="submit"]');
     assert.ok(currentSession().isAuthenticated);

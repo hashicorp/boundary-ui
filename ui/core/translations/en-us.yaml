@@ -49,7 +49,7 @@ form:
     name: Name
     description: Description
     type: Type
-    username: Username
+    identification: Username
     password: Password
 errors:
   titles:
@@ -58,7 +58,7 @@ errors:
     notfound-error: Resource not found
     server-error: Server error
     unknown-error: Something went wrong
-    authentication-failed: Sorry, authentication was unsuccessful and we cannot give a reason. Check your credentials and try again.
+    authentication-failed: Sorry, authentication was unsuccessful. Check your credentials and try again.
   descriptions:
     unauthenticated-error: You are not authenticated. Please authenticate and try again later.
     forbidden-error: You must be granted permissions to view this data. Ask your administrator if you think you should have access.

@@ -37,6 +37,13 @@ export default class OrgsOrgAuthenticateRoute extends Route.extend() {
       org: this.modelFor('orgs.org'),
       orgs: this.modelFor('orgs'),
       authMethods: this.store.findAll('auth-method')
+      /*
+      // for integration testing:
+      authMethods: [{
+        id: 'foobar',
+        type: 'password'
+      }]
+      */
     });
   }
 

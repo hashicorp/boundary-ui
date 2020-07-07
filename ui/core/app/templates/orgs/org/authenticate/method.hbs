@@ -1,14 +1,17 @@
 <Rose::Form
-  @onSubmit={{route-action "authenticate" (hash username=this.username password=this.password)}}
+  @onSubmit={{route-action "authenticate" (hash
+    identification=this.identification
+    password=this.password
+  )}}
   @cancel={{false}}
   as |form|
 >
 
   <form.input
-    name="username"
+    name="identification"
     @type="text"
-    @value={{this.username}}
-    @label={{t "form.label.username"}} />
+    @value={{this.identification}}
+    @label={{t "form.label.identification"}} />
 
   <form.input
     name="password"
