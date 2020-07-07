@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '12.x'
       - run: yarn install
-      - run: yarn audit
+      - run: yarn run compliance:audit
 
   lint:
     name: Lint
