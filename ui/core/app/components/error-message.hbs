@@ -13,46 +13,45 @@
   *                   we don't distinguish it yet
 
 --}}
-<Rose::Layout::Centered>
-  {{#each @model.errors as |error|}}
-    {{!-- error.status === 401 --}}
-    {{#if error.isUnauthenticated}}
-      <Rose::Message @title={{t 'errors.titles.unauthenticated-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="disabled" as |message|>
-        <message.description>{{t 'errors.descriptions.unauthenticated-error'}}</message.description>
-        <message.link @route="index">{{t 'actions.help'}}</message.link>
-      </Rose::Message>
-    {{/if}}
 
-    {{!-- error.status === 403 --}}
-    {{#if error.isForbidden}}
-      <Rose::Message @title={{t 'errors.titles.forbidden-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="disabled" as |message|>
-        <message.description>{{t 'errors.descriptions.forbidden-error'}}</message.description>
-        <message.link @route="index">{{t 'actions.help'}}</message.link>
-      </Rose::Message>
-    {{/if}}
+{{#each @model.errors as |error|}}
+  {{!-- error.status === 401 --}}
+  {{#if error.isUnauthenticated}}
+    <Rose::Message @title={{t 'errors.titles.unauthenticated-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="disabled" as |message|>
+      <message.description>{{t 'errors.descriptions.unauthenticated-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
+  {{/if}}
 
-    {{!-- error.status === 404 --}}
-    {{#if error.isNotFound}}
-      <Rose::Message @title={{t 'errors.titles.notfound-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="help-circle-outline" as |message|>
-        <message.description>{{t 'errors.descriptions.notfound-error'}}</message.description>
-        <message.link @route="index">{{t 'actions.help'}}</message.link>
-      </Rose::Message>
-    {{/if}}
+  {{!-- error.status === 403 --}}
+  {{#if error.isForbidden}}
+    <Rose::Message @title={{t 'errors.titles.forbidden-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="disabled" as |message|>
+      <message.description>{{t 'errors.descriptions.forbidden-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
+  {{/if}}
 
-    {{!-- error.status === 500 --}}
-    {{#if error.isServer}}
-      <Rose::Message @title={{t 'errors.titles.server-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="alert-circle-outline" as |message|>
-        <message.description>{{t 'errors.descriptions.server-error'}}</message.description>
-        <message.link @route="index">{{t 'actions.help'}}</message.link>
-      </Rose::Message>
-    {{/if}}
+  {{!-- error.status === 404 --}}
+  {{#if error.isNotFound}}
+    <Rose::Message @title={{t 'errors.titles.notfound-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="help-circle-outline" as |message|>
+      <message.description>{{t 'errors.descriptions.notfound-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
+  {{/if}}
 
-    {{!-- error.status === 🤷 everything else --}}
-    {{#if error.isUnknown}}
-      <Rose::Message @title={{t 'errors.titles.unknown-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="alert-circle-outline" as |message|>
-        <message.description>{{t 'errors.descriptions.unknown-error'}}</message.description>
-        <message.link @route="index">{{t 'actions.help'}}</message.link>
-      </Rose::Message>
-    {{/if}}
-  {{/each}}
-</Rose::Layout::Centered>
+  {{!-- error.status === 500 --}}
+  {{#if error.isServer}}
+    <Rose::Message @title={{t 'errors.titles.server-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="alert-circle-outline" as |message|>
+      <message.description>{{t 'errors.descriptions.server-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
+  {{/if}}
+
+  {{!-- error.status === 🤷 everything else --}}
+  {{#if error.isUnknown}}
+    <Rose::Message @title={{t 'errors.titles.unknown-error'}} @subtitle="{{t 'states.error'}} {{error.status}}" @icon="alert-circle-outline" as |message|>
+      <message.description>{{t 'errors.descriptions.unknown-error'}}</message.description>
+      <message.link @route="index">{{t 'actions.help'}}</message.link>
+    </Rose::Message>
+  {{/if}}
+{{/each}}

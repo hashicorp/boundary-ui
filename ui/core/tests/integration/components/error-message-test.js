@@ -6,13 +6,6 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | error-message', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    this.set('model', { errors: {} });
-
-    await render(hbs`<ErrorMessage @model={{this.model}} />`);
-    assert.ok(find('.rose-layout-centered'));
-  });
-
   test('it renders a model error', async function(assert) {
     this.set('model', { errors: [{
       isUnknown: true,
