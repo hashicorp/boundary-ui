@@ -3,22 +3,33 @@
   "description": "Monorepo for Project Watchtower UIs and addons.",
   "license": "MPL-2.0",
   "author": "HashiCorp",
-  "workspaces": [
-    "addons/*",
-    "ui/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "addons/*",
+      "ui/*"
+    ],
+    "nohoist": [
+      "**/electron",
+      "**/electron/**",
+      "**/electron*/**",
+      "**/electron*"
+    ]
+  },
   "scripts": {
     "build:ui:core": "cd ui/core && yarn build",
-    "lint": "yarn lint:addons:api && yarn lint:addons:auth && yarn lint:addons:rose && yarn lint:ui:core",
+    "build:ui:connect-client": "cd ui/connect-client && yarn build",
+    "lint": "yarn lint:addons:api && yarn lint:addons:auth && yarn lint:addons:rose && yarn lint:ui:core && yarn lint:ui:connect-client",
     "lint:addons:api": "echo \"\n\nlint: addons/api\n\" && cd addons/api && yarn lint",
     "lint:addons:auth": "echo \"\n\nlint: addons/auth\n\" && cd addons/auth && yarn lint",
     "lint:addons:rose": "echo \"\n\nlint: addons/rose\n\" && cd addons/rose && yarn lint",
     "lint:ui:core": "echo \"\n\nlint: ui/core\n\" && cd ui/core && yarn lint",
-    "test": "yarn test:addons:api && yarn test:addons:auth && yarn test:addons:rose && yarn test:ui:core",
+    "lint:ui:connect-client": "echo \"\n\nlint: ui/connect-client\n\" && cd ui/connect-client && yarn lint",
+    "test": "yarn test:addons:api && yarn test:addons:auth && yarn test:addons:rose && yarn test:ui:core && yarn test:ui:connect-client",
     "test:addons:api": "echo \"\n\ntest: addons/api\n\" && cd addons/api && yarn test",
     "test:addons:auth": "echo \"\n\ntest: addons/auth\n\" && cd addons/auth && yarn test",
     "test:addons:rose": "echo \"\n\ntest: addons/rose\n\" && cd addons/rose && yarn test",
     "test:ui:core": "echo \"\n\ntest: ui/core\n\" && cd ui/core && yarn test",
+    "test:ui:connect-client": "echo \"\n\ntest: ui/connect-client\n\" && cd ui/connect-client && yarn test",
     "compliance:audit": "bash ./scripts/yarn-audit.sh",
     "precommit": "yarn compliance:licenses && yarn compliance:audit && yarn lint && yarn test",
     "commit": "git-cz",
