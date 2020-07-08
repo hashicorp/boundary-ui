@@ -12,6 +12,8 @@ body {
   // expressed in rem units.
   font-size: typography.$base-font-size * 1px;
   line-height: typography.line-height(m);
+  color: var(--stark);
+  background-color: var(--subtle);
 }
 
 pre,
@@ -42,4 +44,8 @@ h3,
 
 p {
   margin-bottom: sizing.rems(m);
+}
+
+a {
+  color: var(--action);
 }
