@@ -12,6 +12,8 @@ body {
   // expressed in rem units.
   font-size: typography.$base-font-size * 1px;
   line-height: typography.line-height(m);
+  color: var(--stark);
+  background-color: var(--subtle);
 }
 
 pre,
@@ -47,4 +49,8 @@ p {
 b,
 strong {
   font-weight: typography.font-weight(bold);
+}
+
+a {
+  color: var(--action);
 }
