@@ -77,7 +77,7 @@ export default class StorageService extends Service {
     // Get the global context object (window) via service lookup,
     // because just reaching for a global is icky
     const globalContext = getOwner(this).lookup('service:-document')
-      .documentElement.parentNode.defaultView;
+      .defaultView;
     // If memory storage enabled, return the memory storage instance,
     // otherwise return localStorage.
     return inMemory ? this.#memoryStorage : globalContext.localStorage;
