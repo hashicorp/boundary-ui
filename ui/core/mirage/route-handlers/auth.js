@@ -12,7 +12,7 @@ import { Response } from 'miragejs';
 //  */
 // export default function authenticateHandler(schema, request) {
 //   const payload = JSON.parse(request.requestBody);
-//   if (payload.password_credential.name === 'error') {
+//   if (payload.credentials.name === 'error') {
 //     return new Response(400);
 //   } else {
 //     const cookieName = config.auth.passwordCookieName;
@@ -33,7 +33,7 @@ export function authHandler(schema, request) {
   const isAuthenticationRequest = payload;
   if (isAuthenticationRequest) {
     // this is an auth request
-    if (payload.password_credential.name === 'error') {
+    if (payload.credentials.name === 'error') {
       return new Response(400);
     } else {
       return new Response(200, {}, {

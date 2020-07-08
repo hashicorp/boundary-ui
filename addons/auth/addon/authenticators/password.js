@@ -59,7 +59,7 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
     const body = JSON.stringify({
       auth_method_id: authMethodID,
       token_type: requestCookies ? 'cookie' : null,
-      password_credential: { name, password }
+      credentials: { name, password }
     });
     const response = await fetch(this.authEndpoint, { method: 'post', body });
     const json = await response.json();

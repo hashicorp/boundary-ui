@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { hash } from 'rsvp';
+//import { A } from '@ember/array';
 
 /**
  * The org-scoped authenticate route has two primary responsibilities:
@@ -37,13 +38,13 @@ export default class OrgsOrgAuthenticateRoute extends Route.extend() {
       org: this.modelFor('orgs.org'),
       orgs: this.modelFor('orgs'),
       authMethods: this.store.findAll('auth-method')
-      /*
+
       // for integration testing:
-      authMethods: [{
-        id: 'foobar',
-        type: 'password'
-      }]
-      */
+      // authMethods: new A([{
+      //   id: 'foobar',
+      //   type: 'password'
+      // }])
+
     });
   }
 

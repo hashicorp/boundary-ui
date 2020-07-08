@@ -41,7 +41,7 @@ module('Unit | Authenticator | password', function (hooks) {
       assert.deepEqual(json, {
         auth_method_id: '123',
         token_type: 'cookie',
-        password_credential: {
+        credentials: {
           name: 'foo',
           password: 'bar'
         }

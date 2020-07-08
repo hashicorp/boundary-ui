@@ -7,7 +7,7 @@
   as |dropdown|>
     {{#each @model as |org|}}
       <dropdown.link @route="orgs.org.authenticate" @model={{org}}>
-        {{org.name}}
+        {{org.displayName}}
       </dropdown.link>
     {{/each}}
   </Rose::Dropdown>
