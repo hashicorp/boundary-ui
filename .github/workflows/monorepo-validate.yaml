@@ -10,12 +10,13 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: **/node_modules
+          path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
       - run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:licenses
 
   audit:
@@ -26,12 +27,13 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: **/node_modules
+          path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
       - run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:audit
 
   lint:
@@ -42,12 +44,13 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: **/node_modules
+          path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
       - run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn lint
 
   test:
@@ -58,10 +61,11 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: **/node_modules
+          path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
       - run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn test
