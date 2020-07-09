@@ -33,4 +33,22 @@ export default class GeneratedRoleModel extends BaseModel {
     description: 'Whether the resource is disabled',
   })
   disabled;
+
+  @attr('array', {
+    description: 'Users in this role.',
+    readOnly: true,
+  })
+  users;
+
+  @attr('array', {
+    description: 'Groups in this role.',
+    readOnly: true,
+  })
+  groups;
+
+  @attr('array', {
+    description: 'Grants in this role.',
+    readOnly: true,
+  })
+  grants;
 }
