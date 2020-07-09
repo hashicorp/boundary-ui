@@ -12,8 +12,11 @@
 
   <page.navigation>
     <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='orgs.org.roles.role'>
+      <nav.link @route='orgs.org.roles.role.index'>
         {{t 'titles.settings'}}
+      </nav.link>
+      <nav.link @route='orgs.org.roles.role.usage'>
+        {{t 'titles.usage'}}
       </nav.link>
     </Rose::Nav::Tabs>
   </page.navigation>
