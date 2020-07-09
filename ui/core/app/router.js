@@ -41,6 +41,7 @@ Router.map(function () {
         this.route('group', { path: ':group_id' }, function () {});
         this.route('new');
       });
+      this.route('auth-methods', function() {});
     });
     this.route('authenticate', function () {});
   });
