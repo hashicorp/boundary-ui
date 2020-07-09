@@ -17,8 +17,8 @@ module('Unit | Serializer | role', function (hooks) {
     const record = store.createRecord('role', {
       name: 'Role',
       description: 'Description',
-      users: ['u_123', 'u_456'],
-      groups: ['g_123', 'g_456'],
+      user_ids: ['u_123', 'u_456'],
+      group_ids: ['g_123', 'g_456'],
       grants: ['*', '*'],
     });
     const serializedRecord = record.serialize();
@@ -36,8 +36,8 @@ module('Unit | Serializer | role', function (hooks) {
     const payload = {
       id: '1',
       name: 'Role 1',
-      users: ['u_123', 'u_456'],
-      groups: ['g_123', 'g_456'],
+      user_ids: ['u_123', 'u_456'],
+      group_ids: ['g_123', 'g_456'],
       grants: ['*', '*'],
     };
     const normalized = serializer.normalizeSingleResponse(
@@ -52,8 +52,8 @@ module('Unit | Serializer | role', function (hooks) {
         type: 'role',
         attributes: {
           name: 'Role 1',
-          users: ['u_123', 'u_456'],
-          groups: ['g_123', 'g_456'],
+          user_ids: ['u_123', 'u_456'],
+          group_ids: ['g_123', 'g_456'],
           grants: ['*', '*'],
         },
         relationships: {},

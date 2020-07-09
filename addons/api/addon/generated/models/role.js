@@ -38,13 +38,13 @@ export default class GeneratedRoleModel extends BaseModel {
     description: 'Users in this role.',
     readOnly: true,
   })
-  users;
+  user_ids;
 
   @attr('array', {
     description: 'Groups in this role.',
     readOnly: true,
   })
-  groups;
+  group_ids;
 
   @attr('array', {
     description: 'Grants in this role.',
