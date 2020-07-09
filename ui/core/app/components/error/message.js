@@ -1,5 +1,4 @@
 import Message from 'rose/components/rose/message';
-import { inject as service } from '@ember/service';
 
 /*
   * Helpful error booleans are attached based on the error status code:
@@ -15,7 +14,7 @@ import { inject as service } from '@ember/service';
   *                   we don't distinguish it yet
 */
 
-const STATUS_MESSAGES = {
+const status_messages = {
   '401' : {
     icon: 'disabled',
     title: 'errors.titles.unauthenticated-error',
@@ -49,12 +48,6 @@ const STATUS_MESSAGES = {
 };
 
 export default class ErrorMessageComponent extends Message {
-  // =services
-
-  @service intl;
-
-  // @tracked error;
-
   // =methods
 
   /**
@@ -70,7 +63,7 @@ export default class ErrorMessageComponent extends Message {
    * @return {string}
    */
   get title() {
-    return this.intl.t(this.statusMessage.title);
+    return this.statusMessage.title;
   }
 
   /**
@@ -78,7 +71,7 @@ export default class ErrorMessageComponent extends Message {
    * @return {string}
    */
   get subtitle() {
-    return this.intl.t(this.statusMessage.subtitle);
+    return this.statusMessage.subtitle;
   }
 
   /**
@@ -86,18 +79,15 @@ export default class ErrorMessageComponent extends Message {
    * @return {string}
    */
   get description() {
-    return this.intl.t(this.statusMessage.description);
+    return this.statusMessage.description;
   }
 
   /**
-   * Returns an object with default index route and help text.
-   * @return {object}
+   * Returns an route string for help text in message.
+   * @return {string}
    */
-  get help() {
-    return {
-      route: 'index',
-      text: this.intl.t('actions.help')
-    }
+  get helpRoute() {
+    return 'index'
   }
 
   /**
@@ -107,8 +97,8 @@ export default class ErrorMessageComponent extends Message {
    * @return {object}
    */
   get statusMessage() {
-    let status = this.error.status;
-    if(!STATUS_MESSAGES[status]) { status = 'unknown'; }
-    return STATUS_MESSAGES[status];
+    let status = this.status;
+    if(!status_messages[status]) { status = 'unknown'; }
+    return status_messages[status];
   }
 }

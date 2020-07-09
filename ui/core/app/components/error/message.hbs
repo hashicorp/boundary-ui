@@ -1,4 +1,4 @@
-<Rose::Message @title={{this.title}} @subtitle="{{this.subtitle}}" @icon={{this.icon}} as |message|>
-  <message.description>{{this.description}}</message.description>
-  <message.link @route={{this.help.route}}>{{this.help.text}}</message.link>
+<Rose::Message @title={{t this.title}} @subtitle="{{t this.subtitle}}" @icon={{this.icon}} as |message|>
+  <message.description>{{t this.description}}</message.description>
+  <message.link @route={{this.helpRoute}}>{{t "actions.help"}}</message.link>
 </Rose::Message>
