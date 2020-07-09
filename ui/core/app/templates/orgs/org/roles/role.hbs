@@ -1,3 +1,25 @@
 {{title @model.displayName}}
 
-{{outlet}}
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.role"}}</h2>
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='orgs.org.roles.role'>
+        {{t 'titles.settings'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.body>
+    {{outlet}}
+  </page.body>
+
+</Rose::Layout::Page>
