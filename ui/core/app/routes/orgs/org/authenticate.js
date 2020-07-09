@@ -14,7 +14,6 @@ import { hash } from 'rsvp';
  *
  */
 export default class OrgsOrgAuthenticateRoute extends Route.extend() {
-
   // =services
 
   @service session;
@@ -37,15 +36,13 @@ export default class OrgsOrgAuthenticateRoute extends Route.extend() {
     return hash({
       org: this.modelFor('orgs.org'),
       orgs: this.modelFor('orgs'),
-      authMethods: this.store.findAll('auth-method')
+      authMethods: this.store.findAll('auth-method'),
 
       // for integration testing:
       // authMethods: new A([{
       //   id: 'foobar',
       //   type: 'password'
       // }])
-
     });
   }
-
 }

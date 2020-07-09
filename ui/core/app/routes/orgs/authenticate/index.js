@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 
 export default class OrgsAuthenticateIndexRoute extends Route {
-
   // =services
 
   @service session;
@@ -18,5 +17,4 @@ export default class OrgsAuthenticateIndexRoute extends Route {
     const orgID = get(this.session, 'data.authenticated.org_id');
     if (orgID) this.transitionTo('orgs.org.authenticate', orgID);
   }
-
 }

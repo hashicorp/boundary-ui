@@ -55,11 +55,15 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @param {boolean} requestCookies request cookie tokens (default `true`)
    * @return {Promise}
    */
-  async authenticate({identification: name, password}, authMethodID, requestCookies=true) {
+  async authenticate(
+    { identification: name, password },
+    authMethodID,
+    requestCookies = true
+  ) {
     const body = JSON.stringify({
       auth_method_id: authMethodID,
       token_type: requestCookies ? 'cookie' : null,
-      credentials: { name, password }
+      credentials: { name, password },
     });
     const response = await fetch(this.authEndpoint, { method: 'post', body });
     const json = await response.json();
@@ -75,7 +79,9 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @return {Promise}
    */
   invalidate() {
-    fetch(this.deauthEndpoint, { method: 'post' }).catch(() => { /* no op */ });
+    fetch(this.deauthEndpoint, { method: 'post' }).catch(() => {
+      /* no op */
+    });
     return super.invalidate(...arguments);
   }
 }

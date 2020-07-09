@@ -7,7 +7,6 @@ import { getOwner } from '@ember/application';
  * org-scoped endpoint.
  */
 export default class PasswordAuthenticator extends BasePasswordAuthenticator {
-
   // =services
 
   @service scope;
@@ -31,7 +30,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @type {string}
    */
   get authEndpoint() {
-    return `${this.endpoint}:authenticate`
+    return `${this.endpoint}:authenticate`;
   }
 
   /**
@@ -39,7 +38,6 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @type {string}
    */
   get deauthEndpoint() {
-    return `${this.endpoint}:deauthenticate`
+    return `${this.endpoint}:deauthenticate`;
   }
-
 }

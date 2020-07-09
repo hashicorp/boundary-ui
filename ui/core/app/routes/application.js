@@ -9,8 +9,9 @@ import { later } from '@ember/runloop';
 /**
  * Entry route for the application.
  */
-export default class ApplicationRoute extends Route.extend(ApplicationRouteMixin) {
-
+export default class ApplicationRoute extends Route.extend(
+  ApplicationRouteMixin
+) {
   // =services
 
   @service session;
@@ -60,5 +61,4 @@ export default class ApplicationRoute extends Route.extend(ApplicationRouteMixin
   invalidateSession() {
     this.session.invalidate();
   }
-
 }

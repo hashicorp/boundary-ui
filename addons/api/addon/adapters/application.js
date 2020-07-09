@@ -33,7 +33,7 @@ function payloadIsBlank(adapterPayload) {
  * @return {object}
  */
 function prenormalizeArrayResponse(response) {
-  return payloadIsBlank(response) ? {items: []} : response;
+  return payloadIsBlank(response) ? { items: [] } : response;
 }
 
 export default class ApplicationAdapter extends RESTAdapter {
@@ -96,7 +96,7 @@ export default class ApplicationAdapter extends RESTAdapter {
    * @param {Object} options
    * @return {Object}
    */
-  ajaxOptions(url, method, options={}) {
+  ajaxOptions(url, method, options = {}) {
     const applicationAdapter = this.store.adapterFor('application');
     const applicationHeaders = get(applicationAdapter, 'headers');
     options.headers = Object.assign({}, applicationHeaders, options.headers);
@@ -184,7 +184,7 @@ export default class ApplicationAdapter extends RESTAdapter {
   normalizeErrorResponse(/*status, headers, payload*/) {
     const errors = super.normalizeErrorResponse(...arguments);
     if (isArray(errors)) {
-      errors.forEach(error => {
+      errors.forEach((error) => {
         switch (Number(error.status)) {
           case 401:
             error.isUnauthenticated = true;

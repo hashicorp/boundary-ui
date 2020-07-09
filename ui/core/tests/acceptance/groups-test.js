@@ -5,8 +5,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 
-
-module('Acceptance | groups', function(hooks) {
+module('Acceptance | groups', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -80,7 +79,7 @@ module('Acceptance | groups', function(hooks) {
 
   test('can save changes to an existing group', async function (assert) {
     assert.expect(2);
-    this.server.createList('group', 1, {name: 'Admin group'});
+    this.server.createList('group', 1, { name: 'Admin group' });
     await visit('/orgs/1/groups/1');
     await fillIn('[name="name"]', 'Updated admin group');
     await click('.rose-form-actions [type="submit"]');
@@ -90,14 +89,14 @@ module('Acceptance | groups', function(hooks) {
 
   test('can cancel changes to an existing group', async function (assert) {
     assert.expect(1);
-    this.server.createList('group', 1, {name: 'Admin group'});
+    this.server.createList('group', 1, { name: 'Admin group' });
     await visit('/orgs/1/groups/1');
     await fillIn('[name="name"]', 'Updated admin group');
     await click('.rose-form-actions [type="button"]');
     assert.equal(find('[name="name"]').value, 'Admin group');
   });
 
-  test('can delete a group', async function(assert) {
+  test('can delete a group', async function (assert) {
     assert.expect(2);
     this.server.createList('group', 1);
     assert.equal(this.server.db.groups.length, 1);

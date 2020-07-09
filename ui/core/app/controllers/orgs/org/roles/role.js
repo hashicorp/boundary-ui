@@ -8,5 +8,4 @@ export default class OrgsOrgRolesRoleController extends Controller {
    * @type {string}
    */
   @alias('model.displayName') breadCrumb;
-
 }

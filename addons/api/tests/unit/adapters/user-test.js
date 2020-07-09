@@ -2,10 +2,10 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import config from 'ember-get-config';
 
-module('Unit | Adapter | user', function(hooks) {
+module('Unit | Adapter | user', function (hooks) {
   setupTest(hooks);
 
-  test('it exists', function(assert) {
+  test('it exists', function (assert) {
     let adapter = this.owner.lookup('adapter:user');
     assert.ok(adapter);
   });

@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class OrgsIndexRoute extends Route {
-
   // =methods
 
   /**
@@ -11,5 +10,4 @@ export default class OrgsIndexRoute extends Route {
   redirect() {
     this.transitionTo('orgs.authenticate');
   }
-
 }

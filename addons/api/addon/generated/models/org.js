@@ -5,7 +5,6 @@ import { attr } from '@ember-data/model';
  *
  */
 export default class GeneratedOrgModel extends BaseModel {
-
   // =attributes
 
   @attr('string', {
@@ -29,5 +28,4 @@ export default class GeneratedOrgModel extends BaseModel {
     readOnly: true,
   })
   updated_time;
-
 }

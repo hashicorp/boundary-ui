@@ -6,7 +6,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 
-module('Acceptance | host catalogs', function(hooks) {
+module('Acceptance | host catalogs', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -24,7 +24,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(currentURL(), '/orgs/1/projects/1/host-catalogs');
   });
 
-  test('can navigate to host catalog form', async function(assert) {
+  test('can navigate to host catalog form', async function (assert) {
     assert.expect(1);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
@@ -34,7 +34,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(currentURL(), '/orgs/1/projects/1/host-catalogs/1');
   });
 
-  test('can delete host catalog', async function(assert) {
+  test('can delete host catalog', async function (assert) {
     assert.expect(2);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
@@ -44,7 +44,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(this.server.db.hostCatalogs.length, 0);
   });
 
-  test('can update host catalog and save changes', async function(assert) {
+  test('can update host catalog and save changes', async function (assert) {
     assert.expect(1);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
@@ -54,7 +54,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(this.server.db.hostCatalogs[0].name, 'Test Name');
   });
 
-  test('can update host catalog and cancel changes', async function(assert) {
+  test('can update host catalog and cancel changes', async function (assert) {
     assert.expect(1);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
@@ -64,7 +64,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.notEqual(this.server.db.hostCatalogs[0].name, 'Test Name');
   });
 
-  test('can create host catalog and save changes', async function(assert) {
+  test('can create host catalog and save changes', async function (assert) {
     assert.expect(2);
     this.server.createList('project', 1);
     await visit('/orgs/1/projects/1/host-catalogs/new');
@@ -74,7 +74,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(currentURL(), '/orgs/1/projects/1/host-catalogs/1');
   });
 
-  test('can create host catalog and cancel changes', async function(assert) {
+  test('can create host catalog and cancel changes', async function (assert) {
     assert.expect(2);
     this.server.createList('project', 1);
     await visit('/orgs/1/projects/1/host-catalogs/new');
@@ -88,17 +88,20 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.expect(1);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
-    this.server.patch('/orgs/:org_id/projects/:project_id/host-catalogs/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
+    this.server.patch(
+      '/orgs/:org_id/projects/:project_id/host-catalogs/:id',
+      () => {
+        return new Response(
+          490,
+          {},
+          {
+            status: 490,
+            code: 'error',
+            message: 'Oops.',
+          }
+        );
+      }
+    );
     await visit('/orgs/1/projects/1/host-catalogs/1');
     await fillIn('[name="name"]', 'random string');
     await click('form [type="submit"]');
@@ -114,17 +117,20 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.expect(1);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
-    this.server.del('/orgs/:org_id/projects/:project_id/host-catalogs/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
+    this.server.del(
+      '/orgs/:org_id/projects/:project_id/host-catalogs/:id',
+      () => {
+        return new Response(
+          490,
+          {},
+          {
+            status: 490,
+            code: 'error',
+            message: 'Oops.',
+          }
+        );
+      }
+    );
     await visit('/orgs/1/projects/1/host-catalogs/1');
     await click('.rose-button-warning');
     await a11yAudit();
@@ -177,25 +183,28 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.expect(2);
     this.server.createList('project', 1);
     this.server.createList('host-catalog', 1);
-    this.server.patch('/orgs/:org_id/projects/:project_id/host-catalogs/:id', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            fields: [
-              {
-                name: 'name',
-                message: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
+    this.server.patch(
+      '/orgs/:org_id/projects/:project_id/host-catalogs/:id',
+      () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {
+              fields: [
+                {
+                  name: 'name',
+                  message: 'Name is required.',
+                },
+              ],
+            },
+          }
+        );
+      }
+    );
     await visit('/orgs/1/projects/1/host-catalogs/1');
     await fillIn('[name="name"]', 'random string');
     await click('form [type="submit"]');
@@ -211,5 +220,4 @@ module('Acceptance | host catalogs', function(hooks) {
       'Displays field-level errors.'
     );
   });
-
 });

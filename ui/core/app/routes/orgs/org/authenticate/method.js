@@ -8,7 +8,6 @@ import { action } from '@ember/object';
  * Ember Simple Auth authenticator.
  */
 export default class OrgsOrgAuthenticateMethodRoute extends Route {
-
   // =services
 
   @service session;
@@ -34,7 +33,6 @@ export default class OrgsOrgAuthenticateMethodRoute extends Route {
   //   };
   // }
 
-
   // =actions
 
   /**
@@ -43,21 +41,24 @@ export default class OrgsOrgAuthenticateMethodRoute extends Route {
    */
   @action
   async authenticate(creds) {
-    const authenticatorName = 'authenticator:password'
+    const authenticatorName = 'authenticator:password';
     const authMethodId = this.currentModel.id;
     this.controller.setProperties({
       identification: null,
-      password: null
+      password: null,
     });
     const requestCookies = false;
     try {
       await this.session.authenticate(
-        authenticatorName, creds, authMethodId, requestCookies);
+        authenticatorName,
+        creds,
+        authMethodId,
+        requestCookies
+      );
       this.transitionTo('orgs.org.projects');
     } catch (e) {
       const errorMessage = this.intl.t('errors.titles.authentication-failed');
       this.notify.error(errorMessage, { closeAfter: null });
     }
   }
-
 }

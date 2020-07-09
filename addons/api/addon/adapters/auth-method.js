@@ -4,7 +4,6 @@ import ScopeAdapterMixin from '../mixins/scope-adapter';
 export default class AuthMethodAdapter extends ApplicationAdapter.extend(
   ScopeAdapterMixin
 ) {
-
   // =attributes
 
   /**
@@ -12,5 +11,4 @@ export default class AuthMethodAdapter extends ApplicationAdapter.extend(
    * @type {boolean}
    */
   includeProject = false;
-
 }

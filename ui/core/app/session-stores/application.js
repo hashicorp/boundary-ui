@@ -4,7 +4,6 @@ import { get } from '@ember/object';
 //import config from '../config/environment';
 
 export default class ApplicationSessionStore extends LocalStorageSessionStore {
-
   @service store;
   @service scope;
 
@@ -42,7 +41,6 @@ export default class ApplicationSessionStore extends LocalStorageSessionStore {
     const authenticated = get(sessionData, 'authenticated');
     if (orgID && authenticated) authenticated.org_id = orgID;
   }
-
 }
 
 // import CookieSessionStore from 'auth/session-stores/cookie';

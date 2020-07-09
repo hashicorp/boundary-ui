@@ -14,5 +14,4 @@ export default class OrgsOrgUsersController extends Controller {
   get breadCrumb() {
     return this.intl.t('resources.users');
   }
-
 }

@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import config from 'ember-get-config';
 
-module('Unit | Adapter | role', function(hooks) {
+module('Unit | Adapter | role', function (hooks) {
   setupTest(hooks);
 
   test('it generates URL prefixes without project scope', function (assert) {

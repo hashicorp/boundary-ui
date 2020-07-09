@@ -43,14 +43,14 @@ module('Unit | Authenticator | password', function (hooks) {
         token_type: 'cookie',
         credentials: {
           name: 'foo',
-          password: 'bar'
-        }
+          password: 'bar',
+        },
       });
       return new Response(200);
     });
     const creds = {
       identification: 'foo',
-      password: 'bar'
+      password: 'bar',
     };
     const authMethodID = '123';
     await authenticator.authenticate(creds, authMethodID);
@@ -84,7 +84,8 @@ module('Unit | Authenticator | password', function (hooks) {
       assert.ok(true, 'deauthentication was requested');
       return new Response(500);
     });
-    await authenticator.invalidate()
+    await authenticator
+      .invalidate()
       .then(() => assert.ok(true))
       .catch(() => assert.notOk(true, 'uh oh, this should not happen'));
   });

@@ -21,20 +21,20 @@ module('Unit | Session Store | application', function (hooks) {
 
   test('it does not add an authorization header to application adapter on persist if no token is present', async function (assert) {
     assert.expect(1);
-    sessionStore.persist({authenticated: {token: null}});
+    sessionStore.persist({ authenticated: { token: null } });
     assert.notOk(applicationAdapter.headers.Authorization);
   });
 
   test('it adds an authorization header to application adapter on persist', async function (assert) {
     assert.expect(1);
-    sessionStore.persist({authenticated: {token: 'token1234'}});
+    sessionStore.persist({ authenticated: { token: 'token1234' } });
     assert.equal(applicationAdapter.headers.Authorization, 'Bearer token1234');
   });
 
   test('it adds an authorization header to application adapter which already has headers on persist', async function (assert) {
     assert.expect(2);
-    applicationAdapter.headers = {foo: 'bar'};
-    sessionStore.persist({authenticated: {token: 'token1234'}});
+    applicationAdapter.headers = { foo: 'bar' };
+    sessionStore.persist({ authenticated: { token: 'token1234' } });
     assert.equal(applicationAdapter.headers.foo, 'bar');
     assert.equal(applicationAdapter.headers.Authorization, 'Bearer token1234');
   });

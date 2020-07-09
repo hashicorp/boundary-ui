@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class OrgsRoute extends Route {
-
   // =methods
 
   /**
@@ -11,5 +10,4 @@ export default class OrgsRoute extends Route {
   model() {
     return this.store.findAll('org');
   }
-
 }

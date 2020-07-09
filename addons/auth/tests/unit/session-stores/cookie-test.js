@@ -17,11 +17,13 @@ module('Unit | Session Store | cookie', function (hooks) {
 
   test('it restores a session if both necessary cookies are present (session exists)', async function (assert) {
     assert.expect(2);
-    sessionStore.cookies.write(sessionStore.cookieName, 'token-value', {path: '/'});
+    sessionStore.cookies.write(sessionStore.cookieName, 'token-value', {
+      path: '/',
+    });
     sessionStore.cookies.write(
       sessionStore.authenticatorCookieName,
       'authenticator-name',
-      {path: '/'}
+      { path: '/' }
     );
     assert.ok(sessionStore.sessionExists);
     const session = await sessionStore.restore();
@@ -42,7 +44,9 @@ module('Unit | Session Store | cookie', function (hooks) {
   test('it cleans up cookies on restore rejection', async function (assert) {
     assert.expect(4);
     // For session cookie
-    sessionStore.cookies.write(sessionStore.cookieName, 'token-value', {path: '/'});
+    sessionStore.cookies.write(sessionStore.cookieName, 'token-value', {
+      path: '/',
+    });
     assert.ok(
       sessionStore.cookies.exists(sessionStore.cookieName),
       'cookie exists'
@@ -56,7 +60,7 @@ module('Unit | Session Store | cookie', function (hooks) {
     sessionStore.cookies.write(
       sessionStore.authenticatorCookieName,
       'authenticator-name',
-      {path: '/'}
+      { path: '/' }
     );
     assert.ok(
       sessionStore.cookies.exists(sessionStore.authenticatorCookieName),

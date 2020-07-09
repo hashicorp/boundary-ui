@@ -40,8 +40,13 @@ module('Unit | Adapter | application', function (hooks) {
     const store = this.owner.lookup('service:store');
     const adapter = store.adapterFor('project');
     this.server.get('/v1/projects', () => new Response({}));
-    const prenormalized = await adapter.findAll(store, {modelName: 'project'}, null, []);
-    assert.deepEqual(prenormalized, {items: []});
+    const prenormalized = await adapter.findAll(
+      store,
+      { modelName: 'project' },
+      null,
+      []
+    );
+    assert.deepEqual(prenormalized, { items: [] });
   });
 
   test('it correctly identifies 400 responses as invalid', function (assert) {

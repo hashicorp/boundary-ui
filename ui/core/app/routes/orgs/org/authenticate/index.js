@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class OrgsOrgAuthenticateIndexRoute extends Route {
-
   // =methods
 
   /**
@@ -10,9 +9,10 @@ export default class OrgsOrgAuthenticateIndexRoute extends Route {
    */
   redirect({ authMethods }) {
     if (authMethods.firstObject) {
-      this.transitionTo('orgs.org.authenticate.method',
-        authMethods.firstObject);
+      this.transitionTo(
+        'orgs.org.authenticate.method',
+        authMethods.firstObject
+      );
     }
   }
-
 }

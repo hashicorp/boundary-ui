@@ -79,7 +79,7 @@ module('Acceptance | roles', function (hooks) {
 
   test('can save changes to an existing role', async function (assert) {
     assert.expect(2);
-    this.server.createList('role', 1, {name: 'Admin role'});
+    this.server.createList('role', 1, { name: 'Admin role' });
     await visit('/orgs/1/roles/1');
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="submit"]');
@@ -89,14 +89,14 @@ module('Acceptance | roles', function (hooks) {
 
   test('can cancel changes to an existing role', async function (assert) {
     assert.expect(1);
-    this.server.createList('role', 1, {name: 'Admin role'});
+    this.server.createList('role', 1, { name: 'Admin role' });
     await visit('/orgs/1/roles/1');
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="button"]');
     assert.equal(find('[name="name"]').value, 'Admin role');
   });
 
-  test('can delete a role', async function(assert) {
+  test('can delete a role', async function (assert) {
     assert.expect(2);
     this.server.createList('role', 1);
     assert.equal(this.server.db.roles.length, 1);

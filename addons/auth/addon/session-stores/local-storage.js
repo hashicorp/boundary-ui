@@ -17,6 +17,4 @@ import LocalStorageSessionStore from 'ember-simple-auth/session-stores/local-sto
  *   }
  *
  */
-export default class AuthLocalStorageSessionStore extends LocalStorageSessionStore {
-
-}
+export default class AuthLocalStorageSessionStore extends LocalStorageSessionStore {}
