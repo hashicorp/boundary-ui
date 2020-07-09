@@ -1,23 +1,25 @@
 module.exports = {
   test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
-  launch_in_ci: ['Chrome'],
-  launch_in_dev: ['Chrome', 'Firefox'],
-  browser_start_timeout: 120,
+  launchers: {
+    Electron: require('ember-electron/lib/test-runner'),
+  },
+  launch_in_ci: ['Electron'],
+  launch_in_dev: ['Electron'],
   browser_args: {
-    Chrome: {
+    Electron: {
+      // Note: Some these Chrome options may not be supported in Electron
+      // See https://electronjs.org/docs/api/chrome-command-line-switches
       ci: [
         // --no-sandbox is needed when running Chrome inside a container
         process.env.CI ? '--no-sandbox' : null,
         '--headless',
         '--disable-dev-shm-usage',
-        '--disable-gpu',
-        //'--disable-software-rasterizer',
+        '--disable-software-rasterizer',
         '--mute-audio',
         '--remote-debugging-port=0',
         '--window-size=1440,900',
       ].filter(Boolean),
     },
-    Firefox: ['-headless', '--window-size=1440,900'],
   },
 };
