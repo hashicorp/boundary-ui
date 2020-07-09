@@ -33,7 +33,9 @@ Router.map(function () {
       });
 
       this.route('roles', function () {
-        this.route('role', { path: ':role_id' }, function () {});
+        this.route('role', { path: ':role_id' }, function () {
+          this.route('usage');
+        });
         this.route('new');
       });
 
