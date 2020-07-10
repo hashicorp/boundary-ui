@@ -5,6 +5,7 @@ import { attr } from '@ember-data/model';
  * Role contains all fields related to a Role resource
  */
 export default class GeneratedRoleModel extends BaseModel {
+
   // = attributes
 
   @attr('string', {
@@ -34,21 +35,4 @@ export default class GeneratedRoleModel extends BaseModel {
   })
   disabled;
 
-  @attr('array', {
-    description: 'Users in this role.',
-    readOnly: true,
-  })
-  user_ids;
-
-  @attr('array', {
-    description: 'Groups in this role.',
-    readOnly: true,
-  })
-  group_ids;
-
-  @attr('array', {
-    description: 'Grants in this role.',
-    readOnly: true,
-  })
-  grants;
 }

@@ -41,7 +41,7 @@
     "ember-cli-uglify": "^3.0.0",
     "ember-copy": "^1.0.0",
     "ember-data": "^3.16.0",
-    "ember-data-array-transform": "^3.0.0",
+    "ember-data-model-fragments": "5.0.0-beta.0",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.1",
     "ember-get-config": "^0.2.4",

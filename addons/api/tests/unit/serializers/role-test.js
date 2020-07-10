@@ -17,9 +17,9 @@ module('Unit | Serializer | role', function (hooks) {
     const record = store.createRecord('role', {
       name: 'Role',
       description: 'Description',
-      user_ids: ['u_123', 'u_456'],
-      group_ids: ['g_123', 'g_456'],
-      grants: ['*', '*'],
+      user_ids: [{value: 'u_123'}, {value: 'u_456'}],
+      group_ids: [{value: 'g_123'}, {value: 'g_456'}],
+      grants: [{value: '*'}, {value: '*'}],
     });
     const serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
@@ -52,12 +52,13 @@ module('Unit | Serializer | role', function (hooks) {
         type: 'role',
         attributes: {
           name: 'Role 1',
-          user_ids: ['u_123', 'u_456'],
-          group_ids: ['g_123', 'g_456'],
-          grants: ['*', '*'],
+          user_ids: [{value: 'u_123'}, {value: 'u_456'}],
+          group_ids: [{value: 'g_123'}, {value: 'g_456'}],
+          grants: [{value: '*'}, {value: '*'}],
         },
         relationships: {},
       },
     });
   });
+
 });

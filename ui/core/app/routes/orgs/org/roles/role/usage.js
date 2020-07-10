@@ -14,8 +14,10 @@ export default class OrgsOrgRolesRoleUsageRoute extends Route {
     const role = this.modelFor('orgs.org.roles.role');
     return hash({
       role,
-      users: all(role.user_ids.map(id => this.store.findRecord('user', id))),
-      groups: all(role.group_ids.map(id => this.store.findRecord('group', id))),
+      users: all(role.user_ids.map(({value: id}) =>
+        this.store.findRecord('user', id))),
+      groups: all(role.group_ids.map(({value: id}) =>
+        this.store.findRecord('group', id))),
     })
   }
 

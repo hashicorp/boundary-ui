@@ -29,7 +29,7 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @param {Object} attribute
    */
   serializeAttribute(snapshot, json, key, { options }) {
-    let value = super.serializeAttribute(...arguments);
+    const value = super.serializeAttribute(...arguments);
     // Do not serialize read-only attributes.
     if (options.readOnly) delete json[key];
     // Do not serialize `disabled` fields.
