@@ -5,6 +5,7 @@ import { attr } from '@ember-data/model';
  * Role contains all fields related to a Role resource
  */
 export default class GeneratedRoleModel extends BaseModel {
+
   // = attributes
 
   @attr('string', {
@@ -33,4 +34,5 @@ export default class GeneratedRoleModel extends BaseModel {
     description: 'Whether the resource is disabled',
   })
   disabled;
+
 }

@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -187,5 +187,13 @@ module('Acceptance | roles', function (hooks) {
       'Oops.',
       'Displays primary error message.'
     );
+  });
+
+  test('can view role usage', async function (assert) {
+    assert.expect(1);
+    const role = this.server.create('role', 'withRelated');
+    const relatedCount = role.user_ids.length + role.group_ids.length;
+    await visit('/orgs/1/roles/1/usage');
+    assert.equal(findAll('tbody tr').length, relatedCount);
   });
 });
