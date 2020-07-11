@@ -1,0 +1,17 @@
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.cell>{{t 'form.label.grant'}}</row.cell>
+      <row.cell>{{t 'form.label.type'}}</row.cell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    {{#each @model as |grant|}}
+      <body.row as |row|>
+        <row.cell>
+          {{grant.value}}
+        </row.cell>
+      </body.row>
+    {{/each}}
+  </table.body>
+</Rose::Table>
