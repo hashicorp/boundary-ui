@@ -120,4 +120,13 @@ export default class ScopeService extends Service {
   set project(project) {
     this.scope = new Scope(this.org, project);
   }
+
+  // =methods
+
+  /**
+   * Resets to an empty scope.
+   */
+  reset() {
+    this.scope = new Scope();
+  }
 }

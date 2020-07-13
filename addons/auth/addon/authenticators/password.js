@@ -41,6 +41,31 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   }
 
   /**
+   * Generates a URL for the given auth method.  Must be implemented in
+   * an application authenticator.
+   * @param {string} authMethodID
+   * @return {string}
+   */
+  buildAuthEndpointURL(/* authMethodID */) {
+    throw new Error(`
+      You must implement the "buildAuthEndpointURL" method
+      in your authenticator.
+    `);
+  }
+
+  /**
+   * Generates a URL for deauthentication.  Must be implemented in
+   * an application authenticator.
+   * @return {string}
+   */
+  buildDeauthEndpointURL() {
+    throw new Error(`
+      You must implement the "buildDeauthEndpointURL" method
+      in your authenticator.
+    `);
+  }
+
+  /**
    * Posts credentials to the URL specified in `authEndpoint` and resolves
    * if a success HTTP status code is received, otherwise rejects.
    *
@@ -65,7 +90,8 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
       token_type: requestCookies ? 'cookie' : null,
       credentials: { name, password },
     });
-    const response = await fetch(this.authEndpoint, { method: 'post', body });
+    const authEndpoint = this.buildAuthEndpointURL(authMethodID);
+    const response = await fetch(authEndpoint, { method: 'post', body });
     const json = await response.json();
     return response.status < 400 ? resolve(json) : reject();
   }
@@ -79,7 +105,8 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @return {Promise}
    */
   invalidate() {
-    fetch(this.deauthEndpoint, { method: 'post' }).catch(() => {
+    const deauthEndpoint = this.buildDeauthEndpointURL();
+    fetch(deauthEndpoint, { method: 'post' }).catch(() => {
       /* no op */
     });
     return super.invalidate(...arguments);

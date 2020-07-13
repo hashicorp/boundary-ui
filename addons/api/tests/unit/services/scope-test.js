@@ -63,4 +63,18 @@ module('Unit | Service | scope', function (hooks) {
     assert.equal(service.org, service.scope.org);
     assert.equal(service.project, service.scope.project);
   });
+
+  test('it can reset scope', function (assert) {
+    assert.expect(4);
+    const service = this.owner.lookup('service:scope');
+    const org = { id: 1 };
+    const project = { id: 2 };
+    service.org = org;
+    service.project = project;
+    assert.equal(service.org, service.scope.org);
+    assert.equal(service.project, service.scope.project);
+    service.reset();
+    assert.notOk(service.org);
+    assert.notOk(service.project);
+  });
 });
