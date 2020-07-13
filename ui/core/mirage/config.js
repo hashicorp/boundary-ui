@@ -1,5 +1,5 @@
 import config from '../config/environment';
-import { authHandler } from './route-handlers/auth';
+import { authHandler, deauthHandler } from './route-handlers/auth';
 // import { Response } from 'miragejs';
 
 export default function() {
@@ -35,15 +35,9 @@ export default function() {
 
   // Auth & IAM resources
 
-  // org-level authentication
-  // Mirage actually doesn't distinguish between the next two routes because a
-  // colon indicates a dynamic segment.  The routes are included here anyway
-  // to communicate the intention that they be different.
-  // TODO:  figure out how to make mirage distinguish these
-  // eslint-disable-next-line no-useless-escape
-  this.post('/orgs/:org_id\:authenticate', authHandler);
-  // eslint-disable-next-line no-useless-escape
-  this.post('/orgs/:org_id\:deauthenticate', authHandler);
+  // authenticate & deauthenticate
+  this.post('/orgs/:org_id/auth-methods/:id_method', authHandler);
+  this.post('/orgs/:id_method', deauthHandler);
 
   // auth methods
   this.get('/orgs/:org_id/auth-methods');
@@ -58,7 +52,7 @@ export default function() {
   this.get('/orgs/:org_id/users/:id');
   this.patch('/orgs/:org_id/users/:id');
   this.del('/orgs/:org_id/users/:id');
-  
+
   // IAM: Roles
   this.get('/orgs/:org_id/roles');
   this.post('/orgs/:org_id/roles');
@@ -74,7 +68,7 @@ export default function() {
   this.del('/orgs/:org_id/groups/:id');
 
   // Other resources
-  
+
   // host-catalog
   this.get('/orgs/:org_id/projects/:project_id/host-catalogs');
   this.post('/orgs/:org_id/projects/:project_id/host-catalogs');

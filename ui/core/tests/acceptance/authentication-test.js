@@ -175,6 +175,6 @@ module('Acceptance | authentication', function (hooks) {
     });
     await click('.rose-button-header-dropdown');
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), authMethodURL);
+    assert.equal(currentURL(), orgsAuthURL);
   });
 });

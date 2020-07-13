@@ -15,6 +15,8 @@ export default class OrgsAuthenticateIndexRoute extends Route {
    */
   redirect() {
     const orgID = get(this.session, 'data.authenticated.org_id');
-    if (orgID) this.transitionTo('orgs.org.authenticate', orgID);
+    if (this.session.isAuthenticated && orgID) {
+      this.transitionTo('orgs.org.authenticate', orgID);
+    }
   }
 }

@@ -29,26 +29,24 @@ import { Response } from 'miragejs';
  * an authentication request and its absence to indicate deauthentication.
  */
 export function authHandler(schema, request) {
+  const [ authMethodID ] = request.params.id_method.split(':');
   const payload = JSON.parse(request.requestBody);
-  const isAuthenticationRequest = payload;
-  if (isAuthenticationRequest) {
-    // this is an auth request
-    if (payload.credentials.name === 'error') {
-      return new Response(400);
-    } else {
-      return new Response(200, {}, {
-        id: 'token123',
-        token: 'thetokenstring',
-        user_id: 'user123',
-        auth_method_id: 'authmethod123',
-        created_time: '',
-        updated_time: '',
-        last_used_time: '',
-        expiration_time: ''
-      });
-    }
+  if (payload.credentials.name === 'error') {
+    return new Response(400);
   } else {
-    // this is a deauth request
-    return new Response(200);
+    return new Response(200, {}, {
+      id: 'token123',
+      token: 'thetokenstring',
+      user_id: 'user123',
+      auth_method_id: authMethodID,
+      created_time: '',
+      updated_time: '',
+      last_used_time: '',
+      expiration_time: ''
+    });
   }
+}
+
+export function deauthHandler() {
+  return new Response(200);
 }

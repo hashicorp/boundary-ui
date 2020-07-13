@@ -14,6 +14,7 @@ export default class ApplicationRoute extends Route.extend(
 ) {
   // =services
 
+  @service scope;
   @service session;
 
   // =methods
@@ -39,15 +40,16 @@ export default class ApplicationRoute extends Route.extend(
    * without an org scope.  So this will need to be rethought.
    */
   async sessionInvalidated() {
-    // Catch error in this transition, since it will be aborted by the
-    // org auth route when it redirects to the first auth method.
-    await this.transitionTo('orgs.org.authenticate').catch(() => {});
+    // Reset the scope when deauthenticating
+    this.scope.reset();
+    // Transition to orgs auth
+    await this.transitionTo('orgs.authenticate');
     // The Ember way of accessing globals...
     const document = getOwner(this).lookup('service:-document').documentElement;
     // defaultView === window, but without using globals directly
     const { location } = document.parentNode.defaultView;
     // Wait a beat, then reload the page...
-    // This is mostly to give the deauth request a chance to fire.
+    // This is mostly to give the deauth request a chance to complete.
     /* istanbul ignore if */
     if (!Ember.testing) later(location, location.reload, 150);
   }
