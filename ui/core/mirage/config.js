@@ -46,7 +46,7 @@ export default function() {
   this.get('/orgs/:org_id/users/:id');
   this.patch('/orgs/:org_id/users/:id');
   this.del('/orgs/:org_id/users/:id');
-  
+
   // IAM: Roles
   this.get('/orgs/:org_id/roles');
   this.post('/orgs/:org_id/roles');
@@ -70,11 +70,12 @@ export default function() {
   this.patch('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
   this.del('/orgs/:org_id/projects/:project_id/host-catalogs/:id');
 
-  // Uncomment the following line and the Response import above
-  // Then change the response code to simulate error responses.
-  // this.get('/orgs/:org_id/projects', () => new Response(505));
-
-  // Update error payload to simulate specific error responses.
+  /* Uncomment the following line and the Response import above
+   * Then change the response code to simulate error responses.
+   * this.get('/orgs/:org_id/projects', () => new Response(505));
+   *
+   * Update error payload to simulate specific error responses.
+   */
   // this.get('/orgs/:org_id/projects', () => new Response(505, {}, {
   //   errors: [{
   //     status: 505,

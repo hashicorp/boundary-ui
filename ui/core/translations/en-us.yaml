@@ -6,7 +6,7 @@ actions:
   help: Need help?
 resources:
   user: User
-  users: Users 
+  users: Users
   role: Role
   roles: Roles
   group: Group
@@ -52,6 +52,12 @@ errors:
     notfound-error: Resource not found
     server-error: Server error
     unknown-error: Something went wrong
+  subtitles:
+    unauthenticated-error: Error 401
+    forbidden-error: Error 403
+    notfound-error: Error 404
+    server-error: Error 500
+    unknown-error: Error
   descriptions:
     unauthenticated-error: You are not authenticated. Please authenticate and try again later.
     forbidden-error: You must be granted permissions to view this data. Ask your administrator if you think you should have access.

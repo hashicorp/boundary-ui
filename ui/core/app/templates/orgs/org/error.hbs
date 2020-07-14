@@ -1,3 +1,5 @@
 <Rose::Layout::Centered>
-  <ErrorMessage @model={{@model}}/>
+  {{#each @model.errors as |error|}}
+    <Error::Message @status={{error.status}}/>
+  {{/each}}
 </Rose::Layout::Centered>
