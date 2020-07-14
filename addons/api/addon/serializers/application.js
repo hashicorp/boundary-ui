@@ -18,6 +18,15 @@ export default class ApplicationSerializer extends RESTSerializer {
   }
 
   /**
+   * Generates an underscored key for the relationship ending in `_id`.
+   * @param {string} rel
+   * @return {string}
+   */
+  keyForRelationship(rel) {
+    return `${underscore(rel)}_id`;
+  }
+
+  /**
    * If an attribute is annotated as readOnly in the model, don't serialize it.
    * Otherwise delegate to default attribute serializer.
    *
