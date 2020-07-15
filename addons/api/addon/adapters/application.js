@@ -1,4 +1,5 @@
 import RESTAdapter from '@ember-data/adapter/rest';
+import AdapterBuildURLMixin from '../mixins/adapter-build-url';
 import config from 'ember-get-config';
 import { get } from '@ember/object';
 import { InvalidError } from '@ember-data/adapter/error';
@@ -36,7 +37,9 @@ function prenormalizeArrayResponse(response) {
   return payloadIsBlank(response) ? {items: []} : response;
 }
 
-export default class ApplicationAdapter extends RESTAdapter {
+export default class ApplicationAdapter extends RESTAdapter.extend(
+  AdapterBuildURLMixin
+) {
   // =attributes
 
   /**
