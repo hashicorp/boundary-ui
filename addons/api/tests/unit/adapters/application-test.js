@@ -37,7 +37,7 @@ module('Unit | Adapter | application', function (hooks) {
 
   test('it prenormalizes "empty" responses into a form that the fetch-manager will not reject', async function (assert) {
     assert.expect(1);
-    const adapter = this.owner.lookup('adapter:project');
+    const adapter = this.owner.lookup('adapter:application');
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/projects', () => new Response({}));
     const prenormalized = await adapter.findAll(store, {modelName: 'project'}, null, []);
