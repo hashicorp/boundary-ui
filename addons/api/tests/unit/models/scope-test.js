@@ -39,6 +39,34 @@ module('Unit | Model | scope', function(hooks) {
     assert.equal(await scopes.objectAt(5).get('parentScope.id'), 'o_2', 'Project 3 parent scope is org 2');
   });
 
+  test('it can load the parent scope if it is not already loaded', async function(assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: 'p_1',
+        type: 'scope',
+        attributes: {},
+        relationships: {
+          parentScope: {
+            data: {
+              id: 'o_1',
+              type: 'scope'
+            }
+          }
+        }
+      }
+    });
+    this.server.get('/v1/scopes/o_1', () => {
+      assert.ok(true, 'Correct parent scope was requested.');
+      return { id: 'o_1' };
+    });
+    const project = store.peekRecord('scope', 'p_1');
+    assert.equal(project.belongsTo('parentScope').id(), 'o_1');
+    const org = await project.get('parentScope');
+    assert.equal(org.id, 'o_1');
+  });
+
   test('it has isType boolean getters and setters', async function(assert) {
     assert.expect(9);
     const store = this.owner.lookup('service:store');
