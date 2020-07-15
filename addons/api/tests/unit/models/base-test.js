@@ -1,8 +1,10 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
 module('Unit | Model | base', function (hooks) {
   setupTest(hooks);
+  setupMirage(hooks);
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
@@ -81,5 +83,63 @@ module('Unit | Model | base', function (hooks) {
     assert.equal(model.canSave, false);
     assert.equal(model.cannotSave, true);
     model.transitionTo('loaded');
+  });
+
+  test('it saves records to a scoped URL', async function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const scope = store.createRecord('scope', {id: 'o_123'});
+    const model = store.createRecord('user', { scope });
+    this.server.post('/v1/o_123/users', () => {
+      assert.ok(true, 'Correctly scoped create record URL was requested.')
+      return {};
+    });
+    await model.save();
+    this.server.patch('/v1/o_123/users', () => {
+      assert.ok(true, 'Correctly scoped update record URL was requested.')
+      return {};
+    });
+    await model.save();
+    this.server.delete('/v1/o_123/users', () => {
+      assert.ok(true, 'Correctly scoped delete record URL was requested.')
+      return {};
+    });
+    await model.destroyRecord();
+  });
+
+  test('it saves to a custom scoped URL if requested', async function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const customScopeID = 'global';
+    const scope = store.createRecord('scope', {id: 'o_123'});
+    const model = store.createRecord('user', { scope });
+    this.server.post('/v1/global/users', () => {
+      assert.ok(true, 'Correctly scoped create record URL was requested.')
+      return {};
+    });
+    await model.save({adapterOptions: {scope_id: customScopeID}});
+    this.server.patch('/v1/global/users', () => {
+      assert.ok(true, 'Correctly scoped update record URL was requested.')
+      return {};
+    });
+    await model.save({adapterOptions: {scope_id: customScopeID}});
+    this.server.delete('/v1/global/users', () => {
+      assert.ok(true, 'Correctly scoped delete record URL was requested.')
+      return {};
+    });
+    await model.destroyRecord({adapterOptions: {scope_id: customScopeID}});
+  });
+
+  test('it saves records to a URL with a custom method if requested', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const method = 'my-custom-method';
+    const scope = store.createRecord('scope', {id: 'o_123'});
+    const model = store.createRecord('user', { scope });
+    this.server.post(`/v1/o_123/users:${method}`, () => {
+      assert.ok(true, 'Correctly scoped create record URL was requested.')
+      return {};
+    });
+    await model.save({adapterOptions: {method}});
   });
 });
