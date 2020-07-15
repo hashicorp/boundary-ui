@@ -14,14 +14,17 @@ module('Unit | Serializer | application', function (hooks) {
   test('it serializes records', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
+    const scope = store.createRecord('scope', {id: 'global'});
     const record = store.createRecord('project', {
       name: 'Project',
       description: 'Description',
+      scope
     });
     const serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       name: 'Project',
       description: 'Description',
+      scope_id: 'global'
       //disabled: false,  // TODO:  disabled is temporarily disabled
     });
   });
