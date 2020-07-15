@@ -7,8 +7,9 @@ module('Unit | Model | scope', function(hooks) {
   setupMirage(hooks);
 
   test('it exists', function(assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('scope', {});
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('scope', {});
     assert.ok(model);
   });
 
@@ -36,6 +37,23 @@ module('Unit | Model | scope', function(hooks) {
     assert.equal(await scopes.objectAt(3).get('parentScope.id'), 'o_1', 'Project 1 parent scope is org 1');
     assert.equal(await scopes.objectAt(4).get('parentScope.id'), 'o_1', 'Project 2 parent scope is org 1');
     assert.equal(await scopes.objectAt(5).get('parentScope.id'), 'o_2', 'Project 3 parent scope is org 2');
+  });
+
+  test('it has isType boolean getters and setters', async function(assert) {
+    assert.expect(9);
+    const store = this.owner.lookup('service:store');
+    const model = store.createRecord('scope', {type: 'global'});
+    assert.ok(model.isGlobal);
+    assert.notOk(model.isOrg);
+    assert.notOk(model.isProject);
+    model.isOrg = true;
+    assert.notOk(model.isGlobal);
+    assert.ok(model.isOrg);
+    assert.notOk(model.isProject);
+    model.isProject = true;
+    assert.notOk(model.isGlobal);
+    assert.notOk(model.isOrg);
+    assert.ok(model.isProject);
   });
 
 });
