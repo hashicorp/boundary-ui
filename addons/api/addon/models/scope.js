@@ -24,7 +24,7 @@ export default class ScopeModel extends GeneratedScopeModel {
    */
   @hasMany('scope', {inverse: 'parentScope'}) childrenScopes;
 
-  // =computed
+  // =attributes
 
   /**
    * @type {boolean}

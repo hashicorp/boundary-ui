@@ -1,7 +1,17 @@
 import Model from '@ember-data/model';
+import { belongsTo } from '@ember-data/model';
 import { computed } from '@ember/object';
 
 export default class BaseModel extends Model {
+
+  // =relationships
+
+  /**
+   * Scope of this resource, if any.
+   * @type {ScopeModel}
+   */
+  @belongsTo('scope', {async: false, inverse: false}) scope;
+
   // =attributes
 
   /**

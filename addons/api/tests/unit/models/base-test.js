@@ -11,6 +11,35 @@ module('Unit | Model | base', function (hooks) {
     assert.ok(model);
   });
 
+  test('it may have a scope relationship', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: 'o_1',
+        type: 'scope'
+      }
+    });
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'project',
+        attributes: {},
+        relationships: {
+          scope: {
+            data: {
+              id: 'o_1',
+              type: 'scope'
+            }
+          }
+        }
+      }
+    });
+    const scope = store.peekRecord('scope', 'o_1');
+    const model = store.peekRecord('project', '123abc');
+    assert.equal(model.scope, scope);
+  });
+
   test('it has a displayName attribute', function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
