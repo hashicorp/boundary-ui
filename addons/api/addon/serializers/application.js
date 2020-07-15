@@ -100,7 +100,7 @@ export default class ApplicationSerializer extends RESTSerializer {
 
   /**
    * In our API, singluar resources are _unrooted_, whereas Ember Data expects
-   * them to be rooted under their model name, e.g. `{project: {…}}`.
+   * them to be rooted under their model name, e.g. `{modelName: {…}}`.
    * This method makes this transformation to accommodate Ember Data.
    *
    * @method normalizeSingleResponse

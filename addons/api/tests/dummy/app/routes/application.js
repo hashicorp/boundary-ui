@@ -2,6 +2,6 @@ import Route from '@ember/routing/route';
 
 export default class ApplicationRoute extends Route {
   model() {
-    this.store.findAll('project');
+    this.store.findAll('scope');
   }
 }

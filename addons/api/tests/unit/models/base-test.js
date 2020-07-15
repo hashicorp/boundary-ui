@@ -25,7 +25,7 @@ module('Unit | Model | base', function (hooks) {
     store.push({
       data: {
         id: '123abc',
-        type: 'project',
+        type: 'user',
         attributes: {},
         relationships: {
           scope: {
@@ -38,7 +38,7 @@ module('Unit | Model | base', function (hooks) {
       }
     });
     const scope = store.peekRecord('scope', 'o_1');
-    const model = store.peekRecord('project', '123abc');
+    const model = store.peekRecord('user', '123abc');
     assert.equal(model.scope, scope);
   });
 
@@ -48,11 +48,11 @@ module('Unit | Model | base', function (hooks) {
     store.push({
       data: {
         id: '123abc',
-        type: 'project',
+        type: 'user',
         attributes: {},
       },
     });
-    const model = store.peekRecord('project', '123abc');
+    const model = store.peekRecord('user', '123abc');
     assert.equal(model.name, null);
     assert.equal(model.displayName, '123abc');
     model.name = 'Test';
@@ -65,15 +65,15 @@ module('Unit | Model | base', function (hooks) {
     store.push({
       data: {
         id: '1',
-        type: 'project',
+        type: 'user',
         attributes: {},
       },
     });
-    const model = store.peekRecord('project', '1');
+    const model = store.peekRecord('user', '1');
     assert.equal(model.canSave, false);
     assert.equal(model.cannotSave, true);
     // Should be able to save if dirty
-    model.name = 'Project';
+    model.name = 'User';
     assert.equal(model.hasDirtyAttributes, true);
     assert.equal(model.canSave, true);
     assert.equal(model.cannotSave, false);

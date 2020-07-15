@@ -64,18 +64,18 @@ module('Unit | Adapter | application', function (hooks) {
     };
     const adapter = this.owner.lookup('adapter:application');
     // test URL generation for each request type...
-    const findRecordURL = adapter.buildURL('project', '1', mockSnapshot, 'findRecord');
-    assert.equal(findRecordURL, '/v1/o_1/projects/1:my-custom-method');
-    const findAllURL = adapter.buildURL('project', null, mockSnapshot, 'findAll');
-    assert.equal(findAllURL, '/v1/o_1/projects:my-custom-method');
-    const findBelongsToURL = adapter.buildURL('project', '2', mockSnapshot, 'findBelongsTo');
-    assert.equal(findBelongsToURL, '/v1/o_1/projects/2:my-custom-method');
-    const createRecordURL = adapter.buildURL('project', null, mockSnapshot, 'createRecord');
-    assert.equal(createRecordURL, '/v1/o_1/projects:my-custom-method');
-    const updateRecordURL = adapter.buildURL('project', '3', mockSnapshot, 'updateRecord');
-    assert.equal(updateRecordURL, '/v1/o_1/projects/3:my-custom-method');
-    const deleteRecordURL = adapter.buildURL('project', '4', mockSnapshot, 'deleteRecord');
-    assert.equal(deleteRecordURL, '/v1/o_1/projects/4:my-custom-method');
+    const findRecordURL = adapter.buildURL('user', '1', mockSnapshot, 'findRecord');
+    assert.equal(findRecordURL, '/v1/o_1/users/1:my-custom-method');
+    const findAllURL = adapter.buildURL('user', null, mockSnapshot, 'findAll');
+    assert.equal(findAllURL, '/v1/o_1/users:my-custom-method');
+    const findBelongsToURL = adapter.buildURL('user', '2', mockSnapshot, 'findBelongsTo');
+    assert.equal(findBelongsToURL, '/v1/o_1/users/2:my-custom-method');
+    const createRecordURL = adapter.buildURL('user', null, mockSnapshot, 'createRecord');
+    assert.equal(createRecordURL, '/v1/o_1/users:my-custom-method');
+    const updateRecordURL = adapter.buildURL('user', '3', mockSnapshot, 'updateRecord');
+    assert.equal(updateRecordURL, '/v1/o_1/users/3:my-custom-method');
+    const deleteRecordURL = adapter.buildURL('user', '4', mockSnapshot, 'deleteRecord');
+    assert.equal(deleteRecordURL, '/v1/o_1/users/4:my-custom-method');
   });
 
   test('it can request records through the store from a specified scope', async function (assert) {
@@ -104,8 +104,8 @@ module('Unit | Adapter | application', function (hooks) {
     assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     const store = this.owner.lookup('service:store');
-    this.server.get('/v1/projects', () => new Response({}));
-    const prenormalized = await adapter.findAll(store, {modelName: 'project'}, null, []);
+    this.server.get('/v1/users', () => new Response({}));
+    const prenormalized = await adapter.findAll(store, {modelName: 'user'}, null, []);
     assert.deepEqual(prenormalized, {items: []});
   });
 
