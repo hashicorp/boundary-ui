@@ -1,7 +1,7 @@
 import RESTAdapter from '@ember-data/adapter/rest';
 import AdapterBuildURLMixin from '../mixins/adapter-build-url';
 import config from 'ember-get-config';
-import { get } from '@ember/object';
+import { get, getWithDefault } from '@ember/object';
 import { InvalidError } from '@ember-data/adapter/error';
 import { dasherize } from '@ember/string';
 import { pluralize } from 'ember-inflector';
@@ -57,6 +57,40 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
   namespace = get(config, 'api.namespace');
 
   // =methods
+
+  /**
+   * Prepends a scope to the URL prefix, if a scope is passed via the
+   * snapshot's `adapterOptions.scope_id` field.
+   * @override
+   * @param {string} path
+   * @param {string} parentURL
+   * @param {string} modelName
+   * @param {string} id
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlPrefix(path, parentURL, modelName, id, snapshot={}) {
+    const prefix = super.urlPrefix(...arguments);
+    let scopePath = getWithDefault(snapshot, 'adapterOptions.scope_id', '');
+    // Ensure a slash is added between prefix + scope path if needed.
+    if (scopePath && prefix.charAt(prefix.length - 1) !== '/') {
+      scopePath = `/${scopePath}`;
+    }
+    return `${prefix}${scopePath}`;
+  }
+
+  /**
+   * Appends a custom method after a colon, if a method is passed via the
+   * snapshot's `adapterOptions.method` field.
+   * @param {string} modelName
+   * @param {string} id
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlSuffix(modelName, id, snapshot={}) {
+    const method = getWithDefault(snapshot, 'adapterOptions.method', '');
+    return method ? `:${method}` : '';
+  }
 
   /**
    * Transforms the type to a dasherized string used in our API paths.

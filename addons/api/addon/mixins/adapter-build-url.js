@@ -16,36 +16,35 @@ export default Mixin.create({
 
   // =methods
 
+  /**
+   * This override behaves identically to the default method by default.
+   * It exists only to document the additional paramters to the method.
+   * @override
+   * @param {string} path
+   * @param {string} parentURL
+   * @param {string} modelName
+   * @param {string} id
+   * @param {object} snapshot
+   * @return {string} urlPrefix
+   */
+  urlPrefix(/* path, parentURL, modelName, id, snapshot */) {
+    // What's this super syntax?
+    // Ember mixins are still based on the older Ember Object, rather than
+    // native ES classes.  Thus we have to call super in this strange way.
+    // https://blog.emberjs.com/2019/01/26/emberjs-native-class-update-2019-edition.html
+    return this._super(...arguments);
+  },
 
-    /**
-     * This override behaves identically to the default method by default.
-     * It exists only to document the additional paramters to the method.
-     * @override
-     * @param {string} path
-     * @param {string} parentURL
-     * @param {string} modelName
-     * @param {string} id
-     * @param {object} snapshot
-     * @return {string} urlPrefix
-     */
-    urlPrefix(/* path, parentURL, modelName, id, snapshot */) {
-      // What's this super syntax?
-      // Ember mixins are still based on the older Ember Object, rather than
-      // native ES classes.  Thus we have to call super in this strange way.
-      // https://blog.emberjs.com/2019/01/26/emberjs-native-class-update-2019-edition.html
-      return this._super(...arguments);
-    },
-
-    /**
-     * Generates a string to be appended to a URL.  Empty string by default.
-     * @param {string} modelName
-     * @param {string} id
-     * @param {?object} snapshot
-     * @return {string}
-     */
-    urlSuffix(/* modelName, id, snapshot */) {
-      return '';
-    },
+  /**
+   * Generates a string to be appended to a URL.  Empty string by default.
+   * @param {string} modelName
+   * @param {string} id
+   * @param {?object} snapshot
+   * @return {string}
+   */
+  urlSuffix(/* modelName, id, snapshot */) {
+    return '';
+  },
 
   /**
    * Overrides the default `_buildURL` with a nearly identical version.
@@ -73,6 +72,82 @@ export default Mixin.create({
     url = url.join('/');
     if (!host && url && url.charAt(0) !== '/') url = '/' + url;
     return `${url}${suffix}`;
+  },
+
+  /**
+   * Overrides the default method simply to pass an additional argument
+   * `snapshot` to the `_buildURL` method.
+   * @override
+   * @param {string} id
+   * @param {string} modelName
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlForFindRecord(id, modelName, snapshot) {
+    return this._buildURL(modelName, id, snapshot);
+  },
+
+  /**
+   * Overrides the default method simply to pass an additional argument
+   * `snapshot` to the `_buildURL` method.
+   * @override
+   * @param {string} modelName
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlForFindAll(modelName, snapshot) {
+    return this._buildURL(modelName, null, snapshot);
+  },
+
+  /**
+   * Overrides the default method simply to pass an additional argument
+   * `snapshot` to the `_buildURL` method.
+   * @override
+   * @param {string} id
+   * @param {string} modelName
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlForFindBelongsTo(id, modelName, snapshot) {
+    return this._buildURL(modelName, id, snapshot);
+  },
+
+  /**
+   * Overrides the default method simply to pass an additional argument
+   * `snapshot` to the `_buildURL` method.
+   * @override
+   * @param {string} modelName
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlForCreateRecord(modelName, snapshot) {
+    return this._buildURL(modelName, null, snapshot);
+  },
+
+  /**
+   * Overrides the default method simply to pass an additional argument
+   * `snapshot` to the `_buildURL` method.
+   * @override
+   * @param {string} id
+   * @param {string} modelName
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlForUpdateRecord(id, modelName, snapshot) {
+    return this._buildURL(modelName, id, snapshot);
+  },
+
+  /**
+   * Overrides the default method simply to pass an additional argument
+   * `snapshot` to the `_buildURL` method.
+   * @override
+   * @param {string} id
+   * @param {string} modelName
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlForDeleteRecord(id, modelName, snapshot) {
+    return this._buildURL(modelName, id, snapshot);
   }
 
 });
