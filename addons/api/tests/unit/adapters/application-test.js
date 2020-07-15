@@ -78,6 +78,16 @@ module('Unit | Adapter | application', function (hooks) {
     assert.equal(deleteRecordURL, '/v1/o_1/projects/4:my-custom-method');
   });
 
+  test('it can request records through the store from a specified scope', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    this.server.get('/v1/p_456/groups', () => {
+      assert.ok(true, 'Scoped resource URL was requested.');
+      return {items: []};
+    });
+    await store.findAll('group', {adapterOptions: {scope_id: 'p_456'}});
+  });
+
   test('it rewrites PUT to PATCH, but leaves others unchanged', function (assert) {
     assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
