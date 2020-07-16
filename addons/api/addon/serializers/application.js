@@ -10,8 +10,7 @@ export default class ApplicationSerializer extends RESTSerializer {
   // =attributes
 
   attrs = {
-    scope: { serialize: false },
-    parentScope: { serialize: false }
+    scope: { serialize: false }
   };
 
   // =methods

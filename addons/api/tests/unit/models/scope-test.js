@@ -19,24 +19,24 @@ module('Unit | Model | scope', function(hooks) {
     this.server.get('/v1/scopes', () => ({
       items: [
         {id: 'global', type: 'global'},
-        {id: 'o_1', type: 'org', parent_scope_id: 'global'},
-        {id: 'o_2', type: 'org', parent_scope_id: 'global'},
-        {id: 'p_1', type: 'project', parent_scope_id: 'o_1'},
-        {id: 'p_2', type: 'project', parent_scope_id: 'o_1'},
-        {id: 'p_3', type: 'project', parent_scope_id: 'o_2'}
+        {id: 'o_1', type: 'org', scope_id: 'global'},
+        {id: 'o_2', type: 'org', scope_id: 'global'},
+        {id: 'p_1', type: 'project', scope_id: 'o_1'},
+        {id: 'p_2', type: 'project', scope_id: 'o_1'},
+        {id: 'p_3', type: 'project', scope_id: 'o_2'}
       ]
     }));
     const scopes = await store.findAll('scope');
     // check integrity of scope relationships
-    assert.notOk(await scopes.firstObject.get('parentScope'), 'Global scope has no parent');
-    assert.equal(await scopes.firstObject.get('childrenScopes.length'), 2, 'Global scope has two children scopes');
-    assert.equal(await scopes.objectAt(1).get('parentScope.id'), 'global', 'Org 1 parent scope is global');
-    assert.equal(await scopes.objectAt(2).get('parentScope.id'), 'global', 'Org 2 parent scope is global');
-    assert.equal(await scopes.objectAt(1).get('childrenScopes.length'), 2, 'Org 1 has two children scopes');
-    assert.equal(await scopes.objectAt(2).get('childrenScopes.length'), 1, 'Org 2 has one child scope');
-    assert.equal(await scopes.objectAt(3).get('parentScope.id'), 'o_1', 'Project 1 parent scope is org 1');
-    assert.equal(await scopes.objectAt(4).get('parentScope.id'), 'o_1', 'Project 2 parent scope is org 1');
-    assert.equal(await scopes.objectAt(5).get('parentScope.id'), 'o_2', 'Project 3 parent scope is org 2');
+    assert.notOk(await scopes.firstObject.get('scope'), 'Global scope has no parent');
+    assert.equal(await scopes.firstObject.get('children.length'), 2, 'Global scope has two children scopes');
+    assert.equal(await scopes.objectAt(1).get('scope.id'), 'global', 'Org 1 parent scope is global');
+    assert.equal(await scopes.objectAt(2).get('scope.id'), 'global', 'Org 2 parent scope is global');
+    assert.equal(await scopes.objectAt(1).get('children.length'), 2, 'Org 1 has two children scopes');
+    assert.equal(await scopes.objectAt(2).get('children.length'), 1, 'Org 2 has one child scope');
+    assert.equal(await scopes.objectAt(3).get('scope.id'), 'o_1', 'Project 1 parent scope is org 1');
+    assert.equal(await scopes.objectAt(4).get('scope.id'), 'o_1', 'Project 2 parent scope is org 1');
+    assert.equal(await scopes.objectAt(5).get('scope.id'), 'o_2', 'Project 3 parent scope is org 2');
   });
 
   test('it can load the parent scope if it is not already loaded', async function(assert) {
@@ -48,7 +48,7 @@ module('Unit | Model | scope', function(hooks) {
         type: 'scope',
         attributes: {},
         relationships: {
-          parentScope: {
+          scope: {
             data: {
               id: 'o_1',
               type: 'scope'
@@ -62,8 +62,8 @@ module('Unit | Model | scope', function(hooks) {
       return { id: 'o_1' };
     });
     const project = store.peekRecord('scope', 'p_1');
-    assert.equal(project.belongsTo('parentScope').id(), 'o_1');
-    const org = await project.get('parentScope');
+    assert.equal(project.belongsTo('scope').id(), 'o_1');
+    const org = await project.get('scope');
     assert.equal(org.id, 'o_1');
   });
 

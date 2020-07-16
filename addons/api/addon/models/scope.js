@@ -16,13 +16,13 @@ export default class ScopeModel extends GeneratedScopeModel {
    * The parent scope, if any.
    * @type {ScopeModel}
    */
-  @belongsTo('scope', {inverse: 'childrenScopes'}) parentScope;
+  @belongsTo('scope', {inverse: 'children'}) scope;
 
   /**
    * The inverse of parent scope, children.
    * @type {ScopeModelp[]}
    */
-  @hasMany('scope', {inverse: 'parentScope'}) childrenScopes;
+  @hasMany('scope', {inverse: 'scope'}) children;
 
   // =attributes
 
