@@ -6,6 +6,14 @@ import { copy } from 'ember-copy';
  * Manages serialization/normalization of data to/from the API.
  */
 export default class ApplicationSerializer extends RESTSerializer {
+
+  // =attributes
+
+  attrs = {
+    scope: { serialize: false },
+    parentScope: { serialize: false }
+  };
+
   // =methods
 
   /**
@@ -129,4 +137,5 @@ export default class ApplicationSerializer extends RESTSerializer {
       requestType
     );
   }
+
 }

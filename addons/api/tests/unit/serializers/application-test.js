@@ -23,8 +23,7 @@ module('Unit | Serializer | application', function (hooks) {
     const serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       name: 'User',
-      description: 'Description',
-      scope_id: 'global'
+      description: 'Description'
       //disabled: false,  // TODO:  disabled is temporarily disabled
     });
   });
