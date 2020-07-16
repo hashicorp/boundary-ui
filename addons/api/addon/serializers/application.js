@@ -30,7 +30,7 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {string}
    */
   keyForRelationship(rel) {
-    return `${underscore(rel)}_id`;
+    return underscore(rel);
   }
 
   /**
@@ -135,6 +135,21 @@ export default class ApplicationSerializer extends RESTSerializer {
       id,
       requestType
     );
+  }
+
+  /**
+   * Returns the default extraction with one difference.  If the extracted
+   * relationship does not include a `type` field as required by JSON API
+   * (the Ember internal record representation), one is added.
+   * @override
+   * @param {Object} relationshipModelName
+   * @param {Object} relationshipHash
+   * @return {Object}
+  */
+  extractRelationship(relationshipModelName/*, relationshipHash*/) {
+    const relationship = super.extractRelationship(...arguments);
+    if (!relationship.type) relationship.type = relationshipModelName;
+    return relationship;
   }
 
 }

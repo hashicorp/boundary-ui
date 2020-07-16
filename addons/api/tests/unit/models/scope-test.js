@@ -19,11 +19,11 @@ module('Unit | Model | scope', function(hooks) {
     this.server.get('/v1/scopes', () => ({
       items: [
         {id: 'global', type: 'global'},
-        {id: 'o_1', type: 'org', scope_id: 'global'},
-        {id: 'o_2', type: 'org', scope_id: 'global'},
-        {id: 'p_1', type: 'project', scope_id: 'o_1'},
-        {id: 'p_2', type: 'project', scope_id: 'o_1'},
-        {id: 'p_3', type: 'project', scope_id: 'o_2'}
+        {id: 'o_1', type: 'org', scope: {id: 'global'}},
+        {id: 'o_2', type: 'org', scope: {id: 'global'}},
+        {id: 'p_1', type: 'project', scope: {id: 'o_1'}},
+        {id: 'p_2', type: 'project', scope: {id: 'o_1'}},
+        {id: 'p_3', type: 'project', scope: {id: 'o_2'}},
       ]
     }));
     const scopes = await store.findAll('scope');
