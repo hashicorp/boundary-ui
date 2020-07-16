@@ -24,15 +24,15 @@ module('Unit | Adapter | application', function (hooks) {
     assert.equal(adapter.urlPrefix(), config.api.namespace);
   });
 
-  test('it generates URL prefixes with optional `scope_id` from adapterOptions', function (assert) {
+  test('it generates URL prefixes with optional `scopeID` from adapterOptions', function (assert) {
     assert.expect(2);
-    const scope_id = 'global';
+    const scopeID = 'global';
     const adapter = this.owner.lookup('adapter:application');
     const prefix = adapter.urlPrefix(null, null, null, null, {
-      adapterOptions: {scope_id}
+      adapterOptions: {scopeID}
     });
     assert.ok(config.api.namespace);
-    assert.equal(prefix, `v1/${scope_id}`);
+    assert.equal(prefix, `v1/${scopeID}`);
   });
 
   test('it generates correct default URL suffixes', function (assert) {
@@ -54,11 +54,11 @@ module('Unit | Adapter | application', function (hooks) {
 
   test('it generates correct complete URLs', function (assert) {
     assert.expect(6);
-    const scope_id = 'o_1';
+    const scopeID = 'o_1';
     const method = 'my-custom-method';
     const mockSnapshot = {
       adapterOptions: {
-        scope_id,
+        scopeID,
         method
       }
     };
@@ -85,7 +85,7 @@ module('Unit | Adapter | application', function (hooks) {
       assert.ok(true, 'Scoped resource URL was requested.');
       return {items: []};
     });
-    await store.findAll('group', {adapterOptions: {scope_id: 'p_456'}});
+    await store.findAll('group', {adapterOptions: {scopeID: 'p_456'}});
   });
 
   test('it rewrites PUT to PATCH, but leaves others unchanged', function (assert) {

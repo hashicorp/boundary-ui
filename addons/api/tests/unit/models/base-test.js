@@ -117,17 +117,17 @@ module('Unit | Model | base', function (hooks) {
       assert.ok(true, 'Correctly scoped create record URL was requested.')
       return {};
     });
-    await model.save({adapterOptions: {scope_id: customScopeID}});
+    await model.save({adapterOptions: {scopeID: customScopeID}});
     this.server.patch('/v1/global/users', () => {
       assert.ok(true, 'Correctly scoped update record URL was requested.')
       return {};
     });
-    await model.save({adapterOptions: {scope_id: customScopeID}});
+    await model.save({adapterOptions: {scopeID: customScopeID}});
     this.server.delete('/v1/global/users', () => {
       assert.ok(true, 'Correctly scoped delete record URL was requested.')
       return {};
     });
-    await model.destroyRecord({adapterOptions: {scope_id: customScopeID}});
+    await model.destroyRecord({adapterOptions: {scopeID: customScopeID}});
   });
 
   test('it saves records to a URL with a custom method if requested', async function (assert) {

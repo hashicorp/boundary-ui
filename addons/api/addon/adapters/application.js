@@ -60,7 +60,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
 
   /**
    * Prepends a scope to the URL prefix, if a scope is passed via the
-   * snapshot's `adapterOptions.scope_id` field.
+   * snapshot's `adapterOptions.scopeID` field.
    * @override
    * @param {string} path
    * @param {string} parentURL
@@ -71,7 +71,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    */
   urlPrefix(path, parentURL, modelName, id, snapshot={}) {
     const prefix = super.urlPrefix(...arguments);
-    let scopePath = getWithDefault(snapshot, 'adapterOptions.scope_id', '');
+    let scopePath = getWithDefault(snapshot, 'adapterOptions.scopeID', '');
     // Ensure a slash is added between prefix + scope path if needed.
     if (scopePath && prefix.charAt(prefix.length - 1) !== '/') {
       scopePath = `/${scopePath}`;
