@@ -26,7 +26,7 @@ module('Unit | Serializer | scope', function(hooks) {
       type: 'org',
       name: 'User',
       description: 'Description',
-      parent_scope_id: 'global'
+      scope_id: 'global'
     });
   });
 });
