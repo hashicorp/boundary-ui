@@ -74,7 +74,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     let scopePath = getWithDefault(snapshot, 'adapterOptions.scopeID', '');
     // Ensure a slash is added between prefix + scope path if needed.
     if (scopePath && prefix.charAt(prefix.length - 1) !== '/') {
-      scopePath = `/${scopePath}`;
+      scopePath = `/scopes/${scopePath}`;
     }
     return `${prefix}${scopePath}`;
   }
