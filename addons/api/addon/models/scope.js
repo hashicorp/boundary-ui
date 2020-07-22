@@ -1,5 +1,4 @@
 import GeneratedScopeModel from '../generated/models/scope';
-import { belongsTo, hasMany } from '@ember-data/model';
 import { computed } from '@ember/object';
 
 export const scopeTypes = {
@@ -9,20 +8,6 @@ export const scopeTypes = {
 };
 
 export default class ScopeModel extends GeneratedScopeModel {
-
-  // =relationships
-
-  /**
-   * The parent scope, if any.
-   * @type {ScopeModel}
-   */
-  @belongsTo('scope', {inverse: 'children'}) scope;
-
-  /**
-   * The inverse of parent scope, children.
-   * @type {ScopeModelp[]}
-   */
-  @hasMany('scope', {inverse: 'scope'}) children;
 
   // =attributes
 

@@ -1,18 +1,32 @@
 import Model from '@ember-data/model';
-import { belongsTo } from '@ember-data/model';
+import { fragment } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
+import { get } from '@ember/object';
 
 export default class BaseModel extends Model {
 
   // =relationships
 
   /**
-   * Scope of this resource, if any.
-   * @type {ScopeModel}
+   * Scope of this resource, if any, represented as a JSON fragment.
+   * @type {FragmentParentScope}
    */
-  @belongsTo('scope', {async: false, inverse: false}) scope;
+  @fragment('fragment-parent-scope') scope;
 
   // =attributes
+
+  /**
+   * Convenience for getting and setting the parent scope ID.
+   * @type {string
+   */
+  @computed('scope.scope_id')
+  get scopeID() {
+    return get(this, 'scope.scope_id');
+  }
+  set scopeID(id) {
+    if (!this.scope) this.scope = {};
+    this.scope.scope_id = id;
+  }
 
   /**
    * Names are optional on models in our API.  Thus we need to fallback on ID
@@ -61,7 +75,7 @@ export default class BaseModel extends Model {
    * @return {Promise}
    */
   save(options={adapterOptions: {}}) {
-    const scopeID = this.belongsTo('scope').id();
+    const scopeID = this.scopeID;
     if (scopeID && !options.adapterOptions.scopeID) {
       options.adapterOptions.scopeID = scopeID;
     }

@@ -25,15 +25,6 @@ export default class ApplicationSerializer extends RESTSerializer {
   }
 
   /**
-   * Generates an underscored key for the relationship ending in `_id`.
-   * @param {string} rel
-   * @return {string}
-   */
-  keyForRelationship(rel) {
-    return underscore(rel);
-  }
-
-  /**
    * If an attribute is annotated as readOnly in the model, don't serialize it.
    * Otherwise delegate to default attribute serializer.
    *
@@ -135,21 +126,6 @@ export default class ApplicationSerializer extends RESTSerializer {
       id,
       requestType
     );
-  }
-
-  /**
-   * Returns the default extraction with one difference.  If the extracted
-   * relationship does not include a `type` field as required by JSON API
-   * (the Ember internal record representation), one is added.
-   * @override
-   * @param {Object} relationshipModelName
-   * @param {Object} relationshipHash
-   * @return {Object}
-  */
-  extractRelationship(relationshipModelName/*, relationshipHash*/) {
-    const relationship = super.extractRelationship(...arguments);
-    if (!relationship.type) relationship.type = relationshipModelName;
-    return relationship;
   }
 
 }

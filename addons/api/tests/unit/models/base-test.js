@@ -26,20 +26,17 @@ module('Unit | Model | base', function (hooks) {
       data: {
         id: '123abc',
         type: 'user',
-        attributes: {},
-        relationships: {
+        attributes: {
           scope: {
-            data: {
-              id: 'o_1',
-              type: 'scope'
-            }
+            scope_id: 'o_1',
+            type: 'scope'
           }
         }
       }
     });
     const scope = store.peekRecord('scope', 'o_1');
     const model = store.peekRecord('user', '123abc');
-    assert.equal(model.scope, scope);
+    assert.equal(model.scope.scope_id, scope.id);
   });
 
   test('it has a displayName attribute', function (assert) {
@@ -88,8 +85,7 @@ module('Unit | Model | base', function (hooks) {
   test('it saves records to a scoped URL', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const scope = store.createRecord('scope', {id: 'o_123'});
-    const model = store.createRecord('user', { scope });
+    const model = store.createRecord('user', { scopeID: 'o_123' });
     this.server.post('/v1/o_123/users', () => {
       assert.ok(true, 'Correctly scoped create record URL was requested.')
       return {};
@@ -111,7 +107,7 @@ module('Unit | Model | base', function (hooks) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const customScopeID = 'global';
-    const scope = store.createRecord('scope', {id: 'o_123'});
+    const scope = {scope_id: 'o_123'};
     const model = store.createRecord('user', { scope });
     this.server.post('/v1/global/users', () => {
       assert.ok(true, 'Correctly scoped create record URL was requested.')
@@ -134,7 +130,7 @@ module('Unit | Model | base', function (hooks) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const method = 'my-custom-method';
-    const scope = store.createRecord('scope', {id: 'o_123'});
+    const scope = {scope_id: 'o_123'};
     const model = store.createRecord('user', { scope });
     this.server.post(`/v1/o_123/users:${method}`, () => {
       assert.ok(true, 'Correctly scoped create record URL was requested.')
