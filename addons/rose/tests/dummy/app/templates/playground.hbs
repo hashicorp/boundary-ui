@@ -33,7 +33,7 @@
   <layout.body>
 
     <Rose::Layout::Sidebar as |layout|>
-    
+
       <layout.sidebar>
         <Rose::Nav::Sidebar @title="Title" as |nav|>
           <nav.link @route="index">Item Name</nav.link>
@@ -49,5 +49,16 @@
 
     </Rose::Layout::Sidebar>
 
+
+
+    <Rose::LinkButton @route="index" @style="primary">Primary</Rose::LinkButton>
+    <Rose::LinkButton @route="index" @style="secondary">Secondary</Rose::LinkButton>
+    <Rose::LinkButton @route="index" @style="warning">Warning</Rose::LinkButton>
+    <Rose::LinkButton @route="index" @style="ghost">Ghost</Rose::LinkButton>
+    <br />
+
+    <Rose::LinkButton @route="index" @style="primary" @iconLeft="help-circle-outline">Left Icon</Rose::LinkButton>
+    <Rose::LinkButton @route="index" @style="primary" @iconRight="help-circle-outline">Right Icon</Rose::LinkButton>
+    <Rose::LinkButton @route="index" @style="primary" @iconOnly="help-circle-outline" />
   </layout.body>
 </Rose::Layout::Global>

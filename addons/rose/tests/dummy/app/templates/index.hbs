@@ -1,9 +1,32 @@
-<Rose::LinkButton @route="index" @style="primary">Primary</Rose::LinkButton>
-<Rose::LinkButton @route="index" @style="secondary">Secondary</Rose::LinkButton>
-<Rose::LinkButton @route="index" @style="warning">Warning</Rose::LinkButton>
-<Rose::LinkButton @route="index" @style="ghost">Ghost</Rose::LinkButton>
-<br />
-
-<Rose::LinkButton @route="index" @style="primary" @iconLeft="help-circle-outline">Left Icon</Rose::LinkButton>
-<Rose::LinkButton @route="index" @style="primary" @iconRight="help-circle-outline">Right Icon</Rose::LinkButton>
-<Rose::LinkButton @route="index" @style="primary" @iconOnly="help-circle-outline" />
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.cell @iconLeft="help-circle-outline">ID</row.cell>
+      <row.cell @iconRight="help-circle-outline">Name</row.cell>
+      <row.cell @iconLeft="help-circle-outline" @iconRight="help-circle-outline">Address</row.cell>
+      <row.cell>Tags</row.cell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>a_1234567890</row.cell>
+      <row.cell></row.cell>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>

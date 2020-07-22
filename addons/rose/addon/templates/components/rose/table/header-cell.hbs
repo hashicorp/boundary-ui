@@ -1,0 +1,19 @@
+<th ...attributes class="rose-table-cell rose-table-header-cell">
+  {{#if @iconLeft}}
+    <Rose::Icon
+      @name={{@iconLeft}}
+      @size="medium"
+    />
+  {{/if}}
+
+  <span class="rose-table-cell-body">
+    {{yield}}
+  </span>
+
+  {{#if @iconRight}}
+    <Rose::Icon
+      @name={{@iconRight}}
+      @size="medium"
+    />
+  {{/if}}
+</th>

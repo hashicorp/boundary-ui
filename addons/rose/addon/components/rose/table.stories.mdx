@@ -13,23 +13,20 @@ A table component to display data in structure of rows and columns. It supports 
 <Rose::Table as |table|>
   <table.header as |header|>
     <header.row as |row|>
-      <row.cell>Address</row.cell>
-      <row.cell>Host Set</row.cell>
       <row.cell>Name</row.cell>
       <row.cell>Description</row.cell>
     </header.row>
   </table.header>
   <table.body as |body|>
     <body.row as |row|>
-      <row.cell>1.1.1.1</row.cell>
-      <row.cell>host-set-1, host-set-2</row.cell>
-      <row.cell>optional name</row.cell>
-      <row.cell>description</row.cell>
+      <row.cell>Generated text</row.cell>
+      <row.cell>Lorem ipsum dolor sit amet</row.cell>
     </body.row>
   </table.body>
   <table.footer as |footer|>
     <footer.row as |row|>
-      <row.cell>Footer</row.cell>
+      <row.cell>Total</row.cell>
+      <row.cell>2</row.cell>
     </footer.row>
   </table.footer>
 </Rose::Table>
@@ -41,27 +38,44 @@ A table component to display data in structure of rows and columns. It supports 
     <Rose::Table as |table|>
       <table.header as |header|>
         <header.row as |row|>
-          <row.cell>Address</row.cell>
-          <row.cell>Host Set</row.cell>
-          <row.cell>Name</row.cell>
-          <row.cell>Description</row.cell>
+          <row.cell
+            @iconLeft={{iconLeft}}
+            @iconRight={{iconRight}}
+          >Header Cell</row.cell>
+          <row.cell>Header Cell</row.cell>
         </header.row>
       </table.header>
       <table.body as |body|>
         <body.row as |row|>
-          <row.cell>1.1.1.1</row.cell>
-          <row.cell>host-set-1, host-set-2</row.cell>
-          <row.cell>optional name</row.cell>
-          <row.cell>description</row.cell>
+          <row.cell>Body cell</row.cell>
+          <row.cell>Body cell</row.cell>
         </body.row>
       </table.body>
       <table.footer as |footer|>
         <footer.row as |row|>
-          <row.cell>Footer</row.cell>
+          <row.cell>Footer cell</row.cell>
+          <row.cell>Footer cell</row.cell>
         </footer.row>
       </table.footer>
     </Rose::Table>
     `,
-    context: {}
+    context: {
+      iconLeft: select(
+        'iconLeft',
+        {
+          'user-square-outline': 'user-square-outline',
+          'chevron-left': 'chevron-left',
+        },
+        'user-square-outline'
+      ),
+      iconRight: select(
+        'iconRight',
+        {
+          'chevron-right': 'chevron-right',
+          'swap-vertical': 'swap-vertical',
+        },
+        'swap-vertical'
+      ),
+    }
   }}</Story>
 </Preview>

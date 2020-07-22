@@ -25,12 +25,6 @@ module('Integration | Component | rose/table/cell', function (hooks) {
     assert.equal(find('.rose-table-cell').textContent.trim(), 'Cell content');
   });
 
-  test('it renders as header cell', async function (assert) {
-    await render(hbs`<Rose::Table::Cell @header={{true}}/>`);
-    assert.ok(find('.rose-table-cell'));
-    assert.ok(find('.rose-table-header-cell'));
-  });
-
   test('it renders as footer cell', async function (assert) {
     await render(hbs`<Rose::Table::Cell @footer={{true}}/>`);
     assert.ok(find('.rose-table-cell'));

@@ -6,12 +6,21 @@
   width: 100%;
 
   .rose-table-header {
-    background-color: var(--ui-gray-subtler-5);
     text-align: left;
+
+    .rose-table-header-cell {
+      padding: sizing.rems(s) sizing.rems(xs);
+      color: var(--ui-gray);
+    }
   }
 
-  .rose-table-cell {
-    border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
-    padding: sizing.rems(xs) sizing.rems(xxs);
+  .rose-table-row {
+    border: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+    border-left: none;
+    border-right: none;
+  }
+
+  .rose-table-body-cell, .rose-table-footer-cell {
+    padding: sizing.rems(s) sizing.rems(xs);
   }
 }
