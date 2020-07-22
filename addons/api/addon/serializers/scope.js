@@ -24,9 +24,10 @@ export default class ScopeSerializer extends ApplicationSerializer {
    * @param {Object} attribute
    */
   serializeAttribute(snapshot, json, key) {
-    let value = super.serializeAttribute(...arguments);
-    if (key === 'scope' && this._canSerialize(key)) {
-      json.parent_scope_id = snapshot.attr('scope').attr('scope_id');
+    const value = super.serializeAttribute(...arguments);
+    const parentScope = snapshot.attr('scope');
+    if (key === 'scope' && this._canSerialize(key) && parentScope) {
+      json.parent_scope_id = parentScope.attr('scope_id');
       delete json[key];
     }
     return value;

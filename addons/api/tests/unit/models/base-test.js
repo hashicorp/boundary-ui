@@ -13,7 +13,7 @@ module('Unit | Model | base', function (hooks) {
     assert.ok(model);
   });
 
-  test('it may have a scope relationship', function (assert) {
+  test('it may have a scope fragment', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
@@ -37,6 +37,17 @@ module('Unit | Model | base', function (hooks) {
     const scope = store.peekRecord('scope', 'o_1');
     const model = store.peekRecord('user', '123abc');
     assert.equal(model.scope.scope_id, scope.id);
+  });
+
+  test('it may accept a `scopeModel` for convenience, instead of a fragment', function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const scope = store.createRecord('scope', {id: 'o_1', type: 'org'});
+    const model = store.createRecord('user', '123abc');
+    assert.notEqual(model.scopeID, scope.id);
+    model.scopeModel = scope;
+    assert.equal(model.scopeID, scope.id);
+    assert.equal(model.scope.isOrg, true);
   });
 
   test('it has a displayName attribute', function (assert) {
