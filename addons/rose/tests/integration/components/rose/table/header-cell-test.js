@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/table/header-cell', function(hooks) {
+module('Integration | Component | rose/table/header-cell', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders a header cell', async function (assert) {
@@ -26,7 +26,9 @@ module('Integration | Component | rose/table/header-cell', function(hooks) {
   });
 
   test('it supports left and right icons', async function (assert) {
-    await render(hbs`<Rose::Table::HeaderCell @iconLeft="chevron-left" @iconRight="chevron-right"/>`);
+    await render(
+      hbs`<Rose::Table::HeaderCell @iconLeft="chevron-left" @iconRight="chevron-right"/>`
+    );
     assert.equal(findAll('.rose-icon').length, 2);
   });
 });

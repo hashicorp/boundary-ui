@@ -20,7 +20,8 @@
     border-right: none;
   }
 
-  .rose-table-body-cell, .rose-table-footer-cell {
+  .rose-table-body-cell,
+  .rose-table-footer-cell {
     padding: sizing.rems(s) sizing.rems(xs);
   }
 }

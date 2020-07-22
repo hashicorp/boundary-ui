@@ -12,19 +12,14 @@ module('Integration | Component | rose/dropdown', function (hooks) {
   });
 
   test('it renders with html attributes', async function (assert) {
-    await render(
-      hbs`<Rose::Dropdown id="custom-id" class="custom-class"/>`
-    );
+    await render(hbs`<Rose::Dropdown id="custom-id" class="custom-class"/>`);
     assert.ok(find('#custom-id'));
     assert.ok(find('.custom-class'));
   });
 
   test('it renders with trigger', async function (assert) {
     await render(hbs`<Rose::Dropdown @text="Click me" />`);
-    assert.equal(
-      find('.rose-dropdown-trigger').textContent.trim(),
-      'Click me'
-    );
+    assert.equal(find('.rose-dropdown-trigger').textContent.trim(), 'Click me');
   });
 
   test('it supports an icon', async function (assert) {
