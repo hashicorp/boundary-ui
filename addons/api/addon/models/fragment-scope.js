@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import { attr } from '@ember-data/model';
 import { scopeTypes } from './scope';
 
-export default class FragmentParentScope extends Fragment {
+export default class FragmentScope extends Fragment {
 
   // =attributes
 

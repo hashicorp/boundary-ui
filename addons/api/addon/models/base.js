@@ -31,9 +31,9 @@ export default class BaseModel extends Model {
 
   /**
    * Scope of this resource, if any, represented as a JSON fragment.
-   * @type {FragmentParentScope}
+   * @type {FragmentScope}
    */
-  @fragment('fragment-parent-scope') scope;
+  @fragment('fragment-scope') scope;
 
   // =attributes
 
