@@ -29,7 +29,7 @@ module('Unit | Adapter | application', function (hooks) {
     const scopeID = 'global';
     const adapter = this.owner.lookup('adapter:application');
     const prefix = adapter.urlPrefix(null, null, null, null, {
-      adapterOptions: {scopeID}
+      adapterOptions: { scopeID }
     });
     assert.ok(config.api.namespace);
     assert.equal(prefix, `v1/scopes/${scopeID}`);
@@ -40,7 +40,7 @@ module('Unit | Adapter | application', function (hooks) {
     const scopeID = 'global';
     const adapter = this.owner.lookup('adapter:application');
     const prefix = adapter.urlPrefix(null, null, 'scope', null, {
-      adapterOptions: {scopeID}
+      adapterOptions: { scopeID }
     });
     assert.equal(prefix, `v1`);
   });
@@ -56,7 +56,7 @@ module('Unit | Adapter | application', function (hooks) {
     const method = 'set-something';
     const adapter = this.owner.lookup('adapter:application');
     const suffix = adapter.urlSuffix(null, null, {
-      adapterOptions: {method}
+      adapterOptions: { method }
     });
     assert.ok(config.api.namespace);
     assert.equal(suffix, ':set-something');
@@ -95,7 +95,9 @@ module('Unit | Adapter | application', function (hooks) {
       assert.ok(true, 'Scoped resource URL was requested.');
       return {items: []};
     });
-    await store.findAll('group', {adapterOptions: {scopeID: 'p_456'}});
+    await store.findAll('group', {
+      adapterOptions: { scopeID: 'p_456' }
+    });
   });
 
   test('it rewrites PUT to PATCH, but leaves others unchanged', function (assert) {

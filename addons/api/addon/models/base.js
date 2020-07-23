@@ -84,32 +84,4 @@ export default class BaseModel extends Model {
     return !this.canSave;
   }
 
-  // =methods
-
-  /**
-   * If this model instance has a related scope, the scope's ID will be passed
-   * via `adapterOptions.scopeID` automatically.  End users may optionally
-   * pass a custom scope ID to override.
-   *
-   * @example
-   *   model.save(); // passes the model's current scope ID
-   *   model.save({adapterOptions: {scopeID: 'global'}}); // override scope ID
-   *
-   * End users may specify a _custom method_ via `adapterOptions.method`.
-   * Custom methods are appended to the record's URL by the adapter.
-   *
-   * @example
-   *   // Results in a URL: `/v1/model-name/id:my-custom-method`
-   *   model.save({adapterOptions: {method: 'my-custom-method'}});
-   *
-   * @return {Promise}
-   */
-  save(options={adapterOptions: {}}) {
-    const scopeID = this.scopeID;
-    if (scopeID && !options.adapterOptions.scopeID) {
-      options.adapterOptions.scopeID = scopeID;
-    }
-    return super.save(options);
-  }
-
 }
