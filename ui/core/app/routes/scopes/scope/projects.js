@@ -55,6 +55,7 @@ export default class ScopesScopeProjectsRoute extends Route {
   async save(project) {
     try {
       await project.save();
+      this.refresh();
       // TODO: replace with translated strings
       this.notify.success('Save succeeded.');
       this.transitionTo('scopes.scope.projects.project', project);
@@ -72,7 +73,8 @@ export default class ScopesScopeProjectsRoute extends Route {
   async delete(project) {
     try {
       await project.destroyRecord();
-      this.transitionTo('orgs.org.projects');
+      this.refresh();
+      this.transitionTo('scopes.scope.projects');
       // TODO: replace with translated strings
       this.notify.success('Deleted project succesfully.');
     } catch (error) {

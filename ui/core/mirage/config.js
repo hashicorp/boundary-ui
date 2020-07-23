@@ -24,7 +24,16 @@ export default function() {
       return scope.scope ? scope.scope.id === scope_id : false
     });
   });
-  this.post('/scopes');
+  this.post('/scopes', function ({ scopes }, request) {
+    // Parent scope comes through the payload via `scope_id`, but this needs
+    // to be expanded to a scope object `scope: {id:..., type:...}` before
+    // saving, which is the gist of this function.
+    const attrs = this.normalizedRequestAttrs();
+    const parentScopeAttrs = this.serialize(scopes.find(attrs.scopeId));
+    delete attrs.scopeId;
+    attrs.scope = parentScopeAttrs;
+    return scopes.create(attrs);
+  });
   // To simulate a possible real-world case, org scopes are not returned,
   // but project scopes are.
   // TODO this should be expanded to support other scenarios.
