@@ -71,10 +71,16 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    */
   urlPrefix(path, parentURL, modelName, id, snapshot={}) {
     const prefix = super.urlPrefix(...arguments);
-    let scopePath = getWithDefault(snapshot, 'adapterOptions.scopeID', '');
-    // Ensure a slash is added between prefix + scope path if needed.
-    if (scopePath && prefix.charAt(prefix.length - 1) !== '/') {
-      scopePath = `/scopes/${scopePath}`;
+    const isScope = modelName === 'scope';
+    let scopePath = '';
+    // Only non-scope resources need a scope path, since scope resources
+    // aren't technically "scoped" the same way.
+    if (!isScope) {
+      scopePath = getWithDefault(snapshot, 'adapterOptions.scopeID', '');
+      // Ensure a slash is added between prefix + scope path if needed.
+      if (scopePath && prefix.charAt(prefix.length - 1) !== '/') {
+        scopePath = `/scopes/${scopePath}`;
+      }
     }
     return `${prefix}${scopePath}`;
   }

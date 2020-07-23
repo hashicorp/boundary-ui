@@ -36,9 +36,9 @@ module('Unit | Serializer | application', function (hooks) {
     const userModelClass = store.createRecord('user').constructor;
     const payload = {
       items: [
-        { id: 1, name: 'User 1' },
-        { id: 2, name: 'User 2' },
-        { id: 3, name: 'User 3' },
+        { id: 1, name: 'User 1', scope: { id: 'o_123' } },
+        { id: 2, name: 'User 2', scope: { id: 'o_123' } },
+        { id: 3, name: 'User 3', scope: { id: 'o_123' } },
       ],
     };
     const normalizedArray = serializer.normalizeArrayResponse(
@@ -52,19 +52,19 @@ module('Unit | Serializer | application', function (hooks) {
         {
           id: '1',
           type: 'user',
-          attributes: { name: 'User 1' },
+          attributes: { name: 'User 1', scope: { scope_id: 'o_123' } },
           relationships: {},
         },
         {
           id: '2',
           type: 'user',
-          attributes: { name: 'User 2' },
+          attributes: { name: 'User 2', scope: { scope_id: 'o_123' } },
           relationships: {},
         },
         {
           id: '3',
           type: 'user',
-          attributes: { name: 'User 3' },
+          attributes: { name: 'User 3', scope: { scope_id: 'o_123' } },
           relationships: {},
         },
       ],
@@ -79,6 +79,7 @@ module('Unit | Serializer | application', function (hooks) {
     const payload = {
       id: '1',
       name: 'User 1',
+      scope: { id: 'o_123' }
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -90,7 +91,7 @@ module('Unit | Serializer | application', function (hooks) {
       data: {
         id: '1',
         type: 'user',
-        attributes: { name: 'User 1' },
+        attributes: { name: 'User 1', scope: { scope_id: 'o_123' } },
         relationships: {},
       },
     });
