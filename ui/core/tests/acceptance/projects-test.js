@@ -30,18 +30,26 @@ module('Acceptance | projects', function (hooks) {
     existingProject = getFirstProjectScope();
     existingProjectURL = `/scopes/${orgID}/projects/${existingProject.id}`;
   });
+
   test('visiting projects', async function (assert) {
     assert.expect(1);
-    this.server.createList('project', 1);
     await visit(projectsURL);
     await a11yAudit();
     assert.equal(currentURL(), projectsURL);
   });
 
+  test('visiting projects within a project scope redirects to the parent org scope', async function (assert) {
+    assert.expect(2);
+    const wrongProjectsURL = `/scopes/${existingProject.id}/projects`;
+    assert.notEqual(wrongProjectsURL, projectsURL);
+    await visit(wrongProjectsURL);
+    await a11yAudit();
+    assert.equal(currentURL(), projectsURL, 'Wrong projects path was redirected to correct path.');
+  });
+
   test('can create new projects', async function (assert) {
     assert.expect(1);
     await visit(newProjectURL);
-    await a11yAudit();
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getProjectScopesCount(), initialProjectScopesCount + 1);
@@ -120,7 +128,6 @@ module('Acceptance | projects', function (hooks) {
 
   test('saving an existing project with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.createList('project', 1);
     this.server.patch('/scopes/:id', () => {
       return new Response(
         400,
@@ -180,7 +187,6 @@ module('Acceptance | projects', function (hooks) {
 
   test('errors are displayed when delete project fails', async function (assert) {
     assert.expect(1);
-    this.server.createList('project', 1);
     this.server.del('/scopes/:id', () => {
       return new Response(
         490,
