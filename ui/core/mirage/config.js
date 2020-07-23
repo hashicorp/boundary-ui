@@ -29,8 +29,7 @@ export default function() {
     // to be expanded to a scope object `scope: {id:..., type:...}` before
     // saving, which is the gist of this function.
     const attrs = this.normalizedRequestAttrs();
-    const parentScopeAttrs = this.serialize(scopes.find(attrs.scopeId));
-    delete attrs.scopeId;
+    const parentScopeAttrs = this.serialize(scopes.find(request.queryParams.scope_id));
     attrs.scope = parentScopeAttrs;
     return scopes.create(attrs);
   });
