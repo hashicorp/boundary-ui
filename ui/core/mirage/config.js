@@ -17,6 +17,13 @@ export default function() {
 
   // Scope resources
 
+  this.get('/scopes', ({ scopes }, { queryParams: { scope_id } }) => {
+    // Default parent scope is global
+    if (!scope_id) scope_id = 'global';
+    return scopes.where(scope => {
+      return scope.scope ? scope.scope.id === scope_id : false
+    });
+  });
   this.post('/scopes');
   // To simulate a possible real-world case, org scopes are not returned,
   // but project scopes are.

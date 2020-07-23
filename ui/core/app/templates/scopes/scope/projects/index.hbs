@@ -1,0 +1,56 @@
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.projects"}}</h2>
+  </page.header>
+
+  <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton
+        @route="scopes.scope.projects.new"
+        @style="primary"
+      >
+        {{t 'titles.new'}}
+      </Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+
+    {{#if @model}}
+
+      <Rose::Cards as |cards|>
+        {{#each @model as |project|}}
+          <cards.link
+            @title={{project.name}}
+            @subtitle={{project.id}}
+            @description={{project.description}}
+            @route="scopes.scope.projects.project"
+            @model={{project}}
+          />
+        {{/each}}
+      </Rose::Cards>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t 'titles.projects-welcome'}} as |message|>
+          <message.description>
+            {{t 'descriptions.projects-welcome'}}
+          </message.description>
+          <message.link @route="scopes.scope.projects.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t 'titles.new'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>
