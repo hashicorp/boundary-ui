@@ -1,0 +1,77 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Badge" component="Badge" />
+
+# Badge
+
+A badge component that supports icons and predefined styles.
+When style definition isn't supplied, a default style will be supplied.
+
+Styles: outline, light, dark, informational, informational-outline, success, success-outline, error, error-outline, warning, warning-outline, alert, alert-outline
+
+```html
+<Rose::Badge @style="outline" @icon="user-organization"/>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`<Rose::Badge
+      @style={{style}}
+      @icon={{icon}}>
+      {{text}}
+      </Rose::Badge>`,
+    context: {
+      text: text('text', 'Badge'),
+      style: select('style', {
+          'none': 'none',
+          'outline': 'outline',
+          'light': 'light',
+          'dark': 'dark',
+          'informational': 'informational',
+          'informational-outline': 'informational-outline',
+          'success': 'success',
+          'success-outline': 'success-outline',
+          'alert': 'alert',
+          'alert-outline': 'alert-outline',
+          'error': 'error',
+          'error-outline': 'error-outline',
+          'warning': 'warning',
+          'warning-outline': 'warning-outline',
+        },
+        'none'
+      ),
+      icon: select('icon', {
+          'user-organization': 'user-organization',
+          'partner': 'partner',
+          'gift-fill': 'gift-fill',
+        },
+        'user-organization'
+      ),
+    }
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Style legend">{{
+    template: hbs`
+    <Rose::Badge>default style</Rose::Badge>
+    <Rose::Badge @style="outline">outline</Rose::Badge>
+    <Rose::Badge @icon="user-organization">default style with icon</Rose::Badge>
+    <Rose::Badge @style="light">light</Rose::Badge>
+    <Rose::Badge @style="dark">dark</Rose::Badge>
+    <Rose::Badge @style="informational">informational</Rose::Badge>
+    <Rose::Badge @style="informational-outline">informational-outline</Rose::Badge>
+    <Rose::Badge @style="alert">alert</Rose::Badge>
+    <Rose::Badge @style="alert-outline">alert-outline</Rose::Badge>
+    <Rose::Badge @style="error">error</Rose::Badge>
+    <Rose::Badge @style="error-outline">error-outline</Rose::Badge>
+    <Rose::Badge @style="success">success</Rose::Badge>
+    <Rose::Badge @style="success-outline">success-outline</Rose::Badge>
+    <Rose::Badge @style="warning">warning</Rose::Badge>
+    <Rose::Badge @style="warning-outline">warning-outline</Rose::Badge>
+    `,
+  }}</Story>
+</Preview>

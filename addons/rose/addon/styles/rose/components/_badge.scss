@@ -1,0 +1,89 @@
+@use '../utilities/type';
+@use '../variables/sizing';
+
+.rose-badge {
+  @include type.type(s);
+  padding: sizing.rems(xxs);
+  border-radius: sizing.rems(xxxs);
+  border-width: thin;
+  border-style: solid;
+  display: inline-block;
+
+  --color: var(--ui-gray-starker-1);
+  --border-color: var(--ui-gray-subtler-5);
+  --background-color: none;
+
+  color: var(--color);
+  border-color: var(--border-color);
+  background-color: var(--background-color);
+
+  &.rose-badge-outline {
+    --border-color: var(--ui-gray-starker-1);
+  }
+
+  &.rose-badge-light {
+    --border-color: var(--ui-gray-subtler-5);
+    --background-color: var(--ui-gray-starker-5);
+  }
+
+  &.rose-badge-dark {
+    --color: var(--ui-gray-subtler-6);
+    --border-color: var(--ui-gray-starker-1);
+    --background-color: var(--ui-gray-starker-1);
+  }
+
+  &.rose-badge-active {
+    --color: var(--info);
+  }
+
+  &.rose-badge-informational {
+    --color: var(--info-starker-1);
+    --border-color: var(--info-subtler-2);
+    --background-color: var(--info-subtler-2);
+  }
+
+  &.rose-badge-informational-outline {
+    --color: var(--info-starker-1);
+    --border-color: var(--info-starker-1);
+  }
+
+  &.rose-badge-alert {
+    --color: var(--alert-starker-1);
+    --background-color: var(--alert-subtler-1);
+  }
+
+  &.rose-badge-alert-outline {
+    --color: var(--alert-starker-1);
+    --border-color: var(--alert-starker-1);
+  }
+
+  &.rose-badge-error {
+    --color: var(--failure-starker-1);
+    --background-color: var(--failure-subtler-1);
+  }
+
+  &.rose-badge-error-outline {
+    --color: var(--failure-starker-1);
+    --border-color: var(--failure-starker-1);
+  }
+
+  &.rose-badge-success {
+    --color: var(--success-starker-1);
+    --background-color: var(--success-subtler-1);
+  }
+
+  &.rose-badge-success-outline {
+    --color: var(--success-starker-1);
+    --border-color: var(--success-starker-1);
+  }
+
+  &.rose-badge-warning {
+    --color: var(--warning-starker-1);
+    --background-color: var(--warning-subtler-1);
+  }
+
+  &.rose-badge-warning-outline {
+    --color: var(--warning-starker-1);
+    --border-color: var(--warning-starker-1);
+  }
+}
