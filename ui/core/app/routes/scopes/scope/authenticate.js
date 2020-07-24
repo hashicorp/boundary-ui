@@ -1,7 +1,18 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import { hash } from 'rsvp';
 
 export default class ScopesScopeAuthenticateRoute extends Route {
+
+  // =services
+
+  @service session;
+
+  // =attributes
+
+  routeIfAlreadyAuthenticated = 'scopes.scope.projects';
+
+  // =methods
 
   /**
    * Returns all auth methods for the current scope, along with the current
@@ -21,6 +32,12 @@ export default class ScopesScopeAuthenticateRoute extends Route {
       //   type: 'password'
       // }])
     });
+  }
+
+  redirect() {
+    if (this.session.isAuthenticated) {
+      this.transitionTo(this.routeIfAlreadyAuthenticated);
+    }
   }
 
 }
