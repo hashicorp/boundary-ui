@@ -51,17 +51,14 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @param {object} creds
    * @param {string} creds.identification is sent to server as `name`
    * @param {string} creds.password
-   * @param {string} authMethodId ID of the auth method to use
    * @param {boolean} requestCookies request cookie tokens (default `true`)
    * @return {Promise}
    */
   async authenticate(
     { identification: name, password },
-    authMethodID,
     requestCookies = true
   ) {
     const body = JSON.stringify({
-      auth_method_id: authMethodID,
       token_type: requestCookies ? 'cookie' : null,
       credentials: { name, password },
     });

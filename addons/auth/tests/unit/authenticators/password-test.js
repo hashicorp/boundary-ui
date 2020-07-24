@@ -15,7 +15,7 @@ module('Unit | Authenticator | password', function (hooks) {
       assert.ok(json.token_type, 'Requested token cookies by default');
       return new Response(200);
     });
-    await authenticator.authenticate({}, '').then(() => {
+    await authenticator.authenticate({}).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
   });
@@ -28,7 +28,7 @@ module('Unit | Authenticator | password', function (hooks) {
       assert.notOk(json.token_type, 'Did not request tokens cookies');
       return new Response(200);
     });
-    await authenticator.authenticate({}, '', false).then(() => {
+    await authenticator.authenticate({}, false).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
   });
@@ -39,7 +39,6 @@ module('Unit | Authenticator | password', function (hooks) {
     this.server.post(authenticator.authEndpoint, (schema, request) => {
       const json = JSON.parse(request.requestBody);
       assert.deepEqual(json, {
-        auth_method_id: '123',
         token_type: 'cookie',
         credentials: {
           name: 'foo',
@@ -52,8 +51,7 @@ module('Unit | Authenticator | password', function (hooks) {
       identification: 'foo',
       password: 'bar',
     };
-    const authMethodID = '123';
-    await authenticator.authenticate(creds, authMethodID);
+    await authenticator.authenticate(creds);
   });
 
   test('it rejects if the endpoint sends an error status code', async function (assert) {
