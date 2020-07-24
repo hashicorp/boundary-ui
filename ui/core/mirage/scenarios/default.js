@@ -2,14 +2,20 @@ export default function(server) {
 
   // Scope resources
 
-  server.create('scope', null, 'withChildren');
+  const globalScope = server.create('scope', { id: 'global' });  // creates a global scope
+  const orgScope = server.create('scope', {
+    type: 'org',
+    scope: { id: globalScope.id, type: globalScope.type }
+  }, 'withChildren');
+
+  const scope = { id: orgScope.id, type: orgScope.type };
 
   // Auth
 
   // Auth methods exist both at the global scope and the org scope.
   // For simplicity we don't scope our mock auth methods and just return the
   // same items for request at all scopes.
-  server.createList('auth-method', 3);
+  server.createList('auth-method', 3, { scope });
 
   // User
   server.createList('user', 5);
