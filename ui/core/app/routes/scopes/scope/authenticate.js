@@ -10,6 +10,8 @@ export default class ScopesScopeAuthenticateRoute extends Route {
 
   // =attributes
 
+  // TODO:  this assumes we're in an org scope, but the "landing"
+  // for global scope is probably different.
   routeIfAlreadyAuthenticated = 'scopes.scope.projects';
 
   // =methods
