@@ -44,7 +44,6 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     const authenticatorName = 'authenticator:password';
     const scope = this.modelFor('scopes.scope');
     const authMethod = this.currentModel;
-    const authMethodId = authMethod.id;
     const requestCookies = false;
     try {
       await this.session.authenticate(

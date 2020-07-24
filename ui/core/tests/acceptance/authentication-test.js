@@ -3,6 +3,11 @@ import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import {
+  currentSession,
+  //authenticateSession,
+  //invalidateSession,
+} from 'ember-simple-auth/test-support';
 
 module('Acceptance | authentication', function(hooks) {
   setupApplicationTest(hooks);
@@ -10,6 +15,7 @@ module('Acceptance | authentication', function(hooks) {
 
   let orgScope;
   let orgScopeID;
+  let scope;
   let authMethod;
   let authMethodID;
   let authMethodAuthenticateURL;
@@ -17,8 +23,8 @@ module('Acceptance | authentication', function(hooks) {
 
   hooks.beforeEach(function () {
     orgScope = this.server.create('scope', {type: 'org'}, 'withChildren');
-    const scope = { id: orgScope.id, type: orgScope.type };
-    authMethod = server.create('auth-method', { scope });
+    scope = { id: orgScope.id, type: orgScope.type };
+    authMethod = this.server.create('auth-method', { scope });
     orgScopeID = orgScope.id;
     authMethodID = authMethod.id;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
@@ -33,21 +39,37 @@ module('Acceptance | authentication', function(hooks) {
   });
 
   test('failed authentication shows a notification message', async function(assert) {
-    assert.expect(1);
+    assert.expect(3);
     await visit(authMethodAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
     await fillIn('[name="identification"]', 'error');
     await click('[type="submit"]');
     assert.ok(find('.rose-notification.is-error'));
+    assert.notOk(currentSession().isAuthenticated);
   });
 
   test('successful authentication redirects to projects', async function(assert) {
-    assert.expect(2);
+    assert.expect(4);
     await visit(authMethodAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodAuthenticateURL);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
     await click('[type="submit"]');
     assert.equal(currentURL(), projectsURL);
+    assert.ok(currentSession().isAuthenticated);
+  });
+
+  test('deauthentication redirects to index', async function(assert) {
+    assert.expect(3);
+    await visit(authMethodAuthenticateURL);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    await click('[type="submit"]');
+    assert.ok(currentSession().isAuthenticated);
+    await click('.rose-button-header-dropdown');
+    assert.notOk(currentSession().isAuthenticated);
+    assert.equal(currentURL(), '/');
   });
 
 });

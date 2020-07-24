@@ -23,38 +23,28 @@ import { Response } from 'miragejs';
 //   }
 // }
 
-/**
- * Mirage doesn't distinguish between `/path:authenticate` and
- * `/path:deauthenticate`, so we use the presence of a request body to indicate
- * an authentication request and its absence to indicate deauthentication.
- */
 export function authHandler({ scopes }, request) {
-  const [ , method ] = request.params.id_method.split(':');
   const payload = JSON.parse(request.requestBody);
-  const isAuthenticationRequest = method === 'authenticate';
-  if (isAuthenticationRequest) {
-    // this is an auth request
-    if (payload.credentials.name === 'error') {
-      return new Response(400);
-    } else {
-      console.log(request);
-      const scopeAttrs =
-        this.serialize(scopes.find(request.params.scope_id));
-      const scope = scopeAttrs;
-      return new Response(200, {}, {
-        scope,
-        id: 'token123',
-        token: 'thetokenstring',
-        user_id: 'user123',
-        auth_method_id: 'authmethod123',
-        created_time: '',
-        updated_time: '',
-        last_used_time: '',
-        expiration_time: ''
-      });
-    }
+  if (payload.credentials.name === 'error') {
+    return new Response(400);
   } else {
-    // this is a deauth request
-    return new Response(200);
+    const scopeAttrs =
+      this.serialize(scopes.find(request.params.scope_id));
+    const scope = scopeAttrs;
+    return new Response(200, {}, {
+      scope,
+      id: 'token123',
+      token: 'thetokenstring',
+      user_id: 'user123',
+      auth_method_id: 'authmethod123',
+      created_time: '',
+      updated_time: '',
+      last_used_time: '',
+      expiration_time: ''
+    });
   }
+}
+
+export function deauthHandler() {
+  return new Response(200);
 }

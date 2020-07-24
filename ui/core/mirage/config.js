@@ -1,5 +1,5 @@
 import config from '../config/environment';
-import { authHandler } from './route-handlers/auth';
+import { authHandler, deauthHandler } from './route-handlers/auth';
 import { Response } from 'miragejs';
 
 export default function() {
@@ -56,8 +56,9 @@ export default function() {
   this.patch('/scopes/:scope_id/auth-methods/:id');
   this.del('/scopes/:scope_id/auth-methods/:id');
 
-  // Authenticate/deauthenticate route
+  // Authenticate/deauthenticate routes
   this.post('/scopes/:scope_id/auth-methods/:id_method', authHandler);
+  this.post('/scopes/:id_method', deauthHandler);
 
   // IAM : Users
   this.get('/scopes/:scope_id/users');
