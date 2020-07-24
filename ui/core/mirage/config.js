@@ -1,6 +1,6 @@
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
-import { Response } from 'miragejs';
+//import { Response } from 'miragejs';
 
 export default function() {
 
@@ -21,9 +21,10 @@ export default function() {
   this.get('/scopes', ({ scopes }, { queryParams: { scope_id } }) => {
     // Default parent scope is global
     if (!scope_id) scope_id = 'global';
-    return scopes.where(scope => {
+    const results = scopes.where(scope => {
       return scope.scope ? scope.scope.id === scope_id : false
     });
+    return results;
   });
   this.post('/scopes', function ({ scopes }, request) {
     // Parent scope comes through the payload via `scope_id`, but this needs
@@ -34,17 +35,7 @@ export default function() {
     attrs.scope = parentScopeAttrs;
     return scopes.create(attrs);
   });
-  // To simulate a possible real-world case, org scopes are not returned,
-  // but project scopes are.
-  // TODO this should be expanded to support other scenarios.
-  this.get('/scopes/:id', ({ scopes }, { params: { id: scopeID } }) => {
-    const scope = scopes.find(scopeID);
-    if (scope.type !== 'project') {
-      return new Response(404, {}, {});
-    } else {
-      return scope;
-    }
-  });
+  this.get('/scopes/:id');
   this.patch('/scopes/:id');
   this.del('/scopes/:id');
 

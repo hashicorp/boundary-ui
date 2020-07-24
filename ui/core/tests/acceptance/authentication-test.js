@@ -6,15 +6,19 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
-  //invalidateSession,
+  invalidateSession,
 } from 'ember-simple-auth/test-support';
 
 module('Acceptance | authentication', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let indexURL;
+  let globalScope;
   let orgScope;
   let orgScopeID;
+  let scopesURL;
+  let orgScopeURL;
   let scope;
   let authMethod;
   let authMethodID;
@@ -23,11 +27,19 @@ module('Acceptance | authentication', function(hooks) {
   let projectsURL;
 
   hooks.beforeEach(function () {
-    orgScope = this.server.create('scope', {type: 'org'}, 'withChildren');
+    invalidateSession();
+    indexURL = '/';
+    globalScope = this.server.create('scope', { id: 'global' });
+    orgScope = this.server.create('scope', {
+      type: 'org',
+      scope: { id: globalScope.id, type: globalScope.type }
+    }, 'withChildren');
     scope = { id: orgScope.id, type: orgScope.type };
     authMethod = this.server.create('auth-method', { scope });
     orgScopeID = orgScope.id;
     authMethodID = authMethod.id;
+    scopesURL = `/scopes`;
+    orgScopeURL = `/scopes/${orgScopeID}`;
     authenticateURL = `/scopes/${orgScopeID}/authenticate`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
     projectsURL = `/scopes/${orgScopeID}/projects`;
@@ -40,6 +52,22 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), authMethodAuthenticateURL);
   });
 
+  test('visiting any authentication parent route while unauthenticated redirects to first authenticate method', async function(assert) {
+    assert.expect(3);
+    await visit(indexURL);
+    assert.equal(currentURL(), authMethodAuthenticateURL);
+    await visit(scopesURL);
+    assert.equal(currentURL(), authMethodAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('visiting projects while unauthenticated redirects to first authenticate method', async function(assert) {
+    assert.expect(2);
+    await visit(projectsURL);
+    assert.equal(currentURL(), authMethodAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
   test('visiting auth method authenticate route', async function(assert) {
     assert.expect(1);
     await visit(authMethodAuthenticateURL);
@@ -47,13 +75,20 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), authMethodAuthenticateURL);
   });
 
-  test('visiting any authenticate route while already authenticated redirects to projects', async function(assert) {
-    assert.expect(2);
-    authenticateSession();
+  test('visiting any authentication parent route while already authenticated redirects to projects', async function(assert) {
+    assert.expect(6);
+    authenticateSession({ scope });
+    await visit(indexURL);
+    assert.equal(currentURL(), projectsURL);
+    await visit(scopesURL);
+    assert.equal(currentURL(), projectsURL);
+    await visit(orgScopeURL);
+    assert.equal(currentURL(), projectsURL);
     await visit(authenticateURL);
     assert.equal(currentURL(), projectsURL);
     await visit(authMethodAuthenticateURL);
     assert.equal(currentURL(), projectsURL);
+    assert.ok(currentSession().isAuthenticated);
   });
 
   test('failed authentication shows a notification message', async function(assert) {
@@ -78,7 +113,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.ok(currentSession().isAuthenticated);
   });
 
-  test('deauthentication redirects to index', async function(assert) {
+  test('deauthentication redirects to first authenticate method', async function(assert) {
     assert.expect(3);
     await visit(authMethodAuthenticateURL);
     await fillIn('[name="identification"]', 'test');
@@ -87,7 +122,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.ok(currentSession().isAuthenticated);
     await click('.rose-button-header-dropdown');
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), '/');
+    assert.equal(currentURL(), authMethodAuthenticateURL);
   });
 
 });

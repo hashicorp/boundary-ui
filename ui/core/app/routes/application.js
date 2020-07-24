@@ -36,16 +36,11 @@ export default class ApplicationRoute extends Route.extend(
   /**
    * When the session ends, redirect to authenticate and reload the page to
    * purge any in-memory state.
-   *
-   * TODO This application route is redirecting to a subroute, assuming
-   * that the user is logged into a specific organization.  This won't always
-   * necessarily be the case.  When we support MSP, users may authenticate
-   * without an org scope.  So this will need to be rethought.
    */
   async sessionInvalidated() {
     // Catch error in this transition, since it will be aborted by the
-    // org auth route when it redirects to the first auth method.
-    await this.transitionTo(this.routeIfUnauthenticated);
+    // scope auth route when it redirects to the first auth method.
+    await this.transitionTo(this.routeIfUnauthenticated).catch(() => {});
     // The Ember way of accessing globals...
     const document = getOwner(this).lookup('service:-document').documentElement;
     // defaultView === window, but without using globals directly
