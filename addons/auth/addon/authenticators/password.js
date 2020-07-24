@@ -7,16 +7,16 @@ import fetch from 'fetch';
  * This authenticator is intended for use with Ember Simple Auth.
  *
  * Simple id/password base authenticator sends credentials to an endpoint
- * specified in the `authEndpoint` URL.  If the HTTP response code is in the
+ * specified by the `buildAuthEndpointURL`.  If the HTTP response code is in the
  * success range, authentication resolves.  Otherwise it rejects.
  *
- * Upon session invalidation, deauthentication is attempted at the
- * `deauthEndpoint`, but is not guaranteed.
+ * Upon session invalidation, deauthentication is attempted at the URL generated
+ * by `buildDeauthEndpointURL`, but is not guaranteed.
  *
  * This authenticator should not be used directly because it does not specify
- * an `authEndpoint` or `deauthEndpoint` of its own.  To use, generate an
- * application authenticator in your app `authenticators/application.js` and
- * extend this class.
+ * an `buildAuthEndpointURL` or `buildDeauthEndpointURL` of its own.
+ * To use, generate an application authenticator in your app
+ * `authenticators/application.js` and extend this class.
  *
  * @example
  *
@@ -56,13 +56,15 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    */
   async authenticate(
     { identification: name, password },
-    requestCookies = true
+    requestCookies = true,
+    options
   ) {
     const body = JSON.stringify({
       token_type: requestCookies ? 'cookie' : null,
       credentials: { name, password },
     });
-    const response = await fetch(this.authEndpoint, { method: 'post', body });
+    const authEndpointURL = this.buildAuthEndpointURL(options);
+    const response = await fetch(authEndpointURL, { method: 'post', body });
     const json = await response.json();
     return response.status < 400 ? resolve(json) : reject();
   }
@@ -75,8 +77,9 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    * @override
    * @return {Promise}
    */
-  invalidate() {
-    fetch(this.deauthEndpoint, { method: 'post' }).catch(() => {
+  invalidate(options) {
+    const deauthEndpointURL = this.buildDeauthEndpointURL(options);
+    fetch(deauthEndpointURL, { method: 'post' }).catch(() => {
       /* no op */
     });
     return super.invalidate(...arguments);

@@ -10,7 +10,7 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it authenticates to the specified authEndpoint', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.authEndpoint, (schema, request) => {
+    this.server.post(authenticator.buildAuthEndpointURL(), (schema, request) => {
       const json = JSON.parse(request.requestBody);
       assert.ok(json.token_type, 'Requested token cookies by default');
       return new Response(200);
@@ -23,7 +23,7 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it can authenticate without requesting cookies', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.authEndpoint, (schema, request) => {
+    this.server.post(authenticator.buildAuthEndpointURL(), (schema, request) => {
       const json = JSON.parse(request.requestBody);
       assert.notOk(json.token_type, 'Did not request tokens cookies');
       return new Response(200);
@@ -36,7 +36,7 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it authenticates with the expected payload', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.authEndpoint, (schema, request) => {
+    this.server.post(authenticator.buildAuthEndpointURL(), (schema, request) => {
       const json = JSON.parse(request.requestBody);
       assert.deepEqual(json, {
         token_type: 'cookie',
@@ -57,7 +57,7 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it rejects if the endpoint sends an error status code', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.authEndpoint, () => {
+    this.server.post(authenticator.buildAuthEndpointURL(), () => {
       return new Response(400);
     });
     await authenticator.authenticate({}).catch(() => {
@@ -68,7 +68,7 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it deauthenticates on invalidation', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.deauthEndpoint, () => {
+    this.server.post(authenticator.buildDeauthEndpointURL(), () => {
       assert.ok(true, 'deauthentication occurred');
       return new Response(200);
     });
@@ -78,7 +78,7 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it invalidation succeeds even if the deauthentication request fails', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.deauthEndpoint, () => {
+    this.server.post(authenticator.buildDeauthEndpointURL(), () => {
       assert.ok(true, 'deauthentication was requested');
       return new Response(500);
     });
