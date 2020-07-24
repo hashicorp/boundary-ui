@@ -23,7 +23,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @return {string}
    */
   buildAuthEndpointURL({
-    scope: { scope_id: scopeID },
+    scope: { id: scopeID },
     authMethod: { id: authMethodID }
   }) {
     const adapter = this.store.adapterFor('application');
@@ -38,7 +38,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @param {string} scopeID
    * @return {string}
    */
-  buildDeauthEndpointURL({ scope: { scope_id: scopeID } }) {
+  buildDeauthEndpointURL({ scope: { id: scopeID } }) {
     const adapter = this.store.adapterFor('application');
     const options = { adapterOptions: { method: 'deauthenticate' } };
     return adapter.buildURL('scope', scopeID, options, 'findRecord');

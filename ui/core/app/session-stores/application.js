@@ -37,9 +37,9 @@ export default class ApplicationSessionStore extends LocalStorageSessionStore {
    * @param {object} sessionData
    */
   addScopeToSession(sessionData) {
-    const scopeID = get(this.scope, 'scope.id');
+    const scope = get(this, 'scope');
     const authenticated = get(sessionData, 'authenticated');
-    if (scopeID && authenticated) authenticated.scopeID = scopeID;
+    if (scope && authenticated) authenticated.scope = scope;
   }
 
 }
