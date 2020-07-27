@@ -69,7 +69,7 @@ export default function() {
   this.patch('/scopes/:scope_id/roles/:id');
   this.del('/scopes/:scope_id/roles/:id');
 
-  // group
+  // IAM: Groups
   this.get('/scopes/:scope_id/groups');
   this.post('/scopes/:scope_id/groups');
   this.get('/scopes/:scope_id/groups/:id');
