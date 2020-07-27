@@ -23,5 +23,4 @@ export default class ScopesScopeRoute extends Route {
         return maybeExistingScope || this.store.createRecord('scope', { id });
       });
   }
-
 }
