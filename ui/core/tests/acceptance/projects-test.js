@@ -20,9 +20,11 @@ module('Acceptance | projects', function (hooks) {
   let initialProjectScopesCount;
 
   hooks.beforeEach(function () {
-    org = this.server.create('scope', {type: 'org'}, 'withChildren');
-    getProjectScopesCount = () => this.server.schema.scopes.where({type: 'project'}).length;
-    getFirstProjectScope = () => this.server.schema.scopes.where({type: 'project'}).models[0];
+    org = this.server.create('scope', { type: 'org' }, 'withChildren');
+    getProjectScopesCount = () =>
+      this.server.schema.scopes.where({ type: 'project' }).length;
+    getFirstProjectScope = () =>
+      this.server.schema.scopes.where({ type: 'project' }).models[0];
     initialProjectScopesCount = getProjectScopesCount();
     orgID = org.id;
     projectsURL = `/scopes/${orgID}/projects`;
@@ -44,7 +46,11 @@ module('Acceptance | projects', function (hooks) {
     assert.notEqual(wrongProjectsURL, projectsURL);
     await visit(wrongProjectsURL);
     await a11yAudit();
-    assert.equal(currentURL(), projectsURL, 'Wrong projects path was redirected to correct path.');
+    assert.equal(
+      currentURL(),
+      projectsURL,
+      'Wrong projects path was redirected to correct path.'
+    );
   });
 
   test('can create new projects', async function (assert) {
@@ -119,7 +125,7 @@ module('Acceptance | projects', function (hooks) {
     assert.equal(find('[name="name"]').value, existingProject.name);
   });
 
-  test('can delete project', async function(assert) {
+  test('can delete project', async function (assert) {
     assert.expect(1);
     await visit(existingProjectURL);
     await click('.rose-button-warning');

@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeProjectsProjectRoute extends Route {
-
   // =methods
 
   /**
@@ -13,5 +12,4 @@ export default class ScopesScopeProjectsProjectRoute extends Route {
   model({ project_id }) {
     return this.store.findRecord('scope', project_id);
   }
-
 }

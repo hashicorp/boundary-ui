@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeRoute extends Route {
-
   // =methods
 
   /**
@@ -24,5 +23,4 @@ export default class ScopesScopeRoute extends Route {
       return maybeExistingScope || this.store.createRecord('scope', { id });
     }
   }
-
 }

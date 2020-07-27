@@ -10,5 +10,4 @@ export default class OrgsOrgRolesRoute extends Route {
   model() {
     return this.store.findAll('role');
   }
-
 }

@@ -5,7 +5,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 
-module('Acceptance | users', function(hooks) {
+module('Acceptance | users', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -80,7 +80,7 @@ module('Acceptance | users', function(hooks) {
 
   test('can save changes to an existing user', async function (assert) {
     assert.expect(2);
-    this.server.createList('user', 1, {name: 'Test User'});
+    this.server.createList('user', 1, { name: 'Test User' });
     await visit('/orgs/1/users/1');
     await fillIn('[name="name"]', 'Updated user name');
     await click('.rose-form-actions [type="submit"]');
@@ -90,14 +90,14 @@ module('Acceptance | users', function(hooks) {
 
   test('can cancel changes to an existing user', async function (assert) {
     assert.expect(1);
-    this.server.createList('user', 1, {name: 'Test User'});
+    this.server.createList('user', 1, { name: 'Test User' });
     await visit('/orgs/1/users/1');
     await fillIn('[name="name"]', 'Unsaved user name');
     await click('.rose-form-actions [type="button"]');
     assert.equal(find('[name="name"]').value, 'Test User');
   });
 
-  test('can delete an user', async function(assert) {
+  test('can delete an user', async function (assert) {
     assert.expect(2);
     this.server.createList('user', 1);
     assert.equal(this.server.db.users.length, 1);
