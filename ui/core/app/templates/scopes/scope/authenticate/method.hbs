@@ -1,3 +1,29 @@
+{{#if @model}}
+  <h2>{{t 'actions.authenticate'}}</h2>
+  <p>{{t "auth.descriptions.choose-org"}}</p>
+  <Rose::Dropdown
+    @text={{t 'actions.choose-org'}}
+    @icon="user-organization"
+  as |dropdown|>
+    {{#each @model as |org|}}
+      <dropdown.link @route="orgs.org.authenticate" @model={{org}}>
+        {{org.displayName}}
+      </dropdown.link>
+    {{/each}}
+  </Rose::Dropdown>
+{{/if}}
+
+{{#unless @model}}
+  <Rose::Message
+    @title={{t "auth.titles.no-orgs"}}
+    @icon="alert-circle-outline"
+  as |message|>
+    <message.description>
+      {{t "auth.descriptions.no-orgs"}}
+    </message.description>
+  </Rose::Message>
+{{/unless}}
+
 <Rose::Form
   @onSubmit={{route-action "authenticate" (hash
     identification=this.identification
