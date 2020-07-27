@@ -4,6 +4,7 @@ actions:
   dismiss: Dismiss
   save: Save
   help: Need help?
+  deauthenticate: Deauthenticate
 resources:
   user: User
   users: Users
