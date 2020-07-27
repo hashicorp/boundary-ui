@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class ScopesScopeUsersRoute extends Route {
+export default class ScopesScopeRolesRoute extends Route {
   // =services
 
   @service intl;
@@ -11,37 +11,36 @@ export default class ScopesScopeUsersRoute extends Route {
   // =methods
 
   /**
-   * Load all users under current scope.
-   * @return {Promise{[UserModel]}}
+   * Load all roles under current scope.
+   * @return {Promise{[RoleModel]}}
    */
   async model() {
-    return this.store.findAll('user', this.scopeAdapterOptions());
+    return this.store.findAll('role', this.scopeAdapterOptions());
   }
 
   // =actions
   /**
-   * Rollback changes on an user.
-   * @param {UserModel} user
+   * Rollback changes on an role.
+   * @param {RoleModel} role
    */
   @action
-  cancel(user) {
-    const { isNew } = user;
-    user.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.users');
+  cancel(role) {
+    const { isNew } = role;
+    role.rollbackAttributes();
+    if (isNew) this.transitionTo('scopes.scope.roles');
   }
 
   /**
-   * Save an user in current scope.
-   * @param {UserModel} user
-   * @param {Event} e
+   * Save an role in current scope.
+   * @param {RoleModel} role
    */
   @action
-  async save(user) {
+  async save(role) {
     try {
-      await user.save(this.scopeAdapterOptions());
+      await role.save(this.scopeAdapterOptions());
       this.refresh();
       this.notify.success(this.intl.t('notify.save-success'));
-      this.transitionTo('scopes.scope.users.user', user);
+      this.transitionTo('scopes.scope.roles.role', role);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -49,16 +48,16 @@ export default class ScopesScopeUsersRoute extends Route {
   }
 
   /**
-   * Delete user in current scope and redirect to index.
-   * @param {UserModel} user
+   * Delete role in current scope and redirect to index.
+   * @param {RoleModel} role
    */
   @action
-  async delete(user) {
+  async delete(role) {
     try {
-      await user.destroyRecord(this.scopeAdapterOptions());
+      await role.destroyRecord(this.scopeAdapterOptions());
       this.refresh();
-      this.transitionTo('scopes.scope.users');
-      this.notify.success(this.intl.t('notify.user.delete-success'));
+      this.notify.success(this.intl.t('notify.role.delete-success'));
+      this.transitionTo('scopes.scope.roles');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

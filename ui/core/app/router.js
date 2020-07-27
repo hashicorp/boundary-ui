@@ -21,6 +21,10 @@ Router.map(function () {
         this.route('group', { path: ':group_id' }, function () {});
         this.route('new');
       });
+      this.route('roles', function () {
+        this.route('role', { path: ':role_id' }, function () {});
+        this.route('new');
+      });
     });
   });
 
