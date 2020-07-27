@@ -20,7 +20,7 @@ export default class ScopesScopeUsersRoute extends Route {
 
   // =actions
   /**
-   * Rollback changes on user.
+   * Rollback changes on an user.
    * @param {UserModel} user
    */
   @action
@@ -31,7 +31,7 @@ export default class ScopesScopeUsersRoute extends Route {
   }
 
   /**
-   * Save a user in current scope.
+   * Save an user in current scope.
    * @param {UserModel} user
    * @param {Event} e
    */
