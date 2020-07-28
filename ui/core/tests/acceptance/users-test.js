@@ -9,25 +9,38 @@ module('Acceptance | users', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let orgScope;
+  let usersURL;
+  let newUserURL;
+
   hooks.beforeEach(function () {
-    this.server.create('org');
+    orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+      },
+      'withChildren'
+    );
+
+    usersURL = `/scopes/${orgScope.id}/users`;
+    newUserURL = `${usersURL}/new`;
   });
 
   test('visiting users', async function (assert) {
     assert.expect(1);
     this.server.createList('user', 1);
-    await visit('/orgs/1/users');
+    await visit(usersURL);
     await a11yAudit();
-    assert.equal(currentURL(), '/orgs/1/users');
+    assert.equal(currentURL(), usersURL);
   });
 
   test('can create new users', async function (assert) {
     assert.expect(4);
     assert.equal(this.server.db.users.length, 0);
-    await visit('/orgs/1/users/new');
+    await visit(newUserURL);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
-    assert.equal(currentURL(), '/orgs/1/users/1');
+    assert.equal(currentURL(), `${usersURL}/1`);
     assert.equal(this.server.db.users.length, 1);
     assert.equal(this.server.db.users[0].name, 'User name');
   });
@@ -35,16 +48,16 @@ module('Acceptance | users', function (hooks) {
   test('can cancel creation of a new user', async function (assert) {
     assert.expect(3);
     assert.equal(this.server.db.users.length, 0);
-    await visit('/orgs/1/users/new');
+    await visit(newUserURL);
     await fillIn('[name="name"]', 'User name');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), '/orgs/1/users');
+    assert.equal(currentURL(), usersURL);
     assert.equal(this.server.db.users.length, 0);
   });
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/orgs/:org_id/users', () => {
+    this.server.post('scopes/:scope_id/users', () => {
       return new Response(
         400,
         {},
@@ -63,7 +76,7 @@ module('Acceptance | users', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/users/new');
+    await visit(newUserURL);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
     assert.ok(
@@ -81,17 +94,17 @@ module('Acceptance | users', function (hooks) {
   test('can save changes to an existing user', async function (assert) {
     assert.expect(2);
     this.server.createList('user', 1, { name: 'Test User' });
-    await visit('/orgs/1/users/1');
+    await visit(`${usersURL}/1`);
     await fillIn('[name="name"]', 'Updated user name');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), '/orgs/1/users/1');
+    assert.equal(currentURL(), `${usersURL}/1`);
     assert.equal(this.server.db.users[0].name, 'Updated user name');
   });
 
   test('can cancel changes to an existing user', async function (assert) {
     assert.expect(1);
     this.server.createList('user', 1, { name: 'Test User' });
-    await visit('/orgs/1/users/1');
+    await visit(`${usersURL}/1`);
     await fillIn('[name="name"]', 'Unsaved user name');
     await click('.rose-form-actions [type="button"]');
     assert.equal(find('[name="name"]').value, 'Test User');
@@ -101,7 +114,7 @@ module('Acceptance | users', function (hooks) {
     assert.expect(2);
     this.server.createList('user', 1);
     assert.equal(this.server.db.users.length, 1);
-    await visit('/orgs/1/users/1');
+    await visit(`${usersURL}/1`);
     await click('.rose-button-warning');
     assert.equal(this.server.db.users.length, 0);
   });
@@ -109,7 +122,7 @@ module('Acceptance | users', function (hooks) {
   test('saving an existing user with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.createList('user', 1);
-    this.server.patch('/orgs/:org_id/users/:id', () => {
+    this.server.patch('/scopes/:scope_id/users/:id', () => {
       return new Response(
         400,
         {},
@@ -128,7 +141,7 @@ module('Acceptance | users', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/users/1');
+    await visit(`${usersURL}/1`);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
     assert.ok(
@@ -146,7 +159,7 @@ module('Acceptance | users', function (hooks) {
   test('errors are displayed when saving user fails', async function (assert) {
     assert.expect(1);
     this.server.createList('user', 1);
-    this.server.patch('/orgs/:org_id/users/:id', () => {
+    this.server.patch('/scopes/:scope_id/users/:id', () => {
       return new Response(
         490,
         {},
@@ -157,7 +170,7 @@ module('Acceptance | users', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/users/1');
+    await visit(`${usersURL}/1`);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
     assert.ok(
@@ -170,7 +183,7 @@ module('Acceptance | users', function (hooks) {
   test('errors are displayed when user deletion fails', async function (assert) {
     assert.expect(1);
     this.server.createList('user', 1);
-    this.server.del('/orgs/:org_id/users/:id', () => {
+    this.server.del('/scopes/:scope_id/users/:id', () => {
       return new Response(
         490,
         {},
@@ -181,7 +194,7 @@ module('Acceptance | users', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/users/1');
+    await visit(`${usersURL}/1`);
     await click('.rose-button-warning');
     assert.ok(
       find('[role="alert"]').textContent.trim(),

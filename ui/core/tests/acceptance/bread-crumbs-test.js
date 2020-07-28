@@ -7,7 +7,8 @@ module('Acceptance | breadcrumbs', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let org;
+  let orgScope;
+  let getProjectScope;
   let project;
   let hostCatalog;
   let user;
@@ -22,33 +23,43 @@ module('Acceptance | breadcrumbs', function (hooks) {
   let crumbPath;
 
   hooks.beforeEach(function () {
-    org = this.server.create('org');
-    project = this.server.create('project');
-    user = this.server.create('user');
+    orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+      },
+      'withChildren'
+    );
 
-    hostCatalog = this.server.create('host-catalog');
+    getProjectScope = () =>
+      this.server.schema.scopes.where({ type: 'project' }).models[0];
+
+    project = getProjectScope();
+    user = this.server.create('user');
     role = this.server.create('role');
     group = this.server.create('group');
 
-    projectsURL = `/orgs/${org.id}/projects`;
+    projectsURL = `/scopes/${orgScope.id}/projects`;
     newProjectURL = `${projectsURL}/new`;
     projectURL = `${projectsURL}/${project.id}`;
 
-    hostCatalogsURL = `${projectURL}/host-catalogs`;
-    newHostCatalogURL = `${hostCatalogsURL}/new`;
-    hostCatalogURL = `${hostCatalogsURL}/${hostCatalog.id}`;
-
-    rolesURL = `/orgs/${org.id}/roles`;
+    rolesURL = `/scopes/${orgScope.id}/roles`;
     newRoleURL = `${rolesURL}/new`;
     roleURL = `${rolesURL}/${role.id}`;
 
-    groupsURL = `/orgs/${org.id}/groups`;
+    groupsURL = `/scopes/${orgScope.id}/groups`;
     newGroupURL = `${groupsURL}/new`;
     groupURL = `${groupsURL}/${group.id}`;
 
-    usersURL = `/orgs/${org.id}/users`;
+    usersURL = `/scopes/${orgScope.id}/users`;
     newUserURL = `${usersURL}/${user.id}`;
     userURL = `${usersURL}/new`;
+
+    // TODO: Update hostcatalog to scopes
+    hostCatalog = this.server.create('host-catalog');
+    hostCatalogsURL = `${projectURL}/host-catalogs`;
+    newHostCatalogURL = `${hostCatalogsURL}/new`;
+    hostCatalogURL = `${hostCatalogsURL}/${hostCatalog.id}`;
   });
 
   test('can navigate via breadcrumbs to projects from project', async function (assert) {
