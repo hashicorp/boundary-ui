@@ -38,7 +38,7 @@ export default class ScopesScopeRolesRoute extends Route {
   async save(role) {
     const { isNew } = role;
     try {
-      await role.save(this.scopeAdapterOptions());
+      await role.save();
       this.refresh();
       this.notify.success(this.intl.t(
         isNew ? 'notify.create-success' : 'notify.save-success'
@@ -68,8 +68,7 @@ export default class ScopesScopeRolesRoute extends Route {
   }
 
   scopeAdapterOptions() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    const adapterOptions = { scopeID: scope_id };
-    return { adapterOptions };
+    const { id: scopeID } = this.modelFor('scopes.scope');
+    return { adapterOptions: { scopeID } };
   }
 }

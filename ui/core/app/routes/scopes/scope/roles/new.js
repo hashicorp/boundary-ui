@@ -8,6 +8,7 @@ export default class ScopesScopeRolesNewRoute extends Route {
    * @return {RoleModel}
    */
   model() {
-    return this.store.createRecord('role');
+    const { id: scopeID } = this.modelFor('scopes.scope');
+    return this.store.createRecord('role', { scopeID });
   }
 }
