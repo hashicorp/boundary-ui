@@ -1,32 +1,33 @@
 <Rose::Layout::Sidebar as |sidebarLayout|>
 
-  <sidebarLayout.sidebar>
+  {{#if this.session.isAuthenticated}}
+    <sidebarLayout.sidebar>
+      <Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
+        <nav.link @route="scopes.scope.projects">
+          {{t "resources.projects"}}
+        </nav.link>
+      </Rose::Nav::Sidebar>
 
-    <Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
-      <nav.link @route="scopes.scope.projects">
-        {{t "resources.projects"}}
-      </nav.link>
-    </Rose::Nav::Sidebar>
+      {{outlet "sidebar"}}
 
-    {{outlet "sidebar"}}
-    
-    {{!--
-    <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
-      <nav.link @route="orgs.org.users">
-        {{t "resources.users"}}
-      </nav.link>
 
-      <nav.link @route="orgs.org.groups">
-        {{t "resources.groups"}}
-      </nav.link>
+      {{!--
+      <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
+        <nav.link @route="orgs.org.users">
+          {{t "resources.users"}}
+        </nav.link>
 
-      <nav.link @route="orgs.org.roles">
-        {{t "resources.roles"}}
-      </nav.link>
-    </Rose::Nav::Sidebar>
-    --}}
+        <nav.link @route="orgs.org.groups">
+          {{t "resources.groups"}}
+        </nav.link>
 
-  </sidebarLayout.sidebar>
+        <nav.link @route="orgs.org.roles">
+          {{t "resources.roles"}}
+        </nav.link>
+      </Rose::Nav::Sidebar>
+      --}}
+    </sidebarLayout.sidebar>
+  {{/if}}
 
   <sidebarLayout.body>
     <main>

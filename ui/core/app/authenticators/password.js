@@ -38,7 +38,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @param {string} scopeID
    * @return {string}
    */
-  buildDeauthEndpointURL({ scope: { id: scopeID } }) {
+  buildDeauthEndpointURL({ org_id: scopeID }) {
     const adapter = this.store.adapterFor('application');
     const options = { adapterOptions: { method: 'deauthenticate' } };
     return adapter.buildURL('scope', scopeID, options, 'findRecord');

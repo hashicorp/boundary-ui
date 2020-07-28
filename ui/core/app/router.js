@@ -18,7 +18,6 @@ Router.map(function () {
         this.route('new');
       });
     });
-    this.route('cope');
   });
 
   this.route('orgs', function () {

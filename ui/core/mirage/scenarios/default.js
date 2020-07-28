@@ -10,6 +10,17 @@ export default function(server) {
 
   const scope = { id: orgScope.id, type: orgScope.type };
 
+  // Create additional scopes for authentication organization selection
+  server.create('scope', {
+    type: 'org',
+    scope: { id: globalScope.id, type: globalScope.type }
+  }, 'withChildren');
+
+  server.create('scope', {
+    type: 'org',
+    scope: { id: globalScope.id, type: globalScope.type }
+  }, 'withChildren');
+
   // Auth
 
   // Auth methods exist both at the global scope and the org scope.

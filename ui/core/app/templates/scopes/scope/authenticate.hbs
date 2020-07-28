@@ -1,1 +1,54 @@
-{{outlet}}
+{{title (t "actions.authenticate")}}
+
+<Rose::Layout::Centered>
+  <Rose::Layout::Page as |page|>
+
+    <page.header>
+      <h2>{{t "actions.authenticate"}}</h2>
+      <p>{{t "auth.descriptions.authenticating-with-org" name=@model.scope.displayName}}</p>
+    </page.header>
+
+    <page.navigation>
+
+      <Rose::Dropdown
+        @text={{t "actions.choose-different-org"}}
+        @icon="user-organization"
+      as |dropdown|>
+        {{#each @model.scopes as |scope|}}
+          <dropdown.link @route="scopes.scope.authenticate" @model={{scope}}>
+            {{scope.displayName}}
+          </dropdown.link>
+        {{/each}}
+      </Rose::Dropdown>
+
+      <Rose::Separator />
+
+      <Rose::Nav::Tabs as |nav|>
+        {{#each @model.authMethods as |authMethod|}}
+          <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod}}>
+            {{t (concat "auth.method-types." authMethod.type)}}
+          </nav.link>
+        {{/each}}
+      </Rose::Nav::Tabs>
+    </page.navigation>
+
+    <page.body>
+      {{#if @model.authMethods}}
+        {{outlet}}
+      {{/if}}
+      {{#unless @model.authMethods}}
+        <Rose::Layout::Centered>
+          <Rose::Message
+            @title={{t "auth.titles.no-methods"}}
+            @icon="alert-circle-outline"
+          as |message|>
+            <message.description>
+              {{t "auth.descriptions.no-methods"}}
+            </message.description>
+          </Rose::Message>
+        </Rose::Layout::Centered>
+      {{/unless}}
+    </page.body>
+
+  </Rose::Layout::Page>
+</Rose::Layout::Centered>
