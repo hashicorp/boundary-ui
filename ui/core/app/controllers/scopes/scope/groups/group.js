@@ -8,6 +8,6 @@ export default class ScopesScopeGroupsGroupController extends Controller {
    * @type {string}
    */
   get breadCrumb() {
-    return this.model.id;
+    return this.model.displayName;
   }
 }
