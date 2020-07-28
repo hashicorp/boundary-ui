@@ -10,7 +10,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsNewRoute extends Rout
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope.projects.project');
-    return this.store.createRecord('host-catalog', { scopeModel });
+    return this.store.createRecord('host-catalog', {
+      type: 'static',
+      scopeModel
+    });
   }
 
 }
