@@ -2,10 +2,10 @@
 @use '../variables/sizing';
 
 .rose-badge {
-  @include type.type(s);
-  padding: sizing.rems(xxs);
+  @include type.type(s, semibold);
+  padding: sizing.rems(xxxs) sizing.rems(xxs);
   border-radius: sizing.rems(xxxs);
-  border-width: thin;
+  border-width: sizing.rems(xxxxs);
   border-style: solid;
   display: inline-block;
 
