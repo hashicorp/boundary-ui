@@ -59,6 +59,7 @@ states:
   error: Error
 form:
   label:
+    id: ID
     name: Name
     description: Description
     type: Type

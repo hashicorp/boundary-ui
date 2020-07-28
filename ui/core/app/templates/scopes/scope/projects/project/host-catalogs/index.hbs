@@ -24,24 +24,27 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
+            <row.cell>{{t "form.label.id"}}</row.cell>
             <row.cell>{{t "form.label.name"}}</row.cell>
             <row.cell>{{t "form.label.type"}}</row.cell>
-            <row.cell>{{t "form.label.description"}}</row.cell>
           </header.row>
         </table.header>
         <table.body as |body|>
           {{#each @model as |hostCatalog|}}
             <body.row as |row|>
               <row.cell>
+                <code>{{hostCatalog.id}}</code>
+              </row.cell>
+              <row.cell>
                 <LinkTo
                   @route="scopes.scope.projects.project.host-catalogs.host-catalog"
                   @model={{hostCatalog}}
                 >
-                  {{hostCatalog.name}}
+                  {{hostCatalog.displayName}}
                 </LinkTo>
+                <p>{{hostCatalog.description}}</p>
               </row.cell>
               <row.cell>{{hostCatalog.type}}</row.cell>
-              <row.cell>{{hostCatalog.description}}</row.cell>
             </body.row>
           {{/each}}
         </table.body>
