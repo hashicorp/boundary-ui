@@ -9,8 +9,8 @@ export default class ScopesScopeProjectsProjectHostCatalogsNewRoute extends Rout
    * @return {HostCatalogModel}
    */
   model() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    return this.store.createRecord('host-catalog', { scopeID });
+    const scopeModel = this.modelFor('scopes.scope.projects.project');
+    return this.store.createRecord('host-catalog', { scopeModel });
   }
 
 }
