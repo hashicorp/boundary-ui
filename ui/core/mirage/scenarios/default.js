@@ -2,8 +2,7 @@ export default function(server) {
 
   // Scope resources
 
-  server.createList('org', 3);
-  server.createList('project', 6);
+  server.create('scope', null, 'withChildren');
 
   // Auth
 

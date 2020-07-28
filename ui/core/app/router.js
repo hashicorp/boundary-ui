@@ -7,6 +7,16 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
+
+  this.route('scopes', function() {
+    this.route('scope', { path: ':scope_id' }, function() {
+      this.route('projects', function() {
+        this.route('project', { path: ':project_id' }, function() {});
+        this.route('new');
+      });
+    });
+  });
+
   this.route('orgs', function () {
     this.route('org', { path: ':org_id' }, function () {
       this.route('projects', function () {
@@ -23,7 +33,7 @@ Router.map(function () {
         this.route('user', { path: ':user_id' }, function() {});
         this.route('new');
       });
-      
+
       this.route('roles', function() {
         this.route('role', { path: ':role_id' }, function() {});
         this.route('new');
