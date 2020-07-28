@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 export default class ScopesScopeProjectsRoute extends Route {
   // =services
 
+  @service intl;
   @service notify;
 
   // =methods
@@ -52,11 +53,13 @@ export default class ScopesScopeProjectsRoute extends Route {
    */
   @action
   async save(project) {
+    const { isNew } = project;
     try {
       await project.save();
       this.refresh();
-      // TODO: replace with translated strings
-      this.notify.success('Save succeeded.');
+      this.notify.success(this.intl.t(
+        isNew ? 'notify.create-success' : 'notify.save-success'
+      ));
       this.transitionTo('scopes.scope.projects.project', project);
     } catch (error) {
       // TODO: replace with translated strings
@@ -73,9 +76,8 @@ export default class ScopesScopeProjectsRoute extends Route {
     try {
       await project.destroyRecord();
       this.refresh();
+      this.notify.success('notify.delete-success');
       this.transitionTo('scopes.scope.projects');
-      // TODO: replace with translated strings
-      this.notify.success('Deleted project succesfully.');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

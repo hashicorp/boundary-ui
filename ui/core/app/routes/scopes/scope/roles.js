@@ -36,10 +36,13 @@ export default class ScopesScopeRolesRoute extends Route {
    */
   @action
   async save(role) {
+    const { isNew } = role;
     try {
       await role.save(this.scopeAdapterOptions());
       this.refresh();
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t(
+        isNew ? 'notify.create-success' : 'notify.save-success'
+      ));
       this.transitionTo('scopes.scope.roles.role', role);
     } catch (error) {
       // TODO: replace with translated strings
@@ -56,7 +59,7 @@ export default class ScopesScopeRolesRoute extends Route {
     try {
       await role.destroyRecord(this.scopeAdapterOptions());
       this.refresh();
-      this.notify.success(this.intl.t('notify.role.delete-success'));
+      this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.roles');
     } catch (error) {
       // TODO: replace with translated strings

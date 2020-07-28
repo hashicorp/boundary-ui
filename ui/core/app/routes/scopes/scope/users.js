@@ -37,10 +37,13 @@ export default class ScopesScopeUsersRoute extends Route {
    */
   @action
   async save(user) {
+    const { isNew } = user;
     try {
       await user.save(this.scopeAdapterOptions());
       this.refresh();
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t(
+        isNew ? 'notify.create-success' : 'notify.save-success'
+      ));
       this.transitionTo('scopes.scope.users.user', user);
     } catch (error) {
       // TODO: replace with translated strings
@@ -57,8 +60,8 @@ export default class ScopesScopeUsersRoute extends Route {
     try {
       await user.destroyRecord(this.scopeAdapterOptions());
       this.refresh();
+      this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.users');
-      this.notify.success(this.intl.t('notify.user.delete-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

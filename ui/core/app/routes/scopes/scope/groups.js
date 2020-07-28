@@ -36,10 +36,13 @@ export default class ScopesScopeGroupsRoute extends Route {
    */
   @action
   async save(group) {
+    const { isNew } = group;
     try {
       await group.save(this.scopeAdapterOptions());
       this.refresh();
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t(
+        isNew ? 'notify.create-success' : 'notify.save-success'
+      ));
       this.transitionTo('scopes.scope.groups.group', group);
     } catch (error) {
       //TODO: replace with translated strings
@@ -56,8 +59,8 @@ export default class ScopesScopeGroupsRoute extends Route {
     try {
       await group.destroyRecord(this.scopeAdapterOptions());
       this.refresh();
+      this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.groups');
-      this.notify.success(this.intl.t('notify.group.delete-success'));
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
