@@ -1,15 +1,17 @@
+{{title (t "actions.authenticate")}}
+
 <Rose::Layout::Centered>
   <Rose::Layout::Page as |page|>
 
     <page.header>
-      <h2>{{t 'actions.authenticate'}}</h2>
-      <p>{{t 'auth.descriptions.authenticating-with-org' name=@model.scope.displayName}}</p>
+      <h2>{{t "actions.authenticate"}}</h2>
+      <p>{{t "auth.descriptions.authenticating-with-org" name=@model.scope.displayName}}</p>
     </page.header>
 
     <page.navigation>
 
       <Rose::Dropdown
-        @text={{t 'actions.choose-different-org'}}
+        @text={{t "actions.choose-different-org"}}
         @icon="user-organization"
       as |dropdown|>
         {{#each @model.scopes as |scope|}}
@@ -24,7 +26,7 @@
       <Rose::Nav::Tabs as |nav|>
         {{#each @model.authMethods as |authMethod|}}
           <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod}}>
-            {{t (concat 'auth.method-types.' authMethod.type)}}
+            {{t (concat "auth.method-types." authMethod.type)}}
           </nav.link>
         {{/each}}
       </Rose::Nav::Tabs>
