@@ -54,23 +54,28 @@ You will need the following things properly installed on your computer.
 
 List of available project commands.  `yarn run <command-name>`
 
-| Command             | Description                                                                                                        |
-|---------------------|--------------------------------------------------------------------------------------------------------------------|
-| commit              | Replaces `git commit`, ensures checks pass before commit is allowed and normalizes commit messages across authors. |
-| compliance:licenses | Checks that all dependencies have OSS-compatible licenses.                                                         |
-| doc:toc             | Automatically generates a table of contents for the README file.                                                   |
+| Command             | Description |
+|---------------------|---|
+| build               | Builds Core UI. |
+| test                | Runs tests in CI mode. |
+| commit              | Replaces `git commit`, ensures compliance, audit, lint, and test checks pass before commit is allowed and normalizes commit messages across authors. |
+| lint                | Runs ember-template-lint on all of the hbs, js, and sass files. |
+| compliance:audit    | Checks for issues using `yarn audit` with moderate and above criticality.|
+| compliance:licenses | Checks that all dependencies have OSS-compatible licenses. |
+| doc:toc             | Automatically generates a table of contents for the README file. |
 
 ## Contributing
 
 ### Branching
 
 We follow [A Successful Git Branching Model][nvie-git], otherwise known as
-Gitflow.  Branches `master` and `develop` are sacred mainlines into which we do
+Gitflow.  Branches `main` and `develop` are sacred mainlines into which we do
 not commit directly.  Instead, these branches have special meaning defining what
 code may be found within.  The `develop` branch contains code _for the next
-release_.  Code in `master` is _released, tagged, and ready for
+release_.  Code in `main` is _released, tagged, and ready for
 production deployment_.
 
+To start contributing:
 1. Start a new **topic branch** off `develop`.
 2. Commit work.
 3. When work is complete, create a PR from the topic branch into `develop`.
@@ -80,20 +85,20 @@ production deployment_.
 5. A core team member may merge the PR into `develop`.  At this point, the code
    is unreleased but considered "releasable".
 6. **Releasing**:  when it's time to release, create a PR from `develop` into
-  `master` (we skip Gitflow's `release` branch).  This is tantamount to
+  `main` (we skip Gitflow's `release` branch).  This is tantamount to
    requesting a new release (version) of the product.  Ensure the body of the PR
    includes well-documented changes slated for release.
 7. Code review and automated checks occur.
-8. A core team member may merge the PR into `master` to initiate a release.
-9. Tag the merge commit in `master` with version number of the release and cut
+8. A core team member may merge the PR into `main` to initiate a release.
+9. Tag the merge commit in `main` with version number of the release and cut
    a release in GitHub.
 
 While Gitflow may seem heavy, most of its process can be automated.  Gitflow is
 similar to its lighter-weight sibling [GitHub Flow][github-flow].  In essence,
-Gitflow differs only by adding an second mainline branch (`master`) that is
+Gitflow differs only by adding an second mainline branch (`main`) that is
 designated as _always containing production code_.  Another happy characteristic
 of Gitflow is that it's easy to track the project's release history, since
-_every commit to `master` is a release by definition_.  The well-defined nature
+_every commit to `main` is a release by definition_.  The well-defined nature
 of releases assists in cross-team collaboration, ensuring everyone has
 confidence about the state of the project.
 
@@ -113,15 +118,14 @@ To quickly produce a production build of Core UI, run from this folder:
 
 ```bash
 yarn install
-yarn build:ui:core
+yarn build
 ```
 
 Assets are saved to `ui/core/dist/`.
 
 #### Building with a Container
 
-Optionally, you may build the UI within a container.  Execute the
-following command:
+Optionally, you may build the UI within a container.  Execute the following command:
 
 ```bash
 docker-compose -f docker-compose-embedding.yml run build
