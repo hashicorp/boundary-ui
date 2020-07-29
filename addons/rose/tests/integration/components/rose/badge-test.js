@@ -3,25 +3,25 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/badge', function(hooks) {
+module('Integration | Component | rose/badge', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     await render(hbs`<Rose::Badge />`);
     assert.ok(find('.rose-badge'));
   });
 
-  test('it renders with content', async function(assert) {
+  test('it renders with content', async function (assert) {
     await render(hbs`<Rose::Badge>host-catalog-1</Rose::Badge>`);
     assert.equal(find('.rose-badge').textContent.trim(), 'host-catalog-1');
   });
 
-  test('it renders an icon using @icon', async function(assert) {
+  test('it renders an icon using @icon', async function (assert) {
     await render(hbs`<Rose::Badge @icon="chevron-right" />`);
     assert.ok(find('.rose-icon'));
   });
 
-  test('it styles content using @style', async function(assert) {
+  test('it styles content using @style', async function (assert) {
     let styles = [
       'outline',
       'dark',
@@ -36,7 +36,7 @@ module('Integration | Component | rose/badge', function(hooks) {
       'success',
       'success-outline',
       'warning',
-      'warning-outline'
+      'warning-outline',
     ];
 
     await render(hbs`<Rose::Badge @style={{this.style}} />`);
