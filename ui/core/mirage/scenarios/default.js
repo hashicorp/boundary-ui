@@ -3,10 +3,10 @@ export default function(server) {
   // Scope resources
 
   const globalScope = server.create('scope', { id: 'global' });  // creates a global scope
-  const orgScope = server.create('scope', {
+  const orgScope = server.createList('scope', 3, {
     type: 'org',
     scope: { id: globalScope.id, type: globalScope.type }
-  }, 'withChildren');
+  }, 'withChildren')[0];
   const scope = { id: orgScope.id, type: orgScope.type };
 
   // Auth

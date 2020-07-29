@@ -5,9 +5,10 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
-//  currentSession,
   authenticateSession,
-//  invalidateSession,
+  // These are left here intentionally for future reference.
+  //currentSession,
+  //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
 module('Acceptance | host catalogs', function(hooks) {
