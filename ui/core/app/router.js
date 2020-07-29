@@ -12,10 +12,6 @@ Router.map(function () {
       this.route('authenticate', function () {
         this.route('method', { path: ':auth_method_id' });
       });
-      this.route('projects', function () {
-        this.route('project', { path: ':project_id' }, function () {});
-        this.route('new');
-      });
       this.route('users', function () {
         this.route('user', { path: ':user_id' }, function () {});
         this.route('new');
@@ -26,6 +22,15 @@ Router.map(function () {
       });
       this.route('roles', function () {
         this.route('role', { path: ':role_id' }, function () {});
+        this.route('new');
+      });
+      this.route('projects', function() {
+        this.route('project', { path: ':project_id' }, function() {
+          this.route('host-catalogs', function() {
+            this.route('new');
+            this.route('host-catalog', { path: ':host_catalog_id' }, function() {});
+          });
+        });
         this.route('new');
       });
     });

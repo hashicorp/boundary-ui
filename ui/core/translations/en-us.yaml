@@ -33,6 +33,7 @@ resources:
 titles:
   iam: IAM
   new: New
+  resources: Resources
   details: Details
   general: General
   overview: Overview
@@ -58,6 +59,7 @@ states:
   error: Error
 form:
   label:
+    id: ID
     name: Name
     description: Description
     type: Type
