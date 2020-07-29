@@ -15,7 +15,8 @@ export default class ScopesScopeGroupsRoute extends Route {
    * @return {Promise[GroupModel]}
    */
   async model() {
-    return this.store.findAll('group', this.scopeAdapterOptions());
+    const { id: scopeID } = this.modelFor('scopes.scope');
+    return this.store.findAll('group', { adapterOptions: { scopeID } });
   }
 
   // =actions
@@ -57,7 +58,7 @@ export default class ScopesScopeGroupsRoute extends Route {
   @action
   async delete(group) {
     try {
-      await group.destroyRecord(this.scopeAdapterOptions());
+      await group.destroyRecord();
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.groups');
@@ -65,10 +66,5 @@ export default class ScopesScopeGroupsRoute extends Route {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
     }
-  }
-
-  scopeAdapterOptions() {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return { adapterOptions: { scopeID } };
   }
 }

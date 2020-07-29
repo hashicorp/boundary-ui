@@ -15,7 +15,8 @@ export default class ScopesScopeRolesRoute extends Route {
    * @return {Promise{[RoleModel]}}
    */
   async model() {
-    return this.store.findAll('role', this.scopeAdapterOptions());
+    const { id: scopeID } = this.modelFor('scopes.scope');
+    return this.store.findAll('role', { adapterOptions: { scopeID } });
   }
 
   // =actions
@@ -57,7 +58,7 @@ export default class ScopesScopeRolesRoute extends Route {
   @action
   async delete(role) {
     try {
-      await role.destroyRecord(this.scopeAdapterOptions());
+      await role.destroyRecord();
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.roles');
@@ -65,10 +66,5 @@ export default class ScopesScopeRolesRoute extends Route {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
     }
-  }
-
-  scopeAdapterOptions() {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return { adapterOptions: { scopeID } };
   }
 }

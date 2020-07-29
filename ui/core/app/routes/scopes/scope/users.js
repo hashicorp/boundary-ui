@@ -15,7 +15,8 @@ export default class ScopesScopeUsersRoute extends Route {
    * @return {Promise{[UserModel]}}
    */
   async model() {
-    return this.store.findAll('user', this.scopeAdapterOptions());
+    const { id: scopeID } = this.modelFor('scopes.scope');
+    return this.store.findAll('user', { adapterOptions: { scopeID } });
   }
 
   // =actions
@@ -58,7 +59,7 @@ export default class ScopesScopeUsersRoute extends Route {
   @action
   async delete(user) {
     try {
-      await user.destroyRecord(this.scopeAdapterOptions());
+      await user.destroyRecord();
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.users');
@@ -66,10 +67,5 @@ export default class ScopesScopeUsersRoute extends Route {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
     }
-  }
-
-  scopeAdapterOptions() {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return { adapterOptions: { scopeID } };
   }
 }
