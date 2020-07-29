@@ -14,4 +14,19 @@ export default class ScopesScopeProjectsProjectRoute extends Route {
     return this.store.findRecord('scope', project_id);
   }
 
+  /**
+   * Renders the project-specific sidebar template.
+   * @override
+   * @param {object} controller
+   * @param {object} model
+   */
+  renderTemplate(controller, model) {
+    this.render('scopes/scope/projects/project/_sidebar', {
+      into: 'scopes/scope',
+      outlet: 'sidebar',
+      model: model
+    });
+    super.renderTemplate(...arguments);
+  }
+
 }

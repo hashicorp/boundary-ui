@@ -1,0 +1,71 @@
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.host-catalogs"}}</h2>
+    <p>{{t "descriptions.host-catalogs"}}</p>
+  </page.header>
+
+  <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton @route="scopes.scope.projects.project.host-catalogs.new" @style="primary">
+        {{t "titles.new"}}
+      </Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+
+    {{#if @model}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.cell>{{t "form.label.id"}}</row.cell>
+            <row.cell>{{t "form.label.name"}}</row.cell>
+            <row.cell>{{t "form.label.type"}}</row.cell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |hostCatalog|}}
+            <body.row as |row|>
+              <row.cell>
+                <code>{{hostCatalog.id}}</code>
+              </row.cell>
+              <row.cell>
+                <LinkTo
+                  @route="scopes.scope.projects.project.host-catalogs.host-catalog"
+                  @model={{hostCatalog}}
+                >
+                  {{hostCatalog.displayName}}
+                </LinkTo>
+                <p>{{hostCatalog.description}}</p>
+              </row.cell>
+              <row.cell>{{hostCatalog.type}}</row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t "titles.host-catalogs-welcome"}} as |message|>
+          <message.description>
+            {{t "descriptions.host-catalogs-welcome"}}
+          </message.description>
+          <message.link @route="scopes.scope.projects.project.host-catalogs.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t "titles.new"}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>

@@ -3,23 +3,11 @@ export default function(server) {
   // Scope resources
 
   const globalScope = server.create('scope', { id: 'global' });  // creates a global scope
-  const orgScope = server.create('scope', {
+  const orgScope = server.createList('scope', 3, {
     type: 'org',
     scope: { id: globalScope.id, type: globalScope.type }
-  }, 'withChildren');
-
+  }, 'withChildren')[0];
   const scope = { id: orgScope.id, type: orgScope.type };
-
-  // Create additional scopes for authentication organization selection
-  server.create('scope', {
-    type: 'org',
-    scope: { id: globalScope.id, type: globalScope.type }
-  }, 'withChildren');
-
-  server.create('scope', {
-    type: 'org',
-    scope: { id: globalScope.id, type: globalScope.type }
-  }, 'withChildren');
 
   // Auth
 
@@ -38,6 +26,9 @@ export default function(server) {
 
   // Other resources
 
-  server.createList('host-catalog', 6);
+  server.db.scopes.where({type: 'project'}).forEach(projectScope => {
+    const scope = { id: projectScope.id, type: projectScope.type };
+    server.createList('host-catalog', 2, { scope });
+  });
 
 }

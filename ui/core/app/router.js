@@ -14,7 +14,12 @@ Router.map(function () {
         this.route('method', { path: ':auth_method_id'});
       });
       this.route('projects', function() {
-        this.route('project', { path: ':project_id' }, function() {});
+        this.route('project', { path: ':project_id' }, function() {
+          this.route('host-catalogs', function() {
+            this.route('new');
+            this.route('host-catalog', { path: ':host_catalog_id' }, function() {});
+          });
+        });
         this.route('new');
       });
     });
