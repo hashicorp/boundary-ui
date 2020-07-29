@@ -4,6 +4,12 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import {
+  authenticateSession,
+  // These are left here intentionally for future reference.
+  //currentSession,
+  //invalidateSession,
+} from 'ember-simple-auth/test-support';
 
 module('Acceptance | groups', function (hooks) {
   setupApplicationTest(hooks);
@@ -11,6 +17,7 @@ module('Acceptance | groups', function (hooks) {
 
   let orgScope;
   let groupsURL;
+  let groupURL;
   let newGroupURL;
 
   hooks.beforeEach(function () {
@@ -22,8 +29,18 @@ module('Acceptance | groups', function (hooks) {
       'withChildren'
     );
 
+    const group = this.server.create('group', {
+      scope: {
+        id: orgScope.id,
+        type: orgScope.type
+      }
+    });
+
     groupsURL = `/scopes/${orgScope.id}/groups`;
+    groupURL = `${groupsURL}/${group.id}`;
     newGroupURL = `${groupsURL}/new`;
+
+    authenticateSession({});
   });
 
   test('visiting groups', async function (assert) {
@@ -33,25 +50,30 @@ module('Acceptance | groups', function (hooks) {
     assert.equal(currentURL(), groupsURL);
   });
 
+  test('visiting a group', async function(assert) {
+    assert.expect(1);
+    await visit(newGroupURL);
+    await a11yAudit();
+    assert.equal(currentURL(), newGroupURL);
+  });
+
   test('can create new group', async function (assert) {
-    assert.expect(4);
-    assert.equal(this.server.db.groups.length, 0);
+    assert.expect(1);
+    const groupsCount = this.server.db.groups.length;
     await visit(newGroupURL);
     await fillIn('[name="name"]', 'group name');
     await click('[type="submit"]');
-    assert.equal(currentURL(), `${groupsURL}/1`);
-    assert.equal(this.server.db.groups.length, 1);
-    assert.equal(this.server.db.groups[0].name, 'group name');
+    assert.equal(this.server.db.groups.length, groupsCount + 1);
   });
 
   test('can cancel new group creation', async function (assert) {
-    assert.expect(3);
-    assert.equal(this.server.db.groups.length, 0);
+    assert.expect(2);
+    const groupsCount = this.server.db.groups.length;
     await visit(newGroupURL);
     await fillIn('[name="name"]', 'group name');
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), groupsURL);
-    assert.equal(this.server.db.groups.length, 0);
+    assert.equal(this.server.db.groups.length, groupsCount);
   });
 
   test('saving a new group with invalid fields displays error messages', async function (assert) {
@@ -92,35 +114,31 @@ module('Acceptance | groups', function (hooks) {
 
   test('can save changes to an existing group', async function (assert) {
     assert.expect(2);
-    this.server.createList('group', 1, { name: 'Admin group' });
-    await visit(`${groupsURL}/1`);
+    await visit(groupURL);
     await fillIn('[name="name"]', 'Updated admin group');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), `${groupsURL}/1`);
+    assert.equal(currentURL(), groupURL);
     assert.equal(this.server.db.groups[0].name, 'Updated admin group');
   });
 
   test('can cancel changes to an existing group', async function (assert) {
     assert.expect(1);
-    this.server.createList('group', 1, { name: 'Admin group' });
-    await visit(`${groupsURL}/1`);
+    await visit(groupURL);
     await fillIn('[name="name"]', 'Updated admin group');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(find('[name="name"]').value, 'Admin group');
+    assert.notEqual(find('[name="name"]').value, 'Updated admin group');
   });
 
   test('can delete a group', async function (assert) {
-    assert.expect(2);
-    this.server.createList('group', 1);
-    assert.equal(this.server.db.groups.length, 1);
-    await visit(`${groupsURL}/1`);
+    assert.expect(1);
+    const groupsCount = this.server.db.groups.length;
+    await visit(groupURL);
     await click('.rose-button-warning');
-    assert.equal(this.server.db.groups.length, 0);
+    assert.equal(this.server.db.groups.length, groupsCount - 1);
   });
 
   test('saving an existing group with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.createList('group', 1);
     this.server.patch('/scopes/:scope_id/groups/:id', () => {
       return new Response(
         400,
@@ -140,7 +158,7 @@ module('Acceptance | groups', function (hooks) {
         }
       );
     });
-    await visit(`${groupsURL}/1`);
+    await visit(groupURL);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
@@ -157,7 +175,6 @@ module('Acceptance | groups', function (hooks) {
 
   test('errors are displayed when save project fails', async function (assert) {
     assert.expect(1);
-    this.server.createList('group', 1);
     this.server.patch('/scopes/:scope_id/groups/:id', () => {
       return new Response(
         490,
@@ -169,7 +186,7 @@ module('Acceptance | groups', function (hooks) {
         }
       );
     });
-    await visit(`${groupsURL}/1`);
+    await visit(groupURL);
     await fillIn('[name="name"]', 'Role name');
     await click('[type="submit"]');
     assert.ok(
@@ -181,7 +198,6 @@ module('Acceptance | groups', function (hooks) {
 
   test('errors are displayed when delete project fails', async function (assert) {
     assert.expect(1);
-    this.server.createList('group', 1);
     this.server.del('/scopes/:scope_id/groups/:id', () => {
       return new Response(
         490,
@@ -193,7 +209,7 @@ module('Acceptance | groups', function (hooks) {
         }
       );
     });
-    await visit(`${groupsURL}/1`);
+    await visit(groupURL);
     await click('.rose-button-warning');
     assert.ok(
       find('[role="alert"]').textContent.trim(),

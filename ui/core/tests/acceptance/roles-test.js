@@ -4,6 +4,12 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import {
+  authenticateSession,
+  // These are left here intentionally for future reference.
+  //currentSession,
+  //invalidateSession,
+} from 'ember-simple-auth/test-support';
 
 module('Acceptance | roles', function (hooks) {
   setupApplicationTest(hooks);
@@ -11,6 +17,7 @@ module('Acceptance | roles', function (hooks) {
 
   let orgScope;
   let rolesURL;
+  let roleURL;
   let newRoleURL;
 
   hooks.beforeEach(function () {
@@ -22,8 +29,18 @@ module('Acceptance | roles', function (hooks) {
       'withChildren'
     );
 
+    const role = this.server.create('role', {
+      scope: {
+        id: orgScope.id,
+        type: orgScope.type
+      }
+    })
+
     rolesURL = `/scopes/${orgScope.id}/roles`;
+    roleURL = `${rolesURL}/${role.id}`;
     newRoleURL = `${rolesURL}/new`;
+
+    authenticateSession({});
   });
 
   test('visiting roles', async function (assert) {
@@ -33,25 +50,30 @@ module('Acceptance | roles', function (hooks) {
     assert.equal(currentURL(), rolesURL);
   });
 
+  test('visiting a role', async function(assert) {
+    assert.expect(1);
+    await visit(newRoleURL);
+    await a11yAudit();
+    assert.equal(currentURL(), newRoleURL);
+  });
+
   test('can create new role', async function (assert) {
-    assert.expect(4);
-    assert.equal(this.server.db.roles.length, 0);
+    assert.expect(1);
+    const rolesCount = this.server.db.roles.length;
     await visit(newRoleURL);
     await fillIn('[name="name"]', 'role name');
     await click('[type="submit"]');
-    assert.equal(currentURL(), `${rolesURL}/1`);
-    assert.equal(this.server.db.roles.length, 1);
-    assert.equal(this.server.db.roles[0].name, 'role name');
+    assert.equal(this.server.db.roles.length, rolesCount + 1);
   });
 
   test('can cancel new role creation', async function (assert) {
-    assert.expect(3);
-    assert.equal(this.server.db.roles.length, 0);
+    assert.expect(2);
+    const rolesCount = this.server.db.roles.length;
     await visit(newRoleURL);
     await fillIn('[name="name"]', 'role name');
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), rolesURL);
-    assert.equal(this.server.db.roles.length, 0);
+    assert.equal(this.server.db.roles.length, rolesCount);
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
@@ -92,35 +114,31 @@ module('Acceptance | roles', function (hooks) {
 
   test('can save changes to an existing role', async function (assert) {
     assert.expect(2);
-    this.server.createList('role', 1, { name: 'Admin role' });
-    await visit(`${rolesURL}/1`);
+    await visit(roleURL);
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), `${rolesURL}/1`);
+    assert.equal(currentURL(), roleURL);
     assert.equal(this.server.db.roles[0].name, 'Updated admin role');
   });
 
   test('can cancel changes to an existing role', async function (assert) {
     assert.expect(1);
-    this.server.createList('role', 1, { name: 'Admin role' });
-    await visit(`${rolesURL}/1`);
+    await visit(roleURL);
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(find('[name="name"]').value, 'Admin role');
+    assert.notEqual(find('[name="name"]').value, 'Updated admin role');
   });
 
   test('can delete a role', async function (assert) {
-    assert.expect(2);
-    this.server.createList('role', 1);
-    assert.equal(this.server.db.roles.length, 1);
-    await visit(`${rolesURL}/1`);
+    assert.expect(1);
+    const rolesCount = this.server.db.roles.length;
+    await visit(roleURL);
     await click('.rose-button-warning');
-    assert.equal(this.server.db.roles.length, 0);
+    assert.equal(this.server.db.roles.length, rolesCount - 1);
   });
 
   test('saving an existing role with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.createList('role', 1);
     this.server.patch('/scopes/:scope_id/roles/:id', () => {
       return new Response(
         400,
@@ -140,7 +158,7 @@ module('Acceptance | roles', function (hooks) {
         }
       );
     });
-    await visit(`${rolesURL}/1`);
+    await visit(roleURL);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
@@ -157,7 +175,6 @@ module('Acceptance | roles', function (hooks) {
 
   test('errors are displayed when save project fails', async function (assert) {
     assert.expect(1);
-    this.server.createList('role', 1);
     this.server.patch('/scopes/:scope_id/roles/:id', () => {
       return new Response(
         490,
@@ -169,7 +186,7 @@ module('Acceptance | roles', function (hooks) {
         }
       );
     });
-    await visit(`${rolesURL}/1`);
+    await visit(roleURL);
     await fillIn('[name="name"]', 'Role name');
     await click('[type="submit"]');
     assert.ok(
@@ -181,7 +198,6 @@ module('Acceptance | roles', function (hooks) {
 
   test('errors are displayed when delete project fails', async function (assert) {
     assert.expect(1);
-    this.server.createList('role', 1);
     this.server.del('/scopes/:scope_id/roles/:id', () => {
       return new Response(
         490,
@@ -193,7 +209,7 @@ module('Acceptance | roles', function (hooks) {
         }
       );
     });
-    await visit(`${rolesURL}/1`);
+    await visit(roleURL);
     await click('.rose-button-warning');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
