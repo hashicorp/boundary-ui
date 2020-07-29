@@ -24,7 +24,6 @@ module('Integration | Component | rose/badge', function(hooks) {
   test('it styles content using @style', async function(assert) {
     let styles = [
       'outline',
-      'light',
       'dark',
       'informational',
       'informational-outline',
