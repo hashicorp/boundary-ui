@@ -3,7 +3,6 @@ import layout from '../../templates/components/rose/dropdown';
 import { action } from '@ember/object';
 
 export default Component.extend({
-
   // =attributes
 
   layout,
@@ -22,5 +21,4 @@ export default Component.extend({
   close(element) {
     if (element.open) element.open = false;
   },
-
 });
