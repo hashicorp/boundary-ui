@@ -9,7 +9,7 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | authentication', function(hooks) {
+module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -30,10 +30,14 @@ module('Acceptance | authentication', function(hooks) {
     invalidateSession();
     indexURL = '/';
     globalScope = this.server.create('scope', { id: 'global' });
-    orgScope = this.server.create('scope', {
-      type: 'org',
-      scope: { id: globalScope.id, type: globalScope.type }
-    }, 'withChildren');
+    orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: globalScope.id, type: globalScope.type },
+      },
+      'withChildren'
+    );
     scope = { id: orgScope.id, type: orgScope.type };
     authMethod = this.server.create('auth-method', { scope });
     orgScopeID = orgScope.id;
@@ -45,14 +49,14 @@ module('Acceptance | authentication', function(hooks) {
     projectsURL = `/scopes/${orgScopeID}/projects`;
   });
 
-  test('visiting auth methods authenticate route redirects to first auth method', async function(assert) {
+  test('visiting auth methods authenticate route redirects to first auth method', async function (assert) {
     assert.expect(1);
     await visit(authenticateURL);
     await a11yAudit();
     assert.equal(currentURL(), authMethodAuthenticateURL);
   });
 
-  test('visiting any authentication parent route while unauthenticated redirects to first authenticate method', async function(assert) {
+  test('visiting any authentication parent route while unauthenticated redirects to first authenticate method', async function (assert) {
     assert.expect(3);
     await visit(indexURL);
     assert.equal(currentURL(), authMethodAuthenticateURL);
@@ -61,21 +65,21 @@ module('Acceptance | authentication', function(hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('visiting projects while unauthenticated redirects to first authenticate method', async function(assert) {
+  test('visiting projects while unauthenticated redirects to first authenticate method', async function (assert) {
     assert.expect(2);
     await visit(projectsURL);
     assert.equal(currentURL(), authMethodAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('visiting auth method authenticate route', async function(assert) {
+  test('visiting auth method authenticate route', async function (assert) {
     assert.expect(1);
     await visit(authMethodAuthenticateURL);
     await a11yAudit();
     assert.equal(currentURL(), authMethodAuthenticateURL);
   });
 
-  test('visiting any authentication parent route while already authenticated redirects to projects', async function(assert) {
+  test('visiting any authentication parent route while already authenticated redirects to projects', async function (assert) {
     assert.expect(6);
     authenticateSession({ scope });
     await visit(indexURL);
@@ -91,7 +95,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.ok(currentSession().isAuthenticated);
   });
 
-  test('failed authentication shows a notification message', async function(assert) {
+  test('failed authentication shows a notification message', async function (assert) {
     assert.expect(3);
     await visit(authMethodAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
@@ -101,7 +105,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('successful authentication redirects to projects', async function(assert) {
+  test('successful authentication redirects to projects', async function (assert) {
     assert.expect(4);
     await visit(authMethodAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
@@ -113,7 +117,7 @@ module('Acceptance | authentication', function(hooks) {
     assert.ok(currentSession().isAuthenticated);
   });
 
-  test('deauthentication redirects to first authenticate method', async function(assert) {
+  test('deauthentication redirects to first authenticate method', async function (assert) {
     assert.expect(3);
     await visit(authMethodAuthenticateURL);
     await fillIn('[name="identification"]', 'test');
@@ -124,5 +128,4 @@ module('Acceptance | authentication', function(hooks) {
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodAuthenticateURL);
   });
-
 });

@@ -14,12 +14,11 @@ export default class ScopesScopeRoute extends Route {
    * @return {Promise{ScopeModel}}
    */
   model({ scope_id: id }) {
-    return this.store.findRecord('scope', id)
-      .catch(() => {
-        const maybeExistingScope = this.store.peekRecord('scope', id);
-        // TODO it's unclear if creating a temporary unsaved scope is reliable
-        // we may need to revert to a POJO.
-        return maybeExistingScope || this.store.createRecord('scope', { id });
-      });
+    return this.store.findRecord('scope', id).catch(() => {
+      const maybeExistingScope = this.store.peekRecord('scope', id);
+      // TODO it's unclear if creating a temporary unsaved scope is reliable
+      // we may need to revert to a POJO.
+      return maybeExistingScope || this.store.createRecord('scope', { id });
+    });
   }
 }

@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 
 export default class ScopesIndexRoute extends Route {
-
   // =services
 
   @service session;
@@ -17,13 +16,14 @@ export default class ScopesIndexRoute extends Route {
    * @param {?ScopeModel} model.firstObject
    */
   redirect({ firstObject }) {
-    const authenticatedScopeID =
-      get(this.session, 'data.authenticated.scope.id');
+    const authenticatedScopeID = get(
+      this.session,
+      'data.authenticated.scope.id'
+    );
     if (authenticatedScopeID) {
       this.transitionTo('scopes.scope', authenticatedScopeID);
     } else if (firstObject) {
       this.transitionTo('scopes.scope', firstObject.id);
     }
   }
-
 }

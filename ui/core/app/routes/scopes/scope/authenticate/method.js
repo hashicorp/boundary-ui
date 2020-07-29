@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class ScopesScopeAuthenticateMethodRoute extends Route {
-
   // =services
 
   @service session;
@@ -62,5 +61,4 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
       this.notify.error(errorMessage, { closeAfter: null });
     }
   }
-
 }

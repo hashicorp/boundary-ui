@@ -12,7 +12,6 @@ import { later } from '@ember/runloop';
 export default class ApplicationRoute extends Route.extend(
   ApplicationRouteMixin
 ) {
-
   // =services
 
   @service session;

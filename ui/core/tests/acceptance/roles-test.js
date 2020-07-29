@@ -32,9 +32,9 @@ module('Acceptance | roles', function (hooks) {
     const role = this.server.create('role', {
       scope: {
         id: orgScope.id,
-        type: orgScope.type
-      }
-    })
+        type: orgScope.type,
+      },
+    });
 
     rolesURL = `/scopes/${orgScope.id}/roles`;
     roleURL = `${rolesURL}/${role.id}`;
@@ -50,7 +50,7 @@ module('Acceptance | roles', function (hooks) {
     assert.equal(currentURL(), rolesURL);
   });
 
-  test('visiting a role', async function(assert) {
+  test('visiting a role', async function (assert) {
     assert.expect(1);
     await visit(newRoleURL);
     await a11yAudit();

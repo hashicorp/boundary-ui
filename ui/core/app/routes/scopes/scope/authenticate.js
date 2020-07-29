@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { hash } from 'rsvp';
 
 export default class ScopesScopeAuthenticateRoute extends Route {
-
   // =services
 
   @service session;
@@ -41,5 +40,4 @@ export default class ScopesScopeAuthenticateRoute extends Route {
       this.transitionTo(this.routeIfAlreadyAuthenticated);
     }
   }
-
 }

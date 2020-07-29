@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { A } from '@ember/array';
 
 export default class ScopesRoute extends Route {
-
   // =methods
 
   /**
@@ -20,5 +19,4 @@ export default class ScopesRoute extends Route {
     // expected to default to the global scope, thus returning org scopes.
     return this.store.findAll('scope').catch(() => A([]));
   }
-
 }

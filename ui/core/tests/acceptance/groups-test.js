@@ -32,8 +32,8 @@ module('Acceptance | groups', function (hooks) {
     const group = this.server.create('group', {
       scope: {
         id: orgScope.id,
-        type: orgScope.type
-      }
+        type: orgScope.type,
+      },
     });
 
     groupsURL = `/scopes/${orgScope.id}/groups`;
@@ -50,7 +50,7 @@ module('Acceptance | groups', function (hooks) {
     assert.equal(currentURL(), groupsURL);
   });
 
-  test('visiting a group', async function(assert) {
+  test('visiting a group', async function (assert) {
     assert.expect(1);
     await visit(newGroupURL);
     await a11yAudit();

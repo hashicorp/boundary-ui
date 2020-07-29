@@ -41,9 +41,9 @@ export default class ScopesScopeRolesRoute extends Route {
     try {
       await role.save();
       this.refresh();
-      this.notify.success(this.intl.t(
-        isNew ? 'notify.create-success' : 'notify.save-success'
-      ));
+      this.notify.success(
+        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+      );
       this.transitionTo('scopes.scope.roles.role', role);
     } catch (error) {
       // TODO: replace with translated strings

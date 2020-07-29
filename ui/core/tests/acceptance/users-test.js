@@ -32,8 +32,8 @@ module('Acceptance | users', function (hooks) {
     const user = this.server.create('user', {
       scope: {
         id: orgScope.id,
-        type: orgScope.type
-      }
+        type: orgScope.type,
+      },
     });
 
     usersURL = `/scopes/${orgScope.id}/users`;
@@ -50,7 +50,7 @@ module('Acceptance | users', function (hooks) {
     assert.equal(currentURL(), usersURL);
   });
 
-  test('visiting a user', async function(assert) {
+  test('visiting a user', async function (assert) {
     assert.expect(1);
     await visit(newUserURL);
     await a11yAudit();

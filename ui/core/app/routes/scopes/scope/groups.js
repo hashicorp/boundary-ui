@@ -41,9 +41,9 @@ export default class ScopesScopeGroupsRoute extends Route {
     try {
       await group.save();
       this.refresh();
-      this.notify.success(this.intl.t(
-        isNew ? 'notify.create-success' : 'notify.save-success'
-      ));
+      this.notify.success(
+        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+      );
       this.transitionTo('scopes.scope.groups.group', group);
     } catch (error) {
       //TODO: replace with translated strings
