@@ -4,6 +4,21 @@ actions:
   dismiss: Dismiss
   save: Save
   help: Need help?
+  authenticate: Authenticate
+  deauthenticate: Deauthenticate
+  choose-org: Choose Org
+  choose-different-org: Choose a Different Org
+auth:
+  titles:
+    no-orgs: No Organizations Available
+    no-methods: No Authentication Method
+  descriptions:
+    no-orgs: No organizations were found.  To authenticate, ask your administrator to create an organization and grant you access.
+    no-methods: No authentication methods were found for this organization.  Switch organizations and try again.
+    choose-org: Choose an organization to authenticate.
+    authenticating-with-org: "You're authenticating with {name}."
+  method-types:
+    password: Password
 resources:
   user: User
   users: Users
@@ -46,6 +61,8 @@ form:
     name: Name
     description: Description
     type: Type
+    identification: Username
+    password: Password
 errors:
   titles:
     unauthenticated-error: You are not signed in

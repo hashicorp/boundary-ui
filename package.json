@@ -24,7 +24,7 @@
     "lint:addons:rose": "echo \"\n\nlint: addons/rose\n\" && cd addons/rose && yarn lint",
     "lint:ui:core": "echo \"\n\nlint: ui/core\n\" && cd ui/core && yarn lint",
     "lint:ui:connect-client": "echo \"\n\nlint: ui/connect-client\n\" && cd ui/connect-client && yarn lint",
-    "test": "yarn test:addons:api && yarn test:addons:auth && yarn test:addons:rose && yarn test:ui:core && yarn test:ui:connect-client",
+    "test": "yarn test:addons:api && yarn test:addons:auth && yarn test:addons:rose && yarn test:ui:core",
     "test:addons:api": "echo \"\n\ntest: addons/api\n\" && cd addons/api && yarn test",
     "test:addons:auth": "echo \"\n\ntest: addons/auth\n\" && cd addons/auth && yarn test",
     "test:addons:rose": "echo \"\n\ntest: addons/rose\n\" && cd addons/rose && yarn test",

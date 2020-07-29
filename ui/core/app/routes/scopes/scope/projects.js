@@ -7,8 +7,16 @@ export default class ScopesScopeProjectsRoute extends Route {
   // =services
 
   @service notify;
+  @service session;
 
   // =methods
+
+  /**
+   * If arriving here unauthenticated, redirect to index for further processing.
+   */
+  beforeModel() {
+    if (!this.session.isAuthenticated) this.transitionTo('index');
+  }
 
   /**
    * Loads all scopes under the current scope.
