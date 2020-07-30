@@ -5,7 +5,7 @@ const API_HOST = process.env.API_HOST || '';
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix: 'connect-client',
+    modulePrefix: 'desktop',
     environment,
     rootURL: process.env.EMBER_CLI_ELECTRON ? '' : '/',
     locationType: process.env.EMBER_CLI_ELECTRON ? 'hash' : 'auto',
