@@ -11,7 +11,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host catalogs', function(hooks) {
+module('Acceptance | host catalogs', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -65,7 +65,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(currentURL(), urls.hostCatalogs);
   });
 
-  test('can navigate to host catalog form', async function(assert) {
+  test('can navigate to host catalog form', async function (assert) {
     assert.expect(1);
     authenticateSession({});
     await visit(urls.hostCatalogs);
@@ -74,7 +74,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(currentURL(), urls.hostCatalog);
   });
 
-  test('can delete host catalog', async function(assert) {
+  test('can delete host catalog', async function (assert) {
     assert.expect(2);
     const hostCatalogsCount = this.server.db.hostCatalogs.length;
     authenticateSession({});
@@ -84,7 +84,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(this.server.db.hostCatalogs.length, hostCatalogsCount - 1);
   });
 
-  test('can update host catalog and save changes', async function(assert) {
+  test('can update host catalog and save changes', async function (assert) {
     assert.expect(1);
     authenticateSession({});
     await visit(urls.hostCatalog);
@@ -93,7 +93,7 @@ module('Acceptance | host catalogs', function(hooks) {
     assert.equal(this.server.db.hostCatalogs[0].name, 'Test Name');
   });
 
-  test('can update host catalog and cancel changes', async function(assert) {
+  test('can update host catalog and cancel changes', async function (assert) {
     assert.expect(1);
     authenticateSession({});
     await visit(urls.hostCatalog);
@@ -246,5 +246,4 @@ module('Acceptance | host catalogs', function(hooks) {
       'Displays field-level errors.'
     );
   });
-
 });

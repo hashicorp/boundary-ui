@@ -17,12 +17,12 @@ export default function(server) {
   server.createList('auth-method', 3, { scope });
 
   // User
-  server.createList('user', 5);
+  server.createList('user', 5, { scope });
 
   // Role
-  server.createList('role', 5);
+  server.createList('role', 5, { scope });
   // Groups
-  server.createList('group', 5);
+  server.createList('group', 5, { scope });
 
   // Other resources
 

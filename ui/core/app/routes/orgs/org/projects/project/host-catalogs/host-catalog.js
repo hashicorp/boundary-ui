@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class OrgsOrgProjectsProjectHostCatalogsHostCatalogRoute extends Route {
-
   // =services
 
   @service notify;
@@ -63,5 +62,4 @@ export default class OrgsOrgProjectsProjectHostCatalogsHostCatalogRoute extends 
       this.notify.error(error.message, { closeAfter: null });
     }
   }
-
 }

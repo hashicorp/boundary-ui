@@ -14,5 +14,4 @@ export default class OrgsOrgRolesController extends Controller {
   get breadCrumb() {
     return this.intl.t('resources.roles');
   }
-
 }

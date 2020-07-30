@@ -8,5 +8,4 @@ export default class OrgsOrgGroupsGroupController extends Controller {
    * @type {string}
    */
   @alias('model.displayName') breadCrumb;
-
 }

@@ -39,7 +39,10 @@ export default class OrgsOrgProjectsProjectHostCatalogsNewRoute extends Route {
   async save(hostCatalog) {
     try {
       await hostCatalog.save();
-      this.transitionTo('orgs.org.projects.project.host-catalogs.host-catalog', hostCatalog);
+      this.transitionTo(
+        'orgs.org.projects.project.host-catalogs.host-catalog',
+        hostCatalog
+      );
       // TODO: replace with translated strings
       this.notify.success('Host catalog created.');
     } catch (error) {

@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeIndexRoute extends Route {
-
   // =methods
 
   /**
@@ -10,5 +9,4 @@ export default class ScopesScopeIndexRoute extends Route {
   redirect() {
     this.transitionTo('scopes.scope.authenticate');
   }
-
 }

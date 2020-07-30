@@ -7,7 +7,6 @@ import { inject as service } from '@ember/service';
  * endpoint, while deauthentication occurs on a scope endpoint.
  */
 export default class PasswordAuthenticator extends BasePasswordAuthenticator {
-
   // =services
 
   @service store;
@@ -24,7 +23,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    */
   buildAuthEndpointURL({
     scope: { id: scopeID },
-    authMethod: { id: authMethodID }
+    authMethod: { id: authMethodID },
   }) {
     const adapter = this.store.adapterFor('application');
     const options = { adapterOptions: { scopeID, method: 'authenticate' } };
@@ -43,5 +42,4 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
     const options = { adapterOptions: { method: 'deauthenticate' } };
     return adapter.buildURL('scope', scopeID, options, 'findRecord');
   }
-
 }

@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
 export default class OrgsOrgProjectsProjectHostCatalogsController extends Controller {
-
   // =services
 
   @service intl;
@@ -15,5 +14,4 @@ export default class OrgsOrgProjectsProjectHostCatalogsController extends Contro
   get breadCrumb() {
     return this.intl.t('resources.host-catalogs');
   }
-
 }

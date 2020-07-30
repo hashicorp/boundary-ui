@@ -79,16 +79,9 @@ errors:
     server-error: We ran into a problem and could not continue. You can ask your administrator or try again later.
     unknown-error: Please contact your administrator or try again later.
 notify:
-  save-success: Save succeeded.
-  user:
-    create-success: User created succesfully.
-    delete-success: Deleted user successfully.
-  role:
-    create-success: Role created succesfully.
-    delete-success: Deleted role successfully.
-  group:
-    create-success: Group created succesfully.
-    delete-success: Deleted group successfully.
+  create-success: Created succesfully.
+  save-success: Saved succesfully.
+  delete-success: Deleted successfully.
 dev:
   default-org: Default Org
   menu-item: Menu item
