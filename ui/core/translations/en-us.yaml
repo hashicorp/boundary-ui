@@ -72,6 +72,7 @@ errors:
     notfound-error: Resource not found
     server-error: Server error
     unknown-error: Something went wrong
+    authentication-failed: Authentication Failed
   descriptions:
     unauthenticated-error: You are not authenticated. Please authenticate and try again later.
     forbidden-error: You must be granted permissions to view this data. Ask your administrator if you think you should have access.
