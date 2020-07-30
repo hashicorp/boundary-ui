@@ -4,46 +4,83 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import {
+  authenticateSession,
+  // These are left here intentionally for future reference.
+  //currentSession,
+  //invalidateSession,
+} from 'ember-simple-auth/test-support';
 
 module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let org;
+  let orgID;
+  let projectsURL;
+  let newProjectURL;
+  let existingProject;
+  let existingProjectURL;
+  let getProjectScopesCount;
+  let getFirstProjectScope;
+  let initialProjectScopesCount;
+
   hooks.beforeEach(function () {
-    this.server.create('org');
+    authenticateSession({});
+    org = this.server.create('scope', { type: 'org' }, 'withChildren');
+    getProjectScopesCount = () =>
+      this.server.schema.scopes.where({ type: 'project' }).length;
+    getFirstProjectScope = () =>
+      this.server.schema.scopes.where({ type: 'project' }).models[0];
+    initialProjectScopesCount = getProjectScopesCount();
+    orgID = org.id;
+    projectsURL = `/scopes/${orgID}/projects`;
+    newProjectURL = `/scopes/${orgID}/projects/new`;
+    existingProject = getFirstProjectScope();
+    existingProjectURL = `/scopes/${orgID}/projects/${existingProject.id}`;
   });
 
   test('visiting projects', async function (assert) {
     assert.expect(1);
-    this.server.createList('project', 1);
-    await visit('/orgs/1/projects');
+    await visit(projectsURL);
     await a11yAudit();
-    assert.equal(currentURL(), '/orgs/1/projects');
+    assert.equal(currentURL(), projectsURL);
+  });
+
+  test('visiting projects within a project scope redirects to the parent org scope', async function (assert) {
+    assert.expect(2);
+    const wrongProjectsURL = `/scopes/${existingProject.id}/projects`;
+    assert.notEqual(wrongProjectsURL, projectsURL);
+    await visit(wrongProjectsURL);
+    await a11yAudit();
+    assert.equal(
+      currentURL(),
+      projectsURL,
+      'Wrong projects path was redirected to correct path.'
+    );
   });
 
   test('can create new projects', async function (assert) {
-    assert.expect(3);
-    assert.equal(this.server.db.projects.length, 0);
-    await visit('/orgs/1/projects/new');
+    assert.expect(1);
+    await visit(newProjectURL);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(currentURL(), '/orgs/1/projects/1');
-    assert.equal(this.server.db.projects.length, 1);
+    assert.equal(getProjectScopesCount(), initialProjectScopesCount + 1);
   });
 
   test('can cancel create new projects', async function (assert) {
     assert.expect(3);
-    assert.equal(this.server.db.projects.length, 0);
-    await visit('/orgs/1/projects/new');
+    assert.equal(getProjectScopesCount(), initialProjectScopesCount);
+    await visit(newProjectURL);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), '/orgs/1/projects');
-    assert.equal(this.server.db.projects.length, 0);
+    assert.equal(currentURL(), projectsURL);
+    assert.equal(getProjectScopesCount(), initialProjectScopesCount);
   });
 
   test('saving a new project with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/orgs/:org_id/projects', () => {
+    this.server.post('/scopes', () => {
       return new Response(
         400,
         {},
@@ -62,8 +99,7 @@ module('Acceptance | projects', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/projects/new');
-    await fillIn('[name="name"]', 'random string');
+    await visit(newProjectURL);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
@@ -78,37 +114,34 @@ module('Acceptance | projects', function (hooks) {
   });
 
   test('can save changes to existing project', async function (assert) {
-    assert.expect(2);
-    this.server.createList('project', 1, {name: 'MyProject'});
-    await visit('/orgs/1/projects/1');
+    assert.expect(3);
+    assert.notEqual(existingProject.name, 'random string');
+    await visit(existingProjectURL);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), '/orgs/1/projects/1');
-    assert.equal(this.server.db.projects[0].name, 'random string');
+    assert.equal(currentURL(), existingProjectURL);
+    assert.equal(getFirstProjectScope().name, 'random string');
   });
 
   test('can cancel changes to existing project', async function (assert) {
-    assert.expect(1);
-    this.server.createList('project', 1, {name: 'MyProject'});
-    await visit('/orgs/1/projects/1');
+    assert.expect(2);
+    await visit(existingProjectURL);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(find('[name="name"]').value, 'MyProject');
+    assert.notEqual(existingProject.name, 'random string');
+    assert.equal(find('[name="name"]').value, existingProject.name);
   });
 
-  test('can delete project', async function(assert) {
-    assert.expect(2);
-    this.server.createList('project', 1);
-    assert.equal(this.server.db.projects.length, 1);
-    await visit('/orgs/1/projects/1');
+  test('can delete project', async function (assert) {
+    assert.expect(1);
+    await visit(existingProjectURL);
     await click('.rose-button-warning');
-    assert.equal(this.server.db.projects.length, 0);
+    assert.equal(getProjectScopesCount(), initialProjectScopesCount - 1);
   });
 
   test('saving an existing project with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.createList('project', 1);
-    this.server.patch('/orgs/:org_id/projects/:id', () => {
+    this.server.patch('/scopes/:id', () => {
       return new Response(
         400,
         {},
@@ -127,7 +160,7 @@ module('Acceptance | projects', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/projects/1');
+    await visit(existingProjectURL);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
@@ -144,8 +177,7 @@ module('Acceptance | projects', function (hooks) {
 
   test('errors are displayed when save project fails', async function (assert) {
     assert.expect(1);
-    this.server.createList('project', 1);
-    this.server.patch('/orgs/:org_id/projects/:id', () => {
+    this.server.patch('/scopes/:id', () => {
       return new Response(
         490,
         {},
@@ -156,7 +188,7 @@ module('Acceptance | projects', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/projects/1');
+    await visit(existingProjectURL);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
@@ -168,8 +200,7 @@ module('Acceptance | projects', function (hooks) {
 
   test('errors are displayed when delete project fails', async function (assert) {
     assert.expect(1);
-    this.server.createList('project', 1);
-    this.server.del('/orgs/:org_id/projects/:id', () => {
+    this.server.del('/scopes/:id', () => {
       return new Response(
         490,
         {},
@@ -180,7 +211,7 @@ module('Acceptance | projects', function (hooks) {
         }
       );
     });
-    await visit('/orgs/1/projects/1');
+    await visit(existingProjectURL);
     await click('.rose-button-warning');
     assert.ok(
       find('[role="alert"]').textContent.trim(),

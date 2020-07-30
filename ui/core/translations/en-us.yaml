@@ -4,9 +4,24 @@ actions:
   dismiss: Dismiss
   save: Save
   help: Need help?
+  authenticate: Authenticate
+  deauthenticate: Deauthenticate
+  choose-org: Choose Org
+  choose-different-org: Choose a Different Org
+auth:
+  titles:
+    no-orgs: No Organizations Available
+    no-methods: No Authentication Method
+  descriptions:
+    no-orgs: No organizations were found.  To authenticate, ask your administrator to create an organization and grant you access.
+    no-methods: No authentication methods were found for this organization.  Switch organizations and try again.
+    choose-org: Choose an organization to authenticate.
+    authenticating-with-org: "You're authenticating with {name}."
+  method-types:
+    password: Password
 resources:
   user: User
-  users: Users 
+  users: Users
   role: Role
   roles: Roles
   group: Group
@@ -18,6 +33,8 @@ resources:
 titles:
   iam: IAM
   new: New
+  resources: Resources
+  details: Details
   general: General
   overview: Overview
   settings: Settings
@@ -42,9 +59,12 @@ states:
   error: Error
 form:
   label:
+    id: ID
     name: Name
     description: Description
     type: Type
+    identification: Username
+    password: Password
 errors:
   titles:
     unauthenticated-error: You are not signed in
@@ -52,6 +72,7 @@ errors:
     notfound-error: Resource not found
     server-error: Server error
     unknown-error: Something went wrong
+    authentication-failed: Authentication Failed
   descriptions:
     unauthenticated-error: You are not authenticated. Please authenticate and try again later.
     forbidden-error: You must be granted permissions to view this data. Ask your administrator if you think you should have access.
@@ -59,16 +80,9 @@ errors:
     server-error: We ran into a problem and could not continue. You can ask your administrator or try again later.
     unknown-error: Please contact your administrator or try again later.
 notify:
-  save-success: Save succeeded.
-  user:
-    create-success: User created succesfully.
-    delete-success: Deleted user successfully.
-  role:
-    create-success: Role created succesfully.
-    delete-success: Deleted role successfully.
-  group:
-    create-success: Group created succesfully.
-    delete-success: Deleted group successfully.
+  create-success: Created succesfully.
+  save-success: Saved succesfully.
+  delete-success: Deleted successfully.
 dev:
   default-org: Default Org
   menu-item: Menu item

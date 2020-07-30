@@ -14,33 +14,36 @@ module('Unit | Serializer | application', function (hooks) {
   test('it serializes records', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const record = store.createRecord('project', {
-      name: 'Project',
+    const record = store.createRecord('user', {
+      name: 'User',
       description: 'Description',
+      scope: {
+        scope_id: 'global',
+        type: 'global'
+      }
     });
     const serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
-      name: 'Project',
-      description: 'Description',
-      //disabled: false,  // TODO:  disabled is temporarily disabled
+      name: 'User',
+      description: 'Description'
     });
   });
 
   test('it normalizes array records from an `items` root key', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('project');
-    const projectModelClass = store.createRecord('project').constructor;
+    const serializer = store.serializerFor('user');
+    const userModelClass = store.createRecord('user').constructor;
     const payload = {
       items: [
-        { id: 1, name: 'Project 1' },
-        { id: 2, name: 'Project 2' },
-        { id: 3, name: 'Project 3' },
+        { id: 1, name: 'User 1', scope: { id: 'o_123' } },
+        { id: 2, name: 'User 2', scope: { id: 'o_123' } },
+        { id: 3, name: 'User 3', scope: { id: 'o_123' } },
       ],
     };
     const normalizedArray = serializer.normalizeArrayResponse(
       store,
-      projectModelClass,
+      userModelClass,
       payload
     );
     assert.deepEqual(normalizedArray, {
@@ -48,20 +51,20 @@ module('Unit | Serializer | application', function (hooks) {
       data: [
         {
           id: '1',
-          type: 'project',
-          attributes: { name: 'Project 1' },
+          type: 'user',
+          attributes: { name: 'User 1', scope: { scope_id: 'o_123' } },
           relationships: {},
         },
         {
           id: '2',
-          type: 'project',
-          attributes: { name: 'Project 2' },
+          type: 'user',
+          attributes: { name: 'User 2', scope: { scope_id: 'o_123' } },
           relationships: {},
         },
         {
           id: '3',
-          type: 'project',
-          attributes: { name: 'Project 3' },
+          type: 'user',
+          attributes: { name: 'User 3', scope: { scope_id: 'o_123' } },
           relationships: {},
         },
       ],
@@ -71,23 +74,24 @@ module('Unit | Serializer | application', function (hooks) {
   test('it normalizes single, unrooted records', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('project');
-    const projectModelClass = store.createRecord('project').constructor;
+    const serializer = store.serializerFor('user');
+    const userModelClass = store.createRecord('user').constructor;
     const payload = {
       id: '1',
-      name: 'Project 1',
+      name: 'User 1',
+      scope: { id: 'o_123' }
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
-      projectModelClass,
+      userModelClass,
       payload
     );
     assert.deepEqual(normalized, {
       included: [],
       data: {
         id: '1',
-        type: 'project',
-        attributes: { name: 'Project 1' },
+        type: 'user',
+        attributes: { name: 'User 1', scope: { scope_id: 'o_123' } },
         relationships: {},
       },
     });

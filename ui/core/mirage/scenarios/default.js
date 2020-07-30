@@ -2,26 +2,33 @@ export default function(server) {
 
   // Scope resources
 
-  server.createList('org', 3);
-  server.createList('project', 6);
+  const globalScope = server.create('scope', { id: 'global' });  // creates a global scope
+  const orgScope = server.createList('scope', 3, {
+    type: 'org',
+    scope: { id: globalScope.id, type: globalScope.type }
+  }, 'withChildren')[0];
+  const scope = { id: orgScope.id, type: orgScope.type };
 
   // Auth
 
   // Auth methods exist both at the global scope and the org scope.
   // For simplicity we don't scope our mock auth methods and just return the
   // same items for request at all scopes.
-  server.createList('auth-method', 3);
+  server.createList('auth-method', 3, { scope });
 
   // User
-  server.createList('user', 5);
+  server.createList('user', 5, { scope });
 
   // Role
-  server.createList('role', 5);
+  server.createList('role', 5, { scope });
   // Groups
-  server.createList('group', 5);
+  server.createList('group', 5, { scope });
 
   // Other resources
 
-  server.createList('host-catalog', 6);
+  server.db.scopes.where({type: 'project'}).forEach(projectScope => {
+    const scope = { id: projectScope.id, type: projectScope.type };
+    server.createList('host-catalog', 2, { scope });
+  });
 
 }

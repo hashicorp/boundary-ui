@@ -1,0 +1,63 @@
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.groups"}}</h2>
+  </page.header>
+
+  <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton @route="scopes.scope.groups.new" @style="primary">{{t 'titles.new'}}</Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+
+    {{#if @model}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.cell>{{t 'form.label.name'}}</row.cell>
+            <row.cell>{{t 'form.label.description'}}</row.cell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |group|}}
+            <body.row as |row|>
+              <row.cell>
+                <LinkTo
+                  @route="scopes.scope.groups.group"
+                  @model={{group}}
+                >
+                  {{group.name}}
+                </LinkTo>
+              </row.cell>
+              <row.cell>{{group.description}}</row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t 'titles.groups-welcome'}} as |message|>
+          <message.description>
+            {{t 'descriptions.groups-welcome'}}
+          </message.description>
+          <message.link @route="scopes.scope.groups.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t 'titles.new'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>
