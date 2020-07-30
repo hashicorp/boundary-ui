@@ -65,6 +65,7 @@ form:
     type: Type
     identification: Username
     password: Password
+    manage: Manage
 errors:
   titles:
     unauthenticated-error: You are not signed in
