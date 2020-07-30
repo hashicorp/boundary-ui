@@ -22,7 +22,7 @@ module('Integration | Component | bread-crumbs', function (hooks) {
     this.set('breadCrumbs', [
       {
         label: 'Level 2',
-        path: 'orgs.org.projects.project',
+        path: 'scopes.scope.projects.project',
         model: project,
       },
     ]);
