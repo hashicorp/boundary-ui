@@ -12,19 +12,14 @@ module('Integration | Component | rose/dropdown', function (hooks) {
   });
 
   test('it renders with html attributes', async function (assert) {
-    await render(
-      hbs`<Rose::Dropdown id="custom-id" class="custom-class"/>`
-    );
+    await render(hbs`<Rose::Dropdown id="custom-id" class="custom-class"/>`);
     assert.ok(find('#custom-id'));
     assert.ok(find('.custom-class'));
   });
 
   test('it renders with trigger', async function (assert) {
     await render(hbs`<Rose::Dropdown @text="Click me" />`);
-    assert.equal(
-      find('.rose-dropdown-trigger').textContent.trim(),
-      'Click me'
-    );
+    assert.equal(find('.rose-dropdown-trigger').textContent.trim(), 'Click me');
   });
 
   test('it supports an icon', async function (assert) {
@@ -71,5 +66,18 @@ module('Integration | Component | rose/dropdown', function (hooks) {
     assert.ok(find('#dropdown').open);
     await click('#wrapper');
     assert.notOk(find('#dropdown').open);
+  });
+
+  test('it is closed when inside content is clicked', async function (assert) {
+    await render(hbs`
+      <Rose::Dropdown as |dropdown|>
+        <dropdown.button>Button</dropdown.button>
+      </Rose::Dropdown>
+    `);
+
+    await click('summary');
+    assert.ok(find('.rose-dropdown').open);
+    await click('button');
+    assert.notOk(find('.rose-dropdown').open);
   });
 });
