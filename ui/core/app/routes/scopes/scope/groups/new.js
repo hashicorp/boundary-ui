@@ -9,6 +9,6 @@ export default class ScopesScopeGroupsNewRoute extends Route {
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope');
-    return this.store.createRecord('group', { type: 'group', scopeModel });
+    return this.store.createRecord('group', { scopeModel });
   }
 }
