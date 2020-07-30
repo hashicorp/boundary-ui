@@ -3,11 +3,11 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | bread-crumbs', function(hooks) {
+module('Integration | Component | bread-crumbs', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    this.set('breadCrumbs', [{label: 'Level 1'}]);
+  test('it renders', async function (assert) {
+    this.set('breadCrumbs', [{ label: 'Level 1' }]);
 
     await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
     // Default index route
@@ -15,28 +15,34 @@ module('Integration | Component | bread-crumbs', function(hooks) {
     assert.equal(find('.rose-nav-breadcrumbs').textContent.trim(), 'Level 1');
   });
 
-  test('it renders with model', async function(assert) {
+  test('it renders with model', async function (assert) {
     let store = this.owner.lookup('service:store');
-    let project = store.createRecord('project', {id: '1234'});
+    let scope = store.createRecord('scope');
 
-    this.set('breadCrumbs', [{
-      label: 'Level 2',
-      path: 'orgs.org.projects.project',
-      model: project
-    }]);
+    this.set('breadCrumbs', [
+      {
+        label: 'Level 1',
+        path: 'scopes.scope',
+        model: scope,
+      },
+    ]);
 
     await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
-    assert.equal(find('.rose-nav-breadcrumbs').textContent.trim(), 'Level 2');
+    assert.equal(find('.rose-nav-breadcrumbs').textContent.trim(), 'Level 1');
   });
 
-  test('it renders multiple breadCrumbs', async function(assert) {
-    this.set('breadCrumbs', [{
-      label: 'Level 1'
-    },{
-      label: 'Level 2'
-    }, {
-      label: 'Level 3'
-    }]);
+  test('it renders multiple breadCrumbs', async function (assert) {
+    this.set('breadCrumbs', [
+      {
+        label: 'Level 1',
+      },
+      {
+        label: 'Level 2',
+      },
+      {
+        label: 'Level 3',
+      },
+    ]);
 
     await render(hbs`<BreadCrumbs @breadCrumbs={{this.breadCrumbs}} />`);
     assert.equal(findAll('a').length, 3);
