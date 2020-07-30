@@ -4,6 +4,12 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import {
+  authenticateSession,
+  // These are left here intentionally for future reference.
+  //currentSession,
+  //invalidateSession,
+} from 'ember-simple-auth/test-support';
 
 module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
@@ -20,6 +26,7 @@ module('Acceptance | projects', function (hooks) {
   let initialProjectScopesCount;
 
   hooks.beforeEach(function () {
+    authenticateSession({});
     org = this.server.create('scope', { type: 'org' }, 'withChildren');
     getProjectScopesCount = () =>
       this.server.schema.scopes.where({ type: 'project' }).length;

@@ -7,7 +7,7 @@
           {{t "resources.projects"}}
         </nav.link>
       </Rose::Nav::Sidebar>
-      
+
       <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
         <nav.link @route="scopes.scope.users">
           {{t "resources.users"}}
@@ -18,26 +18,10 @@
         <nav.link @route="scopes.scope.roles">
           {{t "resources.roles"}}
         </nav.link>
-      </Rose::Nav::Sidebar>      
+      </Rose::Nav::Sidebar>
 
       {{outlet "sidebar"}}
 
-
-      {{!--
-      <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
-        <nav.link @route="orgs.org.users">
-          {{t "resources.users"}}
-        </nav.link>
-
-        <nav.link @route="orgs.org.groups">
-          {{t "resources.groups"}}
-        </nav.link>
-
-        <nav.link @route="orgs.org.roles">
-          {{t "resources.roles"}}
-        </nav.link>
-      </Rose::Nav::Sidebar>
-      --}}
     </sidebarLayout.sidebar>
   {{/if}}
 

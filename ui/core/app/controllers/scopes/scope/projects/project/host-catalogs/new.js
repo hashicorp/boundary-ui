@@ -1,7 +1,8 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
-export default class OrgsOrgProjectsProjectHostCatalogsNewController extends Controller {
+export default class ScopesScopeProjectsProjectHostCatalogsNewController extends Controller {
+
   // =services
 
   @service intl;
@@ -9,9 +10,11 @@ export default class OrgsOrgProjectsProjectHostCatalogsNewController extends Con
   // =attributes
 
   /**
+   * Translated new role breadcrumb
    * @type {string}
    */
   get breadCrumb() {
     return this.intl.t('titles.new');
   }
+
 }
