@@ -8,8 +8,8 @@ $dropdown-chevron: (
 );
 
 @mixin dropdown-style($name, $default) {
-  .rose-header-dropdown-#{$name} {
-    .rose-header-dropdown-trigger {
+  .rose-dropdown-#{$name} {
+    .rose-dropdown-trigger {
       color: map.get($default, color);
       background: url(map.get($dropdown-chevron, map.get($default, chevron)))
         no-repeat right center;

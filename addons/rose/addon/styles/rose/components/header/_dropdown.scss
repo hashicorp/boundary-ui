@@ -18,44 +18,17 @@
   )
 );
 
-.rose-header-dropdown {
-  position: relative;
-  display: inline-block;
+.rose-header-utilities {
+  margin-right: sizing.rems(s);
 
-  .rose-header-dropdown-trigger {
-    cursor: default;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
+  .rose-dropdown-trigger {
     background-size: sizing.rems(m);
-    margin-right: sizing.rems(s);
     padding-right: sizing.rems(l) - sizing.rems(xxs);
     $lineHeight: 48 / 16;
     line-height: $lineHeight;
 
-    &.icon-only {
-      padding-right: sizing.rems(m);
-
-      .rose-header-dropdown-trigger-text {
-        // TODO: factor out into visually-hidden mixin utility
-        position: absolute;
-        left: -1000px;
-        top: -1000px;
-        width: 1px;
-        height: 1px;
-        opacity: 0;
-      }
-    }
-
-    // Hide default twistie triangle
-    // Webkit / Chromium
-    &::-webkit-details-marker {
-      display: none;
-    }
-    // Firefox
-    list-style-type: none;
-    &::marker {
-      display: none;
+    .rose-icon {
+      --size: #{sizing.rems(l)};
     }
 
     .rose-icon {
@@ -66,51 +39,9 @@
         vertical-align: top;
       }
     }
-  }
-
-  .rose-header-dropdown-content {
-    $xs: sizing.rems(xs); // 8
-    $xxs: sizing.rems(xxs); // 4
-    position: absolute;
-    padding: $xxs 0;
-    border: 1px solid var(--ui-gray-subtler-2);
-    border-radius: sizing.rems(xxxs);
-    background: var(--subtle);
-    box-shadow: 0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3)),
-      0 $xxs $xs rgba(var(--stark-components), var(--opacity-4));
-    z-index: 99;
-  }
-
-  &.dropdown-right {
-    .rose-header-dropdown-content {
-      right: 0;
-    }
-  }
-
-  .rose-header-dropdown-link,
-  .rose-button-header-dropdown {
-    @include type.type(m, normal);
-    display: block;
-    // Targeting min-width of 200
-    min-width: (sizing.rems(m) + sizing.rems(xxs)) * 10;
-    padding: 0 sizing.rems(s);
-    margin: 0;
-    border: 0;
-    color: var(--stark);
-    background-color: transparent;
-    // target line height is 36, which is not a standard line height for this
-    // font size
-    $lineHeight: 36 / 16;
-    line-height: $lineHeight;
-    text-align: left;
-    text-decoration: none;
 
     &:hover {
-      background-color: var(--ui-gray-subtler-4);
+      background-color: unset;
     }
-  }
-
-  .rose-button-header-dropdown {
-    width: 100%;
   }
 }

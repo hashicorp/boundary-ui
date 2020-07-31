@@ -12,12 +12,22 @@
     overflow: hidden;
     display: flex;
     align-items: center;
-    margin-right: sizing.rems(s);
     padding: 0 sizing.rems(xl) 0 sizing.rems(l);
     $lineHeight: 36 / 13;
     line-height: $lineHeight;
 
-    //color: var(--subtle);
+    // Hide default twistie triangle
+    // Webkit / Chromium
+    &::-webkit-details-marker {
+      display: none;
+    }
+    // Firefox
+    list-style-type: none;
+    &::marker {
+      display: none;
+    }
+
+    // color: var(--subtle);
     background: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>")
       no-repeat right sizing.rems(s) center;
     background-size: sizing.rems(m);
@@ -84,7 +94,7 @@
 
   .rose-dropdown-link,
   .rose-button-dropdown {
-    @include type.type(m, normal);
+    @include type.type(s, normal);
     display: block;
     // Targeting min-width of 200
     min-width: (sizing.rems(m) + sizing.rems(xxs)) * 10;
