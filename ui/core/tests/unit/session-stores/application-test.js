@@ -38,16 +38,4 @@ module('Unit | Session Store | application', function (hooks) {
     assert.equal(applicationAdapter.headers.foo, 'bar');
     assert.equal(applicationAdapter.headers.Authorization, 'Bearer token1234');
   });
-
-  test('it adds an org_id to the session data if authenticating within a scope', async function (assert) {
-    assert.expect(2);
-    let sessionData = {};
-    sessionStore.set('scope', {});
-    sessionStore.persist(sessionData);
-    assert.notOk(sessionData.authenticated, 'There is no authenticated key');
-    sessionData = { authenticated: {} };
-    sessionStore.set('scope', { org: { id: 1 } });
-    sessionStore.persist(sessionData);
-    assert.equal(sessionData.authenticated.org_id, 1);
-  });
 });

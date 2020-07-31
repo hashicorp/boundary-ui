@@ -14,7 +14,7 @@ export default class ApplicationSessionStore extends LocalStorageSessionStore {
    */
   persist(sessionData) {
     this.addTokenToAuthorization(sessionData);
-    this.addScopeToSession(sessionData);
+    //this.addScopeToSession(sessionData);
     return super.persist(...arguments);
   }
 
@@ -32,14 +32,6 @@ export default class ApplicationSessionStore extends LocalStorageSessionStore {
     if (token) adapter.headers.Authorization = `Bearer ${token}`;
   }
 
-  /**
-   * @param {object} sessionData
-   */
-  addScopeToSession(sessionData) {
-    const scope = get(this, 'scope');
-    const authenticated = get(sessionData, 'authenticated');
-    if (scope && authenticated) authenticated.scope = scope;
-  }
 }
 
 // import CookieSessionStore from 'auth/session-stores/cookie';
