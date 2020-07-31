@@ -50,6 +50,16 @@ module('Acceptance | authentication', function (hooks) {
     projectsURL = `/scopes/${orgScopeID}/projects`;
   });
 
+
+  test('visiting scopes when there are none shows a message', async function (assert) {
+    assert.expect(2);
+    this.server.get('/scopes', () => new Response(404));
+    await visit(scopesURL);
+    await a11yAudit();
+    assert.equal(currentURL(), scopesURL);
+    assert.ok(find('.rose-message'));
+  });
+
   test('visiting auth methods authenticate route redirects to first auth method', async function (assert) {
     assert.expect(1);
     await visit(authenticateURL);
