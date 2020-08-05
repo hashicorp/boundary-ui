@@ -4,12 +4,6 @@
 .rose-form-input {
   margin-bottom: sizing.rems(m);
 
-  .rose-form-input-label {
-    @include type.type(s, semibold);
-    display: block;
-    margin-bottom: sizing.rems(xxs);
-  }
-
   .rose-form-input-field {
     @include type.type(m);
     box-sizing: border-box;

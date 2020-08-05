@@ -4,12 +4,6 @@
 .rose-form-select {
   margin-bottom: sizing.rems(m);
 
-  .rose-form-select-label {
-    @include type.type(s, semibold);
-    display: block;
-    margin-bottom: sizing.rems(xxs);
-  }
-
   .rose-form-select-field {
     @include type.type(s);
     -webkit-appearance: none;
