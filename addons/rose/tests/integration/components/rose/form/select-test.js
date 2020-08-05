@@ -44,7 +44,7 @@ module('Integration | Component | rose/form/select', function (hooks) {
     const fieldEl = find('select');
     const id = fieldEl.id;
     const helperId = `helper-text-${id}`;
-    const helperTextEl = find('.rose-form-select-helper-text');
+    const helperTextEl = find('.rose-form-helper-text');
     assert.equal(helperTextEl.textContent.trim(), 'Help me');
     assert.equal(helperTextEl.id, helperId);
     assert.equal(fieldEl.getAttribute('aria-describedby').trim(), helperId);

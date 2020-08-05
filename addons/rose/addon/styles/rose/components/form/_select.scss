@@ -10,13 +10,6 @@
     margin-bottom: sizing.rems(xxs);
   }
 
-  .rose-form-select-helper-text {
-    @include type.type(xs);
-    display: block;
-    color: var(--ui-gray);
-    margin-bottom: sizing.rems(xxs);
-  }
-
   .rose-form-select-field {
     @include type.type(s);
     -webkit-appearance: none;
@@ -59,7 +52,7 @@
   &.error {
     color: var(--failure);
 
-    .rose-form-select-helper-text {
+    .rose-form-helper-text {
       color: currentColor;
     }
 

@@ -10,13 +10,6 @@
     margin-bottom: sizing.rems(xxs);
   }
 
-  .rose-form-input-helper-text {
-    @include type.type(xs);
-    display: block;
-    color: var(--ui-gray);
-    margin-bottom: sizing.rems(xxs);
-  }
-
   .rose-form-input-field {
     @include type.type(m);
     box-sizing: border-box;
@@ -54,7 +47,7 @@
   &.error {
     color: var(--failure);
 
-    .rose-form-input-helper-text {
+    .rose-form-helper-text {
       color: currentColor;
     }
 
