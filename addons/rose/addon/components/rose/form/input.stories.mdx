@@ -12,6 +12,7 @@ Renders a simple form input.
 ```htmlbars
 <Rose::Form::Input
   @type="email"
+  @name="email"
   @value="info@example.com"
   @label="Email"
   @helperText="Enter your email"
@@ -26,6 +27,7 @@ Renders a simple form input.
     template: hbs`
       <Rose::Form::Input
         @type={{type}}
+        @name={{type}}
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}
@@ -59,6 +61,7 @@ Renders a simple form input.
     template: hbs`
       <Rose::Form::Input
         @type={{type}}
+        @name={{type}}
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}

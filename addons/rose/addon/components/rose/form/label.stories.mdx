@@ -11,7 +11,7 @@ Renders a simple form label.  This componet is used and yielded by form fields
 and should not be used directly.
 
 ```htmlbars
-<Rose::Form::Label for="my-field-id">
+<Rose::Form::Label @for="my-field-id">
   Form Label
 </Rose::Form::Label>
 ```
@@ -19,7 +19,7 @@ and should not be used directly.
 <Preview>
   <Story name="Form Label">{{
     template: hbs`
-      <Rose::Form::Label for="my-field-id">
+      <Rose::Form::Label @for="my-field-id">
         Form Label
       </Rose::Form::Label>
     `

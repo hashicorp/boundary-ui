@@ -1,9 +1,9 @@
 <div class="rose-form-input{{if @error " error"}}">
 
-  <Rose::Form::Label for={{this.id}}>{{@label}}</Rose::Form::Label>
+  <Rose::Form::Label @for={{this.id}}>{{@label}}</Rose::Form::Label>
 
   {{#if @helperText}}
-    <Rose::Form::HelperText id="helper-text-{{this.id}}">
+    <Rose::Form::HelperText @id="helper-text-{{this.id}}">
       {{@helperText}}
     </Rose::Form::HelperText>
   {{/if}}
@@ -12,6 +12,7 @@
     ...attributes
     class="rose-form-input-field"
     id={{this.id}}
+    name={{@name}}
     disabled={{@disabled}}
     @value={{@value}}
     aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
