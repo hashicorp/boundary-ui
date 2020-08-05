@@ -3,11 +3,9 @@
   <Rose::Form::Label for={{this.id}}>{{@label}}</Rose::Form::Label>
 
   {{#if @helperText}}
-    <span
-      class="rose-form-helper-text"
-      id="helper-text-{{this.id}}">
+    <Rose::Form::HelperText id="helper-text-{{this.id}}">
       {{@helperText}}
-    </span>
+    </Rose::Form::HelperText>
   {{/if}}
 
   <Input
