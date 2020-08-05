@@ -1,8 +1,6 @@
 <div class="rose-form-select{{if @error " error"}}">
 
-  <label class="rose-form-label" for={{this.id}}>
-    {{@label}}
-  </label>
+  <Rose::Form::Label for={{this.id}}>{{@label}}</Rose::Form::Label>
 
   {{#if @helperText}}
     <span
