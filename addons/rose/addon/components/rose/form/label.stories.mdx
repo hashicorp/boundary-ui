@@ -19,9 +19,12 @@ and should not be used directly.
 <Preview>
   <Story name="Form Label">{{
     template: hbs`
-      <Rose::Form::Label @for="my-field-id">
+      <Rose::Form::Label @for="my-field-id" @error={{this.error}}>
         Form Label
       </Rose::Form::Label>
-    `
+    `,
+    context: {
+      error: boolean('error', false)
+    },
   }}</Story>
 </Preview>

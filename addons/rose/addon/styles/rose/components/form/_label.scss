@@ -5,4 +5,8 @@
   @include type.type(s, semibold);
   display: block;
   margin-bottom: sizing.rems(xxs);
+
+  &.error {
+    color: var(--failure);
+  }
 }

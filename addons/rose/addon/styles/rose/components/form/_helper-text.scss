@@ -6,4 +6,8 @@
   display: block;
   color: var(--ui-gray);
   margin-bottom: sizing.rems(xxs);
+
+  &.error {
+    color: var(--failure);
+  }
 }

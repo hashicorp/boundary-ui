@@ -17,12 +17,14 @@ by form fields and should not be used directly.
 ```
 
 <Preview>
-  <Story name="Basic Form Errors">{{
+  <Story name="HelperText">{{
     template: hbs`
-      <Rose::Form::HelperText>
+      <Rose::Form::HelperText @error={{this.error}}>
         Helper text
       </Rose::Form::HelperText>
     `,
-    context: {},
+    context: {
+      error: boolean('error', false)
+    },
   }}</Story>
 </Preview>

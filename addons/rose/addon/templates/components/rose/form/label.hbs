@@ -1,3 +1,7 @@
-<label class="rose-form-label" for={{@for}} ...attributes>
+<label
+  class="rose-form-label{{if @error " error"}}"
+  for={{@for}}
+  ...attributes
+>
   {{yield}}
 </label>

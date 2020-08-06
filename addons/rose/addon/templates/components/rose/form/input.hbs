@@ -1,30 +1,29 @@
-<div class="rose-form-input{{if @error " error"}}">
+<div class="rose-form-input">
 
-  <Rose::Form::Label @for={{this.id}}>{{@label}}</Rose::Form::Label>
+  <Rose::Form::Label @for={{this.id}} @error={{@error}}>
+    {{@label}}
+  </Rose::Form::Label>
 
   {{#if @helperText}}
-    <Rose::Form::HelperText @id="helper-text-{{this.id}}">
+    <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}>
       {{@helperText}}
     </Rose::Form::HelperText>
   {{/if}}
 
-  {{!--
-    - refactor errors styles so that error classes appear on individual atoms
-      instead of on the parent wrapper (since the wrapper won't exist in cases
-      where the atoms are yielded, such as for use within a list
-      or other custom use cases)
-  --}}
   <Rose::Form::Input::Input
     ...attributes
+    class="{{if @error "error"}}"
     @id={{this.id}}
-    @disabled={{@disabled}}
     @name={{@name}}
-    @type={{@type}}
     @value={{@value}}
+    @type={{@type}}
+    @disabled={{@disabled}}
     @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 
   {{yield (hash
-    errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
+    errors=(component 'rose/form/errors'
+      id=(concat 'errors-' this.id)
+    )
   )}}
 
 </div>

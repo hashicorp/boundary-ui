@@ -3,19 +3,6 @@
 
 .rose-form-input {
   margin-bottom: sizing.rems(m);
-
-  &.error {
-    color: var(--failure);
-
-    .rose-form-helper-text {
-      color: currentColor;
-    }
-
-    .rose-form-input-field {
-      color: currentColor;
-      border-color: currentColor;
-    }
-  }
 }
 
 .rose-form-input-field {
@@ -30,6 +17,11 @@
   border-radius: sizing.rems(xxxs);
   box-shadow: inset 0px 3px 1px
     rgba(var(--stark-components), var(--opacity-4));
+
+  &.error {
+    color: var(--failure);
+    border-color: currentColor;
+  }
 
   &:not(:disabled):not([readonly]) {
     &:hover {
