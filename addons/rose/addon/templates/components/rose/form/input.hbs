@@ -8,15 +8,20 @@
     </Rose::Form::HelperText>
   {{/if}}
 
-  <Input
+  {{!--
+    - refactor errors styles so that error classes appear on individual atoms
+      instead of on the parent wrapper (since the wrapper won't exist in cases
+      where the atoms are yielded, such as for use within a list
+      or other custom use cases)
+  --}}
+  <Rose::Form::Input::Input
     ...attributes
-    class="rose-form-input-field"
-    id={{this.id}}
-    disabled={{@disabled}}
-    name={{@name}}
+    @id={{this.id}}
+    @disabled={{@disabled}}
+    @name={{@name}}
     @type={{@type}}
     @value={{@value}}
-    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
+    @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 
   {{yield (hash
     errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))

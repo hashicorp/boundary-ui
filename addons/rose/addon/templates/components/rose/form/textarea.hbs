@@ -8,14 +8,14 @@
     </Rose::Form::HelperText>
   {{/if}}
 
-  <Textarea
+  <Rose::Form::Textarea::Textarea
     ...attributes
     class="rose-form-input-field"
-    id={{this.id}}
-    name={{@name}}
-    disabled={{@disabled}}
+    @id={{this.id}}
+    @name={{@name}}
+    @disabled={{@disabled}}
     @value={{@value}}
-    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
+    @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 
   {{yield (hash
     errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
