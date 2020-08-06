@@ -14,10 +14,9 @@
     field=(component 'rose/form/select/select'
       id=this.id
       name=@name
-      disabled=@disabled
       value=@value
       onChange=@onChange
-      helperText=@helperText
+      disabled=@disabled
       error=@error
       aria-describedby=(concat (if @helperText (concat 'helper-text-' this.id)) (if @error (concat ' errors-' this.id)))
     )

@@ -12,11 +12,11 @@
 
   <Rose::Form::Textarea::Textarea
     ...attributes
-    class="{{if @error "error"}}"
     @id={{this.id}}
     @name={{@name}}
     @value={{@value}}
     @disabled={{@disabled}}
+    @error={{@error}}
     @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 
   {{yield (hash
