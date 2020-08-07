@@ -20,6 +20,11 @@ export default class RoleSerializer extends ApplicationSerializer {
     return serialized;
   }
 
+  /**
+   * Returns a payload containing only the grants array.
+   * @param {Snapshot} snapshot
+   * @return {object}
+   */
   serializeWithGrants(snapshot) {
     return {
       grants: snapshot.attr('grants')

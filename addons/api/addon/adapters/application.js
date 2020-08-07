@@ -1,4 +1,5 @@
 import RESTAdapter from '@ember-data/adapter/rest';
+import { serializeIntoHash } from '@ember-data/adapter/-private';
 import AdapterBuildURLMixin from '../mixins/adapter-build-url';
 import config from 'ember-get-config';
 import { get, getWithDefault } from '@ember/object';
@@ -141,6 +142,26 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    */
   query() {
     return super.query(...arguments).then(prenormalizeArrayResponse);
+  }
+
+  /**
+   * Our API expects update calls with a custom method suffix
+   * (e.g. `:set-grants`) to be made with POST instead of PUT/PATCH.
+   * If this method is called with a custom method via `adapterOptions.method`,
+   * the API request will be made with POST.  All other update requests are
+   * made as normal.
+   * @override
+   * @param {Store} store
+   * @param {Model} type
+   * @param {Snapshot} snapshot
+   * @return {Promise} promise
+   */
+  updateRecord(store, type, snapshot) {
+    const method = get(snapshot, 'adapterOptions.method');
+    const data = serializeIntoHash(store, type, snapshot, {});
+    const id = snapshot.id;
+    const url = this.buildURL(type.modelName, id, snapshot, 'updateRecord');
+    return this.ajax(url, method ? 'POST' : 'PUT', { data });
   }
 
   /**
