@@ -9,6 +9,7 @@
   @include type.type(m);
   display: inline-block;
   box-sizing: border-box;
+  width: 100%;
   margin-bottom: sizing.rems(xs);
   padding: sizing.rems(xs);
   color: var(--stark);
