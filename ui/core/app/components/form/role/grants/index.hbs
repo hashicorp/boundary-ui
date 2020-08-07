@@ -1,0 +1,45 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  as |form|
+>
+
+  {{!--
+  {{#if @model.errors.grants}}
+    <input.errors as |errors|>
+      {{#each @model.errors.grants as |error|}}
+        <errors.message>{{error.message}}</errors.message>
+      {{/each}}
+    </input.errors>
+  {{/if}}
+  --}}
+
+  <Rose::List::KeyValue as |list|>
+    {{#each @model.grants as |grant|}}
+      <list.item as |item|>
+        <form.input
+          @contextual={{true}}
+          @name="grant"
+          @type="text"
+          @value={{grant.value}}
+          @error={{@model.errors.grants}}
+        as |input|>
+          <item.key>
+            <input.label>{{t "form.label.grant"}}</input.label>
+          </item.key>
+          <item.cell>
+            <input.field />
+          </item.cell>
+        </form.input>
+      </list.item>
+    {{/each}}
+  </Rose::List::KeyValue>
+
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @submitText={{t "actions.save"}}
+    @cancelText={{t "actions.cancel"}} />
+
+</Rose::Form>
