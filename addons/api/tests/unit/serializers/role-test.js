@@ -11,14 +11,16 @@ module('Unit | Serializer | role', function(hooks) {
     const record = store.createRecord('role', {
       name: 'User',
       description: 'Description',
-      grants: ['foo', 'bar']
+      grants: [{value: 'foo'}, {value: 'bar'}],
+      version: 1
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       name: 'User',
-      description: 'Description'
+      description: 'Description',
+      version: 1
     });
   });
 
@@ -29,7 +31,8 @@ module('Unit | Serializer | role', function(hooks) {
     const record = store.createRecord('role', {
       name: 'User',
       description: 'Description',
-      grants: ['foo', 'bar']
+      grants: [{value: 'foo'}, {value: 'bar'}],
+      version: 1
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
@@ -37,7 +40,37 @@ module('Unit | Serializer | role', function(hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      grants: ['foo', 'bar']
+      grants: ['foo', 'bar'],
+      version: 1
+    });
+  });
+
+  test('it normalizes records with array fields', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('role');
+    const roleModelClass = store.createRecord('role').constructor;
+    const payload = {
+      id: '1',
+      name: 'Role 1',
+      grants: ['*', '*']
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      roleModelClass,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'role',
+        attributes: {
+          name: 'Role 1',
+          grants: [{value: '*'}, {value: '*'}],
+        },
+        relationships: {},
+      },
     });
   });
 

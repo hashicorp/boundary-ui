@@ -17,7 +17,8 @@ module('Unit | Model | role', function (hooks) {
     this.server.post('/v1/scopes/o_1/roles/123abc:set-grants', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
-        grants: ['grant1', 'grant2']
+        grants: ['grant1', 'grant2'],
+        version: 1
       });
     });
     const store = this.owner.lookup('service:store');
@@ -28,7 +29,8 @@ module('Unit | Model | role', function (hooks) {
         attributes: {
           name: 'Role',
           description: 'Description',
-          grants: ['grant1', 'grant2'],
+          grants: [{value: 'grant1'}, {value: 'grant2'}],
+          version: 1,
           scope: {
             scope_id: 'o_1',
             type: 'scope'

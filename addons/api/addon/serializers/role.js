@@ -7,7 +7,7 @@ export default class RoleSerializer extends ApplicationSerializer {
 
   /**
    * If `adapterOptions.serializeGrants` is true, the serialization should
-   * include **only grants** and nothing else.  Normally, grants are not
+   * include **only grants** and the version.  Normally, grants are not
    * serialized.
    * @override
    * @param {Snapshot} snapshot
@@ -27,8 +27,25 @@ export default class RoleSerializer extends ApplicationSerializer {
    */
   serializeWithGrants(snapshot) {
     return {
-      grants: snapshot.attr('grants')
+      version: snapshot.attr('version'),
+      grants: snapshot.attr('grants').map(grant => grant.attr('value'))
     };
+  }
+
+  /**
+   * Converts string arrays to object arrays for use with `fragment-string`.
+   * E.g. `"foo"` -> `{value: "foo"}`
+   * @override
+   * @param {Model} typeClass
+   * @param {Object} hash
+   * @return {Object}
+   */
+  normalize(modelClass, resourceHash) {
+    // TODO:  can fragment string normalization be handled generically?
+    if (resourceHash.grants) {
+      resourceHash.grants = resourceHash.grants.map(value => ({ value }));
+    }
+    return super.normalize(modelClass, resourceHash);
   }
 
 }
