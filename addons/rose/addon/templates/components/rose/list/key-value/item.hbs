@@ -1,0 +1,13 @@
+<li class="rose-list-key-value-item" aria-labelledby={{concat "item-key-" this.id}}>
+  {{yield (hash
+    key=(component 'rose/anonymous'
+      id=(concat "item-key-" this.id)
+      tagName='div'
+      classNames='rose-list-key-value-item-cell'
+    )
+    cell=(component 'rose/anonymous'
+      tagName='div'
+      classNames='rose-list-key-value-item-cell'
+    )
+  )}}
+</li>
