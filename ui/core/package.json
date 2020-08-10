@@ -2,7 +2,7 @@
   "name": "core",
   "version": "0.0.0",
   "private": true,
-  "description": "Core UI for Project Watchtower.",
+  "description": "Core UI for Boundary.",
   "license": "MPL-2.0",
   "author": "HashiCorp",
   "directories": {

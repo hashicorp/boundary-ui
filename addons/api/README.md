@@ -1,6 +1,6 @@
-# API data layer Ember Addon for Project Watchtower
+# API data layer Ember Addon for Boundary
 
-This addon contains the API data access layer for Project Watchtower.
+This addon contains the API data access layer for Boundary.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

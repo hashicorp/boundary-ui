@@ -1,7 +1,7 @@
 {
   "name": "auth",
   "version": "0.0.0",
-  "description": "Authentication layer for Project Watchtower.",
+  "description": "Authentication layer for Boundary.",
   "license": "MPL-2.0",
   "author": "HashiCorp",
   "keywords": [

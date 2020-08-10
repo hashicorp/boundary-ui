@@ -1,9 +1,9 @@
-# Project Watchtower UI Monorepo
+# Boundary UI Monorepo
 
-![Validate Monorepo](https://github.com/hashicorp/watchtower-ui/workflows/Validate%20Monorepo/badge.svg)
+![Validate Monorepo](https://github.com/hashicorp/boundary-ui/workflows/Validate%20Monorepo/badge.svg)
 
 This monorepo contains multiple projects, including UIs and addons, used by
-Project Watchtower.
+Boundary.
 
 This top-level repository provides limited common tasks, such as installation
 and commit assistance.  However, most tasks must be executed from within a
@@ -47,7 +47,7 @@ You will need the following things properly installed on your computer.
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd watchtower-ui`
+* `cd boundary-ui`
 * `yarn install`
 
 ## Yarn Commands
