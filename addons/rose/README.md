@@ -1,7 +1,7 @@
-# Rose - Style & Component Ember Addon for Project Watchtower
+# Rose - Style & Component Ember Addon for Boundary
 
 This addon contains common styles and components shared by
-Project Watchtower UIs.
+Boundary UIs.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
