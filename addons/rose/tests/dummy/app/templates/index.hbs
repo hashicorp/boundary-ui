@@ -19,8 +19,21 @@
     >
       <dropdown.link @route="index">Menu item</dropdown.link>
       <dropdown.link @route="about">Menu item</dropdown.link>
-      <dropdown.button>Button menu item</dropdown.button>
+      <dropdown.button>Button - default</dropdown.button>
+      <dropdown.button @style="warning">Button - warning</dropdown.button>
+      <dropdown.button @style="primary">Button - primary</dropdown.button>
+      <dropdown.button @style="secondary">Button - secondary</dropdown.button>
+      <dropdown.button @style="ghost">Button - ghost</dropdown.button>
     </utilities.dropdown>
   </header.utilities>
 </Rose::Header>
 
+<Rose::Dropdown @text="Dropdown" as |dropdown|>
+  <dropdown.link @route="index">Menu item</dropdown.link>
+  <dropdown.link @route="about">Menu item</dropdown.link>
+  <dropdown.button>Button menu item</dropdown.button>
+  <dropdown.button @style="warning">Button - warning</dropdown.button>
+  <dropdown.button @style="primary">Button - primary</dropdown.button>
+  <dropdown.button @style="secondary">Button - secondary</dropdown.button>
+  <dropdown.button @style="ghost">Button - ghost</dropdown.button>
+</Rose::Dropdown>

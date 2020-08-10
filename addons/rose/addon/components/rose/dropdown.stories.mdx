@@ -7,7 +7,7 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 
 # Dropdown
 
-A simple dropdown component with support for links and buttons.
+A simple dropdown component with support for links and buttons. Dropdown buttons support pre-defined styles of `Rose::Button`.
 
 <Preview>
   <Story name="Basic Dropdown" height="5rem">{{
@@ -42,4 +42,26 @@ A simple dropdown component with support for links and buttons.
     <dropdown.link @route="about">Menu item</dropdown.link>
     <dropdown.button>Button menu item</dropdown.button>
   </Rose::Dropdown>
+```
+
+Dropdown content can be aligned to right edge of the component instead of the default left edge. The following example floats the component to right edge of the page inorder to provide enough space to display right aligned dropdown content.
+
+```htmlbars
+  <Rose::Dropdown @text="Choose One&hellip;" style="float: right" @alignRight={{true}} as |dropdown|>
+    <dropdown.link @route="index">Menu item</dropdown.link>
+    <dropdown.link @route="about">Menu item</dropdown.link>
+    <dropdown.button>Button menu item</dropdown.button>
+  </Rose::Dropdown>
+```
+
+Dropdown button styles can be supplied through a `style` attribute.
+
+```htmlbars
+<Rose::Dropdown @text="Dropdown" as |dropdown|>
+  <dropdown.button>Button menu item</dropdown.button>
+  <dropdown.button @style="warning">Button - warning</dropdown.button>
+  <dropdown.button @style="primary">Button - primary</dropdown.button>
+  <dropdown.button @style="secondary">Button - secondary</dropdown.button>
+  <dropdown.button @style="ghost">Button - ghost</dropdown.button>
+</Rose::Dropdown>
 ```

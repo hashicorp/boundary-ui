@@ -93,7 +93,7 @@
   }
 
   .rose-dropdown-link,
-  .rose-button-dropdown {
+  .rose-dropdown-button {
     @include type.type(s, normal);
     display: block;
     // Targeting min-width of 200
@@ -109,13 +109,17 @@
     line-height: $lineHeight;
     text-align: left;
     text-decoration: none;
+    box-shadow: none;
+    text-shadow: none;
+    cursor: pointer;
 
     &:hover {
-      background-color: var(--ui-gray-subtler-4);
+      box-shadow: none;
+      text-shadow: none;
     }
   }
 
-  .rose-button-dropdown {
+  .rose-dropdown-button {
     width: 100%;
   }
 }
