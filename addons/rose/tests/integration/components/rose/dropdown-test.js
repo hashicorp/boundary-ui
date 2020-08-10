@@ -9,6 +9,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Dropdown />`);
     assert.ok(find('.rose-dropdown'));
+    assert.notOk(find('.rose-dropdown-right'));
   });
 
   test('it renders with html attributes', async function (assert) {
@@ -30,6 +31,13 @@ module('Integration | Component | rose/dropdown', function (hooks) {
   test('it supports icon-only display', async function (assert) {
     await render(hbs`<Rose::Dropdown @iconOnly={{true}} />`);
     assert.ok(find('.has-icon-only'));
+  });
+
+  test('it supports right aligned content', async function (assert) {
+    await render(hbs`
+      <Rose::Dropdown @alignRight={{true}} />
+    `);
+    assert.ok(find('.rose-dropdown-right'));
   });
 
   test('it renders with content', async function (assert) {
