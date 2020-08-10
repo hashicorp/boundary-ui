@@ -11,6 +11,7 @@ Renders a simple form textarea.
 
 ```htmlbars
 <Rose::Form::Textarea
+  @name="field"
   @value="Descriptive content"
   @label="Description"
   @helperText="Enter a description"
@@ -24,6 +25,7 @@ Renders a simple form textarea.
   <Story name="Basic Textarea" height="10rem">{{
     template: hbs`
       <Rose::Form::Textarea
+        @name="field"
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}
@@ -46,6 +48,7 @@ Renders a simple form textarea.
   <Story name="Textarea with Errors" height="10rem">{{
     template: hbs`
       <Rose::Form::Textarea
+        @name="field"
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}

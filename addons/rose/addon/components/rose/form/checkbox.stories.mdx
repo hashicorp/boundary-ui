@@ -11,7 +11,7 @@ Renders a form input checkbox.
 
 ```htmlbars
 <Rose::Form::Checkbox
-  name="boolean-value"
+  @name="boolean-value"
   @label="Yes?"
   @checked={{false}}
   @error={{false}}
@@ -23,7 +23,7 @@ Renders a form input checkbox.
   <Story name="Basic Checkbox" height="10rem">{{
     template: hbs`
       <Rose::Form::Checkbox
-        name={{name}}
+        @name={{name}}
         @label={{label}}
         @checked={{checked}}
         @error={{error}}
@@ -44,7 +44,7 @@ Renders a form input checkbox.
   <Story name="Checkbox with errors" height="10rem">{{
     template: hbs`
       <Rose::Form::Checkbox
-        name={{name}}
+        @name={{name}}
         @label={{label}}
         @checked={{checked}}
         @error={{true}}

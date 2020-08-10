@@ -39,8 +39,8 @@ module('Integration | Component | rose/form', function (hooks) {
         @disabled={{false}}
         as |form|
       >
-        <form.input @label="Input" name="input-field" />
-        <form.textarea @label="Textarea" name="textarea-field" />
+        <form.input @label="Input" @name="input-field" />
+        <form.textarea @label="Textarea" @name="textarea-field" />
         <form.select
           @label="Select"
           @name="select-field"
@@ -49,7 +49,7 @@ module('Integration | Component | rose/form', function (hooks) {
         >
           <field.field />
         </form.select>
-        <form.checkbox @label="Checkbox" name="checkbox-field" />
+        <form.checkbox @label="Checkbox" @name="checkbox-field" />
         <form.radioGroup @name="radio-group-field" @selectedValue="green" as |radioGroup|>
           <radioGroup.radio
             @label="Red"

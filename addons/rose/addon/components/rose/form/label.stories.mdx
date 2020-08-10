@@ -1,0 +1,30 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Label" component="Form/Label" />
+
+# Form Label
+
+Renders a simple form label.  This componet is used and yielded by form fields
+and should not be used directly.
+
+```htmlbars
+<Rose::Form::Label @for="my-field-id">
+  Form Label
+</Rose::Form::Label>
+```
+
+<Preview>
+  <Story name="Form Label">{{
+    template: hbs`
+      <Rose::Form::Label @for="my-field-id" @error={{this.error}}>
+        Form Label
+      </Rose::Form::Label>
+    `,
+    context: {
+      error: boolean('error', false)
+    },
+  }}</Story>
+</Preview>

@@ -1,24 +1,23 @@
-<div class="rose-form-input{{if @error " error"}}">
+<div class="rose-form-input">
 
-  <label class="rose-form-input-label" for={{this.id}}>
+  <Rose::Form::Label @for={{this.id}} @error={{@error}}>
     {{@label}}
-  </label>
+  </Rose::Form::Label>
 
   {{#if @helperText}}
-    <span
-      class="rose-form-input-helper-text"
-      id="helper-text-{{this.id}}">
+    <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}>
       {{@helperText}}
-    </span>
+    </Rose::Form::HelperText>
   {{/if}}
 
-  <Textarea
+  <Rose::Form::Textarea::Textarea
     ...attributes
-    class="rose-form-input-field"
-    id={{this.id}}
-    disabled={{@disabled}}
+    @id={{this.id}}
+    @name={{@name}}
     @value={{@value}}
-    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
+    @disabled={{@disabled}}
+    @error={{@error}}
+    @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 
   {{yield (hash
     errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))

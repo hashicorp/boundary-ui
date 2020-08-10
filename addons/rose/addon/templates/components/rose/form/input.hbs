@@ -1,28 +1,54 @@
-<div class="rose-form-input{{if @error " error"}}">
-
-  <label class="rose-form-input-label" for={{this.id}}>
-    {{@label}}
-  </label>
-
-  {{#if @helperText}}
-    <span
-      class="rose-form-input-helper-text"
-      id="helper-text-{{this.id}}">
-      {{@helperText}}
-    </span>
-  {{/if}}
-
-  <Input
-    ...attributes
-    class="rose-form-input-field"
-    id={{this.id}}
-    disabled={{@disabled}}
-    @type={{@type}}
-    @value={{@value}}
-    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
-
+{{#if @contextual}}
   {{yield (hash
-    errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
+    label=(component 'rose/form/label'
+      for=this.id
+      error=@error
+    )
+    helperText=(component 'rose/form/helper-text'
+      id=(concat 'helper-text-' this.id)
+      error=@error
+    )
+    field=(component 'rose/form/input/input'
+      id=this.id
+      name=@name
+      value=@value
+      type=@type
+      disabled=@disabled
+      error=@error
+      aria-describedby=(concat (if @helperText (concat 'helper-text-' this.id)) (if @error (concat ' errors-' this.id)))
+    )
+    errors=(component 'rose/form/errors'
+      id=(concat 'errors-' this.id)
+    )
   )}}
+{{else}}
+  <div class="rose-form-input">
 
-</div>
+    <Rose::Form::Label @for={{this.id}} @error={{@error}}>
+      {{@label}}
+    </Rose::Form::Label>
+
+    {{#if @helperText}}
+      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}>
+        {{@helperText}}
+      </Rose::Form::HelperText>
+    {{/if}}
+
+    <Rose::Form::Input::Input
+      ...attributes
+      @id={{this.id}}
+      @name={{@name}}
+      @value={{@value}}
+      @type={{@type}}
+      @disabled={{@disabled}}
+      @error={{@error}}
+      @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
+
+    {{yield (hash
+      errors=(component 'rose/form/errors'
+        id=(concat 'errors-' this.id)
+      )
+    )}}
+
+  </div>
+{{/if}}

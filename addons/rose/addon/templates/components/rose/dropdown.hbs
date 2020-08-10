@@ -22,7 +22,7 @@
 
   </summary>
 
-  <div class="rose-dropdown-content">
+  <div class="rose-dropdown-content" {{on-click-inside this.close}}>
     {{yield (hash
       link=(component "link-to" class="rose-dropdown-link")
       button=(component "rose/button" style="dropdown")

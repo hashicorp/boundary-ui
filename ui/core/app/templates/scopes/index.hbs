@@ -1,0 +1,22 @@
+{{outlet}}
+
+{{#unless @model}}
+  <Rose::Layout::Sidebar as |sidebarLayout|>
+
+    <sidebarLayout.body>
+      <main>
+        <Rose::Layout::Centered>
+          <Rose::Message
+            @title={{t "auth.titles.no-scopes"}}
+            @icon="alert-circle-outline"
+          as |message|>
+            <message.description>
+              {{t "auth.descriptions.no-scopes"}}
+            </message.description>
+          </Rose::Message>
+        </Rose::Layout::Centered>
+      </main>
+    </sidebarLayout.body>
+
+  </Rose::Layout::Sidebar>
+{{/unless}}

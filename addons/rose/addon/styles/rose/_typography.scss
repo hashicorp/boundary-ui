@@ -16,6 +16,11 @@ body {
   background-color: var(--subtle);
 }
 
+input,
+textarea {
+  font-family: typography.$family-primary;
+}
+
 pre,
 code {
   font-family: typography.$family-monospace;

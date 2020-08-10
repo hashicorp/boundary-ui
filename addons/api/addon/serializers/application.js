@@ -1,11 +1,19 @@
 import RESTSerializer from '@ember-data/serializer/rest';
 import { underscore } from '@ember/string';
+import { get } from '@ember/object';
 import { copy } from 'ember-copy';
 
 /**
  * Manages serialization/normalization of data to/from the API.
  */
 export default class ApplicationSerializer extends RESTSerializer {
+
+  // =attributes
+
+  attrs = {
+    scope: { serialize: false }
+  };
+
   // =methods
 
   /**
@@ -91,7 +99,7 @@ export default class ApplicationSerializer extends RESTSerializer {
 
   /**
    * In our API, singluar resources are _unrooted_, whereas Ember Data expects
-   * them to be rooted under their model name, e.g. `{project: {…}}`.
+   * them to be rooted under their model name, e.g. `{modelName: {…}}`.
    * This method makes this transformation to accommodate Ember Data.
    *
    * @method normalizeSingleResponse
@@ -110,7 +118,7 @@ export default class ApplicationSerializer extends RESTSerializer {
       primaryModelClass.modelName
     );
     // Copy the unrooted payload under the expected root key name.
-    transformedPayload[payloadKey] = copy(payload);
+    transformedPayload[payloadKey] = copy(payload, true);
     // Return the result of normalizing the transformed payload.
     return super.normalizeSingleResponse(
       store,
@@ -120,4 +128,22 @@ export default class ApplicationSerializer extends RESTSerializer {
       requestType
     );
   }
+
+  /**
+   * One consequence of using model fragments to represent the embedded scope
+   * is that they cannot have `id` fields.  We still need to know scope IDs,
+   * so we copy the `scope.id` value into the `scope.scope_id` field.
+   * @override
+   * @see FragmentScope
+   * @param {Model} typeClass
+   * @param {Object} hash
+   * @return {Object}
+   */
+  normalize(typeClass, hash) {
+    const normalizedHash = copy(hash, true);
+    const scopeID = get(normalizedHash, 'scope.id');
+    if (scopeID) normalizedHash.scope.scope_id = scopeID;
+    return super.normalize(typeClass, normalizedHash);
+  }
+
 }

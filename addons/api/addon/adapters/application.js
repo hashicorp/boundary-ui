@@ -1,6 +1,7 @@
 import RESTAdapter from '@ember-data/adapter/rest';
+import AdapterBuildURLMixin from '../mixins/adapter-build-url';
 import config from 'ember-get-config';
-import { get } from '@ember/object';
+import { get, getWithDefault } from '@ember/object';
 import { InvalidError } from '@ember-data/adapter/error';
 import { dasherize } from '@ember/string';
 import { pluralize } from 'ember-inflector';
@@ -36,7 +37,9 @@ function prenormalizeArrayResponse(response) {
   return payloadIsBlank(response) ? {items: []} : response;
 }
 
-export default class ApplicationAdapter extends RESTAdapter {
+export default class ApplicationAdapter extends RESTAdapter.extend(
+  AdapterBuildURLMixin
+) {
   // =attributes
 
   /**
@@ -54,6 +57,60 @@ export default class ApplicationAdapter extends RESTAdapter {
   namespace = get(config, 'api.namespace');
 
   // =methods
+
+  /**
+   * Prepends a scope to the URL prefix.  Precedence is given to the ID passed
+   * via `adapterOptions.scopeID`.  If this value isn't found in
+   * `adapterOptions`, we look to the `scope.scope_id` field on the snapshot,
+   * which most resources have.
+   *
+   * Note:  scopes themselves never receive a scope URL prefix.
+   *
+   * @override
+   * @param {string} path
+   * @param {string} parentURL
+   * @param {string} modelName
+   * @param {string} id
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlPrefix(path, parentURL, modelName, id, snapshot) {
+    const prefix = super.urlPrefix(...arguments);
+    const isScope = modelName === 'scope';
+    let scopePath = '';
+    let scopeID = '';
+    if (snapshot) {
+      // Not all snapshots have `attr` (such as array snapshots),
+      // so we do this sort of ugly check.
+      if (snapshot.attr) {
+        const parentScope = snapshot.attr('scope');
+        if (parentScope) scopeID = parentScope.attr('scope_id');
+      }
+      // Attempt to get scopeID from adapterOptions and fallback on its current
+      // value if it wasn't passed through options.
+      scopeID = getWithDefault(snapshot, 'adapterOptions.scopeID', scopeID);
+    }
+    // Only non-scope resources need a scope path, since scope resources
+    // aren't technically "scoped" the same way.
+    // Ensure a slash is added between prefix + scope path if needed.
+    if (!isScope && scopeID && prefix.charAt(prefix.length - 1) !== '/') {
+      scopePath = `/scopes/${scopeID}`;
+    }
+    return `${prefix}${scopePath}`;
+  }
+
+  /**
+   * Appends a custom method after a colon, if a method is passed via the
+   * snapshot's `adapterOptions.method` field.
+   * @param {string} modelName
+   * @param {string} id
+   * @param {object} snapshot
+   * @return {string}
+   */
+  urlSuffix(modelName, id, snapshot={}) {
+    const method = getWithDefault(snapshot, 'adapterOptions.method', '');
+    return method ? `:${method}` : '';
+  }
 
   /**
    * Transforms the type to a dasherized string used in our API paths.
