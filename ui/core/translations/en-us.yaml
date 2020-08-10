@@ -6,16 +6,16 @@ actions:
   help: Need help?
   authenticate: Authenticate
   deauthenticate: Deauthenticate
-  choose-org: Choose Org
-  choose-different-org: Choose a Different Org
+  choose-org: Choose Scope
+  choose-different-org: Choose a Different Scope
 auth:
   titles:
-    no-orgs: No Organizations Available
+    no-scopes: No Scopes Available
     no-methods: No Authentication Method
   descriptions:
-    no-orgs: No organizations were found.  To authenticate, ask your administrator to create an organization and grant you access.
-    no-methods: No authentication methods were found for this organization.  Switch organizations and try again.
-    choose-org: Choose an organization to authenticate.
+    no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
+    no-methods: No authentication methods were found for this scope.  Switch scopes and try again.
+    choose-org: Choose a scope to authenticate.
     authenticating-with-org: "You're authenticating with {name}."
   method-types:
     password: Password
@@ -84,7 +84,7 @@ notify:
   save-success: Saved succesfully.
   delete-success: Deleted successfully.
 dev:
-  default-org: Default Org
+  default-org: Default Scope
   menu-item: Menu item
   button-menu-item: Button menu item
   section: Section

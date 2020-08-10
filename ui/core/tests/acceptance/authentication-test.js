@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
@@ -49,9 +50,48 @@ module('Acceptance | authentication', function (hooks) {
     projectsURL = `/scopes/${orgScopeID}/projects`;
   });
 
+
+  test('visiting scopes when there are none shows a message', async function (assert) {
+    assert.expect(2);
+    this.server.get('/scopes', () => new Response(404));
+    await visit(scopesURL);
+    await a11yAudit();
+    assert.equal(currentURL(), scopesURL);
+    assert.ok(find('.rose-message'));
+  });
+
   test('visiting auth methods authenticate route redirects to first auth method', async function (assert) {
     assert.expect(1);
     await visit(authenticateURL);
+    await a11yAudit();
+    assert.equal(currentURL(), authMethodAuthenticateURL);
+  });
+
+  test('visiting auth methods authenticate route when there no methods shows a message', async function (assert) {
+    assert.expect(2);
+    authMethod.destroy()
+    await visit(authenticateURL);
+    await a11yAudit();
+    assert.equal(currentURL(), authenticateURL);
+    assert.ok(find('.rose-message'));
+  });
+
+  test('visiting auth method when the scope cannot be loaded is still allowed', async function (assert) {
+    assert.expect(1);
+    orgScope.destroy();
+    this.server.get('/scopes', ({ scopes }, { queryParams: { scope_id } }) => {
+      // Default parent scope is global
+      if (!scope_id) scope_id = 'global';
+      const results = scopes.where(scope => {
+        return scope.scope ? scope.scope.id === scope_id : false
+      });
+      if (!results.length) {
+        return new Response(404);
+      } else {
+        return results;
+      }
+    });
+    await visit(authMethodAuthenticateURL);
     await a11yAudit();
     assert.equal(currentURL(), authMethodAuthenticateURL);
   });
