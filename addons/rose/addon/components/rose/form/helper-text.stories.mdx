@@ -1,0 +1,30 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/HelperText" component="Form/HelperText" />
+
+# Form Helper Text
+
+Displays helpful messages related to a form field.  This component is used
+by form fields and should not be used directly.
+
+```html
+<Rose::Form::HelperText @id="helper-text-{{field.id}}">
+  Helper text
+</Rose::Form::HelperText>
+```
+
+<Preview>
+  <Story name="HelperText">{{
+    template: hbs`
+      <Rose::Form::HelperText @error={{this.error}}>
+        Helper text
+      </Rose::Form::HelperText>
+    `,
+    context: {
+      error: boolean('error', false)
+    },
+  }}</Story>
+</Preview>

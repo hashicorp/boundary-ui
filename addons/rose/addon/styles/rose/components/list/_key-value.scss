@@ -1,0 +1,45 @@
+@use '../../variables/sizing';
+@use '../../variables/typography';
+@use '../../utilities/type';
+
+.rose-list-key-value-item {
+  display: flex;
+  border-bottom: 1px solid var(--ui-gray-subtler-3);
+  @include type.type(s);
+  $lineHeight: 36 / 14;
+  line-height: $lineHeight;
+  padding: (sizing.rems(s) / 2) 0;
+
+  .rose-list-key-value-item-cell {
+    display: flex;
+    align-items: center;
+    margin-right: sizing.rems(m);
+
+    // Eliminate top/bottom margin from children
+    > * {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    &:last-child {
+      &,
+      & > * {
+        margin-right: 0;
+      }
+    }
+
+    // First cell (key) is approximately 25%
+    &:nth-child(1) {
+      width: 25%;
+      font-weight: typography.font-weight(semibold);
+    }
+
+    // Second cell (value) is approximately 75%
+    &:nth-child(2) {
+      flex-grow: 1;
+    }
+
+    // Remaining cells will take up as little space as necessary to
+    // suit their content.
+  }
+}

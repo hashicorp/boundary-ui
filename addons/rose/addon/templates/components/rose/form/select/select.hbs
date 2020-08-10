@@ -1,11 +1,12 @@
 <XSelect
-  class="rose-form-select-field"
+  ...attributes
+  class="rose-form-select-field{{if @error " error"}}"
   id={{@id}}
   name={{@name}}
   disabled={{@disabled}}
   @value={{@value}}
   @onChange={{@onChange}}
-  aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}"
+  aria-describedby={{@aria-describedby}}
   as |xs|
 >
   {{yield xs}}

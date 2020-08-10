@@ -1,21 +1,6 @@
-<Rose::Badge>Default</Rose::Badge>
-<Rose::Badge @style="outline">Default Outline</Rose::Badge>
-<Rose::Badge @icon="user-organization">Default with Icon</Rose::Badge>
-
-<Rose::Badge @style="light">Light</Rose::Badge>
-<Rose::Badge @style="dark">Dark</Rose::Badge>
-
-<Rose::Badge @style="informational">Informational</Rose::Badge>
-<Rose::Badge @style="informational-outline">Informational Outline</Rose::Badge>
-
-<Rose::Badge @style="alert">Alert</Rose::Badge>
-<Rose::Badge @style="alert-outline">Alert Outline</Rose::Badge>
-
-<Rose::Badge @style="error">Error</Rose::Badge>
-<Rose::Badge @style="error-outline">Error Outline</Rose::Badge>
-
-<Rose::Badge @style="success">Success</Rose::Badge>
-<Rose::Badge @style="success-outline">Success Outline</Rose::Badge>
-
-<Rose::Badge @style="warning">Warning</Rose::Badge>
-<Rose::Badge @style="warning-outline">Warning Outline</Rose::Badge>
+<Rose::List::KeyValue as |list|>
+  <list.item as |item|>
+    <item.cell>Key</item.cell>
+    <item.cell>Value</item.cell>
+  </list.item>
+</Rose::List::KeyValue>

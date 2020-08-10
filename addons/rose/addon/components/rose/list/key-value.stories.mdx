@@ -1,0 +1,103 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|List|KeyValue" component="List/KeyValue" />
+
+# Key/Value List
+
+A simple key/value list with support for embedded form fields and buttons.
+
+<Preview>
+  <Story name="Basic Key/Value List" height="17rem">{{
+    template: hbs`
+    <Rose::List::KeyValue as |list|>
+      <list.item as |item|>
+        <item.key>Key</item.key>
+        <item.cell>Value</item.cell>
+      </list.item>
+      <list.item as |item|>
+        <item.key>Key</item.key>
+        <item.cell>Value</item.cell>
+      </list.item>
+      <list.item as |item|>
+        <item.key>Key</item.key>
+        <item.cell>Value</item.cell>
+      </list.item>
+      <Rose::Form::Input @contextual={{true}} as |input|>
+        <list.item as |item|>
+          <item.key>
+            <input.label>Key</input.label>
+          </item.key>
+          <item.cell>
+            <input.field />
+          </item.cell>
+          <item.cell>
+            <Rose::Button @style="secondary">Add</Rose::Button>
+          </item.cell>
+        </list.item>
+      </Rose::Form::Input>
+      <Rose::Form::Input @contextual={{true}} as |input|>
+        <list.item as |item|>
+          <item.key>
+            <input.label>Key</input.label>
+          </item.key>
+          <item.cell>
+            <input.field />
+          </item.cell>
+          <item.cell>
+            <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+          </item.cell>
+        </list.item>
+      </Rose::Form::Input>
+    </Rose::List::KeyValue>
+    `,
+  }}</Story>
+</Preview>
+
+```html
+<Rose::List::KeyValue as |list|>
+  <list.item as |item|>
+    <item.key>Key</item.key>
+    <item.cell>Value</item.cell>
+  </list.item>
+  <list.item as |item|>
+    <item.key>Key</item.key>
+    <item.cell>Value</item.cell>
+  </list.item>
+  <list.item as |item|>
+    <item.key>Key</item.key>
+    <item.cell>Value</item.cell>
+  </list.item>
+
+  {{!-- In actual use, form fields should be yielded from an outer form component --}}
+  <Rose::Form::Input @contextual={{true}} as |input|>
+    <list.item as |item|>
+      <item.key>
+        <input.label>Key</input.label>
+      </item.key>
+      <item.cell>
+        <input.field />
+      </item.cell>
+      <item.cell>
+        <Rose::Button @style="secondary">Add</Rose::Button>
+      </item.cell>
+    </list.item>
+  </Rose::Form::Input>
+
+  <Rose::Form::Input @contextual={{true}} as |input|>
+    <list.item as |item|>
+      <item.key>
+        <input.label>Key</input.label>
+      </item.key>
+      <item.cell>
+        <input.field />
+      </item.cell>
+      <item.cell>
+        <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+      </item.cell>
+    </list.item>
+  </Rose::Form::Input>
+
+</Rose::List::KeyValue>
+```
