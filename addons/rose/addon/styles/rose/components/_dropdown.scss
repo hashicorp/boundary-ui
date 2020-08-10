@@ -2,6 +2,22 @@
 @use '../utilities/type';
 @use '../utilities/dropdown';
 
+@include dropdown.dropdown-style(
+  'light',
+  (
+    color: var(--white),
+    chevron: 'light',
+  )
+);
+
+@include dropdown.dropdown-style(
+  'dark',
+  (
+    color: var(--black),
+    chevron: 'dark',
+  )
+);
+
 .rose-dropdown {
   position: relative;
   display: inline-block;
@@ -27,9 +43,6 @@
       display: none;
     }
 
-    // color: var(--subtle);
-    background: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>")
-      no-repeat right sizing.rems(s) center;
     background-size: sizing.rems(m);
 
     &:hover {
@@ -121,5 +134,15 @@
 
   .rose-dropdown-button {
     width: 100%;
+
+    &.rose-button-warning {
+      color: unset;
+    }
+
+    // &.rose-button-warning {
+    //   &:hover, &:focus {
+    //     color: unset;
+    //   }
+    // }
   }
 }

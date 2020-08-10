@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use '../variables/sizing';
 
 $dropdown-chevron: (
   'light':
@@ -12,7 +13,7 @@ $dropdown-chevron: (
     .rose-dropdown-trigger {
       color: map.get($default, color);
       background: url(map.get($dropdown-chevron, map.get($default, chevron)))
-        no-repeat right center;
+        no-repeat right sizing.rems(s) center;
     }
   }
 }

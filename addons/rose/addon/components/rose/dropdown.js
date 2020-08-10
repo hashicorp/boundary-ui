@@ -13,7 +13,7 @@ export default Component.extend({
   /**
    * Closes the details element by setting its `open` attribute to `false`.
    * While the details element handles open/close functionality when clicking
-   * directly on the summar elemenet without JavaScript, we include this helper
+   * directly on the summary element without JavaScript, we include this helper
    * action to ensure that when the user clicks _outside_ of the element,
    * or _inside_ the content, it still closes.
    * @param {HTMLElement} element

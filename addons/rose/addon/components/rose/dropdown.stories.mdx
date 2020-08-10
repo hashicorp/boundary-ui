@@ -12,13 +12,22 @@ A simple dropdown component with support for links and buttons. Dropdown buttons
 <Preview>
   <Story name="Basic Dropdown" height="5rem">{{
     template: hbs`
-      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" as |dropdown|>
+      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" @style={{style}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
         <dropdown.button>Button menu item</dropdown.button>
       </Rose::Dropdown>
     `,
-    context: {}
+    context: {
+      style: select(
+        'style',
+        {
+          'light': 'light',
+          'dark': 'dark',
+        },
+        'dark'
+      ),
+    }
   }}</Story>
 </Preview>
 

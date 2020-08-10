@@ -1,22 +1,5 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
-@use '../../utilities/dropdown';
-
-@include dropdown.dropdown-style(
-  'light',
-  (
-    color: var(--white),
-    chevron: 'light',
-  )
-);
-
-@include dropdown.dropdown-style(
-  'dark',
-  (
-    color: var(--black),
-    chevron: 'dark',
-  )
-);
 
 .rose-header-utilities,
 .rose-header-nav {
@@ -24,7 +7,6 @@
 
   .rose-dropdown-trigger {
     background-size: sizing.rems(m);
-    padding-right: sizing.rems(l) - sizing.rems(xxs);
     $lineHeight: 48 / 16;
     line-height: $lineHeight;
 
@@ -41,7 +23,7 @@
       }
     }
 
-    &:hover {
+    &:hover, &:focus {
       background-color: unset;
     }
   }
