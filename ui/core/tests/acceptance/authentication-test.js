@@ -164,7 +164,7 @@ module('Acceptance | authentication', function (hooks) {
     await fillIn('[name="password"]', 'test');
     await click('[type="submit"]');
     assert.ok(currentSession().isAuthenticated);
-    await click('.rose-button-header-dropdown');
+    await click('[data-test-deauthenticate]');
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodAuthenticateURL);
   });
