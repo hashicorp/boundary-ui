@@ -11,10 +11,11 @@
   <page.actions>
     <Rose::Dropdown @text="{{t 'form.label.manage'}}" @alignRight={{true}} as |dropdown|>
       <dropdown.button
+        @style="warning"
         @disabled={{@model.canSave}}
         {{on "click" (route-action "delete" @model)}}
       >
-        {{t 'actions.delete'}}
+        {{t 'actions.delete-user'}}
       </dropdown.button>
     </Rose::Dropdown>
   </page.actions>
