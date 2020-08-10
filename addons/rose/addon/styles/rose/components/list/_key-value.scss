@@ -2,6 +2,10 @@
 @use '../../variables/typography';
 @use '../../utilities/type';
 
+.rose-list-key-value {
+  margin-bottom: sizing.rems(m);
+}
+
 .rose-list-key-value-item {
   display: flex;
   border-bottom: 1px solid var(--ui-gray-subtler-3);
