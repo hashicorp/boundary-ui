@@ -28,7 +28,7 @@ export default class RoleSerializer extends ApplicationSerializer {
   serializeWithGrants(snapshot) {
     return {
       version: snapshot.attr('version'),
-      grants: snapshot.attr('grants').map(grant => grant.attr('value'))
+      grant_strings: snapshot.attr('grants').map(grant => grant.attr('value'))
     };
   }
 
@@ -42,8 +42,9 @@ export default class RoleSerializer extends ApplicationSerializer {
    */
   normalize(modelClass, resourceHash) {
     // TODO:  can fragment string normalization be handled generically?
-    if (resourceHash.grants) {
-      resourceHash.grants = resourceHash.grants.map(value => ({ value }));
+    if (resourceHash.grant_strings) {
+      resourceHash.grants =
+        resourceHash.grant_strings.map(value => ({ value }));
     }
     return super.normalize(modelClass, resourceHash);
   }

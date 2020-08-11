@@ -40,7 +40,7 @@ module('Unit | Serializer | role', function(hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      grants: ['foo', 'bar'],
+      grant_strings: ['foo', 'bar'],
       version: 1
     });
   });
@@ -53,7 +53,7 @@ module('Unit | Serializer | role', function(hooks) {
     const payload = {
       id: '1',
       name: 'Role 1',
-      grants: ['*', '*']
+      grant_strings: ['*', '*']
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
