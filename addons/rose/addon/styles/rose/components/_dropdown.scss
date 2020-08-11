@@ -1,22 +1,7 @@
 @use '../variables/sizing';
 @use '../utilities/type';
-@use '../utilities/dropdown';
 
-@include dropdown.dropdown-style(
-  'light',
-  (
-    color: var(--white),
-    chevron: 'light',
-  )
-);
-
-@include dropdown.dropdown-style(
-  'dark',
-  (
-    color: var(--black),
-    chevron: 'dark',
-  )
-);
+$chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>";
 
 .rose-dropdown {
   position: relative;
@@ -31,6 +16,8 @@
     padding: 0 sizing.rems(xl) 0 sizing.rems(l);
     $lineHeight: 36 / 13;
     line-height: $lineHeight;
+    color: var(--black);
+    background: url($chevron) no-repeat right sizing.rems(s) center;
 
     // Hide default twistie triangle
     // Webkit / Chromium
@@ -136,7 +123,11 @@
     width: 100%;
 
     &.rose-button-warning {
-      color: unset;
+      color: var(--failure);
+
+      &:hover {
+        color: var(--white);
+      }
     }
   }
 }

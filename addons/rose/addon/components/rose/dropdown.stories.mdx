@@ -1,33 +1,21 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Dropdown" component="Dropdown" />
 
 # Dropdown
 
-A simple dropdown component with support for links and buttons. Supports `light` and `dark` styles, with latter being a default style.
+A simple dropdown component with support for links and buttons.
 
 <Preview>
   <Story name="Basic Dropdown" height="5rem">{{
     template: hbs`
-      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" @style={{style}} as |dropdown|>
+      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
         <dropdown.button>Button menu item</dropdown.button>
       </Rose::Dropdown>
     `,
-    context: {
-      style: select(
-        'style',
-        {
-          'light': 'light',
-          'dark': 'dark',
-        },
-        'dark'
-      ),
-    }
   }}</Story>
 </Preview>
 
@@ -40,7 +28,6 @@ A simple dropdown component with support for links and buttons. Supports `light`
         <dropdown.button>Button menu item</dropdown.button>
       </Rose::Dropdown>
     `,
-    context: {}
   }}</Story>
 </Preview>
 
