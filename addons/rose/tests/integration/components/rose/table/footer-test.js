@@ -23,14 +23,4 @@ module('Integration | Component | rose/table/footer', function (hooks) {
     </Rose::Table::Footer>`);
     assert.ok(find('tr'));
   });
-
-  test('it renders with row cell', async function (assert) {
-    await render(hbs`<Rose::Table::Footer as |footer|>
-      <footer.row as |row|>
-        <row.cell />
-      </footer.row>
-    </Rose::Table::Footer>`);
-    assert.ok(find('td'));
-    assert.ok(find('.rose-table-cell'));
-  });
 });

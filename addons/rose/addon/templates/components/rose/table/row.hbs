@@ -1,5 +1,17 @@
 <tr ...attributes class="rose-table-row">
-  {{yield (hash
-    cell=(component 'rose/table/cell' header=@header footer=@footer)
-  )}}
+  {{#if @header}}
+    {{yield (hash
+      cell=(component 'rose/anonymous'
+        tagName='th'
+        classNames='rose-table-cell rose-table-header-cell'
+      )
+    )}}
+  {{else}}
+    {{yield (hash
+      cell=(component 'rose/anonymous'
+        tagName='td'
+        classNames='rose-table-cell'
+      )
+    )}}
+  {{/if}}
 </tr>

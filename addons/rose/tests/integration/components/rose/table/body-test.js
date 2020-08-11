@@ -17,20 +17,10 @@ module('Integration | Component | rose/table/body', function (hooks) {
     assert.ok(find('#body'));
   });
 
-  test('it renders with row', async function (assert) {
+  test('it renders a row', async function (assert) {
     await render(hbs`<Rose::Table::Body as |body|>
       <body.row />
     </Rose::Table::Body>`);
     assert.ok(find('tr'));
-  });
-
-  test('it renders with row cell', async function (assert) {
-    await render(hbs`<Rose::Table::Body as |body|>
-      <body.row as |row|>
-        <row.cell />
-      </body.row>
-    </Rose::Table::Body>`);
-    assert.ok(find('td'));
-    assert.ok(find('.rose-table-body-cell'));
   });
 });
