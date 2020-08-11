@@ -3,7 +3,7 @@
   "productName": "desktop",
   "version": "0.0.0",
   "private": true,
-  "description": "Electron UI for client for Project Watchtower.",
+  "description": "Electron UI for client for Boundary.",
   "license": "MPL-2.0",
   "author": "HashiCorp",
   "main": "src/index.js",

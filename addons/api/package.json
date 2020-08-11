@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "0.0.0",
-  "description": "API data layer for Project Watchtower.",
+  "description": "API data layer for Boundary.",
   "license": "MPL-2.0",
   "author": "HashiCorp",
   "keywords": [
