@@ -10,6 +10,18 @@
     <h2>{{t "resources.role"}}</h2>
   </page.header>
 
+  <page.actions>
+    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @alignRight={{true}} as |dropdown|>
+      <dropdown.button
+        @style="warning"
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "delete" @model)}}
+      >
+        {{t 'actions.delete-role'}}
+      </dropdown.button>
+    </Rose::Dropdown>
+  </page.actions>
+
   <page.navigation>
     <Rose::Nav::Tabs as |nav|>
       <nav.link @route='scopes.scope.roles.role.index'>
