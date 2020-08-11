@@ -112,6 +112,23 @@ module('Unit | Adapter | application', function (hooks) {
     adapter.ajax('/', 'PUT');
   });
 
+  test('it rewrites PUT/PATCH to POST when `adapterOptions.method` is passed to `updateRecord`', function (assert) {
+    assert.expect(1);
+    const adapter = this.owner.lookup('adapter:application');
+    const store = this.owner.lookup('service:store');
+    const snapshot = store.createRecord('role', {})._createSnapshot();
+    snapshot.adapterOptions = {
+      method: 'custom-method'
+    }
+    // TODO this is icky, should be changed to a spy or stub
+    const originalAjax = RESTAdapter.prototype.ajax;
+    RESTAdapter.prototype.ajax = (url, type) => {
+      assert.equal(type, 'POST');
+      RESTAdapter.prototype.ajax = originalAjax;
+    };
+    adapter.updateRecord(store, {modelName: 'user'}, snapshot);
+  });
+
   test('it prenormalizes "empty" responses into a form that the fetch-manager will not reject', async function (assert) {
     assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');

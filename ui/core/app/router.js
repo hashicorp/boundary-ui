@@ -21,7 +21,9 @@ Router.map(function () {
         this.route('new');
       });
       this.route('roles', function () {
-        this.route('role', { path: ':role_id' }, function () {});
+        this.route('role', { path: ':role_id' }, function () {
+          this.route('grants');
+        });
         this.route('new');
       });
       this.route('projects', function() {

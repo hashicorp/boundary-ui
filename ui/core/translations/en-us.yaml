@@ -1,4 +1,5 @@
 actions:
+  add: Add
   cancel: Cancel
   delete: Delete
   dismiss: Dismiss
@@ -44,6 +45,8 @@ titles:
   users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
   groups-welcome: Welcome to Groups
+  grants: Permissions
+  new-grant: New Grant
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -65,6 +68,7 @@ form:
     type: Type
     identification: Username
     password: Password
+    grant: Grant
 errors:
   titles:
     unauthenticated-error: You are not signed in
