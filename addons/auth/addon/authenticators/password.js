@@ -49,19 +49,19 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    *
    * @override
    * @param {object} creds
-   * @param {string} creds.identification is sent to server as `name`
+   * @param {string} creds.identification is sent to server as `login_name`
    * @param {string} creds.password
    * @param {boolean} requestCookies request cookie tokens (default `true`)
    * @return {Promise}
    */
   async authenticate(
-    { identification: name, password },
+    { identification: login_name, password },
     requestCookies = true,
     options
   ) {
     const body = JSON.stringify({
       token_type: requestCookies ? 'cookie' : null,
-      credentials: { name, password },
+      credentials: { login_name, password },
     });
     const authEndpointURL = this.buildAuthEndpointURL(options);
     const response = await fetch(authEndpointURL, { method: 'post', body });
