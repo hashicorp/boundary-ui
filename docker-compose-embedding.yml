@@ -1,6 +1,6 @@
 # Note: this will change the permissions of the files in this directory after
 # running to allow for easy deletion, so this should only be run as part of
-# watchtower's build task.
+# boundary's build task.
 
 version: '3.8'
 

@@ -1,6 +1,6 @@
 # Client Connect UI
 
-The client UI for Project Watchtower.
+The client UI for Boundary.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -30,7 +30,7 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-See watchtower-ui README for installation instructions.
+See boundary-ui README for installation instructions.
 
 ## Yarn Commands
 
