@@ -1,0 +1,91 @@
+<Rose::Form
+  @onSubmit={{fn this.createGrant @addGrant}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  as |form|
+>
+  <Rose::List::KeyValue as |list|>
+    {{!-- Add grant field (only one per form) --}}
+    <list.item as |item|>
+      <form.input
+        @contextual={{true}}
+        @name="grant"
+        @type="text"
+        @value={{this.newGrantString}}
+      as |input|>
+        <item.key>
+          <input.label>{{t "titles.new-grant"}}</input.label>
+        </item.key>
+        <item.cell>
+          <input.field />
+        </item.cell>
+        <item.cell>
+          <Rose::Button
+            @submit={{true}}
+            @disabled={{this.cannotSave}}
+            @style="secondary"
+            title={{t "actions.add"}}
+          >
+            {{t "actions.add"}}
+          </Rose::Button>
+        </item.cell>
+      </form.input>
+    </list.item>
+  </Rose::List::KeyValue>
+</Rose::Form>
+
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  as |form|
+>
+
+  {{!--
+  {{#if @model.errors.grants}}
+    <input.errors as |errors|>
+      {{#each @model.errors.grants as |error|}}
+        <errors.message>{{error.message}}</errors.message>
+      {{/each}}
+    </input.errors>
+  {{/if}}
+  --}}
+
+  <Rose::List::KeyValue as |list|>
+    {{#each @model.grants as |grant|}}
+      <list.item as |item|>
+        <form.input
+          @contextual={{true}}
+          @name="grant"
+          @type="text"
+          @value={{grant.value}}
+          @error={{@model.errors.grants}}
+        as |input|>
+          <item.key>
+            <input.label>{{t "form.label.grant"}}</input.label>
+          </item.key>
+          <item.cell>
+            <input.field />
+          </item.cell>
+        </form.input>
+        <item.cell>
+          <Rose::Button
+            @style="secondary"
+            @iconOnly="trash"
+            title={{t "actions.remove"}}
+            {{on "click" (fn @removeGrant grant)}}
+          >
+            {{t "actions.remove"}}
+          </Rose::Button>
+        </item.cell>
+      </list.item>
+    {{/each}}
+  </Rose::List::KeyValue>
+
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @submitText={{t "actions.save"}}
+    @cancelText={{t "actions.cancel"}} />
+
+</Rose::Form>

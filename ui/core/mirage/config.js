@@ -64,6 +64,13 @@ export default function() {
   this.get('/scopes/:scope_id/roles/:id');
   this.patch('/scopes/:scope_id/roles/:id');
   this.del('/scopes/:scope_id/roles/:id');
+  this.post('/scopes/:scope_id/roles/:id', function ({ roles }, request) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = request.params.id.split(':')[0];
+    const role = roles.find(id);
+    attrs.id = id;
+    return role.update(attrs);
+  });
 
   // IAM: Groups
   this.get('/scopes/:scope_id/groups');
