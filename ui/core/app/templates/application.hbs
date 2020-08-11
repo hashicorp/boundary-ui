@@ -7,18 +7,6 @@
     <Rose::Header as |header|>
       <header.brand @logo="logo-hashi" @text={{app-name}} />
 
-      {{!--
-      <header.nav as |nav|>
-        <nav.dropdown @text={{t 'dev.default-org'}} as |dropdown|>
-          <dropdown.link @route="index">{{t 'dev.menu-item'}}</dropdown.link>
-          <dropdown.link @route="orgs">{{t 'dev.menu-item'}}</dropdown.link>
-          <dropdown.button>{{t 'dev.button-menu-item'}}</dropdown.button>
-        </nav.dropdown>
-        <nav.link @route="index">{{t 'dev.section'}}</nav.link>
-        <nav.link @route="index">{{t 'dev.section'}}</nav.link>
-      </header.nav>
-      --}}
-
       {{#if this.session.isAuthenticated}}
         <header.utilities as |utilities|>
           <utilities.dropdown
@@ -27,7 +15,6 @@
             @icon="user-square-fill" as |dropdown|
           >
             <dropdown.button
-              data-test-deauthenticate
               {{on "click" (route-action "invalidateSession")}}
             >
               {{t 'actions.deauthenticate'}}
