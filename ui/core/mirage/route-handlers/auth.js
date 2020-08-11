@@ -12,7 +12,7 @@ import { Response } from 'miragejs';
 //  */
 // export default function authenticateHandler(schema, request) {
 //   const payload = JSON.parse(request.requestBody);
-//   if (payload.credentials.name === 'error') {
+//   if (payload.credentials.login_name === 'error') {
 //     return new Response(400);
 //   } else {
 //     const cookieName = config.auth.passwordCookieName;
@@ -25,7 +25,7 @@ import { Response } from 'miragejs';
 
 export function authHandler({ scopes }, request) {
   const payload = JSON.parse(request.requestBody);
-  if (payload.credentials.name === 'error') {
+  if (payload.credentials.login_name === 'error') {
     return new Response(400);
   } else {
     const scopeAttrs =
