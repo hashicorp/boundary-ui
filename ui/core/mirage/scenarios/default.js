@@ -18,11 +18,10 @@ export default function(server) {
 
   // User
   server.createList('user', 5, { scope });
-
-  // Role
-  server.createList('role', 5, { scope });
-  // Groups
+  // Group
   server.createList('group', 5, { scope });
+  // Role
+  server.createList('role', 5, { scope }, 'withPrincipals');
 
   // Other resources
 

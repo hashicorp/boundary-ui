@@ -218,6 +218,10 @@ module('Acceptance | roles', function (hooks) {
     );
   });
 
+  test('principals may be viewed in principals tab', async function (assert) {
+    assert.expect(0);
+  });
+
   test('grants can be updated and saved or canceled', async function (assert) {
     assert.expect(0);
   });
