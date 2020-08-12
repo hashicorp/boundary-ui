@@ -1,0 +1,24 @@
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <h2>{{t "resources.auth-method"}}</h2>
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.auth-methods.auth-method'>
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.body>
+    
+    {{@model.type}}
+
+    <Form::AuthMethod
+      @model={{@model}}
+      @submit={{route-action "save" @model}}
+      @cancel={{route-action "cancel" @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>

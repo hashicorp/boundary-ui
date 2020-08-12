@@ -18,7 +18,12 @@
           {{#each @model as |authMethod|}}
             <body.row as |row|>
               <row.cell>
-                {{authMethod.name}}
+                <LinkTo
+                  @route="scopes.scope.auth-methods.auth-method"
+                  @model={{authMethod}}
+                >
+                  {{authMethod.name}}
+                </LinkTo>
                 {{authMethod.description}}
               </row.cell>
               <row.cell>
