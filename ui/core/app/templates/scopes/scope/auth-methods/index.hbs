@@ -55,6 +55,10 @@
           <message.description>
             {{t 'descriptions.auth-methods-welcome'}}
           </message.description>
+          <message.link @route="scopes.scope.auth-methods.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t 'titles.new'}}
+          </message.link>
         </Rose::Message>
       </Rose::Layout::Centered>
 
