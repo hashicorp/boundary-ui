@@ -2,6 +2,9 @@ import Component from '@ember/component';
 import layout from '../../templates/components/rose/dropdown';
 import { action } from '@ember/object';
 
+/**
+ * A dropdown component composed of HTML disclosure elements: details and summary
+ */
 export default Component.extend({
   // =attributes
 

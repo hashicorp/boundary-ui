@@ -43,7 +43,7 @@ A simple dropdown component with support for links and buttons.
 Dropdown content can be aligned to right edge of the component instead of the default left edge, which is the default setting. The following example floats the component to right edge of the page inorder to provide enough space to display right aligned dropdown content.
 
 ```htmlbars
-  <Rose::Dropdown @text="Choose One&hellip;" style="float: right" @alignRight={{true}} as |dropdown|>
+  <Rose::Dropdown @text="Choose One&hellip;" style="float: right" @dropdownRight={{true}} as |dropdown|>
     <dropdown.link @route="index">Menu item</dropdown.link>
     <dropdown.link @route="about">Menu item</dropdown.link>
     <dropdown.button>Button menu item</dropdown.button>

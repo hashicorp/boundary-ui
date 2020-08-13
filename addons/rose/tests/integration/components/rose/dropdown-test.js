@@ -35,7 +35,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
 
   test('it supports right aligned content', async function (assert) {
     await render(hbs`
-      <Rose::Dropdown @alignRight={{true}} />
+      <Rose::Dropdown @dropdownRight={{true}} />
     `);
     assert.ok(find('.rose-dropdown-right'));
   });
