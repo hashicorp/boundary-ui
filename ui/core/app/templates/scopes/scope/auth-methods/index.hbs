@@ -5,6 +5,7 @@
 
   <page.body>
     {{#if @model}}
+
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
@@ -31,6 +32,17 @@
           {{/each}}
         </table.body>
       </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t 'titles.auth-methods-welcome'}} as |message|>
+          <message.description>
+            {{t 'descriptions.auth-methods-welcome'}}
+          </message.description>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
     {{/if}}
   </page.body>
 </Rose::Layout::Page>
