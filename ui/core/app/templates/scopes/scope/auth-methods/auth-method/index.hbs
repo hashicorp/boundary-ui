@@ -12,9 +12,6 @@
   </page.navigation>
 
   <page.body>
-    
-    {{@model.type}}
-
     <Form::AuthMethod
       @model={{@model}}
       @submit={{route-action "save" @model}}

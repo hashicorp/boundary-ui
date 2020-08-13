@@ -50,21 +50,4 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       this.notify.error(error.message, { closeAfter: null });
     }
   }
-
-  /**
-   * Delete an auth-method in current scope and redirect to auth-methods
-   * @param {AuthMethodModel} authMethod
-   */
-  @action
-  async delete(authMethod) {
-    try {
-      await authMethod.destroyRecord();
-      this.refresh();
-      this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.auth-methods');
-    } catch (error) {
-      //TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
-  }
 }
