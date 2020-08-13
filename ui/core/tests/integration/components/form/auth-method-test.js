@@ -9,9 +9,11 @@ module('Integration | Component | form/auth-method', function (hooks) {
   test('it renders', async function (assert) {
     this.submit = () => {};
     this.cancel = () => {};
+    this.model = { type: 'password' };
 
     await render(hbs`
       <Form::AuthMethod
+        @model={{this.model}}
         @submit={{this.submit}}
         @cancel={{this.cancel}}
       />`);

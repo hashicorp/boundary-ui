@@ -27,17 +27,19 @@
           {{#each @model as |authMethod|}}
             <body.row as |row|>
               <row.cell>
-                <LinkTo
-                  @route="scopes.scope.auth-methods.auth-method"
-                  @model={{authMethod}}
-                >
-                  {{authMethod.name}}
-                </LinkTo>
+                <p>
+                  <LinkTo
+                    @route="scopes.scope.auth-methods.auth-method"
+                    @model={{authMethod}}
+                  >
+                    {{authMethod.name}}
+                  </LinkTo>
+                </p>
                 {{authMethod.description}}
               </row.cell>
               <row.cell>
                 <Rose::Badge @style="outline">
-                  {{authMethod.type}}
+                  {{t (concat 'auth.method-types.' authMethod.type)}}
                 </Rose::Badge>
               </row.cell>
               <row.cell>{{authMethod.id}}</row.cell>

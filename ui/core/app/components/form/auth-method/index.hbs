@@ -6,7 +6,7 @@
   as |form|
 >
   <form.input
-  @value={{@model.type}}
+  @value={{t (concat 'auth.method-types.' @model.type)}}
   @label={{t "form.label.type"}}
   readonly={{true}}
   @disabled={{true}} />
