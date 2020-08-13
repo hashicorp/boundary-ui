@@ -1,0 +1,22 @@
+{{title (t 'titles.principals')}}
+
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.cell>{{t 'form.label.name'}}</row.cell>
+      <row.cell>{{t 'form.label.type'}}</row.cell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    {{#each @model as |principal|}}
+      <body.row as |row|>
+        <row.cell>
+          {{principal.model.displayName}}
+        </row.cell>
+        <row.cell>
+          {{t (concat 'resources.' principal.type)}}
+        </row.cell>
+      </body.row>
+    {{/each}}
+  </table.body>
+</Rose::Table>
