@@ -38,6 +38,7 @@ Router.map(function () {
       });
       this.route('auth-methods', function() {
         this.route('auth-method', { path: ':auth_method_id' }, function() {});
+        this.route('new');
       });
     });
   });

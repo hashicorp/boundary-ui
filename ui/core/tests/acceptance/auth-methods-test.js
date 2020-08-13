@@ -64,6 +64,18 @@ module('Acceptance | auth methods', function (hooks) {
     assert.expect(0);
   });
 
+  test('can create new auth method', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('can cancel new auth method creation', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('saving a new auth method with invalid fields displays error messages', async function (assert) {
+    assert.expect(0);
+  });
+
   test('errors are displayed when save on auth method fails', async function (assert) {
     assert.expect(0);
   });

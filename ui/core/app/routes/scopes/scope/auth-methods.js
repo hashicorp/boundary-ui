@@ -44,7 +44,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
-      this.transitionTo('scopes.scope.auth-methods.auth-method');
+      this.transitionTo('scopes.scope.auth-methods.auth-method', authMethod);
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
