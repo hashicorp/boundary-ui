@@ -3,6 +3,10 @@
     <h2>{{t "resources.auth-methods"}}</h2>
   </page.header>
 
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
   <page.actions>
     {{#if @model}}
       <Rose::LinkButton @route="scopes.scope.auth-methods.new" @style="primary">
