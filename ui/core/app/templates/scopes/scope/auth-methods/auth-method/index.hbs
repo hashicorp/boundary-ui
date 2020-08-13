@@ -1,6 +1,9 @@
 <Rose::Layout::Page as |page|>
   <page.header>
-    <h2>{{t "resources.auth-method"}}</h2>
+    <h2>
+      {{t "resources.auth-method"}}
+      <Rose::Badge @style="outline">{{@model.type}}</Rose::Badge>
+    </h2>
   </page.header>
 
   <page.navigation>
