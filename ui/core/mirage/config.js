@@ -88,6 +88,14 @@ export default function() {
   this.patch('/scopes/:scope_id/host-catalogs/:id');
   this.del('/scopes/:scope_id/host-catalogs/:id');
 
+  // host
+
+  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts');
+  this.post('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts');
+  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts/:id');
+  this.patch('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts/:id');
+  this.del('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts/:id');
+
   // host-set
 
   this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets');
