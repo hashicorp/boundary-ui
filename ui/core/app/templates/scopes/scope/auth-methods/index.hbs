@@ -1,0 +1,48 @@
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <h2>{{t "resources.auth-methods"}}</h2>
+  </page.header>
+
+  <page.body>
+    {{#if @model}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.cell>{{t 'form.label.name'}}</row.cell>
+            <row.cell>{{t 'form.label.type'}}</row.cell>
+            <row.cell>{{t 'form.label.id'}}</row.cell>
+          </header.row>
+        </table.header>
+
+        <table.body as |body|>
+          {{#each @model as |authMethod|}}
+            <body.row as |row|>
+              <row.cell>
+                {{authMethod.name}}
+                {{authMethod.description}}
+              </row.cell>
+              <row.cell>
+                <Rose::Badge @style="outline">
+                  {{authMethod.type}}
+                </Rose::Badge>
+              </row.cell>
+              <row.cell>{{authMethod.id}}</row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t 'titles.auth-methods-welcome'}} as |message|>
+          <message.description>
+            {{t 'descriptions.auth-methods-welcome'}}
+          </message.description>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+  </page.body>
+</Rose::Layout::Page>

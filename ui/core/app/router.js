@@ -23,6 +23,7 @@ Router.map(function () {
       this.route('roles', function () {
         this.route('role', { path: ':role_id' }, function () {
           this.route('grants');
+          this.route('principals');
         });
         this.route('new');
       });
@@ -35,6 +36,7 @@ Router.map(function () {
         });
         this.route('new');
       });
+      this.route('auth-methods', function() {});
     });
   });
 });
