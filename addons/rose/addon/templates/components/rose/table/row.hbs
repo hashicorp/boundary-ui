@@ -1,6 +1,12 @@
-{{yield (hash
-  cell=(component 'rose/anonymous'
-    tagName=@cellTagName
-    class='rose-table-cell'
-  )
-)}}
+<tr ...attributes class='rose-table-row'>
+  {{yield (hash
+    cell=(component 'rose/anonymous'
+      tagName='td'
+      class='rose-table-cell'
+    )
+    headerCell=(component 'rose/anonymous'
+      tagName='th'
+      class='rose-table-header-cell'
+    )
+  )}}
+</tr>

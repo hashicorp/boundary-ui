@@ -18,7 +18,7 @@ module('Integration | Component | rose/table/section', function (hooks) {
   });
 
   test('it renders a row', async function (assert) {
-    await render(hbs`<Rose::Table::Section @tagName='tag' cellTagName={{this.cellTagName}} as |section|>
+    await render(hbs`<Rose::Table::Section @tagName='tag' as |section|>
       <section.row />
     </Rose::Table::Section>`);
     assert.ok(find('tr'));
