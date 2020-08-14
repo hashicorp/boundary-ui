@@ -1,6 +1,23 @@
-<Rose::List::KeyValue as |list|>
-  <list.item as |item|>
-    <item.cell>Key</item.cell>
-    <item.cell>Value</item.cell>
-  </list.item>
-</Rose::List::KeyValue>
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.headerCell>Address</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.headerCell>1.1.1.1</row.headerCell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
