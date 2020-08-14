@@ -27,6 +27,8 @@ resources:
   roles: Roles
   group: Group
   groups: Groups
+  orgs: Orgs
+  org: Org
   projects: Projects
   project: Project
   host-catalog: Host Catalog
