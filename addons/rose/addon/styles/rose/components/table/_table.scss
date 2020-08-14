@@ -1,0 +1,34 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+@use '../../variables/typography';
+
+.rose-table {
+  @include type.type(s, normal);
+  width: 100%;
+
+  .rose-table-row {
+    border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    border-left: none;
+    border-right: none;
+    text-align: left;
+
+    .rose-table-cell, .rose-table-header-cell {
+      vertical-align: middle;
+      padding: 0 sizing.rems(s);
+    }
+  }
+
+  .rose-table-header {
+    color: var(--ui-gray-starker-2);
+
+    .rose-table-cell, .rose-table-header-cell {
+      padding: sizing.rems(xs) sizing.rems(s);
+    }
+  }
+
+  .rose-table-body, .rose-table-footer {
+    .rose-table-cell, .rose-table-header-cell {
+      padding: sizing.rems(s) sizing.rems(s);
+    }
+  }
+}
