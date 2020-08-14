@@ -1,6 +1,5 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
-@use '../../variables/typography';
 
 .rose-table {
   @include type.type(s, normal);
