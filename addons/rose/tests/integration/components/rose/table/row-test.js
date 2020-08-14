@@ -17,10 +17,19 @@ module('Integration | Component | rose/table/row', function (hooks) {
     assert.ok(find('#row'));
   });
 
-  test('it renders with cell', async function (assert) {
+  test('it renders a cell', async function (assert) {
     await render(hbs`<Rose::Table::Row as |row|>
       <row.cell />
     </Rose::Table::Row>`);
+    assert.ok(find('td'));
     assert.ok(find('.rose-table-cell'));
+  });
+
+  test('it renders a header cell', async function (assert) {
+    await render(hbs`<Rose::Table::Row as |row|>
+      <row.headerCell />
+    </Rose::Table::Row>`);
+    assert.ok(find('th'));
+    assert.ok(find('.rose-table-header-cell'));
   });
 });

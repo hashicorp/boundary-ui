@@ -4,8 +4,14 @@
   {{/if}}
 
   {{yield (hash
-    header=(component 'rose/table/header')
-    body=(component 'rose/table/body')
-    footer=(component 'rose/table/footer')
+    header=(component 'rose/table/section'
+      tagName='thead'
+      classNames='rose-table-header')
+    body=(component 'rose/table/section'
+      tagName='tbody'
+      classNames='rose-table-body')
+    footer=(component 'rose/table/section'
+      tagName='tfoot'
+      classNames='rose-table-foot')
   )}}
 </table>
