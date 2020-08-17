@@ -11,7 +11,11 @@
   </page.header>
 
   <page.body>
-    
+    <Form::Org
+      @model={{@model}}
+      @submit={{route-action "save" @model}}
+      @cancel={{route-action "cancel" @model}}
+    />
   </page.body>
 
 </Rose::Layout::Page>
