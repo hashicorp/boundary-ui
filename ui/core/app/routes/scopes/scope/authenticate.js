@@ -7,12 +7,6 @@ export default class ScopesScopeAuthenticateRoute extends Route {
 
   @service session;
 
-  // =attributes
-
-  // TODO:  this assumes we're in an org scope, but the "landing"
-  // for global scope is probably different.
-  routeIfAlreadyAuthenticated = 'scopes.scope.projects';
-
   // =methods
 
   /**
@@ -37,7 +31,12 @@ export default class ScopesScopeAuthenticateRoute extends Route {
 
   redirect() {
     if (this.session.isAuthenticated) {
-      this.transitionTo(this.routeIfAlreadyAuthenticated);
+      const scope = this.modelFor('scopes.scope');
+      if (scope.isGlobal) {
+        this.transitionTo('scopes.scope.orgs');
+      } else {
+        this.transitionTo('scopes.scope.projects');
+      }
     }
   }
 }

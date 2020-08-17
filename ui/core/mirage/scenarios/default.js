@@ -2,7 +2,12 @@ export default function(server) {
 
   // Scope resources
 
-  const globalScope = server.create('scope', { id: 'global' });  // creates a global scope
+  // creates a global scope
+  const globalScope = server.create('scope', {
+    id: 'global',
+    type: 'global',
+    name: 'Global'
+  });
   const orgScope = server.createList('scope', 3, {
     type: 'org',
     scope: { id: globalScope.id, type: globalScope.type }
