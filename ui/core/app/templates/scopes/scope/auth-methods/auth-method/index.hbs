@@ -1,0 +1,28 @@
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <h2>{{t "resources.auth-method"}}</h2>
+    <Rose::Badge @style="outline">
+      {{t (concat 'auth.method-types.' @model.type)}}
+    </Rose::Badge>
+  </page.header>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.auth-methods.auth-method'>
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.body>
+    <Form::AuthMethod
+      @model={{@model}}
+      @submit={{route-action "save" @model}}
+      @cancel={{route-action "cancel" @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>

@@ -30,9 +30,13 @@ export default function(server) {
 
   // Other resources
 
-  server.db.scopes.where({type: 'project'}).forEach(projectScope => {
-    const scope = { id: projectScope.id, type: projectScope.type };
+  server.db.scopes.where({type: 'project'}).forEach(({ id, type }) => {
+    const scope = { id, type };
     server.createList('host-catalog', 2, { scope });
+    // Hosts and host sets are supposed to be associated to a host catalog.
+    // For simplicity of mocks, we don't actually associate them here.
+    server.createList('host-set', 3, { scope });
+    server.createList('host', 10, { scope });
   });
 
 }

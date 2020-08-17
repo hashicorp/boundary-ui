@@ -46,8 +46,20 @@ Router.map(function () {
         this.route('new');
       });
 
-      this.route('auth-methods', function() {});
-
+      this.route('projects', function() {
+        this.route('project', { path: ':project_id' }, function() {
+          this.route('host-catalogs', function() {
+            this.route('new');
+            this.route('host-catalog', { path: ':host_catalog_id' }, function() {});
+          });
+        });
+        this.route('new');
+      });
+      this.route('auth-methods', function() {
+        this.route('auth-method', { path: ':auth_method_id' }, function() {});
+        this.route('new');
+      });
+      
     });
   });
 });
