@@ -80,7 +80,7 @@ module('Acceptance | host catalogs', function (hooks) {
     authenticateSession({});
     await visit(urls.hostCatalog);
     assert.equal(currentURL(), urls.hostCatalog);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(this.server.db.hostCatalogs.length, hostCatalogsCount - 1);
   });
 
@@ -162,7 +162,7 @@ module('Acceptance | host catalogs', function (hooks) {
     });
     authenticateSession({});
     await visit(urls.hostCatalog);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     await a11yAudit();
     assert.ok(
       find('[role="alert"]').textContent.trim(),

@@ -133,7 +133,7 @@ module('Acceptance | groups', function (hooks) {
     assert.expect(1);
     const groupsCount = this.server.db.groups.length;
     await visit(groupURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(this.server.db.groups.length, groupsCount - 1);
   });
 
@@ -210,7 +210,7 @@ module('Acceptance | groups', function (hooks) {
       );
     });
     await visit(groupURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'Oops.',

@@ -1,0 +1,33 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-dropdown-link {
+  @include type.type(s, normal);
+  display: block;
+  // Targeting min-width of 200
+  min-width: (sizing.rems(s) + sizing.rems(xxs)) * 10;
+  border: 0;
+  padding: 0 sizing.rems(s);
+  color: var(--stark);
+  background-color: transparent;
+  // target line height is 36, which is not a standard line height for this
+  // font size
+  $lineHeight: 36 / 16;
+  line-height: $lineHeight;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  &.rose-dropdown-link-danger {
+    --background: var(--white);
+    --color: var(--failure);
+
+    color: var(--color);
+    background-color: var(--background-color);
+
+    &:hover {
+      --color: var(--white);
+      --background-color: var(--failure);
+    }
+  }
+}

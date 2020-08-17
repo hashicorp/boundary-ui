@@ -4,9 +4,11 @@
   <header.nav as |nav|>
     <nav.dropdown @text="org-name" as |dropdown|>
       <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
+      <dropdown.separator />
       <dropdown.button>Button menu item</dropdown.button>
     </nav.dropdown>
+
     <nav.link @route="index">Section</nav.link>
     <nav.link @route="about">Section</nav.link>
   </header.nav>
@@ -18,22 +20,19 @@
       @icon="user-square-fill" as |dropdown|
     >
       <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
       <dropdown.button>Button - default</dropdown.button>
-      <dropdown.button @style="warning">Button - warning</dropdown.button>
-      <dropdown.button @style="primary">Button - primary</dropdown.button>
-      <dropdown.button @style="secondary">Button - secondary</dropdown.button>
-      <dropdown.button @style="ghost">Button - ghost</dropdown.button>
+      <dropdown.separator />
+      <dropdown.button @style="danger">Button - danger</dropdown.button>
     </utilities.dropdown>
   </header.utilities>
 </Rose::Header>
 
 <Rose::Dropdown @text="Dropdown" as |dropdown|>
   <dropdown.link @route="index">Menu item</dropdown.link>
-  <dropdown.link @route="about">Menu item</dropdown.link>
+  <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
+  <dropdown.separator></dropdown.separator>
+
   <dropdown.button>Button menu item</dropdown.button>
-  <dropdown.button @style="warning">Button - warning</dropdown.button>
-  <dropdown.button @style="primary">Button - primary</dropdown.button>
-  <dropdown.button @style="secondary">Button - secondary</dropdown.button>
-  <dropdown.button @style="ghost">Button - ghost</dropdown.button>
+  <dropdown.button @style="danger">Button - danger</dropdown.button>
 </Rose::Dropdown>

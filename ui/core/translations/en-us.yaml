@@ -12,6 +12,8 @@ actions:
   delete-user: Delete user
   delete-group: Delete group
   delete-role: Delete role
+  delete-project: Delete project
+  delete-host-catalog: Delete host catalog
 auth:
   titles:
     no-scopes: No Scopes Available

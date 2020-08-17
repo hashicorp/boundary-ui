@@ -133,7 +133,7 @@ module('Acceptance | users', function (hooks) {
     assert.expect(1);
     const usersCount = this.server.db.users.length;
     await visit(userURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(this.server.db.users.length, usersCount - 1);
   });
 
@@ -210,7 +210,7 @@ module('Acceptance | users', function (hooks) {
       );
     });
     await visit(userURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'Oops.',

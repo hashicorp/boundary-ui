@@ -13,6 +13,7 @@ A simple dropdown component with support for links and buttons.
       <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
+        <dropdown.separator />
         <dropdown.button>Button menu item</dropdown.button>
       </Rose::Dropdown>
     `,
@@ -25,6 +26,7 @@ A simple dropdown component with support for links and buttons.
       <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" @iconOnly={{true}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
+        <dropdown.separator />
         <dropdown.button>Button menu item</dropdown.button>
       </Rose::Dropdown>
     `,
@@ -46,18 +48,16 @@ Dropdown content can be aligned to right edge of the component instead of the de
   <Rose::Dropdown @text="Choose One&hellip;" style="float: right" @dropdownRight={{true}} as |dropdown|>
     <dropdown.link @route="index">Menu item</dropdown.link>
     <dropdown.link @route="about">Menu item</dropdown.link>
+    <dropdown.separator />
     <dropdown.button>Button menu item</dropdown.button>
   </Rose::Dropdown>
 ```
 
-Dropdown button styles support all `Rose::Button` styles through a `style` attribute.
+Dropdown supports `danger` styling through `style` attribute.
 
 ```htmlbars
 <Rose::Dropdown @text="Dropdown" as |dropdown|>
-  <dropdown.button>Button menu item</dropdown.button>
-  <dropdown.button @style="warning">Button - warning</dropdown.button>
-  <dropdown.button @style="primary">Button - primary</dropdown.button>
-  <dropdown.button @style="secondary">Button - secondary</dropdown.button>
-  <dropdown.button @style="ghost">Button - ghost</dropdown.button>
+  <dropdown.link @style="danger">Link - danger</dropdown.link>
+  <dropdown.button @style="danger">Button - danger</dropdown.button>
 </Rose::Dropdown>
 ```

@@ -17,9 +17,9 @@
   </page.navigation>
 
   <page.actions>
-    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @alignRight={{true}} as |dropdown|>
+    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
       <dropdown.button
-        @style="warning"
+        @style="danger"
         @disabled={{@model.canSave}}
         {{on "click" (route-action "delete" @model)}}
       >
