@@ -14,7 +14,7 @@ export default factory.extend({
         }, 'withChildren');
       }
       if (record.type === 'org') {
-        server.createList('scope', 5, {
+        server.createList('scope', 3, {
           type: 'project',
           scope: { id: record.id, type: record.type }
         });
