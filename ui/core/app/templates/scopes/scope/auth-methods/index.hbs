@@ -3,6 +3,18 @@
     <h2>{{t "resources.auth-methods"}}</h2>
   </page.header>
 
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton @route="scopes.scope.auth-methods.new" @style="primary">
+        {{t "titles.new"}}
+      </Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
   <page.body>
     {{#if @model}}
 
@@ -19,12 +31,17 @@
           {{#each @model as |authMethod|}}
             <body.row as |row|>
               <row.cell>
-                {{authMethod.name}}
-                {{authMethod.description}}
+                <LinkTo
+                  @route="scopes.scope.auth-methods.auth-method"
+                  @model={{authMethod}}
+                >
+                  {{authMethod.name}}
+                </LinkTo>
+                <p>{{authMethod.description}}</p>
               </row.cell>
               <row.cell>
                 <Rose::Badge @style="outline">
-                  {{authMethod.type}}
+                  {{t (concat 'auth.method-types.' authMethod.type)}}
                 </Rose::Badge>
               </row.cell>
               <row.cell>{{authMethod.id}}</row.cell>
@@ -40,6 +57,10 @@
           <message.description>
             {{t 'descriptions.auth-methods-welcome'}}
           </message.description>
+          <message.link @route="scopes.scope.auth-methods.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t 'titles.new'}}
+          </message.link>
         </Rose::Message>
       </Rose::Layout::Centered>
 

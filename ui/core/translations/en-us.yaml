@@ -31,6 +31,7 @@ resources:
   project: Project
   host-catalog: Host Catalog
   host-catalogs: Host Catalogs
+  auth-method: Auth Method
   auth-methods: Auth Methods
 titles:
   iam: IAM
