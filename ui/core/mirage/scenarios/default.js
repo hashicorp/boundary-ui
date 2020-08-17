@@ -27,7 +27,7 @@ export default function(server) {
 
   server.db.scopes.where({type: 'project'}).forEach(projectScope => {
     const scope = { id: projectScope.id, type: projectScope.type };
-    server.createList('host-catalog', 2, { scope });
+    server.createList('host-catalog', 2, { scope }, 'withChildren');
   });
 
 }

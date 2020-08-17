@@ -47,6 +47,31 @@ export default Mixin.create({
   },
 
   /**
+   * Builds the (mostly full) URL with a prefix, but not the suffix.
+   * The `_buildURL` method adds a suffix.
+   * Do not call directly.
+   * @override
+   * @param {String} modelName
+   * @param {String} id
+   * @return {String} url
+   */
+  _buildPrefixedURL(modelName, id, snapshot) {
+    let path;
+    let url = [];
+    const host = get(this, 'host');
+    const prefix = this.urlPrefix(null, null, modelName, id, snapshot);
+    if (modelName) {
+      path = this.pathForType(modelName);
+      if (path) url.push(path);
+    }
+    if (id) url.push(encodeURIComponent(id));
+    if (prefix) url.unshift(prefix);
+    url = url.join('/');
+    if (!host && url && url.charAt(0) !== '/') url = '/' + url;
+    return `${url}`;
+  },
+
+  /**
    * Overrides the default `_buildURL` with a nearly identical version.
    * This method simply passes arguments into the `urlPrefix` method for
    * convenience, where by default it receives no arguments.
@@ -58,19 +83,8 @@ export default Mixin.create({
    * @return {String} url
    */
   _buildURL(modelName, id, snapshot) {
-    let path;
-    let url = [];
-    const host = get(this, 'host');
-    const prefix = this.urlPrefix(null, null, modelName, id, snapshot);
+    const url = this._buildPrefixedURL(modelName, id, snapshot);
     const suffix = this.urlSuffix(modelName, id, snapshot);
-    if (modelName) {
-      path = this.pathForType(modelName);
-      if (path) url.push(path);
-    }
-    if (id) url.push(encodeURIComponent(id));
-    if (prefix) url.unshift(prefix);
-    url = url.join('/');
-    if (!host && url && url.charAt(0) !== '/') url = '/' + url;
     return `${url}${suffix}`;
   },
 

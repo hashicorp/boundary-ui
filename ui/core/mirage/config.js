@@ -88,6 +88,14 @@ export default function() {
   this.patch('/scopes/:scope_id/host-catalogs/:id');
   this.del('/scopes/:scope_id/host-catalogs/:id');
 
+  // host-set
+
+  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets');
+  this.post('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets');
+  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets/:id');
+  this.patch('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets/:id');
+  this.del('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets/:id');
+
   // Uncomment the following line and the Response import above
   // Then change the response code to simulate error responses.
   // this.get('/scopes/:scope_id/projects', () => new Response(505));
