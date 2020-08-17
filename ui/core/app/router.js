@@ -36,6 +36,7 @@ Router.map(function () {
         });
         this.route('new');
       });
+      this.route('auth-methods', function() {});
     });
   });
 });

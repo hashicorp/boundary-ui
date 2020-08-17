@@ -36,6 +36,7 @@ resources:
   project: Project
   host-catalog: Host Catalog
   host-catalogs: Host Catalogs
+  auth-methods: Auth Methods
 titles:
   iam: IAM
   new: New
@@ -50,6 +51,7 @@ titles:
   users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
   groups-welcome: Welcome to Groups
+  auth-methods-welcome: Welcome to Auth Methods
   grants: Permissions
   new-grant: New Grant
   principals: Principals
@@ -61,6 +63,7 @@ descriptions:
   users-welcome: Users are authorized to access Boundary.
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
   groups-welcome: Groups are collections of users.
+  auth-methods-welcome: Auth methods are configurations to authenticate users.
 states:
   info: Info
   success: Success
@@ -95,10 +98,3 @@ notify:
   create-success: Created succesfully.
   save-success: Saved succesfully.
   delete-success: Deleted successfully.
-dev:
-  default-org: Default Scope
-  menu-item: Menu item
-  button-menu-item: Button menu item
-  section: Section
-  title: Title
-  item-name: Item Name
