@@ -23,12 +23,6 @@ module('Unit | Authenticator | password', function (hooks) {
     session.invalidate();
   });
 
-  test('it does not add an authorization header to application adapter on restore if no token is present', async function (assert) {
-    assert.expect(1);
-    authenticator.restore({ token: null });
-    assert.notOk(applicationAdapter?.headers?.Authorization);
-  });
-
   test('it adds an authorization header to application adapter on restore', async function (assert) {
     assert.expect(1);
     authenticator.restore({ token: 'token1234' });
