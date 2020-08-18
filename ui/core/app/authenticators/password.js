@@ -37,9 +37,52 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @param {string} scopeID
    * @return {string}
    */
-  buildDeauthEndpointURL({ org_id: scopeID }) {
+  buildDeauthEndpointURL({ scope: { id: scopeID } }) {
     const adapter = this.store.adapterFor('application');
     const options = { adapterOptions: { method: 'deauthenticate' } };
     return adapter.buildURL('scope', scopeID, options, 'findRecord');
+  }
+
+  /**
+   * Intercepts the authenticate response, if any, and assigns the returned
+   * token to all future requests via `addTokenToAuthorization`.
+   * Returns the response data as normal.
+   * @override
+   */
+  authenticate() {
+    return super.authenticate(...arguments)
+      .then(data => {
+        const token = data?.token;
+        if (token) this.addTokenToAuthorization(token);
+        return data;
+      });
+  }
+
+  /**
+   * When restoring the session (say, on load), assigns the session token
+   * to all future requests via `addTokenToAuthorization`.
+   * @override
+   * @param {object} data
+   * @return {object}
+   */
+  restore(data) {
+    const token = data?.token;
+    if (token) this.addTokenToAuthorization(token);
+    return super.restore(data);
+  }
+
+  /**
+   * Assigns a token string all future requests via the `Authorization` header
+   * on the application adapter prototype.  Only application and adapters that
+   * extend the application adapter receive this header (which is most).
+   * @param {string} token
+   */
+  addTokenToAuthorization(token) {
+    const adapterPrototype =
+      this.store.adapterFor('application').constructor.prototype;
+    const headers = adapterPrototype?.headers;
+    if (!headers) adapterPrototype.headers = {};
+    adapterPrototype.headers.Authorization = null;
+    if (token) adapterPrototype.headers.Authorization = `Bearer ${token}`;
   }
 }
