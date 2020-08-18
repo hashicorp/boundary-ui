@@ -22,11 +22,11 @@ export default class ScopesScopeRoute extends Route {
   model({ scope_id: id }) {
     // Since only global and org scopes are authenticatable, we can infer type
     // from ID because global has a fixed ID.
-    const scopeType = id === 'global' ? 'global' : 'org';
+    const type = id === 'global' ? 'global' : 'org';
     return this.store.findRecord('scope', id).catch(() => {
       const maybeExistingScope = this.store.peekRecord('scope', id);
-      const scopeOptions = { id, scopeType };
-      if (scopeType === 'global') {
+      const scopeOptions = { id, type };
+      if (type === 'global') {
         scopeOptions.name = this.intl.t('titles.global');
       }
       return maybeExistingScope ||
