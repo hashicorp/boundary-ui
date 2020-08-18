@@ -33,6 +33,7 @@ resources:
   host-catalogs: Host Catalogs
   auth-method: Auth Method
   auth-methods: Auth Methods
+  host-set: Host Set
   host-sets: Host Sets
 titles:
   iam: IAM

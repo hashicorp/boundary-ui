@@ -1,0 +1,19 @@
+import Route from '@ember/routing/route';
+
+export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHostSetRoute extends Route {
+  // =methods
+
+  /**
+   * Load a host set in current scope and host-catalog.
+   * @param {object} params
+   * @param {string} params.host_set_id
+   * @return {HostSetModel}
+   */
+  async model({ host_set_id }) {
+    const { id: scopeID } = this.modelFor('scopes.scope.projects.project');
+    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
+    return this.store.findRecord('host-set', host_set_id, {
+      adapterOptions: { scopeID, hostCatalogID }
+    });
+  }
+}
