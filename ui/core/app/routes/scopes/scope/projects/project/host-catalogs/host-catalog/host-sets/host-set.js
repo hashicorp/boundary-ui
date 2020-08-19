@@ -4,7 +4,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   // =methods
 
   /**
-   * Load a host set in current scope and host-catalog.
+   * Load a host-set using current host-catalog and it's parent project scope.
    * @param {object} params
    * @param {string} params.host_set_id
    * @return {HostSetModel}
@@ -37,7 +37,5 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
       outlet: 'navigation',
       model: model
     });
-
-    super.renderTemplate(...arguments);
   }
 }

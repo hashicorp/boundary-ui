@@ -11,7 +11,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   // =methods
 
   /**
-   * Loads all host-sets under the current scope and host catalog.
+   * Loads all host-sets under the current host catalog and it's parent scope.
    * @return {Promise{[HostSetModel]}}
    */
   async model() {
@@ -19,7 +19,6 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
     const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
     return this.store.findAll('host-set', { adapterOptions: { scopeID, hostCatalogID } });
   }
-
 
   // =actions
 
@@ -40,7 +39,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   @action
   async save(hostSet) {
     try {
-      await hostSet.save();
+      await hostSet.save(this.adapterOptions());
       this.refresh();
       this.notify.success(this.intl.t('notify.save-success'));
       this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set', hostSet);
@@ -57,7 +56,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   @action
   async delete(hostSet) {
     try {
-      await hostSet.destroyRecord();
+      await hostSet.destroyRecord(this.adapterOptions());
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
@@ -65,5 +64,15 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
     }
+  }
+
+  /**
+   * Configure adapter options using current host catalog scope and it's parent project scope.
+   * @return {object}
+   */
+  adapterOptions() {
+    const scopeID = this.modelFor('scopes.scope.projects.project').id;
+    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
+    return { adapterOptions : { scopeID, hostCatalogID } };
   }
 }

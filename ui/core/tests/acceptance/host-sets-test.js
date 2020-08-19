@@ -75,4 +75,28 @@ module('Acceptance | host sets', function (hooks) {
     await a11yAudit();
     assert.equal(currentURL(), urls.hostSets);
   });
+
+  test('can navigate to a host set form', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('can update a host set and save changes', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('can update a host set and cancel changes', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('errors are displayed when save on auth method fails', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('errors are displayed when delete on a host set fails', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('saving an existing auth method with invalid fields displays error messages', async function (assert) {
+    assert.expect(0);
+  });
 });
