@@ -6,6 +6,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
 
   // =services
 
+  @service intl;
   @service notify;
 
   // =methods
@@ -40,11 +41,13 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
    */
   @action
   async save(hostCatalog) {
+    const { isNew } = hostCatalog;
     try {
       await hostCatalog.save();
       this.refresh();
-      // TODO: replace with translated strings
-      this.notify.success('Save succeeded.');
+      this.notify.success(
+        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+      );
       this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog', hostCatalog);
     } catch (error) {
       // TODO: replace with translated strings
@@ -61,9 +64,8 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
     try {
       await project.destroyRecord();
       this.refresh();
+      this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.projects.project.host-catalogs');
-      // TODO: replace with translated strings
-      this.notify.success('Deleted host catalog succesfully.');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

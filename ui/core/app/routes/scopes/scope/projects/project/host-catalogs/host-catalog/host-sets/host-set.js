@@ -18,7 +18,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   }
 
   /**
-   * Renders the host-set specific templates for header and navigation page sections.
+   * Renders the host-set specific templates for header, navigation, and action page sections.
    * @override
    * @param {object} controller
    * @param {object} model
@@ -35,6 +35,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
     this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-navigation', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'navigation',
+      model: model
+    });
+
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-actions', {
+      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+      outlet: 'actions',
       model: model
     });
   }

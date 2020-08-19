@@ -18,7 +18,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogRoute exte
   }
 
     /**
-   * Renders the host-catalog specific templates for header and navigation page sections.
+   * Renders the host-catalog specific templates for header, navigation, and actions page sections.
    * @override
    * @param {object} controller
    * @param {object} model
@@ -35,6 +35,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogRoute exte
     this.render('scopes/scope/projects/project/host-catalogs/host-catalog/-navigation', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'navigation',
+      model: model
+    });
+
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/-actions', {
+      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+      outlet: 'actions',
       model: model
     });
   }
