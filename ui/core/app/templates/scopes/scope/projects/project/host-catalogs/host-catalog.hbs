@@ -8,6 +8,18 @@
     <h2>{{t "resources.host-catalog"}}</h2>
   </page.header>
 
+  <page.actions>
+    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
+      <dropdown.button
+        @style="danger"
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "delete" @model)}}
+      >
+        {{t 'actions.delete-host-catalog'}}
+      </dropdown.button>
+    </Rose::Dropdown>
+  </page.actions>
+
   <page.navigation>
     <Rose::Nav::Tabs as |nav|>
       <nav.link @route='scopes.scope.projects.project.host-catalogs.host-catalog.index'>
