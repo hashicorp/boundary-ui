@@ -16,20 +16,24 @@
     </Rose::Nav::Tabs>
   </page.navigation>
 
+  <page.actions>
+    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
+      <dropdown.button
+        @style="danger"
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "delete" @model)}}
+      >
+        {{t 'actions.delete-group'}}
+      </dropdown.button>
+    </Rose::Dropdown>
+  </page.actions>
+
   <page.body>
     <Form::Project
       @model={{@model}}
       @submit={{route-action "save" @model}}
       @cancel={{route-action "cancel" @model}}
     />
-    <Rose::Separator />
-    <Rose::Button
-      @style="warning"
-      @disabled={{@model.canSave}}
-      {{on "click" (route-action "delete" @model)}}
-    >
-      {{t 'actions.delete'}}
-    </Rose::Button>
   </page.body>
 
 </Rose::Layout::Page>

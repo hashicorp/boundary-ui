@@ -1,11 +1,11 @@
 <details
   ...attributes
-  class="rose-dropdown"
+  class="rose-dropdown {{if @dropdownRight "rose-dropdown-right"}}"
   {{on-click-outside this.close}}
 >
 
   <summary
-    class="rose-dropdown-trigger{{if @iconOnly " has-icon-only"}}"
+    class="rose-dropdown-trigger {{if @iconOnly "has-icon-only"}}"
     title={{@text}}
   >
 
@@ -24,8 +24,9 @@
 
   <div class="rose-dropdown-content" {{on-click-inside this.close}}>
     {{yield (hash
-      link=(component "link-to" class="rose-dropdown-link")
-      button=(component "rose/button" style="dropdown")
+      link=(component "rose/dropdown/link" style=this.style)
+      button=(component "rose/dropdown/button" style=this.style)
+      separator=(component "rose/anonymous" tagName="hr" class="rose-dropdown-separator")
     )}}
   </div>
 

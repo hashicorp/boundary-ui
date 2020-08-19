@@ -21,21 +21,21 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
-            <row.cell>{{t 'form.label.name'}}</row.cell>
-            <row.cell>{{t 'form.label.description'}}</row.cell>
+            <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
+            <row.headerCell>{{t 'form.label.description'}}</row.headerCell>
           </header.row>
         </table.header>
         <table.body as |body|>
           {{#each @model as |user|}}
             <body.row as |row|>
-              <row.cell>
+              <row.headerCell>
                 <LinkTo
                   @route="scopes.scope.users.user"
                   @model={{user}}
                 >
                   {{user.name}}
                 </LinkTo>
-              </row.cell>
+              </row.headerCell>
               <row.cell>{{user.description}}</row.cell>
             </body.row>
           {{/each}}

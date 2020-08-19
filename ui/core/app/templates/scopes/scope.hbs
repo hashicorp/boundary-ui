@@ -1,6 +1,7 @@
 <Rose::Layout::Sidebar as |sidebarLayout|>
 
   {{#if this.session.isAuthenticated}}
+    {{#unless @model.isGlobal}}
     <sidebarLayout.sidebar>
       <Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
         <nav.link @route="scopes.scope.projects">
@@ -26,6 +27,7 @@
       {{outlet "sidebar"}}
 
     </sidebarLayout.sidebar>
+    {{/unless}}
   {{/if}}
 
   <sidebarLayout.body>

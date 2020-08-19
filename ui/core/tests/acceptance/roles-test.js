@@ -133,7 +133,7 @@ module('Acceptance | roles', function (hooks) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
     await visit(roleURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(this.server.db.roles.length, rolesCount - 1);
   });
 
@@ -210,7 +210,7 @@ module('Acceptance | roles', function (hooks) {
       );
     });
     await visit(roleURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'Oops.',

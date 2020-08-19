@@ -7,8 +7,16 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   @service intl;
   @service notify;
+  @service session;
 
   // =methods
+
+  /**
+   * If arriving here unauthenticated, redirect to index for further processing.
+   */
+  beforeModel() {
+    if (!this.session.isAuthenticated) this.transitionTo('index');
+  }
 
   /**
    * Load all auth-methods under current scope

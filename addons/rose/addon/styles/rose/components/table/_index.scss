@@ -1,17 +1,1 @@
-@use '../../variables/sizing';
-@use '../../utilities/type';
-
-.rose-table {
-  @include type.type(s, normal);
-  width: 100%;
-
-  .rose-table-header {
-    background-color: var(--ui-gray-subtler-5);
-    text-align: left;
-  }
-
-  .rose-table-cell {
-    border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
-    padding: sizing.rems(xs) sizing.rems(xxs);
-  }
-}
+@import 'table';
