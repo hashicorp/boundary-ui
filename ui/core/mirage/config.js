@@ -90,19 +90,31 @@ export default function() {
 
   // host
 
-  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts');
-  this.post('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts');
-  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts/:id');
-  this.patch('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts/:id');
-  this.del('/scopes/:scope_id/host-catalogs/:host_catalog_id/hosts/:id');
+  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts', function ({ hosts }, { params: { hostCatalogId } }) {
+    return hosts.where({ hostCatalogId });
+  });
+  this.post('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts', function ({ hosts }, { params: { hostCatalogId } }) {
+    const attrs = this.normalizedRequestAttrs();
+    attrs.hostCatalogId = hostCatalogId;
+    return hosts.create(attrs);
+  });
+  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts/:id');
+  this.patch('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts/:id');
+  this.del('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts/:id');
 
   // host-set
 
-  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets');
-  this.post('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets');
-  this.get('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets/:id');
-  this.patch('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets/:id');
-  this.del('/scopes/:scope_id/host-catalogs/:host_catalog_id/host-sets/:id');
+  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets', function ({ hostSets }, { params: { hostCatalogId } }) {
+    return hostSets.where({ hostCatalogId });
+  });
+  this.post('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets', function ({ hostSets }, { params: { hostCatalogId } }) {
+    const attrs = this.normalizedRequestAttrs();
+    attrs.hostCatalogId = hostCatalogId;
+    return hostSets.create(attrs);
+  });
+  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
+  this.patch('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
+  this.del('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
 
   // Uncomment the following line and the Response import above
   // Then change the response code to simulate error responses.
