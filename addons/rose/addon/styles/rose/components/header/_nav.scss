@@ -6,6 +6,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  margin-right: sizing.rems(s);
 
   @media (max-width: media.width(small)) {
     padding: 0 20px;

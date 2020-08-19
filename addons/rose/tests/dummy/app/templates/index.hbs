@@ -2,7 +2,7 @@
   <header.brand @logo="logo" @text="Product Name" />
 
   <header.nav as |nav|>
-    <nav.dropdown @text="org-name" as |dropdown|>
+    <nav.dropdown @text="org-name" @icon="user-organization" as |dropdown|>
       <dropdown.link @route="index">Menu item</dropdown.link>
       <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
       <dropdown.separator />
