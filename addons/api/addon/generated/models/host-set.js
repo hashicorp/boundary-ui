@@ -9,7 +9,8 @@ export default class GeneratedHostSetModel extends BaseModel {
   // =attributes
 
   @attr('string', {
-    description: 'The type of the resource, to help differentiate schemas'
+    description: 'The type of the resource, to help differentiate schemas',
+    readOnly: true
   }) type;
 
   @attr('string', {
@@ -36,7 +37,8 @@ export default class GeneratedHostSetModel extends BaseModel {
   version;
 
   @attr('number', {
-    description: 'The total count of hosts in this host set\nOutput only.'
+    description: 'The total count of hosts in this host set\nOutput only.',
+    readOnly: true
   }) size;
 
 }
