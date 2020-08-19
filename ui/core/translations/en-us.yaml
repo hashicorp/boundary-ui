@@ -9,6 +9,11 @@ actions:
   deauthenticate: Deauthenticate
   choose-org: Choose Scope
   choose-different-org: Choose a Different Scope
+  delete-user: Delete user
+  delete-group: Delete group
+  delete-role: Delete role
+  delete-project: Delete project
+  delete-host-catalog: Delete host catalog
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -76,6 +81,7 @@ form:
     type: Type
     identification: Username
     password: Password
+    manage: Manage
     grant: Grant
     principal: Principal
 errors:

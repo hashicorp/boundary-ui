@@ -24,6 +24,6 @@ module('Integration | Component | rose/header/nav', function (hooks) {
       <nav.dropdown />
       <nav.dropdown />
     </Rose::Header::nav>`);
-    assert.equal(findAll('.rose-header-dropdown').length, 2);
+    assert.equal(findAll('.rose-dropdown').length, 2);
   });
 });

@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
+import { visit, currentURL, fillIn, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -172,7 +172,11 @@ module('Acceptance | authentication', function (hooks) {
     await fillIn('[name="password"]', 'test');
     await click('[type="submit"]');
     assert.ok(currentSession().isAuthenticated);
-    await click('.rose-button-header-dropdown');
+    // Open header utilities dropdown
+    await click('.rose-header-utilities .rose-dropdown summary');
+    // Find and click on last element in dropdown - should be deauthenticate button
+    const menu = findAll('.rose-header-utilities .rose-dropdown .rose-dropdown-content button');
+    await click(menu[menu.length - 1]);
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
   });
