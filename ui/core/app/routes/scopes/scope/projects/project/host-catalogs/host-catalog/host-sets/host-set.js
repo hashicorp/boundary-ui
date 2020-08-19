@@ -16,4 +16,28 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
       adapterOptions: { scopeID, hostCatalogID }
     });
   }
+
+  /**
+   * Renders the host-set specific templates for header and navigation page sections.
+   * @override
+   * @param {object} controller
+   * @param {object} model
+   */
+  renderTemplate(controller, model) {
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets');
+
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-header', {
+      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+      outlet: 'header',
+      model: model
+    });
+
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-navigation', {
+      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+      outlet: 'navigation',
+      model: model
+    });
+
+    super.renderTemplate(...arguments);
+  }
 }

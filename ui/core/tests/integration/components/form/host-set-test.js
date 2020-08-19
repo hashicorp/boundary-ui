@@ -20,5 +20,4 @@ module('Integration | Component | form/host-set', function(hooks) {
 
     assert.ok(find('form'));
   });
-  });
 });
