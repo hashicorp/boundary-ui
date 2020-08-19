@@ -8,6 +8,18 @@
     <h2>{{t "resources.user"}}</h2>
   </page.header>
 
+  <page.actions>
+    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
+      <dropdown.button
+        @style="danger"
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "delete" @model)}}
+      >
+        {{t 'actions.delete-user'}}
+      </dropdown.button>
+    </Rose::Dropdown>
+  </page.actions>
+
   <page.navigation>
     <Rose::Nav::Tabs as |nav|>
       <nav.link @route='scopes.scope.users.user'>
@@ -17,19 +29,11 @@
   </page.navigation>
 
   <page.body>
-    <Form::Project
+    <Form::User
       @model={{@model}}
       @submit={{route-action "save" @model}}
       @cancel={{route-action "cancel" @model}}
     />
-    <Rose::Separator />
-    <Rose::Button
-      @style="warning"
-      @disabled={{@model.canSave}}
-      {{on "click" (route-action "delete" @model)}}
-    >
-      {{t 'actions.delete'}}
-    </Rose::Button>
   </page.body>
 
 </Rose::Layout::Page>

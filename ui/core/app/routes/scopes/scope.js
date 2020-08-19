@@ -1,6 +1,12 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRoute extends Route {
+
+  // =services
+
+  @service intl;
+
   // =methods
 
   /**
@@ -14,11 +20,18 @@ export default class ScopesScopeRoute extends Route {
    * @return {Promise{ScopeModel}}
    */
   model({ scope_id: id }) {
+    // Since only global and org scopes are authenticatable, we can infer type
+    // from ID because global has a fixed ID.
+    const type = id === 'global' ? 'global' : 'org';
     return this.store.findRecord('scope', id).catch(() => {
       const maybeExistingScope = this.store.peekRecord('scope', id);
-      // TODO it's unclear if creating a temporary unsaved scope is reliable
-      // we may need to revert to a POJO.
-      return maybeExistingScope || this.store.createRecord('scope', { id });
+      const scopeOptions = { id, type };
+      if (type === 'global') {
+        scopeOptions.name = this.intl.t('titles.global');
+      }
+      return maybeExistingScope ||
+        this.store.createRecord('scope', scopeOptions);
     });
   }
+
 }

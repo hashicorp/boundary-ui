@@ -9,10 +9,6 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   @service notify;
   @service intl;
 
-  // =attributes
-
-  routeAfterAuthentication = 'scopes.scope.projects';
-
   // =methods
 
   /**
@@ -55,7 +51,11 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
         requestCookies,
         { scope, authMethod }
       );
-      this.transitionTo(this.routeAfterAuthentication);
+      if (scope.isGlobal) {
+        this.transitionTo('scopes.scope.orgs');
+      } else {
+        this.transitionTo('scopes.scope.projects');
+      }
     } catch (e) {
       const errorMessage = this.intl.t('errors.titles.authentication-failed');
       this.notify.error(errorMessage, { closeAfter: null });
