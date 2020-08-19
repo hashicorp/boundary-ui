@@ -3,11 +3,4 @@
   @submit={{route-action "save" @model}}
   @cancel={{route-action "cancel" @model}}
 />
-<Rose::Separator />
-<Rose::Button
-  @style="warning"
-  @disabled={{@model.canSave}}
-  {{on "click" (route-action "delete" @model)}}
->
-  {{t 'actions.delete'}}
-</Rose::Button>
+

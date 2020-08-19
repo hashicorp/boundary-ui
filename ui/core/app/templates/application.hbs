@@ -14,7 +14,9 @@
             @iconOnly={{true}}
             @icon="user-square-fill" as |dropdown|
           >
-            <dropdown.button {{on "click" (route-action "invalidateSession")}}>
+            <dropdown.button
+              {{on "click" (route-action "invalidateSession")}}
+            >
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
           </utilities.dropdown>

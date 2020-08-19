@@ -53,6 +53,6 @@ module('Integration | Component | rose/header', function (hooks) {
         <utility.dropdown />
       </header.utilities>
     </Rose::Header>`);
-    assert.ok(find('.rose-header-dropdown'));
+    assert.ok(find('.rose-dropdown'));
   });
 });

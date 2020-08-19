@@ -135,7 +135,7 @@ module('Acceptance | projects', function (hooks) {
   test('can delete project', async function (assert) {
     assert.expect(1);
     await visit(existingProjectURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(getProjectScopesCount(), initialProjectScopesCount - 1);
   });
 
@@ -212,7 +212,7 @@ module('Acceptance | projects', function (hooks) {
       );
     });
     await visit(existingProjectURL);
-    await click('.rose-button-warning');
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'Oops.',

@@ -15,15 +15,15 @@ export default class ScopesIndexRoute extends Route {
    * @param {[ScopeModel]} model
    * @param {?ScopeModel} model.firstObject
    */
-  redirect({ firstObject }) {
+  redirect() {
     const authenticatedScopeID = get(
       this.session,
       'data.authenticated.scope.id'
     );
     if (authenticatedScopeID) {
       this.transitionTo('scopes.scope', authenticatedScopeID);
-    } else if (firstObject) {
-      this.transitionTo('scopes.scope', firstObject.id);
+    } else {
+      this.transitionTo('scopes.scope', 'global');
     }
   }
 }
