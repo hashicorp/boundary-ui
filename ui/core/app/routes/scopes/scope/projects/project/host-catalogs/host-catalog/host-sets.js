@@ -28,7 +28,9 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    */
   @action
   cancel(hostSet) {
+    const { isNew } = hostSet;
     hostSet.rollbackAttributes();
+    if (isNew) this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
   }
 
   /**
@@ -39,9 +41,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   @action
   async save(hostSet) {
     try {
+      const { isNew } = hostSet;
       await hostSet.save(this.adapterOptions());
       this.refresh();
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(
+        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+      );
       this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set', hostSet);
     } catch (error) {
       // TODO: replace with translated strings

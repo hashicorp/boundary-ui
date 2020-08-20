@@ -88,6 +88,18 @@ module('Acceptance | host sets', function (hooks) {
     assert.expect(0);
   });
 
+  test('can create new host set', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('can cancel new host set creation', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('saving a new host set with invalid fields displays error messages', async function (assert) {
+    assert.expect(0);
+  });
+
   test('errors are displayed when save on auth method fails', async function (assert) {
     assert.expect(0);
   });

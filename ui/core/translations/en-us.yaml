@@ -15,6 +15,7 @@ actions:
   delete-project: Delete project
   delete-host-catalog: Delete host catalog
   delete-host-set: Delete host set
+  add-host-set: Create Host Set
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -26,6 +27,9 @@ auth:
     authenticating-with-org: "You're authenticating with {name}."
   method-types:
     password: Password
+host-set:
+  types:
+    static: Static
 resources:
   user: User
   users: Users
@@ -54,6 +58,7 @@ titles:
   empty-set: No Items Yet
   projects-welcome: Welcome to Projects
   host-catalogs-welcome: Welcome to Host Catalogs
+  host-sets-welcome: Welcome to Host Sets
   users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
   groups-welcome: Welcome to Groups
@@ -68,6 +73,7 @@ descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   projects-welcome: Projects allow you to create and manage host catalogs. To start, create a project.
   host-catalogs-welcome: Host catalogs allow you to configure to collect and create hosts and host sets. To start, create a host catalog.
+  host-sets-welcome: Configure a static host set in this host catalog.
   users-welcome: Users are authorized to access Boundary.
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
   groups-welcome: Groups are collections of users.
