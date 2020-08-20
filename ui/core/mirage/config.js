@@ -115,6 +115,13 @@ export default function() {
   this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
   this.patch('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
   this.del('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
+  this.post('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const hostSet = hostSets.find(id);
+    attrs.id = id;
+    return hostSet.update(attrs);
+  });
 
   // Uncomment the following line and the Response import above
   // Then change the response code to simulate error responses.
