@@ -55,7 +55,7 @@ module('Acceptance | host sets', function (hooks) {
     assert.expect(0);
   });
 
-  test('saving an existing auth method with invalid fields displays error messages', async function (assert) {
+  test('saving an existing host set with invalid fields displays error messages', async function (assert) {
     assert.expect(0);
   });
 });

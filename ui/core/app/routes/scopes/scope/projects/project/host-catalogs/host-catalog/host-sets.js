@@ -15,9 +15,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    * @return {Promise{[HostSetModel]}}
    */
   async model() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-    return this.store.findAll('host-set', { adapterOptions: { scopeID, hostCatalogID } });
+    return this.store.findAll('host-set', this.adapterOptions());
   }
 
   // =actions
