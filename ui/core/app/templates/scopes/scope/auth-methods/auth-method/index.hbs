@@ -18,6 +18,18 @@
     </Rose::Nav::Tabs>
   </page.navigation>
 
+  <page.actions>
+    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
+      <dropdown.button
+        @style="danger"
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "delete" @model)}}
+      >
+        {{t 'actions.delete-auth-method'}}
+      </dropdown.button>
+    </Rose::Dropdown>
+  </page.actions>
+
   <page.body>
     <Form::AuthMethod
       @model={{@model}}
