@@ -15,4 +15,5 @@ export default ApplicationSerializer.extend({
     json.host_ids = model.hostIds;
     return json;
   }
+
 });

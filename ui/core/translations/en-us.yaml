@@ -14,6 +14,8 @@ actions:
   delete-role: Delete role
   delete-project: Delete project
   delete-host-catalog: Delete host catalog
+  delete-auth-method: Delete auth method
+  delete-host-set: Delete host set
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -40,6 +42,8 @@ resources:
   host-catalogs: Host Catalogs
   auth-method: Auth Method
   auth-methods: Auth Methods
+  host-set: Host Set
+  host-sets: Host Sets
 titles:
   iam: IAM
   new: New
@@ -58,6 +62,7 @@ titles:
   grants: Permissions
   new-grant: New Grant
   principals: Principals
+  host-sets: Host Sets
   global: Global
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.

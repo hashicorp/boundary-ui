@@ -1,3 +1,23 @@
-{{title @model.displayName}}
+<Rose::Layout::Page as |page|>
 
-{{outlet}}
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    {{outlet "header"}}
+  </page.header>
+
+  <page.actions>
+    {{outlet "actions"}}
+  </page.actions>
+
+  <page.navigation>
+    {{outlet "navigation"}}
+  </page.navigation>
+
+  <page.body>
+    {{outlet}}
+  </page.body>
+
+</Rose::Layout::Page>

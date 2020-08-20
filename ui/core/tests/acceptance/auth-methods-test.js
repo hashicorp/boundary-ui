@@ -72,6 +72,10 @@ module('Acceptance | auth methods', function (hooks) {
     assert.expect(0);
   });
 
+  test('can delete an auth method', async function (assert) {
+    assert.expect(0);
+  });
+
   test('saving a new auth method with invalid fields displays error messages', async function (assert) {
     assert.expect(0);
   });
