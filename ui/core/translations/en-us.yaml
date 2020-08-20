@@ -15,6 +15,7 @@ actions:
   delete-project: Delete project
   delete-host-catalog: Delete host catalog
   delete-auth-method: Delete auth method
+  delete-host-set: Delete host set
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -41,6 +42,7 @@ resources:
   host-catalogs: Host Catalogs
   auth-method: Auth Method
   auth-methods: Auth Methods
+  host-set: Host Set
   host-sets: Host Sets
 titles:
   iam: IAM
