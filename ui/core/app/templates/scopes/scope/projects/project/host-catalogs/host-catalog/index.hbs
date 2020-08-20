@@ -1,39 +1,5 @@
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <BreadCrumbs />
-  </page.breadcrumbs>
-
-  <page.header>
-    <h2>{{t "resources.host-catalog"}}</h2>
-  </page.header>
-
-  <page.navigation>
-    <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope.projects.project.host-catalogs.host-catalog'>
-        {{t 'titles.details'}}
-      </nav.link>
-    </Rose::Nav::Tabs>
-  </page.navigation>
-
-  <page.actions>
-    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
-      <dropdown.button
-        @style="danger"
-        @disabled={{@model.canSave}}
-        {{on "click" (route-action "delete" @model)}}
-      >
-        {{t 'actions.delete-host-catalog'}}
-      </dropdown.button>
-    </Rose::Dropdown>
-  </page.actions>
-
-  <page.body>
-    <Form::HostCatalog
-      @model={{@model}}
-      @submit={{route-action "save" @model}}
-      @cancel={{route-action "cancel" @model}}
-    />
-  </page.body>
-
-</Rose::Layout::Page>
+<Form::HostCatalog
+  @model={{@model}}
+  @submit={{route-action "save" @model}}
+  @cancel={{route-action "cancel" @model}}
+/>

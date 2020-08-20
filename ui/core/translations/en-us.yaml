@@ -40,6 +40,7 @@ resources:
   host-catalogs: Host Catalogs
   auth-method: Auth Method
   auth-methods: Auth Methods
+  host-sets: Host Sets
 titles:
   iam: IAM
   new: New
@@ -58,6 +59,7 @@ titles:
   grants: Permissions
   new-grant: New Grant
   principals: Principals
+  host-sets: Host Sets
   global: Global
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
