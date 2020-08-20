@@ -1,4 +1,11 @@
 <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
+  <dropdown.link
+    @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.new"
+    @model={{@model}}
+  >
+    {{t "actions.add-host-set"}}
+  </dropdown.link>
+  <dropdown.separator />
   <dropdown.button
     @style="danger"
     @disabled={{@model.canSave}}

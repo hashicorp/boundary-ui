@@ -1,10 +1,5 @@
 {{#if @model}}
-  <Rose::LinkButton @style="ghost"
-    @iconLeft="plus-plain"
-    @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.new"
-  >
-    {{t "actions.add-host-set"}}
-  </Rose::LinkButton>
+
   <Rose::Table as |table|>
     <table.header as |header|>
       <header.row as |row|>
@@ -35,7 +30,9 @@
       {{/each}}
     </table.body>
   </Rose::Table>
+
 {{else}}
+
   <Rose::Layout::Centered>
     <Rose::Message @title={{t "titles.host-sets-welcome"}} as |message|>
       <message.description>
@@ -47,4 +44,5 @@
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
+
 {{/if}}

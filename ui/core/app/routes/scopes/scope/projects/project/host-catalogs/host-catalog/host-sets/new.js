@@ -23,7 +23,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsNe
    * @param {object} model
    */
   renderTemplate(controller, model) {
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/new');
+    super.renderTemplate(...arguments);
 
     this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/new/-header', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
@@ -31,13 +31,13 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsNe
       model: model
     });
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/new/-navigation', {
+    this.render('_empty', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'navigation',
       model: model
     });
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/new/-actions', {
+    this.render('_empty', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'actions',
       model: model
