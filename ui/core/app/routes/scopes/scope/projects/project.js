@@ -20,11 +20,12 @@ export default class ScopesScopeProjectsProjectRoute extends Route {
    * @param {object} model
    */
   renderTemplate(controller, model) {
+    super.renderTemplate(...arguments);
+
     this.render('scopes/scope/projects/project/_sidebar', {
       into: 'scopes/scope',
       outlet: 'sidebar',
       model: model
     });
-    super.renderTemplate(...arguments);
   }
 }

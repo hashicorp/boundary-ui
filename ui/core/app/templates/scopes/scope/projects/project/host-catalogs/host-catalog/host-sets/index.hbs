@@ -1,30 +1,48 @@
-<Rose::Table as |table|>
-  <table.header as |header|>
-    <header.row as |row|>
-      <row.cell>{{t "form.label.name"}}</row.cell>
-      <row.cell>{{t "form.label.type"}}</row.cell>
-      <row.cell>{{t "form.label.id"}}</row.cell>
-    </header.row>
-  </table.header>
-  <table.body as |body|>
-    {{#each @model as |hostSet|}}
-      <body.row as |row|>
-        <row.cell>
-          <LinkTo
-            @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set"
-            @model={{hostSet}}
-          >
-            {{hostSet.displayName}}
-          </LinkTo>
-          <p>{{hostSet.description}}</p>
-        </row.cell>
-        <row.cell>
-          <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
-        </row.cell>
-        <row.cell>
-          <code>{{hostSet.id}}</code>
-        </row.cell>
-      </body.row>
-    {{/each}}
-  </table.body>
-</Rose::Table>
+{{#if @model}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.cell>{{t "form.label.name"}}</row.cell>
+        <row.cell>{{t "form.label.type"}}</row.cell>
+        <row.cell>{{t "form.label.id"}}</row.cell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model as |hostSet|}}
+        <body.row as |row|>
+          <row.cell>
+            <LinkTo
+              @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set"
+              @model={{hostSet}}
+            >
+              {{hostSet.displayName}}
+            </LinkTo>
+            <p>{{hostSet.description}}</p>
+          </row.cell>
+          <row.cell>
+            <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <code>{{hostSet.id}}</code>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "titles.host-sets-welcome"}} as |message|>
+      <message.description>
+        {{t "descriptions.host-sets-welcome"}}
+      </message.description>
+      <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.new">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t "titles.new"}}
+      </message.link>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}
