@@ -14,6 +14,7 @@ actions:
   delete-role: Delete role
   delete-project: Delete project
   delete-host-catalog: Delete host catalog
+  delete-auth-method: Delete auth method
   delete-host-set: Delete host set
   add-host-set: Create Host Set
 auth:
