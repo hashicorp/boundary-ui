@@ -34,4 +34,9 @@ export default class GeneratedScopeModel extends BaseModel {
   })
   updated_time;
 
+  @attr('number', {
+    description: 'Current version number of this resource.',
+  })
+  version;
+
 }
