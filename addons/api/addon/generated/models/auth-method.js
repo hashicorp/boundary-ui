@@ -39,4 +39,9 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   disabled;
 
+  @attr('number', {
+    description: 'Current version number of this resource.',
+  })
+  version;
+
 }
