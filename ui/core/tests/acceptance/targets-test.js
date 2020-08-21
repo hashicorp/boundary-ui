@@ -10,7 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //   //invalidateSession,
 // } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host sets', function (hooks) {
+module('Acceptance | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -19,43 +19,43 @@ module('Acceptance | host sets', function (hooks) {
     // Generate route URLs for resources
   });
 
-  test('visiting host sets', async function (assert) {
+  test('visiting targets', async function (assert) {
     assert.expect(0);
   });
 
-  test('can navigate to a host set form', async function (assert) {
+  test('can navigate to a target form', async function (assert) {
     assert.expect(0);
   });
 
-  test('can update a host set and save changes', async function (assert) {
+  test('can update a target and save changes', async function (assert) {
     assert.expect(0);
   });
 
-  test('can update a host set and cancel changes', async function (assert) {
+  test('can update a target and cancel changes', async function (assert) {
     assert.expect(0);
   });
 
-  test('can create new host set', async function (assert) {
+  test('can create new target', async function (assert) {
     assert.expect(0);
   });
 
-  test('can cancel new host set creation', async function (assert) {
+  test('can cancel new target creation', async function (assert) {
     assert.expect(0);
   });
 
-  test('saving a new host set with invalid fields displays error messages', async function (assert) {
+  test('saving a new target with invalid fields displays error messages', async function (assert) {
     assert.expect(0);
   });
 
-  test('errors are displayed when save on host set fails', async function (assert) {
+  test('errors are displayed when save on target fails', async function (assert) {
     assert.expect(0);
   });
 
-  test('errors are displayed when delete on a host set fails', async function (assert) {
+  test('errors are displayed when delete on a target fails', async function (assert) {
     assert.expect(0);
   });
 
-  test('saving an existing host set with invalid fields displays error messages', async function (assert) {
+  test('saving an existing target with invalid fields displays error messages', async function (assert) {
     assert.expect(0);
   });
 });

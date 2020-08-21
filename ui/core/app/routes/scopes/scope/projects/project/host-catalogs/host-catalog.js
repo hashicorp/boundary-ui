@@ -17,7 +17,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogRoute exte
     });
   }
 
-    /**
+  /**
    * Renders the host-catalog specific templates for header, navigation, and actions page sections.
    * @override
    * @param {object} controller

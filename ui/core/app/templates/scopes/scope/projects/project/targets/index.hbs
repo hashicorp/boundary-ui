@@ -1,0 +1,76 @@
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.targets"}}</h2>
+  </page.header>
+
+  <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton @route="scopes.scope.projects.project.targets.new" @style="primary">
+        {{t "titles.new"}}
+      </Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+
+    {{#if @model}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t "form.label.name"}}</row.headerCell>
+            <row.headerCell>{{t "form.label.protocol"}}</row.headerCell>
+            <row.headerCell>{{t "form.label.id"}}</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |target|}}
+            <body.row as |row|>
+              <row.headerCell>
+                <LinkTo
+                  @route="scopes.scope.projects.project.targets.target"
+                  @model={{target}}
+                >
+                  {{target.displayName}}
+                </LinkTo>
+                <p>{{target.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                {{#if target.protocol}}
+                  <Rose::Badge @style="outline">
+                    {{t (concat "target.protocols." target.protocol)}}
+                  </Rose::Badge>
+                {{/if}}
+              </row.cell>
+              <row.cell>
+                <code>{{target.id}}</code>
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t "titles.targets-welcome"}} as |message|>
+          <message.description>
+            {{t "descriptions.targets-welcome"}}
+          </message.description>
+          <message.link @route="scopes.scope.projects.project.targets.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t "titles.new"}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>
