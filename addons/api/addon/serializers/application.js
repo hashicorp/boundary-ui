@@ -40,6 +40,10 @@ export default class ApplicationSerializer extends RESTSerializer {
     let value = super.serializeAttribute(...arguments);
     // Do not serialize read-only attributes.
     if (options.readOnly) delete json[key];
+    // Version is sent only if it has a non-nullish value
+    if (key === 'version') {
+      if (json[key] === null || json[key] === undefined) delete json[key];
+    }
     // Do not serialize `disabled` fields.
     // TODO:  disabled is temporarily disabled
     if (key === 'disabled') delete json[key];
