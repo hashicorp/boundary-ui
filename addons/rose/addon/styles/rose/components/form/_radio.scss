@@ -23,6 +23,7 @@ $radio-svg: (
 $data-svg-prefix: 'data:image/svg+xml;utf-8,';
 
 .rose-form-radio {
+  @include type.type(m);
   position: relative;
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
@@ -45,8 +46,8 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
 
     &::after {
       position: absolute;
-      top: -#{sizing.rems(xxs)};
-      left: -#{sizing.rems(xxxs) + sizing.rems(xxxxs)};
+      top: -#{sizing.rems(xxxxs)};
+      left: -#{sizing.rems(xxxs)};
       display: block;
       width: sizing.rems(l);
       height: sizing.rems(l);

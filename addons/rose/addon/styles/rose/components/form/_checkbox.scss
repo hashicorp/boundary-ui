@@ -2,6 +2,7 @@
 @use '../../utilities/type';
 
 .rose-form-checkbox {
+  @include type.type(m);
   position: relative;
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
