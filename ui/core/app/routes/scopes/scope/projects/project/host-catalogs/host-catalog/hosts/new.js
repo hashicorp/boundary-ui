@@ -1,23 +1,23 @@
 import Route from '@ember/routing/route';
 
-export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsNewRoute extends Route {
+export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsNewRoute extends Route {
 
   // =methods
 
   /**
-   * Creates a new unsaved host set in current host catalog scope.
-   * @return {HostSetModel}
+   * Creates a new unsaved host in current host catalog scope.
+   * @return {HostModel}
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
-    return this.store.createRecord('host-set', {
+    return this.store.createRecord('host', {
       type: 'static',
       scopeModel
     });
   }
 
   /**
-   * Renders new host-set specific templates for header, navigation, and action page sections.
+   * Renders new host specific templates for header, navigation, and action page sections.
    * @override
    * @param {object} controller
    * @param {object} model
@@ -25,7 +25,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsNe
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/new/-header', {
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/new/-header', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'header',
       model: model

@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRoute extends Route {
+export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute extends Route {
   // =services
 
   @service intl;
@@ -11,41 +11,41 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   // =methods
 
   /**
-   * Loads all host-sets under the current host catalog and it's parent scope.
-   * @return {Promise{[HostSetModel]}}
+   * Loads all hosts under the current host catalog and it's parent project scope.
+   * @return {Promise{[HostModel]}}
    */
   async model() {
-    return this.store.findAll('host-set', this.adapterOptions());
+    return this.store.findAll('host', this.adapterOptions());
   }
 
   // =actions
 
   /**
-   * Rollback changes on a host set.
-   * @param {HostSetModel} hostSet
+   * Rollback changes on a host.
+   * @param {HostModel} host
    */
   @action
-  cancel(hostSet) {
-    const { isNew } = hostSet;
-    hostSet.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
+  cancel(host) {
+    const { isNew } = host;
+    host.rollbackAttributes();
+    if (isNew) this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts');
   }
 
   /**
-   * Handle save of a host set.
-   * @param {HostSetModel} hostSet
+   * Handle save of a host.
+   * @param {HostModel} host
    * @param {Event} e
    */
   @action
-  async save(hostSet) {
+  async save(host) {
     try {
-      const { isNew } = hostSet;
-      await hostSet.save(this.adapterOptions());
+      const { isNew } = host;
+      await host.save(this.adapterOptions());
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
-      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set', hostSet);
+      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host', host);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -53,16 +53,16 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   }
 
   /**
-   * Delete host set in current scope and redirect to index.
-   * @param {HostSetModel} hostSet
+   * Delete host in current scope and redirect to index.
+   * @param {HostModel} host
    */
   @action
-  async delete(hostSet) {
+  async delete(host) {
     try {
-      await hostSet.destroyRecord(this.adapterOptions());
+      await host.destroyRecord(this.adapterOptions());
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
+      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
