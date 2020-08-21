@@ -24,7 +24,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    * @param {object} model
    */
   renderTemplate(controller, model) {
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets');
+    super.renderTemplate(...arguments);
 
     this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-header', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',

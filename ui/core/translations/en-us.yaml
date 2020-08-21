@@ -16,7 +16,10 @@ actions:
   delete-host-catalog: Delete host catalog
   delete-auth-method: Delete auth method
   delete-host-set: Delete host set
+  delete-host: Delete host
+  delete-target: Delete target
   add-host-set: Create Host Set
+  add-host: Create Host
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -29,6 +32,12 @@ auth:
   method-types:
     password: Password
 host-set:
+  types:
+    static: Static
+target:
+  protocols:
+    SSH: SSH
+host:
   types:
     static: Static
 resources:
@@ -50,6 +59,8 @@ resources:
   host-sets: Host Sets
   host: Host
   hosts: Hosts
+  target: Target
+  targets: Targets
 titles:
   iam: IAM
   new: New
@@ -62,14 +73,18 @@ titles:
   projects-welcome: Welcome to Projects
   host-catalogs-welcome: Welcome to Host Catalogs
   host-sets-welcome: Welcome to Host Sets
+  hosts-welcome: Welcome to Hosts
   users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
   groups-welcome: Welcome to Groups
   auth-methods-welcome: Welcome to Auth Methods
+  targets-welcome: Create your first Target
   grants: Permissions
   new-grant: New Grant
   principals: Principals
   host-sets: Host Sets
+  hosts: Hosts
+  targets: Targets
   global: Global
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
@@ -77,10 +92,12 @@ descriptions:
   projects-welcome: Projects allow you to create and manage host catalogs. To start, create a project.
   host-catalogs-welcome: Host catalogs allow you to configure to collect and create hosts and host sets. To start, create a host catalog.
   host-sets-welcome: Configure a static host set in this host catalog.
+  hosts-welcome: Configure a static host in this host catalog.
   users-welcome: Users are authorized to access Boundary.
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
   groups-welcome: Groups are collections of users.
   auth-methods-welcome: Auth methods are configurations to authenticate users.
+  targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
 states:
   info: Info
   success: Success
@@ -98,6 +115,7 @@ form:
     grant: Grant
     principal: Principal
     address: Address
+    protocol: Protocol
 errors:
   titles:
     unauthenticated-error: You are not signed in

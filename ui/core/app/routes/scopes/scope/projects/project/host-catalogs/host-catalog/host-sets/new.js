@@ -6,7 +6,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsNe
 
   /**
    * Creates a new unsaved host set in current host catalog scope.
-   * @return {HostCatalogModel}
+   * @return {HostSetModel}
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');

@@ -29,7 +29,15 @@ Router.map(function () {
                 });
                 this.route('new');
               });
+              this.route('hosts', function() {
+                this.route('host', { path: ':host_id' }, function() {});
+                this.route('new');
+              });
             });
+          });
+          this.route('targets', function() {
+            this.route('target', { path: ':target_id' }, function() {});
+            this.route('new');
           });
         });
         this.route('new');
