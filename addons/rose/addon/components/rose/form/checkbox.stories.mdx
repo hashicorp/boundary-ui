@@ -25,6 +25,7 @@ Renders a form input checkbox.
       <Rose::Form::Checkbox
         @name={{name}}
         @label={{label}}
+        @description={{description}}
         @checked={{checked}}
         @error={{error}}
         @disabled={{disabled}}
@@ -32,6 +33,7 @@ Renders a form input checkbox.
     `,
     context: {
       label: text('text', 'Checkbox 🛎'),
+      description: text('description', 'This is an optional description paragraph.'),
       name: text('name', 'checkbox-1'),
       checked: boolean('checked', false),
       error: boolean('error', false),

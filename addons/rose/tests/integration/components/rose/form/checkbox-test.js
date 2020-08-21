@@ -7,8 +7,18 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
+    assert.expect(3);
     await render(hbs`<Rose::Form::Checkbox @label="Label" />`);
     assert.equal(await find('label').textContent.trim(), 'Label');
+    assert.ok(await find('input'));
+    assert.notOk(await find('.rose-form-checkbox-label-description'));
+  });
+
+  test('it renders optional description paragraph', async function (assert) {
+    assert.expect(3);
+    await render(hbs`<Rose::Form::Checkbox @label="Label" @description="Hello world" />`);
+    assert.equal(await find('.rose-form-checkbox-label-text').textContent.trim(), 'Label');
+    assert.equal(await find('.rose-form-checkbox-label-description').textContent.trim(), 'Hello world');
     assert.ok(await find('input'));
   });
 

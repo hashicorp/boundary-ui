@@ -33,14 +33,13 @@
     <table.body as |body|>
       {{#each this.options as |option|}}
         <body.row as |row|>
-          <row.headerCell>
+          <row.cell>
             <form.checkbox
               @label={{option.host.id}}
+              @description={{option.host.description}}
               @checked={{option.selected}}
-              onChange={{fn @toggleHost option.host}}
-            />
-            <p>{{option.host.description}}</p>
-          </row.headerCell>
+              onChange={{fn @toggleHost option.host}} />
+          </row.cell>
           <row.cell>{{option.host.name}}</row.cell>
           <row.cell>{{option.host.address}}</row.cell>
         </body.row>

@@ -11,7 +11,10 @@
     aria-describedby="{{if @error (concat 'errors-' this.id)}}" />
 
   <label class="rose-form-checkbox-label" for={{this.id}}>
-    {{@label}}
+    <span class="rose-form-checkbox-label-text">{{@label}}</span>
+    {{#if @description}}
+      <p class="rose-form-checkbox-label-description">{{@description}}</p>
+    {{/if}}
   </label>
 
   {{yield (hash

@@ -16,7 +16,15 @@
     // label styles
     @include type.type(s, semibold);
     color: currentColor;
-    padding-left: sizing.rems(l);
+
+    &,
+    .rose-form-checkbox-label-description {
+      padding-left: sizing.rems(l);
+    }
+
+    .rose-form-checkbox-label-description {
+      margin-top: sizing.rems(xs);
+    }
 
     // custom checkbox styles
     &::before {
