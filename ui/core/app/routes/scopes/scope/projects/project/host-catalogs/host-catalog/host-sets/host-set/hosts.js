@@ -20,6 +20,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
     const scopeID = this.modelFor('scopes.scope.projects.project').id;
     const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
     const hostSet = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set');
+    this.store.unloadAll('host');
     return hash({
       hostSet,
       hosts: this.store.findAll('host', { adapterOptions: { scopeID, hostCatalogID } })

@@ -28,6 +28,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    * @return {Promise{[HostSetModel]}}
    */
   async model() {
+    this.store.unloadAll('host-set');
     return this.store.findAll('host-set', this.adapterOptions);
   }
 
