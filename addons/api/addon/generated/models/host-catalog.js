@@ -38,4 +38,9 @@ export default class GeneratedHostCatalogModel extends BaseModel {
     description: 'Attributes specific to the catalog type'
   }) attributes;
 
+  @attr('number', {
+    description: 'Current version number of this resource.',
+  })
+  version;
+
 }
