@@ -55,9 +55,8 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   @action
   async save(hostSet) {
     try {
-      const scopeID = this.modelFor('scopes.scope.projects.project').id;
       const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-      const options = { adapterOptions : { scopeID, hostCatalogID } };
+      const options = { adapterOptions : { hostCatalogID } };
       await hostSet.saveHostIDs(options);
       this.notify.success(
         this.intl.t('notify.save-success')
