@@ -21,16 +21,16 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
-            <row.cell>{{t 'form.label.name'}}</row.cell>
-            <row.cell>{{t 'form.label.type'}}</row.cell>
-            <row.cell>{{t 'form.label.id'}}</row.cell>
+            <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
+            <row.headerCell>{{t 'form.label.type'}}</row.headerCell>
+            <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
           </header.row>
         </table.header>
 
         <table.body as |body|>
           {{#each @model as |authMethod|}}
             <body.row as |row|>
-              <row.cell>
+              <row.headerCell>
                 <LinkTo
                   @route="scopes.scope.auth-methods.auth-method"
                   @model={{authMethod}}
@@ -38,13 +38,15 @@
                   {{authMethod.name}}
                 </LinkTo>
                 <p>{{authMethod.description}}</p>
-              </row.cell>
+              </row.headerCell>
               <row.cell>
                 <Rose::Badge @style="outline">
                   {{t (concat 'auth.method-types.' authMethod.type)}}
                 </Rose::Badge>
               </row.cell>
-              <row.cell>{{authMethod.id}}</row.cell>
+              <row.cell>
+                <code>{{authMethod.id}}</code>
+              </row.cell>
             </body.row>
           {{/each}}
         </table.body>

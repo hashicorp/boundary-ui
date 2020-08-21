@@ -21,8 +21,8 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
-            <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
-            <row.headerCell>{{t 'form.label.description'}}</row.headerCell>
+            <row.headerCell>{{t "form.label.name"}}</row.headerCell>
+            <row.headerCell>{{t "form.label.id"}}</row.headerCell>
           </header.row>
         </table.header>
         <table.body as |body|>
@@ -35,8 +35,11 @@
                 >
                   {{user.name}}
                 </LinkTo>
+                <p>{{user.description}}</p>
               </row.headerCell>
-              <row.cell>{{user.description}}</row.cell>
+              <row.cell>
+                <code>{{user.id}}</code>
+              </row.cell>
             </body.row>
           {{/each}}
         </table.body>

@@ -69,7 +69,7 @@ module('Acceptance | host catalogs', function (hooks) {
     assert.expect(1);
     authenticateSession({});
     await visit(urls.hostCatalogs);
-    await click('main tbody .rose-table-cell:nth-child(2) a');
+    await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
     assert.equal(currentURL(), urls.hostCatalog);
   });
