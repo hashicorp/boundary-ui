@@ -31,6 +31,10 @@ auth:
 host-set:
   types:
     static: Static
+target:
+  protocols:
+    ssh: SSH
+    SSH: SSH
 resources:
   user: User
   users: Users
@@ -48,6 +52,7 @@ resources:
   auth-methods: Auth Methods
   host-set: Host Set
   host-sets: Host Sets
+  targets: Targets
 titles:
   iam: IAM
   new: New
@@ -64,10 +69,12 @@ titles:
   roles-welcome: Welcome to Roles
   groups-welcome: Welcome to Groups
   auth-methods-welcome: Welcome to Auth Methods
+  targets-welcome: Create your first Target
   grants: Permissions
   new-grant: New Grant
   principals: Principals
   host-sets: Host Sets
+  targets: Targets
   global: Global
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
@@ -79,6 +86,7 @@ descriptions:
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
   groups-welcome: Groups are collections of users.
   auth-methods-welcome: Auth methods are configurations to authenticate users.
+  targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
 states:
   info: Info
   success: Success
@@ -95,6 +103,7 @@ form:
     manage: Manage
     grant: Grant
     principal: Principal
+    protocol: Protocol
 errors:
   titles:
     unauthenticated-error: You are not signed in

@@ -29,6 +29,7 @@ Router.map(function () {
               });
             });
           });
+          this.route('targets', function() {});
         });
         this.route('new');
       });
