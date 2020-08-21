@@ -34,4 +34,8 @@ export default class GeneratedTargetModel extends BaseModel {
     description: 'Whether the catalog is disabled'
   }) disabled;
 
+  @attr('number', {
+    description: 'Current version number of this resource.',
+  })
+  version;
 }

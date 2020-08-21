@@ -36,7 +36,6 @@ host-set:
     static: Static
 target:
   protocols:
-    ssh: SSH
     SSH: SSH
 host:
   types:

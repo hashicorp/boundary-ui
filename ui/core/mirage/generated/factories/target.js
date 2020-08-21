@@ -12,5 +12,6 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   disabled: () => random.boolean(),
+  version: () => random.number(),
 
 });
