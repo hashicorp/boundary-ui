@@ -24,7 +24,9 @@ Router.map(function () {
             this.route('new');
             this.route('host-catalog', { path: ':host_catalog_id' }, function() {
               this.route('host-sets', function() {
-                this.route('host-set', { path: ':host_set_id' }, function() {});
+                this.route('host-set', { path: ':host_set_id' }, function() {
+                  this.route('hosts');
+                });
                 this.route('new');
               });
             });

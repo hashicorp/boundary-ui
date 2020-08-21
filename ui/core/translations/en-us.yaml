@@ -48,6 +48,8 @@ resources:
   auth-methods: Auth Methods
   host-set: Host Set
   host-sets: Host Sets
+  host: Host
+  hosts: Hosts
 titles:
   iam: IAM
   new: New
@@ -95,6 +97,7 @@ form:
     manage: Manage
     grant: Grant
     principal: Principal
+    address: Address
 errors:
   titles:
     unauthenticated-error: You are not signed in
