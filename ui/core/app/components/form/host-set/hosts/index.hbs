@@ -28,6 +28,7 @@
         <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
         <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
         <row.headerCell>{{t 'form.label.address'}}</row.headerCell>
+        <row.headerCell>{{t 'resources.host-sets'}}</row.headerCell>
       </header.row>
     </table.header>
     <table.body as |body|>
@@ -43,6 +44,13 @@
           </row.headerCell>
           <row.cell>{{option.host.name}}</row.cell>
           <row.cell>{{option.host.address}}</row.cell>
+          <row.cell>
+            {{#each option.host.hostSets as |hostSet|}}
+              <Rose::Badge @style="active">
+                {{hostSet.displayName}}
+              </Rose::Badge>
+            {{/each}}
+          </row.cell>
         </body.row>
       {{/each}}
     </table.body>

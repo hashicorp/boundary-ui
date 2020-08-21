@@ -1,7 +1,8 @@
-import { Model, belongsTo } from 'ember-cli-mirage';
+import { Model, belongsTo, hasMany } from 'ember-cli-mirage';
 
 export default Model.extend({
 
-  hostCatalog: belongsTo()
+  hostCatalog: belongsTo(),
+  hostSet: hasMany()
 
 });

@@ -28,7 +28,8 @@
   --brand-gray-1: #{brand-color(gray-1)};
 
   // theme colors
-  --info-subtler-3: #{color(blue, 010)};
+  --info-subtler-4: #{color(blue, 010)};
+  --info-subtler-3: #{color(blue, 050)};
   --info-subtler-2: #{color(blue, 100)};
   --info-subtler-1: #{color(blue, 400)};
   --info: #{color(blue)};
@@ -88,6 +89,7 @@
     --stark-components: 255, 255, 255;
 
     // theme colors
+    --info-subtler-4: #{color(blue, 900)};
     --info-subtler-3: #{color(blue, 800)};
     --info-subtler-2: #{color(blue, 700)};
     --info-subtler-1: #{color(blue, 600)};

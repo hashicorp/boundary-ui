@@ -41,7 +41,6 @@ export default class HostSetSerializer extends ApplicationSerializer {
    */
   normalize(modelClass, resourceHash) {
     // TODO:  can fragment string normalization be handled generically?
-    // TODO: host_ids might actually be attributes.host_ids
     if (resourceHash.host_ids) {
       resourceHash.host_ids =
         resourceHash.host_ids.map(value => ({ value }));

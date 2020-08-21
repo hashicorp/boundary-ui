@@ -29,6 +29,8 @@
 
   &.rose-badge-active {
     --color: var(--info);
+    --background-color: var(--info-subtler-3);
+    --border-color: transparent;
   }
 
   &.rose-badge-informational {

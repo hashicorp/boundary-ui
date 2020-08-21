@@ -13,17 +13,32 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   // =methods
 
   /**
+   * Configure adapter options using current host catalog and
+   * the current project scope.
+   * @return {object}
+   */
+  get adapterOptions() {
+    const scopeID = this.modelFor('scopes.scope.projects.project').id;
+    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
+    return { adapterOptions : { scopeID, hostCatalogID } };
+  }
+
+  /**
+   * Unloads all hosts before loading hosts for the current catalog/set context.
+   */
+  beforeModel() {
+    this.store.unloadAll('host');
+  }
+
+  /**
    * Loads all hosts under the current host catalog.
    * @return {Promise{[HostModel]}}
    */
   async model() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
     const hostSet = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set');
-    this.store.unloadAll('host');
     return hash({
       hostSet,
-      hosts: this.store.findAll('host', { adapterOptions: { scopeID, hostCatalogID } })
+      hosts: this.store.findAll('host', this.adapterOptions)
     });
   }
 
