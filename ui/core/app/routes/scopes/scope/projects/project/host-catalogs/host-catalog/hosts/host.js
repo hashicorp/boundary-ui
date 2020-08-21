@@ -1,24 +1,24 @@
 import Route from '@ember/routing/route';
 
-export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHostSetRoute extends Route {
+export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsHostRoute extends Route {
   // =methods
 
   /**
-   * Load a host-set using current host-catalog and it's parent project scope.
+   * Load a host using current host-catalog and it's parent project scope.
    * @param {object} params
-   * @param {string} params.host_set_id
-   * @return {HostSetModel}
+   * @param {string} params.host_id
+   * @return {HostModel}
    */
-  async model({ host_set_id }) {
+  async model({ host_id }) {
     const { id: scopeID } = this.modelFor('scopes.scope.projects.project');
     const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-    return this.store.findRecord('host-set', host_set_id, {
+    return this.store.findRecord('host', host_id, {
       adapterOptions: { scopeID, hostCatalogID }
     });
   }
 
   /**
-   * Renders the host-set specific templates for header, navigation, and action page sections.
+   * Renders the host specific templates for header, navigation, and action page sections.
    * @override
    * @param {object} controller
    * @param {object} model
@@ -26,19 +26,19 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-header', {
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-header', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'header',
       model: model
     });
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-navigation', {
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-navigation', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'navigation',
       model: model
     });
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/-actions', {
+    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-actions', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'actions',
       model: model

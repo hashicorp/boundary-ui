@@ -9,22 +9,22 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each @model as |hostSet|}}
+      {{#each @model as |host|}}
         <body.row as |row|>
           <row.headerCell>
             <LinkTo
-              @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set"
-              @model={{hostSet}}
+              @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host"
+              @model={{host}}
             >
-              {{hostSet.displayName}}
+              {{host.displayName}}
             </LinkTo>
-            <p>{{hostSet.description}}</p>
+            <p>{{host.description}}</p>
           </row.headerCell>
           <row.cell>
-            <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
+            <Rose::Badge @style="outline">{{host.type}}</Rose::Badge>
           </row.cell>
           <row.cell>
-            <code>{{hostSet.id}}</code>
+            <code>{{host.id}}</code>
           </row.cell>
         </body.row>
       {{/each}}
@@ -34,11 +34,11 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.host-sets-welcome"}} as |message|>
+    <Rose::Message @title={{t "titles.hosts-welcome"}} as |message|>
       <message.description>
-        {{t "descriptions.host-sets-welcome"}}
+        {{t "descriptions.hosts-welcome"}}
       </message.description>
-      <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.new">
+      <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.new">
         <Rose::Icon @name="plus-circle-outline" />
         {{t "titles.new"}}
       </message.link>
