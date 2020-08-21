@@ -16,6 +16,7 @@ actions:
   delete-host-catalog: Delete host catalog
   delete-auth-method: Delete auth method
   delete-host-set: Delete host set
+  delete-target: Delete target
   add-host-set: Create Host Set
 auth:
   titles:
@@ -52,6 +53,7 @@ resources:
   auth-methods: Auth Methods
   host-set: Host Set
   host-sets: Host Sets
+  target: Target
   targets: Targets
 titles:
   iam: IAM
