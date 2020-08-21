@@ -123,6 +123,14 @@ export default function() {
     return hostSet.update(attrs);
   });
 
+  // target
+
+  this.get('/scopes/:scope_id/targets');
+  this.post('/scopes/:scope_id/targets');
+  this.get('/scopes/:scope_id/targets/:id');
+  this.patch('/scopes/:scope_id/targets/:id');
+  this.del('/scopes/:scope_id/targets/:id');
+
   // Uncomment the following line and the Response import above
   // Then change the response code to simulate error responses.
   // this.get('/scopes/:scope_id/projects', () => new Response(505));

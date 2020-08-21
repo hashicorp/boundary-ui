@@ -29,6 +29,28 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
+  test('it serializes non-nullish version fields', function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('user', {
+      name: 'User',
+      description: 'Description',
+      version: null
+    });
+    let serializedRecord = record.serialize();
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description'
+    });
+    record.version = 1;
+    serializedRecord = record.serialize();
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description',
+      version: 1
+    });
+  });
+
   test('it normalizes array records from an `items` root key', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');

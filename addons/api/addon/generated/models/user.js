@@ -33,4 +33,9 @@ export default class GeneratedUserModel extends BaseModel {
     description: 'Whether the resource is disabled',
   })
   disabled;
+
+  @attr('number', {
+    description: 'Current version number of this resource.',
+  })
+  version;
 }
