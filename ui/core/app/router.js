@@ -31,6 +31,7 @@ Router.map(function () {
           });
           this.route('targets', function() {
             this.route('target', { path: ':target_id' }, function() {});
+            this.route('new');
           });
         });
         this.route('new');

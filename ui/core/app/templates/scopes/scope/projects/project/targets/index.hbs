@@ -4,6 +4,14 @@
     <h2>{{t "resources.targets"}}</h2>
   </page.header>
 
+  <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton @route="scopes.scope.projects.project.targets.new" @style="primary">
+        {{t "titles.new"}}
+      </Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
   <page.body>
 
     {{#if @model}}
@@ -29,9 +37,11 @@
                 <p>{{target.description}}</p>
               </row.cell>
               <row.cell>
-                <Rose::Badge @style="outline">
-                  {{t (concat "target.protocols." target.protocol)}}
-                </Rose::Badge>
+                {{#if target.protocol}}
+                  <Rose::Badge @style="outline">
+                    {{t (concat "target.protocols." target.protocol)}}
+                  </Rose::Badge>
+                {{/if}}
               </row.cell>
               <row.cell>
                 <code>{{target.id}}</code>
@@ -48,6 +58,10 @@
           <message.description>
             {{t "descriptions.targets-welcome"}}
           </message.description>
+          <message.link @route="scopes.scope.projects.project.targets.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t "titles.new"}}
+          </message.link>
         </Rose::Message>
       </Rose::Layout::Centered>
 
