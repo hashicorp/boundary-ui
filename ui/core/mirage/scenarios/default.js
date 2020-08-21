@@ -35,4 +35,8 @@ export default function(server) {
     server.createList('host-catalog', 2, { scope }, 'withChildren');
   });
 
+  // Target
+
+  server.createList('target', 5, { scope });
+
 }
