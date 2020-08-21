@@ -7,7 +7,7 @@
   box-shadow: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-gray-subtler-2);
 
   .rose-nav-link {
-    --color: var(--ui-gray);
+    --color: var(--ui-gray-starker-1);
     --background: transparent;
     --box-shadow-color: transparent;
 
@@ -21,7 +21,7 @@
 
     &:hover {
       --box-shadow-color: var(--ui-gray-subtler-2);
-      --background: var(--ui-gray-subtler-4);
+      --background: var(--ui-gray-subtler-5);
     }
 
     &:active,
