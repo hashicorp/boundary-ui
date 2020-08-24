@@ -41,7 +41,11 @@
                 </LinkTo>
                 <p>{{hostCatalog.description}}</p>
               </row.headerCell>
-              <row.cell>{{hostCatalog.type}}</row.cell>
+              <row.cell>
+                <Rose::Badge @style="outline">
+                  {{hostCatalog.type}}
+                </Rose::Badge>
+              </row.cell>
               <row.cell>
                 <code>{{hostCatalog.id}}</code>
               </row.cell>
