@@ -1,0 +1,23 @@
+{{#if @model.hosts}}
+  <Form::HostSet::Hosts
+    @model={{@model.hostSet}}
+    @hosts={{@model.hosts}}
+    @submit={{route-action "save" @model.hostSet}}
+    @cancel={{route-action "cancel" @model.hostSet}}
+    @toggleHost={{route-action "toggleHost" @model.hostSet}}
+  />
+{{/if}}
+
+{{#unless @model.hosts}}
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "titles.no-host-set-hosts"}} as |message|>
+      <message.description>
+        {{t "descriptions.no-host-set-hosts"}}
+      </message.description>
+      <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.new">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t "titles.new"}}
+      </message.link>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+{{/unless}}

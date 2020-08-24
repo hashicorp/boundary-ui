@@ -8,6 +8,19 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   @service intl;
   @service notify;
 
+  // =attributes
+
+  /**
+   * Configure adapter options using current host catalog and
+   * the current project scope.
+   * @return {object}
+   */
+  get adapterOptions() {
+    const scopeID = this.modelFor('scopes.scope.projects.project').id;
+    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
+    return { adapterOptions : { scopeID, hostCatalogID } };
+  }
+
   // =methods
 
   /**
@@ -15,7 +28,8 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    * @return {Promise{[HostSetModel]}}
    */
   async model() {
-    return this.store.findAll('host-set', this.adapterOptions());
+    this.store.unloadAll('host-set');
+    return this.store.findAll('host-set', this.adapterOptions);
   }
 
   // =actions
@@ -40,8 +54,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   async save(hostSet) {
     try {
       const { isNew } = hostSet;
-      await hostSet.save(this.adapterOptions());
-      this.refresh();
+      await hostSet.save(this.adapterOptions);
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
@@ -59,23 +72,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   @action
   async delete(hostSet) {
     try {
-      await hostSet.destroyRecord(this.adapterOptions());
-      this.refresh();
+      await hostSet.destroyRecord(this.adapterOptions);
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
     }
-  }
-
-  /**
-   * Configure adapter options using current host catalog scope and it's parent project scope.
-   * @return {object}
-   */
-  adapterOptions() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-    return { adapterOptions : { scopeID, hostCatalogID } };
   }
 }

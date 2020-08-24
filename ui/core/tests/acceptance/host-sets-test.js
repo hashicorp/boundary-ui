@@ -58,4 +58,17 @@ module('Acceptance | host sets', function (hooks) {
   test('saving an existing host set with invalid fields displays error messages', async function (assert) {
     assert.expect(0);
   });
+
+  test('can view hosts associated with a host set', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('can add/remove host associations to a host set and save', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('can cancel add/remove host associations to a host set', async function (assert) {
+    assert.expect(0);
+  });
+
 });

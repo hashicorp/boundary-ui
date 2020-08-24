@@ -13,13 +13,30 @@
 }
 
 .rose-form {
-  width: 66%;
+  &:not(.full-width) {
+    width: 66%;
+  }
 
   .rose-form-input {
     width: 100%;
 
     .rose-form-input-field {
       width: 100%;
+    }
+  }
+}
+
+.rose-table {
+  p {
+    margin-bottom: 0;
+  }
+
+  .rose-form-checkbox {
+    margin-bottom: 0;
+
+    .rose-form-checkbox-label-text {
+      color: var(--stark);
+      text-decoration: underline;
     }
   }
 }
