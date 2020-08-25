@@ -131,6 +131,26 @@ export default function() {
   this.patch('/scopes/:scope_id/targets/:id');
   this.del('/scopes/:scope_id/targets/:id');
 
+  // host-set in a target
+  this.get('/scopes/:scope_id/targets/:targetId/host-sets', function ({ hostSets }, { params: { targetId } }) {
+    return hostSets.where({ targetId });
+  });
+  this.post('/scopes/:scope_id/targets/:targetId/host-sets', function ({ hostSets }, { params: { targetId } }) {
+    const attrs = this.normalizedRequestAttrs();
+    attrs.targetId = targetId;
+    return hostSets.create(attrs);
+  });
+  this.get('/scopes/:scope_id/targets/:targetId/host-sets/:id');
+  this.patch('/scopes/:scope_id/targets/:targetId/host-sets/:id');
+  this.del('/scopes/:scope_id/targets/:targetId/host-sets/:id');
+  this.post('/scopes/:scope_id/targets/:targetId/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const hostSet = hostSets.find(id);
+    attrs.id = id;
+    return hostSet.update(attrs);
+  });
+
   // Uncomment the following line and the Response import above
   // Then change the response code to simulate error responses.
   // this.get('/scopes/:scope_id/projects', () => new Response(505));

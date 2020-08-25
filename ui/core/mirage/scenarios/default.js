@@ -33,7 +33,7 @@ export default function(server) {
   server.db.scopes.where({type: 'project'}).forEach(({ id, type }) => {
     const scope = { id, type };
     server.createList('host-catalog', 2, { scope }, 'withChildren');
-    server.createList('target', 2, { scope });
+    server.createList('target', 2, { scope }, 'withChildren');
   });
-  
+
 }
