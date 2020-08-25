@@ -6,10 +6,55 @@ module('Unit | Model | target', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
-  test('it exists', function(assert) {
-    let store = this.owner.lookup('service:store');
-    let model = store.createRecord('target', {});
-    assert.ok(model);
+  test('it has a `hostSets` array of resolved model instances (if those instances are already in the store)', function(assert) {
+    assert.expect(6);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'target',
+        attributes: {
+          host_sets: [
+            { host_set_id: '1', host_catalog_id: '2' },
+            { host_set_id: '3', host_catalog_id: '2' }
+          ]
+        }
+      }
+    });
+    const target = store.peekRecord('target', '123abc');
+    assert.equal(target.host_sets.length, 2, 'Target has two entires in host_sets');
+    assert.equal(target.hostSets.length, 0, 'Target has no resolved hostSets because they are not loaded yet');
+    store.push({
+      data: {
+        id: '1',
+        type: 'host-set',
+        attributes: {}
+      }
+    });
+    store.push({
+      data: {
+        id: '3',
+        type: 'host-set',
+        attributes: {}
+      }
+    });
+    // Since `hostSets` is computed on `host_sets`, not the store itself,
+    // it's necessary to do this assignment to kick-off the computed update.
+    // eslint-disable-next-line no-self-assign
+    target.host_sets = target.host_sets;
+    assert.equal(target.host_sets.length, 2, 'Target has two entires in host_sets');
+    assert.equal(target.hostSets.length, 2, 'Target has two resolved hostSets');
+    assert.notOk(target.hostSets[0].hostCatalog, 'Host catalog was not resolved because it is not loaded yet');
+    store.push({
+      data: {
+        id: '2',
+        type: 'host-catalog',
+        attributes: {}
+      }
+    });
+    // eslint-disable-next-line no-self-assign
+    target.host_sets = target.host_sets;
+    assert.ok(target.hostSets[0].hostCatalog, 'Host catalog is resolved');
   });
 
   test('it has a `saveHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
