@@ -149,7 +149,6 @@ export default function() {
     }
     // If deleting host sets, filter them out of the array
     if (method === 'delete-host-sets') {
-      console.log(method, attrs);
       updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter(id => {
         return !attrs.hostSetIds.includes(id);
       });

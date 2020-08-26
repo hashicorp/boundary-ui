@@ -29,7 +29,7 @@ module('Unit | Serializer | target', function(hooks) {
 
   });
 
-  test('it serializes only host sets and version when an `adapterOptions.hostSets` array is passed', function (assert) {
+  test('it serializes only host sets and version when an `adapterOptions.hostSetIDs` array is passed', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -44,7 +44,7 @@ module('Unit | Serializer | target', function(hooks) {
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      hostSets: [{id: '4'}, {id: '5'}]
+      hostSetIDs: ['4', '5']
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {

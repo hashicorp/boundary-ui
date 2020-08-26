@@ -14,7 +14,7 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
-    const hostSets = snapshot?.adapterOptions?.hostSetIDs;
+    const hostSetIDs = snapshot?.adapterOptions?.hostSetIDs;
     if (hostSetIDs) serialized =
       this.serializeWithHostSets(snapshot, hostSetIDs);
     return serialized;

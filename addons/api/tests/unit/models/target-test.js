@@ -87,7 +87,7 @@ module('Unit | Model | target', function (hooks) {
       }
     });
     const model = store.peekRecord('target', '123abc');
-    await model.addHostSets([{id: '123_abc'}, {id: 'foobar'}]);
+    await model.addHostSets(['123_abc', 'foobar']);
   });
 
   test('it has a `deleteHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
@@ -120,6 +120,6 @@ module('Unit | Model | target', function (hooks) {
       }
     });
     const model = store.peekRecord('target', '123abc');
-    await model.deleteHostSets([{id: '1'}, {id: '3'}]);
+    await model.deleteHostSets(['1', '3']);
   });
 });
