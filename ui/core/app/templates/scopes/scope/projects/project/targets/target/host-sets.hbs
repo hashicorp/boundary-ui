@@ -1,33 +1,41 @@
 {{title (t "resources.host-sets")}}
 
-<Rose::Table as |table|>
-  <table.header as |header|>
-    <header.row as |row|>
-      <row.headerCell>{{t "form.label.name"}}</row.headerCell>
-      <row.headerCell>{{t "form.label.type"}}</row.headerCell>
-      <row.headerCell>{{t "form.label.id"}}</row.headerCell>
-    </header.row>
-  </table.header>
-  <table.body as |body|>
-    {{#each @model as |hostSet|}}
-      <body.row as |row|>
-        <row.headerCell>
-          <LinkTo
-            @route="scopes.scope.projects.project.targets.target.host-sets.host-set"
-            @model={{hostSet}}
-          >
-            {{hostSet.displayName}}
-          </LinkTo>
-          <p>{{hostSet.description}}</p>
-        </row.headerCell>
-        <row.cell>
-          <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
-        </row.cell>
-        <row.cell>
-          <code>{{hostSet.id}}</code>
-        </row.cell>
-      </body.row>
-    {{/each}}
-  </table.body>
-</Rose::Table>
+{{#if @model}}
 
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t "form.label.name"}}</row.headerCell>
+        <row.headerCell>{{t "form.label.type"}}</row.headerCell>
+        <row.headerCell>{{t "form.label.id"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model as |hostSet|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{hostSet.displayName}}
+            <p>{{hostSet.description}}</p>
+          </row.headerCell>
+          <row.cell>
+            <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <code>{{hostSet.id}}</code>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "titles.target-host-sets-welcome"}} as |message|>
+      <message.description>
+        {{t "descriptions.target-host-sets-welcome"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}

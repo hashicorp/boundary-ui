@@ -36,7 +36,7 @@ host-set:
     static: Static
 target:
   protocols:
-    SSH: SSH
+    tcp: TCP
 host:
   types:
     static: Static
@@ -79,6 +79,7 @@ titles:
   groups-welcome: Welcome to Groups
   auth-methods-welcome: Welcome to Auth Methods
   targets-welcome: Create your first Target
+  target-host-sets-welcome: No Host Sets Associated
   grants: Permissions
   new-grant: New Grant
   principals: Principals
@@ -99,6 +100,7 @@ descriptions:
   groups-welcome: Groups are collections of users.
   auth-methods-welcome: Auth methods are configurations to authenticate users.
   targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
+  target-host-sets-welcome: Add Host Sets to this target to provide access.
   no-host-set-hosts: Before associating hosts with this host set, create hosts within the host catalog.
 states:
   info: Info
