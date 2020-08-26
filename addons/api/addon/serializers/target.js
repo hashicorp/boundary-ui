@@ -5,30 +5,32 @@ export default class TargetSerializer extends ApplicationSerializer {
   // =methods
 
   /**
-   * If `adapterOptions.serializeHostSets` is true, the serialization should
-   * include **only host sets** and the version.  Normally, host sets are not
-   * serialized.
+   * If `adapterOptions.hostSets` is set to an array of host set models,
+   * the resulting target serialization should include **only host sets**
+   * and the version.  Normally, host sets are not serialized.
    * @override
    * @param {Snapshot} snapshot
    * @return {object}
    */
   serialize(snapshot) {
-    const serializeHostSets = snapshot?.adapterOptions?.serializeHostSets;
     let serialized = super.serialize(...arguments);
-    if (serializeHostSets) serialized = this.serializeWithHostSets(snapshot);
+    const hostSetIDs = snapshot?.adapterOptions?.hostSetIDs;
+    if (hostSetIDs) serialized =
+      this.serializeWithHostSets(snapshot, hostSetIDs);
     return serialized;
   }
 
   /**
-   * Returns a payload containing only the host_set_ids array.
+   * Returns a payload containing only the host_set_ids array using IDs
+   * passed into the function (rather than existing host sets on the model).
    * @param {Snapshot} snapshot
+   * @param {[string]} hostSetIDs
    * @return {object}
    */
-  serializeWithHostSets(snapshot) {
+  serializeWithHostSets(snapshot, hostSetIDs) {
     return {
       version: snapshot.attr('version'),
-      host_set_ids:
-        snapshot.attr('host_sets').map(hostSet => hostSet.attr('host_set_id'))
+      host_set_ids: hostSetIDs
     };
   }
 
