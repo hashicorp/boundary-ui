@@ -11,17 +11,17 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each @model as |hostSet|}}
+      {{#each @model.hostSets as |hostSet|}}
         <body.row as |row|>
           <row.headerCell>
-            {{hostSet.displayName}}
-            <p>{{hostSet.description}}</p>
+            {{hostSet.model.displayName}}
+            <p>{{hostSet.model.description}}</p>
           </row.headerCell>
           <row.cell>
-            <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
+            <Rose::Badge @style="outline">{{hostSet.model.type}}</Rose::Badge>
           </row.cell>
           <row.cell>
-            <code>{{hostSet.id}}</code>
+            <code>{{hostSet.model.id}}</code>
           </row.cell>
         </body.row>
       {{/each}}
