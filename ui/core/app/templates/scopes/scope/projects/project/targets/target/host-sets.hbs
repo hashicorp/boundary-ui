@@ -23,6 +23,16 @@
           <row.cell>
             <code>{{hostSet.model.id}}</code>
           </row.cell>
+          <row.cell>
+            <Rose::Dropdown @icon="more-horizontal" @iconOnly={{true}} @dropdownRight={{true}} as |dropdown|>
+              <dropdown.button
+                @style="danger"
+                {{on "click" (route-action "delete" @model hostSet.model)}}
+              >
+                {{t "actions.delete"}}
+              </dropdown.button>
+            </Rose::Dropdown>
+          </row.cell>
         </body.row>
       {{/each}}
     </table.body>

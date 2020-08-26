@@ -1,7 +1,15 @@
 import Route from '@ember/routing/route';
 import { all, hash } from 'rsvp';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+
 
 export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extends Route {
+  // =services
+
+  @service intl;
+  @service notify;
+
   // =methods
 
   /**
@@ -39,5 +47,19 @@ export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extend
    */
   model() {
     return this.modelFor('scopes.scope.projects.project.targets.target');
+  }
+
+  // =actions
+  @action
+  async delete(target, hostSet) {
+    try {
+      await target.deleteHostSets(hostSet);
+      this.refresh();
+      this.notify.success(this.intl.t('notify.delete-success'));
+      this.transitionTo('scopes.scope.projects.project.targets.target.host-sets');
+    } catch (error) {
+      // TODO: replace with translated strings
+      this.notify.error(error.message, { closeAfter: null });
+    }
   }
 }
