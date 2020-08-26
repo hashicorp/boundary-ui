@@ -38,7 +38,7 @@ Router.map(function () {
           this.route('targets', function() {
             this.route('target', { path: ':target_id' }, function() {
               this.route('host-sets', function() {
-                this.route('host-set');
+                this.route('host-set', { path: ':host_set_id'}, function() {});
               });
             });
             this.route('new');
