@@ -32,14 +32,15 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * Adds host sets via the `add-host-sets` method.
    * See serializer and adapter for more information.
+   * @param {[string]} hostSetIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addHostSets(hostSets, options={ adapterOptions: {} }) {
+  addHostSets(hostSetIDs, options={ adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-host-sets',
-      hostSets
+      hostSetIDs
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get
@@ -56,14 +57,15 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * Delete host sets via the `delete-host-sets` method.
    * See serializer and adapter for more information.
+   * @param {[string]} hostSetIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  deleteHostSets(hostSets, options={ adapterOptions: {} }) {
+  deleteHostSets(hostSetIDs, options={ adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'delete-host-sets',
-      hostSets
+      hostSetIDs
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get

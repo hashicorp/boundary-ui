@@ -14,22 +14,23 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
-    const hostSets = snapshot?.adapterOptions?.hostSets;
-    if (hostSets) serialized = this.serializeWithHostSets(snapshot, hostSets);
+    const hostSets = snapshot?.adapterOptions?.hostSetIDs;
+    if (hostSetIDs) serialized =
+      this.serializeWithHostSets(snapshot, hostSetIDs);
     return serialized;
   }
 
   /**
-   * Returns a payload containing only the host_set_ids array using host sets
+   * Returns a payload containing only the host_set_ids array using IDs
    * passed into the function (rather than existing host sets on the model).
    * @param {Snapshot} snapshot
-   * @param {[HostSetModel]} hostSets
+   * @param {[string]} hostSetIDs
    * @return {object}
    */
-  serializeWithHostSets(snapshot, hostSets) {
+  serializeWithHostSets(snapshot, hostSetIDs) {
     return {
       version: snapshot.attr('version'),
-      host_set_ids: hostSets.map(({ id }) => id)
+      host_set_ids: hostSetIDs
     };
   }
 
