@@ -30,16 +30,40 @@ export default class TargetModel extends GeneratedTargetModel {
   // =methods
 
   /**
-   * Saves the `host_set_ids` array on the via the `set-hosts` method.
+   * Adds host sets via the `add-host-sets` method.
    * See serializer and adapter for more information.
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  saveHostSets(options={ adapterOptions: {} }) {
+  addHostSets(hostSets, options={ adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'set-host-sets',
-      serializeHostSets: true
+      method: 'add-host-sets',
+      hostSets
+    };
+    // There is no "deep merge" in ES.
+    // All of this nonsense is here to ensure we get
+    // a decent merge of `adapterOptions`.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions
+      }
+    });
+  }
+
+  /**
+   * Delete host sets via the `delete-host-sets` method.
+   * See serializer and adapter for more information.
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  deleteHostSets(hostSets, options={ adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'delete-host-sets',
+      hostSets
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get

@@ -130,25 +130,31 @@ export default function() {
   this.get('/scopes/:scope_id/targets/:id');
   this.patch('/scopes/:scope_id/targets/:id');
   this.del('/scopes/:scope_id/targets/:id');
-
-  // host-set in a target
-  this.get('/scopes/:scope_id/targets/:targetId/host-sets', function ({ hostSets }, { params: { targetId } }) {
-    return hostSets.where({ targetId });
-  });
-  this.post('/scopes/:scope_id/targets/:targetId/host-sets', function ({ hostSets }, { params: { targetId } }) {
-    const attrs = this.normalizedRequestAttrs();
-    attrs.targetId = targetId;
-    return hostSets.create(attrs);
-  });
-  this.get('/scopes/:scope_id/targets/:targetId/host-sets/:id');
-  this.patch('/scopes/:scope_id/targets/:targetId/host-sets/:id');
-  this.del('/scopes/:scope_id/targets/:targetId/host-sets/:id');
-  this.post('/scopes/:scope_id/targets/:targetId/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
+  this.post('/scopes/:scope_id/targets/:idMethod', function ({ targets }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
-    const hostSet = hostSets.find(id);
-    attrs.id = id;
-    return hostSet.update(attrs);
+    const method = idMethod.split(':')[1];
+    const target = targets.find(id);
+    const updatedAttrs = {
+      version: attrs.version,
+      hostSetIds: target.hostSetIds
+    };
+    // If adding host sets, push them into the array
+    if (method === 'add-host-sets') {
+      attrs.hostSetIds.forEach(id => {
+        if (!updatedAttrs.hostSetIds.includes(id)) {
+          updatedAttrs.hostSetIds.push(id);
+        }
+      });
+    }
+    // If deleting host sets, filter them out of the array
+    if (method === 'delete-host-sets') {
+      console.log(method, attrs);
+      updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter(id => {
+        return !attrs.hostSetIds.includes(id);
+      });
+    }
+    return target.update(updatedAttrs);
   });
 
   // Uncomment the following line and the Response import above

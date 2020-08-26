@@ -57,9 +57,42 @@ module('Unit | Model | target', function (hooks) {
     assert.ok(target.hostSets[0].hostCatalog, 'Host catalog is resolved');
   });
 
-  test('it has a `saveHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has an `addHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/targets/123abc:set-host-sets', (schema, request) => {
+    this.server.post('/v1/scopes/o_1/targets/123abc:add-host-sets', (schema, request) => {
+      const body = JSON.parse(request.requestBody);
+      assert.deepEqual(body, {
+        host_set_ids: ['123_abc', 'foobar'],
+        version: 1
+      });
+    });
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'target',
+        attributes: {
+          name: 'Target',
+          description: 'Description',
+          host_sets: [
+            { host_set_id: '1', host_catalog_id: '2' },
+            { host_set_id: '3', host_catalog_id: '4' }
+          ],
+          version: 1,
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope'
+          }
+        }
+      }
+    });
+    const model = store.peekRecord('target', '123abc');
+    await model.addHostSets([{id: '123_abc'}, {id: 'foobar'}]);
+  });
+
+  test('it has a `deleteHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
+    this.server.post('/v1/scopes/o_1/targets/123abc:delete-host-sets', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         host_set_ids: ['1', '3'],
@@ -87,6 +120,6 @@ module('Unit | Model | target', function (hooks) {
       }
     });
     const model = store.peekRecord('target', '123abc');
-    await model.saveHostSets();
+    await model.deleteHostSets([{id: '1'}, {id: '3'}]);
   });
 });
