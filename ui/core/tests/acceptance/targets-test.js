@@ -62,4 +62,12 @@ module('Acceptance | targets', function (hooks) {
   test('viewing target host sets', async function (assert) {
     assert.expect(0);
   });
+
+  test('select and save host sets to add', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('select and cancel host sets to add', async function (assert) {
+    assert.expect(0);
+  });
 });

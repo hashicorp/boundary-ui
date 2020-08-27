@@ -13,6 +13,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(this, arguments);
     json.host_ids = model.hostIds;
+    json.host_catalog_id = model.hostCatalogId;
     return json;
   }
 

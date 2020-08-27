@@ -1,3 +1,5 @@
+{{title @model.displayName}}
+
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
@@ -21,6 +23,9 @@
 
   <page.actions>
     <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
+      <dropdown.link @route="scopes.scope.projects.project.targets.target.add-host-sets">
+        {{t 'actions.add-host-sets'}}
+      </dropdown.link>
       <dropdown.button
         @style="danger"
         @disabled={{@model.canSave}}
