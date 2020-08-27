@@ -81,12 +81,12 @@ export default class TargetModel extends GeneratedTargetModel {
 
   /**
    * Delete a single host set via the `delete-host-sets` method.
-   * @param {object} hostSet
+   * @param {number} hostSetID
    * @param {object} options
    * @return {Promise}
    */
-  deleteHostSet(hostSet, options) {
-    return this.deleteHostSets([hostSet.id], options);
+  deleteHostSet(hostSetID, options) {
+    return this.deleteHostSets([hostSetID], options);
   }
 
 }

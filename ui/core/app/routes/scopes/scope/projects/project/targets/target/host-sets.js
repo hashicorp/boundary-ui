@@ -59,7 +59,7 @@ export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extend
   @action
   async delete(target, hostSet) {
     try {
-      await target.deleteHostSet(hostSet);
+      await target.deleteHostSet(hostSet.id);
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.projects.project.targets.target.host-sets');

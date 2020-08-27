@@ -153,6 +153,6 @@ module('Unit | Model | target', function (hooks) {
       }
     });
     const model = store.peekRecord('target', '123abc');
-    await model.deleteHostSet({id: '3'});
+    await model.deleteHostSet('3');
   });
 });
