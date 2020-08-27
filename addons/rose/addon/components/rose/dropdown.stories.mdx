@@ -1,5 +1,6 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
+import { boolean } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Dropdown" component="Dropdown" />
 
@@ -10,13 +11,16 @@ A simple dropdown component with support for links and buttons.
 <Preview>
   <Story name="Basic Dropdown" height="5rem">{{
     template: hbs`
-      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" as |dropdown|>
+      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" @hideDropdownIndicator={{hideDropdownIndicator}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
         <dropdown.separator />
         <dropdown.button>Button menu item</dropdown.button>
       </Rose::Dropdown>
     `,
+    context: {
+      hideDropdownIndicator: boolean('hideDropdownIndicator', false),
+    },
   }}</Story>
 </Preview>
 
@@ -34,7 +38,7 @@ A simple dropdown component with support for links and buttons.
 </Preview>
 
 
-```htmlbars
+```html
   <Rose::Dropdown @text="Choose One&hellip;" as |dropdown|>
     <dropdown.link @route="index">Menu item</dropdown.link>
     <dropdown.link @route="about">Menu item</dropdown.link>
@@ -44,7 +48,7 @@ A simple dropdown component with support for links and buttons.
 
 Dropdown content can be aligned to right edge of the component instead of the default left edge, which is the default setting. The following example floats the component to right edge of the page inorder to provide enough space to display right aligned dropdown content.
 
-```htmlbars
+```html
   <Rose::Dropdown @text="Choose One&hellip;" style="float: right" @dropdownRight={{true}} as |dropdown|>
     <dropdown.link @route="index">Menu item</dropdown.link>
     <dropdown.link @route="about">Menu item</dropdown.link>
@@ -55,9 +59,18 @@ Dropdown content can be aligned to right edge of the component instead of the de
 
 Dropdown supports `danger` styling through `style` attribute.
 
-```htmlbars
+```html
 <Rose::Dropdown @text="Dropdown" as |dropdown|>
   <dropdown.link @style="danger">Link - danger</dropdown.link>
   <dropdown.button @style="danger">Button - danger</dropdown.button>
+</Rose::Dropdown>
+```
+
+Dropdown indicator can be hidden using `hideDropdownIndicator` attribute.
+
+```html
+<Rose::Dropdown @hideDropdownIndicator={{true}} @icon="more-horizontal" as |dropdown|>
+    <dropdown.link @route="index">Menu item</dropdown.link>
+    <dropdown.button>Button menu item</dropdown.button>
 </Rose::Dropdown>
 ```

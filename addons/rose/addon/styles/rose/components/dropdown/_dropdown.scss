@@ -58,6 +58,11 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
       }
     }
 
+    &.hide-dropdown-indicator {
+      background: none;
+      padding-right: sizing.rems(s);
+    }
+
     // Hide default twistie triangle
     // Webkit / Chromium
     &::-webkit-details-marker {

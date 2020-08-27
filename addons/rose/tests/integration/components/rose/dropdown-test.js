@@ -10,6 +10,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
     await render(hbs`<Rose::Dropdown />`);
     assert.ok(find('.rose-dropdown'));
     assert.notOk(find('.rose-dropdown-right'));
+    assert.notOk(find('.hide-dropdown-indicator'));
   });
 
   test('it renders with html attributes', async function (assert) {
@@ -38,6 +39,13 @@ module('Integration | Component | rose/dropdown', function (hooks) {
       <Rose::Dropdown @dropdownRight={{true}} />
     `);
     assert.ok(find('.rose-dropdown-right'));
+  });
+
+  test('it supports hiding dropdown indicator', async function (assert) {
+    await render(hbs`
+      <Rose::Dropdown @hideDropdownIndicator={{true}} />
+    `);
+    assert.ok(find('.hide-dropdown-indicator'));
   });
 
   test('it renders with content', async function (assert) {
