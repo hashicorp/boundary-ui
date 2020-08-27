@@ -1,1 +1,38 @@
-{{outlet}}
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.target"}}</h2>
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.projects.project.targets.target.index'>
+        {{t 'titles.details'}}
+      </nav.link>
+      <nav.link @route='scopes.scope.projects.project.targets.target.host-sets'>
+        {{t 'titles.host-sets'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.actions>
+    <Rose::Dropdown @text="{{t 'form.label.manage'}}" @dropdownRight={{true}} as |dropdown|>
+      <dropdown.button
+        @style="danger"
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "delete" @model)}}
+      >
+        {{t 'actions.delete-target'}}
+      </dropdown.button>
+    </Rose::Dropdown>
+  </page.actions>
+
+  <page.body>
+    {{outlet}}
+  </page.body>
+
+</Rose::Layout::Page>

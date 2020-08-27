@@ -1,0 +1,41 @@
+{{title (t "resources.host-sets")}}
+
+{{#if @model.hostSets}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t "form.label.name"}}</row.headerCell>
+        <row.headerCell>{{t "form.label.type"}}</row.headerCell>
+        <row.headerCell>{{t "form.label.id"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model.hostSets as |hostSet|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{hostSet.model.displayName}}
+            <p>{{hostSet.model.description}}</p>
+          </row.headerCell>
+          <row.cell>
+            <Rose::Badge @style="outline">{{hostSet.model.type}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <code>{{hostSet.model.id}}</code>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "titles.target-host-sets-welcome"}} as |message|>
+      <message.description>
+        {{t "descriptions.target-host-sets-welcome"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}
