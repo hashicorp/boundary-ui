@@ -16,9 +16,8 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
     display: flex;
     align-items: center;
     $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
-    padding: $yPadding sizing.rems(xl) $yPadding sizing.rems(l);
+    padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
     color: var(--black);
-    background: url($chevron) no-repeat right sizing.rems(m) center;
     border-radius: sizing.rems(xxxs);
 
     // Hide default twistie triangle
@@ -56,6 +55,12 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
         height: 1px;
         opacity: 0;
       }
+    }
+
+    &.show-caret {
+      padding-right: sizing.rems(xl);
+      background: url($chevron) no-repeat right sizing.rems(m) center ;
+      background-size: sizing.rems(m);
     }
 
     // Hide default twistie triangle

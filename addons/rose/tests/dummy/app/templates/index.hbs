@@ -36,3 +36,8 @@
   <dropdown.button>Button menu item</dropdown.button>
   <dropdown.button @style="danger">Button - danger</dropdown.button>
 </Rose::Dropdown>
+
+<Rose::Dropdown @showCaret={{false}} @icon="more-horizontal" as |dropdown|>
+  <dropdown.link @route="index">Menu item</dropdown.link>
+  <dropdown.button>Button menu item</dropdown.button>
+</Rose::Dropdown>
