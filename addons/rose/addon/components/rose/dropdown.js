@@ -10,6 +10,7 @@ export default Component.extend({
 
   layout,
   tagName: '',
+  showCaret: true,
 
   // =actions
 

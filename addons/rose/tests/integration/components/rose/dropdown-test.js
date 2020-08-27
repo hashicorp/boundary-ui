@@ -40,6 +40,14 @@ module('Integration | Component | rose/dropdown', function (hooks) {
     assert.ok(find('.rose-dropdown-right'));
   });
 
+  test('it supports hiding dropdown caret', async function (assert) {
+    await render(hbs`<Rose::Dropdown />`);
+    assert.ok(find('.show-caret'));
+
+    await render(hbs`<Rose::Dropdown @showCaret={{false}}/>`);
+    assert.notOk(find('.show-caret'));
+  });
+
   test('it renders with content', async function (assert) {
     await render(hbs`<Rose::Dropdown @text="Click me" as |dropdown|>
       <dropdown.link @route="about"/>
