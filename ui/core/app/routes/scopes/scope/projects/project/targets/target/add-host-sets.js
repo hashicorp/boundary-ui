@@ -42,6 +42,29 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
     };
   }
 
+  /**
+   * Renders the add-host-sets-specific header template.
+   * @override
+   */
+  renderTemplate() {
+    super.renderTemplate(...arguments);
+
+    this.render('scopes/scope/projects/project/targets/target/add-host-sets/-header', {
+      into: 'scopes/scope/projects/project/targets/target',
+      outlet: 'header',
+    });
+
+    this.render('-empty', {
+      into: 'scopes/scope/projects/project/targets/target',
+      outlet: 'navigation',
+    });
+
+    this.render('-empty', {
+      into: 'scopes/scope/projects/project/targets/target',
+      outlet: 'actions',
+    });
+  }
+
   // =actions
 
   @action
