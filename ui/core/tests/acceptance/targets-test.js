@@ -58,4 +58,8 @@ module('Acceptance | targets', function (hooks) {
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
     assert.expect(0);
   });
+
+  test('viewing target host sets', async function (assert) {
+    assert.expect(0);
+  });
 });
