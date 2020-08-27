@@ -62,4 +62,8 @@ module('Acceptance | targets', function (hooks) {
   test('viewing target host sets', async function (assert) {
     assert.expect(0);
   });
+
+  test('can delete a host sets', async function(assert) {
+    assert.expect(0);
+  });
 });
