@@ -21,24 +21,22 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each this.hostSetGroups as |hostSetGroup|}}
-        {{#each hostSetGroup.hostSets as |hostSet|}}
-          <body.row as |row|>
-            <row.cell>
-              <form.checkbox
-                @label={{hostSet.id}}
-                @description={{hostSet.description}}
-                onChange={{fn this.toggleHostSet hostSet}} />
-            </row.cell>
-            <row.cell>{{hostSet.name}}</row.cell>
-            <row.cell>
-              <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
-            </row.cell>
-            <row.cell>
-              <code>{{hostSetGroup.hostCatalog.id}}</code>
-            </row.cell>
-          </body.row>
-        {{/each}}
+      {{#each this.filteredHostSets as |hostSet|}}
+        <body.row as |row|>
+          <row.cell>
+            <form.checkbox
+              @label={{hostSet.id}}
+              @description={{hostSet.description}}
+              onChange={{fn this.toggleHostSet hostSet}} />
+          </row.cell>
+          <row.cell>{{hostSet.name}}</row.cell>
+          <row.cell>
+            <Rose::Badge @style="outline">{{hostSet.type}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <code>{{hostSet.host_catalog_id}}</code>
+          </row.cell>
+        </body.row>
       {{/each}}
     </table.body>
   </Rose::Table>

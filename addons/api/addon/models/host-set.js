@@ -1,5 +1,6 @@
 import GeneratedHostSetModel from '../generated/models/host-set';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
+//import { computed } from '@ember/object';
 
 export default class HostSetModel extends GeneratedHostSetModel {
 
@@ -10,6 +11,18 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * be persisted via a dedicated call to `saveGrants()`.
    */
   @fragmentArray('fragment-string', {readOnly: true}) host_ids;
+
+  // TODO this is here in case we want it in the future,
+  // especially for the target / add host sets workflow
+  /**
+   * Returns the host catalog instance associated with this host set if
+   * it is already loaded into the store.
+   * @type {?HostCatalogModel}
+   */
+  // @computed('host_catalog_id')
+  // get hostCatalog() {
+  //   return this.store.peekRecord('host-catalog', this.host_catalog_id);
+  // }
 
   // =methods
 
