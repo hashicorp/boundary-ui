@@ -52,14 +52,14 @@ export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extend
   // =actions
 
   /**
-   * Delete host set in current target scope and redirect to index.
+   * Removes a host set from the current target and redirects to index.
    * @param {TargetModel} target
    * @param {HostSetModel} hostSet
    */
   @action
-  async delete(target, hostSet) {
+  async removeHostSet(target, hostSet) {
     try {
-      await target.deleteHostSet(hostSet.id);
+      await target.removeHostSet(hostSet.id);
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.projects.project.targets.target.host-sets');
