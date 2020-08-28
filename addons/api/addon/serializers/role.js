@@ -10,7 +10,7 @@ export default class RoleSerializer extends ApplicationSerializer {
    * include **only grants** and the version.  Normally, grants are not
    * serialized.
    * If `adapterOptions.principalIDs` is set (to an array of user and
-   * group IDs), then the payload is serialized via `serializeWithPrincipals`.
+   * group IDs), then the payload is serialized via `serializewithPrincipals`.
    * @override
    * @param {Snapshot} snapshot
    * @return {object}
@@ -21,7 +21,7 @@ export default class RoleSerializer extends ApplicationSerializer {
     if (serializeGrants) serialized = this.serializeWithGrants(snapshot);
     const principalIDs = snapshot?.adapterOptions?.principalIDs;
     if (principalIDs) serialized =
-      this.serializeWithPrincipals(snapshot, principalIDs);
+      this.serializewithPrincipals(snapshot, principalIDs);
     return serialized;
   }
 
@@ -44,7 +44,7 @@ export default class RoleSerializer extends ApplicationSerializer {
    * @param {[string]} principalIDs
    * @return {object}
    */
-  serializeWithPrincipals(snapshot, principalIDs) {
+  serializewithPrincipals(snapshot, principalIDs) {
     return {
       version: snapshot.attr('version'),
       principal_ids: principalIDs
