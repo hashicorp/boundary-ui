@@ -120,6 +120,7 @@ form:
     principal: Principal
     address: Address
     protocol: Protocol
+    actions: Actions
 errors:
   titles:
     unauthenticated-error: You are not signed in
