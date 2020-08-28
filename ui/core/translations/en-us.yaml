@@ -2,6 +2,7 @@ actions:
   add: Add
   cancel: Cancel
   delete: Delete
+  remove: Remove
   dismiss: Dismiss
   save: Save
   help: Need help?

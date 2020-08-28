@@ -29,9 +29,9 @@
               <dropdown.button
                 name={{t "actions.delete"}}
                 @style="danger"
-                {{on "click" (route-action "delete" @model hostSet.model)}}
+                {{on "click" (route-action "removeHostSet" @model hostSet.model)}}
               >
-                {{t "actions.delete"}}
+                {{t "actions.remove"}}
               </dropdown.button>
             </Rose::Dropdown>
           </row.cell>
