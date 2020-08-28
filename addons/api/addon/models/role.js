@@ -36,4 +36,64 @@ export default class RoleModel extends GeneratedRoleModel {
     });
   }
 
+  /**
+   * Adds principals via the `add-principals` method.
+   * See serializer and adapter for more information.
+   * @param {[string]} principalIDs
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  addPrincipals(principalIDs, options={ adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'add-principals',
+      principalIDs
+    };
+    // There is no "deep merge" in ES.
+    // All of this nonsense is here to ensure we get
+    // a decent merge of `adapterOptions`.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions
+      }
+    });
+  }
+
+  /**
+   * Delete principals via the `remove-principals` method.
+   * See serializer and adapter for more information.
+   * @param {[string]} principalIDs
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  removePrincipals(principalIDs, options={ adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'remove-principals',
+      principalIDs
+    };
+    // There is no "deep merge" in ES.
+    // All of this nonsense is here to ensure we get
+    // a decent merge of `adapterOptions`.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions
+      }
+    });
+  }
+
+  /**
+   * Delete a single principal via the `remove-principals` method.
+   * @param {number} principalIDs
+   * @param {object} options
+   * @return {Promise}
+   */
+  removePrincipal(principalID, options) {
+    return this.removePrincipals([principalID], options);
+  }
+
 }
