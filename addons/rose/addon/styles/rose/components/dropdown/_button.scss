@@ -7,7 +7,7 @@
   box-sizing: border-box;
   width: 100%;
   // Targeting min-width of ~200
-  min-width: (sizing.rems(m) + sizing.rems(xs)) * 10;
+  min-width: (sizing.rems(m)) * 10;
   border: 0;
   padding: 0 sizing.rems(s);
   text-decoration: none;

@@ -43,8 +43,8 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
     }
 
     &.has-icon-only {
-      padding-right: sizing.rems(l);
       padding-left: sizing.rems(s);
+      padding-right: sizing.rems(s);
       background-position: right sizing.rems(xs) center;
 
       .rose-dropdown-trigger-text {
