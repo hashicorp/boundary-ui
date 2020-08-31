@@ -23,6 +23,7 @@ actions:
   add-host-set: Create Host Set
   add-host: Create Host
   add-host-sets: Add Host Sets
+  add-principals: Add Principals
 auth:
   titles:
     no-scopes: No Scopes Available
