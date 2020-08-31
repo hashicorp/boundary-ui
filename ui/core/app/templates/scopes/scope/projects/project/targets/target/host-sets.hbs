@@ -28,11 +28,11 @@
             <Rose::Dropdown
               @icon="more-horizontal"
               @iconOnly={{true}}
+              @showCaret={{false}}
               @dropdownRight={{true}}
               @text="{{t "actions.manage"}}" as |dropdown|
             >
               <dropdown.button
-                name="{{t "actions.remove"}}"
                 @style="danger"
                 {{on "click" (route-action "removeHostSet" @model hostSet.model)}}
               >
