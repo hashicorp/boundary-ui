@@ -54,7 +54,6 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
       await role.removePrincipal(principal.id);
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.roles.role.principals');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
