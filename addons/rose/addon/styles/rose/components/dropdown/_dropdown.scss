@@ -34,7 +34,7 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
     background-size: sizing.rems(m);
 
     &:hover {
-      background-color: var(--ui-gray-subtler-4);
+      background-color: var(--ui-gray-subtler-5);
     }
 
     &:not(.has-icon-only) .rose-icon:first-child {
@@ -59,7 +59,9 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
 
     &.show-caret {
       padding-right: sizing.rems(xl);
-      background: url($chevron) no-repeat right sizing.rems(m) center ;
+      background-image: url($chevron);
+      background-repeat: no-repeat;
+      background-position: right sizing.rems(m) center;
       background-size: sizing.rems(m);
     }
 
