@@ -62,7 +62,6 @@ export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extend
       await target.removeHostSet(hostSet.id);
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.projects.project.targets.target.host-sets');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

@@ -222,6 +222,10 @@ module('Acceptance | roles', function (hooks) {
     assert.expect(0);
   });
 
+  test('principal can be removed from a role', async function(assert) {
+    assert.expect(0);
+  });
+
   test('grants can be updated and saved or canceled', async function (assert) {
     assert.expect(0);
   });
