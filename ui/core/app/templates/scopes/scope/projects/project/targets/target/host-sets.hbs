@@ -8,6 +8,7 @@
         <row.headerCell>{{t "form.label.name"}}</row.headerCell>
         <row.headerCell>{{t "form.label.type"}}</row.headerCell>
         <row.headerCell>{{t "form.label.id"}}</row.headerCell>
+        <row.headerCell>{{t "form.label.actions"}}</row.headerCell>
       </header.row>
     </table.header>
     <table.body as |body|>
@@ -22,6 +23,16 @@
           </row.cell>
           <row.cell>
             <code>{{hostSet.model.id}}</code>
+          </row.cell>
+          <row.cell>
+            <Rose::Dropdown @icon="more-horizontal" @iconOnly={{true}} @dropdownRight={{true}} @text="{{t "actions.manage"}}" as |dropdown|>
+              <dropdown.button
+                @style="danger"
+                {{on "click" (route-action "removeHostSet" @model hostSet.model)}}
+              >
+                {{t "actions.remove"}}
+              </dropdown.button>
+            </Rose::Dropdown>
           </row.cell>
         </body.row>
       {{/each}}
