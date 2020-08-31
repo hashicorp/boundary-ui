@@ -64,12 +64,44 @@ export default function() {
   this.get('/scopes/:scope_id/roles/:id');
   this.patch('/scopes/:scope_id/roles/:id');
   this.del('/scopes/:scope_id/roles/:id');
-  this.post('/scopes/:scope_id/roles/:id', function ({ roles }, request) {
+  this.post('/scopes/:scope_id/roles/:idMethod', function ({ roles, users, groups }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
-    const id = request.params.id.split(':')[0];
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
     const role = roles.find(id);
-    attrs.id = id;
-    return role.update(attrs);
+    const updatedAttrs = {
+      version: attrs.version,
+      userIds: role.userIds,
+      groupIds: role.groupIds
+    };
+
+    // Principals is a combined list of users and groups, but in Mirage we've
+    // internally modelled them as separate lists.  Therefore we must check
+    // the type by looking up the user or group first, then determine which
+    // list to add the principal to.
+    if (method === 'add-principals') {
+      attrs.principalIds.forEach(id => {
+        const isUser = users.find(id);
+        const isGroup = groups.find(id);
+        if (isUser && !updatedAttrs.userIds.includes(id)) {
+          updatedAttrs.userIds.push(id);
+        }
+        if (isGroup && !updatedAttrs.groupIds.includes(id)) {
+          updatedAttrs.groupIds.push(id);
+        }
+      });
+    }
+    // If deleting principals, filter them out of both users and groups,
+    // and in this case don't care about the type
+    if (method === 'remove-principals') {
+      updatedAttrs.userIds = updatedAttrs.userIds.filter(id => {
+        return !attrs.principalIds.includes(id);
+      });
+      updatedAttrs.groupIds = updatedAttrs.groupIds.filter(id => {
+        return !attrs.principalIds.includes(id);
+      });
+    }
+    return role.update(updatedAttrs);
   });
 
   // IAM: Groups
