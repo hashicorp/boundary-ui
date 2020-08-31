@@ -40,6 +40,7 @@ Router.map(function () {
               this.route('host-sets', function() {
                 this.route('host-set', { path: ':host_set_id'}, function() {});
               });
+              this.route('add-host-sets');
             });
             this.route('new');
           });

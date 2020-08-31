@@ -21,6 +21,7 @@ actions:
   delete-target: Delete target
   add-host-set: Create Host Set
   add-host: Create Host
+  add-host-sets: Add Host Sets
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -89,6 +90,7 @@ titles:
   targets: Targets
   global: Global
   no-host-set-hosts: No Hosts Available
+  no-host-sets-for-target: No Host Sets Available
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -103,6 +105,7 @@ descriptions:
   targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
   target-host-sets-welcome: Add Host Sets to this target to provide access.
   no-host-set-hosts: Before associating hosts with this host set, create hosts within the host catalog.
+  no-host-sets-for-target: No host sets are available to add to this target.
 states:
   info: Info
   success: Success

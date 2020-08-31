@@ -14,6 +14,11 @@ export default class GeneratedHostSetModel extends BaseModel {
   }) type;
 
   @attr('string', {
+    description: 'The owning host catalog ID.',
+    readOnly: true
+  }) host_catalog_id;
+
+  @attr('string', {
     description: 'Optional name for identification purposes'
   }) name;
 
