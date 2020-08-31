@@ -5,6 +5,7 @@ actions:
   remove: Remove
   dismiss: Dismiss
   save: Save
+  manage: Manage
   help: Need help?
   authenticate: Authenticate
   deauthenticate: Deauthenticate
@@ -119,7 +120,6 @@ form:
     type: Type
     identification: Username
     password: Password
-    manage: Manage
     grant: Grant
     principal: Principal
     address: Address
