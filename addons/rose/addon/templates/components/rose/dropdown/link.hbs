@@ -1,8 +1,18 @@
-<LinkTo
-  ...attributes
-  @route={{if @route @route "index"}}
-  @model={{@model}}
-  class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
->
-  {{yield}}
-</LinkTo>
+{{#if @model}}
+  <LinkTo
+    ...attributes
+    @route={{@route}}
+    @model={{@model}}
+    class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+  >
+    {{yield}}
+  </LinkTo>
+{{else}}
+  <LinkTo
+    ...attributes
+    @route={{@route}}
+    class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+  >
+    {{yield}}
+  </LinkTo>
+{{/if}}
