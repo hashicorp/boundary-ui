@@ -1,7 +1,7 @@
 <Rose::Layout::Page as |page|>
   <page.header>
     <h2>{{t "resources.auth-method"}}</h2>
-    <Rose::Badge @style="outline">
+    <Rose::Badge>
       {{t (concat 'auth.method-types.' @model.type)}}
     </Rose::Badge>
   </page.header>

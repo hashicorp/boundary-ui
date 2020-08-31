@@ -10,8 +10,8 @@
   display: inline-block;
 
   --color: var(--ui-gray-starker-1);
-  --border-color: var(--ui-gray-subtler-5);
-  --background-color: none;
+  --border-color: transparent;
+  --background-color: var(--ui-gray-subtler-4);
 
   color: var(--color);
   border-color: var(--border-color);
