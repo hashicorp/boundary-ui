@@ -237,4 +237,20 @@ module('Acceptance | roles', function (hooks) {
   test('new grants can be added and saved or canceled', async function (assert) {
     assert.expect(0);
   });
+
+  test('viewing role principals', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('can delete a principal', async function(assert) {
+    assert.expect(0);
+  });
+
+  test('select and save principals to add', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('select and cancel principals to add', async function (assert) {
+    assert.expect(0);
+  });
 });
