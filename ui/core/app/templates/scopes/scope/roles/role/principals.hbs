@@ -1,26 +1,57 @@
 {{title (t 'titles.principals')}}
 
-<Rose::Table as |table|>
-  <table.header as |header|>
-    <header.row as |row|>
-      <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
-      <row.headerCell>{{t 'form.label.type'}}</row.headerCell>
-      <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
-    </header.row>
-  </table.header>
-  <table.body as |body|>
-    {{#each @model as |principal|}}
-      <body.row as |row|>
-        <row.headerCell>
-          {{principal.model.displayName}}
-        </row.headerCell>
-        <row.cell>
-          {{t (concat 'resources.' principal.type)}}
-        </row.cell>
-        <row.cell>
-          <code>{{principal.model.id}}</code>
-        </row.cell>
-      </body.row>
-    {{/each}}
-  </table.body>
-</Rose::Table>
+{{#if @model}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
+        <row.headerCell>{{t 'form.label.type'}}</row.headerCell>
+        <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
+        <row.headerCell>{{t "form.label.actions"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model as |principal|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{principal.model.displayName}}
+          </row.headerCell>
+          <row.cell>
+            {{t (concat 'resources.' principal.type)}}
+          </row.cell>
+          <row.cell>
+            <code>{{principal.model.id}}</code>
+          </row.cell>
+            <row.cell>
+            <Rose::Dropdown
+              @icon="more-horizontal"
+              @iconOnly={{true}}
+              @dropdownRight={{true}}
+              @text="{{t "actions.manage"}}" as |dropdown|
+            >
+              <dropdown.button
+                name="{{t "actions.remove"}}"
+                @style="danger"
+                {{on "click" (route-action "removePrincipal" principal.model)}}
+              >
+                {{t "actions.remove"}}
+              </dropdown.button>
+            </Rose::Dropdown>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "titles.role-principals-welcome"}} as |message|>
+      <message.description>
+        {{t "descriptions.role-principals-welcome"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}

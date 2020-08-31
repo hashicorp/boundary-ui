@@ -1,7 +1,14 @@
 import Route from '@ember/routing/route';
 import { all } from 'rsvp';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
+
+  // =services
+  @service intl;
+  @service notify;
+
 
   // =methods
 
@@ -34,4 +41,23 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     return all(users.concat(groups));
   }
 
+  // =actions
+
+  /**
+   * Remove a principal from the current role and redirect to principals index.
+   * @param {UserModel, GroupModel} principal
+   */
+  @action
+  async removePrincipal(principal) {
+    try {
+      const role = this.modelFor('scopes.scope.roles.role');
+      await role.removePrincipal(principal.id);
+      this.refresh();
+      this.notify.success(this.intl.t('notify.delete-success'));
+      this.transitionTo('scopes.scope.roles.role.principals');
+    } catch (error) {
+      // TODO: replace with translated strings
+      this.notify.error(error.message, { closeAfter: null });
+    }
+  }
 }

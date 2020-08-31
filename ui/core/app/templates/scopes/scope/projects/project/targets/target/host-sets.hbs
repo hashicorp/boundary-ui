@@ -25,8 +25,14 @@
             <code>{{hostSet.model.id}}</code>
           </row.cell>
           <row.cell>
-            <Rose::Dropdown @icon="more-horizontal" @iconOnly={{true}} @dropdownRight={{true}} @text="{{t "actions.manage"}}" as |dropdown|>
+            <Rose::Dropdown
+              @icon="more-horizontal"
+              @iconOnly={{true}}
+              @dropdownRight={{true}}
+              @text="{{t "actions.manage"}}" as |dropdown|
+            >
               <dropdown.button
+                name="{{t "actions.remove"}}"
                 @style="danger"
                 {{on "click" (route-action "removeHostSet" @model hostSet.model)}}
               >
