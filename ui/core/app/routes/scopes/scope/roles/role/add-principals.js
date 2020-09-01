@@ -29,21 +29,11 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     const { scopeID } = role;
     const options = { adapterOptions: { scopeID } };
 
-    return {
+    return hash({
       role,
       users: this.store.findAll('user', options),
       groups: this.store.findAll('group', options)
-    };
-  }
-
-  /**
-   * Checks for unassigned principals.
-   * @param {RoleModel} role
-   * @param {[UserModel]} users
-   * @param {[GroupModel]} groups
-   */
-  canAssignPrincipals(role, users, groups) {
-    return role.principals.length != (users.length + groups.length);
+    });
   }
 
   /**
