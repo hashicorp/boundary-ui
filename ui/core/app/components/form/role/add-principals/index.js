@@ -34,5 +34,4 @@ export default class FormRoleAddPrincipalsComponent extends Component {
   submit(fn) {
     fn(this.selectedPrincipalIDs);
   }
-
 }
