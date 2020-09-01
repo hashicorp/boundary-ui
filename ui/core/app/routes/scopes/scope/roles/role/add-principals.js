@@ -13,7 +13,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =methods
 
   /**
-   * Emtpy out any previously loaded users and groups
+   * Empty out any previously loaded users and groups
    * (collectively, principals).
    */
   beforeModel() {
@@ -32,8 +32,10 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     });
   }
 
+  // =methods
+
   /**
-   * Empties the actions and navigation outlets and renders a custom header.
+   * Renders the add-principals-specific header template.
    * @override
    */
   renderTemplate() {
@@ -41,17 +43,17 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
 
     this.render('scopes/scope/roles/role/add-principals/-header', {
       into: 'scopes/scope/roles/role',
-      outlet: 'header'
+      outlet: 'header',
     });
 
     this.render('-empty', {
       into: 'scopes/scope/roles/role',
-      outlet: 'actions'
+      outlet: 'navigation',
     });
 
     this.render('-empty', {
       into: 'scopes/scope/roles/role',
-      outlet: 'navigation'
+      outlet: 'actions',
     });
   }
 
@@ -79,5 +81,4 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   cancel() {
     this.replaceWith('scopes.scope.roles.role.principals');
   }
-
 }
