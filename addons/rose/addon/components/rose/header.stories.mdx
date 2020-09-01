@@ -9,7 +9,7 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 
 A header component that allows three distinct sections to be configured: brand, nav, and utilities.
 
-```htmlbars
+```html
 <Rose::Header as |header|>
   <header.brand @logo="logo" @text="Product Name" />
 
@@ -33,6 +33,7 @@ A header component that allows three distinct sections to be configured: brand, 
       <dropdown.link @route="about">Menu item</dropdown.link>
       <dropdown.button>Button menu item</dropdown.button>
     </utilities.dropdown>
+    <utilities.text>user@example.net</utilities.text>
   </header.utilities>
 </Rose::Header>
 ```
@@ -61,11 +62,13 @@ A header component that allows three distinct sections to be configured: brand, 
           <dropdown.link @route="about">Menu item</dropdown.link>
           <dropdown.button>Button menu item</dropdown.button>
         </utilities.dropdown>
+        <utilities.text>{{userEmail}}</utilities.text>
       </header.utilities>
     </Rose::Header>
     `,
     context: {
       brandName: text('brandName', 'Brand Name'),
+      userEmail: text('userEmail', 'user@example.net'),
       dropdownIcon: select(
         'dropdownIcon',
         {

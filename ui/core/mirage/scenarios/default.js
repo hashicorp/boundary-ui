@@ -12,6 +12,7 @@ export default function(server) {
     type: 'org',
     scope: { id: globalScope.id, type: globalScope.type }
   }, 'withChildren')[0];
+  const globalScopeConfig = { scope: { id: globalScope.id, type: globalScope.type } };
   const scope = { id: orgScope.id, type: orgScope.type };
 
   // Auth
@@ -23,6 +24,7 @@ export default function(server) {
 
   // User
   server.createList('user', 5, { scope });
+  server.createList('user', 2, globalScopeConfig);
   // Group
   server.createList('group', 5, { scope });
   // Role

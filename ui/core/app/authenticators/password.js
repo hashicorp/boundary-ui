@@ -51,11 +51,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    */
   authenticate() {
     return super.authenticate(...arguments)
-      .then(data => {
-        const token = data?.token;
-        if (token) this.addTokenToAuthorization(token);
-        return data;
-      });
+      .then((data) => this.buildConfig(data));
   }
 
   /**
@@ -65,10 +61,8 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @param {object} data
    * @return {object}
    */
-  restore(data) {
-    const token = data?.token;
-    if (token) this.addTokenToAuthorization(token);
-    return super.restore(data);
+  async restore(data) {
+    return super.restore(this.buildConfig(data));
   }
 
   /**
@@ -84,5 +78,27 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
     if (!headers) adapterPrototype.headers = {};
     adapterPrototype.headers.Authorization = null;
     if (token) adapterPrototype.headers.Authorization = `Bearer ${token}`;
+  }
+
+  /**
+   * Use authentication result to use auth token and load user config
+   */
+  async buildConfig(data) {
+    const token = data?.token;
+    if (token) this.addTokenToAuthorization(token);
+    if(data?.user_id && data?.scope?.id) {
+      data.user = await this.loadUser(data.user_id, data.scope.id);
+    }
+    return data;
+  }
+
+  /**
+   * Load user from authenticated user id and current scope.
+   * @param {number} userID
+   * @param {number} scopeID
+   * @return {UserModel}
+   */
+  loadUser(userID, scopeID) {
+    return this.store.findRecord('user', userID, { adapterOptions: { scopeID } });
   }
 }
