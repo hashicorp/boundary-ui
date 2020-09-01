@@ -14,6 +14,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
 
   /**
    * Empty out any previously loaded users and groups.
+   * (collectively, principals).
    */
   beforeModel() {
     this.store.unloadAll('user');
@@ -38,6 +39,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
 
   /**
    * Renders the add-principals-specific header template.
+   * Empties the actions and navigation outlets and renders a custom empty header.
    * @override
    */
   renderTemplate() {
@@ -62,7 +64,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =actions
 
   /**
-   * Save principal IDs to current role.
+   * Save principal IDs to current role via the API.
    * @param {RoleModel} role
    * @param {[string]} principalIDs
    */
