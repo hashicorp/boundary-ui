@@ -217,4 +217,9 @@ module('Acceptance | groups', function (hooks) {
       'Displays primary error message.'
     );
   });
+
+  test('can view group members', async function (assert) {
+    assert.expect(0);
+  });
+  
 });

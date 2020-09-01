@@ -1,0 +1,53 @@
+{{title (t 'titles.members')}}
+
+{{#if @model.members}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
+        <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
+        <row.headerCell>{{t "form.label.actions"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model.members as |member|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{member.displayName}}
+          </row.headerCell>
+          <row.cell>
+            <code>{{member.id}}</code>
+          </row.cell>
+            <row.cell>
+            <Rose::Dropdown
+              @icon="more-horizontal"
+              @iconOnly={{true}}
+              @showCaret={{false}}
+              @dropdownRight={{true}}
+              @text="{{t "actions.manage"}}" as |dropdown|
+            >
+              <dropdown.button
+                @style="danger"
+                {{on "click" (route-action "removeMember" @model member)}}
+              >
+                {{t "actions.remove"}}
+              </dropdown.button>
+            </Rose::Dropdown>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "titles.group-members-welcome"}} as |message|>
+      <message.description>
+        {{t "descriptions.group-members-welcome"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}

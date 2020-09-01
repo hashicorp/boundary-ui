@@ -1,3 +1,40 @@
 {{title @model.displayName}}
 
-{{outlet}}
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.group"}}</h2>
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.groups.group.index'>
+        {{t 'titles.details'}}
+      </nav.link>
+      <nav.link @route='scopes.scope.groups.group.members'>
+        {{t 'titles.members'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.actions>
+    <Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+      <dropdown.button
+        @style="danger"
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "delete" @model)}}
+      >
+        {{t 'actions.delete-group'}}
+      </dropdown.button>
+    </Rose::Dropdown>
+  </page.actions>
+
+  <page.body>
+    {{outlet}}
+  </page.body>
+
+</Rose::Layout::Page>
