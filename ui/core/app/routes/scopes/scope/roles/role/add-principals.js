@@ -13,26 +13,38 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =methods
 
   /**
-   * Empty out any previously loaded users and groups
-   * (collectively, principals).
+   * Empty out any previously loaded users and groups.
    */
   beforeModel() {
     this.store.unloadAll('user');
     this.store.unloadAll('group');
   }
 
+  /**
+   * Returns the current role, all users, and all groups
+   * @return {{role: RoleModel, users: [UserModel], groups: [GroupModel]}}
+   */
   model() {
     const role = this.modelFor('scopes.scope.roles.role');
     const { scopeID } = role;
     const options = { adapterOptions: { scopeID } };
-    return hash({
+
+    return {
       role,
       users: this.store.findAll('user', options),
       groups: this.store.findAll('group', options)
-    });
+    };
   }
 
-  // =methods
+  /**
+   * Checks for unassigned principals.
+   * @param {RoleModel} role
+   * @param {[UserModel]} users
+   * @param {[GroupModel]} groups
+   */
+  canAssignPrincipals(role, users, groups) {
+    return role.principals.length != (users.length + groups.length);
+  }
 
   /**
    * Renders the add-principals-specific header template.
@@ -57,8 +69,10 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     });
   }
 
+  // =actions
+
   /**
-   * Saves principal IDs into the role via the API.
+   * Save principal IDs to current role.
    * @param {RoleModel} role
    * @param {[string]} principalIDs
    */

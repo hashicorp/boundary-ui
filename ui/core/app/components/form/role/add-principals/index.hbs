@@ -1,66 +1,53 @@
-{{#if this.hasAvailablePrincipals}}
-  <Rose::Form
-    class="full-width"
-    @onSubmit={{fn this.submit @submit}}
-    @cancel={{@cancel}}
-    @disabled={{@model.isSaving}}
-    @error={{@model.errors.base}}
-    as |form|
-  >
+<Rose::Form
+  class="full-width"
+  @onSubmit={{fn this.submit @submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  as |form|
+>
 
-    <form.actions
-      @submitText={{t "actions.add-principals"}}
-      @cancelText={{t "actions.cancel"}} />
+  <form.actions
+    @submitText={{t "actions.add-principals"}}
+    @cancelText={{t "actions.cancel"}} />
 
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
-          <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
-          <row.headerCell>{{t 'form.label.type'}}</row.headerCell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each @groups as |group|}}
-          <body.row as |row|>
-            <row.cell>
-              <form.checkbox
-                @label={{group.id}}
-                @description={{group.description}}
-                onChange={{fn this.togglePrincipal group}} />
-            </row.cell>
-            <row.cell>{{group.name}}</row.cell>
-            <row.cell>
-              <Rose::Badge>{{t "resources.group"}}</Rose::Badge>
-            </row.cell>
-          </body.row>
-        {{/each}}
-        {{#each @users as |user|}}
-          <body.row as |row|>
-            <row.cell>
-              <form.checkbox
-                @label={{user.id}}
-                @description={{user.description}}
-                onChange={{fn this.togglePrincipal user}} />
-            </row.cell>
-            <row.cell>{{user.name}}</row.cell>
-            <row.cell>
-              <Rose::Badge>{{t "resources.user"}}</Rose::Badge>
-            </row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
+        <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
+        <row.headerCell>{{t 'form.label.type'}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each this.filteredPrincipals as |principal|}}
+        <body.row as |row|>
+          <row.cell>
+            <form.checkbox
+              @label={{principal.id}}
+              @description={{principal.description}}
+              onChange={{fn this.togglePrincipal principal}} />
+          </row.cell>
+          <row.cell>{{principal.name}}</row.cell>
+          <row.cell>
+            <Rose::Badge>{{t (concat 'resources.' principal.constructor.modelName)}}</Rose::Badge>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
 
-  </Rose::Form>
-{{/if}}
+</Rose::Form>
 
-{{#unless this.hasAvailablePrincipals}}
+
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.no-principals"}} as |message|>
+    <Rose::Message @title={{t "titles.no-principals-available"}} as |message|>
       <message.description>
-        {{t "descriptions.no-principals"}}
+        {{t "descriptions.no-principals-available"}}
       </message.description>
+      <message.link @route="scopes.scope.roles.role.principals">
+        <Rose::Icon @name="chevron-left" />
+        {{t "actions.back"}}
+      </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
-{{/unless}}
