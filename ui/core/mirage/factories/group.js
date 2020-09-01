@@ -11,7 +11,7 @@ export default factory.extend({
   withMembers: trait({
     afterCreate(group, server) {
       const scope = group.scope;
-      const members = server.createList('user', 5, { scope });
+      const members = server.createList('user', 2, { scope });
       group.update({ members });
     }
   })
