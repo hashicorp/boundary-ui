@@ -10,7 +10,7 @@ export default class GroupModel extends GeneratedGroupModel {
    * Members is read-only under normal circumstances.  But members can
    * be persisted via calls to `addMembers()` or `removeMembers()`.
    */
-  @attr( {readOnly: true}) member_ids;
+  @attr({readOnly: true}) member_ids;
 
   /**
    * An array of resolved user instances.
