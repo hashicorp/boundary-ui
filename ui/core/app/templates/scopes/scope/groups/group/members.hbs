@@ -29,7 +29,7 @@
             >
               <dropdown.button
                 @style="danger"
-                {{on "click" (route-action "removeMember" @model member)}}
+                {{on "click" (route-action "removeMember" @model.group member)}}
               >
                 {{t "actions.remove"}}
               </dropdown.button>
