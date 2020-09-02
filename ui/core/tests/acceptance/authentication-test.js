@@ -18,6 +18,7 @@ module('Acceptance | authentication', function (hooks) {
   let globalScope;
   let orgScope;
   let orgScopeID;
+  let user;
   let scopesURL;
   let orgScopeURL;
   let scope;
@@ -42,10 +43,12 @@ module('Acceptance | authentication', function (hooks) {
       },
       'withChildren'
     );
+
     scope = { id: orgScope.id, type: orgScope.type };
     authMethod = this.server.create('auth-method', { scope });
     orgScopeID = orgScope.id;
     authMethodID = authMethod.id;
+    user = this.server.create('user', { scope: { id: orgScopeID } });
     scopesURL = `/scopes`;
     orgScopeURL = `/scopes/${orgScopeID}`;
     globalAuthenticateURL = `/scopes/global/authenticate`;
