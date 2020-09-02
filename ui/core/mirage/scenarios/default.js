@@ -25,8 +25,10 @@ export default function(server) {
   // User
   server.createList('user', 5, { scope });
   server.createList('user', 1, globalScopeConfig);
-  // Group
-  server.createList('group', 5, { scope });
+
+  // Groups and Users
+  server.createList('group', 5, { scope }, 'withMembers');
+
   // Role
   server.createList('role', 5, { scope }, 'withPrincipals');
 

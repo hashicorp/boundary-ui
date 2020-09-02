@@ -110,6 +110,31 @@ export default function() {
   this.get('/scopes/:scope_id/groups/:id');
   this.patch('/scopes/:scope_id/groups/:id');
   this.del('/scopes/:scope_id/groups/:id');
+  this.post('/scopes/:scope_id/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
+    const group = groups.find(id);
+    const updatedAttrs = {
+      version: attrs.version,
+      memberIds: group.memberIds
+    };
+    // If adding members, push them into the array
+    if (method === 'add-members') {
+      attrs.memberIds.forEach(id => {
+        if (!updatedAttrs.memberIds.includes(id)) {
+          updatedAttrs.memberIds.push(id);
+        }
+      });
+    }
+    // If deleting members, filter them out of the array
+    if (method === 'remove-members') {
+      updatedAttrs.memberIds = updatedAttrs.memberIds.filter(id => {
+        return !attrs.memberIds.includes(id);
+      });
+    }
+    return group.update(updatedAttrs);
+  });
 
   // Other resources
   // host-catalog
