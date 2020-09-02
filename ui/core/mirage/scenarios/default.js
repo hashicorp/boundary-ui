@@ -21,10 +21,8 @@ export default function(server) {
   // same items for request at all scopes.
   server.createList('auth-method', 3, { scope });
 
-  // User
-  server.createList('user', 5, { scope });
-  // Group
-  server.createList('group', 5, { scope });
+  // Groups and Users
+  server.createList('group', 5, { scope }, 'withMembers');
   // Role
   server.createList('role', 5, { scope }, 'withPrincipals');
 
