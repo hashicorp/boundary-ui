@@ -226,14 +226,6 @@ module('Acceptance | roles', function (hooks) {
     assert.expect(0);
   });
 
-  test('select and save principals to add', async function (assert) {
-    assert.expect(0);
-  });
-
-  test('select and cancel principals to add', async function (assert) {
-    assert.expect(0);
-  });
-
   test('grants can be updated and saved or canceled', async function (assert) {
     assert.expect(0);
   });
