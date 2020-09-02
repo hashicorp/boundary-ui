@@ -26,14 +26,12 @@ A header component that allows three distinct sections to be configured: brand, 
   <header.utilities as |utilities|>
     <utilities.dropdown
       @text="user@example.net"
-      @iconOnly={{true}}
       @icon="user-square-fill" as |dropdown|
     >
       <dropdown.link @route="index">Menu item</dropdown.link>
       <dropdown.link @route="about">Menu item</dropdown.link>
       <dropdown.button>Button menu item</dropdown.button>
     </utilities.dropdown>
-    <utilities.text>user@example.net</utilities.text>
   </header.utilities>
 </Rose::Header>
 ```
@@ -55,7 +53,6 @@ A header component that allows three distinct sections to be configured: brand, 
       <header.utilities as |utilities|>
         <utilities.dropdown
           @text="user@example.net"
-          @iconOnly={{true}}
           @icon={{dropdownIcon}} as |dropdown|
         >
           <dropdown.link @route="index">Menu item</dropdown.link>

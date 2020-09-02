@@ -10,7 +10,7 @@
       {{#if this.session.isAuthenticated}}
         <header.utilities as |utilities|>
           <utilities.dropdown
-            @iconOnly={{true}}
+            @text={{this.session.data.authenticated.user.name}}
             @icon="user-square-fill" as |dropdown|
           >
             <dropdown.button
@@ -19,7 +19,6 @@
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
           </utilities.dropdown>
-          <utilities.text>{{this.session.data.authenticated.user.name}}</utilities.text>
         </header.utilities>
       {{/if}}
 
