@@ -16,7 +16,7 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
    * Returns users associated with this group.
    * @return {Promise{group: GroupModel, members: Promise{[UserModel]}}}
    */
-  async model() {
+  model() {
     const { id: scopeID } = this.modelFor('scopes.scope');
     const group = this.modelFor('scopes.scope.groups.group');
     return hash({
