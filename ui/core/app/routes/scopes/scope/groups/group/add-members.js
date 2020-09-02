@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { hash } from 'rsvp';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
 
@@ -16,6 +17,18 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
    */
   beforeModel() {
     this.store.unloadAll('user');
+  }
+
+  /**
+   * Loads all users and returns them with the group.
+   * @return {Promise{GroupModel, [UserModel]}}
+   */
+  model() {
+    const { id: scopeID } = this.modelFor('scopes.scope');
+    return hash({
+      group: this.modelFor('scopes.scope.groups.group'),
+      users: this.store.findAll('user', { adapterOptions: { scopeID } })
+    });
   }
 
   /**

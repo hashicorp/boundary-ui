@@ -221,5 +221,17 @@ module('Acceptance | groups', function (hooks) {
   test('can view group members', async function (assert) {
     assert.expect(0);
   });
-  
+
+  test('can delete members', async function(assert) {
+    assert.expect(0);
+  });
+
+  test('select and save members to add', async function (assert) {
+    assert.expect(0);
+  });
+
+  test('select and cancel members to add', async function (assert) {
+    assert.expect(0);
+  });
+
 });
