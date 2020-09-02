@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { hash, all } from 'rsvp';
 
 export default class ScopesScopeGroupsGroupMembersRoute extends Route {
 
@@ -12,21 +13,18 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
   // =methods
 
   /**
-   * Empty out all users before loading members.
-   */
-  beforeModel() {
-    this.store.unloadAll('user');
-  }
-
-  /**
    * Returns users associated with this group.
-   * @return {Promise{[UserModel]}}
+   * @return {Promise{group: GroupModel, members: Promise{[UserModel]}}}
    */
-  async model() {
+  model() {
     const { id: scopeID } = this.modelFor('scopes.scope');
     const group = this.modelFor('scopes.scope.groups.group');
-    await this.store.findAll('user', { adapterOptions: { scopeID } });
-    return group;
+    return hash({
+      group,
+      members: all(group.member_ids.map(id =>
+        this.store.findRecord('user', id, { adapterOptions: { scopeID } })
+      ))
+    });
   }
 
   // =actions
@@ -40,6 +38,7 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
   async removeMember(group, member) {
     try {
       await group.removeMember(member.id);
+      await this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
     } catch (error) {
       // TODO: replace with translated strings
