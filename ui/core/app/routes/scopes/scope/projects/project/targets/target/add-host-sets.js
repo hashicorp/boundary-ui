@@ -13,7 +13,7 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
   // =methods
 
   /**
-   * Emtpy out any previously loaded host catalogs and host sets.
+   * Empty out any previously loaded host catalogs and host sets.
    */
   beforeModel() {
     this.store.unloadAll('host-catalog');
