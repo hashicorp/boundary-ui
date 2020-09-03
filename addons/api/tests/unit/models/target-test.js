@@ -59,7 +59,7 @@ module('Unit | Model | target', function (hooks) {
 
   test('it has an `addHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/targets/123abc:add-host-sets', (schema, request) => {
+    this.server.post('/v1/targets/123abc:add-host-sets', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         host_set_ids: ['123_abc', 'foobar'],
@@ -92,7 +92,7 @@ module('Unit | Model | target', function (hooks) {
 
   test('it has a `removeHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/targets/123abc:remove-host-sets', (schema, request) => {
+    this.server.post('/v1/targets/123abc:remove-host-sets', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         host_set_ids: ['1', '3'],
@@ -125,7 +125,7 @@ module('Unit | Model | target', function (hooks) {
 
   test('it has a `removeHostSet` method that deletes a single host set using `removeHostSets` method', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/targets/123abc:remove-host-sets', (schema, request) => {
+    this.server.post('/v1/targets/123abc:remove-host-sets', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         host_set_ids: ['3'],

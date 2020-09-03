@@ -14,6 +14,12 @@ export default class ApplicationSerializer extends RESTSerializer {
     scope: { serialize: false }
   };
 
+  /**
+   * Whether or not to serialize the scope ID into scope_id.
+   * @type {boolean}
+   */
+  serializeScopeID = false;
+
   // =methods
 
   /**
@@ -65,6 +71,21 @@ export default class ApplicationSerializer extends RESTSerializer {
   serializeIntoHash(hash, typeClass, snapshot, options) {
     const serialized = this.serialize(snapshot, options);
     Object.assign(hash, serialized);
+  }
+
+  /**
+   * Optionally serializes the scope ID into `scope_id`.
+   * @override
+   * @param {Snapshot} snapshot
+   * @return {object}
+   */
+  serialize(snapshot) {
+    const serialized = super.serialize(...arguments);
+    if (this.serializeScopeID) {
+      const scope_id = snapshot?.attr('scope')?.attr('scope_id');
+      if (scope_id) serialized.scope_id = scope_id;
+    }
+    return serialized;
   }
 
   /**

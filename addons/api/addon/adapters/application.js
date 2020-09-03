@@ -41,6 +41,7 @@ function prenormalizeArrayResponse(response) {
 export default class ApplicationAdapter extends RESTAdapter.extend(
   AdapterBuildURLMixin
 ) {
+  
   // =attributes
 
   /**
@@ -56,6 +57,12 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @type {string}
    */
   namespace = get(config, 'api.namespace');
+
+  /**
+   * Whether or not to prefix the URL with the resource scope.
+   * @type {boolean}
+   */
+  hasScopePrefix = true;
 
   // =methods
 
@@ -80,7 +87,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     const isScope = modelName === 'scope';
     let scopePath = '';
     let scopeID = '';
-    if (snapshot) {
+    if (snapshot && this.hasScopePrefix) {
       // Not all snapshots have `attr` (such as array snapshots),
       // so we do this sort of ugly check.
       if (snapshot.attr) {
