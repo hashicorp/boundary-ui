@@ -54,7 +54,10 @@ Router.map(function () {
       });
 
       this.route('groups', function () {
-        this.route('group', { path: ':group_id' }, function () {});
+        this.route('group', { path: ':group_id' }, function () {
+          this.route('members');
+          this.route('add-members');
+        });
         this.route('new');
       });
 

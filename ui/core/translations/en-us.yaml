@@ -24,6 +24,7 @@ actions:
   add-host: Create Host
   add-host-sets: Add Host Sets
   add-principals: Add Principals
+  add-members: Add Members
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -94,6 +95,9 @@ titles:
   no-host-set-hosts: No Hosts Available
   no-host-sets-for-target: No Host Sets Available
   role-principals-welcome: No Principals Associated
+  members: Members
+  group-members-welcome: Welcome to Members
+  no-available-users: No Users Available
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -110,6 +114,8 @@ descriptions:
   no-host-set-hosts: Before associating hosts with this host set, create hosts within the host catalog.
   no-host-sets-for-target: No host sets are available to add to this target.
   role-principals-welcome: No principals are available in this role.
+  group-members-welcome: Users belonging to this group appear here.
+  no-available-users: No users are available to add to this group.
 states:
   info: Info
   success: Success
