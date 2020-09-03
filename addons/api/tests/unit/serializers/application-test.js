@@ -29,6 +29,48 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
+  test('it does not serialize scope_id when serializeScopeID is false', function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('user');
+    const record = store.createRecord('user', {
+      name: 'User',
+      description: 'Description',
+      scope: {
+        scope_id: 'global',
+        type: 'global'
+      }
+    });
+    const serializedRecord = record.serialize();
+    assert.equal(serializer.serializeScopeID, false);
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description'
+    });
+  });
+
+  test('it does serialize scope_id when serializeScopeID is true', function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('user');
+    serializer.serializeScopeID = true;
+    const record = store.createRecord('user', {
+      name: 'User',
+      description: 'Description',
+      scope: {
+        scope_id: 'global',
+        type: 'global'
+      }
+    });
+    const serializedRecord = record.serialize();
+    assert.equal(serializer.serializeScopeID, true);
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description',
+      scope_id: 'global'
+    });
+  });
+
   test('it serializes non-nullish version fields', function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');

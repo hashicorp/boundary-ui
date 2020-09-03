@@ -41,7 +41,7 @@ function prenormalizeArrayResponse(response) {
 export default class ApplicationAdapter extends RESTAdapter.extend(
   AdapterBuildURLMixin
 ) {
-  
+
   // =attributes
 
   /**
@@ -84,7 +84,6 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    */
   urlPrefix(path, parentURL, modelName, id, snapshot) {
     const prefix = super.urlPrefix(...arguments);
-    const isScope = modelName === 'scope';
     let scopePath = '';
     let scopeID = '';
     if (snapshot && this.hasScopePrefix) {
@@ -101,7 +100,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     // Only non-scope resources need a scope path, since scope resources
     // aren't technically "scoped" the same way.
     // Ensure a slash is added between prefix + scope path if needed.
-    if (!isScope && scopeID && prefix.charAt(prefix.length - 1) !== '/') {
+    if (scopeID && prefix.charAt(prefix.length - 1) !== '/') {
       scopePath = `/scopes/${scopeID}`;
     }
     return `${prefix}${scopePath}`;

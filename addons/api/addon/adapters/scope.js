@@ -3,6 +3,16 @@ import { serializeIntoHash } from '@ember-data/adapter/-private';
 
 export default class ScopeAdapter extends ApplicationAdapter {
 
+  // =attributes
+
+  /**
+   * Scopes do not include a scope prefix.
+   * @override
+   */
+  hasScopePrefix = false;
+
+  // =methods
+
   /**
    * Identical to default method except that we pass a query parameter
    * indicating the parent scope.
