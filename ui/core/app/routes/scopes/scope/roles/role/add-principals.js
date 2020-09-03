@@ -29,7 +29,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     const role = this.modelFor('scopes.scope.roles.role');
     const { scopeID } = role;
     const options = { adapterOptions: { scopeID } };
-
     return hash({
       role,
       users: this.store.findAll('user', options),
@@ -87,4 +86,5 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   cancel() {
     this.replaceWith('scopes.scope.roles.role.principals');
   }
+
 }

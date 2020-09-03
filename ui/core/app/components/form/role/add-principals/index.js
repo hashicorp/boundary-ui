@@ -4,6 +4,7 @@ import { A } from '@ember/array';
 
 export default class FormRoleAddPrincipalsIndexComponent extends Component {
 
+
   // =properties
 
   /**
@@ -52,4 +53,5 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
   submit(fn) {
     fn(this.selectedPrincipalIDs);
   }
+
 }
