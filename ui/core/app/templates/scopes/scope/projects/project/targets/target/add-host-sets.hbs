@@ -16,6 +16,10 @@
       <message.description>
         {{t "descriptions.no-host-sets-for-target"}}
       </message.description>
+      <message.link @route="scopes.scope.projects.project.targets.target.host-sets">
+        <Rose::Icon @name="chevron-left" />
+        {{t "actions.back"}}
+      </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
 {{/unless}}

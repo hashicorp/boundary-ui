@@ -7,6 +7,7 @@ actions:
   save: Save
   manage: Manage
   help: Need help?
+  back: Back
   authenticate: Authenticate
   deauthenticate: Deauthenticate
   choose-org: Choose Scope
@@ -95,6 +96,7 @@ titles:
   no-host-set-hosts: No Hosts Available
   no-host-sets-for-target: No Host Sets Available
   role-principals-welcome: No Principals Associated
+  no-principals-available: No Principals Available
   members: Members
   group-members-welcome: Welcome to Members
   no-available-users: No Users Available
@@ -114,6 +116,7 @@ descriptions:
   no-host-set-hosts: Before associating hosts with this host set, create hosts within the host catalog.
   no-host-sets-for-target: No host sets are available to add to this target.
   role-principals-welcome: No principals are available in this role.
+  no-principals-available: Principals are not available for assignment.
   group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.
 states:

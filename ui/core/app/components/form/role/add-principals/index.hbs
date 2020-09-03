@@ -21,31 +21,17 @@
         </header.row>
       </table.header>
       <table.body as |body|>
-        {{#each @groups as |group|}}
+        {{#each this.filteredPrincipals as |principal|}}
           <body.row as |row|>
             <row.cell>
               <form.checkbox
-                @label={{group.id}}
-                @description={{group.description}}
-                onChange={{fn this.togglePrincipal group}} />
+                @label={{principal.id}}
+                @description={{principal.description}}
+                onChange={{fn this.togglePrincipal principal}} />
             </row.cell>
-            <row.cell>{{group.name}}</row.cell>
+            <row.cell>{{principal.name}}</row.cell>
             <row.cell>
-              <Rose::Badge>{{t "resources.group"}}</Rose::Badge>
-            </row.cell>
-          </body.row>
-        {{/each}}
-        {{#each @users as |user|}}
-          <body.row as |row|>
-            <row.cell>
-              <form.checkbox
-                @label={{user.id}}
-                @description={{user.description}}
-                onChange={{fn this.togglePrincipal user}} />
-            </row.cell>
-            <row.cell>{{user.name}}</row.cell>
-            <row.cell>
-              <Rose::Badge>{{t "resources.user"}}</Rose::Badge>
+              <Rose::Badge>{{t (concat 'resources.' principal.constructor.modelName)}}</Rose::Badge>
             </row.cell>
           </body.row>
         {{/each}}
@@ -57,10 +43,14 @@
 
 {{#unless this.hasAvailablePrincipals}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.no-principals"}} as |message|>
+    <Rose::Message @title={{t "titles.no-principals-available"}} as |message|>
       <message.description>
-        {{t "descriptions.no-principals"}}
+        {{t "descriptions.no-principals-available"}}
       </message.description>
+      <message.link @route="scopes.scope.roles.role.principals">
+        <Rose::Icon @name="chevron-left" />
+        {{t "actions.back"}}
+      </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
 {{/unless}}

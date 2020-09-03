@@ -13,7 +13,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =methods
 
   /**
-   * Emtpy out any previously loaded users and groups
+   * Empty out any previously loaded users and groups.
    * (collectively, principals).
    */
   beforeModel() {
@@ -21,6 +21,10 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     this.store.unloadAll('group');
   }
 
+  /**
+   * Returns the current role, all users, and all groups
+   * @return {{role: RoleModel, users: [UserModel], groups: [GroupModel]}}
+   */
   model() {
     const role = this.modelFor('scopes.scope.roles.role');
     const { scopeID } = role;
@@ -33,7 +37,8 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   }
 
   /**
-   * Empties the actions and navigation outlets and renders a custom header.
+   * Renders the add-principals-specific header template.
+   * Empties the actions and navigation outlets and renders a custom empty header.
    * @override
    */
   renderTemplate() {
@@ -41,22 +46,24 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
 
     this.render('scopes/scope/roles/role/add-principals/-header', {
       into: 'scopes/scope/roles/role',
-      outlet: 'header'
+      outlet: 'header',
     });
 
     this.render('-empty', {
       into: 'scopes/scope/roles/role',
-      outlet: 'actions'
+      outlet: 'navigation',
     });
 
     this.render('-empty', {
       into: 'scopes/scope/roles/role',
-      outlet: 'navigation'
+      outlet: 'actions',
     });
   }
 
+  // =actions
+
   /**
-   * Saves principal IDs into the role via the API.
+   * Save principal IDs to current role via the API.
    * @param {RoleModel} role
    * @param {[string]} principalIDs
    */

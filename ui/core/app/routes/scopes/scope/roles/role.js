@@ -17,31 +17,26 @@ export default class ScopesScopeRolesRoleRoute extends Route {
   }
 
   /**
-   * Renders the route-specific templates for header, navigation,
+   * Renders the role specific templates for header, navigation,
    * and actions page sections.
    * @override
-   * @param {object} controller
-   * @param {object} model
    */
-  renderTemplate(controller, model) {
+  renderTemplate() {
     super.renderTemplate(...arguments);
 
     this.render('scopes/scope/roles/role/-header', {
       into: 'scopes/scope/roles/role',
       outlet: 'header',
-      model
-    });
-
-    this.render('scopes/scope/roles/role/-actions', {
-      into: 'scopes/scope/roles/role',
-      outlet: 'actions',
-      model
     });
 
     this.render('scopes/scope/roles/role/-navigation', {
       into: 'scopes/scope/roles/role',
       outlet: 'navigation',
-      model
+    });
+
+    this.render('scopes/scope/roles/role/-actions', {
+      into: 'scopes/scope/roles/role',
+      outlet: 'actions',
     });
   }
 }
