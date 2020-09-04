@@ -12,25 +12,20 @@ export default function(server) {
     type: 'org',
     scope: { id: globalScope.id, type: globalScope.type }
   }, 'withChildren')[0];
-  const scope = { id: orgScope.id, type: orgScope.type };
+  const scopePojo = { id: orgScope.id, type: orgScope.type };
 
   // Auth
-
-  // Auth methods exist both at the global scope and the org scope.
-  // For simplicity we don't scope our mock auth methods and just return the
-  // same items for request at all scopes.
-  server.createList('auth-method', 3, { scope });
+  server.createList('auth-method', 3, { scope: scopePojo });
 
   // Groups and Users
-  server.createList('group', 5, { scope }, 'withMembers');
+  server.createList('group', 5, { scope: scopePojo }, 'withMembers');
   // Role
-  server.createList('role', 5, { scope }, 'withPrincipals');
+  server.createList('role', 5, { scope: scopePojo }, 'withPrincipals');
 
   // Other resources
-
-  server.db.scopes.where({type: 'project'}).forEach(({ id, type }) => {
-    const scope = { id, type };
-    server.createList('host-catalog', 2, { scope }, 'withChildren');
+  server.schema.scopes.where({type: 'project'}).models.forEach(scope => {
+    const scopePojo = { id: scope.id, type: scope.type };
+    server.createList('host-catalog', 2, { scope: scopePojo }, 'withChildren');
     server.createList('target', 2, { scope }, 'withRandomHostSets');
   });
 

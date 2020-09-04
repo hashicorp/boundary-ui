@@ -183,12 +183,10 @@ export default function() {
   // target
 
   this.get('/targets', function ({ targets }, { queryParams: { scope_id } }) {
-    return targets.where(target => target.scope?.id === scope_id);
+    return targets.where(target => target.scopeId === scope_id);
   });
-  this.post('/targets', function ({ targets, scopes }) {
+  this.post('/targets', function ({ targets }) {
     const attrs = this.normalizedRequestAttrs();
-    const scope = scopes.findBy(scope => scope.id === attrs.scopeId);
-    attrs.scope = { id: scope.id, type: scope.type };
     return targets.create(attrs);
   });
   this.get('/targets/:id');
