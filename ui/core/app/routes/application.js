@@ -59,4 +59,20 @@ export default class ApplicationRoute extends Route.extend(
   invalidateSession() {
     this.session.invalidate();
   }
+
+  /**
+   * Invalidates the session if a 401 error occurs and returns false to
+   * prevent further error handling.
+   * Returns true in all other cases, allowing error handling to occur (such
+   * as displaying the `error.hbs` template, if one exists).
+   */
+  @action
+  error(e) {
+    const isUnauthenticated = e?.errors[0]?.isUnauthenticated;
+    if (isUnauthenticated) {
+      this.session.invalidate();
+      return false;
+    }
+    return true;
+  }
 }
