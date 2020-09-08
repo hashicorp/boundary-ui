@@ -130,4 +130,17 @@ module('Unit | Model | group', function(hooks) {
     const model = store.peekRecord('group', '123abc');
     await model.removeMember('3');
   });
+
+  test('it defaults `members_ids` to an empty array when model instance does not define it', function(assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: 'group_123',
+        type: 'group'
+      }
+    });
+    const group = store.peekRecord('group', 'group_123');
+    assert.equal(group.member_ids.length, 0, 'Group has empty member_ids by default');
+  });
 });
