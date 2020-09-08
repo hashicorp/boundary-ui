@@ -182,12 +182,17 @@ export default function() {
 
   // target
 
-  this.get('/scopes/:scope_id/targets');
-  this.post('/scopes/:scope_id/targets');
-  this.get('/scopes/:scope_id/targets/:id');
-  this.patch('/scopes/:scope_id/targets/:id');
-  this.del('/scopes/:scope_id/targets/:id');
-  this.post('/scopes/:scope_id/targets/:idMethod', function ({ targets }, { params: { idMethod } }) {
+  this.get('/targets', function ({ targets }, { queryParams: { scope_id } }) {
+    return targets.where(target => target.scopeId === scope_id);
+  });
+  this.post('/targets', function ({ targets }) {
+    const attrs = this.normalizedRequestAttrs();
+    return targets.create(attrs);
+  });
+  this.get('/targets/:id');
+  this.patch('/targets/:id');
+  this.del('/targets/:id');
+  this.post('/targets/:idMethod', function ({ targets }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
     const method = idMethod.split(':')[1];

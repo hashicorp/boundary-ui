@@ -41,6 +41,7 @@ function prenormalizeArrayResponse(response) {
 export default class ApplicationAdapter extends RESTAdapter.extend(
   AdapterBuildURLMixin
 ) {
+
   // =attributes
 
   /**
@@ -56,6 +57,12 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @type {string}
    */
   namespace = get(config, 'api.namespace');
+
+  /**
+   * Whether or not to prefix the URL with the resource scope.
+   * @type {boolean}
+   */
+  hasScopePrefix = true;
 
   // =methods
 
@@ -77,10 +84,9 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    */
   urlPrefix(path, parentURL, modelName, id, snapshot) {
     const prefix = super.urlPrefix(...arguments);
-    const isScope = modelName === 'scope';
     let scopePath = '';
     let scopeID = '';
-    if (snapshot) {
+    if (snapshot && this.hasScopePrefix) {
       // Not all snapshots have `attr` (such as array snapshots),
       // so we do this sort of ugly check.
       if (snapshot.attr) {
@@ -94,7 +100,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     // Only non-scope resources need a scope path, since scope resources
     // aren't technically "scoped" the same way.
     // Ensure a slash is added between prefix + scope path if needed.
-    if (!isScope && scopeID && prefix.charAt(prefix.length - 1) !== '/') {
+    if (scopeID && prefix.charAt(prefix.length - 1) !== '/') {
       scopePath = `/scopes/${scopeID}`;
     }
     return `${prefix}${scopePath}`;

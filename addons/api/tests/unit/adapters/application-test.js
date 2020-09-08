@@ -35,14 +35,16 @@ module('Unit | Adapter | application', function (hooks) {
     assert.equal(prefix, `v1/scopes/${scopeID}`);
   });
 
-  test('it does not prefixes URLs with `scopeID` for scope resources', function (assert) {
-    assert.expect(1);
+  test('it does not prefix URLs with `scopeID` when hasScopePrefix is `false`', function (assert) {
+    assert.expect(2);
     const scopeID = 'global';
     const adapter = this.owner.lookup('adapter:application');
-    const prefix = adapter.urlPrefix(null, null, 'scope', null, {
+    adapter.hasScopePrefix = false;
+    const prefix = adapter.urlPrefix(null, null, null, null, {
       adapterOptions: { scopeID }
     });
-    assert.equal(prefix, `v1`);
+    assert.ok(config.api.namespace);
+    assert.equal(prefix, 'v1');
   });
 
   test('it generates correct default URL suffixes', function (assert) {

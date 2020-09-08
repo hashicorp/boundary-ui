@@ -15,6 +15,10 @@ module('Unit | Serializer | target', function(hooks) {
         { host_set_id: '1', host_catalog_id: '2' },
         { host_set_id: '3', host_catalog_id: '4' }
       ],
+      scope: {
+        scope_id: 'org_1',
+        type: 'org'
+      },
       version: 1
     });
     const snapshot = record._createSnapshot();
@@ -24,7 +28,8 @@ module('Unit | Serializer | target', function(hooks) {
       name: 'User',
       description: 'Description',
       version: 1,
-      protocol: null
+      protocol: null,
+      scope_id: 'org_1'
     });
 
   });
