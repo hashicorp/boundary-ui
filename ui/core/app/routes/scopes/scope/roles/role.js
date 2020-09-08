@@ -12,6 +12,7 @@ export default class ScopesScopeRolesRoleRoute extends Route {
   model({ role_id }) {
     const { id: scopeID } = this.modelFor('scopes.scope');
     return this.store.findRecord('role', role_id, {
+      reload: true,
       adapterOptions: { scopeID },
     });
   }
