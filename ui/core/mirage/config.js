@@ -26,12 +26,12 @@ export default function() {
     });
     return results;
   });
-  this.post('/scopes', function ({ scopes }, request) {
+  this.post('/scopes', function ({ scopes }) {
     // Parent scope comes through the payload via `scope_id`, but this needs
     // to be expanded to a scope object `scope: {id:..., type:...}` before
     // saving, which is the gist of this function.
     const attrs = this.normalizedRequestAttrs();
-    const parentScopeAttrs = this.serialize(scopes.find(request.queryParams.scope_id));
+    const parentScopeAttrs = this.serialize(scopes.find(attrs.scopeId));
     attrs.scope = parentScopeAttrs;
     return scopes.create(attrs);
   });
