@@ -16,18 +16,4 @@ module('Unit | Adapter | scope', function(hooks) {
     assert.equal(prefix, `v1`);
   });
   
-  test('it generates correct createRecord URLs with a scope_id query parameter', function (assert) {
-    assert.expect(1);
-    this.server.post('/v1/scopes', (schema, { queryParams }) =>{
-      assert.equal(queryParams.scope_id, 'o_1');
-    });
-    const store = this.owner.lookup('service:store');
-    const scope = store.createRecord('scope', {
-      scopeID: 'o_1'
-    });
-    const type = scope.constructor;
-    const snapshot = scope._createSnapshot();
-    const adapter = this.owner.lookup('adapter:scope');
-    adapter.createRecord(store, type, snapshot);
-  });
 });
