@@ -15,7 +15,7 @@
         @icon="user-organization"
       as |dropdown|>
         {{#each this.sortedScopes as |scope|}}
-          <dropdown.link @route="scopes.scope.authenticate" @model={{scope}}>
+          <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
             {{scope.displayName}}
           </dropdown.link>
         {{/each}}
@@ -25,7 +25,7 @@
 
       <Rose::Nav::Tabs as |nav|>
         {{#each @model.authMethods as |authMethod|}}
-          <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod}}>
+          <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
             {{t (concat "auth.method-types." authMethod.type)}}
           </nav.link>
         {{/each}}
