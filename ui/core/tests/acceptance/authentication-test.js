@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click, find, findAll } from '@ember/test-helpers';
+import { visit, currentURL, fillIn, click, find, findAll, setupOnerror } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -179,5 +179,17 @@ module('Acceptance | authentication', function (hooks) {
     await click(menu[menu.length - 1]);
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+  });
+
+  test('401 responses result in deauthentication', async function (assert) {
+    assert.expect(2);
+    authenticateSession({ scope: { id: globalScope.id, type: globalScope.type } });
+    await visit(orgsURL);
+    assert.ok(currentSession().isAuthenticated, 'Session begins authenticated, before encountering 401');
+    this.server.get('/scopes', () => new Response(401));
+    setupOnerror(() => {
+      assert.notOk(currentSession().isAuthenticated, 'Session is unauthenticated, after encountering 401');
+    });
+    await visit(projectsURL);
   });
 });

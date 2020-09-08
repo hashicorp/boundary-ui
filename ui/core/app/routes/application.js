@@ -59,4 +59,15 @@ export default class ApplicationRoute extends Route.extend(
   invalidateSession() {
     this.session.invalidate();
   }
+
+  @action
+  error(e) {
+    const isUnauthenticated = e?.errors[0]?.isUnauthenticated;
+    if (isUnauthenticated) {
+      this.session.invalidate();
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
