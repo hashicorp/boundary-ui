@@ -13,6 +13,7 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
   model({ group_id }) {
     const { id: scopeID } = this.modelFor('scopes.scope');
     return this.store.findRecord('group', group_id, {
+      reload: true,
       adapterOptions: { scopeID },
     });
   }

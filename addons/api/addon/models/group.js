@@ -1,6 +1,7 @@
 import GeneratedGroupModel from '../generated/models/group';
 import { attr } from '@ember-data/model';
 import { computed } from '@ember/object';
+import { A } from '@ember/array';
 
 export default class GroupModel extends GeneratedGroupModel {
 
@@ -10,13 +11,14 @@ export default class GroupModel extends GeneratedGroupModel {
    * Members is read-only under normal circumstances.  But members can
    * be persisted via calls to `addMembers()` or `removeMembers()`.
    */
-  @attr({readOnly: true}) member_ids;
+  @attr({readOnly: true, defaultValue: () => A()}) member_ids;
 
   /**
    * An array of resolved user instances.
    * Unresolvable instances are excluded from the array.
    * @type {[UserModel]}
    */
+  // TODO: Use fragments array to read cross scope members.
   @computed('member_ids.[]')
   get members() {
     return this.member_ids
