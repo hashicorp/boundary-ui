@@ -107,12 +107,14 @@ export default function() {
   });
 
   // IAM: Groups
-  this.get('/scopes/:scope_id/groups');
-  this.post('/scopes/:scope_id/groups');
-  this.get('/scopes/:scope_id/groups/:id');
-  this.patch('/scopes/:scope_id/groups/:id');
-  this.del('/scopes/:scope_id/groups/:id');
-  this.post('/scopes/:scope_id/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
+  this.get('/groups', ({ groups }, { queryParams: { scope_id: scopeId } }) => {
+    return groups.where({ scopeId });
+  });
+  this.post('/groups');
+  this.get('/groups/:id');
+  this.patch('/groups/:id');
+  this.del('/groups/:id');
+  this.post('/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
     const method = idMethod.split(':')[1];

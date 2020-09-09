@@ -18,7 +18,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    */
   beforeModel() {
     this.store.unloadAll('user');
-    this.store.unloadAll('group');
+    //this.store.unloadAll('group');
   }
 
   /**
@@ -32,7 +32,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     return hash({
       role,
       users: this.store.findAll('user', options),
-      groups: this.store.findAll('group', options)
+      groups: this.store.query('group', { scope_id: scopeID })
     });
   }
 

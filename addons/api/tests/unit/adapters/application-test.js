@@ -93,13 +93,11 @@ module('Unit | Adapter | application', function (hooks) {
   test('it can request records through the store from a specified scope', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    this.server.get('/v1/scopes/p_456/groups', () => {
-      assert.ok(true, 'Scoped resource URL was requested.');
+    this.server.get('/v1/groups', (_, { queryParams: { scope_id }}) => {
+      assert.equal(scope_id, 'p_456', 'Scoped resource URL was requested.');
       return {items: []};
     });
-    await store.findAll('group', {
-      adapterOptions: { scopeID: 'p_456' }
-    });
+    await store.query('group', { scope_id: 'p_456' });
   });
 
   test('it rewrites PUT to PATCH, but leaves others unchanged', function (assert) {

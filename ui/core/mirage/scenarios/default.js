@@ -19,7 +19,7 @@ export default function(server) {
   server.createList('auth-method', 3, { scope: orgScope });
 
   // Groups and Users
-  server.createList('group', 5, { scope: scopePojo }, 'withMembers');
+  server.createList('group', 5, { scope: orgScope }, 'withMembers');
   // Role
   server.createList('role', 5, { scope: scopePojo }, 'withPrincipals');
 

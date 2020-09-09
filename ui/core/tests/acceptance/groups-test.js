@@ -30,10 +30,7 @@ module('Acceptance | groups', function (hooks) {
     );
 
     const group = this.server.create('group', {
-      scope: {
-        id: orgScope.id,
-        type: orgScope.type,
-      },
+      scope: orgScope
     });
 
     groupsURL = `/scopes/${orgScope.id}/groups`;
@@ -78,7 +75,7 @@ module('Acceptance | groups', function (hooks) {
 
   test('saving a new group with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/scopes/:scope_id/groups', () => {
+    this.server.post('/groups', () => {
       return new Response(
         400,
         {},
@@ -139,7 +136,7 @@ module('Acceptance | groups', function (hooks) {
 
   test('saving an existing group with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.patch('/scopes/:scope_id/groups/:id', () => {
+    this.server.patch('/groups/:id', () => {
       return new Response(
         400,
         {},
@@ -175,7 +172,7 @@ module('Acceptance | groups', function (hooks) {
 
   test('errors are displayed when save project fails', async function (assert) {
     assert.expect(1);
-    this.server.patch('/scopes/:scope_id/groups/:id', () => {
+    this.server.patch('/groups/:id', () => {
       return new Response(
         490,
         {},
@@ -198,7 +195,7 @@ module('Acceptance | groups', function (hooks) {
 
   test('errors are displayed when delete project fails', async function (assert) {
     assert.expect(1);
-    this.server.del('/scopes/:scope_id/groups/:id', () => {
+    this.server.del('/groups/:id', () => {
       return new Response(
         490,
         {},
