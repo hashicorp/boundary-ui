@@ -30,10 +30,7 @@ module('Acceptance | users', function (hooks) {
     );
 
     const user = this.server.create('user', {
-      scope: {
-        id: orgScope.id,
-        type: orgScope.type,
-      },
+      scope: orgScope
     });
 
     usersURL = `/scopes/${orgScope.id}/users`;
@@ -78,7 +75,7 @@ module('Acceptance | users', function (hooks) {
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('scopes/:scope_id/users', () => {
+    this.server.post('/users', () => {
       return new Response(
         400,
         {},
@@ -139,7 +136,7 @@ module('Acceptance | users', function (hooks) {
 
   test('saving an existing user with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.patch('/scopes/:scope_id/users/:id', () => {
+    this.server.patch('/users/:id', () => {
       return new Response(
         400,
         {},
@@ -175,7 +172,7 @@ module('Acceptance | users', function (hooks) {
 
   test('errors are displayed when saving user fails', async function (assert) {
     assert.expect(1);
-    this.server.patch('/scopes/:scope_id/users/:id', () => {
+    this.server.patch('/users/:id', () => {
       return new Response(
         490,
         {},
@@ -198,7 +195,7 @@ module('Acceptance | users', function (hooks) {
 
   test('errors are displayed when user deletion fails', async function (assert) {
     assert.expect(1);
-    this.server.del('/scopes/:scope_id/users/:id', () => {
+    this.server.del('/users/:id', () => {
       return new Response(
         490,
         {},

@@ -13,26 +13,16 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =methods
 
   /**
-   * Empty out any previously loaded users and groups.
-   * (collectively, principals).
-   */
-  beforeModel() {
-    this.store.unloadAll('user');
-    //this.store.unloadAll('group');
-  }
-
-  /**
    * Returns the current role, all users, and all groups
    * @return {{role: RoleModel, users: [UserModel], groups: [GroupModel]}}
    */
   model() {
     const role = this.modelFor('scopes.scope.roles.role');
-    const { scopeID } = role;
-    const options = { adapterOptions: { scopeID } };
+    const { scopeID: scope_id } = role;
     return hash({
       role,
-      users: this.store.findAll('user', options),
-      groups: this.store.query('group', { scope_id: scopeID })
+      users: this.store.query('user', { scope_id }),
+      groups: this.store.query('group', { scope_id })
     });
   }
 

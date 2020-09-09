@@ -10,9 +10,6 @@ export default class ScopesScopeUsersUserRoute extends Route {
    * @return {UserModel}
    */
   async model({ user_id }) {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return this.store.findRecord('user', user_id, {
-      adapterOptions: { scopeID },
-    });
+    return this.store.findRecord('user', user_id);
   }
 }

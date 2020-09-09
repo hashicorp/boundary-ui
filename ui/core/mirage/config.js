@@ -54,11 +54,47 @@ export default function() {
   this.post('/scopes/:id_method', deauthHandler);
 
   // IAM : Users
-  this.get('/scopes/:scope_id/users');
-  this.post('/scopes/:scope_id/users');
-  this.get('/scopes/:scope_id/users/:id');
-  this.patch('/scopes/:scope_id/users/:id');
-  this.del('/scopes/:scope_id/users/:id');
+  this.get('/users', ({ users }, { queryParams: { scope_id: scopeId } }) => {
+    return users.where({ scopeId });
+  });
+  this.post('/users');
+  this.get('/users/:id');
+  this.patch('/users/:id');
+  this.del('/users/:id');
+
+  // IAM: Groups
+  this.get('/groups', ({ groups }, { queryParams: { scope_id: scopeId } }) => {
+    return groups.where({ scopeId });
+  });
+  this.post('/groups');
+  this.get('/groups/:id');
+  this.patch('/groups/:id');
+  this.del('/groups/:id');
+  this.post('/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
+    const group = groups.find(id);
+    const updatedAttrs = {
+      version: attrs.version,
+      memberIds: group.memberIds
+    };
+    // If adding members, push them into the array
+    if (method === 'add-members') {
+      attrs.memberIds.forEach(id => {
+        if (!updatedAttrs.memberIds.includes(id)) {
+          updatedAttrs.memberIds.push(id);
+        }
+      });
+    }
+    // If deleting members, filter them out of the array
+    if (method === 'remove-members') {
+      updatedAttrs.memberIds = updatedAttrs.memberIds.filter(id => {
+        return !attrs.memberIds.includes(id);
+      });
+    }
+    return group.update(updatedAttrs);
+  });
 
   // IAM: Roles
   this.get('/scopes/:scope_id/roles');
@@ -104,40 +140,6 @@ export default function() {
       });
     }
     return role.update(updatedAttrs);
-  });
-
-  // IAM: Groups
-  this.get('/groups', ({ groups }, { queryParams: { scope_id: scopeId } }) => {
-    return groups.where({ scopeId });
-  });
-  this.post('/groups');
-  this.get('/groups/:id');
-  this.patch('/groups/:id');
-  this.del('/groups/:id');
-  this.post('/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const group = groups.find(id);
-    const updatedAttrs = {
-      version: attrs.version,
-      memberIds: group.memberIds
-    };
-    // If adding members, push them into the array
-    if (method === 'add-members') {
-      attrs.memberIds.forEach(id => {
-        if (!updatedAttrs.memberIds.includes(id)) {
-          updatedAttrs.memberIds.push(id);
-        }
-      });
-    }
-    // If deleting members, filter them out of the array
-    if (method === 'remove-members') {
-      updatedAttrs.memberIds = updatedAttrs.memberIds.filter(id => {
-        return !attrs.memberIds.includes(id);
-      });
-    }
-    return group.update(updatedAttrs);
   });
 
   // Other resources
