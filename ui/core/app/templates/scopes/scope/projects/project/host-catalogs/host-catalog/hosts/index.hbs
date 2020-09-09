@@ -6,6 +6,7 @@
         <row.headerCell>{{t "form.label.name"}}</row.headerCell>
         <row.headerCell>{{t "form.label.type"}}</row.headerCell>
         <row.headerCell>{{t "form.label.id"}}</row.headerCell>
+        <row.headerCell>{{t "form.label.address"}}</row.headerCell>
       </header.row>
     </table.header>
     <table.body as |body|>
@@ -25,6 +26,9 @@
           </row.cell>
           <row.cell>
             <code>{{host.id}}</code>
+          </row.cell>
+          <row.cell>
+            <code>{{host.attributes.address}}</code>
           </row.cell>
         </body.row>
       {{/each}}

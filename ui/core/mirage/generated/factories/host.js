@@ -12,6 +12,6 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   version: () => random.number(),
-  address: () => internet.ipv6(),
+  attributes: () => { return { address: internet.ipv6() } },
 
 });
