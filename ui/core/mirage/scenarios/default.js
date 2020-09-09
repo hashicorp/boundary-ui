@@ -15,7 +15,8 @@ export default function(server) {
   const scopePojo = { id: orgScope.id, type: orgScope.type };
 
   // Auth
-  server.createList('auth-method', 3, { scope: scopePojo });
+  server.createList('auth-method', 3, { scope: globalScope });
+  server.createList('auth-method', 3, { scope: orgScope });
 
   // Groups and Users
   server.createList('group', 5, { scope: scopePojo }, 'withMembers');

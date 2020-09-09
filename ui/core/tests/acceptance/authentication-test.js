@@ -21,7 +21,9 @@ module('Acceptance | authentication', function (hooks) {
   let scopesURL;
   let orgScopeURL;
   let scope;
+  let globalAuthMethod;
   let authMethod;
+  let globalAuthMethodID;
   let authMethodID;
   let globalAuthenticateURL;
   let authenticateURL;
@@ -43,14 +45,16 @@ module('Acceptance | authentication', function (hooks) {
       'withChildren'
     );
     scope = { id: orgScope.id, type: orgScope.type };
-    authMethod = this.server.create('auth-method', { scope });
+    globalAuthMethod = this.server.create('auth-method', { scope: globalScope });
+    authMethod = this.server.create('auth-method', { scope: orgScope });
     orgScopeID = orgScope.id;
+    globalAuthMethodID = globalAuthMethod.id;
     authMethodID = authMethod.id;
     scopesURL = `/scopes`;
     orgScopeURL = `/scopes/${orgScopeID}`;
     globalAuthenticateURL = `/scopes/global/authenticate`;
     authenticateURL = `/scopes/${orgScopeID}/authenticate`;
-    authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${authMethodID}`;
+    authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${globalAuthMethodID}`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
     orgsURL = `/scopes/global/orgs`;
     projectsURL = `/scopes/${orgScopeID}/projects`;
@@ -74,18 +78,8 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting auth method when the scope cannot be loaded is still allowed', async function (assert) {
     assert.expect(1);
-    orgScope.destroy();
-    this.server.get('/scopes', ({ scopes }, { queryParams: { scope_id } }) => {
-      // Default parent scope is global
-      if (!scope_id) scope_id = 'global';
-      const results = scopes.where(scope => {
-        return scope.scope ? scope.scope.id === scope_id : false
-      });
-      if (!results.length) {
-        return new Response(404);
-      } else {
-        return results;
-      }
+    this.server.get('/scopes', () => {
+      return new Response(404);
     });
     await visit(authMethodAuthenticateURL);
     await a11yAudit();

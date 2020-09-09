@@ -9,8 +9,7 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
    * @param {string} params.auth_method_id
    * @return {authMethodModel}
    */
-  async model({ auth_method_id}) {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return this.store.findRecord('auth-method', auth_method_id, { adapterOptions: { scopeID }});
+  async model({ auth_method_id }) {
+    return this.store.findRecord('auth-method', auth_method_id);
   }
 }

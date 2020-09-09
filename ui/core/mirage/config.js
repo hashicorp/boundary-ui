@@ -41,11 +41,13 @@ export default function() {
 
   // Auth & IAM resources
 
-  this.get('/scopes/:scope_id/auth-methods');
-  this.post('/scopes/:scope_id/auth-methods');
-  this.get('/scopes/:scope_id/auth-methods/:id');
-  this.patch('/scopes/:scope_id/auth-methods/:id');
-  this.del('/scopes/:scope_id/auth-methods/:id');
+  this.get('/auth-methods', ({ authMethods }, { queryParams: { scope_id: scopeId } }) => {
+    return authMethods.where({ scopeId });
+  });
+  this.post('/auth-methods');
+  this.get('/auth-methods/:id');
+  this.patch('/auth-methods/:id');
+  this.del('/auth-methods/:id');
 
   // Authenticate/deauthenticate routes
   this.post('/scopes/:scope_id/auth-methods/:id_method', authHandler);
