@@ -1,0 +1,16 @@
+{{title (t "actions.add-hosts")}}
+
+{{!-- <Form::HostSet::Hosts
+  @model={{@model.hostSet}}
+  @hosts={{@model.hosts}}
+  @submit={{route-action "save" @model.hostSet}}
+  @cancel={{route-action "cancel" @model.hostSet}}
+  @toggleHost={{route-action "toggleHost" @model.hostSet}}
+/> --}}
+
+<Form::HostSet::AddHosts
+  @model={{@model.hostSet}}
+  @hosts={{@model.hosts}}
+  @submit={{route-action "addHosts" @model.hostSet}}
+  @cancel={{route-action "cancel"}}
+/>
