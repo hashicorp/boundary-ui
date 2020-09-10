@@ -20,23 +20,24 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   }
 
   /**
-   * Loads all hosts under the current host catalog.
-   * @return {Promise{[HostModel]}}
+   * Loads all hosts under the current host set.
+   * @return {Promise{HostSetModel,[HostModel]}}
    */
   async model() {
     const scopeID = this.modelFor('scopes.scope.projects.project').id;
     const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
     const hostSet = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set');
     return hash({
-      hostSet: this.store.findRecord('host-set', hostSet.id, { adapterOptions: { scopeID, hostCatalogID } }),
-      hosts: all(hostSet.host_ids.map(hostFragment =>
-        this.store.findRecord('host', hostFragment.value, { adapterOptions: { scopeID, hostCatalogID } })
+      hostSet,
+      hosts: all(hostSet.host_ids.map(host =>
+        this.store.findRecord('host', host.value, { adapterOptions: { scopeID, hostCatalogID } })
       ))
     });
   }
 
   /**
-   * Remove a host from the current hostset and redirect to hosts index.
+   * Remove a host from the current host set and redirect to hosts index.
+   * @param {HostSetModel} hostSet
    * @param {HostModel} host
    */
   @action
@@ -44,7 +45,6 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
     try {
       const scopeID = this.modelFor('scopes.scope.projects.project').id;
       const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-      //FIXME: Are adapterOptions needed?
       await hostSet.removeHost(host.id, { adapterOptions : { scopeID, hostCatalogID } });
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));

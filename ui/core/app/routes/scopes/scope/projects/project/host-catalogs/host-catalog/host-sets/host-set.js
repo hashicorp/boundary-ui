@@ -13,6 +13,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
     const { id: scopeID } = this.modelFor('scopes.scope.projects.project');
     const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
     return this.store.findRecord('host-set', host_set_id, {
+      reload: true,
       adapterOptions: { scopeID, hostCatalogID }
     });
   }

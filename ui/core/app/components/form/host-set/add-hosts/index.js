@@ -23,7 +23,7 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
   }
 
   /**
-   * Hosts not currently assigned to current host set.
+   * Hosts currently not assigned to current host set.
    * @type {[HostModel]}
    */
   @computed('args.{model,hosts}')
@@ -34,6 +34,10 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
 
   // =actions
 
+  /**
+   * Toggle host selection
+   * @param {HostModel} host
+   */
   @action
   toggleHost(host) {
     if (!this.selectedHostIDs.includes(host.id)) {
@@ -43,6 +47,10 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
     }
   }
 
+  /**
+   * Callback submit with selected host ids
+   * @param {requestCallback} fn
+   */
   @action
   submit(fn) {
     fn(this.selectedHostIDs);
