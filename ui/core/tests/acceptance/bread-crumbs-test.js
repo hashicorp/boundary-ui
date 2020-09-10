@@ -45,12 +45,7 @@ module('Acceptance | breadcrumbs', function (hooks) {
     user = this.server.create('user', { scope: orgScope });
     role = this.server.create('role', { scope: orgScope });
     group = this.server.create('group', { scope: orgScope });
-    hostCatalog = this.server.create('host-catalog', {
-      scope: {
-        id: project.id,
-        type: project.type
-      }
-    });
+    hostCatalog = this.server.create('host-catalog', { scope: getProjectScope() });
 
     projectsURL = `/scopes/${orgScope.id}/projects`;
     newProjectURL = `${projectsURL}/new`;

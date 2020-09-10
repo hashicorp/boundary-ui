@@ -24,8 +24,7 @@ export default function(server) {
 
   // Other resources
   server.schema.scopes.where({type: 'project'}).models.forEach(scope => {
-    const scopePojo = { id: scope.id, type: scope.type };
-    server.createList('host-catalog', 2, { scope: scopePojo }, 'withChildren');
+    server.createList('host-catalog', 2, { scope }, 'withChildren');
     server.createList('target', 2, { scope }, 'withRandomHostSets');
   });
 

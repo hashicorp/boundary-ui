@@ -13,10 +13,9 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
   // =methods
 
   /**
-   * Empty out any previously loaded host catalogs and host sets.
+   * Empty out any previously loaded host sets.
    */
   beforeModel() {
-    this.store.unloadAll('host-catalog');
     this.store.unloadAll('host-set');
   }
 
@@ -28,8 +27,8 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
     const target =
       this.modelFor('scopes.scope.projects.project.targets.target');
     const { scopeID } = target;
-    const hostCatalogs =
-      await this.store.findAll('host-catalog', { adapterOptions: { scopeID } });
+    const { id: scope_id } = this.modelFor('scopes.scope.projects.project');
+    const hostCatalogs = await this.store.query('host-catalog', { scope_id });
     await all(hostCatalogs.map(({ id: hostCatalogID }) =>
       this.store
         .findAll('host-set', { adapterOptions: { scopeID, hostCatalogID } })
