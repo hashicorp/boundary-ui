@@ -13,21 +13,22 @@ export default class HostSetSerializer extends ApplicationSerializer {
    * @return {object}
    */
   serialize(snapshot) {
-    const serializeHostIDs = snapshot?.adapterOptions?.serializeHostIDs;
     let serialized = super.serialize(...arguments);
-    if (serializeHostIDs) serialized = this.serializeWithHostIDs(snapshot);
+    const hostIDs = snapshot?.adapterOptions?.hostIDs;
+    if (hostIDs) serialized = this.serializeWithHostIDs(snapshot, hostIDs);
     return serialized;
   }
 
   /**
    * Returns a payload containing only the host_ids array.
    * @param {Snapshot} snapshot
+   * @param {[string]} hostIDs
    * @return {object}
    */
-  serializeWithHostIDs(snapshot) {
+  serializeWithHostIDs(snapshot, hostIDs) {
     return {
       version: snapshot.attr('version'),
-      host_ids: snapshot.attr('host_ids').map(hostID => hostID.attr('value'))
+      host_ids: hostIDs,
     };
   }
 
@@ -35,8 +36,8 @@ export default class HostSetSerializer extends ApplicationSerializer {
    * Converts string arrays to object arrays for use with `fragment-string`.
    * E.g. `"foo"` -> `{value: "foo"}`
    * @override
-   * @param {Model} typeClass
-   * @param {Object} hash
+   * @param {Model} modelClass
+   * @param {Object} resourceHash
    * @return {Object}
    */
   normalize(modelClass, resourceHash) {
