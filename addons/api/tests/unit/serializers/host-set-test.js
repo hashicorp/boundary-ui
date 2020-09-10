@@ -11,7 +11,6 @@ module('Unit | Serializer | host set', function(hooks) {
     const record = store.createRecord('host-set', {
       name: 'Host Set 1',
       description: 'Description',
-      host_ids: [{value: '1'}, {value: '2'}, {value: '3'}],
       version: 1
     });
     const snapshot = record._createSnapshot();
@@ -24,7 +23,7 @@ module('Unit | Serializer | host set', function(hooks) {
     });
   });
 
-  test('it serializes only host_ids when `adapterOptions.serializeHostIDs` is true', function (assert) {
+  test('it serializes only host_ids when `adapterOptions.hostIDs` is true', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
@@ -36,11 +35,11 @@ module('Unit | Serializer | host set', function(hooks) {
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      serializeHostIDs: true
+      hostIDs: ['4', '5']
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      host_ids: ['1', '2', '3'],
+      host_ids: ['4', '5'],
       version: 1
     });
   });
