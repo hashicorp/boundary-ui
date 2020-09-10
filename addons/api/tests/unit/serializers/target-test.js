@@ -19,7 +19,8 @@ module('Unit | Serializer | target', function(hooks) {
         scope_id: 'org_1',
         type: 'org'
       },
-      version: 1
+      version: 1,
+      type: 'tcp'
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -28,7 +29,7 @@ module('Unit | Serializer | target', function(hooks) {
       name: 'User',
       description: 'Description',
       version: 1,
-      protocol: null,
+      type: 'tcp',
       scope_id: 'org_1'
     });
 
