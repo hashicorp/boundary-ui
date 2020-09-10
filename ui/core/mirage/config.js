@@ -183,9 +183,30 @@ export default function() {
   this.post('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
     const hostSet = hostSets.find(id);
-    attrs.id = id;
-    return hostSet.update(attrs);
+    const updatedAttrs = {
+      version: attrs.version,
+      hostIds: hostSet.hostIds
+    }
+
+    // If adding hosts, push them into the array
+    if(method === 'add-hosts') {
+      attrs.hostIds.forEach(id => {
+        if(!updatedAttrs.hostIds.includes(id)) {
+          updatedAttrs.hostIds.push(id);
+        }
+      })
+    }
+
+    // If deleting hosts, filter them out of the array
+    if (method === 'remove-hosts') {
+      updatedAttrs.hostIds = updatedAttrs.hostIds.filter(id => {
+        return !attrs.hostIds.includes(id);
+      });
+    }
+
+    return hostSet.update(updatedAttrs);
   });
 
   // target
