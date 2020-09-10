@@ -26,6 +26,7 @@ actions:
   add-host-sets: Add Host Sets
   add-principals: Add Principals
   add-members: Add Members
+  add-hosts: Add Hosts
 auth:
   titles:
     no-scopes: No Scopes Available
