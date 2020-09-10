@@ -14,7 +14,7 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `saveGrants` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/roles/123abc:set-grants', (schema, request) => {
+    this.server.post('/v1/roles/123abc:set-grants', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         grant_strings: ['grant1', 'grant2'],
@@ -44,7 +44,7 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has an `addPrincipals` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/roles/123abc:add-principals', (schema, request) => {
+    this.server.post('/v1/roles/123abc:add-principals', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         principal_ids: ['123_abc', 'foobar'],
@@ -77,7 +77,7 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `removePrincipals` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/roles/123abc:remove-principals', (schema, request) => {
+    this.server.post('/v1/roles/123abc:remove-principals', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         principal_ids: ['1', '3'],
@@ -110,7 +110,7 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `removePrincipal` method that deletes a single principal using `removePrincipals` method', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/scopes/o_1/roles/123abc:remove-principals', (schema, request) => {
+    this.server.post('/v1/roles/123abc:remove-principals', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         principal_ids: ['3'],

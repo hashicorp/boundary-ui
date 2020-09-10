@@ -30,10 +30,7 @@ module('Acceptance | roles', function (hooks) {
     );
 
     const role = this.server.create('role', {
-      scope: {
-        id: orgScope.id,
-        type: orgScope.type,
-      },
+      scope: orgScope
     });
 
     rolesURL = `/scopes/${orgScope.id}/roles`;
@@ -78,7 +75,7 @@ module('Acceptance | roles', function (hooks) {
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/scopes/:scope_id/roles', () => {
+    this.server.post('/roles', () => {
       return new Response(
         400,
         {},
@@ -139,7 +136,7 @@ module('Acceptance | roles', function (hooks) {
 
   test('saving an existing role with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.patch('/scopes/:scope_id/roles/:id', () => {
+    this.server.patch('/roles/:id', () => {
       return new Response(
         400,
         {},
@@ -175,7 +172,7 @@ module('Acceptance | roles', function (hooks) {
 
   test('errors are displayed when save project fails', async function (assert) {
     assert.expect(1);
-    this.server.patch('/scopes/:scope_id/roles/:id', () => {
+    this.server.patch('/roles/:id', () => {
       return new Response(
         490,
         {},
@@ -198,7 +195,7 @@ module('Acceptance | roles', function (hooks) {
 
   test('errors are displayed when delete project fails', async function (assert) {
     assert.expect(1);
-    this.server.del('/scopes/:scope_id/roles/:id', () => {
+    this.server.del('/roles/:id', () => {
       return new Response(
         490,
         {},

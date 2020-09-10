@@ -23,8 +23,8 @@ export default class ScopesScopeRolesRoute extends Route {
    * @return {Promise{[RoleModel]}}
    */
   async model() {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return this.store.findAll('role', { adapterOptions: { scopeID } });
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    return this.store.query('role', { scope_id });
   }
 
   // =actions

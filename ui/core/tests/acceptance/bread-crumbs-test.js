@@ -43,7 +43,7 @@ module('Acceptance | breadcrumbs', function (hooks) {
 
     project = getProjectScope();
     user = this.server.create('user', { scope: orgScope });
-    role = this.server.create('role');
+    role = this.server.create('role', { scope: orgScope });
     group = this.server.create('group', { scope: orgScope });
     hostCatalog = this.server.create('host-catalog', {
       scope: {

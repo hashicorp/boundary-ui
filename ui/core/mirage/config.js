@@ -97,12 +97,14 @@ export default function() {
   });
 
   // IAM: Roles
-  this.get('/scopes/:scope_id/roles');
-  this.post('/scopes/:scope_id/roles');
-  this.get('/scopes/:scope_id/roles/:id');
-  this.patch('/scopes/:scope_id/roles/:id');
-  this.del('/scopes/:scope_id/roles/:id');
-  this.post('/scopes/:scope_id/roles/:idMethod', function ({ roles, users, groups }, { params: { idMethod } }) {
+  this.get('/roles', ({ roles }, { queryParams: { scope_id: scopeId } }) => {
+    return roles.where({ scopeId });
+  });
+  this.post('/roles');
+  this.get('/roles/:id');
+  this.patch('/roles/:id');
+  this.del('/roles/:id');
+  this.post('/roles/:idMethod', function ({ roles, users, groups }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
     const method = idMethod.split(':')[1];
