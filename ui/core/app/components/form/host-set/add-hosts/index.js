@@ -28,7 +28,7 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
    */
   @computed('args.{model,hosts}')
   get filteredHosts() {
-    const currentHostIDs = this.args.hosts.map(host => host.id);
+    const currentHostIDs = this.args.model.host_ids.map(host => host.value);
     return this.args.hosts.filter(({ id }) => !currentHostIDs.includes(id));
   }
 

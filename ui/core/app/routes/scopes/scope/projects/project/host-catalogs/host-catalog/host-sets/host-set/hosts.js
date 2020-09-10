@@ -25,11 +25,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    */
   async model() {
     const scopeID = this.modelFor('scopes.scope.projects.project').id;
+    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
     const hostSet = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set');
     return hash({
-      hostSet,
-      hosts: all(hostSet.host_ids.map(id =>
-        this.store.findRecord('host', id, { adapterOptions: { scopeID } })
+      hostSet: this.store.findRecord('host-set', hostSet.id, { adapterOptions: { scopeID, hostCatalogID } }),
+      hosts: all(hostSet.host_ids.map(hostFragment =>
+        this.store.findRecord('host', hostFragment.value, { adapterOptions: { scopeID, hostCatalogID } })
       ))
     });
   }
