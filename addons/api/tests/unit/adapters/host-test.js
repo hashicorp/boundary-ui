@@ -22,7 +22,7 @@ module('Unit | Adapter | host', function(hooks) {
     // With hostCatalogID...
     mockSnapshot.adapterOptions.hostCatalogID = hostCatalogID;
     url = adapter.buildURL('host', null, mockSnapshot, 'findAll');
-    assert.equal(url, '/v1/scopes/o_1/host-catalogs/hc_098/hosts:my-custom-method');
+    assert.equal(url, '/v1/host-catalogs/hc_098/hosts:my-custom-method');
   });
 
 });

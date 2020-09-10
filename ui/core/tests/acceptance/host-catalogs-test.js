@@ -36,16 +36,13 @@ module('Acceptance | host catalogs', function (hooks) {
     // Setup Mirage mock resources for this test
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', { type: 'org',
-      scope: { id: instances.scopes.global.id, type: instances.scopes.global.type }
+      scope: { id: 'global', type: 'global' }
     });
     instances.scopes.project = this.server.create('scope', { type: 'project',
-      scope: { id: instances.scopes.org.id, type: instances.scopes.org.type }
+      scope: { id: instances.scopes.org.id, type: 'org' }
     });
     instances.hostCatalog = this.server.create('host-catalog', {
-      scope: {
-        id: instances.scopes.project.id,
-        type: instances.scopes.project.type
-      }
+      scope: instances.scopes.project
     });
 
     // Generate route URLs for resources
@@ -124,7 +121,7 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('errors are displayed when save host catalog fails', async function (assert) {
     assert.expect(1);
-    this.server.patch('/scopes/:scope_id/host-catalogs/:id', () => {
+    this.server.patch('/host-catalogs/:id', () => {
       return new Response(
         490,
         {},
@@ -149,7 +146,7 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('errors are displayed when delete host catalog fails', async function (assert) {
     assert.expect(1);
-    this.server.del('/scopes/:scope_id/host-catalogs/:id', () => {
+    this.server.del('/host-catalogs/:id', () => {
       return new Response(
         490,
         {},
@@ -173,7 +170,7 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('saving a new host catalog with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/scopes/:scope_id/host-catalogs', () => {
+    this.server.post('/host-catalogs', () => {
       return new Response(
         400,
         {},
@@ -211,7 +208,7 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('saving an existing host catalog with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.patch('/scopes/:scope_id/host-catalogs/:id', () => {
+    this.server.patch('/host-catalogs/:id', () => {
       return new Response(
         400,
         {},
