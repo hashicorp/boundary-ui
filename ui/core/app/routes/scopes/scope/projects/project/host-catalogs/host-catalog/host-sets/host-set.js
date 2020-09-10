@@ -10,12 +10,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    * @return {HostSetModel}
    */
   async model({ host_set_id }) {
-    const { id: scopeID } = this.modelFor('scopes.scope.projects.project');
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-    return this.store.findRecord('host-set', host_set_id, {
-      reload: true,
-      adapterOptions: { scopeID, hostCatalogID }
-    });
+    return this.store.findRecord('host-set', host_set_id, { reload: true });
   }
 
   /**
