@@ -26,12 +26,10 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
   async model() {
     const target =
       this.modelFor('scopes.scope.projects.project.targets.target');
-    const { scopeID } = target;
     const { id: scope_id } = this.modelFor('scopes.scope.projects.project');
     const hostCatalogs = await this.store.query('host-catalog', { scope_id });
-    await all(hostCatalogs.map(({ id: hostCatalogID }) =>
-      this.store
-        .findAll('host-set', { adapterOptions: { scopeID, hostCatalogID } })
+    await all(hostCatalogs.map(({ id: host_catalog_id }) =>
+      this.store.query('host-set', { host_catalog_id })
     ));
     const hostSets = this.store.peekAll('host-set');
     return {

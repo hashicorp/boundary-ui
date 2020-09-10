@@ -8,19 +8,6 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   @service intl;
   @service notify;
 
-  // =attributes
-
-  /**
-   * Configure adapter options using current host catalog and
-   * the current project scope.
-   * @return {object}
-   */
-  get adapterOptions() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-    return { adapterOptions : { scopeID, hostCatalogID } };
-  }
-
   // =methods
 
   /**
@@ -29,7 +16,9 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    */
   async model() {
     this.store.unloadAll('host-set');
-    return this.store.findAll('host-set', this.adapterOptions);
+    const { id: host_catalog_id } =
+      this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
+    return this.store.query('host-set', { host_catalog_id });
   }
 
   // =actions
@@ -54,7 +43,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   async save(hostSet) {
     try {
       const { isNew } = hostSet;
-      await hostSet.save(this.adapterOptions);
+      await hostSet.save();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
@@ -72,7 +61,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   @action
   async delete(hostSet) {
     try {
-      await hostSet.destroyRecord(this.adapterOptions);
+      await hostSet.destroyRecord();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
     } catch (error) {

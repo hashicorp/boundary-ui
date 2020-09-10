@@ -171,18 +171,14 @@ export default function() {
 
   // host-set
 
-  this.get('/host-catalogs/:hostCatalogId/host-sets', function ({ hostSets }, { params: { hostCatalogId } }) {
+  this.get('/host-sets', function ({ hostSets }, { queryParams: { host_catalog_id: hostCatalogId } }) {
     return hostSets.where({ hostCatalogId });
   });
-  this.post('/host-catalogs/:hostCatalogId/host-sets', function ({ hostSets }, { params: { hostCatalogId } }) {
-    const attrs = this.normalizedRequestAttrs();
-    attrs.hostCatalogId = hostCatalogId;
-    return hostSets.create(attrs);
-  });
-  this.get('/host-catalogs/:hostCatalogId/host-sets/:id');
-  this.patch('/host-catalogs/:hostCatalogId/host-sets/:id');
-  this.del('/host-catalogs/:hostCatalogId/host-sets/:id');
-  this.post('/host-catalogs/:hostCatalogId/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
+  this.post('/host-sets');
+  this.get('/host-sets/:id');
+  this.patch('/host-sets/:id');
+  this.del('/host-sets/:id');
+  this.post('/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
     const method = idMethod.split(':')[1];
