@@ -23,16 +23,18 @@ import { Response } from 'miragejs';
 //   }
 // }
 
-export function authHandler({ scopes }, request) {
+export function authHandler({ scopes, authMethods }, request) {
   const payload = JSON.parse(request.requestBody);
   if (payload.credentials.login_name === 'error') {
     return new Response(400);
   } else {
+    const id = request.params.id_method.split(':')[0];
+    const authMethod = authMethods.find(id);
+    const scope = scopes.find(authMethod.scopeId);
     const scopeAttrs =
-      this.serialize(scopes.find(request.params.scope_id));
-    const scope = scopeAttrs;
+      this.serialize(scopes.find(scope.id));
     return new Response(200, {}, {
-      scope,
+      scope: scopeAttrs,
       id: 'token123',
       token: 'thetokenstring',
       user_id: 'user123',

@@ -50,7 +50,7 @@ export default function() {
   this.del('/auth-methods/:id');
 
   // Authenticate/deauthenticate routes
-  this.post('/scopes/:scope_id/auth-methods/:id_method', authHandler);
+  this.post('/auth-methods/:id_method', authHandler);
   this.post('/scopes/:id_method', deauthHandler);
 
   // IAM : Users
@@ -250,16 +250,4 @@ export default function() {
     }
     return target.update(updatedAttrs);
   });
-
-  // Uncomment the following line and the Response import above
-  // Then change the response code to simulate error responses.
-  // this.get('/scopes/:scope_id/projects', () => new Response(505));
-
-  // Update error payload to simulate specific error responses.
-  // this.get('/scopes/:scope_id/projects', () => new Response(505, {}, {
-  //   errors: [{
-  //     status: 505,
-  //     message: 'HTTP version not supported.',
-  //   }]
-  // }));
 }
