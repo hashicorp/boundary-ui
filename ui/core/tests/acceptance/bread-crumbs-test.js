@@ -42,9 +42,9 @@ module('Acceptance | breadcrumbs', function (hooks) {
       this.server.schema.scopes.where({ type: 'project' }).models[0];
 
     project = getProjectScope();
-    user = this.server.create('user');
-    role = this.server.create('role');
-    group = this.server.create('group');
+    user = this.server.create('user', { scope: orgScope });
+    role = this.server.create('role', { scope: orgScope });
+    group = this.server.create('group', { scope: orgScope });
     hostCatalog = this.server.create('host-catalog', {
       scope: {
         id: project.id,

@@ -24,10 +24,11 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
    * @return {Promise{GroupModel, [UserModel]}}
    */
   model() {
-    const { id: scopeID } = this.modelFor('scopes.scope');
+    const group = this.modelFor('scopes.scope.groups.group');
+    const { scopeID: scope_id } = group;
     return hash({
       group: this.modelFor('scopes.scope.groups.group'),
-      users: this.store.findAll('user', { adapterOptions: { scopeID } })
+      users: this.store.query('user', { scope_id })
     });
   }
 

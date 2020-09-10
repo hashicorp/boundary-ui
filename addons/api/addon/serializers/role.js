@@ -3,6 +3,14 @@ import { get } from '@ember/object';
 
 export default class RoleSerializer extends ApplicationSerializer {
 
+  // =attributes
+
+  /**
+   * Serialized the scope ID into the `scope_id` field.
+   * @type {boolean}
+   */
+  serializeScopeID = true;
+
   // =methods
 
   /**

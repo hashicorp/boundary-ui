@@ -32,7 +32,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     const groups = role.principals
       .filterBy('type', 'group')
       .map(({ principal_id }) =>
-        this.store.findRecord('group', principal_id, { adapterOptions })
+        this.store.findRecord('group', principal_id)
         .then(model => ({
           type: 'group',
           model

@@ -11,11 +11,7 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
    * @return {groupModel}
    */
   model({ group_id }) {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return this.store.findRecord('group', group_id, {
-      reload: true,
-      adapterOptions: { scopeID },
-    });
+    return this.store.findRecord('group', group_id, { reload: true });
   }
 
   /**

@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeAuthMethodsNewRoute extends Route {
+  
   // =methods
 
   /**
@@ -9,6 +10,10 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope');
-    return this.store.createRecord('auth-method', { type: 'password', scopeModel });
+    return this.store.createRecord('auth-method', {
+      scopeModel,
+      type: 'password'
+    });
   }
+
 }

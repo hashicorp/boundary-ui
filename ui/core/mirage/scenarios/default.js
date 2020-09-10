@@ -12,15 +12,15 @@ export default function(server) {
     type: 'org',
     scope: { id: globalScope.id, type: globalScope.type }
   }, 'withChildren')[0];
-  const scopePojo = { id: orgScope.id, type: orgScope.type };
 
   // Auth
-  server.createList('auth-method', 3, { scope: scopePojo });
+  server.createList('auth-method', 3, { scope: globalScope });
+  server.createList('auth-method', 3, { scope: orgScope });
 
   // Groups and Users
-  server.createList('group', 5, { scope: scopePojo }, 'withMembers');
+  server.createList('group', 5, { scope: orgScope }, 'withMembers');
   // Role
-  server.createList('role', 5, { scope: scopePojo }, 'withPrincipals');
+  server.createList('role', 5, { scope: orgScope }, 'withPrincipals');
 
   // Other resources
   server.schema.scopes.where({type: 'project'}).models.forEach(scope => {

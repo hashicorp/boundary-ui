@@ -25,7 +25,8 @@ module('Unit | Serializer | application', function (hooks) {
     const serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       name: 'User',
-      description: 'Description'
+      description: 'Description',
+      scope_id: 'global'
     });
   });
 
@@ -33,6 +34,7 @@ module('Unit | Serializer | application', function (hooks) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
+    serializer.serializeScopeID = false;
     const record = store.createRecord('user', {
       name: 'User',
       description: 'Description',

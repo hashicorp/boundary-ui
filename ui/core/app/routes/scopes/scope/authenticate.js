@@ -15,11 +15,11 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    * @return {Promise} `{scope, scopes, authMethods}`
    */
   model() {
-    const adapterOptions = { scopeID: this.modelFor('scopes.scope').id };
+    const { id: scope_id } = this.modelFor('scopes.scope');
     return hash({
       scope: this.modelFor('scopes.scope'),
       scopes: this.modelFor('scopes'),
-      authMethods: this.store.findAll('auth-method', { adapterOptions }),
+      authMethods: this.store.query('auth-method', { scope_id }),
 
       // for integration testing:
       // authMethods: A([{

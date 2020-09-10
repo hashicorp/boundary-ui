@@ -23,8 +23,8 @@ export default class ScopesScopeGroupsRoute extends Route {
    * @return {Promise[GroupModel]}
    */
   async model() {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return this.store.findAll('group', { adapterOptions: { scopeID } });
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    return this.store.query('group', { scope_id });
   }
 
   // =actions

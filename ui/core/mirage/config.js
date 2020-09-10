@@ -41,30 +41,70 @@ export default function() {
 
   // Auth & IAM resources
 
-  this.get('/scopes/:scope_id/auth-methods');
-  this.post('/scopes/:scope_id/auth-methods');
-  this.get('/scopes/:scope_id/auth-methods/:id');
-  this.patch('/scopes/:scope_id/auth-methods/:id');
-  this.del('/scopes/:scope_id/auth-methods/:id');
+  this.get('/auth-methods', ({ authMethods }, { queryParams: { scope_id: scopeId } }) => {
+    return authMethods.where({ scopeId });
+  });
+  this.post('/auth-methods');
+  this.get('/auth-methods/:id');
+  this.patch('/auth-methods/:id');
+  this.del('/auth-methods/:id');
 
   // Authenticate/deauthenticate routes
   this.post('/scopes/:scope_id/auth-methods/:id_method', authHandler);
   this.post('/scopes/:id_method', deauthHandler);
 
   // IAM : Users
-  this.get('/scopes/:scope_id/users');
-  this.post('/scopes/:scope_id/users');
-  this.get('/scopes/:scope_id/users/:id');
-  this.patch('/scopes/:scope_id/users/:id');
-  this.del('/scopes/:scope_id/users/:id');
+  this.get('/users', ({ users }, { queryParams: { scope_id: scopeId } }) => {
+    return users.where({ scopeId });
+  });
+  this.post('/users');
+  this.get('/users/:id');
+  this.patch('/users/:id');
+  this.del('/users/:id');
+
+  // IAM: Groups
+  this.get('/groups', ({ groups }, { queryParams: { scope_id: scopeId } }) => {
+    return groups.where({ scopeId });
+  });
+  this.post('/groups');
+  this.get('/groups/:id');
+  this.patch('/groups/:id');
+  this.del('/groups/:id');
+  this.post('/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
+    const group = groups.find(id);
+    const updatedAttrs = {
+      version: attrs.version,
+      memberIds: group.memberIds
+    };
+    // If adding members, push them into the array
+    if (method === 'add-members') {
+      attrs.memberIds.forEach(id => {
+        if (!updatedAttrs.memberIds.includes(id)) {
+          updatedAttrs.memberIds.push(id);
+        }
+      });
+    }
+    // If deleting members, filter them out of the array
+    if (method === 'remove-members') {
+      updatedAttrs.memberIds = updatedAttrs.memberIds.filter(id => {
+        return !attrs.memberIds.includes(id);
+      });
+    }
+    return group.update(updatedAttrs);
+  });
 
   // IAM: Roles
-  this.get('/scopes/:scope_id/roles');
-  this.post('/scopes/:scope_id/roles');
-  this.get('/scopes/:scope_id/roles/:id');
-  this.patch('/scopes/:scope_id/roles/:id');
-  this.del('/scopes/:scope_id/roles/:id');
-  this.post('/scopes/:scope_id/roles/:idMethod', function ({ roles, users, groups }, { params: { idMethod } }) {
+  this.get('/roles', ({ roles }, { queryParams: { scope_id: scopeId } }) => {
+    return roles.where({ scopeId });
+  });
+  this.post('/roles');
+  this.get('/roles/:id');
+  this.patch('/roles/:id');
+  this.del('/roles/:id');
+  this.post('/roles/:idMethod', function ({ roles, users, groups }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
     const method = idMethod.split(':')[1];
@@ -102,38 +142,6 @@ export default function() {
       });
     }
     return role.update(updatedAttrs);
-  });
-
-  // IAM: Groups
-  this.get('/scopes/:scope_id/groups');
-  this.post('/scopes/:scope_id/groups');
-  this.get('/scopes/:scope_id/groups/:id');
-  this.patch('/scopes/:scope_id/groups/:id');
-  this.del('/scopes/:scope_id/groups/:id');
-  this.post('/scopes/:scope_id/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const group = groups.find(id);
-    const updatedAttrs = {
-      version: attrs.version,
-      memberIds: group.memberIds
-    };
-    // If adding members, push them into the array
-    if (method === 'add-members') {
-      attrs.memberIds.forEach(id => {
-        if (!updatedAttrs.memberIds.includes(id)) {
-          updatedAttrs.memberIds.push(id);
-        }
-      });
-    }
-    // If deleting members, filter them out of the array
-    if (method === 'remove-members') {
-      updatedAttrs.memberIds = updatedAttrs.memberIds.filter(id => {
-        return !attrs.memberIds.includes(id);
-      });
-    }
-    return group.update(updatedAttrs);
   });
 
   // Other resources

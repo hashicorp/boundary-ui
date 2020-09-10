@@ -23,8 +23,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    * @return {Promise[AuthMethodModel]}
    */
   async model() {
-    const { id: scopeID} = this.modelFor('scopes.scope');
-    return this.store.findAll('auth-method', { adapterOptions: { scopeID } });
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    return this.store.query('auth-method', { scope_id });
   }
 
   // =actions
@@ -48,11 +48,12 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     const { isNew } = authMethod;
     try {
       await authMethod.save();
+      await this
+        .transitionTo('scopes.scope.auth-methods.auth-method', authMethod);
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
-      this.transitionTo('scopes.scope.auth-methods.auth-method', authMethod);
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -67,9 +68,9 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   async delete(authMethod) {
     try {
       await authMethod.destroyRecord();
+      await this.transitionTo('scopes.scope.auth-methods');
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.auth-methods');
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
