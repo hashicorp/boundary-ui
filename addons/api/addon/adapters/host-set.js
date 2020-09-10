@@ -10,7 +10,7 @@ export default class HostSetAdapter extends ApplicationAdapter {
   // =attributes
 
   /**
-   * Host catalogs use the new, unprefixed pathing style.
+   * Host sets use the new, unprefixed pathing style.
    * @override
    */
   hasScopePrefix = false;

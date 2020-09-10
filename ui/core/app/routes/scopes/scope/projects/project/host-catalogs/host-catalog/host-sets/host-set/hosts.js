@@ -13,24 +13,15 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   // =methods
 
   /**
-   * Empty out any previously loaded hosts.
-   */
-  beforeModel() {
-    this.store.unloadAll('host');
-  }
-
-  /**
    * Loads all hosts under the current host set.
    * @return {Promise{HostSetModel,[HostModel]}}
    */
   async model() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
     const hostSet = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set');
     return hash({
       hostSet,
       hosts: all(hostSet.host_ids.map(host =>
-        this.store.findRecord('host', host.value, { adapterOptions: { scopeID, hostCatalogID } })
+        this.store.findRecord('host', host.value, { reload: true })
       ))
     });
   }

@@ -14,8 +14,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
    * Loads all hosts under the current host catalog and it's parent project scope.
    * @return {Promise{[HostModel]}}
    */
-  async model() {
-    return this.store.findAll('host', this.adapterOptions());
+  model() {
+    const { id: host_catalog_id } =
+      this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
+    return this.store.query('host', { host_catalog_id });
   }
 
   // =actions
@@ -40,12 +42,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
   async save(host) {
     try {
       const { isNew } = host;
-      await host.save(this.adapterOptions());
-      this.refresh();
+      await host.save();
+      await this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host', host);
+      await this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
-      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host', host);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -59,7 +61,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
   @action
   async delete(host) {
     try {
-      await host.destroyRecord(this.adapterOptions());
+      await host.destroyRecord();
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
       this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts');
@@ -67,15 +69,5 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
     }
-  }
-
-  /**
-   * Configure adapter options using current host catalog scope and it's parent project scope.
-   * @return {object}
-   */
-  adapterOptions() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-    return { adapterOptions : { scopeID, hostCatalogID } };
   }
 }
