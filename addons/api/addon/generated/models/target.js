@@ -9,8 +9,8 @@ export default class GeneratedTargetModel extends BaseModel {
   // =attributes
 
   @attr('string', {
-    description: 'The protocol used in the target'
-  }) protocol;
+    description: 'The type of the resource, to help differentiate schemas'
+  }) type;
 
   @attr('string', {
     description: 'Optional name for identification purposes'

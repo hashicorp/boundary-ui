@@ -6,7 +6,7 @@ import { random, date } from 'faker';
  */
 export default Factory.extend({
 
-  protocol: 'tcp',
+  type: 'tcp',
   name: () => random.words(),
   description: () => random.words(),
   created_time: () => date.recent(),

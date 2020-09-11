@@ -10,7 +10,10 @@ export default class ScopesScopeProjectsProjectTargetsNewRoute extends Route {
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope.projects.project');
-    return this.store.createRecord('target', { scopeModel });
+    return this.store.createRecord('target', {
+      type: 'tcp',
+      scopeModel
+    });
   }
 
 }

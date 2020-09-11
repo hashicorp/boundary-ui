@@ -42,7 +42,7 @@ host-set:
   types:
     static: Static
 target:
-  protocols:
+  types:
     tcp: TCP
 host:
   types:

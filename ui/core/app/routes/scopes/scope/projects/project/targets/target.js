@@ -11,8 +11,7 @@ export default class ScopesScopeProjectsProjectTargetsTargetRoute extends Route 
    * @return {TargetModel}
    */
   async model({ target_id }) {
-    const { id: scopeID } = this.modelFor('scopes.scope.projects.project');
-    return this.store.findRecord('target', target_id, { adapterOptions: { scopeID } });
+    return this.store.findRecord('target', target_id, { reload: true });
   }
 
   /**

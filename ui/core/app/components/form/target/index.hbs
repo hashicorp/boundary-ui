@@ -7,6 +7,12 @@
 >
 
   <form.input
+  @value={{t (concat 'target.types.' @model.type)}}
+  @label={{t "form.label.type"}}
+  readonly={{true}}
+  @disabled={{true}} />
+
+  <form.input
     @name="name"
     @type="name"
     @value={{@model.name}}

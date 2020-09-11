@@ -24,7 +24,7 @@
         <table.header as |header|>
           <header.row as |row|>
             <row.headerCell>{{t "form.label.name"}}</row.headerCell>
-            <row.headerCell>{{t "form.label.protocol"}}</row.headerCell>
+            <row.headerCell>{{t "form.label.type"}}</row.headerCell>
             <row.headerCell>{{t "form.label.id"}}</row.headerCell>
           </header.row>
         </table.header>
@@ -41,9 +41,9 @@
                 <p>{{target.description}}</p>
               </row.headerCell>
               <row.cell>
-                {{#if target.protocol}}
+                {{#if target.type}}
                   <Rose::Badge>
-                    {{t (concat "target.protocols." target.protocol)}}
+                    {{t (concat "target.types." target.type)}}
                   </Rose::Badge>
                 {{/if}}
               </row.cell>
