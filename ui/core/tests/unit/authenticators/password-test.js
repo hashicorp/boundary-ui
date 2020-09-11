@@ -34,6 +34,8 @@ module('Unit | Authenticator | password', function (hooks) {
     const creds = { identification: 'foo', password: 'bar' };
     const scope = { id: 'global' };
     const authMethod = { id: 'paum_1234' };
+    this.server.create('scope', { id: 'global', type: 'global' });
+    this.server.create('auth-method', { id: authMethod.id, scopeId: 'global' });
     await authenticator.authenticate(
       creds,
       null,
