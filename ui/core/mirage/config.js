@@ -147,40 +147,44 @@ export default function() {
   // Other resources
   // host-catalog
 
-  this.get('/scopes/:scope_id/host-catalogs');
-  this.post('/scopes/:scope_id/host-catalogs');
-  this.get('/scopes/:scope_id/host-catalogs/:id');
-  this.patch('/scopes/:scope_id/host-catalogs/:id');
-  this.del('/scopes/:scope_id/host-catalogs/:id');
+  this.get('/host-catalogs', ({ hostCatalogs }, { queryParams: { scope_id: scopeId } }) => {
+    return hostCatalogs.where({ scopeId });
+  });
+  this.post('/host-catalogs');
+  this.get('/host-catalogs/:id');
+  this.patch('/host-catalogs/:id');
+  this.del('/host-catalogs/:id');
 
   // host
 
-  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts', function ({ hosts }, { params: { hostCatalogId } }) {
+  this.get('/hosts', function ({ hosts }, { queryParams: { host_catalog_id: hostCatalogId } }) {
     return hosts.where({ hostCatalogId });
   });
-  this.post('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts', function ({ hosts }, { params: { hostCatalogId } }) {
+  this.post('/hosts', function ({ hostCatalogs, hosts }) {
     const attrs = this.normalizedRequestAttrs();
-    attrs.hostCatalogId = hostCatalogId;
+    const hostCatalog = hostCatalogs.find(attrs.hostCatalogId);
+    attrs.scopeId = hostCatalog.scope.id;
     return hosts.create(attrs);
   });
-  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts/:id');
-  this.patch('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts/:id');
-  this.del('/scopes/:scope_id/host-catalogs/:hostCatalogId/hosts/:id');
+  this.get('/hosts/:id');
+  this.patch('/hosts/:id');
+  this.del('/hosts/:id');
 
   // host-set
 
-  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets', function ({ hostSets }, { params: { hostCatalogId } }) {
+  this.get('/host-sets', function ({ hostSets }, { queryParams: { host_catalog_id: hostCatalogId } }) {
     return hostSets.where({ hostCatalogId });
   });
-  this.post('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets', function ({ hostSets }, { params: { hostCatalogId } }) {
+  this.post('/host-sets', function ({ hostCatalogs, hostSets }) {
     const attrs = this.normalizedRequestAttrs();
-    attrs.hostCatalogId = hostCatalogId;
+    const hostCatalog = hostCatalogs.find(attrs.hostCatalogId);
+    attrs.scopeId = hostCatalog.scope.id;
     return hostSets.create(attrs);
   });
-  this.get('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
-  this.patch('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
-  this.del('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:id');
-  this.post('/scopes/:scope_id/host-catalogs/:hostCatalogId/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
+  this.get('/host-sets/:id');
+  this.patch('/host-sets/:id');
+  this.del('/host-sets/:id');
+  this.post('/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
     const method = idMethod.split(':')[1];

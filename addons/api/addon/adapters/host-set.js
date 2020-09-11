@@ -7,32 +7,12 @@ export default class HostSetAdapter extends ApplicationAdapter {
 
   @service store;
 
-  // =methods
+  // =attributes
 
   /**
-   * Append a host catalog URL ahead of the host sets path if `hostCatalogID` is
-   * passed via adapter options.  Otherwise, generate the prefix as normal.
-   *
-   * TODO:  generalize the interface to resource-prefixed URLs by accepting
-   *        a modelName and an ID, rather than looking for a known key.
-   *
+   * Host sets use the new, unprefixed pathing style.
    * @override
-   * @param {string} path
-   * @param {string} parentURL
-   * @param {string} modelName
-   * @param {string} id
-   * @param {object} snapshot
-   * @return {string} urlPrefix
    */
-  urlPrefix(path, parentURL, modelName, id, snapshot) {
-    const hostCatalogID = snapshot?.adapterOptions?.hostCatalogID;
-    if (hostCatalogID) {
-      const hostCatalogAdapter = this.store.adapterFor('host-catalog');
-      return hostCatalogAdapter
-        ._buildPrefixedURL('host-catalog', hostCatalogID, snapshot);
-    } else {
-      return super.urlPrefix(...arguments);
-    }
-  }
+  hasScopePrefix = false;
 
 }

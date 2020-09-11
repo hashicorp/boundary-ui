@@ -11,10 +11,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogRoute exte
    * @return {HostCatalogModel}
    */
   async model({ host_catalog_id }) {
-    const { id: scopeID } = this.modelFor('scopes.scope');
-    return this.store.findRecord('host-catalog', host_catalog_id, {
-      adapterOptions: { scopeID },
-    });
+    return this.store.findRecord('host-catalog', host_catalog_id);
   }
 
   /**

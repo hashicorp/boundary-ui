@@ -11,6 +11,7 @@ module('Unit | Serializer | host set', function(hooks) {
     const record = store.createRecord('host-set', {
       name: 'Host Set 1',
       description: 'Description',
+      host_catalog_id: '123',
       version: 1
     });
     const snapshot = record._createSnapshot();
@@ -19,6 +20,7 @@ module('Unit | Serializer | host set', function(hooks) {
     assert.deepEqual(serializedRecord, {
       name: 'Host Set 1',
       description: 'Description',
+      host_catalog_id: '123',
       version: 1
     });
   });

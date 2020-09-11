@@ -13,12 +13,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
 
 
   /**
-   * Loads all scopes under the current scope.
+   * Loads all host catalogs under the current scope.
    * @return {Promise{[HostCatalogModel]}}
    */
   async model() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    return this.store.findAll('host-catalog', { adapterOptions: { scopeID } });
+    const { id: scope_id } = this.modelFor('scopes.scope.projects.project');
+    return this.store.query('host-catalog', { scope_id });
   }
 
   // =actions

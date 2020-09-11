@@ -24,11 +24,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    * @return {Promise{HostSetModel,[HostModel]}}
    */
   async model() {
-    const scopeID = this.modelFor('scopes.scope.projects.project').id;
-    const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
+    const { id: host_catalog_id } = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
     return hash({
       hostSet: this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set'),
-      hosts: this.store.findAll('host', { adapterOptions: { scopeID, hostCatalogID } })
+      hosts: this.store.query('host', { host_catalog_id })
     });
   }
 
@@ -84,13 +83,11 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   @action
   async addHosts(hostSet, hostIDs) {
     try {
-      const scopeID = this.modelFor('scopes.scope.projects.project').id;
-      const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-      await hostSet.addHosts(hostIDs, { adapterOptions : { scopeID, hostCatalogID } });
+      await hostSet.addHosts(hostIDs);
+      await this.replaceWith('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts');
       this.notify.success(
         this.intl.t('notify.save-success')
       );
-      this.replaceWith('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts');
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

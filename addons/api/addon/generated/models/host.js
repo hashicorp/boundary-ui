@@ -13,6 +13,10 @@ export default class GeneratedHostModel extends BaseModel {
   }) type;
 
   @attr('string', {
+    description: 'The owning host catalog ID.',
+  }) host_catalog_id;
+
+  @attr('string', {
     description: 'Optional name for identification purposes'
   }) name;
 
@@ -34,9 +38,5 @@ export default class GeneratedHostModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
-
-  @attr('string', {
-    description: 'The address (DNS or IP name) used to reach the host'
-  }) address;
 
 }
