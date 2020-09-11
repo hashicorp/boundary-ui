@@ -158,7 +158,7 @@ module('Unit | Adapter | application', function (hooks) {
       code: 'invalid_argument',
       message: 'The request was invalid.',
       details: {
-        fields: [{ name: 'name', message: 'Name is wrong.' }],
+        request_fields: [{ name: 'name', description: 'Name is wrong.' }],
       },
     };
     const handledResponse = adapter.handleResponse(400, {}, payload);
