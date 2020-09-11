@@ -10,12 +10,6 @@ export default ApplicationSerializer.extend({
     )}_ids`;
   },
 
-  keyForRelationshipId(relationshipName) {
-    return `${this._container.inflector.singularize(
-      underscore(relationshipName)
-    )}_id`;
-  },
-
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(this, arguments);
     const { hostSets } = this.schema;
@@ -24,10 +18,6 @@ export default ApplicationSerializer.extend({
       const host_catalog_id = hostSet?.hostCatalog?.id;
       return { host_set_id, host_catalog_id };
     });
-    json.scope = {
-      id: model.scope.id,
-      type: model.scope.type
-    };
     return json;
   }
 

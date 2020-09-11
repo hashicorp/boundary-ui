@@ -24,29 +24,6 @@ module('Unit | Adapter | application', function (hooks) {
     assert.equal(adapter.urlPrefix(), config.api.namespace);
   });
 
-  test('it generates URL prefixes with optional `scopeID` from adapterOptions', function (assert) {
-    assert.expect(2);
-    const scopeID = 'global';
-    const adapter = this.owner.lookup('adapter:application');
-    const prefix = adapter.urlPrefix(null, null, null, null, {
-      adapterOptions: { scopeID }
-    });
-    assert.ok(config.api.namespace);
-    assert.equal(prefix, `v1/scopes/${scopeID}`);
-  });
-
-  test('it does not prefix URLs with `scopeID` when hasScopePrefix is `false`', function (assert) {
-    assert.expect(2);
-    const scopeID = 'global';
-    const adapter = this.owner.lookup('adapter:application');
-    adapter.hasScopePrefix = false;
-    const prefix = adapter.urlPrefix(null, null, null, null, {
-      adapterOptions: { scopeID }
-    });
-    assert.ok(config.api.namespace);
-    assert.equal(prefix, 'v1');
-  });
-
   test('it generates correct default URL suffixes', function (assert) {
     assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
@@ -77,17 +54,17 @@ module('Unit | Adapter | application', function (hooks) {
     const adapter = this.owner.lookup('adapter:application');
     // test URL generation for each request type...
     const findRecordURL = adapter.buildURL('user', '1', mockSnapshot, 'findRecord');
-    assert.equal(findRecordURL, '/v1/scopes/o_1/users/1:my-custom-method');
+    assert.equal(findRecordURL, '/v1/users/1:my-custom-method');
     const findAllURL = adapter.buildURL('user', null, mockSnapshot, 'findAll');
-    assert.equal(findAllURL, '/v1/scopes/o_1/users:my-custom-method');
+    assert.equal(findAllURL, '/v1/users:my-custom-method');
     const findBelongsToURL = adapter.buildURL('user', '2', mockSnapshot, 'findBelongsTo');
-    assert.equal(findBelongsToURL, '/v1/scopes/o_1/users/2:my-custom-method');
+    assert.equal(findBelongsToURL, '/v1/users/2:my-custom-method');
     const createRecordURL = adapter.buildURL('user', null, mockSnapshot, 'createRecord');
-    assert.equal(createRecordURL, '/v1/scopes/o_1/users:my-custom-method');
+    assert.equal(createRecordURL, '/v1/users:my-custom-method');
     const updateRecordURL = adapter.buildURL('user', '3', mockSnapshot, 'updateRecord');
-    assert.equal(updateRecordURL, '/v1/scopes/o_1/users/3:my-custom-method');
+    assert.equal(updateRecordURL, '/v1/users/3:my-custom-method');
     const deleteRecordURL = adapter.buildURL('user', '4', mockSnapshot, 'deleteRecord');
-    assert.equal(deleteRecordURL, '/v1/scopes/o_1/users/4:my-custom-method');
+    assert.equal(deleteRecordURL, '/v1/users/4:my-custom-method');
   });
 
   test('it can request records through the store from a specified scope', async function (assert) {

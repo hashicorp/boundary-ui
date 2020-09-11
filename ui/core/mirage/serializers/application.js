@@ -32,6 +32,12 @@ export default RestSerializer.extend({
     return underscore(attr);
   },
 
+  keyForRelationshipId(relationshipName) {
+    return `${this._container.inflector.singularize(
+      underscore(relationshipName)
+    )}_id`;
+  },
+
   /**
    * Serialize items into a root key `items`.
    * @return {object}
@@ -40,6 +46,22 @@ export default RestSerializer.extend({
     let json = RestSerializer.prototype.serialize.apply(this, arguments);
     // If array, root it under a standard `items` key
     if (isArray(json)) json = {items: json};
+    return json;
+  },
+
+  /**
+   * Serialize scope into the payload, if set.
+   * @param {object} model
+   * @return {object}
+   */
+  _hashForModel(model) {
+    const json = RestSerializer.prototype._hashForModel.apply(this, arguments);
+    if (model.scope) {
+      json.scope = {
+        id: model.scope.id,
+        type: model.scope.type
+      };
+    }
     return json;
   },
 
