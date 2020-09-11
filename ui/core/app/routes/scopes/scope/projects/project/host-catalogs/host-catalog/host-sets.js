@@ -14,8 +14,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    * Loads all host-sets under the current host catalog and it's parent scope.
    * @return {Promise{[HostSetModel]}}
    */
-  async model() {
-    this.store.unloadAll('host-set');
+  model() {
     const { id: host_catalog_id } =
       this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
     return this.store.query('host-set', { host_catalog_id });
@@ -44,10 +43,11 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
     try {
       const { isNew } = hostSet;
       await hostSet.save();
+      await this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set', hostSet);
+      await this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
-      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set', hostSet);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

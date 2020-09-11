@@ -9,10 +9,11 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsNe
    * @return {HostSetModel}
    */
   model() {
-    const scopeModel = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
+    const { id: host_catalog_id } =
+      this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
     return this.store.createRecord('host-set', {
       type: 'static',
-      scopeModel
+      host_catalog_id
     });
   }
 
