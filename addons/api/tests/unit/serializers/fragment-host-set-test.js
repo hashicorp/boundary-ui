@@ -10,7 +10,7 @@ module('Unit | Serializer | fragment host set', function(hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('fragment-host-set');
     const normalized = serializer.normalize(FragmentHostSet, {
-      host_set_id: '2',
+      id: '2',
       host_catalog_id: '1'
     });
     assert.deepEqual(normalized, {
