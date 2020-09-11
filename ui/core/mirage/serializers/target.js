@@ -16,7 +16,7 @@ export default ApplicationSerializer.extend({
     json.host_sets = model.hostSetIds.map(host_set_id => {
       const hostSet = hostSets.find(host_set_id);
       const host_catalog_id = hostSet?.hostCatalog?.id;
-      return { host_set_id, host_catalog_id };
+      return { id: host_set_id, host_catalog_id };
     });
     return json;
   }
