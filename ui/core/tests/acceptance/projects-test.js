@@ -89,10 +89,10 @@ module('Acceptance | projects', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {
-            fields: [
+            request_fields: [
               {
                 name: 'name',
-                message: 'Name is required.',
+                description: 'Name is required.',
               },
             ],
           },
@@ -150,10 +150,10 @@ module('Acceptance | projects', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {
-            fields: [
+            request_fields: [
               {
                 name: 'name',
-                message: 'Name is required.',
+                description: 'Name is required.',
               },
             ],
           },

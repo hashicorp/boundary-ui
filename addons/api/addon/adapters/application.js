@@ -235,7 +235,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @return {object}
    */
   transformValidationErrors(payload) {
-    const fieldErrors = get(payload, 'details.fields') || [];
+    const fieldErrors = get(payload, 'details.request_fields') || [];
     // Normalize the primary error message into "base", which is an error
     // that applies to the whole model instance
     const baseError = {
@@ -247,7 +247,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     };
     // Normalize field-specific errors, if any.
     const errors = fieldErrors.map((error) => ({
-      detail: error.message,
+      detail: error.description,
       source: { pointer: `/data/attributes/${error.name}` },
     }));
     // Return a list of JSON API errors rooted under the `errors` key.
