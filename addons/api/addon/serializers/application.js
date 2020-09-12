@@ -117,6 +117,7 @@ export default class ApplicationSerializer extends RESTSerializer {
    * This method makes this transformation to accommodate Ember Data.
    *
    * @method normalizeSingleResponse
+   * @override
    * @param {Store} store
    * @param {Model} primaryModelClass
    * @param {Object} payload
@@ -125,6 +126,10 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {Object} JSON-API Document
    */
   normalizeSingleResponse(store, primaryModelClass, payload, id, requestType) {
+    // Copy payload (mostly to prevent mocking issues)
+    payload = copy(payload, true);
+    // Check for and normalize missing arrays
+    payload = this.normalizeMissingArrays(store, primaryModelClass, payload);
     // Setup a new payload data structure.
     const transformedPayload = {};
     // Find the Ember-data-expected root key name.
@@ -132,7 +137,7 @@ export default class ApplicationSerializer extends RESTSerializer {
       primaryModelClass.modelName
     );
     // Copy the unrooted payload under the expected root key name.
-    transformedPayload[payloadKey] = copy(payload, true);
+    transformedPayload[payloadKey] = payload;
     // Return the result of normalizing the transformed payload.
     return super.normalizeSingleResponse(
       store,
@@ -141,6 +146,29 @@ export default class ApplicationSerializer extends RESTSerializer {
       id,
       requestType
     );
+  }
+
+  /**
+   * Resets missing array fields to an empty array if they are annotated by
+   * `normalizeToEmptyArray: true` in the associated model attribute
+   * declaration.  Our API excludes arrays when they are empty from
+   * singular responses.
+   *
+   * @param {Store} store
+   * @param {Model} primaryModelClass
+   * @param {object} payload
+   * @return {object}
+   */
+  normalizeMissingArrays(store, primaryModelClass, payload) {
+    const attrDefs = store._attributesDefinitionFor(primaryModelClass.modelName);
+    if (attrDefs) {
+      Object.keys(attrDefs).forEach(key => {
+        if (!payload[key] && attrDefs[key]?.options?.emptyArrayIfMissing) {
+          payload[key] = [];
+        }
+      });
+    }
+    return payload;
   }
 
   /**
