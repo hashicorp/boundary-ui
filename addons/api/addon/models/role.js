@@ -12,7 +12,10 @@ export default class RoleModel extends GeneratedRoleModel {
    * see obvious.  Instead, the application layer is expected to load referenced
    * users and groups as needed.
    */
-  @fragmentArray('fragment-principal', {readOnly: true}) principals;
+  @fragmentArray('fragment-principal', {
+    readOnly: true,
+    emptyArrayIfMissing: true
+  }) principals;
 
   /**
    * Grants is read-only _most_ under normal circumstances.  But grants can

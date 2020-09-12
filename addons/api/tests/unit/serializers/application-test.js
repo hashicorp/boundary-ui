@@ -140,7 +140,7 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it normalizes missing arrays in single responses if annotated in model attributes', function (assert) {
-    assert.expect(2);
+    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;
@@ -154,7 +154,6 @@ module('Unit | Serializer | application', function (hooks) {
       target,
       payload
     );
-    assert.notOk(payload.bogusArrayField);
     assert.deepEqual(normalized, {
       included: [],
       data: {

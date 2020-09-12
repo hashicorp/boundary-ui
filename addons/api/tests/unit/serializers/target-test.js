@@ -95,7 +95,7 @@ module('Unit | Serializer | target', function(hooks) {
   });
 
   test('it normalizes missing host_sets to empty array', function (assert) {
-    assert.expect(2);
+    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;
@@ -109,7 +109,6 @@ module('Unit | Serializer | target', function(hooks) {
       target,
       payload
     );
-    assert.notOk(payload.bogusArrayField);
     assert.deepEqual(normalized, {
       included: [],
       data: {
