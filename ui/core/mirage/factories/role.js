@@ -4,7 +4,7 @@ import { trait } from 'ember-cli-mirage';
 export default factory.extend({
 
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
-  grant_strings: [
+  grant_strings: () => [
     'id=*;action=*',
     'id=*;type=host-catalog;actions=create,read'
   ],
