@@ -2,7 +2,7 @@ import factory from '../generated/factories/auth-method';
 import { trait } from 'ember-cli-mirage';
 
 export default factory.extend({
-  id: (i) => `auth-method-id-${i}`
+  id: (i) => `auth-method-id-${i}`,
 
   /**
    * Adds accounts.
