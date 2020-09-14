@@ -6,4 +6,5 @@ export default class FragmentHostAttributesModel extends Fragment {
   @attr('string', {
     description: 'The address (DNS or IP name) used to reach the host'
   }) address;
+
 }
