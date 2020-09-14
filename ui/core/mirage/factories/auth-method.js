@@ -5,12 +5,12 @@ export default factory.extend({
   id: (i) => `auth-method-id-${i}`,
 
   /**
-   * Adds accounts.
+   * Adds accounts to auth method.
    */
   withAccounts: trait({
     afterCreate(authMethod, server) {
       const { scope } = authMethod;
-      server.createList('account', 5, { scope });
+      server.createList('account', 5, { scope, authMethod });
     }
   })
 

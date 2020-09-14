@@ -12,5 +12,6 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   version: () => random.number(),
+  attributes: () => ({ login_name: random.words() }),
 
 });

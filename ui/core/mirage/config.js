@@ -50,8 +50,8 @@ export default function() {
   this.del('/auth-methods/:id');
 
   // Auth Method Accounts
-  this.get('/accounts', ({ accounts }, { queryParams: { scope_id: scopeId } }) => {
-    return accounts.where({ scopeId });
+  this.get('/accounts', ({ accounts }, { queryParams: { auth_method_id: authMethodId } }) => {
+    return accounts.where({ authMethodId });
   });
   this.post('/accounts');
   this.get('/accounts/:id');
