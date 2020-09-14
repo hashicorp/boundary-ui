@@ -1,3 +1,17 @@
 import factory from '../generated/factories/auth-method';
+import { trait } from 'ember-cli-mirage';
 
-export default factory.extend();
+export default factory.extend({
+  id: (i) => `auth-method-id-${i}`
+
+  /**
+   * Adds accounts.
+   */
+  withAccounts: trait({
+    afterCreate(authMethod, server) {
+      const { scope } = authMethod;
+      server.createList('account', 5, { scope });
+    }
+  })
+
+});
