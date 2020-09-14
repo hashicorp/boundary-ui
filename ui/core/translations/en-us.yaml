@@ -47,6 +47,9 @@ target:
 host:
   types:
     static: Static
+account:
+  types:
+    password: Password
 resources:
   user: User
   users: Users
@@ -68,6 +71,8 @@ resources:
   hosts: Hosts
   target: Target
   targets: Targets
+  accounts: Accounts
+  account: Account
 titles:
   iam: IAM
   new: New
@@ -103,6 +108,7 @@ titles:
   group-members-welcome: Welcome to Members
   no-available-users: No Users Available
   accounts: Accounts
+  account: Account
   auth-method-accounts-welcome: Welcome to Accounts
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
