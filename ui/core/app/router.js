@@ -75,6 +75,7 @@ Router.map(function () {
         this.route('auth-method', { path: ':auth_method_id' }, function() {
           this.route('accounts', function() {
             this.route('account', { path: ':account_id' }, function() {});
+            this.route('new');
           });
         });
         this.route('new');

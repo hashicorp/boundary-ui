@@ -28,6 +28,7 @@ actions:
   add-principals: Add Principals
   add-members: Add Members
   add-hosts: Add Hosts
+  add-account: Create Account
 auth:
   titles:
     no-scopes: No Scopes Available
