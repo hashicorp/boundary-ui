@@ -9,7 +9,10 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * Grants is read-only _most_ under normal circumstances.  But grants can
    * be persisted via a dedicated call to `saveGrants()`.
    */
-  @fragmentArray('fragment-string', {readOnly: true}) host_ids;
+  @fragmentArray('fragment-string', {
+    readOnly: true,
+    emptyArrayIfMissing: true
+  }) host_ids;
 
   // =methods
 

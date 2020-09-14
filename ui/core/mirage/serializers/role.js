@@ -16,6 +16,7 @@ export default ApplicationSerializer.extend({
       type: 'group'
     }));
     json.principals = [ ...serializedUsers, ...serializedGroups ];
+    if (!json.principals.length) delete json.principals;
     return json;
   }
 });

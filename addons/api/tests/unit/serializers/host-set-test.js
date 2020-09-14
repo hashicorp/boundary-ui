@@ -74,4 +74,35 @@ module('Unit | Serializer | host set', function(hooks) {
       },
     });
   });
+
+  test('it normalizes missing host_ids to empty array', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-set');
+    const hostSet = store.createRecord('host-set').constructor;
+    const payload = {
+      id: '1',
+      name: 'Host Set 1',
+      scope: { id: 'o_123' }
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostSet,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'host-set',
+        attributes: {
+          name: 'Host Set 1',
+          scope: { scope_id: 'o_123' },
+          host_ids: []
+        },
+        relationships: {},
+      },
+    });
+  });
+
 });

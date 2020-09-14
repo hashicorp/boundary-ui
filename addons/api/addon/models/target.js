@@ -9,7 +9,10 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * @type {[FragmentHostSetModel]}
    */
-  @fragmentArray('fragment-host-set', {readOnly: true}) host_sets;
+  @fragmentArray('fragment-host-set', {
+    readOnly: true,
+    emptyArrayIfMissing: true
+  }) host_sets;
 
   /**
    * An array of resolved host set and host catalog instances.  Model instances

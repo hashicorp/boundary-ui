@@ -109,17 +109,18 @@ export default function() {
     const id = idMethod.split(':')[0];
     const method = idMethod.split(':')[1];
     const role = roles.find(id);
-    const updatedAttrs = {
-      version: attrs.version,
-      userIds: role.userIds,
-      groupIds: role.groupIds
-    };
+    let updatedAttrs = {};
 
     // Principals is a combined list of users and groups, but in Mirage we've
     // internally modelled them as separate lists.  Therefore we must check
     // the type by looking up the user or group first, then determine which
     // list to add the principal to.
     if (method === 'add-principals') {
+      updatedAttrs = {
+        version: attrs.version,
+        userIds: role.userIds,
+        groupIds: role.groupIds
+      };
       attrs.principalIds.forEach(id => {
         const isUser = users.find(id);
         const isGroup = groups.find(id);
@@ -134,6 +135,11 @@ export default function() {
     // If deleting principals, filter them out of both users and groups,
     // and in this case don't care about the type
     if (method === 'remove-principals') {
+      updatedAttrs = {
+        version: attrs.version,
+        userIds: role.userIds,
+        groupIds: role.groupIds
+      };
       updatedAttrs.userIds = updatedAttrs.userIds.filter(id => {
         return !attrs.principalIds.includes(id);
       });
@@ -141,6 +147,14 @@ export default function() {
         return !attrs.principalIds.includes(id);
       });
     }
+
+    if (method === 'set-grants') {
+      updatedAttrs = {
+        version: attrs.version,
+        grant_strings: attrs.grant_strings
+      };
+    }
+
     return role.update(updatedAttrs);
   });
 

@@ -138,4 +138,34 @@ module('Unit | Serializer | application', function (hooks) {
       },
     });
   });
+
+  test('it normalizes missing arrays in single responses if annotated in model attributes', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const target = store.createRecord('target').constructor;
+    const payload = {
+      id: '1',
+      name: 'Target 1',
+      scope: { id: 'o_123' }
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      target,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'target',
+        attributes: {
+          name: 'Target 1',
+          scope: { scope_id: 'o_123' },
+          host_sets: []
+        },
+        relationships: {},
+      },
+    });
+  });
 });

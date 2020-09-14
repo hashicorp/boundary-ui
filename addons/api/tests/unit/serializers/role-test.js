@@ -68,6 +68,37 @@ module('Unit | Serializer | role', function(hooks) {
         attributes: {
           name: 'Role 1',
           grants: [{value: '*'}, {value: '*'}],
+          principals: []
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes missing principals to empty array', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('role');
+    const role = store.createRecord('role').constructor;
+    const payload = {
+      id: '1',
+      name: 'Role 1',
+      scope: { id: 'o_123' }
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      role,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'role',
+        attributes: {
+          name: 'Role 1',
+          scope: { scope_id: 'o_123' },
+          principals: []
         },
         relationships: {},
       },
