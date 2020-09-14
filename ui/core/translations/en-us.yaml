@@ -133,6 +133,7 @@ descriptions:
   group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.
   auth-method-accounts-welcome: No accounts are available in this auth method.
+  account-settings-overview: Set the password for current account.
 states:
   info: Info
   success: Success

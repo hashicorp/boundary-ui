@@ -1,0 +1,7 @@
+<p>{{t 'descriptions.account-settings-overview'}}</p>
+
+<Form::Account::Password::Settings
+  @model={{@model}}
+  @submit={{route-action "savePassword" @model}}
+  @cancel={{route-action "cancel" @model}}
+/>
