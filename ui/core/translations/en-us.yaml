@@ -162,6 +162,12 @@ errors:
     server-error: Server error
     unknown-error: Something went wrong
     authentication-failed: Authentication Failed
+  subtitles:
+    unauthenticated-error: Error 401
+    forbidden-error: Error 403
+    notfound-error: Error 404
+    server-error: Error 500
+    unknown-error: Error
   descriptions:
     unauthenticated-error: You are not authenticated. Please authenticate and try again later.
     forbidden-error: You must be granted permissions to view this data. Ask your administrator if you think you should have access.

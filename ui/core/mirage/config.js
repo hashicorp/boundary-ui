@@ -1,6 +1,6 @@
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
-//import { Response } from 'miragejs';
+import { Response } from 'miragejs';
 
 export default function() {
 
@@ -288,4 +288,18 @@ export default function() {
     }
     return target.update(updatedAttrs);
   });
+
+  /* Uncomment the following line and the Response import above
+   * Then change the response code to simulate error responses.
+   * this.get('/scopes', () => new Response(505));
+   *
+   * Update error payload to simulate specific error responses.
+   */
+  // this.get('/host-catalogs', () => new Response(404));
+  // this.get('/scopes/:id', () => new Response(505, {}, {
+  //   errors: [{
+  //     status: 505,
+  //     message: 'HTTP version not supported.',
+  //   }]
+  // }));
 }
