@@ -63,7 +63,7 @@
     {{/if}}
   </form.input>
 
-  {{#if @allowPassword}}
+  {{#if @model.isNew}}
     <form.input
       @name="password"
       @type="password"
