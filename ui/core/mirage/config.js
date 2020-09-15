@@ -64,7 +64,7 @@ export default function() {
     const account = accounts.find(id);
     const updatedAttrs = {
       version: attrs.version,
-      attributes: {}
+      attributes: account.attributes
     };
     // Set new password
     if (method === 'set-password') {
