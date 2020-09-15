@@ -38,11 +38,11 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   async save(account) {
     try {
       await account.save();
+      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
       this.refresh();
       this.notify.success(
         this.intl.t('notify.save-success')
       );
-      this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -57,9 +57,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   async delete(account) {
     try {
       await account.destroyRecord();
+      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
