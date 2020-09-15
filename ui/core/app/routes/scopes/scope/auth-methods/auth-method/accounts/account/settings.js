@@ -12,13 +12,13 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   // =actions
 
   /**
-   * Save password for current account.
+   * Set password for current account.
    * @param {AccountModel} account
    */
   @action
-  async savePassword(account) {
+  async setPassword(account) {
     try {
-      await account.savePassword();
+      await account.setPassword();
       await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.settings');
       this.notify.success(
         this.intl.t('notify.save-success')
