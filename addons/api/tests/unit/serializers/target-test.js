@@ -30,7 +30,10 @@ module('Unit | Serializer | target', function(hooks) {
       description: 'Description',
       version: 1,
       type: 'tcp',
-      scope_id: 'org_1'
+      scope_id: 'org_1',
+      attributes: {
+        default_port: null
+      }
     });
 
   });
