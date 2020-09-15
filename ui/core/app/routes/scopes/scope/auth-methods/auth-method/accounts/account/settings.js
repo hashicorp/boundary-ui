@@ -14,11 +14,12 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   /**
    * Save password for current account.
    * @param {AccountModel} account
+   * @param {string} password
    */
   @action
-  async savePassword(account) {
+  async savePassword(account, password) {
     try {
-      await account.savePassword();
+      await account.savePassword(password);
       await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.settings');
       this.notify.success(
         this.intl.t('notify.save-success')
@@ -34,6 +35,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account');
+    this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.settings');
   }
 }

@@ -1,6 +1,6 @@
 <Rose::Form
-  @onSubmit={{@submit}}
-  @cancel={{@cancel}}
+  @onSubmit={{fn this.submit @submit}}
+  @cancel={{fn this.cancel @cancel}}
   @disabled={{@model.isSaving}}
   @error={{@model.errors.base}}
   as |form|
@@ -9,7 +9,7 @@
   <form.input
     @name="password"
     @type="password"
-    @value={{@model.attributes.password}}
+    @value={{this.password}}
     @label={{t "form.label.password"}}
     @error={{@model.errors.name}}
     readonly={{false}}
@@ -25,7 +25,7 @@
   </form.input>
 
   <form.actions
-    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @disabled={{this.cannotSave}}
     @submitText={{t "actions.save"}}
     @cancelText={{t "actions.cancel"}} />
 
