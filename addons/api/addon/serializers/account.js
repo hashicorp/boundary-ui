@@ -1,13 +1,12 @@
 import ApplicationSerializer from './application';
-import { get } from '@ember/object';
 
 export default class AccountSerializer extends ApplicationSerializer {
 
   // =methods
 
   /**
-   * If `adapterOptions.serializeWithNewPassword` is true, the serialization should
-   * include **password** and the version.
+   * If `adapterOptions.method` is `set-password`, the serialization should
+   * include only **password** and the version.
    * If `adapterOptions.password` is set, the serialization should
    * include **password** in it's `attributes`.
    * @override
@@ -15,11 +14,12 @@ export default class AccountSerializer extends ApplicationSerializer {
    * @return {object}
    */
   serialize(snapshot) {
-    const password = get(snapshot, 'adapterOptions.password');
-    const serializeWithNewPassword = get(snapshot, 'adapterOptions.serializeWithNewPassword');
+    const password = snapshot?.adapterOptions?.password;
     let serialized = super.serialize(...arguments);
-    if (password) serialized.attributes.password = password;
-    if (serializeWithNewPassword) serialized = this.serializeWithNewPassword(snapshot, password)
+    if (password && snapshot?.record?.isNew) serialized.attributes.password = password;
+    if (snapshot?.adapterOptions?.method === 'set-password') {
+      serialized = this.serializeForSetPassword(snapshot, password);
+    }
     return serialized;
   }
 
@@ -29,7 +29,7 @@ export default class AccountSerializer extends ApplicationSerializer {
    * @param {string} password
    * @return {object}
    */
-  serializeWithNewPassword(snapshot, password) {
+  serializeForSetPassword(snapshot, password) {
     return {
       version: snapshot.attr('version'),
       password,

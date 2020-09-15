@@ -19,10 +19,9 @@ export default class AccountModel extends GeneratedAccountModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  savePassword(password, options={ adapterOptions: {} }) {
+  setPassword(password, options={ adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'set-password',
-      serializeWithNewPassword: true,
       password
     };
     return this.save({

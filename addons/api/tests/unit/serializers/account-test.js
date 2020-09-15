@@ -65,7 +65,11 @@ module('Unit | Serializer | account', function(hooks) {
     });
   });
 
-  test('it serializes only password when `adapterOptions.serializeWithNewPassword` is true', function (assert) {
+  test('it does not serialize password for non-new records', function (assert) {
+    assert.expect(0);
+  });
+
+  test('it serializes only password when `adapterOptions.method` is set to `set-password`', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
@@ -81,7 +85,7 @@ module('Unit | Serializer | account', function(hooks) {
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      serializeWithNewPassword: true,
+      method: 'set-password',
       password: 'Password'
     };
     const serializedRecord = serializer.serialize(snapshot);
