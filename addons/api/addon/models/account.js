@@ -9,4 +9,29 @@ export default class AccountModel extends GeneratedAccountModel {
    */
   @fragment('fragment-account-attributes', { defaultValue: {} }) attributes;
 
+  // =methods
+
+  /**
+   * Save account password via the `set-password` method.
+   * See serializer and adapter for more information.
+   * @param {string} password
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  savePassword(password, options={ adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'set-password',
+      serializeWithNewPassword: true,
+      password
+    };
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions
+      }
+    });
+  }
+
 }
