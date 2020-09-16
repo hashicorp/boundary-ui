@@ -39,14 +39,9 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
    */
   @action
   submit(fn) {
-    try {
-      fn(this.password);
-    } catch (e) {
-      // We want to guarantee password is unset
-      this.resetPassword();
-      // But we don't want to silence the error
-      throw e;
-    }
+    const password = this.password;
+    this.resetPassword();
+    fn(password);
   }
 
   /**
@@ -55,14 +50,8 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
    */
   @action
   cancel(fn) {
-    try {
-      fn();
-    } catch (e) {
-      // We want to guarantee password is unset
-      this.resetPassword();
-      // But we don't want to silence the error
-      throw e;
-    }
+    this.resetPassword();
+    fn();
   }
 
 }

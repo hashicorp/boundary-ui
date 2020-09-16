@@ -30,13 +30,8 @@ export default class FormAccountPasswordIndexComponent extends Component {
    */
   @action
   submit(fn) {
-    try {
-      this.args.model.isNew ? fn(this.password) : fn();
-    } catch (e) {
-      // We want to guarantee password is unset
-      this.resetPassword();
-      // But we don't want to silence the error
-      throw e;
-    }
+    const password = this.password;
+    this.resetPassword();
+    this.args.model.isNew ? fn(password) : fn();
   }
 }
