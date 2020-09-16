@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Route {
-
   // =methods
 
   /**
@@ -9,11 +8,12 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
    * @return {AccountModel}
    */
   model() {
-    const { id: auth_method_id } =
-      this.modelFor('scopes.scope.auth-methods.auth-method');
+    const { id: auth_method_id } = this.modelFor(
+      'scopes.scope.auth-methods.auth-method'
+    );
     return this.store.createRecord('account', {
       type: 'password',
-      auth_method_id
+      auth_method_id,
     });
   }
 
@@ -26,18 +26,17 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
 
     this.render('scopes/scope/auth-methods/auth-method/accounts/new/-header', {
       into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'header'
+      outlet: 'header',
     });
 
     this.render('_empty', {
       into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'actions'
+      outlet: 'actions',
     });
 
     this.render('_empty', {
       into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'navigation'
+      outlet: 'navigation',
     });
   }
-
 }

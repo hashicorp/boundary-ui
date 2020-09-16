@@ -3,7 +3,6 @@ import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class FormHostSetAddHostsIndexComponent extends Component {
-
   // =properties
 
   /**
@@ -28,7 +27,7 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
    */
   @computed('args.{model,hosts}')
   get filteredHosts() {
-    const currentHostIDs = this.args.model.host_ids.map(host => host.value);
+    const currentHostIDs = this.args.model.host_ids.map((host) => host.value);
     return this.args.hosts.filter(({ id }) => !currentHostIDs.includes(id));
   }
 

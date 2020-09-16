@@ -19,9 +19,9 @@ module('Acceptance | host catalogs', function (hooks) {
     scopes: {
       global: null,
       org: null,
-      project: null
+      project: null,
     },
-    hostCatalog: null
+    hostCatalog: null,
   };
   const urls = {
     orgScope: null,
@@ -29,20 +29,22 @@ module('Acceptance | host catalogs', function (hooks) {
     project: null,
     hostCatalogs: null,
     newHostCatalog: null,
-    hostCatalog: null
+    hostCatalog: null,
   };
 
   hooks.beforeEach(function () {
     // Setup Mirage mock resources for this test
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    instances.scopes.org = this.server.create('scope', { type: 'org',
-      scope: { id: 'global', type: 'global' }
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
     });
-    instances.scopes.project = this.server.create('scope', { type: 'project',
-      scope: { id: instances.scopes.org.id, type: 'org' }
+    instances.scopes.project = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
     });
     instances.hostCatalog = this.server.create('host-catalog', {
-      scope: instances.scopes.project
+      scope: instances.scopes.project,
     });
 
     // Generate route URLs for resources
@@ -99,7 +101,7 @@ module('Acceptance | host catalogs', function (hooks) {
     assert.notEqual(this.server.db.hostCatalogs[0].name, 'Test Name');
   });
 
-  test('can create host catalog and save changes', async function(assert) {
+  test('can create host catalog and save changes', async function (assert) {
     assert.expect(1);
     const hostCatalogsCount = this.server.db.hostCatalogs.length;
     authenticateSession({});
@@ -109,7 +111,7 @@ module('Acceptance | host catalogs', function (hooks) {
     assert.equal(this.server.db.hostCatalogs.length, hostCatalogsCount + 1);
   });
 
-  test('can create host catalog and cancel changes', async function(assert) {
+  test('can create host catalog and cancel changes', async function (assert) {
     assert.expect(1);
     const hostCatalogsCount = this.server.db.hostCatalogs.length;
     authenticateSession({});

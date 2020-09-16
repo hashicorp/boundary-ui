@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { next } from '@ember/runloop';
 
 export default class FormAccountPasswordIndexComponent extends Component {
-
   // =properties
 
   /**

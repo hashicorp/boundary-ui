@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { hash } from 'rsvp';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -22,7 +21,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     return hash({
       role,
       users: this.store.query('user', { scope_id }),
-      groups: this.store.query('group', { scope_id })
+      groups: this.store.query('group', { scope_id }),
     });
   }
 
@@ -76,5 +75,4 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   cancel() {
     this.replaceWith('scopes.scope.roles.role.principals');
   }
-
 }

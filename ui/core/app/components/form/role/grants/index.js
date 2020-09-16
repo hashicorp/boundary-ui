@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { computed, action } from '@ember/object';
 
 export default class FormRoleGrantsComponent extends Component {
-
   // =attributes
 
   /**

@@ -30,7 +30,7 @@ module('Acceptance | users', function (hooks) {
     );
 
     const user = this.server.create('user', {
-      scope: orgScope
+      scope: orgScope,
     });
 
     usersURL = `/scopes/${orgScope.id}/users`;

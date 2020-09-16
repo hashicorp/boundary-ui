@@ -48,8 +48,10 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     const { isNew } = authMethod;
     try {
       await authMethod.save();
-      await this
-        .transitionTo('scopes.scope.auth-methods.auth-method', authMethod);
+      await this.transitionTo(
+        'scopes.scope.auth-methods.auth-method',
+        authMethod
+      );
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')

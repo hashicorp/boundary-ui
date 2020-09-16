@@ -15,8 +15,9 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    * @return {Promise{[HostSetModel]}}
    */
   model() {
-    const { id: host_catalog_id } =
-      this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
+    const { id: host_catalog_id } = this.modelFor(
+      'scopes.scope.projects.project.host-catalogs.host-catalog'
+    );
     return this.store.query('host-set', { host_catalog_id });
   }
 
@@ -30,7 +31,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
   cancel(hostSet) {
     const { isNew } = hostSet;
     hostSet.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
+    if (isNew)
+      this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets'
+      );
   }
 
   /**
@@ -43,7 +47,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
     try {
       const { isNew } = hostSet;
       await hostSet.save();
-      await this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set', hostSet);
+      await this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set',
+        hostSet
+      );
       await this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
@@ -63,7 +70,9 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
     try {
       await hostSet.destroyRecord();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets');
+      this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets'
+      );
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

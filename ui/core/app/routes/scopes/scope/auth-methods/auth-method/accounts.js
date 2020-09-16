@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -16,8 +15,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    * @return {Promise{[AccountModel]}}
    */
   model() {
-    const { id: auth_method_id } =
-      this.modelFor('scopes.scope.auth-methods.auth-method');
+    const { id: auth_method_id } = this.modelFor(
+      'scopes.scope.auth-methods.auth-method'
+    );
     return this.store.query('account', { auth_method_id });
   }
 
@@ -31,7 +31,8 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   cancel(account) {
     const { isNew } = account;
     account.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
+    if (isNew)
+      this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
   }
 
   /**
@@ -42,10 +43,15 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   async save(account, password) {
     const { isNew } = account;
     const adapterOptions = {};
-    if(isNew) { adapterOptions.password = password; }
+    if (isNew) {
+      adapterOptions.password = password;
+    }
     try {
       await account.save({ adapterOptions });
-      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
+      await this.transitionTo(
+        'scopes.scope.auth-methods.auth-method.accounts.account',
+        account
+      );
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')

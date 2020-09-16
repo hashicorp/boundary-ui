@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeGroupsGroupRoute extends Route {
-
   // =methods
 
   /**
@@ -23,17 +22,17 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
 
     this.render('scopes/scope/groups/group/-header', {
       into: 'scopes/scope/groups/group',
-      outlet: 'header'
+      outlet: 'header',
     });
 
     this.render('scopes/scope/groups/group/-actions', {
       into: 'scopes/scope/groups/group',
-      outlet: 'actions'
+      outlet: 'actions',
     });
 
     this.render('scopes/scope/groups/group/-navigation', {
       into: 'scopes/scope/groups/group',
-      outlet: 'navigation'
+      outlet: 'navigation',
     });
   }
 }

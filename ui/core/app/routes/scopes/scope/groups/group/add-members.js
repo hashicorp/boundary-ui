@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { hash } from 'rsvp';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
-
   // =services
 
   @service intl;
@@ -28,7 +27,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
     const { scopeID: scope_id } = group;
     return hash({
       group: this.modelFor('scopes.scope.groups.group'),
-      users: this.store.query('user', { scope_id })
+      users: this.store.query('user', { scope_id }),
     });
   }
 
@@ -41,17 +40,17 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
 
     this.render('scopes/scope/groups/group/add-members/-header', {
       into: 'scopes/scope/groups/group',
-      outlet: 'header'
+      outlet: 'header',
     });
 
     this.render('-empty', {
       into: 'scopes/scope/groups/group',
-      outlet: 'actions'
+      outlet: 'actions',
     });
 
     this.render('-empty', {
       into: 'scopes/scope/groups/group',
-      outlet: 'navigation'
+      outlet: 'navigation',
     });
   }
 
@@ -82,5 +81,4 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   cancel() {
     this.replaceWith('scopes.scope.groups.group.members');
   }
-
 }

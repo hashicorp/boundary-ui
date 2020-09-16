@@ -3,8 +3,6 @@ import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class FormRoleAddPrincipalsIndexComponent extends Component {
-
-
   // =properties
 
   /**
@@ -31,10 +29,16 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
   @computed('args.{model,users,groups}')
   get filteredPrincipals() {
     // Retrieve principal IDs assigned to current role
-    const currentPrincipalIDs = this.args.model.principals.map(principal => principal.principal_id);
+    const currentPrincipalIDs = this.args.model.principals.map(
+      (principal) => principal.principal_id
+    );
     // Retrieve principal IDs not assigned to current role
-    const unassignedUsers = this.args.users.filter(({ id }) => !currentPrincipalIDs.includes(id));
-    const unassignedGroups = this.args.groups.filter(({ id }) => !currentPrincipalIDs.includes(id));
+    const unassignedUsers = this.args.users.filter(
+      ({ id }) => !currentPrincipalIDs.includes(id)
+    );
+    const unassignedGroups = this.args.groups.filter(
+      ({ id }) => !currentPrincipalIDs.includes(id)
+    );
     return [...unassignedUsers, ...unassignedGroups];
   }
 
@@ -53,5 +57,4 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
   submit(fn) {
     fn(this.selectedPrincipalIDs);
   }
-
 }

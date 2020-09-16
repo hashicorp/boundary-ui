@@ -4,11 +4,9 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
-
   // =services
   @service intl;
   @service notify;
-
 
   // =methods
 
@@ -23,19 +21,19 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     const users = role.principals
       .filterBy('type', 'user')
       .map(({ principal_id }) =>
-        this.store.findRecord('user', principal_id, { adapterOptions })
-          .then(model => ({
+        this.store
+          .findRecord('user', principal_id, { adapterOptions })
+          .then((model) => ({
             type: 'user',
-            model
+            model,
           }))
       );
     const groups = role.principals
       .filterBy('type', 'group')
       .map(({ principal_id }) =>
-        this.store.findRecord('group', principal_id)
-        .then(model => ({
+        this.store.findRecord('group', principal_id).then((model) => ({
           type: 'group',
-          model
+          model,
         }))
       );
     return all(users.concat(groups));

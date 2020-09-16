@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountRoute extends Route {
-
   // =methods
 
   /**
@@ -21,20 +20,28 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountRoute extend
   renderTemplate() {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/auth-methods/auth-method/accounts/account/-header', {
-      into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'header'
-    });
+    this.render(
+      'scopes/scope/auth-methods/auth-method/accounts/account/-header',
+      {
+        into: 'scopes/scope/auth-methods/auth-method',
+        outlet: 'header',
+      }
+    );
 
-    this.render('scopes/scope/auth-methods/auth-method/accounts/account/-actions', {
-      into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'actions'
-    });
+    this.render(
+      'scopes/scope/auth-methods/auth-method/accounts/account/-actions',
+      {
+        into: 'scopes/scope/auth-methods/auth-method',
+        outlet: 'actions',
+      }
+    );
 
-    this.render('scopes/scope/auth-methods/auth-method/accounts/account/-navigation', {
-      into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'navigation'
-    });
+    this.render(
+      'scopes/scope/auth-methods/auth-method/accounts/account/-navigation',
+      {
+        into: 'scopes/scope/auth-methods/auth-method',
+        outlet: 'navigation',
+      }
+    );
   }
-
 }

@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { all } from 'rsvp';
 
 export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -24,18 +23,21 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
    * @return {{target: TargetModel, hostCatalogs: [HostCatalogModel], hostSets: [HostSetModel]}}
    */
   async model() {
-    const target =
-      this.modelFor('scopes.scope.projects.project.targets.target');
+    const target = this.modelFor(
+      'scopes.scope.projects.project.targets.target'
+    );
     const { id: scope_id } = this.modelFor('scopes.scope.projects.project');
     const hostCatalogs = await this.store.query('host-catalog', { scope_id });
-    await all(hostCatalogs.map(({ id: host_catalog_id }) =>
-      this.store.query('host-set', { host_catalog_id })
-    ));
+    await all(
+      hostCatalogs.map(({ id: host_catalog_id }) =>
+        this.store.query('host-set', { host_catalog_id })
+      )
+    );
     const hostSets = this.store.peekAll('host-set');
     return {
       target,
       hostCatalogs,
-      hostSets
+      hostSets,
     };
   }
 
@@ -46,10 +48,13 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
   renderTemplate() {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/projects/project/targets/target/add-host-sets/-header', {
-      into: 'scopes/scope/projects/project/targets/target',
-      outlet: 'header',
-    });
+    this.render(
+      'scopes/scope/projects/project/targets/target/add-host-sets/-header',
+      {
+        into: 'scopes/scope/projects/project/targets/target',
+        outlet: 'header',
+      }
+    );
 
     this.render('-empty', {
       into: 'scopes/scope/projects/project/targets/target',
@@ -68,7 +73,9 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
   async save(target, hostSetIDs) {
     try {
       await target.addHostSets(hostSetIDs);
-      this.replaceWith('scopes.scope.projects.project.targets.target.host-sets');
+      this.replaceWith(
+        'scopes.scope.projects.project.targets.target.host-sets'
+      );
       this.notify.success(this.intl.t('notify.save-success'));
     } catch (error) {
       // TODO: replace with translated strings

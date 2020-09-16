@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { hash } from 'rsvp';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHostSetAddHostsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -24,10 +23,14 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    * @return {Promise{HostSetModel,[HostModel]}}
    */
   async model() {
-    const { id: host_catalog_id } = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
+    const { id: host_catalog_id } = this.modelFor(
+      'scopes.scope.projects.project.host-catalogs.host-catalog'
+    );
     return hash({
-      hostSet: this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set'),
-      hosts: this.store.query('host', { host_catalog_id })
+      hostSet: this.modelFor(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set'
+      ),
+      hosts: this.store.query('host', { host_catalog_id }),
     });
   }
 
@@ -39,10 +42,13 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   renderTemplate() {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/host-set/add-hosts/-header', {
-      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
-      outlet: 'header',
-    });
+    this.render(
+      'scopes/scope/projects/project/host-catalogs/host-catalog/host-sets/host-set/add-hosts/-header',
+      {
+        into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+        outlet: 'header',
+      }
+    );
 
     this.render('-empty', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
@@ -84,10 +90,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   async addHosts(hostSet, hostIDs) {
     try {
       await hostSet.addHosts(hostIDs);
-      await this.replaceWith('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts');
-      this.notify.success(
-        this.intl.t('notify.save-success')
+      await this.replaceWith(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts'
       );
+      this.notify.success(this.intl.t('notify.save-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -99,6 +105,8 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts');
+    this.replaceWith(
+      'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts'
+    );
   }
 }

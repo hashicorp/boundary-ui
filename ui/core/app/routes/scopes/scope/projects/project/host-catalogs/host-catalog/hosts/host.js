@@ -22,22 +22,31 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsHostR
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-header', {
-      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
-      outlet: 'header',
-      model: model
-    });
+    this.render(
+      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-header',
+      {
+        into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+        outlet: 'header',
+        model: model,
+      }
+    );
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-navigation', {
-      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
-      outlet: 'navigation',
-      model: model
-    });
+    this.render(
+      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-navigation',
+      {
+        into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+        outlet: 'navigation',
+        model: model,
+      }
+    );
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-actions', {
-      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
-      outlet: 'actions',
-      model: model
-    });
+    this.render(
+      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-actions',
+      {
+        into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+        outlet: 'actions',
+        model: model,
+      }
+    );
   }
 }

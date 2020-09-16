@@ -3,7 +3,6 @@ import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class FormGroupAddMembersComponent extends Component {
-
   // =properties
 
   /**
@@ -38,5 +37,4 @@ export default class FormGroupAddMembersComponent extends Component {
   submit(fn) {
     fn(this.selectedMemberIDs);
   }
-
 }

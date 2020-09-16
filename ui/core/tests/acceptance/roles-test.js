@@ -30,7 +30,7 @@ module('Acceptance | roles', function (hooks) {
     );
 
     const role = this.server.create('role', {
-      scope: orgScope
+      scope: orgScope,
     });
 
     rolesURL = `/scopes/${orgScope.id}/roles`;
@@ -219,7 +219,7 @@ module('Acceptance | roles', function (hooks) {
     assert.expect(0);
   });
 
-  test('principal can be removed from a role', async function(assert) {
+  test('principal can be removed from a role', async function (assert) {
     assert.expect(0);
   });
 
@@ -239,7 +239,7 @@ module('Acceptance | roles', function (hooks) {
     assert.expect(0);
   });
 
-  test('can delete a principal', async function(assert) {
+  test('can delete a principal', async function (assert) {
     assert.expect(0);
   });
 

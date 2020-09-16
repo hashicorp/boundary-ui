@@ -15,8 +15,9 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
    * @return {Promise{[HostModel]}}
    */
   model() {
-    const { id: host_catalog_id } =
-      this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
+    const { id: host_catalog_id } = this.modelFor(
+      'scopes.scope.projects.project.host-catalogs.host-catalog'
+    );
     return this.store.query('host', { host_catalog_id });
   }
 
@@ -30,7 +31,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
   cancel(host) {
     const { isNew } = host;
     host.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts');
+    if (isNew)
+      this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.hosts'
+      );
   }
 
   /**
@@ -43,7 +47,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
     try {
       const { isNew } = host;
       await host.save();
-      await this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host', host);
+      await this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host',
+        host
+      );
       await this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
@@ -64,7 +71,9 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
       await host.destroyRecord();
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog.hosts');
+      this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog.hosts'
+      );
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

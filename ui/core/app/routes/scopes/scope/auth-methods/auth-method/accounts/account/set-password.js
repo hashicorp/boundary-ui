@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -17,10 +16,13 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
    */
   renderTemplate() {
     super.renderTemplate(...arguments);
-    this.render('scopes/scope/auth-methods/auth-method/accounts/account/set-password/-header', {
-      into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'header'
-    });
+    this.render(
+      'scopes/scope/auth-methods/auth-method/accounts/account/set-password/-header',
+      {
+        into: 'scopes/scope/auth-methods/auth-method',
+        outlet: 'header',
+      }
+    );
   }
 
   // =actions
@@ -34,10 +36,10 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   async setPassword(account, password) {
     try {
       await account.setPassword(password);
-      await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.set-password');
-      this.notify.success(
-        this.intl.t('notify.save-success')
+      await this.replaceWith(
+        'scopes.scope.auth-methods.auth-method.accounts.account.set-password'
       );
+      this.notify.success(this.intl.t('notify.save-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -49,6 +51,8 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.set-password');
+    this.replaceWith(
+      'scopes.scope.auth-methods.auth-method.accounts.account.set-password'
+    );
   }
 }

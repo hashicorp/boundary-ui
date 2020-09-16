@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeOrgsNewRoute extends Route {
-
   // =methods
 
   /**
@@ -14,5 +13,4 @@ export default class ScopesScopeOrgsNewRoute extends Route {
       scopeID: 'global',
     });
   }
-
 }

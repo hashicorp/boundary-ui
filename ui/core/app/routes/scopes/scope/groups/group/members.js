@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { hash, all } from 'rsvp';
 
 export default class ScopesScopeGroupsGroupMembersRoute extends Route {
-
   // =services
 
   @service intl;
@@ -21,9 +20,11 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
     const group = this.modelFor('scopes.scope.groups.group');
     return hash({
       group,
-      members: all(group.member_ids.map(id =>
-        this.store.findRecord('user', id, { adapterOptions: { scopeID } })
-      ))
+      members: all(
+        group.member_ids.map((id) =>
+          this.store.findRecord('user', id, { adapterOptions: { scopeID } })
+        )
+      ),
     });
   }
 
@@ -45,5 +46,4 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
       this.notify.error(error.message, { closeAfter: null });
     }
   }
-
 }

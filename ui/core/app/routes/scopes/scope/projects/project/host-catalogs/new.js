@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeProjectsProjectHostCatalogsNewRoute extends Route {
-
   // =methods
 
   /**
@@ -12,8 +11,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsNewRoute extends Rout
     const scopeModel = this.modelFor('scopes.scope.projects.project');
     return this.store.createRecord('host-catalog', {
       type: 'static',
-      scopeModel
+      scopeModel,
     });
   }
-
 }
