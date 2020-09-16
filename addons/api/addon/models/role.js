@@ -2,7 +2,6 @@ import GeneratedRoleModel from '../generated/models/role';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
 
 export default class RoleModel extends GeneratedRoleModel {
-
   // =attributes
 
   /**
@@ -14,14 +13,15 @@ export default class RoleModel extends GeneratedRoleModel {
    */
   @fragmentArray('fragment-principal', {
     readOnly: true,
-    emptyArrayIfMissing: true
-  }) principals;
+    emptyArrayIfMissing: true,
+  })
+  principals;
 
   /**
    * Grants is read-only _most_ under normal circumstances.  But grants can
    * be persisted via a dedicated call to `saveGrants()`.
    */
-  @fragmentArray('fragment-string', {readOnly: true}) grants;
+  @fragmentArray('fragment-string', { readOnly: true }) grants;
 
   // =methods
 
@@ -34,8 +34,8 @@ export default class RoleModel extends GeneratedRoleModel {
     return this.save({
       adapterOptions: {
         method: 'set-grants',
-        serializeGrants: true
-      }
+        serializeGrants: true,
+      },
     });
   }
 
@@ -47,10 +47,10 @@ export default class RoleModel extends GeneratedRoleModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addPrincipals(principalIDs, options={ adapterOptions: {} }) {
+  addPrincipals(principalIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-principals',
-      principalIDs
+      principalIDs,
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get
@@ -59,8 +59,8 @@ export default class RoleModel extends GeneratedRoleModel {
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 
@@ -72,10 +72,10 @@ export default class RoleModel extends GeneratedRoleModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removePrincipals(principalIDs, options={ adapterOptions: {} }) {
+  removePrincipals(principalIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'remove-principals',
-      principalIDs
+      principalIDs,
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get
@@ -84,8 +84,8 @@ export default class RoleModel extends GeneratedRoleModel {
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 
@@ -98,5 +98,4 @@ export default class RoleModel extends GeneratedRoleModel {
   removePrincipal(principalID, options) {
     return this.removePrincipals([principalID], options);
   }
-
 }

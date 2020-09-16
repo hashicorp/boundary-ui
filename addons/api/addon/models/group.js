@@ -4,7 +4,6 @@ import { computed } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class GroupModel extends GeneratedGroupModel {
-
   // =attributes
 
   /**
@@ -14,8 +13,9 @@ export default class GroupModel extends GeneratedGroupModel {
   @attr({
     readOnly: true,
     defaultValue: () => A(),
-    emptyArrayIfMissing: true
-  }) member_ids;
+    emptyArrayIfMissing: true,
+  })
+  member_ids;
 
   /**
    * An array of resolved user instances.
@@ -26,7 +26,7 @@ export default class GroupModel extends GeneratedGroupModel {
   @computed('member_ids.[]')
   get members() {
     return this.member_ids
-      .map(id => this.store.peekRecord('user', id))
+      .map((id) => this.store.peekRecord('user', id))
       .filter(Boolean);
   }
 
@@ -40,10 +40,10 @@ export default class GroupModel extends GeneratedGroupModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addMembers(memberIDs, options={ adapterOptions: {} }) {
+  addMembers(memberIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-members',
-      memberIDs
+      memberIDs,
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get
@@ -52,8 +52,8 @@ export default class GroupModel extends GeneratedGroupModel {
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 
@@ -65,10 +65,10 @@ export default class GroupModel extends GeneratedGroupModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeMembers(memberIDs, options={ adapterOptions: {} }) {
+  removeMembers(memberIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'remove-members',
-      memberIDs
+      memberIDs,
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get
@@ -77,8 +77,8 @@ export default class GroupModel extends GeneratedGroupModel {
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 
@@ -91,5 +91,4 @@ export default class GroupModel extends GeneratedGroupModel {
   removeMember(memberID, options) {
     return this.removeMembers([memberID], options);
   }
-
 }

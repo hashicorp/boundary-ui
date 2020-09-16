@@ -35,7 +35,7 @@ module('Unit | Adapter | application', function (hooks) {
     const method = 'set-something';
     const adapter = this.owner.lookup('adapter:application');
     const suffix = adapter.urlSuffix(null, null, {
-      adapterOptions: { method }
+      adapterOptions: { method },
     });
     assert.ok(config.api.namespace);
     assert.equal(suffix, ':set-something');
@@ -48,31 +48,56 @@ module('Unit | Adapter | application', function (hooks) {
     const mockSnapshot = {
       adapterOptions: {
         scopeID,
-        method
-      }
+        method,
+      },
     };
     const adapter = this.owner.lookup('adapter:application');
     // test URL generation for each request type...
-    const findRecordURL = adapter.buildURL('user', '1', mockSnapshot, 'findRecord');
+    const findRecordURL = adapter.buildURL(
+      'user',
+      '1',
+      mockSnapshot,
+      'findRecord'
+    );
     assert.equal(findRecordURL, '/v1/users/1:my-custom-method');
     const findAllURL = adapter.buildURL('user', null, mockSnapshot, 'findAll');
     assert.equal(findAllURL, '/v1/users:my-custom-method');
-    const findBelongsToURL = adapter.buildURL('user', '2', mockSnapshot, 'findBelongsTo');
+    const findBelongsToURL = adapter.buildURL(
+      'user',
+      '2',
+      mockSnapshot,
+      'findBelongsTo'
+    );
     assert.equal(findBelongsToURL, '/v1/users/2:my-custom-method');
-    const createRecordURL = adapter.buildURL('user', null, mockSnapshot, 'createRecord');
+    const createRecordURL = adapter.buildURL(
+      'user',
+      null,
+      mockSnapshot,
+      'createRecord'
+    );
     assert.equal(createRecordURL, '/v1/users:my-custom-method');
-    const updateRecordURL = adapter.buildURL('user', '3', mockSnapshot, 'updateRecord');
+    const updateRecordURL = adapter.buildURL(
+      'user',
+      '3',
+      mockSnapshot,
+      'updateRecord'
+    );
     assert.equal(updateRecordURL, '/v1/users/3:my-custom-method');
-    const deleteRecordURL = adapter.buildURL('user', '4', mockSnapshot, 'deleteRecord');
+    const deleteRecordURL = adapter.buildURL(
+      'user',
+      '4',
+      mockSnapshot,
+      'deleteRecord'
+    );
     assert.equal(deleteRecordURL, '/v1/users/4:my-custom-method');
   });
 
   test('it can request records through the store from a specified scope', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    this.server.get('/v1/groups', (_, { queryParams: { scope_id }}) => {
+    this.server.get('/v1/groups', (_, { queryParams: { scope_id } }) => {
       assert.equal(scope_id, 'p_456', 'Scoped resource URL was requested.');
-      return {items: []};
+      return { items: [] };
     });
     await store.query('group', { scope_id: 'p_456' });
   });
@@ -95,15 +120,15 @@ module('Unit | Adapter | application', function (hooks) {
     const store = this.owner.lookup('service:store');
     const snapshot = store.createRecord('role', {})._createSnapshot();
     snapshot.adapterOptions = {
-      method: 'custom-method'
-    }
+      method: 'custom-method',
+    };
     // TODO this is icky, should be changed to a spy or stub
     const originalAjax = RESTAdapter.prototype.ajax;
     RESTAdapter.prototype.ajax = (url, type) => {
       assert.equal(type, 'POST');
       RESTAdapter.prototype.ajax = originalAjax;
     };
-    adapter.updateRecord(store, {modelName: 'user'}, snapshot);
+    adapter.updateRecord(store, { modelName: 'user' }, snapshot);
   });
 
   test('it prenormalizes "empty" responses into a form that the fetch-manager will not reject', async function (assert) {
@@ -111,8 +136,13 @@ module('Unit | Adapter | application', function (hooks) {
     const adapter = this.owner.lookup('adapter:application');
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/users', () => new Response({}));
-    const prenormalized = await adapter.findAll(store, {modelName: 'user'}, null, []);
-    assert.deepEqual(prenormalized, {items: []});
+    const prenormalized = await adapter.findAll(
+      store,
+      { modelName: 'user' },
+      null,
+      []
+    );
+    assert.deepEqual(prenormalized, { items: [] });
   });
 
   test('it correctly identifies 400 responses as invalid', function (assert) {

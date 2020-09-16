@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsNewController extends Controller {
-
   // =services
 
   @service intl;
@@ -16,5 +15,4 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsNewCo
   get breadCrumb() {
     return this.intl.t('titles.new');
   }
-
 }

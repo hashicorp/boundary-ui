@@ -13,7 +13,6 @@ import { get } from '@ember/object';
  * uses this mixin to alter generated URLs.
  */
 export default Mixin.create({
-
   // =methods
 
   /**
@@ -162,6 +161,5 @@ export default Mixin.create({
    */
   urlForDeleteRecord(id, modelName, snapshot) {
     return this._buildURL(modelName, id, snapshot);
-  }
-
+  },
 });

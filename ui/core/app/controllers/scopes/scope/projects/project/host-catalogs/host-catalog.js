@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogController extends Controller {
-
   // =attributes
 
   /**
@@ -10,5 +9,4 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogController
   get breadCrumb() {
     return this.model.displayName;
   }
-
 }

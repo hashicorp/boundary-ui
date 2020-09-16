@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Serializer | host set', function(hooks) {
+module('Unit | Serializer | host set', function (hooks) {
   setupTest(hooks);
 
   test('it serializes host sets normally, without host_ids', function (assert) {
@@ -12,7 +12,7 @@ module('Unit | Serializer | host set', function(hooks) {
       name: 'Host Set 1',
       description: 'Description',
       host_catalog_id: '123',
-      version: 1
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -21,7 +21,7 @@ module('Unit | Serializer | host set', function(hooks) {
       name: 'Host Set 1',
       description: 'Description',
       host_catalog_id: '123',
-      version: 1
+      version: 1,
     });
   });
 
@@ -32,17 +32,17 @@ module('Unit | Serializer | host set', function(hooks) {
     const record = store.createRecord('host-set', {
       name: 'Host Set 1',
       description: 'Description',
-      host_ids: [{value: '1'}, {value: '2'}, {value: '3'}],
-      version: 1
+      host_ids: [{ value: '1' }, { value: '2' }, { value: '3' }],
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      hostIDs: ['4', '5']
+      hostIDs: ['4', '5'],
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       host_ids: ['4', '5'],
-      version: 1
+      version: 1,
     });
   });
 
@@ -54,7 +54,7 @@ module('Unit | Serializer | host set', function(hooks) {
     const payload = {
       id: '1',
       name: 'Host Set 1',
-      host_ids: ['1', '2', '3']
+      host_ids: ['1', '2', '3'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -68,7 +68,7 @@ module('Unit | Serializer | host set', function(hooks) {
         type: 'host-set',
         attributes: {
           name: 'Host Set 1',
-          host_ids: [{value: '1'}, {value: '2'}, {value: '3'}],
+          host_ids: [{ value: '1' }, { value: '2' }, { value: '3' }],
         },
         relationships: {},
       },
@@ -83,7 +83,7 @@ module('Unit | Serializer | host set', function(hooks) {
     const payload = {
       id: '1',
       name: 'Host Set 1',
-      scope: { id: 'o_123' }
+      scope: { id: 'o_123' },
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -98,11 +98,10 @@ module('Unit | Serializer | host set', function(hooks) {
         attributes: {
           name: 'Host Set 1',
           scope: { scope_id: 'o_123' },
-          host_ids: []
+          host_ids: [],
         },
         relationships: {},
       },
     });
   });
-
 });

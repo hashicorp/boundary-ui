@@ -1,7 +1,6 @@
 import ApplicationSerializer from './application';
 
 export default class HostSetSerializer extends ApplicationSerializer {
-
   // =methods
 
   /**
@@ -44,10 +43,8 @@ export default class HostSetSerializer extends ApplicationSerializer {
     // TODO:  can fragment string normalization be handled generically?
     // TODO: host_ids might actually be attributes.host_ids
     if (resourceHash.host_ids) {
-      resourceHash.host_ids =
-        resourceHash.host_ids.map(value => ({ value }));
+      resourceHash.host_ids = resourceHash.host_ids.map((value) => ({ value }));
     }
     return super.normalize(modelClass, resourceHash);
   }
-
 }

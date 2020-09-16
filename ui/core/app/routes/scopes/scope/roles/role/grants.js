@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class ScopesScopeRolesRoleGrantsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -42,13 +41,10 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   async save(role) {
     try {
       await role.saveGrants();
-      this.notify.success(
-        this.intl.t('notify.save-success')
-      );
+      this.notify.success(this.intl.t('notify.save-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
     }
   }
-
 }

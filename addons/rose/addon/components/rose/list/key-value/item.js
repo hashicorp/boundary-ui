@@ -4,5 +4,5 @@ import ComponentAutoId from '../../../../mixins/component-auto-id';
 
 export default Component.extend(ComponentAutoId, {
   layout,
-  tagName: ''
+  tagName: '',
 });

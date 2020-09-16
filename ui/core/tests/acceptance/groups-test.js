@@ -30,7 +30,7 @@ module('Acceptance | groups', function (hooks) {
     );
 
     const group = this.server.create('group', {
-      scope: orgScope
+      scope: orgScope,
     });
 
     groupsURL = `/scopes/${orgScope.id}/groups`;
@@ -219,7 +219,7 @@ module('Acceptance | groups', function (hooks) {
     assert.expect(0);
   });
 
-  test('can delete members', async function(assert) {
+  test('can delete members', async function (assert) {
     assert.expect(0);
   });
 
@@ -230,5 +230,4 @@ module('Acceptance | groups', function (hooks) {
   test('select and cancel members to add', async function (assert) {
     assert.expect(0);
   });
-
 });

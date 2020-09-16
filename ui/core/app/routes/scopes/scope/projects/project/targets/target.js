@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeProjectsProjectTargetsTargetRoute extends Route {
-
   // =methods
 
   /**
@@ -37,5 +36,4 @@ export default class ScopesScopeProjectsProjectTargetsTargetRoute extends Route 
       outlet: 'actions',
     });
   }
-
 }

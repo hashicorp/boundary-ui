@@ -1,11 +1,16 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Route | scopes/scope/auth-methods/auth-method/accounts/account/set-password', function(hooks) {
-  setupTest(hooks);
+module(
+  'Unit | Route | scopes/scope/auth-methods/auth-method/accounts/account/set-password',
+  function (hooks) {
+    setupTest(hooks);
 
-  test('it exists', function(assert) {
-    let route = this.owner.lookup('route:scopes/scope/auth-methods/auth-method/accounts/account/set-password');
-    assert.ok(route);
-  });
-});
+    test('it exists', function (assert) {
+      let route = this.owner.lookup(
+        'route:scopes/scope/auth-methods/auth-method/accounts/account/set-password'
+      );
+      assert.ok(route);
+    });
+  }
+);

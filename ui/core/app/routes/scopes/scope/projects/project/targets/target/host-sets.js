@@ -3,7 +3,6 @@ import { all, hash } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-
 export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extends Route {
   // =services
 
@@ -18,26 +17,23 @@ export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extend
    * @return {Promise{[HostSetModel, HostCatalogModel]}}
    */
   beforeModel() {
-    const { scopeID, host_sets } =
-      this.modelFor('scopes.scope.projects.project.targets.target');
-    const promises = host_sets
-      .map(({ host_set_id, host_catalog_id: hostCatalogID }) =>
+    const { scopeID, host_sets } = this.modelFor(
+      'scopes.scope.projects.project.targets.target'
+    );
+    const promises = host_sets.map(
+      ({ host_set_id, host_catalog_id: hostCatalogID }) =>
         hash({
           // TODO:  multiple host sets may belong to the same catalog,
           // resulting in the catalog being loaded multiple times.
           // An improvement would be to find the unique set of catalogs first.
-          hostCatalog: this.store.findRecord(
-            'host-catalog',
-            hostCatalogID,
-            { adapterOptions: { scopeID } }
-          ),
-          hostSet: this.store.findRecord(
-            'host-set',
-            host_set_id,
-            { adapterOptions: { scopeID, hostCatalogID } }
-          )
+          hostCatalog: this.store.findRecord('host-catalog', hostCatalogID, {
+            adapterOptions: { scopeID },
+          }),
+          hostSet: this.store.findRecord('host-set', host_set_id, {
+            adapterOptions: { scopeID, hostCatalogID },
+          }),
         })
-      );
+    );
     return all(promises);
   }
 

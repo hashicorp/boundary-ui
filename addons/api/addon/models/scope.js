@@ -4,11 +4,10 @@ import { computed } from '@ember/object';
 export const scopeTypes = {
   global: 'global',
   org: 'org',
-  project: 'project'
+  project: 'project',
 };
 
 export default class ScopeModel extends GeneratedScopeModel {
-
   // =attributes
 
   /**
@@ -42,5 +41,4 @@ export default class ScopeModel extends GeneratedScopeModel {
   set isProject(value) {
     if (value) this.type = scopeTypes.project;
   }
-
 }

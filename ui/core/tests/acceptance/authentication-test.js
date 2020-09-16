@@ -1,5 +1,13 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click, find, findAll, setupOnerror } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  fillIn,
+  click,
+  find,
+  findAll,
+  setupOnerror,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -45,7 +53,9 @@ module('Acceptance | authentication', function (hooks) {
       'withChildren'
     );
     scope = { id: orgScope.id, type: orgScope.type };
-    globalAuthMethod = this.server.create('auth-method', { scope: globalScope });
+    globalAuthMethod = this.server.create('auth-method', {
+      scope: globalScope,
+    });
     authMethod = this.server.create('auth-method', { scope: orgScope });
     orgScopeID = orgScope.id;
     globalAuthMethodID = globalAuthMethod.id;
@@ -69,7 +79,7 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting auth methods authenticate route when there no methods shows a message', async function (assert) {
     assert.expect(2);
-    authMethod.destroy()
+    authMethod.destroy();
     await visit(authenticateURL);
     await a11yAudit();
     assert.equal(currentURL(), authenticateURL);
@@ -127,7 +137,9 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting index or scopes routes while already authenticated with global redirects to orgs', async function (assert) {
     assert.expect(4);
-    authenticateSession({ scope: { id: globalScope.id, type: globalScope.type } });
+    authenticateSession({
+      scope: { id: globalScope.id, type: globalScope.type },
+    });
     await visit(indexURL);
     assert.equal(currentURL(), orgsURL);
     await visit(scopesURL);
@@ -169,7 +181,9 @@ module('Acceptance | authentication', function (hooks) {
     // Open header utilities dropdown
     await click('.rose-header-utilities .rose-dropdown summary');
     // Find and click on last element in dropdown - should be deauthenticate button
-    const menu = findAll('.rose-header-utilities .rose-dropdown .rose-dropdown-content button');
+    const menu = findAll(
+      '.rose-header-utilities .rose-dropdown .rose-dropdown-content button'
+    );
     await click(menu[menu.length - 1]);
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
@@ -177,12 +191,20 @@ module('Acceptance | authentication', function (hooks) {
 
   test('401 responses result in deauthentication', async function (assert) {
     assert.expect(2);
-    authenticateSession({ scope: { id: globalScope.id, type: globalScope.type } });
+    authenticateSession({
+      scope: { id: globalScope.id, type: globalScope.type },
+    });
     await visit(orgsURL);
-    assert.ok(currentSession().isAuthenticated, 'Session begins authenticated, before encountering 401');
+    assert.ok(
+      currentSession().isAuthenticated,
+      'Session begins authenticated, before encountering 401'
+    );
     this.server.get('/scopes', () => new Response(401));
     setupOnerror(() => {
-      assert.notOk(currentSession().isAuthenticated, 'Session is unauthenticated, after encountering 401');
+      assert.notOk(
+        currentSession().isAuthenticated,
+        'Session is unauthenticated, after encountering 401'
+      );
     });
     await visit(projectsURL);
   });

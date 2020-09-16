@@ -3,7 +3,7 @@ import { attr } from '@ember-data/model';
 
 /**
  * User contains all fields related to a user resource
-*/
+ */
 export default class GeneratedUserModel extends BaseModel {
   // =attributes
 

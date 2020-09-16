@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { sort } from '@ember/object/computed';
 
 export default class ScopesScopeAuthenticateController extends Controller {
-
   // =attributes
 
   /**
@@ -17,5 +16,4 @@ export default class ScopesScopeAuthenticateController extends Controller {
     return 0;
   })
   sortedScopes;
-
 }

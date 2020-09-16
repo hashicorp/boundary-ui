@@ -5,12 +5,12 @@ import { attr } from '@ember-data/model';
  *
  */
 export default class GeneratedAuthMethodModel extends BaseModel {
-
   // =attributes
 
   @attr('string', {
-    description: 'The type of the resource, to help differentiate schemas'
-  }) type;
+    description: 'The type of the resource, to help differentiate schemas',
+  })
+  type;
 
   @attr('string', {
     description: 'Optional name for identification purposes',
@@ -43,5 +43,4 @@ export default class GeneratedAuthMethodModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
-
 }

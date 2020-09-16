@@ -3,14 +3,12 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
-
   // =services
 
   @service intl;
   @service notify;
 
   // =methods
-
 
   /**
    * Loads all host catalogs under the current scope.
@@ -48,7 +46,10 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
-      this.transitionTo('scopes.scope.projects.project.host-catalogs.host-catalog', hostCatalog);
+      this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog',
+        hostCatalog
+      );
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -71,5 +72,4 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
       this.notify.error(error.message, { closeAfter: null });
     }
   }
-
 }

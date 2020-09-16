@@ -25,7 +25,7 @@ export default class ScopesScopeProjectsProjectRoute extends Route {
     this.render('scopes/scope/projects/project/_sidebar', {
       into: 'scopes/scope',
       outlet: 'sidebar',
-      model: model
+      model: model,
     });
   }
 }

@@ -1,7 +1,6 @@
 import ApplicationSerializer from './application';
 
 export default class GroupSerializer extends ApplicationSerializer {
-
   // =methods
 
   /**
@@ -27,8 +26,7 @@ export default class GroupSerializer extends ApplicationSerializer {
   serializewithMembers(snapshot, memberIDs) {
     return {
       version: snapshot.attr('version'),
-      member_ids: memberIDs
+      member_ids: memberIDs,
     };
   }
-
 }

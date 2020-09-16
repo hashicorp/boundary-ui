@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Serializer | account', function(hooks) {
+module('Unit | Serializer | account', function (hooks) {
   setupTest(hooks);
 
   test('it serializes normally', function (assert) {
@@ -16,7 +16,7 @@ module('Unit | Serializer | account', function(hooks) {
       attributes: {
         login_name: 'Login Name',
       },
-      version: 1
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -27,9 +27,9 @@ module('Unit | Serializer | account', function(hooks) {
       auth_method_id: '1',
       description: 'Description',
       attributes: {
-        login_name: 'Login Name'
+        login_name: 'Login Name',
       },
-      version: 1
+      version: 1,
     });
   });
 
@@ -45,11 +45,11 @@ module('Unit | Serializer | account', function(hooks) {
       attributes: {
         login_name: 'Login Name',
       },
-      version: 1
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      password: 'Password'
+      password: 'Password',
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
@@ -59,9 +59,9 @@ module('Unit | Serializer | account', function(hooks) {
       description: 'Description',
       attributes: {
         login_name: 'Login Name',
-        password: 'Password'
+        password: 'Password',
       },
-      version: 1
+      version: 1,
     });
   });
 
@@ -78,20 +78,20 @@ module('Unit | Serializer | account', function(hooks) {
       name: 'Name',
       description: 'Description',
       attributes: {
-        login_name: 'Login Name'
+        login_name: 'Login Name',
       },
       auth_method_id: '1',
-      version: 1
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
       method: 'set-password',
-      password: 'Password'
+      password: 'Password',
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       password: 'Password',
-      version: 1
+      version: 1,
     });
   });
 });

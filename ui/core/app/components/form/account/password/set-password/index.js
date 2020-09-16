@@ -5,7 +5,6 @@ import { action } from '@ember/object';
 import { next } from '@ember/runloop';
 
 export default class FormAccountPasswordSetPasswordIndexComponent extends Component {
-
   // =properties
 
   /**
@@ -54,5 +53,4 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
     this.resetPassword();
     fn();
   }
-
 }

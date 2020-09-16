@@ -3,7 +3,6 @@ import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class FormTargetAddHostSetsComponent extends Component {
-
   // =properties
 
   /**
@@ -19,10 +18,12 @@ export default class FormTargetAddHostSetsComponent extends Component {
   @computed('args.{hostSets.[],model.host_sets.[]}')
   get filteredHostSets() {
     // Get IDs for host sets already added to the current target
-    const alreadyAddedHostSetIDs = this.args.model.host_sets
-      .map(({ host_set_id }) => host_set_id);
-    const notAddedHostSets = this.args.hostSets
-      .filter(({ id }) => !alreadyAddedHostSetIDs.includes(id));
+    const alreadyAddedHostSetIDs = this.args.model.host_sets.map(
+      ({ host_set_id }) => host_set_id
+    );
+    const notAddedHostSets = this.args.hostSets.filter(
+      ({ id }) => !alreadyAddedHostSetIDs.includes(id)
+    );
     return notAddedHostSets;
   }
 

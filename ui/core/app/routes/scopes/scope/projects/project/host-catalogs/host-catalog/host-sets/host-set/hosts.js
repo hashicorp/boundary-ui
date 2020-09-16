@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHostSetHostsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -17,12 +16,16 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    * @return {Promise{HostSetModel,[HostModel]}}
    */
   async model() {
-    const hostSet = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set');
+    const hostSet = this.modelFor(
+      'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set'
+    );
     return hash({
       hostSet,
-      hosts: all(hostSet.host_ids.map(host =>
-        this.store.findRecord('host', host.value, { reload: true })
-      ))
+      hosts: all(
+        hostSet.host_ids.map((host) =>
+          this.store.findRecord('host', host.value, { reload: true })
+        )
+      ),
     });
   }
 
@@ -35,8 +38,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   async removeHost(hostSet, host) {
     try {
       const scopeID = this.modelFor('scopes.scope.projects.project').id;
-      const hostCatalogID = this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog').id;
-      await hostSet.removeHost(host.id, { adapterOptions : { scopeID, hostCatalogID } });
+      const hostCatalogID = this.modelFor(
+        'scopes.scope.projects.project.host-catalogs.host-catalog'
+      ).id;
+      await hostSet.removeHost(host.id, {
+        adapterOptions: { scopeID, hostCatalogID },
+      });
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
     } catch (error) {

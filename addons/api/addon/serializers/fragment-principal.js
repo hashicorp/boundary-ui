@@ -1,7 +1,6 @@
 import JSONSerializer from '@ember-data/serializer/json';
 
 export default class FragmentPrincipalSerializer extends JSONSerializer {
-
   // =methods
 
   /**
@@ -14,5 +13,4 @@ export default class FragmentPrincipalSerializer extends JSONSerializer {
   normalize(typeClass, { id: principal_id, ...obj }) {
     return super.normalize(typeClass, { principal_id, ...obj });
   }
-
 }

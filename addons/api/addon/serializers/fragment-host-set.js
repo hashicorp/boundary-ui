@@ -1,7 +1,6 @@
 import JSONSerializer from '@ember-data/serializer/json';
 
 export default class FragmentHostSetSerializer extends JSONSerializer {
-
   // =methods
 
   /**
@@ -14,5 +13,4 @@ export default class FragmentHostSetSerializer extends JSONSerializer {
   normalize(typeClass, { id: host_set_id, ...obj }) {
     return super.normalize(typeClass, { host_set_id, ...obj });
   }
-
 }

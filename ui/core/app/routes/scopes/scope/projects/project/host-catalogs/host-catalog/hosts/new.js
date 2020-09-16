@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsNewRoute extends Route {
-
   // =methods
 
   /**
@@ -9,11 +8,12 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsNewRo
    * @return {HostModel}
    */
   model() {
-    const { id: host_catalog_id } =
-      this.modelFor('scopes.scope.projects.project.host-catalogs.host-catalog');
+    const { id: host_catalog_id } = this.modelFor(
+      'scopes.scope.projects.project.host-catalogs.host-catalog'
+    );
     return this.store.createRecord('host', {
       type: 'static',
-      host_catalog_id
+      host_catalog_id,
     });
   }
 
@@ -26,22 +26,25 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsNewRo
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/projects/project/host-catalogs/host-catalog/hosts/new/-header', {
-      into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
-      outlet: 'header',
-      model: model
-    });
+    this.render(
+      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/new/-header',
+      {
+        into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
+        outlet: 'header',
+        model: model,
+      }
+    );
 
     this.render('_empty', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'navigation',
-      model: model
+      model: model,
     });
 
     this.render('_empty', {
       into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
       outlet: 'actions',
-      model: model
+      model: model,
     });
   }
 }

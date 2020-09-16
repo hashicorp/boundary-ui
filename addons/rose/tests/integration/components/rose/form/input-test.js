@@ -80,7 +80,10 @@ module('Integration | Component | rose/form/input', function (hooks) {
         </field.errors>
       </Rose::Form::Input>
     `);
-    assert.notOk(find('.rose-form-input'), 'The form field wrapper element is not present in contextual mode');
+    assert.notOk(
+      find('.rose-form-input'),
+      'The form field wrapper element is not present in contextual mode'
+    );
     assert.ok(find('.rose-form-label.error'));
     assert.ok(find('.rose-form-helper-text.error'));
     assert.ok(find('.rose-form-input-field.error'));

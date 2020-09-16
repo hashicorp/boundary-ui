@@ -35,13 +35,12 @@ function payloadIsBlank(adapterPayload) {
  * @return {object}
  */
 function prenormalizeArrayResponse(response) {
-  return payloadIsBlank(response) ? {items: []} : response;
+  return payloadIsBlank(response) ? { items: [] } : response;
 }
 
 export default class ApplicationAdapter extends RESTAdapter.extend(
   AdapterBuildURLMixin
 ) {
-
   // =attributes
 
   /**
@@ -68,7 +67,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @param {object} snapshot
    * @return {string}
    */
-  urlSuffix(modelName, id, snapshot={}) {
+  urlSuffix(modelName, id, snapshot = {}) {
     const method = getWithDefault(snapshot, 'adapterOptions.method', '');
     return method ? `:${method}` : '';
   }
@@ -205,7 +204,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
   normalizeErrorResponse(/*status, headers, payload*/) {
     const errors = super.normalizeErrorResponse(...arguments);
     if (isArray(errors)) {
-      errors.forEach(error => {
+      errors.forEach((error) => {
         switch (Number(error.status)) {
           case 401:
             error.isUnauthenticated = true;

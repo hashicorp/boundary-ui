@@ -3,7 +3,7 @@ import { attr } from '@ember-data/model';
 
 /**
  * Group contains all fields related to a Group resource
-*/
+ */
 export default class GeneratedGroupModel extends BaseModel {
   // = attributes
 
@@ -38,5 +38,4 @@ export default class GeneratedGroupModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
-  
 }

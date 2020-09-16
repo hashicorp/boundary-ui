@@ -19,14 +19,14 @@ module('Unit | Serializer | application', function (hooks) {
       description: 'Description',
       scope: {
         scope_id: 'global',
-        type: 'global'
-      }
+        type: 'global',
+      },
     });
     const serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       name: 'User',
       description: 'Description',
-      scope_id: 'global'
+      scope_id: 'global',
     });
   });
 
@@ -38,14 +38,14 @@ module('Unit | Serializer | application', function (hooks) {
       description: 'Description',
       scope: {
         scope_id: 'global',
-        type: 'global'
-      }
+        type: 'global',
+      },
     });
     const serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       name: 'User',
       description: 'Description',
-      scope_id: 'global'
+      scope_id: 'global',
     });
   });
 
@@ -55,19 +55,19 @@ module('Unit | Serializer | application', function (hooks) {
     const record = store.createRecord('user', {
       name: 'User',
       description: 'Description',
-      version: null
+      version: null,
     });
     let serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       name: 'User',
-      description: 'Description'
+      description: 'Description',
     });
     record.version = 1;
     serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       name: 'User',
       description: 'Description',
-      version: 1
+      version: 1,
     });
   });
 
@@ -121,7 +121,7 @@ module('Unit | Serializer | application', function (hooks) {
     const payload = {
       id: '1',
       name: 'User 1',
-      scope: { id: 'o_123' }
+      scope: { id: 'o_123' },
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -147,7 +147,7 @@ module('Unit | Serializer | application', function (hooks) {
     const payload = {
       id: '1',
       name: 'Target 1',
-      scope: { id: 'o_123' }
+      scope: { id: 'o_123' },
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -162,7 +162,7 @@ module('Unit | Serializer | application', function (hooks) {
         attributes: {
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
-          host_sets: []
+          host_sets: [],
         },
         relationships: {},
       },

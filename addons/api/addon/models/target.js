@@ -3,7 +3,6 @@ import { fragment, fragmentArray } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
 
 export default class TargetModel extends GeneratedTargetModel {
-
   // =attributes
 
   /**
@@ -17,8 +16,9 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   @fragmentArray('fragment-host-set', {
     readOnly: true,
-    emptyArrayIfMissing: true
-  }) host_sets;
+    emptyArrayIfMissing: true,
+  })
+  host_sets;
 
   /**
    * An array of resolved host set and host catalog instances.  Model instances
@@ -31,9 +31,9 @@ export default class TargetModel extends GeneratedTargetModel {
     return this.host_sets
       .map(({ host_set_id, host_catalog_id }) => ({
         model: this.store.peekRecord('host-set', host_set_id),
-        hostCatalog: this.store.peekRecord('host-catalog', host_catalog_id)
+        hostCatalog: this.store.peekRecord('host-catalog', host_catalog_id),
       }))
-      .filter(hostSetRef => hostSetRef.model !== null);
+      .filter((hostSetRef) => hostSetRef.model !== null);
   }
 
   // =methods
@@ -46,10 +46,10 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addHostSets(hostSetIDs, options={ adapterOptions: {} }) {
+  addHostSets(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-host-sets',
-      hostSetIDs
+      hostSetIDs,
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get
@@ -58,8 +58,8 @@ export default class TargetModel extends GeneratedTargetModel {
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 
@@ -71,10 +71,10 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeHostSets(hostSetIDs, options={ adapterOptions: {} }) {
+  removeHostSets(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'remove-host-sets',
-      hostSetIDs
+      hostSetIDs,
     };
     // There is no "deep merge" in ES.
     // All of this nonsense is here to ensure we get
@@ -83,8 +83,8 @@ export default class TargetModel extends GeneratedTargetModel {
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 
@@ -97,5 +97,4 @@ export default class TargetModel extends GeneratedTargetModel {
   removeHostSet(hostSetID, options) {
     return this.removeHostSets([hostSetID], options);
   }
-
 }

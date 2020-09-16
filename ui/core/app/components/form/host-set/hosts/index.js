@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { computed } from '@ember/object';
 
 export default class FormHostSetHostsComponent extends Component {
-
   // =attributes
 
   /**
@@ -14,10 +13,9 @@ export default class FormHostSetHostsComponent extends Component {
   @computed('args.{hosts.[],model.host_ids.[]}')
   get options() {
     const { hosts, model: hostSet } = this.args;
-    return hosts.map(host => ({
+    return hosts.map((host) => ({
       host,
-      selected: Boolean(hostSet.host_ids.findBy('value', host.id))
+      selected: Boolean(hostSet.host_ids.findBy('value', host.id)),
     }));
   }
-
 }

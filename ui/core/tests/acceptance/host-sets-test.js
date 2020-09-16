@@ -70,5 +70,4 @@ module('Acceptance | host sets', function (hooks) {
   test('can cancel add/remove host associations to a host set', async function (assert) {
     assert.expect(0);
   });
-
 });

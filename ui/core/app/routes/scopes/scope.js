@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRoute extends Route {
-
   // =services
 
   @service intl;
@@ -29,9 +28,9 @@ export default class ScopesScopeRoute extends Route {
       if (type === 'global') {
         scopeOptions.name = this.intl.t('titles.global');
       }
-      return maybeExistingScope ||
-        this.store.createRecord('scope', scopeOptions);
+      return (
+        maybeExistingScope || this.store.createRecord('scope', scopeOptions)
+      );
     });
   }
-
 }

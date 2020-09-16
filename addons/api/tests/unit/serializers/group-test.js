@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Serializer | group', function(hooks) {
+module('Unit | Serializer | group', function (hooks) {
   setupTest(hooks);
 
   test('it serializes groups normally, without members', function (assert) {
@@ -11,8 +11,8 @@ module('Unit | Serializer | group', function(hooks) {
     const record = store.createRecord('group', {
       name: 'Group',
       description: 'Description',
-      member_ids: [ '1', '2', ],
-      version: 1
+      member_ids: ['1', '2'],
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -20,7 +20,7 @@ module('Unit | Serializer | group', function(hooks) {
     assert.deepEqual(serializedRecord, {
       name: 'Group',
       description: 'Description',
-      version: 1
+      version: 1,
     });
   });
 
@@ -31,17 +31,17 @@ module('Unit | Serializer | group', function(hooks) {
     const record = store.createRecord('group', {
       name: 'Group',
       description: 'Description',
-      member_ids: [ '1', '2', ],
-      version: 1
+      member_ids: ['1', '2'],
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      memberIDs: ['4', '5']
+      memberIDs: ['4', '5'],
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       member_ids: ['4', '5'],
-      version: 1
+      version: 1,
     });
   });
 
@@ -53,7 +53,7 @@ module('Unit | Serializer | group', function(hooks) {
     const payload = {
       id: '1',
       name: 'Group 1',
-      scope: { id: 'o_123' }
+      scope: { id: 'o_123' },
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -68,11 +68,10 @@ module('Unit | Serializer | group', function(hooks) {
         attributes: {
           name: 'Group 1',
           scope: { scope_id: 'o_123' },
-          member_ids: []
+          member_ids: [],
         },
         relationships: {},
       },
     });
   });
-
 });

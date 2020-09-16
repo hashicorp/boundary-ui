@@ -7,7 +7,6 @@ import { copy } from 'ember-copy';
  * Manages serialization/normalization of data to/from the API.
  */
 export default class ApplicationSerializer extends RESTSerializer {
-
   // =methods
 
   /**
@@ -160,9 +159,11 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {object}
    */
   normalizeMissingArrays(store, primaryModelClass, payload) {
-    const attrDefs = store._attributesDefinitionFor(primaryModelClass.modelName);
+    const attrDefs = store._attributesDefinitionFor(
+      primaryModelClass.modelName
+    );
     if (attrDefs) {
-      Object.keys(attrDefs).forEach(key => {
+      Object.keys(attrDefs).forEach((key) => {
         if (!payload[key] && attrDefs[key]?.options?.emptyArrayIfMissing) {
           payload[key] = [];
         }
@@ -187,5 +188,4 @@ export default class ApplicationSerializer extends RESTSerializer {
     if (scopeID) normalizedHash.scope.scope_id = scopeID;
     return super.normalize(typeClass, normalizedHash);
   }
-
 }

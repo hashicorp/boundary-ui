@@ -5,12 +5,12 @@ import { attr } from '@ember-data/model';
  *
  */
 export default class GeneratedScopeModel extends BaseModel {
-
   // =attributes
 
   @attr('string', {
-    description: 'The type of the resource'
-  }) type;
+    description: 'The type of the resource',
+  })
+  type;
 
   @attr('string', {
     description: 'Optional name for identification purposes',
@@ -38,5 +38,4 @@ export default class GeneratedScopeModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
-
 }

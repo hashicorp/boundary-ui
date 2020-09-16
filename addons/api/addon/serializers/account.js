@@ -1,7 +1,6 @@
 import ApplicationSerializer from './application';
 
 export default class AccountSerializer extends ApplicationSerializer {
-
   // =methods
 
   /**
@@ -16,7 +15,8 @@ export default class AccountSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     const password = snapshot?.adapterOptions?.password;
     let serialized = super.serialize(...arguments);
-    if (password && snapshot?.record?.isNew) serialized.attributes.password = password;
+    if (password && snapshot?.record?.isNew)
+      serialized.attributes.password = password;
     if (snapshot?.adapterOptions?.method === 'set-password') {
       serialized = this.serializeForSetPassword(snapshot, password);
     }
@@ -35,5 +35,4 @@ export default class AccountSerializer extends ApplicationSerializer {
       password,
     };
   }
-
 }

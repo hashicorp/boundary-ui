@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class ScopesScopeProjectsProjectTargetsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -70,5 +69,4 @@ export default class ScopesScopeProjectsProjectTargetsRoute extends Route {
       this.notify.error(error.message, { closeAfter: null });
     }
   }
-
 }

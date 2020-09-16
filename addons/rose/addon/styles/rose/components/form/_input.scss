@@ -16,8 +16,7 @@
   background-color: var(--subtle);
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   border-radius: sizing.rems(xxxs);
-  box-shadow: inset 0px 3px 1px
-    rgba(var(--stark-components), var(--opacity-4));
+  box-shadow: inset 0px 3px 1px rgba(var(--stark-components), var(--opacity-4));
 
   &.error {
     color: var(--failure);

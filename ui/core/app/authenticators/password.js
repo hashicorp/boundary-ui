@@ -50,12 +50,11 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @override
    */
   authenticate() {
-    return super.authenticate(...arguments)
-      .then(data => {
-        const token = data?.token;
-        if (token) this.addTokenToAuthorization(token);
-        return data;
-      });
+    return super.authenticate(...arguments).then((data) => {
+      const token = data?.token;
+      if (token) this.addTokenToAuthorization(token);
+      return data;
+    });
   }
 
   /**
@@ -78,8 +77,8 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @param {string} token
    */
   addTokenToAuthorization(token) {
-    const adapterPrototype =
-      this.store.adapterFor('application').constructor.prototype;
+    const adapterPrototype = this.store.adapterFor('application').constructor
+      .prototype;
     const headers = adapterPrototype?.headers;
     if (!headers) adapterPrototype.headers = {};
     adapterPrototype.headers.Authorization = null;
