@@ -39,12 +39,14 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    * @param {AccountModel} account
    */
   @action
-  async save(account) {
+  async save(account, password) {
     const { isNew } = account;
+    const adapterOptions = {};
+    if(isNew) { adapterOptions.password = password; }
     try {
-      await account.save();
-      await this.refresh();
+      await account.save({ adapterOptions });
       await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
+      this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );

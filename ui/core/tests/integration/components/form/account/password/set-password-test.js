@@ -20,5 +20,4 @@ module('Integration | Component | form/account/password/set-password', function(
 
     assert.ok(find('form'));
   });
-
 });

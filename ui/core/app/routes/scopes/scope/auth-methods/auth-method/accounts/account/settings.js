@@ -14,6 +14,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   /**
    * Set password for current account.
    * @param {AccountModel} account
+   * @param {string} password
    */
   @action
   async setPassword(account) {
@@ -34,6 +35,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account');
+    this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.settings');
   }
 }
