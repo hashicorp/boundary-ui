@@ -1,10 +1,24 @@
 import factory from '../generated/factories/target';
 import { trait } from 'ember-cli-mirage';
+import { random } from 'faker';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
 
 export default factory.extend({
+
+  /**
+   * Generates attributes fields by type.
+   */
+  afterCreate(target) {
+    if (target.type === 'tcp') {
+      target.update({
+        attributes: {
+          default_port: random.number()
+        }
+      });
+    }
+  },
 
   /**
    * Randomly selects existing host sets to assign to target.
