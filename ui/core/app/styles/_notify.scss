@@ -1,89 +1,96 @@
-/**
- * This file is essentially a rip of the default ember notify styles, with some
- * minor tweaks for positioning.
- */
+// This file is essentially a rip of the default ember notify styles with some minor tweaks for positioning.
 
-@-webkit-keyframes "ember-notify-show" {
+// sass-lint:disable no-vendor-prefixes
+@-webkit-keyframes 'ember-notify-show' {
   from {
     left: -310px;
   }
+
   to {
     left: 0;
   }
 }
-@keyframes "ember-notify-show" {
+@keyframes 'ember-notify-show' {
   from {
     left: -310px;
   }
+
   to {
     left: 0;
   }
 }
-@-webkit-keyframes "ember-notify-hide" {
+@-webkit-keyframes 'ember-notify-hide' {
   from {
     left: 0;
   }
+
   to {
     left: -310px;
   }
 }
-@keyframes "ember-notify-hide" {
+@keyframes 'ember-notify-hide' {
   from {
     left: 0;
   }
+
   to {
     left: -310px;
   }
 }
+
 .ember-notify-cn {
+  bottom: 0;
+  left: 0;
   position: fixed;
   z-index: 5000;
-  bottom: 0px;
-  left: 0px;
 }
+
 .ember-notify {
+  box-sizing: border-box;
   display: block;
   margin: 10px;
   position: relative;
   width: 300px;
-  box-sizing: border-box;
-  //border: 1px solid #ccc;
-  //padding: 10px;
+
   .close {
-    float: right;
     cursor: pointer;
+    float: right;
   }
 }
+
 .ember-notify-show {
   -webkit-animation-duration: 500ms;
-  animation-duration: 500ms;
   -webkit-animation-name: ember-notify-show;
+  -webkit-animation-timing-function: cubic-bezier(.175, .885, .32, 1.275);
+  animation-duration: 500ms;
   animation-name: ember-notify-show;
-  -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation-timing-function: cubic-bezier(.175, .885, .32, 1.275);
 }
+
 .ember-notify-hide {
   -webkit-animation-duration: 250ms;
-  animation-duration: 250ms;
   -webkit-animation-name: ember-notify-hide;
+  -webkit-animation-timing-function: cubic-bezier(.6, -.28, .735, .045);
+  animation-duration: 250ms;
   animation-name: ember-notify-hide;
-  -webkit-animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  animation-timing-function: cubic-bezier(.6, -.28, .735, .045);
+
   &:hover {
-    -webkit-animation-play-state: paused;
     -moz-animation-play-state: paused;
-    -o-animation-play-state: paused;
+    -webkit-animation-play-state: paused;
     animation-play-state: paused;
   }
 }
+
 @media only screen and (max-width: 680px) {
   .ember-notify-cn {
-    width: 100%;
-    padding-left: 20px;
     box-sizing: border-box;
-  }
-  .ember-notify {
+    padding-left: 20px;
     width: 100%;
+  }
+
+  .ember-notify {
     float: right;
+    width: 100%;
   }
 }
