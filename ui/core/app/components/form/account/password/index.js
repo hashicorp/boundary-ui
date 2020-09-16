@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class FormAccountPasswordIndexComponent extends Component {
@@ -9,7 +10,16 @@ export default class FormAccountPasswordIndexComponent extends Component {
    * Account password property
    * @type {string}
    */
-  password;
+  @tracked password;
+
+  // =methods
+
+  /**
+   * Unsets the password field.
+   */
+  resetPassword() {
+    this.password = null;
+  }
 
   // =actions
 
@@ -20,7 +30,13 @@ export default class FormAccountPasswordIndexComponent extends Component {
    */
   @action
   submit(fn) {
-    this.args.model.isNew ? fn(this.password) : fn();
-    delete this.password;
+    try {
+      this.args.model.isNew ? fn(this.password) : fn();
+    } catch (e) {
+      // We want to guarantee password is unset
+      this.resetPassword();
+      // But we don't want to silence the error
+      throw e;
+    }
   }
 }
