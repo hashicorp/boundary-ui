@@ -33,5 +33,4 @@ export default class ScopesScopeRoute extends Route {
       );
     });
   }
-
 }

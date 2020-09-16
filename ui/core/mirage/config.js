@@ -1,6 +1,7 @@
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
-import { Response } from 'miragejs';
+// Uncomment to use in simulating error responses
+// import { Response } from 'miragejs';
 
 export default function() {
 

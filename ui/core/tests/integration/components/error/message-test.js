@@ -1,26 +1,41 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | error/message', function(hooks) {
+module('Integration | Component | error/message', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it renders predefined message for known error status', async function (assert) {
+    this.set('status', '401');
 
-    await render(hbs`<Error::Message />`);
+    await render(hbs`<Error::Message @status={{this.status}} />`);
+    assert.equal(
+      find('.rose-message-title').textContent.trim(),
+      'You are not signed in'
+    );
+    assert.equal(
+      find('.rose-message-subtitle').textContent.trim(),
+      'Error 401'
+    );
+    assert.equal(
+      find('.rose-message-description').textContent.trim(),
+      'You are not authenticated. Please authenticate and try again later.'
+    );
+  });
 
-    assert.equal(this.element.textContent.trim(), '');
+  test('it renders default error for undefined error status', async function (assert) {
+    this.set('status', '510');
 
-    // Template block usage:
-    await render(hbs`
-      <Error::Message>
-        template block text
-      </Error::Message>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    await render(hbs`<Error::Message @status={{this.status}} />`);
+    assert.equal(
+      find('.rose-message-title').textContent.trim(),
+      'Something went wrong'
+    );
+    assert.equal(find('.rose-message-subtitle').textContent.trim(), 'Error');
+    assert.equal(
+      find('.rose-message-description').textContent.trim(),
+      'Please contact your administrator or try again later.'
+    );
   });
 });
