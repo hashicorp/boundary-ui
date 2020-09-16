@@ -11,14 +11,16 @@ export default class FormAccountPasswordIndexComponent extends Component {
    */
   password;
 
+  // =actions
+
   /**
    * Submit with password value when it is allowed.
    * Callback with no arguments otherwise.
-   * @param {function} fn 
+   * @param {function} fn
    */
   @action
   submit(fn) {
-    this.args.allowPassword ? fn(`${this.password}`) : fn();
+    this.args.model.isNew ? fn(this.password) : fn();
     delete this.password;
   }
 }

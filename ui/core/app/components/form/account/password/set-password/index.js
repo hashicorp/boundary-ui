@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { computed } from '@ember/object';
-import { set } from '@ember/object';
+import { action } from '@ember/object';
 
 export default class FormAccountPasswordSetPasswordIndexComponent extends Component {
 
@@ -11,28 +11,7 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
    * New password property
    * @type {string}
    */
-  password;
-
-  /**
-   * Submit with password value when it is allowed.
-   * Callback with no arguments otherwise.
-   * @param {function} fn 
-   */
-  @action
-  submit(fn) {
-    fn(`${this.password}`);
-    this.resetPassword();
-  }
-
-  /**
-   * Unset password value before callback.
-   * @param {function} fn 
-   */
-  @action
-  cancel(fn) {
-    fn();
-    this.resetPassword();
-  }
+  @tracked password;
 
   /**
    * @type {boolean}
@@ -42,8 +21,36 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
     return !(this.password?.length > 0);
   }
 
+  // =methods
+
+  /**
+   * Unsets the password field.
+   */
   resetPassword() {
-    set(this, 'password', '');
+    this.password = null;
+  }
+
+  // =actions
+
+  /**
+   * Submit with password value when it is allowed.
+   * Callback with no arguments otherwise.
+   * @param {function} fn
+   */
+  @action
+  submit(fn) {
+    fn(this.password);
+    this.resetPassword();
+  }
+
+  /**
+   * Unset password value before callback.
+   * @param {function} fn
+   */
+  @action
+  cancel(fn) {
+    fn();
+    this.resetPassword();
   }
 
 }
