@@ -6,6 +6,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(this, arguments);
     json.auth_method_id = model.authMethodId;
+    delete json.attributes?.password;
     return json;
   }
 });
