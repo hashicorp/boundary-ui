@@ -26,7 +26,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   // =actions
 
   /**
-   * Set password for current account.
+   * Set password for the specified account.
    * @param {AccountModel} account
    * @param {string} password
    */

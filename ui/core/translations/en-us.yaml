@@ -133,7 +133,7 @@ descriptions:
   no-principals-available: Principals are not available for assignment.
   group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.
-  account-set-password-overview: Set the password for current account.
+  account-set-password: Set a password for the account.
   accounts-welcome: No accounts are available in this auth method.
 states:
   info: Info
