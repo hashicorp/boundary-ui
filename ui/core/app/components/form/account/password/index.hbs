@@ -1,5 +1,5 @@
 <Rose::Form
-  @onSubmit={{@submit}}
+  @onSubmit={{fn this.submit @submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @error={{@model.errors.base}}
@@ -63,26 +63,29 @@
     {{/if}}
   </form.input>
 
-  <form.input
-    @name="password"
-    @type="password"
-    @value={{@model.attributes.password}}
-    @label={{t "form.label.password"}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    autocomplete="new-password"
-  as |field|>
-    {{#if @model.errors.name}}
-      <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
+  {{#if @model.isNew}}
+    <form.input
+      @name="password"
+      @type="password"
+      @value={{this.password}}
+      @label={{t "form.label.password"}}
+      @error={{@model.errors.name}}
+      readonly={{false}}
+      autocomplete="new-password"
+    as |field|>
+      {{#if @model.errors.name}}
+        <field.errors as |errors|>
+          {{#each @model.errors.name as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </field.errors>
+      {{/if}}
+    </form.input>
+  {{/if}}
 
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
     @submitText={{t "actions.save"}}
     @cancelText={{t "actions.cancel"}} />
+
 </Rose::Form>

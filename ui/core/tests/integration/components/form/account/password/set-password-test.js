@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | form/account/password/settings', function(hooks) {
+module('Integration | Component | form/account/password/set-password', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -12,7 +12,7 @@ module('Integration | Component | form/account/password/settings', function(hook
     this.model = { type: 'password' };
 
     await render(hbs`
-      <Form::Account::Password::Settings
+      <Form::Account::Password::SetPassword
         @model={{this.model}}
         @submit={{this.submit}}
         @cancel={{this.cancel}}
