@@ -9,10 +9,24 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   @service intl;
   @service notify;
 
+  // =methods
+
+  /**
+   * Renders the route-set specific page sections
+   * @override
+   */
+  renderTemplate() {
+    super.renderTemplate(...arguments);
+    this.render('scopes/scope/auth-methods/auth-method/accounts/account/set-password/-header', {
+      into: 'scopes/scope/auth-methods/auth-method',
+      outlet: 'header'
+    });
+  }
+
   // =actions
 
   /**
-   * Set password for current account.
+   * Set password for the specified account.
    * @param {AccountModel} account
    * @param {string} password
    */
@@ -20,7 +34,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   async setPassword(account) {
     try {
       await account.setPassword();
-      await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.settings');
+      await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.set-password');
       this.notify.success(
         this.intl.t('notify.save-success')
       );
@@ -35,6 +49,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.settings');
+    this.replaceWith('scopes.scope.auth-methods.auth-method.accounts.account.set-password');
   }
 }
