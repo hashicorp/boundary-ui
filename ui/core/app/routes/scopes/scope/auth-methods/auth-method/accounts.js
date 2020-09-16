@@ -12,15 +12,17 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   // =methods
 
   /**
-   * Returns accounts in current auth method.
+   * Returns accounts for the current auth method.
    * @return {Promise{[AccountModel]}}
    */
   model() {
-    const { id: auth_method_id } = this.modelFor('scopes.scope.auth-methods.auth-method');
+    const { id: auth_method_id } =
+      this.modelFor('scopes.scope.auth-methods.auth-method');
     return this.store.query('account', { auth_method_id });
   }
 
   // =actions
+
   /**
    * Rollback changes on an account.
    * @param {AccountModel} account
@@ -38,8 +40,8 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   async save(account) {
     try {
       await account.save();
+      await this.refresh();
       await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
-      this.refresh();
       this.notify.success(
         this.intl.t('notify.save-success')
       );
