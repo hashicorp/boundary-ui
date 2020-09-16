@@ -1,40 +1,5 @@
-<Rose::Layout::Page as |page|>
-  <page.header>
-    <h2>{{t "resources.auth-method"}}</h2>
-    <Rose::Badge>
-      {{t (concat 'auth.method-types.' @model.type)}}
-    </Rose::Badge>
-  </page.header>
-
-  <page.breadcrumbs>
-    <BreadCrumbs />
-  </page.breadcrumbs>
-
-  <page.navigation>
-    <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope.auth-methods.auth-method'>
-        {{t 'titles.details'}}
-      </nav.link>
-    </Rose::Nav::Tabs>
-  </page.navigation>
-
-  <page.actions>
-    <Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
-      <dropdown.button
-        @style="danger"
-        @disabled={{@model.canSave}}
-        {{on "click" (route-action "delete" @model)}}
-      >
-        {{t 'actions.delete-auth-method'}}
-      </dropdown.button>
-    </Rose::Dropdown>
-  </page.actions>
-
-  <page.body>
-    <Form::AuthMethod
-      @model={{@model}}
-      @submit={{route-action "save" @model}}
-      @cancel={{route-action "cancel" @model}}
-    />
-  </page.body>
-</Rose::Layout::Page>
+<Form::AuthMethod
+  @model={{@model}}
+  @submit={{route-action "save" @model}}
+  @cancel={{route-action "cancel" @model}}
+/>

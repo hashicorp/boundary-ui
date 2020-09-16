@@ -102,6 +102,8 @@ titles:
   members: Members
   group-members-welcome: Welcome to Members
   no-available-users: No Users Available
+  accounts: Accounts
+  auth-method-accounts-welcome: Welcome to Accounts
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -122,6 +124,7 @@ descriptions:
   no-principals-available: Principals are not available for assignment.
   group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.
+  auth-method-accounts-welcome: No accounts are available in this auth method.
 states:
   info: Info
   success: Success
