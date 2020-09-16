@@ -1,37 +1,3 @@
 {{title (t 'titles.accounts')}}
 
-{{#if @model}}
-
-  <Rose::Table as |table|>
-    <table.header as |header|>
-      <header.row as |row|>
-        <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
-        <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
-      </header.row>
-    </table.header>
-    <table.body as |body|>
-      {{#each @model as |account|}}
-        <body.row as |row|>
-          <row.headerCell>
-            {{account.name}}
-            <p>{{account.description}}</p>
-          </row.headerCell>
-          <row.cell>
-            <code>{{account.id}}</code>
-          </row.cell>
-        </body.row>
-      {{/each}}
-    </table.body>
-  </Rose::Table>
-
-{{else}}
-
-  <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.auth-method-accounts-welcome"}} as |message|>
-      <message.description>
-        {{t "descriptions.auth-method-accounts-welcome"}}
-      </message.description>
-    </Rose::Message>
-  </Rose::Layout::Centered>
-
-{{/if}}
+{{outlet}}
