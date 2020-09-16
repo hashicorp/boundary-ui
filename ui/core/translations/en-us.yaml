@@ -149,6 +149,7 @@ form:
     address: Address
     protocol: Protocol
     actions: Actions
+    default_port: Default Port
 errors:
   titles:
     unauthenticated-error: You are not signed in
