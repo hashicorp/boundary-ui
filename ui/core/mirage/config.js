@@ -49,6 +49,30 @@ export default function() {
   this.patch('/auth-methods/:id');
   this.del('/auth-methods/:id');
 
+  // Auth Method Accounts
+  this.get('/accounts', ({ accounts }, { queryParams: { auth_method_id: authMethodId } }) => {
+    return accounts.where({ authMethodId });
+  });
+  this.post('/accounts');
+  this.get('/accounts/:id');
+  this.patch('/accounts/:id');
+  this.del('/accounts/:id');
+  this.post('/accounts/:idMethod', function ({ accounts }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
+    const account = accounts.find(id);
+    const updatedAttrs = {
+      version: attrs.version,
+      attributes: account.attributes
+    };
+    // Set new password
+    if (method === 'set-password') {
+      updatedAttrs.attributes.password = attrs.password;
+    }
+    return account.update(updatedAttrs);
+  });
+
   // Authenticate/deauthenticate routes
   this.post('/auth-methods/:id_method', authHandler);
   this.post('/scopes/:id_method', deauthHandler);
