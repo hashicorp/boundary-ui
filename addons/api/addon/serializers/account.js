@@ -20,6 +20,11 @@ export default class AccountSerializer extends ApplicationSerializer {
     if (snapshot?.adapterOptions?.method === 'set-password') {
       serialized = this.serializeForSetPassword(snapshot, password);
     }
+    if (snapshot?.adapterOptions?.method === 'change-password') {
+      const { currentPassword, newPassword } = snapshot?.adapterOptions;
+      serialized =
+        this.serializeForChangePassword(snapshot, currentPassword, newPassword);
+    }
     return serialized;
   }
 
@@ -33,6 +38,21 @@ export default class AccountSerializer extends ApplicationSerializer {
     return {
       version: snapshot.attr('version'),
       password,
+    };
+  }
+
+  /**
+   * Returns a payload containing current and new passwords.
+   * @param {Snapshot} snapshot
+   * @param {string} current_password
+   * @param {string} new_password
+   * @return {object}
+   */
+  serializeForChangePassword(snapshot, current_password, new_password) {
+    return {
+      version: snapshot.attr('version'),
+      current_password,
+      new_password,
     };
   }
 }

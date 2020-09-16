@@ -31,4 +31,28 @@ export default class AccountModel extends GeneratedAccountModel {
       },
     });
   }
+
+  /**
+   * Update account password via the `change-password` method.
+   * See serializer and adapter for more information.
+   * @param {string} currentPassword
+   * @param {string} newPassword
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  changePassword(currentPassword, newPassword, options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'change-password',
+      currentPassword,
+      newPassword,
+    };
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
 }
