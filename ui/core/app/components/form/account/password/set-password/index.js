@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { computed } from '@ember/object';
 import { action } from '@ember/object';
+import { next } from '@ember/runloop';
 
 export default class FormAccountPasswordSetPasswordIndexComponent extends Component {
 
@@ -40,7 +41,7 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
   @action
   submit(fn) {
     const password = this.password;
-    this.resetPassword();
+    next(() => this.resetPassword());
     fn(password);
   }
 
