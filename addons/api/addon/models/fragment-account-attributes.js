@@ -7,7 +7,4 @@ export default class FragmentAccountAttributesModel extends Fragment {
     description: 'The account login name'
   }) login_name;
 
-  @attr('string', {
-    description: 'The account password'
-  }) password;
 }

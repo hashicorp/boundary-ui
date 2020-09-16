@@ -4,7 +4,7 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
   // =methods
 
   /**
-   * Load a single auth-method in current scope.
+   * Load an auth method by ID.
    * @param {object} params
    * @param {string} params.auth_method_id
    * @return {authMethodModel}

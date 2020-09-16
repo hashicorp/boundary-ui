@@ -63,11 +63,12 @@ export default function() {
     const method = idMethod.split(':')[1];
     const account = accounts.find(id);
     const updatedAttrs = {
-      version: attrs.version
+      version: attrs.version,
+      attributes: account.attributes
     };
     // Set new password
     if (method === 'set-password') {
-      updatedAttrs.password = accounts.attributes.password;
+      updatedAttrs.attributes.password = attrs.password;
     }
     return account.update(updatedAttrs);
   });

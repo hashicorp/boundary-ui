@@ -1,10 +1,16 @@
 import GeneratedTargetModel from '../generated/models/target';
-import { fragmentArray } from 'ember-data-model-fragments/attributes';
+import { fragment, fragmentArray } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
 
 export default class TargetModel extends GeneratedTargetModel {
 
   // =attributes
+
+  /**
+   * Attributes of this resource, if any, represented as a JSON fragment.
+   * @type {FragmentTargetAttributesModel}
+   */
+  @fragment('fragment-target-attributes', { defaultValue: {} }) attributes;
 
   /**
    * @type {[FragmentHostSetModel]}
