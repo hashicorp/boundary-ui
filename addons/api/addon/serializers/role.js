@@ -2,7 +2,6 @@ import ApplicationSerializer from './application';
 import { get } from '@ember/object';
 
 export default class RoleSerializer extends ApplicationSerializer {
-
   // =methods
 
   /**
@@ -20,8 +19,8 @@ export default class RoleSerializer extends ApplicationSerializer {
     let serialized = super.serialize(...arguments);
     if (serializeGrants) serialized = this.serializeWithGrants(snapshot);
     const principalIDs = snapshot?.adapterOptions?.principalIDs;
-    if (principalIDs) serialized =
-      this.serializewithPrincipals(snapshot, principalIDs);
+    if (principalIDs)
+      serialized = this.serializewithPrincipals(snapshot, principalIDs);
     return serialized;
   }
 
@@ -33,7 +32,9 @@ export default class RoleSerializer extends ApplicationSerializer {
   serializeWithGrants(snapshot) {
     return {
       version: snapshot.attr('version'),
-      grant_strings: snapshot.attr('grants').map(grant => grant.attr('value'))
+      grant_strings: snapshot
+        .attr('grants')
+        .map((grant) => grant.attr('value')),
     };
   }
 
@@ -47,7 +48,7 @@ export default class RoleSerializer extends ApplicationSerializer {
   serializewithPrincipals(snapshot, principalIDs) {
     return {
       version: snapshot.attr('version'),
-      principal_ids: principalIDs
+      principal_ids: principalIDs,
     };
   }
 
@@ -62,10 +63,10 @@ export default class RoleSerializer extends ApplicationSerializer {
   normalize(modelClass, resourceHash) {
     // TODO:  can fragment string normalization be handled generically?
     if (resourceHash.grant_strings) {
-      resourceHash.grants =
-        resourceHash.grant_strings.map(value => ({ value }));
+      resourceHash.grants = resourceHash.grant_strings.map((value) => ({
+        value,
+      }));
     }
     return super.normalize(modelClass, resourceHash);
   }
-
 }

@@ -6,7 +6,7 @@ module('Unit | Model | target', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
-  test('it has a `hostSets` array of resolved model instances (if those instances are already in the store)', function(assert) {
+  test('it has a `hostSets` array of resolved model instances (if those instances are already in the store)', function (assert) {
     assert.expect(6);
     const store = this.owner.lookup('service:store');
     store.push({
@@ -16,41 +16,56 @@ module('Unit | Model | target', function (hooks) {
         attributes: {
           host_sets: [
             { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '2' }
-          ]
-        }
-      }
+            { host_set_id: '3', host_catalog_id: '2' },
+          ],
+        },
+      },
     });
     const target = store.peekRecord('target', '123abc');
-    assert.equal(target.host_sets.length, 2, 'Target has two entires in host_sets');
-    assert.equal(target.hostSets.length, 0, 'Target has no resolved hostSets because they are not loaded yet');
+    assert.equal(
+      target.host_sets.length,
+      2,
+      'Target has two entires in host_sets'
+    );
+    assert.equal(
+      target.hostSets.length,
+      0,
+      'Target has no resolved hostSets because they are not loaded yet'
+    );
     store.push({
       data: {
         id: '1',
         type: 'host-set',
-        attributes: {}
-      }
+        attributes: {},
+      },
     });
     store.push({
       data: {
         id: '3',
         type: 'host-set',
-        attributes: {}
-      }
+        attributes: {},
+      },
     });
     // Since `hostSets` is computed on `host_sets`, not the store itself,
     // it's necessary to do this assignment to kick-off the computed update.
     // eslint-disable-next-line no-self-assign
     target.host_sets = target.host_sets;
-    assert.equal(target.host_sets.length, 2, 'Target has two entires in host_sets');
+    assert.equal(
+      target.host_sets.length,
+      2,
+      'Target has two entires in host_sets'
+    );
     assert.equal(target.hostSets.length, 2, 'Target has two resolved hostSets');
-    assert.notOk(target.hostSets[0].hostCatalog, 'Host catalog was not resolved because it is not loaded yet');
+    assert.notOk(
+      target.hostSets[0].hostCatalog,
+      'Host catalog was not resolved because it is not loaded yet'
+    );
     store.push({
       data: {
         id: '2',
         type: 'host-catalog',
-        attributes: {}
-      }
+        attributes: {},
+      },
     });
     // eslint-disable-next-line no-self-assign
     target.host_sets = target.host_sets;
@@ -63,7 +78,7 @@ module('Unit | Model | target', function (hooks) {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         host_set_ids: ['123_abc', 'foobar'],
-        version: 1
+        version: 1,
       });
     });
     const store = this.owner.lookup('service:store');
@@ -76,15 +91,15 @@ module('Unit | Model | target', function (hooks) {
           description: 'Description',
           host_sets: [
             { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' }
+            { host_set_id: '3', host_catalog_id: '4' },
           ],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('target', '123abc');
     await model.addHostSets(['123_abc', 'foobar']);
@@ -92,13 +107,16 @@ module('Unit | Model | target', function (hooks) {
 
   test('it has a `removeHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/targets/123abc:remove-host-sets', (schema, request) => {
-      const body = JSON.parse(request.requestBody);
-      assert.deepEqual(body, {
-        host_set_ids: ['1', '3'],
-        version: 1
-      });
-    });
+    this.server.post(
+      '/v1/targets/123abc:remove-host-sets',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          host_set_ids: ['1', '3'],
+          version: 1,
+        });
+      }
+    );
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -109,15 +127,15 @@ module('Unit | Model | target', function (hooks) {
           description: 'Description',
           host_sets: [
             { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' }
+            { host_set_id: '3', host_catalog_id: '4' },
           ],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('target', '123abc');
     await model.removeHostSets(['1', '3']);
@@ -125,13 +143,16 @@ module('Unit | Model | target', function (hooks) {
 
   test('it has a `removeHostSet` method that deletes a single host set using `removeHostSets` method', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/targets/123abc:remove-host-sets', (schema, request) => {
-      const body = JSON.parse(request.requestBody);
-      assert.deepEqual(body, {
-        host_set_ids: ['3'],
-        version: 1
-      });
-    });
+    this.server.post(
+      '/v1/targets/123abc:remove-host-sets',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          host_set_ids: ['3'],
+          version: 1,
+        });
+      }
+    );
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -142,15 +163,15 @@ module('Unit | Model | target', function (hooks) {
           description: 'Description',
           host_sets: [
             { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' }
+            { host_set_id: '3', host_catalog_id: '4' },
           ],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('target', '123abc');
     await model.removeHostSet('3');

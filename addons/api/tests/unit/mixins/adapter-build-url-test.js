@@ -3,7 +3,7 @@ import AdapterBuildURLMixin from 'api/mixins/adapter-build-url';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Mixin | build-url', function(hooks) {
+module('Unit | Mixin | build-url', function (hooks) {
   setupTest(hooks);
 
   test('it does not interfere with basic URLs', function (assert) {
@@ -18,7 +18,7 @@ module('Unit | Mixin | build-url', function(hooks) {
   test('it does not interfere with namespaced URLs', function (assert) {
     assert.expect(1);
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin, {
-      namespace: 'api/v1'
+      namespace: 'api/v1',
     });
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
@@ -30,8 +30,8 @@ module('Unit | Mixin | build-url', function(hooks) {
     assert.expect(1);
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin, {
       urlPrefix() {
-        return '/foo/bars'
-      }
+        return '/foo/bars';
+      },
     });
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
@@ -43,13 +43,12 @@ module('Unit | Mixin | build-url', function(hooks) {
     assert.expect(1);
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin, {
       urlSuffix() {
-        return ':method'
-      }
+        return ':method';
+      },
     });
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
     const url = adapter._buildURL('model', 1);
     assert.equal(url, '/models/1:method');
   });
-
 });

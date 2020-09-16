@@ -2,7 +2,6 @@ import GeneratedAccountModel from '../generated/models/account';
 import { fragment } from 'ember-data-model-fragments/attributes';
 
 export default class AccountModel extends GeneratedAccountModel {
-
   /**
    * Attributes of this resource, if any, represented as a JSON fragment.
    * @type {FragmentAccountAttributesModel}
@@ -19,18 +18,17 @@ export default class AccountModel extends GeneratedAccountModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  setPassword(password, options={ adapterOptions: {} }) {
+  setPassword(password, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'set-password',
-      password
+      password,
     };
     return this.save({
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
-
 }

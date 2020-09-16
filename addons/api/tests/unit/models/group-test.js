@@ -2,11 +2,11 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
-module('Unit | Model | group', function(hooks) {
+module('Unit | Model | group', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
-  test('it has a `members` array of resolved model instances (if those instances are already in the store)', function(assert) {
+  test('it has a `members` array of resolved model instances (if those instances are already in the store)', function (assert) {
     assert.expect(4);
     const store = this.owner.lookup('service:store');
     store.push({
@@ -14,30 +14,42 @@ module('Unit | Model | group', function(hooks) {
         id: 'group_123',
         type: 'group',
         attributes: {
-          member_ids: [ '1', '2', ]
-        }
-      }
+          member_ids: ['1', '2'],
+        },
+      },
     });
     const group = store.peekRecord('group', 'group_123');
-    assert.equal(group.member_ids.length, 2, 'Group has two entires in member_ids');
-    assert.equal(group.members.length, 0, 'Group has no resolved members because they are not loaded yet');
+    assert.equal(
+      group.member_ids.length,
+      2,
+      'Group has two entires in member_ids'
+    );
+    assert.equal(
+      group.members.length,
+      0,
+      'Group has no resolved members because they are not loaded yet'
+    );
     store.push({
       data: {
         id: '1',
         type: 'user',
-        attributes: {}
-      }
+        attributes: {},
+      },
     });
     store.push({
       data: {
         id: '2',
         type: 'user',
-        attributes: {}
-      }
+        attributes: {},
+      },
     });
     // eslint-disable-next-line no-self-assign
     group.member_ids = [...group.member_ids];
-    assert.equal(group.member_ids.length, 2, 'Group has two entires in member_ids');
+    assert.equal(
+      group.member_ids.length,
+      2,
+      'Group has two entires in member_ids'
+    );
     assert.equal(group.members.length, 2, 'Group has two resolved members');
   });
 
@@ -47,7 +59,7 @@ module('Unit | Model | group', function(hooks) {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         member_ids: ['123_abc', 'foobar'],
-        version: 1
+        version: 1,
       });
     });
     const store = this.owner.lookup('service:store');
@@ -58,14 +70,14 @@ module('Unit | Model | group', function(hooks) {
         attributes: {
           name: 'Group',
           description: 'Description',
-          member_ids: [ '1', '2' ],
+          member_ids: ['1', '2'],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('group', '123abc');
     await model.addMembers(['123_abc', 'foobar']);
@@ -77,7 +89,7 @@ module('Unit | Model | group', function(hooks) {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         member_ids: ['1', '3'],
-        version: 1
+        version: 1,
       });
     });
     const store = this.owner.lookup('service:store');
@@ -88,14 +100,14 @@ module('Unit | Model | group', function(hooks) {
         attributes: {
           name: 'group',
           description: 'Description',
-          member_ids: [ '4', '5' ],
+          member_ids: ['4', '5'],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('group', '123abc');
     await model.removeMembers(['1', '3']);
@@ -107,7 +119,7 @@ module('Unit | Model | group', function(hooks) {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         member_ids: ['3'],
-        version: 1
+        version: 1,
       });
     });
     const store = this.owner.lookup('service:store');
@@ -118,29 +130,33 @@ module('Unit | Model | group', function(hooks) {
         attributes: {
           name: 'group',
           description: 'Description',
-          member_ids: [ '1', '3' ],
+          member_ids: ['1', '3'],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('group', '123abc');
     await model.removeMember('3');
   });
 
-  test('it defaults `members_ids` to an empty array when model instance does not define it', function(assert) {
+  test('it defaults `members_ids` to an empty array when model instance does not define it', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
         id: 'group_123',
-        type: 'group'
-      }
+        type: 'group',
+      },
     });
     const group = store.peekRecord('group', 'group_123');
-    assert.equal(group.member_ids.length, 0, 'Group has empty member_ids by default');
+    assert.equal(
+      group.member_ids.length,
+      0,
+      'Group has empty member_ids by default'
+    );
   });
 });

@@ -38,5 +38,4 @@ export default class GeneratedRoleModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
-  
 }

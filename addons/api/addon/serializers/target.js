@@ -1,7 +1,6 @@
 import ApplicationSerializer from './application';
 
 export default class TargetSerializer extends ApplicationSerializer {
-
   // =methods
 
   /**
@@ -15,8 +14,8 @@ export default class TargetSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
     const hostSetIDs = snapshot?.adapterOptions?.hostSetIDs;
-    if (hostSetIDs) serialized =
-      this.serializeWithHostSets(snapshot, hostSetIDs);
+    if (hostSetIDs)
+      serialized = this.serializeWithHostSets(snapshot, hostSetIDs);
     return serialized;
   }
 
@@ -30,8 +29,7 @@ export default class TargetSerializer extends ApplicationSerializer {
   serializeWithHostSets(snapshot, hostSetIDs) {
     return {
       version: snapshot.attr('version'),
-      host_set_ids: hostSetIDs
+      host_set_ids: hostSetIDs,
     };
   }
-
 }

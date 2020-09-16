@@ -2,7 +2,6 @@ import GeneratedHostSetModel from '../generated/models/host-set';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
 
 export default class HostSetModel extends GeneratedHostSetModel {
-
   // =attributes
 
   /**
@@ -11,8 +10,9 @@ export default class HostSetModel extends GeneratedHostSetModel {
    */
   @fragmentArray('fragment-string', {
     readOnly: true,
-    emptyArrayIfMissing: true
-  }) host_ids;
+    emptyArrayIfMissing: true,
+  })
+  host_ids;
 
   // =methods
 
@@ -24,17 +24,17 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addHosts(hostIDs, options={ adapterOptions: {} }) {
+  addHosts(hostIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-hosts',
-      hostIDs
+      hostIDs,
     };
     return this.save({
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 
@@ -46,17 +46,17 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeHosts(hostIDs, options={ adapterOptions: {} }) {
+  removeHosts(hostIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'remove-hosts',
-      hostIDs
+      hostIDs,
     };
     return this.save({
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
-        ...options.adapterOptions
-      }
+        ...options.adapterOptions,
+      },
     });
   }
 

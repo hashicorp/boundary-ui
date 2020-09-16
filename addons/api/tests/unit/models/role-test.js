@@ -6,7 +6,7 @@ module('Unit | Model | role', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
-  test('it exists', function(assert) {
+  test('it exists', function (assert) {
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('role', {});
     assert.ok(model);
@@ -18,7 +18,7 @@ module('Unit | Model | role', function (hooks) {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         grant_strings: ['grant1', 'grant2'],
-        version: 1
+        version: 1,
       });
     });
     const store = this.owner.lookup('service:store');
@@ -29,14 +29,14 @@ module('Unit | Model | role', function (hooks) {
         attributes: {
           name: 'Role',
           description: 'Description',
-          grants: [{value: 'grant1'}, {value: 'grant2'}],
+          grants: [{ value: 'grant1' }, { value: 'grant2' }],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('role', '123abc');
     await model.saveGrants();
@@ -48,7 +48,7 @@ module('Unit | Model | role', function (hooks) {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         principal_ids: ['123_abc', 'foobar'],
-        version: 1
+        version: 1,
       });
     });
     const store = this.owner.lookup('service:store');
@@ -61,15 +61,15 @@ module('Unit | Model | role', function (hooks) {
           description: 'Description',
           principals: [
             { id: '1', type: 'user' },
-            { id: '3', type: 'group' }
+            { id: '3', type: 'group' },
           ],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('role', '123abc');
     await model.addPrincipals(['123_abc', 'foobar']);
@@ -77,13 +77,16 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `removePrincipals` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/roles/123abc:remove-principals', (schema, request) => {
-      const body = JSON.parse(request.requestBody);
-      assert.deepEqual(body, {
-        principal_ids: ['1', '3'],
-        version: 1
-      });
-    });
+    this.server.post(
+      '/v1/roles/123abc:remove-principals',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          principal_ids: ['1', '3'],
+          version: 1,
+        });
+      }
+    );
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -94,15 +97,15 @@ module('Unit | Model | role', function (hooks) {
           description: 'Description',
           principals: [
             { id: '1', type: 'user' },
-            { id: '3', type: 'group' }
+            { id: '3', type: 'group' },
           ],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('role', '123abc');
     await model.removePrincipals(['1', '3']);
@@ -110,13 +113,16 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `removePrincipal` method that deletes a single principal using `removePrincipals` method', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/roles/123abc:remove-principals', (schema, request) => {
-      const body = JSON.parse(request.requestBody);
-      assert.deepEqual(body, {
-        principal_ids: ['3'],
-        version: 1
-      });
-    });
+    this.server.post(
+      '/v1/roles/123abc:remove-principals',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          principal_ids: ['3'],
+          version: 1,
+        });
+      }
+    );
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -127,15 +133,15 @@ module('Unit | Model | role', function (hooks) {
           description: 'Description',
           principals: [
             { id: '1', type: 'user' },
-            { id: '3', type: 'group' }
+            { id: '3', type: 'group' },
           ],
           version: 1,
           scope: {
             scope_id: 'o_1',
-            type: 'scope'
-          }
-        }
-      }
+            type: 'scope',
+          },
+        },
+      },
     });
     const model = store.peekRecord('role', '123abc');
     await model.removePrincipal('3');

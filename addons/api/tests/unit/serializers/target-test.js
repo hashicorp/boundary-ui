@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Serializer | target', function(hooks) {
+module('Unit | Serializer | target', function (hooks) {
   setupTest(hooks);
 
   test('it serializes targets normally, without host sets', function (assert) {
@@ -13,14 +13,14 @@ module('Unit | Serializer | target', function(hooks) {
       description: 'Description',
       host_sets: [
         { host_set_id: '1', host_catalog_id: '2' },
-        { host_set_id: '3', host_catalog_id: '4' }
+        { host_set_id: '3', host_catalog_id: '4' },
       ],
       scope: {
         scope_id: 'org_1',
-        type: 'org'
+        type: 'org',
       },
       version: 1,
-      type: 'tcp'
+      type: 'tcp',
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -32,10 +32,9 @@ module('Unit | Serializer | target', function(hooks) {
       type: 'tcp',
       scope_id: 'org_1',
       attributes: {
-        default_port: null
-      }
+        default_port: null,
+      },
     });
-
   });
 
   test('it serializes only host sets and version when an `adapterOptions.hostSetIDs` array is passed', function (assert) {
@@ -47,18 +46,18 @@ module('Unit | Serializer | target', function(hooks) {
       description: 'Description',
       host_sets: [
         { host_set_id: '1', host_catalog_id: '2' },
-        { host_set_id: '3', host_catalog_id: '4' }
+        { host_set_id: '3', host_catalog_id: '4' },
       ],
-      version: 1
+      version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      hostSetIDs: ['4', '5']
+      hostSetIDs: ['4', '5'],
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       host_set_ids: ['4', '5'],
-      version: 1
+      version: 1,
     });
   });
 
@@ -72,8 +71,8 @@ module('Unit | Serializer | target', function(hooks) {
       name: 'Target 1',
       host_sets: [
         { host_set_id: '1', host_catalog_id: '2' },
-        { host_set_id: '3', host_catalog_id: '4' }
-      ]
+        { host_set_id: '3', host_catalog_id: '4' },
+      ],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -89,8 +88,8 @@ module('Unit | Serializer | target', function(hooks) {
           name: 'Target 1',
           host_sets: [
             { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' }
-          ]
+            { host_set_id: '3', host_catalog_id: '4' },
+          ],
         },
         relationships: {},
       },
@@ -105,7 +104,7 @@ module('Unit | Serializer | target', function(hooks) {
     const payload = {
       id: '1',
       name: 'Target 1',
-      scope: { id: 'o_123' }
+      scope: { id: 'o_123' },
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -120,11 +119,10 @@ module('Unit | Serializer | target', function(hooks) {
         attributes: {
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
-          host_sets: []
+          host_sets: [],
         },
         relationships: {},
       },
     });
   });
-
 });
