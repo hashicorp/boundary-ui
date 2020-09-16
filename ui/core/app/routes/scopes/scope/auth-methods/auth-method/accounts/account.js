@@ -26,7 +26,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountRoute extend
       outlet: 'header'
     });
 
-    this.render('-empty', {
+    this.render('scopes/scope/auth-methods/auth-method/accounts/account/-actions', {
       into: 'scopes/scope/auth-methods/auth-method',
       outlet: 'actions'
     });

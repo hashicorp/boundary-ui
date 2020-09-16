@@ -50,4 +50,21 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
       this.notify.error(error.message, { closeAfter: null });
     }
   }
+
+  /**
+   * Delete an account in current scope and redirect to index
+   * @param {AccountModel} account
+   */
+  @action
+  async delete(account) {
+    try {
+      await account.destroyRecord();
+      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
+      this.refresh();
+      this.notify.success(this.intl.t('notify.delete-success'));
+    } catch (error) {
+      //TODO: replace with translated strings
+      this.notify.error(error.message, { closeAfter: null });
+    }
+  }
 }
