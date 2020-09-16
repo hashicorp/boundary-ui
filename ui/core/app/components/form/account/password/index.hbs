@@ -5,9 +5,8 @@
   @error={{@model.errors.base}}
   as |form|
 >
-
   <form.input
-  @value={{t (concat 'host.types.' @model.type)}}
+  @value={{t (concat 'account.types.' @model.type)}}
   @label={{t "form.label.type"}}
   readonly={{true}}
   @disabled={{true}} />
@@ -48,12 +47,30 @@
   </form.textarea>
 
   <form.input
-    @name="address"
+    @name="login_name"
     @type="text"
-    @value={{@model.attributes.address}}
-    @label={{t "form.label.address"}}
+    @value={{@model.attributes.login_name}}
+    @label={{t "form.label.identification"}}
     @error={{@model.errors.name}}
     readonly={{false}}
+  as |field|>
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name="password"
+    @type="password"
+    @value={{@model.attributes.password}}
+    @label={{t "form.label.password"}}
+    @error={{@model.errors.name}}
+    readonly={{false}}
+    autocomplete="new-password"
   as |field|>
     {{#if @model.errors.name}}
       <field.errors as |errors|>
@@ -68,5 +85,4 @@
     @disabled={{if @model.cannotSave @model.cannotSave}}
     @submitText={{t "actions.save"}}
     @cancelText={{t "actions.cancel"}} />
-
 </Rose::Form>

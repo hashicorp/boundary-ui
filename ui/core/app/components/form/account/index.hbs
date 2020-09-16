@@ -46,6 +46,23 @@
     {{/if}}
   </form.textarea>
 
+  <form.input
+    @name="login_name"
+    @type="text"
+    @value={{@model.attributes.login_name}}
+    @label={{t "form.label.identification"}}
+    @error={{@model.errors.name}}
+    readonly={{false}}
+  as |field|>
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
     @submitText={{t "actions.save"}}

@@ -29,7 +29,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    */
   @action
   cancel(account) {
+    const { isNew } = account;
     account.rollbackAttributes();
+    if (isNew) this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
   }
 
   /**
@@ -38,12 +40,13 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    */
   @action
   async save(account) {
+    const { isNew } = account;
     try {
       await account.save();
       await this.refresh();
       await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
       this.notify.success(
-        this.intl.t('notify.save-success')
+        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
     } catch (error) {
       // TODO: replace with translated strings
