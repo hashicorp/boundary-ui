@@ -29,6 +29,7 @@ actions:
   add-members: Add Members
   add-hosts: Add Hosts
   add-account: Create Account
+  set-password: Set Password
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -132,7 +133,7 @@ descriptions:
   no-principals-available: Principals are not available for assignment.
   group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.
-  account-settings-overview: Set the password for current account.
+  account-set-password-overview: Set the password for current account.
   accounts-welcome: No accounts are available in this auth method.
 states:
   info: Info
