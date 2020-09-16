@@ -10,11 +10,14 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it authenticates to the specified authEndpoint', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.buildAuthEndpointURL(), (schema, request) => {
-      const json = JSON.parse(request.requestBody);
-      assert.ok(json.token_type, 'Requested token cookies by default');
-      return new Response(200);
-    });
+    this.server.post(
+      authenticator.buildAuthEndpointURL(),
+      (schema, request) => {
+        const json = JSON.parse(request.requestBody);
+        assert.ok(json.token_type, 'Requested token cookies by default');
+        return new Response(200);
+      }
+    );
     await authenticator.authenticate({}).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
@@ -23,11 +26,14 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it can authenticate without requesting cookies', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.buildAuthEndpointURL(), (schema, request) => {
-      const json = JSON.parse(request.requestBody);
-      assert.notOk(json.token_type, 'Did not request tokens cookies');
-      return new Response(200);
-    });
+    this.server.post(
+      authenticator.buildAuthEndpointURL(),
+      (schema, request) => {
+        const json = JSON.parse(request.requestBody);
+        assert.notOk(json.token_type, 'Did not request tokens cookies');
+        return new Response(200);
+      }
+    );
     await authenticator.authenticate({}, false).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
@@ -36,17 +42,20 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it authenticates with the expected payload', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.buildAuthEndpointURL(), (schema, request) => {
-      const json = JSON.parse(request.requestBody);
-      assert.deepEqual(json, {
-        token_type: 'cookie',
-        credentials: {
-          login_name: 'foo',
-          password: 'bar',
-        },
-      });
-      return new Response(200);
-    });
+    this.server.post(
+      authenticator.buildAuthEndpointURL(),
+      (schema, request) => {
+        const json = JSON.parse(request.requestBody);
+        assert.deepEqual(json, {
+          token_type: 'cookie',
+          credentials: {
+            login_name: 'foo',
+            password: 'bar',
+          },
+        });
+        return new Response(200);
+      }
+    );
     const creds = {
       identification: 'foo',
       password: 'bar',
