@@ -50,6 +50,8 @@ export default class ApplicationRoute extends Route.extend(
     if (!Ember.testing) later(location, location.reload, 150);
   }
 
+  // =actions
+
   /**
    * Delegates invalidation to the session service.
    */
