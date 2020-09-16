@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | rose/form/label', function(hooks) {
+module('Integration | Component | rose/form/label', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
@@ -14,9 +14,6 @@ module('Integration | Component | rose/form/label', function(hooks) {
       <//Rose::Form::Label>
     `);
     assert.ok(find('.rose-form-label'));
-    assert.equal(
-      find('.rose-form-label').textContent.trim(),
-      'Form Label'
-    );
+    assert.equal(find('.rose-form-label').textContent.trim(), 'Form Label');
   });
 });
