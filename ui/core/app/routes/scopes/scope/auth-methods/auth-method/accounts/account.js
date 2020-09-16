@@ -5,7 +5,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountRoute extend
   // =methods
 
   /**
-   * Load an account in current scope.
+   * Load an account by ID.
    * @param {object} params
    * @param {string} params.account_id
    * @return {AccountModel}

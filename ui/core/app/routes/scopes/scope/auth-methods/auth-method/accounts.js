@@ -12,15 +12,17 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   // =methods
 
   /**
-   * Returns accounts in current auth method.
+   * Returns accounts for the current auth method.
    * @return {Promise{[AccountModel]}}
    */
   model() {
-    const { id: auth_method_id } = this.modelFor('scopes.scope.auth-methods.auth-method');
+    const { id: auth_method_id } =
+      this.modelFor('scopes.scope.auth-methods.auth-method');
     return this.store.query('account', { auth_method_id });
   }
 
   // =actions
+
   /**
    * Rollback changes on an account.
    * @param {AccountModel} account
@@ -43,11 +45,11 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
     if(isNew) { adapterOptions.password = password; }
     try {
       await account.save({ adapterOptions });
+      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
       );
-      this.transitionTo('scopes.scope.auth-methods.auth-method.accounts.account', account);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
@@ -62,9 +64,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   async delete(account) {
     try {
       await account.destroyRecord();
+      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
       this.refresh();
       this.notify.success(this.intl.t('notify.delete-success'));
-      this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

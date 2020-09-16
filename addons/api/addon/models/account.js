@@ -14,14 +14,15 @@ export default class AccountModel extends GeneratedAccountModel {
   /**
    * Save account password via the `set-password` method.
    * See serializer and adapter for more information.
+   * @param {string} password
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  savePassword(options={ adapterOptions: {} }) {
+  setPassword(password, options={ adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'set-password',
-      serializePassword: true
+      password
     };
     return this.save({
       ...options,
