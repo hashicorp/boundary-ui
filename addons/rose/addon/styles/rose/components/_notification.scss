@@ -29,6 +29,7 @@
     @include type.type(s);
     // hack alert, because the icons are still hard to work with
     margin-left: sizing.rems(m) + $xxs;
+    overflow-wrap: break-word;
   }
 
   .rose-notification-dismiss {
