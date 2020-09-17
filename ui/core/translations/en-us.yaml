@@ -30,6 +30,7 @@ actions:
   add-hosts: Add Hosts
   add-account: Create Account
   set-password: Set Password
+  change-password: Change Password
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -154,6 +155,8 @@ form:
     protocol: Protocol
     actions: Actions
     default_port: Default Port
+    current_password: Current Password
+    new_password: New Password
 errors:
   titles:
     unauthenticated-error: You are not signed in

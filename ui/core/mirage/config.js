@@ -71,6 +71,10 @@ export default function() {
     if (method === 'set-password') {
       updatedAttrs.attributes.password = attrs.password;
     }
+    // Set new password
+    if (method === 'change-password') {
+      updatedAttrs.attributes.password = attrs.new_password;
+    }
     return account.update(updatedAttrs);
   });
 

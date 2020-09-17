@@ -18,7 +18,7 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
    */
   @computed('password')
   get cannotSave() {
-    return !(this.password?.length > 0);
+    return !this.password;
   }
 
   // =methods
