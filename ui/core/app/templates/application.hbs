@@ -14,6 +14,9 @@
             @iconOnly={{true}}
             @icon="user-square-fill" as |dropdown|
           >
+            <dropdown.link @route="account.change-password">
+              {{t 'actions.change-password'}}
+            </dropdown.link>
             <dropdown.button
               {{on "click" (route-action "invalidateSession")}}
             >
