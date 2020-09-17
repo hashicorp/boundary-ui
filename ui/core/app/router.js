@@ -91,4 +91,8 @@ Router.map(function () {
       });
     });
   });
+
+  this.route('account', function() {
+    this.route('change-password');
+  });
 });
