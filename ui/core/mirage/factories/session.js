@@ -1,9 +1,16 @@
 import factory from '../generated/factories/target';
 import { trait } from 'ember-cli-mirage';
+import { random } from 'faker';
 
 export default factory.extend({
 
   id: (i) => `session-id-${i}`,
+  status: () => random.arrayElement([
+    'pending',
+    'active',
+    'canceling',
+    'terminated'
+  ]),
 
   /**
    * Sessions generated with this trait will automatically form

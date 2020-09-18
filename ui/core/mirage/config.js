@@ -308,7 +308,7 @@ export default function() {
       version: attrs.version
     };
     if (method === 'cancel') {
-      updatedAttrs.status = 'canceled';
+      updatedAttrs.status = 'canceling';
     }
     return session.update(updatedAttrs);
   });

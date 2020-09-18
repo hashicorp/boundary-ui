@@ -163,6 +163,7 @@ form:
     current_password: Current Password
     new_password: New Password
     started: Started
+    status: Status
 errors:
   titles:
     unauthenticated-error: You are not signed in
