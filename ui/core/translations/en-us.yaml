@@ -117,6 +117,7 @@ titles:
   account: Account
   accounts-welcome: Welcome to Accounts
   no-sessions: No Active Sessions
+  actions: Actions
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -180,3 +181,4 @@ notify:
   create-success: Created succesfully.
   save-success: Saved succesfully.
   delete-success: Deleted successfully.
+  session-canceled: Session canceled.

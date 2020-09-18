@@ -299,4 +299,18 @@ export default function() {
     return sessions.where(session => session.scopeId === scope_id);
   });
   this.get('/sessions/:id');
+  this.post('/sessions/:idMethod', function ({ sessions }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
+    const session = sessions.find(id);
+    const updatedAttrs = {
+      version: attrs.version
+    };
+    if (method === 'cancel') {
+      updatedAttrs.status = 'canceled';
+    }
+    return session.update(updatedAttrs);
+  });
+
 }
