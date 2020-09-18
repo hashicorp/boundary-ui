@@ -17,7 +17,7 @@ module('Unit | Model | account', function (hooks) {
       name: 'name',
       type: 'password',
     });
-    assert.equal(model.username, null);
+    assert.notOk(model.username);
     model.attributes.login_name = 'username';
     assert.equal(model.username, 'username');
   });

@@ -16,11 +16,15 @@ export default class AccountModel extends GeneratedAccountModel {
    * Convenience for getting username in account.
    * @type {string}
    */
-  @computed('attributes')
+  @computed('attributes.{login_name}')
   get username() {
-    if(this.type === 'password') {
-      return this.attributes.login_name;
+    let username = '';
+    switch (this.type) {
+      case 'password':
+        username = this.attributes.login_name;
+        break;
     }
+    return username;
   }
 
   // =methods
