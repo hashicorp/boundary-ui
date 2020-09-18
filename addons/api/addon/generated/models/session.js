@@ -27,4 +27,9 @@ export default class GeneratedSessionModel extends BaseModel {
   })
   updated_time;
 
+  @attr('number', {
+    description: 'Current version number of this resource.',
+  })
+  version;
+
 }
