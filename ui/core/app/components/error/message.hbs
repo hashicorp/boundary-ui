@@ -1,5 +1,5 @@
-<Rose::Message @title={{t (concat "errors." statusCode ".title")}} @subtitle={{concat (t "errors.titles.error") " " this.status}} @icon={{this.icon}} as |message|>
-  <message.description>{{t (concat "errors." statusCode ".description")}}</message.description>
+<Rose::Message @title={{t (concat "errors." this.messageCode ".title")}} @subtitle={{concat (t "errors.titles.error") " " this.status}} @icon={{this.icon}} as |message|>
+  <message.description>{{t (concat "errors." this.messageCode ".description")}}</message.description>
   {{#if this.helpRoute}}
     <message.link @route={{this.helpRoute}}>{{t "actions.help"}}</message.link>
   {{/if}}

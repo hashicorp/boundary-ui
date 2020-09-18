@@ -52,10 +52,10 @@ export default class ErrorMessageComponent extends Message {
    * @return {string}
    */
   @computed('status')
-  get statusCode() {
-    let statusCode = this.status;
-    if(!statuses.includes(statusCode)) statusCode = 'unknown';
-    return statusCode;
+  get messageCode() {
+    let messageCode = this.status;
+    if(!statuses.includes(messageCode)) messageCode = 'unknown';
+    return messageCode;
   }
 
 }
