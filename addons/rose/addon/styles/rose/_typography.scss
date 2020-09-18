@@ -54,3 +54,7 @@ p {
 a {
   color: var(--action);
 }
+
+time {
+  font-variant-numeric: tabular-nums;
+}
