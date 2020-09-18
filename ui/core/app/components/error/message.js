@@ -1,4 +1,5 @@
 import Message from 'rose/components/rose/message';
+import { computed } from '@ember/object';
 
 /*
  * Helpful error booleans are attached based on the error status code:
@@ -14,75 +15,29 @@ import Message from 'rose/components/rose/message';
  *            we don't distinguish it yet
  */
 
-const status_messages = {
-  '401': {
-    icon: 'disabled',
-    title: 'errors.titles.unauthenticated-error',
-    subtitle: 'errors.subtitles.unauthenticated-error',
-    description: 'errors.descriptions.unauthenticated-error',
-  },
-  '403': {
-    icon: 'disabled',
-    title: 'errors.titles.forbidden-error',
-    subtitle: 'errors.subtitles.forbidden-error',
-    description: 'errors.descriptions.forbidden-error',
-  },
-  '404': {
-    icon: 'help-circle-outline',
-    title: 'errors.titles.notfound-error',
-    subtitle: 'errors.subtitles.notfound-error',
-    description: 'errors.descriptions.notfound-error',
-  },
-  '500': {
-    icon: 'alert-circle-outline',
-    title: 'errors.titles.server-error',
-    subtitle: 'errors.subtitles.server-error',
-    description: 'errors.descriptions.server-error',
-  },
-  unknown: {
-    icon: 'alert-circle-outline',
-    title: 'errors.titles.unknown-error',
-    subtitle: 'errors.subtitles.unknown-error',
-    description: 'errors.descriptions.unknown-error',
-  },
-};
+const statuses = ['401', '403', '404', '500'];
 
 export default class ErrorMessageComponent extends Message {
   // =methods
 
   /**
-   * Returns an icon name based on error status.
+   * Returns an icon for error status.
    * @return {string}
    */
+  @computed('status')
   get icon() {
-    return this.statusMessage.icon;
+    switch (this.status) {
+      case '401':
+      case '403':
+        return 'disabled';
+      case '404':
+        return 'help-circle-outline';
+      default:
+        return 'alert-circle-outline';
+    }
   }
 
-  /**
-   * Returns a message title based on error status.
-   * @return {string}
-   */
-  get title() {
-    return this.statusMessage.title;
-  }
-
-  /**
-   * Returns a message subtitle of error status prefixed with 'Error'.
-   * @return {string}
-   */
-  get subtitle() {
-    return this.statusMessage.subtitle;
-  }
-
-  /**
-   * Returns an error description based on error status.
-   * @return {string}
-   */
-  get description() {
-    return this.statusMessage.description;
-  }
-
-  // Disable until help documentation can be linked in.
+  // TODO: Enable when help documentation can be linked in.
   /**
    * Returns an route string for help text in message.
    * @return {string}
@@ -92,16 +47,15 @@ export default class ErrorMessageComponent extends Message {
   // }
 
   /**
-   * Returns an object with message details based on error status.
-   * Return message for `unknown` error when error status isn't part of
-   * predefined message set.
-   * @return {object}
+   * Returns 'unknown' status code when provided error status
+   * isn't part of predefined statuses.
+   * @return {string}
    */
-  get statusMessage() {
-    let status = this.status;
-    if (!status_messages[status]) {
-      status = 'unknown';
-    }
-    return status_messages[status];
+  @computed('status')
+  get statusCode() {
+    let statusCode = this.status;
+    if(!statuses.includes(statusCode)) statusCode = 'unknown';
+    return statusCode;
   }
+
 }
