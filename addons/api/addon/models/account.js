@@ -13,12 +13,14 @@ export default class AccountModel extends GeneratedAccountModel {
   @fragment('fragment-account-attributes', { defaultValue: {} }) attributes;
 
   /**
-   * Convenience for getting login_name attribute.
+   * Convenience for getting username in account.
    * @type {string}
    */
-  @computed('attributes.login_name')
+  @computed('attributes')
   get username() {
-    return this.attributes.login_name;
+    if(this.type === 'password') {
+      return this.attributes.login_name;
+    }
   }
 
   // =methods
