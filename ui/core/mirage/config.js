@@ -1,5 +1,6 @@
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
+import { pickRandomStatusString } from './factories/session';
 //import { Response } from 'miragejs';
 
 export default function() {
@@ -295,10 +296,22 @@ export default function() {
 
   // session
 
+  // To simulate changes to `session.status` that may occur in the backend,
+  // we quietly randomize the value of the field on GET.
   this.get('/sessions', function ({ sessions }, { queryParams: { scope_id } }) {
-    return sessions.where(session => session.scopeId === scope_id);
+    sessions.where(session => session.scopeId === scope_id)
+      .models
+      .forEach(session => session.update({
+        status: pickRandomStatusString()
+      }));
+    return sessions.where(session => session.scopeId === scope_id)
   });
-  this.get('/sessions/:id');
+  this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
+    const session = sessions.find(id);
+    return session.update({
+      status: pickRandomStatusString()
+    });
+  });
   this.post('/sessions/:idMethod', function ({ sessions }, { params: { idMethod } }) {
     const attrs = this.normalizedRequestAttrs();
     const id = idMethod.split(':')[0];
