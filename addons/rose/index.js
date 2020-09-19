@@ -7,7 +7,7 @@ var mergeTrees = require('broccoli-merge-trees');
 module.exports = {
   name: require('./package').name,
   included(app) {
-    this._super.included(app);
+    this._super.included.apply(this, arguments);
 
     this.includeStyles(app);
     this.includeIcons(app);
