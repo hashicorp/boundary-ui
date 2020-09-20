@@ -1,7 +1,14 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 import { all, hash } from 'rsvp';
 
 export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
+
+  // =services
+
+  @service intl;
+  @service notify;
 
   // =methods
 
@@ -20,6 +27,21 @@ export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
         target: this.store.findRecord('target', session.target_id),
       }))
     );
+  }
+
+  /**
+   * Cancels the specified session and notifies user of success or error.
+   * @param {SessionModel}
+   */
+  @action
+  async cancelSession(session) {
+    try {
+      await session.cancelSession();
+      this.notify.success(this.intl.t('notify.session-canceled'));
+    } catch (error) {
+      // TODO: replace with translated strings
+      this.notify.error(error.message, { closeAfter: null });
+    }
   }
 
 }
