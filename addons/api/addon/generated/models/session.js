@@ -12,6 +12,7 @@ export default class GeneratedSessionModel extends BaseModel {
 
   @attr('string', {
     description: 'The name of the current status of this session.',
+    readOnly: true,
   })
   status;
 
