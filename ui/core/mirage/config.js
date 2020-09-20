@@ -292,4 +292,11 @@ export default function() {
     }
     return target.update(updatedAttrs);
   });
+
+  // session
+
+  this.get('/sessions', function ({ sessions }, { queryParams: { scope_id } }) {
+    return sessions.where(session => session.scopeId === scope_id);
+  });
+  this.get('/sessions/:id');
 }
