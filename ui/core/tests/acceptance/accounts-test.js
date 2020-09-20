@@ -98,10 +98,7 @@ module('Acceptance | accounts', function (hooks) {
   test('can create a new account', async function (assert) {
     assert.expect(1);
     const accountsCount = this.server.db.accounts.length;
-    await visit(urls.accounts);
-    // Find and click account creation dropdown link
-    await click('.rose-layout-page-actions .rose-dropdown summary');
-    await click('.rose-layout-page-actions .rose-dropdown .rose-dropdown-content .rose-dropdown-link');
+    await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
     await fillIn('[name="description"]', 'description');
     await fillIn('[name="login_name"]', 'username');
@@ -209,43 +206,6 @@ module('Acceptance | accounts', function (hooks) {
       find('[role="alert"]').textContent.trim(),
       'Oops.',
       'Displays primary error message.'
-    );
-  });
-
-  test('saving a new account with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/accounts', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'save new account');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
     );
   });
 
