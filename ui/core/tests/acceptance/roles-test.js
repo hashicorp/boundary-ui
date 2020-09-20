@@ -15,49 +15,53 @@ module('Acceptance | roles', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgScope;
-  let rolesURL;
-  let roleURL;
-  let newRoleURL;
+  const instances = {
+    scopes: {
+      global: null,
+      org: null,
+    },
+    role: null,
+  };
+  const urls = {
+    orgScope: null,
+    roles: null,
+    role: null,
+    newRole: null,
+  };
 
   hooks.beforeEach(function () {
-    orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-      },
-      'withChildren'
-    );
-
-    const role = this.server.create('role', {
-      scope: orgScope,
-    });
-
-    rolesURL = `/scopes/${orgScope.id}/roles`;
-    roleURL = `${rolesURL}/${role.id}`;
-    newRoleURL = `${rolesURL}/new`;
-
     authenticateSession({});
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    instances.role = this.server.create('role', {
+      scope: instances.scopes.org,
+    });
+    urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
+    urls.role = `${urls.roles}/${instances.role.id}`;
+    urls.newRole = `${urls.roles}/new`;
   });
 
   test('visiting roles', async function (assert) {
     assert.expect(1);
-    await visit(rolesURL);
+    await visit(urls.roles);
     await a11yAudit();
-    assert.equal(currentURL(), rolesURL);
+    assert.equal(currentURL(), urls.roles);
   });
 
   test('visiting a role', async function (assert) {
     assert.expect(1);
-    await visit(newRoleURL);
+    await visit(urls.newRole);
     await a11yAudit();
-    assert.equal(currentURL(), newRoleURL);
+    assert.equal(currentURL(), urls.newRole);
   });
 
   test('can create new role', async function (assert) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
-    await visit(newRoleURL);
+    await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('[type="submit"]');
     assert.equal(this.server.db.roles.length, rolesCount + 1);
@@ -66,10 +70,10 @@ module('Acceptance | roles', function (hooks) {
   test('can cancel new role creation', async function (assert) {
     assert.expect(2);
     const rolesCount = this.server.db.roles.length;
-    await visit(newRoleURL);
+    await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), rolesURL);
+    assert.equal(currentURL(), urls.roles);
     assert.equal(this.server.db.roles.length, rolesCount);
   });
 
@@ -94,7 +98,7 @@ module('Acceptance | roles', function (hooks) {
         }
       );
     });
-    await visit(newRoleURL);
+    await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('[type="submit"]');
     assert.ok(
@@ -111,16 +115,16 @@ module('Acceptance | roles', function (hooks) {
 
   test('can save changes to an existing role', async function (assert) {
     assert.expect(2);
-    await visit(roleURL);
+    await visit(urls.role);
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), roleURL);
+    assert.equal(currentURL(), urls.role);
     assert.equal(this.server.db.roles[0].name, 'Updated admin role');
   });
 
   test('can cancel changes to an existing role', async function (assert) {
     assert.expect(1);
-    await visit(roleURL);
+    await visit(urls.role);
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(find('[name="name"]').value, 'Updated admin role');
@@ -129,7 +133,7 @@ module('Acceptance | roles', function (hooks) {
   test('can delete a role', async function (assert) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
-    await visit(roleURL);
+    await visit(urls.role);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(this.server.db.roles.length, rolesCount - 1);
   });
@@ -155,7 +159,7 @@ module('Acceptance | roles', function (hooks) {
         }
       );
     });
-    await visit(roleURL);
+    await visit(urls.role);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
@@ -183,7 +187,7 @@ module('Acceptance | roles', function (hooks) {
         }
       );
     });
-    await visit(roleURL);
+    await visit(urls.role);
     await fillIn('[name="name"]', 'Role name');
     await click('[type="submit"]');
     assert.ok(
@@ -206,7 +210,7 @@ module('Acceptance | roles', function (hooks) {
         }
       );
     });
-    await visit(roleURL);
+    await visit(urls.role);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
