@@ -11,6 +11,22 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   // =methods
 
   /**
+   * Renders the grants-specific header template.
+   * Empties the actions and navigation outlets and renders a custom empty header.
+   * @override
+   */
+  renderTemplate() {
+    super.renderTemplate(...arguments);
+
+    this.render('scopes/scope/roles/role/grants/-header', {
+      into: 'scopes/scope/roles/role',
+      outlet: 'header',
+    });
+  }
+
+  // =actions
+
+  /**
    * Adds a new grant to the role at the beginning of the grants list.
    * Grant creation is not immediately permanent; users may rollback the change
    * via "cancel" or commit it via "save".
