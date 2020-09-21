@@ -1,12 +1,31 @@
 import GeneratedAccountModel from '../generated/models/account';
 import { fragment } from 'ember-data-model-fragments/attributes';
+import { computed } from '@ember/object';
 
 export default class AccountModel extends GeneratedAccountModel {
+
+  // =attributes
+
   /**
    * Attributes of this resource, if any, represented as a JSON fragment.
    * @type {FragmentAccountAttributesModel}
    */
   @fragment('fragment-account-attributes', { defaultValue: {} }) attributes;
+
+  /**
+   * Convenience for getting username in account.
+   * @type {string}
+   */
+  @computed('type', 'attributes.{login_name}')
+  get username() {
+    let username = '';
+    switch (this.type) {
+      case 'password':
+        username = this.attributes.login_name;
+        break;
+    }
+    return username;
+  }
 
   // =methods
 
@@ -41,7 +60,11 @@ export default class AccountModel extends GeneratedAccountModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  changePassword(currentPassword, newPassword, options = { adapterOptions: {} }) {
+  changePassword(
+    currentPassword,
+    newPassword,
+    options = { adapterOptions: {} }
+  ) {
     const defaultAdapterOptions = {
       method: 'change-password',
       currentPassword,
