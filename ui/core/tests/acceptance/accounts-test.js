@@ -246,23 +246,49 @@ module('Acceptance | accounts', function (hooks) {
     );
   });
 
-  test('can set a new password for account', async function (assert) {
-    assert.expect(1);
-    this.server.post('/accounts/:id', (_, { requestBody }) => {
-      const attrs = JSON.parse(requestBody);
-      assert.equal(attrs.password, 'update password', "attributes don't match the expected ones");
+  module('password', function() {
+    test('can set a new password for account', async function (assert) {
+      assert.expect(1);
+      this.server.post('/accounts/:id', (_, { requestBody }) => {
+        const attrs = JSON.parse(requestBody);
+        assert.equal(attrs.password, 'update password', 'new password is set');
+      });
+      await visit(urls.setAccountPassword);
+      await fillIn('[name="password"]', 'update password');
+      await click('form [type="submit"]:not(:disabled)');
+      await a11yAudit();
     });
-    await visit(urls.setAccountPassword);
-    await fillIn('[name="password"]', 'update password');
-    await click('form [type="submit"]:not(:disabled)');
-    await a11yAudit();
-  });
 
-  test('can cancel setting new password', async function (assert) {
-    assert.expect(1);
-    await visit(urls.setAccountPassword);
-    await fillIn('[name="password"]', 'update password');
-    await click('form button:not([type="submit"])');
-    assert.notOk(find('[name="password"]').textContent.trim());
+    test('can cancel setting new password', async function (assert) {
+      assert.expect(1);
+      await visit(urls.setAccountPassword);
+      await fillIn('[name="password"]', 'update password');
+      await click('form button:not([type="submit"])');
+      assert.notOk(find('[name="password"]').textContent.trim());
+    });
+
+    test('errors are displayed when setting password fails', async function  (assert) {
+      assert.expect(1);
+      this.server.post('/accounts/:id', () => {
+        return new Response(
+          490,
+          {},
+          {
+            status: 490,
+            code: 'error',
+            message: 'Oops.',
+          }
+        );
+      });
+      await visit(urls.setAccountPassword);
+      await fillIn('[name="password"]', 'update password');
+      await click('form [type="submit"]');
+      await a11yAudit();
+      assert.ok(
+        find('[role="alert"]').textContent.trim(),
+        'Oops.',
+        'Displays primary error message.'
+      );
+    });
   });
 });
