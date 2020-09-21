@@ -77,6 +77,8 @@ resources:
   targets: Targets
   accounts: Accounts
   account: Account
+  sessions: Sessions
+  session: Session
 titles:
   iam: IAM
   new: New
@@ -114,6 +116,8 @@ titles:
   accounts: Accounts
   account: Account
   accounts-welcome: Welcome to Accounts
+  no-sessions: No Active Sessions
+  actions: Actions
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -136,6 +140,7 @@ descriptions:
   no-available-users: No users are available to add to this group.
   account-set-password: Set a password for the account.
   accounts-welcome: No accounts are available in this auth method.
+  no-sessions: There are no active sessions at this time.
 states:
   info: Info
   success: Success
@@ -157,6 +162,8 @@ form:
     default_port: Default Port
     current_password: Current Password
     new_password: New Password
+    started: Started
+    status: Status
 errors:
   401:
     title: You are not signed in
@@ -180,3 +187,4 @@ notify:
   create-success: Created succesfully.
   save-success: Saved succesfully.
   delete-success: Deleted successfully.
+  session-canceled: Session canceled.
