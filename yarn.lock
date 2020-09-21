@@ -4295,11 +4295,6 @@ ast-types@0.13.3:
   resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.13.3.tgz#50da3f28d17bdbc7969a3a2d83a0e4a72ae755a7"
   integrity sha512-XTZ7xGML849LkQP86sWdQzfhwbt3YwIO6MqbX9mUNYY98VKaaVZP7YNNm70IpwecbkkxmfC5IYAzOQ/2p29zRA==
 
-ast-types@0.9.6:
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.9.6.tgz#102c9e9e9005d3e7e3829bf0c4fa24ee862ee9b9"
-  integrity sha1-ECyenpAF0+fjgpvwxPok7oYu6bk=
-
 astral-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
@@ -8434,7 +8429,7 @@ ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.11.0, ember-cli-babel@^6.12.0,
     ember-cli-version-checker "^2.1.2"
     semver "^5.5.0"
 
-ember-cli-babel@^7.1.2, ember-cli-babel@^7.10.0, ember-cli-babel@^7.11.0, ember-cli-babel@^7.11.1, ember-cli-babel@^7.12.0, ember-cli-babel@^7.13.2, ember-cli-babel@^7.17.2, ember-cli-babel@^7.18.0, ember-cli-babel@^7.19.0, ember-cli-babel@^7.4.1, ember-cli-babel@^7.5.0, ember-cli-babel@^7.7.0, ember-cli-babel@^7.7.3:
+ember-cli-babel@^7.1.2, ember-cli-babel@^7.10.0, ember-cli-babel@^7.11.0, ember-cli-babel@^7.11.1, ember-cli-babel@^7.12.0, ember-cli-babel@^7.13.2, ember-cli-babel@^7.17.2, ember-cli-babel@^7.18.0, ember-cli-babel@^7.19.0, ember-cli-babel@^7.4.1, ember-cli-babel@^7.5.0, ember-cli-babel@^7.7.3:
   version "7.20.0"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-7.20.0.tgz#aa77eadd15036a053534fc68f7933bb97c5a1e25"
   integrity sha512-DwV5Cbn8wlRFpG8zQXxYPRb0NRnnaj/2qVDODeUEjM/doDhoDDbTSSaEI5Pf0kIlkVIimyGB8qpGv1fkgj2IfQ==
@@ -8923,6 +8918,15 @@ ember-compatibility-helpers@^1.1.1, ember-compatibility-helpers@^1.1.2, ember-co
     ember-cli-version-checker "^2.1.1"
     semver "^5.4.1"
 
+ember-concurrency@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-1.3.0.tgz#66f90fb792687470bcee1172adc0ebf33f5e8b9c"
+  integrity sha512-DwGlfWFpYyAkTwsedlEtK4t1DznJSculAW6Vq5S1C0shVPc5b6tTpHB2FFYisannSYkm+wpm1f1Pd40qiNPtOQ==
+  dependencies:
+    ember-cli-babel "^7.7.3"
+    ember-compatibility-helpers "^1.2.0"
+    ember-maybe-import-regenerator "^0.1.6"
+
 ember-cookies@^0.5.0, ember-cookies@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/ember-cookies/-/ember-cookies-0.5.2.tgz#06e33463f2f83254fefaf224cc944dec3fb9d3ba"
@@ -9280,13 +9284,6 @@ ember-route-action-helper@^2.0.8:
     ember-cli-babel "^6.8.1"
     ember-getowner-polyfill "^2.0.0"
 
-ember-router-generator@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/ember-router-generator/-/ember-router-generator-1.2.3.tgz#8ed2ca86ff323363120fc14278191e9e8f1315ee"
-  integrity sha1-jtLKhv8yM2MSD8FCeBkeno8TFe4=
-  dependencies:
-    recast "^0.11.3"
-
 ember-router-generator@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ember-router-generator/-/ember-router-generator-2.0.0.tgz#d04abfed4ba8b42d166477bbce47fccc672dbde0"
@@ -9323,26 +9320,6 @@ ember-source-channel-url@^2.0.1:
   integrity sha512-YlLUHW9gNvxEaohIj5exykoTZb4xj9ZRTcR4J3svv9S8rjAHJUnHmqC5Fd9onCs+NGxHo7KwR/fDwsfadbDu5Q==
   dependencies:
     got "^8.0.1"
-
-ember-source@~3.12.0:
-  version "3.12.3"
-  resolved "https://registry.yarnpkg.com/ember-source/-/ember-source-3.12.3.tgz#112462b8c1dfa124c0d021ca7eeeb04b5a5488ca"
-  integrity sha512-uzyoOVg1ygTY/InjwP0sgIkHiMiRylDauMY9K+vM15WkmmfrMaetklxxnqWThvsL4onBRRW8MKCj+q41Ra/NQQ==
-  dependencies:
-    broccoli-funnel "^2.0.2"
-    broccoli-merge-trees "^3.0.2"
-    chalk "^2.4.2"
-    ember-cli-babel "^7.7.0"
-    ember-cli-get-component-path-option "^1.0.0"
-    ember-cli-is-package-missing "^1.0.0"
-    ember-cli-normalize-entity-name "^1.0.0"
-    ember-cli-path-utils "^1.0.0"
-    ember-cli-string-utils "^1.1.0"
-    ember-cli-version-checker "^3.1.3"
-    ember-router-generator "^1.2.3"
-    inflection "^1.12.0"
-    jquery "^3.4.1"
-    resolve "^1.11.1"
 
 ember-source@~3.16.0:
   version "3.16.8"
@@ -9929,11 +9906,6 @@ esprima@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-3.0.0.tgz#53cf247acda77313e551c3aa2e73342d3fb4f7d9"
   integrity sha1-U88kes2ncxPlUcOqLnM0LT+099k=
-
-esprima@~3.1.0:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/esprima/-/esprima-3.1.3.tgz#fdca51cee6133895e3c88d535ce49dbff62a4633"
-  integrity sha1-/cpRzuYTOJXjyI1TXOSdv/YqRjM=
 
 esquery@^1.0.1:
   version "1.3.1"
@@ -15667,7 +15639,7 @@ prismjs@~1.17.0:
   optionalDependencies:
     clipboard "^2.0.0"
 
-private@^0.1.6, private@^0.1.8, private@~0.1.5:
+private@^0.1.6, private@^0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
   integrity sha512-VvivMrbvd2nKkiG38qjULzlc+4Vx4wm/whI9pQD35YrARNnhxeiRktSOhSukRLFNlzg6Br/cJPet5J/u19r/mg==
@@ -16487,16 +16459,6 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
-
-recast@^0.11.3:
-  version "0.11.23"
-  resolved "https://registry.yarnpkg.com/recast/-/recast-0.11.23.tgz#451fd3004ab1e4df9b4e4b66376b2a21912462d3"
-  integrity sha1-RR/TAEqx5N+bTktmN2sqIZEkYtM=
-  dependencies:
-    ast-types "0.9.6"
-    esprima "~3.1.0"
-    private "~0.1.5"
-    source-map "~0.5.0"
 
 recast@^0.17.3:
   version "0.17.6"
@@ -17786,7 +17748,7 @@ source-map@0.4.x, source-map@^0.4.2:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6, source-map@^0.5.7, source-map@~0.5.0, source-map@~0.5.1:
+source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6, source-map@^0.5.7, source-map@~0.5.1:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=

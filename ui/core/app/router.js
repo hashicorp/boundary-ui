@@ -52,6 +52,7 @@ Router.map(function () {
             });
             this.route('new');
           });
+          this.route('sessions', function() {});
         });
         this.route('new');
       });
