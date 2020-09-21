@@ -49,6 +49,21 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
+  test('it does not serialize scope_id when resource is nested', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('account', {
+      name: 'Account',
+      description: 'Description',
+      scope: {
+        scope_id: 'global',
+        type: 'global',
+      },
+    });
+    const serializedRecord = record.serialize();
+    assert.notOk(serializedRecord.scope_id);
+  });
+
   test('it serializes non-nullish version fields', function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');

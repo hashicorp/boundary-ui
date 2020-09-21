@@ -2,6 +2,14 @@ import GeneratedHostSetModel from '../generated/models/host-set';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
 
 export default class HostSetModel extends GeneratedHostSetModel {
+
+  // =properties
+
+  /**
+   * Account resource is nested within auth methods.
+   */
+  nestedResource = true;
+
   // =attributes
 
   /**

@@ -4,6 +4,13 @@ import { computed } from '@ember/object';
 
 export default class AccountModel extends GeneratedAccountModel {
 
+  // =properties
+
+  /**
+   * Account resource is nested within auth methods.
+   */
+  nestedResource = true;
+
   // =attributes
 
   /**
