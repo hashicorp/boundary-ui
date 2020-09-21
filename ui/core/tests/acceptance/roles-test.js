@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -38,7 +38,7 @@ module('Acceptance | roles', function (hooks) {
     });
     instances.role = this.server.create('role', {
       scope: instances.scopes.org,
-    });
+    }, 'withPrincipals');
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.newRole = `${urls.roles}/new`;
@@ -219,39 +219,130 @@ module('Acceptance | roles', function (hooks) {
     );
   });
 
-  test('principals may be viewed in principals tab', async function (assert) {
-    assert.expect(0);
+  module('principals', function(hooks) {
+    let principalsCount;
+
+    hooks.beforeEach(function() {
+      principalsCount = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
+      instances.addPrincipals = urls.addPrincipals = `${urls.role}/add-principals`;
+      urls.rolePrincipals = `${urls.role}/principals`;
+      this.server.create('user', { scope: instances.scopes.org });
+    });
+
+    test('visiting role principals', async function (assert) {
+      assert.expect(1);
+      await visit(urls.rolePrincipals);
+      await a11yAudit();
+      assert.equal(currentURL(), urls.rolePrincipals);
+    });
+
+    test('principal can be removed from a role', async function (assert) {
+      assert.expect(1);
+      await visit(urls.rolePrincipals);
+      await click('main tbody .rose-table-row:nth-child(1) .rose-table-cell:nth-child(4) .rose-dropdown-button-danger');
+      const count = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
+      assert.equal(count, principalsCount - 1);
+    });
+
+    test('select and save principals to add', async function (assert) {
+      assert.expect(1);
+      await visit(urls.addPrincipals);
+      await click('main tbody .rose-table-cell:nth-child(1) [type="checkbox"]');
+      await click('form [type="submit"]:not(:disabled)');
+      const count = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
+      assert.equal(count, principalsCount + 1);
+    });
+
+    test('select and cancel principals to add', async function (assert) {
+      assert.expect(1);
+      await visit(urls.addPrincipals);
+      await click('main tbody .rose-table-cell:nth-child(1) [type="checkbox"]');
+      await click('form button:not([type="submit"])');
+      const count = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
+      assert.equal(count, principalsCount);
+    });
   });
 
-  test('principal can be removed from a role', async function (assert) {
-    assert.expect(0);
-  });
+  module('grants', function(hooks) {
+    let grantsCount;
 
-  test('grants can be updated and saved or canceled', async function (assert) {
-    assert.expect(0);
-  });
+    hooks.beforeEach(function() {
+      grantsCount = this.server.db.roles[0].grant_strings.length;
+      urls.grants = `${urls.role}/grants`;
+    });
 
-  test('grants can be removed and saved or canceled', async function (assert) {
-    assert.expect(0);
-  });
+    test('visiting role grants', async function (assert) {
+      assert.expect(1);
+      await visit(urls.grants);
+      await a11yAudit();
+      assert.equal(currentURL(), urls.grants);
+    });
 
-  test('new grants can be added and saved or canceled', async function (assert) {
-    assert.expect(0);
-  });
+    test('update a grant', async function(assert) {
+      assert.expect(1);
+      this.server.post('/roles/:id', (_, { requestBody }) => {
+        const attrs = JSON.parse(requestBody);
+        assert.equal(attrs.grant_strings[0], 'id=123,action=delete', "attributes don't match the expected ones");
+      });
+      await visit(urls.grants);
+      const grant = findAll('.rose-list-key-value:nth-child(1) [name="grant"]')[1];
+      await fillIn(grant, 'id=123,action=delete');
+      await click('form [type="submit"]:not(:disabled)');
+    });
 
-  test('viewing role principals', async function (assert) {
-    assert.expect(0);
-  });
+    test('cancel a grant update', async function(assert) {
+      assert.expect(1);
+      await visit(urls.grants);
+      const grant = findAll('.rose-list-key-value:nth-child(1) [name="grant"]')[1];
+      await fillIn(grant, 'id=123,action=delete');
+      await click('form button:not([type="submit"])');
+      const grantAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]')[1];
+      assert.notEqual(grant.value, grantAfter.value);
+    });
 
-  test('can delete a principal', async function (assert) {
-    assert.expect(0);
-  });
+    test('create a grant', async function(assert) {
+      assert.expect(1);
+      this.server.post('/roles/:id', (_, { requestBody }) => {
+        const attrs = JSON.parse(requestBody);
+        assert.equal(attrs.grant_strings.length, grantsCount + 1, "grants don't match the expected ones");
+      });
+      await visit(urls.grants);
+      await fillIn('.rose-list-key-value:nth-child(1) [name="grant"]', 'id=123,action=delete');
+      await click('.rose-list-key-value:nth-child(1) [type="submit"]:not(:disabled)');
+      await click('form [type="submit"]:not(:disabled)');
+    });
 
-  test('select and save principals to add', async function (assert) {
-    assert.expect(0);
-  });
+    test('cancel a grant creation', async function(assert) {
+      assert.expect(1);
+      await visit(urls.grants);
+      const grantsBefore = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
+      await fillIn('.rose-list-key-value:nth-child(1) [name="grant"]', 'id=123,action=delete');
+      await click('.rose-list-key-value:nth-child(1) [type="submit"]:not(:disabled)');
+      await click('form button:not([type="submit"])');
+      const grantsAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
+      assert.equal(grantsBefore, grantsAfter);
+    });
 
-  test('select and cancel principals to add', async function (assert) {
-    assert.expect(0);
+    test('delete a grant', async function(assert) {
+      assert.expect(1);
+      await visit(urls.grants);
+      const grant = findAll('.rose-list-key-value:nth-child(1) button:not([type="submit"])')[0];
+      const grantsBefore = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
+      await click(grant);
+      await click('form [type="submit"]:not(:disabled)');
+      const grantsAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
+      assert.equal(grantsBefore - 1, grantsAfter);
+    });
+
+    test('cancel a grant deletion', async function(assert) {
+      assert.expect(1);
+      await visit(urls.grants);
+      const grant = findAll('.rose-list-key-value:nth-child(1) button:not([type="submit"])')[0];
+      const grantsBefore = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
+      await click(grant);
+      await click('.rose-form-actions button:not([type="submit"])');
+      const grantsAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
+      assert.equal(grantsBefore, grantsAfter);
+    });
   });
 });
