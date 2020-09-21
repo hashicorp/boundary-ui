@@ -165,19 +165,24 @@ form:
     started: Started
     status: Status
 errors:
+  401:
+    title: You are not signed in
+    description: You are not authenticated. Please authenticate and try again later.
+  403:
+    title: You are not authorized
+    description: You must be granted permissions to view this data. Ask your administrator if you think you should have access.
+  404:
+    title: Resource not found
+    description: We could not find the requested resource. You can ask your administrator or try again later.
+  500:
+    title: Server error
+    description: We ran into a problem and could not continue. You can ask your administrator or try again later.
+  unknown:
+    title: Something went wrong
+    description: Please contact your administrator or try again later.
   titles:
-    unauthenticated-error: You are not signed in
-    forbidden-error: You are not authorized
-    notfound-error: Resource not found
-    server-error: Server error
-    unknown-error: Something went wrong
     authentication-failed: Authentication Failed
-  descriptions:
-    unauthenticated-error: You are not authenticated. Please authenticate and try again later.
-    forbidden-error: You must be granted permissions to view this data. Ask your administrator if you think you should have access.
-    notfound-error: We could not find the requested resource. You can ask your administrator or try again later.
-    server-error: We ran into a problem and could not continue. You can ask your administrator or try again later.
-    unknown-error: Please contact your administrator or try again later.
+    error: Error
 notify:
   create-success: Created succesfully.
   save-success: Saved succesfully.
