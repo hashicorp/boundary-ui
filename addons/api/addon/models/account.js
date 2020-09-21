@@ -16,7 +16,7 @@ export default class AccountModel extends GeneratedAccountModel {
    * Convenience for getting username in account.
    * @type {string}
    */
-  @computed('attributes.{login_name}')
+  @computed('type', 'attributes.{login_name}')
   get username() {
     let username = '';
     switch (this.type) {
