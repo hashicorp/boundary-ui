@@ -163,16 +163,8 @@ module('Acceptance | targets', function (hooks) {
     await fillIn('[name="name"]', 'new target');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
+    assert.ok(find('[role="alert"]'));
+    assert.ok(find('.rose-form-error-message'));
   });
 
   test('errors are displayed when save on target fails', async function (assert) {
@@ -192,11 +184,7 @@ module('Acceptance | targets', function (hooks) {
     await fillIn('[name="name"]', 'save target');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
-    );
+    assert.ok(find('[role="alert"]'));
   });
 
   test('errors are displayed when delete on a target fails', async function (assert) {
@@ -215,11 +203,7 @@ module('Acceptance | targets', function (hooks) {
     await visit(urls.target);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
-    );
+    assert.ok(find('[role="alert"]'));
   });
 
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
@@ -247,16 +231,8 @@ module('Acceptance | targets', function (hooks) {
     await fillIn('[name="name"]', 'existing target');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
+    assert.ok(find('[role="alert"]'));
+    assert.ok(find('.rose-form-error-message'));
   });
 
   test('visiting target host sets', async function (assert) {
@@ -278,20 +254,38 @@ module('Acceptance | targets', function (hooks) {
     assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
   });
 
-  test('select and save host sets to add', async function (assert) {
-    assert.expect(4);
+  test('shows error message on host set remove', async function (assert) {
+    assert.expect(2);
+    this.server.post('/targets/:idMethod', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {},
+        }
+      );
+    });
     const targetHostSetCount = instances.target.hostSets.length;
     await visit(urls.targetHostSets);
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
-    // first, remove a target host set (otherwise none would be available to add)
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
+    assert.ok(find('[role="alert"]'));
+  });
+
+  test('select and save host sets to add', async function (assert) {
+    assert.expect(3);
+    instances.target.update({ hostSetIds: [] });
+    await visit(urls.targetHostSets);
+    assert.equal(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a')
     assert.equal(currentURL(), urls.targetAddHostSets);
     await click('tbody label');
     await click('form [type="submit"]');
     await visit(urls.targetHostSets);
-    assert.equal(findAll('tbody tr').length, targetHostSetCount);
+    assert.equal(findAll('tbody tr').length, 1);
   });
 
   test('select and cancel host sets to add', async function (assert) {
@@ -308,5 +302,29 @@ module('Acceptance | targets', function (hooks) {
     await click('form [type="button"]');
     await visit(urls.targetHostSets);
     assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
+  });
+
+  test('shows error message on host set add', async function (assert) {
+    assert.expect(4);
+    this.server.post('/targets/:idMethod', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {},
+        }
+      );
+    });
+    instances.target.update({ hostSetIds: [] });
+    await visit(urls.targetAddHostSets);
+    assert.equal(instances.target.hostSets.length, 0);
+    assert.equal(currentURL(), urls.targetAddHostSets);
+    await click('tbody label');
+    await click('form [type="submit"]');
+    assert.equal(currentURL(), urls.targetAddHostSets);
+    assert.equal(instances.target.hostSets.length, 0);
   });
 });
