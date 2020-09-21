@@ -39,6 +39,20 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     return all(users.concat(groups));
   }
 
+  /**
+   * Renders the principals-specific header template.
+   * Empties the actions and navigation outlets and renders a custom empty header.
+   * @override
+   */
+  renderTemplate() {
+    super.renderTemplate(...arguments);
+
+    this.render('scopes/scope/roles/role/principals/-header', {
+      into: 'scopes/scope/roles/role',
+      outlet: 'header',
+    });
+  }
+
   // =actions
 
   /**
@@ -57,4 +71,5 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
       this.notify.error(error.message, { closeAfter: null });
     }
   }
+
 }
