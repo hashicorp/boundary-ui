@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, find, findAll, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -47,11 +47,13 @@ module('Acceptance | targets', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.hostSets = this.server.createList('host-set', 4, {
-      scope: instances.scopes.project,
-    });
+
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project
+    }, 'withChildren');
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
+      hostSets: instances.hostCatalog.hostSets
     });
 
     // Generate route URLs for resources
@@ -258,22 +260,53 @@ module('Acceptance | targets', function (hooks) {
   });
 
   test('visiting target host sets', async function (assert) {
-    assert.expect(1);
+    assert.expect(3);
+    const targetHostSetCount = instances.target.hostSets.length;
     await visit(urls.targetHostSets);
     await a11yAudit();
     assert.equal(currentURL(), urls.targetHostSets);
+    assert.ok(targetHostSetCount);
+    assert.equal(findAll('tbody tr').length, targetHostSetCount);
   });
 
   test('can delete a host sets', async function (assert) {
-    assert.expect(0);
+    assert.expect(2);
+    const targetHostSetCount = instances.target.hostSets.length;
+    await visit(urls.targetHostSets);
+    assert.equal(findAll('tbody tr').length, targetHostSetCount);
+    await click('tbody tr .rose-dropdown-button-danger');
+    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
   });
 
   test('select and save host sets to add', async function (assert) {
-    assert.expect(0);
-    await visit(urls.targetAddHostSets);
+    assert.expect(4);
+    const targetHostSetCount = instances.target.hostSets.length;
+    await visit(urls.targetHostSets);
+    assert.equal(findAll('tbody tr').length, targetHostSetCount);
+    // first, remove a target host set (otherwise none would be available to add)
+    await click('tbody tr .rose-dropdown-button-danger');
+    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
+    await click('.rose-layout-page-actions a')
+    assert.equal(currentURL(), urls.targetAddHostSets);
+    await click('tbody label');
+    await click('form [type="submit"]');
+    await visit(urls.targetHostSets);
+    assert.equal(findAll('tbody tr').length, targetHostSetCount);
   });
 
   test('select and cancel host sets to add', async function (assert) {
-    assert.expect(0);
+    assert.expect(4);
+    const targetHostSetCount = instances.target.hostSets.length;
+    await visit(urls.targetHostSets);
+    assert.equal(findAll('tbody tr').length, targetHostSetCount);
+    // first, remove a target host set (otherwise none would be available to add)
+    await click('tbody tr .rose-dropdown-button-danger');
+    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
+    await click('.rose-layout-page-actions a')
+    assert.equal(currentURL(), urls.targetAddHostSets);
+    await click('tbody label');
+    await click('form [type="button"]');
+    await visit(urls.targetHostSets);
+    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
   });
 });
