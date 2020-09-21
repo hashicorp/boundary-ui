@@ -3,13 +3,6 @@ import { fragmentArray } from 'ember-data-model-fragments/attributes';
 
 export default class HostSetModel extends GeneratedHostSetModel {
 
-  // =properties
-
-  /**
-   * @type {boolean}
-   */
-  serializeScopeID = false;
-
   // =attributes
 
   /**

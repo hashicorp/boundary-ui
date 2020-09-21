@@ -27,13 +27,6 @@ import { get } from '@ember/object';
  */
 export default class BaseModel extends Model {
 
-  // =properties
-
-  /**
-   * @type {boolean}
-   */
-  serializeScopeID = true;
-
   // =relationships
 
   /**

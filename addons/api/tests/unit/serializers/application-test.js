@@ -62,7 +62,7 @@ module('Unit | Serializer | application', function (hooks) {
       },
     });
     const snapshot = record._createSnapshot();
-    snapshot.record.serializeScopeID = false;
+    serializer.serializeScopeID = false;
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       name: 'User',

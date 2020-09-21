@@ -4,13 +4,6 @@ import { computed } from '@ember/object';
 
 export default class AccountModel extends GeneratedAccountModel {
 
-  // =properties
-
-  /**
-   * @type {boolean}
-   */
-  serializeScopeID = false;
-
   // =attributes
 
   /**
