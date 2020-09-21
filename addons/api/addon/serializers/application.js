@@ -70,8 +70,8 @@ export default class ApplicationSerializer extends RESTSerializer {
     const serialized = super.serialize(...arguments);
     // Delete `scope` field
     delete serialized.scope;
-    // And serialize `scope_id` when not a nested resource
-    if(!snapshot?.record?.nestedResource) {
+    // And serialize `scope_id`
+    if(snapshot?.record?.serializeScopeID) {
       const scope_id = snapshot?.attr('scope')?.attr('scope_id');
       if (scope_id) serialized.scope_id = scope_id;
     }

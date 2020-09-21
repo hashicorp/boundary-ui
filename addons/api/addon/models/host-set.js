@@ -6,9 +6,9 @@ export default class HostSetModel extends GeneratedHostSetModel {
   // =properties
 
   /**
-   * Account resource is nested within auth methods.
+   * @type {boolean}
    */
-  nestedResource = true;
+  serializeScopeID = false;
 
   // =attributes
 

@@ -30,7 +30,7 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
-  test('it serializes scope_id when scope is set', function (assert) {
+  test('it serializes scope_id', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('user', {
@@ -49,19 +49,25 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
-  test('it does not serialize scope_id when resource is nested', function (assert) {
+  test('it does not serialize scope_id when serializeScopeID is false', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const record = store.createRecord('account', {
-      name: 'Account',
+    const serializer = store.serializerFor('user');
+    const record = store.createRecord('user', {
+      name: 'User',
       description: 'Description',
       scope: {
         scope_id: 'global',
         type: 'global',
       },
     });
-    const serializedRecord = record.serialize();
-    assert.notOk(serializedRecord.scope_id);
+    const snapshot = record._createSnapshot();
+    snapshot.record.serializeScopeID = false;
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description'
+    });
   });
 
   test('it serializes non-nullish version fields', function (assert) {

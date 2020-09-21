@@ -26,6 +26,14 @@ import { get } from '@ember/object';
  *   2) Or as an ID:  `record.scopeID`.
  */
 export default class BaseModel extends Model {
+
+  // =properties
+
+  /**
+   * @type {boolean}
+   */
+  serializeScopeID = true;
+
   // =relationships
 
   /**

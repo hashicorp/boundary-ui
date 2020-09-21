@@ -7,9 +7,9 @@ export default class AccountModel extends GeneratedAccountModel {
   // =properties
 
   /**
-   * Account resource is nested within auth methods.
+   * @type {boolean}
    */
-  nestedResource = true;
+  serializeScopeID = false;
 
   // =attributes
 

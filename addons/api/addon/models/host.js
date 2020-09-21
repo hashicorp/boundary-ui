@@ -6,9 +6,9 @@ export default class HostModel extends GeneratedHostModel {
   // =properties
 
   /**
-   * Account resource is nested within auth methods.
+   * @type {boolean}
    */
-  nestedResource = true;
+  serializeScopeID = false;
 
   /**
    * Attributes of this resource, if any, represented as a JSON fragment.
