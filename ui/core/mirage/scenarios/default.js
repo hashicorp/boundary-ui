@@ -26,6 +26,7 @@ export default function(server) {
   server.schema.scopes.where({type: 'project'}).models.forEach(scope => {
     server.createList('host-catalog', 2, { scope }, 'withChildren');
     server.createList('target', 2, { scope }, 'withRandomHostSets');
+    server.createList('session', 4, { scope }, 'withAssociations');
   });
 
 }

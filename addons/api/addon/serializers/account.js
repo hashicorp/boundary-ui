@@ -1,6 +1,14 @@
 import ApplicationSerializer from './application';
 
 export default class AccountSerializer extends ApplicationSerializer {
+
+  // =properties
+
+  /**
+   * @type {boolean}
+   */
+  serializeScopeID = false;
+
   // =methods
 
   /**
@@ -22,8 +30,11 @@ export default class AccountSerializer extends ApplicationSerializer {
     }
     if (snapshot?.adapterOptions?.method === 'change-password') {
       const { currentPassword, newPassword } = snapshot?.adapterOptions;
-      serialized =
-        this.serializeForChangePassword(snapshot, currentPassword, newPassword);
+      serialized = this.serializeForChangePassword(
+        snapshot,
+        currentPassword,
+        newPassword
+      );
     }
     return serialized;
   }
