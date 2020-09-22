@@ -51,30 +51,12 @@ module('Acceptance | roles', function (hooks) {
     assert.equal(currentURL(), urls.roles);
   });
 
-  test('visiting a role', async function (assert) {
+  test('can navigate to a role form', async function (assert) {
     assert.expect(1);
-    await visit(urls.newRole);
+    await visit(urls.roles);
+    await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.newRole);
-  });
-
-  test('can create new role', async function (assert) {
-    assert.expect(1);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.roles.length, rolesCount + 1);
-  });
-
-  test('can cancel new role creation', async function (assert) {
-    assert.expect(2);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.roles);
-    assert.equal(this.server.db.roles.length, rolesCount);
+    assert.equal(currentURL(), urls.role);
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
@@ -130,12 +112,60 @@ module('Acceptance | roles', function (hooks) {
     assert.notEqual(find('[name="name"]').value, 'Updated admin role');
   });
 
+  test('can create new role', async function (assert) {
+    assert.expect(1);
+    const rolesCount = this.server.db.roles.length;
+    await visit(urls.newRole);
+    await fillIn('[name="name"]', 'role name');
+    await click('[type="submit"]');
+    assert.equal(this.server.db.roles.length, rolesCount + 1);
+  });
+
+  test('can cancel new role creation', async function (assert) {
+    assert.expect(2);
+    const rolesCount = this.server.db.roles.length;
+    await visit(urls.newRole);
+    await fillIn('[name="name"]', 'role name');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(currentURL(), urls.roles);
+    assert.equal(this.server.db.roles.length, rolesCount);
+  });
+
   test('can delete a role', async function (assert) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
     await visit(urls.role);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(this.server.db.roles.length, rolesCount - 1);
+  });
+
+  test('saving a new role with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    this.server.post('/roles', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.newRole);
+    await fillIn('[name="name"]', 'new target');
+    await click('form [type="submit"]');
+    await a11yAudit();
+    assert.ok(find('[role="alert"]'));
+    assert.ok(find('.rose-form-error-message'));
   });
 
   test('saving an existing role with invalid fields displays error messages', async function (assert) {
@@ -224,47 +254,100 @@ module('Acceptance | roles', function (hooks) {
 
     hooks.beforeEach(function() {
       principalsCount = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
-      instances.addPrincipals = urls.addPrincipals = `${urls.role}/add-principals`;
       urls.rolePrincipals = `${urls.role}/principals`;
-      this.server.create('user', { scope: instances.scopes.org });
+      urls.addPrincipals = `${urls.role}/add-principals`;
     });
 
     test('visiting role principals', async function (assert) {
-      assert.expect(1);
+      assert.expect(2);
       await visit(urls.rolePrincipals);
       await a11yAudit();
       assert.equal(currentURL(), urls.rolePrincipals);
+      assert.equal(findAll('tbody tr').length, principalsCount);
     });
 
     test('principal can be removed from a role', async function (assert) {
-      assert.expect(1);
+      assert.expect(2);
       await visit(urls.rolePrincipals);
-      await click('main tbody .rose-table-row:nth-child(1) .rose-table-cell:nth-child(4) .rose-dropdown-button-danger');
-      const count = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
-      assert.equal(count, principalsCount - 1);
+      assert.equal(findAll('tbody tr').length, principalsCount);
+      await click('tbody tr .rose-dropdown-button-danger');
+      assert.equal(findAll('tbody tr').length, principalsCount - 1);
+    });
+
+    test('shows error message on principal remove', async function (assert) {
+      assert.expect(2);
+      this.server.post('/roles/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          }
+        );
+      });
+      await visit(urls.rolePrincipals);
+      assert.equal(findAll('tbody tr').length, principalsCount);
+      await click('tbody tr .rose-dropdown-button-danger');
+      assert.ok(find('[role="alert"]'));
     });
 
     test('select and save principals to add', async function (assert) {
-      assert.expect(1);
-      await visit(urls.addPrincipals);
-      await click('main tbody .rose-table-cell:nth-child(1) [type="checkbox"]');
-      await click('form [type="submit"]:not(:disabled)');
-      const count = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
-      assert.equal(count, principalsCount + 1);
+      assert.expect(3);
+      instances.role.update({ userIds: [], groupIds: [] });
+      await visit(urls.rolePrincipals);
+      assert.equal(findAll('tbody tr').length, 0);
+      await click('.rose-layout-page-actions a')
+      assert.equal(currentURL(), urls.addPrincipals);
+      await click('tbody label');
+      await click('form [type="submit"]');
+      await visit(urls.rolePrincipals);
+      assert.equal(findAll('tbody tr').length, 1);
     });
 
     test('select and cancel principals to add', async function (assert) {
+      assert.expect(4);
+      await visit(urls.rolePrincipals);
+      assert.equal(findAll('tbody tr').length, principalsCount);
+      // Remove a principal to populate association view
+      await click('tbody tr .rose-dropdown-button-danger');
+      assert.equal(findAll('tbody tr').length, principalsCount - 1);
+      await click('.rose-layout-page-actions a')
+      assert.equal(currentURL(), urls.addPrincipals);
+      await click('tbody label');
+      await click('form [type="button"]');
+      await visit(urls.rolePrincipals);
+      assert.equal(findAll('tbody tr').length, principalsCount - 1);
+    });
+
+    test('shows error message on principal add', async function (assert) {
       assert.expect(1);
+      this.server.post('/roles/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          }
+        );
+      });
+      instances.role.update({ userIds: [], groupIds: [] });
       await visit(urls.addPrincipals);
-      await click('main tbody .rose-table-cell:nth-child(1) [type="checkbox"]');
-      await click('form button:not([type="submit"])');
-      const count = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
-      assert.equal(count, principalsCount);
+      await click('tbody label');
+      await click('form [type="submit"]');
+      assert.ok(find('[role="alert"]'));
     });
   });
 
   module('grants', function(hooks) {
     let grantsCount;
+    const newGrantForm = 'form:nth-child(1)',
+      grantsForm = 'form:nth-child(2)';
 
     hooks.beforeEach(function() {
       grantsCount = this.server.db.roles[0].grant_strings.length;
@@ -272,77 +355,135 @@ module('Acceptance | roles', function (hooks) {
     });
 
     test('visiting role grants', async function (assert) {
-      assert.expect(1);
+      assert.expect(2);
       await visit(urls.grants);
       await a11yAudit();
       assert.equal(currentURL(), urls.grants);
+      assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
     });
 
     test('update a grant', async function(assert) {
       assert.expect(1);
       this.server.post('/roles/:id', (_, { requestBody }) => {
         const attrs = JSON.parse(requestBody);
-        assert.equal(attrs.grant_strings[0], 'id=123,action=delete', "attributes don't match the expected ones");
+        assert.equal(attrs.grant_strings[0], 'id=123,action=delete', "A grant is updated");
       });
       await visit(urls.grants);
-      const grant = findAll('.rose-list-key-value:nth-child(1) [name="grant"]')[1];
-      await fillIn(grant, 'id=123,action=delete');
-      await click('form [type="submit"]:not(:disabled)');
+      await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
+      await click('.rose-form-actions [type="submit"]:not(:disabled)');
     });
 
     test('cancel a grant update', async function(assert) {
       assert.expect(1);
       await visit(urls.grants);
-      const grant = findAll('.rose-list-key-value:nth-child(1) [name="grant"]')[1];
-      await fillIn(grant, 'id=123,action=delete');
-      await click('form button:not([type="submit"])');
-      const grantAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]')[1];
-      assert.notEqual(grant.value, grantAfter.value);
+      await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
+      await click('.rose-form-actions button:not([type="submit"])');
+      assert.notEqual(find(`${grantsForm} [name="grant"]`).value, 'id=123,action=delete');
+    });
+
+    test('shows error message on grant update', async function (assert) {
+      assert.expect(2);
+      this.server.post('/roles/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          }
+        );
+      });
+      await visit(urls.grants);
+      assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+      grantsCount);
+      await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
+      await click('.rose-form-actions [type="submit"]:not(:disabled)');
+      assert.ok(find('[role="alert"]'));
     });
 
     test('create a grant', async function(assert) {
       assert.expect(1);
       this.server.post('/roles/:id', (_, { requestBody }) => {
         const attrs = JSON.parse(requestBody);
-        assert.equal(attrs.grant_strings.length, grantsCount + 1, "grants don't match the expected ones");
+        assert.equal(attrs.grant_strings.length, grantsCount + 1, "A grant is created");
       });
       await visit(urls.grants);
-      await fillIn('.rose-list-key-value:nth-child(1) [name="grant"]', 'id=123,action=delete');
-      await click('.rose-list-key-value:nth-child(1) [type="submit"]:not(:disabled)');
-      await click('form [type="submit"]:not(:disabled)');
+      await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
+      await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
+      await click('.rose-form-actions [type="submit"]:not(:disabled)');
     });
 
     test('cancel a grant creation', async function(assert) {
       assert.expect(1);
       await visit(urls.grants);
-      const grantsBefore = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
-      await fillIn('.rose-list-key-value:nth-child(1) [name="grant"]', 'id=123,action=delete');
-      await click('.rose-list-key-value:nth-child(1) [type="submit"]:not(:disabled)');
-      await click('form button:not([type="submit"])');
-      const grantsAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
-      assert.equal(grantsBefore, grantsAfter);
+      await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
+      await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
+      await click('.rose-form-actions button:not([type="submit"])');
+      assert.notOk(find(`${newGrantForm} [name="grant"]`).value);
+    });
+
+    test('shows error message on grant create', async function (assert) {
+      assert.expect(2);
+      this.server.post('/roles/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          }
+        );
+      });
+      await visit(urls.grants);
+      assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+      grantsCount);
+      await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
+      await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
+      await click('.rose-form-actions [type="submit"]:not(:disabled)');
+      assert.ok(find('[role="alert"]'));
     });
 
     test('delete a grant', async function(assert) {
       assert.expect(1);
       await visit(urls.grants);
-      const grant = findAll('.rose-list-key-value:nth-child(1) button:not([type="submit"])')[0];
-      const grantsBefore = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
-      await click(grant);
-      await click('form [type="submit"]:not(:disabled)');
-      const grantsAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
-      assert.equal(grantsBefore - 1, grantsAfter);
+      await click(`${grantsForm} button:not([type="submit"])`);
+      await click('.rose-form-actions [type="submit"]:not(:disabled)');
+      assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+      grantsCount - 1);
     });
 
-    test('cancel a grant deletion', async function(assert) {
+    test('cancel a grant remove', async function(assert) {
       assert.expect(1);
       await visit(urls.grants);
-      const grant = findAll('.rose-list-key-value:nth-child(1) button:not([type="submit"])')[0];
-      const grantsBefore = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
-      await click(grant);
+      await click(`${grantsForm} button`);
       await click('.rose-form-actions button:not([type="submit"])');
-      const grantsAfter = findAll('.rose-list-key-value:nth-child(1) [name="grant"]').length;
-      assert.equal(grantsBefore, grantsAfter);
+      assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    });
+
+    test('shows error message on grant remove', async function (assert) {
+      assert.expect(2);
+      this.server.post('/roles/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          }
+        );
+      });
+      await visit(urls.grants);
+      assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+      grantsCount);
+      await click(`${grantsForm} button:not([type="submit"])`);
+      await click('.rose-form-actions [type="submit"]:not(:disabled)');
+      assert.ok(find('[role="alert"]'));
     });
   });
 });
