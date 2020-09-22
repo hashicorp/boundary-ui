@@ -30,7 +30,7 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
-  test('it serializes scope_id when scope is set', function (assert) {
+  test('it serializes scope_id', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('user', {
@@ -46,6 +46,27 @@ module('Unit | Serializer | application', function (hooks) {
       name: 'User',
       description: 'Description',
       scope_id: 'global',
+    });
+  });
+
+  test('it does not serialize scope_id when serializeScopeID is false', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('user');
+    const record = store.createRecord('user', {
+      name: 'User',
+      description: 'Description',
+      scope: {
+        scope_id: 'global',
+        type: 'global',
+      },
+    });
+    const snapshot = record._createSnapshot();
+    serializer.serializeScopeID = false;
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description'
     });
   });
 
