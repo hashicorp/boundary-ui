@@ -83,26 +83,3 @@ descriptions:
   account-set-password: Set a password for the account.
   accounts-welcome: No accounts are available in this auth method.
   no-sessions: There are no active sessions at this time.
-states:
-  info: Info
-  success: Success
-  warning: Warning
-  error: Error
-form:
-  label:
-    id: ID
-    name: Name
-    description: Description
-    type: Type
-    identification: Username
-    password: Password
-    grant: Grant
-    principal: Principal
-    address: Address
-    protocol: Protocol
-    actions: Actions
-    default_port: Default Port
-    current_password: Current Password
-    new_password: New Password
-    started: Started
-    status: Status

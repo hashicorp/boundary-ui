@@ -8,7 +8,7 @@
 
   <form.input
   @value={{t (concat 'target.types.' @model.type)}}
-  @label={{t "form.label.type"}}
+  @label={{t "form.type.label"}}
   readonly={{true}}
   @disabled={{true}} />
 
@@ -16,7 +16,7 @@
     @name="name"
     @type="text"
     @value={{@model.name}}
-    @label={{t "form.label.name"}}
+    @label={{t "form.name.label"}}
     @error={{@model.errors.name}}
   as |field|>
     {{#if @model.errors.name}}
@@ -32,7 +32,7 @@
     @name="description"
     @type="text"
     @value={{@model.description}}
-    @label={{t "form.label.description"}}
+    @label={{t "form.description.label"}}
     @error={{@model.errors.description}}
   as |field|>
     {{#if @model.errors.description}}
@@ -49,7 +49,7 @@
     @name="default_port"
     @type="number"
     @value={{@model.attributes.default_port}}
-    @label={{t "form.label.default_port"}}
+    @label={{t "form.default_port.label"}}
     @error={{@model.errors.default_port}}
     min="0"
     step="1"
