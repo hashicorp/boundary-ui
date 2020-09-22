@@ -12,6 +12,7 @@
     @value={{@model.name}}
     @label={{t "form.name.label"}}
     @error={{@model.errors.name}}
+    @helperText={{t "form.name.help"}}
     readonly={{false}}
   as |field|>
     {{#if @model.errors.name}}
@@ -29,6 +30,7 @@
     @value={{@model.description}}
     @label={{t "form.description.label"}}
     @error={{@model.errors.description}}
+    @helperText={{t "form.description.help"}}
     disabled={{@model.isSaving}}
     readonly={{false}}
   as |field|>

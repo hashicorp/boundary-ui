@@ -2,18 +2,23 @@ id:
   label: ID
 name:
   label: Name
+  help: Optional name for identification purposes
 description:
   label: Description
+  help: Optional description for identification purposes
 type:
   label: Type
+  help: The type of the resource, to help differentiate schemas
 login_name:
   label: Username
 password:
   label: Password
 grant:
   label: Grant
+  help: A permissions grant string for a role
 address:
   label: Address
+  help: An IP, host name, or other routable address
 default_port:
   label: Default Port
 current_password:

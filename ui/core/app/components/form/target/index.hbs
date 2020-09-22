@@ -18,6 +18,7 @@
     @value={{@model.name}}
     @label={{t "form.name.label"}}
     @error={{@model.errors.name}}
+    @helperText={{t "form.name.help"}}
   as |field|>
     {{#if @model.errors.name}}
       <field.errors as |errors|>
@@ -34,6 +35,7 @@
     @value={{@model.description}}
     @label={{t "form.description.label"}}
     @error={{@model.errors.description}}
+    @helperText={{t "form.description.help"}}
   as |field|>
     {{#if @model.errors.description}}
       <field.errors as |errors|>
@@ -51,6 +53,7 @@
     @value={{@model.attributes.default_port}}
     @label={{t "form.default_port.label"}}
     @error={{@model.errors.default_port}}
+    @helperText={{t "form.default_port.help"}}
     min="0"
     step="1"
   as |field|>
