@@ -21,6 +21,8 @@ auth-method:
     none:
       title: No Authentication Methods
       description: No authentication methods were found for this scope.  Switch scopes and try again.
+  types:
+    password: Password
 user: User
 users: Users
 role: Role

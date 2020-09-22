@@ -5,8 +5,6 @@ auth:
     no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
     choose-org: Choose a scope to authenticate.
     authenticating-with-org: "You're authenticating with {name}."
-  method-types:
-    password: Password
 host-set:
   types:
     static: Static
