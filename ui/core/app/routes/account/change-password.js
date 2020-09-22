@@ -42,7 +42,7 @@ export default class AccountChangePasswordRoute extends Route {
       // redirects may abort this initial transition, resulting in a
       // TransitionAborted error, which we do not want to show to the user.
       await this.replaceWith('index').catch(() => {});
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t('notifications.save-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

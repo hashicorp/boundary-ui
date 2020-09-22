@@ -76,7 +76,7 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
       this.replaceWith(
         'scopes.scope.projects.project.targets.target.host-sets'
       );
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t('notifications.add-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

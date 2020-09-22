@@ -61,7 +61,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     try {
       await role.addPrincipals(principalIDs);
       this.replaceWith('scopes.scope.roles.role.principals');
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t('notifications.add-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

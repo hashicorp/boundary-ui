@@ -191,8 +191,3 @@ form:
     new_password: New Password
     started: Started
     status: Status
-notify:
-  create-success: Created succesfully.
-  save-success: Saved succesfully.
-  delete-success: Deleted successfully.
-  session-canceled: Session canceled.
