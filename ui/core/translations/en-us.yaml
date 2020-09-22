@@ -18,9 +18,6 @@ target:
 host:
   types:
     static: Static
-account:
-  types:
-    password: Password
 titles:
   iam: IAM
   new: New
@@ -55,9 +52,6 @@ titles:
   members: Members
   group-members-welcome: Welcome to Members
   no-available-users: No Users Available
-  accounts: Accounts
-  account: Account
-  accounts-welcome: Welcome to Accounts
   no-sessions: No Active Sessions
   actions: Actions
 descriptions:
@@ -80,6 +74,4 @@ descriptions:
   no-principals-available: Principals are not available for assignment.
   group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.
-  account-set-password: Set a password for the account.
-  accounts-welcome: No accounts are available in this auth method.
   no-sessions: There are no active sessions at this time.

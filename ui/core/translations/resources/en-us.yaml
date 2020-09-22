@@ -1,3 +1,15 @@
+account:
+  title: Account
+  title_plural: Accounts
+  description: Accounts associate an IAM user with an auth method
+  messages:
+    welcome:
+      title: Welcome to Accounts
+      description: Create and manage accounts for an auth method.
+    set-password:
+      description: Set a password for the account.
+  types:
+    password: Password
 user: User
 users: Users
 role: Role
@@ -18,8 +30,6 @@ host: Host
 hosts: Hosts
 target: Target
 targets: Targets
-accounts: Accounts
-account: Account
 sessions: Sessions
 session: Session
 descriptions:
@@ -45,7 +55,5 @@ descriptions:
   hosts: A host is a computing element with a network address reachable from Boundary. A Host belongs to one and only one Host Catalog. A Host can be contained by zero or more Host Sets. The lifecycle of a Host is not tied to the lifecycle of any Host Sets.
   target: Target is abstract. A Target is deleted when the Scope it belongs to is deleted.
   targets: A target is a networked service a User can connect to and interact with through Boundary. A Target does not directly contain any secrets. A Target contains a collection of Hosts. A Target belongs to one and only one Scope. A Target can contain zero or more Host Sets. The lifecycle of a Target is not tied to the lifecycle of any Host Set.
-  accounts: Accounts
-  account: Account
   sessions: Sessions
   session: Session
