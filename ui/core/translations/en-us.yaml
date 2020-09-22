@@ -1,10 +1,8 @@
 auth:
   titles:
     no-scopes: No Scopes Available
-    no-methods: No Authentication Method
   descriptions:
     no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
-    no-methods: No authentication methods were found for this scope.  Switch scopes and try again.
     choose-org: Choose a scope to authenticate.
     authenticating-with-org: "You're authenticating with {name}."
   method-types:
@@ -35,7 +33,6 @@ titles:
   users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
   groups-welcome: Welcome to Groups
-  auth-methods-welcome: Welcome to Auth Methods
   targets-welcome: Create your first Target
   target-host-sets-welcome: No Host Sets Associated
   grants: Permissions
@@ -65,7 +62,6 @@ descriptions:
   users-welcome: Users are authorized to access Boundary.
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
   groups-welcome: Groups are collections of users.
-  auth-methods-welcome: Auth methods are configurations to authenticate users.
   targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
   target-host-sets-welcome: Add Host Sets to this target to provide access.
   no-host-set-hosts: Before associating hosts with this host set, create hosts within the host catalog.

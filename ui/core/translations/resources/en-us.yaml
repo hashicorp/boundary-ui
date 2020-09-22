@@ -10,6 +10,17 @@ account:
       description: Set a password for the account.
   types:
     password: Password
+auth-method:
+  title: Auth Method
+  title_plural: Auth Methods
+  description: An authentication method is a method configured for an Organization to authenticate Users. An Authentication Method is owned by one and only one Organization.
+  messages:
+    welcome:
+      title: Welcome to Auth Methods
+      description: Auth methods are configurations to authenticate users.
+    none:
+      title: No Authentication Methods
+      description: No authentication methods were found for this scope.  Switch scopes and try again.
 user: User
 users: Users
 role: Role
@@ -22,8 +33,6 @@ projects: Projects
 project: Project
 host-catalog: Host Catalog
 host-catalogs: Host Catalogs
-auth-method: Auth Method
-auth-methods: Auth Methods
 host-set: Host Set
 host-sets: Host Sets
 host: Host
@@ -47,8 +56,6 @@ descriptions:
   projects: A project is a child scope of an organization and is owned by an Organization. A Project inherits from Scope ("is-a" Scope) allowing it to own zero to many Groups, Roles, Targets, or Host Catalogs. A Project also inherits from Principal ("is-a" Principal) allowing it to be associated with zero or more Roles. A Project has no additional relationships beyond those defined in Scope and Principal. A Project is deleted when the Organization it belongs to is deleted.
   host-catalog: A host catalog is a permission boundary modeled as a container.
   host-catalogs: A host catalog is a permission boundary modeled as a container.
-  auth-method: An Authentication Method creates and references zero or more Users. An Authentication Method is deleted when the Organization it belongs to is deleted. The lifecycle of an Authentication Method is not tied to the lifecycle of any User.
-  auth-methods: An authentication method is a method configured for an Organization to authenticate Users. An Authentication Method is owned by one and only one Organization.
   host-set: Host Set is abstract. A Host Set is deleted when the Host Catalog it belongs to is deleted.
   host-sets: A host set is a resource which provides a subset of Hosts from the set of Hosts of the Host Catalog it belongs to. A Host Set belongs to one and only one Host Catalog. A Host Set can contain zero or more Hosts. A Host Set can be contained by zero or more Targets. The lifecycle of a Host Set is not tied to the lifecycle of any Targets or Hosts.
   host: Host is abstract. A Host is deleted when the Host Catalog it belongs to is deleted.

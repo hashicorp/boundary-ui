@@ -39,11 +39,11 @@
       {{#unless @model.authMethods}}
         <Rose::Layout::Centered>
           <Rose::Message
-            @title={{t "auth.titles.no-methods"}}
+            @title={{t "resources.auth-method.messages.none.title"}}
             @icon="alert-circle-outline"
           as |message|>
             <message.description>
-              {{t "auth.descriptions.no-methods"}}
+              {{t "resources.auth-method.messages.none.description"}}
             </message.description>
           </Rose::Message>
         </Rose::Layout::Centered>

@@ -1,7 +1,7 @@
 <Rose::Layout::Page as |page|>
   <page.header>
-    <h2>{{t "resources.auth-methods"}}</h2>
-    <p>{{t "resources.descriptions.auth-methods"}}</p>
+    <h2>{{t "resources.auth-method.title_plural"}}</h2>
+    <p>{{t "resources.auth-method.description"}}</p>
   </page.header>
 
   <page.breadcrumbs>
@@ -56,9 +56,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.auth-methods-welcome'}} as |message|>
+        <Rose::Message @title={{t 'resources.auth-method.messages.welcome.title'}} as |message|>
           <message.description>
-            {{t 'descriptions.auth-methods-welcome'}}
+            {{t 'resources.auth-method.messages.welcome.description'}}
           </message.description>
           <message.link @route="scopes.scope.auth-methods.new">
             <Rose::Icon @name="plus-circle-outline" />
