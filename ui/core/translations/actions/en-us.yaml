@@ -16,17 +16,14 @@ delete-group: Delete group
 delete-role: Delete role
 delete-project: Delete project
 delete-host-catalog: Delete host catalog
-delete-auth-method: Delete auth method
 delete-host-set: Delete host set
 delete-host: Delete host
 delete-target: Delete target
-delete-account: Delete account
 add-host-set: Create Host Set
 add-host: Create Host
 add-host-sets: Add Host Sets
 add-principals: Add Principals
 add-members: Add Members
 add-hosts: Add Hosts
-add-account: Create Account
 set-password: Set Password
 change-password: Change Password

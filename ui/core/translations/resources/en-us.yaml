@@ -10,6 +10,9 @@ account:
       description: Set a password for the account.
   types:
     password: Password
+  actions:
+    create: Create Account
+    delete: Delete Account
 auth-method:
   title: Auth Method
   title_plural: Auth Methods
@@ -23,6 +26,9 @@ auth-method:
       description: No authentication methods were found for this scope.  Switch scopes and try again.
   types:
     password: Password
+  actions:
+    create: Create Auth Method
+    delete: Delete Auth Method
 user: User
 users: Users
 role: Role
