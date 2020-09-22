@@ -1,6 +1,14 @@
 import ApplicationSerializer from './application';
 
 export default class HostSetSerializer extends ApplicationSerializer {
+
+  // =properties
+
+  /**
+   * @type {boolean}
+   */
+  serializeScopeID = false;
+
   // =methods
 
   /**
