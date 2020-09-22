@@ -84,7 +84,7 @@ export default class ScopesScopeProjectsRoute extends Route {
     try {
       await project.destroyRecord();
       this.refresh();
-      this.notify.success('notifications.delete-success');
+      this.notify.success(this.intl.t('notifications.delete-success'));
       this.transitionTo('scopes.scope.projects');
     } catch (error) {
       // TODO: replace with translated strings
