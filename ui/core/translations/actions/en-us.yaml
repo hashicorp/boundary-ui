@@ -1,0 +1,32 @@
+add: Add
+cancel: Cancel
+delete: Delete
+remove: Remove
+dismiss: Dismiss
+save: Save
+manage: Manage
+help: Need help?
+back: Back
+authenticate: Authenticate
+deauthenticate: Deauthenticate
+choose-org: Choose Scope
+choose-different-org: Choose a Different Scope
+delete-user: Delete user
+delete-group: Delete group
+delete-role: Delete role
+delete-project: Delete project
+delete-host-catalog: Delete host catalog
+delete-auth-method: Delete auth method
+delete-host-set: Delete host set
+delete-host: Delete host
+delete-target: Delete target
+delete-account: Delete account
+add-host-set: Create Host Set
+add-host: Create Host
+add-host-sets: Add Host Sets
+add-principals: Add Principals
+add-members: Add Members
+add-hosts: Add Hosts
+add-account: Create Account
+set-password: Set Password
+change-password: Change Password
