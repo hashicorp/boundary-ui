@@ -39,7 +39,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
       await this.replaceWith(
         'scopes.scope.auth-methods.auth-method.accounts.account.set-password'
       );
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t('notifications.save-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

@@ -53,7 +53,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
       );
       await this.refresh();
       this.notify.success(
-        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
     } catch (error) {
       // TODO: replace with translated strings
@@ -70,7 +70,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
     try {
       await host.destroyRecord();
       this.refresh();
-      this.notify.success(this.intl.t('notify.delete-success'));
+      this.notify.success(this.intl.t('notifications.delete-success'));
       this.transitionTo(
         'scopes.scope.projects.project.host-catalogs.host-catalog.hosts'
       );

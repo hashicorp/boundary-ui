@@ -65,7 +65,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
       const role = this.modelFor('scopes.scope.roles.role');
       await role.removePrincipal(principal.id);
       this.refresh();
-      this.notify.success(this.intl.t('notify.delete-success'));
+      this.notify.success(this.intl.t('notifications.remove-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
