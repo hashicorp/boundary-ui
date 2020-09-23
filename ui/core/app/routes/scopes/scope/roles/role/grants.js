@@ -57,7 +57,7 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   async save(role) {
     try {
       await role.saveGrants();
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t('notifications.save-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

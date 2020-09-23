@@ -1,4 +1,5 @@
-{{title (t "errors.titles.error") }}
+{{title (t "errors.generic.title") }}
+
 <Rose::Layout::Centered>
   {{#each @model.errors as |error|}}
     <Error::Message @status={{error.status}}/>

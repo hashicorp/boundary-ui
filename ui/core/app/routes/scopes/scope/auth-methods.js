@@ -54,7 +54,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       );
       this.refresh();
       this.notify.success(
-        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
     } catch (error) {
       //TODO: replace with translated strings
@@ -72,7 +72,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       await authMethod.destroyRecord();
       await this.transitionTo('scopes.scope.auth-methods');
       this.refresh();
-      this.notify.success(this.intl.t('notify.delete-success'));
+      this.notify.success(this.intl.t('notifications.delete-success'));
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

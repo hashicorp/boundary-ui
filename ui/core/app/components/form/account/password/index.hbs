@@ -6,8 +6,8 @@
   as |form|
 >
   <form.input
-  @value={{t (concat 'account.types.' @model.type)}}
-  @label={{t "form.label.type"}}
+  @value={{t (concat 'resources.account.types.' @model.type)}}
+  @label={{t "form.type.label"}}
   readonly={{true}}
   @disabled={{true}} />
 
@@ -15,7 +15,7 @@
     @name="name"
     @type="name"
     @value={{@model.name}}
-    @label={{t "form.label.name"}}
+    @label={{t "form.name.label"}}
     @error={{@model.errors.name}}
     readonly={{false}}
   as |field|>
@@ -32,7 +32,7 @@
     @name="description"
     @type="description"
     @value={{@model.description}}
-    @label={{t "form.label.description"}}
+    @label={{t "form.description.label"}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
     readonly={{false}}
@@ -50,7 +50,7 @@
     @name="login_name"
     @type="text"
     @value={{@model.attributes.login_name}}
-    @label={{t "form.label.identification"}}
+    @label={{t "form.login_name.label"}}
     @error={{@model.errors.name}}
     readonly={{false}}
   as |field|>
@@ -68,7 +68,7 @@
       @name="password"
       @type="password"
       @value={{this.password}}
-      @label={{t "form.label.password"}}
+      @label={{t "form.password.label"}}
       @error={{@model.errors.name}}
       readonly={{false}}
       autocomplete="new-password"

@@ -1,7 +1,7 @@
 <Rose::Layout::Page as |page|>
   <page.header>
-    <h2>{{t "resources.auth-methods"}}</h2>
-    <p>{{t "resources.descriptions.auth-methods"}}</p>
+    <h2>{{t "resources.auth-method.title_plural"}}</h2>
+    <p>{{t "resources.auth-method.description"}}</p>
   </page.header>
 
   <page.breadcrumbs>
@@ -22,9 +22,9 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
-            <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
-            <row.headerCell>{{t 'form.label.type'}}</row.headerCell>
-            <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
+            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           </header.row>
         </table.header>
 
@@ -42,7 +42,7 @@
               </row.headerCell>
               <row.cell>
                 <Rose::Badge>
-                  {{t (concat 'auth.method-types.' authMethod.type)}}
+                  {{t (concat 'resources.auth-method.types.' authMethod.type)}}
                 </Rose::Badge>
               </row.cell>
               <row.cell>
@@ -56,9 +56,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.auth-methods-welcome'}} as |message|>
+        <Rose::Message @title={{t 'resources.auth-method.messages.welcome.title'}} as |message|>
           <message.description>
-            {{t 'descriptions.auth-methods-welcome'}}
+            {{t 'resources.auth-method.messages.welcome.description'}}
           </message.description>
           <message.link @route="scopes.scope.auth-methods.new">
             <Rose::Icon @name="plus-circle-outline" />

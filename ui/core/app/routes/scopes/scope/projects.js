@@ -66,7 +66,7 @@ export default class ScopesScopeProjectsRoute extends Route {
       await project.save();
       this.refresh();
       this.notify.success(
-        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
       this.transitionTo('scopes.scope.projects.project', project);
     } catch (error) {
@@ -84,7 +84,7 @@ export default class ScopesScopeProjectsRoute extends Route {
     try {
       await project.destroyRecord();
       this.refresh();
-      this.notify.success('notify.delete-success');
+      this.notify.success(this.intl.t('notifications.delete-success'));
       this.transitionTo('scopes.scope.projects');
     } catch (error) {
       // TODO: replace with translated strings

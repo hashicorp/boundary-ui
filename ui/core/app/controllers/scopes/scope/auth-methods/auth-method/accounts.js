@@ -13,6 +13,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsController extends 
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.accounts');
+    return this.intl.t('resources.account.title_plural');
   }
 }

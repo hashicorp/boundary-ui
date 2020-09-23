@@ -3,9 +3,9 @@
   <Rose::Table as |table|>
     <table.header as |header|>
       <header.row as |row|>
-        <row.headerCell>{{t 'form.label.name'}}</row.headerCell>
-        <row.headerCell>{{t 'form.label.identification'}}</row.headerCell>
-        <row.headerCell>{{t 'form.label.id'}}</row.headerCell>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
       </header.row>
     </table.header>
     <table.body as |body|>
@@ -34,9 +34,9 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.accounts-welcome"}} as |message|>
+    <Rose::Message @title={{t "resources.account.messages.welcome.title"}} as |message|>
       <message.description>
-        {{t "descriptions.accounts-welcome"}}
+        {{t "resources.account.messages.welcome.description"}}
       </message.description>
     </Rose::Message>
   </Rose::Layout::Centered>

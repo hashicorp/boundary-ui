@@ -26,7 +26,7 @@
       <Rose::Nav::Tabs as |nav|>
         {{#each @model.authMethods as |authMethod|}}
           <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
-            {{t (concat "auth.method-types." authMethod.type)}}
+            {{t (concat "resources.auth-method.types." authMethod.type)}}
           </nav.link>
         {{/each}}
       </Rose::Nav::Tabs>
@@ -39,11 +39,11 @@
       {{#unless @model.authMethods}}
         <Rose::Layout::Centered>
           <Rose::Message
-            @title={{t "auth.titles.no-methods"}}
+            @title={{t "resources.auth-method.messages.none.title"}}
             @icon="alert-circle-outline"
           as |message|>
             <message.description>
-              {{t "auth.descriptions.no-methods"}}
+              {{t "resources.auth-method.messages.none.description"}}
             </message.description>
           </Rose::Message>
         </Rose::Layout::Centered>
