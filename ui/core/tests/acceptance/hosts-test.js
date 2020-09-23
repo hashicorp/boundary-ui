@@ -98,7 +98,7 @@ module('Acceptance | hosts', function (hooks) {
     await visit(urls.host);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(currentURL(), urls.hosts);
-    assert.equal(this.server.db.roles.length, hostsCount - 1);
+    assert.equal(this.server.db.hosts.length, hostsCount - 1);
   });
 
   test('saving an existing host with invalid fields displays error messages', async function (assert) {
