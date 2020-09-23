@@ -21,6 +21,7 @@ module('Acceptance | host catalogs | host sets', function (hooks) {
       project: null,
     },
     hostCatalog: null,
+    hostSets: null,
   };
   const urls = {
     orgScope: null,
@@ -47,7 +48,11 @@ module('Acceptance | host catalogs | host sets', function (hooks) {
     });
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
-    }, 'withChildren');
+    });
+    instances.hostSets = this.server.createList('host-set', 3, {
+      scope: instances.scopes.project,
+      hostCatalog: instances.hostCatalog
+    });
     hostSetsCount = instances.hostCatalog.hostSetIds.length;
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
