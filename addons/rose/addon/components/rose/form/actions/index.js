@@ -1,5 +1,5 @@
-import Component from '@ember/component';
-import layout from '../../../templates/components/rose/form/actions';
+import Component from '@glimmer/component';
+import { computed } from '@ember/object';
 
 /**
  * A set of two form action buttons for submit and cancel.
@@ -13,12 +13,13 @@ import layout from '../../../templates/components/rose/form/actions';
  *    @showCancel={{true}}
  *    @cancel=(fn @cancel) />
  */
-export default Component.extend({
-  layout,
-  tagName: '',
+export default class RoseFormActionsComponent extends Component {
 
   /**
    * @type {boolean}
    */
-  showCancel: true,
-});
+  @computed('args.showCancel')
+  get showCancel() {
+    return this.args.showCancel ?? true;
+  }
+}
