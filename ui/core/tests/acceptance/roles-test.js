@@ -59,42 +59,6 @@ module('Acceptance | roles', function (hooks) {
     assert.equal(currentURL(), urls.role);
   });
 
-  test('saving a new role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/roles', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
-  });
-
   test('can save changes to an existing role', async function (assert) {
     assert.expect(2);
     await visit(urls.role);
