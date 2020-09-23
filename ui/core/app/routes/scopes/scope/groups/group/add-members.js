@@ -67,7 +67,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
     try {
       await group.addMembers(userIDs);
       await this.replaceWith('scopes.scope.groups.group.members');
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t('notifications.add-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

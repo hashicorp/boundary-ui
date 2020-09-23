@@ -51,7 +51,7 @@ export default class ScopesScopeOrgsRoute extends Route {
       await org.save();
       this.refresh();
       this.notify.success(
-        this.intl.t(isNew ? 'notify.create-success' : 'notify.save-success')
+        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
       this.transitionTo('scopes.scope', org);
     } catch (error) {

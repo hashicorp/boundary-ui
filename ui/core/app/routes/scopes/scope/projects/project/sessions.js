@@ -75,7 +75,7 @@ export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
   async cancelSession(session) {
     try {
       await session.cancelSession();
-      this.notify.success(this.intl.t('notify.session-canceled'));
+      this.notify.success(this.intl.t('notifications.canceled-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

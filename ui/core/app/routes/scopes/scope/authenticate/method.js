@@ -57,7 +57,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
         this.transitionTo('scopes.scope.projects');
       }
     } catch (e) {
-      const errorMessage = this.intl.t('errors.titles.authentication-failed');
+      const errorMessage = this.intl.t('errors.authentication-failed.title');
       this.notify.error(errorMessage, { closeAfter: null });
     }
   }

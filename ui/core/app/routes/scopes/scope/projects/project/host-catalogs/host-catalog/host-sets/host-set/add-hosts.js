@@ -93,7 +93,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
       await this.replaceWith(
         'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts'
       );
-      this.notify.success(this.intl.t('notify.save-success'));
+      this.notify.success(this.intl.t('notifications.add-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

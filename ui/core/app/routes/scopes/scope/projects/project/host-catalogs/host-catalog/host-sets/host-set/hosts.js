@@ -45,7 +45,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
         adapterOptions: { scopeID, hostCatalogID },
       });
       this.refresh();
-      this.notify.success(this.intl.t('notify.delete-success'));
+      this.notify.success(this.intl.t('notifications.remove-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

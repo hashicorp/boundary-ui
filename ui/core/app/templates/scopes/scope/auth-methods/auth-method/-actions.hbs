@@ -3,13 +3,13 @@
     @route="scopes.scope.auth-methods.auth-method.accounts.new"
     @model={{@model}}
   >
-    {{t "actions.add-account"}}
+    {{t "resources.account.actions.create"}}
   </dropdown.link>
   <dropdown.button
     @style="danger"
     @disabled={{@model.canSave}}
     {{on "click" (route-action "delete" @model)}}
   >
-    {{t 'actions.delete-auth-method'}}
+    {{t 'resources.auth-method.actions.delete'}}
   </dropdown.button>
 </Rose::Dropdown>
