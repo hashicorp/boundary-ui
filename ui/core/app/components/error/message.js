@@ -1,4 +1,4 @@
-import Message from 'rose/components/rose/message';
+import MessageComponent from 'rose/components/rose/message';
 import { computed } from '@ember/object';
 
 /*
@@ -17,16 +17,16 @@ import { computed } from '@ember/object';
 
 const statuses = ['401', '403', '404', '500'];
 
-export default class ErrorMessageComponent extends Message {
+export default class ErrorMessageComponent extends MessageComponent {
   // =methods
 
   /**
    * Returns an icon for error status.
    * @return {string}
    */
-  @computed('status')
+  @computed('args.status')
   get icon() {
-    switch (this.status) {
+    switch (this.args.status) {
       case '401':
       case '403':
         return 'disabled';
@@ -51,9 +51,9 @@ export default class ErrorMessageComponent extends Message {
    * isn't part of predefined statuses.
    * @return {string}
    */
-  @computed('status')
+  @computed('args.status')
   get messageCode() {
-    let messageCode = this.status;
+    let messageCode = this.args.status;
     if(!statuses.includes(messageCode)) messageCode = 'unknown';
     return messageCode;
   }
