@@ -96,10 +96,6 @@ module('Acceptance | accounts | set password', function (hooks) {
     await fillIn('[name="password"]', 'update password');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
-    );
+    assert.ok(find('[role="alert"]'));
   });
 });
