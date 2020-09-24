@@ -1,36 +1,73 @@
 import { module, test } from 'qunit';
-//import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, find, findAll, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-//import a11yAudit from 'ember-a11y-testing/test-support/audit';
-//import { Response } from 'miragejs';
-import //authenticateSession,
-// These are left here intentionally for future reference.
-//currentSession,
-//invalidateSession,
-'ember-simple-auth/test-support';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { Response } from 'miragejs';
+import {
+  authenticateSession,
+  // These are left here intentionally for future reference.
+  //currentSession,
+  //invalidateSession,
+} from 'ember-simple-auth/test-support';
 
 module('Acceptance | org', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  // let org;
-  // let orgID;
-  // let orgsURL;
-  // let newOrgURL;
-  // let existingOrg;
-  // let existingOrgURL;
-  // let getOrgScopesCount;
-  // let getFirstOrgScope;
-  // let initialOrgScopesCount;
-  //
-  // hooks.beforeEach(function () {
-  //   authenticateSession({});
-  //
-  // });
+  const instances = {
+    scopes: {
+      global: null,
+    },
+    orgs: null,
+  };
+  const urls = {
+    root: null,
+    scopes: null,
+    globalScope: null,
+    orgs: null,
+    newOrg: null,
+  };
+  let orgsCount;
+
+  hooks.beforeEach(function () {
+    // Setup Mirage mock resources for this test
+    authenticateSession({});
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.orgs = this.server.createList('scope', 2, {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    orgsCount = instances.orgs.length;
+    // Generate route URLs for resources
+    urls.root = '/';
+    urls.scopes = `/scopes`;
+    urls.globalScope = `${urls.scopes}/global`;
+    urls.orgs = `${urls.globalScope}/orgs`;
+    urls.newOrg = `${urls.orgs}/new`;
+  });
 
   test('visiting orgs', async function (assert) {
-    assert.expect(0);
+    assert.expect(3);
+    await visit(urls.orgs);
+    await a11yAudit();
+    assert.ok(orgsCount);
+    assert.equal(currentURL(), urls.orgs);
+    assert.equal(findAll('article').length, orgsCount);
+  });
+
+  test('visiting scopes redirects to orgs', async function (assert) {
+    assert.expect(1);
+    await visit(urls.scopes);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.orgs);
+  });
+
+  test('visiting root redirects to orgs', async function (assert) {
+    assert.expect(1);
+    await visit(urls.root);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.orgs);
   });
 
   test('visiting orgs within a org scope redirects to the parent org scope', async function (assert) {
@@ -38,38 +75,50 @@ module('Acceptance | org', function (hooks) {
   });
 
   test('can create new orgs', async function (assert) {
-    assert.expect(0);
+    assert.expect(1);
+    await visit(urls.newOrg);
+    await fillIn('[name="name"]', 'Org name');
+    await fillIn('[name="description"]', 'description');
+    await click('form [type="submit"]:not(:disabled)');
+    assert.equal(this.server.db.scopes.where(scope => scope.type === 'org').length, orgsCount + 1);
   });
 
   test('can cancel create new orgs', async function (assert) {
-    assert.expect(0);
+    assert.expect(2);
+    await visit(urls.newOrg);
+    await fillIn('[name="name"]', 'Org name');
+    await fillIn('[name="description"]', 'description');
+    await click('form button:not([type="submit"])');
+    assert.equal(currentURL(), urls.orgs);
+    assert.equal(this.server.db.scopes.where(scope => scope.type === 'org').length, orgsCount);
   });
 
   test('saving a new org with invalid fields displays error messages', async function (assert) {
-    assert.expect(0);
-  });
-
-  test('can save changes to existing org', async function (assert) {
-    assert.expect(0);
-  });
-
-  test('can cancel changes to existing org', async function (assert) {
-    assert.expect(0);
-  });
-
-  test('can delete org', async function (assert) {
-    assert.expect(0);
-  });
-
-  test('saving an existing org with invalid fields displays error messages', async function (assert) {
-    assert.expect(0);
-  });
-
-  test('errors are displayed when save org fails', async function (assert) {
-    assert.expect(0);
-  });
-
-  test('errors are displayed when delete org fails', async function (assert) {
-    assert.expect(0);
+    assert.expect(2);
+    this.server.post('/scopes', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.newOrg);
+    await fillIn('[name="name"]', 'new org');
+    await click('form [type="submit"]');
+    await a11yAudit();
+    assert.ok(find('[role="alert"]'));
+    assert.ok(find('.rose-form-error-message'));
   });
 });
