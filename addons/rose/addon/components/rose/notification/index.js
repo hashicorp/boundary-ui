@@ -1,16 +1,7 @@
-import Component from '@ember/component';
-import layout from '../../templates/components/rose/notification';
+import Component from '@glimmer/component';
 import { computed } from '@ember/object';
 
-/**
- * An accessible alert notification component that displays an icon,
- * a heading, and optional block content.  Notifications may be static or
- * dismissible.  To make a notification dismissible, pass in a
- * `@dismiss` function.
- */
-export default Component.extend({
-  layout,
-  tagName: '',
+export default class RoseNotificationComponent extends Component {
 
   /**
    * Returns an icon name based on the notification style.
@@ -33,5 +24,6 @@ export default Component.extend({
     }
 
     return icon;
-  },
-});
+  }
+
+}
