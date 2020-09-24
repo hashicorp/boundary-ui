@@ -56,25 +56,26 @@ module('Acceptance | org', function (hooks) {
     assert.equal(findAll('article').length, orgsCount);
   });
 
-  test('visiting scopes redirects to orgs', async function (assert) {
+  test('visiting scopes redirects to index', async function (assert) {
     assert.expect(1);
     await visit(urls.scopes);
-    await a11yAudit();
     assert.equal(currentURL(), urls.orgs);
   });
 
-  test('visiting root redirects to orgs', async function (assert) {
+  test('visiting root redirects to index', async function (assert) {
     assert.expect(1);
     await visit(urls.root);
-    await a11yAudit();
     assert.equal(currentURL(), urls.orgs);
   });
 
-  test('visiting orgs within a org scope redirects to the parent org scope', async function (assert) {
-    assert.expect(0);
+  test('visiting orgs within a non global scope redirects to index', async function (assert) {
+    const nonGlobalScopeURL = `${urls.scopes}/123/orgs`;
+    assert.expect(1);
+    await visit(nonGlobalScopeURL);
+    assert.equal(currentURL(), urls.orgs);
   });
 
-  test('can create new orgs', async function (assert) {
+  test('can create a new org', async function (assert) {
     assert.expect(1);
     await visit(urls.newOrg);
     await fillIn('[name="name"]', 'Org name');
@@ -83,7 +84,7 @@ module('Acceptance | org', function (hooks) {
     assert.equal(this.server.db.scopes.where(scope => scope.type === 'org').length, orgsCount + 1);
   });
 
-  test('can cancel create new orgs', async function (assert) {
+  test('can cancel new org creation', async function (assert) {
     assert.expect(2);
     await visit(urls.newOrg);
     await fillIn('[name="name"]', 'Org name');
