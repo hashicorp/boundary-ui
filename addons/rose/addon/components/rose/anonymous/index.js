@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../../templates/components/rose/anonymous';
+import layout from './index';
 
 /**
  * An otherwise empty component that renders a block.  Used only by components

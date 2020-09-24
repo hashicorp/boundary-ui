@@ -1,5 +1,5 @@
 import LinkComponent from '@ember/routing/link-component';
-import layout from '../../templates/components/rose/link-button';
+import layout from './index';
 import { computed } from '@ember/object';
 
 /**
