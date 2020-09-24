@@ -1,7 +1,7 @@
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { pickRandomStatusString } from './factories/session';
-//import { Response } from 'miragejs';
+import { Response } from 'miragejs';
 
 export default function() {
 
@@ -324,6 +324,14 @@ export default function() {
       updatedAttrs.status = 'canceling';
     }
     return session.update(updatedAttrs);
+  });
+
+  // auth-tokens
+
+  this.get('/auth-tokens/:id', function () {
+    // Set to 401 or 404 to simulate token invalidation, which will
+    // cause the session to fail restoration and logout the user.
+    return new Response(200);
   });
 
   /* Uncomment the following line and the Response import above

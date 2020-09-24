@@ -44,6 +44,17 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
   }
 
   /**
+   * Generates an auth token validation URL used to check tokens on restoration.
+   * @override
+   * @param {string} tokenID
+   * @return {string}
+   */
+  buildTokenValidationEndpointURL(tokenID) {
+    const adapter = this.store.adapterFor('auth-token');
+    return adapter.buildURL('auth-token', tokenID, {}, 'findRecord');
+  }
+
+  /**
    * Intercepts the authenticate response, if any, and assigns the returned
    * token to all future requests via `addTokenToAuthorization`.
    * Returns the response data as normal.
