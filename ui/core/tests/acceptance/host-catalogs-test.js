@@ -34,6 +34,7 @@ module('Acceptance | host catalogs', function (hooks) {
 
   hooks.beforeEach(function () {
     // Setup Mirage mock resources for this test
+    authenticateSession();
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -58,7 +59,6 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('visiting host catalogs', async function (assert) {
     assert.expect(1);
-    authenticateSession();
     await visit(urls.hostCatalogs);
     await a11yAudit();
     assert.equal(currentURL(), urls.hostCatalogs);
@@ -66,7 +66,6 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('can navigate to host catalog form', async function (assert) {
     assert.expect(1);
-    authenticateSession({});
     await visit(urls.hostCatalogs);
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
@@ -76,7 +75,6 @@ module('Acceptance | host catalogs', function (hooks) {
   test('can delete host catalog', async function (assert) {
     assert.expect(2);
     const hostCatalogsCount = this.server.db.hostCatalogs.length;
-    authenticateSession({});
     await visit(urls.hostCatalog);
     assert.equal(currentURL(), urls.hostCatalog);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -85,7 +83,6 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('can update host catalog and save changes', async function (assert) {
     assert.expect(1);
-    authenticateSession({});
     await visit(urls.hostCatalog);
     await fillIn('[name="name"]', 'Test Name');
     await click('form [type="submit"]:not(:disabled)');
@@ -94,7 +91,6 @@ module('Acceptance | host catalogs', function (hooks) {
 
   test('can update host catalog and cancel changes', async function (assert) {
     assert.expect(1);
-    authenticateSession({});
     await visit(urls.hostCatalog);
     await fillIn('[name="name"]', 'Test Name');
     await click('form button:not([type="submit"])');
@@ -104,7 +100,6 @@ module('Acceptance | host catalogs', function (hooks) {
   test('can create host catalog and save changes', async function (assert) {
     assert.expect(1);
     const hostCatalogsCount = this.server.db.hostCatalogs.length;
-    authenticateSession({});
     await visit(urls.newHostCatalog);
     await fillIn('[name="name"]', 'Test Name');
     await click('form [type="submit"]:not(:disabled)');
@@ -114,7 +109,6 @@ module('Acceptance | host catalogs', function (hooks) {
   test('can create host catalog and cancel changes', async function (assert) {
     assert.expect(1);
     const hostCatalogsCount = this.server.db.hostCatalogs.length;
-    authenticateSession({});
     await visit(urls.newHostCatalog);
     await fillIn('[name="name"]', 'Test Name');
     await click('form button:not([type="submit"])');
@@ -134,7 +128,6 @@ module('Acceptance | host catalogs', function (hooks) {
         }
       );
     });
-    authenticateSession({});
     await visit(urls.hostCatalog);
     await fillIn('[name="name"]', 'random string');
     await click('form [type="submit"]');
@@ -159,7 +152,6 @@ module('Acceptance | host catalogs', function (hooks) {
         }
       );
     });
-    authenticateSession({});
     await visit(urls.hostCatalog);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     await a11yAudit();
@@ -191,7 +183,6 @@ module('Acceptance | host catalogs', function (hooks) {
         }
       );
     });
-    authenticateSession({});
     await visit(urls.newHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await click('form [type="submit"]');
@@ -229,7 +220,6 @@ module('Acceptance | host catalogs', function (hooks) {
         }
       );
     });
-    authenticateSession({});
     await visit(urls.hostCatalog);
     await fillIn('[name="name"]', 'random string');
     await click('form [type="submit"]');
