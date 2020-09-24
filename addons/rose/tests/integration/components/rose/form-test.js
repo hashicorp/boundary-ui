@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, find, click } from '@ember/test-helpers';
+import { render, find, findAll, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | rose/form', function (hooks) {
@@ -63,5 +63,43 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.ok(find('[name="select-field"]'));
     assert.ok(find('[name="checkbox-field"]'));
     assert.ok(find('[name="radio-group-field"]'));
+  });
+
+  test('it supports an editability toggle when @showEditToggle is true', async function (assert) {
+    assert.expect(12);
+    this.cancel = () => {
+      assert.ok(true, 'cancel function may still be passed even for @showEditToggle');
+    };
+    this.onSubmit = () => {};
+    await render(hbs`
+      <Rose::Form
+        @onSubmit={{this.submit}}
+        @cancel={{this.cancel}}
+        @showEditToggle={{true}}
+        as |form|
+      >
+        <form.input @label="Label" @value="value" />
+        <form.actions
+          @submitText="Save"
+          @cancelText="Cancel"
+          @enableEditText="Edit" />
+      </Rose::Form>
+    `);
+    // Before enabling edit mode, fields are disabled and the edit mode button is displayed
+    assert.ok(find('.rose-form'));
+    assert.equal(findAll('input[disabled]').length, 1);
+    assert.equal(findAll('button').length, 1);
+    assert.equal(find('button').textContent.trim(), 'Edit');
+    // After entering edit mode, fields are enabled and save/cancel buttons are displayed
+    await click('button');
+    assert.equal(findAll('input[disabled]').length, 0);
+    assert.equal(findAll('button').length, 2);
+    assert.equal(find('[type="submit"]').textContent.trim(), 'Save');
+    assert.equal(find('button:not([type="submit"])').textContent.trim(), 'Cancel');
+    // After canceling, fields are disabled again and the edit mode button is displayed
+    await click('button:not([type="submit"])');
+    assert.equal(findAll('input[disabled]').length, 1);
+    assert.equal(findAll('button').length, 1);
+    assert.equal(find('button').textContent.trim(), 'Edit');
   });
 });
