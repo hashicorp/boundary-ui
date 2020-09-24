@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { Response } from 'miragejs';
 
 module('Unit | Authenticator | password', function (hooks) {
   setupTest(hooks);
@@ -25,7 +26,11 @@ module('Unit | Authenticator | password', function (hooks) {
 
   test('it adds an authorization header to application adapter on restore', async function (assert) {
     assert.expect(1);
-    authenticator.restore({ token: 'token1234' });
+    const mockData = { id: 'token1234', token: 'token1234' };
+    this.server.get(authenticator.buildTokenValidationEndpointURL(mockData.id), () => {
+      return new Response(200);
+    });
+    authenticator.restore(mockData);
     assert.equal(applicationAdapter.headers.Authorization, 'Bearer token1234');
   });
 
