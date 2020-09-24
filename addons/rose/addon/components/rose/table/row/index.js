@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../../../templates/components/rose/table/row';
+import layout from './index';
 
 /**
  * A table row component that uses tr table element and

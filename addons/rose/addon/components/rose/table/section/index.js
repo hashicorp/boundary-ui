@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../../../templates/components/rose/table/section';
+import layout from './index';
 
 /**
  * A table section component that configures a row component.
