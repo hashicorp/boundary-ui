@@ -32,7 +32,6 @@ module('Acceptance | hosts', function (hooks) {
     hostCatalog: null,
     hosts: null,
     host: null,
-    newHost: null
   };
 
   hooks.beforeEach(function () {
