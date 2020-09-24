@@ -16,6 +16,7 @@ and actions.
       <Rose::Form
         @onSubmit={{submit}}
         @cancel={{cancel}}
+        @showEditToggle={{showEditToggle}}
         @disabled={{disabled}}
         as |form|>
         <form.input
@@ -59,10 +60,15 @@ and actions.
           @label="Label"
           @checked={{true}}
           />
-        <form.actions @submitText="Save" @cancelText="Cancel" @showCancel={{true}} />
+        <form.actions
+          @submitText="Save"
+          @cancelText="Cancel"
+          @enableEditText="Edit"
+          @showCancel={{true}} />
       </Rose::Form>
     `,
     context: {
+      showEditToggle: boolean('showEditToggle', false),
       disabled: boolean('disabled', false),
       submit: action('submit'),
       cancel: action('cancel'),
@@ -77,6 +83,7 @@ and actions.
   @onSubmit={{this.submit}}
   @cancel={{this.cancel}}
   @disabled={{false}}
+  @showEditToggle={{true}}
   as |form|>
   <form.input
     @label="Label"
@@ -118,6 +125,10 @@ and actions.
   <form.checkbox
     @label="Label"
     />
-  <form.actions @submitText="Save" @cancelText="Cancel" @showCancel={{true}} />
+  <form.actions
+    @submitText="Save"
+    @cancelText="Cancel"
+    @enableEditText="Edit"
+    @showCancel={{true}} />
 </Rose::Form>
 ```
