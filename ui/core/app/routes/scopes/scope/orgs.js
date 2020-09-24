@@ -12,10 +12,13 @@ export default class ScopesScopeOrgsRoute extends Route {
   // =methods
 
   /**
-   * If arriving here unauthenticated, redirect to index for further processing.
+   * If arriving here unauthenticated or from a non-global scope,
+   * redirect to index for further processing.
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.transitionTo('index');
+    const scope = this.modelFor('scopes.scope');
+    if(!scope.isGlobal) this.transitionTo('index');
   }
 
   /**
