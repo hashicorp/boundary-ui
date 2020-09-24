@@ -13,8 +13,14 @@ import fetch from 'fetch';
  * Upon session invalidation, deauthentication is attempted at the URL generated
  * by `buildDeauthEndpointURL`, but is not guaranteed.
  *
+ * When a session is restored, a call is made to the endpoint specified by
+ * `buildTokenValidationEndpointURL`.  If this endpoint responds with 401 or
+ * 404, then the session is invalid and the restoration is rejected.  All other
+ * responses will resolve the session restoration successfully.
+ *
  * This authenticator should not be used directly because it does not specify
- * an `buildAuthEndpointURL` or `buildDeauthEndpointURL` of its own.
+ * an `buildAuthEndpointURL`, `buildDeauthEndpointURL`, or
+ * `buildTokenValidationEndpointURL` of its own.
  * To use, generate an application authenticator in your app
  * `authenticators/application.js` and extend this class.
  *
@@ -31,13 +37,25 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   // =methods
 
   /**
-   * Restores the session if data is present.  Otherwise rejects.
+   * Restores the session if data is present and token validation succeeds
+   * (any response other than 401 or 404 === success).  Otherwise rejects.
    * @override
    * @param {object} data
    * @return {Promise}
    */
-  restore(data) {
-    return data ? resolve(data) : reject();
+  async restore(data) {
+    if (!data) return reject();
+    const tokenID = data.id;
+    const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
+    const response = await fetch(tokenValidationURL, { method: 'get' });
+    // 401 and 404 responses mean the token is invalid, whereas other types of
+    // error responses do not tell us about the validity of the token.
+    switch (response.status) {
+      case 401:
+      case 404:
+        return reject();
+    }
+    return resolve(data);
   }
 
   /**
