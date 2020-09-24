@@ -1,16 +1,17 @@
-import Component from '@ember/component';
-import layout from '../../templates/components/rose/dropdown';
-import { action } from '@ember/object';
+import Component from '@glimmer/component';
+import { computed, action } from '@ember/object';
 
-/**
- * A dropdown component composed of HTML disclosure elements: details and summary
- */
-export default Component.extend({
+export default class RoseDropdownComponent extends Component {
+
   // =attributes
 
-  layout,
-  tagName: '',
-  showCaret: true,
+  /**
+   * @type {boolean}
+   */
+  @computed('args.showCaret')
+  get showCaret() {
+    return this.args.showCaret ?? true;
+  }
 
   // =actions
 
@@ -26,5 +27,5 @@ export default Component.extend({
   close(element) {
     if (element.open) element.open = false;
     if (element.parentElement.open) element.parentElement.open = false;
-  },
-});
+  }
+}
