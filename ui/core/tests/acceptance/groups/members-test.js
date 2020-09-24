@@ -56,7 +56,7 @@ module('Acceptance | groups | members', function (hooks) {
     assert.equal(findAll('tbody tr').length, membersCount);
   });
 
-  test('can delete a member', async function (assert) {
+  test('can remove a member', async function (assert) {
     assert.expect(2);
     await visit(urls.members);
     assert.equal(findAll('tbody tr').length, membersCount);
