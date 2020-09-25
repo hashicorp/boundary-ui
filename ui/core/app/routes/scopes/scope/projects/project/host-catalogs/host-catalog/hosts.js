@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute extends Route {
   // =services
@@ -43,6 +44,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
    * @param {Event} e
    */
   @action
+  @loading
   async save(host) {
     try {
       const { isNew } = host;
@@ -66,6 +68,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
    * @param {HostModel} host
    */
   @action
+  @loading
   async delete(host) {
     try {
       await host.destroyRecord();

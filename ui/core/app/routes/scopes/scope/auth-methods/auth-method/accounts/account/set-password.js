@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRoute extends Route {
   // =services
@@ -33,6 +34,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
    * @param {string} password
    */
   @action
+  @loading
   async setPassword(account, password) {
     try {
       await account.setPassword(password);

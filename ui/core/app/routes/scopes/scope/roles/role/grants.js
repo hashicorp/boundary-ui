@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   // =services
@@ -54,6 +55,7 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
    * @param {RoleModel} role
    */
   @action
+  @loading
   async save(role) {
     try {
       await role.saveGrants();

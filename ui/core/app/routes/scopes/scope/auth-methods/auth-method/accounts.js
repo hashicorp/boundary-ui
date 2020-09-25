@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route {
   // =services
@@ -40,6 +41,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    * @param {AccountModel} account
    */
   @action
+  @loading
   async save(account, password) {
     const { isNew } = account;
     const adapterOptions = {};
@@ -67,6 +69,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    * @param {AccountModel} account
    */
   @action
+  @loading
   async delete(account) {
     try {
       await account.destroyRecord();
