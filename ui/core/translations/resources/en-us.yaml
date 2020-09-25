@@ -80,8 +80,41 @@ user:
   messages:
     welcome:
       title: Welcome to Users
-role: Role
-roles: Roles
+role:
+  title: Role
+  title_plural: Roles
+  description: Roles are collections of capability grants and the principals (users and groups) assigned to them.
+  messages:
+    welcome:
+      title: Welcome to Roles
+  actions:
+    create: Create Role
+    delete: Delete Role
+  principal:
+    title: Principal
+    title_plural: Principals
+    description: Principals are the users and groups assigned to a role and bounded by a role’s grants.
+    messages:
+      welcome:
+        title: Welcome to Principals
+        description: Principals are not assigned in this role.
+      none:
+        title: No Principals Available
+        description: Principals are not available for assignment.
+      add-principals:
+        title: Add Principals
+        description: Select users and groups to assign to this role.
+    types:
+      user: User
+      group: Group
+    actions:
+      add-principals: Add Principals
+  grant:
+    title: Grant
+    title_plural: Grants
+    description: Grants are permissions which allow roles to take actions and access resources
+    actions:
+      create: New Grant
 host-set: Host Set
 host-sets: Host Sets
 host: Host
@@ -89,10 +122,6 @@ hosts: Hosts
 target: Target
 targets: Targets
 descriptions:
-  role: A Role can be assigned to zero or more Principals. A Principal assigned a Role receives all capabilities granted by any Direct Grant owned by the Role. A Role is deleted when the Scope it belongs to is deleted. All Direct Grants owned by a Role are deleted when the Role is deleted.
-  roles: A role is a collection of capabilities granted to any Principal the Role is assigned to. A Role belongs to one and only one Scope. A Role owns zero or more Direct Grants. The lifecycle of a Role is not tied to the lifecycle of any Principal.
-  grants: A grant represents a set of capabilities granted to a role. It couples a set of Actions to either a set of Resource Types or an individual Resource. A Direct Grant belongs exclusively to one and only one Role. However, equivalent Direct Grants may exist across different Roles. A Direct Grant references one or more Actions and either one or more Resource types or one specific Resource. A Direct Grant is deleted when the Role it belongs to is deleted. A Direct Grant is also deleted if it is associated with a specific Resource and that Resource itself is deleted. The lifecycle of a Direct Grant is not tied to the lifecycle of any Action or Resource Type.
-  principals: A principal is any entity which can be assigned capabilities. Principal is abstract. User, Group, and Project are concrete Principals. A Principal can be assigned to zero or more Roles.
   host-set: Host Set is abstract. A Host Set is deleted when the Host Catalog it belongs to is deleted.
   host-sets: A host set is a resource which provides a subset of Hosts from the set of Hosts of the Host Catalog it belongs to. A Host Set belongs to one and only one Host Catalog. A Host Set can contain zero or more Hosts. A Host Set can be contained by zero or more Targets. The lifecycle of a Host Set is not tied to the lifecycle of any Targets or Hosts.
   host: Host is abstract. A Host is deleted when the Host Catalog it belongs to is deleted.

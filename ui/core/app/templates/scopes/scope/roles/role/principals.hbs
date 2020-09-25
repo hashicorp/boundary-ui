@@ -1,4 +1,4 @@
-{{title (t 'titles.principals')}}
+{{title (t 'resources.role.principal.title_plural')}}
 
 {{#if @model}}
 
@@ -18,7 +18,7 @@
             {{principal.model.displayName}}
           </row.headerCell>
           <row.cell>
-            {{t (concat 'resources.' principal.type)}}
+            {{t (concat 'resources.role.principal.types.' principal.type)}}
           </row.cell>
           <row.cell>
             <code>{{principal.model.id}}</code>
@@ -47,10 +47,14 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.role-principals-welcome"}} as |message|>
+    <Rose::Message @title={{t "resources.role.principal.messages.welcome.title"}} as |message|>
       <message.description>
-        {{t "descriptions.role-principals-welcome"}}
+        {{t "resources.role.principal.messages.welcome.description"}}
       </message.description>
+      <message.link @route="scopes.scope.roles.role.add-principals">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t 'resources.role.principal.actions.add-principals'}}
+      </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
 
