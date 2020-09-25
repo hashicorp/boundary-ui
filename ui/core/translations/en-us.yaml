@@ -30,7 +30,6 @@ titles:
   hosts-welcome: Welcome to Hosts
   users-welcome: Welcome to Users
   roles-welcome: Welcome to Roles
-  groups-welcome: Welcome to Groups
   targets-welcome: Create your first Target
   target-host-sets-welcome: No Host Sets Associated
   grants: Permissions
@@ -44,8 +43,6 @@ titles:
   no-host-sets-for-target: No Host Sets Available
   role-principals-welcome: No Principals Associated
   no-principals-available: No Principals Available
-  members: Members
-  group-members-welcome: Welcome to Members
   no-available-users: No Users Available
   actions: Actions
 descriptions:
@@ -58,12 +55,10 @@ descriptions:
   hosts-welcome: Configure a static host in this host catalog.
   users-welcome: Users are authorized to access Boundary.
   roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
-  groups-welcome: Groups are collections of users.
   targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
   target-host-sets-welcome: Add Host Sets to this target to provide access.
   no-host-set-hosts: Before associating hosts with this host set, create hosts within the host catalog.
   no-host-sets-for-target: No host sets are available to add to this target.
   role-principals-welcome: No principals are available in this role.
   no-principals-available: Principals are not available for assignment.
-  group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.

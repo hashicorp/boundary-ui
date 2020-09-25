@@ -13,6 +13,6 @@ export default class ScopesScopeGroupsController extends Controller {
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.groups');
+    return this.intl.t('resources.group.title_plural');
   }
 }
