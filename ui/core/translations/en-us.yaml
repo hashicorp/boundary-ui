@@ -23,7 +23,6 @@ titles:
   overview: Overview
   settings: Settings
   empty-set: No Items Yet
-  projects-welcome: Welcome to Projects
   host-sets-welcome: Welcome to Host Sets
   hosts-welcome: Welcome to Hosts
   users-welcome: Welcome to Users
@@ -45,7 +44,6 @@ titles:
   actions: Actions
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
-  projects-welcome: Projects allow you to create and manage host catalogs. To start, create a project.
   host-sets-welcome: Configure a static host set in this host catalog.
   hosts-welcome: Configure a static host in this host catalog.
   users-welcome: Users are authorized to access Boundary.
