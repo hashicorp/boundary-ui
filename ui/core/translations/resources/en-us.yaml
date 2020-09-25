@@ -44,6 +44,13 @@ group:
       description: Select users to add users to this group.
   actions:
     add-members: Add Members
+host-catalog:
+  title: Host Catalog
+  title_plural: Host Catalogs
+  description: A host catalog is a collection of hosts and host sets.
+  messages:
+    welcome:
+      title: Welcome to Host Catalogs
 session:
   title: Session
   title_plural: Sessions
@@ -60,8 +67,6 @@ orgs: Orgs
 org: Org
 projects: Projects
 project: Project
-host-catalog: Host Catalog
-host-catalogs: Host Catalogs
 host-set: Host Set
 host-sets: Host Sets
 host: Host
@@ -79,8 +84,6 @@ descriptions:
   orgs: An Organization is a top-level container, and owns zero to many Projects and zero to many Authentication Methods. An Organization inherits from Scope ("is-a" Scope) allowing it to own zero to many Groups, Roles, Targets, or Host Catalogs. The lifecycle of an Organization is not tied to anything else. A Role at the Organization level can grant permissions at the Project level.
   project: When a Project is deleted, all resources owned by it are also deleted. The lifecycle of a Project is not tied to any resource it contains.
   projects: A project is a child scope of an organization and is owned by an Organization. A Project inherits from Scope ("is-a" Scope) allowing it to own zero to many Groups, Roles, Targets, or Host Catalogs. A Project also inherits from Principal ("is-a" Principal) allowing it to be associated with zero or more Roles. A Project has no additional relationships beyond those defined in Scope and Principal. A Project is deleted when the Organization it belongs to is deleted.
-  host-catalog: A host catalog is a permission boundary modeled as a container.
-  host-catalogs: A host catalog is a permission boundary modeled as a container.
   host-set: Host Set is abstract. A Host Set is deleted when the Host Catalog it belongs to is deleted.
   host-sets: A host set is a resource which provides a subset of Hosts from the set of Hosts of the Host Catalog it belongs to. A Host Set belongs to one and only one Host Catalog. A Host Set can contain zero or more Hosts. A Host Set can be contained by zero or more Targets. The lifecycle of a Host Set is not tied to the lifecycle of any Targets or Hosts.
   host: Host is abstract. A Host is deleted when the Host Catalog it belongs to is deleted.

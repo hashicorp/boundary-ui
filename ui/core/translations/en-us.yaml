@@ -25,7 +25,6 @@ titles:
   empty-set: No Items Yet
   orgs-welcome: Welcome to Orgs
   projects-welcome: Welcome to Projects
-  host-catalogs-welcome: Welcome to Host Catalogs
   host-sets-welcome: Welcome to Host Sets
   hosts-welcome: Welcome to Hosts
   users-welcome: Welcome to Users
@@ -46,11 +45,9 @@ titles:
   no-available-users: No Users Available
   actions: Actions
 descriptions:
-  host-catalogs: Overview of collections of hosts and host sets.
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   orgs-welcome: Create your orgs here.
   projects-welcome: Projects allow you to create and manage host catalogs. To start, create a project.
-  host-catalogs-welcome: Host catalogs allow you to configure to collect and create hosts and host sets. To start, create a host catalog.
   host-sets-welcome: Configure a static host set in this host catalog.
   hosts-welcome: Configure a static host in this host catalog.
   users-welcome: Users are authorized to access Boundary.

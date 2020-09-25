@@ -5,8 +5,8 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.host-catalogs"}}</h2>
-    <p>{{t "resources.descriptions.host-catalogs"}}</p>
+    <h2>{{t "resources.host-catalog.title_plural"}}</h2>
+    <p>{{t "resources.host-catalog.description"}}</p>
   </page.header>
 
   <page.actions>
@@ -57,9 +57,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t "titles.host-catalogs-welcome"}} as |message|>
+        <Rose::Message @title={{t "resources.host-catalog.messages.welcome.title"}} as |message|>
           <message.description>
-            {{t "descriptions.host-catalogs-welcome"}}
+            {{t "resources.host-catalog.description"}}
           </message.description>
           <message.link @route="scopes.scope.projects.project.host-catalogs.new">
             <Rose::Icon @name="plus-circle-outline" />
