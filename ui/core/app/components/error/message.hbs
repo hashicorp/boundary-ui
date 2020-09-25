@@ -1,6 +1,6 @@
 <Rose::Message
   @title={{t (concat "errors." this.messageCode ".title")}}
-  @subtitle={{concat (t "errors.generic.title") " " this.status}}
+  @subtitle={{concat (t "errors.generic.title") " " @status}}
   @icon={{this.icon}}
 as |message|>
   <message.description>{{t (concat "errors." this.messageCode ".description")}}</message.description>
