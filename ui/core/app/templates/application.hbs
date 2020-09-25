@@ -4,9 +4,8 @@
 <Rose::Layout::Global as |layout|>
 
   <layout.header>
-    <Rose::Header as |header|>
+    <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
       <header.brand @logo="logo-boundary" @text={{app-name}} />
-
       {{#if this.session.isAuthenticated}}
         <header.utilities as |utilities|>
           <utilities.dropdown
@@ -25,7 +24,6 @@
           </utilities.dropdown>
         </header.utilities>
       {{/if}}
-
     </Rose::Header>
   </layout.header>
 
