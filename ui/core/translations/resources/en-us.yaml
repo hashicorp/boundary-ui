@@ -23,12 +23,20 @@ auth-method:
       description: Auth methods are configurations to authenticate users.
     none:
       title: No Authentication Methods
-      description: No authentication methods were found for this scope.  Switch scopes and try again.
+      description: No authentication methods were found for this scope.
   types:
     password: Password
   actions:
     create: Create Auth Method
     delete: Delete Auth Method
+session:
+  title: Session
+  title_plural: Sessions
+  description: A session is a connection to a target initiated through Boundary.
+  messages:
+    none:
+      title: No Sessions
+      description: There are no active sessions within the current scope.
 user: User
 users: Users
 role: Role
@@ -47,8 +55,6 @@ host: Host
 hosts: Hosts
 target: Target
 targets: Targets
-sessions: Sessions
-session: Session
 descriptions:
   user: A User inherits from Principal ("is-a" Principal) allowing it to be associated with zero or more Roles.
   users: A user is any entity authorized to access Boundary using authentication credentials specific to one of the configured Authentication Methods. A User is owned by one and only one Organization. A User is associated with zero or one Authentication Methods. A User not associated with an Authentication Method can not log in to the system. A User can belong to zero or more Groups. A User is deleted when the Organization it belongs to is deleted. The lifecycle of a User is not tied to the lifecycle of any Authentication Method, Group or Role, but rather to its Organization only.
@@ -70,5 +76,3 @@ descriptions:
   hosts: A host is a computing element with a network address reachable from Boundary. A Host belongs to one and only one Host Catalog. A Host can be contained by zero or more Host Sets. The lifecycle of a Host is not tied to the lifecycle of any Host Sets.
   target: Target is abstract. A Target is deleted when the Scope it belongs to is deleted.
   targets: A target is a networked service a User can connect to and interact with through Boundary. A Target does not directly contain any secrets. A Target contains a collection of Hosts. A Target belongs to one and only one Scope. A Target can contain zero or more Host Sets. The lifecycle of a Target is not tied to the lifecycle of any Host Set.
-  sessions: Sessions
-  session: Session

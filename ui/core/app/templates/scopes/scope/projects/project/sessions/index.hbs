@@ -5,7 +5,8 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.sessions"}}</h2>
+    <h2>{{t "resources.session.title_plural"}}</h2>
+    <p>{{t "resources.session.description"}}</p>
   </page.header>
 
   <page.body>
@@ -52,9 +53,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t "titles.no-sessions"}} as |message|>
+        <Rose::Message @title={{t "resources.session.messages.none.title"}} as |message|>
           <message.description>
-            {{t "descriptions.no-sessions"}}
+            {{t "resources.session.messages.none.description"}}
           </message.description>
         </Rose::Message>
       </Rose::Layout::Centered>

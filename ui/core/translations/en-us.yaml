@@ -47,7 +47,6 @@ titles:
   members: Members
   group-members-welcome: Welcome to Members
   no-available-users: No Users Available
-  no-sessions: No Active Sessions
   actions: Actions
 descriptions:
   host-catalogs: Overview of collections of hosts and host sets.
@@ -68,4 +67,3 @@ descriptions:
   no-principals-available: Principals are not available for assignment.
   group-members-welcome: Users belonging to this group appear here.
   no-available-users: No users are available to add to this group.
-  no-sessions: There are no active sessions at this time.
