@@ -59,12 +59,20 @@ session:
     none:
       title: No Sessions
       description: There are no active sessions within the current scope.
+org:
+  title: Organization
+  title_plural: Organizations
+  description: An organization is a type of scope used to organize projects and IAM resources.  Organizations contain projects and is a child scope of global.
+  messages:
+    welcome:
+      title: Welcome to Organizations
+    none:
+      title: No Sessions
+      description: There are no active sessions within the current scope.
 user: User
 users: Users
 role: Role
 roles: Roles
-orgs: Orgs
-org: Org
 projects: Projects
 project: Project
 host-set: Host Set
@@ -80,8 +88,6 @@ descriptions:
   roles: A role is a collection of capabilities granted to any Principal the Role is assigned to. A Role belongs to one and only one Scope. A Role owns zero or more Direct Grants. The lifecycle of a Role is not tied to the lifecycle of any Principal.
   grants: A grant represents a set of capabilities granted to a role. It couples a set of Actions to either a set of Resource Types or an individual Resource. A Direct Grant belongs exclusively to one and only one Role. However, equivalent Direct Grants may exist across different Roles. A Direct Grant references one or more Actions and either one or more Resource types or one specific Resource. A Direct Grant is deleted when the Role it belongs to is deleted. A Direct Grant is also deleted if it is associated with a specific Resource and that Resource itself is deleted. The lifecycle of a Direct Grant is not tied to the lifecycle of any Action or Resource Type.
   principals: A principal is any entity which can be assigned capabilities. Principal is abstract. User, Group, and Project are concrete Principals. A Principal can be assigned to zero or more Roles.
-  org: When an Organization is deleted, all resources owned by it are also deleted.
-  orgs: An Organization is a top-level container, and owns zero to many Projects and zero to many Authentication Methods. An Organization inherits from Scope ("is-a" Scope) allowing it to own zero to many Groups, Roles, Targets, or Host Catalogs. The lifecycle of an Organization is not tied to anything else. A Role at the Organization level can grant permissions at the Project level.
   project: When a Project is deleted, all resources owned by it are also deleted. The lifecycle of a Project is not tied to any resource it contains.
   projects: A project is a child scope of an organization and is owned by an Organization. A Project inherits from Scope ("is-a" Scope) allowing it to own zero to many Groups, Roles, Targets, or Host Catalogs. A Project also inherits from Principal ("is-a" Principal) allowing it to be associated with zero or more Roles. A Project has no additional relationships beyond those defined in Scope and Principal. A Project is deleted when the Organization it belongs to is deleted.
   host-set: Host Set is abstract. A Host Set is deleted when the Host Catalog it belongs to is deleted.
