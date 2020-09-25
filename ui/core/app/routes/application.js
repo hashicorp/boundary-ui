@@ -64,8 +64,7 @@ export default class ApplicationRoute extends Route.extend(
   /**
    * Hooks into ember-loading to kick off loading indicator in the
    * application template.
-   * @return {Transition} returns the transition on a passthrough basis,
-   * because it is a promise on which ember-loading can watch for resolution.
+   * @return {boolean} always returns true
    */
   @action
   @loading
