@@ -22,7 +22,9 @@
             <p>{{host.description}}</p>
           </row.headerCell>
           <row.cell>
-            <Rose::Badge>{{host.type}}</Rose::Badge>
+            <Rose::Badge>
+              {{t (concat 'resources.host.types.' host.type)}}
+            </Rose::Badge>
           </row.cell>
           <row.cell>
             <code>{{host.id}}</code>
@@ -38,9 +40,9 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.hosts-welcome"}} as |message|>
+    <Rose::Message @title={{t "resources.host.messages.welcome.title"}} as |message|>
       <message.description>
-        {{t "descriptions.hosts-welcome"}}
+        {{t "resources.host.description"}}
       </message.description>
       <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.new">
         <Rose::Icon @name="plus-circle-outline" />

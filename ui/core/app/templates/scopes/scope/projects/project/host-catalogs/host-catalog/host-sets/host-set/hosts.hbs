@@ -52,9 +52,9 @@
 
 {{#unless @model.hosts}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.no-host-set-hosts"}} as |message|>
+    <Rose::Message @title={{t "resources.host.messages.none.title"}} as |message|>
       <message.description>
-        {{t "descriptions.no-host-set-hosts"}}
+        {{t "resources.host.messages.none.description"}}
       </message.description>
       <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.new">
         <Rose::Icon @name="plus-circle-outline" />

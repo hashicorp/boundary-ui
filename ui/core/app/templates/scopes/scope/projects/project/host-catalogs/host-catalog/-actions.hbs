@@ -3,13 +3,13 @@
     @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.new"
     @model={{@model}}
   >
-    {{t "actions.add-host"}}
+    {{t "resources.host.actions.add"}}
   </dropdown.link>
   <dropdown.link
     @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.new"
     @model={{@model}}
   >
-    {{t "actions.add-host-set"}}
+    {{t "resources.host-set.actions.add"}}
   </dropdown.link>
   <dropdown.separator />
   <dropdown.button
@@ -17,6 +17,6 @@
     @disabled={{@model.canSave}}
     {{on "click" (route-action "delete" @model)}}
   >
-    {{t 'actions.delete-host-catalog'}}
+    {{t 'resources.host-catalog.actions.delete'}}
   </dropdown.button>
 </Rose::Dropdown>

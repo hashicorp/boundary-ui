@@ -51,6 +51,43 @@ host-catalog:
   messages:
     welcome:
       title: Welcome to Host Catalogs
+  actions:
+    delete: Delete Host Catalog
+  types:
+    static: Static
+host-set:
+  title: Host Set
+  title_plural: Host Sets
+  description: A host set is a collection of hosts within a host catalog.
+  actions:
+    add: Add Host Set
+    create: New Host Set
+    delete: Delete Host Set
+    add-hosts: Add Hosts
+  messages:
+    welcome:
+      title: Welcome to Host Sets
+    add-hosts:
+      title: No Hosts Available
+      description: No hosts available in this scope for association.
+  types:
+    static: Static
+host:
+  title: Host
+  title_plural: Hosts
+  description: A host is a resource that may be accessed by a Boundary target.
+  messages:
+    welcome:
+      title: Welcome to Hosts
+    none:
+      title: No Hosts
+      description: No hosts available in this scope.
+  actions:
+    add: Add Host
+    create: New Host
+    delete: Delete Host
+  types:
+    static: Static
 session:
   title: Session
   title_plural: Sessions
@@ -115,16 +152,8 @@ role:
     description: Grants are permissions which allow roles to take actions and access resources
     actions:
       create: New Grant
-host-set: Host Set
-host-sets: Host Sets
-host: Host
-hosts: Hosts
 target: Target
 targets: Targets
 descriptions:
-  host-set: Host Set is abstract. A Host Set is deleted when the Host Catalog it belongs to is deleted.
-  host-sets: A host set is a resource which provides a subset of Hosts from the set of Hosts of the Host Catalog it belongs to. A Host Set belongs to one and only one Host Catalog. A Host Set can contain zero or more Hosts. A Host Set can be contained by zero or more Targets. The lifecycle of a Host Set is not tied to the lifecycle of any Targets or Hosts.
-  host: Host is abstract. A Host is deleted when the Host Catalog it belongs to is deleted.
-  hosts: A host is a computing element with a network address reachable from Boundary. A Host belongs to one and only one Host Catalog. A Host can be contained by zero or more Host Sets. The lifecycle of a Host is not tied to the lifecycle of any Host Sets.
   target: Target is abstract. A Target is deleted when the Scope it belongs to is deleted.
   targets: A target is a networked service a User can connect to and interact with through Boundary. A Target does not directly contain any secrets. A Target contains a collection of Hosts. A Target belongs to one and only one Scope. A Target can contain zero or more Host Sets. The lifecycle of a Target is not tied to the lifecycle of any Host Set.
