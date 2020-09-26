@@ -4,7 +4,7 @@ auth:
   descriptions:
     no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
     choose-org: Choose a scope to authenticate.
-    authenticating-with-org: "You're authenticating with {name}."
+    authenticating-with-org: "You are authenticating with {name}."
 host-set:
   types:
     static: Static
