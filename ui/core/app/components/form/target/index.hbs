@@ -20,7 +20,6 @@
     @label={{t "form.name.label"}}
     @helperText={{t "form.name.help"}}
     @error={{@model.errors.name}}
-    @helperText={{t "form.name.help"}}
   as |field|>
     {{#if @model.errors.name}}
       <field.errors as |errors|>
@@ -38,7 +37,6 @@
     @label={{t "form.description.label"}}
     @helperText={{t "form.description.help"}}
     @error={{@model.errors.description}}
-    @helperText={{t "form.description.help"}}
   as |field|>
     {{#if @model.errors.description}}
       <field.errors as |errors|>

@@ -66,6 +66,7 @@ module('Acceptance | auth methods', function (hooks) {
   test('can update an auth method and save changes', async function (assert) {
     assert.expect(1);
     await visit(urls.authMethod);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await click('form [type="submit"]:not(:disabled)');
     assert.equal(this.server.db.authMethods[0].name, 'update name');
@@ -74,6 +75,7 @@ module('Acceptance | auth methods', function (hooks) {
   test('can update an auth method and cancel changes', async function (assert) {
     assert.expect(1);
     await visit(urls.authMethod)
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await click('form button:not([type="submit"])');
     assert.notEqual(this.server.db.authMethods[0].name, 'update name');
@@ -160,6 +162,7 @@ module('Acceptance | auth methods', function (hooks) {
     });
     await visit(urls.authMethod);
     await fillIn('[name="name"]', 'save auth method');
+    await click('form [type="button"]');
     await click('form [type="submit"]');
     await a11yAudit();
     assert.ok(
@@ -192,7 +195,7 @@ module('Acceptance | auth methods', function (hooks) {
     );
   });
 
-  test('saving a new auth method with invalid fields displays error messages', async function (assert) {
+  test('saving an existing auth method with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.patch('/auth-methods/:id', () => {
       return new Response(
@@ -214,6 +217,7 @@ module('Acceptance | auth methods', function (hooks) {
       );
     });
     await visit(urls.authMethod);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'existing auth method');
     await click('form [type="submit"]');
     await a11yAudit();
@@ -251,6 +255,7 @@ module('Acceptance | auth methods', function (hooks) {
       );
     });
     await visit(urls.authMethod);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'existing auth method');
     await click('form [type="submit"]');
     await a11yAudit();

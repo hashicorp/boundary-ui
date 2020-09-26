@@ -112,6 +112,7 @@ module('Acceptance | users', function (hooks) {
   test('can save changes to an existing user', async function (assert) {
     assert.expect(2);
     await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated user name');
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), userURL);
@@ -121,6 +122,7 @@ module('Acceptance | users', function (hooks) {
   test('can cancel changes to an existing user', async function (assert) {
     assert.expect(1);
     await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Unsaved user name');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(find('[name="name"]').value, 'Unsaved user name');
@@ -156,6 +158,7 @@ module('Acceptance | users', function (hooks) {
       );
     });
     await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
     assert.ok(
@@ -167,29 +170,6 @@ module('Acceptance | users', function (hooks) {
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'
-    );
-  });
-
-  test('errors are displayed when saving user fails', async function (assert) {
-    assert.expect(1);
-    this.server.patch('/users/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(userURL);
-    await fillIn('[name="name"]', 'User name');
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
     );
   });
 
