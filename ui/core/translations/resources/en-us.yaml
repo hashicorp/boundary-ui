@@ -152,8 +152,27 @@ role:
     description: Grants are permissions which allow roles to take actions and access resources
     actions:
       create: New Grant
-target: Target
-targets: Targets
-descriptions:
-  target: Target is abstract. A Target is deleted when the Scope it belongs to is deleted.
-  targets: A target is a networked service a User can connect to and interact with through Boundary. A Target does not directly contain any secrets. A Target contains a collection of Hosts. A Target belongs to one and only one Scope. A Target can contain zero or more Host Sets. The lifecycle of a Target is not tied to the lifecycle of any Host Set.
+target:
+  title: Target
+  title_plural: Targets
+  description: A target is a logical collection of host sets which may be used to initiate sessions.
+  messages:
+    welcome:
+      title: Welcome to Targets
+  actions:
+    create: New Target
+    delete: Delete Target
+    add-host-sets: Add Host Sets
+  types:
+    tcp: TCP
+  host-set:
+    messages:
+      welcome:
+        title: Welcome to Host Sets
+        description: No hosts sets in this target.
+      none:
+        title: No Host Sets Available
+        description: No hosts sets available to add to target.
+      add:
+        title: Add Host Sets
+        description: Select host sets to assign to this target.

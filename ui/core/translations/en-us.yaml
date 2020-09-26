@@ -5,9 +5,6 @@ auth:
     no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
     choose-org: Choose a scope to authenticate.
     authenticating-with-org: "You're authenticating with {name}."
-target:
-  types:
-    tcp: TCP
 titles:
   iam: IAM
   new: New
@@ -17,16 +14,7 @@ titles:
   overview: Overview
   settings: Settings
   empty-set: No Items Yet
-  targets-welcome: Create your first Target
-  target-host-sets-welcome: No Host Sets Associated
-  targets: Targets
   global: Global
-  no-host-sets-for-target: No Host Sets Available
-  no-available-users: No Users Available
   actions: Actions
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
-  targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
-  target-host-sets-welcome: Add Host Sets to this target to provide access.
-  no-host-sets-for-target: No host sets are available to add to this target.
-  no-available-users: No users are available to add to this group.

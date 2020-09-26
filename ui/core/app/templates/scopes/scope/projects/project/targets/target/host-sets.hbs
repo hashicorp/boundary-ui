@@ -1,4 +1,4 @@
-{{title (t "resources.host-sets")}}
+{{title (t "resources.host-set.title_plural")}}
 
 {{#if @model.hostSets}}
 
@@ -19,7 +19,7 @@
             <p>{{hostSet.model.description}}</p>
           </row.headerCell>
           <row.cell>
-            <Rose::Badge>{{hostSet.model.type}}</Rose::Badge>
+            <Rose::Badge>{{t (concat 'resources.host-set.types.' hostSet.model.type)}}</Rose::Badge>
           </row.cell>
           <row.cell>
             <code>{{hostSet.model.id}}</code>
@@ -48,9 +48,9 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.target-host-sets-welcome"}} as |message|>
+    <Rose::Message @title={{t "resources.target.host-set.messages.welcome.title"}} as |message|>
       <message.description>
-        {{t "descriptions.target-host-sets-welcome"}}
+        {{t "resources.target.host-set.messages.welcome.description"}}
       </message.description>
     </Rose::Message>
   </Rose::Layout::Centered>
