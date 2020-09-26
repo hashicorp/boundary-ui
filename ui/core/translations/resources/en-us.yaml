@@ -32,7 +32,7 @@ auth-method:
 group:
   title: Group
   title_plural: Groups
-  description: Groups are collections of users. Groups may be assigned to roles, thereby receiving the role's grants.
+  description: Groups are collections of users. Groups may be assigned to roles to receive the role’s grants.
   messages:
     welcome:
       title: Welcome to Groups
@@ -67,9 +67,14 @@ host-set:
   messages:
     welcome:
       title: Welcome to Host Sets
-    add-hosts:
-      title: No Hosts Available
-      description: No hosts available in this scope for association.
+  host:
+    messages:
+      none:
+        title: Welcome to Hosts
+        description: No hosts available in this host set.
+      add:
+        title: Add Hosts
+        description: Select hosts that belong to this host set.
   types:
     static: Static
 host:
@@ -149,7 +154,7 @@ role:
   grant:
     title: Grant
     title_plural: Grants
-    description: Grants are permissions which allow roles to take actions and access resources
+    description: Grants are permissions which allow roles to take actions and access resources.
     actions:
       create: New Grant
 target:
