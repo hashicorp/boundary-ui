@@ -33,7 +33,7 @@
 
 </Rose::Layout::Global>
 
-<EmberNotify @closeAfter={{4000}} as |message close|>
+<EmberNotify @closeAfter={{this.notifyTimeout}} as |message close|>
   <Rose::Notification
     @style={{message.type}}
     @heading={{t (concat 'states.' message.type)}}

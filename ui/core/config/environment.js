@@ -33,6 +33,8 @@ module.exports = function (environment) {
 
     appName: APP_NAME,
 
+    notifyTimeout: 4000,
+
     contentSecurityPolicyHeader: 'Content-Security-Policy',
     contentSecurityPolicyMeta: true,
     contentSecurityPolicy: {
@@ -93,6 +95,9 @@ module.exports = function (environment) {
 
     // CSP breaks test coverage, so it is disabled in this environment
     ENV.contentSecurityPolicyMeta = false;
+
+    // Notification timeout should be 0 for fast tests
+    ENV.notifyTimeout = 0;
   }
 
   if (environment === 'production') {
