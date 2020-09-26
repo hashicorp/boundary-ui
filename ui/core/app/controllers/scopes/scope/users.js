@@ -13,6 +13,6 @@ export default class ScopesScopeUsersController extends Controller {
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.users');
+    return this.intl.t('resources.user.title_plural');
   }
 }

@@ -5,19 +5,19 @@
     <sidebarLayout.sidebar>
       <Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
         <nav.link @route="scopes.scope.projects">
-          {{t "resources.projects"}}
+          {{t "resources.project.title_plural"}}
         </nav.link>
       </Rose::Nav::Sidebar>
 
       <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
         <nav.link @route="scopes.scope.users">
-          {{t "resources.users"}}
+          {{t "resources.user.title_plural"}}
         </nav.link>
         <nav.link @route="scopes.scope.groups">
           {{t "resources.group.title_plural"}}
         </nav.link>
         <nav.link @route="scopes.scope.roles">
-          {{t "resources.roles"}}
+          {{t "resources.role.title_plural"}}
         </nav.link>
         <nav.link @route="scopes.scope.auth-methods">
           {{t "resources.auth-method.title_plural"}}

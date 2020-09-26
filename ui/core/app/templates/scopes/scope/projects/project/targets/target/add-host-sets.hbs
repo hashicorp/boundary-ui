@@ -1,4 +1,4 @@
-{{title (t 'actions.add-host-sets')}}
+{{title (t 'resources.target.actions.add-host-sets')}}
 
 {{#if @model.hostSets}}
   <Form::Target::AddHostSets
@@ -12,9 +12,9 @@
 
 {{#unless @model.hostSets}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.no-host-sets-for-target"}} as |message|>
+    <Rose::Message @title={{t "resources.target.host-set.messages.none.title"}} as |message|>
       <message.description>
-        {{t "descriptions.no-host-sets-for-target"}}
+        {{t "resources.target.host-set.messages.none.description"}}
       </message.description>
       <message.link @route="scopes.scope.projects.project.targets.target.host-sets">
         <Rose::Icon @name="chevron-left" />

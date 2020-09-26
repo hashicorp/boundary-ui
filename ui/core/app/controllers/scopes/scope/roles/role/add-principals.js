@@ -13,6 +13,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsController extends Control
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('actions.add-principals');
+    return this.intl.t('resources.role.principal.actions.add-principals');
   }
 }

@@ -21,7 +21,9 @@
             <p>{{hostSet.description}}</p>
           </row.headerCell>
           <row.cell>
-            <Rose::Badge>{{hostSet.type}}</Rose::Badge>
+            <Rose::Badge>
+              {{t (concat 'resources.host-set.types.' hostSet.type)}}
+            </Rose::Badge>
           </row.cell>
           <row.cell>
             <code>{{hostSet.id}}</code>
@@ -34,9 +36,9 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.host-sets-welcome"}} as |message|>
+    <Rose::Message @title={{t "resources.host-set.messages.welcome.title"}} as |message|>
       <message.description>
-        {{t "descriptions.host-sets-welcome"}}
+        {{t "resources.host-set.description"}}
       </message.description>
       <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.new">
         <Rose::Icon @name="plus-circle-outline" />

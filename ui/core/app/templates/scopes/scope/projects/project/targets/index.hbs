@@ -5,8 +5,10 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.targets"}}</h2>
-    <p>{{t "resources.descriptions.targets"}}</p>
+    <h2>{{t "resources.target.title_plural"}}</h2>
+    {{#if @model}}
+      <p>{{t "resources.target.description"}}</p>
+    {{/if}}
   </page.header>
 
   <page.actions>
@@ -44,7 +46,7 @@
               <row.cell>
                 {{#if target.type}}
                   <Rose::Badge>
-                    {{t (concat "target.types." target.type)}}
+                    {{t (concat "resources.target.types." target.type)}}
                   </Rose::Badge>
                 {{/if}}
               </row.cell>
@@ -59,9 +61,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t "titles.targets-welcome"}} as |message|>
+        <Rose::Message @title={{t "resources.target.messages.welcome.title"}} as |message|>
           <message.description>
-            {{t "descriptions.targets-welcome"}}
+            {{t "resources.target.description"}}
           </message.description>
           <message.link @route="scopes.scope.projects.project.targets.new">
             <Rose::Icon @name="plus-circle-outline" />

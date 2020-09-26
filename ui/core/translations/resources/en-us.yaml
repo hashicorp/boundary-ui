@@ -32,7 +32,7 @@ auth-method:
 group:
   title: Group
   title_plural: Groups
-  description: Groups are collections of users. Groups may be assigned to roles, thereby receiving the role's grants.
+  description: Groups are collections of users. Groups may be assigned to roles to receive the role’s grants.
   messages:
     welcome:
       title: Welcome to Groups
@@ -51,6 +51,48 @@ host-catalog:
   messages:
     welcome:
       title: Welcome to Host Catalogs
+  actions:
+    delete: Delete Host Catalog
+  types:
+    static: Static
+host-set:
+  title: Host Set
+  title_plural: Host Sets
+  description: A host set is a collection of hosts within a host catalog.
+  actions:
+    add: Add Host Set
+    create: New Host Set
+    delete: Delete Host Set
+    add-hosts: Add Hosts
+  messages:
+    welcome:
+      title: Welcome to Host Sets
+  host:
+    messages:
+      none:
+        title: Welcome to Hosts
+        description: No hosts available in this host set.
+      add:
+        title: Add Hosts
+        description: Select hosts that belong to this host set.
+  types:
+    static: Static
+host:
+  title: Host
+  title_plural: Hosts
+  description: A host is a resource that may be accessed by a Boundary target.
+  messages:
+    welcome:
+      title: Welcome to Hosts
+    none:
+      title: No Hosts
+      description: No hosts available in this scope.
+  actions:
+    add: Add Host
+    create: New Host
+    delete: Delete Host
+  types:
+    static: Static
 session:
   title: Session
   title_plural: Sessions
@@ -59,34 +101,83 @@ session:
     none:
       title: No Sessions
       description: There are no active sessions within the current scope.
-user: User
-users: Users
-role: Role
-roles: Roles
-orgs: Orgs
-org: Org
-projects: Projects
-project: Project
-host-set: Host Set
-host-sets: Host Sets
-host: Host
-hosts: Hosts
-target: Target
-targets: Targets
-descriptions:
-  user: A User inherits from Principal ("is-a" Principal) allowing it to be associated with zero or more Roles.
-  users: A user is any entity authorized to access Boundary using authentication credentials specific to one of the configured Authentication Methods. A User is owned by one and only one Organization. A User is associated with zero or one Authentication Methods. A User not associated with an Authentication Method can not log in to the system. A User can belong to zero or more Groups. A User is deleted when the Organization it belongs to is deleted. The lifecycle of a User is not tied to the lifecycle of any Authentication Method, Group or Role, but rather to its Organization only.
-  role: A Role can be assigned to zero or more Principals. A Principal assigned a Role receives all capabilities granted by any Direct Grant owned by the Role. A Role is deleted when the Scope it belongs to is deleted. All Direct Grants owned by a Role are deleted when the Role is deleted.
-  roles: A role is a collection of capabilities granted to any Principal the Role is assigned to. A Role belongs to one and only one Scope. A Role owns zero or more Direct Grants. The lifecycle of a Role is not tied to the lifecycle of any Principal.
-  grants: A grant represents a set of capabilities granted to a role. It couples a set of Actions to either a set of Resource Types or an individual Resource. A Direct Grant belongs exclusively to one and only one Role. However, equivalent Direct Grants may exist across different Roles. A Direct Grant references one or more Actions and either one or more Resource types or one specific Resource. A Direct Grant is deleted when the Role it belongs to is deleted. A Direct Grant is also deleted if it is associated with a specific Resource and that Resource itself is deleted. The lifecycle of a Direct Grant is not tied to the lifecycle of any Action or Resource Type.
-  principals: A principal is any entity which can be assigned capabilities. Principal is abstract. User, Group, and Project are concrete Principals. A Principal can be assigned to zero or more Roles.
-  org: When an Organization is deleted, all resources owned by it are also deleted.
-  orgs: An Organization is a top-level container, and owns zero to many Projects and zero to many Authentication Methods. An Organization inherits from Scope ("is-a" Scope) allowing it to own zero to many Groups, Roles, Targets, or Host Catalogs. The lifecycle of an Organization is not tied to anything else. A Role at the Organization level can grant permissions at the Project level.
-  project: When a Project is deleted, all resources owned by it are also deleted. The lifecycle of a Project is not tied to any resource it contains.
-  projects: A project is a child scope of an organization and is owned by an Organization. A Project inherits from Scope ("is-a" Scope) allowing it to own zero to many Groups, Roles, Targets, or Host Catalogs. A Project also inherits from Principal ("is-a" Principal) allowing it to be associated with zero or more Roles. A Project has no additional relationships beyond those defined in Scope and Principal. A Project is deleted when the Organization it belongs to is deleted.
-  host-set: Host Set is abstract. A Host Set is deleted when the Host Catalog it belongs to is deleted.
-  host-sets: A host set is a resource which provides a subset of Hosts from the set of Hosts of the Host Catalog it belongs to. A Host Set belongs to one and only one Host Catalog. A Host Set can contain zero or more Hosts. A Host Set can be contained by zero or more Targets. The lifecycle of a Host Set is not tied to the lifecycle of any Targets or Hosts.
-  host: Host is abstract. A Host is deleted when the Host Catalog it belongs to is deleted.
-  hosts: A host is a computing element with a network address reachable from Boundary. A Host belongs to one and only one Host Catalog. A Host can be contained by zero or more Host Sets. The lifecycle of a Host is not tied to the lifecycle of any Host Sets.
-  target: Target is abstract. A Target is deleted when the Scope it belongs to is deleted.
-  targets: A target is a networked service a User can connect to and interact with through Boundary. A Target does not directly contain any secrets. A Target contains a collection of Hosts. A Target belongs to one and only one Scope. A Target can contain zero or more Host Sets. The lifecycle of a Target is not tied to the lifecycle of any Host Set.
+org:
+  title: Organization
+  title_plural: Organizations
+  description: An organization is a type of scope used to organize projects and IAM resources.  Organizations contain projects and is a child scope of global.
+  messages:
+    welcome:
+      title: Welcome to Organizations
+project:
+  title: Project
+  title_plural: Projects
+  description: A project is a type of scope used to organize resources such as by targets and host catalogs.
+  messages:
+    welcome:
+      title: Welcome to Projects
+user:
+  title: User
+  title_plural: Users
+  description: Users are entities authorized to access Boundary.  Users may be assigned to roles as principals, thus receiving role grants.
+  messages:
+    welcome:
+      title: Welcome to Users
+role:
+  title: Role
+  title_plural: Roles
+  description: Roles are collections of capability grants and the principals (users and groups) assigned to them.
+  messages:
+    welcome:
+      title: Welcome to Roles
+  actions:
+    create: Create Role
+    delete: Delete Role
+  principal:
+    title: Principal
+    title_plural: Principals
+    description: Principals are the users and groups assigned to a role and bounded by a role’s grants.
+    messages:
+      welcome:
+        title: Welcome to Principals
+        description: Principals are not assigned in this role.
+      none:
+        title: No Principals Available
+        description: Principals are not available for assignment.
+      add-principals:
+        title: Add Principals
+        description: Select users and groups to assign to this role.
+    types:
+      user: User
+      group: Group
+    actions:
+      add-principals: Add Principals
+  grant:
+    title: Grant
+    title_plural: Grants
+    description: Grants are permissions which allow roles to take actions and access resources.
+    actions:
+      create: New Grant
+target:
+  title: Target
+  title_plural: Targets
+  description: A target is a logical collection of host sets which may be used to initiate sessions.
+  messages:
+    welcome:
+      title: Welcome to Targets
+  actions:
+    create: New Target
+    delete: Delete Target
+    add-host-sets: Add Host Sets
+  types:
+    tcp: TCP
+  host-set:
+    messages:
+      welcome:
+        title: Welcome to Host Sets
+        description: No hosts sets in this target.
+      none:
+        title: No Host Sets Available
+        description: No hosts sets available to add to target.
+      add:
+        title: Add Host Sets
+        description: Select host sets to assign to this target.

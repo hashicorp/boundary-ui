@@ -5,15 +5,6 @@ auth:
     no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
     choose-org: Choose a scope to authenticate.
     authenticating-with-org: "You're authenticating with {name}."
-host-set:
-  types:
-    static: Static
-target:
-  types:
-    tcp: TCP
-host:
-  types:
-    static: Static
 titles:
   iam: IAM
   new: New
@@ -23,39 +14,7 @@ titles:
   overview: Overview
   settings: Settings
   empty-set: No Items Yet
-  orgs-welcome: Welcome to Orgs
-  projects-welcome: Welcome to Projects
-  host-sets-welcome: Welcome to Host Sets
-  hosts-welcome: Welcome to Hosts
-  users-welcome: Welcome to Users
-  roles-welcome: Welcome to Roles
-  targets-welcome: Create your first Target
-  target-host-sets-welcome: No Host Sets Associated
-  grants: Permissions
-  new-grant: New Grant
-  principals: Principals
-  host-sets: Host Sets
-  hosts: Hosts
-  targets: Targets
   global: Global
-  no-host-set-hosts: No Hosts Available
-  no-host-sets-for-target: No Host Sets Available
-  role-principals-welcome: No Principals Associated
-  no-principals-available: No Principals Available
-  no-available-users: No Users Available
   actions: Actions
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
-  orgs-welcome: Create your orgs here.
-  projects-welcome: Projects allow you to create and manage host catalogs. To start, create a project.
-  host-sets-welcome: Configure a static host set in this host catalog.
-  hosts-welcome: Configure a static host in this host catalog.
-  users-welcome: Users are authorized to access Boundary.
-  roles-welcome: Roles are collections of capabilities that can be granted to user and/or groups.
-  targets-welcome: Targets provide Users the means to connect to and interact networked services. A Target contains a collection of Hosts and a collection of Credentials.
-  target-host-sets-welcome: Add Host Sets to this target to provide access.
-  no-host-set-hosts: Before associating hosts with this host set, create hosts within the host catalog.
-  no-host-sets-for-target: No host sets are available to add to this target.
-  role-principals-welcome: No principals are available in this role.
-  no-principals-available: Principals are not available for assignment.
-  no-available-users: No users are available to add to this group.
