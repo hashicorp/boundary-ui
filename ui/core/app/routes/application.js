@@ -5,6 +5,7 @@ import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { later } from '@ember/runloop';
+import loading from 'ember-loading/decorator';
 
 /**
  * Entry route for the application.
@@ -61,10 +62,22 @@ export default class ApplicationRoute extends Route.extend(
   }
 
   /**
+   * Hooks into ember-loading to kick off loading indicator in the
+   * application template.
+   * @return {boolean} always returns true
+   */
+  @action
+  @loading
+  loading() {
+    return true;
+  }
+
+  /**
    * Invalidates the session if a 401 error occurs and returns false to
    * prevent further error handling.
    * Returns true in all other cases, allowing error handling to occur (such
    * as displaying the `error.hbs` template, if one exists).
+   * @param {Error} e
    */
   @action
   error(e) {

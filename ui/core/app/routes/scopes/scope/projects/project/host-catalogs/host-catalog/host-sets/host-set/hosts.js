@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { hash, all } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHostSetHostsRoute extends Route {
   // =services
@@ -35,6 +36,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    * @param {HostModel} host
    */
   @action
+  @loading
   async removeHost(hostSet, host) {
     try {
       const scopeID = this.modelFor('scopes.scope.projects.project').id;

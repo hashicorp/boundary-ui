@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeRolesRoute extends Route {
   // =services
@@ -44,6 +45,7 @@ export default class ScopesScopeRolesRoute extends Route {
    * @param {RoleModel} role
    */
   @action
+  @loading
   async save(role) {
     const { isNew } = role;
     try {
@@ -64,6 +66,7 @@ export default class ScopesScopeRolesRoute extends Route {
    * @param {RoleModel} role
    */
   @action
+  @loading
   async delete(role) {
     try {
       await role.destroyRecord();

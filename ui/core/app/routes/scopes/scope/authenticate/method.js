@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeAuthenticateMethodRoute extends Route {
   // =services
@@ -38,6 +39,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
    * If authentication fails, notifies with an alert.
    */
   @action
+  @loading
   async authenticate(creds) {
     this.resetCredentials();
     const authenticatorName = 'authenticator:password';
