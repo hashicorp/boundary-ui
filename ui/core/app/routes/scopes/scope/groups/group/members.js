@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { hash, all } from 'rsvp';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeGroupsGroupMembersRoute extends Route {
   // =services
@@ -36,6 +37,7 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
    * @param {UserModel} member
    */
   @action
+  @loading
   async removeMember(group, member) {
     try {
       await group.removeMember(member.id);

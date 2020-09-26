@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeGroupsRoute extends Route {
   // =services
@@ -44,6 +45,7 @@ export default class ScopesScopeGroupsRoute extends Route {
    * @param {GroupModel} group
    */
   @action
+  @loading
   async save(group) {
     const { isNew } = group;
     try {
@@ -64,6 +66,7 @@ export default class ScopesScopeGroupsRoute extends Route {
    * @param {GroupModel} group
    */
   @action
+  @loading
   async delete(group) {
     try {
       await group.destroyRecord();

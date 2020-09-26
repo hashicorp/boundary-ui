@@ -40,3 +40,28 @@
     }
   }
 }
+
+.rose-header {
+  position: relative;
+
+  &.loading {
+    &::after {
+      content: " ";
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 3px;
+
+      background: repeating-linear-gradient(to right, #fff, #fff, var(--info), #fff, #fff);
+      background-size: 200% auto;
+      background-position: 0 100%;
+      animation: gradient 1s linear infinite;
+
+      @keyframes gradient {
+        0%   { background-position: 0 0; }
+        100% { background-position: -200% 0; }
+      }
+    }
+  }
+}

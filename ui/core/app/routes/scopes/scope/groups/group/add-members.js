@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =services
@@ -63,6 +64,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
    * @param {[string]} userIDs
    */
   @action
+  @loading
   async addMembers(group, userIDs) {
     try {
       await group.addMembers(userIDs);

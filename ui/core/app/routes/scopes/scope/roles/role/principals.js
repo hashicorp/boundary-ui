@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { all } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   // =services
@@ -60,6 +61,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
    * @param {UserModel, GroupModel} principal
    */
   @action
+  @loading
   async removePrincipal(principal) {
     try {
       const role = this.modelFor('scopes.scope.roles.role');

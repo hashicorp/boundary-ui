@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeOrgsRoute extends Route {
   // =services
@@ -48,6 +49,7 @@ export default class ScopesScopeOrgsRoute extends Route {
    * @param {Event} e
    */
   @action
+  @loading
   async save(org) {
     const { isNew } = org;
     try {

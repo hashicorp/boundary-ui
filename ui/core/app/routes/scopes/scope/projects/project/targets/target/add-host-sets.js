@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { all } from 'rsvp';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute extends Route {
   // =services
@@ -70,6 +71,7 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsRoute ext
   // =actions
 
   @action
+  @loading
   async save(target, hostSetIDs) {
     try {
       await target.addHostSets(hostSetIDs);

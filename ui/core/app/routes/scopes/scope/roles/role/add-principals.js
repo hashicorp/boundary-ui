@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
+import loading from 'ember-loading/decorator';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
@@ -57,6 +58,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    * @param {[string]} principalIDs
    */
   @action
+  @loading
   async addPrincipals(role, principalIDs) {
     try {
       await role.addPrincipals(principalIDs);
