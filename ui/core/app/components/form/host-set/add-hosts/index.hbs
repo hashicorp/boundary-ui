@@ -43,9 +43,9 @@
 
 {{#unless this.hasAvailableHosts}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.no-host-set-hosts"}} as |message|>
+    <Rose::Message @title={{t "resources.host-set.host.messages.add.title"}} as |message|>
       <message.description>
-        {{t "descriptions.no-host-set-hosts"}}
+        {{t "resources.host-set.host.messages.add.description"}}
       </message.description>
       <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts">
         <Rose::Icon @name="chevron-left" />

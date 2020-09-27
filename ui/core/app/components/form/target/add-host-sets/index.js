@@ -12,6 +12,16 @@ export default class FormTargetAddHostSetsComponent extends Component {
   selectedHostSetIDs = A();
 
   /**
+   * Checks for unassigned hostsets.
+   * @param {[HostSetModel]} filteredHostSets
+   * @type {boolean}
+   */
+  @computed('filteredHostSets')
+  get hasAvailableHostSets() {
+    return this.filteredHostSets.length > 0;
+  }
+
+  /**
    * Host sets not already added to the target.
    * @type {[HostSetModel]}
    */

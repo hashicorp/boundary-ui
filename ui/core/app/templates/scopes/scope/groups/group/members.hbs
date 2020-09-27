@@ -1,4 +1,4 @@
-{{title (t 'titles.members')}}
+{{title (t 'resources.group.messages.members.title')}}
 
 {{#if @model.members}}
 
@@ -43,9 +43,9 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.group-members-welcome"}} as |message|>
+    <Rose::Message @title={{t "resources.group.messages.members.title"}} as |message|>
       <message.description>
-        {{t "descriptions.group-members-welcome"}}
+        {{t "resources.group.messages.members.description"}}
       </message.description>
     </Rose::Message>
   </Rose::Layout::Centered>
