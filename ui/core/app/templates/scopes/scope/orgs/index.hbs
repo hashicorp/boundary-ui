@@ -5,8 +5,10 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.orgs"}}</h2>
-    <p>{{t "resources.descriptions.orgs"}}</p>
+    <h2>{{t "resources.org.title_plural"}}</h2>
+    {{#if @model}}
+      <p>{{t "resources.org.description"}}</p>
+    {{/if}}
   </page.header>
 
   <page.actions>
@@ -39,9 +41,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.orgs-welcome'}} as |message|>
+        <Rose::Message @title={{t 'resources.org.messages.welcome.title'}} as |message|>
           <message.description>
-            {{t 'descriptions.orgs-welcome'}}
+            {{t 'resources.org.description'}}
           </message.description>
           <message.link @route="scopes.scope.orgs.new">
             <Rose::Icon @name="plus-circle-outline" />

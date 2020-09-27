@@ -12,6 +12,6 @@ export default class ScopesScopeProjectsProjectTargetsTargetAddHostSetsControlle
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('actions.add-host-sets');
+    return this.intl.t('resources.target.actions.add-host-sets');
   }
 }

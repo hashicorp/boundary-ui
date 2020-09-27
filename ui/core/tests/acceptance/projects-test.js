@@ -117,6 +117,7 @@ module('Acceptance | projects', function (hooks) {
     assert.expect(3);
     assert.notEqual(existingProject.name, 'random string');
     await visit(existingProjectURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), existingProjectURL);
@@ -126,6 +127,7 @@ module('Acceptance | projects', function (hooks) {
   test('can cancel changes to existing project', async function (assert) {
     assert.expect(2);
     await visit(existingProjectURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(existingProject.name, 'random string');
@@ -161,6 +163,7 @@ module('Acceptance | projects', function (hooks) {
       );
     });
     await visit(existingProjectURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
@@ -172,29 +175,6 @@ module('Acceptance | projects', function (hooks) {
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'
-    );
-  });
-
-  test('errors are displayed when save project fails', async function (assert) {
-    assert.expect(1);
-    this.server.patch('/scopes/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(existingProjectURL);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
     );
   });
 

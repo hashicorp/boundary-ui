@@ -5,8 +5,8 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.groups"}}</h2>
-    <p>{{t "resources.descriptions.groups"}}</p>
+    <h2>{{t "resources.group.title_plural"}}</h2>
+    <p>{{t "resources.group.description"}}</p>
   </page.header>
 
   <page.actions>
@@ -49,9 +49,9 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.groups-welcome'}} as |message|>
+        <Rose::Message @title={{t 'resources.group.messages.welcome.title'}} as |message|>
           <message.description>
-            {{t 'descriptions.groups-welcome'}}
+            {{t 'resources.group.description'}}
           </message.description>
           <message.link @route="scopes.scope.groups.new">
             <Rose::Icon @name="plus-circle-outline" />

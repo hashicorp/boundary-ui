@@ -13,6 +13,6 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('actions.add-members');
+    return this.intl.t('resources.group.messages.add-members.title');
   }
 }

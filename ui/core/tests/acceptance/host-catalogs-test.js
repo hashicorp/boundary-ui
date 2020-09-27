@@ -84,6 +84,7 @@ module('Acceptance | host catalogs', function (hooks) {
   test('can update host catalog and save changes', async function (assert) {
     assert.expect(1);
     await visit(urls.hostCatalog);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Test Name');
     await click('form [type="submit"]:not(:disabled)');
     assert.equal(this.server.db.hostCatalogs[0].name, 'Test Name');
@@ -92,6 +93,7 @@ module('Acceptance | host catalogs', function (hooks) {
   test('can update host catalog and cancel changes', async function (assert) {
     assert.expect(1);
     await visit(urls.hostCatalog);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Test Name');
     await click('form button:not([type="submit"])');
     assert.notEqual(this.server.db.hostCatalogs[0].name, 'Test Name');
@@ -113,30 +115,6 @@ module('Acceptance | host catalogs', function (hooks) {
     await fillIn('[name="name"]', 'Test Name');
     await click('form button:not([type="submit"])');
     assert.equal(this.server.db.hostCatalogs.length, hostCatalogsCount);
-  });
-
-  test('errors are displayed when save host catalog fails', async function (assert) {
-    assert.expect(1);
-    this.server.patch('/host-catalogs/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(urls.hostCatalog);
-    await fillIn('[name="name"]', 'random string');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
-    );
   });
 
   test('errors are displayed when delete host catalog fails', async function (assert) {
@@ -221,6 +199,7 @@ module('Acceptance | host catalogs', function (hooks) {
       );
     });
     await visit(urls.hostCatalog);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('form [type="submit"]');
     await a11yAudit();
