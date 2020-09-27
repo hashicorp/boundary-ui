@@ -8,6 +8,6 @@ module('Integration | Helper | app-name', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`{{app-name}}`);
-    assert.equal(this.element.textContent.trim(), 'Application Name');
+    assert.equal(this.element.textContent.trim(), 'Boundary');
   });
 });
