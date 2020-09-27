@@ -1,7 +1,22 @@
 @use 'rose/variables/sizing';
+@use 'rose/variables/media';
 
 @import 'rose';
 @import 'notify';
+
+.rose-layout-centered {
+  > .rose-layout-page {
+    width: sizing.rems(l) * 18;
+  }
+
+  @media (max-width: media.width(small)) {
+    display: block;
+
+    > .rose-layout-page {
+      width: auto;
+    }
+  }
+}
 
 .rose-nav-sidebar {
   margin-bottom: sizing.rems(l);
