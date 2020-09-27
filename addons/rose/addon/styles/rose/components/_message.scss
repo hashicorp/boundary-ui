@@ -10,6 +10,10 @@
   width: sizing.rems(l) * 15; //16 rems/320 px
   margin-bottom: sizing.rems(l);
 
+  @media (max-width: media.width(small)) {
+    width: auto;
+  }
+
   // Icons always need tweaking
   .rose-icon {
     --size: #{sizing.rems(m)};
