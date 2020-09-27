@@ -92,6 +92,7 @@ module('Acceptance | targets', function (hooks) {
   test('can update a target and save changes', async function (assert) {
     assert.expect(2);
     await visit(urls.target);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await fillIn('[name="default_port"]', '1234');
     await click('form [type="submit"]:not(:disabled)');
@@ -102,6 +103,7 @@ module('Acceptance | targets', function (hooks) {
   test('can update a target and cancel changes', async function (assert) {
     assert.expect(2);
     await visit(urls.target);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await fillIn('[name="default_port"]', '1234');
     await click('form button:not([type="submit"])');
@@ -167,26 +169,6 @@ module('Acceptance | targets', function (hooks) {
     assert.ok(find('.rose-form-error-message'));
   });
 
-  test('errors are displayed when save on target fails', async function (assert) {
-    assert.expect(1);
-    this.server.patch('/targets/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(urls.target);
-    await fillIn('[name="name"]', 'save target');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
-  });
-
   test('errors are displayed when delete on a target fails', async function (assert) {
     assert.expect(1);
     this.server.del('/targets/:id', () => {
@@ -228,6 +210,7 @@ module('Acceptance | targets', function (hooks) {
       );
     });
     await visit(urls.target);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'existing target');
     await click('form [type="submit"]');
     await a11yAudit();
@@ -245,7 +228,7 @@ module('Acceptance | targets', function (hooks) {
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
   });
 
-  test('can delete a host sets', async function (assert) {
+  test('can remove a host sets', async function (assert) {
     assert.expect(2);
     const targetHostSetCount = instances.target.hostSets.length;
     await visit(urls.targetHostSets);

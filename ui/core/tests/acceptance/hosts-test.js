@@ -73,6 +73,7 @@ module('Acceptance | hosts', function (hooks) {
   test('can update a host and save changes', async function (assert) {
     assert.expect(4);
     await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated name');
     await fillIn('[name="description"]', 'Updated description');
     await fillIn('[name="address"]', '::1');
@@ -86,6 +87,7 @@ module('Acceptance | hosts', function (hooks) {
   test('can update a host and cancel changes', async function (assert) {
     assert.expect(1);
     await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated name');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(find('[name="name"]').value, 'Updated name');
@@ -122,31 +124,12 @@ module('Acceptance | hosts', function (hooks) {
       );
     });
     await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'existing host');
     await click('[type="submit"]');
     await a11yAudit();
     assert.ok(find('[role="alert"]'));
     assert.ok(find('.rose-form-error-message'));
-  });
-
-  test('errors are displayed when save on host fails', async function (assert) {
-    assert.expect(1);
-    this.server.patch('/hosts/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(urls.host);
-    await fillIn('[name="name"]', 'save host');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
   });
 
   test('errors are displayed when delete on a host fails', async function (assert) {

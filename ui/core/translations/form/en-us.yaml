@@ -21,6 +21,7 @@ address:
   help: An IP, host name, or other routable address
 default_port:
   label: Default Port
+  help: The default port on which to connect
 current_password:
   label: Current Password
 new_password:

@@ -3,6 +3,7 @@
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
 
@@ -17,6 +18,7 @@
     @type="name"
     @value={{@model.name}}
     @label={{t "form.name.label"}}
+    @helperText={{t "form.name.help"}}
     @error={{@model.errors.name}}
     readonly={{false}}
   as |field|>
@@ -34,6 +36,7 @@
     @type="description"
     @value={{@model.description}}
     @label={{t "form.description.label"}}
+    @helperText={{t "form.description.help"}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
     readonly={{false}}
@@ -49,6 +52,7 @@
 
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
+    @enableEditText={{t "actions.edit-form"}}
     @submitText={{t "actions.save"}}
     @cancelText={{t "actions.cancel"}} />
 

@@ -73,6 +73,7 @@ module('Acceptance | host sets', function (hooks) {
   test('can update a host set and save changes', async function (assert) {
     assert.expect(3);
     await visit(urls.hostSet);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated name');
     await fillIn('[name="description"]', 'Updated description');
     await click('.rose-form-actions [type="submit"]');
@@ -84,6 +85,7 @@ module('Acceptance | host sets', function (hooks) {
   test('can update a host set and cancel changes', async function (assert) {
     assert.expect(1);
     await visit(urls.hostSet);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated name');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(find('[name="name"]').value, 'Updated name');
@@ -120,31 +122,12 @@ module('Acceptance | host sets', function (hooks) {
       );
     });
     await visit(urls.hostSet);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'existing host');
     await click('[type="submit"]');
     await a11yAudit();
     assert.ok(find('[role="alert"]'));
     assert.ok(find('.rose-form-error-message'));
-  });
-
-  test('errors are displayed when save on host set fails', async function (assert) {
-    assert.expect(1);
-    this.server.patch('/host-sets/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(urls.hostSet);
-    await fillIn('[name="name"]', 'save host');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
   });
 
   test('errors are displayed when delete on a host set fails', async function (assert) {

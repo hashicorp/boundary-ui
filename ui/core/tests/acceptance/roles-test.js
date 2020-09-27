@@ -62,6 +62,7 @@ module('Acceptance | roles', function (hooks) {
   test('can save changes to an existing role', async function (assert) {
     assert.expect(2);
     await visit(urls.role);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), urls.role);
@@ -71,6 +72,7 @@ module('Acceptance | roles', function (hooks) {
   test('can cancel changes to an existing role', async function (assert) {
     assert.expect(1);
     await visit(urls.role);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(find('[name="name"]').value, 'Updated admin role');
@@ -154,6 +156,7 @@ module('Acceptance | roles', function (hooks) {
       );
     });
     await visit(urls.role);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
@@ -165,29 +168,6 @@ module('Acceptance | roles', function (hooks) {
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'
-    );
-  });
-
-  test('errors are displayed when save project fails', async function (assert) {
-    assert.expect(1);
-    this.server.patch('/roles/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(urls.role);
-    await fillIn('[name="name"]', 'Role name');
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
     );
   });
 
