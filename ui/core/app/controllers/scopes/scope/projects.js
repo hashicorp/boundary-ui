@@ -12,6 +12,6 @@ export default class ScopesScopeProjectsController extends Controller {
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.projects');
+    return this.intl.t('resources.project.title_plural');
   }
 }

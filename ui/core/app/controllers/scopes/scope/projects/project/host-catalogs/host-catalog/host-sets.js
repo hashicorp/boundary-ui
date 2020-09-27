@@ -13,6 +13,6 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsCo
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.host-sets');
+    return this.intl.t('resources.host-set.title_plural');
   }
 }

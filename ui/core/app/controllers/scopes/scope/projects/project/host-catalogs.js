@@ -12,6 +12,6 @@ export default class ScopesScopeProjectsProjectHostCatalogsController extends Co
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.host-catalogs');
+    return this.intl.t('resources.host-catalog.title_plural');
   }
 }

@@ -31,7 +31,7 @@
             </row.cell>
             <row.cell>{{principal.name}}</row.cell>
             <row.cell>
-              <Rose::Badge>{{t (concat 'resources.' principal.constructor.modelName)}}</Rose::Badge>
+              <Rose::Badge>{{t (concat 'resources.role.principal.types.' principal.constructor.modelName)}}</Rose::Badge>
             </row.cell>
           </body.row>
         {{/each}}
@@ -43,9 +43,9 @@
 
 {{#unless this.hasAvailablePrincipals}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "titles.no-principals-available"}} as |message|>
+    <Rose::Message @title={{t "resources.role.principal.messages.none.title"}} as |message|>
       <message.description>
-        {{t "descriptions.no-principals-available"}}
+        {{t "resources.role.principal.messages.none.description"}}
       </message.description>
       <message.link @route="scopes.scope.roles.role.principals">
         <Rose::Icon @name="chevron-left" />
