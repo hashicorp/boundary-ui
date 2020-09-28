@@ -13,6 +13,7 @@ login_name:
   label: Username
   help: The username for the account
 set_password:
+  label: Password
   help: Create a new password for the account
 password:
   label: Password
