@@ -33,4 +33,12 @@ export default class ScopesScopeRoute extends Route {
       );
     });
   }
+
+  /**
+   * Set scope in application controller
+   */
+  afterModel() {
+    const scope = this.modelFor('scopes.scope');
+    this.controllerFor('application').set('scope', scope);
+  }
 }

@@ -7,6 +7,12 @@
     <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
       <header.brand @logo="logo-boundary" @text={{app-name}} />
       {{#if this.session.isAuthenticated}}
+        <header.nav as |nav|>
+          {{#if this.scope.isOrg}}
+            <nav.link @route="scopes.scope" @model={{this.scope}}>{{this.scope.displayName}}</nav.link>
+          {{/if}}
+        </header.nav>
+
         <header.utilities as |utilities|>
           <utilities.dropdown
             @text="user@example.net"
