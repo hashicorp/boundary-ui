@@ -12,12 +12,11 @@ type:
 login_name:
   label: Username
   help: The username for the account
-  password:
-    help: The password for the account
-  set_password:
-    help: Create a new password for the account
+set_password:
+  help: Create a new password for the account
 password:
   label: Password
+  help: The password for the account
 grant:
   label: Grant
   help: A permissions grant string for a role
