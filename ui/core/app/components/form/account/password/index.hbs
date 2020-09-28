@@ -55,6 +55,7 @@
     @value={{@model.attributes.login_name}}
     @label={{t "form.login_name.label"}}
     @error={{@model.errors.name}}
+    @helperText={{t "form.login_name.help"}}
     readonly={{false}}
   as |field|>
     {{#if @model.errors.name}}
@@ -73,6 +74,7 @@
       @value={{this.password}}
       @label={{t "form.password.label"}}
       @error={{@model.errors.name}}
+      @helperText={{t "form.login_name.password.help"}}
       readonly={{false}}
       autocomplete="new-password"
     as |field|>

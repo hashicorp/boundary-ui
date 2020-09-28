@@ -11,6 +11,11 @@ type:
   help: The type of the resource, to help differentiate schemas
 login_name:
   label: Username
+  help: The username for the account
+  password:
+    help: The password for the account
+  set_password:
+    help: Create a new password for the account
 password:
   label: Password
 grant:
