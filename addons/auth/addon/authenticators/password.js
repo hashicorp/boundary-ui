@@ -46,8 +46,17 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   async restore(data) {
     if (!data) return reject();
     const tokenID = data.id;
+    const token = data.token;
     const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
-    const response = await fetch(tokenValidationURL, { method: 'get' });
+    const response = await fetch(tokenValidationURL, {
+      method: 'get',
+      headers: {
+        // TODO:  this is temporary to get the call working, but generating
+        // the auth header originated in the application authenticator.
+        // It should probably be factored out into a method on the base.
+        'Authorization': `Bearer ${token}`
+      }
+    });
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
     switch (response.status) {
