@@ -9,6 +9,10 @@
   {{!--
     Only show the edit toggle button if the toggle is enabled in the first place
     AND the form is not already in editable mode.
+
+    The cancel button's disabled state depends on the mode.  In edit mode,
+    the cancel button is only disabled if the disabled argument is true,
+    otherwise it is disabled based on the computed property this.disabled.
   --}}
   {{yield (hash
     radioGroup=(component 'rose/form/radio/group' disabled=this.disabled)
@@ -22,7 +26,7 @@
         'rose/form/actions'
       )
       submitDisabled=this.disabled
-      cancelDisabled=(if @showEditToggle false this.disabled)
+      cancelDisabled=(if @showEditToggle @disabled this.disabled)
       cancel=this.handleCancel
       enableEdit=this.enableEdit
     )
