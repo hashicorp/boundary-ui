@@ -53,13 +53,14 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
         'scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host',
         host
       );
-      await this.refresh();
+      this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 

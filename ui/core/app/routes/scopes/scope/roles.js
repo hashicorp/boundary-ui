@@ -50,14 +50,15 @@ export default class ScopesScopeRolesRoute extends Route {
     const { isNew } = role;
     try {
       await role.save();
+      await this.transitionTo('scopes.scope.roles.role', role);
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
-      this.transitionTo('scopes.scope.roles.role', role);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 
