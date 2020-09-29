@@ -54,12 +54,13 @@
     @type="text"
     @value={{@model.attributes.login_name}}
     @label={{t "form.login_name.label"}}
-    @error={{@model.errors.name}}
+    @error={{@model.errors.login_name}}
+    @helperText={{t "form.login_name.help"}}
     readonly={{false}}
   as |field|>
-    {{#if @model.errors.name}}
+    {{#if @model.errors.login_name}}
       <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
+        {{#each @model.errors.login_name as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -72,13 +73,14 @@
       @type="password"
       @value={{this.password}}
       @label={{t "form.password.label"}}
-      @error={{@model.errors.name}}
+      @error={{@model.errors.password}}
+      @helperText={{t "form.password.help"}}
       readonly={{false}}
       autocomplete="new-password"
     as |field|>
-      {{#if @model.errors.name}}
+      {{#if @model.errors.password}}
         <field.errors as |errors|>
-          {{#each @model.errors.name as |error|}}
+          {{#each @model.errors.password as |error|}}
             <errors.message>{{error.message}}</errors.message>
           {{/each}}
         </field.errors>
