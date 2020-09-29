@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { later } from '@ember/runloop';
 import loading from 'ember-loading/decorator';
+import { A } from '@ember/array';
 
 /**
  * Entry route for the application.
@@ -81,7 +82,7 @@ export default class ApplicationRoute extends Route.extend(
    */
   @action
   error(e) {
-    const isUnauthenticated = e?.errors[0]?.isUnauthenticated;
+    const isUnauthenticated = A(e?.errors)?.firstObject?.isUnauthenticated;
     if (isUnauthenticated) {
       this.session.invalidate();
       return false;
