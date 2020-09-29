@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { all } from 'rsvp';
+import { all, hash } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
@@ -37,7 +37,10 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
           model,
         }))
       );
-    return all(users.concat(groups));
+    return hash({
+      role,
+      principals: all(users.concat(groups)),
+    });
   }
 
   /**
