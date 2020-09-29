@@ -28,3 +28,4 @@ add-hosts: Add Hosts
 set-password: Set Password
 change-password: Change Password
 edit-form: Edit Form
+copy: Copy
