@@ -10,14 +10,15 @@
     @name="password"
     @type="password"
     @value={{this.password}}
-    @label={{t "form.password.label"}}
-    @error={{@model.errors.name}}
+    @label={{t "form.set_password.label"}}
+    @error={{@model.errors.password}}
+    @helperText={{t "form.set_password.help"}}
     readonly={{false}}
     autocomplete="new-password"
   as |field|>
-    {{#if @model.errors.name}}
+    {{#if @model.errors.password}}
       <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
+        {{#each @model.errors.password as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
