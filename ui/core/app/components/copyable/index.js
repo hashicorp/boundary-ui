@@ -7,12 +7,11 @@ import { task, timeout } from 'ember-concurrency';
 import { set } from '@ember/object';
 import { bind } from '@ember/runloop';
 
-export default class CopyButtonComponent extends Component {
+export default class CopyableComponent extends Component {
 
   // =attributes
 
   id = generateComponentID();
-  targetId = `copy-target-${this.id}`;
   icon = 'copy-action';
 
   @tracked clipboard;
@@ -40,7 +39,7 @@ export default class CopyButtonComponent extends Component {
    * @return {boolean}
    */
   get isClipboardLibrarySupported() {
-    return ClipboardJS?.isSupported();
+    return ClipboardJS.isSupported();
   }
 
   /**
@@ -59,7 +58,7 @@ export default class CopyButtonComponent extends Component {
   @action
   register() {
     if(!this.clipboard) {
-      this.clipboard = new ClipboardJS('.copy-button');
+      this.clipboard = new ClipboardJS('.copyable-button');
       this.clipboard.on('success', bind(this, this.onCopySuccess));
     }
   }
