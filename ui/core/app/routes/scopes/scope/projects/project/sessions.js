@@ -45,8 +45,12 @@ export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
     return all(
       sessions.map(session => hash({
         session,
-        user: this.store.findRecord('user', session.user_id),
-        target: this.store.findRecord('target', session.target_id),
+        user: session.user_id
+          ? this.store.findRecord('user', session.user_id)
+          : null,
+        target: session.target_id
+          ? this.store.findRecord('target', session.target_id)
+          : null,
       }))
     );
   }
