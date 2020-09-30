@@ -32,6 +32,6 @@ export default class FormAccountPasswordIndexComponent extends Component {
   submit(fn) {
     const password = this.password;
     next(() => this.resetPassword());
-    this.args.model.isNew ? fn(password) : fn();
+    return this.args.model.isNew ? fn(password) : fn();
   }
 }

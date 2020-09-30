@@ -54,14 +54,15 @@ export default class ScopesScopeOrgsRoute extends Route {
     const { isNew } = org;
     try {
       await org.save();
+      await this.transitionTo('scopes.scope', org);
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
-      this.transitionTo('scopes.scope', org);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 }
