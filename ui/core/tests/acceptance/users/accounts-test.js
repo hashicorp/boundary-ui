@@ -41,7 +41,7 @@ module('Acceptance | users | accounts', function (hooks) {
     this.server.create('auth-method', {
       scope: instances.scopes.org
     }, 'withAccountsAndUsers');
-    instances.user = this.server.db.users[0];
+    instances.user = this.server.schema.users.all().models[0];
     accountsCount = instances.user.accountIds.length;
     urls.users = `/scopes/${instances.scopes.org.id}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
@@ -85,58 +85,58 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.ok(find('[role="alert"]'));
   });
 
-  // test('visiting account add accounts', async function(assert) {
-  //   assert.expect(1);
-  //   await visit(urls.addAccounts);
-  //   await a11yAudit();
-  //   assert.equal(currentURL(), urls.addAccounts);
-  // });
-  //
-  // test('select and save accounts to add', async function (assert) {
-  //   assert.expect(3);
-  //   instances.user.update({ accountIds: [] });
-  //   await visit(urls.accounts);
-  //   assert.equal(findAll('tbody tr').length, 0);
-  //   await click('.rose-layout-page-actions a')
-  //   assert.equal(currentURL(), urls.addAccounts);
-  //   await click('tbody label');
-  //   await click('form [type="submit"]');
-  //   await visit(urls.accounts);
-  //   assert.equal(findAll('tbody tr').length, 1);
-  // });
-  //
-  // test('select and cancel accounts to add', async function (assert) {
-  //   assert.expect(4);
-  //   await visit(urls.accounts);
-  //   assert.equal(findAll('tbody tr').length, accountsCount);
-  //   await click('tbody tr .rose-dropdown-button-danger');
-  //   assert.equal(findAll('tbody tr').length, accountsCount - 1);
-  //   await click('.rose-layout-page-actions a')
-  //   assert.equal(currentURL(), urls.addAccounts);
-  //   await click('tbody label');
-  //   await click('form [type="button"]');
-  //   await visit(urls.accounts);
-  //   assert.equal(findAll('tbody tr').length, accountsCount - 1);
-  // });
-  //
-  // test('shows error message on account add', async function (assert) {
-  //   assert.expect(1);
-  //   this.server.post('/users/:idMethod', () => {
-  //     return new Response(
-  //       400,
-  //       {},
-  //       {
-  //         status: 400,
-  //         code: 'invalid_argument',
-  //         message: 'The request was invalid.',
-  //         details: {},
-  //       }
-  //     );
-  //   });
-  //   instances.user.update({ accountIds: [] });
-  //   await visit(urls.addAccounts);
-  //   await click('tbody label');
-  //   await click('form [type="submit"]');
-  //   assert.ok(find('[role="alert"]'));
-  // });
+  test('visiting account add accounts', async function(assert) {
+    assert.expect(1);
+    await visit(urls.addAccounts);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.addAccounts);
+  });
+
+  test('select and save accounts to add', async function (assert) {
+    assert.expect(3);
+    instances.user.update({ accountIds: [] });
+    await visit(urls.accounts);
+    assert.equal(findAll('tbody tr').length, 0);
+    await click('.rose-layout-page-actions a')
+    assert.equal(currentURL(), urls.addAccounts);
+    await click('tbody label');
+    await click('form [type="submit"]');
+    await visit(urls.accounts);
+    assert.equal(findAll('tbody tr').length, 1);
+  });
+
+  test('select and cancel accounts to add', async function (assert) {
+    assert.expect(4);
+    await visit(urls.accounts);
+    assert.equal(findAll('tbody tr').length, accountsCount);
+    await click('tbody tr .rose-dropdown-button-danger');
+    assert.equal(findAll('tbody tr').length, accountsCount - 1);
+    await click('.rose-layout-page-actions a')
+    assert.equal(currentURL(), urls.addAccounts);
+    await click('tbody label');
+    await click('form [type="button"]');
+    await visit(urls.accounts);
+    assert.equal(findAll('tbody tr').length, accountsCount - 1);
+  });
+
+  test('shows error message on account add', async function (assert) {
+    assert.expect(1);
+    this.server.post('/users/:idMethod', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {},
+        }
+      );
+    });
+    instances.user.update({ accountIds: [] });
+    await visit(urls.addAccounts);
+    await click('tbody label');
+    await click('form [type="submit"]');
+    assert.ok(find('[role="alert"]'));
+  });
 });

@@ -128,6 +128,9 @@ user:
     add-accounts:
       title: Add Accounts
       description: Select accounts to associate with this user.
+    no-accounts:
+      title: No Accounts Available
+      description: There are no accounts available to add to this user.
   actions:
     add-accounts: Add Accounts
 role:
