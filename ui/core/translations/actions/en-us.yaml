@@ -7,6 +7,7 @@ save: Save
 manage: Manage
 help: Need help?
 back: Back
+copy-to-clipboard: Copy to Clipboard
 authenticate: Authenticate
 deauthenticate: Deauthenticate
 choose-org: Choose Scope
