@@ -5,7 +5,7 @@
   display: flex;
   flex-wrap: wrap;
   margin-bottom: sizing.rems(m);
-  box-shadow: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-gray-subtler-2);
+  box-shadow: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-border);
 
   .rose-nav-link {
     --color: var(--ui-gray-starker-1);

@@ -83,8 +83,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     // poles
-    --subtle: #{darken(color(ui-gray, 900), 2%)};
-    --stark: var(--white);
+    --subtle: #{darken(color(ui-gray, 900), 3%)};
+    --stark: #{color(ui-gray, 100)};
     --stark-components: 255, 255, 255;
 
     // theme colors
@@ -107,18 +107,18 @@
 
     --failure-subtler-2: #{color(red, 900)};
     --failure-subtler-1: #{color(red, 800)};
-    --failure: #{lighten(color(red, 400), 2.5%)};
-    --failure-starker-1: #{color(red, 300)};
+    --failure: #{color(red, 300)};
+    --failure-starker-1: #{color(red, 200)};
 
     --success-subtler-2: #{color(green, 900)};
     --success-subtler-1: #{color(green, 800)};
-    --success: #{color(green)};
-    --success-starker-1: #{color(green, 200)};
+    --success: #{color(green, 700)};
+    --success-starker-1: #{color(green, 400)};
 
-    --action-subtler-2: #{color(blue, 900)};
-    --action-subtler-1h: #{color(blue, 800)};
+    --action-subtler-2: #{darken(color(blue, 900), 10%)};
+    --action-subtler-1h: #{darken(color(blue, 900), 5%)};
     --action-subtler-1: #{color(blue, 800)};
-    --action: #{color(blue, 300)};
+    --action: #{color(blue, 400)};
     --action-starker-1: #{color(blue, 200)};
 
     --ui-border-subtler-1: #{color(ui-gray, 800)};
