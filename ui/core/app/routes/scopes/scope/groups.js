@@ -50,14 +50,15 @@ export default class ScopesScopeGroupsRoute extends Route {
     const { isNew } = group;
     try {
       await group.save();
+      await this.transitionTo('scopes.scope.groups.group', group);
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
-      this.transitionTo('scopes.scope.groups.group', group);
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 
@@ -72,7 +73,7 @@ export default class ScopesScopeGroupsRoute extends Route {
       await group.destroyRecord();
       this.refresh();
       this.notify.success(this.intl.t('notifications.delete-success'));
-      this.transitionTo('scopes.scope.groups');
+      await this.transitionTo('scopes.scope.groups');
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });

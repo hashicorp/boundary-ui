@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, find, findAll, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { resolve, reject } from 'rsvp';
 
 module('Integration | Component | rose/form', function (hooks) {
   setupRenderingTest(hooks);
@@ -70,7 +71,7 @@ module('Integration | Component | rose/form', function (hooks) {
     this.cancel = () => {
       assert.ok(true, 'cancel function may still be passed even for @showEditToggle');
     };
-    this.onSubmit = () => {};
+    this.submit = () => {};
     await render(hbs`
       <Rose::Form
         @onSubmit={{this.submit}}
@@ -98,6 +99,48 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.equal(find('button:not([type="submit"])').textContent.trim(), 'Cancel');
     // After canceling, fields are disabled again and the edit mode button is displayed
     await click('button:not([type="submit"])');
+    assert.equal(findAll('input[disabled]').length, 1);
+    assert.equal(findAll('button').length, 1);
+    assert.equal(find('button').textContent.trim(), 'Edit');
+  });
+
+  test('it re-enables read-only mode if the submit handler returns a resolving promise', async function (assert) {
+    assert.expect(15);
+    this.cancel = () => {};
+    await render(hbs`
+      <Rose::Form
+        @onSubmit={{this.submit}}
+        @cancel={{this.cancel}}
+        @showEditToggle={{true}}
+        as |form|
+      >
+        <form.input @label="Label" @value="value" />
+        <form.actions
+          @submitText="Save"
+          @cancelText="Cancel"
+          @enableEditText="Edit" />
+      </Rose::Form>
+    `);
+    // Before enabling edit mode, fields are disabled and the edit mode button is displayed
+    assert.ok(find('.rose-form'));
+    assert.equal(findAll('input[disabled]').length, 1);
+    assert.equal(findAll('button').length, 1);
+    assert.equal(find('button').textContent.trim(), 'Edit');
+    // After entering edit mode, fields are enabled and save/cancel buttons are displayed
+    await click('button');
+    assert.equal(findAll('input[disabled]').length, 0);
+    assert.equal(findAll('button').length, 2);
+    assert.equal(find('[type="submit"]').textContent.trim(), 'Save');
+    assert.equal(find('button:not([type="submit"])').textContent.trim(), 'Cancel');
+    // After saving with failure, fields are enabled and save/cancel buttons are displayed
+    this.submit = () => reject();
+    assert.equal(findAll('input[disabled]').length, 0);
+    assert.equal(findAll('button').length, 2);
+    assert.equal(find('[type="submit"]').textContent.trim(), 'Save');
+    assert.equal(find('button:not([type="submit"])').textContent.trim(), 'Cancel');
+    // After saving with success, fields are disabled again and the edit mode button is displayed
+    this.submit = () => resolve();
+    await click('button[type="submit"]');
     assert.equal(findAll('input[disabled]').length, 1);
     assert.equal(findAll('button').length, 1);
     assert.equal(find('button').textContent.trim(), 'Edit');

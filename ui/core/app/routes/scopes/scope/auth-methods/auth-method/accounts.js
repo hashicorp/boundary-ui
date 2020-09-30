@@ -61,6 +61,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 
