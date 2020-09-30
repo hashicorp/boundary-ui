@@ -1,3 +1,5 @@
 <h2>{{t "resources.host-set.title"}}</h2>
 <p>{{t "resources.host-set.description"}}</p>
-<p><code>{{@model.id}}</code></p>
+<Copyable @text={{@model.id}}>
+  <code>{{@model.id}}</code>
+</Copyable>

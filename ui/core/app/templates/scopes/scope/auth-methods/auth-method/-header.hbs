@@ -1,3 +1,5 @@
 <h2>{{t "resources.auth-method.title"}}</h2>
 <p>{{t "resources.auth-method.description"}}</p>
-<p><code>{{@model.id}}</code></p>
+<Copyable @text={{@model.id}}>
+  <code>{{@model.id}}</code>
+</Copyable>

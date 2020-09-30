@@ -21,7 +21,9 @@
             {{t (concat 'resources.role.principal.types.' principal.type)}}
           </row.cell>
           <row.cell>
-            <code>{{principal.model.id}}</code>
+            <Copyable @text={{principal.model.id}}>
+              <code>{{principal.model.id}}</code>
+            </Copyable>
           </row.cell>
             <row.cell>
             <Rose::Dropdown

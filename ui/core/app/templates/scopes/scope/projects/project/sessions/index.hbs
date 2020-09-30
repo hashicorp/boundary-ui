@@ -28,7 +28,9 @@
           {{#each @model as |sessionAggregate|}}
             <body.row as |row|>
               <row.headerCell>
-                <code>{{sessionAggregate.session.id}}</code>
+                <Copyable @text={{sessionAggregate.session.id}}>
+                  <code>{{sessionAggregate.session.id}}</code>
+                </Copyable>
               </row.headerCell>
               <row.cell>{{sessionAggregate.user.displayName}}</row.cell>
               <row.cell>{{sessionAggregate.target.displayName}}</row.cell>

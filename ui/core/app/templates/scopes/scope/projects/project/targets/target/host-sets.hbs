@@ -22,7 +22,9 @@
             <Rose::Badge>{{t (concat 'resources.host-set.types.' hostSet.model.type)}}</Rose::Badge>
           </row.cell>
           <row.cell>
-            <code>{{hostSet.model.id}}</code>
+            <Copyable @text={{hostSet.model.id}}>
+              <code>{{hostSet.model.id}}</code>
+            </Copyable>
           </row.cell>
           <row.cell>
             <Rose::Dropdown

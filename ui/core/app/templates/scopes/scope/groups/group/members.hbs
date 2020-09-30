@@ -17,7 +17,9 @@
             {{member.displayName}}
           </row.headerCell>
           <row.cell>
-            <code>{{member.id}}</code>
+            <Copyable @text={{member.id}}>
+              <code>{{member.id}}</code>
+            </Copyable>
           </row.cell>
             <row.cell>
             <Rose::Dropdown

@@ -1,3 +1,5 @@
 <h2>{{t "resources.role.title"}}</h2>
 <p>{{t "resources.role.principal.description"}}</p>
-<p><code>{{@model.role.id}}</code></p>
+<Copyable @text={{@model.role.id}}>
+  <code>{{@model.role.id}}</code>
+</Copyable>

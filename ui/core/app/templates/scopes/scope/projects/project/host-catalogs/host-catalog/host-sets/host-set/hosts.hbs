@@ -25,7 +25,9 @@
             <Rose::Badge>{{host.type}}</Rose::Badge>
           </row.cell>
           <row.cell>
-            <code>{{host.id}}</code>
+            <Copyable @text={{host.id}}>
+              <code>{{host.id}}</code>
+            </Copyable>
           </row.cell>
           <row.cell>
             <Rose::Dropdown

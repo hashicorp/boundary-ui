@@ -16,7 +16,6 @@ export default class CopyableComponent extends Component {
   icon = 'copy-action';
 
   @tracked text;
-  @tracked clipboard;
 
   /**
    * A Ember Concurrency-based task that updates copy icon to a success state

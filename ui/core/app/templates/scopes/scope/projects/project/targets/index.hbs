@@ -51,7 +51,9 @@
                 {{/if}}
               </row.cell>
               <row.cell>
-                <code>{{target.id}}</code>
+                <Copyable @text={{target.id}}>
+                  <code>{{target.id}}</code>
+                </Copyable>
               </row.cell>
             </body.row>
           {{/each}}

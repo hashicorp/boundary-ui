@@ -82,5 +82,6 @@
 }
 
 .copyable .copyable-button {
-  padding: 0rem;
+  padding: 0 sizing.rems(xxs);
+  margin: 0;
 }

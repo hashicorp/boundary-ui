@@ -39,7 +39,9 @@
                 <p>{{group.description}}</p>
               </row.headerCell>
               <row.cell>
-                <code>{{group.id}}</code>
+                <Copyable @text={{group.id}}>
+                  <code>{{group.id}}</code>
+                </Copyable>
               </row.cell>
             </body.row>
           {{/each}}

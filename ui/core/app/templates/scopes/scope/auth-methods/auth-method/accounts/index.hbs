@@ -24,7 +24,9 @@
             {{account.username}}
           </row.cell>
           <row.cell>
-            <code>{{account.id}}</code>
+            <Copyable @text={{account.id}}>
+              <code>{{account.id}}</code>
+            </Copyable>
           </row.cell>
         </body.row>
       {{/each}}

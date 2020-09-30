@@ -7,7 +7,9 @@
   <page.header>
     <h2>{{t "resources.project.title"}}</h2>
     <p>{{t "resources.project.description"}}</p>
-    <p><code>{{@model.id}}</code></p>
+    <Copyable @text={{@model.id}}>
+      <code>{{@model.id}}</code>
+    </Copyable>
   </page.header>
 
   <page.navigation>

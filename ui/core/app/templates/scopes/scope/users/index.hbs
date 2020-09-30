@@ -41,7 +41,9 @@
                 <p>{{user.description}}</p>
               </row.headerCell>
               <row.cell>
-                <code>{{user.id}}</code>
+                <Copyable @text={{user.id}}>
+                  <code>{{user.id}}</code>
+                </Copyable>
               </row.cell>
             </body.row>
           {{/each}}
