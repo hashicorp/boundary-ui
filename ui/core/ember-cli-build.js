@@ -20,6 +20,14 @@ module.exports = function (defaults) {
     },
   });
 
+  // Only import when in development or test mode
+  if (app.env.match(/(development)|(test)/i)) {
+    app.import('node_modules/clipboard/dist/clipboard.js');
+  }
+  else {
+    app.import('node_modules/clipboard/dist/clipboard.min.js');
+  }
+
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //

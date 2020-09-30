@@ -1,0 +1,22 @@
+{{#if this.isClipboardLibrarySupported}}
+  <span
+    id={{this.id}}
+    aria-labelledby={{this.copyableButtonId}}
+    class="copyable"
+    {{did-insert this.register}}
+    {{will-destroy this.destroy}}
+  >
+    <span class="copyable-content">
+      {{yield}}
+    </span>
+
+    <Rose::Button
+      id={{this.copyableButtonId}}
+      class="copyable-button"
+      @style="ghost"
+      @iconOnly={{this.icon}}
+    >{{@text}}</Rose::Button>
+  </span>
+{{else}}
+  {{yield}}
+{{/if}}
