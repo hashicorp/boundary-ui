@@ -1,0 +1,18 @@
+@use '../../variables/sizing';
+@use '../../variables/media';
+@use '../../utilities/type';
+
+@import 'brand';
+@import 'nav';
+@import 'product';
+@import 'copyright';
+@import 'external-link';
+
+.rose-footer {
+  @include type.type(xs);
+
+  display: flex;
+  justify-content: center;
+  color: var(--ui-gray-starker-1);
+  height: sizing.rems(xxl) + sizing.rems(xxs); //65px
+}

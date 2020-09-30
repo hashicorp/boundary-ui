@@ -1,0 +1,12 @@
+<LinkTo
+  ...attributes
+  class="rose-footer-brand"
+  title={{@text}}
+  @route={{if @route @route "index"}}
+>
+
+  {{#if @logo}}
+    {{inline-svg @logo}}
+  {{/if}}
+
+</LinkTo>

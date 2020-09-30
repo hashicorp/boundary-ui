@@ -1,0 +1,11 @@
+<footer
+  ...attributes
+  class="rose-footer"
+>
+  {{yield (hash
+    brand=(component 'rose/footer/brand')
+    copyright=(component 'rose/footer/copyright')
+    product=(component 'rose/footer/product')
+    nav=(component 'rose/footer/nav')
+  )}}
+</footer>

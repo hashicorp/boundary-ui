@@ -1,0 +1,42 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Footer" component="Footer" />
+
+# Footer
+
+A footer component that allows four distinct sections to be configured: brand, nav, product, and copyright.
+
+```html
+<Rose::Footer as |footer|>
+  <footer.brand @logo="logo" @text="Product Name" />
+  <footer.copyright @text="Company Name" />
+  <footer.product @text="Product Name" @version="1.0" />
+  <footer.nav as |nav|>
+    <nav.external-link @route="index">Section</nav.external-link>
+    <nav.external-link @route="about">Section</nav.external-link>
+  </footer.nav>
+</Rose::Footer>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+      <Rose::Footer as |footer|>
+        <footer.brand @logo="logo" @text={{brandName}} />
+        <footer.copyright @text={{copyright}} />
+        <footer.product @text={{brandName}} @version="1.0" />
+        <footer.nav as |nav|>
+          <nav.external-link @route="index">Section</nav.external-link>
+          <nav.external-link @route="about">Section</nav.external-link>
+        </footer.nav>
+      </Rose::Footer>
+    `,
+    context: {
+      brandName: text('brandName', 'Brand Name'),
+      copyright: text('copyright', 'Company Name'),
+    },
+  }}</Story>
+</Preview>
