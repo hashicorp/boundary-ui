@@ -5,12 +5,15 @@ export default factory.extend({
   id: (i) => `auth-method-id-${i}`,
 
   /**
-   * Adds accounts to auth method.
+   * Adds accounts (with associated users) to auth method.
    */
-  withAccounts: trait({
+  withAccountsAndUsers: trait({
     afterCreate(authMethod, server) {
       const { scope } = authMethod;
-      server.createList('account', 5, { scope, authMethod });
+      server.createList('user', 5, { scope }).map(user => {
+        const { id } = server.create('account', { scope, authMethod });
+        user.update({ accountIds: [id] });
+      });
     }
   })
 
