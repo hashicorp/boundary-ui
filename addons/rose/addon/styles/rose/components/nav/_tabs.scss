@@ -22,13 +22,17 @@
 
     &:hover {
       --box-shadow-color: var(--ui-gray-subtler-2);
-      --background: var(--ui-gray-subtler-5);
+      --background: var(--ui-gray-subtler-6);
     }
 
     &:active,
     &.active {
       --color: var(--action);
       --box-shadow-color: currentColor;
+
+      &:hover {
+        --color: var(--action-starker-1);
+      }
     }
   }
 }
