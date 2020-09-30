@@ -1,6 +1,6 @@
 {{title (t 'resources.role.principal.title_plural')}}
 
-{{#if @model}}
+{{#if @model.principals}}
 
   <Rose::Table as |table|>
     <table.header as |header|>
@@ -12,7 +12,7 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each @model as |principal|}}
+      {{#each @model.principals as |principal|}}
         <body.row as |row|>
           <row.headerCell>
             {{principal.model.displayName}}
