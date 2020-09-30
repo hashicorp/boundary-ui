@@ -68,7 +68,7 @@
       right: 0;
       height: 3px;
 
-      background: repeating-linear-gradient(to right, #fff, #fff, var(--info), #fff, #fff);
+      background: repeating-linear-gradient(to right, var(--subtle), var(--subtle), var(--info), var(--subtle), var(--subtle));
       background-size: 200% auto;
       background-position: 0 100%;
       animation: gradient 1s linear infinite;
