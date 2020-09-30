@@ -61,17 +61,16 @@
 
   &.loading {
     &::after {
-      content: " ";
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      height: 3px;
-
-      background: repeating-linear-gradient(to right, #fff, #fff, var(--info), #fff, #fff);
-      background-size: 200% auto;
-      background-position: 0 100%;
       animation: gradient 1s linear infinite;
+      background: repeating-linear-gradient(to right, var(--white), var(--white), var(--info), var(--white), var(--white));
+      background-position: 0 100%;
+      background-size: 200% auto;
+      content: ' ';
+      height: 3px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 100%;
 
       @keyframes gradient {
         0%   { background-position: 0 0; }
@@ -81,6 +80,8 @@
   }
 }
 
-.copyable .copyable-button {
-  padding: 0rem;
+.copyable {
+  .copyable-button {
+    padding: 0;
+  }
 }
