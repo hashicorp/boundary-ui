@@ -10,14 +10,14 @@ type:
   label: Type
   help: The type of the resource, to help differentiate schemas
 login_name:
+  label: Login Name
+username:
   label: Username
-  help: The username for the account
 set_password:
   label: Password
-  help: Create a new password for the account
+  help: Create a new password
 password:
   label: Password
-  help: The password for the account
 grant:
   label: Grant
   help: A permissions grant string for a role

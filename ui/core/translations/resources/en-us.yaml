@@ -122,6 +122,14 @@ user:
   messages:
     welcome:
       title: Welcome to Users
+    accounts:
+      title: Accounts
+      description: Users may be associated with any number of accounts.
+    add-accounts:
+      title: Add Accounts
+      description: Select accounts to associate with this user.
+  actions:
+    add-accounts: Add Accounts
 role:
   title: Role
   title_plural: Roles
