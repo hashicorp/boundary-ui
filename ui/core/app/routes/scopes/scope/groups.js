@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
+import { confirm } from '../../../utilities/confirm';
 
 export default class ScopesScopeGroupsRoute extends Route {
   // =services
@@ -68,12 +69,13 @@ export default class ScopesScopeGroupsRoute extends Route {
    */
   @action
   @loading
+  @confirm('questions.delete-confirm')
   async delete(group) {
     try {
       await group.destroyRecord();
+      await this.replaceWith('scopes.scope.groups');
       this.refresh();
       this.notify.success(this.intl.t('notifications.delete-success'));
-      await this.transitionTo('scopes.scope.groups');
     } catch (error) {
       //TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
