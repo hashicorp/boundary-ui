@@ -44,17 +44,18 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
     const { isNew } = hostCatalog;
     try {
       await hostCatalog.save();
+      await this.transitionTo(
+        'scopes.scope.projects.project.host-catalogs.host-catalog',
+        hostCatalog
+      );
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
-      this.transitionTo(
-        'scopes.scope.projects.project.host-catalogs.host-catalog',
-        hostCatalog
-      );
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 

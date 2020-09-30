@@ -66,14 +66,15 @@ export default class ScopesScopeProjectsRoute extends Route {
     const { isNew } = project;
     try {
       await project.save();
+      await this.transitionTo('scopes.scope.projects.project', project);
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
-      this.transitionTo('scopes.scope.projects.project', project);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 

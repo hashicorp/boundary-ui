@@ -51,14 +51,15 @@ export default class ScopesScopeUsersRoute extends Route {
     const { isNew } = user;
     try {
       await user.save();
+      await this.transitionTo('scopes.scope.users.user', user);
       this.refresh();
       this.notify.success(
         this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
       );
-      this.transitionTo('scopes.scope.users.user', user);
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
+      throw error;
     }
   }
 
