@@ -12,8 +12,10 @@ export default class CopyableComponent extends Component {
   // =attributes
 
   id = generateComponentID();
+  copyableButtonId = `copyable-button-${this.id}`;
   icon = 'copy-action';
 
+  @tracked text;
   @tracked clipboard;
 
   /**
@@ -58,7 +60,9 @@ export default class CopyableComponent extends Component {
   @action
   register() {
     if(!this.clipboard) {
-      this.clipboard = new ClipboardJS('.copyable-button');
+      this.clipboard = new ClipboardJS(`#${this.copyableButtonId}`, {
+        text: () => this.args.text,
+      });
       this.clipboard.on('success', bind(this, this.onCopySuccess));
     }
   }
