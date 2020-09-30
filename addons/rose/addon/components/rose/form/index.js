@@ -40,13 +40,27 @@ export default class RoseFormComponent extends Component {
   /**
    * Calls the passed `onSubmit` function while disabling the default form
    * submit behavior.
+   *
+   * Submit handlers _may optionally return a promise_.  If they do, the promise
+   * is assumed to reflect the state of the submission operation,
+   * i.e. if the promise resolves the submission was successful and if it
+   * rejects, the submission failed.
    * @param {Event} e
    */
   @action
   handleSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
-    this.args.onSubmit();
+    const submitResult = this.args.onSubmit();
+    // If the submit handler returns a promise, we want to handle success
+    // by re-enabling read-only mode on the form (if applicable).
+    // Since submit is allowed to fail in this context and we don't want
+    // unhandled rejection warnings, we have a no-op catch.
+    if (submitResult?.then) {
+      submitResult
+        .then(() => this.isEditable = false)
+        .catch(() => {});
+    }
     return false;
   }
 
