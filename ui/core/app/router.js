@@ -97,6 +97,7 @@ Router.map(function () {
   });
 
   this.route('account', function() {
-    this.route('change-password');
+    // Enable after full account feature implementation
+    // this.route('change-password');
   });
 });
