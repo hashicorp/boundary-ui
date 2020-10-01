@@ -63,6 +63,10 @@
 .rose-header {
   position: relative;
 
+  .logotype {
+    display: none;
+  }
+
   &.loading {
     &::after {
       animation: gradient 1s linear infinite;

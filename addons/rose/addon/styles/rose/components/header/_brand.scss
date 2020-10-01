@@ -11,9 +11,9 @@
   margin: 10px;
 
   svg {
-    $logoSize: sizing.rems(xl) * 3;
+    //$logoSize: sizing.rems(xl) * 3;
     display: block;
-    width: $logoSize;
+    //width: $logoSize;
   }
 
   .rose-header-brand-text {
