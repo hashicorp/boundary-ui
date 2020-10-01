@@ -1,5 +1,9 @@
 <h2>{{t "resources.host-set.title"}}</h2>
 <p>{{t "resources.host-set.description"}}</p>
-<Copyable @text={{@model.id}}>
+<Copyable
+  @text={{@model.id}}
+  @buttonText={{t "actions.copy-to-clipboard"}}
+  @acknowledgeText={{t "states.copied"}}
+>
   <code>{{@model.id}}</code>
 </Copyable>

@@ -28,7 +28,11 @@
           {{#each @model as |sessionAggregate|}}
             <body.row as |row|>
               <row.headerCell>
-                <Copyable @text={{sessionAggregate.session.id}}>
+                <Copyable
+                  @text={{sessionAggregate.session.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
                   <code>{{sessionAggregate.session.id}}</code>
                 </Copyable>
               </row.headerCell>

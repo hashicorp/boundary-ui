@@ -24,7 +24,11 @@
             {{account.username}}
           </row.cell>
           <row.cell>
-            <Copyable @text={{account.id}}>
+            <Copyable
+              @text={{account.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
               <code>{{account.id}}</code>
             </Copyable>
           </row.cell>

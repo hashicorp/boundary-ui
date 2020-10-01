@@ -17,7 +17,11 @@
             {{member.displayName}}
           </row.headerCell>
           <row.cell>
-            <Copyable @text={{member.id}}>
+            <Copyable
+              @text={{member.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
               <code>{{member.id}}</code>
             </Copyable>
           </row.cell>

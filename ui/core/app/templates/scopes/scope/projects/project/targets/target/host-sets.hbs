@@ -22,7 +22,11 @@
             <Rose::Badge>{{t (concat 'resources.host-set.types.' hostSet.model.type)}}</Rose::Badge>
           </row.cell>
           <row.cell>
-            <Copyable @text={{hostSet.model.id}}>
+            <Copyable
+              @text={{hostSet.model.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
               <code>{{hostSet.model.id}}</code>
             </Copyable>
           </row.cell>

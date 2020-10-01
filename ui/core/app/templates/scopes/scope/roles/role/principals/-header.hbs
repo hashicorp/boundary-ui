@@ -1,5 +1,9 @@
 <h2>{{t "resources.role.title"}}</h2>
 <p>{{t "resources.role.principal.description"}}</p>
-<Copyable @text={{@model.role.id}}>
-  <code>{{@model.role.id}}</code>
+<Copyable
+  @text={{@model.id}}
+  @buttonText={{t "actions.copy-to-clipboard"}}
+  @acknowledgeText={{t "states.copied"}}
+>
+  <code>{{@model.id}}</code>
 </Copyable>

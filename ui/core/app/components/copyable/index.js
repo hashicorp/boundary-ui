@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import ClipboardJS from 'clipboard';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { generateComponentID } from 'rose/utilities/component-auto-id';
 import { task, timeout } from 'ember-concurrency';
 import { set } from '@ember/object';
@@ -12,10 +11,9 @@ export default class CopyableComponent extends Component {
   // =attributes
 
   id = generateComponentID();
-  copyableButtonId = `copyable-button-${this.id}`;
   icon = 'copy-action';
-
-  @tracked text;
+  copyableButtonId = `copyable-button-${this.id}`;
+  copyableButtonText = this.args.buttonText;
 
   /**
    * A Ember Concurrency-based task that updates copy icon to a success state
@@ -29,8 +27,10 @@ export default class CopyableComponent extends Component {
    */
   @task(function * () {
     set(this, 'icon', 'copy-success');
+    set(this, 'copyableButtonText', this.args.acknowledgeText);
     yield timeout(1000);
     set(this, 'icon', 'copy-action');
+    set(this, 'copyableButtonText', this.args.buttonText);
   }).drop() successIconTimer;
 
   // =methods

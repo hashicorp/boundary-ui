@@ -41,7 +41,11 @@
                 <p>{{role.description}}</p>
               </row.headerCell>
               <row.cell>
-                <Copyable @text={{role.id}}>
+                <Copyable
+                  @text={{role.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
                   <code>{{role.id}}</code>
                 </Copyable>
               </row.cell>
