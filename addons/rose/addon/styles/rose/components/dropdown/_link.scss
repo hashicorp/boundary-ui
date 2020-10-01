@@ -25,11 +25,11 @@
   }
 
   &.rose-dropdown-link-danger {
-    --background-color: var(--white);
+    --background-color: var(--subtle);
     --color: var(--failure);
 
     &:hover {
-      --color: var(--white);
+      --color: var(--subtle);
       --background-color: var(--failure);
     }
   }
