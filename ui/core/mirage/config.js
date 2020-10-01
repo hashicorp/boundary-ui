@@ -90,6 +90,31 @@ export default function() {
   this.get('/users/:id');
   this.patch('/users/:id');
   this.del('/users/:id');
+  this.post('/users/:idMethod', function ({ users }, { params: { idMethod } }) {
+    const attrs = this.normalizedRequestAttrs();
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
+    const user = users.find(id);
+    const updatedAttrs = {
+      version: attrs.version,
+      accountIds: user.accountIds
+    };
+    // If adding accounts, push them into the array
+    if (method === 'add-accounts') {
+      attrs.accountIds.forEach(id => {
+        if (!updatedAttrs.accountIds.includes(id)) {
+          updatedAttrs.accountIds.push(id);
+        }
+      });
+    }
+    // If deleting accounts, filter them out of the array
+    if (method === 'remove-accounts') {
+      updatedAttrs.accountIds = updatedAttrs.accountIds.filter(id => {
+        return !attrs.accountIds.includes(id);
+      });
+    }
+    return user.update(updatedAttrs);
+  });
 
   // IAM: Groups
   this.get('/groups', ({ groups }, { queryParams: { scope_id: scopeId } }) => {
