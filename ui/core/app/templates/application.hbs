@@ -37,6 +37,17 @@
     {{outlet}}
   </layout.body>
 
+  <layout.footer>
+    <Rose::Footer as |footer|>
+      <footer.brand @logo="logo-hashi" @text={{t "hashicorp.title"}} />
+      <footer.text>{{t "hashicorp.copyright"}}</footer.text>
+      <footer.text>{{t "hashicorp.product"}}</footer.text>
+      <footer.nav as |nav|>
+        <nav.link @href={{t "hashicorp.documentation.link"}}>{{t "hashicorp.documentation.title"}}</nav.link>
+      </footer.nav>
+    </Rose::Footer>
+  </layout.footer>
+
 </Rose::Layout::Global>
 
 <EmberNotify @closeAfter={{this.notifyTimeout}} as |message close|>

@@ -1,0 +1,9 @@
+@use '../../variables/sizing';
+
+.rose-footer-nav {
+  grid-area: nav;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-right: sizing.rems(s);
+}

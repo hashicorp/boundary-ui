@@ -1,0 +1,9 @@
+@use '../../variables/sizing';
+
+.rose-footer-nav-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: underline;
+  color: var(--ui-gray-starker-1);
+  margin: 0 sizing.rems(xs);
+}

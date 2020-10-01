@@ -1,0 +1,20 @@
+{{#if @href}}
+  <a target="_blank"
+    href={{@href}}
+    class="rose-footer-nav-link"
+    rel="noopener noreferrer" 
+  >
+    {{yield}}
+  </a>
+{{/if}}
+
+{{#if @route}}
+  <LinkTo
+    ...attributes
+    @route={{@route}}
+    @model={{@model}}
+    class="rose-footer-nav-link"
+  >
+    {{yield}}
+  </LinkTo>
+{{/if}}

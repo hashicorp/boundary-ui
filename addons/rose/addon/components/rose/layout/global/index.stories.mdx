@@ -1,29 +1,29 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Layout|Global" component="Global" />
 
 # Layout|Global
 
-A top-level layout/positioning component that allows two distinct sections to
-be configured: header and body.
+A top-level layout/positioning component that allows three distinct sections to
+be configured: header, body, and footer.
 
-```htmlbars
+```html
 <Rose::Layout::Global as |layout|>
   <layout.header />
   <layout.body />
+  <layout.footer />
 </Rose::Layout::Global>
 ```
 
 <Preview>
   <Story name="Global">{{
     template: hbs`
-    <Rose::Layout::Global as |layout|>
-      <layout.header style="background: var(--brand-gray-5);">Header</layout.header>
-      <layout.body style="background: var(--brand-gray-7);">Body</layout.body>
-    </Rose::Layout::Global>
+      <Rose::Layout::Global as |layout|>
+        <layout.header style="background: var(--brand-gray-5);">Header</layout.header>
+        <layout.body style="background: var(--brand-gray-7);">Body</layout.body>
+        <layout.footer style="background: var(--brand-gray-5);">Footer</layout.footer>
+      </Rose::Layout::Global>
     `,
   }}</Story>
 </Preview>
