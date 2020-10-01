@@ -1,6 +1,5 @@
 import factory from '../generated/factories/scope';
 import { trait } from 'ember-cli-mirage';
-import { random } from 'faker';
 
 export default factory.extend({
 
