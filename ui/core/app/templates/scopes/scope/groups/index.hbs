@@ -39,7 +39,13 @@
                 <p>{{group.description}}</p>
               </row.headerCell>
               <row.cell>
-                <code>{{group.id}}</code>
+                <Copyable
+                  @text={{group.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
+                  <code>{{group.id}}</code>
+                </Copyable>
               </row.cell>
             </body.row>
           {{/each}}

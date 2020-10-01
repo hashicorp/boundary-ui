@@ -46,7 +46,13 @@
                 </Rose::Badge>
               </row.cell>
               <row.cell>
-                <code>{{authMethod.id}}</code>
+                <Copyable
+                  @text={{authMethod.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
+                  <code>{{authMethod.id}}</code>
+                </Copyable>
               </row.cell>
             </body.row>
           {{/each}}

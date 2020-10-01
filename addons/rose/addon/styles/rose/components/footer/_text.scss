@@ -1,0 +1,7 @@
+@use '../../variables/sizing';
+
+.rose-footer-text {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 sizing.rems(xs);
+}

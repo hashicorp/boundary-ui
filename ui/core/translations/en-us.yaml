@@ -21,3 +21,10 @@ descriptions:
 questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
+hashicorp:
+  title: HashiCorp
+  copyright: © 2020 HashiCorp
+  product: Boundary v0.1
+  documentation:
+    title: Documentation
+    link: https://boundaryproject.io

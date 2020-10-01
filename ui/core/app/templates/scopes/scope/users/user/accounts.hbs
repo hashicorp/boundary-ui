@@ -1,0 +1,53 @@
+{{title (t 'resources.user.messages.accounts.title')}}
+
+{{#if @model.accounts}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.username.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        <row.headerCell>{{t "titles.actions"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model.accounts as |account|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{account.username}}
+          </row.headerCell>
+          <row.cell>
+            <code>{{account.id}}</code>
+          </row.cell>
+            <row.cell>
+            <Rose::Dropdown
+              @icon="more-horizontal"
+              @iconOnly={{true}}
+              @showCaret={{false}}
+              @dropdownRight={{true}}
+              @text="{{t "actions.manage"}}" as |dropdown|
+            >
+              <dropdown.button
+                @style="danger"
+                {{on "click" (route-action "removeAccount" @model.user account)}}
+              >
+                {{t "actions.remove"}}
+              </dropdown.button>
+            </Rose::Dropdown>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "resources.user.messages.accounts.title"}} as |message|>
+      <message.description>
+        {{t "resources.user.messages.accounts.description"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}

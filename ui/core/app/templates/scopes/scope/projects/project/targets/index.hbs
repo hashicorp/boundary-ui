@@ -51,7 +51,13 @@
                 {{/if}}
               </row.cell>
               <row.cell>
-                <code>{{target.id}}</code>
+                <Copyable
+                  @text={{target.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
+                  <code>{{target.id}}</code>
+                </Copyable>
               </row.cell>
             </body.row>
           {{/each}}

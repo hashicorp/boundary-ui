@@ -58,7 +58,10 @@ Router.map(function () {
       });
 
       this.route('users', function () {
-        this.route('user', { path: ':user_id' }, function () {});
+        this.route('user', { path: ':user_id' }, function () {
+          this.route('accounts');
+          this.route('add-accounts');
+        });
         this.route('new');
       });
 
@@ -94,6 +97,7 @@ Router.map(function () {
   });
 
   this.route('account', function() {
-    this.route('change-password');
+    // Enable after full account feature implementation
+    // this.route('change-password');
   });
 });

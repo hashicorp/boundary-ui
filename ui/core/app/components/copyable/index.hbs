@@ -1,7 +1,6 @@
 {{#if this.isClipboardLibrarySupported}}
   <span
     id={{this.id}}
-    aria-labelledby={{this.copyableButtonId}}
     class="copyable"
     {{did-insert this.register}}
     {{will-destroy this.destroy}}
@@ -12,10 +11,12 @@
 
     <Rose::Button
       id={{this.copyableButtonId}}
+      aria-describedby={{this.id}}
       class="copyable-button"
       @style="ghost"
       @iconOnly={{this.icon}}
-    >{{@text}}</Rose::Button>
+      title={{this.copyableButtonText}}
+    >{{this.copyableButtonText}}</Rose::Button>
   </span>
 {{else}}
   {{yield}}
