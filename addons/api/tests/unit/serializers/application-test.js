@@ -154,7 +154,11 @@ module('Unit | Serializer | application', function (hooks) {
       data: {
         id: '1',
         type: 'user',
-        attributes: { name: 'User 1', scope: { scope_id: 'o_123' } },
+        attributes: {
+          name: 'User 1',
+          account_ids: [],
+          scope: { scope_id: 'o_123' }
+        },
         relationships: {},
       },
     });

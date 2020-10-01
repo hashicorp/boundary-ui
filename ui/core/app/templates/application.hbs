@@ -19,9 +19,9 @@
             @iconOnly={{true}}
             @icon="boundary-icons/user-profile" as |dropdown|
           >
-            <dropdown.link @route="account.change-password">
+            {{!-- <dropdown.link @route="account.change-password">
               {{t 'actions.change-password'}}
-            </dropdown.link>
+            </dropdown.link> --}}
             <dropdown.button
               {{on "click" (route-action "invalidateSession")}}
             >
@@ -36,6 +36,17 @@
   <layout.body>
     {{outlet}}
   </layout.body>
+
+  <layout.footer>
+    <Rose::Footer as |footer|>
+      <footer.brand @logo="logo-hashi" @text={{t "hashicorp.title"}} />
+      <footer.text>{{t "hashicorp.copyright"}}</footer.text>
+      <footer.text>{{t "hashicorp.product"}}</footer.text>
+      <footer.nav as |nav|>
+        <nav.link @href={{t "hashicorp.documentation.link"}}>{{t "hashicorp.documentation.title"}}</nav.link>
+      </footer.nav>
+    </Rose::Footer>
+  </layout.footer>
 
 </Rose::Layout::Global>
 

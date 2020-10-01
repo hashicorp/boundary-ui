@@ -30,4 +30,11 @@ module('Integration | Component | rose/layout/global', function (hooks) {
     </Rose::Layout::Global>`);
     assert.ok(find('.rose-layout-global-body'));
   });
+
+  test('it renders with footer', async function (assert) {
+    await render(hbs`<Rose::Layout::Global as |layout|>
+      <layout.footer />
+    </Rose::Layout::Global>`);
+    assert.ok(find('.rose-layout-global-footer'));
+  });
 });

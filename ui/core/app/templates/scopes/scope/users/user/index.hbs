@@ -1,47 +1,5 @@
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <BreadCrumbs />
-  </page.breadcrumbs>
-
-  <page.header>
-    <h2>{{t "resources.user.title"}}</h2>
-    <p>{{t "resources.user.description"}}</p>
-    <Copyable
-      @text={{@model.id}}
-      @buttonText={{t "actions.copy-to-clipboard"}}
-      @acknowledgeText={{t "states.copied"}}
-    >
-      <code>{{@model.id}}</code>
-    </Copyable>
-  </page.header>
-
-  <page.actions>
-    <Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
-      <dropdown.button
-        @style="danger"
-        @disabled={{@model.canSave}}
-        {{on "click" (route-action "delete" @model)}}
-      >
-        {{t 'actions.delete-user'}}
-      </dropdown.button>
-    </Rose::Dropdown>
-  </page.actions>
-
-  <page.navigation>
-    <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope.users.user'>
-        {{t 'titles.details'}}
-      </nav.link>
-    </Rose::Nav::Tabs>
-  </page.navigation>
-
-  <page.body>
-    <Form::User
-      @model={{@model}}
-      @submit={{route-action "save" @model}}
-      @cancel={{route-action "cancel" @model}}
-    />
-  </page.body>
-
-</Rose::Layout::Page>
+<Form::User
+  @model={{@model}}
+  @submit={{route-action "save" @model}}
+  @cancel={{route-action "cancel" @model}}
+/>

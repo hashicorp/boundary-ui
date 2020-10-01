@@ -15,7 +15,7 @@ export default function(server) {
 
   // Auth
   server.createList('auth-method', 3, { scope: globalScope });
-  server.createList('auth-method', 3, { scope: orgScope }, 'withAccounts');
+  server.createList('auth-method', 3, { scope: orgScope }, 'withAccountsAndUsers');
 
   // Groups and Users
   server.createList('group', 5, { scope: orgScope }, 'withMembers');
