@@ -93,19 +93,24 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
     const authEndpointURL = this.buildAuthEndpointURL(options);
     const response = await fetch(authEndpointURL, { method: 'post', body });
     const json = await response.json();
-    return response.status < 400 ? resolve(this.normalizeData(json)) : reject();
+    return response.status < 400
+      ? resolve(this.normalizeData(json, login_name))
+      : reject();
   }
 
   /**
    * Normalizes the auth data.  Adds convenience booleans depending on the
    * scope within which the session is authenticated:  isGlobal, isOrg.
+   * If a `username` is provided, appends this to the data.
    * @param {object} data
+   * @param {string} username
    * @return {object}
    */
-  normalizeData(data) {
+  normalizeData(data, username) {
     // Add booleans indicated the scope type
     data.isGlobal = (data?.scope?.type === 'global');
     data.isOrg = (data?.scope?.type === 'org');
+    if (username) data.username = username;
     return data;
   }
 
