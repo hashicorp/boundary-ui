@@ -6,9 +6,14 @@ export default factory.extend({
 
   type: 'global',
 
-  id() {
-    const id = new Array(10).fill(0).map(() => random.alphaNumeric()).join('');
-    return `s_${id}`;
+  /**
+   * Generates realistic-ish IDs while still being deterministic.
+   */
+  id(i) {
+    let id = 'tv6fv3yz8p';
+    if (i % 3) id = 'xk1i4dk50v';
+    if (i % 2) id = 's9n819zgko';
+    return `s_${id}${i}`;
   },
 
   withChildren: trait({
