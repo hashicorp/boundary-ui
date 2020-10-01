@@ -27,7 +27,13 @@
             </Rose::Badge>
           </row.cell>
           <row.cell>
-            <code>{{host.id}}</code>
+            <Copyable
+              @text={{host.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{host.id}}</code>
+            </Copyable>
           </row.cell>
           <row.cell>
             <code>{{host.attributes.address}}</code>
