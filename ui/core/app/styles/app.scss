@@ -19,7 +19,6 @@
 }
 
 .rose-nav-sidebar {
-  margin-bottom: sizing.rems(l);
   margin-top: sizing.rems(xxl);
 
   & + .rose-nav-sidebar {
@@ -96,9 +95,9 @@
 
 .copyable {
   .copyable-button {
+    margin: 0;
+    padding: 0 sizing.rems(xxs);
     position: relative;
     top: -2px;
-    padding: 0 sizing.rems(xxs);
-    margin: 0;
   }
 }
