@@ -12,7 +12,8 @@
   display: grid;
   grid-template-areas: 'brand nav utilities';
   grid-template-columns: 0.01fr auto 1fr;
-  background: var(--black) linear-gradient(90deg, #191a1c 0%, #1b212d 100%);
+  background: var(--black);
+  box-shadow: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-border-subtler-1);
 }
 
 @media (max-width: media.width(small)) {
