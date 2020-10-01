@@ -4,9 +4,8 @@
 
 @import 'brand';
 @import 'nav';
-@import 'product';
-@import 'copyright';
-@import 'external-link';
+@import 'text';
+@import 'link';
 
 .rose-footer {
   @include type.type(xs);

@@ -7,16 +7,15 @@ import { text } from '@storybook/addon-knobs';
 
 # Footer
 
-A footer component that allows four distinct sections to be configured: brand, nav, product, and copyright.
+A footer component that allows four distinct sections to be configured: brand, nav, and text.
 
 ```html
 <Rose::Footer as |footer|>
   <footer.brand @logo="logo" @text="Product Name" />
-  <footer.copyright @text="Company Name" />
-  <footer.product @text="Product Name" @version="1.0" />
+  <footer.text>Text</footer.text>
   <footer.nav as |nav|>
-    <nav.external-link @route="index">Section</nav.external-link>
-    <nav.external-link @route="about">Section</nav.external-link>
+    <nav.link @route="index">Section</nav.link>
+    <nav.link @href="index">Section</nav.link>
   </footer.nav>
 </Rose::Footer>
 ```
@@ -26,17 +25,16 @@ A footer component that allows four distinct sections to be configured: brand, n
     template: hbs`
       <Rose::Footer as |footer|>
         <footer.brand @logo="logo" @text={{brandName}} />
-        <footer.copyright @text={{copyright}} />
-        <footer.product @text={{brandName}} @version="1.0" />
+        <footer.text>{{footerText}}</footer.text>
         <footer.nav as |nav|>
-          <nav.external-link @route="index">Section</nav.external-link>
-          <nav.external-link @route="about">Section</nav.external-link>
+          <nav.link @route="index">Section</nav.link>
+          <nav.link @href="index">Section</nav.link>
         </footer.nav>
       </Rose::Footer>
     `,
     context: {
       brandName: text('brandName', 'Brand Name'),
-      copyright: text('copyright', 'Company Name'),
+      footerText: text('footerText', 'Text'),
     },
   }}</Story>
 </Preview>

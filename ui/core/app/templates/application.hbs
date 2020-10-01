@@ -40,10 +40,10 @@
   <layout.footer>
     <Rose::Footer as |footer|>
       <footer.brand @logo="logo-hashi" @text={{t "hashicorp.title"}} />
-      <footer.copyright @text={{t "hashicorp.title"}} />
-      <footer.product @text={{app-name}} @version={{t "boundary.version"}} />
+      <footer.text>{{t "hashicorp.copyright"}}</footer.text>
+      <footer.text>{{t "hashicorp.product"}}</footer.text>
       <footer.nav as |nav|>
-        <nav.external-link @href={{t "hashicorp.documentation.link"}}>{{t "hashicorp.documentation.title"}}</nav.external-link>
+        <nav.link @href={{t "hashicorp.documentation.link"}}>{{t "hashicorp.documentation.title"}}</nav.link>
       </footer.nav>
     </Rose::Footer>
   </layout.footer>

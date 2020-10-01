@@ -1,9 +1,9 @@
 @use '../../variables/sizing';
 
-.rose-footer-nav-external-link {
+.rose-footer-nav-link {
   display: inline-flex;
   align-items: center;
-  margin-right: sizing.rems(s);
   text-decoration: underline;
   color: var(--ui-gray-starker-1);
+  margin: 0 sizing.rems(xs);
 }
