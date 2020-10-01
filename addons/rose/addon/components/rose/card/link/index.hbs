@@ -4,17 +4,30 @@
     @route={{if @route @route "index"}}
     @model={{@model}}
   >
-    {{#if @title}}
-      <h2 class="rose-card-link-title">{{@title}}</h2>
-    {{/if}}
+    <div class="rose-card-link-header">
+      {{#if @title}}
+        <h2 class="rose-card-link-title">
+          {{#if @icon}}
+            <Rose::Icon
+              @name={{@icon}}
+              @size="medium" />
+          {{/if}}
+          <span class="rose-card-link-title-text">{{@title}}</span>
+        </h2>
+      {{/if}}
+    </div>
 
-    {{#if @subtitle}}
-      <p class="rose-card-link-subtitle">{{@subtitle}}</p>
-    {{/if}}
+    <div class="rose-card-link-body">
+      {{#if @description}}
+        <p class="rose-card-link-description">{{@description}}</p>
+      {{/if}}
+    </div>
 
-    {{#if @description}}
-      <p class="rose-card-link-description">{{@description}}</p>
-    {{/if}}
+    <div class="rose-card-link-footer">
+      {{#if @id}}
+        <p class="rose-card-link-footer-id">{{@id}}</p>
+      {{/if}}
+    </div>
   </LinkTo>
 
   {{yield}}
