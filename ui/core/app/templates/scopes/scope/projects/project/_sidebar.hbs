@@ -1,11 +1,20 @@
 <Rose::Nav::Sidebar @title={{t "titles.resources"}} as |nav|>
   <nav.link @route="scopes.scope.projects.project.sessions">
+    <Rose::Icon
+      @name="boundary-icons/action-session"
+      @size="medium" />
     {{t "resources.session.title_plural"}}
   </nav.link>
   <nav.link @route="scopes.scope.projects.project.targets">
+    <Rose::Icon
+      @name="boundary-icons/target"
+      @size="medium" />
     {{t "resources.target.title_plural"}}
   </nav.link>
   <nav.link @route="scopes.scope.projects.project.host-catalogs">
+    <Rose::Icon
+      @name="boundary-icons/host-catalogs"
+      @size="medium" />
     {{t "resources.host-catalog.title_plural"}}
   </nav.link>
 </Rose::Nav::Sidebar>

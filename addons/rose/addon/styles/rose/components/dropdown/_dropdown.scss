@@ -17,7 +17,7 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
     align-items: center;
     $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
     padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
-    color: var(--black);
+    color: var(--stark);
     border-radius: sizing.rems(xxxs);
 
     // Hide default twistie triangle

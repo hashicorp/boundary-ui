@@ -77,7 +77,7 @@
       &:focus {
         ~ .rose-form-checkbox-label {
           &::before {
-            border-color: var(--info);
+            border-color: var(--action);
           }
         }
       }
@@ -85,7 +85,7 @@
       &:checked {
         ~ .rose-form-checkbox-label {
           &::before {
-            border-color: var(--info);
+            border-color: var(--action);
           }
           &::after {
             background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 8 8'><path fill='%231563ff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
