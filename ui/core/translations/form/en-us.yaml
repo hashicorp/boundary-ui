@@ -35,3 +35,9 @@ started:
   label: Started
 status:
   label: Status
+session_max_seconds:
+  label: Maximum Duration (in seconds)
+  help: The maximum duration of a session.
+session_connection_limit:
+  label: Maximum Connections
+  help: The maximum number of connections allowed per session.  For unlimited, specify "-1".

@@ -8,6 +8,11 @@ const hostSetChance = 0.3;
 export default factory.extend({
 
   /**
+   * -1 means "unlimited" and we want to generate these on occassion.
+   */
+  session_connection_limit: () => random.arrayElement([-1, random.number()]),
+
+  /**
    * Generates attributes fields by type.
    */
   afterCreate(target) {
