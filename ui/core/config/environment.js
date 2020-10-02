@@ -34,6 +34,7 @@ module.exports = function (environment) {
     appName: APP_NAME,
 
     notifyTimeout: 4000,
+    enableConfirmService: true,
 
     contentSecurityPolicyHeader: 'Content-Security-Policy',
     contentSecurityPolicyMeta: true,
@@ -98,6 +99,7 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
+    ENV.enableConfirmService = false;
   }
 
   if (environment === 'production') {
