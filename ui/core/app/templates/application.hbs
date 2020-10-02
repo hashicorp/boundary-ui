@@ -8,29 +8,29 @@
       <header.brand @logo="logo-boundary" @text={{app-name}} />
 
       {{#if this.session.isAuthenticated}}
-        {{#if this.scope.isOrg}}
-          <header.nav as |nav|>
-            <nav.dropdown
-              @text={{this.scope.displayName}}
-              @icon="boundary-icons/org" as |dropdown|
-            >
-              {{#if this.session.data.authenticated.isGlobal}}
-                <dropdown.link @route="scopes.scope" @model="global">
-                  {{t "titles.global"}}
+        <header.nav as |nav|>
+          <nav.dropdown
+            @text={{this.scope.displayName}}
+            @icon="boundary-icons/org" as |dropdown|
+          >
+            {{#if this.session.data.authenticated.isGlobal}}
+              <dropdown.link @route="scopes.scope" @model="global">
+                {{t "titles.global"}}
+              </dropdown.link>
+              {{#each this.orgScopes as |scope|}}
+                <dropdown.link @route="scopes.scope" @model={{scope.id}}>
+                  {{scope.displayName}}
                 </dropdown.link>
-                {{#each this.orgScopes as |scope|}}
-                  <dropdown.link @route="scopes.scope" @model={{scope.id}}>
-                    {{scope.displayName}}
-                  </dropdown.link>
-                {{/each}}
-              {{else}}
+              {{/each}}
+            {{else}}
+              {{#if this.scope}}
                 <dropdown.link @route="scopes.scope" @model={{this.scope.id}}>
                   {{this.scope.displayName}}
                 </dropdown.link>
               {{/if}}
-            </nav.dropdown>
-          </header.nav>
-        {{/if}}
+            {{/if}}
+          </nav.dropdown>
+        </header.nav>
 
         <header.utilities as |utilities|>
           <utilities.dropdown
