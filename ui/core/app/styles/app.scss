@@ -63,6 +63,16 @@
 .rose-header {
   position: relative;
 
+  .logotype {
+    display: none;
+  }
+
+  .rose-dropdown {
+    .rose-icon {
+      transform: scale(0.7);
+    }
+  }
+
   &.loading {
     &::after {
       animation: gradient 1s linear infinite;
