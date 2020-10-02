@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
+import { confirm } from '../../../../../../../utilities/confirm';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRoute extends Route {
   // =services
@@ -70,13 +71,14 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsRo
    */
   @action
   @loading
-  async delete(hostSet) {
+  @confirm('questions.delete-confirm')
+  async deleteHostSet(hostSet) {
     try {
       await hostSet.destroyRecord();
-      this.notify.success(this.intl.t('notifications.delete-success'));
-      this.transitionTo(
+      await this.replaceWith(
         'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets'
       );
+      this.notify.success(this.intl.t('notifications.delete-success'));
     } catch (error) {
       // TODO: replace with translated strings
       this.notify.error(error.message, { closeAfter: null });
