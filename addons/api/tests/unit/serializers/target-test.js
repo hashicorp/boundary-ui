@@ -20,7 +20,7 @@ module('Unit | Serializer | target', function (hooks) {
         type: 'org',
       },
       version: 1,
-      type: 'tcp',
+      type: 'tcp'
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -31,6 +31,8 @@ module('Unit | Serializer | target', function (hooks) {
       version: 1,
       type: 'tcp',
       scope_id: 'org_1',
+      session_max_seconds: 28800,
+      session_connection_limit: 1,
       attributes: {
         default_port: null,
       },

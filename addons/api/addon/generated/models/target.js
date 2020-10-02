@@ -22,6 +22,18 @@ export default class GeneratedTargetModel extends BaseModel {
   })
   description;
 
+  @attr('number', {
+    description: '',
+    defaultValue: 28800
+  })
+  session_max_seconds;
+
+  @attr('number', {
+    description: '',
+    defaultValue: 1
+  })
+  session_connection_limit;
+
   @attr('date', {
     description: 'The time this resource was created\nOutput only.',
     readOnly: true,

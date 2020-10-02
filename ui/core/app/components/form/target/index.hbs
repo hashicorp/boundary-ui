@@ -47,6 +47,44 @@
     {{/if}}
   </form.textarea>
 
+  <form.input
+    @name="session_max_seconds"
+    @type="number"
+    @value={{@model.session_max_seconds}}
+    @label={{t "form.session_max_seconds.label"}}
+    @error={{@model.errors.session_max_seconds}}
+    @helperText={{t "form.session_max_seconds.help"}}
+    min="0"
+    step="1"
+  as |field|>
+    {{#if @model.errors.session_max_seconds}}
+      <field.errors as |errors|>
+        {{#each @model.errors.session_max_seconds as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name="session_connection_limit"
+    @type="number"
+    @value={{@model.session_connection_limit}}
+    @label={{t "form.session_connection_limit.label"}}
+    @error={{@model.errors.session_connection_limit}}
+    @helperText={{t "form.session_connection_limit.help"}}
+    min="-1"
+    step="1"
+  as |field|>
+    {{#if @model.errors.session_connection_limit}}
+      <field.errors as |errors|>
+        {{#each @model.errors.session_connection_limit as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
   {{!-- TODO this is a type-specific field --}}
   <form.input
     @name="default_port"

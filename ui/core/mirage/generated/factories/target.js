@@ -8,6 +8,8 @@ export default Factory.extend({
 
   type: 'tcp',
   name: () => random.words(),
+  session_max_seconds: () => random.number(),
+  session_connection_limit: () => random.number(),
   description: () => random.words(),
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
