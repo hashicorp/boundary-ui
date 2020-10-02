@@ -10,9 +10,9 @@ module('Integration | Component | rose/card/link', function (hooks) {
     await render(hbs`<Rose::Card::Link />`);
     assert.ok(find('article'));
     assert.ok(find('.rose-card-link'));
-    assert.notOk(find('.rose-card-link-title'));
-    assert.notOk(find('.rose-card-link-subtitle'));
-    assert.notOk(find('.rose-card-link-description'));
+    assert.ok(find('.rose-card-link-header'));
+    assert.ok(find('.rose-card-link-body'));
+    assert.ok(find('.rose-card-link-footer'));
   });
 
   test('it renders with @title', async function (assert) {
@@ -24,20 +24,25 @@ module('Integration | Component | rose/card/link', function (hooks) {
     );
   });
 
-  test('it renders with @subtitle', async function (assert) {
-    await render(hbs`<Rose::Card::Link @subtitle="card subtitle" />`);
-    assert.equal(
-      find('.rose-card-link-subtitle').textContent.trim(),
-      'card subtitle'
-    );
-  });
-
   test('it renders with @description', async function (assert) {
     await render(hbs`<Rose::Card::Link @description="card description" />`);
     assert.equal(
-      find('.rose-card-link-description').textContent.trim(),
+      find('.rose-card-link-body').textContent.trim(),
       'card description'
     );
+  });
+
+  test('it renders with @id', async function (assert) {
+    await render(hbs`<Rose::Card::Link @id="card_id" />`);
+    assert.equal(
+      find('.rose-card-link-footer-id').textContent.trim(),
+      'card_id'
+    );
+  });
+
+  test('it renders with @icon', async function (assert) {
+    await render(hbs`<Rose::Card::Link @title="foo" @icon="alert-circle-outline" />`);
+    assert.ok(find('.rose-icon'));
   });
 
   test('it renders with attributes', async function (assert) {

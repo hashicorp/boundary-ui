@@ -3,6 +3,7 @@ import { all, hash } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
+import { confirm } from '../../../../../../../utilities/confirm';
 
 export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extends Route {
   // =services
@@ -55,6 +56,7 @@ export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extend
    */
   @action
   @loading
+  @confirm('questions.remove-confirm')
   async removeHostSet(target, hostSet) {
     try {
       await target.removeHostSet(hostSet.id);
