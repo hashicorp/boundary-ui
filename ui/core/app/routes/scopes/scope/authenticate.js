@@ -9,6 +9,17 @@ export default class ScopesScopeAuthenticateRoute extends Route {
 
   // =methods
 
+  beforeModel() {
+    if (this.session.isAuthenticated) {
+      const scope = this.modelFor('scopes.scope');
+      if (scope.isGlobal) {
+        this.transitionTo('scopes.scope.orgs');
+      } else {
+        this.transitionTo('scopes.scope.projects');
+      }
+    }
+  }
+
   /**
    * Returns all auth methods for the current scope, along with the current
    * scope and all scopes (for org navigation).
@@ -27,16 +38,5 @@ export default class ScopesScopeAuthenticateRoute extends Route {
       //   type: 'password'
       // }])
     });
-  }
-
-  redirect() {
-    if (this.session.isAuthenticated) {
-      const scope = this.modelFor('scopes.scope');
-      if (scope.isGlobal) {
-        this.transitionTo('scopes.scope.orgs');
-      } else {
-        this.transitionTo('scopes.scope.projects');
-      }
-    }
   }
 }

@@ -30,8 +30,9 @@
         {{#each @model as |project|}}
           <cards.link
             @title={{project.name}}
-            @subtitle={{project.id}}
             @description={{project.description}}
+            @id={{project.id}}
+            @icon="boundary-icons/project"
             @route="scopes.scope.projects.project"
             @model={{project.id}}
           />
