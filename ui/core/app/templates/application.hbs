@@ -37,9 +37,9 @@
             @text={{this.session.data.authenticated.username}}
             @icon="boundary-icons/user-profile" as |dropdown|
           >
-            {{!-- <dropdown.link @route="account.change-password">
+            <dropdown.link @route="account.change-password">
               {{t 'actions.change-password'}}
-            </dropdown.link> --}}
+            </dropdown.link>
             <dropdown.button
               {{on "click" (route-action "invalidateSession")}}
             >
