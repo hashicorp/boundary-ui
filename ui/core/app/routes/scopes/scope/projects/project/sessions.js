@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { all, hash } from 'rsvp';
 import { task, timeout } from 'ember-concurrency';
+import { A } from '@ember/array';
 
 const POLL_TIMEOUT_SECONDS = 2.5;
 
@@ -52,7 +53,7 @@ export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
           ? this.store.findRecord('target', session.target_id)
           : null,
       }))
-    );
+    ).then((model) => A(model).sortBy('session.status'));
   }
 
   /**
