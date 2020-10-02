@@ -86,7 +86,8 @@
     "qunit-dom": "^1.0.0",
     "rose": "*",
     "sass": "^1.26.5",
-    "sass-lint": "^1.13.1"
+    "sass-lint": "^1.13.1",
+    "sinon": "^9.1.0"
   },
   "engines": {
     "node": "10.* || >= 12"

@@ -10,6 +10,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import sinon from 'sinon';
 
 module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
@@ -139,6 +140,28 @@ module('Acceptance | projects', function (hooks) {
     await visit(existingProjectURL);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(getProjectScopesCount(), initialProjectScopesCount - 1);
+  });
+
+  test('can delete project with confirmation acceptance', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    window.confirm = sinon.fake.returns(true);
+    await visit(existingProjectURL);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getProjectScopesCount(), initialProjectScopesCount - 1);
+    assert.ok(window.confirm.calledOnce);
+  });
+
+  test('cannot delete project with confirmation denial', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    window.confirm = sinon.fake.returns(false);
+    await visit(existingProjectURL);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getProjectScopesCount(), initialProjectScopesCount);
+    assert.ok(window.confirm.calledOnce);
   });
 
   test('saving an existing project with invalid fields displays error messages', async function (assert) {
