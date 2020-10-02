@@ -30,8 +30,8 @@
         {{#each @model as |org|}}
           <cards.link
             @title={{org.name}}
-            @subtitle={{org.id}}
-            @description={{org.description}}
+            @subtitle={{org.description}}
+            @description={{org.id}}
             @route="scopes.scope"
             @model={{org.id}}
           />

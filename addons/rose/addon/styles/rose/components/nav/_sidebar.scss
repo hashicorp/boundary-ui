@@ -39,6 +39,7 @@
     &.active {
       color: var(--action);
       border-color: currentColor;
+      background-color: var(--action-subtler-1h);
     }
 
     &:hover {
