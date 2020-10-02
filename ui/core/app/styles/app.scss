@@ -102,6 +102,7 @@
   }
 
   mark {
+    color: inherit;
     background-color: transparent;
     animation: fadeBackground 0.75s linear;
     @keyframes fadeBackground {
