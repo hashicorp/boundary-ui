@@ -100,4 +100,13 @@
     position: relative;
     top: -2px;
   }
+
+  mark {
+    background-color: transparent;
+    animation: fadeBackground 0.75s linear;
+    @keyframes fadeBackground {
+      0%   { background-color: var(--action-subtler-1); }
+      100% { background-color: transparent; }
+    }
+  }
 }
