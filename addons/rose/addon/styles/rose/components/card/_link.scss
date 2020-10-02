@@ -115,6 +115,13 @@ $xxxs: sizing.rems(xxxs); // 2
     }
   }
 
+  &:hover {
+    .rose-card-link-description,
+    .rose-card-link-footer-id {
+      color: var(--stark);
+    }
+  }
+
   // .rose-card-link-description {
   //   margin: auto 0 0;
   //   color: var(--ui-gray);
