@@ -1,0 +1,6 @@
+<nav class="rose-header-nav" aria-label="header-nav">
+  {{yield (hash
+    link=(component 'link-to' class="rose-header-nav-link")
+    dropdown=(component 'rose/dropdown')
+  )}}
+</nav>

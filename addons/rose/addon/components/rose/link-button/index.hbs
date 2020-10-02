@@ -1,0 +1,26 @@
+<span class="rose-button-wrapper">
+  {{#if @iconLeft}}
+    <Rose::Icon
+      @name={{@iconLeft}}
+      @size="medium"
+    />
+  {{/if}}
+
+  <span class="rose-button-body">
+    {{yield}}
+  </span>
+
+  {{#if @iconOnly}}
+    <Rose::Icon
+      @name={{@iconOnly}}
+      @size="medium"
+    />
+  {{/if}}
+
+  {{#if @iconRight}}
+    <Rose::Icon
+      @name={{@iconRight}}
+      @size="medium"
+    />
+  {{/if}}
+</span>

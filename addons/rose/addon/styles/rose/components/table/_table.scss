@@ -1,0 +1,41 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-table {
+  @include type.type(s, normal);
+  width: 100%;
+
+  .rose-table-row {
+    border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    text-align: left;
+  }
+
+  .rose-table-cell,
+  .rose-table-header-cell {
+    vertical-align: middle;
+  }
+
+  .rose-table-header-cell {
+    @include type.type(s, semibold);
+    color: var(--ui-gray);
+  }
+
+  .rose-table-header,
+  .rose-table-footer {
+    .rose-table-cell,
+    .rose-table-header-cell {
+      padding: sizing.rems(s);
+    }
+  }
+
+  .rose-table-body {
+    .rose-table-cell,
+    .rose-table-header-cell {
+      padding: sizing.rems(l) sizing.rems(s);
+    }
+  }
+
+  [class*="rose-button"] {
+    margin-bottom: 0;
+  }
+}

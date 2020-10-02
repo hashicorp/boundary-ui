@@ -1,0 +1,67 @@
+{{title (t 'resources.role.principal.title_plural')}}
+
+{{#if @model.principals}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        <row.headerCell>{{t "titles.actions"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model.principals as |principal|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{principal.model.displayName}}
+          </row.headerCell>
+          <row.cell>
+            {{t (concat 'resources.role.principal.types.' principal.type)}}
+          </row.cell>
+          <row.cell>
+            <Copyable
+              @text={{principal.model.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{principal.model.id}}</code>
+            </Copyable>
+          </row.cell>
+            <row.cell>
+            <Rose::Dropdown
+              @icon="more-horizontal"
+              @iconOnly={{true}}
+              @showCaret={{false}}
+              @dropdownRight={{true}}
+              @text="{{t "actions.manage"}}" as |dropdown|
+            >
+              <dropdown.button
+                @style="danger"
+                {{on "click" (route-action "removePrincipal" principal.model)}}
+              >
+                {{t "actions.remove"}}
+              </dropdown.button>
+            </Rose::Dropdown>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "resources.role.principal.messages.welcome.title"}} as |message|>
+      <message.description>
+        {{t "resources.role.principal.messages.welcome.description"}}
+      </message.description>
+      <message.link @route="scopes.scope.roles.role.add-principals">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t 'resources.role.principal.actions.add-principals'}}
+      </message.link>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}

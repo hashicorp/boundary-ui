@@ -1,0 +1,75 @@
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t "resources.user.title_plural"}}</h2>
+    {{#if @model}}
+      <p>{{t "resources.user.description"}}</p>
+    {{/if}}
+  </page.header>
+
+  <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton @route="scopes.scope.users.new" @style="primary">{{t 'titles.new'}}</Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+
+    {{#if @model}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t "form.name.label"}}</row.headerCell>
+            <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |user|}}
+            <body.row as |row|>
+              <row.headerCell>
+                <LinkTo
+                  @route="scopes.scope.users.user"
+                  @model={{user.id}}
+                >
+                  {{user.name}}
+                </LinkTo>
+                <p>{{user.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                <Copyable
+                  @text={{user.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
+                  <code>{{user.id}}</code>
+                </Copyable>
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t 'resources.user.messages.welcome.title'}} as |message|>
+          <message.description>
+            {{t 'resources.user.description'}}
+          </message.description>
+          <message.link @route="scopes.scope.users.new">
+            <Rose::Icon @name="plus-circle-outline" />
+            {{t 'titles.new'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>

@@ -1,0 +1,21 @@
+@use 'sass:map';
+
+/**
+ * SASS variables various media query sizes
+ */
+
+$width-breakpoints: (
+  xxlarge: 1440px,
+  xlarge: 1200px,
+  large: 1024px,
+  medium: 768px,
+  small: 540px,
+  xsmall: 320px,
+);
+
+/**
+ * Returns a media width variable.
+ */
+@function width($name) {
+  @return map.get($width-breakpoints, $name);
+}

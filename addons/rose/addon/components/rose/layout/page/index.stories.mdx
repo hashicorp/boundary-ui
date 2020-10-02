@@ -1,0 +1,33 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Layout|Page" component="Page" />
+
+# Layout|Page
+
+A page layout/positioning component that allows five distinct sections to be configured: breadcrumbs, header, actions, navigation, and body.
+
+```htmlbars
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs />
+  <page.header />
+  <page.actions />
+  <page.navigation />
+  <page.body />
+</Rose::Layout::Page>
+```
+
+<Preview>
+  <Story name="Page">{{
+    template: hbs`
+    <Rose::Layout::Page as |page|>
+      <page.breadcrumbs style="background: var(--brand-gray-4);">Breadcrumbs</page.breadcrumbs>
+      <page.header style="background: var(--brand-gray-5);">Header</page.header>
+      <page.actions style="background: var(--brand-gray-8);">Actions</page.actions>
+      <page.navigation style="background: var(--brand-gray-6);">Navigation</page.navigation>
+      <page.body style="background: var(--brand-gray-7);">Body</page.body>
+    </Rose::Layout::Page>
+    `,
+  }}</Story>
+</Preview>

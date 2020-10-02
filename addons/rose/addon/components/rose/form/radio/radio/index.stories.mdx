@@ -1,0 +1,43 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { text, boolean } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Radio/Radio" component="Form/Radio/Radio" />
+
+# Form Radiofield
+
+Renders a form radiofield.
+
+```htmlbars
+<Rose::Form::Radio::Radio
+  @label="Yes"
+  @error={{false}}
+  @value="yes-agree"
+  @selectedValue="yes-agree"
+  @disabled={{false}}
+  />
+```
+
+<Preview>
+  <Story name="Basic" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Radio::Radio
+        @label={{label}}
+        @error={{error}}
+        @value={{value}}
+        @selectedValue={{selectedValue}}
+        @disabled={{disabled}}
+        />
+    `,
+    context: {
+      label: text('text', 'Radiofield'),
+      error: boolean('error', false),
+      value: text('value', 'value and selectedValue must match to select radiofield'),
+      selectedValue: text(
+        'selectedValue',
+        'value and selectedValue must match to select radiofield'
+      ),
+      disabled: boolean('disabled', false),
+    }
+  }}</Story>
+</Preview>

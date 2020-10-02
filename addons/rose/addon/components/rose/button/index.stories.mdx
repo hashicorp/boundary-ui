@@ -1,0 +1,98 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Button" component="Button" />
+
+# Button
+
+A simple button component that renders an HTML `<button>` element.  May be used
+to trigger actions or to submit forms.  Avoid using buttons as simple links to
+other routes.  For accessibility, use links instead.
+
+```htmlbars
+<Rose::Button @style="primary" @iconRight="chevron-right">
+  Action
+</Rose::Button>
+```
+
+<Preview>
+  <Story name="Advanced">{{
+    template: hbs`
+      <Rose::Button
+        @submit={{submit}}
+        @disabled={{disabled}}
+        @style={{style}}
+        @iconLeft={{iconLeft}}
+        @iconRight={{iconRight}}
+        {{on "click" onClick}}
+      >
+        {{text}}
+      </Rose::Button>
+    `,
+    context: {
+      text: text('text', 'Action'),
+      submit: boolean('submit', true),
+      disabled: boolean('disabled', false),
+      style: select(
+        'style',
+        {
+          primary: 'primary',
+          secondary: 'secondary',
+          warning: 'warning',
+          ghost: 'ghost',
+          'inline-link-action': 'inline-link-action',
+        },
+        'primary'
+      ),
+      iconLeft: select(
+        'iconLeft',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'check-circle-outline'
+      ),
+      iconRight: select(
+        'iconRight',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'chevron-right',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'chevron-right'
+      ),
+      onClick: action('clicked'),
+    },
+  }}</Story>
+</Preview>
+
+Buttons may show only an icon.  You should still pass block content into the
+button in this case for accessibility.
+
+<Preview>
+  <Story name="Icon Only">{{
+    template: hbs`
+      <Rose::Button @style="secondary" @iconOnly={{iconOnly}}>
+        Icon Only
+      </Rose::Button>
+    `,
+    context: {
+      iconOnly: select(
+        'iconOnly',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'check-circle-outline'
+      ),
+    },
+  }}</Story>
+</Preview>

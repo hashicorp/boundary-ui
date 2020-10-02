@@ -1,0 +1,341 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Style Guide|Colors" />
+
+# Colors
+
+Colors are available using CSS custom properties.  Find the color swatch you
+need and copy the CSS custom property variable into your stylesheet.
+Use only these properties when specifying colors instead of absolute SCSS color
+variables.  This ensures consistency and dark mode compatibility.
+
+**Tip**:  Try it out in dark mode.  Set your system to dark mode to see these
+swatches in a different light.
+
+For example...
+```css
+.my-component {
+  color: var(--stark);
+  background-color: var(--subtle);
+}
+```
+
+## Relative Poles
+
+These colors depend on light or dark mode.  Use these most often
+when specifying primary foreground and background colors.
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--subtle)"}}></div>
+    <div class="swatch-detail">
+      <code>--subtle</code>
+    </div>
+  </li>
+
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--stark)"}}></div>
+    <div class="swatch-detail">
+      <code>--stark</code>
+    </div>
+  </li>
+</ul>
+
+## Absolute Poles
+
+Some colors don't change in dark vs light mode.  Use these values sparingly.
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--white)"}}></div>
+    <div class="swatch-detail">
+      <code>--white</code>
+    </div>
+  </li>
+
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--black)"}}></div>
+    <div class="swatch-detail">
+      <code>--black</code>
+    </div>
+  </li>
+</ul>
+
+## Theme Colors
+
+### Info
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--info-subtler-3)"}}></div>
+    <div class="swatch-detail">
+      <code>--info-subtler-3</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--info-subtler-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--info-subtler-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--info-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--info-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--info)"}}></div>
+    <div class="swatch-detail">
+      <code>--info</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--info-starker-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--info-starker-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--info-starker-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--info-starker-2</code>
+    </div>
+  </li>
+</ul>
+
+### Alert
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--alert-subtler-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--alert-subtler-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--alert-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--alert-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--alert)"}}></div>
+    <div class="swatch-detail">
+      <code>--alert</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--alert-starker-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--alert-starker-1</code>
+    </div>
+  </li>
+</ul>
+
+### Warning
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--warning-subtler-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--warning-subtler-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--warning-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--warning-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--warning)"}}></div>
+    <div class="swatch-detail">
+      <code>--warning</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--warning-starker-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--warning-starker-1</code>
+    </div>
+  </li>
+</ul>
+
+### Failure
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--failure-subtler-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--failure-subtler-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--failure-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--failure-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--failure)"}}></div>
+    <div class="swatch-detail">
+      <code>--failure</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--failure-starker-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--failure-starker-1</code>
+    </div>
+  </li>
+</ul>
+
+### Success
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--success-subtler-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--success-subtler-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--success-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--success-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--success)"}}></div>
+    <div class="swatch-detail">
+      <code>--success</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--success-starker-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--success-starker-1</code>
+    </div>
+  </li>
+</ul>
+
+### Action
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--action-subtler-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--action-subtler-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--action-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--action-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--action)"}}></div>
+    <div class="swatch-detail">
+      <code>--action</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--action-starker-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--action-starker-1</code>
+    </div>
+  </li>
+</ul>
+
+### UI Border
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-border-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-border-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-border)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-border</code>
+    </div>
+  </li>
+</ul>
+
+### UI Border
+
+<ul class="swatches">
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-subtler-6)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-subtler-6</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-subtler-5)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-subtler-5</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-subtler-4)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-subtler-4</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-subtler-3)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-subtler-3</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-subtler-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-subtler-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-subtler-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-subtler-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-starker-1)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-starker-1</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-starker-2)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-starker-2</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-starker-3)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-starker-3</code>
+    </div>
+  </li>
+  <li class="swatch">
+    <div class="swatch-chip" style={{backgroundColor: "var(--ui-gray-starker-4)"}}></div>
+    <div class="swatch-detail">
+      <code>--ui-gray-starker-4</code>
+    </div>
+  </li>
+</ul>

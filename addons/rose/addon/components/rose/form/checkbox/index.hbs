@@ -1,0 +1,24 @@
+<div class="rose-form-checkbox{{if @error " error"}}">
+
+  <Input
+    ...attributes
+    class="rose-form-checkbox-field"
+    id={{this.id}}
+    name={{@name}}
+    disabled={{@disabled}}
+    @type="checkbox"
+    @checked={{if @checked true false}}
+    aria-describedby="{{if @error (concat 'errors-' this.id)}}" />
+
+  <label class="rose-form-checkbox-label" for={{this.id}}>
+    <span class="rose-form-checkbox-label-text">{{@label}}</span>
+    {{#if @description}}
+      <p class="rose-form-checkbox-label-description">{{@description}}</p>
+    {{/if}}
+  </label>
+
+  {{yield (hash
+    errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
+  )}}
+
+</div>

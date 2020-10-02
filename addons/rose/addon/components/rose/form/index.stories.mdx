@@ -1,0 +1,134 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form" component="Form" />
+
+# Form
+
+A component for building accessible forms.  Yields contextual fields
+and actions.
+
+<Preview>
+  <Story name="Form" height="35rem">{{
+    template: hbs`
+      <Rose::Form
+        @onSubmit={{submit}}
+        @cancel={{cancel}}
+        @showEditToggle={{showEditToggle}}
+        @disabled={{disabled}}
+        as |form|>
+        <form.input
+          @label="Label"
+          @helperText="Helper text"
+          @value="Text"
+          />
+        <form.textarea
+          @label="Label"
+          @helperText="Helper text"
+          @value="Text"
+          />
+        <form.select
+          @label="Label"
+          @helperText="Helper text"
+          @onChange={{selectChange}}
+          as |field|
+        >
+          <field.field as |select|>
+            <select.option>Choose an option</select.option>
+            <select.option @value="value-1">Value 1</select.option>
+            <select.option @value="value-2">Value 2</select.option>
+            <select.option @value="value-3">Value 3</select.option>
+          </field.field>
+        </form.select>
+        <form.radioGroup @name="color" @selectedValue="green" as |radioGroup|>
+          <radioGroup.radio
+            @label="Red"
+            @value="red"
+          />
+          <radioGroup.radio
+            @label="Green"
+            @value="green"
+          />
+          <radioGroup.radio
+            @label="Blue"
+            @value="blue"
+          />
+        </form.radioGroup>
+        <form.checkbox
+          @label="Label"
+          @checked={{true}}
+          />
+        <form.actions
+          @submitText="Save"
+          @cancelText="Cancel"
+          @enableEditText="Edit"
+          @showCancel={{true}} />
+      </Rose::Form>
+    `,
+    context: {
+      showEditToggle: boolean('showEditToggle', false),
+      disabled: boolean('disabled', false),
+      submit: action('submit'),
+      cancel: action('cancel'),
+      selectChange: action('selectChange'),
+    },
+  }}</Story>
+</Preview>
+
+
+```htmlbars
+<Rose::Form
+  @onSubmit={{this.submit}}
+  @cancel={{this.cancel}}
+  @disabled={{false}}
+  @showEditToggle={{true}}
+  as |form|>
+  <form.input
+    @label="Label"
+    @helperText="Helper text"
+    @value="Text"
+    />
+  <form.textarea
+    @label="Label"
+    @helperText="Helper text"
+    @value="Text"
+    />
+  <form.select
+    @label="Label"
+    @helperText="Helper text"
+    @onChange={{fn this.actionHandler}}
+    as |field|
+  >
+    <field.field as |select|>
+      <select.option>Choose an option</select.option>
+      <select.option @value="value-1">Value 1</select.option>
+      <select.option @value="value-2">Value 2</select.option>
+      <select.option @value="value-3">Value 3</select.option>
+    </field.field>
+  </form.select>
+  <form.radioGroup @name="color" @selectedValue="green" as |radioGroup|>
+    <radioGroup.radio
+      @label="Red"
+      @value="red"
+    />
+    <radioGroup.radio
+      @label="Green"
+      @value="green"
+    />
+    <radioGroup.radio
+      @label="Blue"
+      @value="blue"
+    />
+  </form.radioGroup>
+  <form.checkbox
+    @label="Label"
+    />
+  <form.actions
+    @submitText="Save"
+    @cancelText="Cancel"
+    @enableEditText="Edit"
+    @showCancel={{true}} />
+</Rose::Form>
+```

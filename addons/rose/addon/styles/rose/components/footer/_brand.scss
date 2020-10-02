@@ -1,0 +1,14 @@
+@use '../../variables/sizing';
+
+.rose-footer-brand {
+  display: flex;
+  align-items: center;
+  color: var(--ui-gray-starker-1);
+  margin: sizing.rems(xs);
+
+  svg {
+    $logoSize: sizing.rems(m);
+    display: inline-block;
+    width: $logoSize;
+  }
+}

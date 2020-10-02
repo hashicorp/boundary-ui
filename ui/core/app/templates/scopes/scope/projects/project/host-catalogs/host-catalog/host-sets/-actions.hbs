@@ -1,0 +1,12 @@
+<Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+  <dropdown.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.add-hosts">
+    {{t 'resources.host-set.actions.add-hosts'}}
+  </dropdown.link>
+  <dropdown.button
+    @style="danger"
+    @disabled={{@model.canSave}}
+    {{on "click" (route-action "deleteHostSet" @model)}}
+  >
+    {{t 'resources.host-set.actions.delete'}}
+  </dropdown.button>
+</Rose::Dropdown>

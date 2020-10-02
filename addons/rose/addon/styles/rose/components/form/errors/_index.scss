@@ -1,0 +1,7 @@
+@use '../../../variables/sizing';
+
+@import 'message';
+
+.rose-form-errors {
+  margin-bottom: sizing.rems(l);
+}

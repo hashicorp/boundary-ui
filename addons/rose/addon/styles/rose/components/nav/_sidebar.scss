@@ -1,0 +1,51 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-nav-sidebar {
+  $threePX: sizing.rems(xxxs) + sizing.rems(xxxxs);
+  $yPadding: sizing.rems(xs);
+
+  padding-top: $yPadding;
+  padding-bottom: $yPadding;
+  border-bottom: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  // TODO revisit the title
+  .rose-nav-title {
+    @include type.type(xs, semibold);
+    display: none;
+    color: var(--ui-gray);
+    text-transform: uppercase;
+    $lineHeight: 20 / 12;
+    line-height: $lineHeight;
+    padding: 0 sizing.rems(m);
+    margin-bottom: $threePX;
+    border-bottom: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+  }
+
+  .rose-nav-link {
+    @include type.type(s);
+    display: block;
+    color: var(--stark);
+    $lineHeight: 36 / 14;
+    line-height: $lineHeight;
+    text-decoration: none;
+    padding: 0 sizing.rems(m);
+    border-right: $threePX solid transparent;
+
+    &.active {
+      color: var(--action);
+      border-color: currentColor;
+      background-color: var(--action-subtler-1h);
+    }
+
+    &:hover {
+      //text-decoration: underline;
+      color: var(--action);
+      background-color: var(--action-subtler-1h);
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<XSelect
+  ...attributes
+  class="rose-form-select-field{{if @error " error"}}"
+  id={{@id}}
+  name={{@name}}
+  disabled={{@disabled}}
+  @value={{@value}}
+  @onChange={{@onChange}}
+  aria-describedby={{@aria-describedby}}
+  as |xs|
+>
+  {{yield xs}}
+</XSelect>

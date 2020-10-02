@@ -1,0 +1,27 @@
+<Rose::Form
+  class="full-width"
+  @onSubmit={{route-action "authenticate" (hash
+    identification=this.identification
+    password=this.password
+  )}}
+  @cancel={{false}}
+  as |form|
+>
+
+  <form.input
+    @name="identification"
+    @type="text"
+    @value={{this.identification}}
+    @label={{t "form.login_name.label"}} />
+
+  <form.input
+    @name="password"
+    @type="password"
+    @value={{this.password}}
+    @label={{t "form.password.label"}} />
+
+  <form.actions
+    @submitText={{t "actions.authenticate"}}
+    @showCancel={{false}} />
+
+</Rose::Form>

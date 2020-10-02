@@ -1,0 +1,95 @@
+<Rose::Form
+  @onSubmit={{fn this.submit @submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <form.input
+  @value={{t (concat 'resources.account.types.' @model.type)}}
+  @label={{t "form.type.label"}}
+  readonly={{true}}
+  @disabled={{true}} />
+
+  <form.input
+    @name="name"
+    @type="name"
+    @value={{@model.name}}
+    @label={{t "form.name.label"}}
+    @helperText={{t "form.name.help"}}
+    @error={{@model.errors.name}}
+    readonly={{false}}
+  as |field|>
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name="description"
+    @type="description"
+    @value={{@model.description}}
+    @label={{t "form.description.label"}}
+    @helperText={{t "form.description.help"}}
+    @error={{@model.errors.description}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+  as |field|>
+    {{#if @model.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.input
+    @name="login_name"
+    @type="text"
+    @value={{@model.attributes.login_name}}
+    @label={{t "form.login_name.label"}}
+    @error={{@model.errors.login_name}}
+    readonly={{false}}
+  as |field|>
+    {{#if @model.errors.login_name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.login_name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  {{#if @model.isNew}}
+    <form.input
+      @name="password"
+      @type="password"
+      @value={{this.password}}
+      @label={{t "form.password.label"}}
+      @error={{@model.errors.password}}
+      readonly={{false}}
+      autocomplete="new-password"
+    as |field|>
+      {{#if @model.errors.password}}
+        <field.errors as |errors|>
+          {{#each @model.errors.password as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </field.errors>
+      {{/if}}
+    </form.input>
+  {{/if}}
+
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @enableEditText={{t "actions.edit-form"}}
+    @submitText={{t "actions.save"}}
+    @cancelText={{t "actions.cancel"}} />
+
+</Rose::Form>

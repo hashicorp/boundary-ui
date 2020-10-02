@@ -1,0 +1,19 @@
+@use '../variables/sizing';
+
+.rose-icon {
+  --size: #{sizing.rems(l)};
+
+  &.medium {
+    --size: #{sizing.rems(m)};
+  }
+
+  &.small {
+    --size: #{sizing.rems(s)};
+  }
+
+  > svg {
+    width: var(--size);
+    height: var(--size);
+    vertical-align: text-top;
+  }
+}

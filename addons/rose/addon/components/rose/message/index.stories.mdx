@@ -1,0 +1,84 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Message" component="Message" />
+
+# Message
+
+A message component containing a title, description, and nav links.
+Title can be configured with optional icon and subtitle.
+
+<Preview>
+  <Story name="Advanced Message" height="12rem">{{
+    template: hbs`
+    <Rose::Message @title={{title}} @subtitle={{subtitle}} @icon={{icon}} as |message|>
+      <message.description>
+        {{description}}
+      </message.description>
+      <message.link @route="index">
+        <Rose::Icon @name="chevron-left" />
+        Go back
+      </message.link>
+      <message.link @route="index">
+        Need help?
+      </message.link>
+    </Rose::Message>
+    `,
+    context: {
+      title: text('title', 'Page not found'),
+      subtitle: text('subtitle', 'Error 404'),
+      description: text('description', 'Sorry, we could not find the page you were looking for.  Navigate to another page with the links below.'),
+      icon: select(
+        'icon',
+        {
+          'alert-circle-outline': 'alert-circle-outline',
+          'help-circle-outline': 'help-circle-outline',
+          'disabled': 'disabled',
+        },
+        'help-circle-outline'
+      ),
+    },
+  }}</Story>
+</Preview>
+
+```html
+<Rose::Message @title="Page not found" @subtitle="Error 404" @icon="disabled" as |message|>
+  <message.description>
+      You must be granted permissions to view this data. Ask your administrator
+      if you think you should have access.
+  </message.description>
+  <message.link @route="index">
+    <Rose::Icon @name="chevron-left" />
+    Go back
+  </message.link>
+  <message.link @route="index">Need help?</message.link>
+</Rose::Message>
+```
+
+Message can be configured without icons and navigation links.
+
+<Preview>
+  <Story name="Basic Message" height="8rem">{{
+    template: hbs`
+    <Rose::Message @title="No logs received yet" as |message|>
+      <message.description>
+        {{description}}
+      </message.description>
+    </Rose::Message>
+    `,
+    context: {
+      title: text('title', 'No logs received yet'),
+      description: text('description', 'Sorry, we could not find the page you were looking for.  Navigate to another page with the links below.'),
+    },
+  }}</Story>
+</Preview>
+
+```html
+<Rose::Message @title="No logs received yet" as |message|>
+  <message.description>
+    Description.
+  </message.description>
+</Rose::Message>
+```

@@ -1,0 +1,43 @@
+<Rose::Header as |header|>
+  <header.brand @logo="logo" @text="Product Name" />
+
+  <header.nav as |nav|>
+    <nav.dropdown @text="org-name" @icon="user-organization" as |dropdown|>
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
+      <dropdown.separator />
+      <dropdown.button>Button menu item</dropdown.button>
+    </nav.dropdown>
+
+    <nav.link @route="index">Section</nav.link>
+    <nav.link @route="about">Section</nav.link>
+  </header.nav>
+
+  <header.utilities as |utilities|>
+    <utilities.dropdown
+      @text="user@example.net"
+      @iconOnly={{true}}
+      @icon="user-square-fill" as |dropdown|
+    >
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
+      <dropdown.button>Button - default</dropdown.button>
+      <dropdown.separator />
+      <dropdown.button @style="danger">Button - danger</dropdown.button>
+    </utilities.dropdown>
+  </header.utilities>
+</Rose::Header>
+
+<Rose::Dropdown @text="Dropdown" as |dropdown|>
+  <dropdown.link @route="index">Menu item</dropdown.link>
+  <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
+  <dropdown.separator></dropdown.separator>
+
+  <dropdown.button>Button menu item</dropdown.button>
+  <dropdown.button @style="danger">Button - danger</dropdown.button>
+</Rose::Dropdown>
+
+<Rose::Dropdown @showCaret={{false}} @icon="more-horizontal" as |dropdown|>
+  <dropdown.link @route="index">Menu item</dropdown.link>
+  <dropdown.button>Button menu item</dropdown.button>
+</Rose::Dropdown>

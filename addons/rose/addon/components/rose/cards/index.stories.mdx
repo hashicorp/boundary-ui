@@ -1,0 +1,75 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Cards" component="Cards" />
+
+# Cards
+
+A set of cards arranged side-by-side.
+
+<Preview>
+  <Story name="Basic Cards" height="20rem">{{
+    template: hbs`
+      <Rose::Cards as |cards|>
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+          @id="resource_id_1234"
+          @icon="user-organization"
+        />
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+          @id="resource_id_1234"
+          @icon="user-organization"
+        />
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+          @id="resource_id_1234"
+          @icon="user-organization"
+        />
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+          @id="resource_id_1234"
+          @icon="user-organization"
+        />
+        <cards.link
+          @route="index"
+          @title="Card Title"
+          @description="Description"
+          @id="resource_id_1234"
+          @icon="user-organization"
+        />
+      </Rose::Cards>
+    `,
+    context: {}
+  }}</Story>
+</Preview>
+
+
+```htmlbars
+<Rose::Cards as |cards|>
+  <cards.link
+    @route="index"
+    @title="Card Title"
+    @description="Description"
+    @id="resource_id_1234"
+    @icon="user-organization"
+  />
+  <cards.link
+    @route="index"
+    @title="Card Title"
+    @description="Description"
+    @id="resource_id_1234"
+    @icon="user-organization"
+  />
+</Rose::Cards>
+```

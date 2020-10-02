@@ -1,0 +1,9 @@
+{{title (t 'resources.role.grant.title_plural')}}
+
+<Form::Role::Grants
+  @model={{@model}}
+  @submit={{route-action "save" @model}}
+  @cancel={{route-action "cancel" @model}}
+  @addGrant={{route-action "addGrant" @model}}
+  @removeGrant={{route-action "removeGrant" @model}}
+/>

@@ -1,0 +1,24 @@
+<svg
+  width="30"
+  height="30"
+  viewBox="0 0 30 30"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+
+  <g id="logomark">
+    <path
+      d="M0 7.19579L11.4553 0.58728V5.55192L4.30398 9.68052V25.5537L0 23.069V7.19579Z"
+      fill="currentColor">
+    </path>
+
+    <path
+      d="M16.0285 0.58728V13.2291H11.4553V8.51084L7.15165 10.9956V27.1919L11.4553 29.6829V17.0771H16.0285V21.7641L20.3321 19.2788V3.07229L16.0285 0.58728Z"
+      fill="currentColor">
+    </path>
+
+    <path
+      d="M27.4838 23.0789L16.0285 29.6875V24.7228L23.1798 20.5939V4.72074L27.4838 7.20576V23.0789Z"
+      fill="currentColor">
+    </path>
+  </g>
+</svg>

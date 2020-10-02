@@ -1,0 +1,26 @@
+/**
+ * Defines the opacity CSS custom properties that should be used throughout
+ * these stylesheets.
+ */
+
+// Light Mode
+:root {
+  --opacity-5: 0.025;
+  --opacity-4: 0.05;
+  --opacity-3: 0.1;
+  --opacity-2: 0.25;
+  --opacity-1: 0.5;
+}
+
+// Dark Mode
+// Subtler opacities look better in dark mode, so these are halved compared to
+// light mode.
+@media (prefers-color-scheme: dark) {
+  :root {
+    --opacity-5: 0.0125;
+    --opacity-4: 0.0125;
+    --opacity-3: 0.025;
+    --opacity-2: 0.025;
+    --opacity-1: 0.125;
+  }
+}

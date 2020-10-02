@@ -1,0 +1,14 @@
+<span ...attributes
+  class="rose-badge {{if  @style (concat "rose-badge-" @style)}}"
+>
+  {{#if @icon}}
+    <Rose::Icon
+      @name={{@icon}}
+      @size="medium"
+    />
+  {{/if}}
+
+  <span class="rose-badge-body">
+    {{yield}}
+  </span>
+</span>

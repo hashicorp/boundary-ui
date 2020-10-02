@@ -1,0 +1,82 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Header" component="Header" />
+
+# Header
+
+A header component that allows three distinct sections to be configured: brand, nav, and utilities.
+
+```htmlbars
+<Rose::Header as |header|>
+  <header.brand @logo="logo" @text="Product Name" />
+
+  <header.nav as |nav|>
+    <nav.dropdown @text="org-name" as |dropdown|>
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.button>Button menu item</dropdown.button>
+    </nav.dropdown>
+    <nav.link @route="index">Section</nav.link>
+    <nav.link @route="about">Section</nav.link>
+  </header.nav>
+
+  <header.utilities as |utilities|>
+    <utilities.dropdown
+      @text="user@example.net"
+      @iconOnly={{true}}
+      @icon="user-square-fill" as |dropdown|
+    >
+      <dropdown.link @route="index">Menu item</dropdown.link>
+      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.button>Button menu item</dropdown.button>
+    </utilities.dropdown>
+  </header.utilities>
+</Rose::Header>
+```
+
+<Preview>
+  <Story name="Basic">{{
+    template: hbs`
+    <Rose::Header as |header|>
+      <header.brand @logo="logo" @text={{brandName}} />
+      <header.nav as |nav|>
+        <nav.dropdown @text="org-name" as |dropdown|>
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </nav.dropdown>
+        <nav.link @route="index">Section</nav.link>
+        <nav.link @route="about">Section</nav.link>
+      </header.nav>
+      <header.utilities as |utilities|>
+        <utilities.dropdown
+          @text="user@example.net"
+          @iconOnly={{true}}
+          @icon={{dropdownIcon}} as |dropdown|
+        >
+          <dropdown.link @route="index">Menu item</dropdown.link>
+          <dropdown.link @route="about">Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </utilities.dropdown>
+      </header.utilities>
+    </Rose::Header>
+    `,
+    context: {
+      brandName: text('brandName', 'Brand Name'),
+      dropdownIcon: select(
+        'dropdownIcon',
+        {
+          'user-square-fill': 'user-square-fill',
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'user-square-fill'
+      ),
+    },
+  }}</Story>
+</Preview>

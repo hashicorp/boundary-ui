@@ -1,0 +1,43 @@
+id:
+  label: ID
+name:
+  label: Name
+  help: Optional name for identification purposes
+description:
+  label: Description
+  help: Optional description for identification purposes
+type:
+  label: Type
+  help: The type of the resource, to help differentiate schemas
+login_name:
+  label: Login Name
+username:
+  label: Username
+set_password:
+  label: Password
+  help: Create a new password
+password:
+  label: Password
+grant:
+  label: Grant
+  help: A permissions grant string for a role
+address:
+  label: Address
+  help: An IP, host name, or other routable address
+default_port:
+  label: Default Port
+  help: The default port on which to connect
+current_password:
+  label: Current Password
+new_password:
+  label: New Password
+started:
+  label: Started
+status:
+  label: Status
+session_max_seconds:
+  label: Maximum Duration (in seconds)
+  help: The maximum duration of a session.
+session_connection_limit:
+  label: Maximum Connections
+  help: The maximum number of connections allowed per session.  For unlimited, specify "-1".

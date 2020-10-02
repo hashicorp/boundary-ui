@@ -1,0 +1,33 @@
+<details
+  ...attributes
+  class="rose-dropdown {{if @dropdownRight "rose-dropdown-right"}}"
+  {{on-click-outside this.close}}
+>
+
+  <summary
+    class="rose-dropdown-trigger {{if @iconOnly "has-icon-only"}} {{if this.showCaret "show-caret"}}"
+    title={{@text}}
+  >
+
+    {{#if @icon}}
+      <Rose::Icon
+        @name={{@icon}}
+        @size="medium"
+      />
+    {{/if}}
+
+    <span class="rose-dropdown-trigger-text">
+      {{@text}}
+    </span>
+
+  </summary>
+
+  <div class="rose-dropdown-content" {{on-click-inside this.close}}>
+    {{yield (hash
+      link=(component "rose/dropdown/link" style=this.style)
+      button=(component "rose/dropdown/button" style=this.style)
+      separator=(component "rose/anonymous" tagName="hr" class="rose-dropdown-separator")
+    )}}
+  </div>
+
+</details>

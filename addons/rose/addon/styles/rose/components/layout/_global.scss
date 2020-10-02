@@ -1,0 +1,10 @@
+.rose-layout-global {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .rose-layout-global-body {
+    flex: 1;
+    display: flex;
+  }
+}

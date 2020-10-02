@@ -1,0 +1,27 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Nav|Breadcrumbs" component="Nav/Breadcrumbs" />
+
+# Breadcrumbs Navigation
+
+A breadcrumbs component with links as crumbs.
+
+```html
+<Rose::Nav::Breadcrumbs as |breadcrumbs|>
+  <breadcrumbs.link @route="about">Level 1</breadcrumbs.link>
+  <breadcrumbs.link @route="index">Level 2</breadcrumbs.link>
+</Rose::Nav::Breadcrumbs>
+```
+
+<Preview>
+  <Story name="Basic Breadcrumbs">{{
+    template: hbs`
+      <Rose::Nav::Breadcrumbs as |breadcrumbs|>
+        <breadcrumbs.link @route="about">Level 1</breadcrumbs.link>
+        <breadcrumbs.link @route="index">Level 2</breadcrumbs.link>
+      </Rose::Nav::Breadcrumbs>
+    `,
+  }}</Story>
+</Preview>

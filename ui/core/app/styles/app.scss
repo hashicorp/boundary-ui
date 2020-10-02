@@ -1,0 +1,112 @@
+@use 'rose/variables/sizing';
+@use 'rose/variables/media';
+
+@import 'rose';
+@import 'notify';
+
+.rose-layout-centered {
+  > .rose-layout-page {
+    width: sizing.rems(l) * 18;
+  }
+
+  @media (max-width: media.width(small)) {
+    display: block;
+
+    > .rose-layout-page {
+      width: auto;
+    }
+  }
+}
+
+.rose-nav-sidebar {
+  margin-top: sizing.rems(xxl);
+
+  & + .rose-nav-sidebar {
+    margin-top: 0;
+  }
+
+  .rose-icon {
+    margin-right: sizing.rems(xs);
+  }
+}
+
+.rose-form {
+  &:not(.full-width) {
+    width: 66%;
+  }
+
+  .rose-form-input {
+    width: 100%;
+
+    .rose-form-input-field {
+      width: 100%;
+    }
+  }
+}
+
+.rose-table {
+  p {
+    margin-bottom: 0;
+  }
+
+  .rose-form-checkbox {
+    margin-bottom: 0;
+
+    .rose-form-checkbox-label-text {
+      color: var(--stark);
+      text-decoration: underline;
+    }
+  }
+}
+
+.rose-header {
+  position: relative;
+
+  .logotype {
+    display: none;
+  }
+
+  .rose-dropdown {
+    .rose-icon {
+      transform: scale(0.7);
+    }
+  }
+
+  &.loading {
+    &::after {
+      animation: gradient 1s linear infinite;
+      background: repeating-linear-gradient(to right, var(--subtle), var(--subtle), var(--info), var(--subtle), var(--subtle));
+      background-position: -100% 0;
+      background-size: 200% auto;
+      content: ' ';
+      height: 3px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 100%;
+
+      @keyframes gradient {
+        0%   { background-position: -100% 0; }
+        100% { background-position: -200% 0; }
+      }
+    }
+  }
+}
+
+.copyable {
+  .copyable-button {
+    margin: 0;
+    padding: 0 sizing.rems(xxs);
+    position: relative;
+    top: -2px;
+  }
+
+  mark {
+    background-color: transparent;
+    animation: fadeBackground 0.75s linear;
+    @keyframes fadeBackground {
+      0%   { background-color: var(--action-subtler-1); }
+      100% { background-color: transparent; }
+    }
+  }
+}

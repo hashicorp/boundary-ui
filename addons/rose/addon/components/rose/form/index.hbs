@@ -1,0 +1,34 @@
+<form
+  ...attributes
+  novalidate
+  method="post"
+  class="rose-form"
+  autocomplete="off"
+  {{on "submit" this.handleSubmit}}
+>
+  {{!--
+    Only show the edit toggle button if the toggle is enabled in the first place
+    AND the form is not already in editable mode.
+
+    The cancel button's disabled state depends on the mode.  In edit mode,
+    the cancel button is only disabled if the disabled argument is true,
+    otherwise it is disabled based on the computed property this.disabled.
+  --}}
+  {{yield (hash
+    radioGroup=(component 'rose/form/radio/group' disabled=this.disabled)
+    checkbox=(component 'rose/form/checkbox' disabled=this.disabled)
+    input=(component 'rose/form/input' disabled=this.disabled)
+    select=(component 'rose/form/select' disabled=this.disabled)
+    textarea=(component 'rose/form/textarea' disabled=this.disabled)
+    actions=(component
+      (if this.showEditToggleButton
+        'rose/form/actions/edit-toggle'
+        'rose/form/actions'
+      )
+      submitDisabled=this.disabled
+      cancelDisabled=(if @showEditToggle @disabled this.disabled)
+      cancel=this.handleCancel
+      enableEdit=this.enableEdit
+    )
+  )}}
+</form>

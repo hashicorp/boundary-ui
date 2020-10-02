@@ -1,0 +1,71 @@
+{{#if @model.hosts}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t "form.name.label"}}</row.headerCell>
+        <row.headerCell>{{t "form.type.label"}}</row.headerCell>
+        <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+        <row.headerCell>{{t "titles.actions"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model.hosts as |host|}}
+        <body.row as |row|>
+          <row.headerCell>
+            <LinkTo
+              @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host"
+              @model={{host.id}}
+            >
+              {{host.displayName}}
+            </LinkTo>
+            <p>{{host.description}}</p>
+          </row.headerCell>
+          <row.cell>
+            <Rose::Badge>{{host.type}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <Copyable
+              @text={{host.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{host.id}}</code>
+            </Copyable>
+          </row.cell>
+          <row.cell>
+            <Rose::Dropdown
+              @icon="more-horizontal"
+              @iconOnly={{true}}
+              @showCaret={{false}}
+              @dropdownRight={{true}}
+              @text="{{t "actions.manage"}}" as |dropdown|
+            >
+              <dropdown.button
+                @style="danger"
+                {{on "click" (route-action "removeHost" @model.hostSet host)}}
+              >
+                {{t "actions.remove"}}
+              </dropdown.button>
+            </Rose::Dropdown>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{/if}}
+
+{{#unless @model.hosts}}
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "resources.host-set.host.messages.none.title"}} as |message|>
+      <message.description>
+        {{t "resources.host-set.host.messages.none.description"}}
+      </message.description>
+      <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.hosts.new">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t "titles.new"}}
+      </message.link>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+{{/unless}}

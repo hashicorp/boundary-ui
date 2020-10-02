@@ -1,0 +1,31 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-header-brand {
+  grid-area: brand;
+  display: flex;
+  align-items: center;
+  color: var(--white);
+  text-decoration: none;
+  padding: 0 10px;
+  margin: 10px;
+
+  svg {
+    //$logoSize: sizing.rems(xl) * 3;
+    display: block;
+    //width: $logoSize;
+  }
+
+  .rose-header-brand-text {
+    @include type.type(m, normal);
+    margin: 0;
+    margin-left: sizing.rems(s);
+    white-space: nowrap;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+}

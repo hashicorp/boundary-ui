@@ -1,0 +1,76 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { boolean } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Dropdown" component="Dropdown" />
+
+# Dropdown
+
+A simple dropdown component with support for links and buttons.
+
+<Preview>
+  <Story name="Basic Dropdown" height="5rem">{{
+    template: hbs`
+      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" @showCaret={{showCaret}} as |dropdown|>
+        <dropdown.link @route="index">Menu item</dropdown.link>
+        <dropdown.link @route="about">Menu item</dropdown.link>
+        <dropdown.separator />
+        <dropdown.button>Button menu item</dropdown.button>
+      </Rose::Dropdown>
+    `,
+    context: {
+      showCaret: boolean('showCaret', true),
+    },
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Icon-only Dropdown" height="5rem">{{
+    template: hbs`
+      <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" @iconOnly={{true}} as |dropdown|>
+        <dropdown.link @route="index">Menu item</dropdown.link>
+        <dropdown.link @route="about">Menu item</dropdown.link>
+        <dropdown.separator />
+        <dropdown.button>Button menu item</dropdown.button>
+      </Rose::Dropdown>
+    `,
+  }}</Story>
+</Preview>
+
+
+```html
+  <Rose::Dropdown @text="Choose One&hellip;" as |dropdown|>
+    <dropdown.link @route="index">Menu item</dropdown.link>
+    <dropdown.link @route="about">Menu item</dropdown.link>
+    <dropdown.button>Button menu item</dropdown.button>
+  </Rose::Dropdown>
+```
+
+Dropdown content can be aligned to right edge of the component instead of the default left edge, which is the default setting. The following example floats the component to right edge of the page inorder to provide enough space to display right aligned dropdown content.
+
+```html
+  <Rose::Dropdown @text="Choose One&hellip;" style="float: right" @dropdownRight={{true}} as |dropdown|>
+    <dropdown.link @route="index">Menu item</dropdown.link>
+    <dropdown.link @route="about">Menu item</dropdown.link>
+    <dropdown.separator />
+    <dropdown.button>Button menu item</dropdown.button>
+  </Rose::Dropdown>
+```
+
+Dropdown supports `danger` styling through `style` attribute.
+
+```html
+<Rose::Dropdown @text="Dropdown" as |dropdown|>
+  <dropdown.link @style="danger">Link - danger</dropdown.link>
+  <dropdown.button @style="danger">Button - danger</dropdown.button>
+</Rose::Dropdown>
+```
+
+Dropdown indicator can be hidden using `showCaret` attribute.
+
+```html
+<Rose::Dropdown @showCaret={{true}} @icon="more-horizontal" as |dropdown|>
+    <dropdown.link @route="index">Menu item</dropdown.link>
+    <dropdown.button>Button menu item</dropdown.button>
+</Rose::Dropdown>
+```

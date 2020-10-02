@@ -1,0 +1,56 @@
+{{#if this.hasAvailableHosts}}
+  <Rose::Form
+    class="full-width"
+    @onSubmit={{fn this.submit @submit}}
+    @cancel={{@cancel}}
+    @disabled={{@model.isSaving}}
+    @error={{@model.errors.base}}
+    as |form|
+  >
+
+    <form.actions
+      @submitText={{t "actions.add-hosts"}}
+      @cancelText={{t "actions.cancel"}} />
+
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.headerCell>{{t "form.name.label"}}</row.headerCell>
+          <row.headerCell>{{t "form.type.label"}}</row.headerCell>
+          <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        {{#each this.filteredHosts as |host|}}
+          <body.row as |row|>
+            <row.cell>
+              <form.checkbox
+                @label={{host.id}}
+                @description={{host.description}}
+                onChange={{fn this.toggleHost host}} />
+            </row.cell>
+            <row.cell>{{host.name}}</row.cell>
+            <row.cell>
+              <Rose::Badge>{{host.type}}</Rose::Badge>
+            </row.cell>
+          </body.row>
+        {{/each}}
+      </table.body>
+    </Rose::Table>
+
+  </Rose::Form>
+{{/if}}
+
+{{#unless this.hasAvailableHosts}}
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "resources.host-set.host.messages.add.title"}} as |message|>
+      <message.description>
+        {{t "resources.host-set.host.messages.add.description"}}
+      </message.description>
+      <message.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts">
+        <Rose::Icon @name="chevron-left" />
+        {{t "actions.back"}}
+      </message.link>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+{{/unless}}

@@ -1,0 +1,19 @@
+<div class="rose-form-actions" ...attributes>
+  <Rose::Button
+    @disabled={{@submitDisabled}}
+    @submit={{true}}
+    @style="primary"
+  >
+    {{@submitText}}
+  </Rose::Button>
+
+  {{#if this.showCancel}}
+    <Rose::Button
+      @disabled={{@cancelDisabled}}
+      @style="secondary"
+      {{on "click" @cancel}}
+    >
+      {{@cancelText}}
+    </Rose::Button>
+  {{/if}}
+</div>

@@ -1,0 +1,135 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Input" component="Form/Input" />
+
+# Form Input
+
+Renders a simple form input.
+
+```htmlbars
+<Rose::Form::Input
+  @type="email"
+  @name="email"
+  @value="info@example.com"
+  @label="Email"
+  @helperText="Enter your email"
+  @error={{false}}
+  @disabled={{false}}
+  readonly={{false}}
+/>
+```
+
+Or a fully contextual component without a wrapper, for maximum flexibility.
+
+```htmlbars
+<Rose::Form::Input
+  @contextual={{true}}
+  @type="email"
+  @name="email"
+  @value="info@example.com"
+  @label="Email"
+  @helperText="Enter your email"
+  @error={{false}}
+  @disabled={{false}}
+  readonly={{false}}
+>
+
+</Rose::Form::Input>
+```
+
+<Preview>
+  <Story name="Basic Field">{{
+    template: hbs`
+      <Rose::Form::Input
+        @type={{type}}
+        @name={{type}}
+        @value={{value}}
+        @label={{label}}
+        @helperText={{helperText}}
+        @error={{false}}
+        @disabled={{disabled}}
+        readonly={{read-only}}
+        />
+    `,
+    context: {
+      type: select(
+        'type',
+        {
+          text: 'text',
+          email: 'email',
+          number: 'number',
+          password: 'password',
+        },
+        'text'
+      ),
+      value: text('value', 'Value'),
+      label: text('label', 'Label'),
+      helperText: text('helperText', 'Helper text'),
+      disabled: boolean('disabled', false),
+      'read-only': boolean('readonly', false),
+    }
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Field with Errors">{{
+    template: hbs`
+      <Rose::Form::Input
+        @type={{type}}
+        @name={{type}}
+        @value={{value}}
+        @label={{label}}
+        @helperText={{helperText}}
+        @error={{true}}
+        @disabled={{disabled}}
+        readonly={{read-only}}
+        as |field|
+      >
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Input>
+    `,
+    context: {
+      type: select(
+        'type',
+        {
+          text: 'text',
+          email: 'email',
+          number: 'number',
+          password: 'password',
+        },
+        'text'
+      ),
+      value: text('value', 'Value'),
+      label: text('label', 'Label'),
+      helperText: text('helperText', 'Helper text'),
+      disabled: boolean('disabled', false),
+      'read-only': boolean('readonly', false),
+    }
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Fully Contextual Input">{{
+    template: hbs`
+      <Rose::Form::Input @value="Text" @error={{true}} @contextual={{true}} as |field|>
+        <hr />
+        <field.label>Label</field.label>
+        <hr />
+        <field.helperText>Help</field.helperText>
+        <hr />
+        <field.field />
+        <hr />
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+        <hr />
+      </Rose::Form::Input>
+    `,
+    context: {},
+  }}</Story>
+</Preview>

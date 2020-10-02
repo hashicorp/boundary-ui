@@ -1,0 +1,9 @@
+{{title (t "resources.role.principal.actions.add-principals")}}
+
+<Form::Role::AddPrincipals
+  @model={{@model.role}}
+  @users={{@model.users}}
+  @groups={{@model.groups}}
+  @submit={{route-action "addPrincipals" @model.role}}
+  @cancel={{route-action "cancel"}}
+/>

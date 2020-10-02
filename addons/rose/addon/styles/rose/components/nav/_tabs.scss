@@ -1,0 +1,38 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-nav-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: sizing.rems(m);
+  box-shadow: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-border);
+
+  .rose-nav-link {
+    --color: var(--ui-gray-starker-1);
+    --background: transparent;
+    --box-shadow-color: transparent;
+
+    @include type.type(s, semibold);
+    display: inline-block;
+    color: var(--color);
+    background-color: var(--background);
+    box-shadow: inset 0 -#{sizing.rems(xxxxs) * 3} 0 var(--box-shadow-color);
+    text-decoration: none;
+    padding: sizing.rems(m);
+
+    &:hover {
+      --box-shadow-color: var(--ui-gray-subtler-2);
+      --background: var(--ui-gray-subtler-6);
+    }
+
+    &:active,
+    &.active {
+      --color: var(--action);
+      --box-shadow-color: currentColor;
+
+      &:hover {
+        --color: var(--action-starker-1);
+      }
+    }
+  }
+}

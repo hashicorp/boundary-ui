@@ -1,0 +1,15 @@
+<Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+  <dropdown.link
+    @route="scopes.scope.auth-methods.auth-method.accounts.new"
+    @model={{@model}}
+  >
+    {{t "resources.account.actions.create"}}
+  </dropdown.link>
+  <dropdown.button
+    @style="danger"
+    @disabled={{@model.canSave}}
+    {{on "click" (route-action "delete" @model)}}
+  >
+    {{t 'resources.auth-method.actions.delete'}}
+  </dropdown.button>
+</Rose::Dropdown>

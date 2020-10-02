@@ -1,0 +1,42 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Actions" component="Form/Actions" />
+
+# Form Actions
+
+A simple collection of buttons for performing common actions like submit/save
+and cancel.  Form actions should always be used in the context of a form element
+where the form has a submit action handler.  The submit button does not directly
+support actions.  The cancel button supports a cancel action.
+
+```html
+<Rose::Form::Actions
+  @submitText="Save"
+  @cancelText="Cancel"
+  @showCancel={{true}}
+  @disabled={{false}}
+  @cancel=(fn @cancel) />
+```
+
+<Preview>
+  <Story name="Basic Form Actions">{{
+    template: hbs`
+      <Rose::Form::Actions
+        @submitText={{submitText}}
+        @cancelText={{cancelText}}
+        @showCancel={{showCancel}}
+        @disabled={{disabled}}
+        @cancel={{onCancel}} />
+    `,
+    context: {
+      submitText: text('submitText', 'Save'),
+      cancelText: text('cancelText', 'Cancel'),
+      showCancel: boolean('showCancel', true),
+      disabled: boolean('disabled', false),
+      onCancel: action('cancel'),
+    },
+  }}</Story>
+</Preview>

@@ -1,0 +1,17 @@
+<table ...attributes class="rose-table">
+  {{#if @caption}}
+    <caption>{{@caption}}</caption>
+  {{/if}}
+
+  {{yield (hash
+    header=(component 'rose/table/section'
+      tagName='thead'
+      classNames='rose-table-header')
+    body=(component 'rose/table/section'
+      tagName='tbody'
+      classNames='rose-table-body')
+    footer=(component 'rose/table/section'
+      tagName='tfoot'
+      classNames='rose-table-footer')
+  )}}
+</table>
