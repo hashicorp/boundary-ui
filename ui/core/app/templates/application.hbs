@@ -6,17 +6,35 @@
   <layout.header>
     <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
       <header.brand @logo="logo-boundary" @text={{app-name}} />
+
       {{#if this.session.isAuthenticated}}
-        <header.nav as |nav|>
-          {{#if this.scope.isOrg}}
-            <nav.link @route="scopes.scope" @model={{this.scope}}>{{this.scope.displayName}}</nav.link>
-          {{/if}}
-        </header.nav>
+        {{#if this.scope.isOrg}}
+          <header.nav as |nav|>
+            <nav.dropdown
+              @text={{this.scope.displayName}}
+              @icon="boundary-icons/org" as |dropdown|
+            >
+              {{#if this.session.data.authenticated.isGlobal}}
+                <dropdown.link @route="scopes.scope" @model="global">
+                  {{t "titles.global"}}
+                </dropdown.link>
+                {{#each this.orgScopes as |scope|}}
+                  <dropdown.link @route="scopes.scope" @model={{scope.id}}>
+                    {{scope.displayName}}
+                  </dropdown.link>
+                {{/each}}
+              {{else}}
+                <dropdown.link @route="scopes.scope" @model={{this.scope.id}}>
+                  {{this.scope.displayName}}
+                </dropdown.link>
+              {{/if}}
+            </nav.dropdown>
+          </header.nav>
+        {{/if}}
 
         <header.utilities as |utilities|>
           <utilities.dropdown
-            @text="user@example.net"
-            @iconOnly={{true}}
+            @text={{this.session.data.authenticated.username}}
             @icon="boundary-icons/user-profile" as |dropdown|
           >
             {{!-- <dropdown.link @route="account.change-password">
@@ -29,7 +47,9 @@
             </dropdown.button>
           </utilities.dropdown>
         </header.utilities>
+
       {{/if}}
+
     </Rose::Header>
   </layout.header>
 
