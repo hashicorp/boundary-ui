@@ -5,20 +5,31 @@
 >
 
   <summary
-    class="rose-dropdown-trigger {{if @iconOnly "has-icon-only"}} {{if this.showCaret "show-caret"}}"
+    class="rose-dropdown-trigger {{if @iconOnly "has-icon-only"}}"
     title={{@text}}
   >
 
     {{#if @icon}}
-      <Rose::Icon
-        @name={{@icon}}
-        @size="medium"
-      />
+      <span class="rose-dropdown-trigger-icon">
+        <Rose::Icon
+          @name={{@icon}}
+          @size="medium"
+        />
+      </span>
     {{/if}}
 
     <span class="rose-dropdown-trigger-text">
       {{@text}}
     </span>
+
+    {{#if this.showCaret}}
+      <span class="rose-dropdown-trigger-caret">
+        <Rose::Icon
+          @name="chevron-down"
+          @size="medium"
+        />
+      </span>
+    {{/if}}
 
   </summary>
 

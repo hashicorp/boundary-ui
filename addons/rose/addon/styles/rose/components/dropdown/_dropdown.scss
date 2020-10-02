@@ -3,7 +3,6 @@
 
 $xs: sizing.rems(xs); // 8
 $xxs: sizing.rems(xxs); // 4
-$chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>";
 
 .rose-dropdown {
   position: relative;
@@ -37,11 +36,6 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
       background-color: var(--ui-gray-subtler-5);
     }
 
-    &:not(.has-icon-only) .rose-icon:first-child {
-      margin-left: -(sizing.rems(xs));
-      margin-right: sizing.rems(xxs);
-    }
-
     &.has-icon-only {
       padding-left: sizing.rems(s);
       padding-right: sizing.rems(s);
@@ -57,14 +51,6 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
       }
     }
 
-    &.show-caret {
-      padding-right: sizing.rems(xl);
-      background-image: url($chevron);
-      background-repeat: no-repeat;
-      background-position: right sizing.rems(m) center;
-      background-size: sizing.rems(m);
-    }
-
     // Hide default twistie triangle
     // Webkit / Chromium
     &::-webkit-details-marker {
@@ -74,6 +60,14 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xm
     list-style-type: none;
     &::marker {
       display: none;
+    }
+
+    .rose-dropdown-trigger-icon {
+      padding-right: sizing.rems(xxs);
+    }
+
+    .rose-dropdown-trigger-caret {
+      padding-left: sizing.rems(xxs);
     }
   }
 

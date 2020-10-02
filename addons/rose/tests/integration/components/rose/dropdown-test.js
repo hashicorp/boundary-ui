@@ -42,10 +42,10 @@ module('Integration | Component | rose/dropdown', function (hooks) {
 
   test('it supports hiding dropdown caret', async function (assert) {
     await render(hbs`<Rose::Dropdown />`);
-    assert.ok(find('.show-caret'));
+    assert.ok(find('.rose-dropdown-trigger-caret'));
 
     await render(hbs`<Rose::Dropdown @showCaret={{false}}/>`);
-    assert.notOk(find('.show-caret'));
+    assert.notOk(find('.rose-dropdown-trigger-caret'));
   });
 
   test('it renders with content', async function (assert) {
