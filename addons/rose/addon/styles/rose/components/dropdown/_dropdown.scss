@@ -12,8 +12,6 @@ $xxs: sizing.rems(xxs); // 4
     @include type.type(button, semibold);
     cursor: default;
     overflow: hidden;
-    display: flex;
-    align-items: center;
     $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
     padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
     color: var(--stark);
