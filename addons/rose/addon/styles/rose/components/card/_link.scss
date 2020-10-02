@@ -1,6 +1,8 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 
+$xxxs: sizing.rems(xxxs); // 2
+
 .rose-card-link {
   @include type.type(s);
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
@@ -9,6 +11,8 @@
   display: inline-flex;
   flex-direction: column;
   margin: 0 sizing.rems(m) sizing.rems(m) 0;
+  box-shadow: 0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4)),
+    0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4));
 
   a {
     text-decoration: none;

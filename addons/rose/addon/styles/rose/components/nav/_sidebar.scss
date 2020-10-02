@@ -3,10 +3,20 @@
 
 .rose-nav-sidebar {
   $threePX: sizing.rems(xxxs) + sizing.rems(xxxxs);
+  $yPadding: sizing.rems(xs);
 
+  padding-top: $yPadding;
+  padding-bottom: $yPadding;
+  border-bottom: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  // TODO revisit the title
   .rose-nav-title {
     @include type.type(xs, semibold);
-    display: block;
+    display: none;
     color: var(--ui-gray);
     text-transform: uppercase;
     $lineHeight: 20 / 12;
@@ -29,6 +39,7 @@
     &.active {
       color: var(--action);
       border-color: currentColor;
+      background-color: var(--action-subtler-1h);
     }
 
     &:hover {

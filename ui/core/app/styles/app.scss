@@ -19,7 +19,6 @@
 }
 
 .rose-nav-sidebar {
-  margin-bottom: sizing.rems(l);
   margin-top: sizing.rems(xxl);
 
   & + .rose-nav-sidebar {
@@ -77,7 +76,7 @@
     &::after {
       animation: gradient 1s linear infinite;
       background: repeating-linear-gradient(to right, var(--subtle), var(--subtle), var(--info), var(--subtle), var(--subtle));
-      background-position: 0 100%;
+      background-position: -100% 0;
       background-size: 200% auto;
       content: ' ';
       height: 3px;
@@ -87,7 +86,7 @@
       top: 100%;
 
       @keyframes gradient {
-        0%   { background-position: 0 0; }
+        0%   { background-position: -100% 0; }
         100% { background-position: -200% 0; }
       }
     }
@@ -96,9 +95,9 @@
 
 .copyable {
   .copyable-button {
+    margin: 0;
+    padding: 0 sizing.rems(xxs);
     position: relative;
     top: -2px;
-    padding: 0 sizing.rems(xxs);
-    margin: 0;
   }
 }
