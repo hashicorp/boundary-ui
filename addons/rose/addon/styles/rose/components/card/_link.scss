@@ -1,4 +1,6 @@
+@use 'sass:map';
 @use '../../variables/sizing';
+@use '../../variables/typography';
 @use '../../utilities/type';
 
 $xxxs: sizing.rems(xxxs); // 2
@@ -14,18 +16,18 @@ $xxxs: sizing.rems(xxxs); // 2
   box-shadow: 0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4)),
     0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4));
 
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--ui-gray-subtler-6);
+  }
+
   a {
     text-decoration: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
     height: 100%;
-    padding: sizing.rems(s);
     // TODO: Figure out better method of defining card dimensions
-    min-height: sizing.rems(m) * 6; //6 rems
-    width: sizing.rems(m) * 12; //12 rems
+    min-height: sizing.rems(m) * 8; //6 rems
+    width: sizing.rems(m) * 16; //12 rems
   }
 
   &:hover {
@@ -46,27 +48,78 @@ $xxxs: sizing.rems(xxxs); // 2
     border-color: var(--info);
   }
 
-  .rose-card-link-title {
-    $truncate-line-count: 3;
-    @include type.type(m, semibold);
-    color: var(--stark);
-    margin: 0;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: $truncate-line-count;
-    overflow: hidden;
+  .rose-card-link-header,
+  .rose-card-link-body,
+  .rose-card-link-footer {
+    padding-left: sizing.rems(m);
+    padding-right: sizing.rems(m);
   }
 
-  .rose-card-link-subtitle {
-    color: var(--ui-gray);
+  .rose-card-link-header {
+    padding-top: sizing.rems(m);
+  }
+  .rose-card-link-footer {
+    margin-top: sizing.rems(xs) + sizing.rems(xxs);
+    padding-top: sizing.rems(xs) * 2;
+    padding-bottom: sizing.rems(xs) * 2;
+  }
+
+  .rose-card-link-footer {
+    border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+  }
+
+  .rose-card-link-title {
+    @include type.type(m, semibold);
+    display: flex;
+    color: var(--stark);
     margin: 0;
+    margin-bottom: sizing.rems(xs);
+
+    .rose-icon {
+      margin-right: sizing.rems(xs);
+
+      svg {
+        vertical-align: text-bottom;
+      }
+    }
+
+    .rose-card-link-title-text {
+      flex-grow: 1;
+      height: typography.line-height(m) * 2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   }
 
   .rose-card-link-description {
-    margin: auto 0 0;
     color: var(--ui-gray);
-    white-space: nowrap;
+    margin: 0;
+    height: typography.line-height(m) * 2rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
+
+  .rose-card-link-footer-id {
+    @include type.type(xs);
+    color: var(--ui-gray);
+    margin: 0;
+
+    &::before {
+      content: "ID";
+      color: var(--stark);
+      padding-right: sizing.rems(xs);
+    }
+  }
+
+  // .rose-card-link-description {
+  //   margin: auto 0 0;
+  //   color: var(--ui-gray);
+  //   white-space: nowrap;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
+  // }
 }

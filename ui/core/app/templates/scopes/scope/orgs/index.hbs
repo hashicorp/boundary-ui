@@ -30,8 +30,9 @@
         {{#each @model as |org|}}
           <cards.link
             @title={{org.name}}
-            @subtitle={{org.description}}
-            @description={{org.id}}
+            @description={{org.description}}
+            @id={{org.id}}
+            @icon="boundary-icons/org"
             @route="scopes.scope"
             @model={{org.id}}
           />
