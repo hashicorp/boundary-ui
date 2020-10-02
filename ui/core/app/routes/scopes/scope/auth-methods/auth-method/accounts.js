@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
+import { confirm } from '../../../../../utilities/confirm';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route {
   // =services
@@ -71,10 +72,11 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    */
   @action
   @loading
-  async delete(account) {
+  @confirm('questions.delete-confirm')
+  async deleteAccount(account) {
     try {
       await account.destroyRecord();
-      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
+      await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
       this.refresh();
       this.notify.success(this.intl.t('notifications.delete-success'));
     } catch (error) {
