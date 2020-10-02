@@ -8,7 +8,7 @@
       .rose-dropdown-trigger {
         color: var(--white);
         background-size: sizing.rems(m);
-        padding: sizing.rems(xxxs) sizing.rems(s);
+        padding: sizing.rems(xxxs) sizing.rems(xxs);
 
         &.has-icon-only {
           padding-left: sizing.rems(xs);
@@ -32,12 +32,8 @@
           background-color: transparent;
         }
 
-        .rose-dropdown-trigger-icon {
-          padding-right: sizing.rems(xxxs);
-        }
-
-        .rose-dropdown-trigger-caret {
-          padding-left: sizing.rems(xxxs);
+        .rose-dropdown-trigger-caret .rose-icon{
+          margin-left: -(sizing.rems(xxs));
         }
       }
     }

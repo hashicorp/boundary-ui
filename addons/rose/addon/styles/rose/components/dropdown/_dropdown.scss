@@ -12,8 +12,7 @@ $xxs: sizing.rems(xxs); // 4
     @include type.type(button, semibold);
     cursor: default;
     overflow: hidden;
-    $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
-    padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
+    padding: sizing.rems(xxs) sizing.rems(xs);
     color: var(--stark);
     border-radius: sizing.rems(xxxs);
 
@@ -60,12 +59,15 @@ $xxs: sizing.rems(xxs); // 4
       display: none;
     }
 
-    .rose-dropdown-trigger-icon {
-      padding-right: sizing.rems(xxs);
+    .rose-dropdown-trigger-caret .rose-icon{
+      margin-left: 0;
     }
 
-    .rose-dropdown-trigger-caret {
-      padding-left: sizing.rems(xxs);
+    .rose-dropdown-trigger-icon {
+      margin-right: -(sizing.rems(xs));
+    }
+    .rose-dropdown-trigger-text {
+      padding-left: sizing.rems(xs);
     }
   }
 
