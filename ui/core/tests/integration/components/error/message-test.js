@@ -20,6 +20,32 @@ module('Integration | Component | error/message', function (hooks) {
       find('.rose-message-description').textContent.trim(),
       'You are not authenticated. Please authenticate and try again later.'
     );
+    await render(hbs`<Error::Message @status='403' />`);
+    assert.equal(
+      find('.rose-message-title').textContent.trim(),
+      'You are not authorized'
+    );
+    assert.equal(
+      find('.rose-message-subtitle').textContent.trim(),
+      'Error 403'
+    );
+    assert.equal(
+      find('.rose-message-description').textContent.trim(),
+      'You must be granted permissions to view this data. Ask your administrator if you think you should have access.'
+    );
+    await render(hbs`<Error::Message @status='404' />`);
+    assert.equal(
+      find('.rose-message-title').textContent.trim(),
+      'Resource not found'
+    );
+    assert.equal(
+      find('.rose-message-subtitle').textContent.trim(),
+      'Error 404'
+    );
+    assert.equal(
+      find('.rose-message-description').textContent.trim(),
+      'We could not find the requested resource. You can ask your administrator or try again later.'
+    );
   });
 
   test('it renders default error for unknown error status', async function (assert) {
