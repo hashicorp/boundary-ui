@@ -26,7 +26,8 @@
   </form.input>
 
   <form.actions
-    @disabled={{this.cannotSave}}
+    @submitDisabled={{this.cannotSave}}
+    @showCancel={{false}}
     @submitText={{t "actions.save"}}
     @cancelText={{t "actions.cancel"}} />
 
