@@ -56,6 +56,14 @@ module('Acceptance | org', function (hooks) {
     assert.equal(findAll('article').length, orgsCount);
   });
 
+  test('visiting orgs when endpoint 404s shows an error message', async function (assert) {
+    assert.expect(1);
+    this.server.get('/scopes', () => new Response(404));
+    await visit(urls.orgs);
+    await a11yAudit();
+    assert.ok(find('.rose-message'));
+  });
+
   test('visiting orgs is successful even when the global scope cannot be fetched', async function (assert) {
     assert.expect(3);
     this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
