@@ -63,7 +63,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
   authenticate() {
     return super.authenticate(...arguments).then((data) => {
       const token = data?.token;
-      if (token) this.addTokenToAuthorization(token);
+      this.addTokenToAuthorization(token);
       return data;
     });
   }
@@ -93,6 +93,6 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
     const headers = adapterPrototype?.headers;
     if (!headers) adapterPrototype.headers = {};
     adapterPrototype.headers.Authorization = null;
-    if (token) adapterPrototype.headers.Authorization = `Bearer ${token}`;
+    adapterPrototype.headers.Authorization = `Bearer ${token}`;
   }
 }
