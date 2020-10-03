@@ -105,6 +105,13 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
+  test('visiting orgs while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(orgsURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
   test('visiting projects while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(projectsURL);
