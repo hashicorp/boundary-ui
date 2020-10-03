@@ -37,6 +37,7 @@ module('Acceptance | authentication', function (hooks) {
   let authenticateURL;
   let authMethodAuthenticateURL;
   let authMethodGlobalAuthenticateURL;
+  let changePasswordURL;
   let orgsURL;
   let projectsURL;
   let usersURL;
@@ -70,6 +71,7 @@ module('Acceptance | authentication', function (hooks) {
     authenticateURL = `/scopes/${orgScopeID}/authenticate`;
     authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${globalAuthMethodID}`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
+    changePasswordURL = `/account/change-password`;
     orgsURL = `/scopes/global/orgs`;
     projectsURL = `/scopes/${orgScopeID}/projects`;
     usersURL = `/scopes/${orgScopeID}/users`;
@@ -109,6 +111,13 @@ module('Acceptance | authentication', function (hooks) {
     await visit(indexURL);
     assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
     await visit(scopesURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('visiting change password while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(changePasswordURL);
     assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
