@@ -202,7 +202,19 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('successful authentication redirects to projects', async function (assert) {
+  test('successful authentication with the global scope redirects to orgs', async function (assert) {
+    assert.expect(4);
+    await visit(authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    await click('[type="submit"]');
+    assert.equal(currentURL(), orgsURL);
+    assert.ok(currentSession().isAuthenticated);
+  });
+
+  test('successful authentication with an org scope redirects to projects', async function (assert) {
     assert.expect(4);
     await visit(authMethodAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
