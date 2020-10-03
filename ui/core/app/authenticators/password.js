@@ -77,7 +77,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    */
   restore(data) {
     const token = data?.token;
-    if (token) this.addTokenToAuthorization(token);
+    this.addTokenToAuthorization(token);
     return super.restore(data);
   }
 
