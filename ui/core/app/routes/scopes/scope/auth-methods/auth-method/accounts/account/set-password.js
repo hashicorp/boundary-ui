@@ -47,14 +47,4 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
       this.notify.error(error.message, { closeAfter: null });
     }
   }
-
-  /**
-   * Redirect to hosts as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.replaceWith(
-      'scopes.scope.auth-methods.auth-method.accounts.account.set-password'
-    );
-  }
 }
