@@ -94,6 +94,8 @@
 }
 
 .copyable {
+  white-space: nowrap;
+  
   .copyable-button {
     margin: 0;
     padding: 0 sizing.rems(xxs);
@@ -102,6 +104,7 @@
   }
 
   mark {
+    color: inherit;
     background-color: transparent;
     animation: fadeBackground 0.75s linear;
     @keyframes fadeBackground {

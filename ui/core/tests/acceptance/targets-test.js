@@ -265,6 +265,9 @@ module('Acceptance | targets', function (hooks) {
     assert.equal(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a')
     assert.equal(currentURL(), urls.targetAddHostSets);
+    // Click three times to select, unselect, then reselect (for coverage)
+    await click('tbody label');
+    await click('tbody label');
     await click('tbody label');
     await click('form [type="submit"]');
     await visit(urls.targetHostSets);

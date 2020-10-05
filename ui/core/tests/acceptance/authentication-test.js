@@ -37,8 +37,13 @@ module('Acceptance | authentication', function (hooks) {
   let authenticateURL;
   let authMethodAuthenticateURL;
   let authMethodGlobalAuthenticateURL;
+  let changePasswordURL;
   let orgsURL;
   let projectsURL;
+  let usersURL;
+  let groupsURL;
+  let rolesURL;
+  let authMethodsURL;
 
   hooks.beforeEach(function () {
     invalidateSession();
@@ -66,8 +71,13 @@ module('Acceptance | authentication', function (hooks) {
     authenticateURL = `/scopes/${orgScopeID}/authenticate`;
     authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${globalAuthMethodID}`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
+    changePasswordURL = `/account/change-password`;
     orgsURL = `/scopes/global/orgs`;
     projectsURL = `/scopes/${orgScopeID}/projects`;
+    usersURL = `/scopes/${orgScopeID}/users`;
+    groupsURL = `/scopes/${orgScopeID}/groups`;
+    rolesURL = `/scopes/${orgScopeID}/roles`;
+    authMethodsURL = `/scopes/${orgScopeID}/auth-methods`;
   });
 
   test('visiting auth methods authenticate route redirects to first auth method', async function (assert) {
@@ -105,9 +115,51 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
+  test('visiting change password while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(changePasswordURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('visiting orgs while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(orgsURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
   test('visiting projects while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(projectsURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('visiting users while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(usersURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('visiting roles while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(rolesURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('visiting groups while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(groupsURL);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('visiting auth methods while unauthenticated redirects to first global authenticate method', async function (assert) {
+    assert.expect(2);
+    await visit(authMethodsURL);
     assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
@@ -159,7 +211,19 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('successful authentication redirects to projects', async function (assert) {
+  test('successful authentication with the global scope redirects to orgs', async function (assert) {
+    assert.expect(4);
+    await visit(authMethodGlobalAuthenticateURL);
+    assert.notOk(currentSession().isAuthenticated);
+    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    await click('[type="submit"]');
+    assert.equal(currentURL(), orgsURL);
+    assert.ok(currentSession().isAuthenticated);
+  });
+
+  test('successful authentication with an org scope redirects to projects', async function (assert) {
     assert.expect(4);
     await visit(authMethodAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);

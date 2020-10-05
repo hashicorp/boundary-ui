@@ -3,8 +3,10 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { all, hash } from 'rsvp';
 import { task, timeout } from 'ember-concurrency';
+import { A } from '@ember/array';
+import config from '../../../../../config/environment';
 
-const POLL_TIMEOUT_SECONDS = 2.5;
+const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
 
@@ -42,17 +44,32 @@ export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope.projects.project');
     const sessions = await this.store.query('session', { scope_id });
-    return all(
+    const sessionAggregates = await all(
       sessions.map(session => hash({
         session,
         user: session.user_id
-          ? this.store.findRecord('user', session.user_id)
+          ? (
+              this.store.peekRecord('user', session.user_id) ||
+              this.store.findRecord('user', session.user_id)
+            )
           : null,
         target: session.target_id
-          ? this.store.findRecord('target', session.target_id)
+          ? (
+              this.store.peekRecord('target', session.target_id) ||
+              this.store.findRecord('target', session.target_id)
+            )
           : null,
       }))
     );
+    // Sort sessions by time created...
+    let sortedSessionAggregates =
+      A(sessionAggregates).sortBy('session.created_time').reverse();
+    // Then move active sessions to the top...
+    sortedSessionAggregates = [
+      ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status === 'active'),
+      ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status !== 'active'),
+    ];
+    return sortedSessionAggregates;
   }
 
   /**
