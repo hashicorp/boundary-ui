@@ -39,10 +39,14 @@
 
 {{#unless this.availableUsers}}
   <Rose::Layout::Centered>
-     <Rose::Message @title={{t "titles.no-available-users"}} as |message|>
-       <message.description>
-         {{t "descriptions.no-available-users"}}
-       </message.description>
-     </Rose::Message>
+    <Rose::Message @title={{t "resources.group.messages.no-members.title"}} as |message|>
+      <message.description>
+        {{t "resources.group.messages.no-members.description"}}
+      </message.description>
+      <message.link @route="scopes.scope.groups.group.members">
+        <Rose::Icon @name="chevron-left" />
+        {{t "actions.back"}}
+      </message.link>
+    </Rose::Message>
    </Rose::Layout::Centered>
 {{/unless}}
