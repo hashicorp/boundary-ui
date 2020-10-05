@@ -3,7 +3,6 @@ import ClipboardJS from 'clipboard';
 import { action } from '@ember/object';
 import { generateComponentID } from 'rose/utilities/component-auto-id';
 import { task, timeout } from 'ember-concurrency';
-import { bind } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 
 export default class CopyableComponent extends Component {
@@ -20,6 +19,8 @@ export default class CopyableComponent extends Component {
 
   @tracked copied = false;
 
+  clipboard = null;
+
   /**
    * A Ember Concurrency-based task that updates copy icon to a success state
    * and back after 1 second. This icon flash indicates success on
@@ -30,13 +31,12 @@ export default class CopyableComponent extends Component {
    * is an attribute.
    * @type {Task}
    */
+  /* istanbul ignore next */
   @task(function * () {
     this.copied = true;
     yield timeout(1000);
     this.copied = false;
-  }).drop() successIconTimer;
-
-  // =methods
+  }).drop() confirmCopyTimer;
 
   /**
    * Checks for ClipboardJS support.
@@ -46,14 +46,6 @@ export default class CopyableComponent extends Component {
     return ClipboardJS.isSupported();
   }
 
-  /**
-   * When copy to clipboard is successful, begin timer to show success icon.
-   */
-  onCopySuccess(clipboardEvent) {
-    clipboardEvent.clearSelection();
-    this.successIconTimer.perform();
-  }
-
   // =actions
 
   /**
@@ -61,12 +53,16 @@ export default class CopyableComponent extends Component {
    */
   @action
   register() {
-    if (!this.clipboard) {
-      this.clipboard = new ClipboardJS(`#${this.copyableButtonId}`, {
-        text: () => this.args.text,
-      });
-      this.clipboard.on('success', bind(this, this.onCopySuccess));
-    }
+    this.destroy();
+    /* istanbul ignore next */
+    this.clipboard = new ClipboardJS(`#${this.copyableButtonId}`, {
+      text: () => this.args.text,
+    });
+    /* istanbul ignore next */
+    this.clipboard.on('success', (clipboardEvent) => {
+      clipboardEvent.clearSelection();
+      this.confirmCopyTimer.perform();
+    });
   }
 
   /**
@@ -75,7 +71,8 @@ export default class CopyableComponent extends Component {
   @action
   destroy() {
     this.clipboard?.destroy();
-    this.successIconTimer.cancelAll();
+    this.clipboard = null;
+    this.confirmCopyTimer.cancelAll();
   }
 
 }
