@@ -13,7 +13,7 @@
     "doc:toc": "doctoc README.md",
     "build:development": "ember build",
     "build": "ember build --environment=production",
-    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
+    "lint": "yarn lint:hbs && yarn lint:js && yarn lint:sass",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "lint:sass": "sass-lint -v -q",
@@ -23,8 +23,7 @@
     "start": "ember serve",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
-    "test": "npm-run-all lint:* test:*",
-    "test:ember": "ember test",
+    "test": "COVERAGE=true ember exam --random",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "devDependencies": {
