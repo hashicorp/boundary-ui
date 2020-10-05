@@ -47,9 +47,11 @@
                 <Rose::Badge>{{sessionAggregate.session.status}}</Rose::Badge>
               </row.cell>
               <row.cell>
-                <Rose::Button @style="secondary" {{on "click" (route-action "cancelSession" sessionAggregate.session)}}>
-                  {{t "actions.cancel"}}
-                </Rose::Button>
+                {{#if sessionAggregate.session.isCancelable}}
+                  <Rose::Button @style="secondary" {{on "click" (route-action "cancelSession" sessionAggregate.session)}}>
+                    {{t "actions.cancel"}}
+                  </Rose::Button>
+                {{/if}}
               </row.cell>
             </body.row>
           {{/each}}
