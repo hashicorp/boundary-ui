@@ -5,7 +5,7 @@ import config from '../config/environment';
 
 export default helper(function docUrl(params/*, hash*/) {
   const baseURL = config.documentation.baseURL;
-  const docKey = params[0];
+  const docKey = params[0] || '';
   const configuredPath = get(config.documentation, docKey);
   if (docKey) {
     assert(`

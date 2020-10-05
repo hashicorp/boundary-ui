@@ -3,12 +3,12 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Helper | app-name', function (hooks) {
+module('Integration | Helper | company-name', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
     assert.expect(1);
-    await render(hbs`{{app-name}}`);
-    assert.equal(this.element.textContent.trim(), 'Boundary');
+    await render(hbs`{{company-name}}`);
+    assert.equal(this.element.textContent.trim(), 'HashiCorp');
   });
 });
