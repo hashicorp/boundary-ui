@@ -94,6 +94,8 @@
 }
 
 .copyable {
+  white-space: nowrap;
+  
   .copyable-button {
     margin: 0;
     padding: 0 sizing.rems(xxs);
