@@ -3,6 +3,9 @@ id:
 name:
   label: Name
   help: Optional name for identification purposes
+  required:
+    label: Name
+    help: Name is required for identification purposes
 description:
   label: Description
   help: Optional description for identification purposes

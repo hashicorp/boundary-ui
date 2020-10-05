@@ -17,8 +17,8 @@
     @name="name"
     @type="text"
     @value={{@model.name}}
-    @label={{t "form.name.label"}}
-    @helperText={{t "form.name.help"}}
+    @label={{t "form.name.required.label"}}
+    @helperText={{t "form.name.required.help"}}
     @error={{@model.errors.name}}
   as |field|>
     {{#if @model.errors.name}}
