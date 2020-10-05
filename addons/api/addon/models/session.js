@@ -1,6 +1,17 @@
 import GeneratedSessionModel from '../generated/models/session';
+import { computed } from '@ember/object';
 
 export default class SessionModel extends GeneratedSessionModel {
+
+  // =attributes
+
+  /**
+   * @type {boolean}
+   */
+  @computed('status')
+  get isCancelable() {
+    return this.status?.match(/(active)|(pending)/i);
+  }
 
   // =methods
 
