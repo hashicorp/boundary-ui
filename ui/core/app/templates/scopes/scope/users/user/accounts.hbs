@@ -5,6 +5,7 @@
   <Rose::Table as |table|>
     <table.header as |header|>
       <header.row as |row|>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
         <row.headerCell>{{t 'form.username.label'}}</row.headerCell>
         <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
         <row.headerCell>{{t "titles.actions"}}</row.headerCell>
@@ -14,10 +15,20 @@
       {{#each @model.accounts as |account|}}
         <body.row as |row|>
           <row.headerCell>
-            {{account.username}}
+            {{account.displayName}}
+            <p>{{account.description}}</p>
           </row.headerCell>
           <row.cell>
-            <code>{{account.id}}</code>
+            {{account.username}}
+          </row.cell>
+          <row.cell>
+            <Copyable
+              @text={{account.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{account.id}}</code>
+            </Copyable>
           </row.cell>
             <row.cell>
             <Rose::Dropdown
