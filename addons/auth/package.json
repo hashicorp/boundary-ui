@@ -8,13 +8,12 @@
     "ember-addon"
   ],
   "scripts": {
-    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
+    "lint": "yarn lint:js",
     "lint:js": "eslint .",
     "format": "npm run format:js",
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "start": "ember serve",
-    "test": "npm-run-all lint:* test:*",
-    "test:ember": "ember test",
+    "test": "ember test",
     "test:ember-compatibility": "ember try:each",
     "doc:toc": "doctoc README.md"
   },
