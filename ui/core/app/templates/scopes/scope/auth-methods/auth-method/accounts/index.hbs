@@ -44,6 +44,10 @@
       <message.description>
         {{t "resources.account.messages.welcome.description"}}
       </message.description>
+      <message.link @route="scopes.scope.auth-methods.auth-method.accounts.new">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t 'resources.account.actions.create'}}
+      </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
 

@@ -42,6 +42,9 @@ group:
     add-members:
       title: Add Members
       description: Select users to add users to this group.
+    no-members:
+      title: No Members Available
+      description: There are no members available to add to this group.
   actions:
     add-members: Add Members
 host-catalog:
