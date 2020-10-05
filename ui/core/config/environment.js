@@ -32,6 +32,7 @@ module.exports = function (environment) {
     },
 
     appName: APP_NAME,
+    companyName: 'HashiCorp',
 
     notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 2.5,

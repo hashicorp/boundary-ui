@@ -7,6 +7,7 @@ save: Save
 manage: Manage
 help: Need help?
 back: Back
+get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
 authenticate: Authenticate
 deauthenticate: Deauthenticate

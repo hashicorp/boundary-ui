@@ -5,7 +5,10 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.org.title_plural"}}</h2>
+    <h2>
+      {{t "resources.org.title_plural"}}
+      <DocLink @doc="topics.org" @iconSize="large" />
+    </h2>
     {{#if @model}}
       <p>{{t "resources.org.description"}}</p>
     {{/if}}
