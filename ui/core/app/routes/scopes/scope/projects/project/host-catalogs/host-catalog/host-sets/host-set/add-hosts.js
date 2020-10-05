@@ -65,25 +65,6 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   // =actions
 
   /**
-   * Toggles the presence of the passed host ID in the passed host set's
-   * `host_ids` field.
-   * @param {HostSetModel} hostSet
-   * @param {HostModel} host
-   */
-  @action
-  toggleHost(hostSet, host) {
-    const isHostSelected = Boolean(hostSet.host_ids.findBy('value', host.id));
-    const fragment = hostSet.host_ids.findBy('value', host.id);
-    if (isHostSelected) {
-      // if host is already selected, filter it out
-      hostSet.host_ids.removeObject(fragment);
-    } else {
-      // if host is not selected, add it
-      hostSet.host_ids.addObject({ value: host.id });
-    }
-  }
-
-  /**
    * Saves host IDs on the host set.
    * @param {HostSetModel} hostSet
    */
