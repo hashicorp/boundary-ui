@@ -43,14 +43,4 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
     next(() => this.resetPassword());
     fn(password);
   }
-
-  /**
-   * Unset password value before callback.
-   * @param {function} fn
-   */
-  @action
-  cancel(fn) {
-    this.resetPassword();
-    fn();
-  }
 }

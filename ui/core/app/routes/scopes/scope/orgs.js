@@ -38,9 +38,8 @@ export default class ScopesScopeOrgsRoute extends Route {
    */
   @action
   cancel(org) {
-    const { isNew } = org;
     org.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.orgs');
+    this.transitionTo('scopes.scope.orgs');
   }
 
   /**
@@ -51,13 +50,12 @@ export default class ScopesScopeOrgsRoute extends Route {
   @action
   @loading
   async save(org) {
-    const { isNew } = org;
     try {
       await org.save();
-      await this.transitionTo('scopes.scope', org);
+      await this.transitionTo('scopes.scope.projects', org);
       this.refresh();
       this.notify.success(
-        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
+        this.intl.t('notifications.create-success')
       );
     } catch (error) {
       // TODO: replace with translated strings

@@ -4,8 +4,9 @@ import { action } from '@ember/object';
 import { all, hash } from 'rsvp';
 import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
+import config from '../../../../../config/environment';
 
-const POLL_TIMEOUT_SECONDS = 2.5;
+const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeProjectsProjectSessionsRoute extends Route {
 
