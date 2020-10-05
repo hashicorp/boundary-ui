@@ -17,7 +17,13 @@
             {{account.username}}
           </row.headerCell>
           <row.cell>
-            <code>{{account.id}}</code>
+            <Copyable
+              @text={{account.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{account.id}}</code>
+            </Copyable>
           </row.cell>
             <row.cell>
             <Rose::Dropdown
