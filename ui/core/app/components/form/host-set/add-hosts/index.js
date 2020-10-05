@@ -16,7 +16,7 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
    * @param {[HostModel]} filteredHosts
    * @type {boolean}
    */
-  @computed('filteredHosts')
+  @computed('filteredHosts.[]')
   get hasAvailableHosts() {
     return this.filteredHosts.length > 0;
   }
@@ -25,7 +25,7 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
    * Hosts currently not assigned to current host set.
    * @type {[HostModel]}
    */
-  @computed('args.{model,hosts}')
+  @computed('args.{model.host_ids,hosts}')
   get filteredHosts() {
     const currentHostIDs = this.args.model.host_ids.map((host) => host.value);
     return this.args.hosts.filter(({ id }) => !currentHostIDs.includes(id));

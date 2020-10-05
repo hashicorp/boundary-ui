@@ -16,7 +16,7 @@ export default class FormTargetAddHostSetsComponent extends Component {
    * @param {[HostSetModel]} filteredHostSets
    * @type {boolean}
    */
-  @computed('filteredHostSets')
+  @computed('filteredHostSets.[]')
   get hasAvailableHostSets() {
     return this.filteredHostSets.length > 0;
   }

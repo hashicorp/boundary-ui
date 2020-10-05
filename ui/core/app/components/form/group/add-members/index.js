@@ -15,7 +15,7 @@ export default class FormGroupAddMembersComponent extends Component {
    * Host sets not already added to the target.
    * @type {[UserModel]}
    */
-  @computed('args.{model.members_ids.[],users.[]}')
+  @computed('args.{model.member_ids,model.member_ids.[],users.[]}')
   get availableUsers() {
     const memberIDs = this.args.model.member_ids;
     const users = this.args.users;

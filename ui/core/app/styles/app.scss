@@ -68,7 +68,7 @@
 
   .rose-dropdown {
     .rose-icon {
-      transform: scale(0.7);
+      transform: scale(.7);
     }
   }
 
@@ -95,7 +95,7 @@
 
 .copyable {
   white-space: nowrap;
-  
+
   .copyable-button {
     margin: 0;
     padding: 0 sizing.rems(xxs);
@@ -104,9 +104,10 @@
   }
 
   mark {
-    color: inherit;
+    animation: fadeBackground .75s linear;
     background-color: transparent;
-    animation: fadeBackground 0.75s linear;
+    color: inherit;
+
     @keyframes fadeBackground {
       0%   { background-color: var(--action-subtler-1); }
       100% { background-color: transparent; }
