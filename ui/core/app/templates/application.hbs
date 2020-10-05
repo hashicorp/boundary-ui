@@ -59,11 +59,13 @@
 
   <layout.footer>
     <Rose::Footer as |footer|>
-      <footer.brand @logo="logo-hashi" @text={{t "hashicorp.title"}} />
-      <footer.text>{{t "hashicorp.copyright"}}</footer.text>
-      <footer.text>{{t "hashicorp.product"}}</footer.text>
+      <footer.brand @logo="logo-hashi" @text={{company-name}} />
+      <footer.text>{{company-copyright}}</footer.text>
+      <footer.text>{{app-name}}</footer.text>
       <footer.nav as |nav|>
-        <nav.link @href={{t "hashicorp.documentation.link"}}>{{t "hashicorp.documentation.title"}}</nav.link>
+        <nav.link @href={{doc-url}}>
+          {{t "titles.documentation"}}
+        </nav.link>
       </footer.nav>
     </Rose::Footer>
   </layout.footer>

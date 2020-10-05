@@ -32,10 +32,29 @@ module.exports = function (environment) {
     },
 
     appName: APP_NAME,
+    companyName: 'HashiCorp',
 
     notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 2.5,
     enableConfirmService: true,
+
+    documentation: {
+      baseURL: 'https://boundaryproject.io/help/admin-ui',
+      topics: {
+        org: '/org',
+        project: '/project',
+        account: '/account',
+        'auth-method': '/auth-method',
+        group: '/group',
+        'host-catalog': '/host-catalog',
+        'host-set': '/host-set',
+        host: '/host',
+        role: '/role',
+        session: '/session',
+        target: '/target',
+        user: '/user'
+      }
+    },
 
     contentSecurityPolicyHeader: 'Content-Security-Policy',
     contentSecurityPolicyMeta: true,
