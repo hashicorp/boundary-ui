@@ -5,7 +5,10 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.project.title"}}</h2>
+    <h2>
+      {{t "resources.project.title"}}
+      <DocLink @doc="topics.project" @iconSize="large" />
+    </h2>
     <p>{{t "resources.project.description"}}</p>
     <Copyable
       @text={{@model.id}}
