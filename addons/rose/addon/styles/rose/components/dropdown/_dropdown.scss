@@ -12,7 +12,8 @@ $xxs: sizing.rems(xxs); // 4
     @include type.type(button, semibold);
     cursor: default;
     overflow: hidden;
-    padding: sizing.rems(xxs) sizing.rems(xs);
+    $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
+    padding: $yPadding sizing.rems(xs);
     color: var(--stark);
     border-radius: sizing.rems(xxxs);
 
@@ -46,6 +47,10 @@ $xxs: sizing.rems(xxs); // 4
         height: 1px;
         opacity: 0;
       }
+
+      .rose-dropdown-trigger-icon {
+        margin: 0;
+      }
     }
 
     // Hide default twistie triangle
@@ -66,6 +71,7 @@ $xxs: sizing.rems(xxs); // 4
     .rose-dropdown-trigger-icon {
       margin-right: -(sizing.rems(xs));
     }
+
     .rose-dropdown-trigger-text {
       padding-left: sizing.rems(xs);
     }
