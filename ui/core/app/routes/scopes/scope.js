@@ -43,4 +43,20 @@ export default class ScopesScopeRoute extends Route {
     const scope = this.modelFor('scopes.scope');
     this.controllerFor('application').set('scope', scope);
   }
+
+  /**
+   * Renders the scope-specific sidebar template.
+   * @override
+   * @param {object} controller
+   * @param {object} model
+   */
+  renderTemplate(controller, model) {
+    super.renderTemplate(...arguments);
+
+    this.render('scopes/scope/-sidebar', {
+      into: 'scopes/scope',
+      outlet: 'sidebar',
+      model: model,
+    });
+  }
 }
