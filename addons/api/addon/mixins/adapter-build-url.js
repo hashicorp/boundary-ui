@@ -1,5 +1,4 @@
 import Mixin from '@ember/object/mixin';
-import { get } from '@ember/object';
 
 /**
  * Overrides URL-building methods in an adpater for greater flexibility.
@@ -57,7 +56,7 @@ export default Mixin.create({
   _buildPrefixedURL(modelName, id, snapshot) {
     let path;
     let url = [];
-    const host = get(this, 'host');
+    const host = this.host;
     const prefix = this.urlPrefix(null, null, modelName, id, snapshot);
     if (modelName) {
       path = this.pathForType(modelName);

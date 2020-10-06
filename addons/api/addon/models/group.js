@@ -23,7 +23,7 @@ export default class GroupModel extends GeneratedGroupModel {
    * @type {[UserModel]}
    */
   // TODO: Use fragments array to read cross scope members.
-  @computed('member_ids.[]')
+  @computed('member_ids.[]', 'store')
   get members() {
     return this.member_ids
       .map((id) => this.store.peekRecord('user', id))
