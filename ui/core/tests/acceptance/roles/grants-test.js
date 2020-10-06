@@ -58,9 +58,11 @@ module('Acceptance | roles | grants', function (hooks) {
 
   test('update a grant', async function(assert) {
     assert.expect(1);
-    this.server.post('/roles/:id', (_, { requestBody }) => {
+    this.server.post('/roles/:idMethod', (_, { params: { idMethod }, requestBody }) => {
       const attrs = JSON.parse(requestBody);
       assert.equal(attrs.grant_strings[0], 'id=123,action=delete', "A grant is updated");
+      const id = idMethod.split(':')[0];
+      return { id };
     });
     await visit(urls.grants);
     await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
@@ -90,7 +92,7 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+    assert.equal(findAll(`${grantsForm} [name="grant"]`).length,
     grantsCount);
     await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
@@ -99,9 +101,11 @@ module('Acceptance | roles | grants', function (hooks) {
 
   test('create a grant', async function(assert) {
     assert.expect(1);
-    this.server.post('/roles/:id', (_, { requestBody }) => {
+    this.server.post('/roles/:idMethod', (_, { params: { idMethod }, requestBody }) => {
       const attrs = JSON.parse(requestBody);
       assert.equal(attrs.grant_strings.length, grantsCount + 1, "A grant is created");
+      const id = idMethod.split(':')[0];
+      return { id };
     });
     await visit(urls.grants);
     await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
@@ -133,7 +137,7 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+    assert.equal(findAll(`${grantsForm} [name="grant"]`).length,
     grantsCount);
     await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
     await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
@@ -146,7 +150,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await visit(urls.grants);
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+    assert.equal(findAll(`${grantsForm} [name="grant"]`).length,
     grantsCount - 1);
   });
 
@@ -173,7 +177,7 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, 
+    assert.equal(findAll(`${grantsForm} [name="grant"]`).length,
     grantsCount);
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
