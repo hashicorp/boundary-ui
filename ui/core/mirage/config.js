@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { pickRandomStatusString } from './factories/session';
@@ -321,14 +322,18 @@ export default function() {
 
   // session
 
-  // To simulate changes to `session.status` that may occur in the backend,
-  // we quietly randomize the value of the field on GET.
   this.get('/sessions', function ({ sessions }, { queryParams: { scope_id } }) {
-    sessions.where(session => session.scopeId === scope_id)
-      .models
-      .forEach(session => session.update({
-        status: pickRandomStatusString()
-      }));
+    // To simulate changes to `session.status` that may occur in the backend,
+    // we quietly randomize the value of the field on GET.
+    // But only if not in testing mode.
+    // In tests, we need deterministic statuses.
+    if (!Ember.testing) {
+      sessions.where(session => session.scopeId === scope_id)
+        .models
+        .forEach(session => session.update({
+          status: pickRandomStatusString()
+        }));
+    }
     return sessions.where(session => session.scopeId === scope_id)
   });
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {

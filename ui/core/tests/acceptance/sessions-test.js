@@ -42,8 +42,9 @@ module('Acceptance | sessions', function (hooks) {
     this.server.createList('group', 1, { scope: instances.scopes.org }, 'withMembers');
     this.server.createList('host-catalog', 1, { scope: instances.scopes.project }, 'withChildren');
     this.server.createList('target', 1, { scope: instances.scopes.project }, 'withRandomHostSets');
-    instances.sessions = this.server.createList('session', 10, {
+    instances.sessions = this.server.createList('session', 3, {
       scope: instances.scopes.project,
+      status: 'active'
     }, 'withAssociations');
     urls.sessions = `/scopes/${instances.scopes.org.id}/projects/${instances.scopes.project.id}/sessions`;
   });
