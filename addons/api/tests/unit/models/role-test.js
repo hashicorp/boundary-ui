@@ -20,6 +20,7 @@ module('Unit | Model | role', function (hooks) {
         grant_strings: ['grant1', 'grant2'],
         version: 1,
       });
+      return { id: '123abc' };
     });
     const store = this.owner.lookup('service:store');
     store.push({
@@ -50,6 +51,7 @@ module('Unit | Model | role', function (hooks) {
         principal_ids: ['123_abc', 'foobar'],
         version: 1,
       });
+      return { id: '123abc' };
     });
     const store = this.owner.lookup('service:store');
     store.push({
@@ -85,6 +87,7 @@ module('Unit | Model | role', function (hooks) {
           principal_ids: ['1', '3'],
           version: 1,
         });
+        return { id: '123abc' };
       }
     );
     const store = this.owner.lookup('service:store');
@@ -121,6 +124,7 @@ module('Unit | Model | role', function (hooks) {
           principal_ids: ['3'],
           version: 1,
         });
+        return { id: '123abc' };
       }
     );
     const store = this.owner.lookup('service:store');
