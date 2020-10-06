@@ -66,10 +66,12 @@ module('Acceptance | accounts | change password', function (hooks) {
 
   test('can change password for account', async function (assert) {
     assert.expect(2);
-    this.server.post('/accounts/:id', (_, { requestBody }) => {
+    this.server.post('/accounts/:idMethod', (_, { params: { idMethod }, requestBody }) => {
       const attrs = JSON.parse(requestBody);
       assert.equal(attrs.current_password, 'current password', 'current password is provided');
       assert.equal(attrs.new_password, 'new password', 'new password is provided');
+      const id = idMethod.split(':')[0];
+      return { id };
     });
     await visit(urls.changePassword);
     await fillIn('[name="currentPassword"]', 'current password');

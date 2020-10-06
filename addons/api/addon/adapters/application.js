@@ -1,5 +1,6 @@
 import RESTAdapter from '@ember-data/adapter/rest';
 import { serializeIntoHash } from '@ember-data/adapter/-private';
+/* eslint-disable-next-line ember/no-mixins */
 import AdapterBuildURLMixin from '../mixins/adapter-build-url';
 import config from 'ember-get-config';
 import { get, getWithDefault } from '@ember/object';
