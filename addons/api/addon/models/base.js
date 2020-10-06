@@ -1,7 +1,6 @@
 import Model from '@ember-data/model';
 import { fragment } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
-import { get } from '@ember/object';
 
 /**
  * Base model class provides common functionality for all models.
@@ -51,7 +50,7 @@ export default class BaseModel extends Model {
    */
   @computed('scope.scope_id')
   get scopeID() {
-    return get(this, 'scope.scope_id');
+    return this?.scope?.scope_id;
   }
   set scopeID(id) {
     if (!this.scope) this.scope = {};
