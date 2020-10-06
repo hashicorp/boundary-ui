@@ -16,7 +16,7 @@ export default class FormUserAddAccountsComponent extends Component {
    * @param {[AccountModel]} filteredAccounts
    * @type {boolean}
    */
-  @computed('filteredAccounts')
+  @computed('filteredAccounts.length')
   get hasAvailableAccounts() {
     return this.filteredAccounts.length > 0;
   }
