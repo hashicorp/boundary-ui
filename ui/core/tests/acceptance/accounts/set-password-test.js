@@ -61,9 +61,11 @@ module('Acceptance | accounts | set password', function (hooks) {
 
   test('can set a new password for account', async function (assert) {
     assert.expect(1);
-    this.server.post('/accounts/:id', (_, { requestBody }) => {
+    this.server.post('/accounts/:idMethod', (_, { params: { idMethod }, requestBody }) => {
       const attrs = JSON.parse(requestBody);
       assert.equal(attrs.password, 'update password', 'new password is set');
+      const id = idMethod.split(':')[0];
+      return { id };
     });
     await visit(urls.setPassword);
     await fillIn('[name="password"]', 'update password');

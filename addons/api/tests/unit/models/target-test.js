@@ -80,6 +80,7 @@ module('Unit | Model | target', function (hooks) {
         host_set_ids: ['123_abc', 'foobar'],
         version: 1,
       });
+      return { id: '123abc' };
     });
     const store = this.owner.lookup('service:store');
     store.push({
@@ -115,6 +116,7 @@ module('Unit | Model | target', function (hooks) {
           host_set_ids: ['1', '3'],
           version: 1,
         });
+        return { id: '123abc' };
       }
     );
     const store = this.owner.lookup('service:store');
@@ -151,6 +153,7 @@ module('Unit | Model | target', function (hooks) {
           host_set_ids: ['3'],
           version: 1,
         });
+        return { id: '123abc' };
       }
     );
     const store = this.owner.lookup('service:store');
