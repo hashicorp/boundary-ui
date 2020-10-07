@@ -107,14 +107,14 @@ session:
 org:
   title: Organization
   title_plural: Organizations
-  description: An organization is a type of scope used to organize projects and IAM resources.  Organizations contain projects and is a child scope of global.
+  description: An organization is a type of scope used to organize projects and IAM resources.  Organizations are child scopes of the global scope.
   messages:
     welcome:
       title: Welcome to Organizations
 project:
   title: Project
   title_plural: Projects
-  description: A project is a type of scope used to organize resources such as by targets and host catalogs.
+  description: A project is a type of scope used to organize resources such as targets and host catalogs.
   messages:
     welcome:
       title: Welcome to Projects
