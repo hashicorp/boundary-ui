@@ -1,6 +1,7 @@
 import GeneratedAccountModel from '../generated/models/account';
 import { fragment } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
+import { equal } from '@ember/object/computed';
 
 export default class AccountModel extends GeneratedAccountModel {
 
@@ -11,6 +12,11 @@ export default class AccountModel extends GeneratedAccountModel {
    * @type {FragmentAccountAttributesModel}
    */
   @fragment('fragment-account-attributes', { defaultValue: {} }) attributes;
+
+  /**
+   * @type {boolean}
+   */
+  @equal('type', 'password') isPassword;
 
   /**
    * Convenience for getting username in account.
