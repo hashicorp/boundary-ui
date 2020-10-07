@@ -55,7 +55,6 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
    */
   @action
   submit(fn, currentPassword, newPassword) {
-    console.log(currentPassword, newPassword);
     run(() => this.resetPasswords());
     run(() => fn(currentPassword, newPassword));
   }
