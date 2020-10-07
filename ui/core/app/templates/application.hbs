@@ -5,13 +5,13 @@
 
   <layout.header>
     <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
-      <header.brand @logo="logo-boundary" @text={{app-name}} />
+      <header.brand @logo="logo-app" @text={{app-name}} />
 
       {{#if this.session.isAuthenticated}}
         <header.nav as |nav|>
           <nav.dropdown
             @text={{this.scope.displayName}}
-            @icon="boundary-icons/org" as |dropdown|
+            @icon="app-icons/org" as |dropdown|
           >
             {{#if this.session.data.authenticated.isGlobal}}
               <dropdown.link @route="scopes.scope" @model="global">
@@ -35,11 +35,12 @@
         <header.utilities as |utilities|>
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
-            @icon="boundary-icons/user-profile" as |dropdown|
+            @icon="app-icons/user-profile" as |dropdown|
           >
             <dropdown.link @route="account.change-password">
               {{t 'actions.change-password'}}
             </dropdown.link>
+            <dropdown.separator />
             <dropdown.button
               {{on "click" (route-action "invalidateSession")}}
             >
@@ -59,7 +60,7 @@
 
   <layout.footer>
     <Rose::Footer as |footer|>
-      <footer.brand @logo="logo-hashi" @text={{company-name}} />
+      <footer.brand @logo="logo-company" @text={{company-name}} />
       <footer.text>{{company-copyright}}</footer.text>
       <footer.text>{{app-name}}</footer.text>
       <footer.nav as |nav|>
