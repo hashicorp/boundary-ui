@@ -18,6 +18,7 @@ $chevronWhite: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23fffff
     padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
     color: var(--stark);
     border-radius: sizing.rems(xxxs);
+    white-space: nowrap;
 
     // Hide default twistie triangle
     // Webkit / Chromium
