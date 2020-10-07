@@ -56,8 +56,6 @@ host-catalog:
       title: Welcome to Host Catalogs
   actions:
     delete: Delete Host Catalog
-    create-host: Create Host
-    create-host-set: Create Host Set
   types:
     static: Static
 host-set:
