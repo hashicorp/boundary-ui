@@ -70,6 +70,21 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
+  test('it serializes empty strings to null', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('user', {
+      name: '',
+      description: '',
+      version: null,
+    });
+    let serializedRecord = record.serialize();
+    assert.deepEqual(serializedRecord, {
+      name: null,
+      description: null,
+    });
+  });
+
   test('it serializes non-nullish version fields', function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');

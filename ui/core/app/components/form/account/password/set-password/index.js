@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { computed } from '@ember/object';
 import { action } from '@ember/object';
-import { next } from '@ember/runloop';
+import { run } from '@ember/runloop';
 
 export default class FormAccountPasswordSetPasswordIndexComponent extends Component {
   // =properties
@@ -36,11 +36,11 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
    * Submit with password value when it is allowed.
    * Callback with no arguments otherwise.
    * @param {function} fn
+   * @param {string} password
    */
   @action
-  submit(fn) {
-    const password = this.password;
-    next(() => this.resetPassword());
-    fn(password);
+  submit(fn, password) {
+    run(() => this.resetPassword());
+    run(() => fn(password));
   }
 }
