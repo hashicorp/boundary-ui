@@ -115,8 +115,13 @@
   }
 }
 
+[class*="session-status-"] {
+  color: var(--ui-gray-subtler-2);
+}
 .session-status-active {
-  &.rose-icon {
-    color: var(--success);
-  }
+  color: var(--success);
+}
+
+.nowrap {
+  white-space: nowrap;
 }
