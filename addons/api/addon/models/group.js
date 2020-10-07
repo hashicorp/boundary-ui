@@ -46,8 +46,6 @@ export default class GroupModel extends GeneratedGroupModel {
       memberIDs,
     };
     // There is no "deep merge" in ES.
-    // All of this nonsense is here to ensure we get
-    // a decent merge of `adapterOptions`.
     return this.save({
       ...options,
       adapterOptions: {
@@ -71,8 +69,6 @@ export default class GroupModel extends GeneratedGroupModel {
       memberIDs,
     };
     // There is no "deep merge" in ES.
-    // All of this nonsense is here to ensure we get
-    // a decent merge of `adapterOptions`.
     return this.save({
       ...options,
       adapterOptions: {

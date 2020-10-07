@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { computed } from '@ember/object';
 import { action } from '@ember/object';
-import { next } from '@ember/runloop';
+import { run } from '@ember/runloop';
 
 export default class FormAccountPasswordChangePasswordIndexComponent extends Component {
 
@@ -50,13 +50,13 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
    * Call passed submit function with passwords.
    * Unset passwords before callack.
    * @param {function} fn
+   * @param {string} currentPassword
+   * @param {string} newPassword
    */
   @action
-  submit(fn) {
-    const currentPassword = this.currentPassword;
-    const newPassword = this.newPassword;
-    next(() => this.resetPasswords());
-    fn(currentPassword, newPassword);
+  submit(fn, currentPassword, newPassword) {
+    run(() => this.resetPasswords());
+    run(() => fn(currentPassword, newPassword));
   }
 
   /**
