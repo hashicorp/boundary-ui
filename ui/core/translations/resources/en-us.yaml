@@ -47,6 +47,7 @@ group:
       description: There are no members available to add to this group.
   actions:
     add-members: Add Members
+    delete: Delete Group
 host-catalog:
   title: Host Catalog
   title_plural: Host Catalogs
@@ -118,6 +119,8 @@ project:
   messages:
     welcome:
       title: Welcome to Projects
+  actions:
+    delete: Delete Project
 user:
   title: User
   title_plural: Users
@@ -136,6 +139,7 @@ user:
       description: There are no accounts available to add to this user.
   actions:
     add-accounts: Add Accounts
+    delete: Delete User
 role:
   title: Role
   title_plural: Roles

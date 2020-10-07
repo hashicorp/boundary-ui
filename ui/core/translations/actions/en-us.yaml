@@ -13,14 +13,6 @@ authenticate: Authenticate
 deauthenticate: Deauthenticate
 choose-org: Choose Scope
 choose-different-org: Choose a Different Scope
-delete-user: Delete user
-delete-group: Delete group
-delete-role: Delete role
-delete-project: Delete project
-delete-host-catalog: Delete host catalog
-delete-host-set: Delete host set
-delete-host: Delete host
-delete-target: Delete target
 add-host-set: Create Host Set
 add-host: Create Host
 add-host-sets: Add Host Sets
