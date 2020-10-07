@@ -2,6 +2,7 @@
   <dropdown.link @route="scopes.scope.roles.role.add-principals">
     {{t 'resources.role.principal.actions.add-principals'}}
   </dropdown.link>
+  <dropdown.separator />
   <dropdown.button
     @style="danger"
     @disabled={{@model.canSave}}

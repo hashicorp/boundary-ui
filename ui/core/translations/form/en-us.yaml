@@ -2,10 +2,10 @@ id:
   label: ID
 name:
   label: Name
-  help: Optional name for identification purposes
+  help: Name for identification purposes
 description:
   label: Description
-  help: Optional description for identification purposes
+  help: Description for identification purposes
 type:
   label: Type
   help: The type of the resource, to help differentiate schemas

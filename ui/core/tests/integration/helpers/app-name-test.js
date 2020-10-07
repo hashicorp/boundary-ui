@@ -7,6 +7,7 @@ module('Integration | Helper | app-name', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
+    assert.expect(1);
     await render(hbs`{{app-name}}`);
     assert.equal(this.element.textContent.trim(), 'Boundary');
   });

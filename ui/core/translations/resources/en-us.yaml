@@ -42,8 +42,12 @@ group:
     add-members:
       title: Add Members
       description: Select users to add users to this group.
+    no-members:
+      title: No Members Available
+      description: There are no members available to add to this group.
   actions:
     add-members: Add Members
+    delete: Delete Group
 host-catalog:
   title: Host Catalog
   title_plural: Host Catalogs
@@ -104,17 +108,19 @@ session:
 org:
   title: Organization
   title_plural: Organizations
-  description: An organization is a type of scope used to organize projects and IAM resources.  Organizations contain projects and is a child scope of global.
+  description: An organization is a type of scope used to organize projects and IAM resources.  Organizations are child scopes of the global scope.
   messages:
     welcome:
       title: Welcome to Organizations
 project:
   title: Project
   title_plural: Projects
-  description: A project is a type of scope used to organize resources such as by targets and host catalogs.
+  description: A project is a type of scope used to organize resources such as targets and host catalogs.
   messages:
     welcome:
       title: Welcome to Projects
+  actions:
+    delete: Delete Project
 user:
   title: User
   title_plural: Users
@@ -133,6 +139,7 @@ user:
       description: There are no accounts available to add to this user.
   actions:
     add-accounts: Add Accounts
+    delete: Delete User
 role:
   title: Role
   title_plural: Roles

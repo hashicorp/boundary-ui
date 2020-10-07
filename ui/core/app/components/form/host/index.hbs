@@ -8,7 +8,7 @@
 >
 
   <form.input
-  @value={{t (concat 'resources.host.types.' @model.type)}}
+  @value={{@model.type}}
   @label={{t "form.type.label"}}
   readonly={{true}}
   @disabled={{true}} />

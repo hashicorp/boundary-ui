@@ -23,7 +23,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsHostR
     super.renderTemplate(...arguments);
 
     this.render(
-      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-header',
+      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/host/-header',
       {
         into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
         outlet: 'header',
@@ -32,7 +32,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsHostR
     );
 
     this.render(
-      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-navigation',
+      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/host/-navigation',
       {
         into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
         outlet: 'navigation',
@@ -41,7 +41,7 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsHostR
     );
 
     this.render(
-      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/-actions',
+      'scopes/scope/projects/project/host-catalogs/host-catalog/hosts/host/-actions',
       {
         into: 'scopes/scope/projects/project/host-catalogs/host-catalog',
         outlet: 'actions',

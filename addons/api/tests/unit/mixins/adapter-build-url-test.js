@@ -1,4 +1,5 @@
 import RESTAdapter from '@ember-data/adapter/rest';
+/* eslint-disable-next-line ember/no-mixins */
 import AdapterBuildURLMixin from 'api/mixins/adapter-build-url';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
@@ -8,6 +9,7 @@ module('Unit | Mixin | build-url', function (hooks) {
 
   test('it does not interfere with basic URLs', function (assert) {
     assert.expect(1);
+    /* eslint-disable-next-line ember/no-new-mixins */
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin);
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
@@ -17,6 +19,7 @@ module('Unit | Mixin | build-url', function (hooks) {
 
   test('it does not interfere with namespaced URLs', function (assert) {
     assert.expect(1);
+    /* eslint-disable-next-line ember/no-new-mixins */
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin, {
       namespace: 'api/v1',
     });
@@ -28,6 +31,7 @@ module('Unit | Mixin | build-url', function (hooks) {
 
   test('it can prepend a prefix', function (assert) {
     assert.expect(1);
+    /* eslint-disable-next-line ember/no-new-mixins */
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin, {
       urlPrefix() {
         return '/foo/bars';
@@ -41,6 +45,7 @@ module('Unit | Mixin | build-url', function (hooks) {
 
   test('it can append a suffix', function (assert) {
     assert.expect(1);
+    /* eslint-disable-next-line ember/no-new-mixins */
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin, {
       urlSuffix() {
         return ':method';

@@ -1,4 +1,7 @@
-<h2>{{t "resources.user.title"}}</h2>
+<h2>
+  {{t "resources.user.title"}}
+  <DocLink @doc="user" @iconSize="large" />
+</h2>
 <p>{{t "resources.user.description"}}</p>
 <Copyable
   @text={{@model.id}}

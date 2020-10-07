@@ -32,9 +32,40 @@ module.exports = function (environment) {
     },
 
     appName: APP_NAME,
+    companyName: 'HashiCorp',
 
     notifyTimeout: 4000,
+    sessionPollingTimeoutSeconds: 2.5,
     enableConfirmService: true,
+
+    documentation: {
+      baseURL: 'https://boundaryproject.io/help/admin-ui',
+      topics: {
+        org: '/orgs',
+        'org.new': '/orgs/new',
+        project: '/projects',
+        'project.new': '/projects/new',
+        account: '/accounts',
+        'account.new': '/accounts/new',
+        'auth-method': '/auth-methods',
+        group: '/groups',
+        'group.add-members': '/groups/add-members',
+        'host-catalog': '/host-catalogs',
+        'host-catalog.new': '/host-catalogs/new',
+        'host-set': '/host-sets',
+        'host-set.new': '/host-sets/new',
+        'host-set.add-hosts': '/host-sets/add-hosts',
+        host: '/hosts',
+        'host.new': '/hosts/new',
+        role: '/roles',
+        'role.add-principals': '/roles/add-principals',
+        session: '/sessions',
+        target: '/targets',
+        'target.new': '/targets/new',
+        'target.add-host-sets': '/targets/add-host-sets',
+        user: '/users'
+      }
+    },
 
     contentSecurityPolicyHeader: 'Content-Security-Policy',
     contentSecurityPolicyMeta: true,
@@ -99,6 +130,8 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
+    // Session polling timeout should be short
+    ENV.sessionPollingTimeoutSeconds = 0.25;
     ENV.enableConfirmService = false;
   }
 

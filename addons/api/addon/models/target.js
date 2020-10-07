@@ -26,7 +26,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[{model: HostSetModel, hostCatalog: HostCatalogModel}]}
    */
-  @computed('host_sets.[]')
+  @computed('host_sets.[]', 'store')
   get hostSets() {
     return this.host_sets
       .map(({ host_set_id, host_catalog_id }) => ({
@@ -52,8 +52,6 @@ export default class TargetModel extends GeneratedTargetModel {
       hostSetIDs,
     };
     // There is no "deep merge" in ES.
-    // All of this nonsense is here to ensure we get
-    // a decent merge of `adapterOptions`.
     return this.save({
       ...options,
       adapterOptions: {
@@ -77,8 +75,6 @@ export default class TargetModel extends GeneratedTargetModel {
       hostSetIDs,
     };
     // There is no "deep merge" in ES.
-    // All of this nonsense is here to ensure we get
-    // a decent merge of `adapterOptions`.
     return this.save({
       ...options,
       adapterOptions: {

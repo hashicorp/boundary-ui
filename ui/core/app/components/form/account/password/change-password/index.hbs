@@ -1,6 +1,6 @@
 <Rose::Form
   class="full-width"
-  @onSubmit={{fn this.submit @submit}}
+  @onSubmit={{fn this.submit @submit this.currentPassword this.newPassword}}
   @cancel={{fn this.cancel @cancel}}
   @disabled={{@model.isSaving}}
   @error={{@model.errors.base}}
@@ -44,7 +44,7 @@
   </form.input>
 
   <form.actions
-    @disabled={{this.cannotSave}}
+    @submitDisabled={{this.cannotSave}}
     @submitText={{t "actions.save"}}
     @cancelText={{t "actions.cancel"}} />
 

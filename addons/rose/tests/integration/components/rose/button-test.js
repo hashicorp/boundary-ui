@@ -7,8 +7,8 @@ module('Integration | Component | rose/button', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    await render(hbs`<Rose::Button>Button 🌈</Rose::Button>`);
-    assert.equal(this.element.textContent.trim(), 'Button 🌈');
+    await render(hbs`<Rose::Button>Button</Rose::Button>`);
+    assert.equal(this.element.textContent.trim(), 'Button');
   });
 
   test('it is type="button" by default', async function (assert) {

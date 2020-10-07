@@ -1,20 +1,21 @@
-{{#if this.isClipboardLibrarySupported}}
-  <span
-    id={{this.id}}
-    class="copyable"
-    {{did-insert this.register}}
-    {{will-destroy this.destroy}}
-  >
-    {{#if this.copied}}
-      <mark class="copyable-content">
-        {{yield}}
-      </mark>
-    {{else}}
-      <span class="copyable-content">
-        {{yield}}
-      </span>
-    {{/if}}
+<span
+  id={{this.id}}
+  class="copyable"
+  {{did-insert this.register}}
+  {{will-destroy this.destroy}}
+>
 
+  {{#if this.copied}}
+    <mark class="copyable-content">
+      {{yield}}
+    </mark>
+  {{else}}
+    <span class="copyable-content">
+      {{yield}}
+    </span>
+  {{/if}}
+
+  {{#if this.isClipboardLibrarySupported}}
     <Rose::Button
       id={{this.copyableButtonId}}
       aria-describedby={{this.id}}
@@ -22,8 +23,8 @@
       @style="ghost"
       @iconOnly={{if this.copied this.successIcon this.actionIcon}}
       title={{if this.copied this.successText this.actionText}}
-    >{{this.actionText}}</Rose::Button>
-  </span>
-{{else}}
-  {{yield}}
-{{/if}}
+    >
+      {{this.actionText}}
+    </Rose::Button>
+  {{/if}}
+</span>

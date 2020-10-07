@@ -61,9 +61,11 @@ module('Acceptance | accounts | set password', function (hooks) {
 
   test('can set a new password for account', async function (assert) {
     assert.expect(1);
-    this.server.post('/accounts/:id', (_, { requestBody }) => {
+    this.server.post('/accounts/:idMethod', (_, { params: { idMethod }, requestBody }) => {
       const attrs = JSON.parse(requestBody);
       assert.equal(attrs.password, 'update password', 'new password is set');
+      const id = idMethod.split(':')[0];
+      return { id };
     });
     await visit(urls.setPassword);
     await fillIn('[name="password"]', 'update password');
@@ -71,13 +73,16 @@ module('Acceptance | accounts | set password', function (hooks) {
     await a11yAudit();
   });
 
-  test('can cancel setting new password', async function (assert) {
-    assert.expect(1);
-    await visit(urls.setPassword);
-    await fillIn('[name="password"]', 'update password');
-    await click('form button:not([type="submit"])');
-    assert.notOk(find('[name="password"]').textContent.trim());
-  });
+  // NOTE: since set password is a tabbed route with easy navigation away
+  // from the form, and the form does not directly operate on a model instance,
+  // a "cancel" flow doesn't make much sense.  Disabling for now.
+  // test('can cancel setting new password', async function (assert) {
+  //   assert.expect(1);
+  //   await visit(urls.setPassword);
+  //   await fillIn('[name="password"]', 'update password');
+  //   await click('form button:not([type="submit"])');
+  //   assert.notOk(find('[name="password"]').textContent.trim());
+  // });
 
   test('errors are displayed when setting password fails', async function  (assert) {
     assert.expect(1);

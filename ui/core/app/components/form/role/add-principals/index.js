@@ -17,7 +17,7 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
    * @param {[UserModel, GroupModel]} filteredPrincipals
    * @type {boolean}
    */
-  @computed('filteredPrincipals')
+  @computed('filteredPrincipals.length')
   get hasAvailablePrincipals() {
     return this.filteredPrincipals.length > 0;
   }
@@ -26,7 +26,7 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
    * Principals not currently assigned to a role.
    * @type {[UserModel, GroupModel]}
    */
-  @computed('args.{model,users,groups}')
+  @computed('args.{model,model.principals.[],users,groups}')
   get filteredPrincipals() {
     // Retrieve principal IDs assigned to current role
     const currentPrincipalIDs = this.args.model.principals.map(

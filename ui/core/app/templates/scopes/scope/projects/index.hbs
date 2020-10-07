@@ -5,7 +5,10 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.project.title_plural"}}</h2>
+    <h2>
+      {{t "resources.project.title_plural"}}
+      <DocLink @doc="project" @iconSize="large" />
+    </h2>
     {{#if @model}}
       <p>{{t "resources.project.description"}}</p>
     {{/if}}
@@ -32,7 +35,7 @@
             @title={{project.name}}
             @description={{project.description}}
             @id={{project.id}}
-            @icon="boundary-icons/project"
+            @icon="app-icons/project"
             @route="scopes.scope.projects.project"
             @model={{project.id}}
           />

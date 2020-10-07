@@ -22,7 +22,7 @@ export default class ScopesScopeProjectsProjectRoute extends Route {
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/projects/project/_sidebar', {
+    this.render('scopes/scope/projects/project/-sidebar', {
       into: 'scopes/scope',
       outlet: 'sidebar',
       model: model,

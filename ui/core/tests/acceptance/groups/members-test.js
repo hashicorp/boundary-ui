@@ -41,7 +41,7 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group = this.server.create('group', {
       scope: instances.scopes.org,
     }, 'withMembers');
-    membersCount = instances.group.memberIds.length;    
+    membersCount = instances.group.memberIds.length;
     urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
     urls.group = `${urls.groups}/${instances.group.id}`;
     urls.members = `${urls.group}/members`;
@@ -98,6 +98,9 @@ module('Acceptance | groups | members', function (hooks) {
     assert.equal(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a')
     assert.equal(currentURL(), urls.addMembers);
+    // Click three times to select, unselect, then reselect (for coverage)
+    await click('tbody label');
+    await click('tbody label');
     await click('tbody label');
     await click('form [type="submit"]');
     await visit(urls.members);

@@ -5,7 +5,10 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t "resources.project.title"}}</h2>
+    <h2>
+      {{t "resources.project.title"}}
+      <DocLink @doc="project" @iconSize="large" />
+    </h2>
     <p>{{t "resources.project.description"}}</p>
     <Copyable
       @text={{@model.id}}
@@ -31,7 +34,7 @@
         @disabled={{@model.canSave}}
         {{on "click" (route-action "delete" @model)}}
       >
-        {{t 'actions.delete-project'}}
+        {{t 'resources.project.actions.delete'}}
       </dropdown.button>
     </Rose::Dropdown>
   </page.actions>

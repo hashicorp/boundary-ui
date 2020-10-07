@@ -1,4 +1,7 @@
-<h2>{{t "resources.account.title"}}</h2>
+<h2>
+  {{t "resources.account.title"}}
+  <DocLink @doc="account" @iconSize="large" />
+</h2>
 <Copyable
   @text={{@model.id}}
   @buttonText={{t "actions.copy-to-clipboard"}}

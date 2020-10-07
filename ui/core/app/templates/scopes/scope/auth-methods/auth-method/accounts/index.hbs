@@ -4,7 +4,11 @@
     <table.header as |header|>
       <header.row as |row|>
         <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.username.label'}}</row.headerCell>
+        <row.headerCell>
+          {{#if @model.firstObject.isPassword}}
+            {{t 'form.login_name.label'}}
+          {{/if}}
+        </row.headerCell>
         <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
       </header.row>
     </table.header>
@@ -16,7 +20,7 @@
               @route="scopes.scope.auth-methods.auth-method.accounts.account"
               @model={{account.id}}
             >
-              {{account.name}}
+              {{account.displayName}}
             </LinkTo>
             <p>{{account.description}}</p>
           </row.headerCell>
@@ -44,6 +48,10 @@
       <message.description>
         {{t "resources.account.messages.welcome.description"}}
       </message.description>
+      <message.link @route="scopes.scope.auth-methods.auth-method.accounts.new">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t 'resources.account.actions.create'}}
+      </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
 
