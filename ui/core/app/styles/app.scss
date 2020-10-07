@@ -123,9 +123,10 @@
   }
 }
 
-[class*="session-status-"] {
+[class*='session-status-'] {
   color: var(--ui-gray-subtler-2);
 }
+
 .session-status-active {
   color: var(--success);
 }
