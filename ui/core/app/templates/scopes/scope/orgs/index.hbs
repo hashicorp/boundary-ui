@@ -7,7 +7,7 @@
   <page.header>
     <h2>
       {{t "resources.org.title_plural"}}
-      <DocLink @doc="topics.org" @iconSize="large" />
+      <DocLink @doc="org" @iconSize="large" />
     </h2>
     {{#if @model}}
       <p>{{t "resources.org.description"}}</p>
@@ -35,7 +35,7 @@
             @title={{org.name}}
             @description={{org.description}}
             @id={{org.id}}
-            @icon="boundary-icons/org"
+            @icon="app-icons/org"
             @route="scopes.scope"
             @model={{org.id}}
           />
