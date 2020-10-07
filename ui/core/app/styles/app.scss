@@ -114,3 +114,9 @@
     }
   }
 }
+
+.session-status-active {
+  &.rose-icon {
+    color: var(--success);
+  }
+}

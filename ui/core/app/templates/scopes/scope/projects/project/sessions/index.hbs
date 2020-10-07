@@ -31,6 +31,10 @@
           {{#each @model as |sessionAggregate|}}
             <body.row as |row|>
               <row.headerCell>
+                <Rose::Icon
+                  class={{concat "session-status-" sessionAggregate.session.status}}
+                  @name="app-icons/action-session"
+                  @size="medium" />
                 <Copyable
                   @text={{sessionAggregate.session.id}}
                   @buttonText={{t "actions.copy-to-clipboard"}}
