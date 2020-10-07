@@ -40,6 +40,7 @@
             <dropdown.link @route="account.change-password">
               {{t 'actions.change-password'}}
             </dropdown.link>
+            <dropdown.separator />
             <dropdown.button
               {{on "click" (route-action "invalidateSession")}}
             >
