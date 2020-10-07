@@ -2,11 +2,12 @@
   <dropdown.link @route="scopes.scope.groups.group.add-members">
     {{t "resources.group.actions.add-members"}}
   </dropdown.link>
+  <dropdown.separator />
   <dropdown.button
     @style="danger"
     @disabled={{@model.canSave}}
     {{on "click" (route-action "delete" @model)}}
   >
-    {{t 'actions.delete-group'}}
+    {{t 'resources.group.actions.delete'}}
   </dropdown.button>
 </Rose::Dropdown>
