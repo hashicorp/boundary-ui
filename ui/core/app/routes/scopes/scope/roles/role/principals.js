@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
 import { confirm } from '../../../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   // =services
@@ -67,16 +68,12 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   @action
   @loading
   @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
   async removePrincipal(principal) {
-    try {
-      const role = this.modelFor('scopes.scope.roles.role');
-      await role.removePrincipal(principal.id);
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.remove-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    const role = this.modelFor('scopes.scope.roles.role');
+    await role.removePrincipal(principal.id);
+    this.refresh();
   }
 
 }
