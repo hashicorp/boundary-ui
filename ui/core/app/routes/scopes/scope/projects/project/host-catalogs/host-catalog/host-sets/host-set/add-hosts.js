@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
 import loading from 'ember-loading/decorator';
+import { notifySuccess, notifyError } from '../../../../../../../../../decorators/notify';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHostSetAddHostsRoute extends Route {
   // =services
@@ -70,17 +71,13 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
    */
   @action
   @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
   async addHosts(hostSet, hostIDs) {
-    try {
-      await hostSet.addHosts(hostIDs);
-      await this.replaceWith(
-        'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts'
-      );
-      this.notify.success(this.intl.t('notifications.add-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await hostSet.addHosts(hostIDs);
+    await this.replaceWith(
+      'scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.hosts'
+    );
   }
 
   /**
