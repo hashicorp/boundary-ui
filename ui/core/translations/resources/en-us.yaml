@@ -1,7 +1,7 @@
 account:
   title: Account
   title_plural: Accounts
-  description: Accounts associate an IAM user with an auth method
+  description: An account allows a user to log into Boundary with a particular auth method. Users may have multiple accounts for different auth methods.
   messages:
     welcome:
       title: Welcome to Accounts
@@ -16,7 +16,7 @@ account:
 auth-method:
   title: Auth Method
   title_plural: Auth Methods
-  description: An authentication method is a method configured for an Organization to authenticate Users. An Authentication Method is owned by one and only one Organization.
+  description: Auth methods govern how an organization’s users can login to Boundary. Boundary’s default auth method is username & passwords.
   messages:
     welcome:
       title: Welcome to Auth Methods
