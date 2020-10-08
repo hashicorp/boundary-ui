@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from '../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../decorators/notify';
 
 export default class ScopesScopeGroupsRoute extends Route {
   // =services
@@ -47,20 +48,12 @@ export default class ScopesScopeGroupsRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
   async save(group) {
-    const { isNew } = group;
-    try {
-      await group.save();
-      await this.transitionTo('scopes.scope.groups.group', group);
-      this.refresh();
-      this.notify.success(
-        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
-      );
-    } catch (error) {
-      //TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-      throw error;
-    }
+    await group.save();
+    await this.transitionTo('scopes.scope.groups.group', group);
+    this.refresh();
   }
 
   /**
@@ -70,15 +63,11 @@ export default class ScopesScopeGroupsRoute extends Route {
   @action
   @loading
   @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
   async delete(group) {
-    try {
-      await group.destroyRecord();
-      await this.replaceWith('scopes.scope.groups');
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.delete-success'));
-    } catch (error) {
-      //TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await group.destroyRecord();
+    await this.replaceWith('scopes.scope.groups');
+    this.refresh();
   }
 }
