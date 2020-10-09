@@ -3,7 +3,7 @@ import { all, hash } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
-import { confirm } from '../../../../../utilities/confirm';
+import { confirm } from '../../../../../decorators/confirm';
 
 export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   // =services
