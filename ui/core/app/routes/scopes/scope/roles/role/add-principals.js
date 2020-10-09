@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
 import loading from 'ember-loading/decorator';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
@@ -59,15 +60,11 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
   async addPrincipals(role, principalIDs) {
-    try {
-      await role.addPrincipals(principalIDs);
-      this.replaceWith('scopes.scope.roles.role.principals');
-      this.notify.success(this.intl.t('notifications.add-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await role.addPrincipals(principalIDs);
+    this.replaceWith('scopes.scope.roles.role.principals');
   }
 
   /**

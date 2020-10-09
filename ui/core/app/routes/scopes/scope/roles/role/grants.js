@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   // =services
@@ -56,13 +57,9 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.save-success')
   async save(role) {
-    try {
       await role.saveGrants();
-      this.notify.success(this.intl.t('notifications.save-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
   }
 }
