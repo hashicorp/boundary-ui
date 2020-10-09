@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
 import { confirm } from '../../../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route {
   // =services
@@ -43,27 +44,20 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    */
   @action
   @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
   async save(account, password) {
     const { isNew } = account;
     const adapterOptions = {};
     if (isNew) {
       adapterOptions.password = password;
     }
-    try {
-      await account.save({ adapterOptions });
-      await this.transitionTo(
-        'scopes.scope.auth-methods.auth-method.accounts.account',
-        account
-      );
-      this.refresh();
-      this.notify.success(
-        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
-      );
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-      throw error;
-    }
+    await account.save({ adapterOptions });
+    await this.transitionTo(
+      'scopes.scope.auth-methods.auth-method.accounts.account',
+      account
+    );
+    this.refresh();
   }
 
   /**
@@ -73,15 +67,11 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   @action
   @loading
   @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
   async deleteAccount(account) {
-    try {
-      await account.destroyRecord();
-      await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.delete-success'));
-    } catch (error) {
-      //TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await account.destroyRecord();
+    await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
+    this.refresh();
   }
 }

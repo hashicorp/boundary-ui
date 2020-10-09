@@ -17,7 +17,7 @@ export function confirm(confirmationTextKey) {
         // If user confirmed, execute the decorated method
         .then(() => method.apply(this, arguments))
         // If the user denied, gracefully handle promise rejection with no-op
-        .catch(() => {});
+        .catch((e) => e);
     };
   }
 }

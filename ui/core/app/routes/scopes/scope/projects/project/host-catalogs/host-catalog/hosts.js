@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from '../../../../../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../../../../../decorators/notify';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute extends Route {
   // =services
@@ -46,23 +47,15 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
    */
   @action
   @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
   async save(host) {
-    try {
-      const { isNew } = host;
-      await host.save();
-      await this.transitionTo(
-        'scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host',
-        host
-      );
-      this.refresh();
-      this.notify.success(
-        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
-      );
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-      throw error;
-    }
+    await host.save();
+    await this.transitionTo(
+      'scopes.scope.projects.project.host-catalogs.host-catalog.hosts.host',
+      host
+    );
+    this.refresh();
   }
 
   /**
@@ -72,17 +65,13 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostsRoute
   @action
   @loading
   @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
   async deleteHost(host) {
-    try {
-      await host.destroyRecord();
-      await this.replaceWith(
-        'scopes.scope.projects.project.host-catalogs.host-catalog.hosts'
-      );
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.delete-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await host.destroyRecord();
+    await this.replaceWith(
+      'scopes.scope.projects.project.host-catalogs.host-catalog.hosts'
+    );
+    this.refresh();
   }
 }

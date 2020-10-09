@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { hash, all } from 'rsvp';
 import loading from 'ember-loading/decorator';
 import { confirm } from '../../../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeGroupsGroupMembersRoute extends Route {
   // =services
@@ -40,14 +41,10 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
   @action
   @loading
   @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
   async removeMember(group, member) {
-    try {
-      await group.removeMember(member.id);
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.remove-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await group.removeMember(member.id);
+    this.refresh();
   }
 }

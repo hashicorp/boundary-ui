@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
 import { confirm } from '../../../../../../../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../../../../../../../decorators/notify';
 
 export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHostSetHostsRoute extends Route {
   // =services
@@ -39,20 +40,16 @@ export default class ScopesScopeProjectsProjectHostCatalogsHostCatalogHostSetsHo
   @action
   @loading
   @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
   async removeHost(hostSet, host) {
-    try {
-      const scopeID = this.modelFor('scopes.scope.projects.project').id;
-      const hostCatalogID = this.modelFor(
-        'scopes.scope.projects.project.host-catalogs.host-catalog'
-      ).id;
-      await hostSet.removeHost(host.id, {
-        adapterOptions: { scopeID, hostCatalogID },
-      });
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.remove-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    const scopeID = this.modelFor('scopes.scope.projects.project').id;
+    const hostCatalogID = this.modelFor(
+      'scopes.scope.projects.project.host-catalogs.host-catalog'
+    ).id;
+    await hostSet.removeHost(host.id, {
+      adapterOptions: { scopeID, hostCatalogID },
+    });
+    this.refresh();
   }
 }

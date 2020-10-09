@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
+import { notifySuccess, notifyError } from '../../../decorators/notify';
 
 export default class ScopesScopeOrgsRoute extends Route {
   // =services
@@ -49,18 +50,11 @@ export default class ScopesScopeOrgsRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.create-success')
   async save(org) {
-    try {
-      await org.save();
-      await this.transitionTo('scopes.scope.projects', org);
-      this.refresh();
-      this.notify.success(
-        this.intl.t('notifications.create-success')
-      );
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-      throw error;
-    }
+    await org.save();
+    await this.transitionTo('scopes.scope.projects', org);
+    this.refresh();
   }
 }
