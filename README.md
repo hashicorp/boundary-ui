@@ -68,39 +68,7 @@ List of available project commands.  `yarn run <command-name>`
 
 ### Branching
 
-We follow [A Successful Git Branching Model][nvie-git], otherwise known as
-Gitflow.  Branches `main` and `develop` are sacred mainlines into which we do
-not commit directly.  Instead, these branches have special meaning defining what
-code may be found within.  The `develop` branch contains code _for the next
-release_.  Code in `main` is _released, tagged, and ready for
-production deployment_.
-
-To start contributing:
-1. Start a new **topic branch** off `develop`.
-2. Commit work.
-3. When work is complete, create a PR from the topic branch into `develop`.
-4. Code review and automated checks occur.  If checks fail or changes are
-   requested, commit more work.  Rinse and repeat until all checks pass and no
-   changes are requested.
-5. A core team member may merge the PR into `develop`.  At this point, the code
-   is unreleased but considered "releasable".
-6. **Releasing**:  when it's time to release, create a PR from `develop` into
-  `main` (we skip Gitflow's `release` branch).  This is tantamount to
-   requesting a new release (version) of the product.  Ensure the body of the PR
-   includes well-documented changes slated for release.
-7. Code review and automated checks occur.
-8. A core team member may merge the PR into `main` to initiate a release.
-9. Tag the merge commit in `main` with version number of the release and cut
-   a release in GitHub.
-
-While Gitflow may seem heavy, most of its process can be automated.  Gitflow is
-similar to its lighter-weight sibling [GitHub Flow][github-flow].  In essence,
-Gitflow differs only by adding an second mainline branch (`main`) that is
-designated as _always containing production code_.  Another happy characteristic
-of Gitflow is that it's easy to track the project's release history, since
-_every commit to `main` is a release by definition_.  The well-defined nature
-of releases assists in cross-team collaboration, ensuring everyone has
-confidence about the state of the project.
+We follow [GitHub Flow][github-flow].
 
 ### Building ToC
 
@@ -150,5 +118,4 @@ in `package.json` _as long as it is not a GPL variant or UNLICENSED_.
 The change will be verified upon PR.  GPL variants and UNLICENSED dependencies
 will not be accepted.
 
-[nvie-git]: https://nvie.com/posts/a-successful-git-branching-model/
 [github-flow]: https://guides.github.com/introduction/flow/

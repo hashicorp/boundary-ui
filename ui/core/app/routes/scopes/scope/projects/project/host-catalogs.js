@@ -2,7 +2,8 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
-import { confirm } from '../../../../../utilities/confirm';
+import { confirm } from '../../../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
   // =services
@@ -41,23 +42,15 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
   async save(hostCatalog) {
-    const { isNew } = hostCatalog;
-    try {
-      await hostCatalog.save();
-      await this.transitionTo(
-        'scopes.scope.projects.project.host-catalogs.host-catalog',
-        hostCatalog
-      );
-      this.refresh();
-      this.notify.success(
-        this.intl.t(isNew ? 'notifications.create-success' : 'notifications.save-success')
-      );
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-      throw error;
-    }
+    await hostCatalog.save();
+    await this.transitionTo(
+      'scopes.scope.projects.project.host-catalogs.host-catalog',
+      hostCatalog
+    );
+    this.refresh();
   }
 
   /**
@@ -67,15 +60,11 @@ export default class ScopesScopeProjectsProjectHostCatalogsRoute extends Route {
   @action
   @loading
   @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
   async delete(hostCatalog) {
-    try {
-      await hostCatalog.destroyRecord();
-      await this.replaceWith('scopes.scope.projects.project.host-catalogs');
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.delete-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await hostCatalog.destroyRecord();
+    await this.replaceWith('scopes.scope.projects.project.host-catalogs');
+    this.refresh();
   }
 }

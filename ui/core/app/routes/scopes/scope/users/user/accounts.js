@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { hash, all } from 'rsvp';
 import loading from 'ember-loading/decorator';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeUsersUserAccountsRoute extends Route {
   // =services
@@ -38,14 +39,10 @@ export default class ScopesScopeUsersUserAccountsRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
   async removeAccount(user, account) {
-    try {
-      await user.removeAccount(account.id);
-      await this.refresh();
-      this.notify.success(this.intl.t('notifications.remove-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await user.removeAccount(account.id);
+    await this.refresh();
   }
 }
