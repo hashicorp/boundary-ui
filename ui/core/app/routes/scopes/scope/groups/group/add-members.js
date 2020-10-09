@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
 import loading from 'ember-loading/decorator';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =services
@@ -65,15 +66,11 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
   async addMembers(group, userIDs) {
-    try {
-      await group.addMembers(userIDs);
-      await this.replaceWith('scopes.scope.groups.group.members');
-      this.notify.success(this.intl.t('notifications.add-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await group.addMembers(userIDs);
+    await this.replaceWith('scopes.scope.groups.group.members');
   }
 
   /**

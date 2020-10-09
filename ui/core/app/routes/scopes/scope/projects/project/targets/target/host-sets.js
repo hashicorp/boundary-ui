@@ -3,7 +3,8 @@ import { all, hash } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
-import { confirm } from '../../../../../../../utilities/confirm';
+import { confirm } from '../../../../../../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../../../../../../decorators/notify';
 
 export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extends Route {
   // =services
@@ -57,14 +58,10 @@ export default class ScopesScopeProjectsProjectTargetsTargetHostSetsRoute extend
   @action
   @loading
   @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
   async removeHostSet(target, hostSet) {
-    try {
-      await target.removeHostSet(hostSet.id);
-      this.refresh();
-      this.notify.success(this.intl.t('notifications.remove-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await target.removeHostSet(hostSet.id);
+    this.refresh();
   }
 }

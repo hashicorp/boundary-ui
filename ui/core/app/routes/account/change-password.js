@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { notifySuccess, notifyError } from '../../decorators/notify';
 
 /**
  * The change password flow is associated only with password-type auth methods.
@@ -33,20 +34,16 @@ export default class AccountChangePasswordRoute extends Route {
    * @param {string} newPassword
    */
   @action
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.save-success')
   async changePassword(account, currentPassword, newPassword) {
-    try {
-      await account.changePassword(currentPassword, newPassword);
-      // Transition to index after success.  We ignore errors in the transition,
-      // since the index route is responsible for additional
-      // redirects depending on the authentication context.  These additional
-      // redirects may abort this initial transition, resulting in a
-      // TransitionAborted error, which we do not want to show to the user.
-      await this.replaceWith('index').catch(() => {});
-      this.notify.success(this.intl.t('notifications.save-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await account.changePassword(currentPassword, newPassword);
+    // Transition to index after success.  We ignore errors in the transition,
+    // since the index route is responsible for additional
+    // redirects depending on the authentication context.  These additional
+    // redirects may abort this initial transition, resulting in a
+    // TransitionAborted error, which we do not want to show to the user.
+    await this.replaceWith('index').catch(() => {});
   }
 
   /**

@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { all } from 'rsvp';
 import loading from 'ember-loading/decorator';
+import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
   // =services
@@ -69,15 +70,11 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
    */
   @action
   @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
   async addAccounts(user, accountIDs) {
-    try {
-      await user.addAccounts(accountIDs);
-      await this.replaceWith('scopes.scope.users.user.accounts');
-      this.notify.success(this.intl.t('notifications.add-success'));
-    } catch (error) {
-      // TODO: replace with translated strings
-      this.notify.error(error.message, { closeAfter: null });
-    }
+    await user.addAccounts(accountIDs);
+    await this.replaceWith('scopes.scope.users.user.accounts');
   }
 
   /**
