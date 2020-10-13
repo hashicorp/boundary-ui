@@ -22,8 +22,8 @@ auth-method:
       title: Welcome to Auth Methods
       description: Auth methods are configurations to authenticate users.
     none:
-      title: No Authentication Methods
-      description: No authentication methods were found for this scope.
+      title: No Auth Methods
+      description: No auth methods were found for this scope.
   types:
     password: Password
   actions:
