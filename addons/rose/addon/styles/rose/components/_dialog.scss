@@ -99,12 +99,6 @@ $xxxxs: sizing.rems(xxxxs); // 1
       max-width: 675px;
       width: 100%;
 
-      z-index: 999;
-      pointer-events: auto;
-      cursor: auto;
-      visibility: visible;
-      @media (max-width: 400px) { left: 0; }
-
       .rose-dialog-body {
         overflow-y: auto;
       }
@@ -117,11 +111,10 @@ $xxxxs: sizing.rems(xxxxs); // 1
     width: 100vw;
     height: 100vh;
     position: fixed;
-    z-index: 1;
     left: 0;
     top: 0;
-    z-index: 9;
-    visibility: visible;
+    bottom: 0;
+    right: 0;
     opacity: 0.5;
   }
 }
