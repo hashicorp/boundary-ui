@@ -1,0 +1,75 @@
+{{#if @modal}}
+  <div class="rose-dialog-modal-overlay"></div>
+
+  <section
+    ...attributes
+    role="dialog"
+    class="rose-dialog{{if @modal ' modal'}}"
+    {{focus-trap}}
+  >
+
+    {{#if @heading}}
+      <header class="rose-dialog-header">
+
+        {{#if @icon}}
+          <Rose::Icon @name={{@icon}} @size="medium" />
+        {{/if}}
+
+        <h2 class="rose-dialog-heading">{{@heading}}</h2>
+
+        <button
+          type="button"
+          class="rose-dialog-dismiss"
+          title="Dismiss"
+          {{on "click" (fn this.dismiss @dismiss)}}
+        >
+          <Rose::Icon @name="cancel-plain" @size="small" />
+        </button>
+
+      </header>
+    {{/if}}
+
+    {{yield (hash
+      body=(component 'rose/dialog/body')
+      footer=(component 'rose/anonymous' tagName="footer" class="rose-dialog-footer")
+    )}}
+
+  </section>
+
+{{else}}
+
+  <section
+    ...attributes
+    role="dialog"
+    class="rose-dialog{{if @modal ' modal'}}"
+  >
+
+    {{#if @heading}}
+      <header class="rose-dialog-header">
+
+        {{#if @icon}}
+          <Rose::Icon @name={{@icon}} @size="medium" />
+        {{/if}}
+
+        <h2 class="rose-dialog-heading">{{@heading}}</h2>
+
+        <button
+          type="button"
+          class="rose-dialog-dismiss"
+          title="Dismiss"
+          {{on "click" (fn this.dismiss @dismiss)}}
+        >
+          <Rose::Icon @name="cancel-plain" @size="small" />
+        </button>
+
+      </header>
+    {{/if}}
+
+    {{yield (hash
+      body=(component 'rose/dialog/body')
+      footer=(component 'rose/anonymous' tagName="footer" class="rose-dialog-footer")
+    )}}
+
+  </section>
+
+{{/if}}

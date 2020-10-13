@@ -1,0 +1,127 @@
+@use '../variables/sizing';
+@use '../utilities/type';
+@use '../variables/media';
+
+$m: sizing.rems(m); // 16
+$s: sizing.rems(s); // 12
+$xs: sizing.rems(xs); // 8
+$xxs: sizing.rems(xxs); // 4
+$xxxs: sizing.rems(xxxs); // 2
+$xxxxs: sizing.rems(xxxxs); // 1
+
+.rose-dialog {
+  border: $xxxxs solid var(--ui-gray-subtler-3);
+  border-radius: 2px;
+  background-color: var(--subtle);
+  box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
+    0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
+
+  .rose-dialog-header {
+    display: flex;
+    align-items: center;
+    padding: ($xs + $xxxs) $m;
+    min-height: sizing.rems(l);
+    color: var(--ui-gray-starker-3);
+    background-color: var(--ui-gray-subtler-5);
+    border-bottom: $xxxxs solid var(--ui-gray-subtler-2);
+
+    .rose-icon {
+      color: currentColor;
+      margin-right: $xxs + $xxxs;
+
+      svg {
+        transform: scale(1.25);
+        position: relative;
+        top: $xxxxs;
+      }
+    }
+
+    .rose-dialog-heading {
+      @include type.type(m, semibold);
+      flex-grow: 1;
+      margin: 0;
+      padding: 0;
+      color: currentColor;
+    }
+
+    .rose-dialog-dismiss {
+      border: $xxxxs solid var(--ui-gray-subtler-2);
+      border-radius: $xxxs;
+      color: var(--ui-gray);
+      background-color: transparent;
+      padding: 0;
+      margin: 0;
+      height: sizing.rems(l);
+      width: sizing.rems(l);
+
+      &:hover {
+        color: var(--ui-gray-starker-2);
+        border-color: currentColor;
+      }
+
+      .rose-icon {
+        margin: 0;
+
+        svg {
+          top: $xxxs;
+        }
+      }
+    }
+  }
+
+  .rose-dialog-body {
+    margin: sizing.rems(l);
+  }
+
+  .rose-dialog-footer {
+    padding: $m;
+    border-top: $xxxxs solid var(--ui-gray-subtler-2);
+    background-color: var(--ui-gray-subtler-5);
+
+    button {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (min-width: media.width(large)) {
+  .rose-dialog {
+    &.modal {
+      display: flex;
+      flex-direction: column;
+
+      position: fixed;
+
+      left: calc(50% - 300px);
+      top: 5%;
+
+      max-height: 85%;
+      max-width: 675px;
+      width: 100%;
+
+      z-index: 999;
+      pointer-events: auto;
+      cursor: auto;
+      visibility: visible;
+      @media (max-width: 400px) { left: 0; }
+
+      .rose-dialog-body {
+        overflow-y: auto;
+      }
+    }
+  }
+  // overlay
+  .rose-dialog-modal-overlay {
+    content: " ";
+    background-color: var(--black);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    z-index: 9;
+    visibility: visible;
+    opacity: 0.5;
+  }
+}
