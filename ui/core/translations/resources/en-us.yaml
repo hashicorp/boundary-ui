@@ -16,7 +16,7 @@ account:
 auth-method:
   title: Auth Method
   title_plural: Auth Methods
-  description: Auth methods govern how an organization’s users can login to Boundary. Boundary’s default auth method is username & passwords.
+  description: Auth methods govern how an org's users can login to Boundary. Boundary’s default auth method is username & passwords.
   messages:
     welcome:
       title: Welcome to Auth Methods
@@ -106,12 +106,12 @@ session:
       title: No Sessions
       description: There are no active sessions within the current scope.
 org:
-  title: Organization
-  title_plural: Organizations
-  description: An organization is a type of scope used to organize projects and IAM resources.  Organizations are child scopes of the global scope.
+  title: Org
+  title_plural: Orgs
+  description: An org is a type of scope used to organize projects and IAM resources.  Orgs are child scopes of the global scope.
   messages:
     welcome:
-      title: Welcome to Organizations
+      title: Welcome to Orgs
 project:
   title: Project
   title_plural: Projects
