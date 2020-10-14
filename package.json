@@ -44,6 +44,7 @@
     "license-checker": "^25.0.1"
   },
   "resolutions": {
+    "cryptiles": "~4.1.2",
     "prismjs": "~1.20.0"
   },
   "config": {
