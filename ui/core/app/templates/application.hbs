@@ -83,3 +83,23 @@
     {{message.text}}
   </Rose::Notification>
 </EmberNotify>
+
+<PendingConfirmations as |text accept deny|>
+  <Rose::Dialog
+    @heading={{t "actions.confirm"}}
+    @modal={{true}}
+    @dismiss={{deny}}
+  as |dialog|>
+    <dialog.body>
+      <p>{{text}}</p>
+    </dialog.body>
+    <dialog.footer>
+      <Rose::Button @style="primary" {{on "click" accept}}>
+        {{t "actions.ok"}}
+      </Rose::Button>
+      <Rose::Button @style="secondary" {{on "click" deny}}>
+        {{t "actions.cancel"}}
+      </Rose::Button>
+    </dialog.footer>
+  </Rose::Dialog>
+</PendingConfirmations>

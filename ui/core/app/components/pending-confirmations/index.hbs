@@ -1,0 +1,6 @@
+{{#each this.confirm.pending as |confirmation|}}
+  {{yield
+    confirmation.text
+    (fn this.accept confirmation)
+    (fn this.deny confirmation)}}
+{{/each}}
