@@ -1,4 +1,5 @@
 # Boundary UI Monorepo
+![](boundary.png)
 
 ![Validate Monorepo](https://github.com/hashicorp/boundary-ui/workflows/Validate%20Monorepo/badge.svg)
 
