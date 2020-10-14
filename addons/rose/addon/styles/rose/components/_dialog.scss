@@ -84,37 +84,39 @@ $xxxxs: sizing.rems(xxxxs); // 1
   }
 }
 
-@media (min-width: media.width(large)) {
-  .rose-dialog {
-    &.modal {
-      display: flex;
-      flex-direction: column;
+.rose-dialog {
+  &.modal {
+    display: flex;
+    flex-direction: column;
 
-      position: fixed;
+    position: fixed;
 
-      left: calc(50% - 300px);
-      top: 5%;
+    left: calc(50% - 300px);
+    top: 5%;
 
-      max-height: 85%;
-      max-width: 675px;
-      width: 100%;
+    max-height: 85%;
+    max-width: 80vw;
+    width: 650px;
 
-      .rose-dialog-body {
-        overflow-y: auto;
-      }
+    @media (max-width: media.width(small)) {
+      left: 5%;
+    }
+
+    .rose-dialog-body {
+      overflow-y: auto;
     }
   }
-  // overlay
-  .rose-dialog-modal-overlay {
-    content: " ";
-    background-color: var(--black);
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    opacity: 0.5;
-  }
+}
+// overlay
+.rose-dialog-modal-overlay {
+  content: " ";
+  background-color: var(--black);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0.5;
 }
