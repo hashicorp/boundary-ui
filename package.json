@@ -44,6 +44,7 @@
     "license-checker": "^25.0.1"
   },
   "resolutions": {
+    "tunnel-agent": "~0.6.0",
     "cryptiles": "~4.1.2",
     "prismjs": "~1.20.0"
   },
