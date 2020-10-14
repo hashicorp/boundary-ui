@@ -44,6 +44,7 @@
     "license-checker": "^25.0.1"
   },
   "resolutions": {
+    "yargs-parser": "~13.1.2",
     "npm-registry-fetch": "~8.1.1",
     "request": "~2.68.0",
     "mime": "~1.4.1",
