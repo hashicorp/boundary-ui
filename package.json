@@ -43,6 +43,9 @@
     "git-cz": "^4.3.1",
     "license-checker": "^25.0.1"
   },
+  "resolutions": {
+    "prismjs": "~1.20.0"
+  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
