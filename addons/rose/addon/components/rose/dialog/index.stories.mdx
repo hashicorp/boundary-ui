@@ -1,0 +1,63 @@
+
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Dialog" component="Dialog" />
+
+# Dialog
+
+A dialog component with optional modal capabilities.
+
+<Preview>
+  <Story name="Dialog" height="15rem">{{
+    template: hbs`
+      <Rose::Dialog
+        @modal={{modal}}
+        @dismiss={{dismiss}}
+        @icon={{icon}}
+        @heading={{headingText}}
+      as |dialog|>
+        <dialog.body>
+          Dialog Body
+        </dialog.body>
+        <dialog.footer>
+          Footer
+        </dialog.footer>
+      </Rose::Dialog>
+    `,
+    context: {
+      modal: boolean('modal', false),
+      headingText: text('headingText', 'Dialog Heading Text'),
+      icon: select(
+        'icon',
+        {
+          'check-circle-outline': 'check-circle-outline',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        'check-circle-outline'
+      ),
+      dismiss: action('dismiss'),
+    },
+  }}</Story>
+</Preview>
+
+
+```htmlbars
+<Rose::Dialog
+  @modal={{true}}
+  @dismiss={{@dismissFn}}
+  @icon="check-circle-outline"
+  @heading="Heading"
+as |dialog|>
+  <dialog.body>
+    Dialog Body
+  </dialog.body>
+  <dialog.footer>
+    Footer
+  </dialog.footer>
+</Rose::Dialog>
+```
