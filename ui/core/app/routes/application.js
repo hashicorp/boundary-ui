@@ -18,6 +18,7 @@ export default class ApplicationRoute extends Route.extend(
   // =services
 
   @service session;
+  @service confirm;
 
   // =attributes
 
@@ -90,4 +91,28 @@ export default class ApplicationRoute extends Route.extend(
     }
     return true;
   }
+
+  /**
+   * If user attempts to navigate away from unsaved changes, the user is
+   * asked to confirm that they would like to discard the changes.  If the
+   * user chooses discard, changes on the model are rolled back and the
+   * transition is retried.  If the user cancels discard, the transition is
+   * aborted.
+   * @param {Transition} transition
+   */
+  @action
+  async willTransition(transition) {
+    const maybeModel = transition?.from?.attributes;
+    if (maybeModel?.hasDirtyAttributes) {
+      transition.abort();
+      try {
+        await this.confirm.confirm('abandon', { isAbandonConfirm: true });
+        maybeModel?.rollbackAttributes();
+        transition.retry();
+      } catch (e) {
+        // if user denies, do nothing
+      }
+    }
+  }
+
 }
