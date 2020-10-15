@@ -5,6 +5,9 @@ remove: Remove
 dismiss: Dismiss
 save: Save
 manage: Manage
+confirm: Confirm
+ok: OK
+deny: Deny
 help: Need help?
 back: Back
 get-topic-help: Get help for this topic

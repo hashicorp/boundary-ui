@@ -62,6 +62,7 @@
     "ember-exam": "^5.0.1",
     "ember-export-application-global": "^2.0.1",
     "ember-fetch": "^8.0.1",
+    "ember-focus-trap": "^0.4.0",
     "ember-inline-svg": "^1.0.0",
     "ember-intl": "^5.1.1",
     "ember-load-initializers": "^2.1.1",

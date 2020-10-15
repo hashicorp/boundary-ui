@@ -4,6 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { resolve, reject } from 'rsvp';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -146,22 +147,22 @@ module('Acceptance | projects', function (hooks) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    window.confirm = sinon.fake.returns(true);
+    confirmService.confirm = sinon.fake.returns(resolve());
     await visit(existingProjectURL);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(getProjectScopesCount(), initialProjectScopesCount - 1);
-    assert.ok(window.confirm.calledOnce);
+    assert.ok(confirmService.confirm.calledOnce);
   });
 
   test('cannot delete project with confirmation denial', async function (assert) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    window.confirm = sinon.fake.returns(false);
+    confirmService.confirm = sinon.fake.returns(reject());
     await visit(existingProjectURL);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(getProjectScopesCount(), initialProjectScopesCount);
-    assert.ok(window.confirm.calledOnce);
+    assert.ok(confirmService.confirm.calledOnce);
   });
 
   test('saving an existing project with invalid fields displays error messages', async function (assert) {
