@@ -10,23 +10,36 @@ $xxxs: sizing.rems(xxxs); // 2
 $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-dialog {
-  border: $xxxxs solid var(--ui-gray-subtler-3);
-  border-radius: 2px;
+  --headerColor: var(--ui-gray-starker-3);
+  --headerIconColor: var(--headerColor);
+  --headerBackgroundColor: var(--ui-gray-subtler-5);
+  --headerBorderColor: var(--ui-gray-subtler-2);
+
+  border-radius: $xxxs;
   background-color: var(--subtle);
   box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
     0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
+
+  &.rose-dialog-warning {
+    --headerColor: var(--warning-starker-1);
+    --headerIconColor: var(--warning);
+    --headerBackgroundColor: var(--warning-subtler-2);
+    --headerBorderColor: var(--warning);
+  }
 
   .rose-dialog-header {
     display: flex;
     align-items: center;
     padding: ($xs + $xxxs) $m;
     min-height: sizing.rems(l);
-    color: var(--ui-gray-starker-3);
-    background-color: var(--ui-gray-subtler-5);
-    border-bottom: $xxxxs solid var(--ui-gray-subtler-2);
+    color: var(--headerColor);
+    background-color: var(--headerBackgroundColor);
+    border: $xxxxs solid var(--headerBorderColor);
+    border-top-left-radius: $xxxs;
+    border-top-right-radius: $xxxs;
 
     .rose-icon {
-      color: currentColor;
+      color: var(--headerIconColor);
       margin-right: $xxs + $xxxs;
 
       svg {
@@ -55,12 +68,12 @@ $xxxxs: sizing.rems(xxxxs); // 1
       width: sizing.rems(l);
 
       &:hover {
-        color: var(--ui-gray-starker-2);
         border-color: currentColor;
       }
 
       .rose-icon {
         margin: 0;
+        color: var(--ui-gray);
 
         svg {
           top: $xxxs;
@@ -70,12 +83,16 @@ $xxxxs: sizing.rems(xxxxs); // 1
   }
 
   .rose-dialog-body {
-    margin: sizing.rems(l);
+    border-left: $xxxxs solid var(--ui-gray-subtler-2);
+    border-right: $xxxxs solid var(--ui-gray-subtler-2);
+    padding: sizing.rems(l);
   }
 
   .rose-dialog-footer {
     padding: $m;
-    border-top: $xxxxs solid var(--ui-gray-subtler-2);
+    border: $xxxxs solid var(--ui-gray-subtler-2);
+    border-bottom-left-radius: $xxxs;
+    border-bottom-right-radius: $xxxs;
     background-color: var(--ui-gray-subtler-5);
 
     button {

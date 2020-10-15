@@ -17,7 +17,9 @@ A dialog component with optional modal capabilities.
         @modal={{modal}}
         @dismiss={{dismiss}}
         @icon={{icon}}
-        @heading={{headingText}}
+        @heading={{heading}}
+        @dismissButtonText={{dismissButtonText}}
+        @style={{style}}
       as |dialog|>
         <dialog.body>
           Dialog Body
@@ -29,7 +31,8 @@ A dialog component with optional modal capabilities.
     `,
     context: {
       modal: boolean('modal', false),
-      headingText: text('headingText', 'Dialog Heading Text'),
+      heading: text('heading', 'Dialog Heading Text'),
+      dismissButtonText: text('dismissButtonText', 'Dismiss'),
       icon: select(
         'icon',
         {
@@ -40,6 +43,13 @@ A dialog component with optional modal capabilities.
         },
         'check-circle-outline'
       ),
+      style: select(
+        'style',
+        {
+          'default': '',
+          'warning': 'warning'
+        }
+      )
       dismiss: action('dismiss'),
     },
   }}</Story>
@@ -52,6 +62,7 @@ A dialog component with optional modal capabilities.
   @dismiss={{@dismissFn}}
   @icon="check-circle-outline"
   @heading="Heading"
+  @dismissButtonText="Dismiss"
 as |dialog|>
   <dialog.body>
     Dialog Body
