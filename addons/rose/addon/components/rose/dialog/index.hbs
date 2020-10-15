@@ -4,30 +4,28 @@
   <section
     ...attributes
     role="dialog"
-    class="rose-dialog{{if @modal ' modal'}}"
+    class="rose-dialog {{if  @style (concat "rose-dialog-" @style)}} {{if @modal 'modal'}}"
     {{focus-trap}}
   >
 
-    {{#if @heading}}
-      <header class="rose-dialog-header">
+    <header class="rose-dialog-header">
 
-        {{#if @icon}}
-          <Rose::Icon @name={{@icon}} @size="medium" />
-        {{/if}}
+      {{#if @icon}}
+        <Rose::Icon @name={{@icon}} @size="medium" />
+      {{/if}}
 
-        <h2 class="rose-dialog-heading">{{@heading}}</h2>
+      <h2 class="rose-dialog-heading">{{@heading}}</h2>
 
-        <button
-          type="button"
-          class="rose-dialog-dismiss"
-          title="Dismiss"
-          {{on "click" (fn this.dismiss @dismiss)}}
-        >
-          <Rose::Icon @name="cancel-plain" @size="small" />
-        </button>
+      <button
+        type="button"
+        class="rose-dialog-dismiss"
+        title={{@dismissButtonText}}
+        {{on "click" (fn this.dismiss @dismiss)}}
+      >
+        <Rose::Icon @name="cancel-plain" @size="small" />
+      </button>
 
-      </header>
-    {{/if}}
+    </header>
 
     {{yield (hash
       body=(component 'rose/dialog/body')
@@ -41,7 +39,7 @@
   <section
     ...attributes
     role="dialog"
-    class="rose-dialog{{if @modal ' modal'}}"
+    class="rose-dialog {{if  @style (concat "rose-dialog-" @style)}} {{if @modal 'modal'}}"
   >
 
     {{#if @heading}}
@@ -56,7 +54,7 @@
         <button
           type="button"
           class="rose-dialog-dismiss"
-          title="Dismiss"
+          title={{@dismissButtonText}}
           {{on "click" (fn this.dismiss @dismiss)}}
         >
           <Rose::Icon @name="cancel-plain" @size="small" />
