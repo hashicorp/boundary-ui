@@ -84,23 +84,48 @@
   </Rose::Notification>
 </EmberNotify>
 
-<PendingConfirmations as |text accept deny|>
-  <Rose::Dialog
-    @heading={{t "actions.confirm"}}
-    @icon="alert-triangle"
-    @modal={{true}}
-    @dismiss={{deny}}
-  as |dialog|>
-    <dialog.body>
-      <p>{{text}}</p>
-    </dialog.body>
-    <dialog.footer>
-      <Rose::Button @style="primary" {{on "click" accept}}>
-        {{t "actions.ok"}}
-      </Rose::Button>
-      <Rose::Button @style="secondary" {{on "click" deny}}>
-        {{t "actions.cancel"}}
-      </Rose::Button>
-    </dialog.footer>
-  </Rose::Dialog>
+<PendingConfirmations as |confirmation accept deny|>
+  {{#if confirmation.options.isAbandonConfirm}}
+    <Rose::Dialog
+      @heading={{t "titles.abandon-confirm"}}
+      @dismissButtonText={{t "actions.cancel"}}
+      @icon="alert-triangle"
+      @style="warning"
+      @modal={{true}}
+      @dismiss={{deny}}
+    as |dialog|>
+      <dialog.body>
+        <p>{{t "questions.abandon-confirm"}}</p>
+      </dialog.body>
+      <dialog.footer>
+        <Rose::Button @style="primary" {{on "click" accept}}>
+          {{t "actions.discard"}}
+        </Rose::Button>
+        <Rose::Button @style="secondary" {{on "click" deny}}>
+          {{t "actions.cancel"}}
+        </Rose::Button>
+      </dialog.footer>
+    </Rose::Dialog>
+  {{else}}
+    <Rose::Dialog
+      @heading={{t "actions.confirm"}}
+      @dismissButtonText={{t "actions.cancel"}}
+      @icon="alert-triangle"
+      @style="warning"
+      @modal={{true}}
+      @dismiss={{deny}}
+    as |dialog|>
+      <dialog.body>
+        <p>{{confirmation.text}}</p>
+      </dialog.body>
+      <dialog.footer>
+        <Rose::Button @style="primary" {{on "click" accept}}>
+          {{t "actions.ok"}}
+        </Rose::Button>
+        <Rose::Button @style="secondary" {{on "click" deny}}>
+          {{t "actions.cancel"}}
+        </Rose::Button>
+      </dialog.footer>
+    </Rose::Dialog>
+  {{/if}}
 </PendingConfirmations>

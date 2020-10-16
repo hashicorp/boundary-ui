@@ -136,6 +136,44 @@ module('Acceptance | projects', function (hooks) {
     assert.equal(find('[name="name"]').value, existingProject.name);
   });
 
+  test('can discard unsaved changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(existingProject.name, 'random string');
+    await visit(existingProjectURL);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), existingProjectURL);
+    try {
+      await visit(projectsURL);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:first-child');
+      assert.equal(currentURL(), projectsURL);
+      assert.notEqual(getFirstProjectScope().name, 'random string');
+    }
+  });
+
+  test('can cancel discard unsaved changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(existingProject.name, 'random string');
+    await visit(existingProjectURL);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), existingProjectURL);
+    try {
+      await visit(projectsURL);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:last-child');
+      assert.equal(currentURL(), existingProjectURL);
+      assert.notEqual(getFirstProjectScope().name, 'random string');
+    }
+  });
+
   test('can delete project', async function (assert) {
     assert.expect(1);
     await visit(existingProjectURL);
