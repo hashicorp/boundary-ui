@@ -17,8 +17,10 @@ titles:
   global: Global
   actions: Actions
   documentation: Documentation
+  abandon-confirm: Discard unsaved changes?
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
 questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
+  abandon-confirm: Are you sure you want to navigate away?  Your unsaved changes will be lost.

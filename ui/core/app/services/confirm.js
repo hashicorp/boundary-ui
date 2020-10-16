@@ -12,7 +12,7 @@ import config from '../config/environment';
  * @augments Service
  *
  * @example
- *    const confirmation = confirmationService.getConfirmation();
+ *    const confirmation = confirmationService.confirm('Text', { type: 'discard' });
  */
 export default class ConfirmationsService extends Service {
 
@@ -42,11 +42,12 @@ export default class ConfirmationsService extends Service {
    * accepts the confirmation, otherwise rejects.  If the service is disabled,
    * this method always returns a resolving promise.
    * @param {string} text
+   * @param {object} options
    * @return {Promise}
    */
-  confirm(text) {
+  confirm(text, options) {
     if (this.enabled) {
-      const confirmation = new Confirmation(text);
+      const confirmation = new Confirmation(text, options);
       this.confirmations.addObject(confirmation);
       return confirmation;
     } else {
@@ -65,7 +66,7 @@ export default class ConfirmationsService extends Service {
  * to create confirmation instances.
  *
  * @example
- *    const confirmation = new Confirmation();
+ *    const confirmation = new Confirmation('Text', { type: 'discard' });
  *    confirmation.confirm();
  *    // confirmation.done now equals true
  *    confirmation
@@ -74,7 +75,7 @@ export default class ConfirmationsService extends Service {
  *      .finally(() => { });   // do something
  *
  * @example
- *    const confirmation = new Confirmation();
+ *    const confirmation = new Confirmation('Text', { type: 'discard' });
  *    confirmation.dismiss();
  *    // confirmation.done now equals true
  *    confirmation
@@ -100,8 +101,9 @@ class Confirmation {
    * @param {String} type  An optional type annotation for convenience.
    *    Has no effect on confirmation.
    */
-  constructor(text) {
+  constructor(text, options={}) {
     this.text = text;
+    this.options = options;
     this.#deferred = defer();
   }
 

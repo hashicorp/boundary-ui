@@ -5,10 +5,15 @@
     ...attributes
     role="dialog"
     class="rose-dialog {{if  @style (concat "rose-dialog-" @style)}} {{if @modal 'modal'}}"
+    id={{this.id}}
+    aria-describedby={{concat "dialog-header-" this.id}}
     {{focus-trap}}
   >
 
-    <header class="rose-dialog-header">
+    <header
+      class="rose-dialog-header"
+      id={{concat "dialog-header-" this.id}}
+    >
 
       {{#if @icon}}
         <Rose::Icon @name={{@icon}} @size="medium" />
