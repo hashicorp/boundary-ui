@@ -27,17 +27,10 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  if (isDev) {
-    try {
-      require('devtron').install();
-    } catch (err) {
-      console.log('Failed to install Devtron: ', err);
-    }
-    try {
-      await installExtension(EMBER_INSPECTOR);
-    } catch (err) {
-      console.log('Failed to install Ember Inspector: ', err);
-    }
+  // Install ember extensions when in dev mode
+  if(isDev) {
+    installExtension(EMBER_INSPECTOR)
+    .catch((err) => console.error('Failed to install Ember Inspector: ', err));
   }
 
   await handleFileUrls(emberAppDir);
