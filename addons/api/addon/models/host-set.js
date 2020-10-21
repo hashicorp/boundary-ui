@@ -40,6 +40,16 @@ export default class HostSetModel extends GeneratedHostSetModel {
   }
 
   /**
+   * Add a single host via the `add-hosts` method.
+   * @param {string} hostID
+   * @param {object} options
+   * @return {Promise}
+   */
+  addHost(hostID, options) {
+    return this.addHosts([hostID], options);
+  }
+
+  /**
    * Delete hosts via the `remove-hosts` method.
    * See serializer and adapter for more information.
    * @param {[string]} hostIDs
