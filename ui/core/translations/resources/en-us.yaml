@@ -74,8 +74,10 @@ host-set:
   host:
     messages:
       none:
-        title: Welcome to Hosts
-        description: No hosts available in this host set.
+        title: No Hosts
+        description: No hosts available in this host set. Create hosts in a host catalog before assigning them to this host set.
+        actions:
+          new: New Host
       add:
         title: Add Hosts
         description: Select hosts that belong to this host set.
