@@ -1,0 +1,7 @@
+{{title (t 'resources.host-set.actions.create-host')}}
+
+<Form::HostSet::CreateHost
+  @model={{@model}}
+  @submit={{route-action "save" @model}}
+  @cancel={{route-action "cancel" @model}}
+/>

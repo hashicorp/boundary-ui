@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import { visit, currentURL, click, find, findAll, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -32,7 +32,9 @@ module('Acceptance | host-sets | hosts', function (hooks) {
     hostCatalog: null,
     hostSets: null,
     hostSet: null,
-    hostSetHosts: null
+    hostSetHosts: null,
+    addHosts: null,
+    newHost: null,
   };
   let hostSetHostsCount;
 
@@ -62,6 +64,7 @@ module('Acceptance | host-sets | hosts', function (hooks) {
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.hostSetHosts = `${urls.hostSet}/hosts`;
     urls.addHosts = `${urls.hostSet}/add-hosts`;
+    urls.newHost = `${urls.hostSet}/create-host`;
     // Counts
     hostSetHostsCount = instances.hostSet.hosts.length;
   });
@@ -114,7 +117,7 @@ module('Acceptance | host-sets | hosts', function (hooks) {
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSetHosts);
     assert.equal(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a:nth-child(2)')
     assert.equal(currentURL(), urls.addHosts);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -131,7 +134,7 @@ module('Acceptance | host-sets | hosts', function (hooks) {
     assert.equal(findAll('tbody tr').length, hostSetHostsCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, hostSetHostsCount - 1);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a:nth-child(2)')
     assert.equal(currentURL(), urls.addHosts);
     await click('tbody label');
     await click('form [type="button"]');
@@ -156,6 +159,76 @@ module('Acceptance | host-sets | hosts', function (hooks) {
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.addHosts);
     await click('tbody label');
+    await click('form [type="submit"]');
+    assert.ok(find('[role="alert"]'));
+  });
+
+  test('visiting host creation from a host set', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newHost);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.newHost);
+  });
+
+  test('create and add host to host set', async function (assert) {
+    assert.expect(3);
+    instances.hostSet.update({ hostIds: [] });
+    await visit(urls.hostSet);
+    assert.equal(findAll('tbody tr').length, 0);
+    await click('.rose-layout-page-actions a:nth-child(1)')
+    assert.equal(currentURL(), urls.newHost);
+    await fillIn('[name="name"]', 'Test Name');
+    await fillIn('[name="description"]', 'description');
+    await click('form [type="submit"]:not(:disabled)');
+    await visit(urls.hostSetHosts);
+    assert.equal(findAll('tbody tr').length, 1);
+  });
+
+  test('create and cancel host add to host set', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newHost);
+    await click('form [type="button"]');
+    assert.equal(currentURL(), urls.hostSetHosts);
+  });
+
+  test('shows error message on host creation error', async function (assert) {
+    assert.expect(1);
+    this.server.post('/hosts', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {},
+        }
+      );
+    });
+    instances.hostSet.update({ hostIds: [] });
+    await visit(urls.newHost);
+    await fillIn('[name="name"]', 'New Host');
+    await click('form [type="submit"]');
+    assert.ok(find('[role="alert"]'));
+  });
+
+  test('shows error message on host addition to host set error', async function (assert) {
+    assert.expect(1);
+    this.server.post('/host-sets/:idMethod', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {},
+        }
+      );
+    });
+    instances.hostSet.update({ hostIds: [] });
+    await visit(urls.newHost);
+    await fillIn('[name="name"]', 'New Host');
     await click('form [type="submit"]');
     assert.ok(find('[role="alert"]'));
   });

@@ -1,4 +1,7 @@
 <Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+  <dropdown.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.create-host">
+    {{t 'resources.host-set.actions.create-host'}}
+  </dropdown.link>
   <dropdown.link @route="scopes.scope.projects.project.host-catalogs.host-catalog.host-sets.host-set.add-hosts">
     {{t 'resources.host-set.actions.add-hosts'}}
   </dropdown.link>

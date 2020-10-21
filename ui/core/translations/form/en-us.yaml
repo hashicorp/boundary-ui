@@ -41,3 +41,5 @@ session_max_seconds:
 session_connection_limit:
   label: Maximum Connections
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
+host_set:
+  label: Host Set

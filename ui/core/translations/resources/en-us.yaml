@@ -67,7 +67,8 @@ host-set:
     add: Add Host Set
     create: New Host Set
     delete: Delete Host Set
-    add-hosts: Add Hosts
+    create-host: Create and Add Host
+    add-hosts: Add Existing Host
   messages:
     welcome:
       title: Welcome to Host Sets
@@ -75,12 +76,13 @@ host-set:
     messages:
       none:
         title: No Hosts
-        description: No hosts available in this host set. Create hosts in a host catalog before assigning them to this host set.
-        actions:
-          new: New Host
+        description: No hosts available in this host set.
       add:
         title: Add Hosts
         description: Select hosts that belong to this host set.
+      add-none:
+        title: No Hosts Available
+        description: No hosts available for selection.
   types:
     static: Static
 host:
