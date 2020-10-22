@@ -29,6 +29,7 @@ Router.map(function () {
                   this.route('host-set', { path: ':host_set_id' }, function () {
                     this.route('hosts');
                     this.route('add-hosts');
+                    this.route('create-host');
                   });
                   this.route('new');
                 });

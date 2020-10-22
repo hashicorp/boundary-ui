@@ -1,0 +1,82 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.host.isSaving}}
+  @error={{@model.host.errors.base}}
+  as |form|
+>
+
+  <form.input
+  @value={{@model.hostSet.displayName}}
+  @label={{t "form.host_set.label"}}
+  readonly={{true}}
+  @disabled={{true}} />
+
+  <form.input
+  @value={{@model.host.type}}
+  @label={{t "form.type.label"}}
+  readonly={{true}}
+  @disabled={{true}} />
+
+  <form.input
+    @name="name"
+    @type="name"
+    @value={{@model.host.name}}
+    @label={{t "form.name.label"}}
+    @error={{@model.host.errors.name}}
+    @helperText={{t "form.name.help"}}
+    readonly={{false}}
+  as |field|>
+    {{#if @model.host.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.host.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name="description"
+    @type="description"
+    @value={{@model.host.description}}
+    @label={{t "form.description.label"}}
+    @error={{@model.host.errors.description}}
+    @helperText={{t "form.description.help"}}
+    disabled={{@model.host.isSaving}}
+    readonly={{false}}
+  as |field|>
+    {{#if @model.host.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.host.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.input
+    @name="address"
+    @type="text"
+    @value={{@model.host.attributes.address}}
+    @label={{t "form.address.label"}}
+    @error={{@model.host.errors.name}}
+    @helperText={{t "form.address.help"}}
+    readonly={{false}}
+  as |field|>
+    {{#if @model.host.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.host.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.actions
+    @disabled={{if @model.host.cannotSave @model.host.cannotSave}}
+    @enableEditText={{t "actions.edit-form"}}
+    @submitText={{t "actions.save"}}
+    @cancelText={{t "actions.cancel"}} />
+
+</Rose::Form>
