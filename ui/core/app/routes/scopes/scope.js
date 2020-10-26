@@ -38,15 +38,19 @@ export default class ScopesScopeRoute extends Route {
   }
 
   /**
-   * Load all scopes within the current scope context.  For example,
-   * if **this** scope is a project, attempt to load all projects for the owning
-   * org, as well as all orgs.  If **this** scope is an org, attempt to load all
-   * orgs within the global scope.  These are used for scope navigation.
+   * Load all scopes within the current scope context.  Always attempt to load
+   * org scopes.  Only attempt to load project scopes if the current scope is
+   * a project.  These are used for scope navigation.
    */
-  async afterModel() {
-    this.scopes = await hash({
+  async afterModel(model) {
+    const scopes = {
       orgs: this.store.query('scope', { scope_id: 'global' }).catch(() => A([]))
-    });
+    };
+    if (model.isProject) {
+      this.projects = this.store.query('scope', { scope_id: model.scopeID })
+        .catch(() => A([]))
+    }
+    this.scopes = await hash(scopes);
   }
 
   /**
