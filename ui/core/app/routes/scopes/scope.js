@@ -1,10 +1,13 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { hash } from 'rsvp';
+import { A } from '@ember/array';
 
 export default class ScopesScopeRoute extends Route {
   // =services
 
   @service intl;
+  @service session;
 
   // =methods
 
@@ -35,14 +38,24 @@ export default class ScopesScopeRoute extends Route {
   }
 
   /**
-   * Adds the set of all org scopes to the controller, which is used by the
-   * scope navigation template.
+   * Load all scopes within the current scope context.  For example,
+   * if **this** scope is a project, attempt to load all projects for the owning
+   * org, as well as all orgs.  If **this** scope is an org, attempt to load all
+   * orgs within the global scope.  These are used for scope navigation.
+   */
+  async afterModel() {
+    this.scopes = await hash({
+      orgs: this.store.query('scope', { scope_id: 'global' }).catch(() => A([]))
+    });
+  }
+
+  /**
+   * Adds the scopes hash to the controller context (see `afterModel`).
    * @param {Controller} controller
    */
   setupController(controller) {
     super.setupController(...arguments);
-    const orgScopes = this.modelFor('scopes').filterBy('isOrg', true);
-    controller.setProperties({ orgScopes });
+    controller.setProperties({ scopes: this.scopes });
   }
 
   /**
