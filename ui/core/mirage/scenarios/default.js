@@ -14,12 +14,14 @@ export default function(server) {
   }, 'withChildren')[0];
 
   // Auth
-  server.createList('auth-method', 3, { scope: globalScope });
+  server.createList('auth-method', 1, { scope: globalScope }, 'withAccountsAndUsers');
   server.createList('auth-method', 3, { scope: orgScope }, 'withAccountsAndUsers');
 
   // Groups and Users
+  server.createList('group', 1, { scope: globalScope }, 'withMembers');
   server.createList('group', 5, { scope: orgScope }, 'withMembers');
   // Role
+  server.createList('role', 1, { scope: globalScope }, 'withPrincipals');
   server.createList('role', 5, { scope: orgScope }, 'withPrincipals');
 
   // Other resources
