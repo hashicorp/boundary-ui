@@ -35,13 +35,14 @@ export default class ScopesScopeRoute extends Route {
   }
 
   /**
-   * Set scope in application controller
+   * Adds the set of all org scopes to the controller, which is used by the
+   * scope navigation template.
+   * @param {Controller} controller
    */
-  afterModel() {
+  setupController(controller) {
+    super.setupController(...arguments);
     const orgScopes = this.modelFor('scopes').filterBy('isOrg', true);
-    this.controllerFor('application').set('orgScopes', orgScopes);
-    const scope = this.modelFor('scopes.scope');
-    this.controllerFor('application').set('scope', scope);
+    controller.setProperties({ orgScopes });
   }
 
   /**
@@ -52,6 +53,12 @@ export default class ScopesScopeRoute extends Route {
    */
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
+
+    this.render('scopes/scope/-header-nav', {
+      into: 'application',
+      outlet: 'header-nav',
+      model: model,
+    });
 
     this.render('scopes/scope/-sidebar', {
       into: 'scopes/scope',
