@@ -1,5 +1,5 @@
 <Rose::Dropdown
-  @text={{this.model.displayName}}
+  @text={{this.scopes.selectedOrg.displayName}}
   @icon="app-icons/org" as |dropdown|
 >
   {{#if this.session.data.authenticated.isGlobal}}
@@ -18,3 +18,16 @@
     </dropdown.link>
   {{/if}}
 </Rose::Dropdown>
+
+{{#if this.scopes.selectedProject}}
+  <Rose::Dropdown
+    @text={{this.scopes.selectedProject.displayName}}
+    @icon="app-icons/project" as |dropdown|
+  >
+    {{#each this.scopes.projects as |scope|}}
+      <dropdown.link @route="scopes.scope" @model={{scope.id}}>
+        {{scope.displayName}}
+      </dropdown.link>
+    {{/each}}
+  </Rose::Dropdown>
+{{/if}}
