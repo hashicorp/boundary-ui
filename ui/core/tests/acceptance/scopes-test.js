@@ -30,6 +30,8 @@ module('Acceptance | scopes', function (hooks) {
     org2Scope: null,
     projectScope: null,
     project2Scope: null,
+    projectScopeEdit: null,
+    project2ScopeEdit: null,
   };
 
   hooks.beforeEach(function () {
@@ -54,8 +56,10 @@ module('Acceptance | scopes', function (hooks) {
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.org2Scope = `/scopes/${instances.scopes.org2.id}/scopes`;
-    urls.projectScope = `/scopes/${instances.scopes.project.id}/scopes`;
-    urls.project2Scope = `/scopes/${instances.scopes.project2.id}/scopes`;
+    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
+    urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
+    urls.projectScopeEdit = `/scopes/${instances.scopes.project.id}/edit`;
+    urls.project2ScopeEdit = `/scopes/${instances.scopes.project2.id}/edit`;
     authenticateSession({});
   });
 
@@ -110,9 +114,9 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(2);
     await visit(urls.projectScope);
     await a11yAudit();
-    assert.equal(currentURL(), urls.projectScope);
+    assert.equal(currentURL(), urls.projectScopeEdit);
     await click('.rose-header-nav .rose-dropdown + .rose-dropdown a:nth-child(2)');
-    assert.equal(currentURL(), urls.project2Scope);
+    assert.equal(currentURL(), urls.project2ScopeEdit);
   });
 
 });

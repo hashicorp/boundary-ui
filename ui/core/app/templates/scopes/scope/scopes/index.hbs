@@ -46,7 +46,7 @@
             @title={{scope.name}}
             @description={{scope.description}}
             @id={{scope.id}}
-            @icon={{if @model.currentScope.isGlobal "app-icons/org" "app-icons/project"}}
+            @icon={{if scope.isOrg "app-icons/org" "app-icons/project"}}
             @route="scopes.scope"
             @model={{scope.id}}
           />

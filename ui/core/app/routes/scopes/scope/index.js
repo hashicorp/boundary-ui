@@ -13,9 +13,11 @@ export default class ScopesScopeIndexRoute extends Route {
    * If already authenticated, redirects to scopes/scope/scopes to display
    * list of sub scopes.
    */
-  redirect() {
+  redirect(model) {
     if (!this.session.isAuthenticated) {
       this.transitionTo('scopes.scope.authenticate');
+    } else if (model.isProject) {
+      this.transitionTo('scopes.scope.edit');
     } else {
       this.transitionTo('scopes.scope.scopes');
     }
