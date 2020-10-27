@@ -27,6 +27,7 @@ export default class ScopesScopeRoute extends Route {
     return this.store.findRecord('scope', id).catch(() => {
       const maybeExistingScope = this.store.peekRecord('scope', id);
       const scopeOptions = { id, type };
+      /* istanbul ignore else */
       if (type === 'global') {
         scopeOptions.name = this.intl.t('titles.global');
       }
@@ -47,8 +48,7 @@ export default class ScopesScopeRoute extends Route {
     orgs = await this.store.query('scope', { scope_id: 'global' })
       .catch(() => A([]));
     if (model.isProject) {
-      projects = await this.store.query('scope', { scope_id: model.scopeID })
-        .catch(() => A([]));
+      projects = await this.store.query('scope', { scope_id: model.scopeID });
     }
     // Then pull out the "selected" scopes, if relevant
     let selectedOrg, selectedProject;

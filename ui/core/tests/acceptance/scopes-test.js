@@ -3,6 +3,7 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { Response } from 'miragejs';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -56,6 +57,30 @@ module('Acceptance | scopes', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
     authenticateSession({});
+  });
+
+  test('visiting global scope', async function (assert) {
+    assert.expect(1);
+    await visit(urls.globalScope);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.globalScope);
+  });
+
+  // TODO: this probably shouldn't be the case, but was setup to enable
+  // authentication when the global scope couldn't be loaded.
+  // In order to resolve this, we might hoist authentication routes up from
+  // under scopes.
+  test('visiting global scope is successful even when the global scope cannot be fetched', async function (assert) {
+    assert.expect(1);
+    this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
+      const scope = scopes.find(id);
+      const response = (id === 'global')
+        ? new Response(404)
+        : scope;
+      return response;
+    });
+    await visit(urls.globalScope);
+    assert.equal(currentURL(), urls.globalScope);
   });
 
   test('visiting org scope', async function (assert) {
