@@ -48,7 +48,7 @@ export default class ScopesScopeRoute extends Route {
       .catch(() => A([]));
     if (model.isProject) {
       projects = await this.store.query('scope', { scope_id: model.scopeID })
-        .catch(() => A([]))
+        .catch(() => A([]));
     }
     // Then pull out the "selected" scopes, if relevant
     let selectedOrg, selectedProject;

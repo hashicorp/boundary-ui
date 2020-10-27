@@ -5,7 +5,7 @@
 
       {{#if @model.isGlobal}}
         <Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
-          <nav.link @route="scopes.scope">
+          <nav.link @route="scopes.scope.index">
             <Rose::Icon
               @name="app-icons/org"
               @size="medium" />
@@ -16,13 +16,58 @@
 
       {{#if @model.isOrg}}
         <Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
-          <nav.link @route="scopes.scope">
+          {{#if this.session.data.authenticated.isGlobal}}
+            <nav.link @route="scopes.scope.index" @model="global">
+              <Rose::Icon
+                @name="app-icons/org"
+                @size="medium" />
+              {{t "resources.org.title_plural"}}
+            </nav.link>
+          {{/if}}
+          <nav.link @route="scopes.scope.index">
             <Rose::Icon
               @name="app-icons/project"
               @size="medium" />
             {{t "resources.project.title_plural"}}
           </nav.link>
         </Rose::Nav::Sidebar>
+      {{/if}}
+
+      {{#if @model.isProject}}
+        <Rose::Nav::Sidebar @title={{t "titles.general"}} as |nav|>
+          {{#if this.session.data.authenticated.isGlobal}}
+            <nav.link @route="scopes.scope.index" @model="global">
+              <Rose::Icon
+                @name="app-icons/org"
+                @size="medium" />
+              {{t "resources.org.title_plural"}}
+            </nav.link>
+          {{/if}}
+          <nav.link @route="scopes.scope.index" @model={{@model.scopeID}}>
+            <Rose::Icon
+              @name="app-icons/project"
+              @size="medium" />
+            {{t "resources.project.title_plural"}}
+          </nav.link>
+        </Rose::Nav::Sidebar>
+        {{!-- TODO:  after scope awareness refactor, update groups and roles
+                     to support project scopes --}}
+        {{!--
+        <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
+          <nav.link @route="scopes.scope.groups">
+            <Rose::Icon
+              @name="app-icons/group"
+              @size="medium" />
+            {{t "resources.group.title_plural"}}
+          </nav.link>
+          <nav.link @route="scopes.scope.roles">
+            <Rose::Icon
+              @name="app-icons/roles"
+              @size="medium" />
+            {{t "resources.role.title_plural"}}
+          </nav.link>
+        </Rose::Nav::Sidebar>
+        --}}
       {{/if}}
 
       {{#unless @model.isProject}}
@@ -53,23 +98,6 @@
           </nav.link>
         </Rose::Nav::Sidebar>
       {{/unless}}
-
-      {{#if @model.isProject}}
-        <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
-          <nav.link @route="scopes.scope.groups">
-            <Rose::Icon
-              @name="app-icons/group"
-              @size="medium" />
-            {{t "resources.group.title_plural"}}
-          </nav.link>
-          <nav.link @route="scopes.scope.roles">
-            <Rose::Icon
-              @name="app-icons/roles"
-              @size="medium" />
-            {{t "resources.role.title_plural"}}
-          </nav.link>
-        </Rose::Nav::Sidebar>
-      {{/if}}
 
     </sidebarLayout.sidebar>
   {{/if}}
