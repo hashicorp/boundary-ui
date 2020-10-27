@@ -10,14 +10,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   // =methods
 
   beforeModel() {
-    if (this.session.isAuthenticated) {
-      const scope = this.modelFor('scopes.scope');
-      if (scope.isGlobal) {
-        this.transitionTo('scopes.scope.orgs');
-      } else {
-        this.transitionTo('scopes.scope.projects');
-      }
-    }
+    if (this.session.isAuthenticated) this.transitionTo('scopes.scope.index');
   }
 
   /**

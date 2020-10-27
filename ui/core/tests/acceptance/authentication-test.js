@@ -6,7 +6,7 @@ import {
   click,
   find,
   findAll,
-  setupOnerror,
+  //setupOnerror,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -72,8 +72,8 @@ module('Acceptance | authentication', function (hooks) {
     authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${globalAuthMethodID}`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
     changePasswordURL = `/account/change-password`;
-    orgsURL = `/scopes/global/orgs`;
-    projectsURL = `/scopes/${orgScopeID}/projects`;
+    orgsURL = `/scopes/global`;
+    projectsURL = `/scopes/${orgScopeID}`;
     usersURL = `/scopes/${orgScopeID}/users`;
     groupsURL = `/scopes/${orgScopeID}/groups`;
     rolesURL = `/scopes/${orgScopeID}/roles`;
@@ -129,10 +129,10 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('visiting projects while unauthenticated redirects to first global authenticate method', async function (assert) {
+  test('visiting projects while unauthenticated redirects to first org authenticate method', async function (assert) {
     assert.expect(2);
     await visit(projectsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.equal(currentURL(), authMethodAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
@@ -263,13 +263,11 @@ module('Acceptance | authentication', function (hooks) {
       currentSession().isAuthenticated,
       'Session begins authenticated, before encountering 401'
     );
-    this.server.get('/scopes', () => new Response(401));
-    setupOnerror(() => {
-      assert.notOk(
-        currentSession().isAuthenticated,
-        'Session is unauthenticated, after encountering 401'
-      );
-    });
-    await visit(projectsURL);
+    this.server.get('/users', () => new Response(401));
+    await visit(usersURL);
+    assert.notOk(
+      currentSession().isAuthenticated,
+      'Session is unauthenticated, after encountering 401'
+    );
   });
 });

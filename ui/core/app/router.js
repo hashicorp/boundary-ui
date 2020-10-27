@@ -17,47 +17,6 @@ Router.map(function () {
         this.route('new');
       });
 
-      this.route('projects', function () {
-        this.route('project', { path: ':project_id' }, function () {
-          this.route('host-catalogs', function () {
-            this.route('new');
-            this.route(
-              'host-catalog',
-              { path: ':host_catalog_id' },
-              function () {
-                this.route('host-sets', function () {
-                  this.route('host-set', { path: ':host_set_id' }, function () {
-                    this.route('hosts');
-                    this.route('add-hosts');
-                    this.route('create-host');
-                  });
-                  this.route('new');
-                });
-                this.route('hosts', function () {
-                  this.route('host', { path: ':host_id' }, function () {});
-                  this.route('new');
-                });
-              }
-            );
-          });
-          this.route('targets', function () {
-            this.route('target', { path: ':target_id' }, function () {
-              this.route('host-sets', function () {
-                this.route(
-                  'host-set',
-                  { path: ':host_set_id' },
-                  function () {}
-                );
-              });
-              this.route('add-host-sets');
-            });
-            this.route('new');
-          });
-          this.route('sessions', function() {});
-        });
-        this.route('new');
-      });
-
       this.route('users', function () {
         this.route('user', { path: ':user_id' }, function () {
           this.route('accounts');

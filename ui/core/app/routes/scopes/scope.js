@@ -76,18 +76,11 @@ export default class ScopesScopeRoute extends Route {
    * @param {object} controller
    * @param {object} model
    */
-  renderTemplate(controller, model) {
+  renderTemplate() {
     super.renderTemplate(...arguments);
-
     this.render('scopes/scope/-header-nav', {
       into: 'application',
       outlet: 'header-nav',
-    });
-
-    this.render('scopes/scope/-sidebar', {
-      into: 'scopes/scope',
-      outlet: 'sidebar',
-      model: model,
     });
   }
 }
