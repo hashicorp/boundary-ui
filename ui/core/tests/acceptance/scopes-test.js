@@ -51,11 +51,11 @@ module('Acceptance | scopes', function (hooks) {
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.org2Scope = `/scopes/${instances.scopes.org2.id}`;
-    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
+    urls.globalScope = `/scopes/global/scopes`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
+    urls.org2Scope = `/scopes/${instances.scopes.org2.id}/scopes`;
+    urls.projectScope = `/scopes/${instances.scopes.project.id}/scopes`;
+    urls.project2Scope = `/scopes/${instances.scopes.project2.id}/scopes`;
     authenticateSession({});
   });
 

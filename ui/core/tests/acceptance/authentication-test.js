@@ -72,8 +72,8 @@ module('Acceptance | authentication', function (hooks) {
     authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${globalAuthMethodID}`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
     changePasswordURL = `/account/change-password`;
-    orgsURL = `/scopes/global`;
-    projectsURL = `/scopes/${orgScopeID}`;
+    orgsURL = `/scopes/global/scopes`;
+    projectsURL = `/scopes/${orgScopeID}/scopes`;
     usersURL = `/scopes/${orgScopeID}/users`;
     groupsURL = `/scopes/${orgScopeID}/groups`;
     rolesURL = `/scopes/${orgScopeID}/roles`;
