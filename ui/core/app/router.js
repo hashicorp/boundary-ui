@@ -55,6 +55,7 @@ Router.map(function () {
       });
       this.route('scopes', function() {});
       this.route('edit');
+      this.route('new');
     });
   });
 
