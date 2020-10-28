@@ -9,13 +9,14 @@ export default class Router extends EmberRouter {
 Router.map(function () {
   this.route('scopes', function () {
     this.route('scope', { path: ':scope_id' }, function () {
+
       this.route('authenticate', function () {
         this.route('method', { path: ':auth_method_id' });
       });
 
-      this.route('orgs', function () {
-        this.route('new');
-      });
+      this.route('scopes', function() {});
+      this.route('edit');
+      this.route('new');
 
       this.route('users', function () {
         this.route('user', { path: ':user_id' }, function () {
@@ -53,10 +54,14 @@ Router.map(function () {
         });
         this.route('new');
       });
-      this.route('scopes', function() {});
-      this.route('edit');
-      this.route('new');
+
       this.route('sessions', function() {});
+
+      this.route('targets', function() {
+        this.route('target', { path: ':target_id' }, function() {});
+        this.route('new');
+      });
+      
     });
   });
 

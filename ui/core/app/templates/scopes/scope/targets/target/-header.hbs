@@ -1,0 +1,12 @@
+<h2>
+  {{t "resources.target.title"}}
+  <DocLink @doc="target" @iconSize="large" />
+</h2>
+<p>{{t "resources.target.description"}}</p>
+<Copyable
+  @text={{@model.id}}
+  @buttonText={{t "actions.copy-to-clipboard"}}
+  @acknowledgeText={{t "states.copied"}}
+>
+  <code>{{@model.id}}</code>
+</Copyable>

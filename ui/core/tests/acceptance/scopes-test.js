@@ -41,6 +41,7 @@ module('Acceptance | scopes', function (hooks) {
   };
 
   hooks.beforeEach(function () {
+    // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -70,7 +71,7 @@ module('Acceptance | scopes', function (hooks) {
     urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
     urls.projectScopeEdit = `/scopes/${instances.scopes.project.id}/edit`;
     urls.project2ScopeEdit = `/scopes/${instances.scopes.project2.id}/edit`;
-    // Generate scope couners
+    // Generate resource couner
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
     authenticateSession({});
   });
