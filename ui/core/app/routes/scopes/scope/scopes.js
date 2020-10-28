@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
+/**
+ * The scopes route lists subscopes under the currently active scope.
+ * For the global scope, the listed scopes are orgs.
+ * For org scopes, the listed scopes are projects.
+ */
 export default class ScopesScopeScopesRoute extends Route {
   // =services
 
@@ -19,9 +24,7 @@ export default class ScopesScopeScopesRoute extends Route {
 
   /**
    * Loads sub scopes for the current scope.
-   * @param {object} params
-   * @param {string} params.scope_id
-   * @return {Promise{ScopeModel}}
+   * @return {Promise
    */
   async model() {
     const currentScope = this.modelFor('scopes.scope');
