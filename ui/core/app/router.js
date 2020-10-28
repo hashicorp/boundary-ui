@@ -66,7 +66,12 @@ Router.map(function () {
 
       this.route('host-catalogs', function() {
         this.route('new');
-        this.route('host-catalog', { path: ':host_catalog_id' }, function() {});
+        this.route('host-catalog', { path: ':host_catalog_id' }, function() {
+          this.route('hosts', function() {
+            this.route('new');
+            this.route('host', { path: ':host_id' }, function() {});
+          });
+        });
       });
     });
   });

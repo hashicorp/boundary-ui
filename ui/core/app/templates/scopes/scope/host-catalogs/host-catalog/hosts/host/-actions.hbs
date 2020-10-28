@@ -1,0 +1,9 @@
+<Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+  <dropdown.button
+    @style="danger"
+    @disabled={{@model.canSave}}
+    {{on "click" (route-action "deleteHost" @model)}}
+  >
+    {{t 'resources.host.actions.delete'}}
+  </dropdown.button>
+</Rose::Dropdown>
