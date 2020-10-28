@@ -58,7 +58,10 @@ Router.map(function () {
       this.route('sessions', function() {});
 
       this.route('targets', function() {
-        this.route('target', { path: ':target_id' }, function() {});
+        this.route('target', { path: ':target_id' }, function() {
+          this.route('host-sets', function() {});
+          this.route('add-host-sets');
+        });
         this.route('new');
       });
       

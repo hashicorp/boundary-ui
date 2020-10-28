@@ -23,9 +23,7 @@ module('Acceptance | targets', function (hooks) {
     scopes: {
       global: null,
       org: null,
-      org2: null,
       project: null,
-      project2: null,
     }
   };
   const urls = {
@@ -55,10 +53,10 @@ module('Acceptance | targets', function (hooks) {
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.targets = `/scopes/${instances.scopes.project.id}/targets`;
-    urls.target = `/scopes/${instances.scopes.project.id}/targets/${instances.target.id}`;
-    urls.unknownTarget = `/scopes/${instances.scopes.project.id}/targets/foo`;
-    urls.newTarget = `/scopes/${instances.scopes.project.id}/targets/new`;
+    urls.targets = `${urls.projectScope}/targets`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.unknownTarget = `${urls.targets}/foo`;
+    urls.newTarget = `${urls.targets}/new`;
     // Generate resource couner
     getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
