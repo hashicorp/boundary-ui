@@ -116,6 +116,8 @@ org:
   messages:
     welcome:
       title: Welcome to Orgs
+    settings:
+      title: Org Settings
 project:
   title: Project
   title_plural: Projects
@@ -123,6 +125,8 @@ project:
   messages:
     welcome:
       title: Welcome to Projects
+    settings:
+      title: Project Settings
   actions:
     delete: Delete Project
 user:

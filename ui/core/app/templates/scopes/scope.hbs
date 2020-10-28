@@ -121,6 +121,16 @@
         </Rose::Nav::Sidebar>
       {{/unless}}
 
+      {{#unless @model.isGlobal}}
+        <Rose::Nav::Sidebar @title={{t "titles.settings"}} as |nav|>
+          <nav.link @route="scopes.scope.edit">
+            {{t (if @model.isOrg
+              "resources.org.messages.settings.title"
+              "resources.project.messages.settings.title")}}
+          </nav.link>
+        </Rose::Nav::Sidebar>
+      {{/unless}}
+
     </sidebarLayout.sidebar>
   {{/if}}
 
