@@ -14,12 +14,10 @@ export default class ScopesScopeScopesRoute extends Route {
   // =methods
 
   /**
-   * Redirects to scopes/scope/authenticate if unauthenticated.
+   * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) {
-      this.transitionTo('scopes.scope.authenticate');
-    }
+    if (!this.session.isAuthenticated) this.transitionTo('index');
   }
 
   /**

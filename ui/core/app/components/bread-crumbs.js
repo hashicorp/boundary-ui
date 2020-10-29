@@ -5,6 +5,7 @@ export default class crumbs extends BreadCrumbsComponent {
 
   // =services
 
+  @service session;
   @service scope;
 
 }

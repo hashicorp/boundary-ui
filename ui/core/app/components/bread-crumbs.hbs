@@ -2,12 +2,14 @@
 
   {{#if this.scope.org}}
     {{#unless this.scope.org.isGlobal}}
-      <crumbs.link @route="scopes.scope.scopes" @model="global">
-        {{t "resources.org.title_plural"}}
-      </crumbs.link>
-      <crumbs.link @route="scopes.scope.edit" @model={{this.scope.org.id}}>
-        {{this.scope.org.displayName}}
-      </crumbs.link>
+      {{#if this.session.data.authenticated.isGlobal}}
+        <crumbs.link @route="scopes.scope.scopes" @model="global">
+          {{t "resources.org.title_plural"}}
+        </crumbs.link>
+        <crumbs.link @route="scopes.scope.edit" @model={{this.scope.org.id}}>
+          {{this.scope.org.displayName}}
+        </crumbs.link>
+      {{/if}}
     {{/unless}}
   {{/if}}
 

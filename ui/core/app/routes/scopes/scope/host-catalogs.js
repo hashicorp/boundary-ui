@@ -10,8 +10,16 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
 
   @service intl;
   @service notify;
+  @service session;
 
   // =methods
+
+  /**
+   * If arriving here unauthenticated, redirect to index for further processing.
+   */
+  beforeModel() {
+    if (!this.session.isAuthenticated) this.transitionTo('index');
+  }
 
   /**
    * Loads all host catalogs under the current scope.

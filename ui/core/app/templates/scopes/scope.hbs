@@ -131,15 +131,23 @@
         </Rose::Nav::Sidebar>
       {{/unless}}
 
-      {{#unless @model.isGlobal}}
+      {{#if @model.isOrg}}
+        {{#if this.session.data.authenticated.isGlobal}}
+          <Rose::Nav::Sidebar @title={{t "titles.settings"}} as |nav|>
+            <nav.link @route="scopes.scope.edit">
+              {{t "resources.org.messages.settings.title"}}
+            </nav.link>
+          </Rose::Nav::Sidebar>
+        {{/if}}
+      {{/if}}
+
+      {{#if @model.isProject}}
         <Rose::Nav::Sidebar @title={{t "titles.settings"}} as |nav|>
           <nav.link @route="scopes.scope.edit">
-            {{t (if @model.isOrg
-              "resources.org.messages.settings.title"
-              "resources.project.messages.settings.title")}}
+            {{t "resources.project.messages.settings.title"}}
           </nav.link>
         </Rose::Nav::Sidebar>
-      {{/unless}}
+      {{/if}}
 
     </sidebarLayout.sidebar>
   {{/if}}
