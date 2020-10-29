@@ -1,3 +1,15 @@
+{{#if @model.isOrg}}
+  {{title (t "resources.org.title_plural") }}
+  {{title @model.displayName}}
+{{/if}}
+
+{{#if @model.isProject}}
+  {{title (t "resources.org.title_plural") }}
+  {{title this.scopes.selectedOrg.displayName}}
+  {{title (t "resources.project.title_plural") }}
+  {{title @model.displayName}}
+{{/if}}
+
 <Rose::Layout::Sidebar as |sidebarLayout|>
 
   {{#if this.session.isAuthenticated}}

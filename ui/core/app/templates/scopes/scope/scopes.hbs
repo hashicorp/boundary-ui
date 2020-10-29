@@ -3,16 +3,7 @@
 {{/if}}
 
 {{#if @model.currentScope.isOrg}}
-  {{title (t "resources.org.title_plural") }}
-  {{title @model.currentScope.displayName}}
   {{title (t "resources.project.title_plural") }}
-{{/if}}
-
-{{#if @model.currentScope.isProject}}
-  {{title (t "resources.org.title_plural") }}
-  {{title @model.parentScope.displayName}}
-  {{title (t "resources.project.title_plural") }}
-  {{title @model.currentScope.displayName}}
 {{/if}}
 
 {{outlet}}
