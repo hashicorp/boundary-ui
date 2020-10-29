@@ -6,6 +6,7 @@ auth:
     choose-org: Choose a scope to authenticate.
     authenticating-with-org: "You are authenticating with {name}."
 titles:
+  home: Home
   iam: IAM
   new: New
   resources: Resources

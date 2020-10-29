@@ -11,6 +11,7 @@ export default class ScopesScopeRoute extends Route {
 
   @service intl;
   @service session;
+  @service scope;
 
   // =methods
 
@@ -61,6 +62,9 @@ export default class ScopesScopeRoute extends Route {
       selectedProject = model;
       selectedOrg = this.store.peekRecord('scope', model.scopeID);
     }
+    // Update the scope service with the current scope(s);
+    this.scope.org = selectedOrg;
+    this.scope.project = selectedProject;
     this.scopes = { orgs, projects, selectedOrg, selectedProject };
   }
 
