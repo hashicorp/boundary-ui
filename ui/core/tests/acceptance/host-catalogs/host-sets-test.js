@@ -17,7 +17,7 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let getHostCount;
+  let getHostSetCount;
 
   const instances = {
     scopes: {
@@ -69,7 +69,7 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
     urls.unknownHostSet = `${urls.hostSets}/foo`;
     urls.newHostSet = `${urls.hostSets}/new`;
     // Generate resource couner
-    getHostCount = () => this.server.schema.hostSets.all().models.length;
+    getHostSetCount = () => this.server.schema.hostSets.all().models.length;
     authenticateSession({});
   });
 
@@ -92,21 +92,21 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
 
   test('can create new host', async function (assert) {
     assert.expect(1);
-    const count = getHostCount();
+    const count = getHostSetCount();
     await visit(urls.newHostSet);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getHostCount(), count + 1);
+    assert.equal(getHostSetCount(), count + 1);
   });
 
   test('can cancel create new host', async function (assert) {
     assert.expect(2);
-    const count = getHostCount();
+    const count = getHostSetCount();
     await visit(urls.newHostSet);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), urls.hostSets);
-    assert.equal(getHostCount(), count);
+    assert.equal(getHostSetCount(), count);
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {
@@ -232,10 +232,10 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
 
   test('can delete host', async function (assert) {
     assert.expect(1);
-    const count = getHostCount();
+    const count = getHostSetCount();
     await visit(urls.hostSet);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostCount(), count - 1);
+    assert.equal(getHostSetCount(), count - 1);
   });
 
   test('can accept delete host set via dialog', async function (assert) {
@@ -243,10 +243,10 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
-    const count = getHostCount();
+    const count = getHostSetCount();
     await visit(urls.hostSet);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostCount(), count - 1);
+    assert.equal(getHostSetCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -255,10 +255,10 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
-    const count = getHostCount();
+    const count = getHostSetCount();
     await visit(urls.hostSet);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostCount(), count);
+    assert.equal(getHostSetCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

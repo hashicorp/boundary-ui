@@ -67,7 +67,7 @@ host-set:
     add: Add Host Set
     create: New Host Set
     delete: Delete Host Set
-    create-host: Create and Add Host
+    create-and-add-host: Create and Add Host
     add-hosts: Add Existing Host
   messages:
     welcome:

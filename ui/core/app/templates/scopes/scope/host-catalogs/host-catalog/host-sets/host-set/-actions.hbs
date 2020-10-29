@@ -1,12 +1,10 @@
 <Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
-  {{!--
-  <dropdown.link @route="scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-host">
-    {{t 'resources.host-set.actions.create-host'}}
+  <dropdown.link @route="scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host">
+    {{t 'resources.host-set.actions.create-and-add-host'}}
   </dropdown.link>
   <dropdown.link @route="scopes.scope.host-catalogs.host-catalog.host-sets.host-set.add-hosts">
     {{t 'resources.host-set.actions.add-hosts'}}
   </dropdown.link>
-  --}}
   <dropdown.separator />
   <dropdown.button
     @style="danger"
