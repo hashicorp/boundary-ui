@@ -15,9 +15,9 @@ export default class RoleSerializer extends ApplicationSerializer {
    * @return {object}
    */
   serialize(snapshot) {
-    const serializeGrants = get(snapshot, 'adapterOptions.serializeGrants');
+    const grants = get(snapshot, 'adapterOptions.grants');
     let serialized = super.serialize(...arguments);
-    if (serializeGrants) serialized = this.serializeWithGrants(snapshot);
+    if (grants) serialized = this.serializeWithGrants(snapshot, grants);
     const principalIDs = snapshot?.adapterOptions?.principalIDs;
     if (principalIDs)
       serialized = this.serializewithPrincipals(snapshot, principalIDs);
@@ -27,14 +27,13 @@ export default class RoleSerializer extends ApplicationSerializer {
   /**
    * Returns a payload containing only the grants array.
    * @param {Snapshot} snapshot
+   * @param {[string]} grants
    * @return {object}
    */
-  serializeWithGrants(snapshot) {
+  serializeWithGrants(snapshot, grants) {
     return {
       version: snapshot.attr('version'),
-      grant_strings: snapshot
-        .attr('grants')
-        .map((grant) => grant.attr('value')),
+      grant_strings: grants
     };
   }
 
@@ -50,23 +49,5 @@ export default class RoleSerializer extends ApplicationSerializer {
       version: snapshot.attr('version'),
       principal_ids: principalIDs,
     };
-  }
-
-  /**
-   * Converts string arrays to object arrays for use with `fragment-string`.
-   * E.g. `"foo"` -> `{value: "foo"}`
-   * @override
-   * @param {Model} typeClass
-   * @param {Object} hash
-   * @return {Object}
-   */
-  normalize(modelClass, resourceHash) {
-    // TODO:  can fragment string normalization be handled generically?
-    if (resourceHash.grant_strings) {
-      resourceHash.grants = resourceHash.grant_strings.map((value) => ({
-        value,
-      }));
-    }
-    return super.normalize(modelClass, resourceHash);
   }
 }
