@@ -15,9 +15,10 @@ export default class RoleSerializer extends ApplicationSerializer {
    * @return {object}
    */
   serialize(snapshot) {
-    const grants = get(snapshot, 'adapterOptions.grants');
+    const grantStrings = get(snapshot, 'adapterOptions.grantStrings');
     let serialized = super.serialize(...arguments);
-    if (grants) serialized = this.serializeWithGrants(snapshot, grants);
+    if (grantStrings) serialized =
+      this.serializeWithGrantStrings(snapshot, grantStrings);
     const principalIDs = snapshot?.adapterOptions?.principalIDs;
     if (principalIDs)
       serialized = this.serializewithPrincipals(snapshot, principalIDs);
@@ -27,13 +28,13 @@ export default class RoleSerializer extends ApplicationSerializer {
   /**
    * Returns a payload containing only the grants array.
    * @param {Snapshot} snapshot
-   * @param {[string]} grants
+   * @param {[string]} grantStrings
    * @return {object}
    */
-  serializeWithGrants(snapshot, grants) {
+  serializeWithGrantStrings(snapshot, grantStrings) {
     return {
       version: snapshot.attr('version'),
-      grant_strings: grants
+      grant_strings: grantStrings
     };
   }
 

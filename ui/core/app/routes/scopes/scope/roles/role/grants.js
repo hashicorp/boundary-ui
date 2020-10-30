@@ -54,12 +54,13 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   /**
    * Save an role in current scope.
    * @param {RoleModel} role
+   * @param {[string]} grantStrings
    */
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.save-success')
-  async save(role, grants) {
-    await role.saveGrants(grants);
+  async save(role, grantStrings) {
+    await role.saveGrantStrings(grantStrings);
   }
 }

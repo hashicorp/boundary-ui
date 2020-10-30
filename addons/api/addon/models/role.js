@@ -18,24 +18,24 @@ export default class RoleModel extends GeneratedRoleModel {
   principals;
 
   /**
-   * Grants is read-only.  But grants can be persisted via a dedicated
-   * call to `saveGrants(grants)`.
+   * Grant strings are read-only.  But grants can be persisted via a dedicated
+   * call to `saveGrantStrings(grants)`.
    */
   @array('string', { readOnly: true }) grant_strings;
 
   // =methods
 
   /**
-   * Saves the `grants` array on the role via the `set-grants` method.
+   * Saves grant strings on the role via the `set-grants` method.
    * See serializer and adapter for more information.
-   * @param {[string]} grants
+   * @param {[string]} grantStrings
    * @return {Promise}
    */
-  saveGrants(grants) {
+  saveGrantStrings(grantStrings) {
     return this.save({
       adapterOptions: {
         method: 'set-grants',
-        grants
+        grantStrings
       },
     });
   }

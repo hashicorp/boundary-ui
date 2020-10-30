@@ -24,7 +24,7 @@ module('Unit | Serializer | role', function (hooks) {
     });
   });
 
-  test('it serializes only grants when `adapterOptions.grants` is set', function (assert) {
+  test('it serializes only grant strings when `adapterOptions.grantStrings` is set', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('role');
@@ -36,7 +36,7 @@ module('Unit | Serializer | role', function (hooks) {
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      grants: ['foo', 'bar'],
+      grantStrings: ['foo', 'bar'],
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
