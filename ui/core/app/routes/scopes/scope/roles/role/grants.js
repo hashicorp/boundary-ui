@@ -37,29 +37,30 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
    */
   @action
   addGrant(role, grantString) {
-    role.grants.unshiftObject({ value: grantString });
+    role.grant_strings.unshiftObject(grantString);
   }
 
   /**
    * Removes a grant from the role.  Grant removal is not immediately permanent;
    * users may rollback the change via "cancel" or commit it via "save".
    * @param {RoleModel} role
-   * @param {FragmentString} grant
+   * @param {string} grantString
    */
   @action
-  removeGrant(role, grant) {
-    role.grants.removeFragment(grant);
+  removeGrant(role, grantString) {
+    role.grant_strings.removeObject(grantString);
   }
 
   /**
    * Save an role in current scope.
    * @param {RoleModel} role
+   * @param {[string]} grantStrings
    */
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.save-success')
-  async save(role) {
-      await role.saveGrants();
+  async save(role, grantStrings) {
+    await role.saveGrantStrings(grantStrings);
   }
 }
