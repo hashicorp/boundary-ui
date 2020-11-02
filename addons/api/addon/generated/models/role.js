@@ -17,6 +17,11 @@ export default class GeneratedRoleModel extends BaseModel {
   })
   description;
 
+  @attr('string', {
+    description: 'The scope to which this role applies.  Defaults to the role\'s scope.',
+  })
+  grant_scope_id;
+
   @attr('date', {
     description: 'The time this resource was created\nOutput only.',
     readOnly: true,

@@ -19,6 +19,14 @@ export default factory.extend({
       const groups = server.createList('group', 2, { scope });
       role.update({ users, groups });
     }
-  })
+  }),
+
+  /**
+   * Set the grant scope ID to match the scope ID.
+   */
+  afterCreate(role) {
+    const { scope: { id } } = role;
+    role.update({ grant_scope_id: id });
+  }
 
 });
