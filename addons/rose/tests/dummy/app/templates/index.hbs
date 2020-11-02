@@ -41,3 +41,28 @@
   <dropdown.link @route="index">Menu item</dropdown.link>
   <dropdown.button>Button menu item</dropdown.button>
 </Rose::Dropdown>
+
+<Rose::Form as |form|>
+  <form.radioGroup @name="color" @selectedValue="red" as |radioGroup|>
+    <Rose::Dropdown @text="Color" as |dropdown|>
+      <dropdown.item>
+        <radioGroup.radio
+          @label="Red"
+          @value="red"
+        />
+      </dropdown.item>
+      <dropdown.item>
+        <radioGroup.radio
+          @label="Green"
+          @value="green"
+        />
+      </dropdown.item>
+      <dropdown.item>
+        <radioGroup.radio
+          @label="Blue"
+          @value="blue"
+        />
+      </dropdown.item>
+    </Rose::Dropdown>
+  </form.radioGroup>
+</Rose::Form>
