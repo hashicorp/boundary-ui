@@ -206,7 +206,7 @@ export default function() {
     if (method === 'set-grants') {
       updatedAttrs = {
         version: attrs.version,
-        grant_strings: attrs.grant_strings
+        grantStrings: attrs.grantStrings
       };
     }
 

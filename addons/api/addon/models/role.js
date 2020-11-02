@@ -1,5 +1,5 @@
 import GeneratedRoleModel from '../generated/models/role';
-import { fragmentArray } from 'ember-data-model-fragments/attributes';
+import { fragmentArray, array } from 'ember-data-model-fragments/attributes';
 
 export default class RoleModel extends GeneratedRoleModel {
   // =attributes
@@ -18,23 +18,24 @@ export default class RoleModel extends GeneratedRoleModel {
   principals;
 
   /**
-   * Grants is read-only _most_ under normal circumstances.  But grants can
-   * be persisted via a dedicated call to `saveGrants()`.
+   * Grant strings are read-only.  But grants can be persisted via a dedicated
+   * call to `saveGrantStrings(grants)`.
    */
-  @fragmentArray('fragment-string', { readOnly: true }) grants;
+  @array('string', { readOnly: true }) grant_strings;
 
   // =methods
 
   /**
-   * Saves the `grants` array on the role via the `set-grants` method.
+   * Saves grant strings on the role via the `set-grants` method.
    * See serializer and adapter for more information.
+   * @param {[string]} grantStrings
    * @return {Promise}
    */
-  saveGrants() {
+  saveGrantStrings(grantStrings) {
     return this.save({
       adapterOptions: {
         method: 'set-grants',
-        serializeGrants: true,
+        grantStrings
       },
     });
   }
