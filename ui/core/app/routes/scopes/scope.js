@@ -1,10 +1,17 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { A } from '@ember/array';
+import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
+import { confirm } from '../../decorators/confirm';
+import { notifySuccess, notifyError } from '../../decorators/notify';
 
 export default class ScopesScopeRoute extends Route {
   // =services
 
   @service intl;
+  @service session;
+  @service scope;
 
   // =methods
 
@@ -25,6 +32,7 @@ export default class ScopesScopeRoute extends Route {
     return this.store.findRecord('scope', id).catch(() => {
       const maybeExistingScope = this.store.peekRecord('scope', id);
       const scopeOptions = { id, type };
+      /* istanbul ignore else */
       if (type === 'global') {
         scopeOptions.name = this.intl.t('titles.global');
       }
@@ -35,14 +43,39 @@ export default class ScopesScopeRoute extends Route {
   }
 
   /**
-   * Adds the set of all org scopes to the controller, which is used by the
-   * scope navigation template.
+   * Load all scopes within the current scope context.  Always attempt to load
+   * org scopes.  Only attempt to load project scopes if the current scope is
+   * a project.  These are used for scope navigation.
+   */
+  async afterModel(model) {
+    // First, load orgs and, if necessary, projects
+    let orgs, projects;
+    orgs = await this.store.query('scope', { scope_id: 'global' })
+      .catch(() => A([]));
+    if (model.isProject) {
+      projects = await this.store.query('scope', { scope_id: model.scopeID });
+    }
+    // Then pull out the "selected" scopes, if relevant
+    let selectedOrg, selectedProject;
+    if (model.isGlobal || model.isOrg) selectedOrg = model;
+    if (model.isProject) {
+      selectedProject = model;
+      selectedOrg = this.store.peekRecord('scope', model.scopeID);
+    }
+    // Update the scope service with the current scope(s);
+    this.scope.org = selectedOrg;
+    this.scope.project = selectedProject;
+    this.scopes = { orgs, projects, selectedOrg, selectedProject };
+  }
+
+  /**
+   * Adds the scopes hash to the controller context (see `afterModel`).
    * @param {Controller} controller
    */
   setupController(controller) {
     super.setupController(...arguments);
-    const orgScopes = this.modelFor('scopes').filterBy('isOrg', true);
-    controller.setProperties({ orgScopes });
+    const scopes = this.scopes;
+    controller.setProperties({ scopes });
   }
 
   /**
@@ -51,19 +84,56 @@ export default class ScopesScopeRoute extends Route {
    * @param {object} controller
    * @param {object} model
    */
-  renderTemplate(controller, model) {
+  renderTemplate() {
     super.renderTemplate(...arguments);
-
     this.render('scopes/scope/-header-nav', {
       into: 'application',
       outlet: 'header-nav',
-      model: model,
     });
+  }
 
-    this.render('scopes/scope/-sidebar', {
-      into: 'scopes/scope',
-      outlet: 'sidebar',
-      model: model,
-    });
+  // =actions
+
+  /**
+   * Rollback changes on scope.
+   * @param {Model} scope
+   */
+  @action
+  cancel(scope) {
+    const { isNew } = scope;
+    scope.rollbackAttributes();
+    if (isNew) this.transitionTo('scopes.scope');
+  }
+
+  /**
+   * Handle save scope.
+   * @param {Model} scope
+   * @param {Event} e
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  async save(scope) {
+    const { isNew } = scope;
+    await scope.save();
+    await this.transitionTo('scopes.scope.edit', scope);
+    if (isNew) this.refresh();
+  }
+
+  /**
+   * Deletes the scope and redirects to index.
+   * @param {Model} scope
+   */
+  @action
+  @loading
+  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(scope) {
+    const { scopeID } = scope;
+    await scope.destroyRecord();
+    await this.replaceWith('scopes.scope.scopes', scopeID);
+    //this.refresh();
   }
 }

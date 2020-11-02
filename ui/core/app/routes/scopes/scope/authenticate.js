@@ -10,14 +10,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   // =methods
 
   beforeModel() {
-    if (this.session.isAuthenticated) {
-      const scope = this.modelFor('scopes.scope');
-      if (scope.isGlobal) {
-        this.transitionTo('scopes.scope.orgs');
-      } else {
-        this.transitionTo('scopes.scope.projects');
-      }
-    }
+    if (this.session.isAuthenticated) this.transitionTo('scopes.scope.index');
   }
 
   /**
@@ -29,7 +22,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
     const { id: scope_id } = this.modelFor('scopes.scope');
     return hash({
       scope: this.modelFor('scopes.scope'),
-      scopes: this.modelFor('scopes'),
+      scopes: this.modelFor('scopes').filter(scope => scope.isOrg),
       authMethods: this.store.query('auth-method', { scope_id }),
 
       // for integration testing:

@@ -1,15 +1,37 @@
-{{#if this.breadCrumbs}}
-  <Rose::Nav::Breadcrumbs as |crumbs|>
-    {{#each this.breadCrumbs as |crumb|}}
-      {{#if crumb.model}}
-        <crumbs.link @route={{crumb.path}} @model={{crumb.model}}>
-          {{crumb.label}}
+<Rose::Nav::Breadcrumbs as |crumbs|>
+
+  {{#if this.scope.org}}
+    {{#unless this.scope.org.isGlobal}}
+      {{#if this.session.data.authenticated.isGlobal}}
+        <crumbs.link @route="scopes.scope.scopes" @model="global">
+          {{t "resources.org.title_plural"}}
         </crumbs.link>
-      {{else}}
-        <crumbs.link @route={{crumb.path}}>
-          {{crumb.label}}
+        <crumbs.link @route="scopes.scope.edit" @model={{this.scope.org.id}}>
+          {{this.scope.org.displayName}}
         </crumbs.link>
       {{/if}}
-    {{/each}}
-  </Rose::Nav::Breadcrumbs>
-{{/if}}
+    {{/unless}}
+  {{/if}}
+
+  {{#if this.scope.project}}
+    <crumbs.link @route="scopes.scope.scopes" @model={{this.scope.org.id}}>
+      {{t "resources.project.title_plural"}}
+    </crumbs.link>
+    <crumbs.link @route="scopes.scope.edit" @model={{this.scope.project.id}}>
+      {{this.scope.project.displayName}}
+    </crumbs.link>
+  {{/if}}
+
+  {{#each this.breadCrumbs as |crumb|}}
+    {{#if crumb.model}}
+      <crumbs.link @route={{crumb.path}} @model={{crumb.model}}>
+        {{crumb.label}}
+      </crumbs.link>
+    {{else}}
+      <crumbs.link @route={{crumb.path}}>
+        {{crumb.label}}
+      </crumbs.link>
+    {{/if}}
+  {{/each}}
+
+</Rose::Nav::Breadcrumbs>

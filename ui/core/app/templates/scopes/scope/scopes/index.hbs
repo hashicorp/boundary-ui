@@ -1,0 +1,90 @@
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    {{#if @model.currentScope.isGlobal}}
+      <h2>
+        {{t "resources.org.title_plural"}}
+        <DocLink @doc="org" @iconSize="large" />
+      </h2>
+      {{#if @model.subScopes}}
+        <p>{{t "resources.org.description"}}</p>
+      {{/if}}
+    {{/if}}
+    {{#if @model.currentScope.isOrg}}
+      <h2>
+        {{t "resources.project.title_plural"}}
+        <DocLink @doc="project" @iconSize="large" />
+      </h2>
+      {{#if @model.subScopes}}
+        <p>{{t "resources.project.description"}}</p>
+      {{/if}}
+    {{/if}}
+  </page.header>
+
+  <page.actions>
+    {{#if @model.subScopes}}
+      <Rose::LinkButton
+        @route="scopes.scope.new"
+        @style="primary"
+      >
+        {{t 'titles.new'}}
+      </Rose::LinkButton>
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+
+    {{#if @model.subScopes}}
+
+      <Rose::Cards as |cards|>
+        {{#each @model.subScopes as |scope|}}
+          <cards.link
+            @title={{scope.name}}
+            @description={{scope.description}}
+            @id={{scope.id}}
+            @icon={{if scope.isOrg "app-icons/org" "app-icons/project"}}
+            @route="scopes.scope"
+            @model={{scope.id}}
+          />
+        {{/each}}
+      </Rose::Cards>
+
+    {{else}}
+
+      {{#if @model.currentScope.isGlobal}}
+        <Rose::Layout::Centered>
+          <Rose::Message @title={{t 'resources.org.messages.welcome.title'}} as |message|>
+            <message.description>
+              {{t 'resources.org.description'}}
+            </message.description>
+            <message.link @route="scopes.scope.new">
+              <Rose::Icon @name="plus-circle-outline" />
+              {{t 'titles.new'}}
+            </message.link>
+          </Rose::Message>
+        </Rose::Layout::Centered>
+      {{/if}}
+
+      {{#if @model.currentScope.isOrg}}
+        <Rose::Layout::Centered>
+          <Rose::Message @title={{t 'resources.project.messages.welcome.title'}} as |message|>
+            <message.description>
+              {{t 'resources.project.description'}}
+            </message.description>
+            <message.link @route="scopes.scope.new">
+              <Rose::Icon @name="plus-circle-outline" />
+              {{t 'titles.new'}}
+            </message.link>
+          </Rose::Message>
+        </Rose::Layout::Centered>
+      {{/if}}
+
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>

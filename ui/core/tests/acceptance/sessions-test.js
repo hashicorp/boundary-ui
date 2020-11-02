@@ -46,7 +46,7 @@ module('Acceptance | sessions', function (hooks) {
       scope: instances.scopes.project,
       status: 'active'
     }, 'withAssociations');
-    urls.sessions = `/scopes/${instances.scopes.org.id}/projects/${instances.scopes.project.id}/sessions`;
+    urls.sessions = `/scopes/${instances.scopes.project.id}/sessions`;
   });
 
   test('visiting sessions', async function (assert) {

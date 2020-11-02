@@ -53,11 +53,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
         requestCookies,
         { scope, authMethod }
       );
-      if (scope.isGlobal) {
-        this.transitionTo('scopes.scope.orgs');
-      } else {
-        this.transitionTo('scopes.scope.projects');
-      }
+      this.transitionTo('index');
     } catch (e) {
       const errorMessage = this.intl.t('errors.authentication-failed.title');
       this.notify.error(errorMessage, { closeAfter: null });

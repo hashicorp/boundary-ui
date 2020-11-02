@@ -1,0 +1,9 @@
+{{#if @model.currentScope.isGlobal}}
+  {{title (t "resources.org.title_plural") }}
+{{/if}}
+
+{{#if @model.currentScope.isOrg}}
+  {{title (t "resources.project.title_plural") }}
+{{/if}}
+
+{{outlet}}

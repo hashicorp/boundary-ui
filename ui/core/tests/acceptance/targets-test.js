@@ -1,9 +1,11 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { resolve, reject } from 'rsvp';
+import sinon from 'sinon';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -15,29 +17,26 @@ module('Acceptance | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let getTargetCount;
+
   const instances = {
     scopes: {
       global: null,
       org: null,
       project: null,
-    },
-    target: null,
-    hostSets: null,
+    }
   };
   const urls = {
+    globalScope: null,
     orgScope: null,
-    projects: null,
-    project: null,
+    projectScope: null,
     targets: null,
-    newTarget: null,
     target: null,
-    targetHostSets: null,
-    targetAddHostSets: null,
+    newTarget: null,
   };
 
   hooks.beforeEach(function () {
-    // Setup Mirage mock resources for this test
-    authenticateSession({});
+    // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -47,97 +46,56 @@ module('Acceptance | targets', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-
-    instances.hostCatalog = this.server.create('host-catalog', {
-      scope: instances.scopes.project
-    }, 'withChildren');
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
-      hostSets: instances.hostCatalog.hostSets
     });
-
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.projects = `${urls.orgScope}/projects`;
-    urls.project = `${urls.projects}/${instances.scopes.project.id}`;
-    urls.targets = `${urls.project}/targets`;
-    urls.newTarget = `${urls.targets}/new`;
+    urls.globalScope = `/scopes/global/scopes`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
+    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
+    urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.targetHostSets = `${urls.target}/host-sets`;
-    urls.targetAddHostSets = `${urls.target}/add-host-sets`;
-  });
-
-  hooks.afterEach(async function() {
-    const notification = find('.rose-notification');
-    if(notification) {
-      await click('.rose-notification-dismiss');
-    }
+    urls.unknownTarget = `${urls.targets}/foo`;
+    urls.newTarget = `${urls.targets}/new`;
+    // Generate resource couner
+    getTargetCount = () => this.server.schema.targets.all().models.length;
+    authenticateSession({});
   });
 
   test('visiting targets', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     await visit(urls.targets);
     await a11yAudit();
     assert.equal(currentURL(), urls.targets);
-  });
-
-  test('can navigate to a target form', async function (assert) {
-    assert.expect(1);
-    await visit(urls.targets);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await visit(urls.target);
     await a11yAudit();
     assert.equal(currentURL(), urls.target);
   });
 
-  test('can update a target and save changes', async function (assert) {
-    assert.expect(2);
-    await visit(urls.target);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
-    await fillIn('[name="default_port"]', '1234');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.targets[0].name, 'update name');
-    assert.equal(this.server.db.targets[0].attributes.default_port, '1234');
-  });
-
-  test('can update a target and cancel changes', async function (assert) {
-    assert.expect(2);
-    await visit(urls.target);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
-    await fillIn('[name="default_port"]', '1234');
-    await click('form button:not([type="submit"])');
-    assert.notEqual(this.server.db.targets[0].name, 'update name');
-    assert.notEqual(this.server.db.targets[0].port, '1234');
-  });
-
-  test('can create new target', async function (assert) {
+  test('visiting an unknown target displays 404 message', async function (assert) {
     assert.expect(1);
-    const targetsCount = this.server.db.targets.length;
-    await visit(urls.newTarget);
-    await fillIn('[name="name"]', 'Target name');
-    await fillIn('[name="description"]', 'description');
-    await fillIn('[name="default_port"]', '1234');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.targets.length, targetsCount + 1);
+    await visit(urls.unknownTarget);
+    await a11yAudit();
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 
-  test('can cancel new target creation', async function (assert) {
-    assert.expect(2);
-    const targetsCount = this.server.db.targets.length;
+  test('can create new targets', async function (assert) {
+    assert.expect(1);
+    const count = getTargetCount();
     await visit(urls.newTarget);
-    await fillIn('[name="name"]', 'Target Name');
-    await click('form button:not([type="submit"])');
-    assert.equal(this.server.db.targets.length, targetsCount);
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.equal(getTargetCount(), count + 1);
+  });
+
+  test('can cancel create new targets', async function (assert) {
+    assert.expect(2);
+    const count = getTargetCount();
+    await visit(urls.newTarget);
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), urls.targets);
-  });
-
-  test('can delete a target', async function(assert) {
-    assert.expect(1);
-    const targetsCount = this.server.db.targets.length;
-    await visit(urls.target);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(this.server.db.targets.length, targetsCount - 1);
+    assert.equal(getTargetCount(), count);
   });
 
   test('saving a new target with invalid fields displays error messages', async function (assert) {
@@ -162,30 +120,33 @@ module('Acceptance | targets', function (hooks) {
       );
     });
     await visit(urls.newTarget);
-    await fillIn('[name="name"]', 'new target');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
-    assert.ok(find('.rose-form-error-message'));
+    await click('[type="submit"]');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
   });
 
-  test('errors are displayed when delete on a target fails', async function (assert) {
-    assert.expect(1);
-    this.server.del('/targets/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
+  test('can save changes to existing target', async function (assert) {
+    assert.expect(3);
+    assert.notEqual(instances.target.name, 'random string');
     await visit(urls.target);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), urls.target);
+    assert.equal(this.server.schema.targets.all().models[0].name, 'random string');
+  });
+
+  test('can cancel changes to existing target', async function (assert) {
+    assert.expect(2);
+    await visit(urls.target);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.notEqual(instances.target.name, 'random string');
+    assert.equal(find('[name="name"]').value, instances.target.name);
   });
 
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
@@ -211,106 +172,101 @@ module('Acceptance | targets', function (hooks) {
     });
     await visit(urls.target);
     await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'existing target');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
-    assert.ok(find('.rose-form-error-message'));
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
   });
 
-  test('visiting target host sets', async function (assert) {
-    assert.expect(3);
-    const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
-    await a11yAudit();
-    assert.equal(currentURL(), urls.targetHostSets);
-    assert.ok(targetHostSetCount);
-    assert.equal(findAll('tbody tr').length, targetHostSetCount);
+  test('can discard unsaved target changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.target.name, 'random string');
+    await visit(urls.target);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.target);
+    try {
+      await visit(urls.targets);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:first-child');
+      assert.equal(currentURL(), urls.targets);
+      assert.notEqual(this.server.schema.targets.all().models[0].name, 'random string');
+    }
   });
 
-  test('can remove a host sets', async function (assert) {
+  test('can cancel discard unsaved target changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.target.name, 'random string');
+    await visit(urls.target);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.target);
+    try {
+      await visit(urls.targets);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:last-child');
+      assert.equal(currentURL(), urls.target);
+      assert.notEqual(this.server.schema.targets.all().models[0].name, 'random string');
+    }
+  });
+
+  test('can delete target', async function (assert) {
+    assert.expect(1);
+    const count = getTargetCount();
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getTargetCount(), count - 1);
+  });
+
+  test('can accept delete target via dialog', async function (assert) {
     assert.expect(2);
-    const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
-    assert.equal(findAll('tbody tr').length, targetHostSetCount);
-    await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(resolve());
+    const count = getTargetCount();
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getTargetCount(), count - 1);
+    assert.ok(confirmService.confirm.calledOnce);
   });
 
-  test('shows error message on host set remove', async function (assert) {
+  test('cannot cancel delete target via dialog', async function (assert) {
     assert.expect(2);
-    this.server.post('/targets/:idMethod', () => {
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(reject());
+    const count = getTargetCount();
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getTargetCount(), count);
+    assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('deleting a target which errors displays error messages', async function (assert) {
+    assert.expect(1);
+    this.server.del('/targets/:id', () => {
       return new Response(
-        400,
+        490,
         {},
         {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {},
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
         }
       );
     });
-    const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
-    assert.equal(findAll('tbody tr').length, targetHostSetCount);
-    await click('tbody tr .rose-dropdown-button-danger');
-    assert.ok(find('[role="alert"]'));
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 
-  test('select and save host sets to add', async function (assert) {
-    assert.expect(3);
-    instances.target.update({ hostSetIds: [] });
-    await visit(urls.targetHostSets);
-    assert.equal(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a')
-    assert.equal(currentURL(), urls.targetAddHostSets);
-    // Click three times to select, unselect, then reselect (for coverage)
-    await click('tbody label');
-    await click('tbody label');
-    await click('tbody label');
-    await click('form [type="submit"]');
-    await visit(urls.targetHostSets);
-    assert.equal(findAll('tbody tr').length, 1);
-  });
-
-  test('select and cancel host sets to add', async function (assert) {
-    assert.expect(4);
-    const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
-    assert.equal(findAll('tbody tr').length, targetHostSetCount);
-    // first, remove a target host set (otherwise none would be available to add)
-    await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
-    await click('.rose-layout-page-actions a')
-    assert.equal(currentURL(), urls.targetAddHostSets);
-    await click('tbody label');
-    await click('form [type="button"]');
-    await visit(urls.targetHostSets);
-    assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
-  });
-
-  test('shows error message on host set add', async function (assert) {
-    assert.expect(4);
-    this.server.post('/targets/:idMethod', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {},
-        }
-      );
-    });
-    instances.target.update({ hostSetIds: [] });
-    await visit(urls.targetAddHostSets);
-    assert.equal(instances.target.hostSets.length, 0);
-    assert.equal(currentURL(), urls.targetAddHostSets);
-    await click('tbody label');
-    await click('form [type="submit"]');
-    assert.equal(currentURL(), urls.targetAddHostSets);
-    assert.equal(instances.target.hostSets.length, 0);
-  });
 });

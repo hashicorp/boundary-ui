@@ -1,0 +1,56 @@
+{{#if @model}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t "form.name.label"}}</row.headerCell>
+        <row.headerCell>{{t "form.type.label"}}</row.headerCell>
+        <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model as |hostSet|}}
+        <body.row as |row|>
+          <row.headerCell>
+            <LinkTo
+              @route="scopes.scope.host-catalogs.host-catalog.host-sets.host-set"
+              @model={{hostSet.id}}
+            >
+              {{hostSet.displayName}}
+            </LinkTo>
+            <p>{{hostSet.description}}</p>
+          </row.headerCell>
+          <row.cell>
+            <Rose::Badge>
+              {{t (concat 'resources.host-set.types.' hostSet.type)}}
+            </Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <Copyable
+              @text={{hostSet.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{hostSet.id}}</code>
+            </Copyable>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "resources.host-set.messages.welcome.title"}} as |message|>
+      <message.description>
+        {{t "resources.host-set.description"}}
+      </message.description>
+      <message.link @route="scopes.scope.host-catalogs.host-catalog.host-sets.new">
+        <Rose::Icon @name="plus-circle-outline" />
+        {{t "titles.new"}}
+      </message.link>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}

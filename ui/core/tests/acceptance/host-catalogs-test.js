@@ -1,9 +1,11 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
+import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { resolve, reject } from 'rsvp';
+import sinon from 'sinon';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -11,30 +13,30 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host catalogs', function (hooks) {
+module('Acceptance | host-catalogs', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  let gethostCatalogCount;
 
   const instances = {
     scopes: {
       global: null,
       org: null,
       project: null,
-    },
-    hostCatalog: null,
+    }
   };
   const urls = {
+    globalScope: null,
     orgScope: null,
-    projects: null,
-    project: null,
+    projectScope: null,
     hostCatalogs: null,
-    newHostCatalog: null,
     hostCatalog: null,
+    newHostCatalog: null,
   };
 
   hooks.beforeEach(function () {
-    // Setup Mirage mock resources for this test
-    authenticateSession();
+    // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -47,97 +49,53 @@ module('Acceptance | host catalogs', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
-
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.projects = `${urls.orgScope}/projects`;
-    urls.project = `${urls.projects}/${instances.hostCatalog.scope.id}`;
-    urls.hostCatalogs = `${urls.project}/host-catalogs`;
-    urls.newHostCatalog = `${urls.hostCatalogs}/new`;
+    urls.globalScope = `/scopes/global/scopes`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
+    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
+    urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
+    urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
+    urls.newHostCatalog = `${urls.hostCatalogs}/new`;
+    // Generate resource couner
+    gethostCatalogCount = () => this.server.schema.hostCatalogs.all().models.length;
+    authenticateSession({});
   });
 
   test('visiting host catalogs', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     await visit(urls.hostCatalogs);
     await a11yAudit();
     assert.equal(currentURL(), urls.hostCatalogs);
-  });
-
-  test('can navigate to host catalog form', async function (assert) {
-    assert.expect(1);
-    await visit(urls.hostCatalogs);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await visit(urls.hostCatalog);
     await a11yAudit();
     assert.equal(currentURL(), urls.hostCatalog);
   });
 
-  test('can delete host catalog', async function (assert) {
+  test('visiting an unknown host catalog displays 404 message', async function (assert) {
+    assert.expect(1);
+    await visit(urls.unknownHostCatalog);
+    await a11yAudit();
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+  });
+
+  test('can create new host catalogs', async function (assert) {
+    assert.expect(1);
+    const count = gethostCatalogCount();
+    await visit(urls.newHostCatalog);
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.equal(gethostCatalogCount(), count + 1);
+  });
+
+  test('can cancel create new host catalogs', async function (assert) {
     assert.expect(2);
-    const hostCatalogsCount = this.server.db.hostCatalogs.length;
-    await visit(urls.hostCatalog);
-    assert.equal(currentURL(), urls.hostCatalog);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(this.server.db.hostCatalogs.length, hostCatalogsCount - 1);
-  });
-
-  test('can update host catalog and save changes', async function (assert) {
-    assert.expect(1);
-    await visit(urls.hostCatalog);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Test Name');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.hostCatalogs[0].name, 'Test Name');
-  });
-
-  test('can update host catalog and cancel changes', async function (assert) {
-    assert.expect(1);
-    await visit(urls.hostCatalog);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Test Name');
-    await click('form button:not([type="submit"])');
-    assert.notEqual(this.server.db.hostCatalogs[0].name, 'Test Name');
-  });
-
-  test('can create host catalog and save changes', async function (assert) {
-    assert.expect(1);
-    const hostCatalogsCount = this.server.db.hostCatalogs.length;
+    const count = gethostCatalogCount();
     await visit(urls.newHostCatalog);
-    await fillIn('[name="name"]', 'Test Name');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.hostCatalogs.length, hostCatalogsCount + 1);
-  });
-
-  test('can create host catalog and cancel changes', async function (assert) {
-    assert.expect(1);
-    const hostCatalogsCount = this.server.db.hostCatalogs.length;
-    await visit(urls.newHostCatalog);
-    await fillIn('[name="name"]', 'Test Name');
-    await click('form button:not([type="submit"])');
-    assert.equal(this.server.db.hostCatalogs.length, hostCatalogsCount);
-  });
-
-  test('errors are displayed when delete host catalog fails', async function (assert) {
-    assert.expect(1);
-    this.server.del('/host-catalogs/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(urls.hostCatalog);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
-    );
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(currentURL(), urls.hostCatalogs);
+    assert.equal(gethostCatalogCount(), count);
   });
 
   test('saving a new host catalog with invalid fields displays error messages', async function (assert) {
@@ -162,19 +120,33 @@ module('Acceptance | host catalogs', function (hooks) {
       );
     });
     await visit(urls.newHostCatalog);
-    await fillIn('[name="name"]', 'random string');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
+    await click('[type="submit"]');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
+      'Name is required.'
     );
+  });
+
+  test('can save changes to existing host catalog', async function (assert) {
+    assert.expect(3);
+    assert.notEqual(instances.hostCatalog.name, 'random string');
+    await visit(urls.hostCatalog);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), urls.hostCatalog);
+    assert.equal(this.server.schema.hostCatalogs.all().models[0].name, 'random string');
+  });
+
+  test('can cancel changes to existing host catalog', async function (assert) {
+    assert.expect(2);
+    await visit(urls.hostCatalog);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.notEqual(instances.hostCatalog.name, 'random string');
+    assert.equal(find('[name="name"]').value, instances.hostCatalog.name);
   });
 
   test('saving an existing host catalog with invalid fields displays error messages', async function (assert) {
@@ -201,17 +173,100 @@ module('Acceptance | host catalogs', function (hooks) {
     await visit(urls.hostCatalog);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
+    await click('[type="submit"]');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
+      'Name is required.'
     );
   });
+
+  test('can discard unsaved host catalog changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.hostCatalog.name, 'random string');
+    await visit(urls.hostCatalog);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.hostCatalog);
+    try {
+      await visit(urls.hostCatalogs);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:first-child');
+      assert.equal(currentURL(), urls.hostCatalogs);
+      assert.notEqual(this.server.schema.hostCatalogs.all().models[0].name, 'random string');
+    }
+  });
+
+  test('can cancel discard unsaved host catalog changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.hostCatalog.name, 'random string');
+    await visit(urls.hostCatalog);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.hostCatalog);
+    try {
+      await visit(urls.hostCatalogs);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:last-child');
+      assert.equal(currentURL(), urls.hostCatalog);
+      assert.notEqual(this.server.schema.hostCatalogs.all().models[0].name, 'random string');
+    }
+  });
+
+  test('can delete host catalog', async function (assert) {
+    assert.expect(1);
+    const count = gethostCatalogCount();
+    await visit(urls.hostCatalog);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(gethostCatalogCount(), count - 1);
+  });
+
+  test('can accept delete host catalog via dialog', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(resolve());
+    const count = gethostCatalogCount();
+    await visit(urls.hostCatalog);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(gethostCatalogCount(), count - 1);
+    assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('cannot cancel delete host catalog via dialog', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(reject());
+    const count = gethostCatalogCount();
+    await visit(urls.hostCatalog);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(gethostCatalogCount(), count);
+    assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('deleting a host catalog which errors displays error messages', async function (assert) {
+    assert.expect(1);
+    this.server.del('/host-catalogs/:id', () => {
+      return new Response(
+        490,
+        {},
+        {
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
+        }
+      );
+    });
+    await visit(urls.hostCatalog);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+  });
+
 });

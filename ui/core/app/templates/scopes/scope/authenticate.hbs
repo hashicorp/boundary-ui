@@ -14,6 +14,9 @@
         @text={{t "actions.choose-different-org"}}
         @icon="user-organization"
       as |dropdown|>
+        <dropdown.link @route="scopes.scope.authenticate" @model="global">
+          {{t "titles.global"}}
+        </dropdown.link>
         {{#each this.sortedScopes as |scope|}}
           <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
             {{scope.displayName}}
