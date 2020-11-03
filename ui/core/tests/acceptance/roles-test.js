@@ -19,6 +19,7 @@ module('Acceptance | roles', function (hooks) {
     scopes: {
       global: null,
       org: null,
+      project: null,
     },
     role: null,
   };
@@ -35,6 +36,13 @@ module('Acceptance | roles', function (hooks) {
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
+    });
+    // The project scope is not yet used for role tests (though it will be
+    // in the future).  This is created simply to test the grant scope loading
+    // mechanism.
+    instances.scopes.project = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
     });
     instances.role = this.server.create('role', {
       scope: instances.scopes.org,

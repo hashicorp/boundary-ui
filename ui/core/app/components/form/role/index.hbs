@@ -44,6 +44,44 @@
     {{/if}}
   </form.textarea>
 
+  <form.radioGroup @name="grant_scope_id" @selectedValue={{@model.grant_scope_id}} as |radioGroup|>
+    <Rose::Dropdown
+      @text={{concat (t "form.grant_scope.label") ": " this.selectedGrantScope.displayName}}
+      aria-describedby="helper-text-grant-scope"
+    as |dropdown|>
+      {{#each @grantScopes as |grantScope|}}
+        <dropdown.item>
+          <radioGroup.radio
+            @label={{grantScope.model.displayName}}
+            @value={{grantScope.model.id}}
+          />
+        </dropdown.item>
+        {{#each grantScope.subScopes as |subScope|}}
+          <dropdown.item class="indent-1">
+            <radioGroup.radio
+              @label={{subScope.model.displayName}}
+              @value={{subScope.model.id}}
+            />
+          </dropdown.item>
+          {{#each subScope.subScopes as |subSubScope|}}
+            <dropdown.item class="indent-2">
+              <radioGroup.radio
+                @label={{subSubScope.displayName}}
+                @value={{subSubScope.id}}
+              />
+            </dropdown.item>
+          {{/each}}
+        {{/each}}
+      {{/each}}
+    </Rose::Dropdown>
+    <Rose::Form::HelperText @id="helper-text-grant-scope" @error={{@model.errors.grant_scope_id}}>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{t "form.grant_scope.help"}}
+    </Rose::Form::HelperText>
+  </form.radioGroup>
+
+  <br>
+  <br>
+
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
     @enableEditText={{t "actions.edit-form"}}

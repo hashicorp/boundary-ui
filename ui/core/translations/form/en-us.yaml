@@ -43,3 +43,6 @@ session_connection_limit:
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
 host_set:
   label: Host Set
+grant_scope:
+  label: Grant Scope
+  help: Specify the scope to which this role applies.

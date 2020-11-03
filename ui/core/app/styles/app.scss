@@ -42,6 +42,18 @@
       width: 100%;
     }
   }
+
+  .rose-dropdown {
+    .rose-dropdown-item {
+      &.indent-1 {
+        padding-left: sizing.rems(s) * 2;
+      }
+
+      &.indent-2 {
+        padding-left: sizing.rems(l) + sizing.rems(m);
+      }
+    }
+  }
 }
 
 .rose-table {
