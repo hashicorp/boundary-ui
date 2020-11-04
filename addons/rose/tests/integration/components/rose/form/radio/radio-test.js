@@ -17,6 +17,11 @@ module('Integration | Component | rose/form/radio/radio', function (hooks) {
     assert.equal(await find('label').textContent.trim(), 'Label');
   });
 
+  test('it supports an icon', async function (assert) {
+    await render(hbs`<Rose::Form::Radio::Radio @icon="user-square-fill" />`);
+    assert.ok(find('svg'));
+  });
+
   test('it is checked when @value and @selectedValue values match', async function (assert) {
     await render(
       hbs`<Rose::Form::Radio::Radio @value="tree" @selectedValue="tree"/>`

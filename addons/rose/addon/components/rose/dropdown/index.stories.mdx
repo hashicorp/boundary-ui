@@ -37,6 +37,28 @@ A simple dropdown component with support for links and buttons.
   }}</Story>
 </Preview>
 
+<Preview>
+  <Story name="Dropdown with Radio Buttons" height="13rem">{{
+    template: hbs`
+      <Rose::Form as |form|>
+        <form.radioGroup @name="color" @selectedValue="red" as |radioGroup|>
+          <Rose::Dropdown @text="Color" as |dropdown|>
+            <dropdown.item>
+              <radioGroup.radio @label="Red" @value="red" />
+            </dropdown.item>
+            <dropdown.item>
+              <radioGroup.radio @label="Green" @value="green" />
+            </dropdown.item>
+            <dropdown.item>
+              <radioGroup.radio @label="Blue" @value="blue" />
+            </dropdown.item>
+          </Rose::Dropdown>
+        </form.radioGroup>
+      </Rose::Form>
+    `,
+  }}</Story>
+</Preview>
+
 
 ```html
   <Rose::Dropdown @text="Choose One&hellip;" as |dropdown|>
@@ -73,4 +95,25 @@ Dropdown indicator can be hidden using `showCaret` attribute.
     <dropdown.link @route="index">Menu item</dropdown.link>
     <dropdown.button>Button menu item</dropdown.button>
 </Rose::Dropdown>
+```
+
+Dropdowns also support radio buttons.  Currently, this is the only supported
+form field.
+
+```html
+<Rose::Form as |form|>
+  <form.radioGroup @name="color" @selectedValue="red" as |radioGroup|>
+    <Rose::Dropdown @text="Color" as |dropdown|>
+      <dropdown.item>
+        <radioGroup.radio @label="Red" @value="red" />
+      </dropdown.item>
+      <dropdown.item>
+        <radioGroup.radio @label="Green" @value="green" />
+      </dropdown.item>
+      <dropdown.item>
+        <radioGroup.radio @label="Blue" @value="blue" />
+      </dropdown.item>
+    </Rose::Dropdown>
+  </form.radioGroup>
+</Rose::Form>
 ```
