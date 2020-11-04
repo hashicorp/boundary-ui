@@ -54,6 +54,14 @@
       }
     }
   }
+
+  fieldset {
+    margin-bottom: sizing.rems(m);
+
+    legend {
+      @extend .rose-form-label;
+    }
+  }
 }
 
 .rose-table {
