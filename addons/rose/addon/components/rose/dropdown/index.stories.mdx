@@ -9,13 +9,17 @@ import { boolean } from '@storybook/addon-knobs';
 A simple dropdown component with support for links and buttons.
 
 <Preview>
-  <Story name="Basic Dropdown" height="5rem">{{
+  <Story name="Basic Dropdown" height="7rem">{{
     template: hbs`
       <Rose::Dropdown @text="Choose One&hellip;" @icon="user-organization" @showCaret={{showCaret}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
         <dropdown.separator />
         <dropdown.button>Button menu item</dropdown.button>
+        <dropdown.separator />
+        <dropdown.section @title="Dropdown Section Title">
+          <dropdown.link @route="index">Menu item</dropdown.link>
+        </dropdown.section>
       </Rose::Dropdown>
     `,
     context: {
@@ -65,6 +69,10 @@ A simple dropdown component with support for links and buttons.
     <dropdown.link @route="index">Menu item</dropdown.link>
     <dropdown.link @route="about">Menu item</dropdown.link>
     <dropdown.button>Button menu item</dropdown.button>
+    <dropdown.separator />
+    <dropdown.section @title="Dropdown Section Title">
+      <dropdown.link @route="index">Menu item</dropdown.link>
+    </dropdown.section>
   </Rose::Dropdown>
 ```
 

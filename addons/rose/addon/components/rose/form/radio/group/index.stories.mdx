@@ -1,5 +1,6 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Form/Radio/Group" component="Form/Radio/Group" />
@@ -13,6 +14,7 @@ Renders a form radiofield group.
   @disabled={{false}}
   @name={{name}}
   @selectedValue="disagree"
+  @changed={{fn}}
   as |radioGroup|
 >
   <radioGroup.radio
@@ -36,6 +38,7 @@ Renders a form radiofield group.
       @disabled={{disabled}}
       @name={{name}}
       @selectedValue={{selectedValue}}
+      @changed={{changed}}
       as |radioGroup|
     >
       <radioGroup.radio
@@ -73,6 +76,7 @@ Renders a form radiofield group.
     secondFieldValue: text('second value', 'maybe'),
     thirdFieldLabel: text('third label', 'Disagree'),
     thirdFieldValue: text('third value', 'disagree'),
+    changed: action('changed')
   }
   }}</Story>
 </Preview>

@@ -4,7 +4,7 @@
  */
 
 // Light Mode
-:root {
+@mixin light-mode {
   --opacity-5: 0.025;
   --opacity-4: 0.05;
   --opacity-3: 0.1;
@@ -15,12 +15,26 @@
 // Dark Mode
 // Subtler opacities look better in dark mode, so these are halved compared to
 // light mode.
+@mixin dark-mode {
+  --opacity-5: 0.0125;
+  --opacity-4: 0.0125;
+  --opacity-3: 0.025;
+  --opacity-2: 0.025;
+  --opacity-1: 0.125;
+}
+
+// Light mode is the default, hence it is applied to `html` by default
+.ember-application,
+.ember-application.rose-theme-light {
+  @include light-mode;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
-    --opacity-5: 0.0125;
-    --opacity-4: 0.0125;
-    --opacity-3: 0.025;
-    --opacity-2: 0.025;
-    --opacity-1: 0.125;
+  .ember-application {
+    @include dark-mode;
   }
+}
+
+.ember-application.rose-theme-dark {
+  @include dark-mode;
 }

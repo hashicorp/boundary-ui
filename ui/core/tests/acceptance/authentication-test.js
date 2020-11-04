@@ -6,6 +6,7 @@ import {
   click,
   find,
   findAll,
+  getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -314,5 +315,30 @@ module('Acceptance | authentication', function (hooks) {
       currentSession().isAuthenticated,
       'Session is unauthenticated, after encountering 401'
     );
+  });
+
+  test('color theme is applied from session data', async function (assert) {
+    assert.expect(12);
+    authenticateSession({ scope: { id: globalScope.id, type: globalScope.type } });
+    // system default
+    await visit(orgsURL);
+    assert.notOk(currentSession().get('data.theme'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle light mode
+    await click('[name="theme"][value="light"]');
+    assert.equal(currentSession().get('data.theme'), 'light');
+    assert.ok(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle dark mode
+    await click('[name="theme"][value="dark"]');
+    assert.equal(currentSession().get('data.theme'), 'dark');
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.ok(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle system default
+    await click('[name="theme"][value=""]');
+    assert.notOk(currentSession().get('data.theme'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 });

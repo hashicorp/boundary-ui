@@ -1,0 +1,12 @@
+<section class="rose-dropdown-section" aria-labelledby={{concat "dropdown-section-title-" this.id}}>
+  {{#if @title}}
+    <h2
+      id={{concat "dropdown-section-title-" this.id}}
+      class="rose-dropdown-section-title"
+    >
+      {{@title}}
+    </h2>
+  {{/if}}
+
+  {{yield}}
+</section>
