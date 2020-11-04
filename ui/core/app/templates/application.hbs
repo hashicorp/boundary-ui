@@ -23,11 +23,33 @@
               {{t 'actions.change-password'}}
             </dropdown.link>
             <dropdown.separator />
+
             <dropdown.button
               {{on "click" (route-action "invalidateSession")}}
             >
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
+
+            <dropdown.separator />
+
+            <Rose::Form as |form|>
+              <form.radioGroup
+                @name="theme"
+                @selectedValue={{this.session.data.theme}}
+                @changed={{route-action "toggleTheme"}}
+              as |radioGroup|>
+                <dropdown.item>
+                  <radioGroup.radio @label={{t "themes.system"}} />
+                </dropdown.item>
+                <dropdown.item>
+                  <radioGroup.radio @label={{t "themes.light"}} @value="light" />
+                </dropdown.item>
+                <dropdown.item>
+                  <radioGroup.radio @label={{t "themes.dark"}} @value="dark" />
+                </dropdown.item>
+              </form.radioGroup>
+            </Rose::Form>
+
           </utilities.dropdown>
         </header.utilities>
 

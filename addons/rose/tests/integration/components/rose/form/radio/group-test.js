@@ -52,9 +52,15 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
     assert.equal(findAll('[type="radio"]')[1].checked, false);
   });
 
-  test('it reflects active radiofield value in @selectedValue', async function (assert) {
+  test('it reflects active radiofield value in @selectedValue and triggers a @changed function', async function (assert) {
+    assert.expect(5);
+    this.changed = (value) => assert.ok(value);
     await render(hbs`
-      <Rose::Form::Radio::Group @name="bird" @selectedValue={{this.selectedValue}} as |radioGroup|>
+      <Rose::Form::Radio::Group
+        @name="bird"
+        @selectedValue={{this.selectedValue}}
+        @changed={{this.changed}}
+      as |radioGroup|>
         <radioGroup.radio
           @name="bird"
           @label="Pegion"
