@@ -36,7 +36,7 @@
   <dropdown.button>Button menu item</dropdown.button>
   <dropdown.button @style="danger">Button - danger</dropdown.button>
   <dropdown.separator />
-  
+
   <dropdown.section @title="Dropdown Section Title">
     <dropdown.link @route="index">Menu item</dropdown.link>
   </dropdown.section>
@@ -48,26 +48,34 @@
 </Rose::Dropdown>
 
 <Rose::Form as |form|>
-  <form.radioGroup @name="color" @selectedValue="red" as |radioGroup|>
+  <form.radioGroup tagName="ul" @name="color" @selectedValue="red" as |radioGroup|>
     <Rose::Dropdown @text="Color" as |dropdown|>
-      <dropdown.item>
-        <radioGroup.radio
-          @label="Red"
-          @value="red"
-        />
-      </dropdown.item>
-      <dropdown.item>
-        <radioGroup.radio
-          @label="Green"
-          @value="green"
-        />
-      </dropdown.item>
-      <dropdown.item>
-        <radioGroup.radio
-          @label="Blue"
-          @value="blue"
-        />
-      </dropdown.item>
+      <ul>
+        <li>
+          <dropdown.item>
+            <radioGroup.radio
+              @label="Red"
+              @value="red"
+              @icon="user-organization" />
+          </dropdown.item>
+        </li>
+        <li>
+          <dropdown.item>
+            <radioGroup.radio
+              @label="Green"
+              @value="green"
+            />
+          </dropdown.item>
+        </li>
+        <li>
+          <dropdown.item>
+            <radioGroup.radio
+              @label="Blue"
+              @value="blue"
+            />
+          </dropdown.item>
+        </li>
+      </ul>
     </Rose::Dropdown>
   </form.radioGroup>
 </Rose::Form>
