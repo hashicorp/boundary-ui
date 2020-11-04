@@ -57,32 +57,44 @@
         @text={{this.selectedGrantScope.displayName}}
         @icon={{if this.selectedGrantScope.isProject "app-icons/project" "app-icons/org"}}
       as |dropdown|>
-        {{#each @grantScopes as |grantScope|}}
-          <dropdown.item>
-            <radioGroup.radio
-              @label={{grantScope.model.displayName}}
-              @value={{grantScope.model.id}}
-              @icon={{unless grantScope.model.isProject "app-icons/org"}}
-            />
-          </dropdown.item>
-          {{#each grantScope.subScopes as |subScope|}}
-            <dropdown.item class="indent-1">
-              <radioGroup.radio
-                @label={{subScope.model.displayName}}
-                @value={{subScope.model.id}}
-                @icon={{unless subScope.model.isProject "app-icons/org"}}
-              />
-            </dropdown.item>
-            {{#each subScope.subScopes as |subSubScope|}}
-              <dropdown.item class="indent-2">
+        <ul>
+          {{#each @grantScopes as |grantScope|}}
+            <li>
+              <dropdown.item>
                 <radioGroup.radio
-                  @label={{subSubScope.displayName}}
-                  @value={{subSubScope.id}}
+                  @label={{grantScope.model.displayName}}
+                  @value={{grantScope.model.id}}
+                  @icon={{unless grantScope.model.isProject "app-icons/org"}}
                 />
               </dropdown.item>
-            {{/each}}
+              <ul class="indent-label-1">
+                {{#each grantScope.subScopes as |subScope|}}
+                  <li>
+                    <dropdown.item>
+                      <radioGroup.radio
+                        @label={{subScope.model.displayName}}
+                        @value={{subScope.model.id}}
+                        @icon={{unless subScope.model.isProject "app-icons/org"}}
+                      />
+                    </dropdown.item>
+                    <ul class="indent-label-2">
+                      {{#each subScope.subScopes as |subSubScope|}}
+                        <li>
+                          <dropdown.item>
+                            <radioGroup.radio
+                              @label={{subSubScope.displayName}}
+                              @value={{subSubScope.id}}
+                            />
+                          </dropdown.item>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </li>
+                {{/each}}
+              </ul>
+            </li>
           {{/each}}
-        {{/each}}
+        </ul>
       </Rose::Dropdown>
     </form.radioGroup>
   </fieldset>

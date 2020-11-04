@@ -1,21 +1,17 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 
+$checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563ff' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'></path></svg>");
+
 .rose-dropdown-item {
   @include type.type(s);
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: (sizing.rems(m)) * 20;
-  border: 0;
-  padding: 0 sizing.rems(s);
-  text-decoration: none;
-  text-align: left;
+  min-width: (sizing.rems(m)) * 16;
   $line-height: 36 / 14;
   line-height: $line-height;
 
-  --background-color: transparent;
   --color: var(--stark);
+  --background-color: transparent;
+
   color: var(--color);
   background-color: var(--background-color);
 
@@ -31,12 +27,33 @@
       display: block;
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
+      padding-left: sizing.rems(s);
+      padding-right: sizing.rems(xl);
       font-weight: normal;
 
-      // Now that the target height is 36, the radio image needs to be
-      // repositioned
+      &::before,
       &::after {
-        top: calc(50% - #{sizing.rems(s)});
+        display: none;
+      }
+    }
+
+    .rose-form-radio-field {
+      &:checked {
+        ~ .rose-form-radio-label {
+          color: var(--action);
+          background-color: var(--action-subtler-1h);
+
+          background-image: #{$checkmark};
+          background-repeat: no-repeat;
+          background-position: right sizing.rems(m) center;
+          background-size: sizing.rems(m);
+        }
+      }
+
+      &:disabled {
+        ~ .rose-form-radio-label {
+          opacity: 0.5;
+        }
       }
     }
   }
