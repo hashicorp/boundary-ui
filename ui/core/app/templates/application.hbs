@@ -32,23 +32,25 @@
 
             <dropdown.separator />
 
-            <Rose::Form as |form|>
-              <form.radioGroup
-                @name="theme"
-                @selectedValue={{this.session.data.theme}}
-                @changed={{route-action "toggleTheme"}}
-              as |radioGroup|>
-                <dropdown.item>
-                  <radioGroup.radio @label={{t "themes.system"}} />
-                </dropdown.item>
-                <dropdown.item>
-                  <radioGroup.radio @label={{t "themes.light"}} @value="light" />
-                </dropdown.item>
-                <dropdown.item>
-                  <radioGroup.radio @label={{t "themes.dark"}} @value="dark" />
-                </dropdown.item>
-              </form.radioGroup>
-            </Rose::Form>
+            <dropdown.section @title={{t "titles.toggle-color-theme"}}>
+              <Rose::Form as |form|>
+                <form.radioGroup
+                  @name="theme"
+                  @selectedValue={{this.session.data.theme}}
+                  @changed={{route-action "toggleTheme"}}
+                as |radioGroup|>
+                  <dropdown.item>
+                    <radioGroup.radio @label={{t "themes.system"}} />
+                  </dropdown.item>
+                  <dropdown.item>
+                    <radioGroup.radio @label={{t "themes.light"}} @value="light" />
+                  </dropdown.item>
+                  <dropdown.item>
+                    <radioGroup.radio @label={{t "themes.dark"}} @value="dark" />
+                  </dropdown.item>
+                </form.radioGroup>
+              </Rose::Form>
+            </dropdown.section>
 
           </utilities.dropdown>
         </header.utilities>
