@@ -33,6 +33,11 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
     color: currentColor;
     padding-left: sizing.rems(l);
 
+    .rose-icon {
+      margin-right: sizing.rems(xxs);
+      margin-left: sizing.rems(xxs);
+    }
+
     &::before {
       position: absolute;
       top: sizing.rems(xs);

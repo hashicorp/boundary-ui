@@ -35,7 +35,7 @@
 </Rose::Form>
 
 <Rose::Form
-  @onSubmit={{@submit}}
+  @onSubmit={{fn @submit this.grantStrings}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @error={{@model.errors.base}}
@@ -53,14 +53,14 @@
   --}}
 
   <Rose::List::KeyValue as |list|>
-    {{#each @model.grants as |grant|}}
+    {{#each this.grants as |grant|}}
       <list.item as |item|>
         <form.input
           @contextual={{true}}
           @name="grant"
           @type="text"
           @value={{grant.value}}
-          @error={{@model.errors.grants}}
+          @error={{@model.errors.grant_strings}}
         as |input|>
           <item.key>
             <input.label>{{t "form.grant.label"}}</input.label>
@@ -74,7 +74,7 @@
             @style="secondary"
             @iconOnly="trash"
             title={{t "actions.remove"}}
-            {{on "click" (fn @removeGrant grant)}}
+            {{on "click" (fn @removeGrant grant.value)}}
           >
             {{t "actions.remove"}}
           </Rose::Button>

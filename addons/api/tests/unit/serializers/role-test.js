@@ -11,7 +11,7 @@ module('Unit | Serializer | role', function (hooks) {
     const record = store.createRecord('role', {
       name: 'User',
       description: 'Description',
-      grants: [{ value: 'foo' }, { value: 'bar' }],
+      grant_strings: ['foo', 'bar'],
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -25,19 +25,19 @@ module('Unit | Serializer | role', function (hooks) {
     });
   });
 
-  test('it serializes only grants when `adapterOptions.serializeGrants` is true', function (assert) {
+  test('it serializes only grant strings when `adapterOptions.grantStrings` is set', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('role');
     const record = store.createRecord('role', {
       name: 'User',
       description: 'Description',
-      grants: [{ value: 'foo' }, { value: 'bar' }],
+      grant_strings: ['grant1', 'grant2'],
       version: 1,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      serializeGrants: true,
+      grantStrings: ['foo', 'bar'],
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
@@ -68,7 +68,7 @@ module('Unit | Serializer | role', function (hooks) {
         type: 'role',
         attributes: {
           name: 'Role 1',
-          grants: [{ value: '*' }, { value: '*' }],
+          grant_strings: ['*', '*'],
           principals: [],
         },
         relationships: {},

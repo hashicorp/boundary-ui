@@ -11,6 +11,22 @@ export default class FormRoleGrantsComponent extends Component {
   @tracked newGrantString = '';
 
   /**
+   * @type {[object]}
+   */
+  @computed('args.model.grant_strings.[]')
+  get grants() {
+    return this.args.model.grant_strings.map(value => ({ value }));
+  }
+
+  /**
+   * @type {[string]}
+   */
+  @computed('grants.@each.value')
+  get grantStrings() {
+    return this.grants.map(obj => obj.value);
+  }
+
+  /**
    * True if the grant string field is empty, false otherwise.  This is used
    * to disable the submit button.
    * @return {boolean}

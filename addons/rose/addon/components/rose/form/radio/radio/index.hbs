@@ -13,7 +13,16 @@
     @changed={{@changed}} />
 
   <label class="rose-form-radio-label" for={{this.id}}>
+
+    {{#if @icon}}
+      <Rose::Icon
+        @name={{@icon}}
+        @size="medium"
+      />
+    {{/if}}
+
     {{@label}}
+    
   </label>
 
   {{yield}}

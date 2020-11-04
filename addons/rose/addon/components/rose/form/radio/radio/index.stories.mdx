@@ -1,6 +1,6 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
-import { text, boolean } from '@storybook/addon-knobs';
+import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Form/Radio/Radio" component="Form/Radio/Radio" />
 
@@ -28,6 +28,7 @@ Renders a form radiofield.
         @value={{value}}
         @selectedValue={{selectedValue}}
         @disabled={{disabled}}
+        @icon={{icon}}
         />
     `,
     context: {
@@ -39,6 +40,17 @@ Renders a form radiofield.
         'value and selectedValue must match to select radiofield'
       ),
       disabled: boolean('disabled', false),
+      icon: select(
+        'icon',
+        {
+          'none': null,
+          'user-organization': 'user-organization',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        null
+      ),
     }
   }}</Story>
 </Preview>
