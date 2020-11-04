@@ -55,7 +55,7 @@
     <form.radioGroup @name="grant_scope_id" @selectedValue={{@model.grant_scope_id}} as |radioGroup|>
       <Rose::Dropdown
         @text={{this.selectedGrantScope.displayName}}
-        @icon={{if this.selectedGrantScope.isProject "app-icons/project" "app-icons/org"}}
+        @icon={{if this.selectedGrantScope.isProject "app-icons/project" (if this.selectedGrantScope.isOrg "app-icons/org" "app-icons/global")}}
       as |dropdown|>
         <ul>
           {{#each @grantScopes as |grantScope|}}
@@ -64,7 +64,7 @@
                 <radioGroup.radio
                   @label={{grantScope.model.displayName}}
                   @value={{grantScope.model.id}}
-                  @icon={{unless grantScope.model.isProject "app-icons/org"}}
+                  @icon={{if grantScope.model.isOrg "app-icons/org" (if grantScope.model.isGlobal "app-icons/global")}}
                 />
               </dropdown.item>
               <ul class="indent-label-1">
