@@ -54,13 +54,15 @@
     </Rose::Form::HelperText>
     <form.radioGroup @name="grant_scope_id" @selectedValue={{@model.grant_scope_id}} as |radioGroup|>
       <Rose::Dropdown
-        @text={{concat (t "form.grant_scope.label") ": " this.selectedGrantScope.displayName}}
+        @text={{this.selectedGrantScope.displayName}}
+        @icon={{if this.selectedGrantScope.isProject "app-icons/project" "app-icons/org"}}
       as |dropdown|>
         {{#each @grantScopes as |grantScope|}}
           <dropdown.item>
             <radioGroup.radio
               @label={{grantScope.model.displayName}}
               @value={{grantScope.model.id}}
+              @icon={{unless grantScope.model.isProject "app-icons/org"}}
             />
           </dropdown.item>
           {{#each grantScope.subScopes as |subScope|}}
@@ -68,6 +70,7 @@
               <radioGroup.radio
                 @label={{subScope.model.displayName}}
                 @value={{subScope.model.id}}
+                @icon={{unless subScope.model.isProject "app-icons/org"}}
               />
             </dropdown.item>
             {{#each subScope.subScopes as |subSubScope|}}
