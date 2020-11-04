@@ -9,15 +9,29 @@
 @import 'dropdown';
 
 .rose-header {
+
+  --box-shadow-light: none;
+  --box-shadow-dark: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-border-subtler-1);
+
+  --box-shadow: var(--box-shadow-light);
+
+  .ember-application.rose-theme-light & {
+    --box-shadow: var(--box-shadow-light);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --box-shadow: var(--box-shadow-dark);
+  }
+
+  .ember-application.rose-theme-dark & {
+    --box-shadow: var(--box-shadow-dark);
+  }
+
   display: grid;
   grid-template-areas: 'brand nav utilities';
   grid-template-columns: 0.01fr auto 1fr;
   background: var(--black);
-  box-shadow: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-border-subtler-1);
-
-  @media (prefers-color-scheme: light) {
-    box-shadow: none;
-  }
+  box-shadow: var(--box-shadow);
 }
 
 @media (max-width: media.width(small)) {

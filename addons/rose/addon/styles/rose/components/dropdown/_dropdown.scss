@@ -3,10 +3,27 @@
 
 $xs: sizing.rems(xs); // 8
 $xxs: sizing.rems(xxs); // 4
-$chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>";
-$chevronWhite: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ffffff' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>";
+$chevron: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
+$chevronWhite: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ffffff' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
 
 .rose-dropdown {
+  --background-image-light: #{$chevron};
+  --background-image-dark: #{$chevronWhite};
+
+  --background-image: var(--background-image-light);
+
+  .ember-application.rose-theme-light & {
+    --background-image: var(--background-image-light);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --background-image: var(--background-image-dark);
+  }
+
+  .ember-application.rose-theme-dark & {
+    --background-image: var(--background-image-dark);
+  }
+
   position: relative;
   display: inline-block;
 
@@ -59,14 +76,10 @@ $chevronWhite: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23fffff
 
     &.show-caret {
       padding-right: sizing.rems(xl);
-      background-image: url($chevron);
+      background: var(--background-image);
       background-repeat: no-repeat;
       background-position: right sizing.rems(m) center;
       background-size: sizing.rems(m);
-
-      @media (prefers-color-scheme: dark) {
-        background-image: url($chevronWhite);
-      }
     }
 
     // Hide default twistie triangle
