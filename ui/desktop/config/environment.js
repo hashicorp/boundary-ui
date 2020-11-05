@@ -1,9 +1,9 @@
 'use strict';
 
-const APP_NAME = process.env.APP_NAME || 'Application Name';
+const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
 
-module.exports = function (environment) {
+module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'desktop',
     environment,
@@ -14,11 +14,10 @@ module.exports = function (environment) {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
-      EXTEND_PROTOTYPES: false,
-      // EXTEND_PROTOTYPES: {
-      //   // Prevent Ember Data from overriding Date.parse.
-      //   Date: false
-      // }
+      EXTEND_PROTOTYPES: {
+        // // Prevent Ember Data from overriding Date.parse.
+        // Date: false
+      }
     },
 
     APP: {
