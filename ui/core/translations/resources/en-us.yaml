@@ -118,6 +118,8 @@ org:
       title: Welcome to Orgs
     settings:
       title: Org Settings
+  actions:
+    delete: Delete Org
 project:
   title: Project
   title_plural: Projects
