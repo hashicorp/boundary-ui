@@ -44,60 +44,62 @@
     {{/if}}
   </form.textarea>
 
-  <fieldset
-    aria-labelledby="legend-text-grant-scope"
-    aria-describedby="helper-text-grant-scope"
-  >
-    <legend id="legend-text-grant-scope">{{t "form.grant_scope.label"}}</legend>
-    <Rose::Form::HelperText @id="helper-text-grant-scope" @error={{@model.errors.grant_scope_id}}>
-      {{t "form.grant_scope.help"}}
-    </Rose::Form::HelperText>
-    <form.radioGroup @name="grant_scope_id" @selectedValue={{@model.grant_scope_id}} as |radioGroup|>
-      <Rose::Dropdown
-        @text={{this.selectedGrantScope.displayName}}
-        @icon={{if this.selectedGrantScope.isProject "app-icons/project" (if this.selectedGrantScope.isOrg "app-icons/org" "app-icons/global")}}
-      as |dropdown|>
-        <ul>
-          {{#each @grantScopes as |grantScope|}}
-            <li>
-              <dropdown.item>
-                <radioGroup.radio
-                  @label={{grantScope.model.displayName}}
-                  @value={{grantScope.model.id}}
-                  @icon={{if grantScope.model.isOrg "app-icons/org" (if grantScope.model.isGlobal "app-icons/global")}}
-                />
-              </dropdown.item>
-              <ul class="indent-label-1">
-                {{#each grantScope.subScopes as |subScope|}}
-                  <li>
-                    <dropdown.item>
-                      <radioGroup.radio
-                        @label={{subScope.model.displayName}}
-                        @value={{subScope.model.id}}
-                        @icon={{unless subScope.model.isProject "app-icons/org"}}
-                      />
-                    </dropdown.item>
-                    <ul class="indent-label-2">
-                      {{#each subScope.subScopes as |subSubScope|}}
-                        <li>
-                          <dropdown.item>
-                            <radioGroup.radio
-                              @label={{subSubScope.displayName}}
-                              @value={{subSubScope.id}}
-                            />
-                          </dropdown.item>
-                        </li>
-                      {{/each}}
-                    </ul>
-                  </li>
-                {{/each}}
-              </ul>
-            </li>
-          {{/each}}
-        </ul>
-      </Rose::Dropdown>
-    </form.radioGroup>
-  </fieldset>
+  {{#unless @model.isNew}}
+    <fieldset
+      aria-labelledby="legend-text-grant-scope"
+      aria-describedby="helper-text-grant-scope"
+    >
+      <legend id="legend-text-grant-scope">{{t "form.grant_scope.label"}}</legend>
+      <Rose::Form::HelperText @id="helper-text-grant-scope" @error={{@model.errors.grant_scope_id}}>
+        {{t "form.grant_scope.help"}}
+      </Rose::Form::HelperText>
+      <form.radioGroup @name="grant_scope_id" @selectedValue={{@model.grant_scope_id}} as |radioGroup|>
+        <Rose::Dropdown
+          @text={{this.selectedGrantScope.displayName}}
+          @icon={{if this.selectedGrantScope.isProject "app-icons/project" (if this.selectedGrantScope.isOrg "app-icons/org" "app-icons/global")}}
+        as |dropdown|>
+          <ul>
+            {{#each @grantScopes as |grantScope|}}
+              <li>
+                <dropdown.item>
+                  <radioGroup.radio
+                    @label={{grantScope.model.displayName}}
+                    @value={{grantScope.model.id}}
+                    @icon={{if grantScope.model.isOrg "app-icons/org" (if grantScope.model.isGlobal "app-icons/global")}}
+                  />
+                </dropdown.item>
+                <ul class="indent-label-1">
+                  {{#each grantScope.subScopes as |subScope|}}
+                    <li>
+                      <dropdown.item>
+                        <radioGroup.radio
+                          @label={{subScope.model.displayName}}
+                          @value={{subScope.model.id}}
+                          @icon={{unless subScope.model.isProject "app-icons/org"}}
+                        />
+                      </dropdown.item>
+                      <ul class="indent-label-2">
+                        {{#each subScope.subScopes as |subSubScope|}}
+                          <li>
+                            <dropdown.item>
+                              <radioGroup.radio
+                                @label={{subSubScope.displayName}}
+                                @value={{subSubScope.id}}
+                              />
+                            </dropdown.item>
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </li>
+                  {{/each}}
+                </ul>
+              </li>
+            {{/each}}
+          </ul>
+        </Rose::Dropdown>
+      </form.radioGroup>
+    </fieldset>
+  {{/unless}}
 
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
