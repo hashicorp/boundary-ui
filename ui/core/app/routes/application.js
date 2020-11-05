@@ -26,6 +26,11 @@ export default class ApplicationRoute extends Route.extend(
 
   // =methods
 
+  beforeModel() {
+    const theme = this.session.get('data.theme');
+    this.toggleTheme(theme);
+  }
+
   /**
    * After becoming authenticated, does nothing.  This overrides the default
    * behavior of the ApplicationRouteMixin, which is to redirect after auth.
@@ -112,6 +117,31 @@ export default class ApplicationRoute extends Route.extend(
       } catch (e) {
         // if user denies, do nothing
       }
+    }
+  }
+
+  /**
+   * Applies the specified color theme to the root ember element.
+   * @param {string} theme - "light", "dark", or nullish (system default)
+   */
+  @action
+  toggleTheme(theme) {
+    const rootElementSelector = getOwner(this).rootElement;
+    const rootEl = getOwner(this).lookup('service:-document')
+      .querySelector(rootElementSelector);
+    this.session.set('data.theme', theme);
+    switch (theme) {
+      case 'light':
+        rootEl.classList.add('rose-theme-light');
+        rootEl.classList.remove('rose-theme-dark');
+        break;
+      case 'dark':
+        rootEl.classList.add('rose-theme-dark');
+        rootEl.classList.remove('rose-theme-light');
+        break;
+      default:
+        rootEl.classList.remove('rose-theme-dark');
+        rootEl.classList.remove('rose-theme-light');
     }
   }
 

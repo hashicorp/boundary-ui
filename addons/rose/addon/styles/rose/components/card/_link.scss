@@ -6,6 +6,24 @@
 $xxxs: sizing.rems(xxxs); // 2
 
 .rose-card-link {
+
+  --background-color-light: transparent;
+  --background-color-dark: var(--ui-gray-subtler-6);
+
+  --background-color: var(--background-color-light);
+  
+  .ember-application.rose-theme-light & {
+    --background-color: var(--background-color-light);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --background-color: var(--background-color-dark);
+  }
+
+  .ember-application.rose-theme-dark & {
+    --background-color: var(--background-color-dark);
+  }
+
   @include type.type(s);
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   border-radius: sizing.rems(xxxs);
@@ -15,10 +33,7 @@ $xxxs: sizing.rems(xxxs); // 2
   margin: 0 sizing.rems(m) sizing.rems(m) 0;
   box-shadow: 0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4)),
     0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4));
-
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--ui-gray-subtler-6);
-  }
+  background-color: var(--background-color);
 
   a {
     text-decoration: none;

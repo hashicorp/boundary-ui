@@ -9,7 +9,8 @@
     @name={{@name}}
     @value={{@value}}
     @groupValue={{@selectedValue}}
-    @disabled={{@disabled}}/>
+    @disabled={{@disabled}}
+    @changed={{@changed}} />
 
   <label class="rose-form-radio-label" for={{this.id}}>
 
@@ -21,7 +22,7 @@
     {{/if}}
 
     {{@label}}
-    
+
   </label>
 
   {{yield}}
