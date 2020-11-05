@@ -1,6 +1,6 @@
 <Rose::Dropdown
   @text={{this.scopes.selectedOrg.displayName}}
-  @icon="app-icons/org" as |dropdown|
+  @icon={{if this.scopes.selectedOrg.isGlobal "app-icons/global" "app-icons/org"}} as |dropdown|
 >
   {{#if this.session.data.authenticated.isGlobal}}
     <dropdown.link @route="scopes.scope" @model="global">
