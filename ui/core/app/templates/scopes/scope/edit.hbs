@@ -43,7 +43,11 @@
         @disabled={{@model.canSave}}
         {{on "click" (route-action "delete" @model)}}
       >
-        {{t 'resources.project.actions.delete'}}
+        {{#if @model.isOrg}}
+          {{t 'resources.org.actions.delete'}}
+        {{else}}
+          {{t 'resources.project.actions.delete'}}
+        {{/if}}
       </dropdown.button>
     </Rose::Dropdown>
   </page.actions>
