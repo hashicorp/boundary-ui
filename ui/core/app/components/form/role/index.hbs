@@ -60,31 +60,32 @@
         as |dropdown|>
           <ul>
             {{#each @grantScopes as |grantScope|}}
-              <li>
+              <li class={{if grantScope.model.isProject "is-project"}}>
                 <dropdown.item>
                   <radioGroup.radio
                     @label={{grantScope.model.displayName}}
                     @value={{grantScope.model.id}}
-                    @icon={{if grantScope.model.isOrg "app-icons/org" (if grantScope.model.isGlobal "app-icons/global")}}
+                    @icon={{concat "app-icons/" grantScope.model.type}}
                   />
                 </dropdown.item>
                 <ul class="indent-label-1">
                   {{#each grantScope.subScopes as |subScope|}}
-                    <li>
+                    <li class={{if subScope.model.isProject "is-project"}}>
                       <dropdown.item>
                         <radioGroup.radio
                           @label={{subScope.model.displayName}}
                           @value={{subScope.model.id}}
-                          @icon={{unless subScope.model.isProject "app-icons/org"}}
+                          @icon={{concat "app-icons/" subScope.model.type}}
                         />
                       </dropdown.item>
                       <ul class="indent-label-2">
                         {{#each subScope.subScopes as |subSubScope|}}
-                          <li>
+                          <li class={{if subSubScope.isProject "is-project"}}>
                             <dropdown.item>
                               <radioGroup.radio
                                 @label={{subSubScope.displayName}}
                                 @value={{subSubScope.id}}
+                                @icon={{concat "app-icons/" subSubScope.type}}
                               />
                             </dropdown.item>
                           </li>
