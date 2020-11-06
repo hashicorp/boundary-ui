@@ -3,11 +3,12 @@
 
 .rose-dropdown-section {
   .rose-dropdown-section-title {
-    @include type.type(s, bold);
+    @include type.type(xs, normal);
+    text-transform: uppercase;
     padding: 0 sizing.rems(s);
     margin: 0;
     $line-height: 36 / 14;
     line-height: $line-height;
-    color: var(--ui-gray)
+    color: var(--ui-gray-subtler-1)
   }
 }

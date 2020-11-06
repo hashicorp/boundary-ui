@@ -5,7 +5,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
 
 .rose-dropdown-item {
   @include type.type(s);
-  min-width: (sizing.rems(m)) * 16;
+  min-width: (sizing.rems(m)) * 20;
   $line-height: 36 / 14;
   line-height: $line-height;
 
