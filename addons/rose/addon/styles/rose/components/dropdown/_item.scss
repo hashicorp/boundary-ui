@@ -37,7 +37,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       // }
 
       &::after {
-        top: calc(50% - 0.75rem);
+        top: sizing.rems(xxs) + sizing.rems(xxxs);
         right: sizing.rems(xs);
         left: auto;
         transform: scale(1.5);
