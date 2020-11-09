@@ -1,5 +1,15 @@
-{{!-- The following component displays Ember's default welcome message. --}}
-<WelcomePage />
-{{!-- Feel free to remove this! --}}
+{{page-title (app-name)}}
 
-{{outlet}}
+<Rose::Layout::Global as |layout|>
+
+  <layout.header>
+    <Rose::Header as |header|>
+      <header.brand @logo="logo-app" @text={{app-name}} />
+    </Rose::Header>
+  </layout.header>
+
+  <layout.body>
+    {{outlet}}
+  </layout.body>
+
+</Rose::Layout::Global>
