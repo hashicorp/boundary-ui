@@ -89,6 +89,15 @@ class IPCRequest {
 
 /**
  * A simple factory for generating IPCRequests in Ember.
+ * @example
+ *
+ *   class MyClass {
+ *     @service ipc;
+ *
+ *     makeRequest {
+ *       return this.ipc.invoke('getFoobars', { hello: 'world' });
+ *     }
+ *   }
  */
 export default class IpcService extends Service {
 
