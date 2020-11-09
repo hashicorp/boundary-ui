@@ -1,4 +1,5 @@
 import Service from '@ember/service';
+import { getOwner } from '@ember/application';
 import { Promise } from 'rsvp';
 
 /**
@@ -35,9 +36,10 @@ class IPCRequest {
    * resolves to the response.
    * @param {string} method
    * @param {object} payload
+   * @param {Window} window - A reference to the window object
    * @param {?string} origin
    */
-  constructor(method, payload, origin='serve://boundary') {
+  constructor(method, payload, window, origin='serve://boundary') {
     this.method = method;
     this.payload = payload;
     this.origin = origin;
@@ -101,6 +103,19 @@ class IPCRequest {
  */
 export default class IpcService extends Service {
 
+  // =attributes
+
+  /**
+   * Looks up the window object indirectly.
+   * @type {Window}
+   */
+  get window() {
+    // The Ember way of accessing globals...
+    const document = getOwner(this).lookup('service:-document').documentElement;
+    // defaultView === window, but without using globals directly
+    return document.parentNode.defaultView;
+  }
+
   // =methods
 
   /**
@@ -110,7 +125,7 @@ export default class IpcService extends Service {
    * @return {IPCRequest}
    */
   invoke(method, payload) {
-    return new IPCRequest(method, payload);
+    return new IPCRequest(method, payload, this.window);
   }
 
 }
