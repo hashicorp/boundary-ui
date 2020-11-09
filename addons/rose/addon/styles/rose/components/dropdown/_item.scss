@@ -5,7 +5,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
 
 .rose-dropdown-item {
   @include type.type(s);
-  min-width: (sizing.rems(m)) * 16;
+  min-width: (sizing.rems(m)) * 20;
   $line-height: 36 / 14;
   line-height: $line-height;
 
@@ -31,22 +31,36 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       padding-right: sizing.rems(xl);
       font-weight: normal;
 
-      &::before,
+      // &::before,
+      // &::after {
+      //   display: none;
+      // }
+
       &::after {
-        display: none;
+        top: sizing.rems(xxs) + sizing.rems(xxxs);
+        right: sizing.rems(xs);
+        left: auto;
+        transform: scale(1.5);
       }
     }
 
     .rose-form-radio-field {
+      &:not(:checked) {
+        ~ .rose-form-radio-label {
+          &::after {
+            opacity: 0.25;
+          }
+        }
+      }
       &:checked {
         ~ .rose-form-radio-label {
           color: var(--action);
           background-color: var(--action-subtler-1h);
 
-          background-image: #{$checkmark};
-          background-repeat: no-repeat;
-          background-position: right sizing.rems(m) center;
-          background-size: sizing.rems(m);
+          // background-image: #{$checkmark};
+          // background-repeat: no-repeat;
+          // background-position: right sizing.rems(m) center;
+          // background-size: sizing.rems(m);
         }
       }
 

@@ -44,15 +44,32 @@
   }
 
   .rose-dropdown {
+    $iconWidth: sizing.rems(m) + sizing.rems(s);
+    $indent:  $iconWidth + sizing.rems(xs);
+
+    .rose-form-radio-label {
+      display: flex;
+
+      .rose-icon {
+        padding-right: sizing.rems(xxs);
+      }
+    }
+
     .indent-label-1 {
       .rose-form-radio-label {
-        padding-left: sizing.rems(l) * 1.5;
+        padding-left: $indent;
       }
     }
 
     .indent-label-2 {
       .rose-form-radio-label {
-        padding-left: sizing.rems(l) * 3;
+        padding-left: $indent + $iconWidth;
+      }
+    }
+
+    .is-project {
+      .rose-icon {
+        visibility: hidden;
       }
     }
   }
