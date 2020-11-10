@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 const path = require('path');
 const { default: installExtension, EMBER_INSPECTOR } = require('electron-devtools-installer');
-const { session, app, protocol, BrowserWindow } = require('electron');
+const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
+require('./handlers.js');
 
 const isDev = require('electron-is-dev');
 
