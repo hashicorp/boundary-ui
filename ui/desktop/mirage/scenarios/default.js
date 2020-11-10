@@ -1,8 +1,5 @@
 export default function(server) {
-
-  // Scope resources
-
-  // creates a global scope
+  // Scopes
   const globalScope = server.create('scope', {
     id: 'global',
     type: 'global',
@@ -23,5 +20,4 @@ export default function(server) {
     server.createList('target', 2, { scope }, 'withRandomHostSets');
     server.createList('session', 4, { scope }, 'withAssociations');
   });
-
 }

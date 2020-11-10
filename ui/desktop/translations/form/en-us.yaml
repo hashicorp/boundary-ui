@@ -1,0 +1,11 @@
+id:
+  label: ID
+name:
+  label: Name
+  help: Name for identification purposes
+description:
+  label: Description
+  help: Description for identification purposes
+type:
+  label: Type
+  help: The type of the resource, to help differentiate schemas

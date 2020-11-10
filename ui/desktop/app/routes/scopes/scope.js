@@ -48,8 +48,18 @@ export default class ScopesScopeRoute extends Route {
     // Then pull out the "selected" scopes, if relevant
     let selectedOrg;
     if (model.isGlobal || model.isOrg) selectedOrg = model;
+
+    let projects;
+    if(model.isGlobal) {
+      projects = orgs.map((id) => this.store.query('scope', { scope_id: id }));
+    }
+    if(model.isOrg) {
+      projects = this.store.query('scope', { scope_id: model.id });
+    }
+
     // Update the scope service with the current scope(s);
     this.scope.org = selectedOrg;
+    this.scope.projects = await projects;
     this.scopes = { orgs, selectedOrg };
   }
 

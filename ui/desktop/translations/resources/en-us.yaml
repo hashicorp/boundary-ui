@@ -1,0 +1,8 @@
+scope:
+  title: Scope
+  title_plural: Scopes
+  global:
+    title: Global
+target:
+  title: Target
+  title_plural: Targets
