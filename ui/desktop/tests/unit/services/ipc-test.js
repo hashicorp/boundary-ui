@@ -10,7 +10,7 @@ module('Unit | Service | ipc', function(hooks) {
     // IPC requests talk to the main process indirectly via window.postMessage
     // proxy layer (mediated by preload.js).
     // But we don't want to send these for real in tests.
-    window.postMessage = sinon.fake();
+    sinon.stub(window, 'postMessage');
   });
 
   hooks.afterEach(() => {
