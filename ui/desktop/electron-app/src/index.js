@@ -1,24 +1,27 @@
 /* eslint-disable no-console */
-const { default: installExtension, EMBER_INSPECTOR } = require('electron-devtools-installer');
-const { pathToFileURL } = require('url');
-const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const isDev = require('electron-is-dev');
-const handleFileUrls = require('./handle-file-urls');
+const { default: installExtension, EMBER_INSPECTOR } = require('electron-devtools-installer');
+const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
+require('./handlers.js');
 
+const isDev = require('electron-is-dev');
+
+// Register the custom file protocol
+const emberAppProtocol = 'serve';
+const emberAppName = 'boundary';
+const emberAppURL = `${emberAppProtocol}://${emberAppName}`;
 const emberAppDir = path.resolve(__dirname, '..', 'ember-dist');
-const emberAppURL = pathToFileURL(path.join(emberAppDir, 'index.html')).toString();
+const preloadPath = path.resolve(__dirname, 'preload.js');
+
+protocol.registerSchemesAsPrivileged([{
+  scheme: emberAppProtocol,
+  privileges: {
+    secure: true,
+    standard: true
+  }
+}]);
 
 let mainWindow = null;
-
-// Uncomment the lines below to enable Electron's crash reporter
-// For more information, see http://electron.atom.io/docs/api/crash-reporter/
-// electron.crashReporter.start({
-//     productName: 'YourName',
-//     companyName: 'YourCompany',
-//     submitURL: 'https://your-domain.com/url-to-submit',
-//     autoSubmit: true
-// });
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -27,6 +30,23 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
+
+  // Register custom protocol
+  const partition = emberAppName;
+  const ses = session.fromPartition(partition);
+
+  ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => {
+    const isDir = request.url.endsWith('/');
+    const absolutePath = request.url.substr(emberAppURL.length);
+    const normalizedPath = isDir
+      ? path.normalize(`${emberAppDir}/index.html`)
+      : path.normalize(`${emberAppDir}${absolutePath}`);
+
+    if (isDev) console.log('[serving]', request.url);
+
+    callback({ path: normalizedPath });
+  });
+
   if (isDev) {
     try {
       require('devtron').install();
@@ -40,11 +60,19 @@ app.on('ready', async () => {
     }
   }
 
-  await handleFileUrls(emberAppDir);
-
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1024,
+    height: 768,
+    webPreferences: {
+      partition,
+      sandbox: true,
+      webSecurity: true,
+      contextIsolation: true,
+      nodeIntegration: false,
+      enableRemoteModule: false,
+      allowRunningInsecureContent: false,
+      preload: preloadPath
+    }
   });
 
   // If you want to open up dev tools programmatically, call

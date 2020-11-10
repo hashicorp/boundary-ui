@@ -31,6 +31,12 @@ module.exports = function (environment) {
       namespace: 'v1',
     },
 
+    ipc: {
+      defaultOrigin: process.env.EMBER_CLI_ELECTRON
+        ? 'serve://boundary'
+        : 'http://localhost:4200'
+    },
+
     appName: APP_NAME,
   };
 
