@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { getOwner } from '@ember/application';
 import { Promise } from 'rsvp';
+import config from '../config/environment';
 
 /**
  * An IPC request is a promise-like object that issues a request via
@@ -56,7 +57,7 @@ export class IPCRequest {
    * @param {Window} window - A reference to the window object
    * @param {?string} origin
    */
-  constructor(method, payload, window, origin='serve://boundary') {
+  constructor(method, payload, window, origin=config.ipc.defaultOrigin) {
     this.method = method;
     this.payload = payload;
     this.origin = origin;
