@@ -1,23 +1,20 @@
 addons:
   - addons/**/*
 
-addons/api:
+api-addon:
   - addons/api/**/*
 
-addons/auth:
+auth-addon:
   - addons/auth/**/*
 
-addons/styles:
+styles-addon:
   - addons/rose/**/*
 
 ui:
   - ui/**/*
 
-ui/admin:
+admin:
   - ui/core/**/*
 
-ui/admin/app:
-  - ui/core/app/**/*
-
-ui/admin/tests:
-  - ui/core/tests/**/*
+desktop:
+  - ui/desktop/**/*
