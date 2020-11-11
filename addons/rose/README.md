@@ -73,6 +73,14 @@ To build a new component, start by generating it on the command line with
 `component-name.stories.mdx`.  Use the Storybook UI during component
 development (see Yarn commands).
 
+## Using Components
+
+A few of the components have additional ember package dependencies that need to be installed before usage.
+
+| Component | Dependency |
+| --------- | ---------- |
+| Rose::Dropdown | ember-modifier |
+
 ## Running tests
 
 * `yarn test` – Runs the test suite on the current Ember version

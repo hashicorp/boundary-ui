@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class IndexRoute extends Route {
-
   // =services
 
   @service ipc;
@@ -19,4 +18,10 @@ export default class IndexRoute extends Route {
     });
   }
 
+  /**
+   * Redirects to scopes route for further processing.
+   */
+  redirect() {
+    this.transitionTo('scopes');
+  }
 }

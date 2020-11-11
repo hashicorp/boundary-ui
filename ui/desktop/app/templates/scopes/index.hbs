@@ -1,0 +1,26 @@
+{{outlet}}
+
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.headerCell>{{t 'scope.title'}}</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    {{#each @model as |scope|}}
+      <body.row as |row|>
+        <row.cell>
+          <Rose::LinkButton
+            @route="scopes.scope"
+            @model={{scope.id}}
+          >
+            {{scope.name}}
+          </Rose::LinkButton>
+        </row.cell>
+        <row.cell>
+          {{scope.id}}
+        </row.cell>
+      </body.row>
+    {{/each}}
+  </table.body>
+</Rose::Table>

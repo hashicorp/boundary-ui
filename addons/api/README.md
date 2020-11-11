@@ -27,6 +27,8 @@ Add this addon to an Ember application's `devDependencies` as:
 
 See monorepo README for installation instructions.
 
+When manually installing addon, ensure `ember-data-fragments@5.0.0-beta.*` is installed to use api models with data fragments.
+
 ## Yarn Commands
 
 List of available project commands.  `yarn run <command-name>`
