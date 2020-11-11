@@ -6,3 +6,8 @@ scope:
 target:
   title: Target
   title_plural: Targets
+session:
+  title: Session
+  title_plural: Sessions
+  actions:
+    connect: Connect

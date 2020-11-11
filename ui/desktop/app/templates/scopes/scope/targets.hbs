@@ -1,27 +1,3 @@
-{{outlet}}
+{{page-title (t 'target.title_plural')}}
 
-<Rose::Table as |table|>
-  <table.header as |header|>
-    <header.row as |row|>
-      <row.headerCell>{{t "name.label"}}</row.headerCell>
-      <row.headerCell>{{t "type.label"}}</row.headerCell>
-      <row.headerCell>{{t "id.label"}}</row.headerCell>
-    </header.row>
-  </table.header>
-  <table.body as |body|>
-    {{#each @model as |target|}}
-      <body.row as |row|>
-        <row.cell>
-          {{target.name}}
-          <p>{{target.description}}</p>
-        </row.cell>
-        <row.cell>
-          {{target.type}}
-        </row.cell>
-        <row.cell>
-          {{target.id}}
-        </row.cell>
-      </body.row>
-    {{/each}}
-  </table.body>
-</Rose::Table>
+{{outlet}}

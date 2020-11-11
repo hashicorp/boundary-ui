@@ -1,0 +1,49 @@
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <h2>
+      {{t "target.title_plural"}}
+    </h2>
+  </page.header>
+
+  <page.body>
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.headerCell>{{t "name.label"}}</row.headerCell>
+          <row.headerCell>{{t "id.label"}}</row.headerCell>
+          <row.headerCell>{{t "type.label"}}</row.headerCell>
+          <row.headerCell>{{t "project.label"}}</row.headerCell>
+          <row.headerCell />
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        {{#each @model as |model|}}
+          <body.row as |row|>
+            <row.cell>
+              {{model.target.name}}
+              <p>{{model.target.description}}</p>
+            </row.cell>
+            <row.cell>
+              {{model.target.id}}
+            </row.cell>
+            <row.cell>
+              {{model.target.type}}
+            </row.cell>
+            <row.cell>
+              <Rose::Badge @style='informational'>
+                {{model.project.name}}
+              </Rose::Badge>
+            </row.cell>
+            <row.cell>
+              <Rose::Button @style="secondary">
+                {{t "session.actions.connect"}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
+        {{/each}}
+      </table.body>
+    </Rose::Table>
+  </page.body>
+
+</Rose::Layout::Page>

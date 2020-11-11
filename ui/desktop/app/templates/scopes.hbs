@@ -1,1 +1,11 @@
-{{outlet}}
+{{page-title (t 'scope.title_plural')}}
+
+<Rose::Layout::Sidebar as |sidebarLayout|>
+
+  <sidebarLayout.body>
+    <main>
+      {{outlet}}
+    </main>
+  </sidebarLayout.body>
+
+</Rose::Layout::Sidebar>
