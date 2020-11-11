@@ -2,6 +2,7 @@
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
+const IPC_DEV_HOST = process.env.IPC_DEV_HOST || 'http://localhost:4200'
 
 module.exports = function (environment) {
   let ENV = {
@@ -34,7 +35,7 @@ module.exports = function (environment) {
     ipc: {
       defaultOrigin: process.env.EMBER_CLI_ELECTRON
         ? 'serve://boundary'
-        : 'http://localhost:4200'
+        : IPC_DEV_HOST
     },
 
     appName: APP_NAME,
