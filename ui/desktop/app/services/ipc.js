@@ -1,7 +1,7 @@
-import Service from '@ember/service';
-import { getOwner } from '@ember/application';
-import { Promise } from 'rsvp';
-import config from '../config/environment';
+import Service from "@ember/service";
+import { getOwner } from "@ember/application";
+import { Promise } from "rsvp";
+import config from "../config/environment";
 
 /**
  * An IPC request is a promise-like object that issues a request via
@@ -31,7 +31,6 @@ import config from '../config/environment';
  *
  */
 export class IPCRequest {
-
   // =attributes
 
   /**
@@ -57,21 +56,25 @@ export class IPCRequest {
    * @param {Window} window - A reference to the window object
    * @param {?string} origin
    */
-  constructor(method, payload, window, origin=config.ipc.defaultOrigin) {
+  constructor(method, payload, window, origin = config.ipc.defaultOrigin) {
     this.method = method;
     this.payload = payload;
     this.origin = origin;
     this.#channel = new MessageChannel();
-    this.#promise = new Promise((resolve/*, reject*/) => {
+    this.#promise = new Promise((resolve /*, reject*/) => {
       this.#channel.port1.onmessage = (event) => {
         this.close();
         resolve(event.data);
-      }
+      };
     });
-    window.postMessage({
-      method: this.method,
-      payload: this.payload
-    }, origin, [ this.#channel.port2 ]);
+    window.postMessage(
+      {
+        method: this.method,
+        payload: this.payload,
+      },
+      origin,
+      [this.#channel.port2]
+    );
   }
 
   /**
@@ -104,7 +107,6 @@ export class IPCRequest {
   finally() {
     return this.#promise.finally(...arguments);
   }
-
 }
 
 /**
@@ -120,7 +122,6 @@ export class IPCRequest {
  *   }
  */
 export default class IpcService extends Service {
-
   // =attributes
 
   /**
@@ -129,7 +130,7 @@ export default class IpcService extends Service {
    */
   get window() {
     // The Ember way of accessing globals...
-    const document = getOwner(this).lookup('service:-document').documentElement;
+    const document = getOwner(this).lookup("service:-document").documentElement;
     // defaultView === window, but without using globals directly
     return document.parentNode.defaultView;
   }
@@ -146,5 +147,4 @@ export default class IpcService extends Service {
   invoke(method, payload, origin) {
     return new IPCRequest(method, payload, this.window, origin);
   }
-
 }

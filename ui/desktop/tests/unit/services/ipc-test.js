@@ -1,57 +1,56 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
-import { IPCRequest } from 'desktop/services/ipc';
-import sinon from 'sinon';
+import { module, test } from "qunit";
+import { setupTest } from "ember-qunit";
+import { IPCRequest } from "desktop/services/ipc";
+import sinon from "sinon";
 
-module('Unit | Service | ipc', function(hooks) {
+module("Unit | Service | ipc", function (hooks) {
   setupTest(hooks);
 
   hooks.beforeEach(() => {
     // IPC requests talk to the main process indirectly via window.postMessage
     // proxy layer (mediated by preload.js).
     // But we don't want to send these for real in tests.
-    sinon.stub(window, 'postMessage');
+    sinon.stub(window, "postMessage");
   });
 
   hooks.afterEach(() => {
     sinon.restore();
   });
 
-  test('it creates new IPCRequest objects', function(assert) {
+  test("it creates new IPCRequest objects", function (assert) {
     assert.expect(1);
-    const service = this.owner.lookup('service:ipc');
-    const request = service.invoke('hello', 'world', 'http://localhost:4200');
+    const service = this.owner.lookup("service:ipc");
+    const request = service.invoke("hello", "world", "http://localhost:4200");
     assert.equal(request.constructor, IPCRequest);
   });
 
-  test('IPCRequest objects post messages on their window objects', function(assert) {
+  test("IPCRequest objects post messages on their window objects", function (assert) {
     assert.expect(2);
     const myWindow = {
       postMessage(request) {
-        assert.equal(request.method, 'hello');
-        assert.equal(request.payload, 'world');
-      }
+        assert.equal(request.method, "hello");
+        assert.equal(request.payload, "world");
+      },
     };
-    const request = new IPCRequest('hello', 'world', myWindow);
+    new IPCRequest("hello", "world", myWindow);
   });
 
-  test('IPCRequest objects resolve to the value posted via a response message port', async function(assert) {
+  test("IPCRequest objects resolve to the value posted via a response message port", async function (assert) {
     assert.expect(1);
     const myWindow = {
-      postMessage(request, origin, [ port ]) {
+      postMessage(request, origin, [port]) {
         // Post back a message on the response port
         port.postMessage({
-          foo: 'bar',
-          test: 42
+          foo: "bar",
+          test: 42,
         });
-      }
+      },
     };
-    const request = new IPCRequest('hello', 'world', myWindow);
+    const request = new IPCRequest("hello", "world", myWindow);
     const response = await request;
     assert.deepEqual(response, {
-      foo: 'bar',
-      test: 42
+      foo: "bar",
+      test: 42,
     });
   });
-
 });

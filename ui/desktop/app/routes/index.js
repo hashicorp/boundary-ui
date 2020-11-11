@@ -1,5 +1,5 @@
-import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import Route from "@ember/routing/route";
+import { inject as service } from "@ember/service";
 
 export default class IndexRoute extends Route {
   // =services
@@ -13,8 +13,8 @@ export default class IndexRoute extends Route {
    * @return {Promise}
    */
   model() {
-    return this.ipc.invoke('getFoobars', {
-      id: '1'
+    return this.ipc.invoke("getFoobars", {
+      id: "1",
     });
   }
 
@@ -22,6 +22,6 @@ export default class IndexRoute extends Route {
    * Redirects to scopes route for further processing.
    */
   redirect() {
-    this.transitionTo('scopes');
+    this.transitionTo("scopes");
   }
 }

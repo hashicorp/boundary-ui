@@ -1,5 +1,5 @@
-import Route from '@ember/routing/route';
-import { A } from '@ember/array';
+import Route from "@ember/routing/route";
+import { A } from "@ember/array";
 
 export default class ScopesRoute extends Route {
   // =methods
@@ -16,6 +16,6 @@ export default class ScopesRoute extends Route {
   model() {
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
-    return this.store.findAll('scope').catch(() => A([]));
+    return this.store.findAll("scope").catch(() => A([]));
   }
 }

@@ -67,7 +67,7 @@
     "ember-qunit": "^4.6.0",
     "ember-resolver": "^8.0.0",
     "ember-source": "~3.20.2",
-    "ember-template-lint": "^2.9.1",
+    "ember-template-lint": "^2.14.0",
     "ember-welcome-page": "^4.0.0",
     "eslint": "^7.5.0",
     "eslint-plugin-ember": "^8.9.1",
@@ -86,5 +86,8 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "sass-lint": "^1.13.1"
   }
 }

@@ -1,14 +1,26 @@
-'use strict';
+"use strict";
 
-const APP_NAME = process.env.APP_NAME || 'Boundary';
-const API_HOST = process.env.API_HOST || '';
+const APP_NAME = process.env.APP_NAME || "Boundary";
+const API_HOST = process.env.API_HOST || "";
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix: 'desktop',
+    modulePrefix: "desktop",
     environment,
-    rootURL: process.env.EMBER_CLI_ELECTRON ? '' : process.env.EMBER_CLI_ELECTRON ? '' : process.env.EMBER_CLI_ELECTRON ? '' : '/',
-    locationType: process.env.EMBER_CLI_ELECTRON ? 'hash' : process.env.EMBER_CLI_ELECTRON ? 'hash' : process.env.EMBER_CLI_ELECTRON ? 'hash' : 'auto',
+    rootURL: process.env.EMBER_CLI_ELECTRON
+      ? ""
+      : process.env.EMBER_CLI_ELECTRON
+      ? ""
+      : process.env.EMBER_CLI_ELECTRON
+      ? ""
+      : "/",
+    locationType: process.env.EMBER_CLI_ELECTRON
+      ? "hash"
+      : process.env.EMBER_CLI_ELECTRON
+      ? "hash"
+      : process.env.EMBER_CLI_ELECTRON
+      ? "hash"
+      : "auto",
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -28,19 +40,19 @@ module.exports = function (environment) {
 
     api: {
       host: API_HOST,
-      namespace: 'v1',
+      namespace: "v1",
     },
 
     ipc: {
       defaultOrigin: process.env.EMBER_CLI_ELECTRON
-        ? 'serve://boundary'
-        : 'http://localhost:4200'
+        ? "serve://boundary"
+        : "http://localhost:4200",
     },
 
     appName: APP_NAME,
   };
 
-  if (environment === 'development') {
+  if (environment === "development") {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -48,19 +60,19 @@ module.exports = function (environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
 
-  if (environment === 'test') {
+  if (environment === "test") {
     // Testem prefers this...
-    ENV.locationType = 'none';
+    ENV.locationType = "none";
 
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
-    ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.rootElement = "#ember-testing";
     ENV.APP.autoboot = false;
   }
 
-  if (environment === 'production') {
+  if (environment === "production") {
     // here you can enable a production-specific feature
   }
 

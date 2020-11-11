@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
-import { A } from '@ember/array';
+import Route from "@ember/routing/route";
+import { inject as service } from "@ember/service";
+import { A } from "@ember/array";
 
 export default class ScopesScopeRoute extends Route {
   // =services
@@ -22,18 +22,17 @@ export default class ScopesScopeRoute extends Route {
   model({ scope_id: id }) {
     // Since only global and org scopes are authenticatable, we can infer type
     // from ID because global has a fixed ID.
-    const type = id === 'global' ? 'global' : 'org';
-    return this.store.findRecord('scope', id).catch(() => {
-      console.error('caught error');
-      const maybeExistingScope = this.store.peekRecord('scope', id);
+    const type = id === "global" ? "global" : "org";
+    return this.store.findRecord("scope", id).catch(() => {
+      console.error("caught error");
+      const maybeExistingScope = this.store.peekRecord("scope", id);
 
       const scopeOptions = { id, type };
       return (
-        maybeExistingScope || this.store.createRecord('scope', scopeOptions)
+        maybeExistingScope || this.store.createRecord("scope", scopeOptions)
       );
     });
   }
-
 
   /**
    * Load all scopes within the current scope context.  Always attempt to load
@@ -43,18 +42,19 @@ export default class ScopesScopeRoute extends Route {
   async afterModel(model) {
     // Load all orgs
     let orgs;
-    orgs = await this.store.query('scope', { scope_id: 'global' })
+    orgs = await this.store
+      .query("scope", { scope_id: "global" })
       .catch(() => A([]));
     // Then pull out the "selected" scopes, if relevant
     let selectedOrg;
     if (model.isGlobal || model.isOrg) selectedOrg = model;
 
     let projects;
-    if(model.isGlobal) {
-      projects = orgs.map((id) => this.store.query('scope', { scope_id: id }));
+    if (model.isGlobal) {
+      projects = orgs.map((id) => this.store.query("scope", { scope_id: id }));
     }
-    if(model.isOrg) {
-      projects = this.store.query('scope', { scope_id: model.id });
+    if (model.isOrg) {
+      projects = this.store.query("scope", { scope_id: model.id });
     }
 
     // Update the scope service with the current scope(s);
@@ -81,9 +81,9 @@ export default class ScopesScopeRoute extends Route {
    */
   renderTemplate() {
     super.renderTemplate(...arguments);
-    this.render('scopes/scope/-header-nav', {
-      into: 'application',
-      outlet: 'header-nav',
+    this.render("scopes/scope/-header-nav", {
+      into: "application",
+      outlet: "header-nav",
     });
   }
 }
