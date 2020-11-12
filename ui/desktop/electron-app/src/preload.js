@@ -1,5 +1,6 @@
 const { ipcRenderer } = require('electron');
-const emberAppOrigin = 'serve://boundary';
+// Messages must originate from this origin
+const emberAppOrigin = window.location.origin;
 
 process.once('loaded', () => {
 
