@@ -5,6 +5,7 @@ import { A } from '@ember/array';
 export default class ScopesScopeRoute extends Route {
   // =services
 
+  @service session;
   @service scope;
 
   // =methods
@@ -45,22 +46,31 @@ export default class ScopesScopeRoute extends Route {
     let orgs;
     orgs = await this.store.query('scope', { scope_id: 'global' })
       .catch(() => A([]));
-    // Then pull out the "selected" scopes, if relevant
+
+    // Then pull out the "selected" org, if relevant
     let selectedOrg;
     if (model.isGlobal || model.isOrg) selectedOrg = model;
 
     let projects;
-    if(model.isGlobal) {
-      projects = orgs.map((id) => this.store.query('scope', { scope_id: id }));
-    }
-    if(model.isOrg) {
-      projects = this.store.query('scope', { scope_id: model.id });
+    if (model.isOrg) {
+      projects = await this.store.query('scope', { scope_id: model.id });
     }
 
     // Update the scope service with the current scope(s);
     this.scope.org = selectedOrg;
-    this.scope.projects = await projects;
+    this.scope.projects = projects;
     this.scopes = { orgs, selectedOrg };
+  }
+
+  /**
+   *
+   */
+  redirect(model) {
+    const { isAuthenticated } = this.session;
+    const { isGlobal } = model;
+    if (isAuthenticated && isGlobal && this.scopes.orgs?.length) {
+      this.replaceWith('scopes.scope', this.scopes.orgs.firstObject.id);
+    }
   }
 
   /**

@@ -3,6 +3,7 @@ import Route from '@ember/routing/route';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class ApplicationRoute extends Route.extend(
   ApplicationRouteMixin
@@ -52,6 +53,34 @@ export default class ApplicationRoute extends Route.extend(
   @action
   invalidateSession() {
     this.session.invalidate();
+  }
+
+  /**
+   * Hooks into ember-loading to kick off loading indicator in the
+   * application template.
+   * @return {boolean} always returns true
+   */
+  @action
+  @loading
+  loading() {
+    return true;
+  }
+
+  /**
+   * Invalidates the session if a 401 error occurs and returns false to
+   * prevent further error handling.
+   * Returns true in all other cases, allowing error handling to occur (such
+   * as displaying the `error.hbs` template, if one exists).
+   * @param {Error} e
+   */
+  @action
+  error(e) {
+    const isUnauthenticated = A(e?.errors)?.firstObject?.isUnauthenticated;
+    if (isUnauthenticated) {
+      this.session.invalidate();
+      return false;
+    }
+    return true;
   }
 
 }
