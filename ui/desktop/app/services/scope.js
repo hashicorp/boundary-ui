@@ -1,5 +1,5 @@
-import Service from "@ember/service";
-import { tracked } from "@glimmer/tracking";
+import Service from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 /**
  * This simple non-functional service is used to retain references to

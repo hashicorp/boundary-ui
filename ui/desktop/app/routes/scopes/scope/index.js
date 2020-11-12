@@ -1,4 +1,4 @@
-import Route from "@ember/routing/route";
+import Route from '@ember/routing/route';
 
 export default class ScopesScopeIndexRoute extends Route {
   // =methods
@@ -7,6 +7,6 @@ export default class ScopesScopeIndexRoute extends Route {
    * Redirects to scopes route for further processing.
    */
   redirect() {
-    this.transitionTo("scopes.scope.targets");
+    this.transitionTo('scopes.scope.targets');
   }
 }

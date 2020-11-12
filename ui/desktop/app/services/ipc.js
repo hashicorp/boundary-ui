@@ -1,7 +1,7 @@
-import Service from "@ember/service";
-import { getOwner } from "@ember/application";
-import { Promise } from "rsvp";
-import config from "../config/environment";
+import Service from '@ember/service';
+import { getOwner } from '@ember/application';
+import { Promise } from 'rsvp';
+import config from '../config/environment';
 
 /**
  * An IPC request is a promise-like object that issues a request via
@@ -130,7 +130,7 @@ export default class IpcService extends Service {
    */
   get window() {
     // The Ember way of accessing globals...
-    const document = getOwner(this).lookup("service:-document").documentElement;
+    const document = getOwner(this).lookup('service:-document').documentElement;
     // defaultView === window, but without using globals directly
     return document.parentNode.defaultView;
   }

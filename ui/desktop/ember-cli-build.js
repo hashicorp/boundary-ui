@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
-const EmberApp = require("ember-cli/lib/broccoli/ember-app");
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     babel: {
-      sourceMaps: "inline",
+      sourceMaps: 'inline',
     },
     sourcemaps: {
       enabled: true,
-      extensions: ["js"],
+      extensions: ['js'],
     },
     sassOptions: {
       onlyIncluded: true,
-      extension: "scss",
+      extension: 'scss',
     },
   });
 
