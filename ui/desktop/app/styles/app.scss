@@ -1,1 +1,175 @@
+@use 'rose/variables/sizing';
+@use 'rose/variables/media';
+
 @import 'rose';
+@import 'notify';
+
+.rose-layout-centered {
+  > .rose-layout-page {
+    width: sizing.rems(l) * 18;
+  }
+
+  @media (max-width: media.width(small)) {
+    display: block;
+
+    > .rose-layout-page {
+      width: auto;
+    }
+  }
+}
+
+.rose-nav-sidebar {
+  margin-top: sizing.rems(xxl);
+
+  & + .rose-nav-sidebar {
+    margin-top: 0;
+  }
+
+  .rose-icon {
+    margin-right: sizing.rems(xs);
+  }
+}
+
+.rose-form {
+  &:not(.full-width) {
+    width: 66%;
+  }
+
+  .rose-form-input {
+    width: 100%;
+
+    .rose-form-input-field {
+      width: 100%;
+    }
+  }
+
+  .rose-dropdown {
+    $iconWidth: sizing.rems(m) + sizing.rems(s);
+    $indent:  $iconWidth + sizing.rems(xs);
+
+    .rose-form-radio-label {
+      display: flex;
+
+      .rose-icon {
+        padding-right: sizing.rems(xxs);
+      }
+    }
+
+    .indent-label-1 {
+      .rose-form-radio-label {
+        padding-left: $indent;
+      }
+    }
+
+    .indent-label-2 {
+      .rose-form-radio-label {
+        padding-left: $indent + $iconWidth;
+      }
+    }
+
+    .is-project {
+      .rose-icon {
+        visibility: hidden;
+      }
+    }
+  }
+
+  fieldset {
+    margin-bottom: sizing.rems(m);
+
+    legend {
+      @extend .rose-form-label;
+    }
+  }
+}
+
+.rose-table {
+  p {
+    margin-bottom: 0;
+  }
+
+  .rose-form-checkbox {
+    margin-bottom: 0;
+
+    .rose-form-checkbox-label-text {
+      color: var(--stark);
+      text-decoration: underline;
+    }
+  }
+}
+
+.rose-header {
+  position: relative;
+
+  .logotype {
+    display: none;
+  }
+
+  .rose-dropdown {
+    .rose-icon {
+      transform: scale(0.7);
+    }
+  }
+
+  &.loading {
+    &::after {
+      animation: gradient 1s linear infinite;
+      background: repeating-linear-gradient(to right, var(--subtle), var(--subtle), var(--info), var(--subtle), var(--subtle));
+      background-position: -100% 0;
+      background-size: 200% auto;
+      content: ' ';
+      height: 3px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 100%;
+
+      @keyframes gradient {
+        0%   { background-position: -100% 0; }
+        100% { background-position: -200% 0; }
+      }
+    }
+  }
+}
+
+.copyable {
+  white-space: nowrap;
+
+  .copyable-button {
+    margin: 0;
+    padding: 0 sizing.rems(xxs);
+    position: relative;
+    top: -2px;
+  }
+
+  mark {
+    animation: fadeBackground 0.75s linear;
+    background-color: transparent;
+    color: inherit;
+
+    @keyframes fadeBackground {
+      0%   { background-color: var(--action-subtler-1); }
+      100% { background-color: transparent; }
+    }
+  }
+}
+
+.doc-link {
+  .large {
+    svg {
+      transform: scale(0.8);
+    }
+  }
+}
+
+[class*='session-status-'] {
+  color: var(--ui-gray-subtler-2);
+}
+
+.session-status-active {
+  color: var(--success);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
