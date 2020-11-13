@@ -1,8 +1,12 @@
 import Route from '@ember/routing/route';
+import Ember from 'ember';
 /* eslint-disable-next-line ember/no-mixins */
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { A } from '@ember/array';
+import { getOwner } from '@ember/application';
+import { later } from '@ember/runloop';
 import loading from 'ember-loading/decorator';
 
 export default class ApplicationRoute extends Route.extend(

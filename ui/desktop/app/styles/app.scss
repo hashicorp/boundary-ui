@@ -44,8 +44,8 @@
   }
 
   .rose-dropdown {
-    $iconWidth: sizing.rems(m) + sizing.rems(s);
-    $indent:  $iconWidth + sizing.rems(xs);
+    $icon-width: sizing.rems(m) + sizing.rems(s);
+    $indent:  $icon-width + sizing.rems(xs);
 
     .rose-form-radio-label {
       display: flex;
@@ -63,7 +63,7 @@
 
     .indent-label-2 {
       .rose-form-radio-label {
-        padding-left: $indent + $iconWidth;
+        padding-left: $indent + $icon-width;
       }
     }
 
