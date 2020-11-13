@@ -26,12 +26,16 @@ module.exports = function (environment) {
       // when it is created
     },
 
+    isElectron: Boolean(process.env.EMBER_CLI_ELECTRON),
+
     api: {
       host: API_HOST,
       namespace: 'v1',
     },
 
     appName: APP_NAME,
+
+    notifyTimeout: 4000,
   };
 
   if (environment === 'development') {
@@ -52,6 +56,9 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+
+    // Notification timeout should be 0 for fast tests
+    ENV.notifyTimeout = 0;
   }
 
   if (environment === 'production') {
