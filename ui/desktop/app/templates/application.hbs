@@ -3,7 +3,7 @@
 <Rose::Layout::Global as |layout|>
 
   <layout.header>
-    <Rose::Header as |header|>
+    <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
       <header.brand @logo="logo-app" @text={{app-name}} />
 
       <header.nav>
