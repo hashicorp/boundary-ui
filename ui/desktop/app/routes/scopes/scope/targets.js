@@ -22,11 +22,17 @@ export default class ScopesScopeTargetsRoute extends Route {
    * @return {Promise{[TargetModel]}}
    */
   async model() {
-    let projectTargets = await all(this.scope.projects.map(({ id: scope_id }) =>
-      this.store.query('target', { scope_id })
-    ))
-
-    return projectTargets.map((target) => target.toArray()).flat();
+    let projectTargets = await all(
+      this.scope.projects.map(({ id: scope_id }) =>
+        this.store.query('target', { scope_id })
+      )
+    );
+    let targets = projectTargets.map((target) => target.toArray()).flat();
+    return targets.map((target) => {
+      return {
+        target,
+        project: this.store.peekRecord('scope', target.scopeID),
+      };
+    });
   }
-
 }

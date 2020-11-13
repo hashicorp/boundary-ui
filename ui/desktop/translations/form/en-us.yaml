@@ -9,3 +9,5 @@ description:
 type:
   label: Type
   help: The type of the resource, to help differentiate schemas
+project:
+  label: Project

@@ -35,7 +35,6 @@ export default class ScopesScopeRoute extends Route {
     });
   }
 
-
   /**
    * Load all scopes within the current scope context.  Always attempt to load
    * org scopes.  Only attempt to load project scopes if the current scope is
@@ -44,7 +43,8 @@ export default class ScopesScopeRoute extends Route {
   async afterModel(model) {
     // Load all orgs
     let orgs;
-    orgs = await this.store.query('scope', { scope_id: 'global' })
+    orgs = await this.store
+      .query('scope', { scope_id: 'global' })
       .catch(() => A([]));
 
     // Then pull out the "selected" org, if relevant

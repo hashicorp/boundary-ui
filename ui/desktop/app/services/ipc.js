@@ -30,7 +30,6 @@ import { Promise } from 'rsvp';
  *
  */
 export class IPCRequest {
-
   // =attributes
 
   /**
@@ -60,16 +59,20 @@ export class IPCRequest {
     this.payload = payload;
     this.origin = window?.location?.origin;
     this.#channel = new MessageChannel();
-    this.#promise = new Promise((resolve/*, reject*/) => {
+    this.#promise = new Promise((resolve /*, reject*/) => {
       this.#channel.port1.onmessage = (event) => {
         this.close();
         resolve(event.data);
-      }
+      };
     });
-    window.postMessage({
-      method: this.method,
-      payload: this.payload
-    }, origin, [ this.#channel.port2 ]);
+    window.postMessage(
+      {
+        method: this.method,
+        payload: this.payload,
+      },
+      origin,
+      [this.#channel.port2]
+    );
   }
 
   /**
@@ -102,7 +105,6 @@ export class IPCRequest {
   finally() {
     return this.#promise.finally(...arguments);
   }
-
 }
 
 /**
@@ -118,7 +120,6 @@ export class IPCRequest {
  *   }
  */
 export default class IpcService extends Service {
-
   // =attributes
 
   /**
@@ -143,5 +144,4 @@ export default class IpcService extends Service {
   invoke(method, payload) {
     return new IPCRequest(method, payload, this.window);
   }
-
 }
