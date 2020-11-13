@@ -6,7 +6,7 @@ import { Response } from 'miragejs';
 
 export default function() {
 
-  if (!config.isElectron) {
+  if (!config.isElectron && !Ember.testing) {
     class MockIPC {
       invoke(method, payload) {
         console.log('MockIPC:', method, payload);

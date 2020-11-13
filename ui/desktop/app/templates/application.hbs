@@ -10,6 +10,19 @@
         <header.nav>
           {{outlet "header-nav"}}
         </header.nav>
+
+        <header.utilities as |utilities|>
+          <utilities.dropdown
+            @text={{this.session.data.authenticated.username}}
+            as |dropdown|
+          >
+            <dropdown.button
+              {{on "click" (route-action "invalidateSession")}}
+            >
+              {{t 'actions.deauthenticate'}}
+            </dropdown.button>
+          </utilities.dropdown>
+        </header.utilities>
       {{/if}}
 
     </Rose::Header>
