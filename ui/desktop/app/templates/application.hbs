@@ -6,9 +6,25 @@
     <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
       <header.brand @logo="logo-app" @text={{app-name}} />
 
-      <header.nav>
-        {{outlet "header-nav"}}
-      </header.nav>
+      {{#if this.session.isAuthenticated}}
+        <header.nav>
+          {{outlet "header-nav"}}
+        </header.nav>
+
+        <header.utilities as |utilities|>
+          <utilities.dropdown
+            @text={{this.session.data.authenticated.username}}
+            as |dropdown|
+          >
+            <dropdown.button
+              {{on "click" (route-action "invalidateSession")}}
+            >
+              {{t 'actions.deauthenticate'}}
+            </dropdown.button>
+          </utilities.dropdown>
+        </header.utilities>
+      {{/if}}
+
     </Rose::Header>
   </layout.header>
 
@@ -17,3 +33,14 @@
   </layout.body>
 
 </Rose::Layout::Global>
+
+<EmberNotify @closeAfter={{this.notifyTimeout}} as |message close|>
+  <Rose::Notification
+    @style={{message.type}}
+    @heading={{t (concat 'states.' message.type)}}
+    @dismiss={{close}}
+    @dismissText={{t 'actions.dismiss'}}
+  >
+    {{message.text}}
+  </Rose::Notification>
+</EmberNotify>

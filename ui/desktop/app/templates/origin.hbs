@@ -1,0 +1,19 @@
+<Rose::Form
+  class="full-width"
+  @onSubmit={{route-action "setOrigin" this.origin}}
+  @cancel={{false}}
+  as |form|
+>
+
+  <form.input
+    @name="host"
+    @type="text"
+    @value={{this.origin}}
+    @label={{t "form.origin.label"}}
+    @helperText={{t "form.origin.description"}} />
+
+  <form.actions
+    @submitText="Set Origin"
+    @showCancel={{false}} />
+
+</Rose::Form>

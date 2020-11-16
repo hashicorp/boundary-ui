@@ -6,6 +6,38 @@ import { Response } from 'miragejs';
 
 export default function() {
 
+  if (!config.isElectron && !Ember.testing) {
+    class MockIPC {
+      invoke(method, payload) {
+        console.log('MockIPC:', method, payload);
+        return this[method](payload);
+      }
+
+      origin = null;
+
+      getOrigin() {
+        return this.origin;
+      }
+
+      setOrigin(origin) {
+        this.origin = origin;
+        return this.origin;
+      }
+    }
+
+    const mockIPC = new MockIPC();
+
+    window.addEventListener('message', async function (event) {
+      if (event.origin !== window.location.origin) return;
+      const { method, payload } = event.data;
+      if (method) {
+        const response =
+          await mockIPC.invoke(method, payload);
+        event.ports[0].postMessage(response);
+      }
+    });
+  }
+
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
   // make this `/api`, for example, if your API is namespaced

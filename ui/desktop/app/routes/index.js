@@ -1,12 +1,23 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class IndexRoute extends Route {
+
+  // =services
+
+  @service session;
+
   // =methods
 
   /**
-   * Redirects to scopes route for further processing.
+   * If no origin is specified yet, redirects to origin, otherwise scopes.
    */
   redirect() {
-    this.replaceWith('scopes');
+    const rendererOrigin = this.session.data.origin;
+    if (!rendererOrigin) {
+      this.replaceWith('origin');
+    } else {
+      this.replaceWith('scopes');
+    }
   }
 }

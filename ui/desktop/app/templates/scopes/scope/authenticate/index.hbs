@@ -1,1 +1,12 @@
-{{outlet}}
+{{#unless @model}}
+  <Rose::Layout::Centered>
+    <Rose::Message
+      @title={{t "resources.auth-method.messages.none.title"}}
+      @icon="alert-circle-outline"
+    as |message|>
+      <message.description>
+        {{t "resources.auth-method.messages.none.description"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+{{/unless}}
