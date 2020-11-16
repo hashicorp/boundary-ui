@@ -73,7 +73,6 @@
     "ember-source": "~3.20.2",
     "ember-template-lint": "^2.14.0",
     "ember-uuid": "^2.1.0",
-    "ember-welcome-page": "^4.0.0",
     "eslint": "^7.5.0",
     "eslint-plugin-ember": "^8.9.1",
     "eslint-plugin-node": "^11.1.0",
