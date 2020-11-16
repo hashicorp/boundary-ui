@@ -1,13 +1,13 @@
 {{#if @model.isOrg}}
-  {{title (t "resources.org.title_plural") }}
-  {{title @model.displayName}}
+  {{page-title (t "resources.org.title_plural") }}
+  {{page-title @model.displayName}}
 {{/if}}
 
 {{#if @model.isProject}}
-  {{title (t "resources.org.title_plural") }}
-  {{title this.scopes.selectedOrg.displayName}}
-  {{title (t "resources.project.title_plural") }}
-  {{title @model.displayName}}
+  {{page-title (t "resources.org.title_plural") }}
+  {{page-title this.scopes.selectedOrg.displayName}}
+  {{page-title (t "resources.project.title_plural") }}
+  {{page-title @model.displayName}}
 {{/if}}
 
 <Rose::Layout::Sidebar as |sidebarLayout|>
