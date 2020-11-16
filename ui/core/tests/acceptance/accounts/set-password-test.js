@@ -61,12 +61,15 @@ module('Acceptance | accounts | set password', function (hooks) {
 
   test('can set a new password for account', async function (assert) {
     assert.expect(1);
-    this.server.post('/accounts/:idMethod', (_, { params: { idMethod }, requestBody }) => {
-      const attrs = JSON.parse(requestBody);
-      assert.equal(attrs.password, 'update password', 'new password is set');
-      const id = idMethod.split(':')[0];
-      return { id };
-    });
+    this.server.post(
+      '/accounts/:idMethod',
+      (_, { params: { idMethod }, requestBody }) => {
+        const attrs = JSON.parse(requestBody);
+        assert.equal(attrs.password, 'update password', 'new password is set');
+        const id = idMethod.split(':')[0];
+        return { id };
+      }
+    );
     await visit(urls.setPassword);
     await fillIn('[name="password"]', 'update password');
     await click('form [type="submit"]:not(:disabled)');
@@ -84,7 +87,7 @@ module('Acceptance | accounts | set password', function (hooks) {
   //   assert.notOk(find('[name="password"]').textContent.trim());
   // });
 
-  test('errors are displayed when setting password fails', async function  (assert) {
+  test('errors are displayed when setting password fails', async function (assert) {
     assert.expect(1);
     this.server.post('/accounts/:id', () => {
       return new Response(

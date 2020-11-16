@@ -45,7 +45,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(account, password) {
     const { isNew } = account;
     const adapterOptions = {};

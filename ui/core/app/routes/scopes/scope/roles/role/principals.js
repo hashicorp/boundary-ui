@@ -75,5 +75,4 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     await role.removePrincipal(principal.id);
     this.refresh();
   }
-
 }

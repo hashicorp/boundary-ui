@@ -51,7 +51,9 @@ export default class ScopesScopeTargetsRoute extends Route {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(target) {
     await target.save();
     await this.transitionTo('scopes.scope.targets.target', target);

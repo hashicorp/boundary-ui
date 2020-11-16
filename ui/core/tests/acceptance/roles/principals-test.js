@@ -37,10 +37,16 @@ module('Acceptance | roles | principals', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    instances.role = this.server.create('role', {
-      scope: instances.scopes.org,
-    }, 'withPrincipals');
-    principalsCount = this.server.db.roles[0].userIds.length + this.server.db.roles[0].groupIds.length;
+    instances.role = this.server.create(
+      'role',
+      {
+        scope: instances.scopes.org,
+      },
+      'withPrincipals'
+    );
+    principalsCount =
+      this.server.db.roles[0].userIds.length +
+      this.server.db.roles[0].groupIds.length;
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.rolePrincipals = `${urls.role}/principals`;
@@ -88,7 +94,7 @@ module('Acceptance | roles | principals', function (hooks) {
     instances.role.update({ userIds: [], groupIds: [] });
     await visit(urls.rolePrincipals);
     assert.equal(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a');
     assert.equal(currentURL(), urls.addPrincipals);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -106,7 +112,7 @@ module('Acceptance | roles | principals', function (hooks) {
     // Remove a principal to populate association view
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, principalsCount - 1);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a');
     assert.equal(currentURL(), urls.addPrincipals);
     await click('tbody label');
     await click('form [type="button"]');

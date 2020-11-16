@@ -15,7 +15,6 @@ import config from '../config/environment';
  *    const confirmation = confirmationService.confirm('Text', { type: 'discard' });
  */
 export default class ConfirmationsService extends Service {
-
   // =attributes
 
   /**
@@ -54,7 +53,6 @@ export default class ConfirmationsService extends Service {
       return resolve();
     }
   }
-
 }
 
 /**
@@ -84,7 +82,6 @@ export default class ConfirmationsService extends Service {
  *      .finally(() => { });   // do something
  */
 class Confirmation {
-
   // =properties
 
   /**
@@ -101,7 +98,7 @@ class Confirmation {
    * @param {String} type  An optional type annotation for convenience.
    *    Has no effect on confirmation.
    */
-  constructor(text, options={}) {
+  constructor(text, options = {}) {
     this.text = text;
     this.options = options;
     this.#deferred = defer();
@@ -146,5 +143,4 @@ class Confirmation {
   finally() {
     return this.#deferred.promise.finally(...arguments);
   }
-
 }

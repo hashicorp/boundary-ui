@@ -7,10 +7,10 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('scopes', function() {
-    this.route('scope', { path: ':scope_id' }, function() {
-      this.route('targets', function() {});
-      this.route('authenticate', function() {
+  this.route('scopes', function () {
+    this.route('scope', { path: ':scope_id' }, function () {
+      this.route('targets', function () {});
+      this.route('authenticate', function () {
         this.route('method', { path: ':auth_method_id' });
       });
     });

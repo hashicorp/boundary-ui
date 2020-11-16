@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
  * service's `isLoading` attribute.
  */
 export default class extends Helper {
-
   // =services
 
   @service loading;
@@ -20,5 +19,4 @@ export default class extends Helper {
   compute() {
     return this.loading.isLoading;
   }
-
 }

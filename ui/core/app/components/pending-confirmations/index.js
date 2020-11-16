@@ -8,7 +8,6 @@ import { action } from '@ember/object';
  * action. Useful for rendering confirm modals and awaiting user action.
  */
 export default class PendingConfirmationsComponent extends Component {
-
   // =services
 
   @service confirm;
@@ -36,5 +35,4 @@ export default class PendingConfirmationsComponent extends Component {
     confirmation.dismiss();
     return confirmation;
   }
-
 }

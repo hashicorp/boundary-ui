@@ -49,7 +49,9 @@ export default class ScopesScopeGroupsRoute extends Route {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(group) {
     await group.save();
     await this.transitionTo('scopes.scope.groups.group', group);

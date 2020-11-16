@@ -24,7 +24,7 @@ module('Acceptance | targets', function (hooks) {
       global: null,
       org: null,
       project: null,
-    }
+    },
   };
   const urls = {
     globalScope: null,
@@ -121,7 +121,10 @@ module('Acceptance | targets', function (hooks) {
     });
     await visit(urls.newTarget);
     await click('[type="submit"]');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
@@ -136,7 +139,10 @@ module('Acceptance | targets', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), urls.target);
-    assert.equal(this.server.schema.targets.all().models[0].name, 'random string');
+    assert.equal(
+      this.server.schema.targets.all().models[0].name,
+      'random string'
+    );
   });
 
   test('can cancel changes to existing target', async function (assert) {
@@ -174,7 +180,10 @@ module('Acceptance | targets', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
@@ -196,7 +205,10 @@ module('Acceptance | targets', function (hooks) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child');
       assert.equal(currentURL(), urls.targets);
-      assert.notEqual(this.server.schema.targets.all().models[0].name, 'random string');
+      assert.notEqual(
+        this.server.schema.targets.all().models[0].name,
+        'random string'
+      );
     }
   });
 
@@ -215,7 +227,10 @@ module('Acceptance | targets', function (hooks) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
       assert.equal(currentURL(), urls.target);
-      assert.notEqual(this.server.schema.targets.all().models[0].name, 'random string');
+      assert.notEqual(
+        this.server.schema.targets.all().models[0].name,
+        'random string'
+      );
     }
   });
 
@@ -268,5 +283,4 @@ module('Acceptance | targets', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
-
 });

@@ -22,14 +22,11 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
 
-    this.render(
-      'scopes/scope/host-catalogs/host-catalog/hosts/host/-header',
-      {
-        into: 'scopes/scope/host-catalogs/host-catalog',
-        outlet: 'header',
-        model: model,
-      }
-    );
+    this.render('scopes/scope/host-catalogs/host-catalog/hosts/host/-header', {
+      into: 'scopes/scope/host-catalogs/host-catalog',
+      outlet: 'header',
+      model: model,
+    });
 
     this.render(
       'scopes/scope/host-catalogs/host-catalog/hosts/host/-navigation',
@@ -40,13 +37,10 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
       }
     );
 
-    this.render(
-      'scopes/scope/host-catalogs/host-catalog/hosts/host/-actions',
-      {
-        into: 'scopes/scope/host-catalogs/host-catalog',
-        outlet: 'actions',
-        model: model,
-      }
-    );
+    this.render('scopes/scope/host-catalogs/host-catalog/hosts/host/-actions', {
+      into: 'scopes/scope/host-catalogs/host-catalog',
+      outlet: 'actions',
+      model: model,
+    });
   }
 }

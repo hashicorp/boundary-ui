@@ -54,9 +54,9 @@ module('Acceptance | accounts', function (hooks) {
     urls.account = `${urls.accounts}/${instances.account.id}`;
   });
 
-  hooks.afterEach(async function() {
+  hooks.afterEach(async function () {
     const notification = find('.rose-notification');
-    if(notification) {
+    if (notification) {
       await click('.rose-notification-dismiss');
     }
   });
@@ -87,7 +87,7 @@ module('Acceptance | accounts', function (hooks) {
 
   test('can update an account and cancel changes', async function (assert) {
     assert.expect(1);
-    await visit(urls.account)
+    await visit(urls.account);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await click('form button:not([type="submit"])');

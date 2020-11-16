@@ -44,9 +44,13 @@ module('Acceptance | roles', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
     });
-    instances.role = this.server.create('role', {
-      scope: instances.scopes.org,
-    }, 'withPrincipals');
+    instances.role = this.server.create(
+      'role',
+      {
+        scope: instances.scopes.org,
+      },
+      'withPrincipals'
+    );
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.newRole = `${urls.roles}/new`;

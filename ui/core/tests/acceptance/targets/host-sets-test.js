@@ -20,7 +20,7 @@ module('Acceptance | targets | host-sets', function (hooks) {
       global: null,
       org: null,
       project: null,
-    }
+    },
   };
   const urls = {
     globalScope: null,
@@ -43,12 +43,16 @@ module('Acceptance | targets | host-sets', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.hostCatalog = this.server.create('host-catalog', {
-      scope: instances.scopes.project
-    }, 'withChildren');
+    instances.hostCatalog = this.server.create(
+      'host-catalog',
+      {
+        scope: instances.scopes.project,
+      },
+      'withChildren'
+    );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
-      hostSets: instances.hostCatalog.hostSets
+      hostSets: instances.hostCatalog.hostSets,
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
@@ -106,7 +110,7 @@ module('Acceptance | targets | host-sets', function (hooks) {
     instances.target.update({ hostSetIds: [] });
     await visit(urls.targetHostSets);
     assert.equal(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a');
     assert.equal(currentURL(), urls.targetAddHostSets);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -125,7 +129,7 @@ module('Acceptance | targets | host-sets', function (hooks) {
     // first, remove a target host set (otherwise none would be available to add)
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a');
     assert.equal(currentURL(), urls.targetAddHostSets);
     await click('tbody label');
     await click('form [type="button"]');
@@ -156,5 +160,4 @@ module('Acceptance | targets | host-sets', function (hooks) {
     assert.equal(currentURL(), urls.targetAddHostSets);
     assert.equal(instances.target.hostSets.length, 0);
   });
-
 });

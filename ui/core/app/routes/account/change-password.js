@@ -7,7 +7,6 @@ import { notifySuccess, notifyError } from '../../decorators/notify';
  * The change password flow is associated only with password-type auth methods.
  */
 export default class AccountChangePasswordRoute extends Route {
-
   // =services
 
   @service session;
@@ -53,5 +52,4 @@ export default class AccountChangePasswordRoute extends Route {
   cancel() {
     this.replaceWith('index');
   }
-
 }

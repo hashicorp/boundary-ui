@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class OriginRoute extends Route {
-
   // =services
 
   @service session;
@@ -40,10 +39,10 @@ export default class OriginRoute extends Route {
       this.replaceWith('index');
     } catch (e) {
       // If scopes don't load, we assume this is not a Boundary API
-      const errorMessage =
-        this.intl.t('errors.origin-verification-failed.description');
+      const errorMessage = this.intl.t(
+        'errors.origin-verification-failed.description'
+      );
       this.notify.error(errorMessage, { closeAfter: null });
     }
   }
-
 }

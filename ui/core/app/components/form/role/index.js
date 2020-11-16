@@ -10,7 +10,9 @@ export default class FormRoleGrantsComponent extends Component {
    */
   @computed('args.model.{store,grant_scope_id}')
   get selectedGrantScope() {
-    return this.args.model.store
-      .peekRecord('scope', this.args.model.grant_scope_id);
+    return this.args.model.store.peekRecord(
+      'scope',
+      this.args.model.grant_scope_id
+    );
   }
 }

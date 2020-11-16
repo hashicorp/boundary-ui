@@ -54,7 +54,10 @@ module('Integration | Component | error/message', function (hooks) {
       find('.rose-message-title').textContent.trim(),
       'Something went wrong'
     );
-    assert.equal(find('.rose-message-subtitle').textContent.trim(), 'Error 599');
+    assert.equal(
+      find('.rose-message-subtitle').textContent.trim(),
+      'Error 599'
+    );
     assert.equal(
       find('.rose-message-description').textContent.trim(),
       'Please contact your administrator or try again later.'

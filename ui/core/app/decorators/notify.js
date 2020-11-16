@@ -14,9 +14,10 @@ export function notifySuccess(notification) {
       const owner = getOwner(this);
       const notifyService = owner.lookup('service:notify');
       const intlService = owner.lookup('service:intl');
-      const candidateKey = (typeof notification === 'function')
-        ? notification.apply(this, arguments)
-        : notification;
+      const candidateKey =
+        typeof notification === 'function'
+          ? notification.apply(this, arguments)
+          : notification;
       // As of now, we only use translated strings for notifications,
       // but this code would support both translated and arbitrary strings.
       // const text = intlService.exists(candidateKey)
@@ -27,7 +28,7 @@ export function notifySuccess(notification) {
       notifyService.success(text);
       return value;
     };
-  }
+  };
 }
 
 /**
@@ -43,7 +44,7 @@ export function notifySuccess(notification) {
  * @param {object} options
  * @param {object} options.catch - defaults to false
  */
-export function notifyError(notification, options={ catch: false }) {
+export function notifyError(notification, options = { catch: false }) {
   return function (_target, _propertyKey, desc) {
     const method = desc.value;
     desc.value = async function () {
@@ -53,7 +54,6 @@ export function notifyError(notification, options={ catch: false }) {
       try {
         return await method.apply(this, arguments);
       } catch (error) {
-
         // As of now all error notifications pass a function, but this code
         // could support either a function or a string.
         // const candidateKey = (typeof notification === 'function')
@@ -77,5 +77,5 @@ export function notifyError(notification, options={ catch: false }) {
         }
       }
     };
-  }
+  };
 }

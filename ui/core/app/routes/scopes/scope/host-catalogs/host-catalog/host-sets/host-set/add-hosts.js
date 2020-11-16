@@ -3,7 +3,10 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
 import loading from 'ember-loading/decorator';
-import { notifySuccess, notifyError } from '../../../../../../../decorators/notify';
+import {
+  notifySuccess,
+  notifyError,
+} from '../../../../../../../decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRoute extends Route {
   // =services

@@ -22,8 +22,8 @@ export default class ScopesScopeAuthenticateRoute extends Route {
     const { id: scope_id } = this.modelFor('scopes.scope');
     return hash({
       scope: this.modelFor('scopes.scope'),
-      scopes: this.modelFor('scopes').filter(scope => scope.isOrg),
-      authMethods: this.store.query('auth-method', { scope_id })
+      scopes: this.modelFor('scopes').filter((scope) => scope.isOrg),
+      authMethods: this.store.query('auth-method', { scope_id }),
     });
   }
 }

@@ -14,7 +14,7 @@ export default {
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
-      hour12: false
+      hour12: false,
     },
     hhmmss: {
       hour: 'numeric',

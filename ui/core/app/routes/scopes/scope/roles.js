@@ -49,7 +49,9 @@ export default class ScopesScopeRolesRoute extends Route {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(role) {
     await role.save();
     await this.transitionTo('scopes.scope.roles.role', role);

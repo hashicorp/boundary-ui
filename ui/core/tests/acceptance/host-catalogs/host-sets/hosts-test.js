@@ -1,5 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  find,
+  findAll,
+  fillIn,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -23,8 +30,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
       org: null,
       project: null,
       hostCatalog: null,
-      host: null
-    }
+      host: null,
+    },
   };
   const urls = {
     globalScope: null,
@@ -50,9 +57,13 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.hostCatalog = this.server.create('host-catalog', {
-      scope: instances.scopes.project,
-    }, 'withChildren');
+    instances.hostCatalog = this.server.create(
+      'host-catalog',
+      {
+        scope: instances.scopes.project,
+      },
+      'withChildren'
+    );
     instances.hostSet = this.server.schema.hostSets.all().models[0];
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
@@ -108,7 +119,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.ok(find('[role="alert"]'));
   });
 
-  test('visiting add hosts', async function(assert) {
+  test('visiting add hosts', async function (assert) {
     assert.expect(1);
     await visit(urls.addHosts);
     await a11yAudit();
@@ -120,7 +131,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSetHosts);
     assert.equal(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a:nth-child(2)')
+    await click('.rose-layout-page-actions a:nth-child(2)');
     assert.equal(currentURL(), urls.addHosts);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -138,7 +149,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.equal(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, count - 1);
-    await click('.rose-layout-page-actions a:nth-child(2)')
+    await click('.rose-layout-page-actions a:nth-child(2)');
     assert.equal(currentURL(), urls.addHosts);
     await click('tbody label');
     await click('form [type="button"]');
@@ -179,7 +190,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSet);
     assert.equal(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a:nth-child(1)')
+    await click('.rose-layout-page-actions a:nth-child(1)');
     assert.equal(currentURL(), urls.createAndAddHost);
     await fillIn('[name="name"]', 'Test Name');
     await fillIn('[name="description"]', 'description');
@@ -236,5 +247,4 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await click('form [type="submit"]');
     assert.ok(find('[role="alert"]'));
   });
-
 });
