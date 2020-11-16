@@ -18,7 +18,7 @@
     "lint:js": "eslint .",
     "lint:sass": "sass-lint -v -q",
     "format": "npm-run-all format:*",
-    "format:js": "prettier --write '{app,config,stories,tests}/**/*.js' *.js",
+    "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
     "start:desktop": "ember electron",

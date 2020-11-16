@@ -3,7 +3,6 @@ const { ipcRenderer } = require('electron');
 const emberAppOrigin = window.location.origin;
 
 process.once('loaded', () => {
-
   /**
    * Ember-land has no access to the renderer or node modules, and thus
    * cannot call into the main process or make invocations directly.
@@ -17,9 +16,10 @@ process.once('loaded', () => {
    */
   window.addEventListener('message', async function (event) {
     if (event.origin !== emberAppOrigin) return;
-    const response =
-      await ipcRenderer.invoke(event.data.method, event.data.payload);
+    const response = await ipcRenderer.invoke(
+      event.data.method,
+      event.data.payload
+    );
     event.ports[0].postMessage(response);
   });
-
 });

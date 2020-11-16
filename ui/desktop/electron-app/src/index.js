@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 const path = require('path');
-const { default: installExtension, EMBER_INSPECTOR } = require('electron-devtools-installer');
+const {
+  default: installExtension,
+  EMBER_INSPECTOR,
+} = require('electron-devtools-installer');
 const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
 require('./handlers.js');
 
@@ -13,13 +16,15 @@ const emberAppURL = `${emberAppProtocol}://${emberAppName}`;
 const emberAppDir = path.resolve(__dirname, '..', 'ember-dist');
 const preloadPath = path.resolve(__dirname, 'preload.js');
 
-protocol.registerSchemesAsPrivileged([{
-  scheme: emberAppProtocol,
-  privileges: {
-    secure: true,
-    standard: true
-  }
-}]);
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: emberAppProtocol,
+    privileges: {
+      secure: true,
+      standard: true,
+    },
+  },
+]);
 
 let mainWindow = null;
 
@@ -30,7 +35,6 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-
   // Register custom protocol
   const partition = emberAppName;
   const ses = session.fromPartition(partition);
@@ -71,8 +75,8 @@ app.on('ready', async () => {
       nodeIntegration: false,
       enableRemoteModule: false,
       allowRunningInsecureContent: false,
-      preload: preloadPath
-    }
+      preload: preloadPath,
+    },
   });
 
   // If you want to open up dev tools programmatically, call
@@ -88,12 +92,18 @@ app.on('ready', async () => {
   });
 
   mainWindow.webContents.on('crashed', () => {
-    console.log('Your Ember app (or other code) in the main window has crashed.');
-    console.log('This is a serious issue that needs to be handled and/or debugged.');
+    console.log(
+      'Your Ember app (or other code) in the main window has crashed.'
+    );
+    console.log(
+      'This is a serious issue that needs to be handled and/or debugged.'
+    );
   });
 
   mainWindow.on('unresponsive', () => {
-    console.log('Your Ember app (or other code) has made the window unresponsive.');
+    console.log(
+      'Your Ember app (or other code) has made the window unresponsive.'
+    );
   });
 
   mainWindow.on('responsive', () => {
@@ -122,6 +132,8 @@ app.on('ready', async () => {
 // not safe to resume normal operation after 'uncaughtException'.
 process.on('uncaughtException', (err) => {
   console.log('An exception in the main thread was not handled.');
-  console.log('This is a serious issue that needs to be handled and/or debugged.');
+  console.log(
+    'This is a serious issue that needs to be handled and/or debugged.'
+  );
   console.log(`Exception: ${err}`);
 });
