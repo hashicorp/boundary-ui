@@ -6,7 +6,7 @@ import {
   click,
   find,
   findAll,
-  getRootElement
+  getRootElement,
   //setupOnerror,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -319,7 +319,9 @@ module('Acceptance | authentication', function (hooks) {
 
   test('color theme is applied from session data', async function (assert) {
     assert.expect(12);
-    authenticateSession({ scope: { id: globalScope.id, type: globalScope.type } });
+    authenticateSession({
+      scope: { id: globalScope.id, type: globalScope.type },
+    });
     // system default
     await visit(orgsURL);
     assert.notOk(currentSession().get('data.theme'));

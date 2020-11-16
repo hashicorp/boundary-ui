@@ -2,15 +2,18 @@ import { helper } from '@ember/component/helper';
 import { assert } from '@ember/debug';
 import config from '../config/environment';
 
-export default helper(function docUrl(params/*, hash*/) {
+export default helper(function docUrl(params /*, hash*/) {
   const baseURL = config.documentation.baseURL;
   const docKey = params[0] || '';
   const configuredPath = config.documentation.topics[docKey];
   if (docKey) {
-    assert(`
+    assert(
+      `
       Documentation for "${docKey}" could not be found. Please ensure that
       this key exists under "documentation" in your app config.
-    `, configuredPath);
+    `,
+      configuredPath
+    );
   }
   const path = configuredPath || '';
   return `${baseURL}${path}`;

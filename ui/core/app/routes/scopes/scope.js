@@ -50,7 +50,8 @@ export default class ScopesScopeRoute extends Route {
   async afterModel(model) {
     // First, load orgs and, if necessary, projects
     let orgs, projects;
-    orgs = await this.store.query('scope', { scope_id: 'global' })
+    orgs = await this.store
+      .query('scope', { scope_id: 'global' })
       .catch(() => A([]));
     if (model.isProject) {
       projects = await this.store.query('scope', { scope_id: model.scopeID });
@@ -113,7 +114,9 @@ export default class ScopesScopeRoute extends Route {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(scope) {
     const { isNew } = scope;
     await scope.save();

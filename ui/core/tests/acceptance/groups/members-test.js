@@ -38,9 +38,13 @@ module('Acceptance | groups | members', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    instances.group = this.server.create('group', {
-      scope: instances.scopes.org,
-    }, 'withMembers');
+    instances.group = this.server.create(
+      'group',
+      {
+        scope: instances.scopes.org,
+      },
+      'withMembers'
+    );
     membersCount = instances.group.memberIds.length;
     urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
     urls.group = `${urls.groups}/${instances.group.id}`;
@@ -84,7 +88,7 @@ module('Acceptance | groups | members', function (hooks) {
     assert.ok(find('[role="alert"]'));
   });
 
-  test('visiting member selection', async function(assert) {
+  test('visiting member selection', async function (assert) {
     assert.expect(1);
     await visit(urls.addMembers);
     await a11yAudit();
@@ -96,7 +100,7 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group.update({ memberIds: [] });
     await visit(urls.members);
     assert.equal(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a');
     assert.equal(currentURL(), urls.addMembers);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -113,7 +117,7 @@ module('Acceptance | groups | members', function (hooks) {
     assert.equal(findAll('tbody tr').length, membersCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, membersCount - 1);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a');
     assert.equal(currentURL(), urls.addMembers);
     await click('tbody label');
     await click('form [type="button"]');

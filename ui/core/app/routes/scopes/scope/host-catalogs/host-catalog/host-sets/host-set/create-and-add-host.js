@@ -2,7 +2,10 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
-import { notifySuccess, notifyError } from '../../../../../../../decorators/notify';
+import {
+  notifySuccess,
+  notifyError,
+} from '../../../../../../../decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndAddHostRoute extends Route {
   // =services
@@ -65,7 +68,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async save(host) {
-    const hostSet = this.modelFor('scopes.scope.host-catalogs.host-catalog.host-sets.host-set');
+    const hostSet = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
+    );
     await host.save();
     await hostSet.addHost(host.id);
     await this.replaceWith(

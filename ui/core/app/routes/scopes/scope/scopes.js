@@ -29,12 +29,13 @@ export default class ScopesScopeScopesRoute extends Route {
     const parentScope = !currentScope.isGlobal
       ? await this.store.findRecord('scope', currentScope.scopeID)
       : null;
-    const subScopes =
-      await this.store.query('scope', { scope_id: currentScope.id });
+    const subScopes = await this.store.query('scope', {
+      scope_id: currentScope.id,
+    });
     return {
       currentScope,
       parentScope,
-      subScopes
+      subScopes,
     };
   }
 }

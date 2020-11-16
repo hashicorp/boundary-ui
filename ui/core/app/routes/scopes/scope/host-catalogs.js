@@ -51,7 +51,9 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(hostCatalog) {
     await hostCatalog.save();
     await this.transitionTo(

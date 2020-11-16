@@ -37,10 +37,10 @@ module('Acceptance | accounts | change password', function (hooks) {
       scope: instances.scopes.org,
     });
     instances.account = this.server.create('account', {
-      scope: instances.scopes.org
+      scope: instances.scopes.org,
     });
     authenticateSession({
-      account_id: instances.account.id
+      account_id: instances.account.id,
     });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
@@ -60,19 +60,32 @@ module('Acceptance | accounts | change password', function (hooks) {
     // Open header utilities dropdown
     await click('.rose-header-utilities .rose-dropdown summary');
     // Find first element in dropdown - should be change password link
-    await click('.rose-header-utilities .rose-dropdown .rose-dropdown-content a');
+    await click(
+      '.rose-header-utilities .rose-dropdown .rose-dropdown-content a'
+    );
     assert.equal(currentURL(), urls.changePassword);
   });
 
   test('can change password for account', async function (assert) {
     assert.expect(2);
-    this.server.post('/accounts/:idMethod', (_, { params: { idMethod }, requestBody }) => {
-      const attrs = JSON.parse(requestBody);
-      assert.equal(attrs.current_password, 'current password', 'current password is provided');
-      assert.equal(attrs.new_password, 'new password', 'new password is provided');
-      const id = idMethod.split(':')[0];
-      return { id };
-    });
+    this.server.post(
+      '/accounts/:idMethod',
+      (_, { params: { idMethod }, requestBody }) => {
+        const attrs = JSON.parse(requestBody);
+        assert.equal(
+          attrs.current_password,
+          'current password',
+          'current password is provided'
+        );
+        assert.equal(
+          attrs.new_password,
+          'new password',
+          'new password is provided'
+        );
+        const id = idMethod.split(':')[0];
+        return { id };
+      }
+    );
     await visit(urls.changePassword);
     await fillIn('[name="currentPassword"]', 'current password');
     await fillIn('[name="newPassword"]', 'new password');
@@ -89,7 +102,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     assert.notEqual(currentURL(), urls.changePassword);
   });
 
-  test('errors are displayed when changing password fails', async function  (assert) {
+  test('errors are displayed when changing password fails', async function (assert) {
     assert.expect(1);
     this.server.post('/accounts/:id', () => {
       return new Response(
@@ -110,7 +123,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     assert.ok(find('[role="alert"]'));
   });
 
-  test('cannot change password when not authenticated', async function(assert) {
+  test('cannot change password when not authenticated', async function (assert) {
     assert.expect(1);
     invalidateSession();
     await visit(urls.changePassword);

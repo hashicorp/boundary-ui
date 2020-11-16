@@ -54,8 +54,7 @@ export default class ErrorMessageComponent extends MessageComponent {
   @computed('args.status')
   get messageCode() {
     let messageCode = this.args.status;
-    if(!statuses.includes(messageCode)) messageCode = 'unknown';
+    if (!statuses.includes(messageCode)) messageCode = 'unknown';
     return messageCode;
   }
-
 }

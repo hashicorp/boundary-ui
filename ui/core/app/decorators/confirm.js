@@ -13,11 +13,14 @@ export function confirm(confirmationTextKey) {
       const confirmService = owner.lookup('service:confirm');
       const intl = owner.lookup('service:intl');
       const text = intl.t(confirmationTextKey);
-      return confirmService.confirm(text)
-        // If user confirmed, execute the decorated method
-        .then(() => method.apply(this, arguments))
-        // If the user denied, gracefully handle promise rejection with no-op
-        .catch((e) => e);
+      return (
+        confirmService
+          .confirm(text)
+          // If user confirmed, execute the decorated method
+          .then(() => method.apply(this, arguments))
+          // If the user denied, gracefully handle promise rejection with no-op
+          .catch((e) => e)
+      );
     };
-  }
+  };
 }

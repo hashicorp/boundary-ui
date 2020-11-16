@@ -127,7 +127,8 @@ export default class ApplicationRoute extends Route.extend(
   @action
   toggleTheme(theme) {
     const rootElementSelector = getOwner(this).rootElement;
-    const rootEl = getOwner(this).lookup('service:-document')
+    const rootEl = getOwner(this)
+      .lookup('service:-document')
       .querySelector(rootElementSelector);
     this.session.set('data.theme', theme);
     switch (theme) {
@@ -144,5 +145,4 @@ export default class ApplicationRoute extends Route.extend(
         rootEl.classList.remove('rose-theme-light');
     }
   }
-
 }

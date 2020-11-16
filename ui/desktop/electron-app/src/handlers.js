@@ -2,7 +2,7 @@ const { ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const log = (method, request) => {
   if (isDev) console.log(`[ipc-main](${method}): `, request);
-}
+};
 
 let origin = 'serve://boundary';
 

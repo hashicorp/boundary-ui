@@ -50,7 +50,9 @@ export default class ScopesScopeUsersRoute extends Route {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(user) {
     await user.save();
     await this.transitionTo('scopes.scope.users.user', user);

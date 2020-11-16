@@ -35,9 +35,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
     const { isNew } = hostSet;
     hostSet.rollbackAttributes();
     if (isNew)
-      this.transitionTo(
-        'scopes.scope.host-catalogs.host-catalog.host-sets'
-      );
+      this.transitionTo('scopes.scope.host-catalogs.host-catalog.host-sets');
   }
 
   /**
@@ -48,7 +46,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(hostSet) {
     await hostSet.save();
     await this.transitionTo(
@@ -69,8 +69,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   @notifySuccess('notifications.delete-success')
   async deleteHostSet(hostSet) {
     await hostSet.destroyRecord();
-    await this.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets'
-    );
+    await this.replaceWith('scopes.scope.host-catalogs.host-catalog.host-sets');
   }
 }

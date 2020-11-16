@@ -38,9 +38,13 @@ module('Acceptance | users | accounts', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    this.server.create('auth-method', {
-      scope: instances.scopes.org
-    }, 'withAccountsAndUsers');
+    this.server.create(
+      'auth-method',
+      {
+        scope: instances.scopes.org,
+      },
+      'withAccountsAndUsers'
+    );
     instances.user = this.server.schema.users.all().models[0];
     accountsCount = instances.user.accountIds.length;
     urls.users = `/scopes/${instances.scopes.org.id}/users`;
@@ -85,7 +89,7 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.ok(find('[role="alert"]'));
   });
 
-  test('visiting account add accounts', async function(assert) {
+  test('visiting account add accounts', async function (assert) {
     assert.expect(1);
     await visit(urls.addAccounts);
     await a11yAudit();
@@ -114,7 +118,7 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.equal(findAll('tbody tr').length, accountsCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, accountsCount - 1);
-    await click('.rose-layout-page-actions a')
+    await click('.rose-layout-page-actions a');
     assert.equal(currentURL(), urls.addAccounts);
     await click('tbody label');
     await click('form [type="button"]');

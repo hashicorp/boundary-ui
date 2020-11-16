@@ -49,7 +49,9 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) => isNew ? 'notifications.create-success' : 'notifications.save-success')
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
   async save(authMethod) {
     await authMethod.save();
     await this.transitionTo(

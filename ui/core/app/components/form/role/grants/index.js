@@ -15,7 +15,7 @@ export default class FormRoleGrantsComponent extends Component {
    */
   @computed('args.model.grant_strings.[]')
   get grants() {
-    return this.args.model.grant_strings.map(value => ({ value }));
+    return this.args.model.grant_strings.map((value) => ({ value }));
   }
 
   /**
@@ -23,7 +23,7 @@ export default class FormRoleGrantsComponent extends Component {
    */
   @computed('grants.@each.value')
   get grantStrings() {
-    return this.grants.map(obj => obj.value);
+    return this.grants.map((obj) => obj.value);
   }
 
   /**

@@ -63,8 +63,8 @@ module.exports = function (environment) {
         target: '/targets',
         'target.new': '/targets/new',
         'target.add-host-sets': '/targets/add-host-sets',
-        user: '/users'
-      }
+        user: '/users',
+      },
     },
 
     contentSecurityPolicyHeader: 'Content-Security-Policy',

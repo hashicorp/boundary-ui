@@ -13,7 +13,7 @@ Router.map(function () {
         this.route('method', { path: ':auth_method_id' });
       });
 
-      this.route('scopes', function() {});
+      this.route('scopes', function () {});
       this.route('edit');
       this.route('new');
 
@@ -54,26 +54,26 @@ Router.map(function () {
         this.route('new');
       });
 
-      this.route('sessions', function() {});
+      this.route('sessions', function () {});
 
-      this.route('targets', function() {
-        this.route('target', { path: ':target_id' }, function() {
-          this.route('host-sets', function() {});
+      this.route('targets', function () {
+        this.route('target', { path: ':target_id' }, function () {
+          this.route('host-sets', function () {});
           this.route('add-host-sets');
         });
         this.route('new');
       });
 
-      this.route('host-catalogs', function() {
+      this.route('host-catalogs', function () {
         this.route('new');
-        this.route('host-catalog', { path: ':host_catalog_id' }, function() {
-          this.route('hosts', function() {
+        this.route('host-catalog', { path: ':host_catalog_id' }, function () {
+          this.route('hosts', function () {
             this.route('new');
-            this.route('host', { path: ':host_id' }, function() {});
+            this.route('host', { path: ':host_id' }, function () {});
           });
-          this.route('host-sets', function() {
+          this.route('host-sets', function () {
             this.route('new');
-            this.route('host-set', { path: ':host_set_id' }, function() {
+            this.route('host-set', { path: ':host_set_id' }, function () {
               this.route('hosts');
               this.route('add-hosts');
               this.route('create-and-add-host');
@@ -84,7 +84,7 @@ Router.map(function () {
     });
   });
 
-  this.route('account', function() {
+  this.route('account', function () {
     this.route('change-password');
   });
 });

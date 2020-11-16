@@ -6,7 +6,6 @@ import { tracked } from '@glimmer/tracking';
  * the currently active scope or scopes.
  */
 export default class ScopeService extends Service {
-
   // =attributes
 
   /**
@@ -18,5 +17,4 @@ export default class ScopeService extends Service {
    * @type {ScopeModel}
    */
   @tracked project;
-
 }

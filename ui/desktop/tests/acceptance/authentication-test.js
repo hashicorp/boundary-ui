@@ -2,24 +2,24 @@ import { module, test } from 'qunit';
 import {
   visit,
   currentURL,
-  fillIn,
-  click,
+  //fillIn,
+  //click,
   find,
-  findAll,
-  getRootElement
+  //findAll,
+  //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
+//import { Response } from 'miragejs';
 //import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
-  authenticateSession,
+  //authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | authentication', function(hooks) {
+module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -30,19 +30,19 @@ module('Acceptance | authentication', function(hooks) {
     scopes: {
       global: null,
       org: null,
-      project: null
+      project: null,
     },
     authMethods: {
       global: null,
-      org: null
+      org: null,
     },
     hostCatalog: null,
-    target: null
+    target: null,
   };
 
   const stubs = {
     global: null,
-    org: null
+    org: null,
   };
 
   const urls = {
@@ -56,9 +56,9 @@ module('Acceptance | authentication', function(hooks) {
       global: null,
       methods: {
         global: null,
-      }
+      },
     },
-    targets: null
+    targets: null,
   };
 
   const setDefaultOrigin = (test) => {
@@ -73,23 +73,35 @@ module('Acceptance | authentication', function(hooks) {
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     stubs.global = { id: 'global', type: 'global' };
-    instances.scopes.org = this.server.create(
-      'scope',
-      { type: 'org', scope: stubs.global }
-    );
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: stubs.global,
+    });
     stubs.org = { id: instances.scopes.org.id, type: 'org' };
-    instances.scopes.project = this.server.create(
-      'scope',
-      { type: 'project', scope: stubs.org }
-    );
+    instances.scopes.project = this.server.create('scope', {
+      type: 'project',
+      scope: stubs.org,
+    });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
     // create other resources
-    instances.authMethods.global = this.server.create('auth-method', { scope: instances.scopes.global });
-    instances.authMethods.org = this.server.create('auth-method', { scope: instances.scopes.org });
+    instances.authMethods.global = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+    });
+    instances.authMethods.org = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+    });
 
-    instances.hostCatalog = this.server.create('host-catalog', { scope: instances.scopes.project }, 'withChildren');
-    instances.target = this.server.create('target', { scope: instances.scopes.project }, 'withRandomHostSets');
+    instances.hostCatalog = this.server.create(
+      'host-catalog',
+      { scope: instances.scopes.project },
+      'withChildren'
+    );
+    instances.target = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withRandomHostSets'
+    );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
@@ -118,8 +130,7 @@ module('Acceptance | authentication', function(hooks) {
       if (event.origin !== window.location.origin) return;
       const { method, payload } = event.data;
       if (method) {
-        const response =
-          await mockIPC.invoke(method, payload);
+        const response = await mockIPC.invoke(method, payload);
         event.ports[0].postMessage(response);
       }
     };
@@ -148,5 +159,4 @@ module('Acceptance | authentication', function(hooks) {
     assert.equal(currentURL(), urls.authenticate.global);
     assert.ok(find('.rose-message'));
   });
-
 });

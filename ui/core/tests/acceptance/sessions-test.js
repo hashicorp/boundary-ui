@@ -39,13 +39,33 @@ module('Acceptance | sessions', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
     });
-    this.server.createList('group', 1, { scope: instances.scopes.org }, 'withMembers');
-    this.server.createList('host-catalog', 1, { scope: instances.scopes.project }, 'withChildren');
-    this.server.createList('target', 1, { scope: instances.scopes.project }, 'withRandomHostSets');
-    instances.sessions = this.server.createList('session', 3, {
-      scope: instances.scopes.project,
-      status: 'active'
-    }, 'withAssociations');
+    this.server.createList(
+      'group',
+      1,
+      { scope: instances.scopes.org },
+      'withMembers'
+    );
+    this.server.createList(
+      'host-catalog',
+      1,
+      { scope: instances.scopes.project },
+      'withChildren'
+    );
+    this.server.createList(
+      'target',
+      1,
+      { scope: instances.scopes.project },
+      'withRandomHostSets'
+    );
+    instances.sessions = this.server.createList(
+      'session',
+      3,
+      {
+        scope: instances.scopes.project,
+        status: 'active',
+      },
+      'withAssociations'
+    );
     urls.sessions = `/scopes/${instances.scopes.project.id}/sessions`;
   });
 
@@ -65,7 +85,7 @@ module('Acceptance | sessions', function (hooks) {
     assert.expect(2);
     instances.sessions[0].update({
       userId: null,
-      targetId: null
+      targetId: null,
     });
     authenticateSession({});
     later(async () => {

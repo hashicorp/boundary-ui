@@ -1,4 +1,3 @@
 import Route from '@ember/routing/route';
 
-export default class ScopesScopeHostCatalogsHostCatalogHostsIndexRoute extends Route {
-}
+export default class ScopesScopeHostCatalogsHostCatalogHostsIndexRoute extends Route {}

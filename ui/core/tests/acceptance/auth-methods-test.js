@@ -6,9 +6,9 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
-//   // These are left here intentionally for future reference.
-//   //currentSession,
-//   //invalidateSession,
+  //   // These are left here intentionally for future reference.
+  //   //currentSession,
+  //   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
 module('Acceptance | auth methods', function (hooks) {
@@ -74,7 +74,7 @@ module('Acceptance | auth methods', function (hooks) {
 
   test('can update an auth method and cancel changes', async function (assert) {
     assert.expect(1);
-    await visit(urls.authMethod)
+    await visit(urls.authMethod);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await click('form button:not([type="submit"])');

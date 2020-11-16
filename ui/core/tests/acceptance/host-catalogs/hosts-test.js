@@ -25,8 +25,8 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
       org: null,
       project: null,
       hostCatalog: null,
-      host: null
-    }
+      host: null,
+    },
   };
   const urls = {
     globalScope: null,
@@ -56,7 +56,7 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     });
     instances.host = this.server.create('host', {
       scope: instances.scopes.project,
-      hostCatalog: instances.hostCatalog
+      hostCatalog: instances.hostCatalog,
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
@@ -132,7 +132,10 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     });
     await visit(urls.newHost);
     await click('[type="submit"]');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
@@ -147,7 +150,10 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), urls.host);
-    assert.equal(this.server.schema.hosts.all().models[0].name, 'random string');
+    assert.equal(
+      this.server.schema.hosts.all().models[0].name,
+      'random string'
+    );
   });
 
   test('can cancel changes to existing host', async function (assert) {
@@ -185,7 +191,10 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
@@ -207,7 +216,10 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child');
       assert.equal(currentURL(), urls.hosts);
-      assert.notEqual(this.server.schema.hosts.all().models[0].name, 'random string');
+      assert.notEqual(
+        this.server.schema.hosts.all().models[0].name,
+        'random string'
+      );
     }
   });
 
@@ -226,7 +238,10 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
       assert.equal(currentURL(), urls.host);
-      assert.notEqual(this.server.schema.hosts.all().models[0].name, 'random string');
+      assert.notEqual(
+        this.server.schema.hosts.all().models[0].name,
+        'random string'
+      );
     }
   });
 
@@ -279,5 +294,4 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
-
 });

@@ -26,7 +26,7 @@ module('Acceptance | scopes', function (hooks) {
       org2: null,
       project: null,
       project2: null,
-    }
+    },
   };
   const urls = {
     globalScope: null,
@@ -91,9 +91,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(1);
     this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
       const scope = scopes.find(id);
-      const response = (id === 'global')
-        ? new Response(404)
-        : scope;
+      const response = id === 'global' ? new Response(404) : scope;
       return response;
     });
     await visit(urls.globalScope);
@@ -128,7 +126,9 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.projectScope);
     await a11yAudit();
     assert.equal(currentURL(), urls.projectScopeEdit);
-    await click('.rose-header-nav .rose-dropdown + .rose-dropdown a:nth-child(2)');
+    await click(
+      '.rose-header-nav .rose-dropdown + .rose-dropdown a:nth-child(2)'
+    );
     assert.equal(currentURL(), urls.project2ScopeEdit);
   });
 
@@ -193,7 +193,10 @@ module('Acceptance | scopes', function (hooks) {
     });
     await visit(urls.newOrgScope);
     await click('[type="submit"]');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
@@ -208,7 +211,10 @@ module('Acceptance | scopes', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), urls.orgScopeEdit);
-    assert.equal(this.server.schema.scopes.where({ type: 'org' }).models[0].name, 'random string');
+    assert.equal(
+      this.server.schema.scopes.where({ type: 'org' }).models[0].name,
+      'random string'
+    );
   });
 
   test('can cancel changes to existing scope', async function (assert) {
@@ -246,7 +252,10 @@ module('Acceptance | scopes', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'The request was invalid.');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
@@ -268,7 +277,10 @@ module('Acceptance | scopes', function (hooks) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child');
       assert.equal(currentURL(), urls.globalScope);
-      assert.notEqual(this.server.schema.scopes.where({ type: 'org' }).models[0].name, 'random string');
+      assert.notEqual(
+        this.server.schema.scopes.where({ type: 'org' }).models[0].name,
+        'random string'
+      );
     }
   });
 
@@ -287,7 +299,10 @@ module('Acceptance | scopes', function (hooks) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
       assert.equal(currentURL(), urls.orgScopeEdit);
-      assert.notEqual(this.server.schema.scopes.where({ type: 'org' }).models[0].name, 'random string');
+      assert.notEqual(
+        this.server.schema.scopes.where({ type: 'org' }).models[0].name,
+        'random string'
+      );
     }
   });
 
@@ -340,5 +355,4 @@ module('Acceptance | scopes', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
-
 });

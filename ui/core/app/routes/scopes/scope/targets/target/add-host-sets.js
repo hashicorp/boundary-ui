@@ -25,9 +25,7 @@ export default class ScopesScopeTargetsTargetAddHostSetsRoute extends Route {
    * @return {{target: TargetModel, hostCatalogs: [HostCatalogModel], hostSets: [HostSetModel]}}
    */
   async model() {
-    const target = this.modelFor(
-      'scopes.scope.targets.target'
-    );
+    const target = this.modelFor('scopes.scope.targets.target');
     const { id: scope_id } = this.modelFor('scopes.scope');
     const hostCatalogs = await this.store.query('host-catalog', { scope_id });
     await all(
@@ -50,13 +48,10 @@ export default class ScopesScopeTargetsTargetAddHostSetsRoute extends Route {
   renderTemplate() {
     super.renderTemplate(...arguments);
 
-    this.render(
-      'scopes/scope/targets/target/add-host-sets/-header',
-      {
-        into: 'scopes/scope/targets/target',
-        outlet: 'header',
-      }
-    );
+    this.render('scopes/scope/targets/target/add-host-sets/-header', {
+      into: 'scopes/scope/targets/target',
+      outlet: 'header',
+    });
 
     this.render('-empty', {
       into: 'scopes/scope/targets/target',
@@ -77,9 +72,7 @@ export default class ScopesScopeTargetsTargetAddHostSetsRoute extends Route {
   @notifySuccess('notifications.add-success')
   async save(target, hostSetIDs) {
     await target.addHostSets(hostSetIDs);
-    this.replaceWith(
-      'scopes.scope.targets.target.host-sets'
-    );
+    this.replaceWith('scopes.scope.targets.target.host-sets');
   }
 
   /**

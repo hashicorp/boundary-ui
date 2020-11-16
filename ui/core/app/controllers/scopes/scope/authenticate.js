@@ -11,7 +11,6 @@ export default class ScopesScopeAuthenticateController extends Controller {
     return [
       ...this.model.scopes.filter((scope) => scope.id === 'global'),
       ...this.model.scopes.filter((scope) => scope.id !== 'global'),
-    ]
+    ];
   }
-
 }

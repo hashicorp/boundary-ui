@@ -12,7 +12,6 @@ import loading from 'ember-loading/decorator';
 export default class ApplicationRoute extends Route.extend(
   ApplicationRouteMixin
 ) {
-
   // =services
 
   @service session;
@@ -112,5 +111,4 @@ export default class ApplicationRoute extends Route.extend(
     }
     return true;
   }
-
 }

@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Service | confirm', function(hooks) {
+module('Unit | Service | confirm', function (hooks) {
   setupTest(hooks);
 
-  test('`confirm()` emits promise-like instances', function(assert) {
+  test('`confirm()` emits promise-like instances', function (assert) {
     assert.expect(3);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
@@ -14,7 +14,7 @@ module('Unit | Service | confirm', function(hooks) {
     assert.ok(confirmation.finally, 'confirmation has a finally method');
   });
 
-  test('`pending` is an array of pending confirmations', function(assert) {
+  test('`pending` is an array of pending confirmations', function (assert) {
     assert.expect(3);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
@@ -25,7 +25,7 @@ module('Unit | Service | confirm', function(hooks) {
     assert.equal(service.pending.length, 0, 'Confirmation was confirmed');
   });
 
-  test('confirmations may be confirmed or dismissed', function(assert) {
+  test('confirmations may be confirmed or dismissed', function (assert) {
     assert.expect(4);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
@@ -39,7 +39,7 @@ module('Unit | Service | confirm', function(hooks) {
     assert.ok(confirmation.done, 'Confirmation is done via dismiss');
   });
 
-  test('confirmations resolve on confirm', function(assert) {
+  test('confirmations resolve on confirm', function (assert) {
     assert.expect(1);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
@@ -48,7 +48,7 @@ module('Unit | Service | confirm', function(hooks) {
     confirmation.confirm();
   });
 
-  test('confirmations reject on dismiss', function(assert) {
+  test('confirmations reject on dismiss', function (assert) {
     assert.expect(1);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
@@ -57,7 +57,7 @@ module('Unit | Service | confirm', function(hooks) {
     confirmation.dismiss();
   });
 
-  test('confirmations have a finally method', function(assert) {
+  test('confirmations have a finally method', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;

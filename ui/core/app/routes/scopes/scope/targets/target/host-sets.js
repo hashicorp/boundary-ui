@@ -20,9 +20,7 @@ export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
    * @return {Promise{[HostSetModel, HostCatalogModel]}}
    */
   beforeModel() {
-    const { scopeID, host_sets } = this.modelFor(
-      'scopes.scope.targets.target'
-    );
+    const { scopeID, host_sets } = this.modelFor('scopes.scope.targets.target');
     const promises = host_sets.map(
       ({ host_set_id, host_catalog_id: hostCatalogID }) =>
         hash({
