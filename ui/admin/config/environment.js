@@ -5,7 +5,7 @@ const API_HOST = process.env.API_HOST || '';
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix: 'core',
+    modulePrefix: 'admin',
     environment,
     rootURL: '/',
     locationType: 'auto',

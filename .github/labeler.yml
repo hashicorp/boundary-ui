@@ -14,7 +14,7 @@ ui:
   - ui/**/*
 
 admin:
-  - ui/core/**/*
+  - ui/admin/**/*
 
 desktop:
   - ui/desktop/**/*
