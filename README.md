@@ -21,7 +21,7 @@ subproject, e.g. running or testing.
 - [Contributing](#contributing)
   - [Branching](#branching)
   - [Building ToC](#building-toc)
-  - [Building Core UI for Production](#building-core-ui-for-production)
+  - [Building Admin UI for Production](#building-admin-ui-for-production)
     - [Building with a Container](#building-with-a-container)
   - [Committing](#committing)
     - [License Checking](#license-checking)
@@ -57,7 +57,7 @@ List of available project commands.  `yarn run <command-name>`
 
 | Command             | Description |
 |---------------------|---|
-| build               | Builds Core UI. |
+| build               | Builds Admin UI. |
 | test                | Runs tests in CI mode. |
 | commit              | Replaces `git commit`, ensures compliance, audit, lint, and test checks pass before commit is allowed and normalizes commit messages across authors. |
 | lint                | Runs ember-template-lint on all of the hbs, js, and sass files. |
@@ -77,20 +77,20 @@ To autogenerate a ToC (table of contents) for this README,
 run `yarn doc:toc`.  Please update the ToC whenever editing the structure
 of README.
 
-### Building Core UI for Production
+### Building Admin UI for Production
 
-See ui/core/README.md Building for Production for more information on how to
-build the Core UI.  Be sure to set build-related environment variables as
-necessary for your target environment, as described in the Core UI readme.
+See ui/admin/README.md Building for Production for more information on how to
+build the Admin UI.  Be sure to set build-related environment variables as
+necessary for your target environment, as described in the Admin UI readme.
 
-To quickly produce a production build of Core UI, run from this folder:
+To quickly produce a production build of Admin UI, run from this folder:
 
 ```bash
 yarn install
 yarn build
 ```
 
-Assets are saved to `ui/core/dist/`.
+Assets are saved to `ui/admin/dist/`.
 
 #### Building with a Container
 
@@ -100,7 +100,7 @@ Optionally, you may build the UI within a container.  Execute the following comm
 docker-compose -f docker-compose-embedding.yml run build
 ```
 
-Assets are saved to `ui/core/dist/`.
+Assets are saved to `ui/admin/dist/`.
 
 ### Committing
 
