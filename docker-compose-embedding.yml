@@ -13,17 +13,17 @@ services:
       - 'icu_addons_api_node_modules:/src/addons/api/node_modules'
       - 'icu_addons_auth_node_modules:/src/addons/auth/node_modules'
       - 'icu_addons_rose_node_modules:/src/addons/rose/node_modules'
-      - 'icu_ui_core_node_modules:/src/ui/core/node_modules'
+      - 'icu_ui_admin_node_modules:/src/ui/admin/node_modules'
     working_dir: /src
 
   build:
     <<: *node
     entrypoint: bash
-    command: '-c "yarn install && yarn build:ui:core && chmod -R 777 ."'
+    command: '-c "yarn install && yarn build:ui:admin && chmod -R 777 ."'
 
 volumes:
   icu_node_modules:
   icu_addons_api_node_modules:
   icu_addons_auth_node_modules:
   icu_addons_rose_node_modules:
-  icu_ui_core_node_modules:
+  icu_ui_admin_node_modules:
