@@ -13,15 +13,16 @@
     "test": "tests"
   },
   "scripts": {
+    "build:development": "ember build",
     "build": "ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
-    "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "format": "npm run format:js",
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "start": "ember serve",
     "test": "ember test",
-    "test:ember-compatibility": "ember try:each"
+    "test:ember-compatibility": "ember try:each",
+    "doc:toc": "doctoc README.md"
   },
   "dependencies": {
     "ember-cli-babel": "^7.21.0",
@@ -33,6 +34,7 @@
     "@glimmer/tracking": "^1.0.0",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
+    "doctoc": "^1.4.0",
     "ember-auto-import": "^1.6.0",
     "ember-cli": "~3.20.2",
     "ember-cli-dependency-checker": "^3.2.0",
