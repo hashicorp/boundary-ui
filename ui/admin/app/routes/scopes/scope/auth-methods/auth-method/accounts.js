@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from '../../../../../decorators/notify';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route {
   // =services

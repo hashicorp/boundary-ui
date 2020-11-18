@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { all, hash } from 'rsvp';
 import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
-import { notifySuccess, notifyError } from '../../../decorators/notify';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;

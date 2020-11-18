@@ -7,7 +7,7 @@ import { confirm } from 'core/decorators/confirm';
 import {
   notifySuccess,
   notifyError,
-} from '../../../../../../../decorators/notify';
+} from 'core/decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsRoute extends Route {
   // =services

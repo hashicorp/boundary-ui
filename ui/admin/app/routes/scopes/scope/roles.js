@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from '../../../decorators/notify';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeRolesRoute extends Route {
   // =services
