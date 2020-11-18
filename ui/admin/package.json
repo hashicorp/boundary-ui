@@ -35,7 +35,7 @@
     "@glimmer/tracking": "^1.0.0",
     "api": "*",
     "auth": "*",
-    "intl": "*",
+    "core": "*",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "broccoli-asset-rev": "^3.0.0",
