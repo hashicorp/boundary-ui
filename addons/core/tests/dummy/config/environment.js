@@ -21,6 +21,16 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+
+    appName: 'App Name',
+    companyName: 'Company Name',
+
+    documentation: {
+      baseURL: 'https://boundaryproject.io/help/admin-ui',
+      topics: {
+        account: '/accounts',
+      }
+    }
   };
 
   if (environment === "development") {

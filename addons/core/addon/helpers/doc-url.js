@@ -1,6 +1,6 @@
 import { helper } from '@ember/component/helper';
 import { assert } from '@ember/debug';
-import config from '../config/environment';
+import config from 'ember-get-config';
 
 export default helper(function docUrl(params /*, hash*/) {
   const baseURL = config.documentation.baseURL;
