@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
-import { confirm } from '../../../../../decorators/confirm';
+import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from '../../../../../decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route {

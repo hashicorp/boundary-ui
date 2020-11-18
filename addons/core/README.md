@@ -31,9 +31,39 @@ See monorepo README for installation instructions.
 To use internationalization features, install `ember-intl` into your project:
 `ember install ember-intl`.
 
-## Usage within a project
+## I18n
 
 To access translations within a template, see `ember-intl` docs.
+
+## Confirmations
+
+This addon exposes a service to request confirmations and the component
+used to expose them to users.  A decorator is exposed for convenience.
+
+To guard an action on a confirmation, decorate it with `@confirm`. In this
+example, the confirmation looks up the translation under a
+`questions.delete-confirm` key.
+
+```js
+import { confirm } from 'core/decorators/confirm';
+
+export default class ExampleRoute extends Route {
+  @confirm('questions.delete-confirm')
+  async myAction() {
+    // do something
+  }
+}
+```
+
+In the application template, interate over confirmations, yielding the
+confirmation instance as well as accept and deny functions which, when called,
+update the confirmation status.
+
+```html
+<PendingConfirmations as |confirmation accept deny|>
+  {{!-- your confirmation dialog component here --}}
+</PendingConfirmations
+```
 
 ## Yarn Commands
 
