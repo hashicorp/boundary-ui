@@ -6,7 +6,6 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Helper | format-date-iso', function (hooks) {
   setupRenderingTest(hooks);
 
-  // Replace this with your real tests.
   test('it renders', async function (assert) {
     this.set('inputValue', new Date('2020-01-01T00:00:00.999Z'));
 
