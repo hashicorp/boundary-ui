@@ -1,9 +1,9 @@
 import Service from '@ember/service';
+import { filterBy } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { defer, resolve } from 'rsvp';
-import { filterBy } from '@ember/object/computed';
-import config from '../config/environment';
+import config from 'ember-get-config';
 
 /**
  * A simple service that emits Confirmation instances and
