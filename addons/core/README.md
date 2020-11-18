@@ -35,6 +35,24 @@ To use internationalization features, install `ember-intl` into your project:
 
 To access translations within a template, see `ember-intl` docs.
 
+## Notifications
+
+To use in-app notifications, first install `ember-notify` in your app.  Then use
+the notificaiton decorators to notify the user when a function or action
+succeeds or fails.  For example:
+
+```js
+import { notifySuccess, notifyError } from 'core/decorators/notify';
+
+export default class ExampleRoute extends Route {
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async myAction() {
+    // do something
+  }
+}
+```
+
 ## Confirmations
 
 This addon exposes a service to request confirmations and the component

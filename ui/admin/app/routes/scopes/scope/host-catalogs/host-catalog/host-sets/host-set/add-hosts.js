@@ -6,7 +6,7 @@ import loading from 'ember-loading/decorator';
 import {
   notifySuccess,
   notifyError,
-} from '../../../../../../../decorators/notify';
+} from 'core/decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRoute extends Route {
   // =services
