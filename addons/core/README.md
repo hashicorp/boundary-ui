@@ -83,6 +83,25 @@ update the confirmation status.
 </PendingConfirmations
 ```
 
+## App and Company Names
+
+To make use of the `app-name`, `company-name`, and `company-copyright` helpers,
+add `appName` an `companyName` keys to your Ember config
+(see admin for example).
+
+## Documentation URLs
+
+To render doc links in your application, be sure to configure the links in your
+Ember config (see admin).  Then reference doc links by keys:
+
+```html
+<DocLink @doc="account" @iconSize="large" />
+```
+
+## Loading Helper
+
+To make use of the `is-loading` helper, install `ember-loading` first.
+
 ## Yarn Commands
 
 List of available project commands.  `yarn run <command-name>`
