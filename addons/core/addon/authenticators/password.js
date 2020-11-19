@@ -85,6 +85,9 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * Assigns a token string all future requests via the `Authorization` header
    * on the application adapter prototype.  Only application and adapters that
    * extend the application adapter receive this header (which is most).
+   *
+   * TODO:  if cookies were requested, this step should be skipped.
+   *
    * @param {string} token
    */
   addTokenToAuthorization(token) {
