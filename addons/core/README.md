@@ -69,7 +69,7 @@ export default class ExampleRoute extends Route {
 }
 ```
 
-In the application template, interate over confirmations, yielding the
+In the application template, iterate over confirmations, yielding the
 confirmation instance as well as accept and deny functions which, when called,
 update the confirmation status.
 
@@ -105,6 +105,23 @@ present a loading indicator to a user:
 @loading
 async myAction() {
   // ...do potentially time-consuming task
+}
+```
+
+## Scope Service
+
+This addon exposes a service to hold all active scopes (org and project where available).
+
+To make use of the service, import it and initialize it using service injection. 
+
+```js
+import { inject as service } from '@ember/service';
+
+export default class ExampleRoute extends Route {
+  @service scope;
+  async myAction() {
+    // do something
+  }
 }
 ```
 
