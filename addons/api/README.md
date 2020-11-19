@@ -23,6 +23,15 @@ This addon contains the API data access layer for Boundary.
 Add this addon to an Ember application's `devDependencies` as:
 `"api": "*"`, for applications included in this monorepo.
 
+Since this addon also includes Mirage mocks, be sure to install
+`ember-cli-mirage` and add the following config to your UI project:
+
+```js
+'ember-cli-mirage': {
+  directory: '../../addons/api/mirage'
+}
+```
+
 ## Installation
 
 See monorepo README for installation instructions.

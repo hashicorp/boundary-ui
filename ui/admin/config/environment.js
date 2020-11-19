@@ -80,6 +80,10 @@ module.exports = function (environment) {
       'media-src': ["'self'"],
       'manifest-src': ["'self'"],
     },
+
+    'ember-cli-mirage': {
+      directory: '../../addons/api/mirage'
+    }
   };
 
   // Unsafe policy is necessary in development and test environments, but should
