@@ -30,6 +30,15 @@ module.exports = function (environment) {
       topics: {
         account: '/accounts',
       }
+    },
+
+    api: {
+      host: '',
+      namespace: 'v1',
+    },
+
+    'ember-cli-mirage': {
+      directory: '../api/mirage'
     }
   };
 
