@@ -18,6 +18,11 @@ module.exports = function (defaults) {
     emberNotify: {
       importCss: false,
     },
+    svg: {
+      paths: [
+        '../../addons/core/public'
+      ]
+    }
   });
 
   // Only import when in development or test mode
