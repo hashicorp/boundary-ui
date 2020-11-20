@@ -8978,7 +8978,7 @@ ember-router-generator@^2.0.0:
     "@babel/traverse" "^7.4.5"
     recast "^0.18.1"
 
-ember-simple-auth@^3.0.0, ember-simple-auth@^3.0.1:
+ember-simple-auth@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/ember-simple-auth/-/ember-simple-auth-3.0.1.tgz#78bcd8e3d04da43154cf105931c0d3620a9f0694"
   integrity sha512-7D5s23nA5Nsonf37CyeQtksadV6Rgiz2rgCgRDnUObp3xnV71ljPtaUcZuq6kqqaZANYJi3uM8i4zVzmAHlKFQ==
