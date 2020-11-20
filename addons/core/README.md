@@ -28,17 +28,13 @@ Add this addon to an Ember application's `devDependencies` as:
 
 See monorepo README for installation instructions.
 
-To use internationalization features, install `ember-intl` into your project:
-`ember install ember-intl`.
-
 ## I18n
 
 To access translations within a template, see `ember-intl` docs.
 
 ## Notifications
 
-To use in-app notifications, first install `ember-notify` in your app.  Then use
-the notificaiton decorators to notify the user when a function or action
+Use notificaiton decorators to notify the user when a function or action
 succeeds or fails.  For example:
 
 ```js
@@ -100,7 +96,17 @@ Ember config (see admin).  Then reference doc links by keys:
 
 ## Loading Helper
 
-To make use of the `is-loading` helper, install `ember-loading` first.
+See admin and desktop routes and templates for examples of how to
+use the loading subsystem.  For example, to annotate that an async action should
+present a loading indicator to a user:
+
+```js
+@action
+@loading
+async myAction() {
+  // ...do potentially time-consuming task
+}
+```
 
 ## Yarn Commands
 
