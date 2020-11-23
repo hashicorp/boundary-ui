@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 
 /**
  * This simple non-functional service is used to retain references to
- * the currently active scope or scopes.
+ * the current active scope(s).
  */
 export default class ScopeService extends Service {
   // =attributes

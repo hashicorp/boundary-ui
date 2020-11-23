@@ -5,6 +5,7 @@ import { A } from '@ember/array';
 export default class ScopesScopeRoute extends Route {
   // =services
 
+  @service intl;
   @service session;
   @service scope;
 
@@ -25,10 +26,12 @@ export default class ScopesScopeRoute extends Route {
     // from ID because global has a fixed ID.
     const type = id === 'global' ? 'global' : 'org';
     return this.store.findRecord('scope', id).catch(() => {
-      console.error('caught error');
       const maybeExistingScope = this.store.peekRecord('scope', id);
-
       const scopeOptions = { id, type };
+      /* istanbul ignore else */
+      if (type === 'global') {
+        scopeOptions.name = this.intl.t('titles.global');
+      }
       return (
         maybeExistingScope || this.store.createRecord('scope', scopeOptions)
       );
@@ -41,36 +44,25 @@ export default class ScopesScopeRoute extends Route {
    * a project.  These are used for scope navigation.
    */
   async afterModel(model) {
-    // Load all orgs
-    let orgs;
+    // First, load orgs and, if necessary, projects
+    let orgs, projects;
     orgs = await this.store
       .query('scope', { scope_id: 'global' })
       .catch(() => A([]));
-
-    // Then pull out the "selected" org, if relevant
-    let selectedOrg;
-    if (model.isGlobal || model.isOrg) selectedOrg = model;
-
-    let projects;
-    if (model.isOrg) {
-      projects = await this.store.query('scope', { scope_id: model.id });
+    if (model.isProject) {
+      projects = await this.store.query('scope', { scope_id: model.scopeID });
     }
-
+    // Then pull out the "selected" scopes, if relevant
+    let selectedOrg, selectedProject;
+    if (model.isGlobal || model.isOrg) selectedOrg = model;
+    if (model.isProject) {
+      selectedProject = model;
+      selectedOrg = this.store.peekRecord('scope', model.scopeID);
+    }
     // Update the scope service with the current scope(s);
     this.scope.org = selectedOrg;
-    this.scope.projects = projects;
-    this.scopes = { orgs, selectedOrg };
-  }
-
-  /**
-   *
-   */
-  redirect(model) {
-    const { isAuthenticated } = this.session;
-    const { isGlobal } = model;
-    if (isAuthenticated && isGlobal && this.scopes.orgs?.length) {
-      this.replaceWith('scopes.scope', this.scopes.orgs.firstObject.id);
-    }
+    this.scope.project = selectedProject;
+    this.scopes = { orgs, projects, selectedOrg, selectedProject };
   }
 
   /**
@@ -95,5 +87,16 @@ export default class ScopesScopeRoute extends Route {
       into: 'application',
       outlet: 'header-nav',
     });
+  }
+
+  /**
+   * In global scope, redirect to first org on authentication.
+   */
+  redirect(model) {
+    const { isAuthenticated } = this.session;
+    const { isGlobal } = model;
+    if (isAuthenticated && isGlobal && this.scopes.orgs?.length) {
+      this.replaceWith('scopes.scope', this.scopes.orgs.firstObject.id);
+    }
   }
 }

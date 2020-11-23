@@ -2,11 +2,10 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { all } from 'rsvp';
 
-export default class ScopesScopeTargetsRoute extends Route {
+export default class ScopesScopeProjectsTargetsRoute extends Route {
   // =services
 
   @service session;
-  @service scope;
 
   // =methods
 
@@ -22,8 +21,9 @@ export default class ScopesScopeTargetsRoute extends Route {
    * @return {Promise{[TargetModel]}}
    */
   async model() {
+    const projects = this.modelFor('scopes.scope.projects');
     let projectTargets = await all(
-      this.scope.projects.map(({ id: scope_id }) =>
+      projects.map(({ id: scope_id }) =>
         this.store.query('target', { scope_id })
       )
     );

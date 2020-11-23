@@ -19,10 +19,8 @@ module.exports = function (defaults) {
       importCss: false,
     },
     svg: {
-      paths: [
-        '../../addons/core/public'
-      ]
-    }
+      paths: ['../../addons/core/public'],
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated

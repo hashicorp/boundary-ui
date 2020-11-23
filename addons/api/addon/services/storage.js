@@ -4,7 +4,7 @@ import { get } from '@ember/object';
 
 /**
  * A dead simple memory storage class used by `StorageService` when it
- * is configued for memory-only.
+ * is configured for memory-only.
  */
 class MemoryStorage {
   /**
@@ -42,7 +42,7 @@ class MemoryStorage {
 
 /**
  * The storage service provides a simple way to persist data in the browser.
- * Most of the time localStorage is used.  Appplications may specify in-memory
+ * Most of the time localStorage is used.  Applications may specify in-memory
  * storage via the config, for example:
  *
  *     ENV.storage = {
