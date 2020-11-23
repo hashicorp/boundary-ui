@@ -28,6 +28,10 @@ module.exports = function (environment) {
 
     isElectron: Boolean(process.env.EMBER_CLI_ELECTRON),
 
+    'ember-cli-mirage': {
+      directory: '../../addons/api/mirage'
+    },
+
     api: {
       host: API_HOST,
       namespace: 'v1',
