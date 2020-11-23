@@ -25,6 +25,8 @@ class MockIPC {
     this.origin = origin;
     return this.origin;
   }
+
+  connect() {}
 }
 
 /**
