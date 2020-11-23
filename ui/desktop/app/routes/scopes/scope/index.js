@@ -17,7 +17,7 @@ export default class ScopesScopeIndexRoute extends Route {
     if (!this.session.isAuthenticated) {
       this.replaceWith('scopes.scope.authenticate');
     } else {
-      this.replaceWith('scopes.scope.targets');
+      this.replaceWith('scopes.scope.projects.targets');
     }
   }
 }
