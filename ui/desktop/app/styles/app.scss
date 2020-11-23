@@ -99,7 +99,14 @@
 }
 
 .rose-header {
+  -webkit-app-region: drag;
   position: relative;
+  padding-left: sizing.rems(l) * 3;
+  min-height: sizing.rems(l) * 2;
+
+  .rose-header-brand {
+    display: none;
+  }
 
   .logotype {
     display: none;
