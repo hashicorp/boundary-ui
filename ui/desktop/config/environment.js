@@ -2,6 +2,7 @@
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
+const ENABLE_MIRAGE = process.env.API_HOST ? false : true;
 
 module.exports = function (environment) {
   let ENV = {
@@ -29,6 +30,7 @@ module.exports = function (environment) {
     isElectron: Boolean(process.env.EMBER_CLI_ELECTRON),
 
     'ember-cli-mirage': {
+      enabled: ENABLE_MIRAGE,
       directory: '../../addons/api/mirage'
     },
 

@@ -8,6 +8,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
 
   @service ipc;
   @service session;
+  @service notify;
 
   // =methods
 
@@ -41,14 +42,17 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   // =actions
 
   /**
-   * 
+   * Establish a session to current target.
    */
   @action
   async connect(model) {
-    await this.ipc.invoke('connect', {
-      target_id: model.target.id,
-      project: model.project.id,
-      auth_token: this.session.data.authenticated.token,
-    });
+    try {
+      await this.ipc.invoke('connect', {
+        target_id: model.target.id,
+        auth_token: this.session.data.authenticated.token,
+      });
+    } catch(e) {
+      this.notify.error(e.toString(), { closeAfter: null });
+    }
   }
 }

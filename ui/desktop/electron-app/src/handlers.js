@@ -32,19 +32,22 @@ ipcMain.handle('setOrigin', async (event, request) => {
 });
 
 /**
- * 
+ * Establishes a boundary session and returns session details.
+ * TODO: Return session details.
  */
 ipcMain.handle('connect', async (event, request) => {
-  log('connect', request);
+  log('connect payload', request);
 
   const cliAvailable = await lookpath('boundary');
-  // TODO: Add error structure
-  if(!cliAvailable) { return 'error'; }
+  log('cli check', cliAvailable);
+  if(!cliAvailable) { throw new Error('CLI unavailable.'); }
 
-  // call the function
-  exec(`boundary connect -target-id=${request.target_id} -token=${request.auth_token}`, (output) => {
-    console.log(output);
+  const connectCmd = `boundary connect -target-id=${request.target_id} -token=${request.auth_token}`;
+  log('connect command', connectCmd);
+
+  exec(connectCmd, (output) => {
+    log('connect output', output);
   }, (error) => {
-    console.error(error);
+    log('connect error', error);
   });
 });

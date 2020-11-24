@@ -197,3 +197,9 @@
 .nowrap {
   white-space: nowrap;
 }
+
+.centered {
+  display: inline-block;
+  margin: auto;
+  transform: translate(0%, -20%);
+}
