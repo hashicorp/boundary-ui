@@ -5,8 +5,7 @@ import { action } from '@ember/object';
 export default class OriginRoute extends Route {
   // =services
 
-  @service session;
-  @service ipc;
+  @service origin;
   @service intl;
   @service notify;
 
@@ -22,20 +21,15 @@ export default class OriginRoute extends Route {
   // =methods
 
   /**
-   * Points the API to the specified origin and persists it to the session,
-   * as well as the main process.  When the main process receives the origin,
-   * it is expected that the renderer will be restarted.
+   * Points the API to the specified origin and persists it the selection.
+   * When the main process receives the origin, it is expected that the renderer
+   * will be restarted.
    * @param {string} origin
    */
   @action
   async setOrigin(origin) {
-    this.adapter.host = origin;
-    // Check if we have a Boundary endpoint...
     try {
-      // If scopes load, this could be a Boundary API
-      await this.store.query('scope', {});
-      this.session.set('data.origin', origin);
-      await this.ipc.invoke('setOrigin', origin);
+      await this.origin.setOrigin(origin);
       this.replaceWith('index');
     } catch (e) {
       // If scopes don't load, we assume this is not a Boundary API
