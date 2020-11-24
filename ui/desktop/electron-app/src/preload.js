@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+
 // Messages must originate from this origin
 const emberAppOrigin = window.location.origin;
 
@@ -16,10 +17,10 @@ process.once('loaded', () => {
    */
   window.addEventListener('message', async function (event) {
     if (event.origin !== emberAppOrigin) return;
-    const response = await ipcRenderer.invoke(
-      event.data.method,
-      event.data.payload
-    );
-    event.ports[0].postMessage(response);
+    const { method, payload } = event?.data ?? {};
+    if (method) {
+      const response = await ipcRenderer.invoke(method, payload);
+      event.ports[0].postMessage(response);
+    }
   });
 });
