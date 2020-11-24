@@ -25,6 +25,6 @@ ipcMain.handle('getOrigin', async (event, request) => {
  */
 ipcMain.handle('setOrigin', async (event, request) => {
   log('setOrigin', request);
-  origin = request.data;
+  origin = request?.data;
   return origin;
 });
