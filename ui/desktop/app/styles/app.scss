@@ -198,17 +198,16 @@
   white-space: nowrap;
 }
 
-.centered {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  margin: 0 auto;
+.rose-layout-global .rose-layout-global-body {
+  main {
+    flex-grow: 1;
+  }
 }
 
 .branded-card {
   position: relative;
-  max-width: sizing.rems(l) * 16;
+  width: sizing.rems(l) * 16;
+  margin: 0 auto;
   padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2) (sizing.rems(l) * 3);
   border: 1px solid var(--ui-border-subtler-1);
   border-radius: sizing.rems(xxxs);
@@ -230,7 +229,7 @@
   }
 
   .branded-card-description {
-    margin-bottom: sizing.rems(xl);
+    margin-bottom: sizing.rems(l);
   }
 
   .rose-form-actions {

@@ -1,25 +1,23 @@
-<Centered>
-
-<BrandedCard
-  @title={{t 'titles.welcome-to-boundary'}}
-  @description={{t 'descriptions.origin-initialization'}}
->
-  <Rose::Form
-    class="full-width"
-    @onSubmit={{route-action "setOrigin" this.origin}}
-    @cancel={{false}}
-    as |form|
+<main>
+  <BrandedCard
+    @title={{t 'titles.welcome-to-boundary'}}
+    @description={{t 'descriptions.origin-initialization'}}
   >
-    <form.input
-      @name="host"
-      @type="text"
-      @value={{this.origin}}
-      @label={{t "form.origin.label"}}
-      @helperText={{t "form.origin.description"}} />
-    <form.actions
-      @submitText={{t "actions.submit"}}
-      @showCancel={{false}} />
-  </Rose::Form>
-</BrandedCard>
-
-</Centered>
+    <Rose::Form
+      class="full-width"
+      @onSubmit={{route-action "setOrigin" this.origin}}
+      @cancel={{false}}
+      as |form|
+    >
+      <form.input
+        @name="host"
+        @type="text"
+        @value={{this.origin}}
+        @label={{t "form.origin.label"}}
+        @helperText={{t "form.origin.description"}} />
+      <form.actions
+        @submitText={{t "actions.submit"}}
+        @showCancel={{false}} />
+    </Rose::Form>
+  </BrandedCard>
+</main>
