@@ -21,9 +21,8 @@ export default class OriginRoute extends Route {
   // =methods
 
   /**
-   * Points the API to the specified origin and persists it the selection.
-   * When the main process receives the origin, it is expected that the renderer
-   * will be restarted.
+   * Points the API to the specified origin.  When the main process receives
+   * the origin, it is expected that the renderer will be restarted.
    * @param {string} origin
    */
   @action
@@ -32,7 +31,7 @@ export default class OriginRoute extends Route {
       await this.origin.setOrigin(origin);
       this.replaceWith('index');
     } catch (e) {
-      // If scopes don't load, we assume this is not a Boundary API
+      // If scopes do not load, we assume this is not a Boundary API
       const errorMessage = this.intl.t(
         'errors.origin-verification-failed.description'
       );
