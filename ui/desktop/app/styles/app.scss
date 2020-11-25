@@ -218,10 +218,26 @@
     top: 0;
     left: 0;
     right: 0;
-    height: sizing.rems(l) * 3.5;
+    height: sizing.rems(l) * 3.25;
     background-color: var(--black);
+    background-image: url('/brand-background.svg');
+    background-repeat: no-repeat;
+    background-position: right;
     border-top-left-radius: sizing.rems(xxxs);
     border-top-right-radius: sizing.rems(xxxs);
+  }
+
+  &::after {
+    position: absolute;
+    content: " ";
+    top: 0;
+    left: 0;
+    right: 0;
+    height: sizing.rems(l) * 3.25;
+    background-image: url('/logo-app-full.svg');
+    background-size: sizing.rems(l) * 7;
+    background-repeat: no-repeat;
+    background-position: (sizing.rems(l) * 2.5) 50%;
   }
 
   .branded-card-title {
@@ -242,5 +258,12 @@
         display: inline;
       }
     }
+  }
+}
+
+@media (max-width: media.width(medium)) {
+  .branded-card {
+    width: auto;
+    max-width: 100%;
   }
 }
