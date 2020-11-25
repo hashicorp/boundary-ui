@@ -6,6 +6,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   // =services
 
   @service session;
+  @service origin;
 
   // =methods
 
@@ -25,5 +26,9 @@ export default class ScopesScopeAuthenticateRoute extends Route {
       scopes: this.modelFor('scopes').filter((scope) => scope.isOrg),
       authMethods: this.store.query('auth-method', { scope_id }),
     });
+  }
+
+  redirect() {
+    if (!this.origin.rendererOrigin) this.replaceWith('index');
   }
 }
