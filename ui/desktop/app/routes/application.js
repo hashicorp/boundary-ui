@@ -15,7 +15,7 @@ export default class ApplicationRoute extends Route.extend(
   // =services
 
   @service session;
-  @service ipc;
+  @service origin;
 
   // =attributes
 
@@ -25,25 +25,12 @@ export default class ApplicationRoute extends Route.extend(
   routeIfUnauthenticated = 'index';
 
   /**
-   * @type {ApplicationAdapter}
-   */
-  get adapter() {
-    return this.store.adapterFor('application');
-  }
-
-  /**
    * Check that the origin specified in the renderer matches the origin
    * reported by the main process.  If they differ, update the main process
    * origin so that the renderer's CSP can be rewritten to allow requests.
    */
-  async beforeModel() {
-    const rendererOrigin = this.session.data.origin;
-    const mainOrigin = await this.ipc.invoke('getOrigin');
-    const isMatch = rendererOrigin === mainOrigin;
-    this.adapter.host = rendererOrigin;
-    if (rendererOrigin && !isMatch) {
-      await this.ipc.invoke('setOrigin', rendererOrigin);
-    }
+  beforeModel() {
+    return this.origin.updateOrigin();
   }
 
   /**
