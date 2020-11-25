@@ -208,6 +208,7 @@
   position: relative;
   width: sizing.rems(l) * 16;
   margin: 0 auto;
+  margin-top: sizing.rems(l) * 2;
   padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2) (sizing.rems(l) * 3);
   border: 1px solid var(--ui-border-subtler-1);
   border-radius: sizing.rems(xxxs);
