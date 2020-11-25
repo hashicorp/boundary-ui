@@ -1,19 +1,30 @@
-<Rose::Form
-  class="full-width"
-  @onSubmit={{route-action "setOrigin" this.origin}}
-  @cancel={{false}}
-  as |form|
->
+<Rose::Layout::Centered class="centered">
+  <h2>{{t 'origin.titles.welcome'}}</h2>
+  <p>{{t 'origin.descriptions.welcome.get-started'}}</p>
+  <p>
+    <ol>
+      <li>{{t 'origin.descriptions.welcome.step-1'}}</li>
+      <li>{{t 'origin.descriptions.welcome.step-2'}}</li>
+    </ol>
+  </p>
 
-  <form.input
-    @name="host"
-    @type="text"
-    @value={{this.origin}}
-    @label={{t "form.origin.label"}}
-    @helperText={{t "form.origin.description"}} />
+  <Rose::Form
+    class="full-width"
+    @onSubmit={{route-action "setOrigin" this.origin}}
+    @cancel={{false}}
+    as |form|
+  >
 
-  <form.actions
-    @submitText="Set Origin"
-    @showCancel={{false}} />
+    <form.input
+      @name="host"
+      @type="text"
+      @value={{this.origin}}
+      @label={{t "form.origin.label"}}
+      @helperText={{t "form.origin.description"}} />
 
-</Rose::Form>
+    <form.actions
+      @submitText="Set Origin"
+      @showCancel={{false}} />
+
+  </Rose::Form>
+</Rose::Layout::Centered>

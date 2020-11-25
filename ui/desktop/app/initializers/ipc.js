@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import { assert } from '@ember/debug';
 import config from '../config/environment';
 
 /**
@@ -25,6 +24,8 @@ class MockIPC {
     this.origin = origin;
     return this.origin;
   }
+
+  connect() {}
 }
 
 /**
@@ -40,9 +41,10 @@ export function initialize() {
     window.addEventListener('message', async function (event) {
       if (event.origin !== window.location.origin) return;
       const { method, payload } = event?.data ?? {};
-      assert(`IPC requires a method, you passed '${method}'.`, method);
-      const response = await mockIPC.invoke(method, payload);
-      event.ports[0].postMessage(response);
+      if (method) {
+        const response = await mockIPC.invoke(method, payload);
+        event.ports[0].postMessage(response);
+      }
     });
   }
 }

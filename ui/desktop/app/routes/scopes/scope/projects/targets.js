@@ -1,11 +1,14 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { all } from 'rsvp';
+import { action } from '@ember/object';
 
 export default class ScopesScopeProjectsTargetsRoute extends Route {
   // =services
 
+  @service ipc;
   @service session;
+  @service notify;
 
   // =methods
 
@@ -34,5 +37,22 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
         project: this.store.peekRecord('scope', target.scopeID),
       };
     });
+  }
+
+  // =actions
+
+  /**
+   * Establish a session to current target.
+   */
+  @action
+  async connect(model) {
+    try {
+      await this.ipc.invoke('connect', {
+        target_id: model.target.id,
+        auth_token: this.session.data.authenticated.token,
+      });
+    } catch(e) {
+      this.notify.error(e.toString(), { closeAfter: null });
+    }
   }
 }

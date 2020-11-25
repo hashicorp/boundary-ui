@@ -3,6 +3,8 @@ const isDev = require('electron-is-dev');
 const log = (method, request) => {
   if (isDev) console.log(`[ipc-main](${method}): `, request);
 };
+const { lookpath } = require('lookpath');
+const { exec } = require('child_process');
 
 let origin = 'serve://boundary';
 
@@ -27,4 +29,25 @@ ipcMain.handle('setOrigin', async (event, request) => {
   log('setOrigin', request);
   origin = request?.data;
   return origin;
+});
+
+/**
+ * Establishes a boundary session and returns session details.
+ * TODO: Return session details.
+ */
+ipcMain.handle('connect', async (event, request) => {
+  log('connect payload', request);
+
+  const cliAvailable = await lookpath('boundary');
+  log('cli check', cliAvailable);
+  if(!cliAvailable) { throw new Error('CLI unavailable.'); }
+
+  const connectCmd = `boundary connect -target-id=${request.target_id} -token=${request.auth_token}`;
+  log('connect command', connectCmd);
+
+  exec(connectCmd, (output) => {
+    log('connect output', output);
+  }, (error) => {
+    log('connect error', error);
+  });
 });
