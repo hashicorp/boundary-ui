@@ -199,7 +199,49 @@
 }
 
 .centered {
-  display: inline-block;
-  margin: auto;
-  transform: translate(0%, -20%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin: 0 auto;
+}
+
+.branded-card {
+  position: relative;
+  max-width: sizing.rems(l) * 16;
+  padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2) (sizing.rems(l) * 3);
+  border: 1px solid var(--ui-border-subtler-1);
+  border-radius: sizing.rems(xxxs);
+
+  &::before {
+    position: absolute;
+    content: " ";
+    top: 0;
+    left: 0;
+    right: 0;
+    height: sizing.rems(l) * 3.5;
+    background-color: var(--black);
+    border-top-left-radius: sizing.rems(xxxs);
+    border-top-right-radius: sizing.rems(xxxs);
+  }
+
+  .branded-card-title {
+    margin-bottom: 0;
+  }
+
+  .branded-card-description {
+    margin-bottom: sizing.rems(xl);
+  }
+
+  .rose-form-actions {
+    .rose-button-primary {
+      display: block;
+      margin: 0;
+      width: 100%;
+
+      .rose-button-wrapper {
+        display: inline;
+      }
+    }
+  }
 }
