@@ -16,7 +16,7 @@
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
-    "lint:sass": "sass-lint -v -q",
+    "lint:sass": "stylelint '**/*.scss'",
     "format": "npm-run-all format:*",
     "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
@@ -72,8 +72,9 @@
     "qunit-dom": "^1.2.0",
     "rose": "*",
     "sass": "^1.29.0",
-    "sass-lint": "^1.13.1",
-    "sinon": "^9.2.1"
+    "sinon": "^9.2.1",
+    "stylelint": "^13.8.0",
+    "stylelint-config-sass-guidelines": "^7.1.0"
   },
   "engines": {
     "node": "10.* || >= 12"

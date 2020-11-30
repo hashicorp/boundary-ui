@@ -1,5 +1,6 @@
 @use 'rose/variables/sizing';
 @use 'rose/variables/media';
+@use 'rose/utilities/type';
 
 @import 'rose';
 @import 'notify';
@@ -21,7 +22,7 @@
 .rose-nav-sidebar {
   margin-top: sizing.rems(xxl);
 
-  & + .rose-nav-sidebar {
+  + .rose-nav-sidebar {
     margin-top: 0;
   }
 
@@ -100,9 +101,9 @@
 
 .rose-header {
   -webkit-app-region: drag;
-  position: relative;
-  padding-left: sizing.rems(l) * 3;
   min-height: sizing.rems(l) * 2;
+  padding-left: sizing.rems(l) * 3;
+  position: relative;
 
   .rose-header-brand {
     display: none;
@@ -198,8 +199,80 @@
   white-space: nowrap;
 }
 
-.centered {
-  display: inline-block;
-  margin: auto;
-  transform: translate(0%, -20%);
+.rose-layout-global .rose-layout-global-body {
+  main {
+    flex-grow: 1;
+  }
+}
+
+.branded-card {
+  border: 1px solid var(--ui-border-subtler-1);
+  border-radius: sizing.rems(xxxs);
+  margin: 0 auto;
+  margin-top: sizing.rems(l) * 1.25;
+  padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2) (sizing.rems(l) * 3);
+  position: relative;
+  width: sizing.rems(l) * 16;
+
+  &::before {
+    background-color: var(--black);
+    background-image: url('/brand-background.svg');
+    background-position: right;
+    background-repeat: no-repeat;
+    border-top-left-radius: sizing.rems(xxxs);
+    border-top-right-radius: sizing.rems(xxxs);
+    content: ' ';
+    height: sizing.rems(l) * 3.25;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &::after {
+    background-image: url('/logo-app-full.svg');
+    background-position: (sizing.rems(l) * 2.5) 50%;
+    background-repeat: no-repeat;
+    background-size: sizing.rems(l) * 8;
+    content: ' ';
+    height: sizing.rems(l) * 3.25;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .branded-card-title {
+    margin-bottom: 0;
+  }
+
+  .branded-card-description {
+    margin-bottom: sizing.rems(l);
+  }
+
+  .rose-form-actions {
+    .rose-button-primary {
+      display: block;
+      margin: 0;
+      width: 100%;
+
+      .rose-button-wrapper {
+        display: inline;
+      }
+    }
+  }
+}
+
+@media (max-width: media.width(medium)) {
+  .branded-card {
+    max-width: 100%;
+    width: auto;
+  }
+}
+
+.change-origin {
+  @include type.type(s);
+  color: var(--ui-border-starker-1);
+  margin: sizing.rems(l) 0 0 0;
+  text-align: center;
 }

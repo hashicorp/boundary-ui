@@ -1,57 +1,65 @@
 {{page-title (t "actions.authenticate")}}
+{{!--
+<Rose::Form::Input
+  @type="text"
+  @name=""
+  @value={{this.origin.rendererOrigin}}
+  @label={{t "form.origin.label"}}
+  @disabled={{true}}
+  />
+<Rose::Button @style="ghost">Change</Rose::Button> --}}
 
-<Rose::Layout::Centered>
-  <Rose::Layout::Page as |page|>
+<BrandedCard
+  @title={{t 'actions.authenticate'}}
+  @description={{t 'auth.descriptions.authenticating-with-org' name=@model.scope.displayName}}
+>
 
-    <page.header>
-      <h2>{{t "actions.authenticate"}}</h2>
-      <p>{{t "auth.descriptions.authenticating-with-org" name=@model.scope.displayName}}</p>
-    </page.header>
+  <Rose::Dropdown
+    @text={{t "actions.choose-different-org"}}
+    @icon="user-organization"
+  as |dropdown|>
+    <dropdown.link @route="scopes.scope.authenticate" @model="global">
+      {{t "titles.global"}}
+    </dropdown.link>
+    {{#each this.sortedScopes as |scope|}}
+      <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
+        {{scope.displayName}}
+      </dropdown.link>
+    {{/each}}
+  </Rose::Dropdown>
 
-    <page.navigation>
+  <Rose::Nav::Tabs as |nav|>
+    {{#each @model.authMethods as |authMethod|}}
+      <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
+        {{t (concat "resources.auth-method.types." authMethod.type)}}
+      </nav.link>
+    {{/each}}
+  </Rose::Nav::Tabs>
 
-      <Rose::Dropdown
-        @text={{t "actions.choose-different-org"}}
-        @icon="user-organization"
-      as |dropdown|>
-        <dropdown.link @route="scopes.scope.authenticate" @model="global">
-          {{t "titles.global"}}
-        </dropdown.link>
-        {{#each this.sortedScopes as |scope|}}
-          <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
-            {{scope.displayName}}
-          </dropdown.link>
-        {{/each}}
-      </Rose::Dropdown>
+  {{#if @model.authMethods}}
+    {{outlet}}
 
-      <Rose::Separator />
+    <p class="change-origin">
+      {{t "origin.connected-to"}}:
+      <code>{{this.origin}}</code>
+      <br>
+      <LinkTo @route="origin">
+        {{t "actions.change-origin"}}
+      </LinkTo>
+    </p>
 
-      <Rose::Nav::Tabs as |nav|>
-        {{#each @model.authMethods as |authMethod|}}
-          <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
-            {{t (concat "resources.auth-method.types." authMethod.type)}}
-          </nav.link>
-        {{/each}}
-      </Rose::Nav::Tabs>
-    </page.navigation>
+  {{/if}}
+  {{#unless @model.authMethods}}
+    <Rose::Layout::Centered>
+      <Rose::Message
+        @title={{t "resources.auth-method.messages.none.title"}}
+        @icon="alert-circle-outline"
+      as |message|>
+        <message.description>
+          {{t "resources.auth-method.messages.none.description"}}
+        </message.description>
+      </Rose::Message>
+    </Rose::Layout::Centered>
+  {{/unless}}
 
-    <page.body>
-      {{#if @model.authMethods}}
-        {{outlet}}
-      {{/if}}
-      {{#unless @model.authMethods}}
-        <Rose::Layout::Centered>
-          <Rose::Message
-            @title={{t "resources.auth-method.messages.none.title"}}
-            @icon="alert-circle-outline"
-          as |message|>
-            <message.description>
-              {{t "resources.auth-method.messages.none.description"}}
-            </message.description>
-          </Rose::Message>
-        </Rose::Layout::Centered>
-      {{/unless}}
-    </page.body>
-
-  </Rose::Layout::Page>
-</Rose::Layout::Centered>
+</BrandedCard>

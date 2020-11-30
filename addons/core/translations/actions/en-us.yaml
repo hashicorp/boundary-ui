@@ -5,6 +5,7 @@ remove: Remove
 discard: Discard
 dismiss: Dismiss
 save: Save
+submit: Submit
 manage: Manage
 confirm: Confirm
 ok: OK
@@ -26,3 +27,4 @@ add-hosts: Add Hosts
 set-password: Set Password
 change-password: Change Password
 edit-form: Edit Form
+change-origin: Change Controller URL
