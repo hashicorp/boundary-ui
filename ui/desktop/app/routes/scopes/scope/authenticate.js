@@ -31,4 +31,14 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   redirect() {
     if (!this.origin.rendererOrigin) this.replaceWith('index');
   }
+
+  /**
+   * Adds the existing origin, if any, to the controller scope.
+   * @param {Controller} controller
+   */
+  setupController(controller) {
+    super.setupController(...arguments);
+    const origin = this.origin.rendererOrigin;
+    controller.setProperties({ origin });
+  }
 }

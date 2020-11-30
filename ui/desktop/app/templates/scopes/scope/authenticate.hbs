@@ -1,5 +1,5 @@
 {{page-title (t "actions.authenticate")}}
-{{!-- 
+{{!--
 <Rose::Form::Input
   @type="text"
   @name=""
@@ -38,6 +38,16 @@
 
   {{#if @model.authMethods}}
     {{outlet}}
+
+    <p class="change-origin">
+      {{t "form.origin.label"}}:
+      <code>{{this.origin}}</code>.
+      <br>
+      <LinkTo @route="origin">
+        {{t "actions.change-origin"}}
+      </LinkTo>
+    </p>
+
   {{/if}}
   {{#unless @model.authMethods}}
     <Rose::Layout::Centered>
