@@ -41,14 +41,17 @@
 .ember-notify-cn {
   bottom: 0;
   left: 0;
+  max-width: 300px;
   position: fixed;
   z-index: 5000;
 }
 
 .ember-notify {
+  border: 0 !important;
   box-sizing: border-box;
   display: block;
   margin: 10px;
+  padding-bottom: 0 !important;
   position: relative;
   width: 300px;
 
