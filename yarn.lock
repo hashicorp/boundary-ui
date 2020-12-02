@@ -8140,6 +8140,14 @@ ember-auto-import@^1.2.15, ember-auto-import@^1.2.19, ember-auto-import@^1.5.3, 
     walk-sync "^0.3.3"
     webpack "^4.43.0"
 
+ember-autofocus-modifier@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ember-autofocus-modifier/-/ember-autofocus-modifier-1.1.0.tgz#2180e560699290b8e2abba40f265844368cb4b26"
+  integrity sha512-o5q6vkRg95pJoF8zNo7zHT8/RRNJv3AcHiBXg0UGKfEi6XjrbiTa48kjUPOz3+zz2CrJLZCDcVLUGEk2tZG0Jg==
+  dependencies:
+    ember-cli-babel "^7.22.1"
+    ember-modifier "^2.1.0"
+
 ember-breadcrumbs@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/ember-breadcrumbs/-/ember-breadcrumbs-0.2.3.tgz#a95e02b73fdc2150f3d552e84a479d6dc96a8b31"
@@ -9010,7 +9018,7 @@ ember-modifier@^1.0.3:
     ember-compatibility-helpers "^1.2.1"
     ember-modifier-manager-polyfill "^1.2.0"
 
-ember-modifier@^2.1.1:
+ember-modifier@^2.1.0, ember-modifier@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ember-modifier/-/ember-modifier-2.1.1.tgz#aa3a12e2d6cf1622f774f3f1eab4880982a43fa9"
   integrity sha512-g9mcpFWgw5lgNU40YNf0USNWqoGTJ+EqjDQKjm7556gaRNDeGnLylFKqx9O3opwLHEt6ZODnRDy9U0S5YEMREg==
