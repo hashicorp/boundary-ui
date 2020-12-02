@@ -1,6 +1,9 @@
 import Service from '@ember/service';
 import { getOwner } from '@ember/application';
 import { Promise } from 'rsvp';
+import { task, timeout } from 'ember-concurrency';
+
+const IPC_TIMEOUT_MS_DEFAULT = 2 * 1000;
 
 /**
  * An IPC request is a promise-like object that issues a request via
@@ -54,16 +57,17 @@ export class IPCRequest {
    * @param {object} payload
    * @param {Window} window - A reference to the window object
    */
-  constructor(method, payload, window) {
+  constructor(method, payload, ipcTimeoutDuration, window) {
     this.method = method;
     this.payload = payload;
     this.origin = window?.location?.origin;
     this.#channel = new MessageChannel();
-    this.#promise = new Promise((resolve /*, reject*/) => {
+    this.#promise = new Promise((resolve, reject) => {
       this.#channel.port1.onmessage = (event) => {
         this.close();
         resolve(event.data);
       };
+      this.timeout.perform(reject, ipcTimeoutDuration);
     });
     window.postMessage(
       {
@@ -76,6 +80,33 @@ export class IPCRequest {
   }
 
   /**
+   * Called with a rejection function (from #promise) after a timeout period has
+   * elapsed without a response.
+   * @param {function} reject
+   */
+  // timeout(reject) {
+  //
+  // }
+
+  /**
+   * Called when a request begins to setup a timeout period.  If the timeout
+   * elapses before this task is canceled, the request is closed and the promise
+   * is rejected.
+   *
+   * NOTE:  tasks are sort of attributes and sort of methods, but they are not
+   * language-level constructs.  Thus we annotate this task as if it
+   * is an attribute.
+   * @type {Task}
+   */
+  @task(function * (reject, ipcTimeoutDuration=IPC_TIMEOUT_MS_DEFAULT) {
+    yield timeout(ipcTimeoutDuration);
+    this.close();
+    // TODO the error should contain a code we can translate on, but error
+    // handling is not otherwise i18n'd yet.
+    reject(new Error('Timed out.'));
+  }) timeout;
+
+  /**
    * Closes the message ports and drops the channel reference.
    * This is called upon receiving a response for cleanup purposes.
    */
@@ -83,6 +114,7 @@ export class IPCRequest {
     this.#channel.port1.close();
     this.#channel.port2.close();
     this.#channel = null;
+    this.timeout.cancelAll();
   }
 
   /**
@@ -139,9 +171,10 @@ export default class IpcService extends Service {
    * Creates a new IPC request and returns it.
    * @param {string} method
    * @param {object} payload
+   * @param {number} timeout - timeout in milliseconds, optional
    * @return {IPCRequest}
    */
-  invoke(method, payload) {
-    return new IPCRequest(method, payload, this.window);
+  invoke(method, payload, timeout) {
+    return new IPCRequest(method, payload, timeout, this.window);
   }
 }

@@ -17,3 +17,5 @@ generic:
   title: Error
 authentication-failed:
   title: Authentication Failed
+origin-verification-failed:
+  description: The controller URL could not be reached or is not a valid server.
