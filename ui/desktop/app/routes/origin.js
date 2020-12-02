@@ -1,7 +1,9 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
+import config from '../config/environment';
 
 export default class OriginRoute extends Route {
   // =services
@@ -20,6 +22,17 @@ export default class OriginRoute extends Route {
     return this.store.adapterFor('application');
   }
 
+  /**
+   * Looks up the window object indirectly.
+   * @type {Window}
+   */
+  get window() {
+    // The Ember way of accessing globals...
+    const document = getOwner(this).lookup('service:-document').documentElement;
+    // defaultView === window, but without using globals directly
+    return document.parentNode.defaultView;
+  }
+
   // =methods
 
   /**
@@ -36,7 +49,15 @@ export default class OriginRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
-    const origin = this.origin.rendererOrigin;
+    let origin = this.origin.rendererOrigin;
+    // If origin is unset and this is a development environment,
+    // autoset the origin field of the UI for better DX.
+    // The controller URL is almost always the same as the current window when
+    // using mocks, and this makes development more rapid since developers
+    // do not need to fill an origin on every session.
+    if (!origin && config.autoOrigin) {
+      origin = this.window.location.origin;
+    }
     controller.setProperties({ origin });
   }
 

@@ -50,6 +50,11 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+    // This flag tells the origin route to autoset the controller origin field
+    // of the UI, which only makes sense in development where the origin is
+    // usually the same as the application origin.
+    ENV.autoOrigin = true;
   }
 
   if (environment === 'test') {
