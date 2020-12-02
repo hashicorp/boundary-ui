@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
 
 export default class OriginRoute extends Route {
   // =services
@@ -45,6 +46,7 @@ export default class OriginRoute extends Route {
    * @param {string} origin
    */
   @action
+  @loading
   async setOrigin(origin) {
     try {
       await this.origin.setOrigin(origin);

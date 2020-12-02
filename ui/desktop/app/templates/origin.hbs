@@ -7,6 +7,7 @@
       class="full-width"
       @onSubmit={{route-action "setOrigin" this.origin}}
       @cancel={{false}}
+      @disabled={{is-loading}}
       as |form|
     >
       <form.input
