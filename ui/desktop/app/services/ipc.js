@@ -59,10 +59,14 @@ export class IPCRequest {
     this.payload = payload;
     this.origin = window?.location?.origin;
     this.#channel = new MessageChannel();
-    this.#promise = new Promise((resolve /*, reject*/) => {
+    this.#promise = new Promise((resolve, reject) => {
       this.#channel.port1.onmessage = (event) => {
         this.close();
-        resolve(event.data);
+        if (event.data instanceof Error) {
+          reject(JSON.parse(event.data.message));
+        } else {
+          resolve(event.data);
+        }
       };
     });
     window.postMessage(
