@@ -49,10 +49,10 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
     try {
       await this.ipc.invoke('connect', {
         target_id: model.target.id,
-        auth_token: this.session.data.authenticated.token,
+        token: this.session.data.authenticated.token,
       });
     } catch(e) {
-      this.notify.error(e.toString(), { closeAfter: null });
+      this.notify.error(e.message, { closeAfter: null });
     }
   }
 }
