@@ -47,9 +47,16 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @action
   async connect(model) {
     try {
-      await this.ipc.invoke('connect', {
+      await this.ipc.invoke('cli');
+      const connect = this.ipc.invoke('connect', {
         target_id: model.target.id,
         token: this.session.data.authenticated.token,
+      });
+
+      connect.then((data) => {
+        this.notify.success(JSON.stringify(data));
+      }, (e) => {
+        this.notify.error(e.message, { closeAfter: null });
       });
     } catch(e) {
       this.notify.error(e.message, { closeAfter: null });
