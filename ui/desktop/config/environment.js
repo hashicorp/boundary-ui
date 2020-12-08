@@ -1,8 +1,7 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
-const API_HOST = process.env.API_HOST || '';
-const ENABLE_MIRAGE = process.env.API_HOST ? false : true;
+const ENABLE_MIRAGE = process.env.ENABLE_MIRAGE === 'false' ? false : true;
 
 module.exports = function (environment) {
   let ENV = {
@@ -35,7 +34,8 @@ module.exports = function (environment) {
     },
 
     api: {
-      host: API_HOST,
+      // there is no default API host in desktop
+      //host: API_HOST,
       namespace: 'v1',
     },
 
