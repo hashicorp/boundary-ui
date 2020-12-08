@@ -23,7 +23,7 @@ handle('setOrigin', (requestOrigin) => origin = requestOrigin);
 /**
  * Detect boundary cli in env path
  */
-handle('cli', async (event, request) => {
+handle('cli', async () => {
   const cliPath = await lookpath('boundary');
   if(!cliPath) throw new Error({ message: 'Cannot find boundary cli.'})
   return cliPath;
@@ -33,6 +33,12 @@ handle('cli', async (event, request) => {
  * Establishes a boundary session and returns session details.
  */
 handle('connect', async ({ target_id, token }) => {
-  const connectCmd = ['connect', `-target-id=${target_id}`, `-token=${token}`, '-format=json'];
+  const connectCmd = [
+    'connect',
+    `-target-id=${target_id}`,
+    `-token=${token}`,
+    '-format=json',
+    '--output-json-errors'
+  ];
   return spawnPromise(connectCmd);
 });

@@ -27,13 +27,13 @@ const resolveOutput = (resolve, outputStream) => {
 // error from the underlying exec implementation.  It's not a very
 // helpful message for users, so it's recommended to craft nice
 // POJO representation and throw it or promise->reject it.
-//
-// TODO:  connection errors may now return JSON on stderr, which we
-// would attempt to parse here to use a basis for rejection.
-const rejectError = (reject, message, code=10001) => {
-  const error = new Error(`Connect error: ${message}`);
-  error.code = code;
-  reject(error);
+const rejectError = (reject, message) => {
+  try {
+    const errorMessage = JSON.parse(message);
+    reject(new Error(errorMessage.error));
+  } catch (e) {
+    // Ignore JSON parse errors while stderr buffers.
+  }
 };
 
 module.exports = function spawnPromise (command) {
@@ -46,20 +46,10 @@ module.exports = function spawnPromise (command) {
       outputStream += data.toString();
       resolveOutput(resolve, outputStream);
     });
-  
-    // Handle exit of spawned process
-    childProcess.on('close', (code) => {
-      if(code === 0) {
-        resolveOutput(resolve, outputStream);
-      }else {
-        rejectError(reject, errorStream);
-      }
+
+    childProcess.stderr.on('data', (data) => {
+      errorStream += data.toString();
+      rejectError(reject, errorStream);
     });
-
-    // Handle error
-    childProcess.on('error', (err) => rejectError(reject, err));
-
-    // TODO: Figure out what scenarios this is needed in addition to error event listener
-    childProcess.stderr.on('data', (data) => errorStream += data.toString());
   });
 }

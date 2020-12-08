@@ -56,7 +56,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
       connect.then((data) => {
         this.notify.success(JSON.stringify(data));
       }, (e) => {
-        this.notify.error(e.message, { closeAfter: null });
+        this.notify.error(JSON.stringify(e.message), { closeAfter: null });
       });
     } catch(e) {
       this.notify.error(e.message, { closeAfter: null });
