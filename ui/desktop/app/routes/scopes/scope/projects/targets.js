@@ -9,6 +9,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @service ipc;
   @service session;
   @service notify;
+  @service confirm;
 
   // =methods
 
@@ -48,18 +49,16 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   async connect(model) {
     try {
       await this.ipc.invoke('cli');
-      const connect = this.ipc.invoke('connect', {
+      const connection = await this.ipc.invoke('connect', {
         target_id: model.target.id,
         token: this.session.data.authenticated.token,
       });
-
-      connect.then((data) => {
-        this.notify.success(JSON.stringify(data));
-      }, (e) => {
-        this.notify.error(e.message, { closeAfter: null });
-      });
+      // Show the user a modal with basic connection info.
+      this.confirm.confirm(connection, { isConnectSuccess: true });
     } catch(e) {
-      this.notify.error(e.message, { closeAfter: null });
+      this.confirm.confirm(e.message, { isConnectError: true })
+        .then(() => this.connect(model))
+        .catch(() => null /* no op */);
     }
   }
 }

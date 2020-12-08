@@ -45,3 +45,76 @@
     {{message.text}}
   </Rose::Notification>
 </EmberNotify>
+
+<PendingConfirmations as |confirmation accept deny|>
+  {{#if confirmation.options.isConnectSuccess}}
+    <Rose::Dialog
+      @heading={{t "states.success"}}
+      @dismissButtonText={{t "actions.ok"}}
+      @icon="check-circle-fill"
+      @style="success"
+      @modal={{true}}
+      @dismiss={{accept}}
+    as |dialog|>
+      <dialog.body>
+        <p>
+          {{confirmation.text.address}}
+          <br>
+          {{confirmation.text.port}}
+        </p>
+      </dialog.body>
+      <dialog.footer>
+        <Rose::Button @style="primary" {{on "click" accept}}>
+          {{t "actions.ok"}}
+        </Rose::Button>
+      </dialog.footer>
+    </Rose::Dialog>
+  {{else if confirmation.options.isConnectError}}
+    <Rose::Dialog
+      @heading={{t "states.error"}}
+      @dismissButtonText={{t "actions.ok"}}
+      @icon="cancel-square-fill"
+      @style="error"
+      @modal={{true}}
+      @dismiss={{accept}}
+    as |dialog|>
+      <dialog.body>
+        <p>
+          {{confirmation.text}}
+        </p>
+        <p>
+          {{t "questions.retry-confirm"}}
+        </p>
+      </dialog.body>
+      <dialog.footer>
+        <Rose::Button @style="primary" {{on "click" accept}}>
+          {{t "actions.retry"}}
+        </Rose::Button>
+        <Rose::Button @style="secondary" {{on "click" deny}}>
+          {{t "actions.cancel"}}
+        </Rose::Button>
+      </dialog.footer>
+    </Rose::Dialog>
+  {{else}}
+    <Rose::Dialog
+      @heading={{t "actions.confirm"}}
+      @dismissButtonText={{t "actions.cancel"}}
+      @icon="alert-triangle"
+      @style="warning"
+      @modal={{true}}
+      @dismiss={{deny}}
+    as |dialog|>
+      <dialog.body>
+        <p>{{confirmation.text}}</p>
+      </dialog.body>
+      <dialog.footer>
+        <Rose::Button @style="primary" {{on "click" accept}}>
+          {{t "actions.ok"}}
+        </Rose::Button>
+        <Rose::Button @style="secondary" {{on "click" deny}}>
+          {{t "actions.cancel"}}
+        </Rose::Button>
+      </dialog.footer>
+    </Rose::Dialog>
+  {{/if}}
+</PendingConfirmations>

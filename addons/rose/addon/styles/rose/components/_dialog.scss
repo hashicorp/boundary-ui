@@ -20,11 +20,25 @@ $xxxxs: sizing.rems(xxxxs); // 1
   box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
     0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
 
+  &.rose-dialog-success {
+    --headerColor: var(--success-starker-1);
+    --headerIconColor: var(--success);
+    --headerBackgroundColor: var(--success-subtler-2);
+    --headerBorderColor: var(--success);
+  }
+
   &.rose-dialog-warning {
     --headerColor: var(--warning-starker-1);
     --headerIconColor: var(--warning);
     --headerBackgroundColor: var(--warning-subtler-2);
     --headerBorderColor: var(--warning);
+  }
+
+  &.rose-dialog-error {
+    --headerColor: var(--failure-starker-1);
+    --headerIconColor: var(--failure);
+    --headerBackgroundColor: var(--failure-subtler-2);
+    --headerBorderColor: var(--failure);
   }
 
   .rose-dialog-header {
