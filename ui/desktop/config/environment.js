@@ -2,7 +2,7 @@
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
-const ENABLE_MIRAGE = process.env.API_HOST ? false : true;
+const ENABLE_MIRAGE = process.env.ENABLE_MIRAGE ? false : true;
 
 module.exports = function (environment) {
   let ENV = {
@@ -70,6 +70,11 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
+
+    // Use in-memory storage
+    ENV.storage = {
+      memory: true
+    };
   }
 
   if (environment === 'production') {

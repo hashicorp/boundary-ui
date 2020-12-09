@@ -62,9 +62,9 @@ module('Acceptance | authentication', function (hooks) {
   };
 
   const setDefaultOrigin = (test) => {
-    const origin = window.location.origin;
-    const session = test.owner.lookup('service:session');
-    session.set('data.origin', origin);
+    const windowOrigin = window.location.origin;
+    const origin = test.owner.lookup('service:origin');
+    origin.rendererOrigin = windowOrigin;
   };
 
   hooks.beforeEach(function () {
