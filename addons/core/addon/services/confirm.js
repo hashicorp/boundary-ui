@@ -19,9 +19,11 @@ export default class ConfirmationsService extends Service {
 
   /**
    * When the confirm service is disabled, it always returns resolving promises.
+   * By default the service is enabled but it is useful to disable it for test
+   * purposes.
    * @type {boolean}
    */
-  enabled = config.enableConfirmService;
+  enabled = config.enableConfirmService ?? true;
 
   /**
    * @type {Array}

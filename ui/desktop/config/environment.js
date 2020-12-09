@@ -70,6 +70,8 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
+    
+    ENV.enableConfirmService = false;
   }
 
   if (environment === 'production') {

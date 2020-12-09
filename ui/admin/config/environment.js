@@ -36,7 +36,6 @@ module.exports = function (environment) {
 
     notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 2.5,
-    enableConfirmService: true,
 
     documentation: {
       baseURL: 'https://boundaryproject.io/help/admin-ui',

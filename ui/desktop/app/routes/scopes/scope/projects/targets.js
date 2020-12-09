@@ -9,6 +9,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @service ipc;
   @service session;
   @service notify;
+  @service confirm;
 
   // =methods
 
@@ -52,16 +53,17 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
       if(!cliPath) throw new Error('Cannot find boundary cli.')
 
       // Create target session
-      const connect = this.ipc.invoke('connect', {
+      const connection = this.ipc.invoke('connect', {
         target_id: model.target.id,
         token: this.session.data.authenticated.token,
       });
 
-      await connect.then((data) => {
-        this.notify.success(JSON.stringify(data));
-      });
+      // Show the user a modal with basic connection info.
+      this.confirm.confirm(connection, { isConnectSuccess: true });
     } catch(e) {
-      this.notify.error(e.message, { closeAfter: null });
+      this.confirm.confirm(e.message, { isConnectError: true })
+        .then(() => this.connect(model))
+        .catch(() => null /* no op */);
     }
   }
 }
