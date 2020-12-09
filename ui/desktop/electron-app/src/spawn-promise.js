@@ -1,17 +1,17 @@
 const { spawn } = require('child_process');
 
-/**
- * Attempt to parse output string to JSON.
- * When JSON is successfully parsed, consider stdout fully read.
-*/
-// TODO: Potential use for BufferList?
-const resolveOutput = (resolve, outputStream) => {
+// Verify json
+const isJSON = (data) => {
+  let jsonData;
+  if(typeof data !== 'string') data = JSON.stringify(data)
   try {
-    resolve(JSON.parse(outputStream));
+    jsonData = JSON.parse(data);
   } catch (e) {
-    // Ignore JSON parse errors while stdout buffers.
+    // Ignore parse errors
   }
-};
+
+  return (typeof jsonData === 'object');
+}
 
 // You can throw exceptions, or allow them to occur, and this is supported.
 // Exceptions thrown in this way will be returned to the UI as an
@@ -27,15 +27,6 @@ const resolveOutput = (resolve, outputStream) => {
 // error from the underlying exec implementation.  It's not a very
 // helpful message for users, so it's recommended to craft nice
 // POJO representation and throw it or promise->reject it.
-const rejectError = (reject, message) => {
-  try {
-    const errorMessage = JSON.parse(message);
-    reject(new Error(errorMessage.error));
-  } catch (e) {
-    // Ignore JSON parse errors while stderr buffers.
-  }
-};
-
 module.exports = function spawnPromise (command) {
   return new Promise((resolve, reject) => {
     const childProcess = spawn('boundary', command);
@@ -44,12 +35,12 @@ module.exports = function spawnPromise (command) {
 
     childProcess.stdout.on('data', (data) => {
       outputStream += data.toString();
-      resolveOutput(resolve, outputStream);
+      if(isJSON(outputStream)) resolve(JSON.parse(outputStream));
     });
 
     childProcess.stderr.on('data', (data) => {
       errorStream += data.toString();
-      rejectError(reject, errorStream);
+      if(isJSON(errorStream)) reject(new Error(JSON.parse(errorStream)?.error));
     });
   });
 }
