@@ -80,7 +80,6 @@ export default class StorageService extends Service {
       .documentElement.parentNode.defaultView;
     // If memory storage enabled, return the memory storage instance,
     // otherwise return localStorage.
-    console.log(inMemory);
     return inMemory ? this.#memoryStorage : globalContext.localStorage;
   }
 

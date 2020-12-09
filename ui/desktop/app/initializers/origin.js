@@ -15,7 +15,6 @@ export function initialize(registry) {
       // Override the beforeModel hook and initialize the origin
       this.beforeModel = async function() {
         const origin = getOwner(this).lookup('service:origin');
-        console.log('updating origin...', await origin.rendererOrigin);
         return origin.updateOrigin().then(
           () => originalBeforeModel.apply(this, arguments),
           () => originalBeforeModel.apply(this, arguments)
