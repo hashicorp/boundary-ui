@@ -21,9 +21,9 @@ handle('getOrigin', () => origin);
 handle('setOrigin', (requestOrigin) => origin = requestOrigin);
 
 /**
- * Detect boundary cli in env path
+ * Detect boundary cli path
  */
-handle('cli', async () => {
+handle('cliPath', async () => {
   const cliPath = await lookpath('boundary');
   if(!cliPath) throw new Error({ message: 'Cannot find boundary cli.'})
   return cliPath;

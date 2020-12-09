@@ -47,16 +47,18 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @action
   async connect(model) {
     try {
-      await this.ipc.invoke('cli');
+      // Check for cli
+      const cliPath = await this.ipc.invoke('cliPath');
+      if(!cliPath) throw new Error('Cannot find boundary cli.')
+
+      // Create target session
       const connect = this.ipc.invoke('connect', {
         target_id: model.target.id,
         token: this.session.data.authenticated.token,
       });
 
-      connect.then((data) => {
+      await connect.then((data) => {
         this.notify.success(JSON.stringify(data));
-      }, (e) => {
-        this.notify.error(JSON.stringify(e.message), { closeAfter: null });
       });
     } catch(e) {
       this.notify.error(e.message, { closeAfter: null });
