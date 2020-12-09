@@ -57,11 +57,11 @@
       @dismiss={{accept}}
     as |dialog|>
       <dialog.body>
-        <p>
-          {{confirmation.text.address}}
-          <br>
-          {{confirmation.text.port}}
-        </p>
+        {{t 'states.connection.success.description'
+          port=confirmation.text.port
+          address=confirmation.text.address
+          protocol=confirmation.text.protocol
+        }}
       </dialog.body>
       <dialog.footer>
         <Rose::Button @style="primary" {{on "click" accept}}>

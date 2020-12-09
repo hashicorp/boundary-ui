@@ -58,8 +58,10 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
         token: this.session.data.authenticated.token,
       });
 
-      // Show the user a modal with basic connection info.
-      this.confirm.confirm(connection, { isConnectSuccess: true });
+      await connection.then((details) => {
+        // Show the user a modal with basic connection info.
+        this.confirm.confirm(details, { isConnectSuccess: true });
+      });
     } catch(e) {
       this.confirm.confirm(e.message, { isConnectError: true })
         .then(() => this.connect(model))
