@@ -61,9 +61,9 @@ module('Acceptance | targets', function (hooks) {
   };
 
   const setDefaultOrigin = (test) => {
-    const origin = window.location.origin;
-    const session = test.owner.lookup('service:session');
-    session.set('data.origin', origin);
+    const windowOrigin = window.location.origin;
+    const origin = test.owner.lookup('service:origin');
+    origin.rendererOrigin = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -104,7 +104,7 @@ module('Acceptance | targets', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
-  
+
     class MockIPC {
       origin = null;
 
