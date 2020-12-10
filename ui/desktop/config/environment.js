@@ -1,7 +1,8 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
-const ENABLE_MIRAGE = process.env.ENABLE_MIRAGE === 'false' ? false : true;
+const API_HOST = process.env.API_HOST || '';
+const ENABLE_MIRAGE = process.env.ENABLE_MIRAGE ? false : true;
 
 module.exports = function (environment) {
   let ENV = {
@@ -72,6 +73,11 @@ module.exports = function (environment) {
     ENV.notifyTimeout = 0;
     
     ENV.enableConfirmService = false;
+
+    // Use in-memory storage
+    ENV.storage = {
+      memory: true
+    };
   }
 
   if (environment === 'production') {

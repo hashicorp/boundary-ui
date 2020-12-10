@@ -8,7 +8,7 @@ export default class OriginService extends Service {
 
   @service ipc;
   @service store;
-  @service session;
+  @service storage;
 
   // =attributes
 
@@ -23,14 +23,14 @@ export default class OriginService extends Service {
    * @type {?string}
    */
   get rendererOrigin() {
-    return this.session.data.origin;
+    return this.storage.getItem('origin');
   }
 
   /**
    * @param {?string} origin
    */
   set rendererOrigin(origin) {
-    this.session.set('data.origin', origin);
+    this.storage.setItem('origin', origin);
   }
 
   /**
