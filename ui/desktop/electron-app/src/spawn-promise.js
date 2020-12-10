@@ -1,16 +1,13 @@
 const { spawn } = require('child_process');
 
-// Verify json
-const isJSON = (data) => {
-  let jsonData;
-  if(typeof data !== 'string') data = JSON.stringify(data)
+// Convert to json
+const jsonify = (data) => {
+  if(typeof data !== 'string') data = JSON.stringify(data);
   try {
-    jsonData = JSON.parse(data);
+    return JSON.parse(data);
   } catch (e) {
     // Ignore parse errors
   }
-
-  return (typeof jsonData === 'object');
 }
 
 // You can throw exceptions, or allow them to occur, and this is supported.
@@ -35,12 +32,14 @@ module.exports = function spawnPromise (command) {
 
     childProcess.stdout.on('data', (data) => {
       outputStream += data.toString();
-      if(isJSON(outputStream)) resolve(JSON.parse(outputStream));
+      const jsonData = jsonify(outputStream);
+      if(jsonData) resolve(jsonData);
     });
 
     childProcess.stderr.on('data', (data) => {
       errorStream += data.toString();
-      if(isJSON(errorStream)) reject(new Error(JSON.parse(errorStream)?.error));
+      const jsonData = jsonify(errorStream);
+      if(jsonData) reject(new Error(jsonData?.error));
     });
   });
 }

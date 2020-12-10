@@ -1,7 +1,6 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
-const API_HOST = process.env.API_HOST || '';
 const ENABLE_MIRAGE = process.env.ENABLE_MIRAGE ? false : true;
 
 module.exports = function (environment) {

@@ -1,6 +1,6 @@
 const handle = require('./ipc-handler');
-const { lookpath } = require('lookpath');
-const spawnPromise = require('./spawn-promise');
+const boundaryCli = require('./boundary-cli');
+
 
 let origin = '';
 
@@ -21,24 +21,16 @@ handle('getOrigin', () => origin);
 handle('setOrigin', (requestOrigin) => origin = requestOrigin);
 
 /**
+ * Check for boundary cli existence
+ */
+handle('cliExists', () => boundaryCli.exists());
+
+/**
  * Detect boundary cli path
  */
-handle('cliPath', async () => {
-  const cliPath = await lookpath('boundary');
-  if(!cliPath) throw new Error({ message: 'Cannot find boundary cli.'})
-  return cliPath;
-});
+handle('cliPath', () => boundaryCli.path());
 
 /**
  * Establishes a boundary session and returns session details.
  */
-handle('connect', async ({ target_id, token }) => {
-  const connectCmd = [
-    'connect',
-    `-target-id=${target_id}`,
-    `-token=${token}`,
-    '-format=json',
-    '--output-json-errors'
-  ];
-  return spawnPromise(connectCmd);
-});
+handle('connect', ({ target_id, token }) => boundaryCli.connect(target_id, token));

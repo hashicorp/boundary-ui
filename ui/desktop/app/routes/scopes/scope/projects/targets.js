@@ -48,22 +48,23 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @action
   async connect(model) {
     try {
+      //eslint-disable-next-line no-debugger
+      debugger;
       // Check for cli
-      const cliPath = await this.ipc.invoke('cliPath');
+      const cliPath = await this.ipc.invoke('cliExists');
       if(!cliPath) throw new Error('Cannot find boundary cli.')
 
       // Create target session
-      const connection = this.ipc.invoke('connect', {
+      const connectionDetails = await this.ipc.invoke('connect', {
         target_id: model.target.id,
         token: this.session.data.authenticated.token,
       });
 
-      await connection.then((details) => {
-        // Show the user a modal with basic connection info.
-        this.confirm.confirm(details, { isConnectSuccess: true });
-      });
+      // Show the user a modal with basic connection info.
+      this.confirm.confirm(connectionDetails, { isConnectSuccess: true });
     } catch(e) {
       this.confirm.confirm(e.message, { isConnectError: true })
+        // Retry
         .then(() => this.connect(model))
         .catch(() => null /* no op */);
     }
