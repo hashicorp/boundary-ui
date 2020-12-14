@@ -112,9 +112,9 @@ on-screen instructions to author your message.
 
 #### License Checking
 
-The licenses of dependencies are checking against a whitelist before every
+The licenses of dependencies are checking against an allowlist before every
 commit.  This helps catch undesirable licenses sooner (e.g. GPL).  If your
-commit fails due to an non-whitelisted license, you may add it to the whitelist
+commit fails due to a non-allowlisted license, you may add it to the allowlist
 in `package.json` _as long as it is not a GPL variant or UNLICENSED_.
 The change will be verified upon PR.  GPL variants and UNLICENSED dependencies
 will not be accepted.
