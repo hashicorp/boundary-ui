@@ -8,6 +8,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
 
   @service ipc;
   @service session;
+  @service origin;
   @service notify;
   @service confirm;
 
@@ -58,6 +59,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
       const connectionDetails = await this.ipc.invoke('connect', {
         target_id: model.target.id,
         token: this.session.data.authenticated.token,
+        addr: this.origin.rendererOrigin
       });
 
       // Show the user a modal with basic connection info.

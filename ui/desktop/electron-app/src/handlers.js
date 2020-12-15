@@ -33,4 +33,4 @@ handle('cliPath', () => boundaryCli.path());
 /**
  * Establishes a boundary session and returns session details.
  */
-handle('connect', ({ target_id, token }) => boundaryCli.connect(target_id, token));
+handle('connect', ({ target_id, token, addr }) => boundaryCli.connect(target_id, token, addr));
