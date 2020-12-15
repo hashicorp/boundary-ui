@@ -1,7 +1,6 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
-const API_HOST = process.env.API_HOST || '';
 const ENABLE_MIRAGE = process.env.ENABLE_MIRAGE ? false : true;
 
 module.exports = function (environment) {
@@ -35,7 +34,8 @@ module.exports = function (environment) {
     },
 
     api: {
-      host: API_HOST,
+      // there is no default API host in desktop
+      //host: API_HOST,
       namespace: 'v1',
     },
 
@@ -70,6 +70,8 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
+    
+    ENV.enableConfirmService = false;
 
     // Use in-memory storage
     ENV.storage = {

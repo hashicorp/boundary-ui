@@ -30,6 +30,7 @@ questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
   abandon-confirm: Are you sure you want to navigate away?  Your unsaved changes will be lost.
+  retry-confirm: Would you like to retry?
 themes:
   system: System Default
   light: Light
