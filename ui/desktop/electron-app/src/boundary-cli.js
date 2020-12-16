@@ -9,11 +9,12 @@ module.exports = {
   // Check boundary cli existence
   exists: () => Boolean(cliPath()),
   // Initiate connection and return output
-  connect: (target_id, token) => {
+  connect: (target_id, token, addr) => {
     const command = [
       'connect',
       `-target-id=${target_id}`,
       `-token=${token}`,
+      `-addr=${addr}`,
       '-format=json',
       '--output-json-errors'
     ]
