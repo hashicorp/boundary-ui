@@ -17,7 +17,7 @@ import { Promise } from 'rsvp';
  * knowledge of the main process or the Electron context.  In fact a main
  * process and Electron context are not even required.
  *
- * In an Electron context, the `preload.js` script sets up a `window.postMessge`
+ * In an Electron context, the `preload.js` script sets up a `window.postMessage`
  * listener which acts as proxy layer between the main and renderer processes.
  * It waits for incoming requests from the renderer and forwards them to main.
  * Responses from the main process are forwarded back via a response port

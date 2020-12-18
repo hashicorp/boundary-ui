@@ -39,7 +39,9 @@ module.exports = function (environment) {
 
     'ember-cli-mirage': {
       directory: '../api/mirage'
-    }
+    },
+
+    enableConfirmService: false
   };
 
   if (environment === "development") {
