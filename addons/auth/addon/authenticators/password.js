@@ -37,6 +37,21 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   // =methods
 
   /**
+   * Checks that the given token is valid and resolves, otherwise rejects.
+   */
+  async validateToken(token, tokenID) {
+    const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
+    const response = await fetch(tokenValidationURL, {
+      method: 'get',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    // 401 and 404 responses mean the token is invalid, whereas other types of
+    // error responses do not tell us about the validity of the token.
+    if (response.status === 401 || response.status === 404) return reject();
+    return resolve();
+  }
+
+  /**
    * Restores the session if data is present and token validation succeeds
    * (any response other than 401 or 404 === success).  Otherwise rejects.
    * @override
@@ -45,26 +60,8 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
    */
   async restore(data) {
     if (!data) return reject();
-    const tokenID = data.id;
-    const token = data.token;
-    const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
-    const response = await fetch(tokenValidationURL, {
-      method: 'get',
-      headers: {
-        // TODO:  this is temporary to get the call working, but generating
-        // the auth header originated in the application authenticator.
-        // It should probably be factored out into a method on the base.
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    // 401 and 404 responses mean the token is invalid, whereas other types of
-    // error responses do not tell us about the validity of the token.
-    switch (response.status) {
-      case 401:
-      case 404:
-        return reject();
-    }
-    return resolve(this.normalizeData(data));
+    return this.validateToken(data.token, data.id)
+      .then(() => this.normalizeData(data));
   }
 
   /**
