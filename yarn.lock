@@ -14088,11 +14088,6 @@ longest@^2.0.1:
   resolved "https://registry.yarnpkg.com/longest/-/longest-2.0.1.tgz#781e183296aa94f6d4d916dc335d0d17aefa23f8"
   integrity sha1-eB4YMpaqlPbU2RbcM10NF676I/g=
 
-lookpath@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/lookpath/-/lookpath-1.1.0.tgz#932d68371a2f0b4a5644f03d6a2b4728edba96d2"
-  integrity sha512-B9NM7XpVfkyWqfOBI/UW0kVhGw7pJztsduch+1wkbYDi90mYK6/InFul3lG0hYko/VEcVMARVBJ5daFRc5aKCw==
-
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"

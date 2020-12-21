@@ -9,10 +9,7 @@
       "ui/*"
     ],
     "nohoist": [
-      "**/electron",
-      "**/electron/**",
-      "**/electron*/**",
-      "**/electron*"
+      "**/electron**"
     ]
   },
   "scripts": {
