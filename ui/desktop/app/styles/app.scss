@@ -100,14 +100,7 @@
 }
 
 .rose-header {
-  -webkit-app-region: drag;
-  min-height: sizing.rems(l) * 2;
-  padding-left: sizing.rems(l) * 3;
   position: relative;
-
-  .rose-header-brand {
-    display: none;
-  }
 
   .logotype {
     display: none;
