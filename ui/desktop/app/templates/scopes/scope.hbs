@@ -1,1 +1,18 @@
-{{outlet}}
+<Rose::Layout::Sidebar as |sidebarLayout|>
+  <sidebarLayout.sidebar>
+    <Rose::Nav::Sidebar as |nav|>
+      <nav.link @route="scopes.scope.projects.targets">
+        <Rose::Icon
+          @name="app-icons/target"
+          @size="medium" />
+          {{t "resources.target.title_plural"}}
+      </nav.link>
+    </Rose::Nav::Sidebar>
+  </sidebarLayout.sidebar>
+
+  <sidebarLayout.body>
+    <main>
+      {{outlet}}
+    </main>
+  </sidebarLayout.body>
+</Rose::Layout::Sidebar>
