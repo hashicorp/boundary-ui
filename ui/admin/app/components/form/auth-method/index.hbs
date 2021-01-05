@@ -1,5 +1,7 @@
-{{component (concat "form/auth-method/" @model.type)
-  model=@model
-  submit=@submit
-  cancel=@cancel
-}}
+{{#if @model.type}}
+  {{component (concat "form/auth-method/" @model.type)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+  }}
+{{/if}}

@@ -44,7 +44,7 @@ module('Acceptance | auth methods', function (hooks) {
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.authMethods = `${urls.orgScope}/auth-methods`;
-    urls.newAuthMethod = `${urls.authMethods}/new`;
+    urls.newAuthMethod = `${urls.authMethods}/new?type=password`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
   });
 
