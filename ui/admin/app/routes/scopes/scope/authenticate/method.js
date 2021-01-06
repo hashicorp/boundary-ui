@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
+import { notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAuthenticateMethodRoute extends Route {
   // =services
@@ -35,28 +36,24 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   // =actions
 
   /**
-   * Delegates authentication to the `password` authenticator.
-   * If authentication fails, notifies with an alert.
+   * Delegates authentication to an authenticator of type matching the current
+   * auth method.  If authentication fails, notifies with an alert.
    */
   @action
   @loading
+  @notifyError(() => 'errors.authentication-failed.title', { catch: true })
   async authenticate(creds) {
     this.resetCredentials();
-    const authenticatorName = 'authenticator:password';
     const scope = this.modelFor('scopes.scope');
-    const authMethod = this.currentModel;
+    const authMethod = this.modelFor('scopes.scope.authenticate.method');
+    const authenticatorName = `authenticator:${authMethod.type}`;
     const requestCookies = false;
-    try {
-      await this.session.authenticate(
-        authenticatorName,
-        creds,
-        requestCookies,
-        { scope, authMethod }
-      );
-      this.transitionTo('index');
-    } catch (e) {
-      const errorMessage = this.intl.t('errors.authentication-failed.title');
-      this.notify.error(errorMessage, { closeAfter: null });
-    }
+    await this.session.authenticate(
+      authenticatorName,
+      creds,
+      requestCookies,
+      { scope, authMethod }
+    );
+    this.transitionTo('index');
   }
 }
