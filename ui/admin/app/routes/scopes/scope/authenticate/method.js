@@ -23,16 +23,6 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     return this.store.findRecord('auth-method', id, adapterOptions);
   }
 
-  /**
-   * Resets the password field on the controller so it is not
-   * inadvertantly retained in memory.
-   */
-  resetCredentials() {
-    this.controller.setProperties({
-      password: null,
-    });
-  }
-
   // =actions
 
   /**
@@ -43,7 +33,6 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   @loading
   @notifyError(() => 'errors.authentication-failed.title', { catch: true })
   async authenticate(creds) {
-    this.resetCredentials();
     const scope = this.modelFor('scopes.scope');
     const authMethod = this.modelFor('scopes.scope.authenticate.method');
     const authenticatorName = `authenticator:${authMethod.type}`;
