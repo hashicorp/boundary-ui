@@ -17,7 +17,7 @@
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "lint:sass": "stylelint '**/*.scss'",
-    "lint:electron": "electronegativity -i ./electron-app",
+    "lint:electron": "electronegativity -r -i ./electron-app",
     "format": "npm-run-all format:*",
     "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",

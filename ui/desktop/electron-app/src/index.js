@@ -51,6 +51,13 @@ app.on('ready', async () => {
     callback({ path: normalizedPath });
   });
 
+  // Disallow all permissions requests originating outside of serve://boundary,
+  // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
+  ses.setPermissionRequestHandler((webContents, permission, callback) => {
+    if (webContents.getURL().startsWith('serve://boundary')) return callback(false);
+    return callback(true);
+  });
+
   if (isDev) {
     try {
       require('devtron').install();
@@ -77,6 +84,7 @@ app.on('ready', async () => {
       enableRemoteModule: false,
       allowRunningInsecureContent: false,
       preload: preloadPath,
+      disableBlinkFeatures: 'Auxclick'
     },
   });
 
@@ -99,6 +107,16 @@ app.on('ready', async () => {
     console.log(
       'This is a serious issue that needs to be handled and/or debugged.'
     );
+  });
+
+  // Prevent navigation outside of serve://boundary per
+  // Electronegativity LIMIT_NAVIGATION_GLOBAL_CHECK
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (!url.startsWith('serve://boundary')) event.preventDefault();
+  });
+
+  mainWindow.webContents.on('new-window', (event, url) => {
+    if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
 
   mainWindow.on('unresponsive', () => {
