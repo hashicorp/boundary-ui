@@ -33,12 +33,11 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     );
 
     // Filter sessions to current user
-    let sessions = projectSessions.map(sessions => {
-      return sessions.filter(session => {
-        console.log(session.user_id, userId)
-        return session.user_id === userId
-      });
-    }).flat();
+    let sessions = projectSessions.map(
+      sessions => sessions.filter(
+        session => session.user_id === userId
+      )
+    ).flat();
 
     const sessionAggregates = await all(
       sessions.map(session => hash({
