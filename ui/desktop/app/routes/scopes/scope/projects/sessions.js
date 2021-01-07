@@ -1,13 +1,36 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { all, hash } from 'rsvp';
+import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
+import config from '../../../../config/environment';
+
+const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeProjectsSessionsRoute extends Route {
 
   // =services
 
   @service session;
+
+  // =attributes
+
+  /**
+   * A simple Ember Concurrency-based polling task that refreshes the route
+   * every POLL_TIMEOUT_SECONDS seconds.  This is necessary to display changes
+   * to session `status` that may occur.
+   *
+   * NOTE:  tasks are sort of attributes and sort of methods, but they are not
+   * language-level constructs.  Thus we annotate this task as if it
+   * is an attribute.
+   * @type {Task}
+   */
+  @task(function * () {
+    while(true) {
+      yield timeout(POLL_TIMEOUT_SECONDS * 1000);
+      yield this.refresh();
+    }
+  }).drop() poller;
 
   // =methods
 
@@ -61,5 +84,19 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     ];
 
     return sortedSessionAggregates;
+  }
+
+  /**
+   * When this route is activated (entered), begin polling for changes.
+   */
+  activate() {
+    this.poller.perform();
+  }
+
+  /**
+   * When this route is deactivated (exited), stop polling for changes.
+   */
+  deactivate() {
+    this.poller.cancelAll();
   }
 }
