@@ -29,6 +29,9 @@ export default function(server) {
     server.createList('host-catalog', 2, { scope }, 'withChildren');
     server.createList('target', 2, { scope }, 'withRandomHostSets');
     server.createList('session', 4, { scope }, 'withAssociations');
+    // Create sessions for all users
+    server.schema.users.where({ scopeId: scope.scope.id }).models.forEach(user =>
+      server.createList('session', 4, { scope, user }, 'withUserAssociations')
+    );
   });
-
 }
