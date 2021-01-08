@@ -7,6 +7,9 @@ const {
 const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
 require('./handlers.js');
 
+const origin = require('./origin.js');
+const { generateCSPHeader } = require('./content-security-policy.js');
+
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -58,6 +61,16 @@ app.on('ready', async () => {
     return callback(true);
   });
 
+  // Setup content security policy
+  ses.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [generateCSPHeader()]
+      }
+    });
+  });
+
   if (isDev) {
     try {
       require('devtron').install();
@@ -87,6 +100,10 @@ app.on('ready', async () => {
       disableBlinkFeatures: 'Auxclick'
     },
   });
+
+  // If the user-specified origin changes, reload the page so that
+  // the CSP can be refreshed with the this source allowed
+  origin.onOriginChange(() => mainWindow.loadURL(emberAppURL));
 
   // If you want to open up dev tools programmatically, call
   // mainWindow.openDevTools();
