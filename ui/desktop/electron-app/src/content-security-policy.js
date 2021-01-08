@@ -1,4 +1,4 @@
-const runtimeSettings = require('./runtime-settings.js');
+const origin = require('./origin.js');
 const isDev = require('electron-is-dev');
 
 const csp = {
@@ -28,10 +28,9 @@ const generateCSPHeader = () => {
   const policy = Object.assign({}, csp);
 
   // If an origin is specified, add it to the connect-src directive
-  if (runtimeSettings.origin) {
+  if (origin.origin) {
     policy['connect-src'] = policy['connect-src'].slice();
-    policy['connect-src'].push(runtimeSettings.origin);
-    console.log(`[content-security-policy] Including user-specified origin "${runtimeSettings.origin}" to connect-src`);
+    policy['connect-src'].push(origin.origin);
   }
 
   return Object
