@@ -7,6 +7,7 @@ const {
 const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
 require('./handlers.js');
 
+const runtimeSettings = require('./runtime-settings.js');
 const { generateCSPHeader } = require('./content-security-policy.js');
 
 const isDev = require('electron-is-dev');
@@ -99,6 +100,10 @@ app.on('ready', async () => {
       disableBlinkFeatures: 'Auxclick'
     },
   });
+
+  // If the user-specified origin changes, reload the page so that
+  // the CSP can be refreshed with the this source allowed
+  runtimeSettings.onOriginChange(() => mainWindow.loadURL(emberAppURL));
 
   // If you want to open up dev tools programmatically, call
   // mainWindow.openDevTools();
