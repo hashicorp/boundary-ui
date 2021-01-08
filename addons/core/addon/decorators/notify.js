@@ -50,25 +50,22 @@ export function notifyError(notification, options = { catch: false }) {
     desc.value = async function () {
       const owner = getOwner(this);
       const notifyService = owner.lookup('service:notify');
-      //const intlService = owner.lookup('service:intl');
+      const intlService = owner.lookup('service:intl');
+      
       try {
         return await method.apply(this, arguments);
       } catch (error) {
-        // As of now all error notifications pass a function, but this code
-        // could support either a function or a string.
-        // const candidateKey = (typeof notification === 'function')
-        //   ? notification.apply(this, [error])
-        //   : notification;
-        const candidateKey = notification.apply(this, [error]);
 
-        // As of now, we only use untranslated strings for error notifications,
-        // but this code would support both translated and arbitrary strings.
-        // const text = intlService.exists(candidateKey)
-        //   ? intlService.t(candidateKey)
-        //   : candidateKey;
-        const text = candidateKey;
+        const candidateKey = (typeof notification === 'function')
+          ? notification.apply(this, [error])
+          : notification;
+
+        const text = intlService.exists(candidateKey)
+          ? intlService.t(candidateKey)
+          : candidateKey;
 
         notifyService.error(text, { closeAfter: null });
+
         if (options.catch) {
           // squelch the error
         } else {

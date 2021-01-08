@@ -29,7 +29,11 @@
       <Rose::Nav::Tabs as |nav|>
         {{#each @model.authMethods as |authMethod|}}
           <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
-            {{t (concat "resources.auth-method.types." authMethod.type)}}
+            {{#if authMethod.name}}
+              {{authMethod.name}}
+            {{else}}
+              {{t (concat "resources.auth-method.types." authMethod.type)}}
+            {{/if}}
           </nav.link>
         {{/each}}
       </Rose::Nav::Tabs>

@@ -8,6 +8,8 @@ export default class ScopesScopeAuthMethodsNewController extends Controller {
 
   // =attributes
 
+  queryParams = ['type'];
+
   /**
    * Translated new auth-method breadcrumb
    * @type {string}
