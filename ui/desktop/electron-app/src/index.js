@@ -7,6 +7,8 @@ const {
 const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
 require('./handlers.js');
 
+const { generateCSPHeader } = require('./content-security-policy.js');
+
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -56,6 +58,16 @@ app.on('ready', async () => {
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
     if (webContents.getURL().startsWith('serve://boundary')) return callback(false);
     return callback(true);
+  });
+
+  // Setup content security policy
+  ses.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [generateCSPHeader()]
+      }
+    });
   });
 
   if (isDev) {
