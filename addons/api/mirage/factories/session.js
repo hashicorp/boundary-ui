@@ -26,33 +26,12 @@ export default factory.extend({
       const scopeId = record.scopeId;
       if (record.scope.type === 'project') {
         const orgScopeId = record.scope?.scope.id;
-        const user =
+        const orgUser =
           server.schema.users.where({ scopeId: orgScopeId }).models[0];
+        const authenticatedUser = server.schema.users.first();
+        const user = random.arrayElement([orgUser, authenticatedUser]);
         if (user) record.update({ user });
       }
-      const target = server.schema.targets.where({ scopeId }).models[0];
-      if (target) {
-        record.update({ target });
-        const hostSet = target.hostSets.models[0];
-        if (hostSet) {
-          record.update({ hostSet });
-          const host = hostSet.hosts.models[0];
-          if (host) record.update({ host });
-        }
-      }
-    }
-  }),
-
-  /**
-   * Sessions generated with this trait will automatically form
-   * associations to target, host set, and host (if available) within
-   * the current scope and for specified user.
-   */
-  withUserAssociations: trait({
-    afterCreate(record, server) {
-      const scopeId = record.scopeId;
-      const user = record.user;
-      record.update({ user });
       const target = server.schema.targets.where({ scopeId }).models[0];
       if (target) {
         record.update({ target });

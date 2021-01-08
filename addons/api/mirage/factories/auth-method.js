@@ -10,10 +10,7 @@ export default factory.extend({
   withAccountsAndUsers: trait({
     afterCreate(authMethod, server) {
       const { scope } = authMethod;
-      const users = server.createList('user', 5, { scope });
-      // Create authorized user: user123
-      users.push(server.create('user', { scope, id: 'user123' }));
-      users.map(user => {
+      server.createList('user', 5, { scope }).map(user => {
         const { id } = server.create('account', { scope, authMethod });
         user.update({ accountIds: [id] });
       });
