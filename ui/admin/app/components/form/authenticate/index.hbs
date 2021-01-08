@@ -1,0 +1,7 @@
+{{#if @model.type}}
+  {{component (concat "form/authenticate/" @model.type)
+    submit=@submit
+    cancel=false
+    disabled=@disabled
+  }}
+{{/if}}
