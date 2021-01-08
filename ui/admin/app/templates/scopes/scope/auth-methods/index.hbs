@@ -13,9 +13,17 @@
 
   <page.actions>
     {{#if @model}}
-      <Rose::LinkButton @route="scopes.scope.auth-methods.new" @style="primary">
-        {{t "titles.new"}}
-      </Rose::LinkButton>
+      <Rose::Dropdown
+        @text={{t "titles.new"}}
+        @dropdownRight={{true}}
+      as |dropdown|>
+        <dropdown.link
+          @route="scopes.scope.auth-methods.new"
+          @query={{hash type="password"}}
+        >
+          {{t 'resources.auth-method.types.password'}}
+        </dropdown.link>
+      </Rose::Dropdown>
     {{/if}}
   </page.actions>
 
