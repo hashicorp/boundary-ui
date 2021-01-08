@@ -11,8 +11,9 @@
   },
   "scripts": {
     "doc:toc": "doctoc README.md",
-    "build": "ember build --environment=production",
+    "build": "ember build --environment=production && yarn build:desktop",
     "build:development": "ember build",
+    "build:desktop": "cd electron-app && yarn make",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
@@ -68,7 +69,6 @@
     "eslint-plugin-node": "^11.1.0",
     "faker": "^5.1.0",
     "loader.js": "^4.7.0",
-    "lookpath": "^1.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
     "qunit-dom": "^1.2.0",
