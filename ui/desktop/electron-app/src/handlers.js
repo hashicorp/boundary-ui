@@ -1,24 +1,21 @@
 const handle = require('./ipc-handler');
 const boundaryCli = require('./boundary-cli');
-
-
-let origin = '';
+const origin = require('./origin.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
  * rewrite the CSP to allow requests.
  */
-handle('getOrigin', () => origin);
+handle('getOrigin', () => origin.origin);
 
 /**
- * TODO:  sets the main process origin to the specified value.  This value will
- * be used to rewrite the CSP to allow requests to that origin.  If the origin
- * was not previously set, the main process will set it and restart
- * the renderer.
- *
- * For now, we update the internal origin but do not yet rewrite the CSP.
+ * Sets the origin to be used in the content security policy and triggers
+ * a main window reload.
  */
-handle('setOrigin', (requestOrigin) => origin = requestOrigin);
+handle('setOrigin', async (requestOrigin) => {
+  await origin.validateOrigin(requestOrigin);
+  origin.origin = requestOrigin;
+});
 
 /**
  * Check for boundary cli existence

@@ -61,7 +61,6 @@ export default class OriginService extends Service {
     assert(`setOrigin expects a string, you passed ${origin}`, typeof origin === 'string');
     try {
       this.adapter.host = origin;
-      await this.store.query('scope', {});
       this.rendererOrigin = origin;
       if (origin !== await this.mainOrigin) {
         await this.ipc.invoke('setOrigin', origin);
