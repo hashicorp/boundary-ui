@@ -14,7 +14,7 @@ export default function(server) {
   }, 'withChildren')[0];
 
   // Auth
-  server.createList('auth-method', 1, { scope: globalScope }, 'withAccountsAndUsers');
+  server.createList('auth-method', 2, { scope: globalScope }, 'withAccountsAndUsers');
   server.createList('auth-method', 3, { scope: orgScope }, 'withAccountsAndUsers');
 
   // Groups and Users
