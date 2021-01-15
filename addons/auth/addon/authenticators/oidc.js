@@ -1,7 +1,7 @@
 import BaseAuthenticator from './base';
 // import { resolve, reject } from 'rsvp';
 // import fetch from 'fetch';
-import { Promise } from 'rsvp';
+//import { Promise } from 'rsvp';
 
 /**
  *
@@ -17,9 +17,9 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
   } */) { }
 
   async authenticate(
-    creds,
-    requestCookies = true,
-    options
+    // creds,
+    // requestCookies = true,
+    // options
   ) {
     return false;
   }
