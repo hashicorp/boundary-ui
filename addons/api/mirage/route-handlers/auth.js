@@ -38,6 +38,26 @@ const methodHandlers = {
         last_used_time: '',
         expiration_time: ''
       })
+  },
+  /**
+   * OIDC authentication is a two-step process:
+   *
+   * 1. `authenticate:start` kicks of authentication by requesting some details
+   *    from the Boundary server about the request, including the third-party
+   *    URL to which to redirect the user.
+   * 2. `authenticate` accepts the token_request_id and state parameters in
+   *    order to retrieve a Boundary token.  This endpoint may be polled until
+   *    the authentication flow is completed.
+   */
+  oidc: {
+    'authenticate:start': () =>
+      new Response(200, {}, {
+        authorization_request_url: 'https://www.duckduckgo.com',
+        retreival_url: '',
+        token_request_id: 'token_request_1234',
+        state: 'base_58_encoded_string'
+      }),
+    authenticate: () => new Response(200) // TODO
   }
 };
 
