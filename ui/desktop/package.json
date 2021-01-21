@@ -11,9 +11,10 @@
   },
   "scripts": {
     "doc:toc": "doctoc README.md",
-    "build": "ember build --environment=production --output-path electron-app/ember-dist && yarn build:desktop",
+    "build": "ember build --environment=production && yarn build:desktop",
     "build:development": "ember build",
-    "build:desktop": "cd electron-app && yarn make",
+    "build:desktop": "yarn build:desktop:prebuild && cd electron-app && yarn make",
+    "build:desktop:prebuild": "cp -r dist electron-app/ember-dist",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
