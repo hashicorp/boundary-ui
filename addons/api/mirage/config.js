@@ -325,14 +325,21 @@ export default function() {
   this.get('/sessions', function ({ sessions }, { queryParams: { scope_id } }) {
     // To simulate changes to `session.status` that may occur in the backend,
     // we quietly randomize the value of the field on GET.
+    // To populate sessions for logged in user,
+    // update alternate sessions to auth user.
     // But only if not in testing mode.
     // In tests, we need deterministic statuses.
     if (!Ember.testing) {
       sessions.where(session => session.scopeId === scope_id)
         .models
-        .forEach(session => session.update({
-          status: pickRandomStatusString()
-        }));
+        .forEach(session => {
+          session.update({
+            status: pickRandomStatusString()
+          });
+          if(session.id.split('-').pop() % 2) session.update({
+            userId: 'authenticateduser'
+          });
+        });
     }
     return sessions.where(session => session.scopeId === scope_id)
   });

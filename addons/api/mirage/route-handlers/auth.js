@@ -23,7 +23,7 @@ import { Response } from 'miragejs';
 //   }
 // }
 
-export function authHandler({ scopes, authMethods, users }, request) {
+export function authHandler({ scopes, authMethods }, request) {
   const payload = JSON.parse(request.requestBody);
   if (payload.credentials.login_name === 'error') {
     return new Response(400);
@@ -33,16 +33,12 @@ export function authHandler({ scopes, authMethods, users }, request) {
     const scope = scopes.find(authMethod.scopeId);
     const scopeAttrs =
       this.serialize(scopes.find(scope.id));
-    // Create and tag an auth user to be used in auth payload.
-    const user = users.findOrCreateBy({ 
-      description: 'authenticated-user'
-    });
     return new Response(200, {}, {
       scope: scopeAttrs,
       id: 'token123',
       token: 'thetokenstring',
       account_id: '1',
-      user_id: user.id,
+      user_id: 'authenticateduser',
       auth_method_id: 'authmethod123',
       created_time: '',
       updated_time: '',
