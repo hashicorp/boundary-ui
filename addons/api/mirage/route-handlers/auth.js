@@ -25,19 +25,24 @@ import { Response } from 'miragejs';
 
 const methodHandlers = {
   password: {
-    authenticate: (scopeAttrs) =>
-      new Response(200, {}, {
-        scope: scopeAttrs,
-        id: 'token123',
-        token: 'thetokenstring',
-        account_id: '1',
-        user_id: 'user123',
-        auth_method_id: 'authmethod123',
-        created_time: '',
-        updated_time: '',
-        last_used_time: '',
-        expiration_time: ''
-      })
+    authenticate: (payload, scopeAttrs) => {
+      if (payload.credentials.login_name === 'error') {
+        return new Response(400);
+      } else {
+        return new Response(200, {}, {
+          scope: scopeAttrs,
+          id: 'token123',
+          token: 'thetokenstring',
+          account_id: '1',
+          user_id: 'user123',
+          auth_method_id: 'authmethod123',
+          created_time: '',
+          updated_time: '',
+          last_used_time: '',
+          expiration_time: ''
+        });
+      }
+    }
   },
   /**
    * OIDC authentication is a two-step process:
@@ -63,15 +68,11 @@ const methodHandlers = {
 
 export function authHandler({ scopes, authMethods }, request) {
   const payload = JSON.parse(request.requestBody);
-  if (payload.credentials.login_name === 'error') {
-    return new Response(400);
-  } else {
-    const [, id, method] = request.params.id_method.match(/(?<id>.[^:]*)(?::)?(?<method>.*)?/);
-    const authMethod = authMethods.find(id);
-    const scope = scopes.find(authMethod.scopeId);
-    const scopeAttrs = this.serialize(scopes.find(scope.id));
-    return methodHandlers[authMethod.type][method](scopeAttrs);
-  }
+  const [, id, method] = request.params.id_method.match(/(?<id>.[^:]*)(?::)?(?<method>.*)?/);
+  const authMethod = authMethods.find(id);
+  const scope = scopes.find(authMethod.scopeId);
+  const scopeAttrs = this.serialize(scopes.find(scope.id));
+  return methodHandlers[authMethod.type][method](payload, scopeAttrs);
 }
 
 export function deauthHandler() {

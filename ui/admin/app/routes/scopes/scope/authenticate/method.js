@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { notifyError } from 'core/decorators/notify';
@@ -37,12 +38,29 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     const authMethod = this.modelFor('scopes.scope.authenticate.method');
     const authenticatorName = `authenticator:${authMethod.type}`;
     const requestCookies = false;
-    await this.session.authenticate(
-      authenticatorName,
-      creds,
-      requestCookies,
-      { scope, authMethod }
-    );
-    this.transitionTo('index');
+    switch (authMethod.type) {
+      case 'password':
+        await this.session.authenticate(
+          authenticatorName,
+          creds,
+          requestCookies,
+          { scope, authMethod }
+        );
+        this.transitionTo('index');
+        break;
+      case 'oidc':
+        await this.startOIDCAuthentication(
+          authenticatorName,
+          creds,
+          requestCookies,
+          { scope, authMethod }
+        );
+        break;
+    }
+  }
+
+  async startOIDCAuthentication(authenticatorName, creds, requestCookies, options) {
+    const oidc = getOwner(this).lookup(authenticatorName);
+    oidc.startAuthentication(creds, requestCookies, options);
   }
 }
