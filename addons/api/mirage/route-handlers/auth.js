@@ -33,7 +33,10 @@ export function authHandler({ scopes, authMethods, users }, request) {
     const scope = scopes.find(authMethod.scopeId);
     const scopeAttrs =
       this.serialize(scopes.find(scope.id));
-    const user = users.first();
+    // Create and tag an auth user to be used in auth payload.
+    const user = users.findOrCreateBy({ 
+      description: 'authenticated-user'
+    });
     return new Response(200, {}, {
       scope: scopeAttrs,
       id: 'token123',

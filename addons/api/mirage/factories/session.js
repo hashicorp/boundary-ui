@@ -28,8 +28,8 @@ export default factory.extend({
         const orgScopeId = record.scope?.scope.id;
         const orgUser =
           server.schema.users.where({ scopeId: orgScopeId }).models[0];
-        const authenticatedUser = server.schema.users.first();
-        const user = random.arrayElement([orgUser, authenticatedUser]);
+        const mockedAuthPayloadUser = server.schema.users.findOrCreateBy({ description: 'authenticated-user' });
+        const user = random.arrayElement([orgUser, mockedAuthPayloadUser]);
         if (user) record.update({ user });
       }
       const target = server.schema.targets.where({ scopeId }).models[0];
