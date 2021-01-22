@@ -11,7 +11,7 @@
   },
   "scripts": {
     "doc:toc": "doctoc README.md",
-    "build": "ENABLE_MIRAGE=false ember build --environment=production && yarn build:desktop",
+    "build": "ember build --environment=production && yarn build:desktop",
     "build:development": "ember build",
     "prebuild:desktop": "cp -r dist electron-app/ember-dist",
     "build:desktop": "cd electron-app && yarn make",
@@ -24,6 +24,7 @@
     "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
+    "start:development": "ENABLE_MIRAGE=true yarn start",
     "start:desktop": "ember electron",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
