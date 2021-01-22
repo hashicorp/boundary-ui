@@ -23,6 +23,12 @@ import { Response } from 'miragejs';
 //   }
 // }
 
+// Quick and dirty counter system to simulate the polling behavior
+// of the API.  If the OIDC flow is pending, the route returns 100.
+// If complete it returns 200 with the token JSON.
+let oidcAttemptCounter = 0;
+const oidcRequiredAttempts = 3;
+
 const methodHandlers = {
   password: {
     authenticate: (payload, scopeAttrs) => {
@@ -44,6 +50,7 @@ const methodHandlers = {
       }
     }
   },
+
   /**
    * OIDC authentication is a two-step process:
    *
@@ -62,7 +69,25 @@ const methodHandlers = {
         token_request_id: 'token_request_1234',
         state: 'base_58_encoded_string'
       }),
-    authenticate: () => new Response(200) // TODO
+    authenticate: (_, scopeAttrs) => {
+      oidcAttemptCounter++;
+      if (oidcAttemptCounter < oidcRequiredAttempts) {
+        return new Response(100);
+      } else {
+        return new Response(200, {}, {
+          scope: scopeAttrs,
+          id: 'token123',
+          token: 'thetokenstring',
+          account_id: '1',
+          user_id: 'user123',
+          auth_method_id: 'authmethod123',
+          created_time: '',
+          updated_time: '',
+          last_used_time: '',
+          expiration_time: ''
+        });
+      }
+    }
   }
 };
 

@@ -51,7 +51,6 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
       case 'oidc':
         await this.startOIDCAuthentication(
           authenticatorName,
-          creds,
           requestCookies,
           { scope, authMethod }
         );
@@ -60,8 +59,25 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     }
   }
 
-  async startOIDCAuthentication(authenticatorName, creds, requestCookies, options) {
+  /**
+   *
+   */
+  async startOIDCAuthentication(authenticatorName, requestCookies, options) {
     const oidc = getOwner(this).lookup(authenticatorName);
-    oidc.startAuthentication(creds, requestCookies, options);
+    // TODO: delegate this call from the session service so that we don't have
+    // to look up the authenticator directly
+    const json = await oidc.startAuthentication(requestCookies, options);
+    await this.openExternalOIDCFlow(json.authorization_request_url);
   }
+
+  /**
+   * Opens the specified URL in a new tab or window.  By default this uses
+   * `window.open`, but may be overriden.
+   * @param {string} url
+   */
+  async openExternalOIDCFlow(url) {
+    // TODO don't use window directly
+    await window.open(url);
+  }
+
 }
