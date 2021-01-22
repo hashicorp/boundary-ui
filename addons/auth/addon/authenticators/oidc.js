@@ -48,8 +48,8 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
    * `window.open`, but may be overriden.
    * @param {string} url
    */
-  openExternalOIDCFlow(url) {
-    window.open(url);
+  async openExternalOIDCFlow(url) {
+    await window.open(url);
   }
 
   async authenticate(

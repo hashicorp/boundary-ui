@@ -55,6 +55,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
           requestCookies,
           { scope, authMethod }
         );
+        this.transitionTo('scopes.scope.authenticate.method.oidc');
         break;
     }
   }

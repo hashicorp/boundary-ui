@@ -10,7 +10,9 @@ Router.map(function () {
   this.route('scopes', function () {
     this.route('scope', { path: ':scope_id' }, function () {
       this.route('authenticate', function () {
-        this.route('method', { path: ':auth_method_id' }, function() {});
+        this.route('method', { path: ':auth_method_id' }, function() {
+          this.route('oidc');
+        });
       });
 
       this.route('scopes', function () {});
