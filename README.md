@@ -117,7 +117,7 @@ yarn build:ui:desktop
 ```
 
 Assets are saved to `ui/desktop/electron-app/out/make/`.
-DMG packaged desktop UI is available at asset location as `Boundary.dmg`.
+DMG packaged desktop UI is available at asset location as `Boundary Desktop.dmg`.
 
 ### Committing
 

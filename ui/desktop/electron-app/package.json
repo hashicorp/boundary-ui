@@ -22,7 +22,7 @@
           "/ember-test(/|$)",
           "/tests(/|$)"
         ],
-        "name": "Boundary",
+        "name": "Boundary Desktop",
         "appBundleId": "com.electron.boundary",
         "appVersion": "0.0.1",
         "appCopyright": "Copyright © 2021 HashiCorp, Inc.",
@@ -34,7 +34,7 @@
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
-            "name": "Boundary"
+            "name": "Boundary Desktop"
           }
         }
       ]
