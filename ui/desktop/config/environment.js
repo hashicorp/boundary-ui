@@ -25,7 +25,9 @@ module.exports = function (environment) {
       // when it is created
     },
 
-    isElectron: Boolean(process.env.EMBER_CLI_ELECTRON),
+    isElectron: process.env.EMBER_CLI_ELECTRON
+      ? JSON.parse(process.env.EMBER_CLI_ELECTRON)
+      : false,
 
     'ember-cli-mirage': {
       //enabled: ENABLE_MIRAGE,
