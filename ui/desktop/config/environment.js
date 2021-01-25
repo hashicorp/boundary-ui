@@ -1,7 +1,6 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
-const ENABLE_MIRAGE = ('ENABLE_MIRAGE' in process.env) ? process.env.ENABLE_MIRAGE : false;
 
 module.exports = function (environment) {
   let ENV = {
