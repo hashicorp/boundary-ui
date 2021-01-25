@@ -13,7 +13,7 @@
     "doc:toc": "doctoc README.md",
     "build": "EMBER_CLI_ELECTRON=true ember build --environment=production && yarn build:desktop",
     "build:development": "ember build",
-    "prebuild:desktop": "cp -r dist electron-app/ember-dist",
+    "prebuild:desktop": "cp -r dist/ electron-app/ember-dist/",
     "build:desktop": "cd electron-app && yarn make",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
     "lint:hbs": "ember-template-lint .",
