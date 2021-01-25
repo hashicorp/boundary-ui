@@ -47,5 +47,5 @@ grant_scope:
   label: Grant Scope
   help: Specify the scope to which this role applies.
 origin:
-  label: Controller URL
+  label: Origin URL
   description: The Boundary URL to which to connect (e.g. protocol://host:port)
