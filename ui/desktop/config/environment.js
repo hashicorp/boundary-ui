@@ -29,7 +29,7 @@ module.exports = function (environment) {
     isElectron: Boolean(process.env.EMBER_CLI_ELECTRON),
 
     'ember-cli-mirage': {
-      enabled: ENABLE_MIRAGE,
+      //enabled: ENABLE_MIRAGE,
       directory: '../../addons/api/mirage'
     },
 
@@ -43,6 +43,10 @@ module.exports = function (environment) {
 
     notifyTimeout: 4000,
   };
+
+  if (process.env.ENABLE_MIRAGE) {
+    ENV['ember-cli-mirage'].enabled = JSON.parse(process.env.ENABLE_MIRAGE);
+  }
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -70,7 +74,7 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
-    
+
     ENV.enableConfirmService = false;
 
     // Use in-memory storage
