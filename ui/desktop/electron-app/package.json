@@ -27,7 +27,12 @@
         "appVersion": "0.0.1",
         "appCopyright": "Copyright © 2021 HashiCorp, Inc.",
         "osxSign": {
-          "identity": "Developer ID Application: * (*)"
+          "identity": "Developer ID Application: Hashicorp, Inc. (D38WU7D763)",
+          "hardenedRuntime": true,
+          "gatekeeper-assess": false,
+          "entitlements": "config/macos/entitlements.plist",
+          "entitlements-inherit": "config/macos/entitlements.plist",
+          "signature-flags": "library"
         }
       },
       "makers": [
