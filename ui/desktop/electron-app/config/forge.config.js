@@ -2,7 +2,7 @@ const process = require('process');
 
 module.exports = {
   hooks: {
-    prePackage: (forgeConfig) => {
+    preMake: (forgeConfig) => {
       if (process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY) {
         forgeConfig.osxSign = {
           identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
