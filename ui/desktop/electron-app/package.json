@@ -16,34 +16,7 @@
   },
   "keywords": [],
   "config": {
-    "forge": {
-      "packagerConfig": {
-        "ignore": [
-          "/ember-test(/|$)",
-          "/tests(/|$)"
-        ],
-        "name": "Boundary Desktop",
-        "appBundleId": "com.electron.boundary",
-        "appVersion": "0.0.1",
-        "appCopyright": "Copyright © 2021 HashiCorp, Inc.",
-        "osxSign": {
-          "identity": "Developer ID Application: Hashicorp, Inc. (D38WU7D763)",
-          "hardenedRuntime": true,
-          "gatekeeper-assess": false,
-          "entitlements": "config/macos/entitlements.plist",
-          "entitlements-inherit": "config/macos/entitlements.plist",
-          "signature-flags": "library"
-        }
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "name": "Boundary Desktop"
-          }
-        }
-      ]
-    }
+    "forge": "config/forge.config.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
