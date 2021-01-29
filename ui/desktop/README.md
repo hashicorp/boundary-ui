@@ -66,15 +66,17 @@ To run as a desktop app:
 
 Before executing a build, be sure to set any environment variables necessary
 for your target [environment](#environment-variables).  To build this UI for
-production, run the following commads from this folder:
+production, run the following commands from this folder:
 
 ```bash
 yarn install
 yarn build
 ```
 
-The static production assets are saved into the `dist/` folder.
+`BOUNDARY_DESKTOP_SIGNING_IDENTITY` environment variable must be provided
+to codesign in production.
 
+The static production assets are saved into the `dist/` folder.
 
 #### Environment Variables
 
@@ -83,7 +85,7 @@ These environment variables may be used to customized the build.
 | Variable | Default Value | Description |
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
-| `API_HOST` | | The host of the API, if different than UI (e.g. https://example.net:1234). |
+| `BOUNDARY_DESKTOP_SIGNING_IDENTITY` | | The name of the certificate to use when signing (e.g. Developer ID Application: * (*)). |
 
 ### Running Tests
 
