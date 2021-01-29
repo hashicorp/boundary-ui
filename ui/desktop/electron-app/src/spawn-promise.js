@@ -1,3 +1,4 @@
+const path = require('path');
 const { spawn } = require('child_process');
 
 // Convert to json
@@ -26,7 +27,10 @@ const jsonify = (data) => {
 // POJO representation and throw it or promise->reject it.
 module.exports = function spawnPromise (command) {
   return new Promise((resolve, reject) => {
-    const childProcess = spawn('boundary', command);
+    const boundaryPath = path.resolve(__dirname, 'binary', 'boundary');
+    // TODO:  remove path logging
+    console.log(boundaryPath);
+    const childProcess = spawn(boundaryPath, command);
     let outputStream = '';
     let errorStream = '';
 

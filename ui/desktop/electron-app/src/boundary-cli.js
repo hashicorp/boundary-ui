@@ -1,7 +1,7 @@
-const { lookpath } = require('lookpath');
+const path = require('path');
 const spawnPromise = require('./spawn-promise');
 
-const cliPath = async () => await lookpath('boundary');
+const cliPath = async () => path.resolve(__dirname, 'binary', 'boundary');
 
 module.exports = {
   // Find boundary cli path
@@ -17,7 +17,7 @@ module.exports = {
       `-addr=${addr}`,
       '-format=json',
       '--output-json-errors'
-    ]
+    ];
     return spawnPromise(command);
   }
 }
