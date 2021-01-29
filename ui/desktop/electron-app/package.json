@@ -29,6 +29,6 @@
     "@electron-forge/cli": "6.0.0-beta.53",
     "@electron-forge/maker-dmg": "^6.0.0-beta.54",
     "devtron": "^1.4.0",
-    "electron": "10.1.5"
+    "electron": "10.2.0"
   }
 }
