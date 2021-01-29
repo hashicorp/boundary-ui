@@ -67,16 +67,27 @@ export default class ScopesScopeRoute extends Route {
     this.scope.org = selectedOrg;
     this.scope.project = selectedProject;
     this.scopes = { orgs, projects, selectedOrg, selectedProject };
+    // Update the controller (if exists), since setupController is only
+    // called once the first time the route is activated.  It is not called
+    // again on route refreshes.
+    if (this.controller) this.setControllerProperties(this.scopes);
   }
 
   /**
    * Adds the scopes hash to the controller context (see `afterModel`).
    * @param {Controller} controller
    */
-  setupController(controller) {
+  setupController(/* controller */) {
     super.setupController(...arguments);
-    const scopes = this.scopes;
-    controller.setProperties({ scopes });
+    this.setControllerProperties(this.scopes);
+  }
+
+  /**
+   * Updates the controller's `scopes`.
+   * @param {array} scopes
+   */
+  setControllerProperties(scopes) {
+    this.controller.setProperties({ scopes });
   }
 
   /**
