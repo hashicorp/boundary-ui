@@ -67,6 +67,7 @@ module('Acceptance | authentication', function (hooks) {
     globalAuthMethod = this.server.create('auth-method', {
       scope: globalScope,
     });
+    this.server.create('user', { scope: globalScope });
     authMethod = this.server.create('auth-method', { scope: orgScope });
     orgScopeID = orgScope.id;
     globalAuthMethodID = globalAuthMethod.id;

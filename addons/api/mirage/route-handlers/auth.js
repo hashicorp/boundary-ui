@@ -38,7 +38,7 @@ export function authHandler({ scopes, authMethods }, request) {
       id: 'token123',
       token: 'thetokenstring',
       account_id: '1',
-      user_id: 'user123',
+      user_id: 'authenticateduser',
       auth_method_id: 'authmethod123',
       created_time: '',
       updated_time: '',

@@ -43,6 +43,7 @@ module.exports = function (environment) {
     appName: APP_NAME,
 
     notifyTimeout: 4000,
+    sessionPollingTimeoutSeconds: 2.5,
   };
 
   if (process.env.ENABLE_MIRAGE) {
