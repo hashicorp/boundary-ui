@@ -91,7 +91,7 @@ export default class ScopesScopeRoute extends Route {
   }
 
   /**
-   * Renders the scope-specific sidebar template.
+   * Renders the scope-specific header template.
    * @override
    * @param {object} controller
    * @param {object} model

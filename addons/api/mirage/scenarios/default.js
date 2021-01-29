@@ -13,6 +13,8 @@ export default function(server) {
     scope: { id: globalScope.id, type: globalScope.type }
   }, 'withChildren')[0];
 
+  server.create('user', { id: 'authenticateduser' });
+
   // Auth
   server.createList('auth-method', 1, { scope: globalScope }, 'withAccountsAndUsers');
   server.createList('auth-method', 3, { scope: orgScope }, 'withAccountsAndUsers');
@@ -30,5 +32,4 @@ export default function(server) {
     server.createList('target', 2, { scope }, 'withRandomHostSets');
     server.createList('session', 4, { scope }, 'withAssociations');
   });
-
 }

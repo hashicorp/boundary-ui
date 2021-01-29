@@ -1,4 +1,4 @@
-import factory from '../generated/factories/target';
+import factory from '../generated/factories/session';
 import { trait } from 'ember-cli-mirage';
 import { random } from 'faker';
 
@@ -26,8 +26,7 @@ export default factory.extend({
       const scopeId = record.scopeId;
       if (record.scope.type === 'project') {
         const orgScopeId = record.scope?.scope.id;
-        const user =
-          server.schema.users.where({ scopeId: orgScopeId }).models[0];
+        const user = server.schema.users.where({ scopeId: orgScopeId }).models[0];
         if (user) record.update({ user });
       }
       const target = server.schema.targets.where({ scopeId }).models[0];

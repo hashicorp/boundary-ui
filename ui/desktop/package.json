@@ -54,6 +54,7 @@
     "ember-cli-sri": "^2.1.1",
     "ember-cli-template-lint": "^2.0.2",
     "ember-cli-uglify": "^3.0.0",
+    "ember-concurrency": "^1.3.0",
     "ember-electron": "https://github.com/adopted-ember-addons/ember-electron#v3.0.0-beta.4",
     "ember-exam": "^6.0.1",
     "ember-export-application-global": "^2.0.1",

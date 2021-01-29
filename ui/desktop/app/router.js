@@ -14,6 +14,7 @@ Router.map(function () {
       });
       this.route('projects', function () {
         this.route('targets', function () {});
+        this.route('sessions', function() {});
       });
     });
   });
