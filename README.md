@@ -116,6 +116,9 @@ yarn install
 yarn build:ui:desktop
 ```
 
+To provide a signing identify for macOS build, use `BOUNDARY_DESKTOP_SIGNING_IDENTITY`
+environment variable to set signing certificate name (e.g Developer ID Application: * (*)).
+
 Assets are saved to `ui/desktop/electron-app/out/make/`.
 DMG packaged desktop UI is available at asset location as `Boundary Desktop.dmg`.
 
