@@ -17,8 +17,10 @@ class RuntimeSettings {
    */
   get origin() { return this.#origin; }
   set origin(origin) {
-    this.#origin = origin;
-    this.triggerOriginChanged();
+    if (this.#origin !== origin) {
+      this.#origin = origin;
+      this.triggerOriginChanged();
+    }
   }
 
   /**

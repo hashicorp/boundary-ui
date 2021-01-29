@@ -1,7 +1,6 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
-const ENABLE_MIRAGE = process.env.ENABLE_MIRAGE ? false : true;
 
 module.exports = function (environment) {
   let ENV = {
@@ -26,10 +25,12 @@ module.exports = function (environment) {
       // when it is created
     },
 
-    isElectron: Boolean(process.env.EMBER_CLI_ELECTRON),
+    isElectron: process.env.EMBER_CLI_ELECTRON
+      ? JSON.parse(process.env.EMBER_CLI_ELECTRON)
+      : false,
 
     'ember-cli-mirage': {
-      enabled: ENABLE_MIRAGE,
+      //enabled: ENABLE_MIRAGE,
       directory: '../../addons/api/mirage'
     },
 
@@ -44,6 +45,10 @@ module.exports = function (environment) {
     notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 2.5,
   };
+
+  if (process.env.ENABLE_MIRAGE) {
+    ENV['ember-cli-mirage'].enabled = JSON.parse(process.env.ENABLE_MIRAGE);
+  }
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -71,7 +76,7 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
-    
+
     ENV.enableConfirmService = false;
 
     // Use in-memory storage

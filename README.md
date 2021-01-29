@@ -23,6 +23,7 @@ subproject, e.g. running or testing.
   - [Building ToC](#building-toc)
   - [Building Admin UI for Production](#building-admin-ui-for-production)
     - [Building with a Container](#building-with-a-container)
+  - [Building Desktop UI for Production](#building-desktop-ui-for-production)
   - [Committing](#committing)
     - [License Checking](#license-checking)
 
@@ -101,6 +102,25 @@ docker-compose -f docker-compose-embedding.yml run build
 ```
 
 Assets are saved to `ui/admin/dist/`.
+
+### Building Desktop UI for Production
+
+See ui/desktop/README.md Building for Production for more information on how to
+build the Desktop UI.  Be sure to set build-related environment variables as
+necessary for your target environment, as described in the Desktop UI readme.
+
+To quickly produce a production build of Desktop UI, run from this folder:
+
+```bash
+yarn install
+yarn build:ui:desktop
+```
+
+To provide a signing identify for macOS build, use `BOUNDARY_DESKTOP_SIGNING_IDENTITY`
+environment variable to set signing certificate name (e.g Developer ID Application: * (*)).
+
+Assets are saved to `ui/desktop/electron-app/out/make/`.
+DMG packaged desktop UI is available at asset location as `Boundary Desktop.dmg`.
 
 ### Committing
 

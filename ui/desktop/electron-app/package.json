@@ -16,28 +16,7 @@
   },
   "keywords": [],
   "config": {
-    "forge": {
-      "packagerConfig": {
-        "ignore": [
-          "/ember-test(/|$)",
-          "/tests(/|$)"
-        ]
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "name": "Boundary"
-          }
-        }
-      ]
-    }
+    "forge": "config/forge.config.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -48,11 +27,7 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.53",
-    "@electron-forge/maker-deb": "6.0.0-beta.53",
     "@electron-forge/maker-dmg": "^6.0.0-beta.54",
-    "@electron-forge/maker-rpm": "6.0.0-beta.53",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.53",
-    "@electron-forge/maker-zip": "6.0.0-beta.53",
     "devtron": "^1.4.0",
     "electron": "10.1.5"
   }
