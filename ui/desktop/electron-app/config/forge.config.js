@@ -34,7 +34,7 @@ module.exports = {
       const artifactPath = await downloadArtifact(url);
 
       // Extract artifact content
-      const binaryPath = path.resolve(__dirname, '..', 'ember-dist', 'binary');
+      const binaryPath = path.resolve(__dirname, '..', 'src', 'binary');
       if (!fs.existsSync(binaryPath)) fs.mkdirSync(binaryPath);
       console.log('\nExtract artifact to: ', binaryPath);
       await decompress(artifactPath, binaryPath);
