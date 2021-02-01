@@ -4,10 +4,10 @@ const https = require('https');
 const decompress = require('decompress');
 const os = require('os');
 
-const artifactVersion = '0.1.4';
+const artifactVersion = '0.1.5';
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
 
-const downloadArtifact = (version) => {
+const downloadArtifact = version => {
   const url = `https://releases.hashicorp.com/boundary/${version}/boundary_${version}_darwin_amd64.zip`;
   return new Promise((resolve, reject) => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'boundary-desktop-artifact-'))
