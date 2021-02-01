@@ -4,7 +4,7 @@ module.exports = {
   hooks: {
     preMake: (forgeConfig) => {
       if (process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY) {
-        forgeConfig.osxSign = {
+        forgeConfig.packagerConfig.osxSign = {
           identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
           hardenedRuntime: true,
           "gatekeeper-assess": false,
