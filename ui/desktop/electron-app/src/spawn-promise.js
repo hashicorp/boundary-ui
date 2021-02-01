@@ -27,7 +27,7 @@ const jsonify = (data) => {
 // POJO representation and throw it or promise->reject it.
 module.exports = function spawnPromise (command) {
   return new Promise((resolve, reject) => {
-    const boundaryPath = path.resolve(__dirname, 'binary', 'boundary');
+    const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
     // TODO:  remove path logging
     console.log(boundaryPath);
     const childProcess = spawn(boundaryPath, command);

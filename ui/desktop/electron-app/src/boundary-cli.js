@@ -1,7 +1,7 @@
 const path = require('path');
 const spawnPromise = require('./spawn-promise');
 
-const cliPath = async () => path.resolve(__dirname, 'binary', 'boundary');
+const cliPath = async () => path.resolve(__dirname, '..', 'cli', 'boundary');
 
 module.exports = {
   // Find boundary cli path

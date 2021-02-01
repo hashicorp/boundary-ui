@@ -8,8 +8,10 @@
   "author": "HashiCorp",
   "main": "src/index.js",
   "scripts": {
+    "build:cli": "node -e 'require(\"./config/cli.js\").setup()'",
     "start": "electron-forge start",
     "package": "electron-forge package",
+    "premake": "yarn build:cli",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""

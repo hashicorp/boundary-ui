@@ -91,3 +91,6 @@ out/
 # Ember build
 ember-dist/
 ember-test/
+
+# CLI
+cli/
