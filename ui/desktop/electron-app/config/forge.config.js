@@ -27,9 +27,7 @@ module.exports = {
       }
 
       // Download boundary
-      let artifactVersion = '0.1.4';
-      if (process.env.BOUNDARY_ARTIFACT_VERSION) artifactVersion = process.env.BOUNDARY_ARTIFACT_VERSION;
-
+      const artifactVersion = '0.1.4';
       const url = `https://releases.hashicorp.com/boundary/${artifactVersion}/boundary_${artifactVersion}_darwin_amd64.zip`;
       const artifactPath = await downloadArtifact(url);
 
