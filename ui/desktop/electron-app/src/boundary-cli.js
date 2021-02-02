@@ -1,11 +1,9 @@
-const { lookpath } = require('lookpath');
-const spawnPromise = require('./spawn-promise');
+const path = require('path');
+const { spawnAsyncJSONPromise, spawnSync } = require('./spawn-promise');
 
-const cliPath = async () => await lookpath('boundary');
+const cliPath = async () => path.resolve(__dirname, '..', 'cli', 'boundary');
 
 module.exports = {
-  // Find boundary cli path
-  path: () => cliPath(),
   // Check boundary cli existence
   exists: () => Boolean(cliPath()),
   // Initiate connection and return output
@@ -17,7 +15,21 @@ module.exports = {
       `-addr=${addr}`,
       '-format=json',
       '--output-json-errors'
-    ]
-    return spawnPromise(command);
+    ];
+    return spawnAsyncJSONPromise(command);
+  },
+  // Returns JSON-formatted version information from the CLI
+  version: () => {
+    const command = [ '-v' ];
+    const rawOutput = spawnSync(command);
+    let gitRevision = /Git Revision:\s*(?<rev>.*)\n/.exec(rawOutput);
+    let versionNumber = /Version Number:\s*(?<ver>.*)\n/.exec(rawOutput);
+    if (gitRevision) gitRevision = gitRevision.groups.rev;
+    if (versionNumber) versionNumber = versionNumber.groups.ver;
+    const formatted = versionNumber
+      ? `CLI Version ${versionNumber}; CLI Git Rev ${gitRevision}`
+      : `CLI Git Rev ${gitRevision}`;
+    return { gitRevision, versionNumber, formatted };
+    return rawOutput;
   }
 }
