@@ -1,4 +1,7 @@
 const process = require('process');
+const { version } = require('../src/boundary-cli.js');
+
+const formattedCLIVersion = version().formatted;
 
 module.exports = {
   hooks: {
@@ -24,7 +27,8 @@ module.exports = {
     ],
     name: "Boundary Desktop",
     appBundleId: "com.electron.boundary",
-    appVersion: "0.0.1",
+    // TODO: where should the client version number come from?
+    appVersion: `1.0.0 ${formattedCLIVersion}`,
     appCopyright: "Copyright © 2021 HashiCorp, Inc."
   },
   makers: [

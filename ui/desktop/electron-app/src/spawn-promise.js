@@ -1,5 +1,7 @@
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
+
+const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
 
 // Convert to json
 const jsonify = (data) => {
@@ -37,7 +39,6 @@ module.exports = {
    */
   spawnAsyncJSONPromise(command) {
     return new Promise((resolve, reject) => {
-      const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
       const childProcess = spawn(boundaryPath, command);
       let outputStream = '';
       let errorStream = '';
@@ -56,5 +57,14 @@ module.exports = {
       });
     });
   },
+
+  /**
+   *
+   */
+  spawnSync(command) {
+    const childProcess = spawnSync(boundaryPath, command);
+    const rawOutput = childProcess.output.toString();
+    return rawOutput;
+  }
 
 };
