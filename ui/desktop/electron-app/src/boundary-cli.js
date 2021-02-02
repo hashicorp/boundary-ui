@@ -1,5 +1,5 @@
 const path = require('path');
-const spawnPromise = require('./spawn-promise');
+const { spawnAsyncJSONPromise } = require('./spawn-promise');
 
 const cliPath = async () => path.resolve(__dirname, '..', 'cli', 'boundary');
 
@@ -18,6 +18,6 @@ module.exports = {
       '-format=json',
       '--output-json-errors'
     ];
-    return spawnPromise(command);
+    return spawnAsyncJSONPromise(command);
   }
 }
