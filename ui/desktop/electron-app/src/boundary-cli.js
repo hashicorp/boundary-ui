@@ -27,7 +27,7 @@ module.exports = {
     if (gitRevision) gitRevision = gitRevision.groups.rev;
     if (versionNumber) versionNumber = versionNumber.groups.ver;
     const formatted = versionNumber
-      ? `CLI Version ${versionNumber}; Git Rev ${gitRevision}`
+      ? `CLI Version ${versionNumber}; CLI Git Rev ${gitRevision}`
       : `CLI Git Rev ${gitRevision}`;
     return { gitRevision, versionNumber, formatted };
     return rawOutput;
