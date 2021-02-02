@@ -1,0 +1,17 @@
+{{page-title @model.displayName}}
+
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    {{outlet "header"}}
+  </page.header>
+
+  <page.navigation>
+    {{outlet "navigation"}}
+  </page.navigation>
+
+  <page.body>
+    {{outlet}}
+  </page.body>
+
+</Rose::Layout::Page>
