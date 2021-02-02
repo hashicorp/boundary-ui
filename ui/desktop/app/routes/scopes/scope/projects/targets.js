@@ -49,11 +49,9 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @action
   async connect(model) {
     try {
-      //eslint-disable-next-line no-debugger
-      debugger;
-      // Check for cli
-      const cliPath = await this.ipc.invoke('cliExists');
-      if(!cliPath) throw new Error('Cannot find boundary cli.')
+      // Check for CLI
+      const cliExists = await this.ipc.invoke('cliExists');
+      if (!cliExists) throw new Error('Cannot find Boundary CLI.');
 
       // Create target session
       const connectionDetails = await this.ipc.invoke('connect', {

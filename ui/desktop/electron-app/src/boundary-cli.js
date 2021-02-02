@@ -4,8 +4,6 @@ const { spawnAsyncJSONPromise } = require('./spawn-promise');
 const cliPath = async () => path.resolve(__dirname, '..', 'cli', 'boundary');
 
 module.exports = {
-  // Find boundary cli path
-  path: () => cliPath(),
   // Check boundary cli existence
   exists: () => Boolean(cliPath()),
   // Initiate connection and return output
