@@ -13,6 +13,7 @@
           <header.row as |row|>
             <row.headerCell>{{t "form.id.label"}}</row.headerCell>
             <row.headerCell>{{t "resources.target.title"}}</row.headerCell>
+            <row.headerCell>{{t "form.proxy.label"}}</row.headerCell>
             <row.headerCell>{{t "form.started.label"}}</row.headerCell>
             <row.headerCell>{{t "form.status.label"}}</row.headerCell>
           </header.row>
@@ -28,6 +29,24 @@
                 <code>{{sessionAggregate.session.id}}</code>
               </row.headerCell>
               <row.cell>{{sessionAggregate.target.displayName}}</row.cell>
+              <row.cell>
+                {{!--
+                  This should also be predicated on the session being active...
+                  inactive sessions should not show this information,
+                  even if it remains on the model instance
+                --}}
+                {{#if sessionAggregate.session.proxy}}
+                  <Copyable
+                    @text={{concat sessionAggregate.session.proxy.address ':' sessionAggregate.session.proxy.port}}
+                    @buttonText={{t "actions.copy-to-clipboard"}}
+                    @acknowledgeText={{t "states.copied"}}
+                  >
+                    <code>
+                      {{sessionAggregate.session.proxy.address}}:{{sessionAggregate.session.proxy.port}}
+                    </code>
+                  </Copyable>
+                {{/if}}
+              </row.cell>
               <row.cell>
                 <time datetime={{format-date-iso sessionAggregate.session.created_time}}>
                   {{format-date-iso-human sessionAggregate.session.created_time}}

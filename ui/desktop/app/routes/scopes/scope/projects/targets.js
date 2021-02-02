@@ -61,7 +61,14 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
       });
 
       // Show the user a modal with basic connection info.
+      // We don't await because this modal is purely informational.
       this.confirm.confirm(connectionDetails, { isConnectSuccess: true });
+
+      // Associate the connection details with the session
+      const session =
+        await this.store.findRecord('session', connectionDetails.session_id);
+      session.proxy = connectionDetails;
+
     } catch(e) {
       this.confirm.confirm(e.message, { isConnectError: true })
         // Retry
