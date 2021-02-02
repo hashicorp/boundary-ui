@@ -46,7 +46,7 @@ export default function initializeMockIPC (server) {
         created_time: new Date().toISOString()
       });
       return {
-        address: `${window.location.protocol}//${window.location.hostname}`,
+        address: window.location.hostname,
         port: random.number(),
         protocol: type,
         session_id: newSession.id
