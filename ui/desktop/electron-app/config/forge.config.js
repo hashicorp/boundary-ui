@@ -2,18 +2,9 @@ const process = require('process');
 
 module.exports = {
   hooks: {
-    preMake: (forgeConfig) => {
-      if (process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY) {
-        forgeConfig.packagerConfig.osxSign = {
-          identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
-          hardenedRuntime: true,
-          "gatekeeper-assess": false,
-          entitlements: "config/macos/entitlements.plist",
-          "entitlements-inherit": "config/macos/entitlements.plist",
-          "signature-flags": "library"
-        }
-      } else {
-        console.warn('Could not find signing identity. Skipping signing.');
+    prePackage: () => {
+      if (!process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY) {
+        console.warn('\nWARNING: Could not find signing identity.');
       }
     }
   },
@@ -25,7 +16,14 @@ module.exports = {
     name: "Boundary Desktop",
     appBundleId: "com.electron.boundary",
     appVersion: "0.0.1",
-    appCopyright: "Copyright © 2021 HashiCorp, Inc."
+    appCopyright: "Copyright © 2021 HashiCorp, Inc.",
+    osxSign: {
+      identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
+      "hardened-runtime": true,
+      entitlements: "./config/macos/entitlements.plist",
+      "entitlements-inherit": "./config/macos/entitlements.plist",
+      "signature-flags": "library"
+    }
   },
   makers: [
     {
