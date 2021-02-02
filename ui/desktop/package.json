@@ -24,6 +24,7 @@
     "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
+    "prestart:desktop": "cd electron-app && yarn build:cli",
     "start:desktop": "ember electron",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",

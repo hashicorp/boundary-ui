@@ -62,6 +62,9 @@ List of available project commands.  `yarn run <command-name>`
 To run as a desktop app:
 * `yarn start:desktop`
 
+The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
+build. CLI version is defined in `electron-app/config/cli.js`.
+
 ### Building for Production
 
 Before executing a build, be sure to set any environment variables necessary
@@ -77,6 +80,8 @@ yarn build
 to codesign in production.
 
 The static production assets are saved into the `dist/` folder.
+The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
+packaging. CLI version is defined in `electron-app/config/cli.js`.
 
 #### Environment Variables
 

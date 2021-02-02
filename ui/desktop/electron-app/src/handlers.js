@@ -23,11 +23,6 @@ handle('setOrigin', async (requestOrigin) => {
 handle('cliExists', () => boundaryCli.exists());
 
 /**
- * Detect boundary cli path
- */
-handle('cliPath', () => boundaryCli.path());
-
-/**
  * Establishes a boundary session and returns session details.
  */
 handle('connect', ({ target_id, token, addr }) => boundaryCli.connect(target_id, token, addr));

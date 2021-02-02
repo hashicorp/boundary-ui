@@ -1,4 +1,7 @@
-const { spawn } = require('child_process');
+const path = require('path');
+const { spawn, spawnSync } = require('child_process');
+
+const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
 
 // Convert to json
 const jsonify = (data) => {
@@ -24,22 +27,44 @@ const jsonify = (data) => {
 // error from the underlying exec implementation.  It's not a very
 // helpful message for users, so it's recommended to craft nice
 // POJO representation and throw it or promise->reject it.
-module.exports = function spawnPromise (command) {
-  return new Promise((resolve, reject) => {
-    const childProcess = spawn('boundary', command);
-    let outputStream = '';
-    let errorStream = '';
+module.exports = {
 
-    childProcess.stdout.on('data', (data) => {
-      outputStream += data.toString();
-      const jsonData = jsonify(outputStream);
-      if(jsonData) resolve(jsonData);
-    });
+  /**
+   * Spawns an asynchronous child process that is expected to output JSON
+   * data on either stdout or stderr.  The process is allowed to continue
+   * running after the promise resolves.  This function is intended to launch
+   * the local proxy.
+   * @param {string} command
+   * @return {Promise}
+   */
+  spawnAsyncJSONPromise(command) {
+    return new Promise((resolve, reject) => {
+      const childProcess = spawn(boundaryPath, command);
+      let outputStream = '';
+      let errorStream = '';
 
-    childProcess.stderr.on('data', (data) => {
-      errorStream += data.toString();
-      const jsonData = jsonify(errorStream);
-      if(jsonData) reject(new Error(jsonData?.error));
+      childProcess.stdout.on('data', (data) => {
+        outputStream += data.toString();
+        const jsonData = jsonify(outputStream);
+        if (jsonData) resolve(jsonData);
+      });
+
+      childProcess.stderr.on('data', (data) => {
+        errorStream += data.toString();
+        const jsonData = jsonify(errorStream);
+        const error = jsonData ? jsonData.error : undefined;
+        if (jsonData) reject(new Error(error));
+      });
     });
-  });
-}
+  },
+
+  /**
+   *
+   */
+  spawnSync(command) {
+    const childProcess = spawnSync(boundaryPath, command);
+    const rawOutput = childProcess.output.toString();
+    return rawOutput;
+  }
+
+};

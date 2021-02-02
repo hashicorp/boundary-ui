@@ -8,8 +8,10 @@
   "author": "HashiCorp",
   "main": "src/index.js",
   "scripts": {
+    "build:cli": "node -e 'require(\"./config/cli.js\").setup()'",
     "start": "electron-forge start",
     "package": "electron-forge package",
+    "premake": "yarn build:cli",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.53",
     "@electron-forge/maker-dmg": "^6.0.0-beta.54",
+    "decompress": "^4.2.1",
     "devtron": "^1.4.0",
     "electron": "10.1.5"
   }
