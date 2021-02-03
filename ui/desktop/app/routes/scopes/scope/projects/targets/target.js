@@ -14,6 +14,14 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
+   * Navigate to hostsets within a target.
+   * @param {TargetModel} model 
+   */
+  afterModel(model) {
+    this.transitionTo('scopes.scope.projects.targets.target.hosts', model);
+  }
+
+  /**
    * Renders the target-specific templates for header and navigation
    * page sections.
    * @override
