@@ -37,13 +37,11 @@
                 --}}
                 {{#if sessionAggregate.session.proxy}}
                   <Copyable
-                    @text={{concat sessionAggregate.session.proxy.address ':' sessionAggregate.session.proxy.port}}
+                    @text={{sessionAggregate.session.proxy}}
                     @buttonText={{t "actions.copy-to-clipboard"}}
                     @acknowledgeText={{t "states.copied"}}
                   >
-                    <code>
-                      {{sessionAggregate.session.proxy.address}}:{{sessionAggregate.session.proxy.port}}
-                    </code>
+                    <code>{{sessionAggregate.session.proxy}}</code>
                   </Copyable>
                 {{/if}}
               </row.cell>
