@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { all, hash } from 'rsvp';
+import { all } from 'rsvp';
 import { A } from '@ember/array';
 
 export default class ScopesScopeProjectsTargetsTargetHostsRoute extends Route {

@@ -1,23 +1,19 @@
 {{page-title (t "resources.host-set.title_plural")}}
 
-{{#if @model}}
-
-  <Rose::Table as |table|>
-    <table.body as |body|>
-      {{#each @model as |host|}}
-        <body.row as |row|>
-          <row.cell>
-            {{host.displayName}}
-            <p>{{host.description}}</p>
-          </row.cell>
-          <row.cell>{{host.id}}</row.cell>
-          <row.cell>{{host.attributes.address}}</row.cell>
-          <row.cell>
-            <Rose::Badge>{{t (concat 'resources.host.types.' host.type)}}</Rose::Badge>
-          </row.cell>
-        </body.row>
-      {{/each}}
-    </table.body>
-  </Rose::Table>
-
-{{/if}}
+<Rose::Table as |table|>
+  <table.body as |body|>
+    {{#each @model as |host|}}
+      <body.row as |row|>
+        <row.cell>
+          {{host.displayName}}
+          <p>{{host.description}}</p>
+        </row.cell>
+        <row.cell>{{host.id}}</row.cell>
+        <row.cell>{{host.attributes.address}}</row.cell>
+        <row.cell>
+          <Rose::Badge>{{t (concat 'resources.host.types.' host.type)}}</Rose::Badge>
+        </row.cell>
+      </body.row>
+    {{/each}}
+  </table.body>
+</Rose::Table>
