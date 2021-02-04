@@ -14,11 +14,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
-   * Navigate to hostsets within a target.
-   * @param {TargetModel} model 
+   * Navigate to sessions within a target.
    */
-  afterModel(model) {
-    this.transitionTo('scopes.scope.projects.targets.target.hosts', model);
+  afterModel() {
+    this.transitionTo('scopes.scope.projects.targets.target.sessions');
   }
 
   /**
