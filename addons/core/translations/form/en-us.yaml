@@ -49,3 +49,5 @@ grant_scope:
 origin:
   label: Origin URL
   description: The Boundary URL to which to connect (e.g. protocol://host:port)
+proxy:
+  label: Proxy

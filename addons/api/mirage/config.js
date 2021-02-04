@@ -3,8 +3,11 @@ import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
+import initializeMockIPC from './scenarios/ipc';
 
 export default function() {
+
+  initializeMockIPC(this);
 
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
