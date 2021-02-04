@@ -4,9 +4,10 @@ export default class ScopesScopeProjectsTargetsTargetSessionsRoute extends Route
   // =methods
 
   /**
-   * Loads all sessions and filter to current target.
+   * Loads all sessions for current target.
    * @return {Promise{[SessionModel]}}
    */
   async model() {
+    return this.modelFor('scopes.scope.projects.targets.target').sessions;
   }
 }

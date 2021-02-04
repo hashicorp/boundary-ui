@@ -7,7 +7,7 @@ export default class ScopesScopeProjectsTargetsTargetIndexRoute extends Route {
    * Navigate to hosts within a target.
    */
   afterModel() {
-    this.transitionTo('scopes.scope.projects.targets.target.hosts');
+    this.transitionTo('scopes.scope.projects.targets.target.sessions');
   }
 
 }

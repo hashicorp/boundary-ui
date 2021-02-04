@@ -99,4 +99,5 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   deactivate() {
     this.poller.cancelAll();
   }
+
 }

@@ -15,6 +15,7 @@
             <row.headerCell>{{t "resources.target.title"}}</row.headerCell>
             <row.headerCell>{{t "form.started.label"}}</row.headerCell>
             <row.headerCell>{{t "form.status.label"}}</row.headerCell>
+            <row.headerCell />
           </header.row>
         </table.header>
         <table.body as |body|>
@@ -35,6 +36,13 @@
               </row.cell>
               <row.cell>
                 <Rose::Badge>{{sessionAggregate.session.status}}</Rose::Badge>
+              </row.cell>
+              <row.cell>
+                {{#if sessionAggregate.session.isCancelable}}
+                  <Rose::Button @style="secondary" {{on "click" (route-action "cancelSession" sessionAggregate.session)}}>
+                    {{t "actions.cancel"}}
+                  </Rose::Button>
+                {{/if}}
               </row.cell>
             </body.row>
           {{/each}}
