@@ -14,13 +14,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
-   * Navigate to sessions within a target.
-   */
-  afterModel() {
-    this.transitionTo('scopes.scope.projects.targets.target.sessions');
-  }
-
-  /**
    * Renders the target-specific templates for header and navigation
    * page sections.
    * @override
