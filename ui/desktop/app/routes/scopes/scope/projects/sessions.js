@@ -4,6 +4,8 @@ import { all, hash } from 'rsvp';
 import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
 import config from '../../../../config/environment';
+import { action } from '@ember/object';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -100,4 +102,16 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     this.poller.cancelAll();
   }
 
+  // =actions
+
+  /**
+   * Cancels the specified session and notifies user of success or error.
+   * @param {SessionModel}
+   */
+  @action
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.canceled-success')
+  async cancelSession(session) {
+    await session.cancelSession();
+  }
 }
