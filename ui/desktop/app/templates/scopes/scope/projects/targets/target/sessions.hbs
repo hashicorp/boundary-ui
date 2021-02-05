@@ -1,0 +1,30 @@
+<Rose::Table as |table|>
+  <table.body as |body|>
+    {{#each @model as |session|}}
+      <body.row as |row|>
+        <row.cell class="nowrap">
+          <Rose::Icon
+            class={{concat "session-status-" session.status}}
+            @name="app-icons/action-session"
+            @size="medium" />
+          {{session.id}}
+        </row.cell>
+        <row.cell>
+          <time datetime={{format-date-iso session.created_time}}>
+            {{format-date-iso-human session.created_time}}
+          </time>
+        </row.cell>
+        <row.cell>
+          <Rose::Badge>{{session.status}}</Rose::Badge>
+        </row.cell>
+        <row.cell>
+          {{#if session.isCancelable}}
+            <Rose::Button @style="secondary" {{on "click" (route-action "cancelSession" session)}}>
+              {{t "actions.cancel"}}
+            </Rose::Button>
+          {{/if}}
+        </row.cell>
+      </body.row>
+    {{/each}}
+  </table.body>
+</Rose::Table>
