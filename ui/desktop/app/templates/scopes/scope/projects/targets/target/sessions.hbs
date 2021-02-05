@@ -7,7 +7,13 @@
             class={{concat "session-status-" session.status}}
             @name="app-icons/action-session"
             @size="medium" />
-          {{session.id}}
+          <Copyable
+            @text={{session.id}}
+            @buttonText={{t "actions.copy-to-clipboard"}}
+            @acknowledgeText={{t "states.copied"}}
+          >
+            <code>{{session.id}}</code>
+          </Copyable>
         </row.cell>
         <row.cell>
           <time datetime={{format-date-iso session.created_time}}>

@@ -2,3 +2,12 @@
   {{@model.target.displayName}}
 </h2>
 <p>{{@model.target.description}}</p>
+<p>
+  <Copyable
+    @text={{@model.target.id}}
+    @buttonText={{t "actions.copy-to-clipboard"}}
+    @acknowledgeText={{t "states.copied"}}
+  >
+    <code>{{@model.target.id}}</code>
+  </Copyable>
+</p>
