@@ -25,4 +25,5 @@ export default class ScopesScopeProjectsRoute extends Route {
       scope_id: currentScope.id,
     });
   }
+
 }

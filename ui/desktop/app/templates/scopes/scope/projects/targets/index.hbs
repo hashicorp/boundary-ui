@@ -21,7 +21,12 @@
         {{#each @model as |model|}}
           <body.row as |row|>
             <row.cell>
-              {{model.target.name}}
+              <LinkTo
+                @route="scopes.scope.projects.targets.target"
+                @model={{model.target.id}}
+              >
+                {{model.target.displayName}}
+              </LinkTo>
               <p>{{model.target.description}}</p>
             </row.cell>
             <row.cell>
