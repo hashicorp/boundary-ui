@@ -21,6 +21,7 @@ module.exports = {
     // TODO: where should the client version number come from?
     appVersion: `1.0.0 ${formattedCLIVersion}`,
     appCopyright: "Copyright © 2021 HashiCorp, Inc.",
+    icon: "./config/macos/icon.icns",
     osxSign: {
       identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
       "hardened-runtime": true,

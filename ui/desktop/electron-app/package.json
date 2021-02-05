@@ -32,6 +32,6 @@
     "@electron-forge/maker-dmg": "^6.0.0-beta.54",
     "decompress": "^4.2.1",
     "devtron": "^1.4.0",
-    "electron": "10.1.5"
+    "electron": "10.2.0"
   }
 }
