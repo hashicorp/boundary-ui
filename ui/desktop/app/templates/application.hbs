@@ -57,11 +57,19 @@
       @dismiss={{accept}}
     as |dialog|>
       <dialog.body>
-        {{t 'states.connection.success.description'
-          port=confirmation.text.port
-          address=confirmation.text.address
-          protocol=confirmation.text.protocol
-        }}
+
+        <Copyable
+          @text={{concat confirmation.text.address ":" confirmation.text.port}}
+          @buttonText={{t "actions.copy-to-clipboard"}}
+          @acknowledgeText={{t "states.copied"}}
+        >
+          {{t 'states.connection.success.description'
+            port=confirmation.text.port
+            address=confirmation.text.address
+            protocol=confirmation.text.protocol
+          }}
+        </Copyable>
+
       </dialog.body>
       <dialog.footer>
         <Rose::Button @style="primary" {{on "click" accept}}>
