@@ -9,6 +9,7 @@ import {
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
+import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
@@ -151,8 +152,16 @@ module('Acceptance | targets', function (hooks) {
 
   test('visiting index', async function (assert) {
     assert.expect(1);
+    // This later/cancelTimers technique allows us to test a page with
+    // active polling.  Normally an acceptance test waits for all runloop timers
+    // to stop before returning from an awaited test, but polling means that
+    // runloop timers exist indefinitely.  We thus schedule a cancelation before
+    // proceeding with our tests.
+    later(async () => {
+      run.cancelTimers();
+      //await a11yAudit();
+      assert.equal(currentURL(), urls.targets);
+    }, 750);
     await visit(urls.targets);
-    //await a11yAudit();
-    assert.equal(currentURL(), urls.targets);
   });
 });

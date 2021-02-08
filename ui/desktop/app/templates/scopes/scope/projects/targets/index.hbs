@@ -20,7 +20,13 @@
       <table.body as |body|>
         {{#each @model as |model|}}
           <body.row as |row|>
-            <row.cell>
+            <row.headerCell>
+              <Rose::Icon
+                class={{concat "session-status-" (if model.target.isActive 'active' 'canceled')}}
+                @name="app-icons/action-session"
+                @size="medium"
+                title={{if model.target.isActive (t 'states.active')}}
+              />
               <LinkTo
                 @route="scopes.scope.projects.targets.target"
                 @model={{model.target.id}}
@@ -28,7 +34,7 @@
                 {{model.target.displayName}}
               </LinkTo>
               <p>{{model.target.description}}</p>
-            </row.cell>
+            </row.headerCell>
             <row.cell>
               <Copyable
                 @text={{model.target.id}}
