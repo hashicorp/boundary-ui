@@ -30,16 +30,34 @@
               <p>{{model.target.description}}</p>
             </row.cell>
             <row.cell>
-              {{model.target.id}}
+              <Copyable
+                @text={{model.target.id}}
+                @buttonText={{t "actions.copy-to-clipboard"}}
+                @acknowledgeText={{t "states.copied"}}
+              >
+                <code>{{model.target.id}}</code>
+              </Copyable>
             </row.cell>
             <row.cell>
-              {{model.target.type}}
+              {{#if model.target.type}}
+                <Rose::Badge>
+                  {{t (concat "resources.target.types." model.target.type)}}
+                </Rose::Badge>
+              {{/if}}
             </row.cell>
             <row.cell>
+              <div>
+                <Copyable
+                  @text={{model.project.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
+                  <code>{{model.project.id}}</code>
+                </Copyable>
+              </div>
               <Rose::Badge @style='informational'>
                 {{model.project.name}}
               </Rose::Badge>
-              <p>{{model.project.id}}</p>
             </row.cell>
             <row.cell>
               <Rose::Button @style="secondary" {{on "click" (route-action "connect" model)}}>
