@@ -1,6 +1,10 @@
 <Rose::Table as |table|>
   <table.body as |body|>
-    {{#each @model as |session|}}
+    {{!--
+      TODO:  sort these via the controller so that active and pending appear first
+      similar to the way the sessions routes are sorted.
+     --}}
+    {{#each @model.target.sessions as |session|}}
       <body.row as |row|>
         <row.cell class="nowrap">
           <Rose::Icon

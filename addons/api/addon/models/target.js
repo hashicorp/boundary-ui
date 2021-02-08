@@ -41,7 +41,8 @@ export default class TargetModel extends GeneratedTargetModel {
    * @type {SessionModel[]}
    */
   get sessions() {
-    return this.store.peekAll('session').filter(s => s.target_id === this.id);
+    return this.store.peekAll('session')
+      .filter(s => s && (s.target_id === this.id));
   }
 
   /**

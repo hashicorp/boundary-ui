@@ -1,5 +1,10 @@
 <h2>
   {{@model.target.displayName}}
+  {{#if @model.target.isActive}}
+    <Rose::Badge @style="success">
+      {{t "states.active"}}
+    </Rose::Badge>
+  {{/if}}
 </h2>
 <p>{{@model.target.description}}</p>
 <p>
