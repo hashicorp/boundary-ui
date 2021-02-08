@@ -27,7 +27,13 @@
                   class={{concat "session-status-" sessionAggregate.session.status}}
                   @name="app-icons/action-session"
                   @size="medium" />
-                <code>{{sessionAggregate.session.id}}</code>
+                <Copyable
+                  @text={{sessionAggregate.session.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
+                  <code>{{sessionAggregate.session.id}}</code>
+                </Copyable>
               </row.headerCell>
               <row.cell>{{sessionAggregate.target.displayName}}</row.cell>
               <row.cell>

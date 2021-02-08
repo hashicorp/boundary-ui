@@ -8,7 +8,15 @@
           {{host.displayName}}
           <p>{{host.description}}</p>
         </row.cell>
-        <row.cell>{{host.id}}</row.cell>
+        <row.cell>
+          <Copyable
+            @text={{host.id}}
+            @buttonText={{t "actions.copy-to-clipboard"}}
+            @acknowledgeText={{t "states.copied"}}
+          >
+            <code>{{host.id}}</code>
+          </Copyable>
+        </row.cell>
         <row.cell>{{host.attributes.address}}</row.cell>
         <row.cell>
           <Rose::Badge>{{t (concat 'resources.host.types.' host.type)}}</Rose::Badge>
