@@ -25,4 +25,6 @@ handle('cliExists', () => boundaryCli.exists());
 /**
  * Establishes a boundary session and returns session details.
  */
-handle('connect', ({ target_id, token, addr, host_id }) => boundaryCli.connect(target_id, token, addr, host_id));
+handle('connect', ({ target_id, token, host_id }) =>
+  boundaryCli.connect(target_id, token, host_id)
+);
