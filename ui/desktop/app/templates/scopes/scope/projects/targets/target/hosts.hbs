@@ -2,7 +2,7 @@
 
 <Rose::Table as |table|>
   <table.body as |body|>
-    {{#each @model as |host|}}
+    {{#each @model.hosts as |host|}}
       <body.row as |row|>
         <row.cell>
           {{host.displayName}}
@@ -20,6 +20,11 @@
         <row.cell>{{host.attributes.address}}</row.cell>
         <row.cell>
           <Rose::Badge>{{t (concat 'resources.host.types.' host.type)}}</Rose::Badge>
+        </row.cell>
+        <row.cell>
+          <Rose::Button @style="secondary" {{on "click" (route-action "connect" @model.target host)}}>
+            {{t "resources.host.actions.connect"}}
+          </Rose::Button>
         </row.cell>
       </body.row>
     {{/each}}

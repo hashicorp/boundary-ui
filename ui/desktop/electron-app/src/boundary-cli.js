@@ -7,7 +7,7 @@ module.exports = {
   // Check boundary cli existence
   exists: () => Boolean(cliPath()),
   // Initiate connection and return output
-  connect: (target_id, token, addr) => {
+  connect: (target_id, token, addr, host_id) => {
     const command = [
       'connect',
       `-target-id=${target_id}`,
@@ -16,6 +16,8 @@ module.exports = {
       '-format=json',
       '--output-json-errors'
     ];
+
+    if(host_id) command.push(`-host-id=${host_id}`)
     return spawnAsyncJSONPromise(command);
   },
   // Returns JSON-formatted version information from the CLI

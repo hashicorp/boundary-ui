@@ -100,9 +100,11 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
 
   /**
    * Establish a session to current target.
+   * @param {TargetModel} model
    */
   @action
   async connect(model) {
+    // TODO: Connect: Refactor into an addon
     try {
       // Check for CLI
       const cliExists = await this.ipc.invoke('cliExists');

@@ -99,6 +99,7 @@ host:
     add: Add Host
     create: New Host
     delete: Delete Host
+    connect: Connect With Host
   types:
     static: Static
 session:
