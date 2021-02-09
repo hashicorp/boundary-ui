@@ -34,12 +34,17 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
-   * Renders the target-specific templates for header and navigation
+   * Renders the target-specific templates for actions, header and navigation
    * page sections.
    * @override
    */
   renderTemplate() {
     super.renderTemplate(...arguments);
+
+    this.render('scopes/scope/projects/targets/target/-actions', {
+      into: 'scopes/scope/projects/targets/target',
+      outlet: 'actions',
+    });
 
     this.render('scopes/scope/projects/targets/target/-header', {
       into: 'scopes/scope/projects/targets/target',
@@ -50,6 +55,5 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       into: 'scopes/scope/projects/targets/target',
       outlet: 'navigation',
     });
-
   }
 }
