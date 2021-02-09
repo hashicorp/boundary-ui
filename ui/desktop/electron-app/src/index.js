@@ -38,10 +38,14 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  // Register custom protocol
-  const partition = emberAppName;
+  // Setup a partition
+  // Must be prefixed with persist: in order to save things like localStorage
+  // data.  Without this, the session is in-memory only.
+  // https://www.electronjs.org/docs/api/session#sessionfrompartitionpartition-options
+  const partition = `persist:${emberAppName}`;
   const ses = session.fromPartition(partition);
 
+  // Register custom protocol
   ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => {
     const isDir = request.url.endsWith('/');
     const absolutePath = request.url.substr(emberAppURL.length);
