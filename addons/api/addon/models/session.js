@@ -1,5 +1,6 @@
 import GeneratedSessionModel from '../generated/models/session';
 import { computed } from '@ember/object';
+import { equal } from '@ember/object/computed';
 import { attr } from '@ember-data/model';
 
 export default class SessionModel extends GeneratedSessionModel {
@@ -9,12 +10,15 @@ export default class SessionModel extends GeneratedSessionModel {
   @attr('string', { readOnly: true }) proxy_address;
   @attr('number', { readOnly: true }) proxy_port;
 
+  @equal('status', 'active') isActive;
+  @equal('status', 'pending') isPending;
+
   /**
    * @type {boolean}
    */
-  @computed('status')
+  @computed('isActive', 'isPending')
   get isCancelable() {
-    return this.status?.match(/(active)|(pending)/i);
+    return this.isActive || this.isPending;
   }
 
   /**

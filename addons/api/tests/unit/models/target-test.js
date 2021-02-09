@@ -179,4 +179,44 @@ module('Unit | Model | target', function (hooks) {
     const model = store.peekRecord('target', '123abc');
     await model.removeHostSet('3');
   });
+
+  test('it has a `sessions` array of session instances associated with the target (if those instances are already in the store)', function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'target'
+      }
+    });
+    const target = store.peekRecord('target', '123abc');
+    assert.equal( target.sessions.length, 0);
+    store.push({
+      data: {
+        id: '1',
+        type: 'session',
+        attributes: { target_id: '123abc' }
+      }
+    });
+    store.push({
+      data: {
+        id: '2',
+        type: 'session',
+        attributes: { target_id: '123abc' }
+      }
+    });
+    store.push({
+      data: {
+        id: '3',
+        type: 'session',
+        attributes: { target_id: '456xyz' }
+      }
+    });
+    assert.equal(store.peekAll('session').length, 3, 'There are 3 sessions loaded in the store');
+    assert.equal(
+      target.sessions.length,
+      2,
+      'Target has two associated sessions loaded in the store'
+    );
+  });
 });
