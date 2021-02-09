@@ -20,6 +20,30 @@
           </Copyable>
         </row.cell>
         <row.cell>
+          {{!--
+            Two if's here because:
+            1) Local proxy info is only relevant if the session is
+                active or pending (aka isCancelable).  Once the session
+                is canceled or in the process thereof, the local proxy
+                may no longer be used.
+            2) The session actually has proxy information associated
+                with it.  It's possible for the user to start sessions
+                from other devices (or even another tab), in which case we
+                won't have the local proxy info available here.
+          --}}
+          {{#if session.isCancelable}}
+            {{#if session.proxy}}
+              <Copyable
+                @text={{session.proxy}}
+                @buttonText={{t "actions.copy-to-clipboard"}}
+                @acknowledgeText={{t "states.copied"}}
+              >
+                <code>{{session.proxy}}</code>
+              </Copyable>
+            {{/if}}
+          {{/if}}
+        </row.cell>
+        <row.cell>
           <time datetime={{format-date-iso session.created_time}}>
             {{format-date-iso-human session.created_time}}
           </time>
