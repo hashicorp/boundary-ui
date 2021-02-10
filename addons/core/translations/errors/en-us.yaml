@@ -17,3 +17,5 @@ generic:
   title: Error
 authentication-failed:
   title: Authentication Failed
+origin-verification-failed:
+  description: Could not validate the provided origin URL as Boundary URL. Please check origin URL and try again.
