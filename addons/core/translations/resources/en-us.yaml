@@ -195,6 +195,9 @@ target:
   messages:
     welcome:
       title: Welcome to Targets
+    none:
+      title: No Targets Available
+      description: No Targets to display yet. Contact your Boundary admin if you don't see a Target you expect access to.
   actions:
     create: New Target
     delete: Delete Target

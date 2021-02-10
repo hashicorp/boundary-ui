@@ -1,40 +1,54 @@
-<Rose::Table as |table|>
-  <table.body as |body|>
-    {{!--
-      TODO:  sort these via the controller so that active and pending appear first
-      similar to the way the sessions routes are sorted.
-     --}}
-    {{#each @model.target.sessions as |session|}}
-      <body.row as |row|>
-        <row.cell class="nowrap">
-          <Rose::Icon
-            class={{concat "session-status-" session.status}}
-            @name="app-icons/action-session"
-            @size="medium" />
-          <Copyable
-            @text={{session.id}}
-            @buttonText={{t "actions.copy-to-clipboard"}}
-            @acknowledgeText={{t "states.copied"}}
-          >
-            <code>{{session.id}}</code>
-          </Copyable>
-        </row.cell>
-        <row.cell>
-          <time datetime={{format-date-iso session.created_time}}>
-            {{format-date-iso-human session.created_time}}
-          </time>
-        </row.cell>
-        <row.cell>
-          <Rose::Badge>{{session.status}}</Rose::Badge>
-        </row.cell>
-        <row.cell>
-          {{#if session.isCancelable}}
-            <Rose::Button @style="secondary" {{on "click" (route-action "cancelSession" session)}}>
-              {{t "actions.cancel"}}
-            </Rose::Button>
-          {{/if}}
-        </row.cell>
-      </body.row>
-    {{/each}}
-  </table.body>
-</Rose::Table>
+{{#if @model.target.sessions}}
+
+  <Rose::Table as |table|>
+    <table.body as |body|>
+      {{!--
+        TODO:  sort these via the controller so that active and pending appear first
+        similar to the way the sessions routes are sorted.
+      --}}
+      {{#each @model.target.sessions as |session|}}
+        <body.row as |row|>
+          <row.cell class="nowrap">
+            <Rose::Icon
+              class={{concat "session-status-" session.status}}
+              @name="app-icons/action-session"
+              @size="medium" />
+            <Copyable
+              @text={{session.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{session.id}}</code>
+            </Copyable>
+          </row.cell>
+          <row.cell>
+            <time datetime={{format-date-iso session.created_time}}>
+              {{format-date-iso-human session.created_time}}
+            </time>
+          </row.cell>
+          <row.cell>
+            <Rose::Badge>{{session.status}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            {{#if session.isCancelable}}
+              <Rose::Button @style="secondary" {{on "click" (route-action "cancelSession" session)}}>
+                {{t "actions.cancel"}}
+              </Rose::Button>
+            {{/if}}
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "resources.session.messages.none.title"}} as |message|>
+      <message.description>
+        {{t "resources.session.messages.none.description"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}
