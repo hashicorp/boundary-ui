@@ -3,19 +3,20 @@ import {
   visit,
   currentURL,
   //fillIn,
-  //click,
+  click,
   find,
   //findAll,
-  //getRootElement
+  getRootElement,
   //setupOnerror,
 } from '@ember/test-helpers';
+import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
 //import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
-  //authenticateSession,
+  authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 
@@ -158,5 +159,39 @@ module('Acceptance | authentication', function (hooks) {
     //await a11yAudit();
     assert.equal(currentURL(), urls.authenticate.global);
     assert.ok(find('.rose-message'));
+  });
+
+  test('color theme is applied from session data', async function (assert) {
+    assert.expect(12);
+    authenticateSession({
+      scope: {
+        id: instances.scopes.global.id,
+        type: instances.scopes.global.type
+      },
+    });
+    later(async () => {
+      run.cancelTimers();
+      // system default
+      assert.notOk(currentSession().get('data.theme'));
+      assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+      assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+      // toggle light mode
+      await click('[name="theme"][value="light"]');
+      assert.equal(currentSession().get('data.theme'), 'light');
+      assert.ok(getRootElement().classList.contains('rose-theme-light'));
+      assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+      // toggle dark mode
+      await click('[name="theme"][value="dark"]');
+      assert.equal(currentSession().get('data.theme'), 'dark');
+      assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+      assert.ok(getRootElement().classList.contains('rose-theme-dark'));
+      // toggle system default
+      await click('[name="theme"][value=""]');
+      assert.notOk(currentSession().get('data.theme'));
+      assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+      assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+    }, 750);
+
+    await visit(urls.scopes.org);
   });
 });

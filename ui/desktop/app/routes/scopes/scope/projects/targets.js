@@ -101,21 +101,25 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   /**
    * Establish a session to current target.
    * @param {TargetModel} model
+   * @param {HostModel} host
    */
   @action
-  async connect(model) {
+  async connect(model, host) {
     // TODO: Connect: Refactor into an addon
     try {
       // Check for CLI
       const cliExists = await this.ipc.invoke('cliExists');
       if (!cliExists) throw new Error('Cannot find Boundary CLI.');
 
+      const options = {
+        target_id: model.id,
+        token: this.session.data.authenticated.token
+      };
+      
+      if (host) options.host_id = host.id;
+
       // Create target session
-      const connectionDetails = await this.ipc.invoke('connect', {
-        target_id: model.target.id,
-        token: this.session.data.authenticated.token,
-        addr: this.origin.rendererOrigin
-      });
+      const connectionDetails = await this.ipc.invoke('connect', options);
 
       // Associate the connection details with the session
       const { session_id, address, port } = connectionDetails;
