@@ -20,10 +20,9 @@ export default class ScopesScopeProjectsRoute extends Route {
    * @return {Promise
    */
   model() {
-    const currentScope = this.modelFor('scopes.scope');
-    return this.store.query('scope', {
-      scope_id: currentScope.id,
-    });
+    return this.store
+      .query('scope', { recursive: true, scope_id: 'global' })
+      .filter(({ isProject }) => isProject);
   }
 
 }

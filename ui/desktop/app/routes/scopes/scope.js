@@ -89,14 +89,14 @@ export default class ScopesScopeRoute extends Route {
     });
   }
 
-  /**
-   * In global scope, redirect to first org on authentication.
-   */
-  redirect(model) {
-    const { isAuthenticated } = this.session;
-    const { isGlobal } = model;
-    if (isAuthenticated && isGlobal && this.scopes.orgs?.length) {
-      this.replaceWith('scopes.scope', this.scopes.orgs.firstObject.id);
-    }
-  }
+  // /**
+  //  * In global scope, redirect to first org on authentication.
+  //  */
+  // redirect(model) {
+  //   const { isAuthenticated } = this.session;
+  //   const { isGlobal } = model;
+  //   if (isAuthenticated && isGlobal && this.scopes.orgs?.length) {
+  //     this.replaceWith('scopes.scope', this.scopes.orgs.firstObject.id);
+  //   }
+  // }
 }
