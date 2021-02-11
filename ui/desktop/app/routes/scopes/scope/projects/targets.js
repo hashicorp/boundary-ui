@@ -32,7 +32,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @task(function * () {
     while(true) {
       yield timeout(POLL_TIMEOUT_SECONDS * 1000);
-      //yield this.refreshSessions();
+      yield this.refreshSessions();
     }
   }).drop() poller;
 
