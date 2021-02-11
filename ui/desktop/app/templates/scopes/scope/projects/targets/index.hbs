@@ -23,9 +23,9 @@
             <row.headerCell>
               <LinkTo
                 @route="scopes.scope.projects.targets.target"
-                @model={{model.target.id}}
+                @model={{model.id}}
               >
-                {{model.target.displayName}}
+                {{model.displayName}}
               </LinkTo>
               {{#if model.target.description}}
                 <p>{{model.target.description}}</p>
@@ -38,17 +38,17 @@
             </row.headerCell>
             <row.cell>
               <Copyable
-                @text={{model.target.id}}
+                @text={{model.id}}
                 @buttonText={{t "actions.copy-to-clipboard"}}
                 @acknowledgeText={{t "states.copied"}}
               >
-                <code>{{model.target.id}}</code>
+                <code>{{model.id}}</code>
               </Copyable>
             </row.cell>
             <row.cell>
-              {{#if model.target.type}}
+              {{#if model.type}}
                 <Rose::Badge>
-                  {{t (concat "resources.target.types." model.target.type)}}
+                  {{t (concat "resources.target.types." model.type)}}
                 </Rose::Badge>
               {{/if}}
             </row.cell>
@@ -67,7 +67,7 @@
               </Rose::Badge>
             </row.cell>
             <row.cell>
-              <Rose::Button @style="secondary" {{on "click" (route-action "connect" model.target)}}>
+              <Rose::Button @style="secondary" {{on "click" (route-action "connect" model)}}>
                 {{t "resources.session.actions.connect"}}
               </Rose::Button>
             </row.cell>
