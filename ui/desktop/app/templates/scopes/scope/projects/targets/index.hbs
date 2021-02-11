@@ -22,32 +22,32 @@
           <body.row as |row|>
             <row.headerCell>
               <Rose::Icon
-                class={{concat "session-status-" (if model.target.isActive 'active' 'canceled')}}
+                class={{concat "session-status-" (if model.isActive 'active' 'canceled')}}
                 @name="app-icons/action-session"
                 @size="medium"
-                title={{if model.target.isActive (t 'states.active')}}
+                title={{if model.isActive (t 'states.active')}}
               />
               <LinkTo
                 @route="scopes.scope.projects.targets.target"
-                @model={{model.target.id}}
+                @model={{model.id}}
               >
-                {{model.target.displayName}}
+                {{model.displayName}}
               </LinkTo>
-              <p>{{model.target.description}}</p>
+              <p>{{model.description}}</p>
             </row.headerCell>
             <row.cell>
               <Copyable
-                @text={{model.target.id}}
+                @text={{model.id}}
                 @buttonText={{t "actions.copy-to-clipboard"}}
                 @acknowledgeText={{t "states.copied"}}
               >
-                <code>{{model.target.id}}</code>
+                <code>{{model.id}}</code>
               </Copyable>
             </row.cell>
             <row.cell>
-              {{#if model.target.type}}
+              {{#if model.type}}
                 <Rose::Badge>
-                  {{t (concat "resources.target.types." model.target.type)}}
+                  {{t (concat "resources.target.types." model.type)}}
                 </Rose::Badge>
               {{/if}}
             </row.cell>
@@ -66,7 +66,7 @@
               </Rose::Badge>
             </row.cell>
             <row.cell>
-              <Rose::Button @style="secondary" {{on "click" (route-action "connect" model.target)}}>
+              <Rose::Button @style="secondary" {{on "click" (route-action "connect" model)}}>
                 {{t "resources.session.actions.connect"}}
               </Rose::Button>
             </row.cell>

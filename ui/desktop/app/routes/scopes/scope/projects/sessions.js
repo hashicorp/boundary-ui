@@ -1,8 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { all, hash } from 'rsvp';
 import { task, timeout } from 'ember-concurrency';
-import { A } from '@ember/array';
 import config from '../../../../config/environment';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
@@ -49,43 +47,9 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
    * @return {Promise{[{session: SessionModel, target: TargetModel}]}}
    */
   async model() {
-    const projects = this.modelFor('scopes.scope.projects');
-    const userId = this.session.data.authenticated.user_id;
-    let projectSessions = await all(
-      projects.map(({ id: scope_id }) =>
-        this.store.query('session', { scope_id })
-      )
-    );
-
-    // Filter sessions to current user
-    let sessions = projectSessions.map(
-      sessions => sessions.filter(
-        session => session.user_id === userId
-      )
-    ).flat();
-
-    const sessionAggregates = await all(
-      sessions.map(session => hash({
-        session,
-        target: session.target_id
-          ? (
-              this.store.peekRecord('target', session.target_id) ||
-              this.store.findRecord('target', session.target_id)
-            )
-          : null,
-      }))
-    );
-
-    // Sort sessions by time created...
-    let sortedSessionAggregates =
-      A(sessionAggregates).sortBy('session.created_time').reverse();
-    // Then move active sessions to the top...
-    sortedSessionAggregates = [
-      ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status === 'active'),
-      ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status !== 'active'),
-    ];
-
-    return sortedSessionAggregates;
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    await this.store.query('target', { recursive: true, scope_id });
+    return await this.store.query('session', { recursive: true, scope_id });
   }
 
   /**

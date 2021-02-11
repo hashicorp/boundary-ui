@@ -46,6 +46,14 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
+   * The project associated with this target (if already loaded).
+   * @type {ScopeModel}
+   */
+  get project() {
+    return this.store.peekRecord('scope', this.scopeID);
+  }
+
+  /**
    * True if any sessions associated with this target are active or pending.
    * @type {boolean}
    */
