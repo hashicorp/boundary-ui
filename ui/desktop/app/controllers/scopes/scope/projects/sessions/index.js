@@ -1,5 +1,4 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
@@ -15,7 +14,6 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    * and active/pending.
    * @type {SessionModel[]}
    */
-  @computed('model.@each.{created_time,active}', 'session.data.authenticated.user_id')
   get sorted() {
     const userId = this.session.data.authenticated.user_id;
     const sessions = this.model;

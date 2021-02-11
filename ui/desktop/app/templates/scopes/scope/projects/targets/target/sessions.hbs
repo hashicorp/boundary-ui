@@ -1,6 +1,7 @@
 <Rose::Table as |table|>
   <table.body as |body|>
-    {{#each this.selfActiveSessions as |session|}}
+    {{this.sessions.length}} / {{this.cancelableUserSessions.length}}
+    {{#each this.cancelableUserSessions as |session|}}
       <body.row as |row|>
         <row.cell class="nowrap">
           <Rose::Icon
