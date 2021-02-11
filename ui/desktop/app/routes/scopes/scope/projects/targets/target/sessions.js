@@ -3,6 +3,16 @@ import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeProjectsTargetsTargetSessionsRoute extends Route {
+
+  // =methods
+
+  /**
+   * @return {[SessionModel]}
+   */
+  model() {
+    return this.modelFor('scopes.scope.projects.targets.target').sessions;
+  }
+
   // =actions
 
   /**
