@@ -49,7 +49,7 @@ module.exports = {
     if (gitRevision) gitRevision = gitRevision.groups.rev;
     if (versionNumber) versionNumber = versionNumber.groups.ver;
     const formatted = versionNumber
-      ? `CLI Version:  ${versionNumber}\nCLI Commit ${gitRevision}`
+      ? `CLI Version:  ${versionNumber}\nCLI Commit:  ${gitRevision}`
       : `CLI Commit:  ${gitRevision}`;
     return { gitRevision, versionNumber, formatted };
     return rawOutput;
