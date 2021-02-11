@@ -95,6 +95,9 @@ host:
     none:
       title: No Hosts
       description: No hosts available in this scope.
+    none-friendly:
+      title: No Hosts Available
+      description: No hosts available to display yet.
   actions:
     add: Add Host
     create: New Host
@@ -110,6 +113,12 @@ session:
     none:
       title: No Sessions
       description: There are no active sessions within the current scope.
+    none-friendly:
+      title: No Sessions Available
+      description: No sessions available to display yet.
+    none-active-friendly:
+      title: No Active Sessions Available
+      description: No active sessions available to display yet.
   actions:
     connect: Connect
 org:
