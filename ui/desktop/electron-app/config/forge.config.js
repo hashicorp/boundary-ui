@@ -3,6 +3,15 @@ const { version } = require('../src/boundary-cli.js');
 
 const formattedCLIVersion = version().formatted;
 
+const appVersion = process.env.VERSION
+  ? `Version:  ${process.env.VERSION}\n`
+  : '';
+const appCommit = process.env.COMMIT
+  ? `Commit:  ${process.env.COMMIT}\n`
+  : '';
+
+const formattedAppVersion = `${appVersion}${appCommit}`;
+
 module.exports = {
   hooks: {
     prePackage: () => {
@@ -19,7 +28,7 @@ module.exports = {
     name: "Boundary Desktop",
     appBundleId: "com.electron.boundary",
     // TODO: where should the client version number come from?
-    appVersion: `1.0.0 ${formattedCLIVersion}`,
+    appVersion: `${formattedAppVersion}${formattedCLIVersion}\n`,
     appCopyright: "Copyright © 2021 HashiCorp, Inc.",
     icon: "./config/macos/icon.icns",
     osxSign: {
