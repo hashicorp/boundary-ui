@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { all } from 'rsvp';
 import { action } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import { later } from '@ember/runloop';
@@ -51,20 +50,9 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
    * @return {Promise{[TargetModel]}}
    */
   async model() {
-    const projects = this.modelFor('scopes.scope.projects');
-    let projectTargets = await all(
-      projects.map(({ id: scope_id }) =>
-        this.store.query('target', { scope_id })
-      )
-    );
-    let targets = projectTargets.map((target) => target.toArray()).flat();
+    const { id: scope_id } = this.modelFor('scopes.scope');
     await this.refreshSessions();
-    return targets.map((target) => {
-      return {
-        target,
-        project: this.store.peekRecord('scope', target.scopeID),
-      };
-    });
+    return this.store.query('target', { recursive: true, scope_id });
   }
 
   /**
@@ -73,13 +61,8 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
    * TODO:  query only for sessions associated with the current user.
    */
   async refreshSessions() {
-    const projects = this.modelFor('scopes.scope.projects');
-    //const userId = this.session.data.authenticated.user_id;
-    await all(
-      projects.map(({ id: scope_id }) =>
-        this.store.query('session', { scope_id })
-      )
-    );
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    await this.store.query('session', { recursive: true, scope_id });
   }
 
   /**
@@ -115,7 +98,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
         target_id: model.id,
         token: this.session.data.authenticated.token
       };
-      
+
       if (host) options.host_id = host.id;
 
       // Create target session
