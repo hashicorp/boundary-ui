@@ -1,0 +1,20 @@
+name: "Trigger Boundary UI release"
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  trigger-circleci-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Trigger Release job
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          curl -u ${{ secrets.CIRCLE_TOKEN }}: -X POST --header "Content-Type: application/json" \
+          -d '{ "branch": "main", "parameters": {"TAG": "${TAG}" }}' \
+          https://circleci.com/api/v2/project/github/hashicorp/boundary-ui-releases/pipeline
