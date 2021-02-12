@@ -1,7 +1,11 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <h2>{{t "resources.session.title_plural"}}</h2>
+    <h2>
+      {{t "resources.session.title_plural"}}
+      <DocLink @doc="sessions" @iconSize="large" />
+    </h2>
+    <p>{{t "resources.session.description"}}</p>
   </page.header>
 
   <page.body>
