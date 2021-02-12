@@ -4,11 +4,13 @@ const {
   default: installExtension,
   EMBER_INSPECTOR,
 } = require('electron-devtools-installer');
-const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
+const { session, app, protocol, BrowserWindow, ipcMain, Menu } = require('electron');
 require('./handlers.js');
 
 const origin = require('./origin.js');
 const { generateCSPHeader } = require('./content-security-policy.js');
+
+const menu = require('./menu.js');
 
 const isDev = require('electron-is-dev');
 
@@ -86,6 +88,12 @@ app.on('ready', async () => {
     } catch (err) {
       console.log('Failed to install Ember Inspector: ', err);
     }
+  }
+
+  // Configure menu in prod env
+  if(!isDev) {
+    const menuTemplate = Menu.buildFromTemplate(menu.generateMenuTemplate());
+    Menu.setApplicationMenu(menuTemplate);
   }
 
   mainWindow = new BrowserWindow({
