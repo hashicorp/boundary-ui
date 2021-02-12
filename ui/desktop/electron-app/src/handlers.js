@@ -18,6 +18,13 @@ handle('setOrigin', async (requestOrigin) => {
 });
 
 /**
+ * Resets the origin.
+ */
+handle('resetOrigin', async (requestOrigin) => {
+  origin.resetOrigin();
+});
+
+/**
  * Check for boundary cli existence
  */
 handle('cliExists', () => boundaryCli.exists());
