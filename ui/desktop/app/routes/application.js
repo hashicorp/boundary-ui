@@ -32,6 +32,8 @@ export default class ApplicationRoute extends Route.extend(
    * origin so that the renderer's CSP can be rewritten to allow requests.
    */
   beforeModel() {
+    const theme = this.session.get('data.theme');
+    this.toggleTheme(theme);
     return this.origin.updateOrigin();
   }
 
