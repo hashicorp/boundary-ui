@@ -44,6 +44,14 @@ module.exports = function (environment) {
 
     notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 2.5,
+
+    documentation: {
+      baseURL: 'https://boundaryproject.io/help/desktop',
+      topics: {
+        targets: '/targets',
+        sessions: '/sessions'
+      }
+    }
   };
 
   if (process.env.ENABLE_MIRAGE) {
