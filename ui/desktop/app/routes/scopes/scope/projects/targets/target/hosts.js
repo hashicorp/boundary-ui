@@ -18,7 +18,7 @@ export default class ScopesScopeProjectsTargetsTargetHostsRoute extends Route {
    * @return {Promise{[HostModel]}}
    */
   async model() {
-    const { target } = this.modelFor('scopes.scope.projects.targets.target');
+    const target = this.modelFor('scopes.scope.projects.targets.target');
     // Load all host-sets
     const hostSets = await all(
       target.host_sets.map(({ host_set_id }) =>

@@ -32,6 +32,14 @@ export default class SessionModel extends GeneratedSessionModel {
       : null;
   }
 
+  /**
+   * The target associated with this session (if loaded).
+   * @type {TargetModel}
+   */
+  get target() {
+    return this.store.peekRecord('target', this.target_id);
+  }
+
   // =methods
 
   /**
