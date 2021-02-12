@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { assert } from '@ember/debug';
 import { inject as service } from '@ember/service';
+import { notifyError } from 'core/decorators/notify';
 
 export default class OriginService extends Service {
 
@@ -70,6 +71,15 @@ export default class OriginService extends Service {
       this.rendererOrigin = null;
       throw e;
     }
+  }
+
+  /**
+   * Resets the origin.
+   */
+  @notifyError(({ message }) => message, { catch: true })
+  async resetOrigin() {
+    this.rendererOrigin = null;
+    await this.ipc.invoke('resetOrigin');
   }
 
 }

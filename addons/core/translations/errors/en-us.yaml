@@ -12,7 +12,7 @@
   description: We ran into a problem and could not continue. You can ask your administrator or try again later.
 unknown:
   title: Something went wrong
-  description: Please contact your administrator or try again later.
+  description: We're not sure what happened.  Please contact your administrator or try again later.
 generic:
   title: Error
 authentication-failed:
