@@ -72,6 +72,16 @@ export default class ApplicationRoute extends Route.extend(
   }
 
   /**
+   * Disconnects from origin and invalidates session, thereby resetting
+   * the client and reloading to the onboarding origin screen.
+   */
+  @action
+  disconnect() {
+    this.origin.resetOrigin();
+    this.invalidateSession();
+  }
+
+  /**
    * Hooks into ember-loading to kick off loading indicator in the
    * application template.
    * @return {boolean} always returns true
