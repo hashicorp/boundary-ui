@@ -1,0 +1,23 @@
+{{page-title (t "errors.generic.title") }}
+
+{{! Most error types will land here }}
+{{#if @model.errors}}
+  <Rose::Layout::Centered>
+    {{#each @model.errors as |error|}}
+      <Error::Message @status={{error.status}}/>
+    {{/each}}
+  </Rose::Layout::Centered>
+{{/if}}
+
+{{! But a disconnected state doesn't get normalized errors }}
+{{#unless @model.errors}}
+  <Rose::Layout::Centered>
+    <Error::Message />
+  </Rose::Layout::Centered>
+
+  <Rose::Layout::Centered>
+    <Rose::Button @style="primary" {{on "click" (route-action "disconnect")}}>
+      {{t "actions.disconnect"}}
+    </Rose::Button>
+  </Rose::Layout::Centered>
+{{/unless}}
