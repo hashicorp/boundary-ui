@@ -26,6 +26,14 @@ export default function initializeMockIPC (server) {
       return this.origin;
     }
 
+    resetOrigin() {
+      this.origin = null;
+    }
+
+    openExternal(href) {
+      window.open(href);
+    }
+
     cliExists() {
       return true;
     }

@@ -1,3 +1,4 @@
+const { shell } = require('electron');
 const handle = require('./ipc-handler');
 const boundaryCli = require('./boundary-cli');
 const origin = require('./origin.js');
@@ -22,6 +23,13 @@ handle('setOrigin', async (requestOrigin) => {
  */
 handle('resetOrigin', async (requestOrigin) => {
   origin.resetOrigin();
+});
+
+/**
+ * Opens the specified URL in an external browser.
+ */
+handle('openExternal', async (href) => {
+  shell.openExternal(href);
 });
 
 /**
