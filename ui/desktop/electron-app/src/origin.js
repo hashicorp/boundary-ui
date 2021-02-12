@@ -24,7 +24,7 @@ class RuntimeSettings {
   }
 
   /**
-   *
+   * Validates the origin is reachable and has a scopes endpoint.
    */
   async validateOrigin(origin) {
     // If the origin is the Electron origin, it is automatically valid.
@@ -38,6 +38,13 @@ class RuntimeSettings {
     } catch (e) {
       throw new Error(`Origin ${origin} could not be validated.`);
     }
+  }
+
+  /**
+   * Sets the origin to null.
+   */
+  async resetOrigin() {
+    this.origin = null;
   }
 
   // Quick and dirty event handler pattern to enable the application to respond
