@@ -7,74 +7,86 @@
   </page.header>
 
   <page.body>
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>{{t "form.name.label"}}</row.headerCell>
-          <row.headerCell>{{t "form.id.label"}}</row.headerCell>
-          <row.headerCell>{{t "form.type.label"}}</row.headerCell>
-          <row.headerCell>{{t "resources.project.title"}}</row.headerCell>
-          <row.headerCell />
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each @model as |model|}}
-          <body.row as |row|>
-            <row.headerCell>
-              <LinkTo
-                @route="scopes.scope.projects.targets.target"
-                @model={{model.id}}
-              >
-                {{model.displayName}}
-              </LinkTo>
-              {{#if model.target.description}}
-                <p>{{model.target.description}}</p>
-              {{/if}}
-              {{#if model.target.isActive}}
-                <Rose::Badge @style="success">
-                  {{t "states.active"}}
-                </Rose::Badge>
-              {{/if}}
-            </row.headerCell>
-            <row.cell>
-              <Copyable
-                @text={{model.id}}
-                @buttonText={{t "actions.copy-to-clipboard"}}
-                @acknowledgeText={{t "states.copied"}}
-              >
-                <code>{{model.id}}</code>
-              </Copyable>
-            </row.cell>
-            <row.cell>
-              {{#if model.type}}
-                <Rose::Badge>
-                  {{t (concat "resources.target.types." model.type)}}
-                </Rose::Badge>
-              {{/if}}
-            </row.cell>
-            <row.cell>
-              <div>
+    {{#if @model}}
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t "form.name.label"}}</row.headerCell>
+            <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+            <row.headerCell>{{t "form.type.label"}}</row.headerCell>
+            <row.headerCell>{{t "resources.project.title"}}</row.headerCell>
+            <row.headerCell />
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |model|}}
+            <body.row as |row|>
+              <row.headerCell>
+                <LinkTo
+                  @route="scopes.scope.projects.targets.target"
+                  @model={{model.id}}
+                >
+                  {{model.displayName}}
+                </LinkTo>
+                {{#if model.target.description}}
+                  <p>{{model.target.description}}</p>
+                {{/if}}
+                {{#if model.target.isActive}}
+                  <Rose::Badge @style="success">
+                    {{t "states.active"}}
+                  </Rose::Badge>
+                {{/if}}
+              </row.headerCell>
+              <row.cell>
                 <Copyable
-                  @text={{model.project.id}}
+                  @text={{model.id}}
                   @buttonText={{t "actions.copy-to-clipboard"}}
                   @acknowledgeText={{t "states.copied"}}
                 >
-                  <code>{{model.project.id}}</code>
+                  <code>{{model.id}}</code>
                 </Copyable>
-              </div>
-              <Rose::Badge @style='informational'>
-                {{model.project.name}}
-              </Rose::Badge>
-            </row.cell>
-            <row.cell>
-              <Rose::Button @style="secondary" {{on "click" (route-action "connect" model)}}>
-                {{t "resources.session.actions.connect"}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
+              </row.cell>
+              <row.cell>
+                {{#if model.type}}
+                  <Rose::Badge>
+                    {{t (concat "resources.target.types." model.type)}}
+                  </Rose::Badge>
+                {{/if}}
+              </row.cell>
+              <row.cell>
+                <div>
+                  <Copyable
+                    @text={{model.target.id}}
+                    @buttonText={{t "actions.copy-to-clipboard"}}
+                    @acknowledgeText={{t "states.copied"}}
+                  >
+                    <code>{{model.target.id}}</code>
+                  </Copyable>
+                </div>
+                <Rose::Badge @style='informational'>
+                  {{model.project.name}}
+                </Rose::Badge>
+              </row.cell>
+              <row.cell>
+                <Rose::Button @style="secondary" {{on "click" (route-action "connect" model)}}>
+                  {{t "resources.session.actions.connect"}}
+                </Rose::Button>
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t "resources.target.messages.none.title"}} as |message|>
+          <message.description>
+            {{t "resources.target.messages.none.description"}}
+          </message.description>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
   </page.body>
 
 </Rose::Layout::Page>
