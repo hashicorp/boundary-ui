@@ -43,8 +43,9 @@ module.exports = {
     {
       name: "@electron-forge/maker-dmg",
       config: {
+        title: "Boundary",
         name: "boundary-desktop",
-        title: "BoundaryDesktop",
+        icon: "./config/macos/icon.icns",
         background: "./config/macos/background.png"
       }
     }
