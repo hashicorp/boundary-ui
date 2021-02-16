@@ -4,11 +4,13 @@ const {
   default: installExtension,
   EMBER_INSPECTOR,
 } = require('electron-devtools-installer');
-const { session, app, protocol, BrowserWindow, ipcMain } = require('electron');
+const { session, app, protocol, BrowserWindow, ipcMain, Menu } = require('electron');
 require('./handlers.js');
 
 const origin = require('./origin.js');
 const { generateCSPHeader } = require('./content-security-policy.js');
+
+const menu = require('./menu.js');
 
 const isDev = require('electron-is-dev');
 
@@ -38,10 +40,14 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  // Register custom protocol
-  const partition = emberAppName;
+  // Setup a partition
+  // Must be prefixed with persist: in order to save things like localStorage
+  // data.  Without this, the session is in-memory only.
+  // https://www.electronjs.org/docs/api/session#sessionfrompartitionpartition-options
+  const partition = `persist:${emberAppName}`;
   const ses = session.fromPartition(partition);
 
+  // Register custom protocol
   ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => {
     const isDir = request.url.endsWith('/');
     const absolutePath = request.url.substr(emberAppURL.length);
@@ -84,9 +90,15 @@ app.on('ready', async () => {
     }
   }
 
+  // Configure menu in prod env
+  if(!isDev) {
+    const menuTemplate = Menu.buildFromTemplate(menu.generateMenuTemplate());
+    Menu.setApplicationMenu(menuTemplate);
+  }
+
   mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: 1280,
+    height: 760,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       partition,

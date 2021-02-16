@@ -1,0 +1,77 @@
+{{#if this.cancelableUserSessions}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+        <row.headerCell>{{t "form.proxy.label"}}</row.headerCell>
+        <row.headerCell>{{t "form.started.label"}}</row.headerCell>
+        <row.headerCell />
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+
+      {{#each this.cancelableUserSessions as |session|}}
+        <body.row as |row|>
+
+          <row.cell class="nowrap">
+            <Rose::Icon
+              class={{concat "session-status-" session.status}}
+              @name="app-icons/action-session"
+              @size="medium" />
+            <Copyable
+              @text={{session.id}}
+              @buttonText={{t "actions.copy-to-clipboard"}}
+              @acknowledgeText={{t "states.copied"}}
+            >
+              <code>{{session.id}}</code>
+            </Copyable>
+            <Rose::Badge>{{session.status}}</Rose::Badge>
+          </row.cell>
+
+          <row.cell>
+            {{#if session.proxy}}
+              <Copyable
+                @text={{session.proxy}}
+                @buttonText={{t "actions.copy-to-clipboard"}}
+                @acknowledgeText={{t "states.copied"}}
+              >
+                <code>{{session.proxy}}</code>
+              </Copyable>
+            {{/if}}
+          </row.cell>
+
+          <row.cell>
+            <time datetime={{format-date-iso session.created_time}}>
+              {{format-date-iso-human session.created_time}}
+            </time>
+          </row.cell>
+
+          <row.cell>
+            {{#if session.isCancelable}}
+              <Rose::Button
+                @style="secondary"
+                {{on "click" (route-action "cancelSession" session)}}
+              >
+                {{t "actions.cancel"}}
+              </Rose::Button>
+            {{/if}}
+          </row.cell>
+
+        </body.row>
+      {{/each}}
+
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message @title={{t "resources.session.messages.none-active-friendly.title"}} as |message|>
+      <message.description>
+        {{t "resources.session.messages.none-active-friendly.description"}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}

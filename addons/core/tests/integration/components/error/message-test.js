@@ -60,7 +60,7 @@ module('Integration | Component | error/message', function (hooks) {
     );
     assert.equal(
       find('.rose-message-description').textContent.trim(),
-      'Please contact your administrator or try again later.'
+      'We\'re not sure what happened.  Please contact your administrator or try again later.'
     );
   });
 });

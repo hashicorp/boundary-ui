@@ -105,10 +105,6 @@
   padding-left: sizing.rems(l) * 3;
   position: relative;
 
-  .rose-header-brand {
-    display: none;
-  }
-
   .logotype {
     display: none;
   }
@@ -171,7 +167,7 @@
       0% {
         background-color: var(--action-subtler-1);
       }
-
+      
       100% {
         background-color: transparent;
       }

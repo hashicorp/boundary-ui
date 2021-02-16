@@ -36,6 +36,33 @@ export default class TargetModel extends GeneratedTargetModel {
       .filter((hostSetRef) => hostSetRef.model !== null);
   }
 
+  /**
+   * Sessions associated with this target (but only already loaded sessions).
+   * @type {SessionModel[]}
+   */
+  get sessions() {
+    return this.store.peekAll('session')
+      .filter(s => s && (s.target_id === this.id));
+  }
+
+  /**
+   * The project associated with this target (if already loaded).
+   * @type {ScopeModel}
+   */
+  get project() {
+    return this.store.peekRecord('scope', this.scopeID);
+  }
+
+  /**
+   * True if any sessions associated with this target are active or pending.
+   * @type {boolean}
+   */
+  get isActive() {
+    const pendingOrActiveSessions =
+      this.sessions.filter(s => s.isActive || s.isPending);
+    return Boolean(pendingOrActiveSessions.length);
+  }
+
   // =methods
 
   /**

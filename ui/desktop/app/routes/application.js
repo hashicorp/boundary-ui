@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import Ember from 'ember';
+import jQuery from 'jquery';
 /* eslint-disable-next-line ember/no-mixins */
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { inject as service } from '@ember/service';
@@ -16,6 +17,7 @@ export default class ApplicationRoute extends Route.extend(
 
   @service session;
   @service origin;
+  @service ipc;
 
   // =attributes
 
@@ -30,7 +32,21 @@ export default class ApplicationRoute extends Route.extend(
    * origin so that the renderer's CSP can be rewritten to allow requests.
    */
   beforeModel() {
+    const theme = this.session.get('data.theme');
+    this.toggleTheme(theme);
     return this.origin.updateOrigin();
+  }
+
+  /**
+   * Adds listener on target=_blank links so that they may be opened in an
+   * external browser.
+   */
+  afterModel() {
+    const ipc = this.ipc;
+    /* eslint-disable-next-line ember/no-jquery */
+    jQuery(document).on('click', 'a[href][target="_blank"]', function () {
+      ipc.invoke('openExternal', this.href);
+    });
   }
 
   /**
@@ -72,6 +88,16 @@ export default class ApplicationRoute extends Route.extend(
   }
 
   /**
+   * Disconnects from origin and invalidates session, thereby resetting
+   * the client and reloading to the onboarding origin screen.
+   */
+  @action
+  disconnect() {
+    this.origin.resetOrigin();
+    this.invalidateSession();
+  }
+
+  /**
    * Hooks into ember-loading to kick off loading indicator in the
    * application template.
    * @return {boolean} always returns true
@@ -97,5 +123,31 @@ export default class ApplicationRoute extends Route.extend(
       return false;
     }
     return true;
+  }
+
+  /**
+   * Applies the specified color theme to the root ember element.
+   * @param {string} theme - "light", "dark", or nullish (system default)
+   */
+  @action
+  toggleTheme(theme) {
+    const rootElementSelector = getOwner(this).rootElement;
+    const rootEl = getOwner(this)
+      .lookup('service:-document')
+      .querySelector(rootElementSelector);
+    this.session.set('data.theme', theme);
+    switch (theme) {
+      case 'light':
+        rootEl.classList.add('rose-theme-light');
+        rootEl.classList.remove('rose-theme-dark');
+        break;
+      case 'dark':
+        rootEl.classList.add('rose-theme-dark');
+        rootEl.classList.remove('rose-theme-light');
+        break;
+      default:
+        rootEl.classList.remove('rose-theme-dark');
+        rootEl.classList.remove('rose-theme-light');
+    }
   }
 }

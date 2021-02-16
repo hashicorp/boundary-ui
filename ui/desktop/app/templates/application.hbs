@@ -22,6 +22,29 @@
             >
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
+
+            <dropdown.separator />
+
+            <dropdown.section @title={{t "titles.toggle-color-theme"}}>
+              <Rose::Form as |form|>
+                <form.radioGroup
+                  @name="theme"
+                  @selectedValue={{this.session.data.theme}}
+                  @changed={{route-action "toggleTheme"}}
+                as |radioGroup|>
+                  <dropdown.item>
+                    <radioGroup.radio @label={{t "themes.system"}} />
+                  </dropdown.item>
+                  <dropdown.item>
+                    <radioGroup.radio @label={{t "themes.light"}} @value="light" />
+                  </dropdown.item>
+                  <dropdown.item>
+                    <radioGroup.radio @label={{t "themes.dark"}} @value="dark" />
+                  </dropdown.item>
+                </form.radioGroup>
+              </Rose::Form>
+            </dropdown.section>
+            
           </utilities.dropdown>
         </header.utilities>
       {{/if}}
@@ -54,14 +77,22 @@
       @icon="check-circle-fill"
       @style="success"
       @modal={{true}}
-      @dismiss={{accept}}
+      @dismiss={{deny}}
     as |dialog|>
       <dialog.body>
-        {{t 'states.connection.success.description'
-          port=confirmation.text.port
-          address=confirmation.text.address
-          protocol=confirmation.text.protocol
-        }}
+
+        <Copyable
+          @text={{concat confirmation.text.address ":" confirmation.text.port}}
+          @buttonText={{t "actions.copy-to-clipboard"}}
+          @acknowledgeText={{t "states.copied"}}
+        >
+          {{t 'states.connection.success.description'
+            port=confirmation.text.port
+            address=confirmation.text.address
+            protocol=confirmation.text.protocol
+          }}
+        </Copyable>
+
       </dialog.body>
       <dialog.footer>
         <Rose::Button @style="primary" {{on "click" accept}}>
@@ -76,7 +107,7 @@
       @icon="cancel-square-fill"
       @style="error"
       @modal={{true}}
-      @dismiss={{accept}}
+      @dismiss={{deny}}
     as |dialog|>
       <dialog.body>
         <p>

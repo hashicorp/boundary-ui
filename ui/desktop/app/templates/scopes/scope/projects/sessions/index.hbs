@@ -1,0 +1,101 @@
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <h2>
+      {{t "resources.session.title_plural"}}
+      <DocLink @doc="sessions" @iconSize="large" />
+    </h2>
+    <p>{{t "resources.session.description"}}</p>
+  </page.header>
+
+  <page.body>
+
+    {{#if this.sorted}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+            <row.headerCell>{{t "resources.target.title"}}</row.headerCell>
+            <row.headerCell>{{t "form.proxy.label"}}</row.headerCell>
+            <row.headerCell>{{t "form.started.label"}}</row.headerCell>
+            <row.headerCell>{{t "form.status.label"}}</row.headerCell>
+            <row.headerCell />
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each this.sorted as |model|}}
+            <body.row as |row|>
+              <row.headerCell class="nowrap">
+                <Rose::Icon
+                  class={{concat "session-status-" model.status}}
+                  @name="app-icons/action-session"
+                  @size="medium" />
+                <Copyable
+                  @text={{model.id}}
+                  @buttonText={{t "actions.copy-to-clipboard"}}
+                  @acknowledgeText={{t "states.copied"}}
+                >
+                  <code>{{model.id}}</code>
+                </Copyable>
+              </row.headerCell>
+              <row.cell>{{model.target.displayName}}</row.cell>
+              <row.cell>
+                {{!--
+                  Two if's here because:
+                  1) Local proxy info is only relevant if the session is
+                     active or pending (aka isCancelable).  Once the session
+                     is canceled or in the process thereof, the local proxy
+                     may no longer be used.
+                  2) The session actually has proxy information associated
+                     with it.  It's possible for the user to start sessions
+                     from other devices (or even another tab), in which case we
+                     won't have the local proxy info available here.
+                --}}
+                {{#if model.isCancelable}}
+                  {{#if model.proxy}}
+                    <Copyable
+                      @text={{model.proxy}}
+                      @buttonText={{t "actions.copy-to-clipboard"}}
+                      @acknowledgeText={{t "states.copied"}}
+                    >
+                      <code>{{model.proxy}}</code>
+                    </Copyable>
+                  {{/if}}
+                {{/if}}
+              </row.cell>
+              <row.cell>
+                <time datetime={{format-date-iso model.created_time}}>
+                  {{format-date-iso-human model.created_time}}
+                </time>
+              </row.cell>
+              <row.cell>
+                <Rose::Badge>{{model.status}}</Rose::Badge>
+              </row.cell>
+              <row.cell>
+                {{#if model.isCancelable}}
+                  <Rose::Button @style="secondary" {{on "click" (route-action "cancelSession" model)}}>
+                    {{t "actions.cancel"}}
+                  </Rose::Button>
+                {{/if}}
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t "resources.session.messages.none-friendly.title"}} as |message|>
+          <message.description>
+            {{t "resources.session.messages.none-friendly.description"}}
+          </message.description>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>

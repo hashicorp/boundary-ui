@@ -3,8 +3,11 @@ import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
+import initializeMockIPC from './scenarios/ipc';
 
 export default function() {
+
+  initializeMockIPC(this);
 
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
@@ -20,13 +23,16 @@ export default function() {
 
   // Scope resources
 
-  this.get('/scopes', ({ scopes }, { queryParams: { scope_id } }) => {
+  this.get('/scopes', ({ scopes }, { queryParams: { scope_id, recursive } }) => {
     // Default parent scope is global
     if (!scope_id) scope_id = 'global';
-    const results = scopes.where(scope => {
-      return scope.scope ? scope.scope.id === scope_id : false
-    });
-    return results;
+    if (recursive && scope_id === 'global') {
+      return scopes.all();
+    } else {
+      return scopes.where(scope => {
+        return scope.scope ? scope.scope.id === scope_id : false
+      });
+    }
   });
   this.post('/scopes', function ({ scopes }) {
     // Parent scope comes through the payload via `scope_id`, but this needs
@@ -284,7 +290,16 @@ export default function() {
 
   // target
 
-  this.get('/targets', function ({ targets }, { queryParams: { scope_id } }) {
+  this.get('/targets', function ({ targets }, { queryParams: { scope_id, recursive } }) {
+    if (recursive && scope_id === 'global') {
+      return targets.all();
+    } else if (recursive) {
+      return targets.where(target => {
+        const targetModel = targets.find(target.id);
+        return (target.scopeId === scope_id)
+          || (targetModel?.scope?.scope?.id === scope_id)
+      });
+    }
     return targets.where(target => target.scopeId === scope_id);
   });
   this.post('/targets', function ({ targets }) {
@@ -322,19 +337,35 @@ export default function() {
 
   // session
 
-  this.get('/sessions', function ({ sessions }, { queryParams: { scope_id } }) {
+  this.get('/sessions', function ({ sessions }, { queryParams: { scope_id, recursive } }) {
     // To simulate changes to `session.status` that may occur in the backend,
     // we quietly randomize the value of the field on GET.
+    // To populate sessions for logged in user,
+    // update alternate sessions to auth user.
     // But only if not in testing mode.
     // In tests, we need deterministic statuses.
     if (!Ember.testing) {
-      sessions.where(session => session.scopeId === scope_id)
+      sessions.all()
         .models
-        .forEach(session => session.update({
-          status: pickRandomStatusString()
-        }));
+        .forEach(session => {
+          session.update({
+            status: pickRandomStatusString()
+          });
+          if(session.id.split('-').pop() % 2) session.update({
+            userId: 'authenticateduser'
+          });
+        });
     }
-    return sessions.where(session => session.scopeId === scope_id)
+    if (recursive && scope_id === 'global') {
+      return sessions.all();
+    } else if (recursive) {
+      return sessions.where(session => {
+        const sessionModel = sessions.find(session.id);
+        return (session.scopeId === scope_id)
+          || (sessionModel?.scope?.scope?.id === scope_id)
+      });
+    }
+    return sessions.where(session => session.scopeId === scope_id);
   });
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
     const session = sessions.find(id);

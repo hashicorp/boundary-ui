@@ -95,6 +95,9 @@ host:
     none:
       title: No Hosts
       description: No hosts available in this scope.
+    none-friendly:
+      title: No Hosts Available
+      description: No hosts available to display yet.
   actions:
     add: Add Host
     create: New Host
@@ -104,11 +107,18 @@ host:
 session:
   title: Session
   title_plural: Sessions
+  active_plural: Active Sessions
   description: A session is a connection to a target initiated through Boundary.
   messages:
     none:
       title: No Sessions
       description: There are no active sessions within the current scope.
+    none-friendly:
+      title: No Sessions Available
+      description: No sessions available to display yet.
+    none-active-friendly:
+      title: No Active Sessions Available
+      description: No active sessions available to display yet.
   actions:
     connect: Connect
 org:
@@ -194,6 +204,9 @@ target:
   messages:
     welcome:
       title: Welcome to Targets
+    none:
+      title: No Targets Available
+      description: No Targets to display yet. Contact your Boundary admin if you don't see a Target you expect access to.
   actions:
     create: New Target
     delete: Delete Target

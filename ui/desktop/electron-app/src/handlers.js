@@ -1,3 +1,4 @@
+const { shell } = require('electron');
 const handle = require('./ipc-handler');
 const boundaryCli = require('./boundary-cli');
 const origin = require('./origin.js');
@@ -18,16 +19,27 @@ handle('setOrigin', async (requestOrigin) => {
 });
 
 /**
+ * Resets the origin.
+ */
+handle('resetOrigin', async (requestOrigin) => {
+  origin.resetOrigin();
+});
+
+/**
+ * Opens the specified URL in an external browser.
+ */
+handle('openExternal', async (href) => {
+  shell.openExternal(href);
+});
+
+/**
  * Check for boundary cli existence
  */
 handle('cliExists', () => boundaryCli.exists());
 
 /**
- * Detect boundary cli path
- */
-handle('cliPath', () => boundaryCli.path());
-
-/**
  * Establishes a boundary session and returns session details.
  */
-handle('connect', ({ target_id, token, addr }) => boundaryCli.connect(target_id, token, addr));
+handle('connect', ({ target_id, token, host_id }) =>
+  boundaryCli.connect(target_id, token, host_id)
+);

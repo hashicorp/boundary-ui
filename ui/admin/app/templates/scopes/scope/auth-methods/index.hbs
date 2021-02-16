@@ -77,7 +77,9 @@
           <message.description>
             {{t 'resources.auth-method.messages.welcome.description'}}
           </message.description>
-          <message.link @route="scopes.scope.auth-methods.new">
+          <message.link
+            @route="scopes.scope.auth-methods.new"
+            @query={{hash type="password"}}>
             <Rose::Icon @name="plus-circle-outline" />
             {{t 'titles.new'}}
           </message.link>
