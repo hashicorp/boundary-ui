@@ -12,8 +12,8 @@ import {
 import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-//import { Response } from 'miragejs';
-//import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { Response } from 'miragejs';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -147,7 +147,7 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
-    //await a11yAudit();
+    await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), urls.authenticate.methods.global);
   });
@@ -156,9 +156,19 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(2);
     instances.authMethods.global.destroy();
     await visit(urls.authenticate.global);
-    //await a11yAudit();
+    await a11yAudit();
     assert.equal(currentURL(), urls.authenticate.global);
     assert.ok(find('.rose-message'));
+  });
+
+  test('visiting authenticate route when the scope cannot be loaded is still allowed', async function (assert) {
+    assert.expect(1);
+    this.server.get('/scopes', () => {
+      return new Response(404);
+    });
+    await visit(urls.authenticate.global);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.authenticate.global);
   });
 
   test('color theme is applied from session data', async function (assert) {

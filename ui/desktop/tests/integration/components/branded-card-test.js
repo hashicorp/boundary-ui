@@ -1,26 +1,24 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | branded-card', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
+  test('it renders', async function(assert) {
     await render(hbs`<BrandedCard />`);
+    assert.ok(find('.branded-card'));
+    assert.ok(find('.branded-card-title'));
+    assert.ok(find('.branded-card-description'));
+  });
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      <BrandedCard>
-        template block text
-      </BrandedCard>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+  test('it renders with content', async function(assert) {
+    await render(hbs`<BrandedCard
+      @title="title"
+      @description="description"
+    />`);
+    assert.equal(find('.branded-card-title').textContent.trim(), 'title');
+    assert.equal(find('.branded-card-description').textContent.trim(), 'description');
   });
 });
