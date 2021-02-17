@@ -45,7 +45,7 @@ module.exports = {
       config: {
         title: "Boundary",
         name: "boundary-desktop",
-        icon: "./config/macos/icon.icns",
+        icon: "./config/macos/disk.icns",
         background: "./config/macos/background.png"
       }
     }
