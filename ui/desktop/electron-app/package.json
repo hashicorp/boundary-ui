@@ -1,6 +1,6 @@
 {
   "name": "desktop",
-  "productName": "desktop",
+  "productName": "Boundary Desktop",
   "version": "0.0.0",
   "private": true,
   "description": "Electron UI for client for Boundary.",
