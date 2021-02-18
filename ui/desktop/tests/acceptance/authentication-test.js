@@ -223,9 +223,6 @@ module('Acceptance | authentication', function (hooks) {
       );
     }, 750);
     await click('[type="submit"]');
-=======
-    assert.equal(currentURL(), urls.authenticate.global);
->>>>>>> 0d4e5d56 (test: Add branded card test & update auth acceptance test)
   });
 
   test('color theme is applied from session data', async function (assert) {
