@@ -2,8 +2,8 @@ import { module, test } from 'qunit';
 import {
   visit,
   currentURL,
-  //fillIn,
-  //click,
+  fillIn,
+  click,
   //find,
   //findAll,
   //getRootElement
@@ -12,14 +12,14 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
-//import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   //currentSession,
   //authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | authentication', function (hooks) {
+module('Acceptance | origin', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -54,7 +54,9 @@ module('Acceptance | authentication', function (hooks) {
     },
     authenticate: {
       global: null,
-      org: null,
+      methods: {
+        global: null,
+      }
     },
     targets: null,
   };
@@ -97,8 +99,11 @@ module('Acceptance | authentication', function (hooks) {
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
-    urls.authenticate.global = `${urls.scopes.global}/authenticate/${instances.authMethods.global.id}`;
+    urls.authenticate.global = `${urls.scopes.global}/authenticate`;
+    urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.authenticate.org = `${urls.scopes.global}/authenticate/${instances.authMethods.org.id}`;
+    urls.projects = `${urls.scopes.org}/projects`;
+    urls.targets = `${urls.projects}/targets`;
 
     class MockIPC {
       origin = null;
@@ -137,8 +142,33 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting index without an origin specified redirects to origin route', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
-    //await a11yAudit();
+    await a11yAudit();
     assert.notOk(mockIPC.origin);
     assert.equal(currentURL(), urls.origin);
+  });
+
+  test('can set origin', async function (assert) {
+    assert.expect(2);
+    assert.notOk(mockIPC.origin);
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(mockIPC.origin, window.location.origin);
+  });
+
+  test('can update origin', async function (assert) {
+    assert.expect(2);
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(currentURL(), urls.authenticate.methods.global);
+    await click('.change-origin a');
+    assert.equal(currentURL(), urls.origin);
+    await fillIn('[name="host"]', 'protocol://test');
+    // FIXME: Submission raises mirage error
+    // await click('[type="submit"]');
+    // assert.equal(mockIPC.origin, 'protocol://test');
   });
 });

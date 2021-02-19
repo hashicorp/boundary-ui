@@ -183,35 +183,35 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('successful authentication with the global scope redirects to targets', async function (assert) {
-    assert.expect(3);
-    await visit(urls.authenticate.methods.global);
-    assert.notOk(currentSession().isAuthenticated);
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    await click('[type="submit"]');
-    assert.equal(currentURL(), urls.targets);
-    assert.ok(currentSession().isAuthenticated);
-  });
-
-  test('deauthentication redirects to first global authenticate method', async function (assert) {
-    assert.expect(4);
-    await visit(urls.authenticate.methods.global);
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    await click('[type="submit"]');
-    assert.equal(currentURL(), urls.targets);
-    assert.ok(currentSession().isAuthenticated);
-    // Open header utilities dropdown
-    await click('.rose-header-utilities .rose-dropdown summary');
-    // Find and click on first element in dropdown - should be deauthenticate button
-    const menu = findAll(
-      '.rose-header-utilities .rose-dropdown .rose-dropdown-content button'
-    );
-    await click(menu[0]);
-    assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
-  });
+//   test('successful authentication with the global scope redirects to targets', async function (assert) {
+//     assert.expect(3);
+//     await visit(urls.authenticate.methods.global);
+//     assert.notOk(currentSession().isAuthenticated);
+//     await fillIn('[name="identification"]', 'test');
+//     await fillIn('[name="password"]', 'test');
+//     await click('[type="submit"]');
+//     assert.equal(currentURL(), urls.targets);
+//     assert.ok(currentSession().isAuthenticated);
+//   });
+//
+//   test('deauthentication redirects to first global authenticate method', async function (assert) {
+//     assert.expect(4);
+//     await visit(urls.authenticate.methods.global);
+//     await fillIn('[name="identification"]', 'test');
+//     await fillIn('[name="password"]', 'test');
+//     await click('[type="submit"]');
+//     assert.equal(currentURL(), urls.targets);
+//     assert.ok(currentSession().isAuthenticated);
+//     // Open header utilities dropdown
+//     await click('.rose-header-utilities .rose-dropdown summary');
+//     // Find and click on first element in dropdown - should be deauthenticate button
+//     const menu = findAll(
+//       '.rose-header-utilities .rose-dropdown .rose-dropdown-content button'
+//     );
+//     await click(menu[0]);
+//     assert.notOk(currentSession().isAuthenticated);
+//     assert.equal(currentURL(), urls.authenticate.methods.global);
+//   });
 
   test('color theme is applied from session data', async function (assert) {
     assert.expect(12);
