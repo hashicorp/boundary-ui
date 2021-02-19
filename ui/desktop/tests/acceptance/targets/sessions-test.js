@@ -63,7 +63,7 @@ module('Acceptance | targets | sessions', function (hooks) {
     projects: null,
     targets: null,
     target: null,
-    targetSessions: null,
+    sessions: null,
   };
 
   const setDefaultOrigin = (test) => {
@@ -124,7 +124,7 @@ module('Acceptance | targets | sessions', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.targetSessions = `${urls.target}/sessions`;
+    urls.sessions = `${urls.target}/sessions`;
 
     class MockIPC {
       origin = null;
@@ -168,7 +168,7 @@ module('Acceptance | targets | sessions', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
     assert.expect(2);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), urls.authenticate.methods.global);
@@ -185,10 +185,10 @@ module('Acceptance | targets | sessions', function (hooks) {
     later(async () => {
       run.cancelTimers();
       // await a11yAudit();
-      assert.equal(currentURL(), urls.targetSessions);
+      assert.equal(currentURL(), urls.sessions);
       assert.equal(findAll('tbody tr').length, sessionsCount);
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('visiting index redirects to sessions', async function (assert) {
@@ -196,7 +196,7 @@ module('Acceptance | targets | sessions', function (hooks) {
     later(async () => {
       run.cancelTimers();
       // await a11yAudit();
-      assert.equal(currentURL(), urls.targetSessions);
+      assert.equal(currentURL(), urls.sessions);
     }, 750);
     await visit(urls.target);
   });
@@ -208,7 +208,7 @@ module('Acceptance | targets | sessions', function (hooks) {
       run.cancelTimers();
       assert.ok(find('.rose-message-title').textContent.trim(), 'No Sessions Available');
     }, 750);
-    await visit(urls.target);
+    await visit(urls.sessions);
   });
 
   test('can identify target with active sessions', async function (assert) {
@@ -217,7 +217,7 @@ module('Acceptance | targets | sessions', function (hooks) {
       run.cancelTimers();
       assert.ok(find('.rose-layout-page-header .rose-badge-success'));
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('can identify target with pending sessions', async function (assert) {
@@ -227,7 +227,7 @@ module('Acceptance | targets | sessions', function (hooks) {
       run.cancelTimers();
       assert.ok(find('.rose-layout-page-header .rose-badge-success'));
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('cannot identify target with terminated sessions', async function (assert) {
@@ -237,7 +237,7 @@ module('Acceptance | targets | sessions', function (hooks) {
       run.cancelTimers();
       assert.notOk(find('.rose-layout-page-header .rose-badge-success'));
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('cancelling a session', async function (assert) {
@@ -249,7 +249,7 @@ module('Acceptance | targets | sessions', function (hooks) {
       assert.ok(find('[role="alert"].is-success'));
       assert.equal(findAll('tbody tr').length, sessionsCount - 1);
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
@@ -260,23 +260,29 @@ module('Acceptance | targets | sessions', function (hooks) {
       await click('tbody tr:first-child td:last-child button');
       assert.ok(find('[role="alert"].is-error'));
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('connecting to a target', async function (assert) {
     assert.expect(4);
     sinon.stub(mockIPC, 'cliExists').returns(true);
-    sinon.stub(mockIPC, 'connect').returns({
-      session_id: instances.session.id,
-      address: 'a_123',
-      port: 'p_123',
-      protocol: 'tcp',
-    });
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
     later(async() => {
       run.cancelTimers();
+      const connectSession = this.server.create('session', {
+        scope: instances.scopes.project,
+        target: instances.target,
+        status: 'pending',
+        user: instances.user,
+      });
+      sinon.stub(mockIPC, 'connect').returns({
+        session_id: connectSession.id,
+        address: 'a_123',
+        port: 'p_123',
+        protocol: 'tcp',
+      });
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
@@ -284,7 +290,7 @@ module('Acceptance | targets | sessions', function (hooks) {
       await click('.rose-dialog-dismiss');
       assert.equal(find('tbody tr:first-child td:nth-child(2) .copyable-content').textContent.trim(), 'a_123:p_123');
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('handles cli error on connect', async function (assert) {
@@ -302,7 +308,7 @@ module('Acceptance | targets | sessions', function (hooks) {
       assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
       assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 
   test('handles connect error', async function (assert) {
@@ -321,6 +327,6 @@ module('Acceptance | targets | sessions', function (hooks) {
       assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
       assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
-    await visit(urls.targetSessions);
+    await visit(urls.sessions);
   });
 });
