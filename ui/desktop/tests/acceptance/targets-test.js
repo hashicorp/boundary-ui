@@ -3,17 +3,19 @@ import {
   visit,
   currentURL,
   //fillIn,
-  //click,
-  //find,
-  //findAll,
+  click,
+  find,
+  findAll,
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
 import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-//import { Response } from 'miragejs';
-//import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { Response } from 'miragejs';
+import { resolve, reject } from 'rsvp';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import sinon from 'sinon';
 import {
   currentSession,
   authenticateSession,
@@ -37,6 +39,7 @@ module('Acceptance | targets', function (hooks) {
       global: null,
     },
     target: null,
+    session: null,
   };
 
   const stubs = {
@@ -59,6 +62,8 @@ module('Acceptance | targets', function (hooks) {
     },
     projects: null,
     targets: null,
+    target: null,
+    targetSessions: null,
   };
 
   const setDefaultOrigin = (test) => {
@@ -99,12 +104,23 @@ module('Acceptance | targets', function (hooks) {
       'withRandomHostSets'
     );
 
+    instances.session = this.server.create(
+      'session',
+      {
+        scope: instances.scopes.project,
+        status: 'active',
+      },
+      'withAssociations'
+    );
+
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.targetSessions = `${urls.target}/sessions`;
 
     class MockIPC {
       origin = null;
@@ -121,6 +137,10 @@ module('Acceptance | targets', function (hooks) {
         this.origin = origin;
         return this.origin;
       }
+
+      cliExists(payload) {}
+
+      connect(payload) {}
     }
 
     mockIPC = new MockIPC();
@@ -145,13 +165,14 @@ module('Acceptance | targets', function (hooks) {
     invalidateSession();
     assert.expect(2);
     await visit(urls.targets);
-    //await a11yAudit();
+    await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
+    const targetsCount = this.server.schema.targets.all().models.length;
     // This later/cancelTimers technique allows us to test a page with
     // active polling.  Normally an acceptance test waits for all runloop timers
     // to stop before returning from an awaited test, but polling means that
@@ -159,8 +180,71 @@ module('Acceptance | targets', function (hooks) {
     // proceeding with our tests.
     later(async () => {
       run.cancelTimers();
-      //await a11yAudit();
+      await a11yAudit();
       assert.equal(currentURL(), urls.targets);
+      assert.equal(findAll('tbody tr').length, targetsCount);
+    }, 750);
+    await visit(urls.targets);
+  });
+
+  test('visiting a target', async function (assert) {
+    assert.expect(1);
+    later(async() => {
+      run.cancelTimers();
+      await click('tbody tr th a');
+      assert.equal(currentURL(), urls.targetSessions);
+    }, 750);
+    await visit(urls.targets);
+  });
+
+  test('can display message for empty targets', async function (assert) {
+    assert.expect(1);
+    this.server.get('/targets', () => {
+      return new Response(200);
+    });
+    later(async() => {
+      run.cancelTimers();
+      assert.ok(find('.rose-message-title').textContent.trim(), 'No Targets Available');
+    }, 750);
+    await visit(urls.targets);
+  });
+
+  test('can connect to a target', async function (assert) {
+    assert.expect(3);
+    sinon.stub(mockIPC, 'cliExists').returns(true);
+    sinon.stub(mockIPC, 'connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    later(async() => {
+      run.cancelTimers();
+      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      assert.ok(find('.rose-dialog-success'), 'Success dialog');
+      assert.equal(findAll('.rose-dialog-footer button').length, 1);
+      assert.equal(find('.rose-dialog-footer button').textContent.trim(), 'OK', 'Cannot retry');
+    }, 750);
+    await visit(urls.targets);
+  });
+
+  test('handles cli error on connect', async function (assert) {
+    assert.expect(4);
+    sinon.stub(mockIPC, 'cliExists').returns(false);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    later(async() => {
+      run.cancelTimers();
+      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      assert.ok(find('.rose-dialog-error'), 'Error dialog');
+      const dialogButtons = findAll('.rose-dialog-footer button');
+      assert.equal(dialogButtons.length, 2);
+      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
     await visit(urls.targets);
   });
