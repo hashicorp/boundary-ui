@@ -160,6 +160,31 @@ module('Acceptance | origin', function (hooks) {
     assert.equal(currentURL(), urls.origin);
   });
 
+  test('can set origin', async function (assert) {
+    assert.expect(2);
+    assert.notOk(mockIPC.origin);
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(mockIPC.origin, window.location.origin);
+  });
+
+  test('can update origin', async function (assert) {
+    assert.expect(2);
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(currentURL(), urls.authenticate.methods.global);
+    await click('.change-origin a');
+    assert.equal(currentURL(), urls.origin);
+    await fillIn('[name="host"]', 'protocol://test');
+    // FIXME: Submission raises mirage error
+    // await click('[type="submit"]');
+    // assert.equal(mockIPC.origin, 'protocol://test');
+  });
+
   // FIXME: Test run pauses in this test
   test('visiting index after authentication redirects to auth route', async function (assert) {
     assert.expect(2);
