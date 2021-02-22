@@ -1,4 +1,3 @@
-const axios = require('axios');
 const { net } = require('electron')
 
 const requestTimeoutSeconds = 10;
@@ -59,7 +58,6 @@ class RuntimeSettings {
     const scopesEndpoint = `${origin}/v1/scopes`;
     try {
       await netRequestPromise(scopesEndpoint);
-      //await axios.get(scopesEndpoint);
     } catch (e) {
       throw new Error(`Origin ${origin} could not be validated.`);
     }
