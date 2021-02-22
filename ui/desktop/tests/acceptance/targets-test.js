@@ -201,7 +201,7 @@ module('Acceptance | targets', function (hooks) {
     this.server.get('/targets', () => new Response(200));
     later(async() => {
       run.cancelTimers();
-      assert.ok(find('.rose-message-title').textContent.trim(), 'No Targets Available');
+      assert.equal(find('.rose-message-title').textContent.trim(), 'No Targets Available');
     }, 750);
     await visit(urls.targets);
   });

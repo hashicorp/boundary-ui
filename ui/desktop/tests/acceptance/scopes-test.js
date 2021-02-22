@@ -3,15 +3,16 @@ import {
   visit,
   currentURL,
   //fillIn,
-  //click,
-  //find,
+  click,
+  find,
   //findAll,
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
+import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-//import { Response } from 'miragejs';
+import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
@@ -19,7 +20,7 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | projects', function (hooks) {
+module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -34,8 +35,7 @@ module('Acceptance | projects', function (hooks) {
     },
     authMethods: {
       global: null,
-    },
-    target: null,
+    }
   };
 
   const stubs = {
@@ -57,6 +57,9 @@ module('Acceptance | projects', function (hooks) {
       },
     },
     projects: null,
+    globalProjects: null,
+    targets: null,
+    globalTargets: null,
   };
 
   const setDefaultOrigin = (test) => {
@@ -75,6 +78,10 @@ module('Acceptance | projects', function (hooks) {
       type: 'org',
       scope: stubs.global,
     });
+    instances.scopes.org2 = this.server.create('scope', {
+      type: 'org',
+      scope: stubs.global,
+    });
     stubs.org = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
@@ -86,22 +93,14 @@ module('Acceptance | projects', function (hooks) {
       scope: instances.scopes.global,
     });
 
-    instances.hostCatalog = this.server.create(
-      'host-catalog',
-      { scope: instances.scopes.project },
-      'withChildren'
-    );
-    instances.target = this.server.create(
-      'target',
-      { scope: instances.scopes.project },
-      'withRandomHostSets'
-    );
-
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
+    urls.globalProjects = `${urls.scopes.global}/projects`;
     urls.projects = `${urls.scopes.org}/projects`;
+    urls.globalTargets = `${urls.globalProjects}/targets`;
+    urls.targets = `${urls.projects}/targets`;
 
     class MockIPC {
       origin = null;
@@ -138,20 +137,55 @@ module('Acceptance | projects', function (hooks) {
     window.removeEventListener('message', messageHandler);
   });
 
-  test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
-    invalidateSession();
-    assert.expect(2);
-    await visit(urls.projects);
-    await a11yAudit();
-    assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
-  });
-
-  test('visiting index', async function (assert) {
+  test('visiting global scope', async function (assert) {
     assert.expect(1);
-    await visit(urls.projects);
-    await a11yAudit();
-    assert.equal(currentURL(), urls.projects);
+    later(async () => {
+      run.cancelTimers();
+      await a11yAudit();
+      assert.equal(currentURL(), urls.globalTargets);
+    }, 750);
+    await visit(urls.scopes.global);
   });
 
+  // TODO: this probably shouldn't be the case, but was setup to enable
+  // authentication when the global scope couldn't be loaded.
+  // In order to resolve this, we might hoist authentication routes up from
+  // under scopes.
+  test('visiting global scope is not successful when the global scope cannot be fetched', async function (assert) {
+    assert.expect(1);
+    this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
+      const scope = scopes.find(id);
+      const response = id === 'global' ? new Response(404) : scope;
+      return response;
+    });
+    later(async () => {
+      run.cancelTimers();
+      await a11yAudit();
+      assert.equal(currentURL(), urls.globalTargets);
+    }, 750);
+    await visit(urls.scopes.global);
+  });
+
+  test('visiting org scope', async function (assert) {
+    assert.expect(1);
+    later(async () => {
+      run.cancelTimers();
+      await a11yAudit();
+      assert.equal(currentURL(), urls.targets);
+    }, 750);
+    await visit(urls.scopes.org);
+  });
+
+  test('can navigate among org scopes via header navigation', async function (assert) {
+    assert.expect(2);
+    later(async () => {
+      run.cancelTimers();
+      await a11yAudit();
+      await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
+      assert.equal(currentURL(), urls.targets);
+      await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
+      assert.equal(currentURL(), urls.globalTargets);
+    }, 750);
+    await visit(urls.scopes.global);
+  });
 });
