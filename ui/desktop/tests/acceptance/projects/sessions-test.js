@@ -178,7 +178,21 @@ module('Acceptance | projects | sessions', function (hooks) {
     this.server.get('/sessions', () => new Response(200));
     later(async () => {
       run.cancelTimers();
+      await a11yAudit();
       assert.ok(find('.rose-message-title').textContent.trim(), 'No Sessions Available');
+    }, 750);
+    await visit(urls.sessions);
+  });
+
+  test('visiting sessions without targets is OK', async function (assert) {
+    assert.expect(2);
+    instances.session.update({ targetId: undefined });
+    const sessionsCount = this.server.schema.sessions.all().models.length;
+    later(async () => {
+      run.cancelTimers();
+      await a11yAudit();
+      assert.equal(currentURL(), urls.sessions);
+      assert.equal(findAll('tbody tr').length, sessionsCount);
     }, 750);
     await visit(urls.sessions);
   });

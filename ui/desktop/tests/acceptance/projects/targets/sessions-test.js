@@ -21,7 +21,7 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | targets | sessions', function (hooks) {
+module('Acceptance | projects | targets | sessions', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 

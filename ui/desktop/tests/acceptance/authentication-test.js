@@ -14,6 +14,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import sinon from 'sinon';
 import {
   currentSession,
   authenticateSession,
@@ -165,6 +166,14 @@ module('Acceptance | authentication', function (hooks) {
     assert.ok(find('.rose-message'));
   });
 
+  test('visiting authenticate route without origin redirects to origin index', async function (assert) {
+    assert.expect(1);
+    this.owner.lookup('service:origin').rendererOrigin = null;
+    await visit(urls.authenticate.global);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.origin);
+  });
+
   test('visiting authenticate route when the scope cannot be loaded is allowed', async function (assert) {
     assert.expect(1);
     this.server.get('/scopes', () => {
@@ -185,17 +194,6 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  // test('successful authentication with the global scope redirects to targets', async function (assert) {
-  //   assert.expect(3);
-    // await visit(urls.authenticate.methods.global);
-    // assert.notOk(currentSession().isAuthenticated);
-    // await fillIn('[name="identification"]', 'test');
-    // await fillIn('[name="password"]', 'test');
-    // await click('[type="submit"]');
-    // assert.equal(currentURL(), urls.targets);
-    // assert.ok(currentSession().isAuthenticated);
-  // });
-
   test('deauthentication redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     authenticateSession({
@@ -203,10 +201,7 @@ module('Acceptance | authentication', function (hooks) {
     });
     later(async() => {
       run.cancelTimers();
-      // Open header utilities dropdown
-      await click('.rose-header-utilities .rose-dropdown summary');
-      // Find and click on first element in dropdown - should be deauthenticate button
-      await click('.rose-dropdown-content button');
+      await click('.rose-header-utilities .rose-dropdown button');
       assert.notOk(currentSession().isAuthenticated);
       assert.equal(currentURL(), urls.authenticate.methods.global);
     }, 750);

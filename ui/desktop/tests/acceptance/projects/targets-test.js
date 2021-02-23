@@ -21,7 +21,7 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | targets', function (hooks) {
+module('Acceptance | projects | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -257,6 +257,27 @@ module('Acceptance | targets', function (hooks) {
     later(async() => {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      assert.ok(find('.rose-dialog-error'), 'Error dialog');
+      const dialogButtons = findAll('.rose-dialog-footer button');
+      assert.equal(dialogButtons.length, 2);
+      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+    }, 750);
+    await visit(urls.targets);
+  });
+
+  test('can retry on connect error', async function (assert) {
+    assert.expect(4);
+    sinon.stub(mockIPC, 'cliExists').returns(true);
+    sinon.stub(mockIPC, 'connect').returns({});
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    // FIXME: why isn't retry working?
+    later(async() => {
+      run.cancelTimers();
+      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click('.rose-dialog-footer .rose-button-primary');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.equal(dialogButtons.length, 2);

@@ -4,7 +4,7 @@ import {
   currentURL,
   fillIn,
   click,
-  //find,
+  find,
   //findAll,
   //getRootElement
   //setupOnerror,
@@ -13,6 +13,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import sinon from 'sinon';
 import {
   //currentSession,
   //authenticateSession,
@@ -137,6 +138,7 @@ module('Acceptance | origin', function (hooks) {
 
   hooks.afterEach(function () {
     window.removeEventListener('message', messageHandler);
+    sinon.restore();
   });
 
   test('visiting index without an origin specified redirects to origin route', async function (assert) {
@@ -157,18 +159,26 @@ module('Acceptance | origin', function (hooks) {
     assert.equal(mockIPC.origin, window.location.origin);
   });
 
-  test('can update origin', async function (assert) {
+  test('captures error on origin update', async function (assert) {
     assert.expect(2);
+    assert.notOk(mockIPC.origin);
+    sinon.stub(this.owner.lookup('service:origin'), 'setOrigin').throws();
     await visit(urls.origin);
     await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
+    assert.ok(find('.rose-notification.is-error'));
+  });
+
+  test('can reset origin before authentication', async function (assert) {
+    assert.expect(4);
+    assert.notOk(mockIPC.origin);
+    await visit(urls.origin);
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(mockIPC.origin, window.location.origin);
     assert.equal(currentURL(), urls.authenticate.methods.global);
     await click('.change-origin a');
     assert.equal(currentURL(), urls.origin);
-    await fillIn('[name="host"]', 'protocol://test');
-    // FIXME: Submission raises mirage error
-    // await click('[type="submit"]');
-    // assert.equal(mockIPC.origin, 'protocol://test');
   });
 });
