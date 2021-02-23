@@ -281,7 +281,8 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
       assert.equal(find('.rose-dialog-footer button').textContent.trim(), 'OK', 'Cannot retry');
-      assert.equal(find('.rose-dialog-body .copyable-content').textContent.trim(), 'Local proxy address (tcp): a_123:p_123');
+      await click('.rose-dialog-dismiss');
+      assert.equal(find('tbody tr:first-child td:nth-child(2) .copyable-content').textContent.trim(), 'a_123:p_123');
     }, 750);
     await visit(urls.sessions);
   });

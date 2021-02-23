@@ -170,19 +170,27 @@ module('Acceptance | origin', function (hooks) {
     assert.equal(mockIPC.origin, window.location.origin);
   });
 
-  test('can update origin', async function (assert) {
+  test('captures error on origin update', async function (assert) {
     assert.expect(2);
+    assert.notOk(mockIPC.origin);
+    sinon.stub(this.owner.lookup('service:origin'), 'setOrigin').throws();
     await visit(urls.origin);
     await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
+    assert.ok(find('.rose-notification.is-error'));
+  });
+
+  test('can reset origin before authentication', async function (assert) {
+    assert.expect(4);
+    assert.notOk(mockIPC.origin);
+    await visit(urls.origin);
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(mockIPC.origin, window.location.origin);
     assert.equal(currentURL(), urls.authenticate.methods.global);
     await click('.change-origin a');
     assert.equal(currentURL(), urls.origin);
-    await fillIn('[name="host"]', 'protocol://test');
-    // FIXME: Submission raises mirage error
-    // await click('[type="submit"]');
-    // assert.equal(mockIPC.origin, 'protocol://test');
   });
 
   // FIXME: Test run pauses in this test
