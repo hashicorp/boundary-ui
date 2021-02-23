@@ -4,7 +4,7 @@ const generateMenuTemplate = () => {
   return [
     // { role: 'appMenu' }
     {
-      label: 'Boundary Desktop',
+      label: 'Boundary',
       submenu: [
         { role: 'about' },
         { type: 'separator' },
