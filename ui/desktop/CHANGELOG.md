@@ -5,9 +5,12 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ## Next
 
-### Changes/Deprecations
+### New & Improved
 
 - Scrolling now occurs within columns individually so that sidebar and header remain visible when scrolling the application body.  ([PR](https://github.com/hashicorp/boundary-ui/pull/482))
+
+### Changes/Deprecations
+
 - Boundary origin validation now occurs via Electron's built-in net request module, ensuring the validation request is made via chromium's networking library rather than Node's.  ([PR](https://github.com/hashicorp/boundary-ui/pull/480))
 
 ## v1.0.0-alpha (2021.02.16)
