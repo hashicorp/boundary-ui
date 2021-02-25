@@ -268,27 +268,20 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     sinon.stub(mockIPC, 'cliExists').returns(true);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    sinon.stub(mockIPC, 'connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
 
     later(async() => {
       run.cancelTimers();
-      const connectSession = this.server.create('session', {
-        scope: instances.scopes.project,
-        target: instances.target,
-        status: 'pending',
-        user: instances.user,
-      });
-      sinon.stub(mockIPC, 'connect').returns({
-        session_id: connectSession.id,
-        address: 'a_123',
-        port: 'p_123',
-        protocol: 'tcp',
-      });
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
       assert.equal(find('.rose-dialog-footer button').textContent.trim(), 'OK', 'Cannot retry');
-      await click('.rose-dialog-dismiss');
-      assert.equal(find('tbody tr:first-child td:nth-child(2) .copyable-content').textContent.trim(), 'a_123:p_123');
+      assert.equal(find('.rose-dialog-body .copyable-content').textContent.trim(), 'Local proxy address (tcp): a_123:p_123');
     }, 750);
     await visit(urls.sessions);
   });

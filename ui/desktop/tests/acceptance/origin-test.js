@@ -169,16 +169,4 @@ module('Acceptance | origin', function (hooks) {
     await click('[type="submit"]');
     assert.ok(find('.rose-notification.is-error'));
   });
-
-  test('can reset origin before authentication', async function (assert) {
-    assert.expect(4);
-    assert.notOk(mockIPC.origin);
-    await visit(urls.origin);
-    await fillIn('[name="host"]', window.location.origin);
-    await click('[type="submit"]');
-    assert.equal(mockIPC.origin, window.location.origin);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
-    await click('.change-origin a');
-    assert.equal(currentURL(), urls.origin);
-  });
 });

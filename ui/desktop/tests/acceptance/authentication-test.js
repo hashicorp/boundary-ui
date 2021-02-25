@@ -38,8 +38,6 @@ module('Acceptance | authentication', function (hooks) {
       global: null,
       org: null,
     },
-    hostCatalog: null,
-    target: null,
   };
 
   const stubs = {
@@ -61,7 +59,6 @@ module('Acceptance | authentication', function (hooks) {
       },
     },
     targets: null,
-    sessions: null,
   };
 
   const setDefaultOrigin = (test) => {
@@ -95,24 +92,12 @@ module('Acceptance | authentication', function (hooks) {
       scope: instances.scopes.org,
     });
 
-    instances.hostCatalog = this.server.create(
-      'host-catalog',
-      { scope: instances.scopes.project },
-      'withChildren'
-    );
-    instances.target = this.server.create(
-      'target',
-      { scope: instances.scopes.project },
-      'withRandomHostSets'
-    );
-
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
-    urls.projects = `${urls.scopes.org}/projects`;
+    urls.projects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
-    urls.sessions = `${urls.projects}/sessions`;
 
     class MockIPC {
       origin = null;
@@ -194,18 +179,28 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
+  test('can reset origin before authentication', async function (assert) {
+    assert.expect(1);
+    await visit(urls.authenticate.methods.global);
+    await click('.change-origin a');
+    assert.equal(currentURL(), urls.origin);
+  });
+
   test('deauthentication redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
-    authenticateSession({
-      scope: instances.scopes.global,
-    });
+    await visit(urls.authenticate.methods.global);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    
     later(async() => {
       run.cancelTimers();
+      assert.ok(currentSession().isAuthenticated);
       await click('.rose-header-utilities .rose-dropdown button');
       assert.notOk(currentSession().isAuthenticated);
       assert.equal(currentURL(), urls.authenticate.methods.global);
     }, 750);
-    await visit(urls.targets);
+    await click('[type="submit"]');
+    assert.equal(currentURL(), urls.targets);
   });
 
   test('401 responses result in deauthentication', async function (assert) {
