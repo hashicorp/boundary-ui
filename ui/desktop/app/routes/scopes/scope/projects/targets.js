@@ -52,7 +52,11 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
     await this.refreshSessions();
-    return this.store.query('target', { recursive: true, scope_id });
+    return this.store.query('target', {
+      filter: '"authorize-session" in "/item/authorized_actions"',
+      recursive: true,
+      scope_id
+    });
   }
 
   /**
