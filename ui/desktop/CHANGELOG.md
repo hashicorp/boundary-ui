@@ -11,6 +11,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### Changes/Deprecations
 
+- Boundary Desktop is now simply "Boundary".  This change affects macOS asset filenames, as well as the title used within the application.  Documentation will continue to refer to "Boundary Desktop" to avoid confusion with the core binary.  ([PR](https://github.com/hashicorp/boundary-ui/pull/481))
 - Boundary origin validation now occurs via Electron's built-in net request module, ensuring the validation request is made via chromium's networking library rather than Node's.  ([PR](https://github.com/hashicorp/boundary-ui/pull/480))
 
 ## v1.0.0-alpha (2021.02.16)

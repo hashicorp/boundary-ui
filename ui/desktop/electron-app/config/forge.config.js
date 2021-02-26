@@ -25,7 +25,7 @@ module.exports = {
       "/ember-test(/|$)",
       "/tests(/|$)"
     ],
-    name: "Boundary Desktop",
+    name: "Boundary",
     appBundleId: "com.electron.boundary",
     // TODO: where should the client version number come from?
     appVersion: `${formattedAppVersion}${formattedCLIVersion}\n`,
@@ -44,7 +44,7 @@ module.exports = {
       name: "@electron-forge/maker-dmg",
       config: {
         title: "Boundary",
-        name: "boundary-desktop",
+        name: "boundary",
         icon: "./config/macos/disk.icns",
         background: "./config/macos/background.png"
       }
