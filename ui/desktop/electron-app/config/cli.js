@@ -10,7 +10,7 @@ const artifactDestination = path.resolve(__dirname, '..', 'cli');
 const downloadArtifact = version => {
   const url = `https://releases.hashicorp.com/boundary/${version}/boundary_${version}_darwin_amd64.zip`;
   return new Promise((resolve, reject) => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'boundary-desktop-artifact-'))
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'boundary-artifact-'))
     console.log('Create tmp artifact directory: ', tmpDir);
 
     const artifactFileName = url.split('/').pop();
