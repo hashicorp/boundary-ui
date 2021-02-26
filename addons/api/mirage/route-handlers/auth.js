@@ -69,7 +69,7 @@ const methodHandlers = {
         token_request_id: 'token_request_1234',
         state: 'base_58_encoded_string'
       }),
-    authenticate: (_, scopeAttrs) => {
+    'authenticate:token': (_, scopeAttrs) => {
       oidcAttemptCounter++;
       if (oidcAttemptCounter < oidcRequiredAttempts) {
         return new Response(100);

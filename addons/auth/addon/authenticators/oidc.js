@@ -22,7 +22,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
    * @param {string} options.authMethod.id
    * @return {string}
    */
-  buildAuthEndpointURL(/* {
+  buildTokenAuthEndpointURL(/* {
     scope: { id: scopeID },
     authMethod: { id: authMethodID },
   } */) { }
@@ -79,7 +79,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
    *
    */
   async attemptOIDCAuthentication(options) {
-    const url = this.buildAuthEndpointURL(options);
+    const url = this.buildTokenAuthEndpointURL(options);
     const body = JSON.stringify({
       state: this.session.get('data.pending.oidc.state'),
       token_request_id: this.session.get('data.pending.oidc.token_request_id')
