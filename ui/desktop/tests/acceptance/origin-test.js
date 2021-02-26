@@ -9,16 +9,18 @@ import {
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
+import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
 import {
-  //currentSession,
-  //authenticateSession,
+  currentSession,
+  authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import config from '../../config/environment';
 
 module('Acceptance | origin', function (hooks) {
   setupApplicationTest(hooks);
@@ -121,6 +123,8 @@ module('Acceptance | origin', function (hooks) {
         this.origin = origin;
         return this.origin;
       }
+
+      resetOrigin() {}
     }
 
     mockIPC = new MockIPC();
@@ -141,6 +145,13 @@ module('Acceptance | origin', function (hooks) {
     sinon.restore();
   });
 
+  test('visiting index', async function (assert) {
+    assert.expect(1);
+    await visit(urls.origin);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.origin);
+  });
+
   test('visiting index without an origin specified redirects to origin route', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
@@ -149,14 +160,35 @@ module('Acceptance | origin', function (hooks) {
     assert.equal(currentURL(), urls.origin);
   });
 
-  test('can set origin', async function (assert) {
+  // FIXME: Test run pauses in this test
+  test('visiting index after authentication redirects to auth route', async function (assert) {
     assert.expect(2);
-    assert.notOk(mockIPC.origin);
+    authenticateSession({});
+    await visit(urls.index);
+    await a11yAudit();
+
+    assert.equal(currentURL(), urls.origin);
+  });
+
+  test('can set origin', async function (assert) {
+    const originService = this.owner.lookup('service:origin');
+    assert.expect(2);
+    assert.notOk(originService.rendererOrigin);
     await visit(urls.origin);
     await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
-    assert.equal(mockIPC.origin, window.location.origin);
+    assert.equal(originService.rendererOrigin, window.location.origin);
+  });
+
+  test('origin set automatically in dev mode', async function (assert) {
+    assert.expect(1);
+    config.autoOrigin = true;
+    await visit(urls.origin);
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(this.owner.lookup('controller:origin').origin, window.location.origin);
+    config.autoOrigin = false;
   });
 
   test('captures error on origin update', async function (assert) {
@@ -168,5 +200,30 @@ module('Acceptance | origin', function (hooks) {
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
     assert.ok(find('.rose-notification.is-error'));
+  });
+
+  test('can reset origin on error', async function (assert) {
+    assert.expect(7);
+    const originService = this.owner.lookup('service:origin');
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.ok(originService.rendererOrigin, window.location.origin);
+    await visit(urls.authenticate.methods.global);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    this.server.get('/targets', () => new Response(500));
+    later(async() => {
+      run.cancelTimers();
+      assert.ok(currentSession().isAuthenticated);
+      assert.ok(find('.rose-message'));
+      assert.equal(find('main section button').textContent.trim(), 'Disconnect');
+      await click('main section button');
+      assert.notOk(originService.rendererOrigin);
+      assert.notOk(currentSession().isAuthenticated);
+      assert.equal(currentURL(), urls.origin);
+    }, 750);
+    await click('[type="submit"]');
   });
 });

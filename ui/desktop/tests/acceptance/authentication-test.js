@@ -59,6 +59,7 @@ module('Acceptance | authentication', function (hooks) {
       },
     },
     targets: null,
+    sessions: null,
   };
 
   const setDefaultOrigin = (test) => {
@@ -98,6 +99,7 @@ module('Acceptance | authentication', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
+    urls.sessions = `${urls.projects}/sessions`;
 
     class MockIPC {
       origin = null;
@@ -187,11 +189,10 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('deauthentication redirects to first global authenticate method', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     await visit(urls.authenticate.methods.global);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
-    
     later(async() => {
       run.cancelTimers();
       assert.ok(currentSession().isAuthenticated);
@@ -200,28 +201,28 @@ module('Acceptance | authentication', function (hooks) {
       assert.equal(currentURL(), urls.authenticate.methods.global);
     }, 750);
     await click('[type="submit"]');
-    assert.equal(currentURL(), urls.targets);
   });
 
   test('401 responses result in deauthentication', async function (assert) {
-    assert.expect(2);
-    authenticateSession({
-      scope: instances.scopes.global,
-    });
+    assert.expect(3);
+    await visit(urls.authenticate.methods.global);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
     later(async() => {
       run.cancelTimers();
       assert.ok(
         currentSession().isAuthenticated,
         'Session begins authenticated, before encountering 401'
       );
+      assert.ok(currentURL(), urls.targets);
       this.server.get('/sessions', () => new Response(401));
-      await visit(urls.targets);
+      await visit(urls.sessions);
       assert.notOk(
         currentSession().isAuthenticated,
         'Session is unauthenticated, after encountering 401'
       );
     }, 750);
-    await visit(urls.sessions);
+    await click('[type="submit"]');
   });
 
   test('color theme is applied from session data', async function (assert) {
