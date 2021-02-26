@@ -14,8 +14,9 @@ jobs:
       - name: Trigger Release job
         env:
           TAG: ${{ github.event.release.tag_name }}
+          TEST_REF: ${{ github.ref }}
         run: |
-          echo "($TAG)"
+          echo "($TAG), ($TEST_REF)"
           curl -u ${{ secrets.CIRCLE_TOKEN }}: -X POST --header "Content-Type: application/json" \
           -d '{ "branch": "main", "parameters": {"TAG": "'${TAG}'" }}' \
           https://circleci.com/api/v2/project/github/hashicorp/boundary-ui-releases/pipeline
