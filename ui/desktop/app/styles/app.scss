@@ -19,6 +19,25 @@
   }
 }
 
+/**
+ * This section enables scrolling within the sidebar columns separately,
+ * rather than the whole viewport.  This ensures the sidebar and application
+ * header remain visible when scrolling.
+ */
+.rose-layout-global {
+  max-height: 100vh;
+
+  .rose-layout-global-body {
+    max-height: 100vh;
+    overflow: hidden;
+  }
+
+  .rose-layout-sidebar-sidebar,
+  .rose-layout-sidebar-body {
+    overflow-y: scroll;
+  }
+}
+
 .rose-nav-sidebar {
   margin-top: sizing.rems(xxl);
 
@@ -167,7 +186,7 @@
       0% {
         background-color: var(--action-subtler-1);
       }
-      
+
       100% {
         background-color: transparent;
       }

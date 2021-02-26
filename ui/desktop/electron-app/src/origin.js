@@ -1,4 +1,27 @@
-const axios = require('axios');
+const { net } = require('electron')
+
+const requestTimeoutSeconds = 10;
+// Simple promise wrapper around Electron's net.request feature.
+// https://www.electronjs.org/docs/api/client-request
+const netRequestPromise = url => new Promise((resolve, reject) => {
+  try {
+    const request = net.request(url);
+    // We don't worry about canceling the request timeout timer once a
+    // request ends because:  request.abort() has no effect after a request
+    // ends and the promise will already have been completed, so a rejection
+    // has no effect either.
+    const requestTimeout =
+      setTimeout(() => {
+        request.abort();
+        reject(new Error('Request timeout'));
+      }, requestTimeoutSeconds * 1000);
+    request.on('error', reject);
+    request.on('response', resolve);
+    request.end();
+  } catch (e) {
+    reject(e);
+  }
+});
 
 // Provides a singleton class instance to enable a consistent view of
 // runtime settings across the application.
@@ -34,7 +57,7 @@ class RuntimeSettings {
     // test to see if the origin is API-compatible with the desktop client.
     const scopesEndpoint = `${origin}/v1/scopes`;
     try {
-      await axios.get(scopesEndpoint)
+      await netRequestPromise(scopesEndpoint);
     } catch (e) {
       throw new Error(`Origin ${origin} could not be validated.`);
     }
