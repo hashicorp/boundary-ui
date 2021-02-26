@@ -5,6 +5,10 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ## Next
 
+### New & Improved
+
+- Scrolling now occurs within columns individually so that sidebar and header remain visible when scrolling the application body.  ([PR](https://github.com/hashicorp/boundary-ui/pull/482))
+
 ### Changes/Deprecations
 
 - Boundary Desktop is now simply "Boundary".  This change affects macOS asset filenames, as well as the title used within the application.  Documentation will continue to refer to "Boundary Desktop" to avoid confusion with the core binary.  ([PR](https://github.com/hashicorp/boundary-ui/pull/481))
