@@ -17,4 +17,3 @@ jobs:
           curl -u ${{ secrets.CIRCLE_TOKEN }}: -X POST --header "Content-Type: application/json" \
           -d '{ "branch": "main", "parameters": {"TAG": "${GITHUB_REF#refs/tags/}" }}' \
           https://circleci.com/api/v2/project/github/hashicorp/boundary-ui-releases/pipeline
-
