@@ -6,10 +6,8 @@ import { random, date } from 'faker';
  *
  */
 export default Factory.extend({
-
   name: () => random.words(),
   description: () => random.words(),
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
-
 });

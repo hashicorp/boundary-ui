@@ -21,5 +21,4 @@ module('Unit | Model | account', function (hooks) {
     model.attributes.login_name = 'username';
     assert.equal(model.username, 'username');
   });
-
 });

@@ -24,10 +24,7 @@ module('Unit | Model | host set', function (hooks) {
         attributes: {
           name: 'Host Set',
           description: 'Description',
-          host_ids: [
-            {value: '1'},
-            {value: '3'},
-          ],
+          host_ids: [{ value: '1' }, { value: '3' }],
           version: 1,
           scope: {
             scope_id: 'o_1',
@@ -58,10 +55,7 @@ module('Unit | Model | host set', function (hooks) {
         attributes: {
           name: 'Host Set',
           description: 'Description',
-          host_ids: [
-            {value: '1'},
-            {value: '3'},
-          ],
+          host_ids: [{ value: '1' }, { value: '3' }],
           version: 1,
           scope: {
             scope_id: 'o_1',
@@ -92,10 +86,7 @@ module('Unit | Model | host set', function (hooks) {
         attributes: {
           name: 'Host Set',
           description: 'Description',
-          host_ids: [
-            {value: '1'},
-            {value: '3'},
-          ],
+          host_ids: [{ value: '1' }, { value: '3' }],
           version: 1,
           scope: {
             scope_id: 'o_1',
@@ -126,10 +117,7 @@ module('Unit | Model | host set', function (hooks) {
         attributes: {
           name: 'Host Set',
           description: 'Description',
-          host_ids: [
-            {value: '1'},
-            {value: '3'},
-          ],
+          host_ids: [{ value: '1' }, { value: '3' }],
           version: 1,
           scope: {
             scope_id: 'o_1',

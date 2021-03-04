@@ -2,11 +2,10 @@ import factory from '../generated/factories/role';
 import { trait } from 'ember-cli-mirage';
 
 export default factory.extend({
-
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   grant_strings: () => [
     'id=*;action=*',
-    'id=*;type=host-catalog;actions=create,read'
+    'id=*;type=host-catalog;actions=create,read',
   ],
 
   /**
@@ -18,15 +17,16 @@ export default factory.extend({
       const users = server.createList('user', 2, { scope });
       const groups = server.createList('group', 2, { scope });
       role.update({ users, groups });
-    }
+    },
   }),
 
   /**
    * Set the grant scope ID to match the scope ID.
    */
   afterCreate(role) {
-    const { scope: { id } } = role;
+    const {
+      scope: { id },
+    } = role;
     role.update({ grant_scope_id: id });
-  }
-
+  },
 });

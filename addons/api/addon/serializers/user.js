@@ -13,8 +13,8 @@ export default class UserSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
     const accountIDs = snapshot?.adapterOptions?.accountIDs;
-    if (accountIDs) serialized =
-      this.serializewithAccounts(snapshot, accountIDs);
+    if (accountIDs)
+      serialized = this.serializewithAccounts(snapshot, accountIDs);
     return serialized;
   }
 

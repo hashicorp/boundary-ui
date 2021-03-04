@@ -5,8 +5,7 @@ import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
 
-export default function() {
-
+export default function () {
   initializeMockIPC(this);
 
   // make this `http://localhost:8080`, for example, if your API is on a different server
@@ -23,17 +22,20 @@ export default function() {
 
   // Scope resources
 
-  this.get('/scopes', ({ scopes }, { queryParams: { scope_id, recursive } }) => {
-    // Default parent scope is global
-    if (!scope_id) scope_id = 'global';
-    if (recursive && scope_id === 'global') {
-      return scopes.all();
-    } else {
-      return scopes.where(scope => {
-        return scope.scope ? scope.scope.id === scope_id : false
-      });
+  this.get(
+    '/scopes',
+    ({ scopes }, { queryParams: { scope_id, recursive } }) => {
+      // Default parent scope is global
+      if (!scope_id) scope_id = 'global';
+      if (recursive && scope_id === 'global') {
+        return scopes.all();
+      } else {
+        return scopes.where((scope) => {
+          return scope.scope ? scope.scope.id === scope_id : false;
+        });
+      }
     }
-  });
+  );
   this.post('/scopes', function ({ scopes }) {
     // Parent scope comes through the payload via `scope_id`, but this needs
     // to be expanded to a scope object `scope: {id:..., type:...}` before
@@ -49,41 +51,50 @@ export default function() {
 
   // Auth & IAM resources
 
-  this.get('/auth-methods', ({ authMethods }, { queryParams: { scope_id: scopeId } }) => {
-    return authMethods.where({ scopeId });
-  });
+  this.get(
+    '/auth-methods',
+    ({ authMethods }, { queryParams: { scope_id: scopeId } }) => {
+      return authMethods.where({ scopeId });
+    }
+  );
   this.post('/auth-methods');
   this.get('/auth-methods/:id');
   this.patch('/auth-methods/:id');
   this.del('/auth-methods/:id');
 
   // Auth Method Accounts
-  this.get('/accounts', ({ accounts }, { queryParams: { auth_method_id: authMethodId } }) => {
-    return accounts.where({ authMethodId });
-  });
+  this.get(
+    '/accounts',
+    ({ accounts }, { queryParams: { auth_method_id: authMethodId } }) => {
+      return accounts.where({ authMethodId });
+    }
+  );
   this.post('/accounts');
   this.get('/accounts/:id');
   this.patch('/accounts/:id');
   this.del('/accounts/:id');
-  this.post('/accounts/:idMethod', function ({ accounts }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const account = accounts.find(id);
-    const updatedAttrs = {
-      version: attrs.version,
-      attributes: account.attributes
-    };
-    // Set new password
-    if (method === 'set-password') {
-      updatedAttrs.attributes.password = attrs.password;
+  this.post(
+    '/accounts/:idMethod',
+    function ({ accounts }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const account = accounts.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+        attributes: account.attributes,
+      };
+      // Set new password
+      if (method === 'set-password') {
+        updatedAttrs.attributes.password = attrs.password;
+      }
+      // Set new password
+      if (method === 'change-password') {
+        updatedAttrs.attributes.password = attrs.new_password;
+      }
+      return account.update(updatedAttrs);
     }
-    // Set new password
-    if (method === 'change-password') {
-      updatedAttrs.attributes.password = attrs.new_password;
-    }
-    return account.update(updatedAttrs);
-  });
+  );
 
   // Authenticate/deauthenticate routes
   this.post('/auth-methods/:id_method', authHandler);
@@ -104,11 +115,11 @@ export default function() {
     const user = users.find(id);
     const updatedAttrs = {
       version: attrs.version,
-      accountIds: user.accountIds
+      accountIds: user.accountIds,
     };
     // If adding accounts, push them into the array
     if (method === 'add-accounts') {
-      attrs.accountIds.forEach(id => {
+      attrs.accountIds.forEach((id) => {
         if (!updatedAttrs.accountIds.includes(id)) {
           updatedAttrs.accountIds.push(id);
         }
@@ -116,7 +127,7 @@ export default function() {
     }
     // If deleting accounts, filter them out of the array
     if (method === 'remove-accounts') {
-      updatedAttrs.accountIds = updatedAttrs.accountIds.filter(id => {
+      updatedAttrs.accountIds = updatedAttrs.accountIds.filter((id) => {
         return !attrs.accountIds.includes(id);
       });
     }
@@ -131,31 +142,34 @@ export default function() {
   this.get('/groups/:id');
   this.patch('/groups/:id');
   this.del('/groups/:id');
-  this.post('/groups/:idMethod', function ({ groups }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const group = groups.find(id);
-    const updatedAttrs = {
-      version: attrs.version,
-      memberIds: group.memberIds
-    };
-    // If adding members, push them into the array
-    if (method === 'add-members') {
-      attrs.memberIds.forEach(id => {
-        if (!updatedAttrs.memberIds.includes(id)) {
-          updatedAttrs.memberIds.push(id);
-        }
-      });
+  this.post(
+    '/groups/:idMethod',
+    function ({ groups }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const group = groups.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+        memberIds: group.memberIds,
+      };
+      // If adding members, push them into the array
+      if (method === 'add-members') {
+        attrs.memberIds.forEach((id) => {
+          if (!updatedAttrs.memberIds.includes(id)) {
+            updatedAttrs.memberIds.push(id);
+          }
+        });
+      }
+      // If deleting members, filter them out of the array
+      if (method === 'remove-members') {
+        updatedAttrs.memberIds = updatedAttrs.memberIds.filter((id) => {
+          return !attrs.memberIds.includes(id);
+        });
+      }
+      return group.update(updatedAttrs);
     }
-    // If deleting members, filter them out of the array
-    if (method === 'remove-members') {
-      updatedAttrs.memberIds = updatedAttrs.memberIds.filter(id => {
-        return !attrs.memberIds.includes(id);
-      });
-    }
-    return group.update(updatedAttrs);
-  });
+  );
 
   // IAM: Roles
   this.get('/roles', ({ roles }, { queryParams: { scope_id: scopeId } }) => {
@@ -165,66 +179,72 @@ export default function() {
   this.get('/roles/:id');
   this.patch('/roles/:id');
   this.del('/roles/:id');
-  this.post('/roles/:idMethod', function ({ roles, users, groups }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const role = roles.find(id);
-    let updatedAttrs = {};
+  this.post(
+    '/roles/:idMethod',
+    function ({ roles, users, groups }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const role = roles.find(id);
+      let updatedAttrs = {};
 
-    // Principals is a combined list of users and groups, but in Mirage we've
-    // internally modelled them as separate lists.  Therefore we must check
-    // the type by looking up the user or group first, then determine which
-    // list to add the principal to.
-    if (method === 'add-principals') {
-      updatedAttrs = {
-        version: attrs.version,
-        userIds: role.userIds,
-        groupIds: role.groupIds
-      };
-      attrs.principalIds.forEach(id => {
-        const isUser = users.find(id);
-        const isGroup = groups.find(id);
-        if (isUser && !updatedAttrs.userIds.includes(id)) {
-          updatedAttrs.userIds.push(id);
-        }
-        if (isGroup && !updatedAttrs.groupIds.includes(id)) {
-          updatedAttrs.groupIds.push(id);
-        }
-      });
-    }
-    // If deleting principals, filter them out of both users and groups,
-    // and in this case don't care about the type
-    if (method === 'remove-principals') {
-      updatedAttrs = {
-        version: attrs.version,
-        userIds: role.userIds,
-        groupIds: role.groupIds
-      };
-      updatedAttrs.userIds = updatedAttrs.userIds.filter(id => {
-        return !attrs.principalIds.includes(id);
-      });
-      updatedAttrs.groupIds = updatedAttrs.groupIds.filter(id => {
-        return !attrs.principalIds.includes(id);
-      });
-    }
+      // Principals is a combined list of users and groups, but in Mirage we've
+      // internally modelled them as separate lists.  Therefore we must check
+      // the type by looking up the user or group first, then determine which
+      // list to add the principal to.
+      if (method === 'add-principals') {
+        updatedAttrs = {
+          version: attrs.version,
+          userIds: role.userIds,
+          groupIds: role.groupIds,
+        };
+        attrs.principalIds.forEach((id) => {
+          const isUser = users.find(id);
+          const isGroup = groups.find(id);
+          if (isUser && !updatedAttrs.userIds.includes(id)) {
+            updatedAttrs.userIds.push(id);
+          }
+          if (isGroup && !updatedAttrs.groupIds.includes(id)) {
+            updatedAttrs.groupIds.push(id);
+          }
+        });
+      }
+      // If deleting principals, filter them out of both users and groups,
+      // and in this case don't care about the type
+      if (method === 'remove-principals') {
+        updatedAttrs = {
+          version: attrs.version,
+          userIds: role.userIds,
+          groupIds: role.groupIds,
+        };
+        updatedAttrs.userIds = updatedAttrs.userIds.filter((id) => {
+          return !attrs.principalIds.includes(id);
+        });
+        updatedAttrs.groupIds = updatedAttrs.groupIds.filter((id) => {
+          return !attrs.principalIds.includes(id);
+        });
+      }
 
-    if (method === 'set-grants') {
-      updatedAttrs = {
-        version: attrs.version,
-        grantStrings: attrs.grantStrings
-      };
-    }
+      if (method === 'set-grants') {
+        updatedAttrs = {
+          version: attrs.version,
+          grantStrings: attrs.grantStrings,
+        };
+      }
 
-    return role.update(updatedAttrs);
-  });
+      return role.update(updatedAttrs);
+    }
+  );
 
   // Other resources
   // host-catalog
 
-  this.get('/host-catalogs', ({ hostCatalogs }, { queryParams: { scope_id: scopeId } }) => {
-    return hostCatalogs.where({ scopeId });
-  });
+  this.get(
+    '/host-catalogs',
+    ({ hostCatalogs }, { queryParams: { scope_id: scopeId } }) => {
+      return hostCatalogs.where({ scopeId });
+    }
+  );
   this.post('/host-catalogs');
   this.get('/host-catalogs/:id');
   this.patch('/host-catalogs/:id');
@@ -232,9 +252,12 @@ export default function() {
 
   // host
 
-  this.get('/hosts', function ({ hosts }, { queryParams: { host_catalog_id: hostCatalogId } }) {
-    return hosts.where({ hostCatalogId });
-  });
+  this.get(
+    '/hosts',
+    function ({ hosts }, { queryParams: { host_catalog_id: hostCatalogId } }) {
+      return hosts.where({ hostCatalogId });
+    }
+  );
   this.post('/hosts', function ({ hostCatalogs, hosts }) {
     const attrs = this.normalizedRequestAttrs();
     const hostCatalog = hostCatalogs.find(attrs.hostCatalogId);
@@ -247,9 +270,15 @@ export default function() {
 
   // host-set
 
-  this.get('/host-sets', function ({ hostSets }, { queryParams: { host_catalog_id: hostCatalogId } }) {
-    return hostSets.where({ hostCatalogId });
-  });
+  this.get(
+    '/host-sets',
+    function (
+      { hostSets },
+      { queryParams: { host_catalog_id: hostCatalogId } }
+    ) {
+      return hostSets.where({ hostCatalogId });
+    }
+  );
   this.post('/host-sets', function ({ hostCatalogs, hostSets }) {
     const attrs = this.normalizedRequestAttrs();
     const hostCatalog = hostCatalogs.find(attrs.hostCatalogId);
@@ -259,49 +288,57 @@ export default function() {
   this.get('/host-sets/:id');
   this.patch('/host-sets/:id');
   this.del('/host-sets/:id');
-  this.post('/host-sets/:idMethod', function ({ hostSets }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const hostSet = hostSets.find(id);
-    const updatedAttrs = {
-      version: attrs.version,
-      hostIds: hostSet.hostIds
-    }
+  this.post(
+    '/host-sets/:idMethod',
+    function ({ hostSets }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const hostSet = hostSets.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+        hostIds: hostSet.hostIds,
+      };
 
-    // If adding hosts, push them into the array
-    if(method === 'add-hosts') {
-      attrs.hostIds.forEach(id => {
-        if(!updatedAttrs.hostIds.includes(id)) {
-          updatedAttrs.hostIds.push(id);
-        }
-      })
-    }
+      // If adding hosts, push them into the array
+      if (method === 'add-hosts') {
+        attrs.hostIds.forEach((id) => {
+          if (!updatedAttrs.hostIds.includes(id)) {
+            updatedAttrs.hostIds.push(id);
+          }
+        });
+      }
 
-    // If deleting hosts, filter them out of the array
-    if (method === 'remove-hosts') {
-      updatedAttrs.hostIds = updatedAttrs.hostIds.filter(id => {
-        return !attrs.hostIds.includes(id);
-      });
-    }
+      // If deleting hosts, filter them out of the array
+      if (method === 'remove-hosts') {
+        updatedAttrs.hostIds = updatedAttrs.hostIds.filter((id) => {
+          return !attrs.hostIds.includes(id);
+        });
+      }
 
-    return hostSet.update(updatedAttrs);
-  });
+      return hostSet.update(updatedAttrs);
+    }
+  );
 
   // target
 
-  this.get('/targets', function ({ targets }, { queryParams: { scope_id, recursive } }) {
-    if (recursive && scope_id === 'global') {
-      return targets.all();
-    } else if (recursive) {
-      return targets.where(target => {
-        const targetModel = targets.find(target.id);
-        return (target.scopeId === scope_id)
-          || (targetModel?.scope?.scope?.id === scope_id)
-      });
+  this.get(
+    '/targets',
+    function ({ targets }, { queryParams: { scope_id, recursive } }) {
+      if (recursive && scope_id === 'global') {
+        return targets.all();
+      } else if (recursive) {
+        return targets.where((target) => {
+          const targetModel = targets.find(target.id);
+          return (
+            target.scopeId === scope_id ||
+            targetModel?.scope?.scope?.id === scope_id
+          );
+        });
+      }
+      return targets.where((target) => target.scopeId === scope_id);
     }
-    return targets.where(target => target.scopeId === scope_id);
-  });
+  );
   this.post('/targets', function ({ targets }) {
     const attrs = this.normalizedRequestAttrs();
     return targets.create(attrs);
@@ -309,83 +346,93 @@ export default function() {
   this.get('/targets/:id');
   this.patch('/targets/:id');
   this.del('/targets/:id');
-  this.post('/targets/:idMethod', function ({ targets }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const target = targets.find(id);
-    const updatedAttrs = {
-      version: attrs.version,
-      hostSetIds: target.hostSetIds
-    };
-    // If adding host sets, push them into the array
-    if (method === 'add-host-sets') {
-      attrs.hostSetIds.forEach(id => {
-        if (!updatedAttrs.hostSetIds.includes(id)) {
-          updatedAttrs.hostSetIds.push(id);
-        }
-      });
+  this.post(
+    '/targets/:idMethod',
+    function ({ targets }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const target = targets.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+        hostSetIds: target.hostSetIds,
+      };
+      // If adding host sets, push them into the array
+      if (method === 'add-host-sets') {
+        attrs.hostSetIds.forEach((id) => {
+          if (!updatedAttrs.hostSetIds.includes(id)) {
+            updatedAttrs.hostSetIds.push(id);
+          }
+        });
+      }
+      // If deleting host sets, filter them out of the array
+      if (method === 'remove-host-sets') {
+        updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
+          return !attrs.hostSetIds.includes(id);
+        });
+      }
+      return target.update(updatedAttrs);
     }
-    // If deleting host sets, filter them out of the array
-    if (method === 'remove-host-sets') {
-      updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter(id => {
-        return !attrs.hostSetIds.includes(id);
-      });
-    }
-    return target.update(updatedAttrs);
-  });
+  );
 
   // session
 
-  this.get('/sessions', function ({ sessions }, { queryParams: { scope_id, recursive } }) {
-    // To simulate changes to `session.status` that may occur in the backend,
-    // we quietly randomize the value of the field on GET.
-    // To populate sessions for logged in user,
-    // update alternate sessions to auth user.
-    // But only if not in testing mode.
-    // In tests, we need deterministic statuses.
-    if (!Ember.testing) {
-      sessions.all()
-        .models
-        .forEach(session => {
+  this.get(
+    '/sessions',
+    function ({ sessions }, { queryParams: { scope_id, recursive } }) {
+      // To simulate changes to `session.status` that may occur in the backend,
+      // we quietly randomize the value of the field on GET.
+      // To populate sessions for logged in user,
+      // update alternate sessions to auth user.
+      // But only if not in testing mode.
+      // In tests, we need deterministic statuses.
+      if (!Ember.testing) {
+        sessions.all().models.forEach((session) => {
           session.update({
-            status: pickRandomStatusString()
+            status: pickRandomStatusString(),
           });
-          if(session.id.split('-').pop() % 2) session.update({
-            userId: 'authenticateduser'
-          });
+          if (session.id.split('-').pop() % 2)
+            session.update({
+              userId: 'authenticateduser',
+            });
         });
+      }
+      if (recursive && scope_id === 'global') {
+        return sessions.all();
+      } else if (recursive) {
+        return sessions.where((session) => {
+          const sessionModel = sessions.find(session.id);
+          return (
+            session.scopeId === scope_id ||
+            sessionModel?.scope?.scope?.id === scope_id
+          );
+        });
+      }
+      return sessions.where((session) => session.scopeId === scope_id);
     }
-    if (recursive && scope_id === 'global') {
-      return sessions.all();
-    } else if (recursive) {
-      return sessions.where(session => {
-        const sessionModel = sessions.find(session.id);
-        return (session.scopeId === scope_id)
-          || (sessionModel?.scope?.scope?.id === scope_id)
-      });
-    }
-    return sessions.where(session => session.scopeId === scope_id);
-  });
+  );
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
     const session = sessions.find(id);
     return session.update({
-      status: pickRandomStatusString()
+      status: pickRandomStatusString(),
     });
   });
-  this.post('/sessions/:idMethod', function ({ sessions }, { params: { idMethod } }) {
-    const attrs = this.normalizedRequestAttrs();
-    const id = idMethod.split(':')[0];
-    const method = idMethod.split(':')[1];
-    const session = sessions.find(id);
-    const updatedAttrs = {
-      version: attrs.version
-    };
-    if (method === 'cancel') {
-      updatedAttrs.status = 'canceling';
+  this.post(
+    '/sessions/:idMethod',
+    function ({ sessions }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const session = sessions.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+      };
+      if (method === 'cancel') {
+        updatedAttrs.status = 'canceling';
+      }
+      return session.update(updatedAttrs);
     }
-    return session.update(updatedAttrs);
-  });
+  );
 
   // auth-tokens
 

@@ -25,7 +25,6 @@ import { computed } from '@ember/object';
  *   2) Or as an ID:  `record.scopeID`.
  */
 export default class BaseModel extends Model {
-
   // =relationships
 
   /**

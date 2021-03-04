@@ -1,23 +1,37 @@
-export default function(server) {
-
+export default function (server) {
   // Scope resources
 
   // creates a global scope
   const globalScope = server.create('scope', {
     id: 'global',
     type: 'global',
-    name: 'Global'
+    name: 'Global',
   });
-  const orgScope = server.createList('scope', 3, {
-    type: 'org',
-    scope: { id: globalScope.id, type: globalScope.type }
-  }, 'withChildren')[0];
+  const orgScope = server.createList(
+    'scope',
+    3,
+    {
+      type: 'org',
+      scope: { id: globalScope.id, type: globalScope.type },
+    },
+    'withChildren'
+  )[0];
 
   server.create('user', { id: 'authenticateduser' });
 
   // Auth
-  server.createList('auth-method', 1, { scope: globalScope }, 'withAccountsAndUsers');
-  server.createList('auth-method', 3, { scope: orgScope }, 'withAccountsAndUsers');
+  server.createList(
+    'auth-method',
+    1,
+    { scope: globalScope },
+    'withAccountsAndUsers'
+  );
+  server.createList(
+    'auth-method',
+    3,
+    { scope: orgScope },
+    'withAccountsAndUsers'
+  );
 
   // Groups and Users
   server.createList('group', 1, { scope: globalScope }, 'withMembers');
@@ -27,7 +41,7 @@ export default function(server) {
   server.createList('role', 5, { scope: orgScope }, 'withPrincipals');
 
   // Other resources
-  server.schema.scopes.where({type: 'project'}).models.forEach(scope => {
+  server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 2, { scope }, 'withChildren');
     server.createList('target', 2, { scope }, 'withRandomHostSets');
     server.createList('session', 4, { scope }, 'withAssociations');

@@ -1,28 +1,28 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Model | session', function(hooks) {
+module('Unit | Model | session', function (hooks) {
   setupTest(hooks);
 
-  test('it exists', function(assert) {
+  test('it exists', function (assert) {
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {});
     assert.ok(model);
     assert.notOk(model.isCancelable);
   });
 
-  test('it allows cancellation of an active session', function(assert) {
+  test('it allows cancellation of an active session', function (assert) {
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {
-      status: 'active'
+      status: 'active',
     });
     assert.ok(model.isCancelable);
   });
 
-  test('it allows cancellation of a pending session', function(assert) {
+  test('it allows cancellation of a pending session', function (assert) {
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {
-      status: 'pending'
+      status: 'pending',
     });
     assert.ok(model.isCancelable);
   });
@@ -31,7 +31,7 @@ module('Unit | Model | session', function(hooks) {
     assert.expect(2);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {
-      status: 'pending'
+      status: 'pending',
     });
     assert.notOk(model.isActive);
     model.status = 'active';
@@ -42,7 +42,7 @@ module('Unit | Model | session', function(hooks) {
     assert.expect(2);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {
-      status: 'active'
+      status: 'active',
     });
     assert.notOk(model.isPending);
     model.status = 'pending';
@@ -55,7 +55,7 @@ module('Unit | Model | session', function(hooks) {
     assert.equal(model.proxy, null);
     model.setProperties({
       proxy_address: 'localhost',
-      proxy_port: '12345'
+      proxy_port: '12345',
     });
     assert.equal(model.proxy, 'localhost:12345');
   });

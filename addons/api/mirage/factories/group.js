@@ -13,6 +13,6 @@ export default factory.extend({
       const scope = group.scope;
       const members = server.createList('user', 2, { scope });
       group.update({ members });
-    }
-  })
+    },
+  }),
 });

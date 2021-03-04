@@ -2,7 +2,6 @@ import BaseModel from '../../models/base';
 import { attr } from '@ember-data/model';
 
 export default class GeneratedSessionModel extends BaseModel {
-
   // =attributes
 
   @attr('string') user_id;
@@ -32,5 +31,4 @@ export default class GeneratedSessionModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
-
 }

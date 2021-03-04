@@ -1,7 +1,6 @@
 import ApplicationSerializer from './application';
 
 export default class AccountSerializer extends ApplicationSerializer {
-
   // =properties
 
   /**
