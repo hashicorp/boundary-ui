@@ -58,13 +58,13 @@ module('Unit | Service | ipc', function (hooks) {
     assert.expect(1);
     const stringifiedPayload = JSON.stringify({
       foo: 'bar',
-      test: 42
+      test: 42,
     });
     const myWindow = {
       postMessage(request, origin, [port]) {
         // Post back an error on the response port
         port.postMessage(new Error(stringifiedPayload));
-      }
+      },
     };
     try {
       await new IPCRequest('hello', 'world', myWindow);

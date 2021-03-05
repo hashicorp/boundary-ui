@@ -14,12 +14,12 @@ Router.map(function () {
       });
       this.route('projects', function () {
         this.route('targets', function () {
-          this.route('target', { path: ':target_id' }, function() {
+          this.route('target', { path: ':target_id' }, function () {
             this.route('hosts');
             this.route('sessions');
           });
         });
-        this.route('sessions', function() {});
+        this.route('sessions', function () {});
       });
     });
   });

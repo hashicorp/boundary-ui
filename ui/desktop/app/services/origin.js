@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { notifyError } from 'core/decorators/notify';
 
 export default class OriginService extends Service {
-
   // =services
 
   @service ipc;
@@ -59,11 +58,14 @@ export default class OriginService extends Service {
    */
   async setOrigin(origin) {
     const originalHost = this.adapter.host;
-    assert(`setOrigin expects a string, you passed ${origin}`, typeof origin === 'string');
+    assert(
+      `setOrigin expects a string, you passed ${origin}`,
+      typeof origin === 'string'
+    );
     try {
       this.adapter.host = origin;
       this.rendererOrigin = origin;
-      if (origin !== await this.mainOrigin) {
+      if (origin !== (await this.mainOrigin)) {
         await this.ipc.invoke('setOrigin', origin);
       }
     } catch (e) {
@@ -81,5 +83,4 @@ export default class OriginService extends Service {
     this.rendererOrigin = null;
     await this.ipc.invoke('resetOrigin');
   }
-
 }

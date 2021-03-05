@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
-
   // =methods
 
   /**

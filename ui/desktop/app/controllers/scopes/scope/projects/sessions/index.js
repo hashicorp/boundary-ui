@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
-
   // =sessions
 
   @service session;
@@ -19,9 +18,10 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
     const sessions = this.model;
     const sortedSessions = sessions
       // filter sessions by current user
-      .filter(session => session.user_id === userId)
+      .filter((session) => session.user_id === userId)
       // sort by created time
-      .sortBy('session.created_time').reverse();
+      .sortBy('session.created_time')
+      .reverse();
     return [
       // then move active sessions to the top
       ...sortedSessions.filter((session) => session.isCancelable),
@@ -29,5 +29,4 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
       ...sortedSessions.filter((session) => !session.isCancelable),
     ];
   }
-
 }

@@ -27,11 +27,9 @@ export default class ScopesScopeProjectsTargetsTargetHostsRoute extends Route {
     );
 
     // Extract host ids from all host sets
-    const hostIds = hostSets.map(({host_ids}) =>
-      host_ids.content.map((hostId) =>
-        hostId.value
-      )
-    )
+    const hostIds = hostSets.map(({ host_ids }) =>
+      host_ids.content.map((hostId) => hostId.value)
+    );
 
     // Load unique hosts
     const uniqueHostIds = new Set(hostIds.flat());
@@ -42,7 +40,7 @@ export default class ScopesScopeProjectsTargetsTargetHostsRoute extends Route {
         [...uniqueHostIds].map((hostId) =>
           this.store.findRecord('host', hostId)
         )
-      )
-    })
+      ),
+    });
   }
 }

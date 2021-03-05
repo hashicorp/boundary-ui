@@ -37,6 +37,7 @@ export default class CopyableComponent extends Component {
     this.copied = true;
     yield timeout(1000);
     this.copied = false;
+  /* eslint-disable-next-line prettier/prettier */
   }).drop() confirmCopyTimer;
 
   /**
