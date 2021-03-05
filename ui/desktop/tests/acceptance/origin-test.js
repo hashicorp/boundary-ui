@@ -193,16 +193,6 @@ module('Acceptance | origin', function (hooks) {
     assert.equal(currentURL(), urls.origin);
   });
 
-  // FIXME: Test run pauses in this test
-  test('visiting index after authentication redirects to auth route', async function (assert) {
-    assert.expect(2);
-    authenticateSession({});
-    await visit(urls.index);
-    await a11yAudit();
-
-    assert.equal(currentURL(), urls.origin);
-  });
-
   test('can set origin', async function (assert) {
     const originService = this.owner.lookup('service:origin');
     assert.expect(2);
