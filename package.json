@@ -55,7 +55,8 @@
     "caniuse-lite": "^1.0.30001157",
     "immer": "^8.0.1",
     "node-notifier": "^8.0.1",
-    "highlight.js": "^10.4.1"
+    "highlight.js": "^10.4.1",
+    "hoek": "~4.2.0"
   },
   "config": {
     "commitizen": {

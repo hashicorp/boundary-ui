@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | rose/footer/nav', function(hooks) {
+module('Integration | Component | rose/footer/nav', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
@@ -20,5 +20,4 @@ module('Integration | Component | rose/footer/nav', function(hooks) {
     </Rose::Footer::nav>`);
     assert.equal(findAll('a').length, 2);
   });
-
 });
