@@ -32,7 +32,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @task(function * () {
     while(true) {
       yield timeout(POLL_TIMEOUT_SECONDS * 1000);
-      yield this.refreshSessions();
+      yield this.refresh();
     }
   }).drop() poller;
 
@@ -51,22 +51,17 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-    await this.refreshSessions();
+    const { user_id } = this.session.data.authenticated;
+    await this.store.query('session', {
+      filter: `"/item/user_id" == "${user_id}"`,
+      recursive: true,
+      scope_id
+    });
     return this.store.query('target', {
       filter: '"authorize-session" in "/item/authorized_actions"',
       recursive: true,
       scope_id
     });
-  }
-
-  /**
-   * Loads all sessions for all scopes in order to prime the store.
-   * Targets peek into the store to determine if they are active.
-   * TODO:  query only for sessions associated with the current user.
-   */
-  async refreshSessions() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    await this.store.query('session', { recursive: true, scope_id });
   }
 
   /**
@@ -92,7 +87,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
    */
   @action
   async connect(model, host) {
-    // TODO: Connect: Refactor into an addon
+    // TODO: Connect: move this logic into the target model
     try {
       // Check for CLI
       const cliExists = await this.ipc.invoke('cliExists');
