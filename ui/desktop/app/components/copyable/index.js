@@ -66,7 +66,7 @@ export default class CopyableComponent extends Component {
    */
   @action
   register() {
-    this.destroy();
+    this.tearDown();
     /* istanbul ignore next */
     this.clipboard = new ClipboardJS(`#${this.copyableButtonId}`, {
       text: () => this.args.text,
@@ -89,7 +89,7 @@ export default class CopyableComponent extends Component {
    * Destroy ClipboardJS library instance and cancel icon timer.
    */
   @action
-  destroy() {
+  tearDown() {
     this.clipboard?.destroy();
     this.clipboard = null;
     this.confirmCopyTimer.cancelAll();

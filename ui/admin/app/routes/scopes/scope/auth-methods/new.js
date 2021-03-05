@@ -5,8 +5,8 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
 
   queryParams = {
     type: {
-      refreshModel: true
-    }
+      refreshModel: true,
+    },
   };
 
   // =methods

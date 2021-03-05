@@ -19,7 +19,7 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
         subScopes,
       },
     ];
-    this.set('grantScopes', grantScopes);
+    this.grantScopes = grantScopes;
   }
 
   /**
