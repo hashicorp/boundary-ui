@@ -15,7 +15,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    * @param {string} scopeID
    * @return {string}
    */
-  buildDeauthEndpointURL(/* { scope: { id: scopeID } } */) { }
+  buildDeauthEndpointURL(/* { scope: { id: scopeID } } */) {}
 
   /**
    * Generates an auth token validation URL used to check tokens on restoration.
@@ -23,7 +23,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    * @param {string} tokenID
    * @return {string}
    */
-  buildTokenValidationEndpointURL(/* tokenID */) { }
+  buildTokenValidationEndpointURL(/* tokenID */) {}
 
   // =methods
 
@@ -34,7 +34,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
     const response = await fetch(tokenValidationURL, {
       method: 'get',
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
@@ -51,8 +51,9 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    */
   async restore(data) {
     if (!data) return reject();
-    return this.validateToken(data.token, data.id)
-      .then(() => this.normalizeData(data));
+    return this.validateToken(data.token, data.id).then(() =>
+      this.normalizeData(data)
+    );
   }
 
   /**
@@ -65,8 +66,8 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    */
   normalizeData(data, username) {
     // Add booleans indicated the scope type
-    data.isGlobal = (data?.scope?.type === 'global');
-    data.isOrg = (data?.scope?.type === 'org');
+    data.isGlobal = data?.scope?.type === 'global';
+    data.isOrg = data?.scope?.type === 'org';
     if (username) data.username = username;
     return data;
   }

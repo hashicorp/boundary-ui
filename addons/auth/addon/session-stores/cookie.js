@@ -75,6 +75,9 @@ export default class CookieSessionStore extends BaseSessionStore {
    * present.  If either one is missing, we want to cleanup to be sure they
    * are both absent.
    */
+  // The base class is a classic Ember class, but the linter doesn't know that.
+  // That's why this rule is disabled here.
+  /* eslint-disable-next-line ember/classic-decorator-hooks */
   init() {
     if (!this.sessionExists) this.clear();
   }
