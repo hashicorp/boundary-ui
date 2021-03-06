@@ -7,6 +7,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### New & Improved
 
+- Changes to targets (like adding, removing) are rapidly reflected in Boundary Desktop. ([PR](https://github.com/hashicorp/boundary-ui/pull/487))
 - Scrolling now occurs within columns individually so that sidebar and header remain visible when scrolling the application body.  ([PR](https://github.com/hashicorp/boundary-ui/pull/482))
 
 ### Changes/Deprecations

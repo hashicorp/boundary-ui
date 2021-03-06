@@ -51,8 +51,10 @@ module.exports = {
       childProcess.stderr.on('data', (data) => {
         errorStream += data.toString();
         const jsonData = jsonify(errorStream);
-        const error = jsonData ? jsonData.error : undefined;
-        if (jsonData) reject(new Error(error));
+        if (jsonData) {
+          const error = jsonData.api_error || jsonData.error;
+          reject(new Error(error));
+        }
       });
     });
   },

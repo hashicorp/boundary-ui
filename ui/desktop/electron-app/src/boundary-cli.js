@@ -20,6 +20,7 @@ const escapeAndValidateBase62 = (str) => {
 module.exports = {
   // Check boundary cli existence
   exists: () => Boolean(cliPath()),
+
   // Initiate connection and return output
   connect: (target_id, token, host_id) => {
     const addr = origin.origin;
@@ -34,12 +35,12 @@ module.exports = {
       `-token=${sanitized.token}`,
       `-addr=${addr}`,
       '-format=json',
-      '--output-json-errors',
     ];
 
     if (host_id) command.push(`-host-id=${sanitized.host_id}`);
     return spawnAsyncJSONPromise(command);
   },
+
   // Returns JSON-formatted version information from the CLI
   version: () => {
     const command = ['-v'];
