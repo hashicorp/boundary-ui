@@ -26,10 +26,19 @@ handle('resetOrigin', async (requestOrigin) => {
 });
 
 /**
- * Opens the specified URL in an external browser.
+ * Opens the specified URL in an external browser.  Only HTTPS URLs are allowed.
  */
 handle('openExternal', async (href) => {
-  shell.openExternal(href);
+  if (href.startsWith('https://')) {
+    // openExternal is necessary in order to display documentation and to
+    // support arbitrary OIDC flows.  The protocol is validated.
+    shell.openExternal(href); /* eng-disable OPEN_EXTERNAL_JS_CHECK */
+  } else {
+    throw new Error(
+      `URLs may only be opened over HTTPS in an external browser.
+       The URL '${href}' could not be opened.`
+    );
+  }
 });
 
 /**
