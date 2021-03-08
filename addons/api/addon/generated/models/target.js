@@ -24,13 +24,13 @@ export default class GeneratedTargetModel extends BaseModel {
 
   @attr('number', {
     description: '',
-    defaultValue: 28800
+    defaultValue: 28800,
   })
   session_max_seconds;
 
   @attr('number', {
     description: '',
-    defaultValue: 1
+    defaultValue: 1,
   })
   session_connection_limit;
 

@@ -2,7 +2,7 @@ import Ember from 'ember';
 import config from 'ember-get-config';
 import { random } from 'faker';
 
-export default function initializeMockIPC (server) {
+export default function initializeMockIPC(server) {
   /**
    * We strive to make this application runnable in a regular web browser, since
    * it is a convenient environment for development and testing.  But only an
@@ -51,13 +51,13 @@ export default function initializeMockIPC (server) {
         target,
         userId: 'authenticateduser',
         type,
-        created_time: new Date().toISOString()
+        created_time: new Date().toISOString(),
       });
       return {
         address: window.location.hostname,
         port: random.number(),
         protocol: type,
-        session_id: newSession.id
+        session_id: newSession.id,
       };
     }
   }
@@ -80,5 +80,4 @@ export default function initializeMockIPC (server) {
       }
     });
   }
-
 }

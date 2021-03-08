@@ -69,7 +69,10 @@ module('Integration | Component | rose/form', function (hooks) {
   test('it supports an editability toggle when @showEditToggle is true', async function (assert) {
     assert.expect(12);
     this.cancel = () => {
-      assert.ok(true, 'cancel function may still be passed even for @showEditToggle');
+      assert.ok(
+        true,
+        'cancel function may still be passed even for @showEditToggle'
+      );
     };
     this.submit = () => {};
     await render(hbs`
@@ -96,7 +99,10 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.equal(findAll('input[disabled]').length, 0);
     assert.equal(findAll('button').length, 2);
     assert.equal(find('[type="submit"]').textContent.trim(), 'Save');
-    assert.equal(find('button:not([type="submit"])').textContent.trim(), 'Cancel');
+    assert.equal(
+      find('button:not([type="submit"])').textContent.trim(),
+      'Cancel'
+    );
     // After canceling, fields are disabled again and the edit mode button is displayed
     await click('button:not([type="submit"])');
     assert.equal(findAll('input[disabled]').length, 1);
@@ -131,13 +137,19 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.equal(findAll('input[disabled]').length, 0);
     assert.equal(findAll('button').length, 2);
     assert.equal(find('[type="submit"]').textContent.trim(), 'Save');
-    assert.equal(find('button:not([type="submit"])').textContent.trim(), 'Cancel');
+    assert.equal(
+      find('button:not([type="submit"])').textContent.trim(),
+      'Cancel'
+    );
     // After saving with failure, fields are enabled and save/cancel buttons are displayed
     this.submit = () => reject();
     assert.equal(findAll('input[disabled]').length, 0);
     assert.equal(findAll('button').length, 2);
     assert.equal(find('[type="submit"]').textContent.trim(), 'Save');
-    assert.equal(find('button:not([type="submit"])').textContent.trim(), 'Cancel');
+    assert.equal(
+      find('button:not([type="submit"])').textContent.trim(),
+      'Cancel'
+    );
     // After saving with success, fields are disabled again and the edit mode button is displayed
     this.submit = () => resolve();
     await click('button[type="submit"]');

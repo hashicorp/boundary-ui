@@ -112,7 +112,7 @@ async myAction() {
 
 This addon exposes a service to hold all active scopes (org and project where available).
 
-To make use of the service, import it and initialize it using service injection. 
+To make use of the service, import it and initialize it using service injection.
 
 ```js
 import { inject as service } from '@ember/service';

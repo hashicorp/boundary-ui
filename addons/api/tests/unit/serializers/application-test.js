@@ -66,7 +66,7 @@ module('Unit | Serializer | application', function (hooks) {
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       name: 'User',
-      description: 'Description'
+      description: 'Description',
     });
   });
 
@@ -172,7 +172,7 @@ module('Unit | Serializer | application', function (hooks) {
         attributes: {
           name: 'User 1',
           account_ids: [],
-          scope: { scope_id: 'o_123' }
+          scope: { scope_id: 'o_123' },
         },
         relationships: {},
       },

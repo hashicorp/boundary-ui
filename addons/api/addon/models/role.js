@@ -35,7 +35,7 @@ export default class RoleModel extends GeneratedRoleModel {
     return this.save({
       adapterOptions: {
         method: 'set-grants',
-        grantStrings
+        grantStrings,
       },
     });
   }

@@ -1,4 +1,4 @@
-const { shell } = require('electron')
+const { shell } = require('electron');
 
 const generateMenuTemplate = () => {
   return [
@@ -14,15 +14,13 @@ const generateMenuTemplate = () => {
         { role: 'hideothers' },
         { role: 'unhide' },
         { type: 'separator' },
-        { role: 'quit' }
-      ]
+        { role: 'quit' },
+      ],
     },
     // { role: 'fileMenu' }
     {
       label: 'File',
-      submenu: [
-        { role: 'close' }
-      ]
+      submenu: [{ role: 'close' }],
     },
     // { role: 'editMenu' }
     {
@@ -40,12 +38,9 @@ const generateMenuTemplate = () => {
         { type: 'separator' },
         {
           label: 'Speech',
-          submenu: [
-            { role: 'startSpeaking' },
-            { role: 'stopSpeaking' }
-          ]
-        }
-      ]
+          submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
+        },
+      ],
     },
     // { role: 'viewMenu' }
     {
@@ -57,8 +52,8 @@ const generateMenuTemplate = () => {
         { role: 'zoomIn' },
         { role: 'zoomOut' },
         { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
+        { role: 'togglefullscreen' },
+      ],
     },
     // { role: 'windowMenu' }
     {
@@ -69,21 +64,21 @@ const generateMenuTemplate = () => {
         { type: 'separator' },
         { role: 'front' },
         { type: 'separator' },
-        { role: 'window' }
-      ]
+        { role: 'window' },
+      ],
     },
     {
       role: 'help',
       submenu: [
         {
           label: 'Documentation',
-          click: () => shell.openExternal('https://www.boundaryproject.io')
-        }
-      ]
-    }
-  ]
-}
+          click: () => shell.openExternal('https://www.boundaryproject.io'),
+        },
+      ],
+    },
+  ];
+};
 
 module.exports = {
-  generateMenuTemplate: generateMenuTemplate
+  generateMenuTemplate: generateMenuTemplate,
 };

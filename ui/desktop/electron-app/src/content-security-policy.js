@@ -20,8 +20,8 @@ const enableDevCSP = () => {
   csp['style-src'].push("'unsafe-inline'");
   csp['script-src'].push("'unsafe-eval'");
   csp['script-src'].push("'unsafe-inline'");
-  csp['script-src'].push("http://localhost:7020");
-  csp['connect-src'].push("ws://localhost:7020");
+  csp['script-src'].push('http://localhost:7020');
+  csp['connect-src'].push('ws://localhost:7020');
 };
 
 const generateCSPHeader = () => {
@@ -33,14 +33,13 @@ const generateCSPHeader = () => {
     policy['connect-src'].push(origin.origin);
   }
 
-  return Object
-    .keys(policy)
-    .map(key => `${key} ${policy[key].join(' ')};`)
+  return Object.keys(policy)
+    .map((key) => `${key} ${policy[key].join(' ')};`)
     .join(' ');
-}
+};
 
 if (isDev) enableDevCSP();
 
 module.exports = {
-  generateCSPHeader: generateCSPHeader
+  generateCSPHeader: generateCSPHeader,
 };

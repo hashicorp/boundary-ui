@@ -31,20 +31,23 @@ export function authHandler({ scopes, authMethods }, request) {
     const id = request.params.id_method.split(':')[0];
     const authMethod = authMethods.find(id);
     const scope = scopes.find(authMethod.scopeId);
-    const scopeAttrs =
-      this.serialize(scopes.find(scope.id));
-    return new Response(200, {}, {
-      scope: scopeAttrs,
-      id: 'token123',
-      token: 'thetokenstring',
-      account_id: '1',
-      user_id: 'authenticateduser',
-      auth_method_id: 'authmethod123',
-      created_time: '',
-      updated_time: '',
-      last_used_time: '',
-      expiration_time: ''
-    });
+    const scopeAttrs = this.serialize(scopes.find(scope.id));
+    return new Response(
+      200,
+      {},
+      {
+        scope: scopeAttrs,
+        id: 'token123',
+        token: 'thetokenstring',
+        account_id: '1',
+        user_id: 'authenticateduser',
+        auth_method_id: 'authmethod123',
+        created_time: '',
+        updated_time: '',
+        last_used_time: '',
+        expiration_time: '',
+      }
+    );
   }
 }
 

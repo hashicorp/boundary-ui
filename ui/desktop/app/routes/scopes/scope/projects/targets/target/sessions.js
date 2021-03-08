@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeProjectsTargetsTargetSessionsRoute extends Route {
-
   // =actions
 
   /**
@@ -16,5 +15,4 @@ export default class ScopesScopeProjectsTargetsTargetSessionsRoute extends Route
   async cancelSession(session) {
     await session.cancelSession();
   }
-
 }

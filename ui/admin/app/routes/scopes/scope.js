@@ -70,6 +70,7 @@ export default class ScopesScopeRoute extends Route {
     // Update the controller (if exists), since setupController is only
     // called once the first time the route is activated.  It is not called
     // again on route refreshes.
+    /* eslint-disable-next-line ember/no-controller-access-in-routes */
     if (this.controller) this.setControllerProperties(this.scopes);
   }
 
@@ -87,6 +88,7 @@ export default class ScopesScopeRoute extends Route {
    * @param {array} scopes
    */
   setControllerProperties(scopes) {
+    /* eslint-disable-next-line ember/no-controller-access-in-routes */
     this.controller.setProperties({ scopes });
   }
 

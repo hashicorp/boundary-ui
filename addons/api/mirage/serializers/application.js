@@ -6,7 +6,6 @@ import { isArray } from '@ember/array';
  * Manages serialization/normalization of data into and out of the mock API.
  */
 export default RestSerializer.extend({
-
   // =attributes
 
   /**
@@ -45,7 +44,7 @@ export default RestSerializer.extend({
   serialize() {
     let json = RestSerializer.prototype.serialize.apply(this, arguments);
     // If array, root it under a standard `items` key
-    if (isArray(json)) json = {items: json};
+    if (isArray(json)) json = { items: json };
     return json;
   },
 
@@ -59,7 +58,7 @@ export default RestSerializer.extend({
     if (model.scope) {
       json.scope = {
         id: model.scope.id,
-        type: model.scope.type
+        type: model.scope.type,
       };
     }
     return json;
@@ -79,6 +78,5 @@ export default RestSerializer.extend({
     }
     const value = RestSerializer.prototype.normalize.apply(this, [newJSON]);
     return value;
-  }
-
+  },
 });

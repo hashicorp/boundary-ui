@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { computed, action } from '@ember/object';
 
 export default class RoseFormComponent extends Component {
-
   // =attributes
 
   /**
@@ -57,9 +56,7 @@ export default class RoseFormComponent extends Component {
     // Since submit is allowed to fail in this context and we don't want
     // unhandled rejection warnings, we have a no-op catch.
     if (submitResult?.then) {
-      submitResult
-        .then(() => this.isEditable = false)
-        .catch(() => {});
+      submitResult.then(() => (this.isEditable = false)).catch(() => {});
     }
     return false;
   }
@@ -89,5 +86,4 @@ export default class RoseFormComponent extends Component {
   disableEdit() {
     this.isEditable = false;
   }
-
 }

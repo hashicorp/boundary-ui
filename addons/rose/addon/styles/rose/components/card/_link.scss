@@ -6,12 +6,11 @@
 $xxxs: sizing.rems(xxxs); // 2
 
 .rose-card-link {
-
   --background-color-light: transparent;
   --background-color-dark: var(--ui-gray-subtler-6);
 
   --background-color: var(--background-color-light);
-  
+
   .ember-application.rose-theme-light & {
     --background-color: var(--background-color-light);
   }
@@ -124,7 +123,7 @@ $xxxs: sizing.rems(xxxs); // 2
     margin: 0;
 
     &::before {
-      content: "ID";
+      content: 'ID';
       color: var(--stark);
       padding-right: sizing.rems(xs);
     }

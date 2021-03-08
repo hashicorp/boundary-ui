@@ -11,7 +11,8 @@ addons:
   chrome: stable
 
 cache:
-  yarn: true
+  directories:
+    - $HOME/.npm
 
 env:
   global:
@@ -34,19 +35,18 @@ jobs:
     - stage: "Tests"
       name: "Tests"
       script:
-        - yarn lint
-        - yarn test:ember
+        - npm run lint
+        - npm run test:ember
 
     - stage: "Additional Tests"
       name: "Floating Dependencies"
       install:
-        - yarn install --no-lockfile --non-interactive
+        - npm install --no-package-lock
       script:
-        - yarn test:ember
+        - npm run test:ember
 
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
-    - env: EMBER_TRY_SCENARIO=ember-lts-3.12
     - env: EMBER_TRY_SCENARIO=ember-lts-3.16
     - env: EMBER_TRY_SCENARIO=ember-lts-3.20
     - env: EMBER_TRY_SCENARIO=ember-release
@@ -54,13 +54,6 @@ jobs:
     - env: EMBER_TRY_SCENARIO=ember-canary
     - env: EMBER_TRY_SCENARIO=ember-default-with-jquery
     - env: EMBER_TRY_SCENARIO=ember-classic
-
-before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
-
-install:
-  - yarn install --non-interactive
 
 script:
   - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO

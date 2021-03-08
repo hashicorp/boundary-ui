@@ -7,7 +7,6 @@ import { copy } from 'ember-copy';
  * Manages serialization/normalization of data to/from the API.
  */
 export default class ApplicationSerializer extends RESTSerializer {
-
   // =properties
 
   /**
@@ -82,7 +81,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     // Delete `scope` field
     delete serialized.scope;
     // And serialize `scope_id`
-    if(this.serializeScopeID) {
+    if (this.serializeScopeID) {
       const scope_id = snapshot?.attr('scope')?.attr('scope_id');
       if (scope_id) serialized.scope_id = scope_id;
     }

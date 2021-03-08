@@ -161,8 +161,8 @@ module('Acceptance | auth methods', function (hooks) {
       );
     });
     await visit(urls.authMethod);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'save auth method');
-    await click('form [type="button"]');
     await click('form [type="submit"]');
     await a11yAudit();
     assert.ok(

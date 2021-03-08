@@ -1,16 +1,17 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Controller | scopes/scope/targets/target/host-sets', function (
-  hooks
-) {
-  setupTest(hooks);
+module(
+  'Unit | Controller | scopes/scope/targets/target/host-sets',
+  function (hooks) {
+    setupTest(hooks);
 
-  // TODO: Replace this with your real tests.
-  test('it exists', function (assert) {
-    let controller = this.owner.lookup(
-      'controller:scopes/scope/targets/target/host-sets'
-    );
-    assert.ok(controller);
-  });
-});
+    // TODO: Replace this with your real tests.
+    test('it exists', function (assert) {
+      let controller = this.owner.lookup(
+        'controller:scopes/scope/targets/target/host-sets'
+      );
+      assert.ok(controller);
+    });
+  }
+);

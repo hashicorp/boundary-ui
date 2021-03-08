@@ -4,7 +4,6 @@ import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 
 export default class AccountModel extends GeneratedAccountModel {
-
   // =attributes
 
   /**

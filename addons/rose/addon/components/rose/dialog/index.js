@@ -3,7 +3,6 @@ import { generateComponentID } from '../../../utilities/component-auto-id';
 import { action } from '@ember/object';
 
 export default class RoseDialogComponent extends Component {
-
   // =attributes
 
   /**
@@ -23,5 +22,4 @@ export default class RoseDialogComponent extends Component {
   dismiss(fn) {
     fn();
   }
-
 }

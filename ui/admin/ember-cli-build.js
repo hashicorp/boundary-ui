@@ -5,7 +5,7 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     'ember-cli-babel': {
-      includeExternalHelpers: true
+      includeExternalHelpers: true,
     },
     babel: {
       sourceMaps: 'inline',
@@ -22,10 +22,8 @@ module.exports = function (defaults) {
       importCss: false,
     },
     svg: {
-      paths: [
-        '../../addons/core/public'
-      ]
-    }
+      paths: ['../../addons/core/public'],
+    },
   });
 
   // Only import when in development or test mode

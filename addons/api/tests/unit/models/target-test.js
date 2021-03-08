@@ -186,33 +186,37 @@ module('Unit | Model | target', function (hooks) {
     store.push({
       data: {
         id: '123abc',
-        type: 'target'
-      }
+        type: 'target',
+      },
     });
     const target = store.peekRecord('target', '123abc');
-    assert.equal( target.sessions.length, 0);
+    assert.equal(target.sessions.length, 0);
     store.push({
       data: {
         id: '1',
         type: 'session',
-        attributes: { target_id: '123abc' }
-      }
+        attributes: { target_id: '123abc' },
+      },
     });
     store.push({
       data: {
         id: '2',
         type: 'session',
-        attributes: { target_id: '123abc' }
-      }
+        attributes: { target_id: '123abc' },
+      },
     });
     store.push({
       data: {
         id: '3',
         type: 'session',
-        attributes: { target_id: '456xyz' }
-      }
+        attributes: { target_id: '456xyz' },
+      },
     });
-    assert.equal(store.peekAll('session').length, 3, 'There are 3 sessions loaded in the store');
+    assert.equal(
+      store.peekAll('session').length,
+      3,
+      'There are 3 sessions loaded in the store'
+    );
     assert.equal(
       target.sessions.length,
       2,

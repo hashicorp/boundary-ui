@@ -37,12 +37,10 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     const authMethod = this.modelFor('scopes.scope.authenticate.method');
     const authenticatorName = `authenticator:${authMethod.type}`;
     const requestCookies = false;
-    await this.session.authenticate(
-      authenticatorName,
-      creds,
-      requestCookies,
-      { scope, authMethod }
-    );
+    await this.session.authenticate(authenticatorName, creds, requestCookies, {
+      scope,
+      authMethod,
+    });
     this.transitionTo('index');
   }
 }

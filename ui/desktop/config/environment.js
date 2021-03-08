@@ -31,7 +31,7 @@ module.exports = function (environment) {
 
     'ember-cli-mirage': {
       //enabled: ENABLE_MIRAGE,
-      directory: '../../addons/api/mirage'
+      directory: '../../addons/api/mirage',
     },
 
     api: {
@@ -49,9 +49,9 @@ module.exports = function (environment) {
       baseURL: 'https://boundaryproject.io/help/desktop',
       topics: {
         targets: '/targets',
-        sessions: '/sessions'
-      }
-    }
+        sessions: '/sessions',
+      },
+    },
   };
 
   if (process.env.ENABLE_MIRAGE) {
@@ -89,7 +89,7 @@ module.exports = function (environment) {
 
     // Use in-memory storage
     ENV.storage = {
-      memory: true
+      memory: true,
     };
   }
 

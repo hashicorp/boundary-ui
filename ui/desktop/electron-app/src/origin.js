@@ -1,27 +1,27 @@
-const { net } = require('electron')
+const { net } = require('electron');
 
 const requestTimeoutSeconds = 10;
 // Simple promise wrapper around Electron's net.request feature.
 // https://www.electronjs.org/docs/api/client-request
-const netRequestPromise = url => new Promise((resolve, reject) => {
-  try {
-    const request = net.request(url);
-    // We don't worry about canceling the request timeout timer once a
-    // request ends because:  request.abort() has no effect after a request
-    // ends and the promise will already have been completed, so a rejection
-    // has no effect either.
-    const requestTimeout =
-      setTimeout(() => {
+const netRequestPromise = (url) =>
+  new Promise((resolve, reject) => {
+    try {
+      const request = net.request(url);
+      // We don't worry about canceling the request timeout timer once a
+      // request ends because:  request.abort() has no effect after a request
+      // ends and the promise will already have been completed, so a rejection
+      // has no effect either.
+      const requestTimeout = setTimeout(() => {
         request.abort();
         reject(new Error('Request timeout'));
       }, requestTimeoutSeconds * 1000);
-    request.on('error', reject);
-    request.on('response', resolve);
-    request.end();
-  } catch (e) {
-    reject(e);
-  }
-});
+      request.on('error', reject);
+      request.on('response', resolve);
+      request.end();
+    } catch (e) {
+      reject(e);
+    }
+  });
 
 // Provides a singleton class instance to enable a consistent view of
 // runtime settings across the application.
@@ -30,7 +30,6 @@ const netRequestPromise = url => new Promise((resolve, reject) => {
 // set up at runtime.  For example, the Boundary origin is a runtime setting.
 
 class RuntimeSettings {
-
   // Internal private origin is exposed via getter/setter below.
   #origin = undefined;
 
@@ -38,7 +37,9 @@ class RuntimeSettings {
    * The user-specified Boundary origin, which should be allowed by CSP.
    * @type {?string}
    */
-  get origin() { return this.#origin; }
+  get origin() {
+    return this.#origin;
+  }
   set origin(origin) {
     if (this.#origin !== origin) {
       this.#origin = origin;
@@ -79,7 +80,7 @@ class RuntimeSettings {
   }
 
   triggerOriginChanged() {
-    this.#originWatchers.forEach(fn => fn(this.#origin));
+    this.#originWatchers.forEach((fn) => fn(this.#origin));
   }
 }
 

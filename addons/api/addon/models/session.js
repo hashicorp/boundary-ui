@@ -4,7 +4,6 @@ import { equal } from '@ember/object/computed';
 import { attr } from '@ember-data/model';
 
 export default class SessionModel extends GeneratedSessionModel {
-
   // =attributes
 
   @attr('string', { readOnly: true }) proxy_address;
@@ -61,5 +60,4 @@ export default class SessionModel extends GeneratedSessionModel {
       },
     });
   }
-
 }

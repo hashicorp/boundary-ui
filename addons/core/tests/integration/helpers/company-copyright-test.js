@@ -10,6 +10,9 @@ module('Integration | Helper | company-copyright', function (hooks) {
     assert.expect(1);
     const currentYear = new Date().getFullYear();
     await render(hbs`{{company-copyright}}`);
-    assert.equal(this.element.textContent.trim(), `© ${currentYear} Company Name`);
+    assert.equal(
+      this.element.textContent.trim(),
+      `© ${currentYear} Company Name`
+    );
   });
 });
