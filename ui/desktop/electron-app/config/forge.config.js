@@ -12,6 +12,11 @@ const appCommit = process.env.COMMIT
 
 const formattedAppVersion = `${appVersion}${appCommit}`;
 
+// Output version strings for debugging
+console.log('\n\nVersion Env Vars:');
+console.log('RELEASE_VERSION     ', process.env.RELEASE_VERSION);
+console.log('COMMIT              ', process.env.COMMIT);
+
 module.exports = {
   hooks: {
     prePackage: () => {
