@@ -3,7 +3,7 @@ import { serializeIntoHash } from '@ember-data/adapter/-private';
 /* eslint-disable-next-line ember/no-mixins */
 import AdapterBuildURLMixin from '../mixins/adapter-build-url';
 import config from 'ember-get-config';
-import { get, getWithDefault } from '@ember/object';
+import { get } from '@ember/object';
 import { InvalidError } from '@ember-data/adapter/error';
 import { dasherize } from '@ember/string';
 import { pluralize } from 'ember-inflector';
@@ -69,7 +69,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @return {string}
    */
   urlSuffix(modelName, id, snapshot = {}) {
-    const method = getWithDefault(snapshot, 'adapterOptions.method', '');
+    const method = get(snapshot, 'adapterOptions.method') || '';
     return method ? `:${method}` : '';
   }
 
