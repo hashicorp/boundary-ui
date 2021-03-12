@@ -18,7 +18,8 @@ export default class GeneratedRoleModel extends BaseModel {
   description;
 
   @attr('string', {
-    description: 'The scope to which this role applies.  Defaults to the role\'s scope.',
+    description:
+      "The scope to which this role applies.  Defaults to the role's scope.",
   })
   grant_scope_id;
 

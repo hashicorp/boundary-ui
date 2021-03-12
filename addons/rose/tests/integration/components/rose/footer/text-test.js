@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | rose/footer/text', function(hooks) {
+module('Integration | Component | rose/footer/text', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {

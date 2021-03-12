@@ -14,7 +14,6 @@ import { computed } from '@ember/object';
  *    @cancel=(fn @cancel) />
  */
 export default class RoseFormActionsComponent extends Component {
-
   /**
    * @type {boolean}
    */

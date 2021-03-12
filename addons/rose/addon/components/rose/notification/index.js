@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { computed } from '@ember/object';
 
 export default class RoseNotificationComponent extends Component {
-
   /**
    * Returns an icon name based on the notification style.
    * @type {string}
@@ -25,5 +24,4 @@ export default class RoseNotificationComponent extends Component {
 
     return icon;
   }
-
 }

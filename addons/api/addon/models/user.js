@@ -3,7 +3,6 @@ import { attr } from '@ember-data/model';
 import { A } from '@ember/array';
 
 export default class UserModel extends GeneratedUserModel {
-
   // =attributes
 
   /**
@@ -74,5 +73,4 @@ export default class UserModel extends GeneratedUserModel {
   removeAccount(accountID, options) {
     return this.removeAccounts([accountID], options);
   }
-
 }

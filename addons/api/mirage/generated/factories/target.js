@@ -5,7 +5,6 @@ import { random, date } from 'faker';
  * GeneratedTargetModelFactory
  */
 export default Factory.extend({
-
   type: 'tcp',
   name: () => random.words(),
   session_max_seconds: () => random.number(),
@@ -15,5 +14,4 @@ export default Factory.extend({
   updated_time: () => date.recent(),
   disabled: () => random.boolean(),
   version: () => random.number(),
-
 });

@@ -20,7 +20,7 @@ module('Unit | Serializer | target', function (hooks) {
         type: 'org',
       },
       version: 1,
-      type: 'tcp'
+      type: 'tcp',
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};

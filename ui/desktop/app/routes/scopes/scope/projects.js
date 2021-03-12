@@ -38,5 +38,4 @@ export default class ScopesScopeProjectsRoute extends Route {
       .query('scope', { recursive: true, scope_id: 'global' })
       .filter(({ isProject }) => isProject);
   }
-
 }

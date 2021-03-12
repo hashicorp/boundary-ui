@@ -5,13 +5,13 @@ const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
 
 // Convert to json
 const jsonify = (data) => {
-  if(typeof data !== 'string') data = JSON.stringify(data);
+  if (typeof data !== 'string') data = JSON.stringify(data);
   try {
     return JSON.parse(data);
   } catch (e) {
     // Ignore parse errors
   }
-}
+};
 
 // You can throw exceptions, or allow them to occur, and this is supported.
 // Exceptions thrown in this way will be returned to the UI as an
@@ -28,7 +28,6 @@ const jsonify = (data) => {
 // helpful message for users, so it's recommended to craft nice
 // POJO representation and throw it or promise->reject it.
 module.exports = {
-
   /**
    * Spawns an asynchronous child process that is expected to output JSON
    * data on either stdout or stderr.  The process is allowed to continue
@@ -52,8 +51,10 @@ module.exports = {
       childProcess.stderr.on('data', (data) => {
         errorStream += data.toString();
         const jsonData = jsonify(errorStream);
-        const error = jsonData ? jsonData.error : undefined;
-        if (jsonData) reject(new Error(error));
+        if (jsonData) {
+          const error = jsonData.api_error || jsonData.error;
+          reject(new Error(error));
+        }
       });
     });
   },
@@ -65,6 +66,5 @@ module.exports = {
     const childProcess = spawnSync(boundaryPath, command);
     const rawOutput = childProcess.output.toString();
     return rawOutput;
-  }
-
+  },
 };

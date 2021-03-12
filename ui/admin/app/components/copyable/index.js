@@ -36,6 +36,7 @@ export default class CopyableComponent extends Component {
     this.copied = true;
     yield timeout(1000);
     this.copied = false;
+  /* eslint-disable-next-line prettier/prettier */
   }).drop() confirmCopyTimer;
 
   /**
@@ -53,7 +54,7 @@ export default class CopyableComponent extends Component {
    */
   @action
   register() {
-    this.destroy();
+    this.tearDown();
     /* istanbul ignore next */
     this.clipboard = new ClipboardJS(`#${this.copyableButtonId}`, {
       text: () => this.args.text,
@@ -69,7 +70,7 @@ export default class CopyableComponent extends Component {
    * Destroy ClipboardJS library instance and cancel icon timer.
    */
   @action
-  destroy() {
+  tearDown() {
     this.clipboard?.destroy();
     this.clipboard = null;
     this.confirmCopyTimer.cancelAll();

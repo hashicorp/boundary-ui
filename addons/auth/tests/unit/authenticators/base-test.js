@@ -34,10 +34,13 @@ module('Unit | Authenticator | base', function (hooks) {
     assert.expect(1);
     const mockData = { id: 'token_123' };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(authenticator.buildTokenValidationEndpointURL(mockData.id), () => {
-      assert.ok(true, 'token validation was requested');
-      return new Response(200);
-    });
+    this.server.get(
+      authenticator.buildTokenValidationEndpointURL(mockData.id),
+      () => {
+        assert.ok(true, 'token validation was requested');
+        return new Response(200);
+      }
+    );
     await authenticator.restore(mockData);
   });
 
@@ -45,10 +48,13 @@ module('Unit | Authenticator | base', function (hooks) {
     assert.expect(2);
     const mockData = { id: 'token_123' };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(authenticator.buildTokenValidationEndpointURL(mockData.id), () => {
-      assert.ok(true, 'token validation was requested');
-      return new Response(401);
-    });
+    this.server.get(
+      authenticator.buildTokenValidationEndpointURL(mockData.id),
+      () => {
+        assert.ok(true, 'token validation was requested');
+        return new Response(401);
+      }
+    );
     try {
       await authenticator.restore(mockData);
     } catch (e) {
@@ -60,10 +66,13 @@ module('Unit | Authenticator | base', function (hooks) {
     assert.expect(2);
     const mockData = { id: 'token_123' };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(authenticator.buildTokenValidationEndpointURL(mockData.id), () => {
-      assert.ok(true, 'token validation was requested');
-      return new Response(404);
-    });
+    this.server.get(
+      authenticator.buildTokenValidationEndpointURL(mockData.id),
+      () => {
+        assert.ok(true, 'token validation was requested');
+        return new Response(404);
+      }
+    );
     try {
       await authenticator.restore(mockData);
     } catch (e) {

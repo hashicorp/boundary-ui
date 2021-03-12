@@ -6,7 +6,6 @@ const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
 
 export default factory.extend({
-
   /**
    * -1 means "unlimited" and we want to generate these on occassion.
    */
@@ -19,8 +18,8 @@ export default factory.extend({
     if (target.type === 'tcp') {
       target.update({
         attributes: {
-          default_port: random.number()
-        }
+          default_port: random.number(),
+        },
       });
     }
   },
@@ -37,10 +36,9 @@ export default factory.extend({
         // expect at this level of abstraction, but appears to be a serialized
         // representation of the model instance.  It's very confusing since
         // the result set of `where` _is a collection of model instances_.
-        .where(hostSet => hostSet.scopeId === target.scope.id).models
-        .filter(() => randomBoolean(hostSetChance));
-      target.update({hostSets: randomlySelectedHostSets});
-    }
-  })
-
+        .where((hostSet) => hostSet.scopeId === target.scope.id)
+        .models.filter(() => randomBoolean(hostSetChance));
+      target.update({ hostSets: randomlySelectedHostSets });
+    },
+  }),
 });

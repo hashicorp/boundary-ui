@@ -9,5 +9,4 @@ export default class ScopesScopeProjectsTargetsTargetIndexRoute extends Route {
   afterModel() {
     this.transitionTo('scopes.scope.projects.targets.target.sessions');
   }
-
 }

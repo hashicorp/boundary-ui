@@ -11,16 +11,18 @@ export default ApplicationSerializer.extend({
   },
 
   _hashForModel(model) {
-    const json = ApplicationSerializer.prototype._hashForModel.apply(this, arguments);
+    const json = ApplicationSerializer.prototype._hashForModel.apply(
+      this,
+      arguments
+    );
     const { hostSets } = this.schema;
     if (model.hostSetIds?.length) {
-      json.host_sets = model.hostSetIds.map(host_set_id => {
+      json.host_sets = model.hostSetIds.map((host_set_id) => {
         const hostSet = hostSets.find(host_set_id);
         const host_catalog_id = hostSet?.hostCatalog?.id;
         return { id: host_set_id, host_catalog_id };
       });
     }
     return json;
-  }
-
+  },
 });

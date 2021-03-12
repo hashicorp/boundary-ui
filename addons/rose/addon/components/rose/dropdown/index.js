@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { computed, action } from '@ember/object';
 
 export default class RoseDropdownComponent extends Component {
-
   // =attributes
 
   /**

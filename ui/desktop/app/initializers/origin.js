@@ -1,7 +1,6 @@
 import { getOwner } from '@ember/application';
 
 export function initialize(registry) {
-
   // Lookup the application route
   const ApplicationRoute = registry.resolveRegistration
     ? registry.resolveRegistration('route:application')
@@ -13,7 +12,7 @@ export function initialize(registry) {
       const originalBeforeModel = this.beforeModel;
 
       // Override the beforeModel hook and initialize the origin
-      this.beforeModel = async function() {
+      this.beforeModel = async function () {
         const origin = getOwner(this).lookup('service:origin');
         return origin.updateOrigin().then(
           () => originalBeforeModel.apply(this, arguments),
@@ -26,5 +25,5 @@ export function initialize(registry) {
 
 export default {
   after: 'ember-simple-auth',
-  initialize
+  initialize,
 };

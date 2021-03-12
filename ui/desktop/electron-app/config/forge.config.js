@@ -3,14 +3,19 @@ const { version } = require('../src/boundary-cli.js');
 
 const formattedCLIVersion = version().formatted;
 
-const appVersion = process.env.VERSION
-  ? `Version:  ${process.env.VERSION}\n`
+const appVersion = process.env.RELEASE_VERSION
+  ? `Version:  ${process.env.RELEASE_VERSION}\n`
   : '';
-const appCommit = process.env.COMMIT
-  ? `Commit:  ${process.env.COMMIT}\n`
+const appCommit = process.env.RELEASE_COMMIT
+  ? `Commit:  ${process.env.RELEASE_COMMIT}\n`
   : '';
 
 const formattedAppVersion = `${appVersion}${appCommit}`;
+
+// Output version strings for debugging
+console.log('\n\nVersion Env Vars:');
+console.log('RELEASE_VERSION     ', process.env.RELEASE_VERSION);
+console.log('RELEASE_COMMIT      ', process.env.RELEASE_COMMIT);
 
 module.exports = {
   hooks: {

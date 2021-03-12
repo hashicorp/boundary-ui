@@ -34,6 +34,7 @@ export default class ScopesScopeSessionsRoute extends Route {
       yield timeout(POLL_TIMEOUT_SECONDS * 1000);
       yield this.refresh();
     }
+  /* eslint-disable-next-line prettier/prettier */
   }).drop() poller;
 
   // =methods

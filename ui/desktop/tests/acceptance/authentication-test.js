@@ -166,7 +166,7 @@ module('Acceptance | authentication', function (hooks) {
     authenticateSession({
       scope: {
         id: instances.scopes.global.id,
-        type: instances.scopes.global.type
+        type: instances.scopes.global.type,
       },
     });
     later(async () => {

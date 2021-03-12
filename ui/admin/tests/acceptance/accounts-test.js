@@ -79,8 +79,8 @@ module('Acceptance | accounts', function (hooks) {
   test('can update an account and save changes', async function (assert) {
     assert.expect(1);
     await visit(urls.account);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
-    await click('form [type="button"]');
     await click('form [type="submit"]:not(:disabled)');
     assert.equal(this.server.db.accounts[0].name, 'update name');
   });
@@ -175,8 +175,8 @@ module('Acceptance | accounts', function (hooks) {
       );
     });
     await visit(urls.account);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'save account');
-    await click('form [type="button"]');
     await click('form [type="submit"]');
     await a11yAudit();
     assert.ok(

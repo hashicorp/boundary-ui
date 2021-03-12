@@ -26,21 +26,21 @@ $base-font-size: 16;
 $font-sizes: (
   xl: sizing.size(m) * 1.75,
   // 28
-    l: sizing.size(m) * 1.25,
+  l: sizing.size(m) * 1.25,
   // 20
-    m: sizing.size(m),
+  m: sizing.size(m),
   // 16
-    s: sizing.size(m) * 0.875,
+  s: sizing.size(m) * 0.875,
   // 14
-    xs: sizing.size(m) * 0.75,
+  xs: sizing.size(m) * 0.75,
   // 12
-    h1: sizing.size(m) * 1.75,
+  h1: sizing.size(m) * 1.75,
   // 28
-    h2: sizing.size(m) * 1.25,
+  h2: sizing.size(m) * 1.25,
   // 20
-    h3: sizing.size(m),
+  h3: sizing.size(m),
   // 16
-    button: sizing.size(m) * 0.8125,
+  button: sizing.size(m) * 0.8125,
   // 13
 );
 

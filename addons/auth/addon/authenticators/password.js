@@ -34,7 +34,6 @@ import fetch from 'fetch';
  *
  */
 export default class PasswordAuthenticator extends BaseAuthenticator {
-
   // =unimplemented methods
 
   /**
@@ -48,7 +47,7 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   buildAuthEndpointURL(/* {
     scope: { id: scopeID },
     authMethod: { id: authMethodID },
-  } */) { }
+  } */) {}
 
   // =methods
 

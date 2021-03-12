@@ -11,9 +11,11 @@ export default ApplicationSerializer.extend({
   },
 
   _hashForModel(model) {
-    const json = ApplicationSerializer.prototype._hashForModel.apply(this, arguments);
+    const json = ApplicationSerializer.prototype._hashForModel.apply(
+      this,
+      arguments
+    );
     if (model.memberIds.length) json.member_ids = model.memberIds;
     return json;
-  }
-
+  },
 });

@@ -24,11 +24,9 @@ export default class ScopesScopeProjectsTargetsTargetSessionsController extends 
   get cancelableUserSessions() {
     const sessions = this.sessions;
     const userId = this.session.data.authenticated.user_id;
-    const filteredSessions =
-      sessions.filter(session =>
-        session.isCancelable &&
-        session.user_id === userId
-      );
+    const filteredSessions = sessions.filter(
+      (session) => session.isCancelable && session.user_id === userId
+    );
 
     // Sort sessions
     const sortedSessions = A(filteredSessions).sortBy('created_time').reverse();

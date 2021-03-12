@@ -51,14 +51,14 @@ export function notifyError(notification, options = { catch: false }) {
       const owner = getOwner(this);
       const notifyService = owner.lookup('service:notify');
       const intlService = owner.lookup('service:intl');
-      
+
       try {
         return await method.apply(this, arguments);
       } catch (error) {
-
-        const candidateKey = (typeof notification === 'function')
-          ? notification.apply(this, [error])
-          : notification;
+        const candidateKey =
+          typeof notification === 'function'
+            ? notification.apply(this, [error])
+            : notification;
 
         const text = intlService.exists(candidateKey)
           ? intlService.t(candidateKey)

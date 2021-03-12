@@ -55,11 +55,7 @@ module('Unit | Serializer | user', function (hooks) {
       name: 'user 1',
       scope: { id: 'o_123' },
     };
-    const normalized = serializer.normalizeSingleResponse(
-      store,
-      user,
-      payload
-    );
+    const normalized = serializer.normalizeSingleResponse(store, user, payload);
     assert.deepEqual(normalized, {
       included: [],
       data: {

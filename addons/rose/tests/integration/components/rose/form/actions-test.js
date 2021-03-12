@@ -17,7 +17,9 @@ module('Integration | Component | rose/form/actions', function (hooks) {
   test('it can disable the buttons', async function (assert) {
     assert.expect(2);
     this.cancel = () => {};
-    await render(hbs`{{rose/form/actions cancel=this.cancel submitDisabled=true cancelDisabled=true}}`);
+    await render(
+      hbs`{{rose/form/actions cancel=this.cancel submitDisabled=true cancelDisabled=true}}`
+    );
     assert.ok(find('[type="submit"]:disabled'));
     assert.ok(find('button:not([type="submit"]):disabled'));
   });

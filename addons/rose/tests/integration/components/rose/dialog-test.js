@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | rose/dialog', function(hooks) {
+module('Integration | Component | rose/dialog', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders and handles dismiss actions', async function (assert) {
@@ -24,5 +24,4 @@ module('Integration | Component | rose/dialog', function(hooks) {
     assert.ok(find('.rose-dialog-footer'));
     await click('button');
   });
-
 });

@@ -30,6 +30,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
       yield timeout(POLL_TIMEOUT_SECONDS * 1000);
       yield this.refresh();
     }
+  /* eslint-disable-next-line prettier/prettier */
   }).drop() poller;
 
   // =methods
@@ -48,8 +49,13 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
+    const { user_id } = this.session.data.authenticated;
     await this.store.query('target', { recursive: true, scope_id });
-    return await this.store.query('session', { recursive: true, scope_id });
+    return await this.store.query('session', {
+      filter: `"/item/user_id" == "${user_id}"`,
+      recursive: true,
+      scope_id
+    });
   }
 
   /**

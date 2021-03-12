@@ -17,8 +17,8 @@ export default class RoleSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     const grantStrings = get(snapshot, 'adapterOptions.grantStrings');
     let serialized = super.serialize(...arguments);
-    if (grantStrings) serialized =
-      this.serializeWithGrantStrings(snapshot, grantStrings);
+    if (grantStrings)
+      serialized = this.serializeWithGrantStrings(snapshot, grantStrings);
     const principalIDs = snapshot?.adapterOptions?.principalIDs;
     if (principalIDs)
       serialized = this.serializewithPrincipals(snapshot, principalIDs);
@@ -34,7 +34,7 @@ export default class RoleSerializer extends ApplicationSerializer {
   serializeWithGrantStrings(snapshot, grantStrings) {
     return {
       version: snapshot.attr('version'),
-      grant_strings: grantStrings
+      grant_strings: grantStrings,
     };
   }
 

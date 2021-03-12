@@ -4,7 +4,14 @@ const {
   default: installExtension,
   EMBER_INSPECTOR,
 } = require('electron-devtools-installer');
-const { session, app, protocol, BrowserWindow, ipcMain, Menu } = require('electron');
+const {
+  session,
+  app,
+  protocol,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+} = require('electron');
 require('./handlers.js');
 
 const origin = require('./origin.js');
@@ -63,7 +70,8 @@ app.on('ready', async () => {
   // Disallow all permissions requests originating outside of serve://boundary,
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
-    if (webContents.getURL().startsWith('serve://boundary')) return callback(false);
+    if (webContents.getURL().startsWith('serve://boundary'))
+      return callback(false);
     return callback(true);
   });
 
@@ -72,8 +80,8 @@ app.on('ready', async () => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': [generateCSPHeader()]
-      }
+        'Content-Security-Policy': [generateCSPHeader()],
+      },
     });
   });
 
@@ -91,7 +99,7 @@ app.on('ready', async () => {
   }
 
   // Configure menu in prod env
-  if(!isDev) {
+  if (!isDev) {
     const menuTemplate = Menu.buildFromTemplate(menu.generateMenuTemplate());
     Menu.setApplicationMenu(menuTemplate);
   }
@@ -109,7 +117,7 @@ app.on('ready', async () => {
       enableRemoteModule: false,
       allowRunningInsecureContent: false,
       preload: preloadPath,
-      disableBlinkFeatures: 'Auxclick'
+      disableBlinkFeatures: 'Auxclick',
     },
   });
 
