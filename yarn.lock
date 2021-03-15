@@ -1264,10 +1264,10 @@
   resolved "https://registry.yarnpkg.com/@doyensec/csp-evaluator/-/csp-evaluator-1.0.3.tgz#0d0405cbfb5bb814c24b8a73736a9700da2c681f"
   integrity sha512-Nz2QxdGiYh7nHgRU4R5/v6NDGW+IYv7j7dyQgpjtl4aJzrwHAdoZ0yxz7/YO8bgIOyDJJlF7jbUqjYpPClk9ZQ==
 
-"@doyensec/electronegativity@^1.7.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@doyensec/electronegativity/-/electronegativity-1.8.0.tgz#b71f4836318010e3583a0c347d2660ef1e6bc6ef"
-  integrity sha512-TDil3r1l6mSZMXI8JsWLqY/B77PhoJQ9DeS4PoosL44R+uO+ZoclSg7HBFzGANU9SJ+19X2uwd4R1ufYEQJVfg==
+"@doyensec/electronegativity@^1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@doyensec/electronegativity/-/electronegativity-1.8.1.tgz#401561cb822afb978d0ee89a97e64746a2a34680"
+  integrity sha512-3J1seE0TzGOUBhxopixy/DX88uvf1ho+D6NfF4w7VU/fhIK9zIWcHyrLco0nmrUlL0cOxul1dhx5c6ySI4JyQw==
   dependencies:
     "@babel/parser" "^7.1.2"
     "@babel/traverse" "^7.3.4"
