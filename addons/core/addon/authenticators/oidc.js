@@ -2,7 +2,7 @@ import BaseOIDCAuthenticator from 'auth/authenticators/oidc';
 import { inject as service } from '@ember/service';
 
 /**
- *
+ * An OIDC authenticator that handles flow kick-off and polling.
  */
 export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
 
@@ -36,8 +36,8 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
 
   /**
    * Generates a URL from which to obtain a ready Boundary token, after the
-   * OIDC authentication flow is completed.  This endpoint may be polled by the
-   * client until the token becomes available.
+   * OIDC authentication flow is completed.  This endpoint may be polled
+   * until the token becomes available.
    * @override
    * @param {object} options
    * @param {string} options.scope.scope_id
