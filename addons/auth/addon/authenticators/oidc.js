@@ -65,12 +65,9 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
    * @param {object} options
    * @return {object}
    */
-  async startAuthentication(requestCookies = true, options) {
+  async startAuthentication(options) {
     const url = this.buildStartAuthEndpointURL(options);
-    const body = JSON.stringify({
-      token_type: requestCookies ? 'cookie' : null
-    });
-    const response = await fetch(url, { method: 'post', body });
+    const response = await fetch(url, { method: 'post' });
     const json = await response.json();
     if (response.status < 400) {
       // Store meta about the pending OIDC flow

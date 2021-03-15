@@ -51,7 +51,6 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
       case 'oidc':
         await this.startOIDCAuthentication(
           authenticatorName,
-          requestCookies,
           { scope, authMethod }
         );
         this.transitionTo('scopes.scope.authenticate.method.oidc');
@@ -62,11 +61,11 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   /**
    *
    */
-  async startOIDCAuthentication(authenticatorName, requestCookies, options) {
+  async startOIDCAuthentication(authenticatorName, options) {
     const oidc = getOwner(this).lookup(authenticatorName);
     // TODO: delegate this call from the session service so that we don't have
     // to look up the authenticator directly
-    const json = await oidc.startAuthentication(requestCookies, options);
+    const json = await oidc.startAuthentication(options);
     await this.openExternalOIDCFlow(json.authorization_request_url);
   }
 
