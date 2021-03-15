@@ -40,7 +40,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
     const oidc = getOwner(this).lookup(authenticatorName);
     // TODO: delegate this call from the session service so that we don't have
     // to look up the authenticator directly
-    return oidc.attemptOIDCAuthentication({ scope, authMethod });
+    return oidc.attemptFetchToken({ scope, authMethod });
   }
 
   /**
