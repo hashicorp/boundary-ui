@@ -37,7 +37,7 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "devDependencies": {
-    "@doyensec/electronegativity": "^1.7.0",
+    "@doyensec/electronegativity": "^1.8.1",
     "@ember/jquery": "^1.1.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^1.0.2",

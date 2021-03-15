@@ -55,7 +55,9 @@ app.on('ready', async () => {
   const ses = session.fromPartition(partition);
 
   // Register custom protocol
-  ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => {
+  // This file protocol is the exclusive protocol for this application.  All
+  // other protocols are disabled.
+  ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => { /* eng-disable PROTOCOL_HANDLER_JS_CHECK */
     const isDir = request.url.endsWith('/');
     const absolutePath = request.url.substr(emberAppURL.length);
     const normalizedPath = isDir
@@ -67,17 +69,16 @@ app.on('ready', async () => {
     callback({ path: normalizedPath });
   });
 
-  // Disallow all permissions requests originating outside of serve://boundary,
+  // Disallow all permissions requests,
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
-  ses.setPermissionRequestHandler((webContents, permission, callback) => {
-    if (webContents.getURL().startsWith('serve://boundary'))
-      return callback(false);
-    return callback(true);
+  ses.setPermissionRequestHandler((webContents, permission, callback) => { /* eng-disable PERMISSION_REQUEST_HANDLER_JS_CHECK */
+    return callback(false);
   });
 
   // Setup content security policy
   ses.webRequest.onHeadersReceived((details, callback) => {
     callback({
+      // See `content-security-policy.js` to learn how the CSP is generated.
       responseHeaders: {
         ...details.responseHeaders,
         'Content-Security-Policy': [generateCSPHeader()],
@@ -116,7 +117,9 @@ app.on('ready', async () => {
       nodeIntegration: false,
       enableRemoteModule: false,
       allowRunningInsecureContent: false,
-      preload: preloadPath,
+      // The preload script establishes the message-based IPC pathway without
+      // exposing new modules to the renderer.
+      preload: preloadPath, /* eng-disable PRELOAD_JS_CHECK */
       disableBlinkFeatures: 'Auxclick',
     },
   });
@@ -148,11 +151,10 @@ app.on('ready', async () => {
 
   // Prevent navigation outside of serve://boundary per
   // Electronegativity LIMIT_NAVIGATION_GLOBAL_CHECK
-  mainWindow.webContents.on('will-navigate', (event, url) => {
+  mainWindow.webContents.on('will-navigate', (event, url) => { /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
-
-  mainWindow.webContents.on('new-window', (event, url) => {
+  mainWindow.webContents.on('new-window', (event, url) => { /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
 
