@@ -35,20 +35,24 @@ const methodHandlers = {
       if (payload.credentials.login_name === 'error') {
         return new Response(400);
       } else {
-        return new Response(200, {}, {
-          scope: scopeAttrs,
-          id: 'token123',
-          token: 'thetokenstring',
-          account_id: '1',
-          user_id: 'user123',
-          auth_method_id: 'authmethod123',
-          created_time: '',
-          updated_time: '',
-          last_used_time: '',
-          expiration_time: ''
-        });
+        return new Response(
+          200,
+          {},
+          {
+            scope: scopeAttrs,
+            id: 'token123',
+            token: 'thetokenstring',
+            account_id: '1',
+            user_id: 'user123',
+            auth_method_id: 'authmethod123',
+            created_time: '',
+            updated_time: '',
+            last_used_time: '',
+            expiration_time: '',
+          }
+        );
       }
-    }
+    },
   },
 
   /**
@@ -63,37 +67,47 @@ const methodHandlers = {
    */
   oidc: {
     'authenticate:start': () =>
-      new Response(200, {}, {
-        authorization_request_url: 'https://www.duckduckgo.com',
-        retreival_url: '',
-        token_request_id: 'token_request_1234',
-        state: 'base_58_encoded_string'
-      }),
+      new Response(
+        200,
+        {},
+        {
+          authorization_request_url: 'https://www.duckduckgo.com',
+          retreival_url: '',
+          token_request_id: 'token_request_1234',
+          state: 'base_58_encoded_string',
+        }
+      ),
     'authenticate:token': (_, scopeAttrs) => {
       oidcAttemptCounter++;
       if (oidcAttemptCounter < oidcRequiredAttempts) {
         return new Response(100);
       } else {
-        return new Response(200, {}, {
-          scope: scopeAttrs,
-          id: 'token123',
-          token: 'thetokenstring',
-          account_id: '1',
-          user_id: 'user123',
-          auth_method_id: 'authmethod123',
-          created_time: '',
-          updated_time: '',
-          last_used_time: '',
-          expiration_time: ''
-        });
+        return new Response(
+          200,
+          {},
+          {
+            scope: scopeAttrs,
+            id: 'token123',
+            token: 'thetokenstring',
+            account_id: '1',
+            user_id: 'user123',
+            auth_method_id: 'authmethod123',
+            created_time: '',
+            updated_time: '',
+            last_used_time: '',
+            expiration_time: '',
+          }
+        );
       }
-    }
-  }
+    },
+  },
 };
 
 export function authHandler({ scopes, authMethods }, request) {
   const payload = JSON.parse(request.requestBody);
-  const [, id, method] = request.params.id_method.match(/(?<id>.[^:]*)(?::)?(?<method>.*)?/);
+  const [, id, method] = request.params.id_method.match(
+    /(?<id>.[^:]*)(?::)?(?<method>.*)?/
+  );
   const authMethod = authMethods.find(id);
   const scope = scopes.find(authMethod.scopeId);
   const scopeAttrs = this.serialize(scopes.find(scope.id));

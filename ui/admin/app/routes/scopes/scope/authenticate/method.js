@@ -49,10 +49,10 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
         this.transitionTo('index');
         break;
       case 'oidc':
-        await this.startOIDCAuthentication(
-          authenticatorName,
-          { scope, authMethod }
-        );
+        await this.startOIDCAuthentication(authenticatorName, {
+          scope,
+          authMethod,
+        });
         this.transitionTo('scopes.scope.authenticate.method.oidc');
         break;
     }
@@ -78,5 +78,4 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     // TODO don't use window directly
     await window.open(url);
   }
-
 }

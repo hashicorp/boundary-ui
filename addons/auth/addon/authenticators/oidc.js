@@ -22,7 +22,6 @@ import fetch from 'fetch';
  * `authenticators/application.js` and extend this class.
  */
 export default class OIDCAuthenticator extends BaseAuthenticator {
-
   // =services
 
   @service session;
@@ -40,7 +39,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
   buildStartAuthEndpointURL(/* {
     scope: { id: scopeID },
     authMethod: { id: authMethodID },
-  } */) { }
+  } */) {}
 
   /**
    * Generates an auth method URL with which to authenticate.
@@ -53,7 +52,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
   buildTokenAuthEndpointURL(/* {
     scope: { id: scopeID },
     authMethod: { id: authMethodID },
-  } */) { }
+  } */) {}
 
   /**
    * Kicks-off the OIDC flow:  calls the `authenticate:start` action on the
@@ -72,7 +71,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     if (response.status < 400) {
       // Store meta about the pending OIDC flow
       this.session.set('data.pending', {
-        oidc: json
+        oidc: json,
       });
       return json;
     } else {
@@ -108,7 +107,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     const url = this.buildTokenAuthEndpointURL(options);
     const body = JSON.stringify({
       state: this.session.get('data.pending.oidc.state'),
-      token_request_id: this.session.get('data.pending.oidc.token_request_id')
+      token_request_id: this.session.get('data.pending.oidc.token_request_id'),
     });
     // Fetch the endpoint and get the response JSON
     const response = await fetch(url, { method: 'post', body });

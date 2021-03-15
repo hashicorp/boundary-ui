@@ -5,7 +5,6 @@ import { inject as service } from '@ember/service';
  * An OIDC authenticator that handles flow kick-off and polling.
  */
 export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
-
   // =services
 
   @service store;
@@ -28,8 +27,8 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
     const options = {
       adapterOptions: {
         scopeID,
-        method: 'authenticate:start'
-      }
+        method: 'authenticate:start',
+      },
     };
     return adapter.buildURL('auth-method', authMethodID, options, 'findRecord');
   }
@@ -49,7 +48,9 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
     authMethod: { id: authMethodID },
   }) {
     const adapter = this.store.adapterFor('application');
-    const options = { adapterOptions: { scopeID, method: 'authenticate:token' } };
+    const options = {
+      adapterOptions: { scopeID, method: 'authenticate:token' },
+    };
     return adapter.buildURL('auth-method', authMethodID, options, 'findRecord');
   }
 
@@ -63,5 +64,4 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
     const adapter = this.store.adapterFor('auth-token');
     return adapter.buildURL('auth-token', tokenID, {}, 'findRecord');
   }
-
 }

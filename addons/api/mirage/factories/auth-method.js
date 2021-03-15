@@ -1,10 +1,7 @@
 import factory from '../generated/factories/auth-method';
 import { trait } from 'ember-cli-mirage';
 
-const types = [
-  'password',
-  'oidc'
-];
+const types = ['password', 'oidc'];
 
 export default factory.extend({
   id: (i) => `auth-method-id-${i}`,

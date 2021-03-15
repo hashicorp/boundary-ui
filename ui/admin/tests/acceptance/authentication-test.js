@@ -66,11 +66,11 @@ module('Acceptance | authentication', function (hooks) {
     scope = { id: orgScope.id, type: orgScope.type };
     globalAuthMethod = this.server.create('auth-method', {
       scope: globalScope,
-      type: 'password'
+      type: 'password',
     });
     authMethod = this.server.create('auth-method', {
       scope: orgScope,
-      type: 'password'
+      type: 'password',
     });
     orgScopeID = orgScope.id;
     globalAuthMethodID = globalAuthMethod.id;
