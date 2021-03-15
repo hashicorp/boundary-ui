@@ -153,5 +153,4 @@ module('Acceptance | projects', function (hooks) {
     await a11yAudit();
     assert.equal(currentURL(), urls.projects);
   });
-
 });

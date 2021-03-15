@@ -11,7 +11,7 @@ const netRequestPromise = (url) =>
       // request ends because:  request.abort() has no effect after a request
       // ends and the promise will already have been completed, so a rejection
       // has no effect either.
-      const requestTimeout = setTimeout(() => {
+      setTimeout(() => {
         request.abort();
         reject(new Error('Request timeout'));
       }, requestTimeoutSeconds * 1000);

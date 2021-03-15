@@ -73,7 +73,9 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    instances.user = this.server.create('user', { scope: instances.scopes.global });
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.global,
+    });
 
     authenticateSession({ user_id: instances.user.id });
 
@@ -142,9 +144,8 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
         return this.origin;
       }
 
-      cliExists(payload) {}
-
-      connect(payload) {}
+      cliExists() {}
+      connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -206,7 +207,10 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     this.server.get('/sessions', () => new Response(200));
     later(async () => {
       run.cancelTimers();
-      assert.ok(find('.rose-message-title').textContent.trim(), 'No Sessions Available');
+      assert.ok(
+        find('.rose-message-title').textContent.trim(),
+        'No Sessions Available'
+      );
     }, 750);
     await visit(urls.sessions);
   });
@@ -275,14 +279,23 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       protocol: 'tcp',
     });
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
-      assert.equal(find('.rose-dialog-footer button').textContent.trim(), 'OK', 'Cannot retry');
+      assert.equal(
+        find('.rose-dialog-footer button').textContent.trim(),
+        'OK',
+        'Cannot retry'
+      );
       await click('.rose-dialog-dismiss');
-      assert.equal(find('tbody tr:first-child td:nth-child(2) .copyable-content').textContent.trim(), 'a_123:p_123');
+      assert.equal(
+        find(
+          'tbody tr:first-child td:nth-child(2) .copyable-content'
+        ).textContent.trim(),
+        'a_123:p_123'
+      );
     }, 750);
     await visit(urls.sessions);
   });
@@ -293,7 +306,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
@@ -312,7 +325,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');

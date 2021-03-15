@@ -145,9 +145,8 @@ module('Acceptance | scopes', function (hooks) {
         return this.origin;
       }
 
-      cliExists(payload) {}
-
-      connect(payload) {}
+      cliExists() {}
+      connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -248,7 +247,7 @@ module('Acceptance | scopes', function (hooks) {
 
   test('visiting a target', async function (assert) {
     assert.expect(1);
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       await click('tbody tr th a');
       assert.equal(currentURL(), urls.targetSessions);
@@ -259,9 +258,12 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      assert.ok(find('.rose-message-title').textContent.trim(), 'No Targets Available');
+      assert.ok(
+        find('.rose-message-title').textContent.trim(),
+        'No Targets Available'
+      );
     }, 750);
     await visit(urls.targets);
   });
@@ -278,12 +280,19 @@ module('Acceptance | scopes', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
-      assert.equal(find('.rose-dialog-footer button').textContent.trim(), 'OK', 'Cannot retry');
+      assert.equal(
+        find('.rose-dialog-footer button').textContent.trim(),
+        'OK',
+        'Cannot retry'
+      );
     }, 750);
     await visit(urls.targets);
   });
@@ -294,9 +303,12 @@ module('Acceptance | scopes', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.equal(dialogButtons.length, 2);
@@ -313,9 +325,12 @@ module('Acceptance | scopes', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.equal(dialogButtons.length, 2);

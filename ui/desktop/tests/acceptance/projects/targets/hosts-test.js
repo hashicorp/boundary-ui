@@ -12,7 +12,7 @@ import {
 import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
+// import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
 import {
@@ -73,7 +73,9 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    instances.user = this.server.create('user', { scope: instances.scopes.global });
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.global,
+    });
 
     authenticateSession({ user_id: instances.user.id });
 
@@ -101,9 +103,11 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
-      hostSets: instances.hostCatalog.hostSets
+      hostSets: instances.hostCatalog.hostSets,
     });
-    instances.session = this.server.create('session', {
+    instances.session = this.server.create(
+      'session',
+      {
         scope: instances.scopes.project,
         status: 'active',
       },
@@ -135,9 +139,8 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
         return this.origin;
       }
 
-      cliExists(payload) {}
-
-      connect(payload) {}
+      cliExists() {}
+      connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -186,10 +189,13 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
 
   test('visiting empty hosts', async function (assert) {
     assert.expect(1);
-    instances.target.update({ hostSets: []});
+    instances.target.update({ hostSets: [] });
     later(async () => {
       run.cancelTimers();
-      assert.ok(find('.rose-message-title').textContent.trim(), 'No Hosts Available');
+      assert.ok(
+        find('.rose-message-title').textContent.trim(),
+        'No Hosts Available'
+      );
     }, 750);
     await visit(urls.hosts);
   });
@@ -206,13 +212,23 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
-      assert.equal(find('.rose-dialog-footer button').textContent.trim(), 'OK', 'Cannot retry');
-      assert.equal(find('.rose-dialog-body .copyable-content').textContent.trim(), 'Local proxy address (tcp): a_123:p_123');
+      assert.equal(
+        find('.rose-dialog-footer button').textContent.trim(),
+        'OK',
+        'Cannot retry'
+      );
+      assert.equal(
+        find('.rose-dialog-body .copyable-content').textContent.trim(),
+        'Local proxy address (tcp): a_123:p_123'
+      );
     }, 750);
     await visit(urls.hosts);
   });
@@ -223,9 +239,12 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.equal(dialogButtons.length, 2);
@@ -242,9 +261,12 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.equal(dialogButtons.length, 2);
@@ -262,9 +284,12 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     confirmService.enabled = true;
 
     // FIXME: why isn't retry working?
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       await click('.rose-dialog-footer .rose-button-primary');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');

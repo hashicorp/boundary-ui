@@ -69,7 +69,9 @@ module('Acceptance | projects | sessions', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    instances.user = this.server.create('user', { scope: instances.scopes.global });
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.global,
+    });
 
     authenticateSession({ user_id: instances.user.id });
 
@@ -95,12 +97,13 @@ module('Acceptance | projects | sessions', function (hooks) {
       { scope: instances.scopes.project },
       'withRandomHostSets'
     );
-    instances.session = this.server.create('session',
+    instances.session = this.server.create(
+      'session',
       {
         scope: instances.scopes.project,
         target: instances.target,
         status: 'active',
-        user: instances.user
+        user: instances.user,
       },
       'withAssociations'
     );
@@ -179,7 +182,10 @@ module('Acceptance | projects | sessions', function (hooks) {
     later(async () => {
       run.cancelTimers();
       await a11yAudit();
-      assert.ok(find('.rose-message-title').textContent.trim(), 'No Sessions Available');
+      assert.ok(
+        find('.rose-message-title').textContent.trim(),
+        'No Sessions Available'
+      );
     }, 750);
     await visit(urls.sessions);
   });
@@ -201,7 +207,9 @@ module('Acceptance | projects | sessions', function (hooks) {
     assert.expect(1);
     later(async () => {
       run.cancelTimers();
-      assert.ok(find('tbody tr:first-child th:first-child .session-status-active'));
+      assert.ok(
+        find('tbody tr:first-child th:first-child .session-status-active')
+      );
     }, 750);
     await visit(urls.sessions);
   });
@@ -211,7 +219,9 @@ module('Acceptance | projects | sessions', function (hooks) {
     instances.session.update({ status: 'pending' });
     later(async () => {
       run.cancelTimers();
-      assert.notOk(find('tbody tr:first-child th:first-child .session-status-active'));
+      assert.notOk(
+        find('tbody tr:first-child th:first-child .session-status-active')
+      );
     }, 750);
     await visit(urls.sessions);
   });
@@ -221,7 +231,9 @@ module('Acceptance | projects | sessions', function (hooks) {
     instances.session.update({ status: 'terminated' });
     later(async () => {
       run.cancelTimers();
-      assert.notOk(find('tbody tr:first-child th:first-child .session-status-active'));
+      assert.notOk(
+        find('tbody tr:first-child th:first-child .session-status-active')
+      );
     }, 750);
     await visit(urls.sessions);
   });

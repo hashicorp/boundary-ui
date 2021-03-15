@@ -137,9 +137,8 @@ module('Acceptance | projects | targets', function (hooks) {
         return this.origin;
       }
 
-      cliExists(payload) {}
-
-      connect(payload) {}
+      cliExists() {}
+      connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -188,7 +187,7 @@ module('Acceptance | projects | targets', function (hooks) {
 
   test('visiting a target', async function (assert) {
     assert.expect(1);
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       await click('tbody tr th a');
       assert.equal(currentURL(), urls.sessions);
@@ -199,9 +198,12 @@ module('Acceptance | projects | targets', function (hooks) {
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      assert.equal(find('.rose-message-title').textContent.trim(), 'No Targets Available');
+      assert.equal(
+        find('.rose-message-title').textContent.trim(),
+        'No Targets Available'
+      );
     }, 750);
     await visit(urls.targets);
   });
@@ -218,13 +220,23 @@ module('Acceptance | projects | targets', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
-      assert.equal(find('.rose-dialog-footer button').textContent.trim(), 'OK', 'Cannot retry');
-      assert.equal(find('.rose-dialog-body .copyable-content').textContent.trim(), 'Local proxy address (tcp): a_123:p_123');
+      assert.equal(
+        find('.rose-dialog-footer button').textContent.trim(),
+        'OK',
+        'Cannot retry'
+      );
+      assert.equal(
+        find('.rose-dialog-body .copyable-content').textContent.trim(),
+        'Local proxy address (tcp): a_123:p_123'
+      );
     }, 750);
     await visit(urls.targets);
   });
@@ -235,9 +247,12 @@ module('Acceptance | projects | targets', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.equal(dialogButtons.length, 2);
@@ -254,9 +269,12 @@ module('Acceptance | projects | targets', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.equal(dialogButtons.length, 2);
@@ -274,9 +292,12 @@ module('Acceptance | projects | targets', function (hooks) {
     confirmService.enabled = true;
 
     // FIXME: why isn't retry working?
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button', 'Activate connect mode');
+      await click(
+        'tbody tr:first-child td:last-child button',
+        'Activate connect mode'
+      );
       await click('.rose-dialog-footer .rose-button-primary');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');

@@ -17,7 +17,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
 import {
   currentSession,
-  authenticateSession,
+  // authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import config from '../../config/environment';
@@ -59,7 +59,7 @@ module('Acceptance | origin', function (hooks) {
       global: null,
       methods: {
         global: null,
-      }
+      },
     },
     targets: null,
   };
@@ -210,7 +210,10 @@ module('Acceptance | origin', function (hooks) {
     await visit(urls.origin);
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
-    assert.equal(this.owner.lookup('controller:origin').origin, window.location.origin);
+    assert.equal(
+      this.owner.lookup('controller:origin').origin,
+      window.location.origin
+    );
     config.autoOrigin = false;
   });
 
@@ -237,11 +240,14 @@ module('Acceptance | origin', function (hooks) {
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
     this.server.get('/targets', () => new Response(500));
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       assert.ok(currentSession().isAuthenticated);
       assert.ok(find('.rose-message'));
-      assert.equal(find('main section button').textContent.trim(), 'Disconnect');
+      assert.equal(
+        find('main section button').textContent.trim(),
+        'Disconnect'
+      );
       await click('main section button');
       assert.notOk(originService.rendererOrigin);
       assert.notOk(currentSession().isAuthenticated);

@@ -14,7 +14,6 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import sinon from 'sinon';
 import {
   currentSession,
   authenticateSession,
@@ -193,7 +192,7 @@ module('Acceptance | authentication', function (hooks) {
     await visit(urls.authenticate.methods.global);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       assert.ok(currentSession().isAuthenticated);
       await click('.rose-header-utilities .rose-dropdown button');
@@ -208,7 +207,7 @@ module('Acceptance | authentication', function (hooks) {
     await visit(urls.authenticate.methods.global);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
-    later(async() => {
+    later(async () => {
       run.cancelTimers();
       assert.ok(
         currentSession().isAuthenticated,

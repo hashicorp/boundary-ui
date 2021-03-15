@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { Origin } from 'desktop/services/origin';
 
 module('Unit | Service | origin', function (hooks) {
   setupTest(hooks);
