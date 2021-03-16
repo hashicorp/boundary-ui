@@ -26,6 +26,7 @@ auth-method:
       description: No auth methods were found for this scope.
   types:
     password: Password
+    oidc: OIDC
   actions:
     create: Create Auth Method
     delete: Delete Auth Method

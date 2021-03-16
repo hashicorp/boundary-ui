@@ -43,12 +43,16 @@
           {{#each @model as |authMethod|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo
-                  @route="scopes.scope.auth-methods.auth-method"
-                  @model={{authMethod.id}}
-                >
+                {{#if authMethod.isPassword}}
+                  <LinkTo
+                    @route="scopes.scope.auth-methods.auth-method"
+                    @model={{authMethod.id}}
+                  >
+                    {{authMethod.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{authMethod.displayName}}
-                </LinkTo>
+                {{/if}}
                 <p>{{authMethod.description}}</p>
               </row.headerCell>
               <row.cell>
