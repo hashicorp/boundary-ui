@@ -45,6 +45,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   const stubs = {
     global: null,
     org: null,
+    ipcService: null,
   };
 
   const urls = {
@@ -143,9 +144,6 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
         this.origin = origin;
         return this.origin;
       }
-
-      cliExists() {}
-      connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -160,6 +158,9 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
 
     window.addEventListener('message', messageHandler);
     setDefaultOrigin(this);
+
+    const ipcService = this.owner.lookup('service:ipc');
+    stubs.ipcService = sinon.stub(ipcService, 'invoke');
   });
 
   hooks.afterEach(function () {
@@ -268,24 +269,23 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   });
 
   test('connecting to a target', async function (assert) {
-    assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(true);
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    sinon.stub(mockIPC, 'connect').returns({
+    assert.expect(3);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
       protocol: 'tcp',
     });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
 
     later(async () => {
       run.cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
-      assert.equal(findAll('.rose-dialog-footer button').length, 1);
       assert.equal(
-        find('.rose-dialog-footer button').textContent.trim(),
+        find('.rose-dialog-footer .rose-button-primary').textContent.trim(),
         'OK',
         'Cannot retry'
       );
@@ -302,7 +302,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
 
   test('handles cli error on connect', async function (assert) {
     assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(false);
+    stubs.ipcService.withArgs('cliExists').returns(false);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -320,8 +320,8 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
 
   test('handles connect error', async function (assert) {
     assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(true);
-    sinon.stub(mockIPC, 'connect').returns({});
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -333,6 +333,23 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       assert.equal(dialogButtons.length, 2);
       assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
       assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+    }, 750);
+    await visit(urls.sessions);
+  });
+
+  test('can retry on error', async function (assert) {
+    assert.expect(1);
+    stubs.ipcService.withArgs('cliExists').rejects();
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    later(async () => {
+      run.cancelTimers();
+      await click('.rose-layout-page-actions button', 'Activate connect mode');
+      const firstErrorDialog = find('.rose-dialog');
+      await click('.rose-dialog footer .rose-button-primary', 'Retry');
+      const secondErrorDialog = find('.rose-dialog');
+      assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
     }, 750);
     await visit(urls.sessions);
   });

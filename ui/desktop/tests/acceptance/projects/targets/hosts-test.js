@@ -45,6 +45,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
   const stubs = {
     global: null,
     org: null,
+    ipcService: null,
   };
 
   const urls = {
@@ -138,9 +139,6 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
         this.origin = origin;
         return this.origin;
       }
-
-      cliExists() {}
-      connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -155,6 +153,9 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
 
     window.addEventListener('message', messageHandler);
     setDefaultOrigin(this);
+
+    const ipcService = this.owner.lookup('service:ipc');
+    stubs.ipcService = sinon.stub(ipcService, 'invoke');
   });
 
   hooks.afterEach(function () {
@@ -201,9 +202,9 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
   });
 
   test('connecting to a host', async function (assert) {
-    assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(true);
-    sinon.stub(mockIPC, 'connect').returns({
+    assert.expect(3);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -219,9 +220,8 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
         'Activate connect mode'
       );
       assert.ok(find('.rose-dialog-success'), 'Success dialog');
-      assert.equal(findAll('.rose-dialog-footer button').length, 1);
       assert.equal(
-        find('.rose-dialog-footer button').textContent.trim(),
+        find('.rose-dialog-footer .rose-button-primary').textContent.trim(),
         'OK',
         'Cannot retry'
       );
@@ -235,7 +235,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
 
   test('handles cli error on connect', async function (assert) {
     assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(false);
+    stubs.ipcService.withArgs('cliExists').returns(false);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -256,8 +256,8 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
 
   test('handles connect error', async function (assert) {
     assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(true);
-    sinon.stub(mockIPC, 'connect').returns({});
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -276,27 +276,23 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     await visit(urls.hosts);
   });
 
-  test('can retry on connect error', async function (assert) {
-    assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(true);
-    sinon.stub(mockIPC, 'connect').returns({});
+  test('can retry on error', async function (assert) {
+    assert.expect(1);
+    stubs.ipcService.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    // FIXME: why isn't retry working?
     later(async () => {
       run.cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
       );
-      await click('.rose-dialog-footer .rose-button-primary');
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      const firstErrorDialog = find('.rose-dialog');
+      await click('.rose-dialog footer .rose-button-primary', 'Retry');
+      const secondErrorDialog = find('.rose-dialog');
+      assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
     }, 750);
-    await visit(urls.targets);
+    await visit(urls.hosts);
   });
 });

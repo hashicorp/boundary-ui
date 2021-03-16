@@ -251,7 +251,7 @@ module('Acceptance | origin', function (hooks) {
       await click('main section button');
       assert.notOk(originService.rendererOrigin);
       assert.notOk(currentSession().isAuthenticated);
-      assert.equal(currentURL(), urls.origin);
+      assert.equal(currentURL(), urls.authenticate.methods.global);
     }, 750);
     await click('[type="submit"]');
   });

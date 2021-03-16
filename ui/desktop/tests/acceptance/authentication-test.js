@@ -195,9 +195,15 @@ module('Acceptance | authentication', function (hooks) {
     later(async () => {
       run.cancelTimers();
       assert.ok(currentSession().isAuthenticated);
-      await click('.rose-header-utilities .rose-dropdown button');
+      await click('.rose-header-utilities .rose-dropdown summary');
+      assert.equal(
+        find(
+          '.rose-header-utilities .rose-dropdown-content button'
+        ).textContent.trim(),
+        'Deauthenticate'
+      );
+      await click('.rose-header-utilities .rose-dropdown-content button');
       assert.notOk(currentSession().isAuthenticated);
-      assert.equal(currentURL(), urls.authenticate.methods.global);
     }, 750);
     await click('[type="submit"]');
   });

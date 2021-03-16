@@ -44,6 +44,7 @@ module('Acceptance | scopes', function (hooks) {
   const stubs = {
     global: null,
     org: null,
+    ipcService: null,
   };
 
   const urls = {
@@ -52,6 +53,7 @@ module('Acceptance | scopes', function (hooks) {
     scopes: {
       global: null,
       org: null,
+      org2: null,
     },
     authenticate: {
       global: null,
@@ -60,8 +62,10 @@ module('Acceptance | scopes', function (hooks) {
       },
     },
     projects: null,
+    org2Projects: null,
     globalProjects: null,
     targets: null,
+    org2Targets: null,
     globalTargets: null,
     target: null,
     targetSessions: null,
@@ -120,12 +124,15 @@ module('Acceptance | scopes', function (hooks) {
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
+    urls.scopes.org2 = `/scopes/${instances.scopes.org2.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
-    urls.globalProjects = `${urls.scopes.global}/projects`;
     urls.projects = `${urls.scopes.org}/projects`;
-    urls.globalTargets = `${urls.globalProjects}/targets`;
+    urls.org2Projects = `${urls.scopes.org2}/projects`;
+    urls.globalProjects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
+    urls.org2Targets = `${urls.org2Projects}/targets`;
+    urls.globalTargets = `${urls.globalProjects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetSessions = `${urls.target}/sessions`;
 
@@ -145,8 +152,8 @@ module('Acceptance | scopes', function (hooks) {
         return this.origin;
       }
 
-      cliExists() {}
-      connect() {}
+      // cliExists() {}
+      // connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -161,6 +168,9 @@ module('Acceptance | scopes', function (hooks) {
 
     window.addEventListener('message', messageHandler);
     setDefaultOrigin(this);
+
+    const ipcService = this.owner.lookup('service:ipc');
+    stubs.ipcService = sinon.stub(ipcService, 'invoke');
   });
 
   hooks.afterEach(function () {
@@ -207,14 +217,23 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can navigate among org scopes via header navigation', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     later(async () => {
       run.cancelTimers();
       await a11yAudit();
+
+      later(async () => {
+        assert.equal(currentURL(), urls.targets);
+        later(async () => {
+          assert.equal(currentURL(), urls.org2Targets);
+          later(async () => {
+            assert.equal(currentURL(), urls.globalTargets);
+          }, 750);
+          await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
+        }, 750);
+        await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
+      }, 750);
       await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
-      assert.equal(currentURL(), urls.targets);
-      await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
-      assert.equal(currentURL(), urls.globalTargets);
     }, 750);
     await visit(urls.targets);
   });
@@ -270,8 +289,8 @@ module('Acceptance | scopes', function (hooks) {
 
   test('connecting to a target', async function (assert) {
     assert.expect(3);
-    sinon.stub(mockIPC, 'cliExists').returns(true);
-    sinon.stub(mockIPC, 'connect').returns({
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -299,7 +318,7 @@ module('Acceptance | scopes', function (hooks) {
 
   test('handles cli error on connect', async function (assert) {
     assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(false);
+    stubs.ipcService.withArgs('cliExists').returns(false);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -320,8 +339,8 @@ module('Acceptance | scopes', function (hooks) {
 
   test('handles connect error', async function (assert) {
     assert.expect(4);
-    sinon.stub(mockIPC, 'cliExists').returns(true);
-    sinon.stub(mockIPC, 'connect').returns({});
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
