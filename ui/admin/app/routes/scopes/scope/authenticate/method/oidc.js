@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
+import { action } from '@ember/object';
+import { notifyError } from 'core/decorators/notify';
 import config from '../../../../../config/environment';
 
 const POLL_TIMEOUT_SECONDS = config.oidcPollingTimeoutSeconds;
@@ -63,6 +65,18 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    */
   deactivate() {
     this.poller.cancelAll();
+  }
+
+  /**
+   * An error in this route indicates authentication failed.  The user is
+   * notified and returned to the index.
+   */
+  @action
+  @notifyError(() => 'errors.authentication-failed.title', { catch: true })
+  error(e) {
+    this.transitionTo('scopes.scope.authenticate.method.index');
+    // rethrow the error to activate the notifyError decorator
+    throw e;
   }
 
 }
