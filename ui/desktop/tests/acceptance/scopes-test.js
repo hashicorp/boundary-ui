@@ -151,9 +151,6 @@ module('Acceptance | scopes', function (hooks) {
         this.origin = origin;
         return this.origin;
       }
-
-      // cliExists() {}
-      // connect() {}
     }
 
     mockIPC = new MockIPC();
@@ -175,6 +172,23 @@ module('Acceptance | scopes', function (hooks) {
 
   hooks.afterEach(function () {
     window.removeEventListener('message', messageHandler);
+  });
+
+  test('visiting index', async function (assert) {
+    assert.expect(2);
+    const targetsCount = this.server.schema.targets.all().models.length;
+    // This later/cancelTimers technique allows us to test a page with
+    // active polling.  Normally an acceptance test waits for all runloop timers
+    // to stop before returning from an awaited test, but polling means that
+    // runloop timers exist indefinitely.  We thus schedule a cancelation before
+    // proceeding with our tests.
+    later(async () => {
+      run.cancelTimers();
+      await a11yAudit();
+      assert.equal(currentURL(), urls.targets);
+      assert.equal(findAll('tbody tr').length, targetsCount);
+    }, 750);
+    await visit(urls.targets);
   });
 
   test('visiting global scope', async function (assert) {
@@ -218,24 +232,14 @@ module('Acceptance | scopes', function (hooks) {
 
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
-    later(async () => {
-      run.cancelTimers();
-      await a11yAudit();
-
-      later(async () => {
-        assert.equal(currentURL(), urls.targets);
-        later(async () => {
-          assert.equal(currentURL(), urls.org2Targets);
-          later(async () => {
-            assert.equal(currentURL(), urls.globalTargets);
-          }, 750);
-          await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
-        }, 750);
-        await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
-      }, 750);
-      await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
-    }, 750);
+    await later(async () => run.cancelTimers(), 750);
     await visit(urls.targets);
+    await later(async () => assert.equal(currentURL(), urls.targets), 750);
+    await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
+    await later(async () => assert.equal(currentURL(), urls.org2Targets), 750);
+    await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
+    later(async () => assert.equal(currentURL(), urls.globalTargets), 750);
+    await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -245,23 +249,6 @@ module('Acceptance | scopes', function (hooks) {
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), urls.authenticate.methods.global);
-  });
-
-  test('visiting index', async function (assert) {
-    assert.expect(2);
-    const targetsCount = this.server.schema.targets.all().models.length;
-    // This later/cancelTimers technique allows us to test a page with
-    // active polling.  Normally an acceptance test waits for all runloop timers
-    // to stop before returning from an awaited test, but polling means that
-    // runloop timers exist indefinitely.  We thus schedule a cancelation before
-    // proceeding with our tests.
-    later(async () => {
-      run.cancelTimers();
-      await a11yAudit();
-      assert.equal(currentURL(), urls.targets);
-      assert.equal(findAll('tbody tr').length, targetsCount);
-    }, 750);
-    await visit(urls.targets);
   });
 
   test('visiting a target', async function (assert) {

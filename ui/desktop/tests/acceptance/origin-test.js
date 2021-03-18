@@ -46,6 +46,7 @@ module('Acceptance | origin', function (hooks) {
   const stubs = {
     global: null,
     org: null,
+    ipcService: null,
   };
 
   const urls = {
