@@ -413,9 +413,12 @@ export default function () {
   );
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
     const session = sessions.find(id);
-    return session.update({
-      status: pickRandomStatusString(),
-    });
+    if (!Ember.testing) {
+      session.update({
+        status: pickRandomStatusString(),
+      });
+    }
+    return session;
   });
   this.post(
     '/sessions/:idMethod',

@@ -289,6 +289,31 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
         'OK',
         'Cannot retry'
       );
+      assert.equal(
+        find('.rose-dialog-body .copyable-content').textContent.trim(),
+        'Local proxy address (tcp): a_123:p_123'
+      );
+    }, 750);
+    await visit(urls.sessions);
+  });
+
+  test('connect details in session', async function (assert) {
+    assert.expect(2);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    later(async () => {
+      run.cancelTimers();
+      instances.session.update('status', 'active');
+      await click('.rose-layout-page-actions button', 'Activate connect mode');
+      assert.ok(find('.rose-dialog-success'), 'Success dialog');
       await click('.rose-dialog-dismiss');
       assert.equal(
         find(

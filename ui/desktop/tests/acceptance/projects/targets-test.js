@@ -218,7 +218,6 @@ module('Acceptance | projects | targets', function (hooks) {
       port: 'p_123',
       protocol: 'tcp',
     });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
