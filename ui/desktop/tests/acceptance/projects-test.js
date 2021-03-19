@@ -12,7 +12,7 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
-//import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -142,7 +142,7 @@ module('Acceptance | projects', function (hooks) {
     invalidateSession();
     assert.expect(2);
     await visit(urls.projects);
-    //await a11yAudit();
+    await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), urls.authenticate.methods.global);
   });
@@ -150,7 +150,7 @@ module('Acceptance | projects', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(1);
     await visit(urls.projects);
-    //await a11yAudit();
+    await a11yAudit();
     assert.equal(currentURL(), urls.projects);
   });
 });
