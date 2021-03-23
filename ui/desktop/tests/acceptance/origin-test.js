@@ -62,6 +62,7 @@ module('Acceptance | origin', function (hooks) {
         global: null,
       },
     },
+    projects: null,
     targets: null,
   };
 
@@ -82,12 +83,8 @@ module('Acceptance | origin', function (hooks) {
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
-    // create other resources
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
-    });
-    instances.authMethods.org = this.server.create('auth-method', {
-      scope: instances.scopes.org,
     });
 
     instances.hostCatalog = this.server.create(
@@ -102,11 +99,9 @@ module('Acceptance | origin', function (hooks) {
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
-    urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
-    urls.authenticate.org = `${urls.scopes.global}/authenticate/${instances.authMethods.org.id}`;
-    urls.projects = `${urls.scopes.org}/projects`;
+    urls.projects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
 
     class MockIPC {
@@ -194,17 +189,6 @@ module('Acceptance | origin', function (hooks) {
     assert.equal(currentURL(), urls.origin);
   });
 
-  test('can set origin', async function (assert) {
-    const originService = this.owner.lookup('service:origin');
-    assert.expect(2);
-    assert.notOk(originService.rendererOrigin);
-    await visit(urls.origin);
-    await a11yAudit();
-    await fillIn('[name="host"]', window.location.origin);
-    await click('[type="submit"]');
-    assert.equal(originService.rendererOrigin, window.location.origin);
-  });
-
   test('origin set automatically in dev mode', async function (assert) {
     assert.expect(1);
     config.autoOrigin = true;
@@ -218,42 +202,28 @@ module('Acceptance | origin', function (hooks) {
     config.autoOrigin = false;
   });
 
-  test('captures error on origin update', async function (assert) {
-    assert.expect(2);
-    assert.notOk(mockIPC.origin);
-    sinon.stub(this.owner.lookup('service:origin'), 'setOrigin').throws();
-    await visit(urls.origin);
-    await a11yAudit();
-    await fillIn('[name="host"]', window.location.origin);
-    await click('[type="submit"]');
-    assert.ok(find('.rose-notification.is-error'));
-  });
-
   test('can reset origin on error', async function (assert) {
-    assert.expect(7);
-    const originService = this.owner.lookup('service:origin');
+    assert.expect(4);
     await visit(urls.origin);
     await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
-    assert.ok(originService.rendererOrigin, window.location.origin);
-    await visit(urls.authenticate.methods.global);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
     this.server.get('/targets', () => new Response(500));
-    later(async () => {
+    await later(async () => {
       run.cancelTimers();
       assert.ok(currentSession().isAuthenticated);
-      assert.ok(find('.rose-message'));
       assert.equal(
         find('main section button').textContent.trim(),
         'Disconnect'
       );
-      await click('main section button');
-      assert.notOk(originService.rendererOrigin);
+    }, 750);
+    await click('[type="submit"]');
+    later(async () => {
       assert.notOk(currentSession().isAuthenticated);
       assert.equal(currentURL(), urls.authenticate.methods.global);
     }, 750);
-    await click('[type="submit"]');
+    await click('main section button');
   });
 });
