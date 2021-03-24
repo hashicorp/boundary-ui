@@ -8,6 +8,12 @@ export default class GeneratedScopeModel extends BaseModel {
   // =attributes
 
   @attr('string', {
+    description:
+      'The ID of the primary auth method for this scope.  A primary auth method\nis allowed to vivify users when new accounts are created and is the source for the users account info.',
+  })
+  primary_auth_method_id;
+
+  @attr('string', {
     description: 'The type of the resource',
   })
   type;

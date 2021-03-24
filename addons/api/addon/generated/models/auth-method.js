@@ -7,6 +7,12 @@ import { attr } from '@ember-data/model';
 export default class GeneratedAuthMethodModel extends BaseModel {
   // =attributes
 
+  @attr('boolean', {
+    description: 'Specifies if this is the primary auth method for its scope.',
+    readOnly: true,
+  })
+  primary;
+
   @attr('string', {
     description: 'The type of the resource, to help differentiate schemas',
   })
