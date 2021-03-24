@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import {
   visit,
   currentURL,
-  //fillIn,
+  fillIn,
   click,
   find,
   //findAll,
@@ -12,8 +12,8 @@ import {
 import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-//import { Response } from 'miragejs';
-//import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { Response } from 'miragejs';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -37,8 +37,6 @@ module('Acceptance | authentication', function (hooks) {
       global: null,
       org: null,
     },
-    hostCatalog: null,
-    target: null,
   };
 
   const stubs = {
@@ -60,6 +58,7 @@ module('Acceptance | authentication', function (hooks) {
       },
     },
     targets: null,
+    sessions: null,
   };
 
   const setDefaultOrigin = (test) => {
@@ -93,21 +92,13 @@ module('Acceptance | authentication', function (hooks) {
       scope: instances.scopes.org,
     });
 
-    instances.hostCatalog = this.server.create(
-      'host-catalog',
-      { scope: instances.scopes.project },
-      'withChildren'
-    );
-    instances.target = this.server.create(
-      'target',
-      { scope: instances.scopes.project },
-      'withRandomHostSets'
-    );
-
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
+    urls.projects = `${urls.scopes.global}/projects`;
+    urls.targets = `${urls.projects}/targets`;
+    urls.sessions = `${urls.projects}/sessions`;
 
     class MockIPC {
       origin = null;
@@ -147,7 +138,7 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
-    //await a11yAudit();
+    await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
     assert.equal(currentURL(), urls.authenticate.methods.global);
   });
@@ -156,9 +147,87 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(2);
     instances.authMethods.global.destroy();
     await visit(urls.authenticate.global);
-    //await a11yAudit();
+    await a11yAudit();
     assert.equal(currentURL(), urls.authenticate.global);
     assert.ok(find('.rose-message'));
+  });
+
+  test('visiting authenticate route without origin redirects to origin index', async function (assert) {
+    assert.expect(1);
+    this.owner.lookup('service:origin').rendererOrigin = null;
+    await visit(urls.authenticate.global);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.origin);
+  });
+
+  test('visiting authenticate route when the scope cannot be loaded is allowed', async function (assert) {
+    assert.expect(1);
+    this.server.get('/scopes', () => {
+      return new Response(404);
+    });
+    await visit(urls.authenticate.global);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.authenticate.methods.global);
+  });
+
+  test('failed authentication shows a notification message', async function (assert) {
+    assert.expect(3);
+    await visit(urls.authenticate.methods.global);
+    assert.notOk(currentSession().isAuthenticated);
+    await fillIn('[name="identification"]', 'error');
+    await click('[type="submit"]');
+    assert.ok(find('.rose-notification.is-error'));
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('can reset origin before authentication', async function (assert) {
+    assert.expect(1);
+    await visit(urls.authenticate.methods.global);
+    await click('.change-origin a');
+    assert.equal(currentURL(), urls.origin);
+  });
+
+  test('deauthentication redirects to first global authenticate method', async function (assert) {
+    assert.expect(3);
+    await visit(urls.authenticate.methods.global);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    later(async () => {
+      run.cancelTimers();
+      assert.ok(currentSession().isAuthenticated);
+      await click('.rose-header-utilities .rose-dropdown summary');
+      assert.equal(
+        find(
+          '.rose-header-utilities .rose-dropdown-content button'
+        ).textContent.trim(),
+        'Deauthenticate'
+      );
+      await click('.rose-header-utilities .rose-dropdown-content button');
+      assert.notOk(currentSession().isAuthenticated);
+    }, 750);
+    await click('[type="submit"]');
+  });
+
+  test('401 responses result in deauthentication', async function (assert) {
+    assert.expect(3);
+    await visit(urls.authenticate.methods.global);
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    later(async () => {
+      run.cancelTimers();
+      assert.ok(
+        currentSession().isAuthenticated,
+        'Session begins authenticated, before encountering 401'
+      );
+      assert.ok(currentURL(), urls.targets);
+      this.server.get('/sessions', () => new Response(401));
+      await visit(urls.sessions);
+      assert.notOk(
+        currentSession().isAuthenticated,
+        'Session is unauthenticated, after encountering 401'
+      );
+    }, 750);
+    await click('[type="submit"]');
   });
 
   test('color theme is applied from session data', async function (assert) {

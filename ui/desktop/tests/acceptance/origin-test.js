@@ -2,24 +2,27 @@ import { module, test } from 'qunit';
 import {
   visit,
   currentURL,
-  //fillIn,
-  //click,
-  //find,
+  fillIn,
+  click,
+  find,
   //findAll,
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
+import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
-//import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import sinon from 'sinon';
 import {
-  //currentSession,
-  //authenticateSession,
+  currentSession,
+  // authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import config from '../../config/environment';
 
-module('Acceptance | authentication', function (hooks) {
+module('Acceptance | origin', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -43,6 +46,7 @@ module('Acceptance | authentication', function (hooks) {
   const stubs = {
     global: null,
     org: null,
+    ipcService: null,
   };
 
   const urls = {
@@ -54,8 +58,11 @@ module('Acceptance | authentication', function (hooks) {
     },
     authenticate: {
       global: null,
-      org: null,
+      methods: {
+        global: null,
+      },
     },
+    projects: null,
     targets: null,
   };
 
@@ -76,12 +83,8 @@ module('Acceptance | authentication', function (hooks) {
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
-    // create other resources
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
-    });
-    instances.authMethods.org = this.server.create('auth-method', {
-      scope: instances.scopes.org,
     });
 
     instances.hostCatalog = this.server.create(
@@ -96,9 +99,10 @@ module('Acceptance | authentication', function (hooks) {
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
-    urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
-    urls.authenticate.global = `${urls.scopes.global}/authenticate/${instances.authMethods.global.id}`;
-    urls.authenticate.org = `${urls.scopes.global}/authenticate/${instances.authMethods.org.id}`;
+    urls.authenticate.global = `${urls.scopes.global}/authenticate`;
+    urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
+    urls.projects = `${urls.scopes.global}/projects`;
+    urls.targets = `${urls.projects}/targets`;
 
     class MockIPC {
       origin = null;
@@ -115,6 +119,8 @@ module('Acceptance | authentication', function (hooks) {
         this.origin = origin;
         return this.origin;
       }
+
+      resetOrigin() {}
     }
 
     mockIPC = new MockIPC();
@@ -132,13 +138,92 @@ module('Acceptance | authentication', function (hooks) {
 
   hooks.afterEach(function () {
     window.removeEventListener('message', messageHandler);
+    sinon.restore();
+  });
+
+  test('visiting index', async function (assert) {
+    assert.expect(1);
+    await visit(urls.origin);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.origin);
   });
 
   test('visiting index without an origin specified redirects to origin route', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
-    //await a11yAudit();
+    await a11yAudit();
     assert.notOk(mockIPC.origin);
     assert.equal(currentURL(), urls.origin);
+  });
+
+  test('can set origin', async function (assert) {
+    assert.expect(2);
+    assert.notOk(mockIPC.origin);
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(mockIPC.origin, window.location.origin);
+  });
+
+  test('captures error on origin update', async function (assert) {
+    assert.expect(2);
+    assert.notOk(mockIPC.origin);
+    sinon.stub(this.owner.lookup('service:origin'), 'setOrigin').throws();
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.ok(find('.rose-notification.is-error'));
+  });
+
+  test('can reset origin before authentication', async function (assert) {
+    assert.expect(4);
+    assert.notOk(mockIPC.origin);
+    await visit(urls.origin);
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(mockIPC.origin, window.location.origin);
+    assert.equal(currentURL(), urls.authenticate.methods.global);
+    await click('.change-origin a');
+    assert.equal(currentURL(), urls.origin);
+  });
+
+  test('origin set automatically in dev mode', async function (assert) {
+    assert.expect(1);
+    config.autoOrigin = true;
+    await visit(urls.origin);
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(
+      this.owner.lookup('controller:origin').origin,
+      window.location.origin
+    );
+    config.autoOrigin = false;
+  });
+
+  test('can reset origin on error', async function (assert) {
+    assert.expect(4);
+    await visit(urls.origin);
+    await a11yAudit();
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    this.server.get('/targets', () => new Response(500));
+    await later(async () => {
+      run.cancelTimers();
+      assert.ok(currentSession().isAuthenticated);
+      assert.equal(
+        find('main section button').textContent.trim(),
+        'Disconnect'
+      );
+    }, 750);
+    await click('[type="submit"]');
+    later(async () => {
+      assert.notOk(currentSession().isAuthenticated);
+      assert.equal(currentURL(), urls.authenticate.methods.global);
+    }, 750);
+    await click('main section button');
   });
 });
