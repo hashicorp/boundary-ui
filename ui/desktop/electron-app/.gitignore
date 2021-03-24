@@ -94,3 +94,6 @@ ember-test/
 
 # CLI
 cli/
+
+# Autoupdate
+nextVersion/
