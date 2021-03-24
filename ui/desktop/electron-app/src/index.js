@@ -11,6 +11,7 @@ const {
   BrowserWindow,
   ipcMain,
   Menu,
+  MenuItem,
 } = require('electron');
 require('./handlers.js');
 
@@ -18,7 +19,6 @@ const origin = require('./origin.js');
 const { generateCSPHeader } = require('./content-security-policy.js');
 
 const menu = require('./menu.js');
-
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -101,11 +101,13 @@ app.on('ready', async () => {
     }
   }
 
-  // Configure menu in prod env
-  if (!isDev) {
-    const menuTemplate = Menu.buildFromTemplate(menu.generateMenuTemplate());
-    Menu.setApplicationMenu(menuTemplate);
+  // Configure dev tools menu
+  const menuTemplate = Menu.buildFromTemplate(menu.generateMenuTemplate());
+  if (isDev) {
+    const view = menuTemplate.getMenuItemById('view');
+    view.submenu.append(new MenuItem({ role: 'toggleDevTools' }));
   }
+  Menu.setApplicationMenu(menuTemplate);
 
   mainWindow = new BrowserWindow({
     width: 1280,

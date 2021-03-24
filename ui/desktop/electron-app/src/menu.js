@@ -1,4 +1,5 @@
 const { shell } = require('electron');
+const appUpdater = require('./app-updater.js');
 
 const generateMenuTemplate = () => {
   return [
@@ -7,6 +8,15 @@ const generateMenuTemplate = () => {
       label: 'Boundary',
       submenu: [
         { role: 'about' },
+        {
+          id: 'update',
+          label: 'Check for Updates',
+          click: async () => {
+            debugger;
+            const feedPath = await appUpdater.run();
+            console.log('feedPath ', feedPath);
+          },
+        },
         { type: 'separator' },
         { role: 'services' },
         { type: 'separator' },
@@ -44,6 +54,7 @@ const generateMenuTemplate = () => {
     },
     // { role: 'viewMenu' }
     {
+      id: 'view',
       label: 'View',
       submenu: [
         { role: 'reload' },
