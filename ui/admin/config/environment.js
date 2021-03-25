@@ -83,6 +83,10 @@ module.exports = function (environment) {
     'ember-cli-mirage': {
       directory: '../../addons/api/mirage',
     },
+
+    featureFlags: {
+      'primary-auth-method': false,
+    },
   };
 
   // Unsafe policy is necessary in development and test environments, but should
