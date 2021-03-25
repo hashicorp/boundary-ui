@@ -36,6 +36,7 @@
             <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+            <row.cell></row.cell>
           </header.row>
         </table.header>
 
@@ -64,6 +65,13 @@
                 >
                   <code>{{authMethod.id}}</code>
                 </Copyable>
+              </row.cell>
+              <row.cell>
+                {{#if authMethod.isPrimary}}
+                  <Rose::Badge @style="success-outline">
+                    {{t 'states.primary'}}
+                  </Rose::Badge>
+                {{/if}}
               </row.cell>
             </body.row>
           {{/each}}
