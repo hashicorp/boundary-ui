@@ -178,15 +178,12 @@ module('Acceptance | origin', function (hooks) {
   });
 
   test('can reset origin before authentication', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
+    assert.notOk(mockIPC.origin);
     await visit(urls.origin);
-    await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
-    assert.equal(
-      this.owner.lookup('controller:origin').origin,
-      window.location.origin
-    );
+    assert.equal(mockIPC.origin, window.location.origin);
     assert.equal(currentURL(), urls.authenticate.methods.global);
     await click('.change-origin a');
     assert.equal(currentURL(), urls.origin);
