@@ -71,7 +71,11 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async delete(authMethod) {
+    const scopeModel = this.modelFor('scopes.scope');
     await authMethod.destroyRecord();
+    // Reload the scope, since this is where the primary_auth_method_id is
+    // stored.  An auth method deletion could affect this field.
+    await scopeModel.reload();
     await this.replaceWith('scopes.scope.auth-methods');
     this.refresh();
   }
