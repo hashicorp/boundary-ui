@@ -10,9 +10,9 @@ export default ApplicationSerializer.extend({
     );
     // If the scope marks this auth method as primary, designate it
     // as such with a read-only boolean field (this is how the API behaves).
-    if (model.scope && model.scope.primary_auth_method_id === model.id) {
-      json.primary = true;
-    }
+    const isPrimary =
+      model.scope && model.scope.primaryAuthMethodId === model.id;
+    json.primary = isPrimary;
     return json;
   },
 });

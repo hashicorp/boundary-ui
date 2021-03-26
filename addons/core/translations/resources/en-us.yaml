@@ -32,6 +32,14 @@ auth-method:
   actions:
     create: Create Auth Method
     delete: Delete Auth Method
+    make-primary: Make Primary
+    remove-as-primary: Remove as Primary
+  notifications:
+    make-primary-success: Auth method successfully elected to primary.
+    remove-as-primary-success: Auth method successfully removed as primary.
+  questions:
+    make-primary-confirm: Are you sure you want to elect this auth method to primary?
+    remove-as-primary-confirm: Are you sure you want to remove as primary this auth method?  A primary auth method is recommended for every scope.
 group:
   title: Group
   title_plural: Groups

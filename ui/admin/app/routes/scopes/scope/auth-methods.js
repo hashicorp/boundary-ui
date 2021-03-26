@@ -79,4 +79,55 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     await this.replaceWith('scopes.scope.auth-methods');
     this.refresh();
   }
+
+  /**
+   * Elects the specified auth method to primary for the current scope.
+   * @param {AuthMethodModel} authMethod
+   * @param {string} authMethod.id
+   */
+  @action
+  @loading
+  @confirm('resources.auth-method.questions.make-primary-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('resources.auth-method.notifications.make-primary-success')
+  async makePrimary({ id }) {
+    const scopeModel = this.modelFor('scopes.scope');
+    scopeModel.primary_auth_method_id = id;
+    // Attempt to save the change to the scope.  If this operation fails,
+    // we rollback the change and rethrow the error so the user can be notified.
+    try {
+      await scopeModel.save();
+    } catch (e) {
+      scopeModel.rollbackAttributes();
+      throw e;
+    }
+    await this.refresh();
+  }
+
+  /**
+   * Sets the `primary_auth_method_id` field to null for the current scope
+   * and saves it if and only if the specified auth method is in fact primary
+   * for the current scope.
+   * @param {AuthMethodModel} authMethod
+   */
+  @action
+  @loading
+  @confirm('resources.auth-method.questions.remove-as-primary-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess(
+    'resources.auth-method.notifications.remove-as-primary-success'
+  )
+  async removeAsPrimary(authMethod) {
+    const scopeModel = this.modelFor('scopes.scope');
+    scopeModel.primary_auth_method_id = null;
+    // Attempt to save the change to the scope.  If this operation fails,
+    // we rollback the change and rethrow the error so the user can be notified.
+    try {
+      await scopeModel.save();
+    } catch (e) {
+      scopeModel.rollbackAttributes();
+      throw e;
+    }
+    await authMethod.reload();
+  }
 }

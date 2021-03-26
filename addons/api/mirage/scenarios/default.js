@@ -34,8 +34,8 @@ export default function (server) {
   );
   // Assign primary auth methods per scope
   // TODO make this generic
-  globalScope.update({ primary_auth_method_id: globalAuthMethods[0].id });
-  orgScope.update({ primary_auth_method_id: orgAuthMethods[1].id });
+  globalScope.update({ primaryAuthMethodId: globalAuthMethods[0].id });
+  orgScope.update({ primaryAuthMethodId: orgAuthMethods[1].id });
 
   // Groups and Users
   server.createList('group', 1, { scope: globalScope }, 'withMembers');

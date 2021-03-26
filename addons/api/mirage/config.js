@@ -66,8 +66,8 @@ export default function () {
     authMethod.destroy();
     // If the primary auth method is deleted, the associated scope's
     // primary_auth_method_id field should be set to null.
-    if (scope.primary_auth_method_id === id) {
-      scope.update({ primary_auth_method_id: null });
+    if (scope.primaryAuthMethodId === id) {
+      scope.update({ primaryAuthMethodId: null });
     }
     return new Response(204);
   });
