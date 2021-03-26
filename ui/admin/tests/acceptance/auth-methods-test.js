@@ -270,4 +270,90 @@ module('Acceptance | auth methods', function (hooks) {
       'Displays field-level errors.'
     );
   });
+
+  test('user can make primary an auth method', async function (assert) {
+    assert.expect(2);
+    assert.notOk(
+      instances.scopes.org.primaryAuthMethodId,
+      'Primary auth method is not yet set.'
+    );
+    await visit(urls.authMethod);
+    await click(
+      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
+    );
+    const scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    assert.equal(
+      scope.primaryAuthMethodId,
+      instances.authMethod.id,
+      'Primary auth method is set.'
+    );
+  });
+
+  test('user is notified of error on make primary an auth method', async function (assert) {
+    assert.expect(2);
+    this.server.patch('/scopes/:id', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'fail',
+          message: 'Sorry!',
+        }
+      );
+    });
+    assert.notOk(
+      instances.scopes.org.primaryAuthMethodId,
+      'Primary auth method is not yet set.'
+    );
+    await visit(urls.authMethod);
+    await click(
+      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
+    );
+    assert.ok(find('.rose-notification'));
+  });
+
+  test('user can remove as primary an auth method', async function (assert) {
+    assert.expect(2);
+    instances.scopes.org.update({
+      primaryAuthMethodId: instances.authMethod.id,
+    });
+    assert.ok(
+      instances.scopes.org.primaryAuthMethodId,
+      'Primary auth method is set.'
+    );
+    await visit(urls.authMethod);
+    await click(
+      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
+    );
+    const scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
+  });
+
+  test('user is notified of error on remove as primary an auth method', async function (assert) {
+    assert.expect(2);
+    this.server.patch('/scopes/:id', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'fail',
+          message: 'Sorry!',
+        }
+      );
+    });
+    instances.scopes.org.update({
+      primaryAuthMethodId: instances.authMethod.id,
+    });
+    assert.ok(
+      instances.scopes.org.primaryAuthMethodId,
+      'Primary auth method is set.'
+    );
+    await visit(urls.authMethod);
+    await click(
+      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
+    );
+    assert.ok(find('.rose-notification'));
+  });
 });
