@@ -85,7 +85,7 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
-      'primary-auth-method': false,
+      'primary-auth-method': true,
     },
   };
 

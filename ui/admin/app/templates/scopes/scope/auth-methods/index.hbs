@@ -30,6 +30,17 @@
   <page.body>
     {{#if @model}}
 
+      {{#if (feature-flag 'primary-auth-method')}}
+        {{#unless this.hasPrimaryAuthMethod}}
+          <Rose::Notification
+            @style="warning"
+            @heading={{t "resources.auth-method.messages.no-primary-auth-method.title"}}
+          >
+            {{t "resources.auth-method.messages.no-primary-auth-method.description"}}
+          </Rose::Notification>
+        {{/unless}}
+      {{/if}}
+
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>

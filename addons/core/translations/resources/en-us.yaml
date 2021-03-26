@@ -24,6 +24,9 @@ auth-method:
     none:
       title: No Auth Methods
       description: No auth methods were found for this scope.
+    no-primary-auth-method:
+      title: No Primary Auth Method Found
+      description: A primary auth method auto-vivifies users when they authenticate for the first time.  The primary auth method is also presented first to unauthenticated users.  Each scope may have one primary auth method.  Please choose a primary auth method for this scope.
   types:
     password: Password
   actions:
