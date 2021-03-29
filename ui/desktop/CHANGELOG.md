@@ -2,6 +2,11 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## Next
+
+### Bug Fixes
+
+- ui: Trigger zoom-in menu option on keyboard shortcut. ([PR](https://github.com/hashicorp/boundary-ui/pull/505))
 
 ## v1.0.0-beta [CLI 0.1.8] (2021.03.10)
 
