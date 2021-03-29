@@ -16,7 +16,7 @@ account:
 auth-method:
   title: Auth Method
   title_plural: Auth Methods
-  description: Auth methods govern how an org's users can login to Boundary. Boundary’s default auth method is username & passwords.
+  description: Auth methods enable authentication within a scope.  The primary auth method within a scope auto-creates users on their first authentication attempt.
   messages:
     welcome:
       title: Welcome to Auth Methods
@@ -25,8 +25,8 @@ auth-method:
       title: No Auth Methods
       description: No auth methods were found for this scope.
     no-primary-auth-method:
-      title: No Primary Auth Method Found
-      description: A primary auth method auto-vivifies users when they authenticate for the first time.  The primary auth method is also presented first to unauthenticated users.  Each scope may have one primary auth method.  Please choose a primary auth method for this scope.
+      title: "Recommendation: Select a Primary Auth Method"
+      description: A primary auth method auto-creates users when they authenticate for the first time.  Scopes without primary auth methods may experience authentication failures.
   types:
     password: Password
   actions:
@@ -38,8 +38,10 @@ auth-method:
     make-primary-success: Auth method successfully elected to primary.
     remove-as-primary-success: Auth method successfully removed as primary.
   questions:
-    make-primary-confirm: Are you sure you want to elect this auth method to primary?
-    remove-as-primary-confirm: Are you sure you want to remove as primary this auth method?  A primary auth method is recommended for every scope.
+    make-primary: Make primary auth method?
+    remove-as-primary: Remove primary auth method?
+    make-primary-confirm: "A primary auth method auto-creates users on their first authentication attempt if needed.  Note:  if you change the primary auth method, the previous primary will no longer auto-create users."
+    remove-as-primary-confirm: Removing the primary auth method may lead to authentication failures for this scope.
 group:
   title: Group
   title_plural: Groups

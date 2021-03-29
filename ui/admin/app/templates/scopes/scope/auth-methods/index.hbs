@@ -49,6 +49,7 @@
             <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
             {{#if (feature-flag 'primary-auth-method')}}
               <row.cell></row.cell>
+              <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
             {{/if}}
           </header.row>
         </table.header>
@@ -86,6 +87,30 @@
                       {{t 'states.primary'}}
                     </Rose::Badge>
                   {{/if}}
+                </row.cell>
+                <row.cell>
+                  <Rose::Dropdown
+                    @text={{t "titles.actions"}}
+                    @dropdownRight={{true}}
+                    @iconOnly={{true}}
+                    @showCaret={{false}}
+                    @icon="more-horizontal"
+                  as |dropdown|>
+                    {{#unless authMethod.isPrimary}}
+                      <dropdown.button
+                        {{on "click" (route-action "makePrimary" authMethod)}}
+                      >
+                        {{t 'resources.auth-method.actions.make-primary'}}
+                      </dropdown.button>
+                    {{/unless}}
+                    {{#if authMethod.isPrimary}}
+                      <dropdown.button
+                        {{on "click" (route-action "removeAsPrimary" authMethod)}}
+                      >
+                        {{t 'resources.auth-method.actions.remove-as-primary'}}
+                      </dropdown.button>
+                    {{/if}}
+                  </Rose::Dropdown>
                 </row.cell>
               {{/if}}
             </body.row>

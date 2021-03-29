@@ -87,7 +87,9 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   @loading
-  @confirm('resources.auth-method.questions.make-primary-confirm')
+  @confirm('resources.auth-method.questions.make-primary-confirm', {
+    title: 'resources.auth-method.questions.make-primary',
+  })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.auth-method.notifications.make-primary-success')
   async makePrimary({ id }) {
@@ -112,7 +114,9 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   @loading
-  @confirm('resources.auth-method.questions.remove-as-primary-confirm')
+  @confirm('resources.auth-method.questions.remove-as-primary-confirm', {
+    title: 'resources.auth-method.questions.remove-as-primary',
+  })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(
     'resources.auth-method.notifications.remove-as-primary-success'

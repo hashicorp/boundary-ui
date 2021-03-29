@@ -361,4 +361,28 @@ module('Acceptance | auth methods', function (hooks) {
     );
     assert.ok(find('.rose-notification'));
   });
+
+  test('user can make and remove primary auth methods from index', async function (assert) {
+    assert.expect(3);
+    assert.notOk(
+      instances.scopes.org.primaryAuthMethodId,
+      'Primary auth method is not yet set.'
+    );
+    enableFeature('primary-auth-method');
+    await visit(urls.authMethods);
+    await click(
+      '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
+    );
+    let scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    assert.equal(
+      scope.primaryAuthMethodId,
+      instances.authMethod.id,
+      'Primary auth method is set.'
+    );
+    await click(
+      '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
+    );
+    scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
+  });
 });
