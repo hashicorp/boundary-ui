@@ -3,7 +3,7 @@
   {{#if (feature-flag 'primary-auth-method')}}
     {{#if @model.isPrimary}}
       &nbsp;
-      <Rose::Badge @style="success-outline" @size="">
+      <Rose::Badge @style="success-outline">
         {{t 'states.primary'}}
       </Rose::Badge>
       &nbsp;
