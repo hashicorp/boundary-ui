@@ -119,6 +119,9 @@ module.exports = function (environment) {
     // rather than automatically include API_HOST.  Changes to CSP should
     // be explicit.
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
+
+    // Enable features in development
+    ENV.featureFlags['primary-auth-method'] = true;
   }
 
   if (environment === 'test') {
