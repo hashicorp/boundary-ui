@@ -5,7 +5,7 @@ import { getOwner } from '@ember/application';
  * confirmation via the confirmation service.  If the user accepts, the
  * original method is executed.  If the user denies, it is not.
  */
-export function confirm(confirmationTextKey) {
+export function confirm(confirmationTextKey, options) {
   return function (_target, _propertyKey, desc) {
     const method = desc.value;
     desc.value = function () {
@@ -15,7 +15,7 @@ export function confirm(confirmationTextKey) {
       const text = intl.t(confirmationTextKey);
       return (
         confirmService
-          .confirm(text)
+          .confirm(text, options)
           // If user confirmed, execute the decorated method
           .then(() => method.apply(this, arguments))
           // If the user denied, gracefully handle promise rejection with no-op

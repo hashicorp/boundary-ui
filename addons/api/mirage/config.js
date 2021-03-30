@@ -60,7 +60,17 @@ export default function () {
   this.post('/auth-methods');
   this.get('/auth-methods/:id');
   this.patch('/auth-methods/:id');
-  this.del('/auth-methods/:id');
+  this.del('/auth-methods/:id', ({ authMethods }, { params: { id } }) => {
+    const authMethod = authMethods.find(id);
+    const scope = authMethod.scope;
+    authMethod.destroy();
+    // If the primary auth method is deleted, the associated scope's
+    // primary_auth_method_id field should be set to null.
+    if (scope.primaryAuthMethodId === id) {
+      scope.update({ primaryAuthMethodId: null });
+    }
+    return new Response(204);
+  });
 
   // Auth Method Accounts
   this.get(

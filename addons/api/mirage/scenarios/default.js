@@ -20,18 +20,22 @@ export default function (server) {
   server.create('user', { id: 'authenticateduser' });
 
   // Auth
-  server.createList(
+  const globalAuthMethods = server.createList(
     'auth-method',
     1,
     { scope: globalScope },
     'withAccountsAndUsers'
   );
-  server.createList(
+  const orgAuthMethods = server.createList(
     'auth-method',
     3,
     { scope: orgScope },
     'withAccountsAndUsers'
   );
+  // Assign primary auth methods per scope
+  // TODO make this generic
+  globalScope.update({ primaryAuthMethodId: globalAuthMethods[0].id });
+  orgScope.update({ primaryAuthMethodId: orgAuthMethods[1].id });
 
   // Groups and Users
   server.createList('group', 1, { scope: globalScope }, 'withMembers');

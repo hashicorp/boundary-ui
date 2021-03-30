@@ -1,4 +1,22 @@
 <Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+  {{#if (feature-flag 'primary-auth-method')}}
+    {{#unless @model.isPrimary}}
+      <dropdown.button
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "makePrimary" @model)}}
+      >
+        {{t 'resources.auth-method.actions.make-primary'}}
+      </dropdown.button>
+    {{/unless}}
+    {{#if @model.isPrimary}}
+      <dropdown.button
+        @disabled={{@model.canSave}}
+        {{on "click" (route-action "removeAsPrimary" @model)}}
+      >
+        {{t 'resources.auth-method.actions.remove-as-primary'}}
+      </dropdown.button>
+    {{/if}}
+  {{/if}}
   <dropdown.link
     @route="scopes.scope.auth-methods.auth-method.accounts.new"
     @model={{@model}}
