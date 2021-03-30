@@ -16,7 +16,7 @@ account:
 auth-method:
   title: Auth Method
   title_plural: Auth Methods
-  description: Auth methods enable authentication within a scope.  The primary auth method within a scope auto-creates users on their first authentication attempt.
+  description: Auth methods allow users to authenticate within a scope.
   messages:
     welcome:
       title: Welcome to Auth Methods
