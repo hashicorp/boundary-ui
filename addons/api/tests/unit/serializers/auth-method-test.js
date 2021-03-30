@@ -60,7 +60,7 @@ module('Unit | Serializer | auth method', function (hooks) {
           },
         ],
       },
-      'First normalized itme is primary'
+      'First normalized item is primary'
     );
   });
 });
