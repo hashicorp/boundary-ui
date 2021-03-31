@@ -9,7 +9,6 @@ import {
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 //import { Response } from 'miragejs';
@@ -160,7 +159,6 @@ module('Acceptance | origin', function (hooks) {
     assert.expect(3);
     assert.notOk(mockIPC.origin);
     await visit(urls.origin);
-    await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
     assert.equal(currentURL(), urls.authenticate.methods.global);
@@ -184,7 +182,6 @@ module('Acceptance | origin', function (hooks) {
     assert.notOk(mockIPC.origin);
     sinon.stub(this.owner.lookup('service:origin'), 'setOrigin').throws();
     await visit(urls.origin);
-    await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
     assert.ok(find('.rose-notification.is-error'));
@@ -205,26 +202,15 @@ module('Acceptance | origin', function (hooks) {
 
   test('can reset origin on error', async function (assert) {
     assert.expect(4);
+    this.server.get('/targets', () => new Response(500));
     await visit(urls.origin);
-    await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    this.server.get('/targets', () => new Response(500));
-    await later(async () => {
-      run.cancelTimers();
-      assert.ok(currentSession().isAuthenticated);
-      assert.equal(
-        find('main section button').textContent.trim(),
-        'Disconnect'
-      );
-    }, 750);
     await click('[type="submit"]');
-    later(async () => {
-      assert.notOk(currentSession().isAuthenticated);
-      assert.equal(currentURL(), urls.authenticate.methods.global);
-    }, 750);
+    assert.ok(currentSession().isAuthenticated);
+    assert.equal(find('main section button').textContent.trim(), 'Disconnect');
     await click('main section button');
+    assert.notOk(currentSession().isAuthenticated);
+    assert.equal(currentURL(), urls.authenticate.methods.global);
   });
 });
