@@ -40,6 +40,10 @@ module.exports = {
       'entitlements-inherit': './config/macos/entitlements.plist',
       'signature-flags': 'library',
     },
+    osxNotarize: {
+      appleId: 'gsusmi@gmail.com',
+      appleIdPassword: 'nxcj-orhk-aiyt-bcki',
+    },
   },
   makers: [
     {

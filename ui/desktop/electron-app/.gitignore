@@ -94,3 +94,6 @@ ember-test/
 
 # CLI
 cli/
+
+# Update
+updateArchive/

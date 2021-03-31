@@ -66,11 +66,11 @@ module.exports = {
     // }).on('error', (e) => {
     //   console.error(e);
     // });
-    const updateVersion = '1.0.0';
+    const updateVersion = '1.0.2';
     const url = `${releasesUrl}/${updateVersion}/boundary_${updateVersion}_darwin_amd64.zip`;
     const artifactPath = await downloadUpdateArtifact(url, updateArchiveDestination);
-    const feedURL = createUpdateConfig(artifactPath, updateArchiveDestination);
-    autoUpdater.setFeedURL(feedURL);
+    const configPath = createUpdateConfig(artifactPath, updateArchiveDestination);
+    autoUpdater.setFeedURL(`file://${configPath}`);
     autoUpdater.checkForUpdates();
   },
 };
