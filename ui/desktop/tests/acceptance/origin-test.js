@@ -157,13 +157,26 @@ module('Acceptance | origin', function (hooks) {
   });
 
   test('can set origin', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     assert.notOk(mockIPC.origin);
     await visit(urls.origin);
     await a11yAudit();
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
+    assert.equal(currentURL(), urls.authenticate.methods.global);
     assert.equal(mockIPC.origin, window.location.origin);
+  });
+
+  test('can reset origin before authentication', async function (assert) {
+    assert.expect(4);
+    assert.notOk(mockIPC.origin);
+    await visit(urls.origin);
+    await fillIn('[name="host"]', window.location.origin);
+    await click('[type="submit"]');
+    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.equal(mockIPC.origin, window.location.origin);
+    await click('.change-origin a');
+    assert.equal(currentURL(), urls.origin);
   });
 
   test('captures error on origin update', async function (assert) {
@@ -175,18 +188,6 @@ module('Acceptance | origin', function (hooks) {
     await fillIn('[name="host"]', window.location.origin);
     await click('[type="submit"]');
     assert.ok(find('.rose-notification.is-error'));
-  });
-
-  test('can reset origin before authentication', async function (assert) {
-    assert.expect(4);
-    assert.notOk(mockIPC.origin);
-    await visit(urls.origin);
-    await fillIn('[name="host"]', window.location.origin);
-    await click('[type="submit"]');
-    assert.equal(mockIPC.origin, window.location.origin);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
-    await click('.change-origin a');
-    assert.equal(currentURL(), urls.origin);
   });
 
   test('origin set automatically in dev mode', async function (assert) {
