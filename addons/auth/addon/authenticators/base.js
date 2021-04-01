@@ -17,6 +17,19 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
   // =unimplemented methods
 
   /**
+   * Generates an auth method URL with which to authenticate.
+   * @override
+   * @param {object} options
+   * @param {string} options.scope.scope_id
+   * @param {string} options.authMethod.id
+   * @return {string}
+   */
+  buildAuthEndpointURL(/* {
+    scope: { id: scopeID },
+    authMethod: { id: authMethodID },
+  } */) {}
+
+  /**
    * Generates a scope URL with which to deauthenticate.
    * @override
    * @param {object} options

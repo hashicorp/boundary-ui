@@ -11,7 +11,7 @@ module('Unit | Authenticator | OIDC', function (hooks) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:oidc');
     this.server.post(
-      authenticator.buildStartAuthEndpointURL(),
+      authenticator.buildAuthEndpointURL(),
       () => new Response(200, {}, { foo: 'bar' })
     );
     const response = await authenticator.startAuthentication();
@@ -23,7 +23,7 @@ module('Unit | Authenticator | OIDC', function (hooks) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:oidc');
     this.server.post(
-      authenticator.buildStartAuthEndpointURL(),
+      authenticator.buildAuthEndpointURL(),
       () => new Response(400)
     );
     // Because assert.throws doesn't work with async errors/promise rejections

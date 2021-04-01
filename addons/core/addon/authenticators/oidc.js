@@ -19,38 +19,12 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
    * @param {string} options.authMethod.id
    * @return {string}
    */
-  buildStartAuthEndpointURL({
+  buildAuthEndpointURL({
     scope: { id: scopeID },
     authMethod: { id: authMethodID },
   }) {
     const adapter = this.store.adapterFor('application');
-    const options = {
-      adapterOptions: {
-        scopeID,
-        method: 'authenticate:start',
-      },
-    };
-    return adapter.buildURL('auth-method', authMethodID, options, 'findRecord');
-  }
-
-  /**
-   * Generates a URL from which to obtain a ready Boundary token, after the
-   * OIDC authentication flow is completed.  This endpoint may be polled
-   * until the token becomes available.
-   * @override
-   * @param {object} options
-   * @param {string} options.scope.scope_id
-   * @param {string} options.authMethod.id
-   * @return {string}
-   */
-  buildTokenAuthEndpointURL({
-    scope: { id: scopeID },
-    authMethod: { id: authMethodID },
-  }) {
-    const adapter = this.store.adapterFor('application');
-    const options = {
-      adapterOptions: { scopeID, method: 'authenticate:token' },
-    };
+    const options = { adapterOptions: { scopeID, method: 'authenticate' } };
     return adapter.buildURL('auth-method', authMethodID, options, 'findRecord');
   }
 

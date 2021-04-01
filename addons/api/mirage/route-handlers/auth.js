@@ -29,9 +29,9 @@ import { Response } from 'miragejs';
 let oidcAttemptCounter = 0;
 const oidcRequiredAttempts = 3;
 
-const methodHandlers = {
+const commandHandlers = {
   password: {
-    authenticate: (payload, scopeAttrs) => {
+    login: (payload, scopeAttrs) => {
       if (payload.credentials.login_name === 'error') {
         return new Response(400);
       } else {
@@ -66,7 +66,7 @@ const methodHandlers = {
    *    the authentication flow is completed.
    */
   oidc: {
-    'authenticate:start': () =>
+    start: () =>
       new Response(
         200,
         {},
@@ -77,7 +77,7 @@ const methodHandlers = {
           state: 'base_58_encoded_string',
         }
       ),
-    'authenticate:token': (_, scopeAttrs) => {
+    token: (_, scopeAttrs) => {
       oidcAttemptCounter++;
       if (oidcAttemptCounter < oidcRequiredAttempts) {
         return new Response(100);
@@ -105,13 +105,12 @@ const methodHandlers = {
 
 export function authHandler({ scopes, authMethods }, request) {
   const payload = JSON.parse(request.requestBody);
-  const [, id, method] = request.params.id_method.match(
-    /(?<id>.[^:]*)(?::)?(?<method>.*)?/
-  );
+  const [, id] = request.params.id_method.match(/(?<id>.[^:]*)/);
+  const { command } = payload;
   const authMethod = authMethods.find(id);
   const scope = scopes.find(authMethod.scopeId);
   const scopeAttrs = this.serialize(scopes.find(scope.id));
-  return methodHandlers[authMethod.type][method](payload, scopeAttrs);
+  return commandHandlers[authMethod.type][command](payload, scopeAttrs);
 }
 
 export function deauthHandler() {

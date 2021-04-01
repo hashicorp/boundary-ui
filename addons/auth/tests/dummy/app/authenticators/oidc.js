@@ -5,8 +5,8 @@ export default class ApplicationOIDCAuthenticator extends OIDCAuthenticator {
     return `/validate/${id}`;
   }
 
-  buildStartAuthEndpointURL() {
-    return '/authenticate:start';
+  buildAuthEndpointURL() {
+    return '/authenticate';
   }
 
   buildDeauthEndpointURL() {
