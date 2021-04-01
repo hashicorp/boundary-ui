@@ -32,29 +32,25 @@ module('Unit | Authenticator | base', function (hooks) {
 
   test('it passes token validation on restoration if receiving 200', async function (assert) {
     assert.expect(1);
-    const mockData = { id: 'token_123' };
+    const id = 'token_123';
+    const mockData = { attributes: { id } };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(
-      authenticator.buildTokenValidationEndpointURL(mockData.id),
-      () => {
-        assert.ok(true, 'token validation was requested');
-        return new Response(200);
-      }
-    );
+    this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
+      assert.ok(true, 'token validation was requested');
+      return new Response(200);
+    });
     await authenticator.restore(mockData);
   });
 
   test('it fails token validation on restoration if receiving 401', async function (assert) {
     assert.expect(2);
-    const mockData = { id: 'token_123' };
+    const id = 'token_123';
+    const mockData = { attributes: { id } };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(
-      authenticator.buildTokenValidationEndpointURL(mockData.id),
-      () => {
-        assert.ok(true, 'token validation was requested');
-        return new Response(401);
-      }
-    );
+    this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
+      assert.ok(true, 'token validation was requested');
+      return new Response(401);
+    });
     try {
       await authenticator.restore(mockData);
     } catch (e) {
@@ -64,15 +60,13 @@ module('Unit | Authenticator | base', function (hooks) {
 
   test('it fails token validation on restoration if receiving 404', async function (assert) {
     assert.expect(2);
-    const mockData = { id: 'token_123' };
+    const id = 'token_123';
+    const mockData = { attributes: { id } };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(
-      authenticator.buildTokenValidationEndpointURL(mockData.id),
-      () => {
-        assert.ok(true, 'token validation was requested');
-        return new Response(404);
-      }
-    );
+    this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
+      assert.ok(true, 'token validation was requested');
+      return new Response(404);
+    });
     try {
       await authenticator.restore(mockData);
     } catch (e) {

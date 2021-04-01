@@ -83,8 +83,12 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     const url = this.buildAuthEndpointURL(options);
     const body = JSON.stringify({
       command: 'token',
-      state: this.session.get('data.pending.oidc.state'),
-      token_request_id: this.session.get('data.pending.oidc.token_request_id'),
+      attributes: {
+        state: this.session.get('data.pending.oidc.state'),
+        token_request_id: this.session.get(
+          'data.pending.oidc.token_request_id'
+        ),
+      },
     });
     // Fetch the endpoint and get the response JSON
     const response = await fetch(url, { method: 'post', body });

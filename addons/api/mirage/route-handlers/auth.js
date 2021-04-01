@@ -12,7 +12,7 @@ import { Response } from 'miragejs';
 //  */
 // export default function authenticateHandler(schema, request) {
 //   const payload = JSON.parse(request.requestBody);
-//   if (payload.credentials.login_name === 'error') {
+//   if (payload.attributes.login_name === 'error') {
 //     return new Response(400);
 //   } else {
 //     const cookieName = config.auth.passwordCookieName;
@@ -32,23 +32,25 @@ const oidcRequiredAttempts = 3;
 const commandHandlers = {
   password: {
     login: (payload, scopeAttrs) => {
-      if (payload.credentials.login_name === 'error') {
+      if (payload.attributes.login_name === 'error') {
         return new Response(400);
       } else {
         return new Response(
           200,
           {},
           {
-            scope: scopeAttrs,
-            id: 'token123',
-            token: 'thetokenstring',
-            account_id: '1',
-            user_id: 'user123',
-            auth_method_id: 'authmethod123',
-            created_time: '',
-            updated_time: '',
-            last_used_time: '',
-            expiration_time: '',
+            attributes: {
+              scope: scopeAttrs,
+              id: 'token123',
+              token: 'thetokenstring',
+              account_id: '1',
+              user_id: 'user123',
+              auth_method_id: 'authmethod123',
+              created_time: '',
+              updated_time: '',
+              last_used_time: '',
+              expiration_time: '',
+            },
           }
         );
       }
@@ -71,10 +73,12 @@ const commandHandlers = {
         200,
         {},
         {
-          authorization_request_url: 'https://www.duckduckgo.com',
-          retreival_url: '',
-          token_request_id: 'token_request_1234',
-          state: 'base_58_encoded_string',
+          attributes: {
+            authorization_request_url: 'https://www.duckduckgo.com',
+            retreival_url: '',
+            token_request_id: 'token_request_1234',
+            state: 'base_58_encoded_string',
+          },
         }
       ),
     token: (_, scopeAttrs) => {
@@ -86,16 +90,18 @@ const commandHandlers = {
           200,
           {},
           {
-            scope: scopeAttrs,
-            id: 'token123',
-            token: 'thetokenstring',
-            account_id: '1',
-            user_id: 'user123',
-            auth_method_id: 'authmethod123',
-            created_time: '',
-            updated_time: '',
-            last_used_time: '',
-            expiration_time: '',
+            attributes: {
+              scope: scopeAttrs,
+              id: 'token123',
+              token: 'thetokenstring',
+              account_id: '1',
+              user_id: 'user123',
+              auth_method_id: 'authmethod123',
+              created_time: '',
+              updated_time: '',
+              last_used_time: '',
+              expiration_time: '',
+            },
           }
         );
       }

@@ -72,9 +72,10 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    */
   async restore(data) {
     if (!data) return reject();
-    return this.validateToken(data.token, data.id).then(() =>
-      this.normalizeData(data)
-    );
+    return this.validateToken(
+      data.attributes.token,
+      data.attributes.id
+    ).then(() => this.normalizeData(data));
   }
 
   /**
@@ -86,6 +87,10 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    * @return {object}
    */
   normalizeData(data, username) {
+    // Pull fields up from `data.attributes` for easier access in JavaScript.
+    // The `attributes` field exists on the Go side for its convenience but is
+    // unnecessary here.
+    Object.assign(data, data.attributes);
     // Add booleans indicated the scope type
     data.isGlobal = data?.scope?.type === 'global';
     data.isOrg = data?.scope?.type === 'org';
