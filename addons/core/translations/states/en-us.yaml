@@ -7,3 +7,4 @@ copied: Copied
 connection:
   success:
     description: "Local proxy address ({protocol}): {address}:{port}"
+primary: Primary

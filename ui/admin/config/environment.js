@@ -84,6 +84,10 @@ module.exports = function (environment) {
     'ember-cli-mirage': {
       directory: '../../addons/api/mirage',
     },
+
+    featureFlags: {
+      'primary-auth-method': false,
+    },
   };
 
   // Unsafe policy is necessary in development and test environments, but should
@@ -116,6 +120,9 @@ module.exports = function (environment) {
     // rather than automatically include API_HOST.  Changes to CSP should
     // be explicit.
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
+
+    // Enable features in development
+    ENV.featureFlags['primary-auth-method'] = true;
   }
 
   if (environment === 'test') {

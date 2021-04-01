@@ -19,6 +19,7 @@
 
   &.rose-badge-outline {
     --border-color: var(--ui-gray-starker-1);
+    --background-color: none;
   }
 
   &.rose-badge-dark {
@@ -40,6 +41,7 @@
   &.rose-badge-informational-outline {
     --color: var(--info-starker-1);
     --border-color: var(--info-starker-1);
+    --background-color: none;
   }
 
   &.rose-badge-alert {
@@ -50,6 +52,7 @@
   &.rose-badge-alert-outline {
     --color: var(--alert-starker-1);
     --border-color: var(--alert-starker-1);
+    --background-color: none;
   }
 
   &.rose-badge-error {
@@ -60,6 +63,7 @@
   &.rose-badge-error-outline {
     --color: var(--failure-starker-1);
     --border-color: var(--failure-starker-1);
+    --background-color: none;
   }
 
   &.rose-badge-success {
@@ -70,6 +74,7 @@
   &.rose-badge-success-outline {
     --color: var(--success-starker-1);
     --border-color: var(--success-starker-1);
+    --background-color: none;
   }
 
   &.rose-badge-warning {
@@ -80,5 +85,6 @@
   &.rose-badge-warning-outline {
     --color: var(--warning-starker-1);
     --border-color: var(--warning-starker-1);
+    --background-color: none;
   }
 }

@@ -1,5 +1,14 @@
 <h2>
   {{t "resources.auth-method.title"}}
+  {{#if (feature-flag 'primary-auth-method')}}
+    {{#if @model.isPrimary}}
+      &nbsp;
+      <Rose::Badge @style="success-outline">
+        {{t 'states.primary'}}
+      </Rose::Badge>
+      &nbsp;
+    {{/if}}
+  {{/if}}
   <DocLink @doc="auth-method" @iconSize="large" />
 </h2>
 <p>{{t "resources.auth-method.description"}}</p>

@@ -57,7 +57,8 @@ app.on('ready', async () => {
   // Register custom protocol
   // This file protocol is the exclusive protocol for this application.  All
   // other protocols are disabled.
-  ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => { /* eng-disable PROTOCOL_HANDLER_JS_CHECK */
+  ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => {
+    /* eng-disable PROTOCOL_HANDLER_JS_CHECK */
     const isDir = request.url.endsWith('/');
     const absolutePath = request.url.substr(emberAppURL.length);
     const normalizedPath = isDir
@@ -71,7 +72,8 @@ app.on('ready', async () => {
 
   // Disallow all permissions requests,
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
-  ses.setPermissionRequestHandler((webContents, permission, callback) => { /* eng-disable PERMISSION_REQUEST_HANDLER_JS_CHECK */
+  ses.setPermissionRequestHandler((webContents, permission, callback) => {
+    /* eng-disable PERMISSION_REQUEST_HANDLER_JS_CHECK */
     return callback(false);
   });
 
@@ -151,10 +153,12 @@ app.on('ready', async () => {
 
   // Prevent navigation outside of serve://boundary per
   // Electronegativity LIMIT_NAVIGATION_GLOBAL_CHECK
-  mainWindow.webContents.on('will-navigate', (event, url) => { /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
-  mainWindow.webContents.on('new-window', (event, url) => { /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
+  mainWindow.webContents.on('new-window', (event, url) => {
+    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
 

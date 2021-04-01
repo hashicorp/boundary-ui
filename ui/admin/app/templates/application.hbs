@@ -113,7 +113,7 @@
     </Rose::Dialog>
   {{else}}
     <Rose::Dialog
-      @heading={{t "actions.confirm"}}
+      @heading={{if confirmation.options.title (t confirmation.options.title) (t "actions.confirm")}}
       @dismissButtonText={{t "actions.cancel"}}
       @icon="alert-triangle"
       @style="warning"
