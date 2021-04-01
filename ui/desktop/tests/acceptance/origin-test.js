@@ -188,14 +188,19 @@ module('Acceptance | origin', function (hooks) {
     assert.ok(find('.rose-notification.is-error'));
   });
 
-  test('origin set automatically in dev mode', async function (assert) {
+  test('origin set automatically when autoOrigin is true', async function (assert) {
     assert.expect(1);
     config.autoOrigin = true;
     await visit(urls.origin);
-    await fillIn('[name="host"]', currentOrigin);
-    await click('[type="submit"]');
-    assert.equal(this.owner.lookup('controller:origin').origin, currentOrigin);
+    assert.equal(find('[name="host"]').value, currentOrigin);
     config.autoOrigin = false;
+  });
+
+  test('origin is *not* set automatically when autoOrigin is false', async function (assert) {
+    assert.expect(2);
+    assert.notOk(config.autoOrigin, 'autoOrigin is disabled');
+    await visit(urls.origin);
+    assert.notOk(find('[name="host"]').value, 'Origin field is empty');
   });
 
   test('can reset origin on error', async function (assert) {
