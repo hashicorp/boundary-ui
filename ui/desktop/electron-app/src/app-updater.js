@@ -66,11 +66,36 @@ module.exports = {
     // }).on('error', (e) => {
     //   console.error(e);
     // });
-    const updateVersion = '1.0.2';
+    const updateVersion = '1.0.3';
     const url = `${releasesUrl}/${updateVersion}/boundary_${updateVersion}_darwin_amd64.zip`;
-    const artifactPath = await downloadUpdateArtifact(url, updateArchiveDestination);
-    const configPath = createUpdateConfig(artifactPath, updateArchiveDestination);
+    // const artifactPath = await downloadUpdateArtifact(url, updateArchiveDestination);
+    const artifactPath = '/Users/susmitha/code/boundary-ui/ui/desktop/electron-app/updateArchive/boundary_1.0.3_darwin_amd64.zip';
+    const configPath = createUpdateConfig(
+      artifactPath,
+      updateArchiveDestination
+    );
+    console.log('setFeedURL: ', `file://${configPath}`);
     autoUpdater.setFeedURL(`file://${configPath}`);
+
+    autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['Restart', 'Later'],
+        title: 'Application Update',
+        message: releaseName,
+        detail: 'A new version has been downloaded. Restart the application to apply the updates.',
+      };
+    
+      dialog.showMessageBox(dialogOpts).then((returnValue) => {
+        if (returnValue.response === 0) autoUpdater.quitAndInstall()
+      });
+    })
+
+    autoUpdater.on('error', message => {
+      console.error('There was a problem updating the application');
+      console.error(message);
+    });
+
     autoUpdater.checkForUpdates();
   },
 };
