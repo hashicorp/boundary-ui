@@ -2,13 +2,13 @@ auth:
   titles:
     no-scopes: No Scopes Available
     flow-success: Successful authentication
-    flow-error: Could not authenticate to provider
+    flow-error: Could not authenticate
   descriptions:
     no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
     choose-org: Choose a scope to authenticate.
     authenticating-with-org: "You are authenticating with {name}."
     flow-success: You've successfully authenticated.  You may now close this window and return to the client.
-    flow-error: Something went wrong while authenticating with the provider.  Please close this window and try again.  If the problem persists, notify your administrator.
+    flow-error: Something went wrong while authenticating.  Please close this window and try again.  If the problem persists, notify your administrator.
 origin:
   connected-to: Connected to
 titles:
