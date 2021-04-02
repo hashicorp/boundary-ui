@@ -16,7 +16,7 @@ jobs:
       - name: Trigger Release job
         if: github.event_name == 'workflow_dispatch'
         run: |
-          echo "Triggering Test release with a TAG ${GITHUB_REF#refs/tags/}"
+          echo "Triggering Test release with a TAG ${{ github.event.inputs.branch }}"
 
           curl -u ${{ secrets.CIRCLE_TOKEN }}: -X POST --header "Content-Type: application/json" \
           -d '{ "branch": "main", "parameters": {"TAG": "'${{ github.event.inputs.branch }}'" }}' \
