@@ -35,6 +35,7 @@
     "electron": "12.0.2"
   },
   "resolutions": {
-    "highlight.js": "^10.4.1"
+    "highlight.js": "^10.4.1",
+    "xmldom": "~0.5.0"
   }
 }
