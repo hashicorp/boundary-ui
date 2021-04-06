@@ -25,6 +25,7 @@ module('Acceptance | origin', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const currentOrigin = window.location.origin;
   let mockIPC;
   let messageHandler;
 
@@ -124,7 +125,7 @@ module('Acceptance | origin', function (hooks) {
 
     mockIPC = new MockIPC();
     messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
+      if (event.origin !== currentOrigin) return;
       const { method, payload } = event.data;
       if (method) {
         const response = await mockIPC.invoke(method, payload);
@@ -159,20 +160,20 @@ module('Acceptance | origin', function (hooks) {
     assert.expect(3);
     assert.notOk(mockIPC.origin);
     await visit(urls.origin);
-    await fillIn('[name="host"]', window.location.origin);
+    await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.equal(currentURL(), urls.authenticate.methods.global);
-    assert.equal(mockIPC.origin, window.location.origin);
+    assert.equal(mockIPC.origin, currentOrigin);
   });
 
   test('can reset origin before authentication', async function (assert) {
     assert.expect(4);
     assert.notOk(mockIPC.origin);
     await visit(urls.origin);
-    await fillIn('[name="host"]', window.location.origin);
+    await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.equal(currentURL(), urls.authenticate.methods.global);
-    assert.equal(mockIPC.origin, window.location.origin);
+    assert.equal(mockIPC.origin, currentOrigin);
     await click('.change-origin a');
     assert.equal(currentURL(), urls.origin);
   });
@@ -182,31 +183,33 @@ module('Acceptance | origin', function (hooks) {
     assert.notOk(mockIPC.origin);
     sinon.stub(this.owner.lookup('service:origin'), 'setOrigin').throws();
     await visit(urls.origin);
-    await fillIn('[name="host"]', window.location.origin);
+    await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.ok(find('.rose-notification.is-error'));
   });
 
-  test('origin set automatically in dev mode', async function (assert) {
+  test('origin set automatically when autoOrigin is true', async function (assert) {
     assert.expect(1);
     config.autoOrigin = true;
     await visit(urls.origin);
-    await fillIn('[name="host"]', window.location.origin);
-    await click('[type="submit"]');
-    assert.equal(
-      this.owner.lookup('controller:origin').origin,
-      window.location.origin
-    );
+    assert.equal(find('[name="host"]').value, currentOrigin);
     config.autoOrigin = false;
+  });
+
+  test('origin is *not* set automatically when autoOrigin is false', async function (assert) {
+    assert.expect(2);
+    assert.notOk(config.autoOrigin, 'autoOrigin is disabled');
+    await visit(urls.origin);
+    assert.notOk(find('[name="host"]').value, 'Origin field is empty');
   });
 
   test('can reset origin on error', async function (assert) {
     assert.expect(4);
     this.server.get('/targets', () => new Response(500));
     await visit(urls.origin);
-    await fillIn('[name="host"]', window.location.origin);
-    await click('[type="submit"]');
-    await click('[type="submit"]');
+    await fillIn('[name="host"]', currentOrigin);
+    await click('[type="submit"]', 'Set origin');
+    await click('[type="submit"]', 'Authenticate');
     assert.ok(currentSession().isAuthenticated);
     assert.equal(find('main section button').textContent.trim(), 'Disconnect');
     await click('main section button');
