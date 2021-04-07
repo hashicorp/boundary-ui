@@ -1,0 +1,42 @@
+
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Frame" component="Frame" />
+
+# Frame
+
+A simple frame component with named blocks `:header` and `:body`.  Note that
+this component is unique to Boundary and is not part of the Structure design
+system.
+
+Prerequisite:  `ember-named-blocks-polyfill` must be installed in your app's
+`dependencies` rather than `devDependencies`.
+
+<Preview>
+  <Story name="Frame" height="15rem">{{
+    template: hbs`
+    <Rose::Frame>
+      <:header>
+        <h2>Frame Header</h2>
+      </:header>
+      <:body>
+        <p>Frame body</p>
+      </:body>
+    </Rose::Frame>
+    `
+  }}</Story>
+</Preview>
+
+
+```htmlbars
+<Rose::Frame>
+  <:header>
+    <h2>Frame Header</h2>
+  </:header>
+  <:body>
+    <p>Frame body</p>
+  </:body>
+</Rose::Frame>
+```
