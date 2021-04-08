@@ -11,11 +11,7 @@ const generateMenuTemplate = () => {
         {
           id: 'update',
           label: 'Check for Updates',
-          click: async () => {
-            debugger;
-            const feedPath = await appUpdater.run();
-            console.log('feedPath ', feedPath);
-          },
+          click: async () => appUpdater.run(),
         },
         { type: 'separator' },
         { role: 'services' },

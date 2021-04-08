@@ -1,110 +1,121 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const isDev = require('electron-is-dev');
 const { parse } = require('node-html-parser');
 const { autoUpdater, dialog } = require('electron');
 
-// Query release site to find latest available version
+const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
+const currentVersion = '1.0.0-beta';
+
+// Query releases url to find latest version
 const findLatestVersion = (url) => {
   return new Promise((resolve, reject) => {
     let data = '';
     https.get(url, (response) => {
-      response.on('data', (chunk) => {
-        data += chunk;
-      });
+      response.on('data', (chunk) => (data += chunk));
       response.on('end', () => {
         const html = parse(data);
         // Ignore first link as it navigates to root
         const fullVersion = html.querySelectorAll('a')[1].innerHTML;
-        const version = {
-          name: fullVersion,
-          tag: fullVersion.split('_')[1],
-        };
-        resolve(version);
+        resolve(fullVersion.split('_')[1]);
       });
       response.on('error', (err) => reject(err));
     });
   });
 };
 
-// Download update archive from releases
-const downloadUpdateArtifact = (url, archiveDestination) => {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(archiveDestination)) fs.mkdirSync(archiveDestination);
+// Download latest version from releases
+// const downloadLatestVersion = (url, archiveDestination) => {
+//   return new Promise((resolve, reject) => {
+//     if (!fs.existsSync(archiveDestination)) fs.mkdirSync(archiveDestination);
 
-    const artifactFileName = url.split('/').pop();
-    if (!artifactFileName) reject('Could not find artifact filename in: ', url);
+//     const artifactFileName = url.split('/').pop();
+//     if (!artifactFileName) reject('Could not find artifact filename in: ', url);
 
-    const artifactPath = path.resolve(archiveDestination, artifactFileName);
-    https.get(url, (response) => {
-      const stream = response.pipe(fs.createWriteStream(artifactPath));
-      stream.on('close', () => resolve(artifactPath));
-      stream.on('error', reject);
-    });
-  });
-};
+//     const artifactPath = path.resolve(archiveDestination, artifactFileName);
+//     https.get(url, (response) => {
+//       const stream = response.pipe(fs.createWriteStream(artifactPath));
+//       stream.on('close', () => resolve(artifactPath));
+//       stream.on('error', reject);
+//     });
+//   });
+// };
 
 // Create update config using downloaded archive
-const createUpdateConfig = (path, destination) => {
+const createAppUpdaterConfig = (url, destination) => {
+  // https vs file
   const json = { url: `file://${path}` };
-  const feedPath = `${destination}/feed.json`;
-  fs.writeFileSync(feedPath, JSON.stringify(json));
-  return feedPath;
+  const config = JSON.stringify(json);
+  const configPath = `${destination}/feed.json`;
+  if (isDev) console.log(`[app-updater] config: ${config}`);
+  fs.writeFileSync(configPath, config);
+  return configPath;
 };
 
-const downloadAndInstallUpdate = async (url, destination) => {
-  const artifactPath = await downloadUpdateArtifact(url, destination);
-  const configPath = createUpdateConfig(artifactPath, destination);
+const downloadAndInstallUpdate = async (version) => {
+  const url = `${releasesUrl}boundary-desktop_${version}/boundary-desktop_${version}_darwin_amd64.zip`;
+  const destination = path.resolve(__dirname, '..', 'updateArchive');
+  if (!fs.existsSync(destination)) fs.mkdirSync(destination);
 
-  console.log('setFeedURL: ', `file://${configPath}`);
-  autoUpdater.setFeedURL(`file://${configPath}`);
+  try {
+      // can be converted into find zip url and use it instead of downloading it
+      // const artifactPath = await downloadLatestVersion(url, destination);
 
-  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-      type: 'info',
-      buttons: ['Restart', 'Later'],
-      detail:
-        'A new version has been downloaded. Restart the application to apply the updates.',
-    };
+    let configPath;
+    if (isDev && process.env.ENABLE_DEV_UPDATE_CONFIG) {
+      configPath = createAppUpdaterConfig(
+        process.env.LATEST_VERSION_LOCATION,
+        destination
+      );
+    } else {
+      configPath = createAppUpdaterConfig(url, destination);
+    }
 
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      if (returnValue.response === 0) autoUpdater.quitAndInstall();
+    autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['Restart', 'Later'],
+        detail:
+          'A new version has been downloaded. Restart the application to apply the updates.',
+      };
+      dialog.showMessageBox(dialogOpts).then((returnValue) => {
+        if (returnValue.response === 0) autoUpdater.quitAndInstall(true, true);
+      });
     });
-  });
 
-  autoUpdater.on('error', (message) => {
-    console.error('There was a problem updating the application');
-    console.error(message);
-  });
+    autoUpdater.on('error', (e) => {
+      dialog.showErrorBox('Could not update', e.message);
+    });
 
-  // Is this still needed? Does quitAndInstall do what's needed?
-  // autoUpdater.checkForUpdates();
+    if (isDev) console.log('[app-updater] config:', configPath);
+    autoUpdater.setFeedURL(`file://${configPath}`);
+    autoUpdater.checkForUpdates();
+  } catch (e) {
+    dialog.showErrorBox('Could not update', e.message);
+  }
 };
 
 /*
   TODO:
     - download progress in dialog
+    - Alternate to specifying current version
 */
 module.exports = {
   run: async () => {
-    // const releasesUrl = 'https://localhost:1313/releases/boundary-desktop/';
-    const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
-    const current = {
-      name: 'boundary-desktop_1.0.0-alpha',
-      tag: '1.0.0-alpha',
-    };
+    let latestVersion;
+    if (isDev && process.env.ENABLE_DEV_UPDATE_CONFIG) {
+      latestVersion = process.env.LATEST_VERSION_TAG;
+    } else {
+      latestVersion = await findLatestVersion(releasesUrl);
+    }
 
-    // scrape html to find first record in releaseurl to find version
-    // DEV ONLY
-    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-
-    const latest = await findLatestVersion(releasesUrl);
     // No update available - do nothing
-    if (latest.tag <= current.tag) {
+    if (latestVersion <= currentVersion) {
       const dialogOpts = {
         type: 'info',
         icon: null,
-        detail: 'You are on the latest version.',
+        detail: 'No updates available',
       };
 
       dialog.showMessageBox(dialogOpts);
@@ -116,15 +127,12 @@ module.exports = {
       type: 'info',
       buttons: ['Download', 'Later'],
       icon: null,
-      detail:
-        'A new version is available for download. Proceed with download to update.',
+      detail: 'A new version is available for download',
     };
 
     dialog.showMessageBox(dialogOpts).then((returnValue) => {
       if (returnValue.response === 0) {
-        const url = `${releasesUrl}${latest.name}/${latest.name}_darwin_amd64.zip`;
-        const destination = path.resolve(__dirname, '..', 'updateArchive');
-        downloadAndInstallUpdate(url, destination);
+        downloadAndInstallUpdate(latestVersion);
       }
     });
   },

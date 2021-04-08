@@ -39,6 +39,7 @@ module.exports = {
       entitlements: './config/macos/entitlements.plist',
       'entitlements-inherit': './config/macos/entitlements.plist',
       'signature-flags': 'library',
+      'gatekeeper-assess': false,
     },
     osxNotarize: {
       appleId: 'gsusmi@gmail.com',
