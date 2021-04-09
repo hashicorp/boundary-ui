@@ -19,7 +19,7 @@ copy-to-clipboard: Copy to Clipboard
 authenticate: Authenticate
 deauthenticate: Deauthenticate
 choose-org: Choose Scope
-choose-different-org: Choose a Different Scope
+choose-different-org: Choose a different scope
 add-host-set: Create Host Set
 add-host: Create Host
 add-host-sets: Add Host Sets
