@@ -1,6 +1,7 @@
 .rose-dialog-cover {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -16,6 +17,8 @@
 
   .rose-dialog-cover-header,
   .rose-dialog-cover-body {
+    position: relative;
+    top: -10vh;
     max-width: 650px;
   }
 }
