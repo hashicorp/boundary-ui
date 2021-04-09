@@ -1,0 +1,42 @@
+
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Dialog|Cover" component="Cover" />
+
+# Dialog Cover
+
+A template-only dialog component that covers the viewport and accepts arbitrary
+content. Note that this component is unique to Boundary and is not part of the
+Structure design system.
+
+Prerequisite:  `ember-named-blocks-polyfill` must be installed in your app's
+`dependencies` rather than `devDependencies`.
+
+<Preview>
+  <Story name="Cover" height="15rem">{{
+    template: hbs`
+    <Rose::Dialog::Cover>
+      <:header>
+        <h1>Cover Header</h1>
+      </:header>
+      <:body>
+        <p>Cover body</p>
+      </:body>
+    </Rose::Dialog::Cover>
+    `
+  }}</Story>
+</Preview>
+
+
+```htmlbars
+<Rose::Dialog::Cover>
+  <:header>
+    <h2>Cover Header</h2>
+  </:header>
+  <:body>
+    <p>Cover body</p>
+  </:body>
+</Rose::Dialog::Cover>
+```

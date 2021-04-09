@@ -1,0 +1,34 @@
+.rose-dialog-cover {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  text-align: center;
+
+  a {
+    color: var(--white);
+  }
+
+  .rose-dialog-cover-header,
+  .rose-dialog-cover-body {
+    max-width: 650px;
+  }
+}
+// overlay
+.rose-dialog-cover-modal-overlay {
+  content: ' ';
+  background-color: var(--black);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0.85;
+}

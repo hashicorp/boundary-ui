@@ -1,6 +1,6 @@
-@use '../variables/sizing';
-@use '../utilities/type';
-@use '../variables/media';
+@use '../../variables/sizing';
+@use '../../utilities/type';
+@use '../../variables/media';
 
 $m: sizing.rems(m); // 16
 $s: sizing.rems(s); // 12
