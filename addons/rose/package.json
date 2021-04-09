@@ -33,6 +33,7 @@
     "ember-cli-babel": "^7.23.0",
     "ember-cli-htmlbars": "^5.3.1",
     "ember-focus-trap": "^0.4.0",
+    "ember-named-blocks-polyfill": "^0.2.4",
     "ember-radio-button": "^2.0.1",
     "ember-uuid": "^2.1.0",
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
