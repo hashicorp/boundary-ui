@@ -86,6 +86,7 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
+      oidc: false,
       'primary-auth-method': false,
     },
   };
@@ -123,6 +124,7 @@ module.exports = function (environment) {
 
     // Enable features in development
     ENV.featureFlags['primary-auth-method'] = true;
+    ENV.featureFlags['oidc'] = true;
   }
 
   if (environment === 'test') {

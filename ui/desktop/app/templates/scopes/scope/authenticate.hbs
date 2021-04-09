@@ -21,11 +21,23 @@
     </Rose::Dropdown>
 
     <Rose::Nav::Tabs as |nav|>
-      {{#each @model.authMethods as |authMethod|}}
-        <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
-          {{t (concat "resources.auth-method.types." authMethod.type)}}
-        </nav.link>
-      {{/each}}
+      {{#if (feature-flag 'oidc')}}
+        {{! OIDC enable:  list all auth methods }}
+        {{#each @model.authMethods as |authMethod|}}
+          <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
+            {{t (concat "resources.auth-method.types." authMethod.type)}}
+          </nav.link>
+        {{/each}}
+      {{else}}
+        {{! OIDC disabled:  filter out OIDC auth methods}}
+        {{#each @model.authMethods as |authMethod|}}
+          {{#unless authMethod.isOIDC}}
+            <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
+              {{t (concat "resources.auth-method.types." authMethod.type)}}
+            </nav.link>
+          {{/unless}}
+        {{/each}}
+      {{/if}}
     </Rose::Nav::Tabs>
 
     {{#if @model.authMethods}}

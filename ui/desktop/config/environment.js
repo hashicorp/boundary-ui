@@ -52,6 +52,10 @@ module.exports = function (environment) {
         sessions: '/sessions',
       },
     },
+
+    featureFlags: {
+      oidc: false,
+    },
   };
 
   if (process.env.ENABLE_MIRAGE) {
@@ -69,6 +73,9 @@ module.exports = function (environment) {
     // of the UI, which only makes sense in development where the origin is
     // usually the same as the application origin.
     ENV.autoOrigin = true;
+
+    // Enable features in development
+    ENV.featureFlags['oidc'] = true;
   }
 
   if (environment === 'test') {
