@@ -30,6 +30,9 @@
     "test:ember": "COVERAGE=true ember exam --random",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
+  "dependencies": {
+    "ember-named-blocks-polyfill": "^0.2.4"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@ember/optional-features": "^2.0.0",
