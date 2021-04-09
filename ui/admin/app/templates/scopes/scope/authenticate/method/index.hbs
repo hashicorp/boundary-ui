@@ -1,5 +1,17 @@
-<Form::Authenticate
-  @model={{@model}}
-  @submit={{route-action "authenticate"}}
-  @disabled={{is-loading}}
-/>
+{{#if (feature-flag 'oidc')}}
+  {{! OIDC enabled:  show form for any auth method}}
+  <Form::Authenticate
+    @model={{@model}}
+    @submit={{route-action "authenticate"}}
+    @disabled={{is-loading}}
+  />
+{{else}}
+  {{! OIDC disabled:  hide OIDC auth form}}
+  {{#unless @model.isOIDC}}
+    <Form::Authenticate
+      @model={{@model}}
+      @submit={{route-action "authenticate"}}
+      @disabled={{is-loading}}
+    />
+  {{/unless}}
+{{/if}}
