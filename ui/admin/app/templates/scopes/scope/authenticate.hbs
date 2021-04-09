@@ -3,58 +3,59 @@
 <Rose::Layout::Centered>
   <Rose::Layout::Page as |page|>
 
-    <page.header>
-      <h2>{{t "actions.authenticate"}}</h2>
-      <p>{{t "auth.descriptions.authenticating-with-org" name=@model.scope.displayName}}</p>
-    </page.header>
-
-    <page.navigation>
-
-      <Rose::Dropdown
-        @text={{t "actions.choose-different-org"}}
-        @icon="user-organization"
-      as |dropdown|>
-        <dropdown.link @route="scopes.scope.authenticate" @model="global">
-          {{t "titles.global"}}
-        </dropdown.link>
-        {{#each this.sortedScopes as |scope|}}
-          <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
-            {{scope.displayName}}
-          </dropdown.link>
-        {{/each}}
-      </Rose::Dropdown>
-
-      <Rose::Separator />
-
-      <Rose::Nav::Tabs as |nav|>
-        {{#each @model.authMethods as |authMethod|}}
-          <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
-            {{#if authMethod.name}}
-              {{authMethod.name}}
-            {{else}}
-              {{t (concat "resources.auth-method.types." authMethod.type)}}
-            {{/if}}
-          </nav.link>
-        {{/each}}
-      </Rose::Nav::Tabs>
-    </page.navigation>
-
     <page.body>
-      {{#if @model.authMethods}}
-        {{outlet}}
-      {{/if}}
-      {{#unless @model.authMethods}}
-        <Rose::Layout::Centered>
-          <Rose::Message
-            @title={{t "resources.auth-method.messages.none.title"}}
-            @icon="alert-circle-outline"
-          as |message|>
-            <message.description>
-              {{t "resources.auth-method.messages.none.description"}}
-            </message.description>
-          </Rose::Message>
-        </Rose::Layout::Centered>
-      {{/unless}}
+
+      <Rose::Frame>
+        <:header>
+          <h2>{{t "actions.authenticate"}}</h2>
+        </:header>
+        <:body>
+          <p>{{t "auth.descriptions.authenticating-with-org" name=@model.scope.displayName}}</p>
+          <Rose::Dropdown
+            @text={{t "actions.choose-different-org"}}
+            @icon="user-organization"
+          as |dropdown|>
+            <dropdown.link @route="scopes.scope.authenticate" @model="global">
+              {{t "titles.global"}}
+            </dropdown.link>
+            {{#each this.sortedScopes as |scope|}}
+              <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
+                {{scope.displayName}}
+              </dropdown.link>
+            {{/each}}
+          </Rose::Dropdown>
+
+          <Rose::Separator />
+
+          <Rose::Nav::Tabs as |nav|>
+            {{#each @model.authMethods as |authMethod|}}
+              <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
+                {{#if authMethod.name}}
+                  {{authMethod.name}}
+                {{else}}
+                  {{t (concat "resources.auth-method.types." authMethod.type)}}
+                {{/if}}
+              </nav.link>
+            {{/each}}
+          </Rose::Nav::Tabs>
+
+          {{#if @model.authMethods}}
+            {{outlet}}
+          {{/if}}
+          {{#unless @model.authMethods}}
+            <Rose::Layout::Centered>
+              <Rose::Message
+                @title={{t "resources.auth-method.messages.none.title"}}
+                @icon="alert-circle-outline"
+              as |message|>
+                <message.description>
+                  {{t "resources.auth-method.messages.none.description"}}
+                </message.description>
+              </Rose::Message>
+            </Rose::Layout::Centered>
+          {{/unless}}
+        </:body>
+      </Rose::Frame>
     </page.body>
 
   </Rose::Layout::Page>
