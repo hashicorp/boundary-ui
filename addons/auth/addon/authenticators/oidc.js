@@ -10,8 +10,8 @@ import fetch from 'fetch';
  *    sub steps:
  *    1. Initiate a call via `startAuthentication` to the API at
  *       `buildAuthEndpointURL` using the `start` command to fetch the URL of
- *       the external authentication provider (`authorization_request_url`).
- *    2. Open `authorization_request_url`.  This may be either inline (same tab)
+ *       the external authentication provider (`auth_url`).
+ *    2. Open `auth_url`.  This may be either inline (same tab)
  *       or external in a new tab or browser window.
  * 2. Requests the token from `buildAuthEndpointURL` using the `token` command.
  *       A token isn't guaranteed to be ready, so the OIDC flow can be in a
@@ -84,21 +84,19 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     const body = JSON.stringify({
       command: 'token',
       attributes: {
-        state: this.session.get('data.pending.oidc.state'),
-        token_request_id: this.session.get(
-          'data.pending.oidc.token_request_id'
-        ),
+        //state: this.session.get('data.pending.oidc.attributes.state'),
+        token_id: this.session.get('data.pending.oidc.attributes.token_id'),
       },
     });
     // Fetch the endpoint and get the response JSON
     const response = await fetch(url, { method: 'post', body });
-    const json = await response.json();
-    if (response.status === 100) {
+    if (response.status === 204) {
       // The token isn't ready yet, keep trying.
       return false;
     } else if (response.status < 400) {
       // Response was successful, meaning a token was obtained.
       // Authenticate with the session service using the response JSON.
+      const json = await response.json();
       await this.session.authenticate('authenticator:oidc', json);
       return true;
     } else {

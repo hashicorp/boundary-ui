@@ -66,7 +66,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     // TODO: delegate this call from the session service so that we don't have
     // to look up the authenticator directly
     const json = await oidc.startAuthentication(options);
-    await this.openExternalOIDCFlow(json.attributes.authorization_request_url);
+    await this.openExternalOIDCFlow(json.attributes.auth_url);
   }
 
   /**

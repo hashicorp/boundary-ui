@@ -63,7 +63,7 @@ const commandHandlers = {
    * 1. `authenticate:start` kicks of authentication by requesting some details
    *    from the Boundary server about the request, including the third-party
    *    URL to which to redirect the user.
-   * 2. `authenticate` accepts the token_request_id and state parameters in
+   * 2. `authenticate` accepts the token_id and state parameters in
    *    order to retrieve a Boundary token.  This endpoint may be polled until
    *    the authentication flow is completed.
    */
@@ -74,10 +74,8 @@ const commandHandlers = {
         {},
         {
           attributes: {
-            authorization_request_url: 'https://www.duckduckgo.com',
-            retreival_url: '',
-            token_request_id: 'token_request_1234',
-            state: 'base_58_encoded_string',
+            auth_url: 'https://www.duckduckgo.com',
+            token_id: 'token_1234',
           },
         }
       ),
