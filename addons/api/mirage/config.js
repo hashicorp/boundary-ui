@@ -69,7 +69,7 @@ export default function () {
     if (scope.primaryAuthMethodId === id) {
       scope.update({ primaryAuthMethodId: null });
     }
-    return new Response(204);
+    return new Response(202);
   });
 
   // Auth Method Accounts

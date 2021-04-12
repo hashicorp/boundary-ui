@@ -90,7 +90,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     });
     // Fetch the endpoint and get the response JSON
     const response = await fetch(url, { method: 'post', body });
-    if (response.status === 204) {
+    if (response.status === 202) {
       // The token isn't ready yet, keep trying.
       return false;
     } else if (response.status < 400) {
