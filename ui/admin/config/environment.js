@@ -86,7 +86,7 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
-      oidc: false,
+      oidc: true,
       'oidc-crud': false,
       'primary-auth-method': false,
     },

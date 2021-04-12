@@ -55,7 +55,7 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
-      oidc: false,
+      oidc: true,
     },
   };
 
