@@ -36,6 +36,9 @@
     "postinstall": "cd electron-app && yarn install",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
+  "dependencies": {
+    "ember-named-blocks-polyfill": "^0.2.4"
+  },
   "devDependencies": {
     "@doyensec/electronegativity": "^1.8.1",
     "@ember/jquery": "^1.1.0",
