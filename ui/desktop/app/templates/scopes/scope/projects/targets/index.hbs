@@ -58,11 +58,11 @@
               <row.cell>
                 <div>
                   <Copyable
-                    @text={{model.target.id}}
+                    @text={{model.project.id}}
                     @buttonText={{t "actions.copy-to-clipboard"}}
                     @acknowledgeText={{t "states.copied"}}
                   >
-                    <code>{{model.target.id}}</code>
+                    <code>{{model.project.id}}</code>
                   </Copyable>
                 </div>
                 <Rose::Badge @style='informational'>
