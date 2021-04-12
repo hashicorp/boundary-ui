@@ -1,5 +1,5 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date } from 'faker';
+import { random, date, datatype } from 'faker';
 
 /**
  * GeneratedHostSetModelFactory
@@ -10,6 +10,6 @@ export default Factory.extend({
   description: () => random.words(),
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
-  version: () => random.number(),
-  size: () => random.number(),
+  version: () => datatype.number(),
+  size: () => datatype.number(),
 });

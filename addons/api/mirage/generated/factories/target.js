@@ -1,5 +1,5 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date } from 'faker';
+import { random, date, datatype } from 'faker';
 
 /**
  * GeneratedTargetModelFactory
@@ -7,11 +7,11 @@ import { random, date } from 'faker';
 export default Factory.extend({
   type: 'tcp',
   name: () => random.words(),
-  session_max_seconds: () => random.number(),
-  session_connection_limit: () => random.number(),
+  session_max_seconds: () => datatype.number(),
+  session_connection_limit: () => datatype.number(),
   description: () => random.words(),
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
-  disabled: () => random.boolean(),
-  version: () => random.number(),
+  disabled: () => datatype.boolean(),
+  version: () => datatype.number(),
 });

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import config from 'ember-get-config';
-import { random } from 'faker';
+import { datatype } from 'faker';
 
 export default function initializeMockIPC(server) {
   /**
@@ -55,7 +55,7 @@ export default function initializeMockIPC(server) {
       });
       return {
         address: window.location.hostname,
-        port: random.number(),
+        port: datatype.number(),
         protocol: type,
         session_id: newSession.id,
       };
