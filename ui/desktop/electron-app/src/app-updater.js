@@ -46,7 +46,7 @@ const downloadAndInstallUpdate = async (version) => {
     let configPath;
     if (debug) {
       // Support hosted url and file paths
-      const location = process.env.LATEST_VERSION_LOCATION;
+      const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
       configPath = createAppUpdaterConfig(
         location.match(/^https/i) ? location : `file://${location}`,
         version,
@@ -90,7 +90,7 @@ module.exports = {
   run: async () => {
     let latestVersion;
     if (debug) {
-      latestVersion = process.env.LATEST_VERSION_TAG;
+      latestVersion = process.env.APP_UPDATER_LATEST_VERSION_TAG;
     } else {
       latestVersion = await findLatestVersion(releasesUrl);
     }
