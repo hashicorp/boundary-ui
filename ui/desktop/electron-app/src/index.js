@@ -19,6 +19,7 @@ const origin = require('./origin.js');
 const { generateCSPHeader } = require('./content-security-policy.js');
 
 const menu = require('./menu.js');
+const appUpdater = require('./app-updater.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -137,6 +138,9 @@ app.on('ready', async () => {
 
   // Load the ember application
   mainWindow.loadURL(emberAppURL);
+
+  // Check for updates on launch
+  appUpdater.run({ suppressNoUpdatePrompt: true });
 
   // If a loading operation goes wrong, we'll send Electron back to
   // Ember App entry point

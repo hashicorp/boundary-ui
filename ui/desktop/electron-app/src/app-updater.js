@@ -88,10 +88,9 @@ const downloadAndInstallUpdate = async (version) => {
  * Configure inbuilt app updater to use a custom config file
  * to download and install next available app version.
  * TODO: download progress in dialog
- * TODO: Read current version from app config
  **/
 module.exports = {
-  run: async () => {
+  run: async ({ suppressNoUpdatePrompt }) => {
     let latestVersion;
     if (debug) {
       latestVersion = process.env.APP_UPDATER_LATEST_VERSION_TAG;
@@ -105,7 +104,7 @@ module.exports = {
     }
 
     // Update not available - do nothing
-    if (semver.lte(latestVersion, currentVersion)) {
+    if (!suppressNoUpdatePrompt && semver.lte(latestVersion, currentVersion)) {
       const dialogOpts = {
         type: 'info',
         icon: null,
