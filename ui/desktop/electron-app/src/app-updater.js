@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const semver = require('semver');
 const { parse } = require('node-html-parser');
 const { autoUpdater, dialog } = require('electron');
 
-const debug = process.env.DEBUG_APP_UPDATER
+const debug = process.env.DEBUG_APP_UPDATER;
 const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
 const currentVersion = '1.0.0-beta';
 
@@ -84,7 +85,7 @@ const downloadAndInstallUpdate = async (version) => {
  * to download and install next available app version.
  * TODO: download progress in dialog
  * TODO: Read current version from app config
-**/
+ **/
 module.exports = {
   run: async () => {
     let latestVersion;
@@ -94,8 +95,13 @@ module.exports = {
       latestVersion = await findLatestVersion(releasesUrl);
     }
 
+    // Ensure version is in proper format
+    if (!semver.valid(latestVersion)) {
+      latestVersion = semver.coerce(latestVersion);
+    }
+
     // Update not available - do nothing
-    if (latestVersion <= currentVersion) {
+    if (semver.lte(latestVersion, currentVersion)) {
       const dialogOpts = {
         type: 'info',
         icon: null,
