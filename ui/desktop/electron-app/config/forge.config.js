@@ -18,12 +18,13 @@ console.log('RELEASE_VERSION     ', process.env.RELEASE_VERSION);
 console.log('RELEASE_COMMIT      ', process.env.RELEASE_COMMIT);
 
 module.exports = {
+  releaseVersion: process.env.RELEASE_VERSION,
   hooks: {
     prePackage: () => {
       if (!process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY) {
         console.warn('\nWARNING: Could not find signing identity.');
       }
-    }
+    },
   },
   packagerConfig: {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],

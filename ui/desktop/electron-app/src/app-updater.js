@@ -4,10 +4,14 @@ const https = require('https');
 const semver = require('semver');
 const { parse } = require('node-html-parser');
 const { autoUpdater, dialog } = require('electron');
+const { releaseVersion } = require('../config/forge.config.js');
 
 const debug = process.env.DEBUG_APP_UPDATER;
 const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
-const currentVersion = '1.0.0-beta';
+let currentVersion = releaseVersion;
+if (debug && process.env.APP_UPDATER_CURRENT_VERSION) {
+  currentVersion = process.env.APP_UPDATER_CURRENT_VERSION;
+}
 
 // Query releases url to find latest version
 const findLatestVersion = (url) => {
