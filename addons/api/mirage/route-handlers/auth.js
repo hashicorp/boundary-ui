@@ -82,7 +82,7 @@ const commandHandlers = {
     token: (_, scopeAttrs) => {
       oidcAttemptCounter++;
       if (oidcAttemptCounter < oidcRequiredAttempts) {
-        return new Response(100);
+        return new Response(202);
       } else {
         return new Response(
           200,
