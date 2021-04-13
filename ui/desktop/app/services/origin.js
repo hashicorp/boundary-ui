@@ -63,11 +63,11 @@ export default class OriginService extends Service {
       typeof origin === 'string'
     );
     try {
-      // Silently drop trailing slashes if present.
+      // Trim whitespaces and silently drop trailing slashes if present.
       // This is important since API paths that will be appended to the origin
       // will include preceeding slashes already.
-      // Trim whitespaces around origin.
-      origin = origin.replace(/\/*$/, '').trim();
+      origin = origin.trim();
+      origin = origin.replace(/\/*$/, '');
       this.adapter.host = origin;
       this.rendererOrigin = origin;
       if (origin !== (await this.mainOrigin)) {
