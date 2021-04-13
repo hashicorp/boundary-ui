@@ -8,4 +8,18 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
    * @type {boolean}
    */
   @equal('primary', true) isPrimary;
+
+  /**
+   * @type {boolean}
+   */
+  get isPassword() {
+    return this.type === 'password';
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isOIDC() {
+    return this.type === 'oidc';
+  }
 }

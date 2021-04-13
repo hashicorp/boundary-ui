@@ -47,8 +47,9 @@ module('Unit | Authenticator | password', function (hooks) {
       (schema, request) => {
         const json = JSON.parse(request.requestBody);
         assert.deepEqual(json, {
+          command: 'login',
           token_type: 'cookie',
-          credentials: {
+          attributes: {
             login_name: 'foo',
             password: 'bar',
           },

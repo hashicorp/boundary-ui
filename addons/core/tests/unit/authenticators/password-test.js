@@ -26,13 +26,11 @@ module('Unit | Authenticator | password', function (hooks) {
 
   test('it adds an authorization header to application adapter on restore', async function (assert) {
     assert.expect(1);
-    const mockData = { id: 'token1234', token: 'token1234' };
-    this.server.get(
-      authenticator.buildTokenValidationEndpointURL(mockData.id),
-      () => {
-        return new Response(200);
-      }
-    );
+    const id = 'token1234';
+    const mockData = { attributes: { id, token: 'token1234' } };
+    this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
+      return new Response(200);
+    });
     authenticator.restore(mockData);
     assert.equal(applicationAdapter.headers.Authorization, 'Bearer token1234');
   });

@@ -87,9 +87,11 @@ module('Acceptance | authentication', function (hooks) {
     // create other resources
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
+      type: 'password',
     });
     instances.authMethods.org = this.server.create('auth-method', {
       scope: instances.scopes.org,
+      type: 'password',
     });
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;

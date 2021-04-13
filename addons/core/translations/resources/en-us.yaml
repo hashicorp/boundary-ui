@@ -27,8 +27,12 @@ auth-method:
     no-primary-auth-method:
       title: "Recommendation: Select a Primary Auth Method"
       description: A primary auth method auto-creates users when they authenticate for the first time.  Scopes without primary auth methods may experience authentication failures.
+    pending:
+      title: Authentication Pending
+      description: Complete authentication in the newly-opened window.
   types:
     password: Password
+    oidc: OIDC
   actions:
     create: Create Auth Method
     delete: Delete Auth Method
@@ -42,6 +46,7 @@ auth-method:
     remove-as-primary: Remove primary auth method?
     make-primary-confirm: "A primary auth method auto-creates users on their first authentication attempt if needed.  Note:  if you change the primary auth method, the previous primary will no longer auto-create users."
     remove-as-primary-confirm: Removing the primary auth method may lead to authentication failures for this scope.
+    no-see-window: Don't see the new window?
 group:
   title: Group
   title_plural: Groups

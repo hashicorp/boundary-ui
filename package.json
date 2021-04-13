@@ -58,7 +58,8 @@
     "highlight.js": "^10.4.1",
     "hoek": "~4.2.0",
     "elliptic": "~6.5.4",
-    "react-dev-utils": "~11.0.4"
+    "react-dev-utils": "~11.0.4",
+    "yargs-parser": "~20.2.7"
   },
   "config": {
     "commitizen": {

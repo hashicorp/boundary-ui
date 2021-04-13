@@ -1,0 +1,13 @@
+<Rose::Form
+  class="full-width"
+  @onSubmit={{@submit}}
+  @cancel={{false}}
+  @disabled={{@disabled}}
+  as |form|
+>
+
+  <form.actions
+    @submitText={{t "actions.authenticate"}}
+    @showCancel={{false}} />
+
+</Rose::Form>

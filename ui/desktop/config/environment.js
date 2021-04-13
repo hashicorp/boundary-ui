@@ -44,6 +44,7 @@ module.exports = function (environment) {
 
     notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 2.5,
+    oidcPollingTimeoutSeconds: 1,
 
     documentation: {
       baseURL: 'https://boundaryproject.io/help/desktop',
@@ -51,6 +52,10 @@ module.exports = function (environment) {
         targets: '/targets',
         sessions: '/sessions',
       },
+    },
+
+    featureFlags: {
+      oidc: true,
     },
   };
 
@@ -69,6 +74,9 @@ module.exports = function (environment) {
     // of the UI, which only makes sense in development where the origin is
     // usually the same as the application origin.
     ENV.autoOrigin = true;
+
+    // Enable features in development
+    ENV.featureFlags['oidc'] = true;
   }
 
   if (environment === 'test') {

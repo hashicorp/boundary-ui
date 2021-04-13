@@ -36,6 +36,7 @@ module.exports = function (environment) {
 
     notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 2.5,
+    oidcPollingTimeoutSeconds: 1,
 
     documentation: {
       baseURL: 'https://boundaryproject.io/help/admin-ui',
@@ -85,6 +86,8 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
+      oidc: true,
+      'oidc-crud': false,
       'primary-auth-method': false,
     },
   };
@@ -122,6 +125,8 @@ module.exports = function (environment) {
 
     // Enable features in development
     ENV.featureFlags['primary-auth-method'] = true;
+    ENV.featureFlags['oidc'] = true;
+    //ENV.featureFlags['oidc-crud'] = true;
   }
 
   if (environment === 'test') {
