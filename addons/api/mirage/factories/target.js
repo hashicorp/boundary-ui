@@ -1,6 +1,6 @@
 import factory from '../generated/factories/target';
 import { trait } from 'ember-cli-mirage';
-import { random } from 'faker';
+import { random, datatype } from 'faker';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
@@ -9,7 +9,7 @@ export default factory.extend({
   /**
    * -1 means "unlimited" and we want to generate these on occassion.
    */
-  session_connection_limit: () => random.arrayElement([-1, random.number()]),
+  session_connection_limit: () => random.arrayElement([-1, datatype.number()]),
 
   /**
    * Generates attributes fields by type.
@@ -18,7 +18,7 @@ export default factory.extend({
     if (target.type === 'tcp') {
       target.update({
         attributes: {
-          default_port: random.number(),
+          default_port: datatype.number(),
         },
       });
     }
