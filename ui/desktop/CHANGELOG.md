@@ -4,6 +4,10 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ## Next
 
+### New
+
+- Check for client updates and update on-demand using new menu option. ([PR](https://github.com/hashicorp/boundary-ui/pull/522))
+
 ### Bug Fixes
 
 - Trigger zoom-in menu option on keyboard shortcut. ([PR](https://github.com/hashicorp/boundary-ui/pull/505))
