@@ -1,5 +1,5 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date } from 'faker';
+import { random, date, datatype } from 'faker';
 
 /**
  * GeneratedGroupModelFactory
@@ -10,5 +10,5 @@ export default Factory.extend({
   description: () => random.words(),
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
-  disabled: () => random.boolean(),
+  disabled: () => datatype.boolean(),
 });
