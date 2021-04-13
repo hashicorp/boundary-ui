@@ -1,17 +1,15 @@
-import BasePasswordAuthenticator from 'auth/authenticators/password';
+import BaseOIDCAuthenticator from 'auth/authenticators/oidc';
 import { inject as service } from '@ember/service';
 
 /**
- * A username/password authenticator that authenticates with
- * a scope/auth-method endpoint.  Authentication occurs on an auth method
- * endpoint, while deauthentication occurs on a scope endpoint.
+ * An OIDC authenticator that handles flow kick-off and polling.
  */
-export default class PasswordAuthenticator extends BasePasswordAuthenticator {
+export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
   // =services
 
   @service store;
 
-  // =attributes
+  // =methods
 
   /**
    * Generates an auth method URL with which to authenticate.
@@ -28,19 +26,6 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
     const adapter = this.store.adapterFor('application');
     const options = { adapterOptions: { scopeID, method: 'authenticate' } };
     return adapter.buildURL('auth-method', authMethodID, options, 'findRecord');
-  }
-
-  /**
-   * Generates a scope URL with which to deauthenticate.
-   * @override
-   * @param {object} options
-   * @param {string} scopeID
-   * @return {string}
-   */
-  buildDeauthEndpointURL({ scope: { id: scopeID } }) {
-    const adapter = this.store.adapterFor('application');
-    const options = { adapterOptions: { method: 'deauthenticate' } };
-    return adapter.buildURL('scope', scopeID, options, 'findRecord');
   }
 
   /**
@@ -62,7 +47,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    */
   authenticate() {
     return super.authenticate(...arguments).then((data) => {
-      const token = data?.token;
+      const token = data?.attributes?.token;
       this.addTokenToAuthorization(token);
       return data;
     });
@@ -76,7 +61,7 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * @return {object}
    */
   restore(data) {
-    const token = data?.token;
+    const token = data?.attributes?.token;
     this.addTokenToAuthorization(token);
     return super.restore(data);
   }
@@ -85,6 +70,9 @@ export default class PasswordAuthenticator extends BasePasswordAuthenticator {
    * Assigns a token string all future requests via the `Authorization` header
    * on the application adapter prototype.  Only application and adapters that
    * extend the application adapter receive this header (which is most).
+   *
+   * TODO:  if cookies were requested, this step should be skipped.
+   *
    * @param {string} token
    */
   addTokenToAuthorization(token) {

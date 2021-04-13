@@ -1,0 +1,24 @@
+<Rose::Dialog::Cover>
+  <:header>
+    {{inline-svg "logo-app-full"}}
+    <h1>{{t 'resources.auth-method.messages.pending.title'}}</h1>
+  </:header>
+  <:body>
+    <p>{{t 'resources.auth-method.messages.pending.description'}}</p>
+    <p>
+      {{t 'resources.auth-method.questions.no-see-window'}}
+      <a
+        href="{{this.authURL}}"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        {{t 'actions.retry'}}
+      </a>
+    </p>
+    <p>
+      <LinkTo @route="scopes.scope.authenticate.method">
+        {{t 'actions.cancel'}}
+      </LinkTo>
+    </p>
+  </:body>
+</Rose::Dialog::Cover>

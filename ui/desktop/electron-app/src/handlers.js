@@ -1,4 +1,5 @@
 const { shell } = require('electron');
+const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler');
 const boundaryCli = require('./boundary-cli');
 const origin = require('./origin.js');
@@ -26,12 +27,17 @@ handle('resetOrigin', async (requestOrigin) => {
 });
 
 /**
- * Opens the specified URL in an external browser.  Only HTTPS URLs are allowed.
+ * Opens the specified URL in an external browser.  Only secure HTTPs URLs are
+ * allowed except in the case of localhost (which enables development and
+ * testing workflows).  Insecure URLs are allowed in dev mode.
  */
 handle('openExternal', async (href) => {
-  if (href.startsWith('https://')) {
+  const isSecure = href.startsWith('https://');
+  const isLocalhost = href.startsWith('http://localhost')
+    || href.startsWith('http://127.0.0.1');
+  if (isSecure || isLocalhost || isDev) {
     // openExternal is necessary in order to display documentation and to
-    // support arbitrary OIDC flows.  The protocol is validated.
+    // support arbitrary OIDC flows.  The protocol is validated (see above).
     shell.openExternal(href); /* eng-disable OPEN_EXTERNAL_JS_CHECK */
   } else {
     throw new Error(
