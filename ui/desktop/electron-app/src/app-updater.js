@@ -90,7 +90,7 @@ const downloadAndInstallUpdate = async (version) => {
  * TODO: download progress in dialog
  **/
 module.exports = {
-  run: async ({ suppressNoUpdatePrompt }) => {
+  run: async ({ suppressNoUpdatePrompt } = {}) => {
     let latestVersion;
     if (debug) {
       latestVersion = process.env.APP_UPDATER_LATEST_VERSION_TAG;
@@ -104,7 +104,8 @@ module.exports = {
     }
 
     // Update not available - do nothing
-    if (!suppressNoUpdatePrompt && semver.lte(latestVersion, currentVersion)) {
+    if (semver.lte(latestVersion, currentVersion)) {
+      if (suppressNoUpdatePrompt) return;
       const dialogOpts = {
         type: 'info',
         icon: null,
@@ -112,21 +113,20 @@ module.exports = {
       };
 
       dialog.showMessageBox(dialogOpts);
-      return;
+    } else {
+      // Update is available - prompt for download
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['Download', 'Later'],
+        icon: null,
+        detail: 'A new version is available for download',
+      };
+
+      dialog.showMessageBox(dialogOpts).then((returnValue) => {
+        if (returnValue.response === 0) {
+          downloadAndInstallUpdate(latestVersion);
+        }
+      });
     }
-
-    // Update is available - prompt for download
-    const dialogOpts = {
-      type: 'info',
-      buttons: ['Download', 'Later'],
-      icon: null,
-      detail: 'A new version is available for download',
-    };
-
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      if (returnValue.response === 0) {
-        downloadAndInstallUpdate(latestVersion);
-      }
-    });
   },
 };

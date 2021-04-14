@@ -53,7 +53,7 @@ module.exports = {
         const jsonData = jsonify(errorStream);
         if (jsonData) {
           const error = jsonData.api_error || jsonData.error;
-          reject(new Error(error));
+          reject(new Error(error.message));
         }
       });
     });
