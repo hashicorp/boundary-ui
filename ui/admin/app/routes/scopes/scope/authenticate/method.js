@@ -21,7 +21,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
    */
   model({ auth_method_id: id }) {
     const adapterOptions = { scopeID: this.modelFor('scopes.scope').id };
-    return this.store.findRecord('auth-method', id, adapterOptions);
+    return this.store.peekRecord('auth-method', id, adapterOptions);
   }
 
   /**
