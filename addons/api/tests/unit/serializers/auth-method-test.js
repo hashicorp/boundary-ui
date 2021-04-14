@@ -49,13 +49,13 @@ module('Unit | Serializer | auth method', function (hooks) {
           {
             id: '1',
             type: 'auth-method',
-            attributes: {},
+            attributes: { is_primary: false },
             relationships: {},
           },
           {
             id: '3',
             type: 'auth-method',
-            attributes: {},
+            attributes: { is_primary: false },
             relationships: {},
           },
         ],
