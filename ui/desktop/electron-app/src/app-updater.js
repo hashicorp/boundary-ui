@@ -87,8 +87,7 @@ const downloadAndInstallUpdate = async (version, url) => {
 /**
  * Show update not available prompt only when allowed.
  **/
-const displayInfoPrompt = (suppressPrompt) => {
-  if (suppressPrompt) return;
+const displayInfoPrompt = () => {
   const dialogOpts = {
     type: 'info',
     icon: null,
@@ -137,7 +136,7 @@ module.exports = {
 
     // Update not available - do nothing
     if (semver.lte(latestVersion, currentVersion)) {
-      displayInfoPrompt(suppressNoUpdatePrompt);
+      if (!suppressNoUpdatePrompt) displayInfoPrompt();
       return;
     }
 
@@ -159,7 +158,7 @@ module.exports = {
       })
       .catch((e) => {
         if (debug) console.error('[app-updater]', e);
-        displayInfoPrompt(suppressNoUpdatePrompt);
+        if (!suppressNoUpdatePrompt) displayInfoPrompt();
       });
   },
 };
