@@ -6,6 +6,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### New
 
+- OIDC authentication support. ([PR](https://github.com/hashicorp/boundary-ui/pull/429))
 - Check for client updates and update on-demand using new menu option. ([PR](https://github.com/hashicorp/boundary-ui/pull/522))
 
 ### Bug Fixes
