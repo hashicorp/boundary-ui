@@ -27,14 +27,14 @@ module('Unit | Serializer | auth method', function (hooks) {
     const serializer = store.serializerFor('auth-method');
     const modelClass = store.createRecord('auth-method').constructor;
     const payload = {
-      items: [{ id: 1 }, { id: 2, primary: true }, { id: 3 }],
+      items: [{ id: 1 }, { id: 2, is_primary: true }, { id: 3 }],
     };
     const normalizedArray = serializer.normalizeArrayResponse(
       store,
       modelClass,
       payload
     );
-    assert.ok(payload.items[1].primary, 'Second payload item is primary');
+    assert.ok(payload.items[1].is_primary, 'Second payload item is primary');
     assert.deepEqual(
       normalizedArray,
       {
@@ -43,19 +43,19 @@ module('Unit | Serializer | auth method', function (hooks) {
           {
             id: '2',
             type: 'auth-method',
-            attributes: { primary: true },
+            attributes: { is_primary: true },
             relationships: {},
           },
           {
             id: '1',
             type: 'auth-method',
-            attributes: {},
+            attributes: { is_primary: false },
             relationships: {},
           },
           {
             id: '3',
             type: 'auth-method',
-            attributes: {},
+            attributes: { is_primary: false },
             relationships: {},
           },
         ],

@@ -12,7 +12,7 @@ export default ApplicationSerializer.extend({
     // as such with a read-only boolean field (this is how the API behaves).
     const isPrimary =
       model.scope && model.scope.primaryAuthMethodId === model.id;
-    json.primary = isPrimary;
+    json.is_primary = isPrimary;
     return json;
   },
 });

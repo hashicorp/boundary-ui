@@ -11,7 +11,7 @@ export default class GeneratedAuthMethodModel extends BaseModel {
     description: 'Specifies if this is the primary auth method for its scope.',
     readOnly: true,
   })
-  primary;
+  is_primary;
 
   @attr('string', {
     description: 'The type of the resource, to help differentiate schemas',
