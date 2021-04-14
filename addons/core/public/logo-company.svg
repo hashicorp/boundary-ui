@@ -5,7 +5,7 @@
   fill="none"
   xmlns="http://www.w3.org/2000/svg">
 
-  <g id="logomark">
+  <g class="logomark">
     <path
       d="M0 7.19579L11.4553 0.58728V5.55192L4.30398 9.68052V25.5537L0 23.069V7.19579Z"
       fill="currentColor">
