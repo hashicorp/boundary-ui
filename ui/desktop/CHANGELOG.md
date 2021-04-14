@@ -2,7 +2,7 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
-## Next
+## v1.0.0 [CLI 0.2.0] (2021.04.14)
 
 ### New
 
@@ -12,7 +12,8 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ### Bug Fixes
 
 - Trigger zoom-in menu option on keyboard shortcut. ([PR](https://github.com/hashicorp/boundary-ui/pull/505))
-- Boundary Desktop will accept origins with or without trailing slashes.  ([PR](https://github.com/hashicorp/boundary-ui/pull/519))
+- Boundary Desktop will display readable errors on connect failure. ([PR](https://github.com/hashicorp/boundary-ui/pull/530))
+- Project id will be copyable in Boundary Desktop. ([PR](https://github.com/hashicorp/boundary-ui/pull/523))
 
 ## v1.0.0-beta [CLI 0.1.8] (2021.03.10)
 
