@@ -35,4 +35,15 @@ module('Unit | Service | origin', function (hooks) {
     assert.equal(service.rendererOrigin, window.location.origin);
     assert.equal(service.adapter.host, window.location.origin);
   });
+
+  test('trim spaces from origin on setOrigin', async function (assert) {
+    assert.expect(4);
+    sinon.stub(ipcService, 'invoke');
+    await service.setOrigin(` ${window.location.origin}/ `);
+    assert.equal(service.rendererOrigin, window.location.origin);
+    assert.equal(service.adapter.host, window.location.origin);
+    await service.setOrigin(`   ${window.location.origin}   `);
+    assert.equal(service.rendererOrigin, window.location.origin);
+    assert.equal(service.adapter.host, window.location.origin);
+  });
 });
