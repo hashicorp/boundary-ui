@@ -89,6 +89,10 @@ module.exports = function (environment) {
       oidc: true,
       'oidc-crud': false,
       'primary-auth-method': false,
+      search: false,
+      filter: false,
+      capabilities: false,
+      'credential-store': false,
     },
   };
 

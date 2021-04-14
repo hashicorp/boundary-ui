@@ -56,6 +56,10 @@ module.exports = function (environment) {
 
     featureFlags: {
       oidc: true,
+      search: false,
+      filter: false,
+      capabilities: false,
+      'credential-store': false,
     },
   };
 
