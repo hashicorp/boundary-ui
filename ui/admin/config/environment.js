@@ -83,7 +83,6 @@ module.exports = function (environment) {
 
     'ember-cli-mirage': {
       directory: '../../addons/api/mirage',
-      enabled: false,
     },
 
     featureFlags: {
