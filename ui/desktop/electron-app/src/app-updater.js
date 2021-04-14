@@ -30,10 +30,23 @@ const findLatestVersion = (url) => {
   });
 };
 
+// Find zip archive for update
+const findUpdateArchive = (version) => {
+  const url = `${releasesUrl}boundary-desktop_${version}/boundary-desktop_${version}_darwin_amd64.zip`;
+  return new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      if (response.statusCode === 403)
+        reject({ message: 'Archive not available' });
+      response.on('end', () => resolve(url));
+      response.on('error', (err) => reject(err));
+    });
+  });
+};
+
 // Create update config using downloaded archive
 const createAppUpdaterConfig = (url, version, destination) => {
   if (debug) console.log(`[app-updater] url: ${url}, destination: ${destination}`);
-  const json = { url, version};
+  const json = { url, version };
   const config = JSON.stringify(json);
   const configPath = `${destination}/feed.json`;
   if (debug) console.log(`[app-updater] config: ${config}`);
@@ -41,25 +54,12 @@ const createAppUpdaterConfig = (url, version, destination) => {
   return configPath;
 };
 
-const downloadAndInstallUpdate = async (version) => {
-  const url = `${releasesUrl}boundary-desktop_${version}/boundary-desktop_${version}_darwin_amd64.zip`;
+const downloadAndInstallUpdate = async (version, url) => {
   const destination = path.resolve(__dirname, '..', 'nextVersion');
   if (!fs.existsSync(destination)) fs.mkdirSync(destination);
 
   try {
-    let configPath;
-    if (debug) {
-      // Support hosted url and file paths
-      const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
-      configPath = createAppUpdaterConfig(
-        location.match(/^https/i) ? location : `file://${location}`,
-        version,
-        destination
-      );
-    } else {
-      configPath = createAppUpdaterConfig(url, version, destination);
-    }
-
+    const configPath = createAppUpdaterConfig(url, version, destination);
     autoUpdater.on('update-downloaded', () => {
       const dialogOpts = {
         type: 'info',
@@ -85,6 +85,37 @@ const downloadAndInstallUpdate = async (version) => {
 };
 
 /**
+ * Show update not available prompt only when allowed.
+ **/
+const displayInfoPrompt = () => {
+  const dialogOpts = {
+    type: 'info',
+    icon: null,
+    detail: 'No updates available',
+  };
+
+  dialog.showMessageBox(dialogOpts);
+};
+
+/**
+ * Show update available prompt
+ */
+const displayDownloadPrompt = (version, url) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Download', 'Later'],
+    icon: null,
+    detail: 'A new version is available for download',
+  };
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) {
+      downloadAndInstallUpdate(version, url);
+    }
+  });
+};
+
+/**
  * Configure inbuilt app updater to use a custom config file
  * to download and install next available app version.
  * TODO: download progress in dialog
@@ -105,28 +136,29 @@ module.exports = {
 
     // Update not available - do nothing
     if (semver.lte(latestVersion, currentVersion)) {
-      if (suppressNoUpdatePrompt) return;
-      const dialogOpts = {
-        type: 'info',
-        icon: null,
-        detail: 'No updates available',
-      };
-
-      dialog.showMessageBox(dialogOpts);
-    } else {
-      // Update is available - prompt for download
-      const dialogOpts = {
-        type: 'info',
-        buttons: ['Download', 'Later'],
-        icon: null,
-        detail: 'A new version is available for download',
-      };
-
-      dialog.showMessageBox(dialogOpts).then((returnValue) => {
-        if (returnValue.response === 0) {
-          downloadAndInstallUpdate(latestVersion);
-        }
-      });
+      if (!suppressNoUpdatePrompt) displayInfoPrompt();
+      return;
     }
+
+    const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
+    if (debug && location) {
+      // Support hosted url and file paths
+      displayDownloadPrompt(latestVersion, location.match(/^https/i) ? location : `file://${location}`);
+      return;
+    }
+
+    /**
+     * Find archive for update and prompt user when it's available.
+     * Ignore otherwise.
+     **/
+    findUpdateArchive(latestVersion)
+      .then((url) => {
+        // Update is available - prompt for download
+        displayDownloadPrompt(latestVersion, url);
+      })
+      .catch((e) => {
+        if (debug) console.error('[app-updater]', e);
+        if (!suppressNoUpdatePrompt) displayInfoPrompt();
+      });
   },
 };
