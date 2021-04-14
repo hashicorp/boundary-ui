@@ -7,7 +7,7 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
   /**
    * @type {boolean}
    */
-  @equal('primary', true) isPrimary;
+  @equal('is_primary', true) isPrimary;
 
   /**
    * @type {boolean}
