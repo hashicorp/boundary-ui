@@ -4,11 +4,12 @@ const https = require('https');
 const semver = require('semver');
 const { parse } = require('node-html-parser');
 const { autoUpdater, dialog } = require('electron');
-const { releaseVersion } = require('../config/forge.config.js');
+// TODO: Pickup app release version from config file
+// const { releaseVersion } = require('../config/forge.config.js');
 
 const debug = process.env.DEBUG_APP_UPDATER;
 const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
-let currentVersion = releaseVersion;
+let currentVersion = '1.0.0';
 if (debug && process.env.APP_UPDATER_CURRENT_VERSION) {
   currentVersion = process.env.APP_UPDATER_CURRENT_VERSION;
 }
@@ -143,7 +144,7 @@ module.exports = {
     const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
     if (debug && location) {
       // Support hosted url and file paths
-      displayDownloadPrompt(latestVersion, location.match(/^https/i) ? location : `file://${location}`);
+      displayDownloadPrompt(latestVersion, location.match(/^http/i) ? location : `file://${location}`);
       return;
     }
 
