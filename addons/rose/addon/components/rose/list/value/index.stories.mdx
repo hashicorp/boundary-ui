@@ -4,31 +4,25 @@ import { action } from '@storybook/addon-actions';
 
 <Meta title="Rose|List|Value" component="List/Value" />
 
-# Key/Value List
+# Value List
 
 A simple value list with support for embedded form fields and buttons.
 
 <Preview>
-  <Story name="Basic Key/Value List" height="17rem">{{
+  <Story name="Basic Value List" height="17rem">{{
     template: hbs`
     <Rose::List::Value as |list|>
       <list.item as |item|>
-        <item.key>Key</item.key>
         <item.cell>Value</item.cell>
       </list.item>
       <list.item as |item|>
-        <item.key>Key</item.key>
         <item.cell>Value</item.cell>
       </list.item>
       <list.item as |item|>
-        <item.key>Key</item.key>
         <item.cell>Value</item.cell>
       </list.item>
       <Rose::Form::Input @contextual={{true}} as |input|>
         <list.item as |item|>
-          <item.key>
-            <input.label>Key</input.label>
-          </item.key>
           <item.cell>
             <input.field />
           </item.cell>
@@ -39,9 +33,6 @@ A simple value list with support for embedded form fields and buttons.
       </Rose::Form::Input>
       <Rose::Form::Input @contextual={{true}} as |input|>
         <list.item as |item|>
-          <item.key>
-            <input.label>Key</input.label>
-          </item.key>
           <item.cell>
             <input.field />
           </item.cell>
@@ -58,24 +49,18 @@ A simple value list with support for embedded form fields and buttons.
 ```html
 <Rose::List::Value as |list|>
   <list.item as |item|>
-    <item.key>Key</item.key>
     <item.cell>Value</item.cell>
   </list.item>
   <list.item as |item|>
-    <item.key>Key</item.key>
     <item.cell>Value</item.cell>
   </list.item>
   <list.item as |item|>
-    <item.key>Key</item.key>
     <item.cell>Value</item.cell>
   </list.item>
 
   {{!-- In actual use, form fields should be yielded from an outer form component --}}
   <Rose::Form::Input @contextual={{true}} as |input|>
     <list.item as |item|>
-      <item.key>
-        <input.label>Key</input.label>
-      </item.key>
       <item.cell>
         <input.field />
       </item.cell>
@@ -87,9 +72,6 @@ A simple value list with support for embedded form fields and buttons.
 
   <Rose::Form::Input @contextual={{true}} as |input|>
     <list.item as |item|>
-      <item.key>
-        <input.label>Key</input.label>
-      </item.key>
       <item.cell>
         <input.field />
       </item.cell>
