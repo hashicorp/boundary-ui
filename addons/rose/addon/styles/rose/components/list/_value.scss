@@ -1,0 +1,40 @@
+@use '../../variables/sizing';
+@use '../../variables/typography';
+@use '../../utilities/type';
+
+.rose-list-value {
+  margin-bottom: sizing.rems(m);
+}
+
+.rose-list-value-item {
+  display: flex;
+  border-bottom: 1px solid var(--ui-gray-subtler-3);
+  @include type.type(s);
+  $lineHeight: 36 / 14;
+  line-height: $lineHeight;
+  padding: (sizing.rems(s) / 2) 0;
+
+  .rose-list-value-item-cell {
+    display: flex;
+    align-items: center;
+    margin-right: sizing.rems(m);
+
+    // Eliminate top/bottom margin from children
+    > * {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    &:last-child {
+      &,
+      & > * {
+        margin-right: 0;
+      }
+    }
+
+    // First cell grows to full available width
+    &:nth-child(1) {
+      flex-grow: 1;
+    }
+  }
+}
