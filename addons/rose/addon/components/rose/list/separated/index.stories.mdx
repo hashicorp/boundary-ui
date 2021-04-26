@@ -2,16 +2,16 @@ import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 
-<Meta title="Rose|List|Value" component="List/Value" />
+<Meta title="Rose|List|Separated" component="List/Separated" />
 
-# Value List
+# Separated List
 
-A simple value list with support for embedded form fields and buttons.
+A simple separated list.
 
 <Preview>
-  <Story name="Basic Value List" height="17rem">{{
+  <Story name="Basic Separated List" height="17rem">{{
     template: hbs`
-    <Rose::List::Value as |list|>
+    <Rose::List::Separated as |list|>
       <list.item as |item|>
         <item.cell>Value</item.cell>
       </list.item>
@@ -41,13 +41,13 @@ A simple value list with support for embedded form fields and buttons.
           </item.cell>
         </list.item>
       </Rose::Form::Input>
-    </Rose::List::Value>
+    </Rose::List::Separated>
     `,
   }}</Story>
 </Preview>
 
 ```html
-<Rose::List::Value as |list|>
+<Rose::List::Separated as |list|>
   <list.item as |item|>
     <item.cell>Value</item.cell>
   </list.item>
@@ -81,5 +81,5 @@ A simple value list with support for embedded form fields and buttons.
     </list.item>
   </Rose::Form::Input>
 
-</Rose::List::Value>
+</Rose::List::Separated>
 ```

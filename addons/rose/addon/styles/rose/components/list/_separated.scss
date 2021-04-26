@@ -2,11 +2,11 @@
 @use '../../variables/typography';
 @use '../../utilities/type';
 
-.rose-list-value {
+.rose-list-separated {
   margin-bottom: sizing.rems(m);
 }
 
-.rose-list-value-item {
+.rose-list-separated-item {
   display: flex;
   border-bottom: 1px solid var(--ui-gray-subtler-3);
   @include type.type(s);
@@ -14,7 +14,7 @@
   line-height: $lineHeight;
   padding: (sizing.rems(s) / 2) 0;
 
-  .rose-list-value-item-cell {
+  .rose-list-separated-item-cell {
     display: flex;
     align-items: center;
     margin-right: sizing.rems(m);
