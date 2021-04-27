@@ -1,0 +1,8 @@
+<li class="rose-form-list-item" id={{concat "item-" this.id}}>
+  {{yield (hash
+    cell=(component 'rose/anonymous'
+      tagName='div'
+      classNames='rose-form-list-item-cell'
+    )
+  )}}
+</li>

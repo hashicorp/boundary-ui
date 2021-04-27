@@ -1,0 +1,55 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Form/List" component="Form/List" />
+
+# List
+
+Renders an unordered list in form.
+
+```html
+<Rose::Form::List @label="list-example" as |list|>
+  <list.item as |item|>
+    <item.cell>Value</item.cell>
+  </list.item>
+  <list.item as |item|>
+    <item.cell>Value</item.cell>
+  </list.item>
+  <Rose::Form::Input @contextual={{true}} as |input|>
+    <list.item as |item|>
+      <item.cell>
+        <input.field />
+      </item.cell>
+      <item.cell>
+        <Rose::Button @style="secondary">Add</Rose::Button>
+      </item.cell>
+    </list.item>
+  </Rose::Form::Input>
+</Rose::Form::List>
+```
+
+<Preview>
+  <Story name="Basic" height="17rem">{{
+    template: hbs`
+    <Rose::Form::List @label="list-example" as |list|>
+      <list.item as |item|>
+        <item.cell>Value</item.cell>
+      </list.item>
+      <list.item as |item|>
+        <item.cell>Value</item.cell>
+      </list.item>
+      <Rose::Form::Input @contextual={{true}} as |input|>
+        <list.item as |item|>
+          <item.cell>
+            <input.field />
+          </item.cell>
+          <item.cell>
+            <Rose::Button @style="secondary">Add</Rose::Button>
+          </item.cell>
+        </list.item>
+      </Rose::Form::Input>
+    </Rose::Form::List>
+    `,
+  }}</Story>
+</Preview>
