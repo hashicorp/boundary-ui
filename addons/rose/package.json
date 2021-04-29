@@ -87,7 +87,7 @@
     "sass-lint": "^1.13.1"
   },
   "engines": {
-    "node": ">=10 <=14"
+    "node": ">=10 <=15"
   },
   "ember": {
     "edition": "octane"

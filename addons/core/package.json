@@ -80,7 +80,7 @@
     "qunit-dom": "^1.6.0"
   },
   "engines": {
-    "node": ">=10 <=14"
+    "node": ">=10 <=15"
   },
   "ember": {
     "edition": "octane"
