@@ -1,0 +1,45 @@
+@use '../../variables/sizing';
+@use '../../variables/typography';
+@use '../../utilities/type';
+
+.rose-list-separated {
+  margin-bottom: sizing.rems(m);
+
+  .rose-list-separated-item {
+    display: flex;
+    border-bottom: 1px solid var(--ui-gray-subtler-3);
+    @include type.type(s);
+    $lineHeight: 36 / 14;
+    line-height: $lineHeight;
+    padding: (sizing.rems(s) / 2) 0;
+    // align-items: baseline;
+    // justify-content: center;
+    height: sizing.rems(xxl);
+    // border: 1px dotted red;
+    
+    .rose-list-separated-item-cell {
+      margin-right: sizing.rems(xs);
+      // height: sizing.rems(xl);
+      align-self: baseline;
+      justify-content: center;
+      // border: 1px dotted green;
+
+
+      &:last-child {
+        &,
+        & > * {
+          margin-right: sizing.rems(l);
+        }
+      }
+  
+      // First cell grows to full available width
+      &:nth-child(1) {
+        flex-grow: 1;
+        // width: 100%;
+      }
+
+      // Remaining cells will take up as little space as necessary to
+      // suit their content.
+    }
+  }
+}

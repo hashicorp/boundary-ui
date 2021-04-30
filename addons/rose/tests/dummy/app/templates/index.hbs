@@ -1,20 +1,36 @@
-<Rose::Form::List @label="I am a list" as |list|>
-  <list.item as |item|>
-    <item.cell>Value</item.cell>
-  </list.item>
-  <Rose::Form::Input @contextual={{true}} as |input|>
+<Rose::List::Separated as |list|>
+  <Rose::Form as |form|>
     <list.item as |item|>
       <item.cell>
-        <input.field />
+        <form.input />
+      </item.cell>
+      <item.cell>
+        <form.input />
+      </item.cell>
+      <item.cell>
+        <form.input />
+      </item.cell>
+      <item.cell>
+        <Rose::Button @style='secondary' @iconOnly='copy-action'></Rose::Button>
       </item.cell>
     </list.item>
     <list.item as |item|>
+      <item.cell>Cell</item.cell>
       <item.cell>
-        <input.field />
-      </item.cell>
-      <item.cell>
-        <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+        <Rose::Button @style='secondary' @iconOnly='copy-action'></Rose::Button>
       </item.cell>
     </list.item>
-  </Rose::Form::Input>
-</Rose::Form::List>
+    <list.item as |item|>
+      <item.cell>Cell</item.cell>
+      <item.cell>Cell</item.cell>
+    </list.item>
+    <list.item as |item|>
+      <item.cell>
+        <form.input />
+      </item.cell>
+      <item.cell>
+        <Rose::Button @style='secondary' @iconOnly='copy-action'></Rose::Button>
+      </item.cell>
+    </list.item>
+  </Rose::Form>
+</Rose::List::Separated>
