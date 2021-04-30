@@ -3,26 +3,62 @@
 @use '../../utilities/type';
 
 .rose-list-separated {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   margin-bottom: sizing.rems(m);
+  background: red;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 
   .rose-list-separated-item {
     display: flex;
+    flex-direction: row;
+
     border-bottom: 1px solid var(--ui-gray-subtler-3);
     @include type.type(s);
+    background: green;
     $lineHeight: 36 / 14;
     line-height: $lineHeight;
     padding: (sizing.rems(s) / 2) 0;
+    height: sizing.rems(xxl);
+    
+    
     // align-items: baseline;
     // justify-content: center;
-    height: sizing.rems(xxl);
     // border: 1px dotted red;
     
     .rose-list-separated-item-cell {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      background: pink;
       margin-right: sizing.rems(xs);
       // height: sizing.rems(xl);
-      align-self: baseline;
-      justify-content: center;
+      // align-self: baseline;
+      // justify-content: center;
       // border: 1px dotted green;
+
+      .rose-form-input {
+        margin: 0;
+
+        label {
+          margin: 0;
+        }
+
+        input {
+          margin: 0;
+        }
+      }
+
+      .rose-button-secondary {
+        margin: 0;
+      }
+      
 
 
       &:last-child {
@@ -34,7 +70,9 @@
   
       // First cell grows to full available width
       &:nth-child(1) {
-        flex-grow: 1;
+        // flex-grow: 1;
+        
+        
         // width: 100%;
       }
 
