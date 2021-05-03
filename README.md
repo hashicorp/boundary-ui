@@ -129,7 +129,7 @@ DMG packaged desktop UI is available at asset location as `boundary.dmg`.
 
 This describes how to connect local Boundary UI to your local instance of Boundary.
 
-This assumes you already have up and running a boundary instance in your local environment with a listener `127.0.0.1:9200` (default behaviour). If you do not have it, please [follow Boundary documentation](https://github.com/hashicorp/boundary#build-and-start-boundary-in-dev-mode) for it.
+This assumes you already have up and running a Boundary dev instance in your local environment with a listener `127.0.0.1:9200` (default behaviour). [Learn how to start a local Boundary dev instance](https://learn.hashicorp.com/tutorials/boundary/getting-started-dev?in=boundary/getting-started#start-a-dev-environment).
 #### For admin
 
 This assumes you are within `boundary-ui/ui/admin`.
@@ -138,28 +138,17 @@ You will need to turn `off` mirage, tell the UI where to find Boundary and run i
 
 Following terminal instructions, open in your browser: `http://localhost:4200/`.
 
-Once you open the UI you will see the login screen.
+Once you open the UI you will see the login screen, authenticate using generated admin login name and password.
 
-By default, for development purposes, credentials are:
-- Login name: `admin`.
-- Password: `password`
-
-*Be aware these are default credentials, if you change them in Boundary, use the ones you set before*
 #### For desktop
 
 This assumes you are within `boundary-ui/ui/desktop`.
 
 You will need to turn `off` mirage and run it: `$ ENABLE_MIRAGE=false yarn start:desktop`.
 
-You will see the login screen.
+You will see the login screen, authenticate using generated admin login name and password.
 
-Make sure the origin URL is pointing `http://localhost:9200`.
-
-By default, for development purposes, credentials are:
-- Login name: `admin`.
-- Password: `password`
-
-*Be aware these are default credentials, if you change them in Boundary, use the ones you set before*
+Enter the origin of your Boundary dev instance, by default is: `http://localhost:9200`.
 
 ### Committing
 
