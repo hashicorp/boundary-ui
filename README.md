@@ -38,6 +38,9 @@ You will need the following things properly installed on your computer.
 
 * [Git][git]
 * [Node.js][node]
+  * v10–v15
+  * **Apple Silicon Users**:  if you experience problems building or running
+    Boundary UIs, try Node v15.
 * [Yarn][yarn] installed globally
 * [Google Chrome][chrome]
 * [Firefox][firefox]
