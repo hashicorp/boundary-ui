@@ -149,7 +149,7 @@ This assumes you are within `boundary-ui/ui/desktop`.
 
 You will need to turn `off` mirage and run it: `$ ENABLE_MIRAGE=false yarn start:desktop`.
 
-You will see the login screen, authenticate using generated admin login name and password.
+In login screen, authenticate using generated admin login name and password.
 
 Enter the origin of your Boundary dev instance, by default is: `http://localhost:9200`.
 
