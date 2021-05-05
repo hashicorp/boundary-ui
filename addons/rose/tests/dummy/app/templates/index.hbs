@@ -1,9 +1,8 @@
 <h2>Condensed Table</h2>
-
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
-    <header.row @visually-hidden=true as |row|>
-      <row.headerCell>Address</row.headerCell>
+    <header.row  as |row|>
+      <row.headerCell >Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
       <row.headerCell>Description</row.headerCell>
@@ -19,6 +18,103 @@
   </table.body>
   <table.footer as |footer|>
     <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
+
+<h2>Condensed Table With Expanded Cells</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row  as |row|>
+      <row.headerCell >Address</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell @style="expand">Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>
+        <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+      </row.cell>
+      <row.cell @style="expand">description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer @visually-hidden=true as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
+
+<h2>Condensed Table Key/Value Lookalike</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row  as |row|>
+      <row.headerCell>Key</row.headerCell>
+      <row.headerCell @style="expand">Value</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>Value</row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>Value</row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>Value</row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell @style="expand">
+        <Rose::Form::Input @contextual={{true}} as |input|>
+          {{!-- <row.cell @style="expand"> --}}
+          <input.field />
+          <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+          {{!-- </row.cell> --}}
+        </Rose::Form::Input>
+      </row.cell>
+      <row.cell>
+        <Rose::Form::Input @contextual={{true}} as |input|>
+          {{!-- <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button> --}}
+        </Rose::Form::Input>
+      </row.cell>
+    </body.row>
+  </table.body>
+  <table.footer @visually-hidden=true as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
+
+<h2>Condensed Table With Visually Hidden Header & Footer</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row @visually-hidden=true as |row|>
+      <row.headerCell >Address</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell @style="expand">Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row @visually-hidden=true as |row|>
       <row.cell>Footer</row.cell>
     </footer.row>
   </table.footer>
