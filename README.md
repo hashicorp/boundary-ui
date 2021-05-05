@@ -24,6 +24,9 @@ subproject, e.g. running or testing.
   - [Building Admin UI for Production](#building-admin-ui-for-production)
     - [Building with a Container](#building-with-a-container)
   - [Building Desktop UI for Production](#building-desktop-ui-for-production)
+  - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
+    - [For admin](#for-admin)
+    - [For desktop](#for-desktop)
   - [Committing](#committing)
     - [License Checking](#license-checking)
 
@@ -35,6 +38,9 @@ You will need the following things properly installed on your computer.
 
 * [Git][git]
 * [Node.js][node]
+  * v10–v15
+  * **Apple Silicon Users**:  if you experience problems building or running
+    Boundary UIs, try Node v15.
 * [Yarn][yarn] installed globally
 * [Google Chrome][chrome]
 * [Firefox][firefox]
@@ -121,6 +127,31 @@ environment variable to set signing certificate name (e.g Developer ID Applicati
 
 Assets are saved to `ui/desktop/electron-app/out/make/`.
 DMG packaged desktop UI is available at asset location as `boundary.dmg`.
+
+### Connect Boundary UI to Boundary local instance
+
+This describes how to connect local Boundary UI to your local instance of Boundary.
+
+This assumes you already have up and running a Boundary dev instance in your local environment with a listener `127.0.0.1:9200` (default behaviour). [Learn how to start a local Boundary dev instance](https://learn.hashicorp.com/tutorials/boundary/getting-started-dev?in=boundary/getting-started#start-a-dev-environment).
+#### For admin
+
+This assumes you are within `boundary-ui/ui/admin`.
+
+You will need to turn `off` mirage, tell the UI where to find Boundary and run it: `$ ENABLE_MIRAGE=false API_HOST=http://localhost:9200 yarn start`.
+
+Following terminal instructions, open in your browser: `http://localhost:4200/`.
+
+Once you open the UI you will see the login screen, authenticate using generated admin login name and password.
+
+#### For desktop
+
+This assumes you are within `boundary-ui/ui/desktop`.
+
+You will need to turn `off` mirage and run it: `$ ENABLE_MIRAGE=false yarn start:desktop`.
+
+In login screen, authenticate using generated admin login name and password.
+
+Enter the origin of your Boundary dev instance, by default is: `http://localhost:9200`.
 
 ### Committing
 

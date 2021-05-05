@@ -99,7 +99,7 @@
     "stylelint-config-sass-guidelines": "^7.1.0"
   },
   "engines": {
-    "node": "10.* || >= 12"
+    "node": ">=10 <=15"
   },
   "ember": {
     "edition": "octane"
