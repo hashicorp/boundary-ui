@@ -1,0 +1,20 @@
+<fieldset ...attributes class='rose-form-fieldset'>
+    <legend 
+        id={{concat 'title-' this.id}}
+        aria-describedby={{concat 'description-' this.id}}
+        class='rose-form-fieldset-title'
+    >
+        {{yield to='title'}}
+    </legend>
+    <div
+        id={{concat 'description-' this.id}}
+        aria-labelledby={{concat 'title-' this.id}}
+        class='rose-form-fieldset-description'
+    >
+        {{yield to='description'}}
+    </div>
+
+    <div class='rose-form-fieldset-body'>
+        {{yield to='body'}}
+    </div>
+</fieldset>
