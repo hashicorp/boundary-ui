@@ -11,6 +11,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   @service session;
   @service notify;
   @service intl;
+  @service('browser/window') window;
 
   // =methods
 
@@ -36,13 +37,11 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   }
 
   /**
-   * Opens the specified URL in a new tab or window.  By default this uses
-   * `window.open`, but may be overriden.
+   * Opens the specified URL in a new tab or window.
    * @param {string} url
    */
-  async openExternalOIDCFlow(url) {
-    // TODO don't use window directly
-    await window.open(url);
+  openExternalOIDCFlow(url) {
+    this.window.open(url);
   }
 
   // =actions
