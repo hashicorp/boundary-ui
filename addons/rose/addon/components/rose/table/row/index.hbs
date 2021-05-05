@@ -1,4 +1,4 @@
-<tr ...attributes class='rose-table-row'>
+<tr ...attributes class='rose-table-row {{if @visually-hidden (concat "rose-table-row-visually-hidden")}}'>
   {{yield (hash
     cell=(component 'rose/anonymous'
       tagName='td'

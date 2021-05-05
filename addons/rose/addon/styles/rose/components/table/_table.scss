@@ -38,4 +38,19 @@
   [class*='rose-button'] {
     margin-bottom: 0;
   }
+
+  &.rose-table-condensed {
+    .rose-table-cell {
+      @include type.type(s);
+      $lineHeight: 36 / 14;
+      line-height: $lineHeight;
+      padding: (sizing.rems(s) / 2) sizing.rems(s);
+    }
+  }
+
+  .rose-table-row-visually-hidden {
+    position: absolute;
+    top: -9999rem;
+    left: -9999rem;
+  }
 }
