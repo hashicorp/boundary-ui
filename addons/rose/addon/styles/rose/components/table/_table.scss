@@ -39,7 +39,11 @@
   // Grow to full available width
   .rose-table-cell-expand {
     width: 100%;
-    border: 1px solid red;
+
+    & > * {
+      vertical-align: inherit;
+      margin: 0;
+  }
   }
 
   [class*='rose-button'] {

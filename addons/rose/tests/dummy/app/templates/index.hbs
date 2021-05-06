@@ -50,6 +50,31 @@
   </table.footer>
 </Rose::Table>
 
+<h2>Condensed Table With Right and Center aligned cells</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row  as |row|>
+      <row.headerCell >Address</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell @align="center">host-set-1, host-set-2</row.cell>
+      <row.cell @alignRight=true>optional name</row.cell>
+      <row.cell @alignCenter=true>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
+
 <h2>Condensed Table Key/Value Lookalike</h2>
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
@@ -75,15 +100,8 @@
       <row.cell>Key</row.cell>
       <row.cell @style="expand">
         <Rose::Form::Input @contextual={{true}} as |input|>
-          {{!-- <row.cell @style="expand"> --}}
           <input.field />
           <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
-          {{!-- </row.cell> --}}
-        </Rose::Form::Input>
-      </row.cell>
-      <row.cell>
-        <Rose::Form::Input @contextual={{true}} as |input|>
-          {{!-- <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button> --}}
         </Rose::Form::Input>
       </row.cell>
     </body.row>
@@ -135,7 +153,6 @@
     <item.cell>Value</item.cell>
   </list.item>
 
-  {{!-- In actual use, form fields should be yielded from an outer form component --}}
   <Rose::Form::Input @contextual={{true}} as |input|>
     <list.item as |item|>
       <item.key>
@@ -163,7 +180,6 @@
       </item.cell>
     </list.item>
   </Rose::Form::Input>
-
 </Rose::List::KeyValue>
 
 <h2>Table</h2>
