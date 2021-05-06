@@ -1,11 +1,14 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
+import { boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Table" component="Table" />
 
 # Table
 
-A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element.
+A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element. Rows can be visually hidden, cells can be expanded to fit full width, and center/right cell alignment is supported.
+
+Cell expansion style should be applied to only one cell in a row.
 
 ```htmlbars
 <Rose::Table as |table|>
@@ -24,6 +27,18 @@ A table component to display data in structure of rows and columns. It supports 
       <row.cell>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
   </table.body>
   <table.footer as |footer|>
     <footer.row as |row|>
@@ -36,11 +51,11 @@ A table component to display data in structure of rows and columns. It supports 
 <Preview>
   <Story name="Basic">{{
     template: hbs`
-    <Rose::Table as |table|>
+    <Rose::Table @style={{style}} as |table|>
       <table.header as |header|>
-        <header.row as |row|>
+        <header.row @visually-hidden={{visuallyHideHeaderRow}} as |row|>
           <row.headerCell>Address</row.headerCell>
-          <row.headerCell>Host Set</row.headerCell>
+          <row.headerCell @style={{cellStyle}}>Host Set</row.headerCell>
           <row.headerCell>Name</row.headerCell>
           <row.headerCell>Description</row.headerCell>
         </header.row>
@@ -48,7 +63,19 @@ A table component to display data in structure of rows and columns. It supports 
       <table.body as |body|>
         <body.row as |row|>
           <row.cell>1.1.1.1</row.cell>
-          <row.cell>host-set-1, host-set-2</row.cell>
+          <row.cell @style={{cellStyle}}>host-set-1, host-set-2</row.cell>
+          <row.cell>optional name</row.cell>
+          <row.cell>description</row.cell>
+        </body.row>
+        <body.row as |row|>
+          <row.cell>1.1.1.1</row.cell>
+          <row.cell @style={{cellStyle}}>host-set-2</row.cell>
+          <row.cell>optional name</row.cell>
+          <row.cell>description</row.cell>
+        </body.row>
+        <body.row as |row|>
+          <row.cell>1.1.1.1</row.cell>
+          <row.cell @style={{cellStyle}}>host-set-1</row.cell>
           <row.cell>optional name</row.cell>
           <row.cell>description</row.cell>
         </body.row>
@@ -60,6 +87,74 @@ A table component to display data in structure of rows and columns. It supports 
       </table.footer>
     </Rose::Table>
     `,
-    context: {}
+    context: {
+      visuallyHideHeaderRow: boolean('visuallyHideHeaderRow', false),
+      cellStyle: select(
+        'cellStyle',
+        {
+          default: '',
+          'expand': 'expand'
+        }
+      ),
+      style: select(
+        'style',
+        {
+          'default': '',
+          'condensed': 'condensed'
+        }
+      )
+    },
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Basic Key/Value Table">{{
+    template: hbs`
+      <Rose::Table @style="condensed" as |table|>
+        <table.header as |header|>
+          <header.row @visually-hidden=true as |row|>
+            <row.headerCell>Key</row.headerCell>
+            <row.headerCell @style="expand">Value</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell>Value</row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell>Value</row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell>Value</row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell @style="expand">
+              <Rose::Form::Input @contextual={{true}} as |input|>
+                <input.field />
+                <Rose::Button @style="secondary">Add</Rose::Button>
+              </Rose::Form::Input>
+            </row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell @style="expand">
+              <Rose::Form::Input @contextual={{true}} as |input|>
+                <input.field />
+                <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+              </Rose::Form::Input>
+            </row.cell>
+          </body.row>
+        </table.body>
+        <table.footer as |footer|>
+          <footer.row  @visually-hidden=true as |row|>
+            <row.cell>Footer</row.cell>
+          </footer.row>
+        </table.footer>
+      </Rose::Table>
+    `,
   }}</Story>
 </Preview>
