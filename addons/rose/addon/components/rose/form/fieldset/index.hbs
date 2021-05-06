@@ -1,19 +1,20 @@
-<fieldset ...attributes class='rose-form-fieldset'>
+<fieldset ...attributes class='rose-form-fieldset' aria-describedby={{concat 'title-' this.id}}>
     <legend 
         id={{concat 'title-' this.id}}
-        aria-describedby={{concat 'description-' this.id}}
         class='rose-form-fieldset-title'
     >
         {{yield to='title'}}
     </legend>
-    <div
-        id={{concat 'description-' this.id}}
-        aria-labelledby={{concat 'title-' this.id}}
-        class='rose-form-fieldset-description'
-    >
-        {{yield to='description'}}
-    </div>
-
+    
+    {{#if (has-block "description")}}
+        <div
+            id={{concat 'description-' this.id}}
+            class='rose-form-fieldset-description'
+        >
+            {{yield to='description'}}
+        </div>
+    {{/if}}
+    
     <div class='rose-form-fieldset-body'>
         {{yield to='body'}}
     </div>

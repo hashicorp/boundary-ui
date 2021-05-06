@@ -11,19 +11,29 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
   this.mockDescription = 'Description';
   this.mockBody = 'Rest of the form';
 
-  hooks.beforeEach(async function () {
-    // Render the component before each test
-    await render(hbs`
+  // Wrap the rendering in a function to avoid repeat code
+  async function renderComponent(noDescription) {
+    if (noDescription === true) {
+      return render(hbs`
+        <Rose::Form::Fieldset>
+          <:title>{{this.mockTitle}}</:title>
+          <:body>{{this.mockBody}}</:body>
+        </Rose::Form::Fieldset>
+    `);
+    }
+
+    return render(hbs`
       <Rose::Form::Fieldset>
         <:title>{{this.mockTitle}}</:title>
         <:description>{{this.mockDescription}}</:description>
         <:body>{{this.mockBody}}</:body>
       </Rose::Form::Fieldset>
     `);
-  });
+  }
 
-  test('it renders', async function (assert) {
+  test('it renders the full component', async function (assert) {
     assert.expect(4);
+    await renderComponent(false);
     assert.ok(find('.rose-form-fieldset'));
     assert.equal(
       find('.rose-form-fieldset-title').textContent.trim(),
@@ -39,21 +49,31 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     );
   });
 
-  test('it supports aria description for title', async function (assert) {
-    assert.expect(2);
-    const titleElement = find('.rose-form-fieldset-title');
-    const descriptionElement = find('.rose-form-fieldset-description');
-
+  test('it render with no description', async function (assert) {
+    assert.expect(4);
+    await renderComponent(true);
+    assert.ok(find('.rose-form-fieldset'));
     assert.equal(
-      titleElement.getAttribute('aria-describedBy'),
-      descriptionElement.id,
-      'Title is described by description'
+      find('.rose-form-fieldset-title').textContent.trim(),
+      this.mockTitle
     );
+    assert.notOk(find('.rose-form-fieldset-description'));
+    assert.equal(
+      find('.rose-form-fieldset-body').textContent.trim(),
+      this.mockBody
+    );
+  });
+
+  test('it supports aria description for fieldset', async function (assert) {
+    assert.expect(1);
+    await renderComponent(false);
+    const titleElement = find('.rose-form-fieldset-title');
+    const fieldsetElement = find('.rose-form-fieldset');
 
     assert.equal(
-      descriptionElement.getAttribute('aria-labelledBy'),
+      fieldsetElement.getAttribute('aria-describedby'),
       titleElement.id,
-      'Description is labelled by title'
+      'Fieldset is described by legend'
     );
   });
 });
