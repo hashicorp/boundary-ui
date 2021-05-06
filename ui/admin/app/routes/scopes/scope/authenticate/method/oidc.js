@@ -13,6 +13,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
   // =services
 
   @service session;
+  @service windowManager;
 
   // =attributes
 
@@ -61,10 +62,12 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
   }
 
   /**
-   * When this route is deactivated (exited), stop polling for changes.
+   * When this route is deactivated (exited), stop polling for changes and close
+   * any windows opened via the window manager service.
    */
   deactivate() {
     this.poller.cancelAll();
+    this.windowManager.closeAll();
   }
 
   /**

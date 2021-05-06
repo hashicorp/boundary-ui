@@ -11,7 +11,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   @service session;
   @service notify;
   @service intl;
-  @service('browser/window') window;
+  @service windowManager;
 
   // =methods
 
@@ -41,7 +41,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
    * @param {string} url
    */
   openExternalOIDCFlow(url) {
-    this.window.open(url);
+    this.windowManager.open(url);
   }
 
   // =actions
