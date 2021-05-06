@@ -10,12 +10,12 @@ A table component to display data in structure of rows and columns. It supports 
 
 Cell expansion style should be applied to only one cell in a row.
 
-```htmlbars
-<Rose::Table as |table|>
+```html
+<Rose::Table @style={{style}} as |table|>
   <table.header as |header|>
-    <header.row as |row|>
+    <header.row @hidden={{hideHeaderRow}} as |row|>
       <row.headerCell>Address</row.headerCell>
-      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell @style={{cellStyle}}>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
       <row.headerCell>Description</row.headerCell>
     </header.row>
@@ -23,19 +23,19 @@ Cell expansion style should be applied to only one cell in a row.
   <table.body as |body|>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell @style={{cellStyle}}>host-set-1, host-set-2</row.cell>
       <row.cell>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell>host-set-2</row.cell>
+      <row.cell @style={{cellStyle}}>host-set-2</row.cell>
       <row.cell>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell>host-set-1</row.cell>
+      <row.cell @style={{cellStyle}}>host-set-1</row.cell>
       <row.cell>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
@@ -53,7 +53,7 @@ Cell expansion style should be applied to only one cell in a row.
     template: hbs`
     <Rose::Table @style={{style}} as |table|>
       <table.header as |header|>
-        <header.row @visually-hidden={{visuallyHideHeaderRow}} as |row|>
+        <header.row @hidden={{hideHeaderRow}} as |row|>
           <row.headerCell>Address</row.headerCell>
           <row.headerCell @style={{cellStyle}}>Host Set</row.headerCell>
           <row.headerCell>Name</row.headerCell>
@@ -88,7 +88,7 @@ Cell expansion style should be applied to only one cell in a row.
     </Rose::Table>
     `,
     context: {
-      visuallyHideHeaderRow: boolean('visuallyHideHeaderRow', false),
+      hideHeaderRow: boolean('hideHeaderRow', false),
       cellStyle: select(
         'cellStyle',
         {
@@ -112,7 +112,7 @@ Cell expansion style should be applied to only one cell in a row.
     template: hbs`
       <Rose::Table @style="condensed" as |table|>
         <table.header as |header|>
-          <header.row @visually-hidden=true as |row|>
+          <header.row @hidden=true as |row|>
             <row.headerCell>Key</row.headerCell>
             <row.headerCell @style="expand">Value</row.headerCell>
           </header.row>
@@ -150,7 +150,7 @@ Cell expansion style should be applied to only one cell in a row.
           </body.row>
         </table.body>
         <table.footer as |footer|>
-          <footer.row  @visually-hidden=true as |row|>
+          <footer.row  @hidden=true as |row|>
             <row.cell>Footer</row.cell>
           </footer.row>
         </table.footer>

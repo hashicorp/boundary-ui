@@ -43,7 +43,7 @@
       <row.cell @style="expand">description</row.cell>
     </body.row>
   </table.body>
-  <table.footer @visually-hidden=true as |footer|>
+  <table.footer @hidden=true as |footer|>
     <footer.row as |row|>
       <row.cell>Footer</row.cell>
     </footer.row>
@@ -106,7 +106,7 @@
       </row.cell>
     </body.row>
   </table.body>
-  <table.footer @visually-hidden=true as |footer|>
+  <table.footer @hidden=true as |footer|>
     <footer.row as |row|>
       <row.cell>Footer</row.cell>
     </footer.row>
@@ -116,7 +116,7 @@
 <h2>Condensed Table With Visually Hidden Header & Footer</h2>
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
-    <header.row @visually-hidden=true as |row|>
+    <header.row @hidden=true as |row|>
       <row.headerCell >Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
@@ -132,7 +132,7 @@
     </body.row>
   </table.body>
   <table.footer as |footer|>
-    <footer.row @visually-hidden=true as |row|>
+    <footer.row @hidden=true as |row|>
       <row.cell>Footer</row.cell>
     </footer.row>
   </table.footer>
