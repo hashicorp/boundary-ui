@@ -49,7 +49,7 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     );
   });
 
-  test('it render with no description', async function (assert) {
+  test('it renders with no description', async function (assert) {
     assert.expect(4);
     await renderComponent(true);
     assert.ok(find('.rose-form-fieldset'));
@@ -64,16 +64,26 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     );
   });
 
-  test('it supports aria description for fieldset', async function (assert) {
+  test('it supports aria description for fieldset with description provided', async function (assert) {
     assert.expect(1);
     await renderComponent(false);
-    const titleElement = find('.rose-form-fieldset-title');
+    const descriptionElement = find('.rose-form-fieldset-description');
     const fieldsetElement = find('.rose-form-fieldset');
 
     assert.equal(
       fieldsetElement.getAttribute('aria-describedby'),
-      titleElement.id,
-      'Fieldset is described by legend'
+      descriptionElement.id,
+      'Fieldset is described by description'
     );
+  });
+
+  test('it does not support aria description for fieldset with no description provided', async function (assert) {
+    assert.expect(3);
+    await renderComponent(true);
+    const fieldsetElement = find('.rose-form-fieldset');
+
+    assert.ok(find('.rose-form-fieldset'));
+    assert.notOk(find('.rose-form-fieldset-description'));
+    assert.notOk(fieldsetElement.getAttribute('aria-describedby'));
   });
 });
