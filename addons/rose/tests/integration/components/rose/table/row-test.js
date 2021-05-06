@@ -32,4 +32,9 @@ module('Integration | Component | rose/table/row', function (hooks) {
     assert.ok(find('th'));
     assert.ok(find('.rose-table-header-cell'));
   });
+
+  test('it can be hidden', async function (assert) {
+    await render(hbs`<Rose::Table::Row @hidden=true />`);
+    assert.ok(find('.rose-table-row-visually-hidden'));
+  });
 });

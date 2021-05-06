@@ -4,13 +4,14 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   layout,
-  classNameBindings: ['cellStyle', 'cellSizeStyle'],
-  cellStyle: computed(function () {
+  tagName: 'td',
+  classNameBindings: ['cellTypeStyle', 'cellStyle'],
+  cellTypeStyle: computed(function () {
     return this.tagName.match('th')
       ? `rose-table-header-cell`
       : 'rose-table-cell';
   }),
-  cellSizeStyle: computed(function () {
+  cellStyle: computed(function () {
     return this.style ? `rose-table-cell-${this.style}` : '';
   }),
 });

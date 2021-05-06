@@ -1,6 +1,6 @@
 <tr ...attributes class='rose-table-row {{if @hidden (concat "rose-table-row-visually-hidden")}}'>
   {{yield (hash
-    cell=(component 'rose/table/row/cell' tagName='td')
+    cell=(component 'rose/table/row/cell')
     headerCell=(component 'rose/table/row/cell' tagName='th')
   )}}
 </tr>
