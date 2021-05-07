@@ -1,0 +1,14 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-form-fieldset {
+  .rose-form-fieldset-title {
+    @include type.type(l, bold);
+  }
+
+  .rose-form-fieldset-description {
+    margin: sizing.rems(xxs) 0;
+    @include type.type(xs);
+    color: var(--ui-gray);
+  }
+}
