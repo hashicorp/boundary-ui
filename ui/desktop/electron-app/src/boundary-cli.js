@@ -53,6 +53,5 @@ module.exports = {
       ? `CLI Version:  ${versionNumber}\nCLI Commit:  ${gitRevision}`
       : `CLI Commit:  ${gitRevision}`;
     return { gitRevision, versionNumber, formatted };
-    return rawOutput;
   },
 };

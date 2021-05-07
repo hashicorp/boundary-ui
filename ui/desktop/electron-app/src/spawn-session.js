@@ -5,7 +5,7 @@ const spawnedSessions = [];
 const purge = (process_id, index) => {
   process.kill(process_id);
   // Remove tracking after cancellation
-  delete spawnedSessions[index];
+  spawnedSessions.splice(index, 1);
 };
 
 module.exports = {
@@ -15,7 +15,6 @@ module.exports = {
    * @param {object} params
    */
   add: ({ childProcess, data }) => {
-    debugger;
     spawnedSessions.push({
       data,
       process_id: childProcess.pid,

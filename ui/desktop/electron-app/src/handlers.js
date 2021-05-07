@@ -2,7 +2,8 @@ const { shell } = require('electron');
 const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler');
 const boundaryCli = require('./boundary-cli');
-const origin = require('./origin.js');
+const origin = require('./origin');
+const spawnSession = require('./spawn-session');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -58,3 +59,10 @@ handle('cliExists', () => boundaryCli.exists());
 handle('connect', ({ target_id, token, host_id }) =>
   boundaryCli.connect(target_id, token, host_id)
 );
+
+/**
+ * Cancel an established boundary session spawned process.
+ */
+handle('cancel', ({ session_id }) => {
+  spawnSession.cancelSession(session_id);
+});
