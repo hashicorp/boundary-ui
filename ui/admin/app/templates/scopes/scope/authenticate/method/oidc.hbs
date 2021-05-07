@@ -8,9 +8,9 @@
     <p>
       {{t 'resources.auth-method.questions.no-see-window'}}
       <a
-        href="{{this.authURL}}"
-        target="_blank"
-        rel="noreferrer noopener"
+        href="#"
+        aria-role="button"
+        {{on "click" (route-action "authenticate")}}
       >
         {{t 'actions.retry'}}
       </a>
