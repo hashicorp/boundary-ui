@@ -26,22 +26,16 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   }
 
   /**
-   *
+   * Kicks off the OIDC auth flow by opening a new window to the provider.
+   * @param {string} authenticatorName
+   * @param {object} options
    */
   async startOIDCAuthentication(authenticatorName, options) {
     const oidc = getOwner(this).lookup(authenticatorName);
     // TODO: delegate this call from the session service so that we don't have
     // to look up the authenticator directly
     const json = await oidc.startAuthentication(options);
-    await this.openExternalOIDCFlow(json.attributes.auth_url);
-  }
-
-  /**
-   * Opens the specified URL in a new tab or window.
-   * @param {string} url
-   */
-  openExternalOIDCFlow(url) {
-    this.windowManager.open(url);
+    await this.windowManager.open(json.attributes.auth_url);
   }
 
   // =actions
