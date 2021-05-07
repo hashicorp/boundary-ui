@@ -1,0 +1,21 @@
+<fieldset ...attributes class='rose-form-fieldset' aria-describedby={{if (has-block "description") (concat 'description-' this.id)}}>
+    <legend 
+        id={{concat 'title-' this.id}}
+        class='rose-form-fieldset-title'
+    >
+        {{yield to='title'}}
+    </legend>
+    
+    {{#if (has-block "description")}}
+        <div
+            id={{concat 'description-' this.id}}
+            class='rose-form-fieldset-description'
+        >
+            {{yield to='description'}}
+        </div>
+    {{/if}}
+    
+    <div class='rose-form-fieldset-body'>
+        {{yield to='body'}}
+    </div>
+</fieldset>
