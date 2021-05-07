@@ -1,5 +1,6 @@
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
+const spawnSession = require('./spawn-session');
 
 const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
 
@@ -45,14 +46,26 @@ module.exports = {
       childProcess.stdout.on('data', (data) => {
         outputStream += data.toString();
         const jsonData = jsonify(outputStream);
-        if (jsonData) resolve(jsonData);
+        if (jsonData) {
+          if (jsonData.termination_reason) {
+            spawnSession.cancelProcess(childProcess.pid);
+          } else {
+            // Track only successfully launched child processes
+            spawnSession.add({ childProcess, data: jsonData });
+          }
+          outputStream = '';
+          resolve(jsonData);
+        }
       });
 
+      // @todo Cancel spawned session childprocess on error? Does it get automatically cancelled?
+      // Test on connection limit errors especially
       childProcess.stderr.on('data', (data) => {
         errorStream += data.toString();
         const jsonData = jsonify(errorStream);
         if (jsonData) {
           const error = jsonData.api_error || jsonData.error;
+          errorStream = '';
           reject(new Error(error.message));
         }
       });
@@ -60,7 +73,10 @@ module.exports = {
   },
 
   /**
-   *
+   * Spawn child process and return output immediately.
+   * This function is intended for non-connection related tasks.
+   * @param {string} command
+   * @return {string}
    */
   spawnSync(command) {
     const childProcess = spawnSync(boundaryPath, command);
