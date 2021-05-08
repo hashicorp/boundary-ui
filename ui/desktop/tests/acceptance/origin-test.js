@@ -19,15 +19,17 @@ import {
   // authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { setupBrowserFakes } from 'ember-browser-services/test-support';
+import WindowMockIPC from '../helpers/window-mock-ipc';
 import config from '../../config/environment';
 
 module('Acceptance | origin', function (hooks) {
   setupApplicationTest(hooks);
+  setupBrowserFakes(hooks, { window: true });
   setupMirage(hooks);
 
   const currentOrigin = window.location.origin;
   let mockIPC;
-  let messageHandler;
 
   const instances = {
     scopes: {
@@ -104,40 +106,12 @@ module('Acceptance | origin', function (hooks) {
     urls.projects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
 
-    class MockIPC {
-      origin = null;
-
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getOrigin() {
-        return this.origin;
-      }
-
-      setOrigin(origin) {
-        this.origin = origin;
-        return this.origin;
-      }
-
-      resetOrigin() {}
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== currentOrigin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    // Mock the postMessage interface used by IPC.
+    this.owner.register('service:browser/window', WindowMockIPC);
+    mockIPC = this.owner.lookup('service:browser/window').mockIPC;
   });
 
   hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
     sinon.restore();
   });
 
