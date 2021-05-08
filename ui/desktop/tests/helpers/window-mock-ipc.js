@@ -34,14 +34,8 @@ class MockIPC {
 export default class extends Service {
   // =attributes
 
-  /**
-   *
-   */
   mockIPC = new MockIPC();
 
-  /**
-   *
-   */
   MessageChannel = class MessageChannel {
     constructor() {
       this.port1.postMessage = this.port1.postMessage.bind(this);
@@ -61,9 +55,6 @@ export default class extends Service {
 
   // =methods
 
-  /**
-   *
-   */
   postMessage(data, origin, ports) {
     if (origin !== window.location.origin) return;
     const { method, payload } = data;
