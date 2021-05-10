@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { getOwner } from '@ember/application';
+import { inject as service } from '@ember/service';
 import { Promise } from 'rsvp';
 
 /**
@@ -58,7 +58,7 @@ export class IPCRequest {
     this.method = method;
     this.payload = payload;
     this.origin = window?.location?.origin;
-    this.#channel = new MessageChannel();
+    this.#channel = new window.MessageChannel();
     this.#promise = new Promise((resolve, reject) => {
       this.#channel.port1.onmessage = (event) => {
         this.close();
@@ -124,18 +124,9 @@ export class IPCRequest {
  *   }
  */
 export default class IpcService extends Service {
-  // =attributes
+  // =services
 
-  /**
-   * Looks up the window object indirectly.
-   * @type {Window}
-   */
-  get window() {
-    // The Ember way of accessing globals...
-    const document = getOwner(this).lookup('service:-document').documentElement;
-    // defaultView === window, but without using globals directly
-    return document.parentNode.defaultView;
-  }
+  @service('browser/window') window;
 
   // =methods
 
