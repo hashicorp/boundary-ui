@@ -12,12 +12,14 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
+//import { run, later } from '@ember/runloop';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import Service from '@ember/service';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -31,12 +33,15 @@ module('Acceptance | authentication', function (hooks) {
   let orgScopeURL;
   let scope;
   let globalAuthMethod;
-  let authMethod;
   let globalAuthMethodID;
+  let authMethod;
   let authMethodID;
+  let authMethodOIDC;
+  let authMethodOIDCID;
   let globalAuthenticateURL;
   let authenticateURL;
   let authMethodAuthenticateURL;
+  let authMethodOIDCAuthenticateURL;
   let authMethodGlobalAuthenticateURL;
   let changePasswordURL;
   let orgsURL;
@@ -72,15 +77,21 @@ module('Acceptance | authentication', function (hooks) {
       scope: orgScope,
       type: 'password',
     });
+    authMethodOIDC = this.server.create('auth-method', {
+      scope: orgScope,
+      type: 'oidc',
+    });
     orgScopeID = orgScope.id;
     globalAuthMethodID = globalAuthMethod.id;
     authMethodID = authMethod.id;
+    authMethodOIDCID = authMethodOIDC.id;
     scopesURL = `/scopes`;
     orgScopeURL = `/scopes/${orgScopeID}`;
     globalAuthenticateURL = `/scopes/global/authenticate`;
     authenticateURL = `/scopes/${orgScopeID}/authenticate`;
     authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${globalAuthMethodID}`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
+    authMethodOIDCAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodOIDCID}`;
     changePasswordURL = `/account/change-password`;
     orgsURL = `/scopes/global/scopes`;
     orgEditURL = `/scopes/${orgScopeID}/edit`;
@@ -105,6 +116,7 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting auth methods authenticate route when there no methods shows a message', async function (assert) {
     assert.expect(2);
     authMethod.destroy();
+    authMethodOIDC.destroy();
     await visit(authenticateURL);
     await a11yAudit();
     assert.equal(currentURL(), authenticateURL);
@@ -350,4 +362,28 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
+
+  // TODO:  figure out a sustainable test strategy for polling routes
+  test('OIDC authentication opens a new window and closes it upon completion', async function (assert) {
+    assert.expect(3);
+    // Register mock window service
+    this.owner.register(
+      'service:browser/window',
+      class extends Service {
+        open(/* url */) {
+          assert.ok(true, 'New window was opened.');
+          return {
+            close() {
+              assert.ok(true, 'New window was closed.');
+              assert.ok(currentSession().isAuthenticated);
+            },
+          };
+        }
+      }
+    );
+    await visit(authMethodOIDCAuthenticateURL);
+    await click('form [type="submit"]');
+  });
+
+  // TODO:  test OIDC retry and cancel
 });
