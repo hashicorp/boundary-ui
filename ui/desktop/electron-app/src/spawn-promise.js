@@ -47,25 +47,28 @@ module.exports = {
         outputStream += data.toString();
         const jsonData = jsonify(outputStream);
         if (jsonData) {
-          if (jsonData.termination_reason) {
-            spawnSession.cancelProcess(childProcess.pid);
-          } else {
-            // Track only successfully launched child processes
-            spawnSession.add({ childProcess, data: jsonData });
-          }
-          outputStream = '';
-          resolve(jsonData);
+          // if (jsonData.termination_reason) {
+          //   spawnSession.cancelProcess(childProcess.pid);
+          // } else {
+          //   // Track only successfully launched child processes
+          //   spawnSession.add({ childProcess, data: jsonData });
+          // }
+          // FIXME
+          // outputStream = '';
+          resolve({ childProcess, response: jsonData });
         }
       });
 
       // @todo Cancel spawned session childprocess on error? Does it get automatically cancelled?
+      // @todo on error - should childprocess be closed?
       // Test on connection limit errors especially
       childProcess.stderr.on('data', (data) => {
         errorStream += data.toString();
         const jsonData = jsonify(errorStream);
         if (jsonData) {
           const error = jsonData.api_error || jsonData.error;
-          errorStream = '';
+          // FIXME
+          // errorStream = '';
           reject(new Error(error.message));
         }
       });

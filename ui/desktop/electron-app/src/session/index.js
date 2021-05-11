@@ -1,0 +1,99 @@
+const { spawnAsyncJSONPromise } = require('../spawn-promise');
+
+// FIXME create structure 'util' folder for spawn-promise
+
+/**
+ * Super paranoid shell quote/escape and validation.  Input must be base62.
+ * @param {string} str
+ */
+const escapeAndValidateBase62 = (str) => {
+  const candidate = str.toString();
+  if (candidate.match(/^[A-Za-z0-9_]*$/)) return candidate;
+  throw new Error(`
+    Could not invoke command:
+    input contained unsafe characters.
+  `);
+};
+
+class Session {
+  #id;
+  #pid;
+  #addr;
+  #token;
+  #hostId;
+  #targetId;
+  #proxyDetails;
+
+  /**
+   * Initialize a session to a controller address
+   * using target details.
+   * @param {string} addr
+   * @param {string} targetId
+   * @param {string} token
+   * @param {string} hostId
+   */
+  constructor(addr, targetId, token, hostId) {
+    this.#addr = addr;
+    this.#targetId = targetId;
+    this.#token = token;
+    this.#hostId = hostId;
+  }
+
+  /**
+   * @return {boolean}
+   */
+  get isActive() {
+    return Boolean(this.#pid);
+  }
+
+  /**
+   * Returns session proxy details.
+   * Only available after successful start of a session.
+   * @return {object}
+   */
+  get proxyDetails() {
+    return this.#proxyDetails;
+  }
+
+  // Spawn process
+  // Track spawned process this.pid = pid;
+  /**
+   * Using cli, initialize a session to a target.
+   * Tracks local proxy details if successful.
+   */
+  start() {
+    const command = this.cliCommand();
+    return spawnAsyncJSONPromise(command).then((spawnedSession) => {
+      this.#id = this.#proxyDetails.session_id;
+      this.#pid = spawnedSession.childProcess.pid;
+      this.#proxyDetails = spawnedSession.response;
+    });
+  }
+
+  /**
+   * Generate cli command for session.
+   * @returns {[]}
+   */
+  cliCommand() {
+    const sanitized = {
+      target_id: escapeAndValidateBase62(this.#targetId),
+      token: escapeAndValidateBase62(this.#token),
+    };
+
+    const command = [
+      'connect',
+      `-target-id=${sanitized.target_id}`,
+      `-token=${sanitized.token}`,
+      `-addr=${this.#addr}`,
+      '-format=json',
+    ];
+
+    if (this.#hostId) {
+      sanitized.host_id = escapeAndValidateBase62(this.#hostId);
+      command.push(`-host-id=${sanitized.host_id}`);
+    }
+    return command;
+  }
+}
+
+module.exports = Session;
