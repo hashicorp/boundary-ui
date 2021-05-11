@@ -6,16 +6,12 @@
     <p>{{t 'resources.auth-method.messages.pending.description'}}</p>
     <p>
       {{t 'resources.auth-method.questions.no-see-window'}}
-      <a
-        href="{{this.authURL}}"
-        target="_blank"
-        rel="noreferrer noopener"
-      >
+      <a href='{{this.authURL}}' target='_blank' rel='noreferrer noopener'>
         {{t 'actions.retry'}}
       </a>
     </p>
     <p>
-      <LinkTo @route="scopes.scope.authenticate.method">
+      <LinkTo @route='scopes.scope.authenticate.method'>
         {{t 'actions.cancel'}}
       </LinkTo>
     </p>

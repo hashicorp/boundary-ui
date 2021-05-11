@@ -1,6 +1,6 @@
 {{#if this.hasAvailableHostSets}}
   <Rose::Form
-    class="full-width"
+    class='full-width'
     @onSubmit={{fn this.submit @submit}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
@@ -9,8 +9,9 @@
   >
 
     <form.actions
-      @submitText={{t "actions.add-host-sets"}}
-      @cancelText={{t "actions.cancel"}} />
+      @submitText={{t 'actions.add-host-sets'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
 
     <Rose::Table as |table|>
       <table.header as |header|>
@@ -28,11 +29,14 @@
               <form.checkbox
                 @label={{hostSet.id}}
                 @description={{hostSet.description}}
-                onChange={{fn this.toggleHostSet hostSet}} />
+                onChange={{fn this.toggleHostSet hostSet}}
+              />
             </row.cell>
             <row.cell>{{hostSet.name}}</row.cell>
             <row.cell>
-              <Rose::Badge>{{t (concat 'resources.host-set.types.' hostSet.type)}}</Rose::Badge>
+              <Rose::Badge>{{t
+                  (concat 'resources.host-set.types.' hostSet.type)
+                }}</Rose::Badge>
             </row.cell>
             <row.cell>
               <code>{{hostSet.host_catalog_id}}</code>
@@ -47,13 +51,16 @@
 
 {{#unless this.hasAvailableHostSets}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.target.host-set.messages.none.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.target.host-set.messages.none.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.target.host-set.messages.none.description"}}
+        {{t 'resources.target.host-set.messages.none.description'}}
       </message.description>
-      <message.link @route="scopes.scope.targets.target.host-sets">
-        <Rose::Icon @name="chevron-left" />
-        {{t "actions.back"}}
+      <message.link @route='scopes.scope.targets.target.host-sets'>
+        <Rose::Icon @name='chevron-left' />
+        {{t 'actions.back'}}
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>

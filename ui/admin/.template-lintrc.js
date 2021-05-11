@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = {
-  extends: 'octane',
+  plugins: ['ember-template-lint-plugin-prettier'],
+  extends: ['octane', 'ember-template-lint-plugin-prettier:recommended'],
   rules: {
     'no-bare-strings': true,
     'no-curly-component-invocation': {

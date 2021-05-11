@@ -3,49 +3,55 @@
 <Rose::Layout::Global as |layout|>
 
   <layout.header>
-    <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
-      <header.brand @logo="logo-app" @text={{app-name}} />
+    <Rose::Header class='{{if (is-loading) ' loading'}}' as |header|>
+      <header.brand @logo='logo-app' @text={{app-name}} />
 
       {{#if this.session.isAuthenticated}}
         <header.nav>
 
-          {{outlet "header-nav"}}
+          {{outlet 'header-nav'}}
 
         </header.nav>
 
         <header.utilities as |utilities|>
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
-            @icon="app-icons/user-profile" as |dropdown|
+            @icon='app-icons/user-profile'
+            as |dropdown|
           >
-            <dropdown.link @route="account.change-password">
+            <dropdown.link @route='account.change-password'>
               {{t 'actions.change-password'}}
             </dropdown.link>
             <dropdown.separator />
 
-            <dropdown.button
-              {{on "click" (route-action "invalidateSession")}}
-            >
+            <dropdown.button {{on 'click' (route-action 'invalidateSession')}}>
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
 
             <dropdown.separator />
 
-            <dropdown.section @title={{t "titles.toggle-color-theme"}}>
+            <dropdown.section @title={{t 'titles.toggle-color-theme'}}>
               <Rose::Form as |form|>
                 <form.radioGroup
-                  @name="theme"
+                  @name='theme'
                   @selectedValue={{this.session.data.theme}}
-                  @changed={{route-action "toggleTheme"}}
-                as |radioGroup|>
+                  @changed={{route-action 'toggleTheme'}}
+                  as |radioGroup|
+                >
                   <dropdown.item>
-                    <radioGroup.radio @label={{t "themes.system"}} />
+                    <radioGroup.radio @label={{t 'themes.system'}} />
                   </dropdown.item>
                   <dropdown.item>
-                    <radioGroup.radio @label={{t "themes.light"}} @value="light" />
+                    <radioGroup.radio
+                      @label={{t 'themes.light'}}
+                      @value='light'
+                    />
                   </dropdown.item>
                   <dropdown.item>
-                    <radioGroup.radio @label={{t "themes.dark"}} @value="dark" />
+                    <radioGroup.radio
+                      @label={{t 'themes.dark'}}
+                      @value='dark'
+                    />
                   </dropdown.item>
                 </form.radioGroup>
               </Rose::Form>
@@ -65,12 +71,12 @@
 
   <layout.footer>
     <Rose::Footer as |footer|>
-      <footer.brand @logo="logo-company" @text={{company-name}} />
+      <footer.brand @logo='logo-company' @text={{company-name}} />
       <footer.text>{{company-copyright}}</footer.text>
       <footer.text>{{app-name}}</footer.text>
       <footer.nav as |nav|>
         <nav.link @href={{doc-url}}>
-          {{t "titles.documentation"}}
+          {{t 'titles.documentation'}}
         </nav.link>
       </footer.nav>
     </Rose::Footer>
@@ -92,43 +98,49 @@
 <PendingConfirmations as |confirmation accept deny|>
   {{#if confirmation.options.isAbandonConfirm}}
     <Rose::Dialog
-      @heading={{t "titles.abandon-confirm"}}
-      @dismissButtonText={{t "actions.cancel"}}
-      @icon="alert-triangle"
-      @style="warning"
+      @heading={{t 'titles.abandon-confirm'}}
+      @dismissButtonText={{t 'actions.cancel'}}
+      @icon='alert-triangle'
+      @style='warning'
       @modal={{true}}
       @dismiss={{deny}}
-    as |dialog|>
+      as |dialog|
+    >
       <dialog.body>
-        <p>{{t "questions.abandon-confirm"}}</p>
+        <p>{{t 'questions.abandon-confirm'}}</p>
       </dialog.body>
       <dialog.footer>
-        <Rose::Button @style="primary" {{on "click" accept}}>
-          {{t "actions.discard"}}
+        <Rose::Button @style='primary' {{on 'click' accept}}>
+          {{t 'actions.discard'}}
         </Rose::Button>
-        <Rose::Button @style="secondary" {{on "click" deny}}>
-          {{t "actions.cancel"}}
+        <Rose::Button @style='secondary' {{on 'click' deny}}>
+          {{t 'actions.cancel'}}
         </Rose::Button>
       </dialog.footer>
     </Rose::Dialog>
   {{else}}
     <Rose::Dialog
-      @heading={{if confirmation.options.title (t confirmation.options.title) (t "actions.confirm")}}
-      @dismissButtonText={{t "actions.cancel"}}
-      @icon="alert-triangle"
-      @style="warning"
+      @heading={{if
+        confirmation.options.title
+        (t confirmation.options.title)
+        (t 'actions.confirm')
+      }}
+      @dismissButtonText={{t 'actions.cancel'}}
+      @icon='alert-triangle'
+      @style='warning'
       @modal={{true}}
       @dismiss={{deny}}
-    as |dialog|>
+      as |dialog|
+    >
       <dialog.body>
         <p>{{confirmation.text}}</p>
       </dialog.body>
       <dialog.footer>
-        <Rose::Button @style="primary" {{on "click" accept}}>
-          {{t "actions.ok"}}
+        <Rose::Button @style='primary' {{on 'click' accept}}>
+          {{t 'actions.ok'}}
         </Rose::Button>
-        <Rose::Button @style="secondary" {{on "click" deny}}>
-          {{t "actions.cancel"}}
+        <Rose::Button @style='secondary' {{on 'click' deny}}>
+          {{t 'actions.cancel'}}
         </Rose::Button>
       </dialog.footer>
     </Rose::Dialog>

@@ -1,6 +1,6 @@
 {{#if this.hasAvailablePrincipals}}
   <Rose::Form
-    class="full-width"
+    class='full-width'
     @onSubmit={{fn this.submit @submit}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
@@ -9,8 +9,9 @@
   >
 
     <form.actions
-      @submitText={{t "actions.add-principals"}}
-      @cancelText={{t "actions.cancel"}} />
+      @submitText={{t 'actions.add-principals'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
 
     <Rose::Table as |table|>
       <table.header as |header|>
@@ -27,11 +28,17 @@
               <form.checkbox
                 @label={{principal.id}}
                 @description={{principal.description}}
-                onChange={{fn this.togglePrincipal principal}} />
+                onChange={{fn this.togglePrincipal principal}}
+              />
             </row.cell>
             <row.cell>{{principal.name}}</row.cell>
             <row.cell>
-              <Rose::Badge>{{t (concat 'resources.role.principal.types.' principal.constructor.modelName)}}</Rose::Badge>
+              <Rose::Badge>{{t
+                  (concat
+                    'resources.role.principal.types.'
+                    principal.constructor.modelName
+                  )
+                }}</Rose::Badge>
             </row.cell>
           </body.row>
         {{/each}}
@@ -43,13 +50,16 @@
 
 {{#unless this.hasAvailablePrincipals}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.role.principal.messages.none.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.role.principal.messages.none.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.role.principal.messages.none.description"}}
+        {{t 'resources.role.principal.messages.none.description'}}
       </message.description>
-      <message.link @route="scopes.scope.roles.role.principals">
-        <Rose::Icon @name="chevron-left" />
-        {{t "actions.back"}}
+      <message.link @route='scopes.scope.roles.role.principals'>
+        <Rose::Icon @name='chevron-left' />
+        {{t 'actions.back'}}
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>

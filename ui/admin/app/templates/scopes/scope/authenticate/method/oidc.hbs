@@ -1,22 +1,18 @@
 <Rose::Dialog::Cover>
   <:header>
-    {{inline-svg "logo-app-full"}}
+    {{inline-svg 'logo-app-full'}}
     <h1>{{t 'resources.auth-method.messages.pending.title'}}</h1>
   </:header>
   <:body>
     <p>{{t 'resources.auth-method.messages.pending.description'}}</p>
     <p>
       {{t 'resources.auth-method.questions.no-see-window'}}
-      <a
-        href="#"
-        role="button"
-        {{on "click" (route-action "authenticate")}}
-      >
+      <a href='#' role='button' {{on 'click' (route-action 'authenticate')}}>
         {{t 'actions.retry'}}
       </a>
     </p>
     <p>
-      <LinkTo @route="scopes.scope.authenticate.method">
+      <LinkTo @route='scopes.scope.authenticate.method'>
         {{t 'actions.cancel'}}
       </LinkTo>
     </p>

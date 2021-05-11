@@ -5,20 +5,23 @@
     @model={{@model.user}}
     @authMethods={{@model.authMethods}}
     @accounts={{@model.accounts}}
-    @submit={{route-action "addAccounts" @model.user}}
-    @cancel={{route-action "cancel"}}
+    @submit={{route-action 'addAccounts' @model.user}}
+    @cancel={{route-action 'cancel'}}
   />
 {{/if}}
 
 {{#unless @model.accounts}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.user.messages.no-accounts.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.user.messages.no-accounts.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.user.messages.no-accounts.description"}}
+        {{t 'resources.user.messages.no-accounts.description'}}
       </message.description>
-      <message.link @route="scopes.scope.users.user.accounts">
-        <Rose::Icon @name="chevron-left" />
-        {{t "actions.back"}}
+      <message.link @route='scopes.scope.users.user.accounts'>
+        <Rose::Icon @name='chevron-left' />
+        {{t 'actions.back'}}
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>

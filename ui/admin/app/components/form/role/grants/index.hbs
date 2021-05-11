@@ -5,28 +5,29 @@
   as |form|
 >
   <Rose::List::KeyValue as |list|>
-    {{!-- Add grant field (only one per form) --}}
+    {{! Add grant field (only one per form) }}
     <list.item as |item|>
       <form.input
         @contextual={{true}}
-        @name="grant"
-        @type="text"
+        @name='grant'
+        @type='text'
         @value={{this.newGrantString}}
-      as |input|>
+        as |input|
+      >
         <item.key>
-          <input.label>{{t "resources.role.grant.actions.create"}}</input.label>
+          <input.label>{{t 'resources.role.grant.actions.create'}}</input.label>
         </item.key>
         <item.cell>
-          <input.field title={{t "form.grant.help"}} />
+          <input.field title={{t 'form.grant.help'}} />
         </item.cell>
         <item.cell>
           <Rose::Button
             @submit={{true}}
             @disabled={{this.cannotSave}}
-            @style="secondary"
-            title={{t "actions.add"}}
+            @style='secondary'
+            title={{t 'actions.add'}}
           >
-            {{t "actions.add"}}
+            {{t 'actions.add'}}
           </Rose::Button>
         </item.cell>
       </form.input>
@@ -57,26 +58,27 @@
       <list.item as |item|>
         <form.input
           @contextual={{true}}
-          @name="grant"
-          @type="text"
+          @name='grant'
+          @type='text'
           @value={{grant.value}}
           @error={{@model.errors.grant_strings}}
-        as |input|>
+          as |input|
+        >
           <item.key>
-            <input.label>{{t "form.grant.label"}}</input.label>
+            <input.label>{{t 'form.grant.label'}}</input.label>
           </item.key>
           <item.cell>
-            <input.field title={{t "form.grant.help"}} />
+            <input.field title={{t 'form.grant.help'}} />
           </item.cell>
         </form.input>
         <item.cell>
           <Rose::Button
-            @style="secondary"
-            @iconOnly="trash"
-            title={{t "actions.remove"}}
-            {{on "click" (fn @removeGrant grant.value)}}
+            @style='secondary'
+            @iconOnly='trash'
+            title={{t 'actions.remove'}}
+            {{on 'click' (fn @removeGrant grant.value)}}
           >
-            {{t "actions.remove"}}
+            {{t 'actions.remove'}}
           </Rose::Button>
         </item.cell>
       </list.item>
@@ -85,7 +87,8 @@
 
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
-    @submitText={{t "actions.save"}}
-    @cancelText={{t "actions.cancel"}} />
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
 
 </Rose::Form>

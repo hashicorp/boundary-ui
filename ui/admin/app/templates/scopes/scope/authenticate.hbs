@@ -1,4 +1,4 @@
-{{page-title (t "actions.authenticate")}}
+{{page-title (t 'actions.authenticate')}}
 
 <Rose::Layout::Centered>
   <Rose::Layout::Page as |page|>
@@ -7,19 +7,26 @@
 
       <Rose::Frame>
         <:header>
-          <h2>{{t "actions.authenticate"}}</h2>
+          <h2>{{t 'actions.authenticate'}}</h2>
         </:header>
         <:body>
-          <p>{{t "auth.descriptions.authenticating-with-org" name=@model.scope.displayName}}</p>
+          <p>{{t
+              'auth.descriptions.authenticating-with-org'
+              name=@model.scope.displayName
+            }}</p>
           <Rose::Dropdown
-            @text={{t "actions.choose-different-org"}}
-            @icon="user-organization"
-          as |dropdown|>
-            <dropdown.link @route="scopes.scope.authenticate" @model="global">
-              {{t "titles.global"}}
+            @text={{t 'actions.choose-different-org'}}
+            @icon='user-organization'
+            as |dropdown|
+          >
+            <dropdown.link @route='scopes.scope.authenticate' @model='global'>
+              {{t 'titles.global'}}
             </dropdown.link>
             {{#each this.sortedScopes as |scope|}}
-              <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
+              <dropdown.link
+                @route='scopes.scope.authenticate'
+                @model={{scope.id}}
+              >
                 {{scope.displayName}}
               </dropdown.link>
             {{/each}}
@@ -31,11 +38,16 @@
             {{#if (feature-flag 'oidc')}}
               {{! OIDC enable:  list all auth methods }}
               {{#each @model.authMethods as |authMethod|}}
-                <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
+                <nav.link
+                  @route='scopes.scope.authenticate.method'
+                  @model={{authMethod.id}}
+                >
                   {{#if authMethod.name}}
                     {{authMethod.name}}
                   {{else}}
-                    {{t (concat "resources.auth-method.types." authMethod.type)}}
+                    {{t
+                      (concat 'resources.auth-method.types.' authMethod.type)
+                    }}
                   {{/if}}
                 </nav.link>
               {{/each}}
@@ -43,11 +55,16 @@
               {{! OIDC disabled:  filter out OIDC auth methods}}
               {{#each @model.authMethods as |authMethod|}}
                 {{#unless authMethod.isOIDC}}
-                  <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
+                  <nav.link
+                    @route='scopes.scope.authenticate.method'
+                    @model={{authMethod.id}}
+                  >
                     {{#if authMethod.name}}
                       {{authMethod.name}}
                     {{else}}
-                      {{t (concat "resources.auth-method.types." authMethod.type)}}
+                      {{t
+                        (concat 'resources.auth-method.types.' authMethod.type)
+                      }}
                     {{/if}}
                   </nav.link>
                 {{/unless}}
@@ -61,11 +78,12 @@
           {{#unless @model.authMethods}}
             <Rose::Layout::Centered>
               <Rose::Message
-                @title={{t "resources.auth-method.messages.none.title"}}
-                @icon="alert-circle-outline"
-              as |message|>
+                @title={{t 'resources.auth-method.messages.none.title'}}
+                @icon='alert-circle-outline'
+                as |message|
+              >
                 <message.description>
-                  {{t "resources.auth-method.messages.none.description"}}
+                  {{t 'resources.auth-method.messages.none.description'}}
                 </message.description>
               </Rose::Message>
             </Rose::Layout::Centered>

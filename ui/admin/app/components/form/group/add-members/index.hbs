@@ -1,6 +1,6 @@
 {{#if this.availableUsers}}
   <Rose::Form
-    class="full-width"
+    class='full-width'
     @onSubmit={{fn this.submit @submit}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
@@ -9,8 +9,9 @@
   >
 
     <form.actions
-      @submitText={{t "resources.group.actions.add-members"}}
-      @cancelText={{t "actions.cancel"}} />
+      @submitText={{t 'resources.group.actions.add-members'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
 
     <Rose::Table as |table|>
       <table.header as |header|>
@@ -26,7 +27,8 @@
               <form.checkbox
                 @label={{user.id}}
                 @description={{user.description}}
-                onChange={{fn this.toggleMember user}} />
+                onChange={{fn this.toggleMember user}}
+              />
             </row.cell>
             <row.cell>{{user.name}}</row.cell>
           </body.row>
@@ -39,14 +41,17 @@
 
 {{#unless this.availableUsers}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.group.messages.no-members.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.group.messages.no-members.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.group.messages.no-members.description"}}
+        {{t 'resources.group.messages.no-members.description'}}
       </message.description>
-      <message.link @route="scopes.scope.groups.group.members">
-        <Rose::Icon @name="chevron-left" />
-        {{t "actions.back"}}
+      <message.link @route='scopes.scope.groups.group.members'>
+        <Rose::Icon @name='chevron-left' />
+        {{t 'actions.back'}}
       </message.link>
     </Rose::Message>
-   </Rose::Layout::Centered>
+  </Rose::Layout::Centered>
 {{/unless}}

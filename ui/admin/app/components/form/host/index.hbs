@@ -8,20 +8,22 @@
 >
 
   <form.input
-  @value={{@model.type}}
-  @label={{t "form.type.label"}}
-  readonly={{true}}
-  @disabled={{true}} />
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    readonly={{true}}
+    @disabled={{true}}
+  />
 
   <form.input
-    @name="name"
-    @type="name"
+    @name='name'
+    @type='name'
     @value={{@model.name}}
-    @label={{t "form.name.label"}}
+    @label={{t 'form.name.label'}}
     @error={{@model.errors.name}}
-    @helperText={{t "form.name.help"}}
+    @helperText={{t 'form.name.help'}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.name}}
       <field.errors as |errors|>
         {{#each @model.errors.name as |error|}}
@@ -32,15 +34,16 @@
   </form.input>
 
   <form.textarea
-    @name="description"
-    @type="description"
+    @name='description'
+    @type='description'
     @value={{@model.description}}
-    @label={{t "form.description.label"}}
+    @label={{t 'form.description.label'}}
     @error={{@model.errors.description}}
-    @helperText={{t "form.description.help"}}
+    @helperText={{t 'form.description.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.description}}
       <field.errors as |errors|>
         {{#each @model.errors.description as |error|}}
@@ -51,14 +54,15 @@
   </form.textarea>
 
   <form.input
-    @name="address"
-    @type="text"
+    @name='address'
+    @type='text'
     @value={{@model.attributes.address}}
-    @label={{t "form.address.label"}}
+    @label={{t 'form.address.label'}}
     @error={{@model.errors.name}}
-    @helperText={{t "form.address.help"}}
+    @helperText={{t 'form.address.help'}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.name}}
       <field.errors as |errors|>
         {{#each @model.errors.name as |error|}}
@@ -70,8 +74,9 @@
 
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
-    @enableEditText={{t "actions.edit-form"}}
-    @submitText={{t "actions.save"}}
-    @cancelText={{t "actions.cancel"}} />
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
 
 </Rose::Form>

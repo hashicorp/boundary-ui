@@ -46,7 +46,8 @@ const findUpdateArchive = (version) => {
 
 // Create update config using downloaded archive
 const createAppUpdaterConfig = (url, version, destination) => {
-  if (debug) console.log(`[app-updater] url: ${url}, destination: ${destination}`);
+  if (debug)
+    console.log(`[app-updater] url: ${url}, destination: ${destination}`);
   const json = { url, version };
   const config = JSON.stringify(json);
   const configPath = `${destination}/feed.json`;
@@ -144,7 +145,10 @@ module.exports = {
     const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
     if (debug && location) {
       // Support hosted url and file paths
-      displayDownloadPrompt(latestVersion, location.match(/^http/i) ? location : `file://${location}`);
+      displayDownloadPrompt(
+        latestVersion,
+        location.match(/^http/i) ? location : `file://${location}`
+      );
       return;
     }
 

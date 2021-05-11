@@ -8,10 +8,10 @@
 
   <page.header>
     <h2>
-      {{t "titles.new"}}
+      {{t 'titles.new'}}
       <DocLink
-        @doc={{if @model.isOrg "org.new" "project.new"}}
-        @iconSize="large"
+        @doc={{if @model.isOrg 'org.new' 'project.new'}}
+        @iconSize='large'
       />
     </h2>
   </page.header>
@@ -19,8 +19,8 @@
   <page.body>
     <Form::Scope
       @model={{@model}}
-      @submit={{route-action "save" @model}}
-      @cancel={{route-action "cancel" @model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
     />
   </page.body>
 
