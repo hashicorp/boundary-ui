@@ -3,43 +3,48 @@
 <Rose::Layout::Global as |layout|>
 
   <layout.header>
-    <Rose::Header class="{{if (is-loading) " loading"}}" as |header|>
-      <header.brand @logo="logo-app" @text={{app-name}} />
+    <Rose::Header class='{{if (is-loading) ' loading'}}' as |header|>
+      <header.brand @logo='logo-app' @text={{app-name}} />
 
       {{#if this.session.isAuthenticated}}
         <header.nav>
-          {{outlet "header-nav"}}
+          {{outlet 'header-nav'}}
         </header.nav>
 
         <header.utilities as |utilities|>
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
-            @icon="app-icons/user-profile"
+            @icon='app-icons/user-profile'
             as |dropdown|
           >
-            <dropdown.button
-              {{on "click" (route-action "invalidateSession")}}
-            >
+            <dropdown.button {{on 'click' (route-action 'invalidateSession')}}>
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
 
             <dropdown.separator />
 
-            <dropdown.section @title={{t "titles.toggle-color-theme"}}>
+            <dropdown.section @title={{t 'titles.toggle-color-theme'}}>
               <Rose::Form as |form|>
                 <form.radioGroup
-                  @name="theme"
+                  @name='theme'
                   @selectedValue={{this.session.data.theme}}
-                  @changed={{route-action "toggleTheme"}}
-                as |radioGroup|>
+                  @changed={{route-action 'toggleTheme'}}
+                  as |radioGroup|
+                >
                   <dropdown.item>
-                    <radioGroup.radio @label={{t "themes.system"}} />
+                    <radioGroup.radio @label={{t 'themes.system'}} />
                   </dropdown.item>
                   <dropdown.item>
-                    <radioGroup.radio @label={{t "themes.light"}} @value="light" />
+                    <radioGroup.radio
+                      @label={{t 'themes.light'}}
+                      @value='light'
+                    />
                   </dropdown.item>
                   <dropdown.item>
-                    <radioGroup.radio @label={{t "themes.dark"}} @value="dark" />
+                    <radioGroup.radio
+                      @label={{t 'themes.dark'}}
+                      @value='dark'
+                    />
                   </dropdown.item>
                 </form.radioGroup>
               </Rose::Form>
@@ -72,21 +77,23 @@
 <PendingConfirmations as |confirmation accept deny|>
   {{#if confirmation.options.isConnectSuccess}}
     <Rose::Dialog
-      @heading={{t "states.success"}}
-      @dismissButtonText={{t "actions.ok"}}
-      @icon="check-circle-fill"
-      @style="success"
+      @heading={{t 'states.success'}}
+      @dismissButtonText={{t 'actions.ok'}}
+      @icon='check-circle-fill'
+      @style='success'
       @modal={{true}}
       @dismiss={{deny}}
-    as |dialog|>
+      as |dialog|
+    >
       <dialog.body>
 
         <Copyable
-          @text={{concat confirmation.text.address ":" confirmation.text.port}}
-          @buttonText={{t "actions.copy-to-clipboard"}}
-          @acknowledgeText={{t "states.copied"}}
+          @text={{concat confirmation.text.address ':' confirmation.text.port}}
+          @buttonText={{t 'actions.copy-to-clipboard'}}
+          @acknowledgeText={{t 'states.copied'}}
         >
-          {{t 'states.connection.success.description'
+          {{t
+            'states.connection.success.description'
             port=confirmation.text.port
             address=confirmation.text.address
             protocol=confirmation.text.protocol
@@ -95,55 +102,57 @@
 
       </dialog.body>
       <dialog.footer>
-        <Rose::Button @style="primary" {{on "click" accept}}>
-          {{t "actions.ok"}}
+        <Rose::Button @style='primary' {{on 'click' accept}}>
+          {{t 'actions.ok'}}
         </Rose::Button>
       </dialog.footer>
     </Rose::Dialog>
   {{else if confirmation.options.isConnectError}}
     <Rose::Dialog
-      @heading={{t "states.error"}}
-      @dismissButtonText={{t "actions.ok"}}
-      @icon="cancel-square-fill"
-      @style="error"
+      @heading={{t 'states.error'}}
+      @dismissButtonText={{t 'actions.ok'}}
+      @icon='cancel-square-fill'
+      @style='error'
       @modal={{true}}
       @dismiss={{deny}}
-    as |dialog|>
+      as |dialog|
+    >
       <dialog.body>
         <p>
           {{confirmation.text}}
         </p>
         <p>
-          {{t "questions.retry-confirm"}}
+          {{t 'questions.retry-confirm'}}
         </p>
       </dialog.body>
       <dialog.footer>
-        <Rose::Button @style="primary" {{on "click" accept}}>
-          {{t "actions.retry"}}
+        <Rose::Button @style='primary' {{on 'click' accept}}>
+          {{t 'actions.retry'}}
         </Rose::Button>
-        <Rose::Button @style="secondary" {{on "click" deny}}>
-          {{t "actions.cancel"}}
+        <Rose::Button @style='secondary' {{on 'click' deny}}>
+          {{t 'actions.cancel'}}
         </Rose::Button>
       </dialog.footer>
     </Rose::Dialog>
   {{else}}
     <Rose::Dialog
-      @heading={{t "actions.confirm"}}
-      @dismissButtonText={{t "actions.cancel"}}
-      @icon="alert-triangle"
-      @style="warning"
+      @heading={{t 'actions.confirm'}}
+      @dismissButtonText={{t 'actions.cancel'}}
+      @icon='alert-triangle'
+      @style='warning'
       @modal={{true}}
       @dismiss={{deny}}
-    as |dialog|>
+      as |dialog|
+    >
       <dialog.body>
         <p>{{confirmation.text}}</p>
       </dialog.body>
       <dialog.footer>
-        <Rose::Button @style="primary" {{on "click" accept}}>
-          {{t "actions.ok"}}
+        <Rose::Button @style='primary' {{on 'click' accept}}>
+          {{t 'actions.ok'}}
         </Rose::Button>
-        <Rose::Button @style="secondary" {{on "click" deny}}>
-          {{t "actions.cancel"}}
+        <Rose::Button @style='secondary' {{on 'click' deny}}>
+          {{t 'actions.cancel'}}
         </Rose::Button>
       </dialog.footer>
     </Rose::Dialog>

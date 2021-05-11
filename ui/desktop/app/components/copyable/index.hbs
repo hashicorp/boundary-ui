@@ -1,16 +1,16 @@
 <span
   id={{this.id}}
-  class="copyable"
+  class='copyable'
   {{did-insert this.register}}
   {{will-destroy this.tearDown}}
 >
 
   {{#if this.copied}}
-    <mark class="copyable-content">
+    <mark class='copyable-content'>
       {{yield}}
     </mark>
   {{else}}
-    <span class="copyable-content">
+    <span class='copyable-content'>
       {{yield}}
     </span>
   {{/if}}
@@ -19,8 +19,8 @@
     <Rose::Button
       id={{this.copyableButtonId}}
       aria-describedby={{this.id}}
-      class="copyable-button"
-      @style="ghost"
+      class='copyable-button'
+      @style='ghost'
       @iconOnly={{if this.copied this.successIcon this.actionIcon}}
       title={{if this.copied this.successText this.actionText}}
     >
