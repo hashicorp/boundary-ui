@@ -248,6 +248,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   test('cancelling a session', async function (assert) {
     assert.expect(2);
     const sessionsCount = this.server.schema.sessions.all().models.length;
+    stubs.ipcService.withArgs('cancel');
     later(async () => {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button');
@@ -260,6 +261,17 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   test('cancelling a session with error shows notification', async function (assert) {
     assert.expect(1);
     this.server.post('/sessions/:id_method', () => new Response(400));
+    later(async () => {
+      run.cancelTimers();
+      await click('tbody tr:first-child td:last-child button');
+      assert.ok(find('[role="alert"].is-error'));
+    }, 750);
+    await visit(urls.sessions);
+  });
+
+  test('cancelling a session with ipc error shows notification', async function (assert) {
+    assert.expect(1);
+    stubs.ipcService.withArgs('cancel').throws();
     later(async () => {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button');

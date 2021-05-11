@@ -16,7 +16,7 @@ class SessionManager {
    * @param {string} token
    * @param {string} host_id
    */
-  start(addr, target_id, token, host_id) {
+  async start(addr, target_id, token, host_id) {
     const session = new Session(addr, target_id, token, host_id);
     return session.start().then(() => {
       this.#sessions.push(session);
@@ -24,7 +24,19 @@ class SessionManager {
     });
   }
 
-  stopById() {
+  /**
+   * Stop a session and remove it from tracked sessions.
+   * @param {string} session_id
+   */
+  async stopById(session_id) {
+    const index = this.#sessions.findIndex(
+      (session) => session.id === session_id
+    );
+    if (index === -1) return;
+    const session = this.#sessions[index];
+    return session.stop().then(() => {
+      this.#sessions.splice(index, 1);
+    });
   }
 
   stopAll() {

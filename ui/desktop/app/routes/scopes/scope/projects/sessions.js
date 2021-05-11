@@ -84,10 +84,6 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   @notifySuccess('notifications.canceled-success')
   async cancelSession(session) {
     await session.cancelSession();
-    try {
-      this.ipc.invoke('cancel', { session_id: session.id });
-    } catch (e) {
-      //Ignore errors
-    }
+    await this.ipc.invoke('cancel', { session_id: session.id });
   }
 }

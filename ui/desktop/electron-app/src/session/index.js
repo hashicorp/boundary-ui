@@ -1,4 +1,4 @@
-const { spawnAsyncJSONPromise } = require('../spawn-promise');
+const { spawnAsyncJSONPromise } = require('../spawn-promise.js');
 
 // FIXME create structure 'util' folder for spawn-promise
 
@@ -21,6 +21,7 @@ class Session {
   #addr;
   #token;
   #hostId;
+  #process;
   #targetId;
   #proxyDetails;
 
@@ -40,10 +41,18 @@ class Session {
   }
 
   /**
+   * Session id
+   * @return {string}
+   */
+  get id() {
+    return this.#id;
+  }
+
+  /**
    * @return {boolean}
    */
   get isActive() {
-    return Boolean(this.#pid);
+    return this.#process.connected;
   }
 
   /**
@@ -55,8 +64,6 @@ class Session {
     return this.#proxyDetails;
   }
 
-  // Spawn process
-  // Track spawned process this.pid = pid;
   /**
    * Using cli, initialize a session to a target.
    * Tracks local proxy details if successful.
@@ -64,9 +71,21 @@ class Session {
   start() {
     const command = this.cliCommand();
     return spawnAsyncJSONPromise(command).then((spawnedSession) => {
-      this.#id = this.#proxyDetails.session_id;
-      this.#pid = spawnedSession.childProcess.pid;
+      this.#process = spawnedSession.childProcess;
       this.#proxyDetails = spawnedSession.response;
+      this.#process = spawnedSession.childProcess;
+      this.#id = this.#proxyDetails.session_id;
+    });
+  }
+
+  /**
+   * Stop proxy used by session.
+   */
+  stop() {
+    return new Promise((resolve, reject) => {
+      this.#process.on('close', () => resolve());
+      this.#process.on('error', (e) => reject(e));
+      this.#process.kill();
     });
   }
 
