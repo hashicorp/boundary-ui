@@ -2,7 +2,7 @@
   {{! OIDC enabled:  show form for any auth method}}
   <Form::Authenticate
     @model={{@model}}
-    @submit={{route-action "authenticate"}}
+    @submit={{route-action 'authenticate'}}
     @disabled={{is-loading}}
   />
 {{else}}
@@ -10,7 +10,7 @@
   {{#unless @model.isOIDC}}
     <Form::Authenticate
       @model={{@model}}
-      @submit={{route-action "authenticate"}}
+      @submit={{route-action 'authenticate'}}
       @disabled={{is-loading}}
     />
   {{/unless}}

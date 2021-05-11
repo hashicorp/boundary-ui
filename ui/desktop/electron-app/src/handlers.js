@@ -33,8 +33,8 @@ handle('resetOrigin', async (requestOrigin) => {
  */
 handle('openExternal', async (href) => {
   const isSecure = href.startsWith('https://');
-  const isLocalhost = href.startsWith('http://localhost')
-    || href.startsWith('http://127.0.0.1');
+  const isLocalhost =
+    href.startsWith('http://localhost') || href.startsWith('http://127.0.0.1');
   if (isSecure || isLocalhost || isDev) {
     // openExternal is necessary in order to display documentation and to
     // support arbitrary OIDC flows.  The protocol is validated (see above).

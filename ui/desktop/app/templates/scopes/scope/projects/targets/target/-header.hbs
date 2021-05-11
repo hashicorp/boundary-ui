@@ -2,8 +2,8 @@
   {{@model.displayName}}
   {{#if @model.isActive}}
     &nbsp;
-    <Rose::Badge @style="success">
-      {{t "states.active"}}
+    <Rose::Badge @style='success'>
+      {{t 'states.active'}}
     </Rose::Badge>
   {{/if}}
 </h2>
@@ -11,8 +11,8 @@
 <p>
   <Copyable
     @text={{@model.id}}
-    @buttonText={{t "actions.copy-to-clipboard"}}
-    @acknowledgeText={{t "states.copied"}}
+    @buttonText={{t 'actions.copy-to-clipboard'}}
+    @acknowledgeText={{t 'states.copied'}}
   >
     <code>{{@model.id}}</code>
   </Copyable>

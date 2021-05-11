@@ -1,20 +1,24 @@
-{{page-title (t "actions.authenticate")}}
+{{page-title (t 'actions.authenticate')}}
 
 <main>
   <BrandedCard
     @title={{t 'actions.authenticate'}}
-    @description={{t 'auth.descriptions.authenticating-with-org' name=@model.scope.displayName}}
+    @description={{t
+      'auth.descriptions.authenticating-with-org'
+      name=@model.scope.displayName
+    }}
   >
 
     <Rose::Dropdown
-      @text={{t "actions.choose-different-org"}}
-      @icon="user-organization"
-    as |dropdown|>
-      <dropdown.link @route="scopes.scope.authenticate" @model="global">
-        {{t "titles.global"}}
+      @text={{t 'actions.choose-different-org'}}
+      @icon='user-organization'
+      as |dropdown|
+    >
+      <dropdown.link @route='scopes.scope.authenticate' @model='global'>
+        {{t 'titles.global'}}
       </dropdown.link>
       {{#each this.sortedScopes as |scope|}}
-        <dropdown.link @route="scopes.scope.authenticate" @model={{scope.id}}>
+        <dropdown.link @route='scopes.scope.authenticate' @model={{scope.id}}>
           {{scope.displayName}}
         </dropdown.link>
       {{/each}}
@@ -24,16 +28,22 @@
       {{#if (feature-flag 'oidc')}}
         {{! OIDC enable:  list all auth methods }}
         {{#each @model.authMethods as |authMethod|}}
-          <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
-            {{t (concat "resources.auth-method.types." authMethod.type)}}
+          <nav.link
+            @route='scopes.scope.authenticate.method'
+            @model={{authMethod.id}}
+          >
+            {{t (concat 'resources.auth-method.types.' authMethod.type)}}
           </nav.link>
         {{/each}}
       {{else}}
         {{! OIDC disabled:  filter out OIDC auth methods}}
         {{#each @model.authMethods as |authMethod|}}
           {{#unless authMethod.isOIDC}}
-            <nav.link @route="scopes.scope.authenticate.method" @model={{authMethod.id}}>
-              {{t (concat "resources.auth-method.types." authMethod.type)}}
+            <nav.link
+              @route='scopes.scope.authenticate.method'
+              @model={{authMethod.id}}
+            >
+              {{t (concat 'resources.auth-method.types.' authMethod.type)}}
             </nav.link>
           {{/unless}}
         {{/each}}
@@ -43,12 +53,12 @@
     {{#if @model.authMethods}}
       {{outlet}}
 
-      <p class="change-origin">
-        {{t "origin.connected-to"}}:
+      <p class='change-origin'>
+        {{t 'origin.connected-to'}}:
         <code>{{this.origin}}</code>
-        <br>
-        <LinkTo @route="origin">
-          {{t "actions.change-origin"}}
+        <br />
+        <LinkTo @route='origin'>
+          {{t 'actions.change-origin'}}
         </LinkTo>
       </p>
 
@@ -56,11 +66,12 @@
     {{#unless @model.authMethods}}
       <Rose::Layout::Centered>
         <Rose::Message
-          @title={{t "resources.auth-method.messages.none.title"}}
-          @icon="alert-circle-outline"
-        as |message|>
+          @title={{t 'resources.auth-method.messages.none.title'}}
+          @icon='alert-circle-outline'
+          as |message|
+        >
           <message.description>
-            {{t "resources.auth-method.messages.none.description"}}
+            {{t 'resources.auth-method.messages.none.description'}}
           </message.description>
         </Rose::Message>
       </Rose::Layout::Centered>

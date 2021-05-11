@@ -4,22 +4,21 @@
     @description={{t 'descriptions.origin-initialization'}}
   >
     <Rose::Form
-      class="full-width"
-      @onSubmit={{route-action "setOrigin" this.origin}}
+      class='full-width'
+      @onSubmit={{route-action 'setOrigin' this.origin}}
       @cancel={{false}}
       @disabled={{is-loading}}
       as |form|
     >
       <form.input
-        @name="host"
-        @type="text"
+        @name='host'
+        @type='text'
         @value={{this.origin}}
-        @label={{t "form.origin.label"}}
-        @helperText={{t "form.origin.description"}}
-        {{autofocus}} />
-      <form.actions
-        @submitText={{t "actions.submit"}}
-        @showCancel={{false}} />
+        @label={{t 'form.origin.label'}}
+        @helperText={{t 'form.origin.description'}}
+        {{autofocus}}
+      />
+      <form.actions @submitText={{t 'actions.submit'}} @showCancel={{false}} />
     </Rose::Form>
   </BrandedCard>
 </main>
