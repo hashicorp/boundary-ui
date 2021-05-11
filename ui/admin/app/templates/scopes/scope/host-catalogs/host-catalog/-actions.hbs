@@ -1,22 +1,26 @@
-<Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+<Rose::Dropdown
+  @text='{{t 'actions.manage'}}'
+  @dropdownRight={{true}}
+  as |dropdown|
+>
   <dropdown.link
-    @route="scopes.scope.host-catalogs.host-catalog.hosts.new"
+    @route='scopes.scope.host-catalogs.host-catalog.hosts.new'
     @model={{@model}}
   >
-    {{t "resources.host.actions.create"}}
+    {{t 'resources.host.actions.create'}}
   </dropdown.link>
   <dropdown.link
-    @route="scopes.scope.host-catalogs.host-catalog.host-sets.new"
+    @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
     @model={{@model}}
   >
-    {{t "resources.host-set.actions.create"}}
+    {{t 'resources.host-set.actions.create'}}
   </dropdown.link>
   <dropdown.separator />
   <dropdown.button
-    @style="danger"
+    @style='danger'
     @disabled={{@model.canSave}}
-    {{on "click" (route-action "delete" @model)}}
+    {{on 'click' (route-action 'delete' @model)}}
   >
-    {{t "resources.host-catalog.actions.delete"}}
+    {{t 'resources.host-catalog.actions.delete'}}
   </dropdown.button>
 </Rose::Dropdown>

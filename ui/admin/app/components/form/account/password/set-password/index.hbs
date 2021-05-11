@@ -6,15 +6,16 @@
 >
 
   <form.input
-    @name="password"
-    @type="password"
+    @name='password'
+    @type='password'
     @value={{this.password}}
-    @label={{t "form.set_password.label"}}
+    @label={{t 'form.set_password.label'}}
     @error={{@model.errors.password}}
-    @helperText={{t "form.set_password.help"}}
+    @helperText={{t 'form.set_password.help'}}
     readonly={{false}}
-    autocomplete="new-password"
-  as |field|>
+    autocomplete='new-password'
+    as |field|
+  >
     {{#if @model.errors.password}}
       <field.errors as |errors|>
         {{#each @model.errors.password as |error|}}
@@ -27,7 +28,8 @@
   <form.actions
     @submitDisabled={{this.cannotSave}}
     @showCancel={{false}}
-    @submitText={{t "actions.save"}}
-    @cancelText={{t "actions.cancel"}} />
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
 
 </Rose::Form>

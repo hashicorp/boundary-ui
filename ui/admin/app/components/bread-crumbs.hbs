@@ -3,10 +3,10 @@
   {{#if this.scope.org}}
     {{#unless this.scope.org.isGlobal}}
       {{#if this.session.data.authenticated.isGlobal}}
-        <crumbs.link @route="scopes.scope.scopes" @model="global">
-          {{t "resources.org.title_plural"}}
+        <crumbs.link @route='scopes.scope.scopes' @model='global'>
+          {{t 'resources.org.title_plural'}}
         </crumbs.link>
-        <crumbs.link @route="scopes.scope.edit" @model={{this.scope.org.id}}>
+        <crumbs.link @route='scopes.scope.edit' @model={{this.scope.org.id}}>
           {{this.scope.org.displayName}}
         </crumbs.link>
       {{/if}}
@@ -14,10 +14,10 @@
   {{/if}}
 
   {{#if this.scope.project}}
-    <crumbs.link @route="scopes.scope.scopes" @model={{this.scope.org.id}}>
-      {{t "resources.project.title_plural"}}
+    <crumbs.link @route='scopes.scope.scopes' @model={{this.scope.org.id}}>
+      {{t 'resources.project.title_plural'}}
     </crumbs.link>
-    <crumbs.link @route="scopes.scope.edit" @model={{this.scope.project.id}}>
+    <crumbs.link @route='scopes.scope.edit' @model={{this.scope.project.id}}>
       {{this.scope.project.displayName}}
     </crumbs.link>
   {{/if}}

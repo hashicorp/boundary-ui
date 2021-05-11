@@ -7,22 +7,22 @@
   <page.header>
     {{#if @model.isOrg}}
       <h2>
-        {{t "resources.org.title"}}
-        <DocLink @doc="org" @iconSize="large" />
+        {{t 'resources.org.title'}}
+        <DocLink @doc='org' @iconSize='large' />
       </h2>
-      <p>{{t "resources.org.description"}}</p>
+      <p>{{t 'resources.org.description'}}</p>
     {{/if}}
     {{#if @model.isProject}}
       <h2>
-        {{t "resources.project.title"}}
-        <DocLink @doc="project" @iconSize="large" />
+        {{t 'resources.project.title'}}
+        <DocLink @doc='project' @iconSize='large' />
       </h2>
-      <p>{{t "resources.project.description"}}</p>
+      <p>{{t 'resources.project.description'}}</p>
     {{/if}}
     <Copyable
       @text={{@model.id}}
-      @buttonText={{t "actions.copy-to-clipboard"}}
-      @acknowledgeText={{t "states.copied"}}
+      @buttonText={{t 'actions.copy-to-clipboard'}}
+      @acknowledgeText={{t 'states.copied'}}
     >
       <code>{{@model.id}}</code>
     </Copyable>
@@ -37,11 +37,15 @@
   </page.navigation>
 
   <page.actions>
-    <Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+    <Rose::Dropdown
+      @text='{{t 'actions.manage'}}'
+      @dropdownRight={{true}}
+      as |dropdown|
+    >
       <dropdown.button
-        @style="danger"
+        @style='danger'
         @disabled={{@model.canSave}}
-        {{on "click" (route-action "delete" @model)}}
+        {{on 'click' (route-action 'delete' @model)}}
       >
         {{#if @model.isOrg}}
           {{t 'resources.org.actions.delete'}}
@@ -55,8 +59,8 @@
   <page.body>
     <Form::Scope
       @model={{@model}}
-      @submit={{route-action "save" @model}}
-      @cancel={{route-action "cancel" @model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
     />
   </page.body>
 

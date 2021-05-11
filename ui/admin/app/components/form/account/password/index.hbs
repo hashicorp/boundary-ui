@@ -7,20 +7,22 @@
   as |form|
 >
   <form.input
-  @value={{@model.type}}
-  @label={{t "form.type.label"}}
-  readonly={{true}}
-  @disabled={{true}} />
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    readonly={{true}}
+    @disabled={{true}}
+  />
 
   <form.input
-    @name="name"
-    @type="name"
+    @name='name'
+    @type='name'
     @value={{@model.name}}
-    @label={{t "form.name.label"}}
-    @helperText={{t "form.name.help"}}
+    @label={{t 'form.name.label'}}
+    @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.name}}
       <field.errors as |errors|>
         {{#each @model.errors.name as |error|}}
@@ -31,15 +33,16 @@
   </form.input>
 
   <form.textarea
-    @name="description"
-    @type="description"
+    @name='description'
+    @type='description'
     @value={{@model.description}}
-    @label={{t "form.description.label"}}
-    @helperText={{t "form.description.help"}}
+    @label={{t 'form.description.label'}}
+    @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.description}}
       <field.errors as |errors|>
         {{#each @model.errors.description as |error|}}
@@ -50,13 +53,14 @@
   </form.textarea>
 
   <form.input
-    @name="login_name"
-    @type="text"
+    @name='login_name'
+    @type='text'
     @value={{@model.attributes.login_name}}
-    @label={{t "form.login_name.label"}}
+    @label={{t 'form.login_name.label'}}
     @error={{@model.errors.login_name}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.login_name}}
       <field.errors as |errors|>
         {{#each @model.errors.login_name as |error|}}
@@ -68,14 +72,15 @@
 
   {{#if @model.isNew}}
     <form.input
-      @name="password"
-      @type="password"
+      @name='password'
+      @type='password'
       @value={{this.password}}
-      @label={{t "form.password.label"}}
+      @label={{t 'form.password.label'}}
       @error={{@model.errors.password}}
       readonly={{false}}
-      autocomplete="new-password"
-    as |field|>
+      autocomplete='new-password'
+      as |field|
+    >
       {{#if @model.errors.password}}
         <field.errors as |errors|>
           {{#each @model.errors.password as |error|}}
@@ -88,8 +93,9 @@
 
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
-    @enableEditText={{t "actions.edit-form"}}
-    @submitText={{t "actions.save"}}
-    @cancelText={{t "actions.cancel"}} />
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
 
 </Rose::Form>

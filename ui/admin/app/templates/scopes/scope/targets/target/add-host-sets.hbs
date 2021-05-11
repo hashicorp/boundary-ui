@@ -5,20 +5,23 @@
     @model={{@model.target}}
     @hostCatalogs={{@model.hostCatalogs}}
     @hostSets={{@model.hostSets}}
-    @submit={{route-action "save" @model.target}}
-    @cancel={{route-action "cancel"}}
+    @submit={{route-action 'save' @model.target}}
+    @cancel={{route-action 'cancel'}}
   />
 {{/if}}
 
 {{#unless @model.hostSets}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.target.host-set.messages.none.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.target.host-set.messages.none.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.target.host-set.messages.none.description"}}
+        {{t 'resources.target.host-set.messages.none.description'}}
       </message.description>
-      <message.link @route="scopes.scope.targets.target.host-sets">
-        <Rose::Icon @name="chevron-left" />
-        {{t "actions.back"}}
+      <message.link @route='scopes.scope.targets.target.host-sets'>
+        <Rose::Icon @name='chevron-left' />
+        {{t 'actions.back'}}
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>

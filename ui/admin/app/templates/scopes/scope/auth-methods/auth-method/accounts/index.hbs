@@ -17,7 +17,7 @@
         <body.row as |row|>
           <row.headerCell>
             <LinkTo
-              @route="scopes.scope.auth-methods.auth-method.accounts.account"
+              @route='scopes.scope.auth-methods.auth-method.accounts.account'
               @model={{account.id}}
             >
               {{account.displayName}}
@@ -30,8 +30,8 @@
           <row.cell>
             <Copyable
               @text={{account.id}}
-              @buttonText={{t "actions.copy-to-clipboard"}}
-              @acknowledgeText={{t "states.copied"}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
             >
               <code>{{account.id}}</code>
             </Copyable>
@@ -44,12 +44,15 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.account.messages.welcome.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.account.messages.welcome.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.account.messages.welcome.description"}}
+        {{t 'resources.account.messages.welcome.description'}}
       </message.description>
-      <message.link @route="scopes.scope.auth-methods.auth-method.accounts.new">
-        <Rose::Icon @name="plus-circle-outline" />
+      <message.link @route='scopes.scope.auth-methods.auth-method.accounts.new'>
+        <Rose::Icon @name='plus-circle-outline' />
         {{t 'resources.account.actions.create'}}
       </message.link>
     </Rose::Message>
