@@ -6,17 +6,19 @@
 
   <page.header>
     <h2>
-      {{t "resources.user.title_plural"}}
-      <DocLink @doc="user" @iconSize="large" />
+      {{t 'resources.user.title_plural'}}
+      <DocLink @doc='user' @iconSize='large' />
     </h2>
     {{#if @model}}
-      <p>{{t "resources.user.description"}}</p>
+      <p>{{t 'resources.user.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if @model}}
-      <Rose::LinkButton @route="scopes.scope.users.new" @style="primary">{{t 'titles.new'}}</Rose::LinkButton>
+      <Rose::LinkButton @route='scopes.scope.users.new' @style='primary'>{{t
+          'titles.new'
+        }}</Rose::LinkButton>
     {{/if}}
   </page.actions>
 
@@ -27,18 +29,15 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
-            <row.headerCell>{{t "form.name.label"}}</row.headerCell>
-            <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           </header.row>
         </table.header>
         <table.body as |body|>
           {{#each @model as |user|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo
-                  @route="scopes.scope.users.user"
-                  @model={{user.id}}
-                >
+                <LinkTo @route='scopes.scope.users.user' @model={{user.id}}>
                   {{user.displayName}}
                 </LinkTo>
                 <p>{{user.description}}</p>
@@ -46,8 +45,8 @@
               <row.cell>
                 <Copyable
                   @text={{user.id}}
-                  @buttonText={{t "actions.copy-to-clipboard"}}
-                  @acknowledgeText={{t "states.copied"}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
                 >
                   <code>{{user.id}}</code>
                 </Copyable>
@@ -60,12 +59,15 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'resources.user.messages.welcome.title'}} as |message|>
+        <Rose::Message
+          @title={{t 'resources.user.messages.welcome.title'}}
+          as |message|
+        >
           <message.description>
             {{t 'resources.user.description'}}
           </message.description>
-          <message.link @route="scopes.scope.users.new">
-            <Rose::Icon @name="plus-circle-outline" />
+          <message.link @route='scopes.scope.users.new'>
+            <Rose::Icon @name='plus-circle-outline' />
             {{t 'titles.new'}}
           </message.link>
         </Rose::Message>

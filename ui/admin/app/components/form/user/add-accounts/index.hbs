@@ -1,6 +1,6 @@
 {{#if this.hasAvailableAccounts}}
   <Rose::Form
-    class="full-width"
+    class='full-width'
     @onSubmit={{fn this.submit @submit}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
@@ -9,8 +9,9 @@
   >
 
     <form.actions
-      @submitText={{t "resources.user.actions.add-accounts"}}
-      @cancelText={{t "actions.cancel"}} />
+      @submitText={{t 'resources.user.actions.add-accounts'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
 
     <Rose::Table as |table|>
       <table.header as |header|>
@@ -27,7 +28,8 @@
               <form.checkbox
                 @label={{account.id}}
                 @description={{account.description}}
-                onChange={{fn this.toggleAccount account}} />
+                onChange={{fn this.toggleAccount account}}
+              />
             </row.cell>
             <row.cell>{{account.username}}</row.cell>
             <row.cell>
@@ -43,13 +45,16 @@
 
 {{#unless this.hasAvailableAccounts}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.user.messages.no-accounts.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.user.messages.no-accounts.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.user.messages.no-accounts.description"}}
+        {{t 'resources.user.messages.no-accounts.description'}}
       </message.description>
-      <message.link @route="scopes.scope.users.user.accounts">
-        <Rose::Icon @name="chevron-left" />
-        {{t "actions.back"}}
+      <message.link @route='scopes.scope.users.user.accounts'>
+        <Rose::Icon @name='chevron-left' />
+        {{t 'actions.back'}}
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>

@@ -1,9 +1,13 @@
-<Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
+<Rose::Dropdown
+  @text='{{t 'actions.manage'}}'
+  @dropdownRight={{true}}
+  as |dropdown|
+>
   {{#if (feature-flag 'primary-auth-method')}}
     {{#unless @model.isPrimary}}
       <dropdown.button
         @disabled={{@model.canSave}}
-        {{on "click" (route-action "makePrimary" @model)}}
+        {{on 'click' (route-action 'makePrimary' @model)}}
       >
         {{t 'resources.auth-method.actions.make-primary'}}
       </dropdown.button>
@@ -11,23 +15,23 @@
     {{#if @model.isPrimary}}
       <dropdown.button
         @disabled={{@model.canSave}}
-        {{on "click" (route-action "removeAsPrimary" @model)}}
+        {{on 'click' (route-action 'removeAsPrimary' @model)}}
       >
         {{t 'resources.auth-method.actions.remove-as-primary'}}
       </dropdown.button>
     {{/if}}
   {{/if}}
   <dropdown.link
-    @route="scopes.scope.auth-methods.auth-method.accounts.new"
+    @route='scopes.scope.auth-methods.auth-method.accounts.new'
     @model={{@model}}
   >
-    {{t "resources.account.actions.create"}}
+    {{t 'resources.account.actions.create'}}
   </dropdown.link>
   <dropdown.separator />
   <dropdown.button
-    @style="danger"
+    @style='danger'
     @disabled={{@model.canSave}}
-    {{on "click" (route-action "delete" @model)}}
+    {{on 'click' (route-action 'delete' @model)}}
   >
     {{t 'resources.auth-method.actions.delete'}}
   </dropdown.button>

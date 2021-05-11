@@ -1,12 +1,12 @@
 <h2>
-  {{t "resources.user.title"}}
-  <DocLink @doc="user" @iconSize="large" />
+  {{t 'resources.user.title'}}
+  <DocLink @doc='user' @iconSize='large' />
 </h2>
-<p>{{t "resources.user.description"}}</p>
+<p>{{t 'resources.user.description'}}</p>
 <Copyable
   @text={{@model.id}}
-  @buttonText={{t "actions.copy-to-clipboard"}}
-  @acknowledgeText={{t "states.copied"}}
+  @buttonText={{t 'actions.copy-to-clipboard'}}
+  @acknowledgeText={{t 'states.copied'}}
 >
   <code>{{@model.id}}</code>
 </Copyable>

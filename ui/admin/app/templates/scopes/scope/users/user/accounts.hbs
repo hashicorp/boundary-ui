@@ -8,7 +8,7 @@
         <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
         <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
         <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-        <row.headerCell>{{t "titles.actions"}}</row.headerCell>
+        <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
       </header.row>
     </table.header>
     <table.body as |body|>
@@ -24,25 +24,29 @@
           <row.cell>
             <Copyable
               @text={{account.id}}
-              @buttonText={{t "actions.copy-to-clipboard"}}
-              @acknowledgeText={{t "states.copied"}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
             >
               <code>{{account.id}}</code>
             </Copyable>
           </row.cell>
-            <row.cell>
+          <row.cell>
             <Rose::Dropdown
-              @icon="more-horizontal"
+              @icon='more-horizontal'
               @iconOnly={{true}}
               @showCaret={{false}}
               @dropdownRight={{true}}
-              @text="{{t "actions.manage"}}" as |dropdown|
+              @text='{{t 'actions.manage'}}'
+              as |dropdown|
             >
               <dropdown.button
-                @style="danger"
-                {{on "click" (route-action "removeAccount" @model.user account)}}
+                @style='danger'
+                {{on
+                  'click'
+                  (route-action 'removeAccount' @model.user account)
+                }}
               >
-                {{t "actions.remove"}}
+                {{t 'actions.remove'}}
               </dropdown.button>
             </Rose::Dropdown>
           </row.cell>
@@ -54,12 +58,15 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.user.messages.accounts.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.user.messages.accounts.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.user.messages.accounts.description"}}
+        {{t 'resources.user.messages.accounts.description'}}
       </message.description>
-      <message.link @route="scopes.scope.users.user.add-accounts">
-        <Rose::Icon @name="plus-circle-outline" />
+      <message.link @route='scopes.scope.users.user.add-accounts'>
+        <Rose::Icon @name='plus-circle-outline' />
         {{t 'resources.user.actions.add-accounts'}}
       </message.link>
     </Rose::Message>

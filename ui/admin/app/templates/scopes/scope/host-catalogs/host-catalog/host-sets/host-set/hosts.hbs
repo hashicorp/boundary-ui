@@ -1,14 +1,14 @@
-{{page-title (t "resources.host.title_plural")}}
+{{page-title (t 'resources.host.title_plural')}}
 
 {{#if @model.hosts}}
 
   <Rose::Table as |table|>
     <table.header as |header|>
       <header.row as |row|>
-        <row.headerCell>{{t "form.name.label"}}</row.headerCell>
-        <row.headerCell>{{t "form.type.label"}}</row.headerCell>
-        <row.headerCell>{{t "form.id.label"}}</row.headerCell>
-        <row.headerCell>{{t "titles.actions"}}</row.headerCell>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
       </header.row>
     </table.header>
     <table.body as |body|>
@@ -16,7 +16,7 @@
         <body.row as |row|>
           <row.headerCell>
             <LinkTo
-              @route="scopes.scope.host-catalogs.host-catalog.hosts.host"
+              @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
               @model={{host.id}}
             >
               {{host.displayName}}
@@ -29,25 +29,26 @@
           <row.cell>
             <Copyable
               @text={{host.id}}
-              @buttonText={{t "actions.copy-to-clipboard"}}
-              @acknowledgeText={{t "states.copied"}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
             >
               <code>{{host.id}}</code>
             </Copyable>
           </row.cell>
           <row.cell>
             <Rose::Dropdown
-              @icon="more-horizontal"
+              @icon='more-horizontal'
               @iconOnly={{true}}
               @showCaret={{false}}
               @dropdownRight={{true}}
-              @text="{{t "actions.manage"}}" as |dropdown|
+              @text='{{t 'actions.manage'}}'
+              as |dropdown|
             >
               <dropdown.button
-                @style="danger"
-                {{on "click" (route-action "removeHost" @model.hostSet host)}}
+                @style='danger'
+                {{on 'click' (route-action 'removeHost' @model.hostSet host)}}
               >
-                {{t "actions.remove"}}
+                {{t 'actions.remove'}}
               </dropdown.button>
             </Rose::Dropdown>
           </row.cell>
@@ -60,9 +61,12 @@
 
 {{#unless @model.hosts}}
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.host-set.host.messages.none.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.host-set.host.messages.none.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.host-set.host.messages.none.description"}}
+        {{t 'resources.host-set.host.messages.none.description'}}
       </message.description>
       {{!--
       <message.link @route="scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host">

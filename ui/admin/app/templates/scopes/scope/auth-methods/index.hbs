@@ -1,10 +1,10 @@
 <Rose::Layout::Page as |page|>
   <page.header>
     <h2>
-      {{t "resources.auth-method.title_plural"}}
-      <DocLink @doc="auth-method" @iconSize="large" />
+      {{t 'resources.auth-method.title_plural'}}
+      <DocLink @doc='auth-method' @iconSize='large' />
     </h2>
-    <p>{{t "resources.auth-method.description"}}</p>
+    <p>{{t 'resources.auth-method.description'}}</p>
   </page.header>
 
   <page.breadcrumbs>
@@ -14,12 +14,13 @@
   <page.actions>
     {{#if @model}}
       <Rose::Dropdown
-        @text={{t "titles.new"}}
+        @text={{t 'titles.new'}}
         @dropdownRight={{true}}
-      as |dropdown|>
+        as |dropdown|
+      >
         <dropdown.link
-          @route="scopes.scope.auth-methods.new"
-          @query={{hash type="password"}}
+          @route='scopes.scope.auth-methods.new'
+          @query={{hash type='password'}}
         >
           {{t 'resources.auth-method.types.password'}}
         </dropdown.link>
@@ -33,10 +34,14 @@
       {{#if (feature-flag 'primary-auth-method')}}
         {{#unless this.hasPrimaryAuthMethod}}
           <Rose::Notification
-            @style="warning"
-            @heading={{t "resources.auth-method.messages.no-primary-auth-method.title"}}
+            @style='warning'
+            @heading={{t
+              'resources.auth-method.messages.no-primary-auth-method.title'
+            }}
           >
-            {{t "resources.auth-method.messages.no-primary-auth-method.description"}}
+            {{t
+              'resources.auth-method.messages.no-primary-auth-method.description'
+            }}
           </Rose::Notification>
         {{/unless}}
       {{/if}}
@@ -48,7 +53,7 @@
             <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
             {{#if (feature-flag 'primary-auth-method')}}
-              <row.cell></row.cell>
+              <row.cell />
               <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
             {{/if}}
           </header.row>
@@ -66,7 +71,7 @@
                 {{#if authMethod.isOIDC}}
                   {{#if (feature-flag 'oidc-crud')}}
                     <LinkTo
-                      @route="scopes.scope.auth-methods.auth-method"
+                      @route='scopes.scope.auth-methods.auth-method'
                       @model={{authMethod.id}}
                     >
                       {{authMethod.displayName}}
@@ -76,7 +81,7 @@
                   {{/if}}
                 {{else}}
                   <LinkTo
-                    @route="scopes.scope.auth-methods.auth-method"
+                    @route='scopes.scope.auth-methods.auth-method'
                     @model={{authMethod.id}}
                   >
                     {{authMethod.displayName}}
@@ -92,8 +97,8 @@
               <row.cell>
                 <Copyable
                   @text={{authMethod.id}}
-                  @buttonText={{t "actions.copy-to-clipboard"}}
-                  @acknowledgeText={{t "states.copied"}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
                 >
                   <code>{{authMethod.id}}</code>
                 </Copyable>
@@ -101,29 +106,33 @@
               {{#if (feature-flag 'primary-auth-method')}}
                 <row.cell>
                   {{#if authMethod.isPrimary}}
-                    <Rose::Badge @style="success-outline">
+                    <Rose::Badge @style='success-outline'>
                       {{t 'states.primary'}}
                     </Rose::Badge>
                   {{/if}}
                 </row.cell>
                 <row.cell>
                   <Rose::Dropdown
-                    @text={{t "actions.manage"}}
+                    @text={{t 'actions.manage'}}
                     @dropdownRight={{true}}
                     @iconOnly={{true}}
                     @showCaret={{false}}
-                    @icon="more-horizontal"
-                  as |dropdown|>
+                    @icon='more-horizontal'
+                    as |dropdown|
+                  >
                     {{#unless authMethod.isPrimary}}
                       <dropdown.button
-                        {{on "click" (route-action "makePrimary" authMethod)}}
+                        {{on 'click' (route-action 'makePrimary' authMethod)}}
                       >
                         {{t 'resources.auth-method.actions.make-primary'}}
                       </dropdown.button>
                     {{/unless}}
                     {{#if authMethod.isPrimary}}
                       <dropdown.button
-                        {{on "click" (route-action "removeAsPrimary" authMethod)}}
+                        {{on
+                          'click'
+                          (route-action 'removeAsPrimary' authMethod)
+                        }}
                       >
                         {{t 'resources.auth-method.actions.remove-as-primary'}}
                       </dropdown.button>
@@ -139,14 +148,18 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'resources.auth-method.messages.welcome.title'}} as |message|>
+        <Rose::Message
+          @title={{t 'resources.auth-method.messages.welcome.title'}}
+          as |message|
+        >
           <message.description>
             {{t 'resources.auth-method.messages.welcome.description'}}
           </message.description>
           <message.link
-            @route="scopes.scope.auth-methods.new"
-            @query={{hash type="password"}}>
-            <Rose::Icon @name="plus-circle-outline" />
+            @route='scopes.scope.auth-methods.new'
+            @query={{hash type='password'}}
+          >
+            <Rose::Icon @name='plus-circle-outline' />
             {{t 'titles.new'}}
           </message.link>
         </Rose::Message>

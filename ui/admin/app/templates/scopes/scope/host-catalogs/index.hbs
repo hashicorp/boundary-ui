@@ -6,18 +6,21 @@
 
   <page.header>
     <h2>
-      {{t "resources.host-catalog.title_plural"}}
-      <DocLink @doc="host-catalog" @iconSize="large" />
+      {{t 'resources.host-catalog.title_plural'}}
+      <DocLink @doc='host-catalog' @iconSize='large' />
     </h2>
     {{#if @model}}
-      <p>{{t "resources.host-catalog.description"}}</p>
+      <p>{{t 'resources.host-catalog.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if @model}}
-      <Rose::LinkButton @route="scopes.scope.host-catalogs.new" @style="primary">
-        {{t "titles.new"}}
+      <Rose::LinkButton
+        @route='scopes.scope.host-catalogs.new'
+        @style='primary'
+      >
+        {{t 'titles.new'}}
       </Rose::LinkButton>
     {{/if}}
   </page.actions>
@@ -29,9 +32,9 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
-            <row.headerCell>{{t "form.name.label"}}</row.headerCell>
-            <row.headerCell>{{t "form.type.label"}}</row.headerCell>
-            <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           </header.row>
         </table.header>
         <table.body as |body|>
@@ -39,7 +42,7 @@
             <body.row as |row|>
               <row.headerCell>
                 <LinkTo
-                  @route="scopes.scope.host-catalogs.host-catalog"
+                  @route='scopes.scope.host-catalogs.host-catalog'
                   @model={{hostCatalog.id}}
                 >
                   {{hostCatalog.displayName}}
@@ -48,14 +51,16 @@
               </row.headerCell>
               <row.cell>
                 <Rose::Badge>
-                  {{t (concat 'resources.host-catalog.types.' hostCatalog.type)}}
+                  {{t
+                    (concat 'resources.host-catalog.types.' hostCatalog.type)
+                  }}
                 </Rose::Badge>
               </row.cell>
               <row.cell>
                 <Copyable
                   @text={{hostCatalog.id}}
-                  @buttonText={{t "actions.copy-to-clipboard"}}
-                  @acknowledgeText={{t "states.copied"}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
                 >
                   <code>{{hostCatalog.id}}</code>
                 </Copyable>
@@ -68,13 +73,16 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message @title={{t "resources.host-catalog.messages.welcome.title"}} as |message|>
+        <Rose::Message
+          @title={{t 'resources.host-catalog.messages.welcome.title'}}
+          as |message|
+        >
           <message.description>
-            {{t "resources.host-catalog.description"}}
+            {{t 'resources.host-catalog.description'}}
           </message.description>
-          <message.link @route="scopes.scope.host-catalogs.new">
-            <Rose::Icon @name="plus-circle-outline" />
-            {{t "titles.new"}}
+          <message.link @route='scopes.scope.host-catalogs.new'>
+            <Rose::Icon @name='plus-circle-outline' />
+            {{t 'titles.new'}}
           </message.link>
         </Rose::Message>
       </Rose::Layout::Centered>

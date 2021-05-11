@@ -1,19 +1,16 @@
-{{page-title (t "auth.titles.flow-error")}}
+{{page-title (t 'auth.titles.flow-error')}}
 
 <main>
   <Rose::Layout::Centered>
-    <Rose::Notification
-      @style="error"
-      @heading={{t "auth.titles.flow-error"}}
-    >
-      {{t "auth.descriptions.flow-error"}}
-      <br>
+    <Rose::Notification @style='error' @heading={{t 'auth.titles.flow-error'}}>
+      {{t 'auth.descriptions.flow-error'}}
+      <br />
       <Copyable
         @text={{@model}}
-        @buttonText={{t "actions.copy-error-detail-to-clipboard"}}
-        @acknowledgeText={{t "states.copied"}}
+        @buttonText={{t 'actions.copy-error-detail-to-clipboard'}}
+        @acknowledgeText={{t 'states.copied'}}
       >
-        {{t "actions.copy-error-detail-to-clipboard"}}
+        {{t 'actions.copy-error-detail-to-clipboard'}}
       </Copyable>
     </Rose::Notification>
   </Rose::Layout::Centered>

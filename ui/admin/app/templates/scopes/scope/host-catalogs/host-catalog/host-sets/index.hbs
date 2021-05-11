@@ -3,9 +3,9 @@
   <Rose::Table as |table|>
     <table.header as |header|>
       <header.row as |row|>
-        <row.headerCell>{{t "form.name.label"}}</row.headerCell>
-        <row.headerCell>{{t "form.type.label"}}</row.headerCell>
-        <row.headerCell>{{t "form.id.label"}}</row.headerCell>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
       </header.row>
     </table.header>
     <table.body as |body|>
@@ -13,7 +13,7 @@
         <body.row as |row|>
           <row.headerCell>
             <LinkTo
-              @route="scopes.scope.host-catalogs.host-catalog.host-sets.host-set"
+              @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
               @model={{hostSet.id}}
             >
               {{hostSet.displayName}}
@@ -28,8 +28,8 @@
           <row.cell>
             <Copyable
               @text={{hostSet.id}}
-              @buttonText={{t "actions.copy-to-clipboard"}}
-              @acknowledgeText={{t "states.copied"}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
             >
               <code>{{hostSet.id}}</code>
             </Copyable>
@@ -42,13 +42,18 @@
 {{else}}
 
   <Rose::Layout::Centered>
-    <Rose::Message @title={{t "resources.host-set.messages.welcome.title"}} as |message|>
+    <Rose::Message
+      @title={{t 'resources.host-set.messages.welcome.title'}}
+      as |message|
+    >
       <message.description>
-        {{t "resources.host-set.description"}}
+        {{t 'resources.host-set.description'}}
       </message.description>
-      <message.link @route="scopes.scope.host-catalogs.host-catalog.host-sets.new">
-        <Rose::Icon @name="plus-circle-outline" />
-        {{t "titles.new"}}
+      <message.link
+        @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
+      >
+        <Rose::Icon @name='plus-circle-outline' />
+        {{t 'titles.new'}}
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>

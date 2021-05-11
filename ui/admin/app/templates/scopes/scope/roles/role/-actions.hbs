@@ -1,12 +1,16 @@
-<Rose::Dropdown @text="{{t 'actions.manage'}}" @dropdownRight={{true}} as |dropdown|>
-  <dropdown.link @route="scopes.scope.roles.role.add-principals">
+<Rose::Dropdown
+  @text='{{t 'actions.manage'}}'
+  @dropdownRight={{true}}
+  as |dropdown|
+>
+  <dropdown.link @route='scopes.scope.roles.role.add-principals'>
     {{t 'resources.role.principal.actions.add-principals'}}
   </dropdown.link>
   <dropdown.separator />
   <dropdown.button
-    @style="danger"
+    @style='danger'
     @disabled={{@model.canSave}}
-    {{on "click" (route-action "delete" @model)}}
+    {{on 'click' (route-action 'delete' @model)}}
   >
     {{t 'resources.role.actions.delete'}}
   </dropdown.button>

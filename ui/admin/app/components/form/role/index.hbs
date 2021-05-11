@@ -8,14 +8,15 @@
 >
 
   <form.input
-    @name="name"
-    @type="name"
+    @name='name'
+    @type='name'
     @value={{@model.name}}
-    @label={{t "form.name.label"}}
-    @helperText={{t "form.name.help"}}
+    @label={{t 'form.name.label'}}
+    @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.name}}
       <field.errors as |errors|>
         {{#each @model.errors.name as |error|}}
@@ -26,15 +27,16 @@
   </form.input>
 
   <form.textarea
-    @name="description"
-    @type="description"
+    @name='description'
+    @type='description'
     @value={{@model.description}}
-    @label={{t "form.description.label"}}
-    @helperText={{t "form.description.help"}}
+    @label={{t 'form.description.label'}}
+    @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
     readonly={{false}}
-  as |field|>
+    as |field|
+  >
     {{#if @model.errors.description}}
       <field.errors as |errors|>
         {{#each @model.errors.description as |error|}}
@@ -46,46 +48,62 @@
 
   {{#unless @model.isNew}}
     <fieldset
-      aria-labelledby="legend-text-grant-scope"
-      aria-describedby="helper-text-grant-scope"
+      aria-labelledby='legend-text-grant-scope'
+      aria-describedby='helper-text-grant-scope'
     >
-      <legend id="legend-text-grant-scope">{{t "form.grant_scope.label"}}</legend>
-      <Rose::Form::HelperText @id="helper-text-grant-scope" @error={{@model.errors.grant_scope_id}}>
-        {{t "form.grant_scope.help"}}
+      <legend id='legend-text-grant-scope'>{{t
+          'form.grant_scope.label'
+        }}</legend>
+      <Rose::Form::HelperText
+        @id='helper-text-grant-scope'
+        @error={{@model.errors.grant_scope_id}}
+      >
+        {{t 'form.grant_scope.help'}}
       </Rose::Form::HelperText>
-      <form.radioGroup @name="grant_scope_id" @selectedValue={{@model.grant_scope_id}} as |radioGroup|>
+      <form.radioGroup
+        @name='grant_scope_id'
+        @selectedValue={{@model.grant_scope_id}}
+        as |radioGroup|
+      >
         <Rose::Dropdown
           @text={{this.selectedGrantScope.displayName}}
-          @icon={{if this.selectedGrantScope.isProject "app-icons/project" (if this.selectedGrantScope.isOrg "app-icons/org" "app-icons/global")}}
-        as |dropdown|>
+          @icon={{if
+            this.selectedGrantScope.isProject
+            'app-icons/project'
+            (if
+              this.selectedGrantScope.isOrg 'app-icons/org' 'app-icons/global'
+            )
+          }}
+          as |dropdown|
+        >
           <ul>
             {{#each @grantScopes as |grantScope|}}
-              <li class={{if grantScope.model.isProject "is-project"}}>
+              <li class={{if grantScope.model.isProject 'is-project'}}>
                 <dropdown.item>
                   <radioGroup.radio
                     @label={{grantScope.model.displayName}}
                     @value={{grantScope.model.id}}
-                    @icon={{concat "app-icons/" grantScope.model.type}}
+                    @icon={{concat 'app-icons/' grantScope.model.type}}
                   />
                 </dropdown.item>
-                <ul class="indent-label-1">
+                <ul class='indent-label-1'>
                   {{#each grantScope.subScopes as |subScope|}}
-                    <li class={{if subScope.model.isProject "is-project"}}>
+                    <li class={{if subScope.model.isProject 'is-project'}}>
                       <dropdown.item>
                         <radioGroup.radio
                           @label={{subScope.model.displayName}}
                           @value={{subScope.model.id}}
-                          @icon={{concat "app-icons/" subScope.model.type}}
+                          @icon={{concat 'app-icons/' subScope.model.type}}
                         />
                       </dropdown.item>
-                      <ul class="indent-label-2">
+                      <ul class='indent-label-2'>
                         {{#each subScope.subScopes as |subSubScope|}}
-                          <li class={{if subSubScope.isProject "is-project"}}>
+                          <li class={{if subSubScope.isProject 'is-project'}}>
                             <dropdown.item>
                               <radioGroup.radio
                                 @label={{subSubScope.displayName}}
                                 @value={{subSubScope.id}}
-                                @icon={{concat "app-icons/" subSubScope.type}}
+                                @icon={{concat 'app-icons/' subSubScope.type}}
                               />
                             </dropdown.item>
                           </li>
@@ -104,8 +122,9 @@
 
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
-    @enableEditText={{t "actions.edit-form"}}
-    @submitText={{t "actions.save"}}
-    @cancelText={{t "actions.cancel"}} />
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
 
 </Rose::Form>
