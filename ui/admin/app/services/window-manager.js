@@ -28,7 +28,7 @@ export default class WindowManagerService extends Service {
    */
   open(url) {
     const newWindow = this.window.open(url);
-    this.add(newWindow);
+    if (newWindow) this.add(newWindow);
   }
 
   /**

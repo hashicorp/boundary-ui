@@ -6,6 +6,23 @@ import sinon from 'sinon';
 module('Unit | Service | ipc', function (hooks) {
   setupTest(hooks);
 
+  class MessageChannelMock {
+    constructor() {
+      this.port1.postMessage = this.port1.postMessage.bind(this);
+      this.port2.postMessage = this.port2.postMessage.bind(this);
+    }
+    port1 = {
+      postMessage() {},
+      close() {},
+    };
+    port2 = {
+      postMessage(data) {
+        this.port1.onmessage({ data });
+      },
+      close() {},
+    };
+  }
+
   hooks.beforeEach(() => {
     // IPC requests talk to the main process indirectly via window.postMessage
     // proxy layer (mediated by preload.js).
@@ -31,6 +48,7 @@ module('Unit | Service | ipc', function (hooks) {
         assert.equal(request.method, 'hello');
         assert.equal(request.payload, 'world');
       },
+      MessageChannel: MessageChannelMock,
     };
     new IPCRequest('hello', 'world', myWindow);
   });
@@ -45,6 +63,7 @@ module('Unit | Service | ipc', function (hooks) {
           test: 42,
         });
       },
+      MessageChannel: MessageChannelMock,
     };
     const request = new IPCRequest('hello', 'world', myWindow);
     const response = await request;
@@ -65,6 +84,7 @@ module('Unit | Service | ipc', function (hooks) {
         // Post back an error on the response port
         port.postMessage(new Error(stringifiedPayload));
       },
+      MessageChannel: MessageChannelMock,
     };
     try {
       await new IPCRequest('hello', 'world', myWindow);
