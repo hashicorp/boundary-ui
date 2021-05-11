@@ -35,4 +35,36 @@ module('Integration | Component | rose/table/row/cell', function (hooks) {
     await render(hbs`<Rose::Table::Row::Cell @style='expand' />`);
     assert.ok(find('.rose-table-cell-expand'));
   });
+
+  test('it renders with align center in a header cell', async function (assert) {
+    assert.expect(2);
+    await render(
+      hbs`<Rose::Table::Row::Cell @tagName='th' @alignCenter=true />`
+    );
+    assert.ok(find('.rose-table-header-cell'));
+    assert.ok(find('.align-center'));
+  });
+
+  test('it renders with align center in a body', async function (assert) {
+    assert.expect(2);
+    await render(hbs`<Rose::Table::Row::Cell @alignCenter=true />`);
+    assert.ok(find('.rose-table-cell'));
+    assert.ok(find('.align-center'));
+  });
+
+  test('it renders with align right in a header cell', async function (assert) {
+    assert.expect(2);
+    await render(
+      hbs`<Rose::Table::Row::Cell @tagName='th' @alignRight=true />`
+    );
+    assert.ok(find('.rose-table-header-cell'));
+    assert.ok(find('.align-right'));
+  });
+
+  test('it renders with align right', async function (assert) {
+    assert.expect(2);
+    await render(hbs`<Rose::Table::Row::Cell @alignRight=true />`);
+    assert.ok(find('.rose-table-cell'));
+    assert.ok(find('.align-right'));
+  });
 });

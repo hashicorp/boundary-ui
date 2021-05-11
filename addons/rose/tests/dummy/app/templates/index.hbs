@@ -43,7 +43,7 @@
       <row.cell @style="expand">description</row.cell>
     </body.row>
   </table.body>
-  <table.footer @hidden=true as |footer|>
+  <table.footer @hidden={{true}} as |footer|>
     <footer.row as |row|>
       <row.cell>Footer</row.cell>
     </footer.row>
@@ -63,9 +63,9 @@
   <table.body as |body|>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell @align="center">host-set-1, host-set-2</row.cell>
-      <row.cell @alignRight=true>optional name</row.cell>
-      <row.cell @alignCenter=true>description</row.cell>
+      <row.cell @alignCenter={{true}}>host-set-1, host-set-2</row.cell>
+      <row.cell @alignRight={{true}}>optional name</row.cell>
+      <row.cell @alignCenter={{true}}>description</row.cell>
     </body.row>
   </table.body>
   <table.footer as |footer|>
@@ -106,7 +106,7 @@
       </row.cell>
     </body.row>
   </table.body>
-  <table.footer @hidden=true as |footer|>
+  <table.footer @hidden={{true}} as |footer|>
     <footer.row as |row|>
       <row.cell>Footer</row.cell>
     </footer.row>
@@ -116,7 +116,7 @@
 <h2>Condensed Table With Visually Hidden Header & Footer</h2>
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
-    <header.row @hidden=true as |row|>
+    <header.row @hidden={{true}} as |row|>
       <row.headerCell >Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
@@ -132,7 +132,7 @@
     </body.row>
   </table.body>
   <table.footer as |footer|>
-    <footer.row @hidden=true as |row|>
+    <footer.row @hidden={{true}} as |row|>
       <row.cell>Footer</row.cell>
     </footer.row>
   </table.footer>

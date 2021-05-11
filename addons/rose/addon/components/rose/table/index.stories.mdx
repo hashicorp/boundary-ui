@@ -30,8 +30,8 @@ Cell expansion style should be applied to only one cell in a row.
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
       <row.cell @style={{cellStyle}}>host-set-2</row.cell>
-      <row.cell>optional name</row.cell>
-      <row.cell>description</row.cell>
+      <row.cell @alignCenter={{true}}>optional name</row.cell>
+      <row.cell @alignRight={{true}}>description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
@@ -54,10 +54,10 @@ Cell expansion style should be applied to only one cell in a row.
     <Rose::Table @style={{style}} as |table|>
       <table.header as |header|>
         <header.row @hidden={{hideHeaderRow}} as |row|>
-          <row.headerCell>Address</row.headerCell>
-          <row.headerCell @style={{cellStyle}}>Host Set</row.headerCell>
-          <row.headerCell>Name</row.headerCell>
-          <row.headerCell>Description</row.headerCell>
+          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Address</row.headerCell>
+          <row.headerCell @style={{cellStyle}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Host Set</row.headerCell>
+          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Name</row.headerCell>
+          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Description</row.headerCell>
         </header.row>
       </table.header>
       <table.body as |body|>
@@ -68,16 +68,16 @@ Cell expansion style should be applied to only one cell in a row.
           <row.cell>description</row.cell>
         </body.row>
         <body.row as |row|>
-          <row.cell>1.1.1.1</row.cell>
-          <row.cell @style={{cellStyle}}>host-set-2</row.cell>
-          <row.cell>optional name</row.cell>
-          <row.cell>description</row.cell>
+          <row.cell @alignCenter={{cellAlignmentCenter}}>1.1.1.1</row.cell>
+          <row.cell @style={{cellStyle}} @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
+          <row.cell @alignCenter={{cellAlignmentCenter}}>optional name</row.cell>
+          <row.cell @alignCenter={{cellAlignmentCenter}}>description</row.cell>
         </body.row>
         <body.row as |row|>
-          <row.cell>1.1.1.1</row.cell>
-          <row.cell @style={{cellStyle}}>host-set-1</row.cell>
-          <row.cell>optional name</row.cell>
-          <row.cell>description</row.cell>
+          <row.cell @alignRight={{cellAlignmentRight}}>1.1.1.1</row.cell>
+          <row.cell @style={{cellStyle}} @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
+          <row.cell @alignRight={{cellAlignmentRight}}>optional name</row.cell>
+          <row.cell @alignRight={{cellAlignmentRight}}>description</row.cell>
         </body.row>
       </table.body>
       <table.footer as |footer|>
@@ -102,7 +102,9 @@ Cell expansion style should be applied to only one cell in a row.
           'default': '',
           'condensed': 'condensed'
         }
-      )
+      ),
+      cellAlignmentCenter: boolean('cellAlignmentCenter', false),
+      cellAlignmentRight: boolean('cellAlignmentRight', false),
     },
   }}</Story>
 </Preview>
