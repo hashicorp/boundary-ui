@@ -2,6 +2,12 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## Next
+
+### Bug Fixes
+
+- Close spawned boundary process on session cancel. ([PR](https://github.com/hashicorp/boundary-ui/pull/549))
+
 ## v1.0.0 [CLI 0.2.0] (2021.04.14)
 
 ### New
