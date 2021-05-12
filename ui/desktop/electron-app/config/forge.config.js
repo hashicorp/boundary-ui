@@ -1,5 +1,5 @@
 const process = require('process');
-const { version } = require('../src/boundary-cli.js');
+const { version } = require('../src/cli/index.js');
 
 const formattedCLIVersion = version().formatted;
 

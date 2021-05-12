@@ -2,7 +2,7 @@ const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 const jsonify = require('../utils/jsonify.js');
 
-const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
+const boundaryPath = path.resolve(__dirname, '..', '..', 'cli', 'boundary');
 
 // You can throw exceptions, or allow them to occur, and this is supported.
 // Exceptions thrown in this way will be returned to the UI as an
