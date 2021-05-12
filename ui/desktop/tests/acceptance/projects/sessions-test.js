@@ -245,7 +245,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   test('cancelling a session', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('cancel');
+    stubs.ipcService.withArgs('stop');
     later(async () => {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button');
@@ -267,7 +267,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('cancel').throws();
+    stubs.ipcService.withArgs('stop').throws();
     later(async () => {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button');

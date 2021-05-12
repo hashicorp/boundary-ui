@@ -1,16 +1,5 @@
 const { spawnAsyncJSONPromise } = require('../helpers/spawn-promise.js');
-/**
- * Super paranoid shell quote/escape and validation.  Input must be base62.
- * @param {string} str
- */
-const escapeAndValidateBase62 = (str) => {
-  const candidate = str.toString();
-  if (candidate.match(/^[A-Za-z0-9_]*$/)) return candidate;
-  throw new Error(`
-    Could not invoke command:
-    input contained unsafe characters.
-  `);
-};
+const base62 = require('../utils/base62.js');
 
 class Session {
   #id;
@@ -88,20 +77,21 @@ class Session {
    */
   cliCommand() {
     const sanitized = {
-      target_id: escapeAndValidateBase62(this.#targetId),
-      token: escapeAndValidateBase62(this.#token),
+      target_id: base62.escapeAndValidate(this.#targetId),
+      token: base62.escapeAndValidate(this.#token),
+      addr: encodeURI(this.#addr),
     };
 
     const command = [
       'connect',
       `-target-id=${sanitized.target_id}`,
       `-token=${sanitized.token}`,
-      `-addr=${this.#addr}`,
+      `-addr=${sanitized.addr}`,
       '-format=json',
     ];
 
     if (this.#hostId) {
-      sanitized.host_id = escapeAndValidateBase62(this.#hostId);
+      sanitized.host_id = base62.escapeAndValidate(this.#hostId);
       command.push(`-host-id=${sanitized.host_id}`);
     }
     return command;
