@@ -191,7 +191,7 @@ app.on('before-quit', (event) => {
   if (sessionManager.hasActiveSessions) {
     const dialogOpts = {
       type: 'question',
-      buttons: ['Close & Quit', 'Ignore & Quit', 'Cancel'],
+      buttons: ['Close', 'Cancel'],
       detail: 'Close sessions before quitting?',
     };
 
@@ -200,7 +200,7 @@ app.on('before-quit', (event) => {
         case 0:
           sessionManager.stopAll();
           break;
-        case 2:
+        case 1:
           event.preventDefault();
           break;
       }
