@@ -93,7 +93,7 @@ ember-dist/
 ember-test/
 
 # CLI
-cli/
+/cli/
 
 # Autoupdate
 nextVersion/
