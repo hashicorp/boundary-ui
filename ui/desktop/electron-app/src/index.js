@@ -13,13 +13,13 @@ const {
   Menu,
   MenuItem,
 } = require('electron');
-require('./handlers.js');
+require('./ipc/handlers.js');
 
-const origin = require('./origin.js');
-const { generateCSPHeader } = require('./content-security-policy.js');
+const origin = require('./origin/index.js');
+const { generateCSPHeader } = require('./config/content-security-policy.js');
 
-const menu = require('./menu.js');
-const appUpdater = require('./app-updater.js');
+const menu = require('./config/menu.js');
+const appUpdater = require('./helpers/app-updater.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol

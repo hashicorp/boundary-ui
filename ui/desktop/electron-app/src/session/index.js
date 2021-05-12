@@ -1,5 +1,5 @@
 const { spawnAsyncJSONPromise } = require('../helpers/spawn-promise.js');
-
+const jsonify = require('../utils/jsonify.js');
 /**
  * Super paranoid shell quote/escape and validation.  Input must be base62.
  * @param {string} str
@@ -15,7 +15,6 @@ const escapeAndValidateBase62 = (str) => {
 
 class Session {
   #id;
-  #pid;
   #addr;
   #token;
   #hostId;
@@ -73,17 +72,29 @@ class Session {
       this.#proxyDetails = spawnedSession.response;
       this.#process = spawnedSession.childProcess;
       this.#id = this.#proxyDetails.session_id;
+      this.monitor();
     });
   }
 
   /**
-   * Stop proxy used by session.
+   * Stop proxy process used by session.
    */
   stop() {
     return new Promise((resolve, reject) => {
       this.#process.on('close', () => resolve());
       this.#process.on('error', (e) => reject(e));
       this.#process.kill();
+    });
+  }
+
+  monitor() {
+    let outputStream = '';
+    this.#process.on('data', (data) => {
+      outputStream += data;
+      const jsonData = jsonify(outputStream);
+      if (jsonData && jsonData.termination_reason) {
+        this.stop();
+      }
     });
   }
 

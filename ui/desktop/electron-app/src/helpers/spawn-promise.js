@@ -1,18 +1,8 @@
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
-const spawnSession = require('./spawn-session');
+const jsonify = require('../utils/jsonify.js');
 
 const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
-
-// Convert to json
-const jsonify = (data) => {
-  if (typeof data !== 'string') data = JSON.stringify(data);
-  try {
-    return JSON.parse(data);
-  } catch (e) {
-    // Ignore parse errors
-  }
-};
 
 // You can throw exceptions, or allow them to occur, and this is supported.
 // Exceptions thrown in this way will be returned to the UI as an
@@ -43,35 +33,29 @@ module.exports = {
       let outputStream = '';
       let errorStream = '';
 
-      childProcess.stdout.on('data', (data) => {
+      const processData = (data) => {
         outputStream += data.toString();
         const jsonData = jsonify(outputStream);
         if (jsonData) {
-          // if (jsonData.termination_reason) {
-          //   spawnSession.cancelProcess(childProcess.pid);
-          // } else {
-          //   // Track only successfully launched child processes
-          //   spawnSession.add({ childProcess, data: jsonData });
-          // }
-          // FIXME
-          // outputStream = '';
+          childProcess.removeListener('data', processData);
           resolve({ childProcess, response: jsonData });
         }
-      });
+      };
 
-      // @todo Cancel spawned session childprocess on error? Does it get automatically cancelled?
-      // @todo on error - should childprocess be closed?
-      // Test on connection limit errors especially
-      childProcess.stderr.on('data', (data) => {
-        errorStream += data.toString();
+      childProcess.stdout.on('data', processData);
+
+      // Errors are cli returned json objects
+      const processError = (error) => {
+        errorStream += error.toString();
         const jsonData = jsonify(errorStream);
         if (jsonData) {
           const error = jsonData.api_error || jsonData.error;
-          // FIXME
-          // errorStream = '';
+          childProcess.removeListener('error', processError);
           reject(new Error(error.message));
         }
-      });
+      };
+
+      childProcess.stderr.on('data', processError);
     });
   },
 
