@@ -7,9 +7,9 @@ const {
 const {
   session,
   app,
+  dialog,
   protocol,
   BrowserWindow,
-  ipcMain,
   Menu,
   MenuItem,
 } = require('electron');
@@ -17,6 +17,7 @@ require('./ipc/handlers.js');
 
 const origin = require('./origin/index.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
+const sessionManager = require('./session/manager.js');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
@@ -181,6 +182,30 @@ app.on('ready', async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+});
+
+/**
+ * Prompt for closing spawned processes
+ */
+app.on('before-quit', (event) => {
+  if (sessionManager.hasActiveSessions) {
+    const dialogOpts = {
+      type: 'question',
+      buttons: ['Close & Quit', 'Ignore & Quit', 'Cancel'],
+      detail: 'Close sessions before quitting?',
+    };
+
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+      switch (returnValue.response) {
+        case 0:
+          sessionManager.stopAll();
+          break;
+        case 2:
+          event.preventDefault();
+          break;
+      }
+    });
+  }
 });
 
 // Handle an unhandled error in the main thread
