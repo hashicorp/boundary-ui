@@ -10,7 +10,6 @@ class SessionManager {
   /**
    * Start a session and track it.
    * Returns session proxy details if successfully started.
-   * Only successfully started sessions will be tracked.
    * @param {string} addr
    * @param {string} target_id
    * @param {string} token
@@ -18,32 +17,20 @@ class SessionManager {
    */
   async start(addr, target_id, token, host_id) {
     const session = new Session(addr, target_id, token, host_id);
-    return session.start().then(() => {
-      this.#sessions.push(session);
-      return session.proxyDetails;
-    });
+    this.#sessions.push(session);
+    return session.start();
   }
 
   /**
-   * Stop a session and remove it from tracked sessions.
+   * Stop a session using identifier.
    * @param {string} session_id
    */
   async stopById(session_id) {
-    const index = this.#sessions.findIndex(
-      (session) => session.id === session_id
-    );
-    if (index === -1) return;
-    const session = this.#sessions[index];
-    return session.stop().then(() => {
-      this.#sessions.splice(index, 1);
-    });
+    const session = this.#sessions.find((session) => session.id === session_id);
+    return session.stop();
   }
 
   stopAll() {
-  }
-
-  get sessions() {
-    return this.#sessions;
   }
 }
 

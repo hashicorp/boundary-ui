@@ -48,16 +48,7 @@ class Session {
    * @return {boolean}
    */
   get isActive() {
-    return this.#process.connected;
-  }
-
-  /**
-   * Returns session proxy details.
-   * Only available after successful start of a session.
-   * @return {object}
-   */
-  get proxyDetails() {
-    return this.#proxyDetails;
+    return !this.#process.killed;
   }
 
   /**
@@ -71,6 +62,7 @@ class Session {
       this.#proxyDetails = spawnedSession.response;
       this.#process = spawnedSession.childProcess;
       this.#id = this.#proxyDetails.session_id;
+      return this.#proxyDetails;
     });
   }
 
@@ -79,9 +71,14 @@ class Session {
    */
   stop() {
     return new Promise((resolve, reject) => {
-      this.#process.on('close', () => resolve());
-      this.#process.on('error', (e) => reject(e));
-      this.#process.kill();
+      if (this.isActive) {
+        this.#process.on('close', () => resolve());
+        this.#process.on('error', (e) => reject(e));
+        this.#process.kill();
+      } else {
+        // Do nothing when process isn't active
+        resolve();
+      }
     });
   }
 
