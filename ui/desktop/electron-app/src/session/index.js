@@ -1,6 +1,4 @@
-const { spawnAsyncJSONPromise } = require('../spawn-promise.js');
-
-// FIXME create structure 'util' folder for spawn-promise
+const { spawnAsyncJSONPromise } = require('../helpers/spawn-promise.js');
 
 /**
  * Super paranoid shell quote/escape and validation.  Input must be base62.

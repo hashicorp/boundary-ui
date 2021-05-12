@@ -1,5 +1,5 @@
 const path = require('path');
-const { spawnSync } = require('./spawn-promise');
+const { spawnSync } = require('./helpers/spawn-promise.js');
 
 const cliPath = async () => path.resolve(__dirname, '..', 'cli', 'boundary');
 
