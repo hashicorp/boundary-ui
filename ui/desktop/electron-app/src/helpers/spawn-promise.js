@@ -37,7 +37,7 @@ module.exports = {
         outputStream += data.toString();
         const jsonData = jsonify(outputStream);
         if (jsonData) {
-          childProcess.removeListener('data', processData);
+          childProcess.removeAllListeners();
           resolve({ childProcess, response: jsonData });
         }
       };
@@ -50,12 +50,12 @@ module.exports = {
         const jsonData = jsonify(errorStream);
         if (jsonData) {
           const error = jsonData.api_error || jsonData.error;
-          childProcess.removeListener('error', processError);
+          childProcess.removeAllListeners();
           reject(new Error(error.message));
         }
       };
 
-      childProcess.stderr.on('data', processError);
+      childProcess.stderr.on('error', processError);
     });
   },
 

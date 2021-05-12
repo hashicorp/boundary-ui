@@ -61,4 +61,4 @@ handle('connect', ({ target_id, token, host_id }) =>
 /**
  * Cancel an established boundary session spawned process.
  */
-handle('cancel', ({ session_id }) => sessionManager.stopById(session_id));
+handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
