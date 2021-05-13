@@ -2,7 +2,7 @@ const { shell } = require('electron');
 const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
-const origin = require('../origin/index.js');
+const origin = require('../services/origin.js');
 const sessionManager = require('../services/session-manager.js');
 
 /**

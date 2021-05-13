@@ -15,7 +15,7 @@ const {
 } = require('electron');
 require('./ipc/handlers.js');
 
-const origin = require('./origin/index.js');
+const origin = require('./services/origin.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 
 const menu = require('./config/menu.js');

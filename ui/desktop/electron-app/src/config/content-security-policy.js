@@ -1,4 +1,4 @@
-const origin = require('../origin/index.js');
+const origin = require('../services/origin.js');
 const isDev = require('electron-is-dev');
 
 const csp = {
