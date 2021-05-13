@@ -44,4 +44,29 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
   get isOIDC() {
     return this.type === 'oidc';
   }
+
+  // =methods
+
+  /**
+   * Change the active and visibility state of an OIDC auth method
+   * given its ID.
+   * For OIDC auth methods only.
+   * @param {[string]} state
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  changeState(state, options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'change-state',
+      state,
+    };
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
 }
