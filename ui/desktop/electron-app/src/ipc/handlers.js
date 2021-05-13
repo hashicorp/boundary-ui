@@ -3,7 +3,7 @@ const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
 const origin = require('../origin/index.js');
-const sessionManager = require('../session/manager.js');
+const sessionManager = require('../services/session-manager.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
