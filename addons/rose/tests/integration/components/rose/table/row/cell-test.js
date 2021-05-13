@@ -30,10 +30,16 @@ module('Integration | Component | rose/table/row/cell', function (hooks) {
     assert.notOk(find('.rose-table-cell'));
   });
 
-  test('it adds a style class', async function (assert) {
+  test('it adds expand style class', async function (assert) {
     assert.expect(1);
-    await render(hbs`<Rose::Table::Row::Cell @style='expand' />`);
+    await render(hbs`<Rose::Table::Row::Cell @expand={{true}} />`);
     assert.ok(find('.rose-table-cell-expand'));
+  });
+
+  test('it does not add expand style class', async function (assert) {
+    assert.expect(1);
+    await render(hbs`<Rose::Table::Row::Cell />`);
+    assert.notOk(find('.rose-table-cell-expand'));
   });
 
   test('it renders with align center in a header cell', async function (assert) {

@@ -5,14 +5,16 @@ import { computed } from '@ember/object';
 export default Component.extend({
   layout,
   tagName: 'td',
-  classNameBindings: ['cellTypeStyle', 'cellStyle', 'cellAlignmentStyle'],
+  classNameBindings: ['cellTypeStyle', 'cellExpand', 'cellAlignmentStyle'],
   cellTypeStyle: computed(function () {
     return this.tagName.match('th')
       ? `rose-table-header-cell`
       : 'rose-table-cell';
   }),
-  cellStyle: computed(function () {
-    return this.style ? `rose-table-cell-${this.style}` : '';
+  cellExpand: computed(function () {
+    if (this.expand) {
+      return 'rose-table-cell-expand'
+    }
   }),
   cellAlignmentStyle: computed(function () {
     if (this.alignRight) {

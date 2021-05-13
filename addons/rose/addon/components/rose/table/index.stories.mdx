@@ -15,7 +15,7 @@ Cell expansion style should be applied to only one cell in a row.
   <table.header as |header|>
     <header.row @hidden={{hideHeaderRow}} as |row|>
       <row.headerCell>Address</row.headerCell>
-      <row.headerCell @style={{cellStyle}}>Host Set</row.headerCell>
+      <row.headerCell @expand={{cellExpand}}>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
       <row.headerCell>Description</row.headerCell>
     </header.row>
@@ -23,19 +23,19 @@ Cell expansion style should be applied to only one cell in a row.
   <table.body as |body|>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell @style={{cellStyle}}>host-set-1, host-set-2</row.cell>
+      <row.cell @expand={{cellExpand}}>host-set-1, host-set-2</row.cell>
       <row.cell>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell @style={{cellStyle}}>host-set-2</row.cell>
+      <row.cell @expand={{cellExpand}}>host-set-2</row.cell>
       <row.cell @alignCenter={{true}}>optional name</row.cell>
       <row.cell @alignRight={{true}}>description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell @style={{cellStyle}}>host-set-1</row.cell>
+      <row.cell @expand={{cellExpand}}>host-set-1</row.cell>
       <row.cell>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
@@ -55,7 +55,7 @@ Cell expansion style should be applied to only one cell in a row.
       <table.header as |header|>
         <header.row @hidden={{hideHeaderRow}} as |row|>
           <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Address</row.headerCell>
-          <row.headerCell @style={{cellStyle}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Host Set</row.headerCell>
+          <row.headerCell @expand={{cellExpand}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Host Set</row.headerCell>
           <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Name</row.headerCell>
           <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Description</row.headerCell>
         </header.row>
@@ -63,19 +63,19 @@ Cell expansion style should be applied to only one cell in a row.
       <table.body as |body|>
         <body.row as |row|>
           <row.cell>1.1.1.1</row.cell>
-          <row.cell @style={{cellStyle}}>host-set-1, host-set-2</row.cell>
+          <row.cell @expand={{cellExpand}}>host-set-1, host-set-2</row.cell>
           <row.cell>optional name</row.cell>
           <row.cell>description</row.cell>
         </body.row>
         <body.row as |row|>
           <row.cell @alignCenter={{cellAlignmentCenter}}>1.1.1.1</row.cell>
-          <row.cell @style={{cellStyle}} @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
+          <row.cell @expand={{cellExpand}} @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
           <row.cell @alignCenter={{cellAlignmentCenter}}>optional name</row.cell>
           <row.cell @alignCenter={{cellAlignmentCenter}}>description</row.cell>
         </body.row>
         <body.row as |row|>
           <row.cell @alignRight={{cellAlignmentRight}}>1.1.1.1</row.cell>
-          <row.cell @style={{cellStyle}} @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
+          <row.cell @expand={{cellExpand}} @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
           <row.cell @alignRight={{cellAlignmentRight}}>optional name</row.cell>
           <row.cell @alignRight={{cellAlignmentRight}}>description</row.cell>
         </body.row>
@@ -89,13 +89,7 @@ Cell expansion style should be applied to only one cell in a row.
     `,
     context: {
       hideHeaderRow: boolean('hideHeaderRow', false),
-      cellStyle: select(
-        'cellStyle',
-        {
-          default: '',
-          'expand': 'expand'
-        }
-      ),
+      cellExpand: boolean('cellExpand', false),
       style: select(
         'style',
         {

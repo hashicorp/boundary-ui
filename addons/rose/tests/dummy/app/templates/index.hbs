@@ -30,7 +30,7 @@
       <row.headerCell >Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
-      <row.headerCell @style="expand">Description</row.headerCell>
+      <row.headerCell @expand={{true}}>Description</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
@@ -40,7 +40,7 @@
       <row.cell>
         <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
       </row.cell>
-      <row.cell @style="expand">description</row.cell>
+      <row.cell @expand={{true}}>description</row.cell>
     </body.row>
   </table.body>
   <table.footer @hidden={{true}} as |footer|>
@@ -80,7 +80,7 @@
   <table.header as |header|>
     <header.row  as |row|>
       <row.headerCell>Key</row.headerCell>
-      <row.headerCell @style="expand">Value</row.headerCell>
+      <row.headerCell @expand={{true}}>Value</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
@@ -98,7 +98,7 @@
     </body.row>
     <body.row as |row|>
       <row.cell>Key</row.cell>
-      <row.cell @style="expand">
+      <row.cell @expand={{true}}>
         <Rose::Form::Input @contextual={{true}} as |input|>
           <input.field />
           <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
@@ -120,7 +120,7 @@
       <row.headerCell >Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
-      <row.headerCell @style="expand">Description</row.headerCell>
+      <row.headerCell @expand={{true}}>Description</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
