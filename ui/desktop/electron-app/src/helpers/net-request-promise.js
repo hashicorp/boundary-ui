@@ -22,3 +22,5 @@ const netRequestPromise = (url) =>
       reject(e);
     }
   });
+
+module.exports = netRequestPromise;
