@@ -6,37 +6,39 @@ import { boolean, select } from '@storybook/addon-knobs';
 
 # Table
 
-A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element. Rows can be visually hidden, cells can be expanded to fit full width, and center/right cell alignment is supported.
+A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element. Rows can be visually hidden, styled for a key/value visualization, cells can be shrinked to its content with, and center/right cell alignment is supported.
 
-Cell expansion style should be applied to only one cell in a row.
+Row `key/value` style should be applied per row.
+
+Cell shrink should be applied to all the cells in a row. Otherwise the bigger cell with shrink applied will determinate the width of the row.
 
 ```html
 <Rose::Table @style={{style}} as |table|>
   <table.header as |header|>
     <header.row @hidden={{hideHeaderRow}} as |row|>
       <row.headerCell>Address</row.headerCell>
-      <row.headerCell @expand={{cellExpand}}>Host Set</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
-      <row.headerCell>Description</row.headerCell>
+      <row.headerCell @alignCenter={{true}}>Description</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell @expand={{cellExpand}}>host-set-1, host-set-2</row.cell>
-      <row.cell>optional name</row.cell>
-      <row.cell>description</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell @shrink={{true}}>optional name</row.cell>
+      <row.cell @alignCenter={{true}}>description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell @expand={{cellExpand}}>host-set-2</row.cell>
-      <row.cell @alignCenter={{true}}>optional name</row.cell>
+      <row.cell>host-set-2</row.cell>
+      <row.cell @shrink={{true}} @alignCenter={{true}}>optional name</row.cell>
       <row.cell @alignRight={{true}}>description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell @expand={{cellExpand}}>host-set-1</row.cell>
-      <row.cell>optional name</row.cell>
+      <row.cell>host-set-1</row.cell>
+      <row.cell @shrink={{true}}>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
   </table.body>
@@ -54,29 +56,29 @@ Cell expansion style should be applied to only one cell in a row.
     <Rose::Table @style={{style}} as |table|>
       <table.header as |header|>
         <header.row @hidden={{hideHeaderRow}} as |row|>
-          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Address</row.headerCell>
-          <row.headerCell @expand={{cellExpand}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Host Set</row.headerCell>
-          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Name</row.headerCell>
+          <row.headerCell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Address</row.headerCell>
+          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Host Set</row.headerCell>
+          <row.headerCell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Name</row.headerCell>
           <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Description</row.headerCell>
         </header.row>
       </table.header>
       <table.body as |body|>
         <body.row as |row|>
-          <row.cell>1.1.1.1</row.cell>
-          <row.cell @expand={{cellExpand}}>host-set-1, host-set-2</row.cell>
-          <row.cell>optional name</row.cell>
+          <row.cell @shrink={{cellShrink}}>1.1.1.1</row.cell>
+          <row.cell>host-set-1, host-set-2</row.cell>
+          <row.cell @shrink={{cellShrink}}>optional name</row.cell>
           <row.cell>description</row.cell>
         </body.row>
         <body.row as |row|>
-          <row.cell @alignCenter={{cellAlignmentCenter}}>1.1.1.1</row.cell>
-          <row.cell @expand={{cellExpand}} @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
-          <row.cell @alignCenter={{cellAlignmentCenter}}>optional name</row.cell>
+          <row.cell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}}>1.1.1.1</row.cell>
+          <row.cell @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
+          <row.cell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}}>optional name</row.cell>
           <row.cell @alignCenter={{cellAlignmentCenter}}>description</row.cell>
         </body.row>
         <body.row as |row|>
-          <row.cell @alignRight={{cellAlignmentRight}}>1.1.1.1</row.cell>
-          <row.cell @expand={{cellExpand}} @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
-          <row.cell @alignRight={{cellAlignmentRight}}>optional name</row.cell>
+          <row.cell @shrink={{cellShrink}} @alignRight={{cellAlignmentRight}}>1.1.1.1</row.cell>
+          <row.cell @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
+          <row.cell @shrink={{cellShrink}} @alignRight={{cellAlignmentRight}}>optional name</row.cell>
           <row.cell @alignRight={{cellAlignmentRight}}>description</row.cell>
         </body.row>
       </table.body>
@@ -89,7 +91,7 @@ Cell expansion style should be applied to only one cell in a row.
     `,
     context: {
       hideHeaderRow: boolean('hideHeaderRow', false),
-      cellExpand: boolean('cellExpand', false),
+      cellShrink: boolean('cellShrink', false),
       style: select(
         'style',
         {
@@ -110,34 +112,34 @@ Cell expansion style should be applied to only one cell in a row.
         <table.header as |header|>
           <header.row @hidden=true as |row|>
             <row.headerCell>Key</row.headerCell>
-            <row.headerCell @style="expand">Value</row.headerCell>
+            <row.headerCell>Value</row.headerCell>
           </header.row>
         </table.header>
         <table.body as |body|>
-          <body.row as |row|>
+          <body.row @style={{style}} as |row|>
             <row.cell>Key</row.cell>
             <row.cell>Value</row.cell>
           </body.row>
-          <body.row as |row|>
+          <body.row @style={{style}} as |row|>
             <row.cell>Key</row.cell>
             <row.cell>Value</row.cell>
           </body.row>
-          <body.row as |row|>
+          <body.row @style={{style}} as |row|>
             <row.cell>Key</row.cell>
             <row.cell>Value</row.cell>
           </body.row>
-          <body.row as |row|>
+          <body.row @style={{style}} as |row|>
             <row.cell>Key</row.cell>
-            <row.cell @style="expand">
+            <row.cell>
               <Rose::Form::Input @contextual={{true}} as |input|>
                 <input.field />
                 <Rose::Button @style="secondary">Add</Rose::Button>
               </Rose::Form::Input>
             </row.cell>
           </body.row>
-          <body.row as |row|>
+          <body.row @style={{style}} as |row|>
             <row.cell>Key</row.cell>
-            <row.cell @style="expand">
+            <row.cell>
               <Rose::Form::Input @contextual={{true}} as |input|>
                 <input.field />
                 <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
@@ -152,5 +154,14 @@ Cell expansion style should be applied to only one cell in a row.
         </table.footer>
       </Rose::Table>
     `,
+    context: {
+      style: select(
+        'style',
+        {
+          'default': '',
+          'key-value': 'key-value'
+        }
+      )
+    }
   }}</Story>
 </Preview>

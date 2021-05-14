@@ -10,10 +10,20 @@
     text-align: left;
   }
 
+  .rose-table-row-key-value {
+    td:nth-child(2) {
+      display: flex;
+      input {
+        width: 100%;
+        margin-right: sizing.rems(s);
+      }
+      button { margin-right: 0; }
+    }
+  }
+
   .rose-table-cell,
   .rose-table-header-cell {
     vertical-align: middle;
-    white-space: nowrap;
 
     &.align-right { text-align: right; }
     &.align-center { text-align: center; }
@@ -39,18 +49,21 @@
     }
   }
 
-  // Grow to full available width
-  .rose-table-cell-expand {
-    width: 100%;
-
-    & > * {
-      vertical-align: inherit;
-      margin: 0;
-    }
+  .rose-table-cell-shrink {
+    width: 1%;
+    white-space: nowrap;
   }
 
   [class*='rose-button'] {
     margin-bottom: 0;
+  }
+
+  .rose-table-cell {
+    .rose-form-input-field {
+      margin: 0;
+      width: inherit;
+      vertical-align: inherit;
+    }
   }
 
   &.rose-table-condensed {

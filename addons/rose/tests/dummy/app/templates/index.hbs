@@ -23,24 +23,24 @@
   </table.footer>
 </Rose::Table>
 
-<h2>Condensed Table With Expanded Cells</h2>
+<h2>Condensed Table with Shrink Cells</h2>
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
     <header.row  as |row|>
-      <row.headerCell >Address</row.headerCell>
-      <row.headerCell>Host Set</row.headerCell>
-      <row.headerCell>Name</row.headerCell>
-      <row.headerCell @expand={{true}}>Description</row.headerCell>
+      <row.headerCell>Address</row.headerCell>
+      <row.headerCell @shrink={{true}}>Host Set</row.headerCell>
+      <row.headerCell @shrink={{true}}>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
-      <row.cell>host-set-1, host-set-2</row.cell>
-      <row.cell>
+      <row.cell @shrink={{true}}>host-set-1, host-set-2</row.cell>
+      <row.cell @shrink={{true}}>
         <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
       </row.cell>
-      <row.cell @expand={{true}}>description</row.cell>
+      <row.cell>description</row.cell>
     </body.row>
   </table.body>
   <table.footer @hidden={{true}} as |footer|>
@@ -50,12 +50,12 @@
   </table.footer>
 </Rose::Table>
 
-<h2>Condensed Table With Right and Center aligned cells</h2>
+<h2>Condensed Table with Right and Center aligned cells</h2>
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
     <header.row  as |row|>
-      <row.headerCell >Address</row.headerCell>
-      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Address</row.headerCell>
+      <row.headerCell @alignCenter={{true}}>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
       <row.headerCell>Description</row.headerCell>
     </header.row>
@@ -79,29 +79,38 @@
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
     <header.row  as |row|>
-      <row.headerCell>Key</row.headerCell>
-      <row.headerCell @expand={{true}}>Value</row.headerCell>
+      <row.headerCell @shrink={{true}}>Key</row.headerCell>
+      <row.headerCell>Value</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
-    <body.row as |row|>
+    <body.row @style="key-value" as |row|>
       <row.cell>Key</row.cell>
       <row.cell>Value</row.cell>
     </body.row>
-    <body.row as |row|>
+    <body.row @style="key-value" as |row|>
       <row.cell>Key</row.cell>
       <row.cell>Value</row.cell>
     </body.row>
-    <body.row as |row|>
+    <body.row @style="key-value" as |row|>
       <row.cell>Key</row.cell>
       <row.cell>Value</row.cell>
     </body.row>
-    <body.row as |row|>
+    <body.row @style="key-value" as |row|>
       <row.cell>Key</row.cell>
-      <row.cell @expand={{true}}>
+      <row.cell>
         <Rose::Form::Input @contextual={{true}} as |input|>
-          <input.field />
-          <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+            <input.field />
+            <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+        </Rose::Form::Input>
+      </row.cell>
+    </body.row>
+    <body.row @style="key-value" as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>
+        <Rose::Form::Input @contextual={{true}} as |input|>
+            <input.field />
+            <Rose::Button @style="secondary">Add</Rose::Button>
         </Rose::Form::Input>
       </row.cell>
     </body.row>
@@ -120,7 +129,7 @@
       <row.headerCell >Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
-      <row.headerCell @expand={{true}}>Description</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
