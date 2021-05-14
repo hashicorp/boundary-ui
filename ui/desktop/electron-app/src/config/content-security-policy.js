@@ -1,4 +1,4 @@
-const origin = require('../services/origin.js');
+const runtimeSettings = require('../services/runtime-settings.js');
 const isDev = require('electron-is-dev');
 
 const csp = {
@@ -28,9 +28,9 @@ const generateCSPHeader = () => {
   const policy = Object.assign({}, csp);
 
   // If an origin is specified, add it to the connect-src directive
-  if (origin.origin) {
+  if (runtimeSettings.origin) {
     policy['connect-src'] = policy['connect-src'].slice();
-    policy['connect-src'].push(origin.origin);
+    policy['connect-src'].push(runtimeSettings.origin);
   }
 
   return Object.keys(policy)
