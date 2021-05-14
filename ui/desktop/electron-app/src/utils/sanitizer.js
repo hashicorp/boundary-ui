@@ -1,4 +1,4 @@
-const { quote } = require('shell-quote');
+const { URL } = require('url');
 
 module.exports = {
   /**
@@ -18,5 +18,16 @@ module.exports = {
    * @param {string} str
    * @returns {string}
    */
-  shellEscape: (str) => quote([str]),
+  urlValidate: (str) => {
+    try {
+      const url = new URL(str);
+      return url.href;
+    } catch (e) {
+      // Parse error
+      throw new Error(`
+        Could not invoke command:
+        input contained unsafe url.
+      `);
+    }
+  },
 };

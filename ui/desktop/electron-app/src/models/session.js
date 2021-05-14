@@ -79,13 +79,14 @@ class Session {
     const sanitized = {
       target_id: sanitizer.base62EscapeAndValidate(this.#targetId),
       token: sanitizer.base62EscapeAndValidate(this.#token),
+      addr: sanitizer.urlValidate(this.#addr),
     };
 
     const command = [
       'connect',
       `-target-id=${sanitized.target_id}`,
       `-token=${sanitized.token}`,
-      `-addr=${this.#addr}`,
+      `-addr=${sanitized.addr}`,
       '-format=json',
     ];
 
