@@ -1,4 +1,5 @@
 import ApplicationSerializer from './application';
+import { copy } from 'ember-copy';
 
 export default class AuthMethodSerializer extends ApplicationSerializer {
   // =methods
@@ -80,10 +81,19 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    *
    * TODO:  generalize this so that all zero values are reified.
    * @override
-   * @return {object}
+   * @see FragmentScope
+   * @param {Model} typeClass
+   * @param {Object} hash
+   * @return {Object}
    */
-  normalize() {
-    const normalized = super.normalize(...arguments);
+  normalize(typeClass, hash, ...rest) {
+    let normalizedHash = copy(hash, true);
+    // switch (normalizedHash.type) {
+    //   case 'oidc':
+    //     normalizedHash = this.normalizeOIDC(normalizedHash);
+    //     break;
+    // }
+    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
     if (!normalized.data.attributes.is_primary) {
       normalized.data.attributes.is_primary = false;
     }
