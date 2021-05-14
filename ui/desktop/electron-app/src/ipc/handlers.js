@@ -4,6 +4,7 @@ const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
+const sanitizer = require('../utils/sanitizer.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -16,8 +17,9 @@ handle('getOrigin', () => runtimeSettings.origin);
  * a main window reload.
  */
 handle('setOrigin', async (requestOrigin) => {
-  await runtimeSettings.validateOrigin(requestOrigin);
-  runtimeSettings.origin = requestOrigin;
+  const origin = sanitizer.urlValidate(requestOrigin);
+  await runtimeSettings.validateOrigin(origin);
+  runtimeSettings.origin = origin;
 });
 
 /**

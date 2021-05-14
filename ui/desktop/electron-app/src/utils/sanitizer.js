@@ -21,13 +21,10 @@ module.exports = {
   urlValidate: (str) => {
     try {
       const url = new URL(str);
-      return url.href;
+      return `${url.protocol}://${url.host}`;
     } catch (e) {
       // Parse error
-      throw new Error(`
-        Could not invoke command:
-        input contained unsafe url.
-      `);
+      throw new Error(`URL ${str} could not be validated.`);
     }
   },
 };
