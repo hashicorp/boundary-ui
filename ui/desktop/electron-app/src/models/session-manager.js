@@ -31,7 +31,7 @@ class SessionManager {
    */
   stopById(session_id) {
     const session = this.#sessions.find((session) => session.id === session_id);
-    return session && session.stop();
+    return session?.stop?.();
   }
 
   stopAll() {

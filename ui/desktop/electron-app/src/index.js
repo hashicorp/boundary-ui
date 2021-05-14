@@ -200,7 +200,7 @@ app.on('before-quit', (event) => {
         case 0:
           sessionManager.stopAll();
           break;
-        case 1:
+        default:
           event.preventDefault();
           break;
       }
