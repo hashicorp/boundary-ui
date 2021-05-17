@@ -2,28 +2,30 @@ const { shell } = require('electron');
 const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
-const origin = require('../origin/index.js');
-const sessionManager = require('../session/manager.js');
+const sessionManager = require('../services/session-manager.js');
+const runtimeSettings = require('../services/runtime-settings.js');
+const sanitizer = require('../utils/sanitizer.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
  * rewrite the CSP to allow requests.
  */
-handle('getOrigin', () => origin.origin);
+handle('getOrigin', () => runtimeSettings.origin);
 
 /**
  * Sets the origin to be used in the content security policy and triggers
  * a main window reload.
  */
 handle('setOrigin', async (requestOrigin) => {
-  await origin.validateOrigin(requestOrigin);
-  origin.origin = requestOrigin;
+  const origin = sanitizer.urlValidate(requestOrigin);
+  await runtimeSettings.validateOrigin(origin);
+  runtimeSettings.origin = origin;
 });
 
 /**
  * Resets the origin.
  */
-handle('resetOrigin', async () => origin.resetOrigin());
+handle('resetOrigin', async () => runtimeSettings.resetOrigin());
 
 /**
  * Opens the specified URL in an external browser.  Only secure HTTPs URLs are
@@ -55,7 +57,7 @@ handle('cliExists', () => boundaryCli.exists());
  * Establishes a boundary session and returns session details.
  */
 handle('connect', ({ target_id, token, host_id }) =>
-  sessionManager.start(origin.origin, target_id, token, host_id)
+  sessionManager.start(runtimeSettings.origin, target_id, token, host_id)
 );
 
 /**

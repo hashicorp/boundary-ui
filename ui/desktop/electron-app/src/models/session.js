@@ -1,5 +1,5 @@
 const { spawnAsyncJSONPromise } = require('../helpers/spawn-promise.js');
-const base62 = require('../utils/base62.js');
+const sanitizer = require('../utils/sanitizer.js');
 
 class Session {
   #id;
@@ -77,9 +77,9 @@ class Session {
    */
   cliCommand() {
     const sanitized = {
-      target_id: base62.escapeAndValidate(this.#targetId),
-      token: base62.escapeAndValidate(this.#token),
-      addr: encodeURI(this.#addr),
+      target_id: sanitizer.base62EscapeAndValidate(this.#targetId),
+      token: sanitizer.base62EscapeAndValidate(this.#token),
+      addr: sanitizer.urlValidate(this.#addr),
     };
 
     const command = [
@@ -91,7 +91,7 @@ class Session {
     ];
 
     if (this.#hostId) {
-      sanitized.host_id = base62.escapeAndValidate(this.#hostId);
+      sanitized.host_id = sanitizer.base62EscapeAndValidate(this.#hostId);
       command.push(`-host-id=${sanitized.host_id}`);
     }
     return command;

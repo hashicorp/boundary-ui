@@ -15,7 +15,7 @@ const {
 } = require('electron');
 require('./ipc/handlers.js');
 
-const origin = require('./origin/index.js');
+const runtimeSettings = require('./services/runtime-settings.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 const sessionManager = require('./session/manager.js');
 
@@ -132,7 +132,7 @@ app.on('ready', async () => {
 
   // If the user-specified origin changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
-  origin.onOriginChange(() => mainWindow.loadURL(emberAppURL));
+  runtimeSettings.onOriginChange(() => mainWindow.loadURL(emberAppURL));
 
   // If you want to open up dev tools programmatically, call
   // mainWindow.openDevTools();

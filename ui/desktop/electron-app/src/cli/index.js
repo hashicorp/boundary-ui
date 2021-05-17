@@ -1,7 +1,7 @@
 const path = require('path');
 const { spawnSync } = require('../helpers/spawn-promise.js');
 
-const cliPath = async () => path.resolve(__dirname, '..', 'cli', 'boundary');
+const cliPath = async () => path.resolve(__dirname, '..', '..', 'cli', 'boundary');
 
 module.exports = {
   // Check boundary cli existence
