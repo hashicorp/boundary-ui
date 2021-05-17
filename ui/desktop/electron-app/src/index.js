@@ -13,13 +13,13 @@ const {
   Menu,
   MenuItem,
 } = require('electron');
-require('./handlers.js');
+require('./ipc/handlers.js');
 
-const origin = require('./origin.js');
-const { generateCSPHeader } = require('./content-security-policy.js');
+const runtimeSettings = require('./services/runtime-settings.js');
+const { generateCSPHeader } = require('./config/content-security-policy.js');
 
-const menu = require('./menu.js');
-const appUpdater = require('./app-updater.js');
+const menu = require('./config/menu.js');
+const appUpdater = require('./helpers/app-updater.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -131,7 +131,7 @@ app.on('ready', async () => {
 
   // If the user-specified origin changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
-  origin.onOriginChange(() => mainWindow.loadURL(emberAppURL));
+  runtimeSettings.onOriginChange(() => mainWindow.loadURL(emberAppURL));
 
   // If you want to open up dev tools programmatically, call
   // mainWindow.openDevTools();
