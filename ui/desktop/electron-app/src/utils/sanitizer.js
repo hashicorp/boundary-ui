@@ -21,7 +21,7 @@ module.exports = {
   urlValidate: (str) => {
     try {
       const url = new URL(str);
-      return `${url.protocol}://${url.host}`;
+      return `${url.protocol}//${url.host}`;
     } catch (e) {
       // Parse error
       throw new Error(`URL ${str} could not be validated.`);
