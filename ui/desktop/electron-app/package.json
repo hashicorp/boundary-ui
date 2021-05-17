@@ -8,7 +8,7 @@
   "author": "HashiCorp",
   "main": "src/index.js",
   "scripts": {
-    "build:cli": "node -e 'require(\"./config/cli.js\").setup()'",
+    "build:cli": "node -e \"require('./config/cli.js').setup()\"",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "premake": "yarn build:cli",

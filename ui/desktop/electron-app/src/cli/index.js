@@ -1,7 +1,12 @@
 const path = require('path');
+const os = require('os');
 const { spawnSync } = require('../helpers/spawn-promise.js');
 
-const cliPath = async () => path.resolve(__dirname, '..', '..', 'cli', 'boundary');
+const cliPath = async () => {
+  let cli = 'boundary';
+  if(os.type().match(/(windows)/i)) cli = 'boundary.exe';
+  return path.resolve(__dirname, '..', 'cli', cli);
+}
 
 module.exports = {
   // Check boundary cli existence
