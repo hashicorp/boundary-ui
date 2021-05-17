@@ -1,10 +1,11 @@
 const { shell } = require('electron');
 const appUpdater = require('../helpers/app-updater.js');
+const { isMac, isWindows } = require('../helpers/platform.js');
 
 const generateMenuTemplate = () => {
   return [
     // { role: 'appMenu' }
-    {
+    ...(isMac() ? [{
       label: 'Boundary',
       submenu: [
         { role: 'about' },
@@ -22,7 +23,7 @@ const generateMenuTemplate = () => {
         { type: 'separator' },
         { role: 'quit' },
       ],
-    },
+    }] : []),
     // { role: 'fileMenu' }
     {
       label: 'File',
@@ -38,14 +39,23 @@ const generateMenuTemplate = () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        { role: 'pasteAndMatchStyle' },
-        { role: 'delete' },
-        { role: 'selectAll' },
-        { type: 'separator' },
-        {
-          label: 'Speech',
-          submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
-        },
+        ...(isMac() ? [
+          { role: 'pasteAndMatchStyle' },
+          { role: 'delete' },
+          { role: 'selectAll' },
+          { type: 'separator' },
+          {
+            label: 'Speech',
+            submenu: [
+              { role: 'startspeaking' },
+              { role: 'stopspeaking' }
+            ]
+          }
+        ] : [
+          { role: 'delete' },
+          { type: 'separator' },
+          { role: 'selectAll' }
+        ]),
       ],
     },
     // { role: 'viewMenu' }
@@ -68,10 +78,14 @@ const generateMenuTemplate = () => {
       submenu: [
         { role: 'minimize' },
         { role: 'zoom' },
-        { type: 'separator' },
-        { role: 'front' },
-        { type: 'separator' },
-        { role: 'window' },
+        ...(isMac() ? [
+          { type: 'separator' },
+          { role: 'front' },
+          { type: 'separator' },
+          { role: 'window' }
+        ] : [
+          { role: 'close' }
+        ])
       ],
     },
     {
@@ -81,6 +95,9 @@ const generateMenuTemplate = () => {
           label: 'Documentation',
           click: () => shell.openExternal('https://www.boundaryproject.io'),
         },
+        ...(isWindows() ? [
+          { role: 'about' },
+        ] : [])
       ],
     },
   ];
