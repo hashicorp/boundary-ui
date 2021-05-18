@@ -4,11 +4,11 @@ class SessionManager {
   #sessions = [];
 
   /**
-   * Checks for active sessions
+   * Checks for running sessions
    * @returns {boolean}
    */
-  get hasActiveSessions() {
-    return Boolean(this.#sessions.find((session) => session.isActive));
+  get hasRunningSessions() {
+    return Boolean(this.#sessions.find((session) => session.isRunning));
   }
 
   /**

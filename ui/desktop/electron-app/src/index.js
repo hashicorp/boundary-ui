@@ -188,7 +188,7 @@ app.on('ready', async () => {
  * Prompt for closing spawned processes
  */
 app.on('before-quit', (event) => {
-  if (sessionManager.hasActiveSessions) {
+  if (sessionManager.hasRunningSessions) {
     const dialogOpts = {
       type: 'question',
       buttons: ['Close', 'Cancel'],
