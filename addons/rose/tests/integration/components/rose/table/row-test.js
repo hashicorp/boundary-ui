@@ -42,10 +42,4 @@ module('Integration | Component | rose/table/row', function (hooks) {
     await render(hbs`<Rose::Table::Row @hidden=true />`);
     assert.ok(find('.rose-table-row-visually-hidden'));
   });
-
-  test('it can be key/value style', async function (assert) {
-    assert.expect(1);
-    await render(hbs`<Rose::Table::Row @style="key-value" />`);
-    assert.ok(find('.rose-table-row-key-value'));
-  });
 });
