@@ -17,7 +17,7 @@ require('./ipc/handlers.js');
 
 const runtimeSettings = require('./services/runtime-settings.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
-const sessionManager = require('./session/manager.js');
+const sessionManager = require('./services/session-manager.js');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
