@@ -4,6 +4,14 @@ class SessionManager {
   #sessions = [];
 
   /**
+   * Checks for running sessions
+   * @returns {boolean}
+   */
+  get hasRunningSessions() {
+    return Boolean(this.#sessions.find((session) => session.isRunning));
+  }
+
+  /**
    * Start a session and track it.
    * Returns session proxy details if successfully started.
    * @param {string} addr
@@ -23,10 +31,11 @@ class SessionManager {
    */
   stopById(session_id) {
     const session = this.#sessions.find((session) => session.id === session_id);
-    return session.stop();
+    return session?.stop?.();
   }
 
   stopAll() {
+    this.#sessions.forEach((session) => session.stop());
   }
 }
 
