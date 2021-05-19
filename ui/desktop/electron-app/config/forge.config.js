@@ -31,7 +31,9 @@ module.exports = {
     name: 'Boundary',
     appBundleId: 'com.electron.boundary',
     // TODO: where should the client version number come from?
-    appVersion: `${formattedAppVersion}${formattedCLIVersion}\n`,
+    // appVersion: `${formattedAppVersion}${formattedCLIVersion}\n`,
+    // FIXME: Disable version temporarily to build windows archives
+    appVersion: '1.0.0',
     appCopyright: 'Copyright © 2021 HashiCorp, Inc.',
     icon: './config/macos/icon.icns',
     osxSign: {
@@ -51,6 +53,9 @@ module.exports = {
         icon: './config/macos/disk.icns',
         background: './config/macos/background.png',
       },
+    },
+    {
+      name: '@electron-forge/maker-squirrel'
     },
     {
       name: '@electron-forge/maker-zip',
