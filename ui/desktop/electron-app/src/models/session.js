@@ -36,7 +36,7 @@ class Session {
   /**
    * @return {boolean}
    */
-  get isActive() {
+  get isRunning() {
     return !this.#process.killed;
   }
 
@@ -60,12 +60,12 @@ class Session {
    */
   stop() {
     return new Promise((resolve, reject) => {
-      if (this.isActive) {
+      if (this.isRunning) {
         this.#process.on('close', () => resolve());
         this.#process.on('error', (e) => reject(e));
         this.#process.kill();
       } else {
-        // Do nothing when process isn't active
+        // Do nothing when process isn't running
         resolve();
       }
     });
