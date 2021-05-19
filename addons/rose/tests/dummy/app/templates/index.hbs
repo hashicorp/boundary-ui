@@ -75,49 +75,72 @@
   </table.footer>
 </Rose::Table>
 
-<h2>Condensed Table Key/Value Lookalike</h2>
+<h2>Condensed Table Key/Value Lookalike (edit mode)</h2>
 <Rose::Table @style="condensed" as |table|>
   <table.header as |header|>
     <header.row  as |row|>
       <row.headerCell @shrink={{true}}>Key</row.headerCell>
-      <row.headerCell>Value</row.headerCell>
+      <row.headerCell colspan="2">Value</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
-    <body.row @style="key-value" as |row|>
-      <row.cell>Key</row.cell>
-      <row.cell>Value</row.cell>
-    </body.row>
-    <body.row @style="key-value" as |row|>
-      <row.cell>Key</row.cell>
-      <row.cell>Value</row.cell>
-    </body.row>
-    <body.row @style="key-value" as |row|>
-      <row.cell>Key</row.cell>
-      <row.cell>Value</row.cell>
-    </body.row>
-    <body.row @style="key-value" as |row|>
+    <body.row as |row|>
       <row.cell>Key</row.cell>
       <row.cell>
         <Rose::Form::Input @contextual={{true}} as |input|>
-            <input.field />
-            <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+          <input.field />
         </Rose::Form::Input>
       </row.cell>
+      <row.cell @shrink={{true}} @alignRight={{true}}>
+        <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+      </row.cell>
     </body.row>
-    <body.row @style="key-value" as |row|>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>
+        <Rose::Form::Select
+          @name="Test select"
+          as |field|
+        >
+          <field.field as |select|>
+            <select.option>Choose an option</select.option>
+            <select.option @value="value-1">Value 1</select.option>
+            <select.option @value="value-2">Value 2</select.option>
+            <select.option @value="value-3">Value 3</select.option>
+          </field.field>
+        </Rose::Form::Select>
+      </row.cell>
+      <row.cell @shrink={{true}} @alignRight={{true}}>
+        <Rose::Button @style="secondary">Add</Rose::Button>
+      </row.cell>
+    </body.row>
+    <body.row as |row|>
       <row.cell>Key</row.cell>
       <row.cell>
         <Rose::Form::Input @contextual={{true}} as |input|>
-            <input.field />
-            <Rose::Button @style="secondary">Add</Rose::Button>
+          <input.field />
         </Rose::Form::Input>
+      </row.cell>
+      <row.cell @alignRight={{true}}>
+        <Rose::Button @style="secondary">Add</Rose::Button>
+      </row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>
+        <Rose::Form::Textarea
+          @name="field"
+          readonly={{false}}
+        />
+      </row.cell>
+      <row.cell @alignRight={{true}}>
+        <Rose::Button @style="secondary">Add</Rose::Button>
       </row.cell>
     </body.row>
   </table.body>
   <table.footer @hidden={{true}} as |footer|>
     <footer.row as |row|>
-      <row.cell>Footer</row.cell>
+      <row.cell colspan="3">Footer</row.cell>
     </footer.row>
   </table.footer>
 </Rose::Table>
@@ -146,50 +169,6 @@
     </footer.row>
   </table.footer>
 </Rose::Table>
-
-<h2>Key/Value</h2>
-<Rose::List::KeyValue as |list|>
-  <list.item as |item|>
-    <item.key>Key</item.key>
-    <item.cell>Value</item.cell>
-  </list.item>
-  <list.item as |item|>
-    <item.key>Key</item.key>
-    <item.cell>Value</item.cell>
-  </list.item>
-  <list.item as |item|>
-    <item.key>Key</item.key>
-    <item.cell>Value</item.cell>
-  </list.item>
-
-  <Rose::Form::Input @contextual={{true}} as |input|>
-    <list.item as |item|>
-      <item.key>
-        <input.label>Key</input.label>
-      </item.key>
-      <item.cell>
-        <input.field />
-      </item.cell>
-      <item.cell>
-        <Rose::Button @style="secondary">Add</Rose::Button>
-      </item.cell>
-    </list.item>
-  </Rose::Form::Input>
-
-  <Rose::Form::Input @contextual={{true}} as |input|>
-    <list.item as |item|>
-      <item.key>
-        <input.label>Key</input.label>
-      </item.key>
-      <item.cell>
-        <input.field />
-      </item.cell>
-      <item.cell>
-        <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
-      </item.cell>
-    </list.item>
-  </Rose::Form::Input>
-</Rose::List::KeyValue>
 
 <h2>Table</h2>
 <Rose::Table as |table|>

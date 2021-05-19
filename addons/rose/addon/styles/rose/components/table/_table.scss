@@ -10,15 +10,12 @@
     text-align: left;
   }
 
-  .rose-table-row-key-value {
-    td:nth-child(2) {
-      display: flex;
-      input {
-        width: 100%;
-        margin-right: sizing.rems(s);
-      }
-      button { margin-right: 0; }
-    }
+  // This styles are add to stop the input to apply extra margin (default on forms)
+  .rose-form-input-field,
+  .rose-form-select, 
+  .rose-form-input { 
+    margin: 0; 
+    width: 100%;
   }
 
   .rose-table-cell,
@@ -56,14 +53,6 @@
 
   [class*='rose-button'] {
     margin-bottom: 0;
-  }
-
-  .rose-table-cell {
-    .rose-form-input-field {
-      margin: 0;
-      width: inherit;
-      vertical-align: inherit;
-    }
   }
 
   &.rose-table-condensed {
