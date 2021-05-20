@@ -1,4 +1,4 @@
-<table ...attributes class="rose-table">
+<table ...attributes class="rose-table {{if @style (concat "rose-table-" @style)}}">
   {{#if @caption}}
     <caption>{{@caption}}</caption>
   {{/if}}

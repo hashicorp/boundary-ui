@@ -11,6 +11,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
 
   // =services
 
+  @service ipc;
   @service session;
 
   // =attributes
@@ -83,5 +84,6 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   @notifySuccess('notifications.canceled-success')
   async cancelSession(session) {
     await session.cancelSession();
+    await this.ipc.invoke('stop', { session_id: session.id });
   }
 }

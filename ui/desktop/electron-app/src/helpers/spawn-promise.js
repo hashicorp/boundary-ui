@@ -1,17 +1,8 @@
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
+const jsonify = require('../utils/jsonify.js');
 
-const boundaryPath = path.resolve(__dirname, '..', 'cli', 'boundary');
-
-// Convert to json
-const jsonify = (data) => {
-  if (typeof data !== 'string') data = JSON.stringify(data);
-  try {
-    return JSON.parse(data);
-  } catch (e) {
-    // Ignore parse errors
-  }
-};
+const boundaryPath = path.resolve(__dirname, '..', '..', 'cli', 'boundary');
 
 // You can throw exceptions, or allow them to occur, and this is supported.
 // Exceptions thrown in this way will be returned to the UI as an
@@ -42,25 +33,37 @@ module.exports = {
       let outputStream = '';
       let errorStream = '';
 
-      childProcess.stdout.on('data', (data) => {
+      const processData = (data) => {
         outputStream += data.toString();
         const jsonData = jsonify(outputStream);
-        if (jsonData) resolve(jsonData);
-      });
+        if (jsonData) {
+          childProcess.removeAllListeners();
+          resolve({ childProcess, response: jsonData });
+        }
+      };
 
-      childProcess.stderr.on('data', (data) => {
-        errorStream += data.toString();
+      childProcess.stdout.on('data', processData);
+
+      // Errors are cli returned json objects
+      const processError = (error) => {
+        errorStream += error.toString();
         const jsonData = jsonify(errorStream);
         if (jsonData) {
           const error = jsonData.api_error || jsonData.error;
+          childProcess.removeAllListeners();
           reject(new Error(error.message));
         }
-      });
+      };
+
+      childProcess.stderr.on('error', processError);
     });
   },
 
   /**
-   *
+   * Spawn child process and return output immediately.
+   * This function is intended for non-connection related tasks.
+   * @param {string} command
+   * @return {string}
    */
   spawnSync(command) {
     const childProcess = spawnSync(boundaryPath, command);
