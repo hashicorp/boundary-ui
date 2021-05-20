@@ -19,6 +19,7 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import sinon from 'sinon';
 
 module('Acceptance | projects | sessions', function (hooks) {
   setupApplicationTest(hooks);
@@ -43,6 +44,7 @@ module('Acceptance | projects | sessions', function (hooks) {
   const stubs = {
     global: null,
     org: null,
+    ipcService: null,
   };
 
   const urls = {
@@ -144,6 +146,9 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     window.addEventListener('message', messageHandler);
     setDefaultOrigin(this);
+
+    const ipcService = this.owner.lookup('service:ipc');
+    stubs.ipcService = sinon.stub(ipcService, 'invoke');
   });
 
   hooks.afterEach(function () {
@@ -240,6 +245,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   test('cancelling a session', async function (assert) {
     assert.expect(1);
+    stubs.ipcService.withArgs('stop');
     later(async () => {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button');
@@ -251,6 +257,17 @@ module('Acceptance | projects | sessions', function (hooks) {
   test('cancelling a session with error shows notification', async function (assert) {
     assert.expect(1);
     this.server.post('/sessions/:id_method', () => new Response(400));
+    later(async () => {
+      run.cancelTimers();
+      await click('tbody tr:first-child td:last-child button');
+      assert.ok(find('[role="alert"].is-error'));
+    }, 750);
+    await visit(urls.sessions);
+  });
+
+  test('cancelling a session with ipc error shows notification', async function (assert) {
+    assert.expect(1);
+    stubs.ipcService.withArgs('stop').throws();
     later(async () => {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button');

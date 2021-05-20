@@ -1,27 +1,42 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
+import { boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose|Table" component="Table" />
 
 # Table
 
-A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element.
+A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element. Rows can be visually hidden, and cells can be shrinked to its content with, and center/right cell alignment is supported.
 
-```htmlbars
-<Rose::Table as |table|>
+Cell shrink should be applied to all the cells in a row. Otherwise the bigger cell with shrink applied will determinate the width of the row.
+
+```html
+<Rose::Table @style={{style}} as |table|>
   <table.header as |header|>
-    <header.row as |row|>
+    <header.row @hidden={{hideHeaderRow}} as |row|>
       <row.headerCell>Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
-      <row.headerCell>Description</row.headerCell>
+      <row.headerCell @alignCenter={{true}}>Description</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
       <row.cell>host-set-1, host-set-2</row.cell>
-      <row.cell>optional name</row.cell>
+      <row.cell @shrink={{true}}>optional name</row.cell>
+      <row.cell @alignCenter={{true}}>description</row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-2</row.cell>
+      <row.cell @shrink={{true}} @alignCenter={{true}}>optional name</row.cell>
+      <row.cell @alignRight={{true}}>description</row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1</row.cell>
+      <row.cell @shrink={{true}}>optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
   </table.body>
@@ -36,21 +51,33 @@ A table component to display data in structure of rows and columns. It supports 
 <Preview>
   <Story name="Basic">{{
     template: hbs`
-    <Rose::Table as |table|>
+    <Rose::Table @style={{style}} as |table|>
       <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>Address</row.headerCell>
-          <row.headerCell>Host Set</row.headerCell>
-          <row.headerCell>Name</row.headerCell>
-          <row.headerCell>Description</row.headerCell>
+        <header.row @hidden={{hideHeaderRow}} as |row|>
+          <row.headerCell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Address</row.headerCell>
+          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Host Set</row.headerCell>
+          <row.headerCell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Name</row.headerCell>
+          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Description</row.headerCell>
         </header.row>
       </table.header>
       <table.body as |body|>
         <body.row as |row|>
-          <row.cell>1.1.1.1</row.cell>
+          <row.cell @shrink={{cellShrink}}>1.1.1.1</row.cell>
           <row.cell>host-set-1, host-set-2</row.cell>
-          <row.cell>optional name</row.cell>
+          <row.cell @shrink={{cellShrink}}>optional name</row.cell>
           <row.cell>description</row.cell>
+        </body.row>
+        <body.row as |row|>
+          <row.cell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}}>1.1.1.1</row.cell>
+          <row.cell @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
+          <row.cell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}}>optional name</row.cell>
+          <row.cell @alignCenter={{cellAlignmentCenter}}>description</row.cell>
+        </body.row>
+        <body.row as |row|>
+          <row.cell @shrink={{cellShrink}} @alignRight={{cellAlignmentRight}}>1.1.1.1</row.cell>
+          <row.cell @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
+          <row.cell @shrink={{cellShrink}} @alignRight={{cellAlignmentRight}}>optional name</row.cell>
+          <row.cell @alignRight={{cellAlignmentRight}}>description</row.cell>
         </body.row>
       </table.body>
       <table.footer as |footer|>
@@ -60,6 +87,102 @@ A table component to display data in structure of rows and columns. It supports 
       </table.footer>
     </Rose::Table>
     `,
-    context: {}
+    context: {
+      hideHeaderRow: boolean('hideHeaderRow', false),
+      cellShrink: boolean('cellShrink', false),
+      style: select(
+        'style',
+        {
+          'default': '',
+          'condensed': 'condensed'
+        }
+      ),
+      cellAlignmentCenter: boolean('cellAlignmentCenter', false),
+      cellAlignmentRight: boolean('cellAlignmentRight', false),
+    },
+  }}</Story>
+</Preview>
+
+<Preview>
+  <Story name="Basic Key/Value Table">{{
+    template: hbs`
+      <Rose::Table @style={{style}} as |table|>
+        <table.header as |header|>
+          <header.row  as |row|>
+            <row.headerCell @shrink={{true}}>Key</row.headerCell>
+            <row.headerCell colspan="2">Value</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell>
+              <Rose::Form::Input @contextual={{true}} as |input|>
+                <input.field />
+              </Rose::Form::Input>
+            </row.cell>
+            <row.cell @shrink={{true}} @alignRight={{true}}>
+              <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+            </row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell>
+              <Rose::Form::Select
+                @name="Test select"
+                as |field|
+              >
+                <field.field as |select|>
+                  <select.option>Choose an option</select.option>
+                  <select.option @value="value-1">Value 1</select.option>
+                  <select.option @value="value-2">Value 2</select.option>
+                  <select.option @value="value-3">Value 3</select.option>
+                </field.field>
+              </Rose::Form::Select>
+            </row.cell>
+            <row.cell @shrink={{true}} @alignRight={{true}}>
+              <Rose::Button @style="secondary">Add</Rose::Button>
+            </row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell>
+              <Rose::Form::Input @contextual={{true}} as |input|>
+                <input.field />
+              </Rose::Form::Input>
+            </row.cell>
+            <row.cell @alignRight={{true}}>
+              <Rose::Button @style="secondary">Add</Rose::Button>
+            </row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell>Key</row.cell>
+            <row.cell>
+              <Rose::Form::Textarea
+                @name="field"
+                readonly={{false}}
+              />
+            </row.cell>
+            <row.cell @alignRight={{true}}>
+              <Rose::Button @style="secondary">Add</Rose::Button>
+            </row.cell>
+          </body.row>
+        </table.body>
+        <table.footer @hidden={{true}} as |footer|>
+          <footer.row as |row|>
+            <row.cell colspan="3">Footer</row.cell>
+          </footer.row>
+        </table.footer>
+      </Rose::Table>
+    `,
+    context: {
+      style: select(
+        'style',
+        {
+          'condensed': 'condensed',
+          'default': ''
+        }
+      )
+    }
   }}</Story>
 </Preview>

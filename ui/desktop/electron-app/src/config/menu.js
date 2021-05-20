@@ -1,5 +1,5 @@
 const { shell } = require('electron');
-const appUpdater = require('./app-updater.js');
+const appUpdater = require('../helpers/app-updater.js');
 
 const generateMenuTemplate = () => {
   return [

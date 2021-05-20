@@ -10,9 +10,20 @@
     text-align: left;
   }
 
+  // This styles are add to stop the input to apply extra margin (default on forms)
+  .rose-form-input-field,
+  .rose-form-select, 
+  .rose-form-input { 
+    margin: 0; 
+    width: 100%;
+  }
+
   .rose-table-cell,
   .rose-table-header-cell {
     vertical-align: middle;
+
+    &.align-right { text-align: right; }
+    &.align-center { text-align: center; }
   }
 
   .rose-table-header-cell {
@@ -35,7 +46,28 @@
     }
   }
 
+  .rose-table-cell-shrink {
+    width: 1%;
+    white-space: nowrap;
+  }
+
   [class*='rose-button'] {
     margin-bottom: 0;
+  }
+
+  &.rose-table-condensed {
+    .rose-table-cell {
+      @include type.type(s);
+      $lineHeight: 36 / 14;
+      line-height: $lineHeight;
+      padding: (sizing.rems(s) / 2) sizing.rems(s);
+    }
+
+  }
+
+  .rose-table-row-visually-hidden {
+    position: absolute;
+    top: -9999rem;
+    left: -9999rem;
   }
 }

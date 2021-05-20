@@ -1,93 +1,196 @@
-<Rose::Header as |header|>
-  <header.brand @logo="logo" @text="Product Name" />
+<h2>Condensed Table</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row  as |row|>
+      <row.headerCell >Address</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
 
-  <header.nav as |nav|>
-    <nav.dropdown @text="org-name" @icon="user-organization" as |dropdown|>
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
-      <dropdown.separator />
-      <dropdown.button>Button menu item</dropdown.button>
-    </nav.dropdown>
+<h2>Condensed Table with Shrink Cells</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row  as |row|>
+      <row.headerCell>Address</row.headerCell>
+      <row.headerCell @shrink={{true}}>Host Set</row.headerCell>
+      <row.headerCell @shrink={{true}}>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell @shrink={{true}}>host-set-1, host-set-2</row.cell>
+      <row.cell @shrink={{true}}>
+        <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+      </row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer @hidden={{true}} as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
 
-    <nav.link @route="index">Section</nav.link>
-    <nav.link @route="about">Section</nav.link>
-  </header.nav>
+<h2>Condensed Table with Right and Center aligned cells</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row  as |row|>
+      <row.headerCell>Address</row.headerCell>
+      <row.headerCell @alignCenter={{true}}>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell @alignCenter={{true}}>host-set-1, host-set-2</row.cell>
+      <row.cell @alignRight={{true}}>optional name</row.cell>
+      <row.cell @alignCenter={{true}}>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
 
-  <header.utilities as |utilities|>
-    <utilities.dropdown
-      @text="user@example.net"
-      @iconOnly={{true}}
-      @icon="user-square-fill" as |dropdown|
-    >
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
-      <dropdown.button>Button - default</dropdown.button>
-      <dropdown.separator />
-      <dropdown.button @style="danger">Button - danger</dropdown.button>
-    </utilities.dropdown>
-  </header.utilities>
-</Rose::Header>
+<h2>Condensed Table Key/Value Lookalike (edit mode)</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row  as |row|>
+      <row.headerCell @shrink={{true}}>Key</row.headerCell>
+      <row.headerCell colspan="2">Value</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>
+        <Rose::Form::Input @contextual={{true}} as |input|>
+          <input.field />
+        </Rose::Form::Input>
+      </row.cell>
+      <row.cell @shrink={{true}} @alignRight={{true}}>
+        <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+      </row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>
+        <Rose::Form::Select
+          @name="Test select"
+          as |field|
+        >
+          <field.field as |select|>
+            <select.option>Choose an option</select.option>
+            <select.option @value="value-1">Value 1</select.option>
+            <select.option @value="value-2">Value 2</select.option>
+            <select.option @value="value-3">Value 3</select.option>
+          </field.field>
+        </Rose::Form::Select>
+      </row.cell>
+      <row.cell @shrink={{true}} @alignRight={{true}}>
+        <Rose::Button @style="secondary">Add</Rose::Button>
+      </row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>
+        <Rose::Form::Input @contextual={{true}} as |input|>
+          <input.field />
+        </Rose::Form::Input>
+      </row.cell>
+      <row.cell @alignRight={{true}}>
+        <Rose::Button @style="secondary">Add</Rose::Button>
+      </row.cell>
+    </body.row>
+    <body.row as |row|>
+      <row.cell>Key</row.cell>
+      <row.cell>
+        <Rose::Form::Textarea
+          @name="field"
+          readonly={{false}}
+        />
+      </row.cell>
+      <row.cell @alignRight={{true}}>
+        <Rose::Button @style="secondary">Add</Rose::Button>
+      </row.cell>
+    </body.row>
+  </table.body>
+  <table.footer @hidden={{true}} as |footer|>
+    <footer.row as |row|>
+      <row.cell colspan="3">Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
 
-<Rose::Dropdown @text="Dropdown" as |dropdown|>
-  <dropdown.link @route="index">Menu item</dropdown.link>
-  <dropdown.link @route="about" @style="danger">Menu item - danger</dropdown.link>
-  <dropdown.separator></dropdown.separator>
+<h2>Condensed Table With Visually Hidden Header & Footer</h2>
+<Rose::Table @style="condensed" as |table|>
+  <table.header as |header|>
+    <header.row @hidden={{true}} as |row|>
+      <row.headerCell >Address</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row @hidden={{true}} as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
 
-  <dropdown.button>Button menu item</dropdown.button>
-  <dropdown.button @style="danger">Button - danger</dropdown.button>
-  <dropdown.separator />
-
-  <dropdown.section @title="Dropdown Section Title">
-    <dropdown.link @route="index">Menu item</dropdown.link>
-  </dropdown.section>
-</Rose::Dropdown>
-
-<Rose::Dropdown @showCaret={{false}} @icon="more-horizontal" as |dropdown|>
-  <dropdown.link @route="index">Menu item</dropdown.link>
-  <dropdown.button>Button menu item</dropdown.button>
-</Rose::Dropdown>
-
-<Rose::Form as |form|>
-  <form.radioGroup tagName="ul" @name="color" @selectedValue="red" as |radioGroup|>
-    <Rose::Dropdown @text="Color" as |dropdown|>
-      <ul>
-        <li>
-          <dropdown.item>
-            <radioGroup.radio
-              @label="Red"
-              @value="red"
-              @icon="user-organization" />
-          </dropdown.item>
-        </li>
-        <li>
-          <dropdown.item>
-            <radioGroup.radio
-              @label="Green"
-              @value="green"
-            />
-          </dropdown.item>
-        </li>
-        <li>
-          <dropdown.item>
-            <radioGroup.radio
-              @label="Blue"
-              @value="blue"
-            />
-          </dropdown.item>
-        </li>
-      </ul>
-    </Rose::Dropdown>
-  </form.radioGroup>
-</Rose::Form>
-
-
-<Rose::Dialog::Cover>
-  <:header>
-    <h1>Authentication Pending</h1>
-  </:header>
-  <:body>
-    <p>Complete authentication in the newly-opened window.</p>
-    <p>Don't see the new window?  <a href="#">Try again.</a></p>
-    <p><a href="#">Cancel</a></p>
-  </:body>
-</Rose::Dialog::Cover>
+<h2>Table</h2>
+<Rose::Table as |table|>
+  <table.header as |header|>
+    <header.row as |row|>
+      <row.headerCell>Address</row.headerCell>
+      <row.headerCell>Host Set</row.headerCell>
+      <row.headerCell>Name</row.headerCell>
+      <row.headerCell>Description</row.headerCell>
+    </header.row>
+  </table.header>
+  <table.body as |body|>
+    <body.row as |row|>
+      <row.cell>1.1.1.1</row.cell>
+      <row.cell>host-set-1, host-set-2</row.cell>
+      <row.cell>optional name</row.cell>
+      <row.cell>description</row.cell>
+    </body.row>
+  </table.body>
+  <table.footer as |footer|>
+    <footer.row as |row|>
+      <row.cell>Footer</row.cell>
+    </footer.row>
+  </table.footer>
+</Rose::Table>
