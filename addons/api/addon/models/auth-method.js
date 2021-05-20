@@ -2,20 +2,29 @@ import GeneratedAuthMethodModel from '../generated/models/auth-method';
 import { fragment } from 'ember-data-model-fragments/attributes';
 import { equal } from '@ember/object/computed';
 
-export const signingAlgorithms = [
-  'RS256',
-  'RS384',
-  'RS512',
-  'ES256',
-  'ES384',
-  'ES512',
-  'PS256',
-  'PS384',
-  'PS512',
-  'EdDSA',
-];
-
-export const states = ['inactive', 'active-private', 'active-public'];
+/**
+ * Enum ptions per auth method type and field.
+ */
+export const options = {
+  oidc: {
+    signing_algorithm: [
+      'RS256',
+      'RS384',
+      'RS512',
+      'ES256',
+      'ES384',
+      'ES512',
+      'PS256',
+      'PS384',
+      'PS512',
+      'EdDSA',
+    ],
+    state: ['inactive', 'active-private', 'active-public'],
+    account_claim_maps: {
+      to: ['sub', 'name', 'email'],
+    },
+  },
+};
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
   // =attributes

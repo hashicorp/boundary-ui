@@ -1,8 +1,10 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
 module('Unit | Serializer | auth method', function (hooks) {
   setupTest(hooks);
+  setupMirage(hooks);
 
   // Replace this with your real tests.
   test('it exists', function (assert) {
@@ -27,20 +29,36 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test('it serializes OIDC records without state', function (assert) {
-    assert.expect(3);
+    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: 'oidc',
+      name: 'OIDC Auth Method',
       attributes: {
         state: 'foo',
+        account_claim_maps: [{ from: 'foo', to: 'bar' }],
       },
     });
 
     let serializedRecord = record.serialize();
 
-    assert.ok(serializedRecord);
-    assert.ok(serializedRecord.attributes, 'OIDC should have attributes');
-    assert.notOk(serializedRecord.attributes.state);
+    assert.deepEqual(serializedRecord, {
+      type: 'oidc',
+      name: 'OIDC Auth Method',
+      description: null,
+      attributes: {
+        account_claim_maps: ['foo=bar'],
+        api_url_prefix: null,
+        callback_url: null,
+        client_id: null,
+        client_secret: null,
+        client_secret_hmac: null,
+        disable_discovered_config_validation: false,
+        dry_run: false,
+        issuer: null,
+        max_age: null,
+      },
+    });
   });
 
   test('it serializes OIDC records with only state and version when `adapterOptions.state` is passed', function (assert) {
@@ -108,5 +126,23 @@ module('Unit | Serializer | auth method', function (hooks) {
       },
       'First normalized item is primary'
     );
+  });
+
+  test('it normalizes OIDC records', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    this.server.get('/v1/auth-methods/oidc123', () => ({
+      attributes: {
+        account_claim_maps: ['from=to', 'foo=bar'],
+      },
+      version: 1,
+      type: 'oidc',
+      id: 'oidc123',
+    }));
+    const record = await store.findRecord('auth-method', 'oidc123');
+    const { account_claim_maps } = record.attributes;
+    assert.equal(account_claim_maps.firstObject.from, 'from');
+    assert.equal(account_claim_maps.firstObject.to, 'to');
+    assert.equal(account_claim_maps.lastObject.from, 'foo');
+    assert.equal(account_claim_maps.lastObject.to, 'bar');
   });
 });
