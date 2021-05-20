@@ -7,19 +7,20 @@ const {
 const {
   session,
   app,
+  dialog,
   protocol,
   BrowserWindow,
-  ipcMain,
   Menu,
   MenuItem,
 } = require('electron');
-require('./handlers.js');
+require('./ipc/handlers.js');
 
-const origin = require('./origin.js');
-const { generateCSPHeader } = require('./content-security-policy.js');
+const runtimeSettings = require('./services/runtime-settings.js');
+const { generateCSPHeader } = require('./config/content-security-policy.js');
+const sessionManager = require('./services/session-manager.js');
 
-const menu = require('./menu.js');
-const appUpdater = require('./app-updater.js');
+const menu = require('./config/menu.js');
+const appUpdater = require('./helpers/app-updater.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -131,7 +132,7 @@ app.on('ready', async () => {
 
   // If the user-specified origin changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
-  origin.onOriginChange(() => mainWindow.loadURL(emberAppURL));
+  runtimeSettings.onOriginChange(() => mainWindow.loadURL(emberAppURL));
 
   // If you want to open up dev tools programmatically, call
   // mainWindow.openDevTools();
@@ -181,6 +182,30 @@ app.on('ready', async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+});
+
+/**
+ * Prompt for closing spawned processes
+ */
+app.on('before-quit', (event) => {
+  if (sessionManager.hasRunningSessions) {
+    const dialogOpts = {
+      type: 'question',
+      buttons: ['Close', 'Cancel'],
+      detail: 'Close sessions before quitting?',
+    };
+
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+      switch (returnValue.response) {
+        case 0:
+          sessionManager.stopAll();
+          break;
+        default:
+          event.preventDefault();
+          break;
+      }
+    });
+  }
 });
 
 // Handle an unhandled error in the main thread

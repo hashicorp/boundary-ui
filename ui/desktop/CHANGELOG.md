@@ -2,6 +2,16 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.0.1 [CLI 0.2.2] (2021.05.19)
+
+### New
+
+- Add prompt to close sessions when quitting client. ([PR](https://github.com/hashicorp/boundary-ui/pull/555))
+
+### Bug Fixes
+
+- Close spawned boundary process on session cancel. ([PR](https://github.com/hashicorp/boundary-ui/pull/549))
+
 ## v1.0.0 [CLI 0.2.0] (2021.04.14)
 
 ### New
