@@ -12,13 +12,59 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.ok(serializer);
   });
 
-  test('it serializes records', function (assert) {
+  test('it serializes password records', function (assert) {
+    assert.expect(2);
     let store = this.owner.lookup('service:store');
-    let record = store.createRecord('auth-method', {});
+    let record = store.createRecord('auth-method', { type: 'password' });
 
     let serializedRecord = record.serialize();
 
     assert.ok(serializedRecord);
+    assert.notOk(
+      serializedRecord.attributes,
+      'Password should not have attributes'
+    );
+  });
+
+  test('it serializes OIDC records without state', function (assert) {
+    assert.expect(3);
+    let store = this.owner.lookup('service:store');
+    let record = store.createRecord('auth-method', {
+      type: 'oidc',
+      attributes: {
+        state: 'foo',
+      },
+    });
+
+    let serializedRecord = record.serialize();
+
+    assert.ok(serializedRecord);
+    assert.ok(serializedRecord.attributes, 'OIDC should have attributes');
+    assert.notOk(serializedRecord.attributes.state);
+  });
+
+  test('it serializes OIDC records with only state and version when `adapterOptions.state` is passed', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('auth-method');
+    const record = store.createRecord('auth-method', {
+      type: 'oidc',
+      attributes: {
+        state: 'foo',
+      },
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      state: 'bar',
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      attributes: {
+        state: 'bar',
+      },
+      version: 1,
+    });
   });
 
   test('it sorts primary first in normalizeArrayResponse', function (assert) {
