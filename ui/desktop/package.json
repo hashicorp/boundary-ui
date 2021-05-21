@@ -13,7 +13,7 @@
     "doc:toc": "doctoc README.md",
     "build": "set EMBER_CLI_ELECTRON=true && ember build --environment=production && yarn build:desktop",
     "build:development": "ember build",
-    "prebuild:desktop": "xcopy /E /Y dist electron-app\\ember-dist",
+    "prebuild:desktop": "robocopy dist electron-app\\ember-dist /MIR",
     "build:desktop": "cd electron-app && yarn make",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
