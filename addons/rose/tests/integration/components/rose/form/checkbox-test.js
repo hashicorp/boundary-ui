@@ -9,9 +9,9 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
   test('it renders', async function (assert) {
     assert.expect(3);
     await render(hbs`<Rose::Form::Checkbox @label="Label" />`);
-    assert.equal(await find('label').textContent.trim(), 'Label');
-    assert.ok(await find('input'));
-    assert.notOk(await find('.rose-form-checkbox-label-description'));
+    assert.equal(find('label').textContent.trim(), 'Label');
+    assert.ok(find('input'));
+    assert.notOk(find('.rose-form-checkbox-label-description'));
   });
 
   test('it renders optional description paragraph', async function (assert) {
@@ -20,14 +20,14 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
       hbs`<Rose::Form::Checkbox @label="Label" @description="Hello world" />`
     );
     assert.equal(
-      await find('.rose-form-checkbox-label-text').textContent.trim(),
+      find('.rose-form-checkbox-label-text').textContent.trim(),
       'Label'
     );
     assert.equal(
-      await find('.rose-form-checkbox-label-description').textContent.trim(),
+      find('.rose-form-checkbox-label-description').textContent.trim(),
       'Hello world'
     );
-    assert.ok(await find('input'));
+    assert.ok(find('input'));
   });
 
   test('it renders optional helper text', async function (assert) {
@@ -36,7 +36,7 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
       hbs`<Rose::Form::Checkbox @label="Label" @helperText="Hello world" />`
     );
     assert.equal(
-      await find('.rose-form-helper-text').textContent.trim(),
+      find('.rose-form-helper-text').textContent.trim(),
       'Hello world'
     );
   });
@@ -60,26 +60,26 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
 
   test('it is not checked by default', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox />`);
-    assert.equal(await find('input').checked, false);
+    assert.equal(find('input').checked, false);
   });
 
   test('it is not disabled by default', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox />`);
-    assert.equal(await find('input').disabled, false);
+    assert.equal(find('input').disabled, false);
   });
 
   test('it is checked when @checked={{true}}', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox @checked={{true}} />`);
-    assert.equal(await find('input').checked, true);
+    assert.equal(find('input').checked, true);
   });
 
   test('it marks error when @error={{true}}', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox @error={{true}} />`);
-    assert.ok(await find('.error'));
+    assert.ok(find('.error'));
   });
 
   test('it is disabled when @disabled={{true}}', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox @disabled={{true}} />`);
-    assert.equal(await find('input').disabled, true);
+    assert.equal(find('input').disabled, true);
   });
 });
