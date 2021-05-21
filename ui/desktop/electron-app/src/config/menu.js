@@ -16,11 +16,12 @@ const generateMenuTemplate = () => {
             const appVersion = `Version:  ${forgeConfig.RELEASE_VERSION}`;
             const appCommit = `Commit: ${forgeConfig.RELEASE_COMMIT}`;
             const cliVersion = version().formatted;
+            const copyright = forgeConfig.packagerConfig.appCopyright;
 
             const dialogOpts = {
               type: 'none',
-              message: `${appVersion}\n${appCommit}`,
-              detail: cliVersion,
+              message: app.getName(),
+              detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
             };
             dialog.showMessageBox(dialogOpts);
           },

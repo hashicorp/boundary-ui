@@ -88,6 +88,9 @@ typings/
 # Electron-Forge
 out/
 
+# Electron-Forge config
+config/forge.config.js
+
 # Ember build
 ember-dist/
 ember-test/
