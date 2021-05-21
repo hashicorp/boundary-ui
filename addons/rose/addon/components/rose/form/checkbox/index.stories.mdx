@@ -26,6 +26,7 @@ Renders a form input checkbox.
         @name={{name}}
         @label={{label}}
         @description={{description}}
+        @helperText={{helperText}}
         @checked={{checked}}
         @error={{error}}
         @disabled={{disabled}}
@@ -33,7 +34,8 @@ Renders a form input checkbox.
     `,
     context: {
       label: text('text', 'Checkbox 🛎'),
-      description: text('description', 'This is an optional description paragraph.'),
+      description: text('description', 'Short description in label'),
+      helperText: text('helperText', 'This is an optional help text.'),
       name: text('name', 'checkbox-1'),
       checked: boolean('checked', false),
       error: boolean('error', false),

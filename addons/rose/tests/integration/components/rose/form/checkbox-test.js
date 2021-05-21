@@ -30,6 +30,17 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     assert.ok(await find('input'));
   });
 
+  test('it renders optional helper text', async function (assert) {
+    assert.expect(1);
+    await render(
+      hbs`<Rose::Form::Checkbox @label="Label" @helperText="Hello world" />`
+    );
+    assert.equal(
+      await find('.rose-form-helper-text').textContent.trim(),
+      'Hello world'
+    );
+  });
+
   test('it displays optional errors', async function (assert) {
     await render(hbs`
       <Rose::Form::Checkbox @error={{true}} as |field|>
