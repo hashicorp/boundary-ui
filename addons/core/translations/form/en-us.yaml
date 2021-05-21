@@ -51,3 +51,22 @@ origin:
   description: The Boundary URL to which to connect (e.g. protocol://host:port)
 proxy:
   label: Proxy
+issuer:
+  label: Issuer
+  help:  The issuer URL. Boundary expects only the schema, host, and port and will strip off ".well-known/openid-configuration" if present. This will be used for configuration discovery as well as for validation of the "iss" claim.
+client_id:
+  label: Client ID
+  help: An OAuth 2.0 Client Identifier valid at the Authorization Server.
+client_secret:
+  label: Client Secret
+  description: The client secret is set-only, may not be unset, and will not appear after a successful save.
+max_age:
+  label: Maximum Age
+  help: The OIDC "max_age" parameter sent to the Authorization Server indicating a maximum acceptable time in seconds since the user's last authentication before requiring the user to reauthenticate. 0 indicates an immediate need to reauthenticate.
+api_url_prefix:
+  label: API URL Prefix
+  help: The prefix that should be used for any URLs needed during the authentication flow. This includes the callback URL, the token retrieval URL, and the redirection URL used by the OIDC Authorization Server.
+disable_discovered_config_validation:
+  label: Disable discovered config validation
+  help: >
+    If the Authorization Server's discovered configuration contains values that do not match the configuration set on this auth method, this can be set to force the local configuration to override the discovered values.  This is useful in the case of slow-changing or incorrect values announced by the Authorization Server. NOTE: For safety, not providing this value will be treated the same as "false"; that is, every time the method is updated or the state is changed, this value must be set to "true" or it will be disabled.
