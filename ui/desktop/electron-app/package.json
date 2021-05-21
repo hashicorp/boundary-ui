@@ -9,9 +9,10 @@
   "main": "src/index.js",
   "scripts": {
     "build:cli": "node -e 'require(\"./config/cli.js\").setup()'",
+    "build:config": "node -e 'require(\"./config/forge.js\").setup()'",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "premake": "yarn build:cli",
+    "premake": "yarn build:cli && yarn build:config",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""

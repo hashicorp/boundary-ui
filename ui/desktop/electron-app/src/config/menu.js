@@ -1,5 +1,7 @@
-const { shell } = require('electron');
+const { app, shell, dialog } = require('electron');
 const appUpdater = require('../helpers/app-updater.js');
+const forgeConfig = require('../../config/forge.config.js');
+const { version } = require('../cli/index.js');
 
 const generateMenuTemplate = () => {
   return [
@@ -7,7 +9,22 @@ const generateMenuTemplate = () => {
     {
       label: 'Boundary',
       submenu: [
-        { role: 'about' },
+        // { role: 'about' },
+        {
+          label: `About ${app.getName()}`,
+          click: () => {
+            const appVersion = `Version:  ${forgeConfig.RELEASE_VERSION}`;
+            const appCommit = `Commit: ${forgeConfig.RELEASE_COMMIT}`;
+            const cliVersion = version().formatted;
+
+            const dialogOpts = {
+              type: 'none',
+              message: `${appVersion}\n${appCommit}`,
+              detail: cliVersion,
+            };
+            dialog.showMessageBox(dialogOpts);
+          },
+        },
         {
           id: 'update',
           label: 'Check for Updates',
