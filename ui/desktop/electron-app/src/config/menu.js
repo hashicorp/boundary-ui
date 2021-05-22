@@ -1,6 +1,8 @@
-const { shell } = require('electron');
+const { app, shell, dialog } = require('electron');
 const appUpdater = require('../helpers/app-updater.js');
 const { isMac, isWindows } = require('../helpers/platform.js');
+const forgeConfig = require('../../config/forge.config.js');
+const { version } = require('../cli/index.js');
 
 const generateMenuTemplate = () => {
   return [
@@ -8,7 +10,23 @@ const generateMenuTemplate = () => {
     ...(isMac() ? [{
       label: 'Boundary',
       submenu: [
-        { role: 'about' },
+        // { role: 'about' },
+        {
+          label: `About ${app.getName()}`,
+          click: () => {
+            const appVersion = `Version:  ${forgeConfig.RELEASE_VERSION}`;
+            const appCommit = `Commit: ${forgeConfig.RELEASE_COMMIT}`;
+            const cliVersion = version().formatted;
+            const copyright = forgeConfig.packagerConfig.appCopyright;
+
+            const dialogOpts = {
+              type: 'none',
+              message: app.getName(),
+              detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
+            };
+            dialog.showMessageBox(dialogOpts);
+          },
+        },
         {
           id: 'update',
           label: 'Check for Updates',

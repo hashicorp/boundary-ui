@@ -28,7 +28,7 @@
     "format:sass": "prettier --write app/**/*.scss",
     "lint:js:fix": "eslint . --fix",
     "start": "ember serve",
-    "prestart:desktop": "cd electron-app && yarn build:cli",
+    "prestart:desktop": "cd electron-app && yarn premake",
     "start:desktop": "ember electron",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",

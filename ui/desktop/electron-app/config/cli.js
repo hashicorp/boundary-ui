@@ -4,7 +4,7 @@ const https = require('https');
 const decompress = require('decompress');
 const os = require('os');
 
-const artifactVersion = '0.2.0';
+const artifactVersion = '0.2.2';
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
 
 const platform = {

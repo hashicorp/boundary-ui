@@ -43,4 +43,9 @@ module('Integration | Component | rose/table', function (hooks) {
     </Rose::Table>`);
     assert.ok(find('tfoot'));
   });
+
+  test('it supports a style class', async function (assert) {
+    await render(hbs`<Rose::Table @style="condensed" />`);
+    assert.ok(find('.rose-table-condensed'));
+  });
 });
