@@ -50,7 +50,7 @@ const createAppUpdaterConfig = (url, version, destination) => {
     console.log(`[app-updater] url: ${url}, destination: ${destination}`);
   const json = { url, version };
   const config = JSON.stringify(json);
-  const configPath = `${destination}/feed.json`;
+  const configPath = path.join(destination, 'feed.json');
   if (debug) console.log(`[app-updater] config: ${config}`);
   fs.writeFileSync(configPath, config);
   return configPath;

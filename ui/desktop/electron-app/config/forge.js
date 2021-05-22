@@ -76,7 +76,7 @@ const createConfig = () => {
 
 // Save forge config file
 const saveConfig = (config, destination) => {
-  const configPath = `${destination}/forge.config.js`;
+  const configPath = path.join(destination, 'forge.config.js');
   console.log(`[forge-config] ${configPath}`);
   const content = `module.exports = ${JSON.stringify(config, null, 2)}`;
   fs.writeFileSync(configPath, content);
