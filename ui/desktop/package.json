@@ -11,7 +11,7 @@
   },
   "scripts": {
     "doc:toc": "doctoc README.md",
-    "build": "set EMBER_CLI_ELECTRON=true && ember build --environment=production && yarn build:desktop",
+    "build": "cross-env EMBER_CLI_ELECTRON=true && ember build --environment=production && yarn build:desktop",
     "build:development": "ember build",
     "prebuild:desktop": "(robocopy dist electron-app\\ember-dist /MIR) ^& exit 0",
     "build:desktop": "cd electron-app && yarn make",
@@ -33,7 +33,7 @@
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
     "test": "npm-run-all lint test:*",
-    "test:ember": "COVERAGE=true ember exam --random",
+    "test:ember": "cross-env COVERAGE=true ember exam --random",
     "postinstall": "cd electron-app && yarn install",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
@@ -53,6 +53,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "clipboard": "^2.0.6",
     "core": "*",
+    "cross-env": "^7.0.3",
     "doctoc": "^1.4.0",
     "ember-a11y-testing": "^4.0.2",
     "ember-auto-import": "^1.10.1",
