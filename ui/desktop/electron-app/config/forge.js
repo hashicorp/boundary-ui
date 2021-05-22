@@ -29,6 +29,10 @@ const createConfig = () => {
     }
   });
 
+  // Version
+  if (config.RELEASE_VERSION)
+  config.packagerConfig.version = config.RELEASE_VERSION;
+
   if (os.platform().match(/(darwin)/i)) {
     config.packagerConfig.icon = './config/macos/icon.icns';
     config.packagerConfig.osxSign = {
@@ -37,10 +41,6 @@ const createConfig = () => {
       'entitlements-inherit': './config/macos/entitlements.plist',
       'signature-flags': 'library',
     };
-
-    // Version
-    if (config.RELEASE_VERSION)
-      config.packagerConfig.version = config.RELEASE_VERSION;
 
     // Signing identity
     const signingIdentity = process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY;
@@ -61,6 +61,13 @@ const createConfig = () => {
         icon: './config/macos/disk.icns',
         background: './config/macos/background.png',
       },
+    });
+  }
+
+  if (os.platform().match(/(win32)/i)) {
+    // Generate EXE file
+    config.makers.push({
+      name: '@electron-forge/maker-squirrel'
     });
   }
 

@@ -5,6 +5,20 @@ const forgeConfig = require('../../config/forge.config.js');
 const { version } = require('../cli/index.js');
 
 const generateMenuTemplate = () => {
+  const aboutDialog = () => {
+    const appVersion = `Version:  ${forgeConfig.RELEASE_VERSION}`;
+    const appCommit = `Commit: ${forgeConfig.RELEASE_COMMIT}`;
+    const cliVersion = version().formatted;
+    const copyright = forgeConfig.packagerConfig.appCopyright;
+
+    const dialogOpts = {
+      type: 'none',
+      message: app.getName(),
+      detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
+    };
+    dialog.showMessageBox(dialogOpts);
+  }
+
   return [
     // { role: 'appMenu' }
     ...(isMac() ? [{
@@ -13,19 +27,7 @@ const generateMenuTemplate = () => {
         // { role: 'about' },
         {
           label: `About ${app.getName()}`,
-          click: () => {
-            const appVersion = `Version:  ${forgeConfig.RELEASE_VERSION}`;
-            const appCommit = `Commit: ${forgeConfig.RELEASE_COMMIT}`;
-            const cliVersion = version().formatted;
-            const copyright = forgeConfig.packagerConfig.appCopyright;
-
-            const dialogOpts = {
-              type: 'none',
-              message: app.getName(),
-              detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
-            };
-            dialog.showMessageBox(dialogOpts);
-          },
+          click: aboutDialog,
         },
         {
           id: 'update',
@@ -114,7 +116,11 @@ const generateMenuTemplate = () => {
           click: () => shell.openExternal('https://www.boundaryproject.io'),
         },
         ...(isWindows() ? [
-          { role: 'about' },
+          // { role: 'about' },
+          {
+            label: `About ${app.getName()}`,
+            click: aboutDialog,
+          },
         ] : [])
       ],
     },
