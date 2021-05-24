@@ -11,12 +11,12 @@ const artifactDestination = path.resolve(__dirname, '..', 'cli');
 const downloadArtifact = (version) => {
   const archivePlatform = {};
   // TODO: Support all available build machines
-  if (isMac) {
+  if (isMac()) {
     archivePlatform.name = 'darwin';
     archivePlatform.arch = 'amd64';
   }
 
-  if (isWindows) {
+  if (isWindows()) {
     archivePlatform.name = 'windows';
     archivePlatform.arch = 'amd64';
   }

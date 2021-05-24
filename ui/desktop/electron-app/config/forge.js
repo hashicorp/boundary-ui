@@ -32,8 +32,7 @@ const createConfig = () => {
   // Version
   if (config.RELEASE_VERSION)
     config.packagerConfig.version = config.RELEASE_VERSION;
-
-  if (isMac) {
+  if (isMac()) {
     config.packagerConfig.icon = './config/macos/icon.icns';
     config.packagerConfig.osxSign = {
       'hardened-runtime': true,
@@ -64,7 +63,9 @@ const createConfig = () => {
     });
   }
 
-  if (isWindows) {
+  if (isWindows()) {
+    config.packagerConfig.icon = './config/windows/icon.ico';
+
     // Generate EXE file
     config.makers.push({
       name: '@electron-forge/maker-squirrel',
