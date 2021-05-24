@@ -9,10 +9,10 @@ export default class FragmentAuthMethodAttributesModel extends Fragment {
   @attr('string') issuer;
   @attr('string') client_id;
   @attr('string') client_secret;
-  @attr('string') client_secret_hmac;
+  @attr('string', { readOnly: true }) client_secret_hmac;
   @attr('number') max_age;
   @attr('string') api_url_prefix;
-  @attr('string') callback_url;
+  @attr('string', { readOnly: true }) callback_url;
   @attr('boolean') disable_discovered_config_validation;
   @attr('boolean') dry_run;
 
@@ -20,4 +20,21 @@ export default class FragmentAuthMethodAttributesModel extends Fragment {
     emptyArrayIfMissing: true,
   })
   account_claim_maps;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+  })
+  claims_scopes;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+  })
+  signing_algorithms;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+  })
+  allowed_audiences;
+
+  @fragmentArray('fragment-string', { emptyArrayIfMissing: true }) idp_ca_certs;
 }

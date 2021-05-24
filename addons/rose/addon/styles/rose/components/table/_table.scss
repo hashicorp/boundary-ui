@@ -12,9 +12,9 @@
 
   // This styles are add to stop the input to apply extra margin (default on forms)
   .rose-form-input-field,
-  .rose-form-select, 
-  .rose-form-input { 
-    margin: 0; 
+  .rose-form-select,
+  .rose-form-input {
+    margin: 0;
     width: 100%;
   }
 
@@ -22,8 +22,12 @@
   .rose-table-header-cell {
     vertical-align: middle;
 
-    &.align-right { text-align: right; }
-    &.align-center { text-align: center; }
+    &.align-right {
+      text-align: right;
+    }
+    &.align-center {
+      text-align: center;
+    }
   }
 
   .rose-table-header-cell {
@@ -62,7 +66,6 @@
       line-height: $lineHeight;
       padding: (sizing.rems(s) / 2) sizing.rems(s);
     }
-
   }
 
   .rose-table-row-visually-hidden {

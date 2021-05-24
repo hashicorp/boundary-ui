@@ -36,6 +36,23 @@ module('Unit | Serializer | auth method', function (hooks) {
       attributes: {
         state: 'foo',
         account_claim_maps: [{ from: 'foo', to: 'bar' }],
+        claims_scopes: [{ value: 'profile' }, { value: 'email' }],
+        signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
+        allowed_audiences: [
+          { value: 'www.alice.com' },
+          { value: 'www.alice.com/admin' },
+        ],
+        idp_ca_certs: [
+          { value: 'certificate-1234' },
+          { value: 'certificate-5678' },
+        ],
+        api_url_prefix: 'protocol://host:port/foo',
+        client_id: 'id123',
+        client_secret: 'secret456',
+        disable_discovered_config_validation: true,
+        dry_run: true,
+        issuer: 'http://www.example.net',
+        max_age: 500,
       },
     });
 
@@ -47,15 +64,17 @@ module('Unit | Serializer | auth method', function (hooks) {
       description: null,
       attributes: {
         account_claim_maps: ['foo=bar'],
-        api_url_prefix: null,
-        callback_url: null,
-        client_id: null,
-        client_secret: null,
-        client_secret_hmac: null,
-        disable_discovered_config_validation: false,
-        dry_run: false,
-        issuer: null,
-        max_age: null,
+        claims_scopes: ['profile', 'email'],
+        signing_algorithms: ['RS256', 'RS384'],
+        allowed_audiences: ['www.alice.com', 'www.alice.com/admin'],
+        idp_ca_certs: ['certificate-1234', 'certificate-5678'],
+        api_url_prefix: 'protocol://host:port/foo',
+        client_id: 'id123',
+        client_secret: 'secret456',
+        disable_discovered_config_validation: true,
+        dry_run: true,
+        issuer: 'http://www.example.net',
+        max_age: 500,
       },
     });
   });

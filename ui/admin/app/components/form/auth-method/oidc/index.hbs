@@ -1,0 +1,168 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <form.input
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    readonly={{true}}
+    @disabled={{true}}
+  />
+
+  <form.input
+    @name='name'
+    @type='text'
+    @value={{@model.name}}
+    @label={{t 'form.name.label'}}
+    @helperText={{t 'form.name.help'}}
+    @error={{@model.errors.name}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name='description'
+    @type='text'
+    @value={{@model.description}}
+    @label={{t 'form.description.label'}}
+    @helperText={{t 'form.description.help'}}
+    @error={{@model.errors.description}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.input
+    @name='issuer'
+    @type='text'
+    @value={{@model.attributes.issuer}}
+    @label={{t 'form.issuer.label'}}
+    @helperText={{t 'form.issuer.help'}}
+    @error={{@model.errors.attributes.issuer}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes.issuer}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes.issuer as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.checkbox
+    @label={{t 'form.disable_discovered_config_validation.label'}}
+    @helperText={{t 'form.disable_discovered_config_validation.help'}}
+    @checked={{@model.attributes.disable_discovered_config_validation}}
+    onChange={{fn
+      (mut @model.attributes.disable_discovered_config_validation)
+      (if @model.attributes.disable_discovered_config_validation false true)
+    }}
+  />
+
+  <form.input
+    @name='client_id'
+    @type='text'
+    @value={{@model.attributes.client_id}}
+    @label={{t 'form.client_id.label'}}
+    @helperText={{t 'form.client_id.help'}}
+    @error={{@model.errors.attributes.client_id}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes.client_id}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes.client_id as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name='client_secret'
+    @type='password'
+    @value={{@model.attributes.client_secret}}
+    @label={{t 'form.client_secret.label'}}
+    @helperText={{t 'form.client_secret.help'}}
+    @error={{@model.errors.attributes.client_secret}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes.client_secret}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes.client_secret as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name='max_age'
+    @type='number'
+    @value={{@model.attributes.max_age}}
+    @label={{t 'form.max_age.label'}}
+    @helperText={{t 'form.max_age.help'}}
+    @error={{@model.errors.attributes.max_age}}
+    readonly={{false}}
+    step='1'
+    min='0'
+    as |field|
+  >
+    {{#if @model.errors.attributes.max_age}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes.max_age as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name='api_url_prefix'
+    @type='test'
+    @value={{@model.attributes.api_url_prefix}}
+    @label={{t 'form.api_url_prefix.label'}}
+    @helperText={{t 'form.api_url_prefix.help'}}
+    @error={{@model.errors.attributes.api_url_prefix}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes.api_url_prefix}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes.api_url_prefix as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
+</Rose::Form>
