@@ -1,6 +1,6 @@
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
+const { isMac, isWindows } = require('../src/helpers/platform.js');
 
 const DEFAULT_CONFIG = {
   packagerConfig: {
@@ -31,9 +31,9 @@ const createConfig = () => {
 
   // Version
   if (config.RELEASE_VERSION)
-  config.packagerConfig.version = config.RELEASE_VERSION;
+    config.packagerConfig.version = config.RELEASE_VERSION;
 
-  if (os.platform().match(/(darwin)/i)) {
+  if (isMac) {
     config.packagerConfig.icon = './config/macos/icon.icns';
     config.packagerConfig.osxSign = {
       'hardened-runtime': true,
@@ -64,10 +64,10 @@ const createConfig = () => {
     });
   }
 
-  if (os.platform().match(/(win32)/i)) {
+  if (isWindows) {
     // Generate EXE file
     config.makers.push({
-      name: '@electron-forge/maker-squirrel'
+      name: '@electron-forge/maker-squirrel',
     });
   }
 
