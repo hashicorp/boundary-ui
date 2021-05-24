@@ -8,30 +8,31 @@ const DEFAULT_CONFIG = {
     name: 'Boundary',
     version: '0.0.0',
     appBundleId: 'com.electron.boundary',
-    appCopyright: 'Copyright © 2021 HashiCorp, Inc.',
+    appCopyright: `Copyright © ${new Date().getFullYear()} HashiCorp, Inc.`,
   },
   makers: [
     {
       name: '@electron-forge/maker-zip',
     },
   ],
-}
+};
 
 // Create forge config based on platform
 const createConfig = () => {
-  const config = { ...DEFAULT_CONFIG };
+  const config = {
+    releaseVersion: process.env.RELEASE_VERSION,
+    releaseCommit: process.env.RELEASE_COMMIT,
+    ...DEFAULT_CONFIG,
+  };
 
-  // Store env vars in config
-  ['RELEASE_COMMIT', 'RELEASE_VERSION'].forEach((envVar) => {
-    if (process.env[envVar]) {
-      config[envVar] = process.env[envVar];
-      console.log(`[forge-config] ${envVar} ${config[envVar]}`);
-    }
-  });
+  console.log(`[forge-config]
+    release version: ${config.releaseVersion}
+    release commit: ${config.releaseVersion}
+  `);
 
   // Version
-  if (config.RELEASE_VERSION)
-    config.packagerConfig.version = config.RELEASE_VERSION;
+  config.packagerConfig.version = config.releaseVersion;
+
   if (isMac()) {
     config.packagerConfig.icon = './config/macos/icon.icns';
     config.packagerConfig.osxSign = {

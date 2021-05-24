@@ -9,7 +9,7 @@
   "main": "src/index.js",
   "scripts": {
     "build:cli": "node -e \"require('./config/cli.js').setup()\"",
-    "build:config": "node -e \"require('./config/forge.js').setup()\"",
+    "build:config": "node -e \"require('./config/electron.js').setup()\"",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "premake": "yarn build:cli && yarn build:config",
