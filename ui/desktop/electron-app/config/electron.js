@@ -26,8 +26,8 @@ const createConfig = () => {
   };
 
   console.log(`[forge-config]
-    release version: ${config.releaseVersion}
-    release commit: ${config.releaseVersion}
+    Release version: ${config.releaseVersion}
+    Release commit: ${config.releaseVersion}
   `);
 
   // Version
