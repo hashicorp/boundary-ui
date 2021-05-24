@@ -20,4 +20,21 @@ export default class FragmentAuthMethodAttributesModel extends Fragment {
     emptyArrayIfMissing: true,
   })
   account_claim_maps;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+  })
+  claims_scopes;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+  })
+  signing_algorithms;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+  })
+  allowed_audiences;
+
+  @fragmentArray('fragment-string', { emptyArrayIfMissing: true }) idp_ca_certs;
 }

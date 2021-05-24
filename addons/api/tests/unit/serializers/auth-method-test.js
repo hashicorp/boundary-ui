@@ -36,6 +36,16 @@ module('Unit | Serializer | auth method', function (hooks) {
       attributes: {
         state: 'foo',
         account_claim_maps: [{ from: 'foo', to: 'bar' }],
+        claims_scopes: [{ value: 'profile' }, { value: 'email' }],
+        signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
+        allowed_audiences: [
+          { value: 'www.alice.com' },
+          { value: 'www.alice.com/admin' },
+        ],
+        idp_ca_certs: [
+          { value: 'certificate-1234' },
+          { value: 'certificate-5678' },
+        ],
       },
     });
 
@@ -47,6 +57,10 @@ module('Unit | Serializer | auth method', function (hooks) {
       description: null,
       attributes: {
         account_claim_maps: ['foo=bar'],
+        claims_scopes: ['profile', 'email'],
+        signing_algorithms: ['RS256', 'RS384'],
+        allowed_audiences: ['www.alice.com', 'www.alice.com/admin'],
+        idp_ca_certs: ['certificate-1234', 'certificate-5678'],
         api_url_prefix: null,
         callback_url: null,
         client_id: null,
