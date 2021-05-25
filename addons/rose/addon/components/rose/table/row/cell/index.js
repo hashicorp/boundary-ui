@@ -13,16 +13,16 @@ export default Component.extend({
   }),
   cellShrink: computed(function () {
     if (this.shrink) {
-      return 'rose-table-cell-shrink'
+      return 'rose-table-cell-shrink';
     }
   }),
   cellAlignmentStyle: computed(function () {
     if (this.alignRight) {
       return 'align-right';
     }
-    
+
     if (this.alignCenter) {
       return 'align-center';
     }
-  })
+  }),
 });

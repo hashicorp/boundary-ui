@@ -4,12 +4,15 @@
 .rose-form-checkbox {
   @include type.type(m);
   position: relative;
-  margin-bottom: sizing.rems(xs);
-  color: var(--ui-gray);
+  margin-bottom: sizing.rems(m);
 
   .rose-form-errors {
     margin-top: sizing.rems(xs);
     margin-bottom: sizing.rems(xs);
+  }
+
+  .rose-form-helper-text {
+    padding-left: sizing.rems(l);
   }
 
   .rose-form-checkbox-label {
@@ -23,6 +26,7 @@
     }
 
     .rose-form-checkbox-label-description {
+      margin-bottom: 0;
       margin-top: sizing.rems(xs);
     }
 
@@ -52,6 +56,10 @@
       content: ' ';
       background: no-repeat 50%/50% 50%;
     }
+  }
+
+  .rose-form-helper-text {
+    margin-top: sizing.rems(xs);
   }
 
   .rose-form-checkbox-field {
