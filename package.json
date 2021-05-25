@@ -16,6 +16,7 @@
     "build": "yarn build:ui:admin",
     "build:ui:admin": "cd ui/admin && yarn build",
     "build:ui:desktop": "cd ui/desktop && yarn build",
+    "build:ui:desktop:production": "cd ui/desktop && yarn build:production",
     "lint": "npm-run-all lint:*",
     "lint:addons-api": "cd addons/api && yarn lint",
     "lint:addons-auth": "cd addons/auth && yarn lint",
