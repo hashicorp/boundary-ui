@@ -1,6 +1,6 @@
-const { app, shell, dialog } = require('electron');
+const { shell, dialog } = require('electron');
 const appUpdater = require('../helpers/app-updater.js');
-const electronConfig = require('../../config/forge.config.js');
+const config = require('../../config/config.js');
 const { version } = require('../cli/index.js');
 
 const generateMenuTemplate = () => {
@@ -11,16 +11,16 @@ const generateMenuTemplate = () => {
       submenu: [
         // { role: 'about' },
         {
-          label: `About ${app.getName()}`,
+          label: `About ${config.productName}`,
           click: () => {
-            const appVersion = `Version:  ${electronConfig.releaseVersion}`;
-            const appCommit = `Commit: ${electronConfig.releaseCommit}`;
+            const appVersion = `Version:  ${config.releaseVersion}`;
+            const appCommit = `Commit: ${config.releaseCommit}`;
             const cliVersion = version().formatted;
-            const copyright = electronConfig.packagerConfig.appCopyright;
+            const copyright = config.copyright;
 
             const dialogOpts = {
               type: 'none',
-              message: app.getName(),
+              message: config.productName,
               detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
             };
             dialog.showMessageBox(dialogOpts);
