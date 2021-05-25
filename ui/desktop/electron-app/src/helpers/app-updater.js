@@ -33,12 +33,12 @@ const findLatestVersion = (url) => {
 
 // Find zip archive for update
 const findUpdateArchive = (version) => {
-  const url = `${releasesUrl}boundary-desktop_${version}/boundary-desktop_${version}_darwin_amd64.zip`;
+  const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_amd64.zip`;
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
       if (response.statusCode === 403)
         reject({ message: 'Archive not available' });
-      response.on('end', () => resolve(url));
+      if (response.statusCode === 200) resolve(url);
       response.on('error', (err) => reject(err));
     });
   });
@@ -136,7 +136,10 @@ module.exports = {
       latestVersion = semver.coerce(latestVersion);
     }
 
-    // Update not available - do nothing
+    /**
+     * Update not available - do nothing
+     * lte(v1, v2): v1 <= v2
+     **/
     if (semver.lte(latestVersion, currentVersion)) {
       if (!suppressNoUpdatePrompt) displayInfoPrompt();
       return;
