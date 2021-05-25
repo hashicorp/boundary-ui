@@ -1,1 +1,1 @@
-export { default, formatDateIso } from 'core/helpers/format-date-iso';
+export { default } from 'core/helpers/format-date-iso';
