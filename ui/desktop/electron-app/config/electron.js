@@ -25,10 +25,14 @@ const createConfig = () => {
     ...DEFAULT_CONFIG,
   };
 
-  console.log(`[forge-config]
-    release version: ${config.releaseVersion}
-    release commit: ${config.releaseVersion}
+  console.log(`[electron-config]
+    Release version: ${config.releaseVersion}
+    Release commit: ${config.releaseVersion}
   `);
+
+  // Version
+  if (config.releaseVersion)
+    config.packagerConfig.version = config.releaseVersion;
 
   if (os.platform().match(/(darwin)/i)) {
     config.packagerConfig.icon = './config/macos/icon.icns';
@@ -39,17 +43,13 @@ const createConfig = () => {
       'signature-flags': 'library',
     };
 
-    // Version
-    if (config.releaseVersion)
-      config.packagerConfig.version = config.releaseVersion;
-
     // Signing identity
     const signingIdentity = process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY;
     if (signingIdentity) {
       config.packagerConfig.osxSign.identity = signingIdentity;
     } else {
       console.warn(
-        '[forge-config] WARNING: Could not find signing identity. Proceeding without signing.'
+        '[electron-config] WARNING: Could not find signing identity. Proceeding without signing.'
       );
     }
 
@@ -71,7 +71,7 @@ const createConfig = () => {
 // Save forge config file
 const saveConfig = (config, destination) => {
   const configPath = `${destination}/forge.config.js`;
-  console.log(`[forge-config] ${configPath}`);
+  console.log(`[electron-config] ${configPath}`);
   const content = `module.exports = ${JSON.stringify(config, null, 2)}`;
   fs.writeFileSync(configPath, content);
 };
