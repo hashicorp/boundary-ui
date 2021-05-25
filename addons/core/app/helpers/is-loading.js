@@ -1,1 +1,1 @@
-export { default, isLoading } from 'core/helpers/is-loading';
+export { default } from 'core/helpers/is-loading';
