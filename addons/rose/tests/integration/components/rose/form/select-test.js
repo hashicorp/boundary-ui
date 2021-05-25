@@ -144,4 +144,28 @@ module('Integration | Component | rose/form/select', function (hooks) {
     `);
     await fillIn('[name="my-select"]', 'value-1');
   });
+
+  test('it supports a fully contextual usage', async function (assert) {
+    assert.expect(5);
+    await render(hbs`
+      <Rose::Form::Select @value="value-1" @error={{true}} @contextual={{true}} as |field|>
+        <field.label>Label</field.label>
+        <field.helperText>Help</field.helperText>
+        <field.field as |select|>
+          <select.option @value="value-1">value-1</select.option>
+        </field.field>
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+      </Rose::Form::Select>
+    `);
+    assert.notOk(
+      find('.rose-form-input'),
+      'The form field wrapper element is not present in contextual mode'
+    );
+    assert.ok(find('.rose-form-label.error'));
+    assert.ok(find('.rose-form-helper-text.error'));
+    assert.ok(find('.rose-form-select-field.error'));
+    assert.ok(find('.rose-form-error-message'));
+  });
 });

@@ -112,3 +112,28 @@ Renders a form select element.
     }
   }}</Story>
 </Preview>
+
+<Preview>
+  <Story name="Fully Contextual Select">{{
+    template: hbs`
+      <Rose::Form::Select @value="value-3" @error={{true}} @contextual={{true}} as |field|>
+        <hr />
+        <field.label>Label</field.label>
+        <hr />
+        <field.helperText>Help</field.helperText>
+        <hr />
+        <field.field as |select|>
+          <select.option @value="value-1">Value 1</select.option>
+          <select.option @value="value-2">Value 2</select.option>
+          <select.option @value="value-3">Value 3</select.option>
+        </field.field>
+        <hr />
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+        <hr />
+      </Rose::Form::Select>
+    `,
+    context: {},
+  }}</Story>
+</Preview>
