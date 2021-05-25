@@ -1,1 +1,1 @@
-export { default, companyCopyright } from 'core/helpers/company-copyright';
+export { default } from 'core/helpers/company-copyright';

@@ -1,4 +1,1 @@
-export {
-  default,
-  formatDateIsoHuman,
-} from 'core/helpers/format-date-iso-human';
+export { default } from 'core/helpers/format-date-iso-human';
