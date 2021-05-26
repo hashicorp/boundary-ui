@@ -151,7 +151,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   /**
    * Adds a string item to array `property` on the passed `authMethod`.
-   * This is used to manage entries in fragment string array fields such
+   * This is used to manage entries in fragment OIDC string array fields such
    * as `signing_algorithms`.
    * @param {AuthMethodModel} authMethod
    * @param {string} property
@@ -161,5 +161,18 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   async addStringItem(authMethod, property, value) {
     const array = authMethod.get(property);
     array.addObject({ value });
+  }
+
+  /**
+   * Adds an account claim map fragment to the passed OIDC `authMethod`.
+   * @param {AuthMethodModel} authMethod
+   * @param {string} property
+   * @param {string} value
+   */
+  @action
+  async addAccountClaimMapItem(authMethod, from, to) {
+    const array = authMethod.attributes.account_claim_maps;
+    const value = { from, to };
+    array.addObject(value);
   }
 }

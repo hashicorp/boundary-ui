@@ -472,6 +472,45 @@
               </row.cell>
             </body.row>
           {{/each}}
+
+          <body.row as |row|>
+            <row.cell>
+              <form.input
+                @type='text'
+                @value={{this.newFromClaim}}
+                @label={{t 'resources.auth-method.titles.new-from-claim'}}
+              />
+            </row.cell>
+            <row.cell>
+              <form.select
+                @value={{this.newToClaim}}
+                @label={{t 'resources.auth-method.titles.new-to-claim'}}
+                @onChange={{fn (mut this.newToClaim)}}
+                as |field|
+              >
+                <field.field as |select|>
+                  {{#each this.toClaims as |toClaim|}}
+                    <select.option
+                      @value={{toClaim}}
+                    >{{toClaim}}</select.option>
+                  {{/each}}
+                </field.field>
+              </form.select>
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+                @disabled={{if form.isEditable false true}}
+                {{on
+                  'click'
+                  (fn @addAccountClaimMapItem this.newFromClaim this.newToClaim)
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
         </table.body>
       </Rose::Table>
     </:body>
