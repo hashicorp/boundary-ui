@@ -39,7 +39,6 @@
     @label={{t 'form.description.label'}}
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
@@ -124,7 +123,7 @@
     <:title>{{t 'form.signing_algorithms.label'}}</:title>
     <:description>{{t 'form.signing_algorithms.help'}}</:description>
     <:body>
-      <Rose::Table @style="condensed" as |table|>
+      <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row @hidden={{true}} as |row|>
             <row.headerCell>{{t 'titles.value'}}</row.headerCell>
@@ -140,16 +139,22 @@
                   @error={{@model.errors.attributes.signing_algorithms}}
                   @contextual={{true}}
                   @onChange={{fn (mut algorithm.value)}}
-                as |field|>
+                  as |field|
+                >
                   <field.label>{{t 'form.algorithm.label'}}</field.label>
                   <field.field as |select|>
                     {{#each this.signingAlgorithms as |algorithm|}}
-                      <select.option @value={{algorithm}}>{{algorithm}}</select.option>
+                      <select.option
+                        @value={{algorithm}}
+                      >{{algorithm}}</select.option>
                     {{/each}}
                   </field.field>
                   {{#if @model.errors.attributes.signing_algorithms}}
                     <field.errors as |errors|>
-                      {{#each @model.errors.attributes.signing_algorithms as |error|}}
+                      {{#each
+                        @model.errors.attributes.signing_algorithms
+                        as |error|
+                      }}
                         <errors.message>{{error.message}}</errors.message>
                       {{/each}}
                     </field.errors>
@@ -158,57 +163,14 @@
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
-                  @style='secondary'
+                  @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
-                >
-                  {{t 'actions.remove'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </Rose::Form::Fieldset>
-
-  {{! Certificates }}
-  <Rose::Form::Fieldset>
-    <:title>{{t 'form.idp_ca_certs.label'}}</:title>
-    <:description>{{t 'form.idp_ca_certs.help'}}</:description>
-    <:body>
-      <Rose::Table @style="condensed" as |table|>
-        <table.header as |header|>
-          <header.row @hidden={{true}} as |row|>
-            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.attributes.idp_ca_certs as |cert i|}}
-            <body.row as |row|>
-              <row.cell>
-                <form.textarea
-                  @value={{cert.value}}
-                  @error={{@model.errors.attributes.idp_ca_certs}}
-                  @contextual={{true}}
-                as |field|>
-                  <field.label>{{t 'form.certificate.label'}}</field.label>
-                  <field.field />
-                  {{#if @model.errors.attributes.idp_ca_certs}}
-                    <field.errors as |errors|>
-                      {{#each @model.errors.attributes.idp_ca_certs as |error|}}
-                        <errors.message>{{error.message}}</errors.message>
-                      {{/each}}
-                    </field.errors>
-                  {{/if}}
-                </form.textarea>
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='secondary'
-                  @iconOnly='trash'
-                  title={{t 'actions.remove'}}
+                  @disabled={{if form.isEditable false true}}
+                  {{on
+                    'click'
+                    (fn @removeItemByIndex 'attributes.signing_algorithms' i)
+                  }}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -225,7 +187,7 @@
     <:title>{{t 'form.allowed_audiences.label'}}</:title>
     <:description>{{t 'form.allowed_audiences.help'}}</:description>
     <:body>
-      <Rose::Table @style="condensed" as |table|>
+      <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row @hidden={{true}} as |row|>
             <row.headerCell>{{t 'titles.value'}}</row.headerCell>
@@ -241,12 +203,16 @@
                   @value={{audience.value}}
                   @error={{@model.errors.attributes.allowed_audiences}}
                   @contextual={{true}}
-                as |field|>
+                  as |field|
+                >
                   <field.label>{{t 'form.claim.label'}}</field.label>
                   <field.field />
                   {{#if @model.errors.attributes.allowed_audiences}}
                     <field.errors as |errors|>
-                      {{#each @model.errors.attributes.allowed_audiences as |error|}}
+                      {{#each
+                        @model.errors.attributes.allowed_audiences
+                        as |error|
+                      }}
                         <errors.message>{{error.message}}</errors.message>
                       {{/each}}
                     </field.errors>
@@ -255,9 +221,14 @@
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
-                  @style='secondary'
+                  @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
+                  @disabled={{if form.isEditable false true}}
+                  {{on
+                    'click'
+                    (fn @removeItemByIndex 'attributes.allowed_audiences' i)
+                  }}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -274,11 +245,11 @@
     <:title>{{t 'form.claims_scopes.label'}}</:title>
     <:description>{{t 'form.claims_scopes.help'}}</:description>
     <:body>
-      <Rose::Table @style="condensed" as |table|>
+      <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row @hidden={{true}} as |row|>
             <row.headerCell>{{t 'titles.value'}}</row.headerCell>
-            <row.headerCell></row.headerCell>
+            <row.headerCell />
           </header.row>
         </table.header>
         <table.body as |body|>
@@ -289,13 +260,17 @@
                   @type='text'
                   @value={{claimsScope.value}}
                   @error={{@model.errors.attributes.claims_scopes}}
-
-                as |field|>
+                  @contextual={{true}}
+                  as |field|
+                >
                   <field.label>{{t 'form.claims_scope.label'}}</field.label>
                   <field.field />
                   {{#if @model.errors.attributes.claims_scopes}}
                     <field.errors as |errors|>
-                      {{#each @model.errors.attributes.claims_scopes as |error|}}
+                      {{#each
+                        @model.errors.attributes.claims_scopes
+                        as |error|
+                      }}
                         <errors.message>{{error.message}}</errors.message>
                       {{/each}}
                     </field.errors>
@@ -304,9 +279,14 @@
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
-                  @style='secondary'
+                  @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
+                  @disabled={{if form.isEditable false true}}
+                  {{on
+                    'click'
+                    (fn @removeItemByIndex 'attributes.claims_scopes' i)
+                  }}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -323,7 +303,7 @@
     <:title>{{t 'form.account_claim_maps.label'}}</:title>
     <:description>{{t 'form.account_claim_maps.help'}}</:description>
     <:body>
-      <Rose::Table @style="condensed" as |table|>
+      <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row as |row|>
             <row.headerCell>{{t 'form.from_claim.label'}}</row.headerCell>
@@ -340,12 +320,16 @@
                   @value={{claimMap.from}}
                   @error={{@model.errors.attributes.account_claim_maps}}
                   @contextual={{true}}
-                as |field|>
+                  as |field|
+                >
                   <field.label>{{t 'form.from_claim.label'}}</field.label>
                   <field.field />
                   {{#if @model.errors.attributes.account_claim_maps}}
                     <field.errors as |errors|>
-                      {{#each @model.errors.attributes.account_claim_maps as |error|}}
+                      {{#each
+                        @model.errors.attributes.account_claim_maps
+                        as |error|
+                      }}
                         <errors.message>{{error.message}}</errors.message>
                       {{/each}}
                     </field.errors>
@@ -358,16 +342,22 @@
                   @error={{@model.errors.attributes.account_claim_maps}}
                   @contextual={{true}}
                   @onChange={{fn (mut claimMap.to)}}
-                as |field|>
+                  as |field|
+                >
                   <field.label>{{t 'form.to_claim.label'}}</field.label>
                   <field.field as |select|>
                     {{#each this.toClaims as |toClaim|}}
-                      <select.option @value={{toClaim}}>{{toClaim}}</select.option>
+                      <select.option
+                        @value={{toClaim}}
+                      >{{toClaim}}</select.option>
                     {{/each}}
                   </field.field>
                   {{#if @model.errors.attributes.account_claim_maps}}
                     <field.errors as |errors|>
-                      {{#each @model.errors.attributes.account_claim_maps as |error|}}
+                      {{#each
+                        @model.errors.attributes.account_claim_maps
+                        as |error|
+                      }}
                         <errors.message>{{error.message}}</errors.message>
                       {{/each}}
                     </field.errors>
@@ -376,15 +366,75 @@
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
-                  @style='secondary'
+                  @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
+                  @disabled={{if form.isEditable false true}}
+                  {{on
+                    'click'
+                    (fn @removeItemByIndex 'attributes.account_claim_maps' i)
+                  }}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
               </row.cell>
             </body.row>
           {{/each}}
+        </table.body>
+      </Rose::Table>
+    </:body>
+  </Rose::Form::Fieldset>
+
+  {{! Certificates }}
+  <Rose::Form::Fieldset>
+    <:title>{{t 'form.idp_ca_certs.label'}}</:title>
+    <:description>{{t 'form.idp_ca_certs.help'}}</:description>
+    <:body>
+      <Rose::Table @style='condensed' as |table|>
+        <table.header as |header|>
+          <header.row @hidden={{true}} as |row|>
+            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
+            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model.attributes.idp_ca_certs as |cert i|}}
+            <body.row as |row|>
+              <row.cell>
+                <form.textarea
+                  @value={{cert.value}}
+                  @error={{@model.errors.attributes.idp_ca_certs}}
+                  @contextual={{true}}
+                  as |field|
+                >
+                  <field.label>{{t 'form.certificate.label'}}</field.label>
+                  <field.field />
+                  {{#if @model.errors.attributes.idp_ca_certs}}
+                    <field.errors as |errors|>
+                      {{#each @model.errors.attributes.idp_ca_certs as |error|}}
+                        <errors.message>{{error.message}}</errors.message>
+                      {{/each}}
+                    </field.errors>
+                  {{/if}}
+                </form.textarea>
+              </row.cell>
+              <row.cell @shrink={{true}}>
+                <Rose::Button
+                  @style='warning'
+                  @iconOnly='trash'
+                  title={{t 'actions.remove'}}
+                  @disabled={{if form.isEditable false true}}
+                  {{on
+                    'click'
+                    (fn @removeItemByIndex 'attributes.idp_ca_certs' i)
+                  }}
+                >
+                  {{t 'actions.remove'}}
+                </Rose::Button>
+              </row.cell>
+            </body.row>
+          {{/each}}
+          {{! Add field }}
         </table.body>
       </Rose::Table>
     </:body>

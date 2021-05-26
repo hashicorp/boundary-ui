@@ -80,11 +80,13 @@
     }
   }
 
-  fieldset {
-    margin-bottom: sizing.rems(m);
-
-    legend {
-      @extend .rose-form-label;
+  .rose-form-fieldset {
+    .rose-table {
+      .rose-form-label {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
     }
   }
 }

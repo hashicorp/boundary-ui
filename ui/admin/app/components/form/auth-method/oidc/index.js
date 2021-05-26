@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { options } from 'api/models/auth-method';
 
 export default class FormAuthMethodOidcComponent extends Component {
-
   // =attributes
   /**
    * @type {object}
@@ -13,5 +12,4 @@ export default class FormAuthMethodOidcComponent extends Component {
    * @type {object}
    */
   toClaims = options.oidc.account_claim_maps.to;
-
 }

@@ -134,4 +134,18 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     }
     await authMethod.reload();
   }
+
+  /**
+   * Removes an item from array `property` at `index` on the
+   * passed `authMethod`.  This is used to manage entries in fragment array
+   * fields such as `signing_algorithms`.
+   * @param {AuthMethodModel} authMethod
+   * @param {string} property
+   * @param {number} index
+   */
+  @action
+  async removeItemByIndex(authMethod, property, index) {
+    const array = authMethod.get(property);
+    array.removeAt(index);
+  }
 }
