@@ -148,4 +148,18 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     const array = authMethod.get(property);
     array.removeAt(index);
   }
+
+  /**
+   * Adds a string item to array `property` on the passed `authMethod`.
+   * This is used to manage entries in fragment string array fields such
+   * as `signing_algorithms`.
+   * @param {AuthMethodModel} authMethod
+   * @param {string} property
+   * @param {string} value
+   */
+  @action
+  async addStringItem(authMethod, property, value) {
+    const array = authMethod.get(property);
+    array.addObject({ value });
+  }
 }

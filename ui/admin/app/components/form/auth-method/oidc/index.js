@@ -12,4 +12,9 @@ export default class FormAuthMethodOidcComponent extends Component {
    * @type {object}
    */
   toClaims = options.oidc.account_claim_maps.to;
+
+  /**
+   * @type {string}
+   */
+  newSigningAlgorithm = options.oidc.signing_algorithms[0];
 }

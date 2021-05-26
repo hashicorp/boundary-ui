@@ -177,6 +177,44 @@
               </row.cell>
             </body.row>
           {{/each}}
+
+          <body.row as |row|>
+            <row.cell>
+              <form.select
+                @value={{this.newSigningAlgorithm}}
+                @label={{t
+                  'resources.auth-method.titles.new-signing-algorithm'
+                }}
+                @onChange={{fn (mut this.newSigningAlgorithm)}}
+                as |field|
+              >
+                <field.field as |select|>
+                  {{#each this.signingAlgorithms as |algorithm|}}
+                    <select.option
+                      @value={{algorithm}}
+                    >{{algorithm}}</select.option>
+                  {{/each}}
+                </field.field>
+              </form.select>
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+                @disabled={{if form.isEditable false true}}
+                {{on
+                  'click'
+                  (fn
+                    @addStringItem
+                    'attributes.signing_algorithms'
+                    this.newSigningAlgorithm
+                  )
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
         </table.body>
       </Rose::Table>
     </:body>
@@ -235,6 +273,33 @@
               </row.cell>
             </body.row>
           {{/each}}
+
+          <body.row as |row|>
+            <row.cell>
+              <form.input
+                @type='text'
+                @value={{this.newAllowedAudience}}
+                @label={{t 'resources.auth-method.titles.new-allowed-audience'}}
+              />
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+                @disabled={{if form.isEditable false true}}
+                {{on
+                  'click'
+                  (fn
+                    @addStringItem
+                    'attributes.allowed_audiences'
+                    this.newAllowedAudience
+                  )
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
         </table.body>
       </Rose::Table>
     </:body>
@@ -293,6 +358,33 @@
               </row.cell>
             </body.row>
           {{/each}}
+
+          <body.row as |row|>
+            <row.cell>
+              <form.input
+                @type='text'
+                @value={{this.newClaimsScope}}
+                @label={{t 'resources.auth-method.titles.new-claims-scope'}}
+              />
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+                @disabled={{if form.isEditable false true}}
+                {{on
+                  'click'
+                  (fn
+                    @addStringItem
+                    'attributes.claims_scopes'
+                    this.newClaimsScope
+                  )
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
         </table.body>
       </Rose::Table>
     </:body>
@@ -434,7 +526,30 @@
               </row.cell>
             </body.row>
           {{/each}}
-          {{! Add field }}
+
+          <body.row as |row|>
+            <row.cell>
+              <form.textarea
+                @value={{this.newCertificate}}
+                @label={{t 'resources.auth-method.titles.new-certificate'}}
+              />
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+                @disabled={{if form.isEditable false true}}
+                {{on
+                  'click'
+                  (fn
+                    @addStringItem 'attributes.idp_ca_certs' this.newCertificate
+                  )
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
         </table.body>
       </Rose::Table>
     </:body>
