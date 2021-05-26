@@ -8,7 +8,7 @@
     disabled={{@disabled}}
     @type="checkbox"
     @checked={{if @checked true false}}
-    aria-describedby="{{if @error (concat 'errors-' this.id)}}" />
+    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 
   <label class="rose-form-checkbox-label" for={{this.id}}>
     <span class="rose-form-checkbox-label-text">{{@label}}</span>
@@ -16,6 +16,12 @@
       <p class="rose-form-checkbox-label-description">{{@description}}</p>
     {{/if}}
   </label>
+
+  {{#if @helperText}}
+    <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}>
+      {{@helperText}}
+    </Rose::Form::HelperText>
+  {{/if}}
 
   {{yield (hash
     errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))

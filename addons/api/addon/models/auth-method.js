@@ -7,7 +7,7 @@ import { equal } from '@ember/object/computed';
  */
 export const options = {
   oidc: {
-    signing_algorithm: [
+    signing_algorithms: [
       'RS256',
       'RS384',
       'RS512',
