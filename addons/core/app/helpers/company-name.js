@@ -1,1 +1,1 @@
-export { default, companyName } from 'core/helpers/company-name';
+export { default } from 'core/helpers/company-name';
