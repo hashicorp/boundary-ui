@@ -30,5 +30,8 @@ module.exports = {
         background: config.macos.dmg.background,
       },
     },
+    {
+      name: '@electron-forge/maker-squirrel',
+    },
   ],
 };
