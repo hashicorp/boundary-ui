@@ -1,20 +1,29 @@
 // Generated during build
 const config = require('./config.js');
 
+console.log(`\n[forge-config] Release commit: ${config.releaseCommit}`);
+console.log(`[forge-config] Release version: ${config.releaseVersion}`);
+
+// MacOS signing identity
+if (process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY)
+  console.warn(
+    '[forge-config] WARNING: Could not find signing identity. Proceeding without signing.'
+  );
+
 module.exports = {
   packagerConfig: {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],
-    icon: config.icon,
+    icon: './assets/app-icons/icon',
     name: config.productName,
     appVersion: config.version,
-    appBundleId: config.bundleId,
+    appBundleId: 'com.electron.boundary',
     appCopyright: config.copyright,
     osxSign: {
-      identity: config.macos.signingIdentity,
-      'hardened-runtime': config.macos.hardenedRuntime,
-      entitlements: config.macos.entitlements,
-      'entitlements-inherit': config.macos.entitlements,
-      'signature-flags': config.macos.signatureFlags,
+      identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
+      'hardened-runtime': true,
+      entitlements: './assets/macos/entitlements.plist',
+      'entitlements-inherit': './assets/macos/entitlements.plist',
+      'signature-flags': 'library',
     },
   },
   makers: [
@@ -26,8 +35,8 @@ module.exports = {
       config: {
         title: config.productName,
         name: config.name,
-        icon: config.macos.dmg.diskIcon,
-        background: config.macos.dmg.background,
+        icon: './assets/macos/disk.icns',
+        background: './assets/macos/background.png',
       },
     },
   ],
