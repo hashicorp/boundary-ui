@@ -70,3 +70,24 @@ Renders a simple form textarea.
     }
   }}</Story>
 </Preview>
+
+<Preview>
+  <Story name="Fully Contextual Textarea">{{
+    template: hbs`
+      <Rose::Form::Textarea @value="Text" @error={{true}} @contextual={{true}} as |field|>
+        <hr />
+        <field.label>Label</field.label>
+        <hr />
+        <field.helperText>Help</field.helperText>
+        <hr />
+        <field.field />
+        <hr />
+        <field.errors as |errors|>
+          <errors.message>An error occurred.</errors.message>
+        </field.errors>
+        <hr />
+      </Rose::Form::Textarea>
+    `,
+    context: {},
+  }}</Story>
+</Preview>
