@@ -127,7 +127,7 @@
     <div>
       <Rose::Button
         @style='secondary'
-        {{on 'click' (route-action 'acknowledge' session)}}
+        {{!-- {{on 'click' (route-action 'acknowledge' session)}} --}}
       >
         {{t 'actions.ok'}}
       </Rose::Button>
@@ -138,7 +138,7 @@
         @style='inline-link-action'
         @iconRight='chevron-right'
       >
-        View on Session page
+        {{@value}}
       </Rose::LinkButton>
     </div>
   </dialog.footer>
