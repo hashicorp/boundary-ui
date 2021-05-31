@@ -6,6 +6,8 @@ import { attr } from '@ember-data/model';
 export default class SessionModel extends GeneratedSessionModel {
   // =attributes
 
+  @attr('boolean', { readOnly: true }) acknowledged;
+  @attr('boolean', { readOnly: true }) started_desktop_client;
   @attr('string', { readOnly: true }) proxy_address;
   @attr('number', { readOnly: true }) proxy_port;
 

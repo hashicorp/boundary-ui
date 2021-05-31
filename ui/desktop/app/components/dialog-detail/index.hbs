@@ -1,0 +1,145 @@
+<Rose::Dialog
+  class='connection-dialog'
+  @heading={{@heading}}
+  @dismiss={{@dismiss}}
+  @dismissButtonText={{@dismissButtonText}}
+  @style={{@style}}
+  @icon={{@icon}}
+  @modal={{true}}
+  as |dialog|
+>
+  <dialog.body>
+
+    {{!-- <Copyable
+      @text={{concat @session.proxy_address ':' @session.proxy_port}}
+      @buttonText={{t 'actions.copy-to-clipboard'}}
+      @acknowledgeText={{t 'states.copied'}}
+    >
+      {{t
+        'states.connection.success.description'
+        port=session.proxy_port
+        address=session.proxy_address
+        protocol='tcp'
+      }}
+    </Copyable>
+
+    <div class='connection-dialog-successfully'>Succesfully connected</div>
+
+    <h3>Proxy URL</h3>
+    <div class="proxy-url">
+      <p>www.verylongurl.com/section1/subsection2/how-to-tell-the-world-this-is-a-very-long-url-example</p>
+      <Rose::Icon @name="copy-action" @size={{size}} />
+    </div>
+
+    <Rose::Separator />
+    <h3>Credentials</h3>
+    <div class="credentials-card">
+      <div class="credentials-card-header">
+        <div><Rose::Icon @name="key" /> Credentials</div>
+        <div>
+          <Rose::Button
+            @disabled={{false}}
+            @style={{style}}
+            @iconRight={{iconRight}}
+            {{on "click" onClick}}
+          >
+            Credential library details
+          </Rose::Button>
+        </div>
+      </div>
+
+      <Rose::Separator />
+    
+      <div class="credentials-card-body">
+        <Rose::Table @style="condensed" as |table|>
+          <table.header as |header|>
+            <header.row  as |row|>
+              <row.headerCell @shrink={{true}}>Key</row.headerCell>
+              <row.headerCell colspan="2">Value</row.headerCell>
+            </header.row>
+          </table.header>
+          <table.body as |body|>
+            <body.row as |row|>
+              <row.cell>Foo</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+            <body.row as |row|>
+              <row.cell>ttl</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+          </table.body>
+        </Rose::Table>
+      </div>
+    
+      <div class="credentials-card-footer">
+        <p><LinkTo @route='index'>View raw API output</LinkTo></p>
+        <Rose::Separator />
+        <div>Code</div>
+      </div>
+    </div>
+
+    <div class="credentials-card">
+      <div class="credentials-card-header">
+        <div><Rose::Icon @name="key" /> Credentials</div>
+        <div>
+          <Rose::Button
+            @disabled={{false}}
+            @style={{style}}
+            @iconRight={{iconRight}}
+            {{on "click" onClick}}
+          >
+            Credential library details
+          </Rose::Button>
+        </div>
+      </div>
+
+      <Rose::Separator />
+      
+      <div class="credentials-card-body">
+        <Rose::Table @style="condensed" as |table|>
+          <table.header as |header|>
+            <header.row  as |row|>
+              <row.headerCell @shrink={{true}}>Key</row.headerCell>
+              <row.headerCell colspan="2">Value</row.headerCell>
+            </header.row>
+          </table.header>
+          <table.body as |body|>
+            <body.row as |row|>
+              <row.cell>Foo</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+            <body.row as |row|>
+              <row.cell>ttl</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+          </table.body>
+        </Rose::Table>
+      </div>
+      
+      <div class="credentials-card-footer">
+        <p><LinkTo @route='index'>View raw API output</LinkTo></p>
+        <Rose::Separator />
+        <div>Code</div>
+      </div>
+    </div> --}}
+  </dialog.body>
+  <dialog.footer>
+    <div>
+      <Rose::Button
+        @style='secondary'
+        {{on 'click' (route-action 'acknowledge' session)}}
+      >
+        {{t 'actions.ok'}}
+      </Rose::Button>
+    </div>
+    <div>
+      <Rose::LinkButton
+        @route='index'
+        @style='inline-link-action'
+        @iconRight='chevron-right'
+      >
+        View on Session page
+      </Rose::LinkButton>
+    </div>
+  </dialog.footer>
+</Rose::Dialog>

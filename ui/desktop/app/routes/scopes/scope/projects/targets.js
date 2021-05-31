@@ -81,6 +81,11 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
 
   // =actions
 
+  @action
+  acknowledge(session) {
+    session.acknowledged = true;
+  }
+
   /**
    * Establish a session to current target.
    * @param {TargetModel} model
@@ -119,17 +124,13 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
             id: session_id,
             type: 'session',
             attributes: {
+              started_desktop_client: true,
               proxy_address: address,
               proxy_port: port
             }
           }
         });
       }, 150);
-
-      // Show the user a modal with basic connection info.
-      // We don't await because this modal is purely informational.
-      this.confirm.confirm(connectionDetails, { isConnectSuccess: true });
-
     } catch(e) {
       this.confirm.confirm(e.message, { isConnectError: true })
         // Retry
