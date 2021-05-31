@@ -1,3 +1,55 @@
 {{page-title (t 'resources.target.title_plural')}}
 
+{{#each @model as |target|}}
+  {{#each target.sessions as |session|}}
+    {{#if session.started_desktop_client}}
+      {{#unless session.acknowledged}}
+        <Rose::Dialog
+          @heading={{t 'states.success'}}
+          @dismissButtonText={{t 'actions.ok'}}
+          @icon='check-circle-fill'
+          @style='success'
+          @modal={{true}}
+          @dismiss={{route-action 'acknowledge' session}}
+          as |dialog|
+        >
+          <dialog.body>
+
+            <Copyable
+              @text={{concat session.proxy_address ':' session.proxy_port}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              {{t
+                'states.connection.success.description'
+                port=session.proxy_port
+                address=session.proxy_address
+                protocol='tcp'
+              }}
+            </Copyable>
+
+          </dialog.body>
+          <dialog.footer>
+            <Rose::Button
+              @style='primary'
+              {{on 'click' (route-action 'acknowledge' session)}}
+            >
+              {{t 'actions.ok'}}
+            </Rose::Button>
+          </dialog.footer>
+        </Rose::Dialog>
+        {{!-- <DialogDetail
+          @heading={{t 'states.success'}}
+          @dismiss={{route-action 'acknowledge' session}}
+          @dismissButtonText={{t 'actions.ok'}}
+          @icon='check-circle-fill'
+          @style='success'
+          @session={{session}}
+        >
+        </DialogDetail> --}}
+      {{/unless}}
+    {{/if}}
+  {{/each}}
+{{/each}}
+
 {{outlet}}

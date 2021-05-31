@@ -325,3 +325,69 @@
   margin: sizing.rems(l) 0 0 0;
   text-align: center;
 }
+
+// Dialog Detail
+// These styles are a Work In Progress. Expect changes (lots of them)
+.connection-dialog {
+  .connection-dialog-successfully {
+    // background: green;
+  }
+
+  .proxy-url {
+    display: flex;
+
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .credentials-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+
+    &:last-child { margin-bottom: 0; }
+
+    .credentials-card-header {
+      display: flex;
+      flex-direction: row;
+
+      div {
+        display: flex;
+        width: 50%;
+        
+        &:last-child {
+          justify-content: flex-end;
+        }
+      }
+      // border-bottom: 1px solid grey;
+    }
+
+    .credentials-card-body {
+      // background: yellow;
+    }
+
+    .credentials-card-footer {
+      // background: pink;
+    }
+  }
+}
+
+.rose-dialog-footer {
+  align-items: center;
+  display: flex;
+
+  div:nth-child(1) {
+    display: flex;
+    justify-content: flex-start;
+    width: 50%;
+  }
+  
+  div:nth-child(2) {
+    display: flex;
+    justify-content: flex-end;
+    width: 50%;
+  }
+}
