@@ -43,7 +43,7 @@
     "license-checker": "^25.0.1"
   },
   "resolutions": {
-    "bl": "~1.2.3",
+    "bl": "^5.0.0",
     "tough-cookie": "~2.3.3",
     "npm": "~6.14.6",
     "npm-registry-fetch": "~8.1.1",
