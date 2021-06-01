@@ -76,8 +76,8 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
    * @param {string} token
    */
   addTokenToAuthorization(token) {
-    const adapterPrototype =
-      this.store.adapterFor('application').constructor.prototype;
+    const adapterPrototype = this.store.adapterFor('application').constructor
+      .prototype;
     const headers = adapterPrototype?.headers;
     if (!headers) adapterPrototype.headers = {};
     adapterPrototype.headers.Authorization = null;
