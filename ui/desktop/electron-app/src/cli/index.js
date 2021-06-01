@@ -4,7 +4,7 @@ const { spawnSync } = require('../helpers/spawn-promise.js');
 
 const cliPath = async () => {
   let name = 'boundary';
-  if (isWindows) name = 'boundary.exe';
+  if (isWindows()) name = 'boundary.exe';
   return path.resolve(__dirname, '..', 'cli', name);
 };
 
