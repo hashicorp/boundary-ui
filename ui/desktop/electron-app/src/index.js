@@ -114,6 +114,7 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 760,
+    titleBarStyle: 'hiddenInset',
     webPreferences: {
       partition,
       sandbox: true,
