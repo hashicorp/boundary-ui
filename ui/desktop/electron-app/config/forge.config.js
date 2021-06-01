@@ -1,11 +1,12 @@
 // Generated during build
 const config = require('./config.js');
+const { isMac } = require('../src/helpers/platform.js');
 
 console.log(`\n[forge-config] Release commit: ${config.releaseCommit}`);
 console.log(`[forge-config] Release version: ${config.releaseVersion}`);
 
 // MacOS signing identity
-if (process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY)
+if (isMac() && !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY)
   console.warn(
     '[forge-config] WARNING: Could not find signing identity. Proceeding without signing.'
   );
