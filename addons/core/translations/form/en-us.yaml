@@ -59,7 +59,7 @@ client_id:
   help: An OAuth 2.0 Client Identifier valid at the Authorization Server.
 client_secret:
   label: Client Secret
-  description: The client secret is set-only, may not be unset, and will not appear after a successful save.
+  help: The client secret is set-only and may not be unset.
 max_age:
   label: Maximum Age
   help: The OIDC "max_age" parameter sent to the Authorization Server indicating a maximum acceptable time in seconds since the user's last authentication before requiring the user to reauthenticate. 0 indicates an immediate need to reauthenticate.
