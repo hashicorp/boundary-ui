@@ -8,29 +8,15 @@
   @modal={{true}}
   as |dialog|
 >
+  {{yield (hash
+    notification=(component 'rose/notification' class='connection-dialog-notification')
+  )}}
+
   <dialog.body>
-
-    {{!-- <Copyable
-      @text={{concat @session.proxy_address ':' @session.proxy_port}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      {{t
-        'states.connection.success.description'
-        port=session.proxy_port
-        address=session.proxy_address
-        protocol='tcp'
-      }}
-    </Copyable>
-
-    <div class='connection-dialog-successfully'>Succesfully connected</div>
-
-    <h3>Proxy URL</h3>
-    <div class="proxy-url">
-      <p>www.verylongurl.com/section1/subsection2/how-to-tell-the-world-this-is-a-very-long-url-example</p>
-      <Rose::Icon @name="copy-action" @size={{size}} />
-    </div>
-
+    {{yield (hash
+      body=(component 'rose/anonymous')
+    )}}
+    {{!--
     <Rose::Separator />
     <h3>Credentials</h3>
     <div class="credentials-card">
@@ -121,25 +107,11 @@
         <Rose::Separator />
         <div>Code</div>
       </div>
-    </div> --}}
-  </dialog.body>
+    </div>--}}
+  </dialog.body> 
   <dialog.footer>
-    <div>
-      <Rose::Button
-        @style='secondary'
-        {{!-- {{on 'click' (route-action 'acknowledge' session)}} --}}
-      >
-        {{t 'actions.ok'}}
-      </Rose::Button>
-    </div>
-    <div>
-      <Rose::LinkButton
-        @route='index'
-        @style='inline-link-action'
-        @iconRight='chevron-right'
-      >
-        {{@value}}
-      </Rose::LinkButton>
-    </div>
+    {{yield (hash
+      footer=(component 'rose/anonymous')
+    )}}
   </dialog.footer>
 </Rose::Dialog>
