@@ -1,5 +1,7 @@
-const { shell } = require('electron');
+const { shell, dialog } = require('electron');
 const appUpdater = require('../helpers/app-updater.js');
+const config = require('../../config/config.js');
+const { version } = require('../cli/index.js');
 
 const generateMenuTemplate = () => {
   return [
@@ -7,7 +9,23 @@ const generateMenuTemplate = () => {
     {
       label: 'Boundary',
       submenu: [
-        { role: 'about' },
+        // { role: 'about' },
+        {
+          label: `About ${config.productName}`,
+          click: () => {
+            const appVersion = `Version:  ${config.releaseVersion}`;
+            const appCommit = `Commit: ${config.releaseCommit}`;
+            const cliVersion = version().formatted;
+            const copyright = config.copyright;
+
+            const dialogOpts = {
+              type: 'none',
+              message: config.productName,
+              detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
+            };
+            dialog.showMessageBox(dialogOpts);
+          },
+        },
         {
           id: 'update',
           label: 'Check for Updates',
