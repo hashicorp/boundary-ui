@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// Create config for use in electron forge
+// Create config
 const createConfig = () => {
   const config = {
     name: 'boundary',
@@ -15,9 +15,9 @@ const createConfig = () => {
   return config;
 };
 
-// Save config file
+// Save config to file
 const saveConfig = (config, destination) => {
-  const configPath = `${destination}/config.js`;
+  const configPath = path.join(destination, 'config.js');
   const content = `module.exports = ${JSON.stringify(config, null, 2)}`;
   fs.writeFileSync(configPath, content);
   console.log(`Create: ${configPath}`);

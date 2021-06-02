@@ -1,30 +1,33 @@
 const { shell, dialog } = require('electron');
 const appUpdater = require('../helpers/app-updater.js');
+const { isMac, isWindows } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
 const { version } = require('../cli/index.js');
 
 const generateMenuTemplate = () => {
+  const aboutDialog = () => {
+    const appVersion = `Version:  ${config.releaseVersion}`;
+    const appCommit = `Commit: ${config.releaseCommit}`;
+    const cliVersion = version().formatted;
+    const copyright = config.copyright;
+
+    const dialogOpts = {
+      type: 'none',
+      message: config.productName,
+      detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
+    };
+    dialog.showMessageBox(dialogOpts);
+  }
+
   return [
     // { role: 'appMenu' }
-    {
+    ...(isMac() ? [{
       label: 'Boundary',
       submenu: [
         // { role: 'about' },
         {
           label: `About ${config.productName}`,
-          click: () => {
-            const appVersion = `Version:  ${config.releaseVersion}`;
-            const appCommit = `Commit: ${config.releaseCommit}`;
-            const cliVersion = version().formatted;
-            const copyright = config.copyright;
-
-            const dialogOpts = {
-              type: 'none',
-              message: config.productName,
-              detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
-            };
-            dialog.showMessageBox(dialogOpts);
-          },
+          click: aboutDialog,
         },
         {
           id: 'update',
@@ -40,7 +43,7 @@ const generateMenuTemplate = () => {
         { type: 'separator' },
         { role: 'quit' },
       ],
-    },
+    }] : []),
     // { role: 'fileMenu' }
     {
       label: 'File',
@@ -56,14 +59,23 @@ const generateMenuTemplate = () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        { role: 'pasteAndMatchStyle' },
-        { role: 'delete' },
-        { role: 'selectAll' },
-        { type: 'separator' },
-        {
-          label: 'Speech',
-          submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
-        },
+        ...(isMac() ? [
+          { role: 'pasteAndMatchStyle' },
+          { role: 'delete' },
+          { role: 'selectAll' },
+          { type: 'separator' },
+          {
+            label: 'Speech',
+            submenu: [
+              { role: 'startspeaking' },
+              { role: 'stopspeaking' }
+            ]
+          }
+        ] : [
+          { role: 'delete' },
+          { type: 'separator' },
+          { role: 'selectAll' }
+        ]),
       ],
     },
     // { role: 'viewMenu' }
@@ -86,10 +98,14 @@ const generateMenuTemplate = () => {
       submenu: [
         { role: 'minimize' },
         { role: 'zoom' },
-        { type: 'separator' },
-        { role: 'front' },
-        { type: 'separator' },
-        { role: 'window' },
+        ...(isMac() ? [
+          { type: 'separator' },
+          { role: 'front' },
+          { type: 'separator' },
+          { role: 'window' }
+        ] : [
+          { role: 'close' }
+        ])
       ],
     },
     {
@@ -99,6 +115,13 @@ const generateMenuTemplate = () => {
           label: 'Documentation',
           click: () => shell.openExternal('https://www.boundaryproject.io'),
         },
+        ...(isWindows() ? [
+          // { role: 'about' },
+          {
+            label: `About ${config.productName}`,
+            click: aboutDialog,
+          },
+        ] : [])
       ],
     },
   ];

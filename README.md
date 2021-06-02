@@ -122,11 +122,20 @@ yarn install
 yarn build:ui:desktop
 ```
 
+In windows, UI is generated using docker to provide a stable UI across platforms.
+
+```cmd
+yarn install
+docker-compose -f docker-compose-embedding.yml run build-desktop-production 
+yarn build:ui:desktop:app
+```
+
 To provide a signing identify for macOS build, use `BOUNDARY_DESKTOP_SIGNING_IDENTITY`
-environment variable to set signing certificate name (e.g Developer ID Application: * (*)).
+environment variable to set signing certificate name (e.g Developer ID Application: * (*)) when building desktop app using `yarn build:ui:desktop:app`.
 
 Assets are saved to `ui/desktop/electron-app/out/make/`.
 DMG packaged desktop UI is available at asset location as `boundary.dmg`.
+EXE archived desktop UI is available at asset location under `zip` folder.
 
 ### Connect Boundary UI to Boundary local instance
 
