@@ -1,3 +1,35 @@
+{{#if @model.isOIDC}}
+  <Rose::Dropdown
+    @text='{{
+      concat (t 'resources.auth-method.actions.change-state')
+      ' : '
+      (t (concat 'states.auth-method.oidc.states.' @model.attributes.state))
+    }}'
+    @dropdownRight={{true}}
+    as |dropdown|
+  >
+    <dropdown.section @title={{t 'resources.auth-method.actions.change-state'}}>
+      <Rose::Form as |form|>
+        <form.radioGroup
+          @name='theme'
+          @selectedValue={{@model.attributes.state}}
+          @changed={{route-action 'changeState'}}
+          as |radioGroup|
+        >
+          {{#each @model.STATES_ENUM as |state|}}
+            <dropdown.item>
+              <radioGroup.radio
+                @label={{t (concat 'states.auth-method.oidc.states.' state)}}
+                @value={{state}}
+              />
+            </dropdown.item>
+          {{/each}}
+        </form.radioGroup>
+      </Rose::Form>
+    </dropdown.section>
+  </Rose::Dropdown>
+{{/if}}
+
 <Rose::Dropdown
   @text='{{t 'actions.manage'}}'
   @dropdownRight={{true}}

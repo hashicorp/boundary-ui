@@ -1,4 +1,6 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
   // =methods
@@ -35,5 +37,19 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
       into: 'scopes/scope/auth-methods/auth-method',
       outlet: 'actions',
     });
+  }
+
+  // =actions
+
+  /**
+   * Update state of OIDC auth method
+   * @param {string} state - "inactive", "active-private", "active-public"
+   */
+  @action
+  @notifyError(({ message }) => message)
+  @notifySuccess('notifications.save-success')
+  async changeState(state) {
+    const model = this.modelFor('scopes.scope.auth-methods.auth-method');
+    await model.changeState(state);
   }
 }

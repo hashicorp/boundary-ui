@@ -8,3 +8,9 @@ connection:
   success:
     description: "Local proxy address ({protocol}): {address}:{port}"
 primary: Primary
+auth-method:
+  oidc:
+    states:
+      inactive: Inactive
+      active-private: Active Private
+      active-public: Active Public

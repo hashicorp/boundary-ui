@@ -109,7 +109,7 @@ const commandHandlers = {
 
 export function authHandler({ scopes, authMethods }, request) {
   const payload = JSON.parse(request.requestBody);
-  const [, id] = request.params.id_method.match(/(?<id>.[^:]*)/);
+  const [, id] = request.params.idMethod.match(/(?<id>.[^:]*)/);
   const { command } = payload;
   const authMethod = authMethods.find(id);
   const scope = scopes.find(authMethod.scopeId);
