@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import config from '../config/environment';
-import { authHandler, deauthHandler } from './route-handlers/auth';
+import { deauthHandler } from './route-handlers/auth';
 import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
@@ -70,6 +70,31 @@ export default function () {
       scope.update({ primaryAuthMethodId: null });
     }
     return new Response(202);
+  });
+  this.post('/auth-methods/:idMethod', function (schema, request) {
+    const idMethod = request.params.idMethod;
+    const id = idMethod.split(':')[0];
+    const method = idMethod.split(':')[1];
+
+    if (method === 'authenticate') {
+      schema.authHandler.call(this, schema, request);
+      return;
+    }
+
+    const attrs = this.normalizedRequestAttrs();
+    const authMethods = schema.authMethods;
+    const authMethod = authMethods.find(id);
+    let updatedAttrs = {};
+
+    if (method === 'change-state') {
+      updatedAttrs = {
+        attributes: {
+          state: attrs.attributes.state,
+        },
+      };
+    }
+
+    return authMethod.update(updatedAttrs);
   });
 
   // Auth Method Accounts
