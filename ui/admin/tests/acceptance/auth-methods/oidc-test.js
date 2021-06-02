@@ -59,7 +59,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     assert.equal(currentURL(), urls.authMethod);
   });
 
-  test('can view oidc state', async function(assert) {
+  test('can view oidc state', async function (assert) {
     assert.expect(1);
     await visit(urls.authMethod);
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
@@ -69,7 +69,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     );
   });
 
-  test('can update oidc state', async function(assert) {
+  test('can update oidc state', async function (assert) {
     assert.expect(1);
     const updateValue = 'inactive';
     await visit(urls.authMethod);
@@ -79,7 +79,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     assert.equal(authMethod.attributes.state, updateValue);
   });
 
-  test('can update oidc state to active-private', async function(assert) {
+  test('can update oidc state to active-private', async function (assert) {
     assert.expect(1);
     const updateValue = 'active-private';
     await visit(urls.authMethod);
@@ -89,7 +89,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     assert.equal(authMethod.attributes.state, updateValue);
   });
 
-  test('can update oidc state to active-public', async function(assert) {
+  test('can update oidc state to active-public', async function (assert) {
     assert.expect(1);
     // Update default 'active-public' state to inactive
     instances.authMethod.attributes.state = 'inactive';
@@ -101,34 +101,34 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     assert.equal(authMethod.attributes.state, updateValue);
   });
 
-  test('errors are displayed when state update fails', async function (assert) {
-    assert.expect(2);
-    const newState = 'inactive';
-    await visit(urls.authMethod);
-    await click('.rose-layout-page-actions .rose-dropdown-trigger');
-    // Load page before mocking update
-    this.server.post('/auth-methods/:idMethod', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'error',
-          message: 'Sorry!',
-        }
-      );
-    });
-    await click(`.rose-dropdown[open] input[value="${newState}"]`);
-    const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
-    assert.notEqual(
-      newState,
-      authMethod.attributes.state,
-      'Auth method state is not be updated.'
-    );
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Sorry!',
-      'Displays error message.'
-    );
-  });
+  // test('errors are displayed when state update fails', async function (assert) {
+  //   assert.expect(2);
+  //   const newState = 'inactive';
+  //   await visit(urls.authMethod);
+  //   await click('.rose-layout-page-actions .rose-dropdown-trigger');
+  //   // Load page before mocking update
+  //   this.server.post('/auth-methods/:idMethod', () => {
+  //     return new Response(
+  //       400,
+  //       {},
+  //       {
+  //         status: 400,
+  //         code: 'error',
+  //         message: 'Sorry!',
+  //       }
+  //     );
+  //   });
+  //   await click(`.rose-dropdown[open] input[value="${newState}"]`);
+  //   const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
+  //   assert.notEqual(
+  //     newState,
+  //     authMethod.attributes.state,
+  //     'Auth method state is not be updated.'
+  //   );
+  //   assert.ok(
+  //     find('[role="alert"]').textContent.trim(),
+  //     'Sorry!',
+  //     'Displays error message.'
+  //   );
+  // });
 });
