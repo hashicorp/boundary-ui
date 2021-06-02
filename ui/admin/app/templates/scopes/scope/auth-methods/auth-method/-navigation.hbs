@@ -2,7 +2,15 @@
   <nav.link @route='scopes.scope.auth-methods.auth-method.index'>
     {{t 'titles.details'}}
   </nav.link>
-  <nav.link @route='scopes.scope.auth-methods.auth-method.accounts'>
-    {{t 'resources.account.title_plural'}}
-  </nav.link>
+  {{#if @model.isOIDC}}
+    {{#if (feature-flag 'oidc-account-crud')}}
+      <nav.link @route='scopes.scope.auth-methods.auth-method.accounts'>
+        {{t 'resources.account.title_plural'}}
+      </nav.link>
+    {{/if}}
+  {{else}}
+    <nav.link @route='scopes.scope.auth-methods.auth-method.accounts'>
+      {{t 'resources.account.title_plural'}}
+    </nav.link>
+  {{/if}}
 </Rose::Nav::Tabs>

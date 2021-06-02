@@ -59,7 +59,7 @@ client_id:
   help: An OAuth 2.0 Client Identifier valid at the Authorization Server.
 client_secret:
   label: Client Secret
-  description: The client secret is set-only, may not be unset, and will not appear after a successful save.
+  help: The client secret is set-only and may not be unset.
 max_age:
   label: Maximum Age
   help: The OIDC "max_age" parameter sent to the Authorization Server indicating a maximum acceptable time in seconds since the user's last authentication before requiring the user to reauthenticate. 0 indicates an immediate need to reauthenticate.
@@ -70,3 +70,33 @@ disable_discovered_config_validation:
   label: Disable discovered config validation
   help: >
     If the Authorization Server's discovered configuration contains values that do not match the configuration set on this auth method, this can be set to force the local configuration to override the discovered values.  This is useful in the case of slow-changing or incorrect values announced by the Authorization Server. NOTE: For safety, not providing this value will be treated the same as "false"; that is, every time the method is updated or the state is changed, this value must be set to "true" or it will be disabled.
+idp_ca_certs:
+  label: Certificates
+  help: Optional PEM-encoded X.509 CA certificates that can be used as trust anchors when connecting to an OIDC provider.
+certificate:
+  label: Certificate
+allowed_audiences:
+  label: Allowed Audiences
+  help: Allowed audience claims for this auth method.
+claim:
+  label: Claim
+claims_scopes:
+  label: Claims Scopes
+  help: Optional claims scopes that will be requested during authentication.
+claims_scope:
+  label: Claims Scope
+account_claim_maps:
+  label: Account Claim Maps
+  help: >
+    Optional claim maps from custom claims to the standard claims of sub, name and email.  These maps are represented as key=value where the key equals the from_claim and the value equals the to_claim.  For example "oid=sub".
+account_claim_map:
+  label: Account Claim Map
+from_claim:
+  label: From Claim
+to_claim:
+  label: To Claim
+signing_algorithms:
+  label: Signing Algorithms
+  help: The signing algorithms allowed for the auth method.
+algorithm:
+  label: Algorithm

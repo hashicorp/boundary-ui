@@ -30,6 +30,13 @@ auth-method:
     pending:
       title: Authentication Pending
       description: Complete authentication in the newly-opened window.
+  titles:
+    new-signing-algorithm: New Signing Algorithm
+    new-allowed-audience: New Allowed Audience
+    new-claims-scope: New Claims Scope
+    new-from-claim: New From Claim
+    new-to-claim: New To Claim
+    new-certificate: New Certificate
   types:
     password: Password
     oidc: OIDC
