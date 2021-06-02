@@ -3,7 +3,7 @@ import { fragment } from 'ember-data-model-fragments/attributes';
 import { equal } from '@ember/object/computed';
 
 /**
- * Enum ptions per auth method type and field.
+ * Enum options per auth method type and field.
  */
 export const options = {
   oidc: {
@@ -27,6 +27,8 @@ export const options = {
 };
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
+  STATES_ENUM = options.oidc.state;
+
   // =attributes
 
   /**
