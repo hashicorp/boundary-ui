@@ -72,10 +72,9 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    */
   async restore(data) {
     if (!data) return reject();
-    return this.validateToken(
-      data.attributes.token,
-      data.attributes.id
-    ).then(() => this.normalizeData(data));
+    return this.validateToken(data.attributes.token, data.attributes.id).then(
+      () => this.normalizeData(data)
+    );
   }
 
   /**
