@@ -1,4 +1,5 @@
 import GeneratedAuthMethodModel from '../generated/models/auth-method';
+import { attr } from '@ember-data/model';
 import { fragment } from 'ember-data-model-fragments/attributes';
 import { equal } from '@ember/object/computed';
 
@@ -27,6 +28,26 @@ export const options = {
 };
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
+  // =error attributes
+  // These attributes exist solely to capture errors on nested fields.
+  // See the application adapter's error normalization method for
+  // more information.
+
+  @attr('string', { readOnly: true }) attributes_state;
+  @attr('string', { readOnly: true }) attributes_issuer;
+  @attr('string', { readOnly: true }) attributes_client_id;
+  @attr('string', { readOnly: true }) attributes_client_secret;
+  @attr('string', { readOnly: true }) attributes_max_age;
+  @attr('string', { readOnly: true }) attributes_api_url_prefix;
+  @attr('string', { readOnly: true })
+  attributes_disable_discovered_config_validation;
+  @attr('string', { readOnly: true }) attributes_dry_run;
+  @attr('string', { readOnly: true }) attributes_account_claim_maps;
+  @attr('string', { readOnly: true }) attributes_claims_scopes;
+  @attr('string', { readOnly: true }) attributes_signing_algorithms;
+  @attr('string', { readOnly: true }) attributes_allowed_audiences;
+  @attr('string', { readOnly: true }) attributes_idp_ca_certs;
+
   // =attributes
 
   /**

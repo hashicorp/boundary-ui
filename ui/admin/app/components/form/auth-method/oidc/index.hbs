@@ -57,13 +57,13 @@
     @value={{@model.attributes.issuer}}
     @label={{t 'form.issuer.label'}}
     @helperText={{t 'form.issuer.help'}}
-    @error={{@model.errors.attributes.issuer}}
+    @error={{@model.errors.attributes_issuer}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes.issuer}}
+    {{#if @model.errors.attributes_issuer}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes.issuer as |error|}}
+        {{#each @model.errors.attributes_issuer as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -86,13 +86,13 @@
     @value={{@model.attributes.client_id}}
     @label={{t 'form.client_id.label'}}
     @helperText={{t 'form.client_id.help'}}
-    @error={{@model.errors.attributes.client_id}}
+    @error={{@model.errors.attributes_client_id}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes.client_id}}
+    {{#if @model.errors.attributes_client_id}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes.client_id as |error|}}
+        {{#each @model.errors.attributes_client_id as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -105,13 +105,13 @@
     @value={{@model.attributes.client_secret}}
     @label={{t 'form.client_secret.label'}}
     @helperText={{t 'form.client_secret.help'}}
-    @error={{@model.errors.attributes.client_secret}}
+    @error={{@model.errors.attributes_client_secret}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes.client_secret}}
+    {{#if @model.errors.attributes_client_secret}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes.client_secret as |error|}}
+        {{#each @model.errors.attributes_client_secret as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -123,6 +123,13 @@
     <:title>{{t 'form.signing_algorithms.label'}}</:title>
     <:description>{{t 'form.signing_algorithms.help'}}</:description>
     <:body>
+      {{#if @model.errors.attributes_signing_algorithms}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.attributes_signing_algorithms as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
       <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row @hidden={{true}} as |row|>
@@ -136,7 +143,7 @@
               <row.cell>
                 <form.select
                   @value={{algorithm.value}}
-                  @error={{@model.errors.attributes.signing_algorithms}}
+                  @error={{@model.errors.attributes_signing_algorithms}}
                   @contextual={{true}}
                   @onChange={{fn (mut algorithm.value)}}
                   as |field|
@@ -149,16 +156,6 @@
                       >{{algorithm}}</select.option>
                     {{/each}}
                   </field.field>
-                  {{#if @model.errors.attributes.signing_algorithms}}
-                    <field.errors as |errors|>
-                      {{#each
-                        @model.errors.attributes.signing_algorithms
-                        as |error|
-                      }}
-                        <errors.message>{{error.message}}</errors.message>
-                      {{/each}}
-                    </field.errors>
-                  {{/if}}
                 </form.select>
               </row.cell>
               <row.cell @shrink={{true}}>
@@ -225,6 +222,13 @@
     <:title>{{t 'form.allowed_audiences.label'}}</:title>
     <:description>{{t 'form.allowed_audiences.help'}}</:description>
     <:body>
+      {{#if @model.errors.attributes_allowed_audiences}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.attributes_allowed_audiences as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
       <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row @hidden={{true}} as |row|>
@@ -239,22 +243,12 @@
                 <form.input
                   @type='text'
                   @value={{audience.value}}
-                  @error={{@model.errors.attributes.allowed_audiences}}
+                  @error={{@model.errors.attributes_allowed_audiences}}
                   @contextual={{true}}
                   as |field|
                 >
                   <field.label>{{t 'form.claim.label'}}</field.label>
                   <field.field />
-                  {{#if @model.errors.attributes.allowed_audiences}}
-                    <field.errors as |errors|>
-                      {{#each
-                        @model.errors.attributes.allowed_audiences
-                        as |error|
-                      }}
-                        <errors.message>{{error.message}}</errors.message>
-                      {{/each}}
-                    </field.errors>
-                  {{/if}}
                 </form.input>
               </row.cell>
               <row.cell @shrink={{true}}>
@@ -310,6 +304,13 @@
     <:title>{{t 'form.claims_scopes.label'}}</:title>
     <:description>{{t 'form.claims_scopes.help'}}</:description>
     <:body>
+      {{#if @model.errors.attributes_claims_scopes}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.attributes_claims_scopes as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
       <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row @hidden={{true}} as |row|>
@@ -324,22 +325,12 @@
                 <form.input
                   @type='text'
                   @value={{claimsScope.value}}
-                  @error={{@model.errors.attributes.claims_scopes}}
+                  @error={{@model.errors.attributes_claims_scopes}}
                   @contextual={{true}}
                   as |field|
                 >
                   <field.label>{{t 'form.claims_scope.label'}}</field.label>
                   <field.field />
-                  {{#if @model.errors.attributes.claims_scopes}}
-                    <field.errors as |errors|>
-                      {{#each
-                        @model.errors.attributes.claims_scopes
-                        as |error|
-                      }}
-                        <errors.message>{{error.message}}</errors.message>
-                      {{/each}}
-                    </field.errors>
-                  {{/if}}
                 </form.input>
               </row.cell>
               <row.cell @shrink={{true}}>
@@ -395,6 +386,13 @@
     <:title>{{t 'form.account_claim_maps.label'}}</:title>
     <:description>{{t 'form.account_claim_maps.help'}}</:description>
     <:body>
+      {{#if @model.errors.attributes_account_claim_maps}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.attributes_account_claim_maps as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
       <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row as |row|>
@@ -410,28 +408,18 @@
                 <form.input
                   @type='text'
                   @value={{claimMap.from}}
-                  @error={{@model.errors.attributes.account_claim_maps}}
+                  @error={{@model.errors.attributes_account_claim_maps}}
                   @contextual={{true}}
                   as |field|
                 >
                   <field.label>{{t 'form.from_claim.label'}}</field.label>
                   <field.field />
-                  {{#if @model.errors.attributes.account_claim_maps}}
-                    <field.errors as |errors|>
-                      {{#each
-                        @model.errors.attributes.account_claim_maps
-                        as |error|
-                      }}
-                        <errors.message>{{error.message}}</errors.message>
-                      {{/each}}
-                    </field.errors>
-                  {{/if}}
                 </form.input>
               </row.cell>
               <row.cell>
                 <form.select
                   @value={{claimMap.to}}
-                  @error={{@model.errors.attributes.account_claim_maps}}
+                  @error={{@model.errors.attributes_account_claim_maps}}
                   @contextual={{true}}
                   @onChange={{fn (mut claimMap.to)}}
                   as |field|
@@ -444,16 +432,6 @@
                       >{{toClaim}}</select.option>
                     {{/each}}
                   </field.field>
-                  {{#if @model.errors.attributes.account_claim_maps}}
-                    <field.errors as |errors|>
-                      {{#each
-                        @model.errors.attributes.account_claim_maps
-                        as |error|
-                      }}
-                        <errors.message>{{error.message}}</errors.message>
-                      {{/each}}
-                    </field.errors>
-                  {{/if}}
                 </form.select>
               </row.cell>
               <row.cell @shrink={{true}}>
@@ -521,6 +499,13 @@
     <:title>{{t 'form.idp_ca_certs.label'}}</:title>
     <:description>{{t 'form.idp_ca_certs.help'}}</:description>
     <:body>
+      {{#if @model.errors.attributes_idp_ca_certs}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.attributes_idp_ca_certs as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
       <Rose::Table @style='condensed' as |table|>
         <table.header as |header|>
           <header.row @hidden={{true}} as |row|>
@@ -534,19 +519,12 @@
               <row.cell>
                 <form.textarea
                   @value={{cert.value}}
-                  @error={{@model.errors.attributes.idp_ca_certs}}
+                  @error={{@model.errors.attributes_idp_ca_certs}}
                   @contextual={{true}}
                   as |field|
                 >
                   <field.label>{{t 'form.certificate.label'}}</field.label>
                   <field.field />
-                  {{#if @model.errors.attributes.idp_ca_certs}}
-                    <field.errors as |errors|>
-                      {{#each @model.errors.attributes.idp_ca_certs as |error|}}
-                        <errors.message>{{error.message}}</errors.message>
-                      {{/each}}
-                    </field.errors>
-                  {{/if}}
                 </form.textarea>
               </row.cell>
               <row.cell @shrink={{true}}>
@@ -600,15 +578,15 @@
     @value={{@model.attributes.max_age}}
     @label={{t 'form.max_age.label'}}
     @helperText={{t 'form.max_age.help'}}
-    @error={{@model.errors.attributes.max_age}}
+    @error={{@model.errors.attributes_max_age}}
     readonly={{false}}
     step='1'
     min='0'
     as |field|
   >
-    {{#if @model.errors.attributes.max_age}}
+    {{#if @model.errors.attributes_max_age}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes.max_age as |error|}}
+        {{#each @model.errors.attributes_max_age as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -621,13 +599,13 @@
     @value={{@model.attributes.api_url_prefix}}
     @label={{t 'form.api_url_prefix.label'}}
     @helperText={{t 'form.api_url_prefix.help'}}
-    @error={{@model.errors.attributes.api_url_prefix}}
+    @error={{@model.errors.attributes_api_url_prefix}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes.api_url_prefix}}
+    {{#if @model.errors.attributes_api_url_prefix}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes.api_url_prefix as |error|}}
+        {{#each @model.errors.attributes_api_url_prefix as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
