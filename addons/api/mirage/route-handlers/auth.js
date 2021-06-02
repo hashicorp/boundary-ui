@@ -107,14 +107,35 @@ const commandHandlers = {
   },
 };
 
+// Handles all custom methods on /auth-methods/:id route
 export function authHandler({ scopes, authMethods }, request) {
-  const payload = JSON.parse(request.requestBody);
-  const [, id] = request.params.idMethod.match(/(?<id>.[^:]*)/);
-  const { command } = payload;
+  const [, id, method] = request.params.id_method.match(
+    /(?<id>.[^:]*):(?<method>(.*))/
+  );
   const authMethod = authMethods.find(id);
-  const scope = scopes.find(authMethod.scopeId);
-  const scopeAttrs = this.serialize(scopes.find(scope.id));
-  return commandHandlers[authMethod.type][command](payload, scopeAttrs);
+
+  if (method === 'authenticate') {
+    const payload = JSON.parse(request.requestBody);
+    const { command } = payload;
+    const scope = scopes.find(authMethod.scopeId);
+    const scopeAttrs = this.serialize(scopes.find(scope.id));
+    return commandHandlers[authMethod.type][command](payload, scopeAttrs);
+  }
+
+  if (method === 'change-state') {
+    const attrs = this.normalizedRequestAttrs();
+    let updatedAttrs = {};
+
+    if (method === 'change-state') {
+      updatedAttrs = {
+        attributes: {
+          state: attrs.attributes.state,
+        },
+      };
+    }
+
+    return authMethod.update(updatedAttrs);
+  }
 }
 
 export function deauthHandler() {

@@ -1,5 +1,3 @@
-import { authHandler } from '../route-handlers/auth';
-
 export default function (server) {
   // Scope resources
 
@@ -52,8 +50,4 @@ export default function (server) {
     server.createList('target', 2, { scope }, 'withRandomHostSets');
     server.createList('session', 4, { scope }, 'withAssociations');
   });
-
-  // Authenticate route handler
-  // TODO: Better way to pass-in auth handler
-  server.schema.authHandler = authHandler;
 }

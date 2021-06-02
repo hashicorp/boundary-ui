@@ -1,7 +1,7 @@
 {{#if @model.isOIDC}}
   <Rose::Dropdown
-    @text='{{
-      concat (t 'resources.auth-method.actions.change-state')
+    @text='{{concat
+      (t 'resources.auth-method.actions.change-state')
       ' : '
       (t (concat 'states.auth-method.oidc.states.' @model.attributes.state))
     }}'
