@@ -48,7 +48,7 @@
     "@storybook/addon-docs": "^6.0.26",
     "@storybook/addon-knobs": "^6.0.26",
     "@storybook/ember": "^6.0.26",
-    "@storybook/ember-cli-storybook": "^0.2.1",
+    "@storybook/ember-cli-storybook": "^0.4.0",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "doctoc": "^1.4.0",
