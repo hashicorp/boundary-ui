@@ -4,17 +4,19 @@
   {{#each target.sessions as |session|}}
     {{#if session.started_desktop_client}}
       {{#unless session.acknowledged}}
-        <Rose::Dialog
-          @heading={{t 'states.success'}}
-          @dismissButtonText={{t 'actions.ok'}}
-          @icon='check-circle-fill'
-          @style='success'
-          @modal={{true}}
+        <DialogDetail
+          @heading={{concat 'Target connection details: ' session.id}}
           @dismiss={{route-action 'acknowledge' session}}
-          as |dialog|
+          @dismissButtonText={{t 'actions.ok'}}
+          as |dialogDetail|
         >
-          <dialog.body>
+          <dialogDetail.notification
+            @style='success'
+            @heading='Successfully connected'
+          ></dialogDetail.notification>
 
+          <dialogDetail.body>
+            <h3>Proxy URL</h3>
             <Copyable
               @text={{concat session.proxy_address ':' session.proxy_port}}
               @buttonText={{t 'actions.copy-to-clipboard'}}
@@ -28,25 +30,31 @@
               }}
             </Copyable>
 
-          </dialog.body>
-          <dialog.footer>
-            <Rose::Button
-              @style='primary'
-              {{on 'click' (route-action 'acknowledge' session)}}
+            <Rose::Separator />
+
+            <h3>Credentials</h3>
+
+          </dialogDetail.body>
+          <dialogDetail.footer>
+            <div>
+              <Rose::Button
+                @style='secondary'
+                {{on 'click' (route-action 'acknowledge' session)}}
+              >
+                {{t 'actions.close'}}
+              </Rose::Button>
+            </div>
+            <div>
+            {{! <Rose::LinkButton
+              @route='index'
+              @style='inline-link-action'
+              @iconRight='chevron-right'
             >
-              {{t 'actions.ok'}}
-            </Rose::Button>
-          </dialog.footer>
-        </Rose::Dialog>
-        {{!-- <DialogDetail
-          @heading={{t 'states.success'}}
-          @dismiss={{route-action 'acknowledge' session}}
-          @dismissButtonText={{t 'actions.ok'}}
-          @icon='check-circle-fill'
-          @style='success'
-          @session={{session}}
-        >
-        </DialogDetail> --}}
+              
+            </Rose::LinkButton> }}
+            </div>
+          </dialogDetail.footer>
+        </DialogDetail>
       {{/unless}}
     {{/if}}
   {{/each}}

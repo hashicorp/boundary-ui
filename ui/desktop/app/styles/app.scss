@@ -213,7 +213,6 @@
   .copyable-button {
     margin: 0;
     padding: 0 sizing.rems(xxs);
-    position: relative;
     top: -2px;
   }
 
@@ -326,68 +325,63 @@
   text-align: center;
 }
 
+
 // Dialog Detail
 // These styles are a Work In Progress. Expect changes (lots of them)
 .connection-dialog {
-  .connection-dialog-successfully {
-    // background: green;
+  .rose-notification {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    box-shadow: none;
+    margin-bottom: 0;
   }
 
-  .proxy-url {
+  .rose-dialog-footer {
+    align-items: center;
     display: flex;
-
-    p {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  .credentials-card {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 12px;
-
-    &:last-child { margin-bottom: 0; }
-
-    .credentials-card-header {
+    
+    div:nth-child(1) {
       display: flex;
-      flex-direction: row;
+      justify-content: flex-start;
+      width: 50%;
+    }
+      
+    div:nth-child(2) {
+      display: flex;
+      justify-content: flex-end;
+      width: 50%;
+    }
+  }
 
-      div {
-        display: flex;
-        width: 50%;
+  // .credentials-card {
+  //   display: flex;
+  //   flex-direction: column;
+  //   margin-bottom: 12px;
+
+  //   &:last-child { margin-bottom: 0; }
+
+  //   .credentials-card-header {
+  //     display: flex;
+  //     flex-direction: row;
+
+  //     div {
+  //       display: flex;
+  //       width: 50%;
         
-        &:last-child {
-          justify-content: flex-end;
-        }
-      }
-      // border-bottom: 1px solid grey;
-    }
+  //       &:last-child {
+  //         justify-content: flex-end;
+  //       }
+  //     }
+  //     // border-bottom: 1px solid grey;
+  //   }
 
-    .credentials-card-body {
-      // background: yellow;
-    }
+  //   .credentials-card-body {
+  //     // background: yellow;
+  //   }
 
-    .credentials-card-footer {
-      // background: pink;
-    }
-  }
-}
-
-.rose-dialog-footer {
-  align-items: center;
-  display: flex;
-
-  div:nth-child(1) {
-    display: flex;
-    justify-content: flex-start;
-    width: 50%;
-  }
-  
-  div:nth-child(2) {
-    display: flex;
-    justify-content: flex-end;
-    width: 50%;
-  }
+  //   .credentials-card-footer {
+  //     // background: pink;
+  //   }
+  // }
 }
