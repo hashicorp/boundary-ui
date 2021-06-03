@@ -43,6 +43,15 @@ export default class ApplicationRoute extends Route {
     });
   }
 
+  /**
+   * Add windows OS config on controller
+   */
+  async setupController(controller, model) {
+    super.setupController(controller, model);
+    const isWindowsOS = await this.ipc.invoke('isWindowsOS');
+    this.controllerFor('application').set('isWindowsOS', isWindowsOS);
+  }
+
   // =actions
 
   /**

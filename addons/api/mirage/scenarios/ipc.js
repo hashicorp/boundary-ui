@@ -60,6 +60,13 @@ export default function initializeMockIPC(server) {
         session_id: newSession.id,
       };
     }
+
+    /**
+     * Check for browser running on windows OS
+     */
+    isWindowsOS() {
+      return Boolean(window.navigator.userAgent.match(/(windows)/i));
+    }
   }
 
   /**

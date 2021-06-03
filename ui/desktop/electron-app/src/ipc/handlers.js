@@ -5,6 +5,7 @@ const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
+const { isWindows } = require('../helpers/platform.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -64,3 +65,8 @@ handle('connect', ({ target_id, token, host_id }) =>
  * Cancel an established boundary session spawned process.
  */
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
+
+/**
+ * Check whether platform is windows
+ */
+handle('isWindowsOS', () => isWindows());

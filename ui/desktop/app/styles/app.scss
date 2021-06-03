@@ -124,6 +124,10 @@
   padding-left: sizing.rems(l) * 3;
   position: relative;
 
+  &.header-shrink {
+    padding-left: 0;
+  }
+
   .logotype {
     display: none;
   }
