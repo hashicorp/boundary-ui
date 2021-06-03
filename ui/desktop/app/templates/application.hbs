@@ -9,8 +9,16 @@
         <header.nav>
           {{outlet 'header-nav'}}
         </header.nav>
+      {{/if}}
 
-        <header.utilities as |utilities|>
+      <header.utilities as |utilities|>
+        {{#if this.isWindowsOS}}
+          <Rose::Button @iconOnly="cancel-plain" />
+          <Rose::Button @iconOnly="box-outline"/>
+          <Rose::Button @iconOnly="minus-plain" />
+        {{/if}}
+
+        {{#if this.session.isAuthenticated}}
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
             @icon='app-icons/user-profile'
@@ -48,11 +56,10 @@
                 </form.radioGroup>
               </Rose::Form>
             </dropdown.section>
-
           </utilities.dropdown>
-        </header.utilities>
-      {{/if}}
+        {{/if}}
 
+      </header.utilities>
     </Rose::Header>
   </layout.header>
 
