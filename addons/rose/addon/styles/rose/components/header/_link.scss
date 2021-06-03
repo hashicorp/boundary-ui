@@ -1,11 +1,12 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
+@use 'sass:math';
 
 .rose-header-nav-link {
   @include type.type(s, semibold);
 
   // target line height is 16, which is not a standard line height
-  $lineHeight: 16 / 14;
+  $lineHeight: math.div(16, 14);
   line-height: $lineHeight;
   text-decoration: none;
 

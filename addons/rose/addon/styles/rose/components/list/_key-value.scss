@@ -1,6 +1,7 @@
 @use '../../variables/sizing';
 @use '../../variables/typography';
 @use '../../utilities/type';
+@use 'sass:math';
 
 .rose-list-key-value {
   margin-bottom: sizing.rems(m);
@@ -10,9 +11,9 @@
   display: flex;
   border-bottom: 1px solid var(--ui-gray-subtler-3);
   @include type.type(s);
-  $lineHeight: 36 / 14;
+  $lineHeight: math.div(36, 14);
   line-height: $lineHeight;
-  padding: (sizing.rems(s) / 2) 0;
+  padding: math.div(sizing.rems(s), 2) 0;
 
   .rose-list-key-value-item-cell {
     display: flex;
