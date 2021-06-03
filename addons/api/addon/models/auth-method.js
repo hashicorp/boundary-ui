@@ -75,6 +75,27 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
     return this.type === 'oidc';
   }
 
+  /**
+   * @type {boolean}
+   */
+  get isInactive() {
+    return this.attributes.state === 'inactive';
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isPrivate() {
+    return this.attributes.state === 'active-private';
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isPublic() {
+    return this.attributes.state === 'active-public';
+  }
+
   // =methods
 
   /**

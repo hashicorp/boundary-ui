@@ -1,14 +1,15 @@
 {{#if @model.isOIDC}}
   <Rose::Dropdown
-    @text='{{concat
-      (t 'resources.auth-method.actions.status')
-      ' : '
-      (t (concat 'states.auth-method.oidc.states.' @model.attributes.state))
-    }}'
+    @text={{t (concat 'states.' @model.attributes.state)}}
+    @icon={{if
+      @model.isInactive
+      'disabled'
+      (if @model.isPrivate 'lock-closed-outline' 'check-circle-outline')
+    }}
     @dropdownRight={{true}}
     as |dropdown|
   >
-    <dropdown.section @title={{t 'resources.auth-method.actions.status'}}>
+    <dropdown.section @title={{t 'actions.change-state'}}>
       <Rose::Form as |form|>
         <form.radioGroup
           @name='theme'
@@ -19,7 +20,7 @@
           {{#each this.oidcStates as |state|}}
             <dropdown.item>
               <radioGroup.radio
-                @label={{t (concat 'states.auth-method.oidc.states.' state)}}
+                @label={{t (concat 'states.' state)}}
                 @value={{state}}
               />
             </dropdown.item>
