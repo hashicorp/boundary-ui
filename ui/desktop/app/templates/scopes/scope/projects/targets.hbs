@@ -5,18 +5,18 @@
     {{#if session.started_desktop_client}}
       {{#unless session.acknowledged}}
         <DialogDetail
-          @heading={{concat 'Target connection details: ' session.id}}
+          @heading={{concat (t 'resources.target.host-set.detail.title') ': ' session.id}}
           @dismiss={{route-action 'acknowledge' session}}
           @dismissButtonText={{t 'actions.ok'}}
           as |dialogDetail|
         >
           <dialogDetail.notification
             @style='success'
-            @heading='Successfully connected'
+            @heading={{t 'resources.target.messages.connection-success'}}
           ></dialogDetail.notification>
 
           <dialogDetail.body>
-            <h3>Proxy URL</h3>
+            <h3>{{t 'resources.target.host-set.detail.proxy_url'}}</h3>
             <Copyable
               @text={{concat session.proxy_address ':' session.proxy_port}}
               @buttonText={{t 'actions.copy-to-clipboard'}}
@@ -32,7 +32,7 @@
 
             <Rose::Separator />
 
-            <h3>Credentials</h3>
+            <h3>{{t 'resources.target.host-set.detail.credentials'}}</h3>
 
           </dialogDetail.body>
           <dialogDetail.footer>
@@ -50,7 +50,7 @@
               @style='inline-link-action'
               @iconRight='chevron-right'
             >
-              
+
             </Rose::LinkButton> }}
             </div>
           </dialogDetail.footer>
