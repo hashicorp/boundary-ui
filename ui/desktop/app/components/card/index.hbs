@@ -1,0 +1,15 @@
+<section class='credentials-card'>
+  {{yield
+    (hash
+      header=(component
+        'rose/anonymous' tagName='header' class='credentials-card-header'
+      )
+      body=(component
+        'rose/anonymous' tagName='div' class='credentials-card-body'
+      )
+      footer=(component
+        'rose/anonymous' tagName='footer' class='credentials-card-footer'
+      )
+    )
+  }}
+</section>
