@@ -43,7 +43,7 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
 
   /**
    * Update state of OIDC auth method
-   * @param {string} state - "inactive", "active-private", "active-public"
+   * @param {string} state
    */
   @action
   @notifyError(({ message }) => message)

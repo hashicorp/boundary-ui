@@ -45,7 +45,7 @@ auth-method:
     delete: Delete Auth Method
     make-primary: Make Primary
     remove-as-primary: Remove as Primary
-    change-state: State
+    status: Status
   notifications:
     make-primary-success: Auth method successfully elected to primary.
     remove-as-primary-success: Auth method successfully removed as primary.

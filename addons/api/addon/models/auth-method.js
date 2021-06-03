@@ -28,8 +28,6 @@ export const options = {
 };
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
-  STATES_ENUM = options.oidc.state;
-
   // =error attributes
   // These attributes exist solely to capture errors on nested fields.
   // See the application adapter's error normalization method for
