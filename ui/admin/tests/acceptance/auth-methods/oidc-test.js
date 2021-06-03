@@ -101,24 +101,29 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     assert.equal(authMethod.attributes.state, updateValue);
   });
 
+  // FIXME: How to mock just one request routed to /auth-methods and let everything else passthrough?
   // test('errors are displayed when state update fails', async function (assert) {
   //   assert.expect(2);
+  //   this.server.post('/auth-methods/:idMethod', (_, request) => {
+  //     // Only respond to state update with error
+  //     if (request.params.idMethod.match(/(change-state)/i)) {
+  //       return new Response(
+  //         400,
+  //         {},
+  //         {
+  //           status: 400,
+  //           code: 'error',
+  //           message: 'Sorry!',
+  //         }
+  //       );
+  //     }
+  //     return request;
+  //   });
   //   const newState = 'inactive';
   //   await visit(urls.authMethod);
   //   await click('.rose-layout-page-actions .rose-dropdown-trigger');
-  //   // Load page before mocking update
-  //   this.server.post('/auth-methods/:idMethod', () => {
-  //     return new Response(
-  //       400,
-  //       {},
-  //       {
-  //         status: 400,
-  //         code: 'error',
-  //         message: 'Sorry!',
-  //       }
-  //     );
-  //   });
   //   await click(`.rose-dropdown[open] input[value="${newState}"]`);
+  //   // debugger;
   //   const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
   //   assert.notEqual(
   //     newState,
