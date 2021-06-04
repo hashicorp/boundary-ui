@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import { options } from 'api/models/auth-method';
 
 export default class ScopesScopeAuthMethodsAuthMethodController extends Controller {
   // =attributes
@@ -9,5 +10,13 @@ export default class ScopesScopeAuthMethodsAuthMethodController extends Controll
    */
   get breadCrumb() {
     return this.model.displayName;
+  }
+
+  /**
+   * OIDC auth-method states
+   * @type {[string]}
+   */
+  get oidcStates() {
+    return options.oidc.state;
   }
 }

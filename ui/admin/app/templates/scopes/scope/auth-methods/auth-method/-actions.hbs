@@ -1,17 +1,42 @@
+{{#if @model.isOIDC}}
+  <Rose::Dropdown
+    @text={{t (concat 'states.' @model.attributes.state)}}
+    @icon={{if
+      @model.isInactive
+      'disabled'
+      (if @model.isPrivate 'lock-closed-outline' 'check-circle-outline')
+    }}
+    @dropdownRight={{true}}
+    as |dropdown|
+  >
+    <dropdown.section @title={{t 'actions.change-state'}}>
+      <Rose::Form as |form|>
+        <form.radioGroup
+          @name='theme'
+          @selectedValue={{@model.attributes.state}}
+          @changed={{route-action 'changeState'}}
+          as |radioGroup|
+        >
+          {{#each this.oidcStates as |state|}}
+            <dropdown.item>
+              <radioGroup.radio
+                @label={{t (concat 'states.' state)}}
+                @value={{state}}
+              />
+            </dropdown.item>
+          {{/each}}
+        </form.radioGroup>
+      </Rose::Form>
+    </dropdown.section>
+  </Rose::Dropdown>
+{{/if}}
+
 <Rose::Dropdown
   @text='{{t 'actions.manage'}}'
   @dropdownRight={{true}}
   as |dropdown|
 >
   {{#if (feature-flag 'primary-auth-method')}}
-    {{#unless @model.isPrimary}}
-      <dropdown.button
-        @disabled={{@model.canSave}}
-        {{on 'click' (route-action 'makePrimary' @model)}}
-      >
-        {{t 'resources.auth-method.actions.make-primary'}}
-      </dropdown.button>
-    {{/unless}}
     {{#if @model.isPrimary}}
       <dropdown.button
         @disabled={{@model.canSave}}
@@ -19,14 +44,32 @@
       >
         {{t 'resources.auth-method.actions.remove-as-primary'}}
       </dropdown.button>
+    {{else}}
+      <dropdown.button
+        @disabled={{@model.canSave}}
+        {{on 'click' (route-action 'makePrimary' @model)}}
+      >
+        {{t 'resources.auth-method.actions.make-primary'}}
+      </dropdown.button>
     {{/if}}
   {{/if}}
-  <dropdown.link
-    @route='scopes.scope.auth-methods.auth-method.accounts.new'
-    @model={{@model}}
-  >
-    {{t 'resources.account.actions.create'}}
-  </dropdown.link>
+  {{#if @model.isOIDC}}
+    {{#if (feature-flag 'oidc-account-crud')}}
+      <dropdown.link
+        @route='scopes.scope.auth-methods.auth-method.accounts.new'
+        @model={{@model}}
+      >
+        {{t 'resources.account.actions.create'}}
+      </dropdown.link>
+    {{/if}}
+  {{else}}
+    <dropdown.link
+      @route='scopes.scope.auth-methods.auth-method.accounts.new'
+      @model={{@model}}
+    >
+      {{t 'resources.account.actions.create'}}
+    </dropdown.link>
+  {{/if}}
   <dropdown.separator />
   <dropdown.button
     @style='danger'

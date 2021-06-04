@@ -248,7 +248,11 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     // Normalize field-specific errors, if any.
     const errors = fieldErrors.map((error) => ({
       detail: error.description,
-      source: { pointer: `/data/attributes/${error.name}` },
+      // Ember Data cannot handle errors on nested attributes, so these are
+      // flattened (e.g. `attributes.foobar` becomes `attributes_foobar`).
+      // To capture these errors, add read-only fields on the model
+      // corresponding to the underscored field name.
+      source: { pointer: `/data/attributes/${error.name.replace('.', '_')}` },
     }));
     // Return a list of JSON API errors rooted under the `errors` key.
     return {
