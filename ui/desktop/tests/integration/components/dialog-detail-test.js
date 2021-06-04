@@ -1,26 +1,30 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | dialog-detail', function (hooks) {
   setupRenderingTest(hooks);
 
-  test.skip('it renders', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
+  test('it renders', async function (assert) {
     await render(hbs`<DialogDetail />`);
+    assert.ok(find('.connection-dialog'));
+  });
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
+  test('it renders with content', async function (assert) {
     await render(hbs`
       <DialogDetail>
-        template block text
+        <dialogDetail.notification />
+        <dialogDetail.body>
+          <h2>Test</h2>
+        </dialogDetail.body>
+        <dialogDetail.footer></dialogDetail.footer>
       </DialogDetail>
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.ok(find('.connection-dialog'));
+    assert.ok(find('.rose-dialog-header'));
+    assert.ok(find('.rose-dialog-body'));
+    assert.ok(find('.rose-dialog-footer'));
   });
 });

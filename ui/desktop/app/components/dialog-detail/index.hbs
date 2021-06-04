@@ -8,14 +8,16 @@
   @modal={{true}}
   as |dialog|
 >
-  {{yield (hash
-    notification=(component 'rose/notification' class='connection-dialog-notification')
-  )}}
+  {{yield
+    (hash
+      notification=(component
+        'rose/notification' class='connection-dialog-notification'
+      )
+    )
+  }}
 
   <dialog.body>
-    {{yield (hash
-      body=(component 'rose/anonymous')
-    )}}
+    {{yield (hash body=(component 'rose/anonymous'))}}
     {{!--
     <Rose::Separator />
     <h3>Credentials</h3>
@@ -108,10 +110,8 @@
         <div>Code</div>
       </div>
     </div>--}}
-  </dialog.body> 
+  </dialog.body>
   <dialog.footer>
-    {{yield (hash
-      footer=(component 'rose/anonymous')
-    )}}
+    {{yield (hash footer=(component 'rose/anonymous'))}}
   </dialog.footer>
 </Rose::Dialog>
