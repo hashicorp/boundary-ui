@@ -37,14 +37,6 @@
   as |dropdown|
 >
   {{#if (feature-flag 'primary-auth-method')}}
-    {{#unless @model.isPrimary}}
-      <dropdown.button
-        @disabled={{@model.canSave}}
-        {{on 'click' (route-action 'makePrimary' @model)}}
-      >
-        {{t 'resources.auth-method.actions.make-primary'}}
-      </dropdown.button>
-    {{/unless}}
     {{#if @model.isPrimary}}
       <dropdown.button
         @disabled={{@model.canSave}}
@@ -52,14 +44,32 @@
       >
         {{t 'resources.auth-method.actions.remove-as-primary'}}
       </dropdown.button>
+    {{else}}
+      <dropdown.button
+        @disabled={{@model.canSave}}
+        {{on 'click' (route-action 'makePrimary' @model)}}
+      >
+        {{t 'resources.auth-method.actions.make-primary'}}
+      </dropdown.button>
     {{/if}}
   {{/if}}
-  <dropdown.link
-    @route='scopes.scope.auth-methods.auth-method.accounts.new'
-    @model={{@model}}
-  >
-    {{t 'resources.account.actions.create'}}
-  </dropdown.link>
+  {{#if @model.isOIDC}}
+    {{#if (feature-flag 'oidc-account-crud')}}
+      <dropdown.link
+        @route='scopes.scope.auth-methods.auth-method.accounts.new'
+        @model={{@model}}
+      >
+        {{t 'resources.account.actions.create'}}
+      </dropdown.link>
+    {{/if}}
+  {{else}}
+    <dropdown.link
+      @route='scopes.scope.auth-methods.auth-method.accounts.new'
+      @model={{@model}}
+    >
+      {{t 'resources.account.actions.create'}}
+    </dropdown.link>
+  {{/if}}
   <dropdown.separator />
   <dropdown.button
     @style='danger'

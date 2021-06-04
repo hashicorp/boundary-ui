@@ -18,6 +18,11 @@ export default class AccountModel extends GeneratedAccountModel {
   @equal('type', 'password') isPassword;
 
   /**
+   * @type {boolean}
+   */
+  @equal('type', 'oidc') isOIDC;
+
+  /**
    * Convenience for getting username in account.
    * @type {string}
    */
