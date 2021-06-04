@@ -5,7 +5,11 @@
     {{#if session.started_desktop_client}}
       {{#unless session.acknowledged}}
         <DialogDetail
-          @heading={{concat (t 'resources.target.host-set.detail.title') ': ' session.id}}
+          @heading={{concat
+            (t 'resources.target.host-set.detail.title')
+            ': '
+            session.id
+          }}
           @dismiss={{route-action 'acknowledge' session}}
           @dismissButtonText={{t 'actions.ok'}}
           as |dialogDetail|
@@ -13,7 +17,7 @@
           <dialogDetail.notification
             @style='success'
             @heading={{t 'resources.target.messages.connection-success'}}
-          ></dialogDetail.notification>
+          />
 
           <dialogDetail.body>
             <h3>{{t 'resources.target.host-set.detail.proxy_url'}}</h3>
@@ -45,7 +49,7 @@
               </Rose::Button>
             </div>
             <div>
-            {{! <Rose::LinkButton
+              {{! <Rose::LinkButton
               @route='index'
               @style='inline-link-action'
               @iconRight='chevron-right'
