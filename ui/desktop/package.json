@@ -11,11 +11,11 @@
   },
   "scripts": {
     "doc:toc": "doctoc README.md",
-    "build": "EMBER_CLI_ELECTRON=true yarn build:production && yarn build:desktop",
-    "build:production": "ember build --environment=production",
+    "build": "yarn build:production && yarn build:desktop",
+    "build:production": "cross-env EMBER_CLI_ELECTRON=true ember build --environment=production",
     "build:development": "ember build",
-    "prebuild:desktop": "cp -r dist/ electron-app/ember-dist/",
-    "build:desktop": "cd electron-app && yarn make",
+    "prebuild:desktop": "cross-os prebuild:desktop",
+    "build:desktop": "cd electron-app && yarn install && yarn make",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
@@ -29,14 +29,20 @@
     "format:sass": "prettier --write app/**/*.scss",
     "lint:js:fix": "eslint . --fix",
     "start": "ember serve",
-    "prestart:desktop": "cd electron-app && yarn build:cli",
+    "prestart:desktop": "cd electron-app && yarn premake",
     "start:desktop": "ember electron",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
     "test": "npm-run-all lint test:*",
-    "test:ember": "COVERAGE=true ember exam --random",
+    "test:ember": "cross-env COVERAGE=true ember exam --random",
     "postinstall": "cd electron-app && yarn install",
     "posttest": "ember coverage-merge && yarn clean:coverage"
+  },
+  "cross-os": {
+    "prebuild:desktop": {
+      "darwin": "cp -r dist/ electron-app/ember-dist/",
+      "win32": "(robocopy dist electron-app\\ember-dist /MIR) ^& exit 0"
+    }
   },
   "dependencies": {
     "ember-named-blocks-polyfill": "^0.2.4"
@@ -54,6 +60,8 @@
     "broccoli-asset-rev": "^3.0.0",
     "clipboard": "^2.0.6",
     "core": "*",
+    "cross-env": "^7.0.3",
+    "cross-os": "^1.4.0",
     "doctoc": "^1.4.0",
     "ember-a11y-testing": "^4.0.2",
     "ember-auto-import": "^1.10.1",

@@ -1,5 +1,6 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
+@use 'sass:math';
 
 .rose-dropdown-link {
   @include type.type(s);
@@ -11,7 +12,7 @@
   padding: 0 sizing.rems(s);
   text-decoration: none;
   text-align: left;
-  $line-height: 36 / 14;
+  $line-height: math.div(36, 14);
   line-height: $line-height;
 
   --background-color: transparent;

@@ -1,5 +1,6 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
+@use 'sass:math';
 
 .rose-table {
   @include type.type(s, normal);
@@ -68,9 +69,9 @@
   &.rose-table-condensed {
     .rose-table-cell {
       @include type.type(s);
-      $lineHeight: 36 / 14;
+      $lineHeight: math.div(36, 14);
       line-height: $lineHeight;
-      padding: (sizing.rems(s) / 2) sizing.rems(s);
+      padding: math.div(sizing.rems(s), 2) sizing.rems(s);
     }
   }
 

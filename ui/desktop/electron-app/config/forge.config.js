@@ -1,59 +1,47 @@
-const process = require('process');
-const { version } = require('../src/cli/index.js');
+// Generated during build
+const config = require('./config.js');
+const { isMac } = require('../src/helpers/platform.js');
 
-const formattedCLIVersion = version().formatted;
+console.log(`\n[forge-config] Release commit: ${config.releaseCommit}`);
+console.log(`[forge-config] Release version: ${config.releaseVersion}`);
 
-const appVersion = process.env.RELEASE_VERSION
-  ? `Version:  ${process.env.RELEASE_VERSION}\n`
-  : '';
-const appCommit = process.env.RELEASE_COMMIT
-  ? `Commit:  ${process.env.RELEASE_COMMIT}\n`
-  : '';
-
-const formattedAppVersion = `${appVersion}${appCommit}`;
-
-// Output version strings for debugging
-console.log('\n\nVersion Env Vars:');
-console.log('RELEASE_VERSION     ', process.env.RELEASE_VERSION);
-console.log('RELEASE_COMMIT      ', process.env.RELEASE_COMMIT);
+// MacOS signing identity
+if (isMac() && !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY)
+  console.warn(
+    '[forge-config] WARNING: Could not find signing identity. Proceeding without signing.'
+  );
 
 module.exports = {
-  releaseVersion: process.env.RELEASE_VERSION,
-  hooks: {
-    prePackage: () => {
-      if (!process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY) {
-        console.warn('\nWARNING: Could not find signing identity.');
-      }
-    },
-  },
   packagerConfig: {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],
-    name: 'Boundary',
+    icon: './assets/app-icons/icon',
+    name: config.productName,
+    appVersion: config.version,
     appBundleId: 'com.electron.boundary',
-    // TODO: where should the client version number come from?
-    appVersion: `${formattedAppVersion}${formattedCLIVersion}\n`,
-    appCopyright: 'Copyright © 2021 HashiCorp, Inc.',
-    icon: './config/macos/icon.icns',
+    appCopyright: config.copyright,
     osxSign: {
       identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
       'hardened-runtime': true,
-      entitlements: './config/macos/entitlements.plist',
-      'entitlements-inherit': './config/macos/entitlements.plist',
+      entitlements: './assets/macos/entitlements.plist',
+      'entitlements-inherit': './assets/macos/entitlements.plist',
       'signature-flags': 'library',
     },
   },
   makers: [
     {
+      name: '@electron-forge/maker-zip',
+    },
+    {
       name: '@electron-forge/maker-dmg',
       config: {
-        title: 'Boundary',
-        name: 'boundary',
-        icon: './config/macos/disk.icns',
-        background: './config/macos/background.png',
+        title: config.productName,
+        name: config.name,
+        icon: './assets/macos/disk.icns',
+        background: './assets/macos/background.png',
       },
     },
     {
-      name: '@electron-forge/maker-zip',
+      name: '@electron-forge/maker-squirrel',
     },
   ],
 };
