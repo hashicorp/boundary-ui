@@ -111,7 +111,9 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
 
       // Associate the connection details with the session
       const { session_id, address, port } = connectionDetails;
-      await this.store.findRecord('session', session_id);
+      const session = await this.store.findRecord('session', session_id);
+      // Flag the session has been open in the desktop client
+      session.started_desktop_client = true;
 
       // Update the session record with proxy information from the CLI
       // This is read-only information that shouldn't dirty the session,
@@ -124,7 +126,6 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
             id: session_id,
             type: 'session',
             attributes: {
-              started_desktop_client: true,
               proxy_address: address,
               proxy_port: port
             }

@@ -2,12 +2,13 @@ import GeneratedSessionModel from '../generated/models/session';
 import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 import { attr } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 
 export default class SessionModel extends GeneratedSessionModel {
   // =attributes
 
-  @attr('boolean', { readOnly: true }) acknowledged;
-  @attr('boolean', { readOnly: true }) started_desktop_client;
+  @tracked acknowledged;
+  @tracked started_desktop_client;
   @attr('string', { readOnly: true }) proxy_address;
   @attr('number', { readOnly: true }) proxy_port;
 
