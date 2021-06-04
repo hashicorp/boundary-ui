@@ -100,3 +100,9 @@ signing_algorithms:
   help: The signing algorithms allowed for the auth method.
 algorithm:
   label: Algorithm
+subject:
+  label: Subject
+email:
+  label: Email
+full_name:
+  label: Full Name

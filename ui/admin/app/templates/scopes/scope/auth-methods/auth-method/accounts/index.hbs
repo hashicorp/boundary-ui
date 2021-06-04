@@ -1,46 +1,91 @@
 {{#if @model}}
 
-  <Rose::Table as |table|>
-    <table.header as |header|>
-      <header.row as |row|>
-        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-        <row.headerCell>
-          {{#if @model.firstObject.isPassword}}
-            {{t 'form.login_name.label'}}
-          {{/if}}
-        </row.headerCell>
-        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-      </header.row>
-    </table.header>
-    <table.body as |body|>
-      {{#each @model as |account|}}
-        <body.row as |row|>
-          <row.headerCell>
-            <LinkTo
-              @route='scopes.scope.auth-methods.auth-method.accounts.account'
-              @model={{account.id}}
-            >
+  {{! OIDC accounts display more fields }}
+  {{#if @model.firstObject.isOIDC}}
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.issuer.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.subject.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.email.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.full_name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        {{#each @model as |account|}}
+          <body.row as |row|>
+            <row.headerCell scope='row'>
               {{account.displayName}}
-            </LinkTo>
-            <p>{{account.description}}</p>
+            </row.headerCell>
+            <row.cell>
+              <code>{{account.attributes.issuer}}</code>
+            </row.cell>
+            <row.cell>
+              <code>{{account.attributes.subject}}</code>
+            </row.cell>
+            <row.cell>
+              <code>{{account.attributes.email}}</code>
+            </row.cell>
+            <row.cell>
+              {{account.attributes.full_name}}
+            </row.cell>
+            <row.cell>
+              <Copyable
+                @text={{account.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{account.id}}</code>
+              </Copyable>
+            </row.cell>
+          </body.row>
+        {{/each}}
+      </table.body>
+    </Rose::Table>
+  {{else}}
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+          <row.headerCell>
+            {{#if @model.firstObject.isPassword}}
+              {{t 'form.login_name.label'}}
+            {{/if}}
           </row.headerCell>
-          <row.cell>
-            {{account.username}}
-          </row.cell>
-          <row.cell>
-            <Copyable
-              @text={{account.id}}
-              @buttonText={{t 'actions.copy-to-clipboard'}}
-              @acknowledgeText={{t 'states.copied'}}
-            >
-              <code>{{account.id}}</code>
-            </Copyable>
-          </row.cell>
-        </body.row>
-      {{/each}}
-    </table.body>
-  </Rose::Table>
-
+          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        {{#each @model as |account|}}
+          <body.row as |row|>
+            <row.headerCell>
+              <LinkTo
+                @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                @model={{account.id}}
+              >
+                {{account.displayName}}
+              </LinkTo>
+              <p>{{account.description}}</p>
+            </row.headerCell>
+            <row.cell>
+              {{account.username}}
+            </row.cell>
+            <row.cell>
+              <Copyable
+                @text={{account.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{account.id}}</code>
+              </Copyable>
+            </row.cell>
+          </body.row>
+        {{/each}}
+      </table.body>
+    </Rose::Table>
+  {{/if}}
 {{else}}
 
   <Rose::Layout::Centered>
