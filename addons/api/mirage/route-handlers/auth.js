@@ -122,19 +122,18 @@ export function authHandler({ scopes, authMethods }, request) {
     return commandHandlers[authMethod.type][command](payload, scopeAttrs);
   }
 
+  // TODO:  this handler doesn't really belong here, but we already route
+  // POST requests on existing auth methods to this route handler file under the
+  // assumption it would be for authentication.  While authentication should
+  // still occur here, we should handle other custom methods in the
+  // mirage config and route here only for auth.
   if (method === 'change-state') {
     const attrs = this.normalizedRequestAttrs();
-    let updatedAttrs = {};
-
-    if (method === 'change-state') {
-      updatedAttrs = {
-        attributes: {
-          state: attrs.attributes.state,
-        },
-      };
-    }
-
-    return authMethod.update(updatedAttrs);
+    return authMethod.update({
+      attributes: {
+        state: attrs.attributes.state,
+      },
+    });
   }
 }
 
