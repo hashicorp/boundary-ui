@@ -4,7 +4,7 @@ import { fragment } from 'ember-data-model-fragments/attributes';
 import { equal } from '@ember/object/computed';
 
 /**
- * Enum ptions per auth method type and field.
+ * Enum options per auth method type and field.
  */
 export const options = {
   oidc: {
@@ -73,6 +73,27 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
    */
   get isOIDC() {
     return this.type === 'oidc';
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isInactive() {
+    return this.attributes.state === 'inactive';
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isPrivate() {
+    return this.attributes.state === 'active-private';
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isPublic() {
+    return this.attributes.state === 'active-public';
   }
 
   // =methods

@@ -1,1 +1,1 @@
-export { default, docUrl } from 'core/helpers/doc-url';
+export { default } from 'core/helpers/doc-url';

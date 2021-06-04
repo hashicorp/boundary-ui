@@ -1,1 +1,1 @@
-export { default, appName } from 'core/helpers/app-name';
+export { default } from 'core/helpers/app-name';

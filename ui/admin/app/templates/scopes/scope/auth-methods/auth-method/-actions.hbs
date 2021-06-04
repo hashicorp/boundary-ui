@@ -1,3 +1,36 @@
+{{#if @model.isOIDC}}
+  <Rose::Dropdown
+    @text={{t (concat 'states.' @model.attributes.state)}}
+    @icon={{if
+      @model.isInactive
+      'disabled'
+      (if @model.isPrivate 'lock-closed-outline' 'check-circle-outline')
+    }}
+    @dropdownRight={{true}}
+    as |dropdown|
+  >
+    <dropdown.section @title={{t 'actions.change-state'}}>
+      <Rose::Form as |form|>
+        <form.radioGroup
+          @name='theme'
+          @selectedValue={{@model.attributes.state}}
+          @changed={{route-action 'changeState'}}
+          as |radioGroup|
+        >
+          {{#each this.oidcStates as |state|}}
+            <dropdown.item>
+              <radioGroup.radio
+                @label={{t (concat 'states.' state)}}
+                @value={{state}}
+              />
+            </dropdown.item>
+          {{/each}}
+        </form.radioGroup>
+      </Rose::Form>
+    </dropdown.section>
+  </Rose::Dropdown>
+{{/if}}
+
 <Rose::Dropdown
   @text='{{t 'actions.manage'}}'
   @dropdownRight={{true}}
