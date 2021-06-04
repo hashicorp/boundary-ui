@@ -125,4 +125,19 @@ export default class ApplicationRoute extends Route {
         rootEl.classList.remove('rose-theme-light');
     }
   }
+
+  @action
+  minimize() {
+    this.ipc.invoke('minimizeWindow');
+  }
+
+  @action
+  toggleFullScreen() {
+    this.ipc.invoke('toggleFullscreenWindow');
+  }
+
+  @action
+  close() {
+    this.ipc.invoke('closeWindow');
+  }
 }

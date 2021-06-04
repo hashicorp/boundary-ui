@@ -1,4 +1,4 @@
-const { shell } = require('electron');
+const { shell, BrowserWindow } = require('electron');
 const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
@@ -70,3 +70,21 @@ handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
  * Check whether platform is windows
  */
 handle('isWindowsOS', () => isWindows());
+
+/**
+ * Minimize window
+ */
+handle('minimizeWindow', () => BrowserWindow.getFocusedWindow().minimize());
+
+/**
+ * Toggle fullscreen window
+ */
+handle('toggleFullscreenWindow', () => {
+  const window = BrowserWindow.getFocusedWindow();
+  window.isMaximized() ? window.unmaximize() : window.maximize();
+});
+
+/**
+ * Close window
+ */
+handle('closeWindow', () => BrowserWindow.getFocusedWindow().close());

@@ -67,6 +67,14 @@ export default function initializeMockIPC(server) {
     isWindowsOS() {
       return Boolean(window.navigator.userAgent.match(/(windows)/i));
     }
+
+    /**
+     * Do nothing when attempting to minimize, toggle fullscreen,
+     * and close a browser window
+     */
+    minimizeWindow() {}
+    closeWindow() {}
+    toggleFullScreenWindow() {}
   }
 
   /**

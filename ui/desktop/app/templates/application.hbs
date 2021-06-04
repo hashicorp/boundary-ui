@@ -13,9 +13,15 @@
 
       <header.utilities as |utilities|>
         {{#if this.isWindowsOS}}
-          <Rose::Button @iconOnly="cancel-plain" />
-          <Rose::Button @iconOnly="box-outline"/>
-          <Rose::Button @iconOnly="minus-plain" />
+          <Rose::Button @iconOnly="cancel-plain"
+            {{on 'click' (route-action 'close')}}
+          />
+          <Rose::Button @iconOnly="box-outline"
+            {{on 'click' (route-action 'toggleFullScreen')}}
+          />
+          <Rose::Button @iconOnly="minus-plain"
+            {{on 'click' (route-action 'minimize')}}
+          />
         {{/if}}
 
         {{#if this.session.isAuthenticated}}
