@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'sizing';
+@use 'sass:math';
 
 /**
  * SASS variables defining typography.
@@ -46,15 +47,15 @@ $font-sizes: (
 
 // Line height expressed as ratio.
 $line-heights: (
-  xl: 36 / 28,
-  l: 24 / 20,
-  m: 20 / 16,
-  s: 18 / 14,
-  xs: 16 / 12,
-  h1: 48 / 28,
-  h2: 36 / 20,
-  h3: 24 / 16,
-  button: 24 / 13,
+  xl: math.div(36, 28),
+  l: math.div(24, 20),
+  m: math.div(20, 16),
+  s: math.div(18, 14),
+  xs: math.div(16, 12),
+  h1: math.div(48, 28),
+  h2: math.div(36, 20),
+  h3: math.div(24, 16),
+  button: math.div(24, 13),
 );
 
 /**
