@@ -10,6 +10,7 @@ account:
       description: Set a password for the account.
   types:
     password: Password
+    oidc: OIDC
   actions:
     create: Create Account
     delete: Delete Account
