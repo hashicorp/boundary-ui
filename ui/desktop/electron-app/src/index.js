@@ -197,16 +197,19 @@ app.on('before-quit', (event) => {
       detail: 'Close sessions before quitting?',
     };
 
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      switch (returnValue.response) {
-        case 0:
-          sessionManager.stopAll();
-          break;
-        default:
-          event.preventDefault();
-          break;
-      }
-    });
+    const buttonId = dialog.showMessageBoxSync(null, dialogOpts);
+    buttonId === 0 ? sessionManager.stopAll() : event.preventDefault();
+
+    //   console.log(returnValue.response);
+    //   switch (returnValue.response) {
+    //     case 0:
+    //       sessionManager.stopAll();
+    //       break;
+    //     default:
+    //       event.preventDefault();
+    //       break;
+    //   }
+    // });
   }
 });
 

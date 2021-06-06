@@ -1,11 +1,11 @@
-const { shell, BrowserWindow } = require('electron');
+const { app, shell, BrowserWindow } = require('electron');
 const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
-const { isWindows } = require('../helpers/platform.js');
+const { isMac, isWindows } = require('../helpers/platform.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -67,7 +67,12 @@ handle('connect', ({ target_id, token, host_id }) =>
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
 
 /**
- * Check whether platform is windows
+ * Check for MacOS OS
+ */
+handle('isMacOS', () => isMac());
+
+/**
+ * Check for Windows OS
  */
 handle('isWindowsOS', () => isWindows());
 
@@ -85,6 +90,6 @@ handle('toggleFullscreenWindow', () => {
 });
 
 /**
- * Close window
+ * Quit app
  */
-handle('closeWindow', () => BrowserWindow.getFocusedWindow().close());
+handle('closeWindow', () => app.quit());

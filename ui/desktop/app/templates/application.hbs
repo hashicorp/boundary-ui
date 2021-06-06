@@ -1,9 +1,9 @@
 {{page-title (app-name)}}
 
-<Rose::Layout::Global as |layout|>
+<Rose::Layout::Global class='{{if this.isWindowsOS ' layout-scroll'}}' as |layout|>
 
   <layout.header>
-    <Rose::Header class='{{if (is-loading) ' loading'}} {{if this.isWindowsOS ' header-shrink'}}' as |header|>
+    <Rose::Header class='{{if (is-loading) ' loading'}} {{if this.isMacOS ' header-cushion'}}' as |header|>
       <header.brand @logo='logo-app' @text={{app-name}} />
       {{#if this.session.isAuthenticated}}
         <header.nav>
@@ -13,15 +13,17 @@
 
       <header.utilities as |utilities|>
         {{#if this.isWindowsOS}}
-          <Rose::Button @iconOnly="cancel-plain"
-            {{on 'click' (route-action 'close')}}
-          />
-          <Rose::Button @iconOnly="box-outline"
-            {{on 'click' (route-action 'toggleFullScreen')}}
-          />
-          <Rose::Button @iconOnly="minus-plain"
-            {{on 'click' (route-action 'minimize')}}
-          />
+          <span class='utilities-actions'>
+            <Rose::Button @iconOnly="minus-plain" @style="secondary"
+              {{on 'click' (route-action 'minimize')}}
+            />
+            <Rose::Button @iconOnly="box-outline" @style="secondary"
+              {{on 'click' (route-action 'toggleFullScreen')}}
+            />
+            <Rose::Button @iconOnly="cancel-plain" @style="warning"
+              {{on 'click' (route-action 'close')}}
+            />
+          </span>
         {{/if}}
 
         {{#if this.session.isAuthenticated}}
