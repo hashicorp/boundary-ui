@@ -12,11 +12,17 @@
   }
 
   // This styles are add to stop the input to apply extra margin (default on forms)
+  .rose-form-input,
   .rose-form-input-field,
   .rose-form-select,
-  .rose-form-input {
+  .rose-form-select-field {
     margin: 0;
     width: 100%;
+  }
+
+  // Fix margin issue with textarea elements inside tables
+  textarea {
+    display: block;
   }
 
   .rose-table-cell,

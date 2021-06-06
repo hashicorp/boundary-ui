@@ -88,7 +88,8 @@ module.exports = function (environment) {
     featureFlags: {
       'primary-auth-method': true,
       oidc: true,
-      'oidc-crud': false,
+      'oidc-crud': true,
+      'oidc-account-crud': false,
       search: false,
       filter: false,
       capabilities: false,
@@ -131,6 +132,7 @@ module.exports = function (environment) {
     ENV.featureFlags['primary-auth-method'] = true;
     ENV.featureFlags['oidc'] = true;
     ENV.featureFlags['oidc-crud'] = true;
+    //ENV.featureFlags['oidc-account-crud'] = true;
   }
 
   if (environment === 'test') {

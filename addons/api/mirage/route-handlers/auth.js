@@ -107,14 +107,34 @@ const commandHandlers = {
   },
 };
 
+// Handles all custom methods on /auth-methods/:id route
 export function authHandler({ scopes, authMethods }, request) {
-  const payload = JSON.parse(request.requestBody);
-  const [, id] = request.params.id_method.match(/(?<id>.[^:]*)/);
-  const { command } = payload;
+  const [, id, method] = request.params.id_method.match(
+    /(?<id>.[^:]*):(?<method>(.*))/
+  );
   const authMethod = authMethods.find(id);
-  const scope = scopes.find(authMethod.scopeId);
-  const scopeAttrs = this.serialize(scopes.find(scope.id));
-  return commandHandlers[authMethod.type][command](payload, scopeAttrs);
+
+  if (method === 'authenticate') {
+    const payload = JSON.parse(request.requestBody);
+    const { command } = payload;
+    const scope = scopes.find(authMethod.scopeId);
+    const scopeAttrs = this.serialize(scopes.find(scope.id));
+    return commandHandlers[authMethod.type][command](payload, scopeAttrs);
+  }
+
+  // TODO:  this handler doesn't really belong here, but we already route
+  // POST requests on existing auth methods to this route handler file under the
+  // assumption it would be for authentication.  While authentication should
+  // still occur here, we should handle other custom methods in the
+  // mirage config and route here only for auth.
+  if (method === 'change-state') {
+    const attrs = this.normalizedRequestAttrs();
+    return authMethod.update({
+      attributes: {
+        state: attrs.attributes.state,
+      },
+    });
+  }
 }
 
 export function deauthHandler() {

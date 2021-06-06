@@ -20,13 +20,36 @@ export default class AccountSerializer extends ApplicationSerializer {
    * @return {object}
    */
   serialize(snapshot) {
+    switch (snapshot.record.type) {
+      case 'password':
+        return this.serializePassword(...arguments);
+    }
+  }
+
+  /**
+   * Password serialization omits `attributes` and handles password-related
+   * custom methods.
+   * @param {Snapshot} snapshot
+   * @return {object}
+   */
+  serializePassword(snapshot) {
     const password = snapshot?.adapterOptions?.password;
     let serialized = super.serialize(...arguments);
+    // Only login_name is serialized into password attributes.
+    const { login_name } = serialized.attributes;
+    if (login_name) {
+      serialized.attributes = { login_name };
+    } else {
+      serialized.attributes = {};
+    }
+    // New record case
     if (password && snapshot?.record?.isNew)
       serialized.attributes.password = password;
+    // Set password custom method
     if (snapshot?.adapterOptions?.method === 'set-password') {
       serialized = this.serializeForSetPassword(snapshot, password);
     }
+    // Change password custom method
     if (snapshot?.adapterOptions?.method === 'change-password') {
       const { currentPassword, newPassword } = snapshot?.adapterOptions;
       serialized = this.serializeForChangePassword(
