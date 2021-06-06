@@ -199,17 +199,6 @@ app.on('before-quit', (event) => {
 
     const buttonId = dialog.showMessageBoxSync(null, dialogOpts);
     buttonId === 0 ? sessionManager.stopAll() : event.preventDefault();
-
-    //   console.log(returnValue.response);
-    //   switch (returnValue.response) {
-    //     case 0:
-    //       sessionManager.stopAll();
-    //       break;
-    //     default:
-    //       event.preventDefault();
-    //       break;
-    //   }
-    // });
   }
 });
 

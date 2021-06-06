@@ -141,11 +141,12 @@
 
 .rose-header {
   -webkit-app-region: drag;
-  -webkit-user-select: none;
   min-height: sizing.rems(l) * 2;
   position: relative;
+  -webkit-user-select: none;
 
-  .rose-header-brand, .rose-header-nav,
+  .rose-header-brand,
+  .rose-header-nav,
   .rose-header-utilities .rose-dropdown,
   .rose-header-utilities button {
     -webkit-app-region: no-drag;
