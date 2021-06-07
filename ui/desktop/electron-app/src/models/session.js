@@ -62,7 +62,6 @@ class Session {
    */
   stop() {
     return new Promise((resolve, reject) => {
-      debugger;
       if (this.isRunning) {
         this.#process.on('close', () => resolve());
         this.#process.on('error', (e) => reject(e));
