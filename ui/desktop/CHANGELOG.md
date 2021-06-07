@@ -2,6 +2,16 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## Next
+
+### New
+
+- Add Windows 10 support for client. ([PR](https://github.com/hashicorp/boundary-ui/pull/581))
+
+### Bug Fixes
+
+- Client will show update available prompt when a new version is released. ([PR](https://github.com/hashicorp/boundary-ui/pull/566))
+
 ## v1.0.1 [CLI 0.2.2] (2021.05.19)
 
 ### New

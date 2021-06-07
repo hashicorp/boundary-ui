@@ -29,12 +29,32 @@
 
   .rose-layout-global-body {
     max-height: 100vh;
-    overflow: hidden;
+    overflow: auto;
+
+    main {
+      flex-grow: 1;
+      overflow: auto;
+    }
   }
 
   .rose-layout-sidebar-sidebar,
   .rose-layout-sidebar-body {
     overflow-y: scroll;
+  }
+
+  &.layout-scroll {
+    .rose-layout-global-body {
+      overflow-y: auto;
+
+      main {
+        overflow: unset;
+      }
+    }
+
+    .rose-layout-sidebar-sidebar,
+    .rose-layout-sidebar-body {
+      overflow-y: unset;
+    }
   }
 }
 
@@ -121,8 +141,28 @@
 .rose-header {
   -webkit-app-region: drag;
   min-height: sizing.rems(l) * 2;
-  padding-left: sizing.rems(l) * 3;
   position: relative;
+  -webkit-user-select: none;
+
+  .rose-header-brand,
+  .rose-header-nav,
+  .rose-header-utilities .rose-dropdown,
+  .rose-header-utilities button {
+    -webkit-app-region: no-drag;
+  }
+
+  &.header-cushion {
+    padding-left: sizing.rems(l) * 3;
+  }
+
+  .button-window-minimize,
+  .button-window-fullscreen,
+  .button-window-close {
+    background: transparent;
+    border: transparent;
+    color: var(--white);
+    margin: sizing.rems(xs);
+  }
 
   .logotype {
     display: none;
@@ -212,13 +252,6 @@
 
 .nowrap {
   white-space: nowrap;
-}
-
-.rose-layout-global .rose-layout-global-body {
-  main {
-    flex-grow: 1;
-    overflow: auto;
-  }
 }
 
 .branded-card {

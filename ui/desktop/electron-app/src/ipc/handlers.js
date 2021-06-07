@@ -1,10 +1,11 @@
-const { shell } = require('electron');
+const { app, shell, BrowserWindow } = require('electron');
 const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
+const { isMac, isWindows } = require('../helpers/platform.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -64,3 +65,31 @@ handle('connect', ({ target_id, token, host_id }) =>
  * Cancel an established boundary session spawned process.
  */
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
+
+/**
+ * Check for MacOS OS
+ */
+handle('isMacOS', () => isMac());
+
+/**
+ * Check for Windows OS
+ */
+handle('isWindowsOS', () => isWindows());
+
+/**
+ * Minimize window
+ */
+handle('minimizeWindow', () => BrowserWindow.getFocusedWindow().minimize());
+
+/**
+ * Toggle fullscreen window
+ */
+handle('toggleFullscreenWindow', () => {
+  const window = BrowserWindow.getFocusedWindow();
+  window.isMaximized() ? window.unmaximize() : window.maximize();
+});
+
+/**
+ * Quit app
+ */
+handle('closeWindow', () => app.quit());

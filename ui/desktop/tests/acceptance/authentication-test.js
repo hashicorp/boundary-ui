@@ -19,13 +19,11 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import WindowMockIPC from '../helpers/window-mock-ipc';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let mockIPC;
-  let messageHandler;
 
   const instances = {
     scopes: {
@@ -102,39 +100,9 @@ module('Acceptance | authentication', function (hooks) {
     urls.targets = `${urls.projects}/targets`;
     urls.sessions = `${urls.projects}/sessions`;
 
-    class MockIPC {
-      origin = null;
-
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getOrigin() {
-        return this.origin;
-      }
-
-      setOrigin(origin) {
-        this.origin = origin;
-        return this.origin;
-      }
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    // Mock the postMessage interface used by IPC.
+    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultOrigin(this);
-  });
-
-  hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {

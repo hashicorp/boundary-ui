@@ -17,6 +17,8 @@ class MockIPC {
   }
 
   resetOrigin() {}
+  isMacOS() {}
+  isWindowsOS() {}
 }
 
 /**

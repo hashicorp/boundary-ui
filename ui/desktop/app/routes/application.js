@@ -43,6 +43,14 @@ export default class ApplicationRoute extends Route {
     });
   }
 
+  /**
+   * Add OS config on controller
+   */
+  async setupController(controller) {
+    controller.set('isMacOS', await this.ipc.invoke('isMacOS'));
+    controller.set('isWindowsOS', await this.ipc.invoke('isWindowsOS'));
+  }
+
   // =actions
 
   /**
@@ -115,5 +123,20 @@ export default class ApplicationRoute extends Route {
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
     }
+  }
+
+  @action
+  minimize() {
+    this.ipc.invoke('minimizeWindow');
+  }
+
+  @action
+  toggleFullScreen() {
+    this.ipc.invoke('toggleFullscreenWindow');
+  }
+
+  @action
+  close() {
+    this.ipc.invoke('closeWindow');
   }
 }

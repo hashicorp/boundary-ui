@@ -1,17 +1,46 @@
 {{page-title (app-name)}}
 
-<Rose::Layout::Global as |layout|>
+<Rose::Layout::Global
+  class='{{if this.isWindowsOS ' layout-scroll'}}'
+  as |layout|
+>
 
   <layout.header>
-    <Rose::Header class='{{if (is-loading) ' loading'}}' as |header|>
+    <Rose::Header
+      class='{{if (is-loading) ' loading'}}
+        {{if this.isMacOS ' header-cushion'}}'
+      as |header|
+    >
       <header.brand @logo='logo-app' @text={{app-name}} />
-
       {{#if this.session.isAuthenticated}}
         <header.nav>
           {{outlet 'header-nav'}}
         </header.nav>
+      {{/if}}
 
-        <header.utilities as |utilities|>
+      <header.utilities as |utilities|>
+        {{#if this.isWindowsOS}}
+          <Rose::Button
+            @iconOnly='cancel-plain'
+            @style='warning'
+            class='button-window-close'
+            {{on 'click' (route-action 'close')}}
+          />
+          <Rose::Button
+            @iconOnly='box-outline'
+            @style='secondary'
+            class='button-window-fullscreen'
+            {{on 'click' (route-action 'toggleFullScreen')}}
+          />
+          <Rose::Button
+            @iconOnly='minus-plain'
+            @style='secondary'
+            class='button-window-minimize'
+            {{on 'click' (route-action 'minimize')}}
+          />
+        {{/if}}
+
+        {{#if this.session.isAuthenticated}}
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
             @icon='app-icons/user-profile'
@@ -49,11 +78,10 @@
                 </form.radioGroup>
               </Rose::Form>
             </dropdown.section>
-
           </utilities.dropdown>
-        </header.utilities>
-      {{/if}}
+        {{/if}}
 
+      </header.utilities>
     </Rose::Header>
   </layout.header>
 

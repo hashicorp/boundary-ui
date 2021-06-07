@@ -1,8 +1,7 @@
-const path = require('path');
+const { path } = require('../cli/path.js');
 const { spawn, spawnSync } = require('child_process');
 const jsonify = require('../utils/jsonify.js');
-
-const boundaryPath = path.resolve(__dirname, '..', '..', 'cli', 'boundary');
+const { isWindows } = require('../helpers/platform.js');
 
 // You can throw exceptions, or allow them to occur, and this is supported.
 // Exceptions thrown in this way will be returned to the UI as an
@@ -29,7 +28,7 @@ module.exports = {
    */
   spawnAsyncJSONPromise(command) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(boundaryPath, command);
+      const childProcess = spawn(path(), command, { shell: isWindows() });
       let outputStream = '';
       let errorStream = '';
 
@@ -56,6 +55,7 @@ module.exports = {
       };
 
       childProcess.stderr.on('error', processError);
+      childProcess.stderr.on('data', processError);
     });
   },
 
@@ -66,7 +66,7 @@ module.exports = {
    * @return {string}
    */
   spawnSync(command) {
-    const childProcess = spawnSync(boundaryPath, command);
+    const childProcess = spawnSync(path(), command, { shell: isWindows() });
     const rawOutput = childProcess.output.toString();
     return rawOutput;
   },
