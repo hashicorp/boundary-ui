@@ -13,6 +13,7 @@ Boundary UIs.
 - [Linting](#linting)
 - [Formatting](#formatting)
 - [Building Components](#building-components)
+- [Using Components](#using-components)
 - [Running tests](#running-tests)
 - [Running the dummy application](#running-the-dummy-application)
 - [Contributing](#contributing)
