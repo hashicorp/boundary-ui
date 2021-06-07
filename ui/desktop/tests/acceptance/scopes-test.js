@@ -292,11 +292,11 @@ module('Acceptance | scopes', function (hooks) {
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
       );
-      assert.ok(find('.rose-dialog-success'), 'Success dialog');
+      assert.ok(find('.connection-dialog'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
       assert.equal(
         find('.rose-dialog-footer button').textContent.trim(),
-        'OK',
+        'Close',
         'Cannot retry'
       );
     }, 750);
