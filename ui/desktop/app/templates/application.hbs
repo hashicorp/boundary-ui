@@ -20,23 +20,24 @@
 
       <header.utilities as |utilities|>
         {{#if this.isWindowsOS}}
-          <span class='utilities-actions'>
-            <Rose::Button
-              @iconOnly='minus-plain'
-              @style='secondary'
-              {{on 'click' (route-action 'minimize')}}
-            />
-            <Rose::Button
-              @iconOnly='box-outline'
-              @style='secondary'
-              {{on 'click' (route-action 'toggleFullScreen')}}
-            />
-            <Rose::Button
-              @iconOnly='cancel-plain'
-              @style='warning'
-              {{on 'click' (route-action 'close')}}
-            />
-          </span>
+          <Rose::Button
+            @iconOnly='cancel-plain'
+            @style='warning'
+            class='button-window-close'
+            {{on 'click' (route-action 'close')}}
+          />
+          <Rose::Button
+            @iconOnly='box-outline'
+            @style='secondary'
+            class='button-window-fullscreen'
+            {{on 'click' (route-action 'toggleFullScreen')}}
+          />
+          <Rose::Button
+            @iconOnly='minus-plain'
+            @style='secondary'
+            class='button-window-minimize'
+            {{on 'click' (route-action 'minimize')}}
+          />
         {{/if}}
 
         {{#if this.session.isAuthenticated}}

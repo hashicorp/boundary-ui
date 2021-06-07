@@ -4,8 +4,7 @@ const { isWindows } = require('../helpers/platform.js');
 module.exports = {
   // Returns boundary cli path
   path: () => {
-    let name = 'boundary';
-    if (isWindows()) name = 'boundary.exe';
+    const name = isWindows() ? 'boundary.exe' : 'boundary';
     return path.resolve(__dirname, '..', '..', 'cli', name);
   }
 };

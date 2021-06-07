@@ -42,7 +42,6 @@
     overflow-y: scroll;
   }
 
-  // Windows OS specific overflow.
   &.layout-scroll {
     .rose-layout-global-body {
       overflow-y: auto;
@@ -156,16 +155,13 @@
     padding-left: sizing.rems(l) * 3;
   }
 
-  .utilities-actions {
-    display: flex;
-    justify-content: center;
-
-    button {
-      background: transparent;
-      border: transparent;
-      color: var(--white);
-      margin: sizing.rems(xs);
-    }
+  .button-window-minimize,
+  .button-window-fullscreen,
+  .button-window-close {
+    background: transparent;
+    border: transparent;
+    color: var(--white);
+    margin: sizing.rems(xs);
   }
 
   .logotype {
