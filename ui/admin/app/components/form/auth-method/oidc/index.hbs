@@ -6,6 +6,14 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
+
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
+
   <form.input
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
@@ -117,6 +125,15 @@
       </field.errors>
     {{/if}}
   </form.input>
+
+  {{#unless @model.isNew}}
+    <form.input
+      @value={{@model.attributes.client_secret_hmac}}
+      @label={{t 'form.client_secret_hmac.label'}}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/unless}}
 
   {{! Signing Algorithms }}
   <Rose::Form::Fieldset>
