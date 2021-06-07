@@ -24,6 +24,12 @@
         >
           {{t 'resources.auth-method.types.password'}}
         </dropdown.link>
+        <dropdown.link
+          @route='scopes.scope.auth-methods.new'
+          @query={{hash type='oidc'}}
+        >
+          {{t 'resources.auth-method.types.oidc'}}
+        </dropdown.link>
       </Rose::Dropdown>
     {{/if}}
   </page.actions>
