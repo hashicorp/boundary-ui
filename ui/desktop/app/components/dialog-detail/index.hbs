@@ -1,20 +1,12 @@
 <Rose::Dialog
-  class='connection-dialog'
+  class='dialog-detail'
   @heading={{@heading}}
   @dismiss={{@dismiss}}
   @dismissButtonText={{@dismissButtonText}}
-  @style={{@style}}
-  @icon={{@icon}}
   @modal={{true}}
   as |dialog|
 >
-  {{yield
-    (hash
-      notification=(component
-        'rose/notification' class='connection-dialog-notification'
-      )
-    )
-  }}
+  {{yield (hash notification=(component 'rose/notification'))}}
 
   <dialog.body>
     {{yield (hash body=(component 'rose/anonymous'))}}

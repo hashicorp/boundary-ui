@@ -328,13 +328,20 @@
 
 // Dialog Detail
 // These styles are a Work In Progress. Expect changes (lots of them)
-.connection-dialog {
+.dialog-detail {
   .rose-notification {
     border-left: 0;
     border-right: 0;
     border-top: 0;
     box-shadow: none;
     margin-bottom: 0;
+  }
+
+  .rose-dialog-body {
+    > :first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
   }
 
   .rose-dialog-footer {
