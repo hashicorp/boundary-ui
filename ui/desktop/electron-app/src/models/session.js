@@ -39,7 +39,7 @@ class Session {
    * @return {boolean}
    */
   get isRunning() {
-    return !this.#process.killed;
+    return this.#process && !this.#process.killed;
   }
 
   /**
