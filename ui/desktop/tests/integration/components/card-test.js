@@ -25,4 +25,22 @@ module('Integration | Component | card', function (hooks) {
     assert.ok(find('.card-body'));
     assert.ok(find('.card-footer'));
   });
+
+  test('header renders an icon when defined', async function (assert) {
+    await render(hbs`
+      <Card
+        @heading='This is a heading test'
+        @icon='key'
+      as |card|>
+        <card.header></card.header>
+        <card.body></card.body>
+        <card.footer></card.footer>
+      </Card>
+    `);
+
+    assert.ok(find('.card'));
+    assert.ok(find('.card-header'));
+    assert.ok(find('.card-header .rose-icon'));
+    assert.equal(this.element.textContent.trim(), 'This is a heading test');
+  });
 });
