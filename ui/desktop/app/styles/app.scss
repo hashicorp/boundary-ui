@@ -346,7 +346,6 @@
 
   .rose-dialog-footer {
     align-items: center;
-    display: flex;
 
     div:nth-child(1) {
       display: flex;
@@ -360,35 +359,29 @@
       width: 50%;
     }
   }
+}
 
-  // .credentials-card {
-  //   display: flex;
-  //   flex-direction: column;
-  //   margin-bottom: 12px;
+// Card component (app/componetns/card)
+.card {
+  border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: sizing.rems(m);
 
-  //   &:last-child { margin-bottom: 0; }
+  .card-header {
+    border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    display: flex;
+  }
 
-  //   .credentials-card-header {
-  //     display: flex;
-  //     flex-direction: row;
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: sizing.rems(s);
+  }
 
-  //     div {
-  //       display: flex;
-  //       width: 50%;
-
-  //       &:last-child {
-  //         justify-content: flex-end;
-  //       }
-  //     }
-  //     // border-bottom: 1px solid grey;
-  //   }
-
-  //   .credentials-card-body {
-  //     // background: yellow;
-  //   }
-
-  //   .credentials-card-footer {
-  //     // background: pink;
-  //   }
-  // }
+  .card-footer {
+    border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    display: flex;
+    padding: sizing.rems(s);
+  }
 }

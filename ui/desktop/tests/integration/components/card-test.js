@@ -8,7 +8,7 @@ module('Integration | Component | card', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<Card />`);
-    assert.ok(find('.credentials-card'));
+    assert.ok(find('.card'));
   });
 
   test('it renders with content', async function (assert) {
@@ -20,9 +20,9 @@ module('Integration | Component | card', function (hooks) {
       </Card>
     `);
 
-    assert.ok(find('.credentials-card'));
-    assert.ok(find('.credentials-card-header'));
-    assert.ok(find('.credentials-card-body'));
-    assert.ok(find('.credentials-card-footer'));
+    assert.ok(find('.card'));
+    assert.ok(find('.card-header'));
+    assert.ok(find('.card-body'));
+    assert.ok(find('.card-footer'));
   });
 });
