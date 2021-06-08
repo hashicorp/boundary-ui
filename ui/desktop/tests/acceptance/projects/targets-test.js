@@ -227,7 +227,7 @@ module('Acceptance | projects | targets', function (hooks) {
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
       );
-      assert.ok(find('.connection-dialog'), 'Success dialog');
+      assert.ok(find('.dialog-detail'), 'Success dialog');
       assert.equal(findAll('.rose-dialog-footer button').length, 1);
       assert.equal(
         find('.rose-dialog-footer button').textContent.trim(),
@@ -236,7 +236,7 @@ module('Acceptance | projects | targets', function (hooks) {
       );
       assert.equal(
         find('.rose-dialog-body .copyable-content').textContent.trim(),
-        'Local proxy address (tcp): a_123:p_123'
+        'a_123:p_123'
       );
     }, 750);
     await visit(urls.targets);

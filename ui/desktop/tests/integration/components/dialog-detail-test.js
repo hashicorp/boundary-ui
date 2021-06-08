@@ -8,7 +8,7 @@ module('Integration | Component | dialog-detail', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<DialogDetail />`);
-    assert.ok(find('.connection-dialog'));
+    assert.ok(find('.dialog-detail'));
   });
 
   test('it renders with content', async function (assert) {
@@ -22,7 +22,7 @@ module('Integration | Component | dialog-detail', function (hooks) {
       </DialogDetail>
     `);
 
-    assert.ok(find('.connection-dialog'));
+    assert.ok(find('.dialog-detail'));
     assert.ok(find('.rose-dialog-header'));
     assert.ok(find('.rose-dialog-body'));
     assert.ok(find('.rose-dialog-footer'));

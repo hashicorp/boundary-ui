@@ -6,40 +6,36 @@
       {{#unless session.acknowledged}}
         <DialogDetail
           @heading={{concat
-            (t 'resources.target.host-set.detail.title')
+            (t 'resources.target.messages.connection-details.title')
             ': '
-            session.id
+            target.id
           }}
           @dismiss={{route-action 'acknowledge' session}}
           @dismissButtonText={{t 'actions.ok'}}
-          as |dialogDetail|
+          as |dialog|
         >
-          <dialogDetail.notification
+          <dialog.notification
             @style='success'
-            @heading={{t 'resources.target.messages.connection-success'}}
+            @heading={{t 'resources.target.messages.connection-success.title'}}
           />
 
-          <dialogDetail.body>
-            <h3>{{t 'resources.target.host-set.detail.proxy_url'}}</h3>
+          <dialog.body>
+            <h3>{{t 'resources.target.messages.proxy_url.title'}}
+              (<code>{{t 'resources.target.types.tcp'}}</code>)</h3>
             <Copyable
               @text={{concat session.proxy_address ':' session.proxy_port}}
               @buttonText={{t 'actions.copy-to-clipboard'}}
               @acknowledgeText={{t 'states.copied'}}
             >
-              {{t
-                'states.connection.success.description'
-                port=session.proxy_port
-                address=session.proxy_address
-                protocol='tcp'
-              }}
+              <code>{{session.proxy_address}}:{{session.proxy_port}}</code>
             </Copyable>
 
-            {{!-- <Rose::Separator />
+            {{! <Rose::Separator />
 
-            <h3>{{t 'resources.target.host-set.detail.credentials'}}</h3> --}}
+            <h3>Credentials</h3> }}
 
-          </dialogDetail.body>
-          <dialogDetail.footer>
+          </dialog.body>
+          <dialog.footer>
             <div>
               <Rose::Button
                 @style='secondary'
@@ -57,7 +53,7 @@
 
             </Rose::LinkButton> }}
             </div>
-          </dialogDetail.footer>
+          </dialog.footer>
         </DialogDetail>
       {{/unless}}
     {{/if}}
