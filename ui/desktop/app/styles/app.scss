@@ -340,13 +340,13 @@
   .rose-dialog-footer {
     align-items: center;
     display: flex;
-    
+
     div:nth-child(1) {
       display: flex;
       justify-content: flex-start;
       width: 50%;
     }
-      
+
     div:nth-child(2) {
       display: flex;
       justify-content: flex-end;
@@ -368,7 +368,7 @@
   //     div {
   //       display: flex;
   //       width: 50%;
-        
+
   //       &:last-child {
   //         justify-content: flex-end;
   //       }
