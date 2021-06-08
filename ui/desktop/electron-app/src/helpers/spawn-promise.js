@@ -67,7 +67,7 @@ module.exports = {
    * @return {string}
    */
   spawnSync(command) {
-    const childProcess = spawnSync(path(), command, { shell: isWindows() });
+    const childProcess = spawnSync(path(), command);
     const rawOutput = childProcess.output.toString();
     return rawOutput;
   },

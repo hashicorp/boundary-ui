@@ -11,39 +11,42 @@ const generateMenuTemplate = () => {
     const cliVersion = version().formatted;
     const copyright = config.copyright;
 
-    const dialogOpts = {
+    dialog.showMessageBox({
       type: 'none',
       message: config.productName,
       detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
-    };
-    dialog.showMessageBox(dialogOpts);
-  }
+    });
+  };
 
   return [
     // { role: 'appMenu' }
-    ...(isMac() ? [{
-      label: 'Boundary',
-      submenu: [
-        // { role: 'about' },
-        {
-          label: `About ${config.productName}`,
-          click: aboutDialog,
-        },
-        {
-          id: 'update',
-          label: 'Check for Updates',
-          click: async () => appUpdater.run(),
-        },
-        { type: 'separator' },
-        { role: 'services' },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' },
-      ],
-    }] : []),
+    ...(isMac()
+      ? [
+          {
+            label: 'Boundary',
+            submenu: [
+              // { role: 'about' },
+              {
+                label: `About ${config.productName}`,
+                click: aboutDialog,
+              },
+              {
+                id: 'update',
+                label: 'Check for Updates',
+                click: async () => appUpdater.run(),
+              },
+              { type: 'separator' },
+              { role: 'services' },
+              { type: 'separator' },
+              { role: 'hide' },
+              { role: 'hideothers' },
+              { role: 'unhide' },
+              { type: 'separator' },
+              { role: 'quit' },
+            ],
+          },
+        ]
+      : []),
     // { role: 'fileMenu' }
     {
       label: 'File',
@@ -59,23 +62,18 @@ const generateMenuTemplate = () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        ...(isMac() ? [
-          { role: 'pasteAndMatchStyle' },
-          { role: 'delete' },
-          { role: 'selectAll' },
-          { type: 'separator' },
-          {
-            label: 'Speech',
-            submenu: [
-              { role: 'startspeaking' },
-              { role: 'stopspeaking' }
+        ...(isMac()
+          ? [
+              { role: 'pasteAndMatchStyle' },
+              { role: 'delete' },
+              { role: 'selectAll' },
+              { type: 'separator' },
+              {
+                label: 'Speech',
+                submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
+              },
             ]
-          }
-        ] : [
-          { role: 'delete' },
-          { type: 'separator' },
-          { role: 'selectAll' }
-        ]),
+          : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }]),
       ],
     },
     // { role: 'viewMenu' }
@@ -98,14 +96,14 @@ const generateMenuTemplate = () => {
       submenu: [
         { role: 'minimize' },
         { role: 'zoom' },
-        ...(isMac() ? [
-          { type: 'separator' },
-          { role: 'front' },
-          { type: 'separator' },
-          { role: 'window' }
-        ] : [
-          { role: 'close' }
-        ])
+        ...(isMac()
+          ? [
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' },
+            ]
+          : [{ role: 'close' }]),
       ],
     },
     {
@@ -115,13 +113,15 @@ const generateMenuTemplate = () => {
           label: 'Documentation',
           click: () => shell.openExternal('https://www.boundaryproject.io'),
         },
-        ...(isWindows() ? [
-          // { role: 'about' },
-          {
-            label: `About ${config.productName}`,
-            click: aboutDialog,
-          },
-        ] : [])
+        ...(isWindows()
+          ? [
+              // { role: 'about' },
+              {
+                label: `About ${config.productName}`,
+                click: aboutDialog,
+              },
+            ]
+          : []),
       ],
     },
   ];
