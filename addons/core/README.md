@@ -9,6 +9,25 @@ helpers.
 
 - [Add core to an App](#add-core-to-an-app)
 - [Installation](#installation)
+- [I18n](#i18n)
+- [Notifications](#notifications)
+- [Confirmations](#confirmations)
+- [App and Company Names](#app-and-company-names)
+- [Documentation URLs](#documentation-urls)
+- [Loading Helper](#loading-helper)
+- [Scope Service](#scope-service)
+- [Yarn Commands](#yarn-commands)
+- [Linting](#linting)
+- [Formatting](#formatting)
+- [Running tests](#running-tests)
+- [Running the dummy application](#running-the-dummy-application)
+- [Contributing](#contributing)
+  - [Building ToC](#building-toc)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+- [Add core to an App](#add-core-to-an-app)
+- [Installation](#installation)
 - [Yarn Commands](#yarn-commands)
 - [Linting](#linting)
 - [Formatting](#formatting)
