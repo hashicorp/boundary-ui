@@ -16,6 +16,7 @@
     "build": "yarn build:ui:admin",
     "build:ui:admin": "cd ui/admin && yarn build",
     "build:ui:desktop": "cd ui/desktop && yarn build",
+    "build:ui:desktop:win": "docker-compose -f docker-compose-embedding.yml run build-desktop-production && yarn run build:ui:desktop:app",
     "build:ui:desktop:production": "cd ui/desktop && yarn build:production",
     "build:ui:desktop:app": "cd ui/desktop && yarn build:desktop",
     "lint": "npm-run-all lint:*",
