@@ -6,5 +6,5 @@ module.exports = {
   path: () => {
     const name = isWindows() ? 'boundary.exe' : 'boundary';
     return path.resolve(__dirname, '..', '..', 'cli', name);
-  }
+  },
 };
