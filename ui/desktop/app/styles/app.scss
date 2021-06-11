@@ -319,6 +319,7 @@
 }
 
 .change-origin {
+  @include type.type(s);
   color: var(--ui-border-starker-1);
   margin: sizing.rems(l) 0 0 0;
   text-align: center;
