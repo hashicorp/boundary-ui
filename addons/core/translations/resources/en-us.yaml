@@ -233,6 +233,12 @@ target:
     none:
       title: No Targets Available
       description: No Targets to display yet. Contact your Boundary admin if you don't see a Target you expect access to.
+    connection-success:
+      title: Successfully Connected
+    connection-details:
+      title: Target Connection Details
+    proxy_url:
+      title: Proxy URL
   actions:
     create: New Target
     delete: Delete Target
