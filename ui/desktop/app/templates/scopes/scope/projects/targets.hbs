@@ -10,20 +10,18 @@
             ': '
             target.id
           }}
+          @notificationStyle='success'
+          @notification={{t
+            'resources.target.messages.connection-success.title'
+          }}
           @dismiss={{route-action 'acknowledge' session}}
           @dismissButtonText={{t 'actions.ok'}}
-          as |dialog|
         >
-          <dialog.notification
-            @style='success'
-            @heading={{t 'resources.target.messages.connection-success.title'}}
-          />
-
-          <dialog.body>
+          <:body>
             <h3>{{t 'resources.target.messages.proxy_url.title'}}
               (<code>{{t 'resources.target.types.tcp'}}</code>)</h3>
             <Copyable
-              @text={{concat session.proxy_address ':' session.proxy_port}}
+              @text={{session.proxy}}
               @buttonText={{t 'actions.copy-to-clipboard'}}
               @acknowledgeText={{t 'states.copied'}}
             >
@@ -34,8 +32,8 @@
 
             <h3>Credentials</h3> }}
 
-          </dialog.body>
-          <dialog.footer>
+          </:body>
+          <:footer>
             <div>
               <Rose::Button
                 @style='secondary'
@@ -53,7 +51,7 @@
 
             </Rose::LinkButton> }}
             </div>
-          </dialog.footer>
+          </:footer>
         </DialogDetail>
       {{/unless}}
     {{/if}}
