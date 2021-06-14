@@ -1,0 +1,114 @@
+<Rose::Dialog
+  class='dialog-detail'
+  @heading={{@heading}}
+  @dismiss={{@dismiss}}
+  @dismissButtonText={{@dismissButtonText}}
+  @modal={{true}}
+  as |dialog|
+>
+  {{#if @notification}}
+    <Rose::Notification
+      @style={{@notificationStyle}}
+      @heading={{@notification}}
+    />
+  {{/if}}
+
+  <dialog.body>
+    {{yield to='body'}}
+    {{!--
+    <Rose::Separator />
+    <h3>Credentials</h3>
+    <div class="credentials-card">
+      <div class="credentials-card-header">
+        <div><Rose::Icon @name="key" /> Credentials</div>
+        <div>
+          <Rose::Button
+            @disabled={{false}}
+            @style={{style}}
+            @iconRight={{iconRight}}
+            {{on "click" onClick}}
+          >
+            Credential library details
+          </Rose::Button>
+        </div>
+      </div>
+
+      <Rose::Separator />
+
+      <div class="credentials-card-body">
+        <Rose::Table @style="condensed" as |table|>
+          <table.header as |header|>
+            <header.row  as |row|>
+              <row.headerCell @shrink={{true}}>Key</row.headerCell>
+              <row.headerCell colspan="2">Value</row.headerCell>
+            </header.row>
+          </table.header>
+          <table.body as |body|>
+            <body.row as |row|>
+              <row.cell>Foo</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+            <body.row as |row|>
+              <row.cell>ttl</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+          </table.body>
+        </Rose::Table>
+      </div>
+
+      <div class="credentials-card-footer">
+        <p><LinkTo @route='index'>View raw API output</LinkTo></p>
+        <Rose::Separator />
+        <div>Code</div>
+      </div>
+    </div>
+
+    <div class="credentials-card">
+      <div class="credentials-card-header">
+        <div><Rose::Icon @name="key" /> Credentials</div>
+        <div>
+          <Rose::Button
+            @disabled={{false}}
+            @style={{style}}
+            @iconRight={{iconRight}}
+            {{on "click" onClick}}
+          >
+            Credential library details
+          </Rose::Button>
+        </div>
+      </div>
+
+      <Rose::Separator />
+
+      <div class="credentials-card-body">
+        <Rose::Table @style="condensed" as |table|>
+          <table.header as |header|>
+            <header.row  as |row|>
+              <row.headerCell @shrink={{true}}>Key</row.headerCell>
+              <row.headerCell colspan="2">Value</row.headerCell>
+            </header.row>
+          </table.header>
+          <table.body as |body|>
+            <body.row as |row|>
+              <row.cell>Foo</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+            <body.row as |row|>
+              <row.cell>ttl</row.cell>
+              <row.cell>&nbsp;</row.cell>
+            </body.row>
+          </table.body>
+        </Rose::Table>
+      </div>
+
+      <div class="credentials-card-footer">
+        <p><LinkTo @route='index'>View raw API output</LinkTo></p>
+        <Rose::Separator />
+        <div>Code</div>
+      </div>
+    </div>--}}
+  </dialog.body>
+  <dialog.footer>
+    {{yield to='footer'}}
+  </dialog.footer>
+</Rose::Dialog>
