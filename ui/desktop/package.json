@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@doyensec/electronegativity": "^1.8.1",
-    "@ember/jquery": "^1.1.0",
+    "@ember/jquery": "^2.0.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^1.0.2",
     "@ember/test-helpers": "^2.1.4",
