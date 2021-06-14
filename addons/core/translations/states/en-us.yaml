@@ -4,9 +4,6 @@ success: Success
 warning: Warning
 error: Error
 copied: Copied
-connection:
-  success:
-    description: "Local proxy address ({protocol}): {address}:{port}"
 primary: Primary
 inactive: Inactive
 active-private: Private
