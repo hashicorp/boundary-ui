@@ -103,39 +103,7 @@
 </EmberNotify>
 
 <PendingConfirmations as |confirmation accept deny|>
-  {{#if confirmation.options.isConnectSuccess}}
-    <Rose::Dialog
-      @heading={{t 'states.success'}}
-      @dismissButtonText={{t 'actions.ok'}}
-      @icon='check-circle-fill'
-      @style='success'
-      @modal={{true}}
-      @dismiss={{deny}}
-      as |dialog|
-    >
-      <dialog.body>
-
-        <Copyable
-          @text={{concat confirmation.text.address ':' confirmation.text.port}}
-          @buttonText={{t 'actions.copy-to-clipboard'}}
-          @acknowledgeText={{t 'states.copied'}}
-        >
-          {{t
-            'states.connection.success.description'
-            port=confirmation.text.port
-            address=confirmation.text.address
-            protocol=confirmation.text.protocol
-          }}
-        </Copyable>
-
-      </dialog.body>
-      <dialog.footer>
-        <Rose::Button @style='primary' {{on 'click' accept}}>
-          {{t 'actions.ok'}}
-        </Rose::Button>
-      </dialog.footer>
-    </Rose::Dialog>
-  {{else if confirmation.options.isConnectError}}
+  {{#if confirmation.options.isConnectError}}
     <Rose::Dialog
       @heading={{t 'states.error'}}
       @dismissButtonText={{t 'actions.ok'}}

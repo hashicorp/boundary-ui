@@ -5,7 +5,7 @@ const https = require('https');
 const decompress = require('decompress');
 const { isMac, isWindows } = require('../src/helpers/platform.js');
 
-const artifactVersion = '0.2.3';
+const artifactVersion = '0.3.0';
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
 
 const downloadArtifact = (version) => {

@@ -2,7 +2,11 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
-## Next
+## v1.1.0 [CLI 0.3.0] (2021.06.09)
+
+### Known Issues
+
+- When quitting Boundary Desktop on Windows, active sessions may not be properly cancelled prior to application shutdown.
 
 ### New
 

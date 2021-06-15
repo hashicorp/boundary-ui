@@ -1,3 +1,61 @@
 {{page-title (t 'resources.target.title_plural')}}
 
+{{#each @model as |target|}}
+  {{#each target.sessions as |session|}}
+    {{#if session.started_desktop_client}}
+      {{#unless session.acknowledged}}
+        <DialogDetail
+          @heading={{concat
+            (t 'resources.target.messages.connection-details.title')
+            ': '
+            target.id
+          }}
+          @notificationStyle='success'
+          @notification={{t
+            'resources.target.messages.connection-success.title'
+          }}
+          @dismiss={{route-action 'acknowledge' session}}
+          @dismissButtonText={{t 'actions.ok'}}
+        >
+          <:body>
+            <h3>{{t 'resources.target.messages.proxy_url.title'}}
+              (<code>{{t 'resources.target.types.tcp'}}</code>)</h3>
+            <Copyable
+              @text={{session.proxy}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{session.proxy_address}}:{{session.proxy_port}}</code>
+            </Copyable>
+
+            {{! <Rose::Separator />
+
+            <h3>Credentials</h3> }}
+
+          </:body>
+          <:footer>
+            <div>
+              <Rose::Button
+                @style='secondary'
+                {{on 'click' (route-action 'acknowledge' session)}}
+              >
+                {{t 'actions.close'}}
+              </Rose::Button>
+            </div>
+            <div>
+              {{! <Rose::LinkButton
+              @route='index'
+              @style='inline-link-action'
+              @iconRight='chevron-right'
+            >
+
+            </Rose::LinkButton> }}
+            </div>
+          </:footer>
+        </DialogDetail>
+      {{/unless}}
+    {{/if}}
+  {{/each}}
+{{/each}}
+
 {{outlet}}
