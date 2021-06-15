@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
-import { later } from '@ember/runloop';
 import config from '../../../../config/environment';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
@@ -81,6 +80,11 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
 
   // =actions
 
+  @action
+  acknowledge(session) {
+    session.acknowledged = true;
+  }
+
   /**
    * Establish a session to current target.
    * @param {TargetModel} model
@@ -106,30 +110,15 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
 
       // Associate the connection details with the session
       const { session_id, address, port } = connectionDetails;
-      await this.store.findRecord('session', session_id);
+      const session = await this.store.findRecord('session', session_id);
 
+      // Flag the session has been open in the desktop client
+      session.started_desktop_client = true;
       // Update the session record with proxy information from the CLI
-      // This is read-only information that shouldn't dirty the session,
-      // so we use store.push here.  In the future, it may make sense to push
-      // this off to the API so that we don't have to manually persist the
-      // proxy details.
-      later(() => {
-        this.store.push({
-          data: {
-            id: session_id,
-            type: 'session',
-            attributes: {
-              proxy_address: address,
-              proxy_port: port
-            }
-          }
-        });
-      }, 150);
-
-      // Show the user a modal with basic connection info.
-      // We don't await because this modal is purely informational.
-      this.confirm.confirm(connectionDetails, { isConnectSuccess: true });
-
+      // In the future, it may make sense to push this off to the API so that
+      // we don't have to manually persist the proxy details.
+      session.proxy_address = address;
+      session.proxy_port = port;
     } catch(e) {
       this.confirm.confirm(e.message, { isConnectError: true })
         // Retry
