@@ -32,11 +32,6 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       padding-right: sizing.rems(xl);
       font-weight: normal;
 
-      // &::before,
-      // &::after {
-      //   display: none;
-      // }
-
       &::after {
         top: sizing.rems(xxs) + sizing.rems(xxxs);
         right: sizing.rems(xs);
@@ -57,11 +52,6 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
         ~ .rose-form-radio-label {
           color: var(--action);
           background-color: var(--action-subtler-1h);
-
-          // background-image: #{$checkmark};
-          // background-repeat: no-repeat;
-          // background-position: right sizing.rems(m) center;
-          // background-size: sizing.rems(m);
         }
       }
 
@@ -71,5 +61,15 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
         }
       }
     }
+  }
+}
+
+.rose-dropdown-condensed .rose-dropdown-item {
+  @include type.type(s);
+  color: var(--ui-gray-starker-1);
+
+  &:hover {
+    // To override original
+    background-color: transparent;
   }
 }
