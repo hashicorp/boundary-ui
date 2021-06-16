@@ -1,17 +1,15 @@
 <section class='card'>
   <header class='card-header'>
-    <div>
-      {{#if @icon}}
-        <Rose::Icon @name={{@icon}} @size='medium' />
-      {{/if}}
-      {{@heading}}
-    </div>
-    {{yield (hash header=(component 'rose/anonymous'))}}
+    {{#if @heading}}
+      <div>
+        {{#if @icon}}
+          <Rose::Icon @name={{@icon}} @size='medium' />
+        {{/if}}
+        {{@heading}}
+      </div>
+    {{/if}}
+    {{yield to='header'}}
   </header>
-  {{yield
-    (hash
-      body=(component 'rose/anonymous' tagName='div' class='card-body')
-      footer=(component 'rose/anonymous' tagName='footer' class='card-footer')
-    )
-  }}
+  <div class='card-body'>{{yield to='body'}}</div>
+  <footer class='card-footer'>{{yield to='footer'}}</footer>
 </section>

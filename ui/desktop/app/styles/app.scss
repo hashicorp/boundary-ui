@@ -371,6 +371,14 @@
   .card-header {
     border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     display: flex;
+    justify-content: flex-start;
+    padding: sizing.rems(s);
+
+    div {
+      display: flex;
+      flex-shrink: 1;
+      width: 100%;
+    }
   }
 
   .card-body {
