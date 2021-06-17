@@ -10,6 +10,7 @@
           <row.headerCell>{{t 'form.subject.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.email.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.full_name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
         </header.row>
       </table.header>
@@ -17,7 +18,13 @@
         {{#each @model as |account|}}
           <body.row as |row|>
             <row.headerCell scope='row'>
-              {{account.displayName}}
+              <LinkTo
+                @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                @model={{account.id}}
+              >
+                {{account.accountName}}
+                <p>{{account.description}}</p>
+              </LinkTo>
             </row.headerCell>
             <row.cell>
               <code>{{account.attributes.issuer}}</code>
@@ -30,6 +37,9 @@
             </row.cell>
             <row.cell>
               {{account.attributes.full_name}}
+            </row.cell>
+            <row.cell>
+              <Rose::Badge>{{account.type}}</Rose::Badge>
             </row.cell>
             <row.cell>
               <Copyable
@@ -49,11 +59,8 @@
       <table.header as |header|>
         <header.row as |row|>
           <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-          <row.headerCell>
-            {{#if @model.firstObject.isPassword}}
-              {{t 'form.login_name.label'}}
-            {{/if}}
-          </row.headerCell>
+          <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
         </header.row>
       </table.header>
@@ -65,12 +72,15 @@
                 @route='scopes.scope.auth-methods.auth-method.accounts.account'
                 @model={{account.id}}
               >
-                {{account.displayName}}
+                {{account.accountName}}
+                <p>{{account.description}}</p>
               </LinkTo>
-              <p>{{account.description}}</p>
             </row.headerCell>
             <row.cell>
-              {{account.username}}
+              {{account.attributes.login_name}}
+            </row.cell>
+            <row.cell>
+              <Rose::Badge>{{account.type}}</Rose::Badge>
             </row.cell>
             <row.cell>
               <Copyable

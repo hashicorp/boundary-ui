@@ -14,9 +14,9 @@ export default factory.extend({
    */
   withAccountsAndUsers: trait({
     afterCreate(authMethod, server) {
-      const { scope } = authMethod;
+      const { scope, type } = authMethod;
       server.createList('user', 5, { scope }).map((user) => {
-        const { id } = server.create('account', { scope, authMethod });
+        const { id } = server.create('account', { scope, type, authMethod });
         user.update({ accountIds: [id] });
       });
     },
