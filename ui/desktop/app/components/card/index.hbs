@@ -1,12 +1,12 @@
 <section class='card'>
   <header class='card-header'>
     {{#if @heading}}
-      <div>
+      <h2>
         {{#if @icon}}
           <Rose::Icon @name={{@icon}} @size='medium' />
         {{/if}}
         {{@heading}}
-      </div>
+      </h2>
     {{/if}}
     {{yield to='header'}}
   </header>

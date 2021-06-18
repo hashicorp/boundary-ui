@@ -369,12 +369,19 @@
   margin-bottom: sizing.rems(m);
 
   .card-header {
+    align-items: center;
     border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     display: flex;
     justify-content: flex-start;
     padding: sizing.rems(s);
 
-    div {
+    h2 {
+      @include type.type(s, normal);
+      color: var(--ui-gray-starker-1);
+    }
+
+    div,
+    h2 {
       display: flex;
       flex-shrink: 1;
       width: 100%;
