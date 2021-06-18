@@ -1,17 +1,14 @@
-<details class='reveal' {{on 'click' (fn this.toggle)}}>
+<details ...attributes class='reveal' {{on-click-outside this.close}}>
   <summary class='reveal-summary'>
-    <span>
-      {{if this.isOpen @textWhenOpen @textWhenClose}}
+    <span class='reveal-summary-text-close'>
+      {{@textWhenClose}}
     </span>
-    <Rose::Icon
-      @name={{if this.isOpen 'chevron-up' 'chevron-down'}}
-      @size='m'
-    />
-  </summary>
-</details>
+    <span class='reveal-summary-text-open'>
+      {{@textWhenOpen}}
+    </span>
 
-{{#if this.isOpen}}
-  <content class='reveal-content'>
+  </summary>
+  <content class='reveal-content' {{on-click-inside this.close}}>
     {{yield}}
   </content>
-{{/if}}
+</details>
