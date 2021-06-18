@@ -4,7 +4,75 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Serializer | account', function (hooks) {
   setupTest(hooks);
 
-  test('it serializes normally', function (assert) {
+  test('it serializes OIDC-type with only issuer and subject in `attributes` on create', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('account');
+    const record = store.createRecord('account', {
+      type: 'oidc',
+      name: 'Name',
+      auth_method_id: '1',
+      description: 'Description',
+      attributes: {
+        issuer: 'issuer',
+        subject: 'sub',
+        full_name: 'full_name',
+        email: 'email',
+      },
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      type: 'oidc',
+      name: 'Name',
+      auth_method_id: '1',
+      description: 'Description',
+      version: 1,
+      attributes: {
+        issuer: 'issuer',
+        subject: 'sub',
+      },
+    });
+  });
+
+  test('it serializes OIDC-type without `attributes` on update', function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('account');
+    store.push({
+      data: {
+        id: '1',
+        type: 'account',
+        attributes: {
+          type: 'oidc',
+          name: 'Name',
+          auth_method_id: '1',
+          description: 'Description',
+          attributes: {
+            issuer: 'issuer',
+            subject: 'sub',
+            full_name: 'full_name',
+            email: 'email',
+          },
+          version: 1,
+        },
+      },
+    });
+    const record = store.peekRecord('account', '1');
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.notOk(serializedRecord.attributes);
+    assert.deepEqual(serializedRecord, {
+      type: 'oidc',
+      name: 'Name',
+      auth_method_id: '1',
+      description: 'Description',
+      version: 1,
+    });
+  });
+
+  test('it serializes password-type normally', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
@@ -19,7 +87,6 @@ module('Unit | Serializer | account', function (hooks) {
       version: 1,
     });
     const snapshot = record._createSnapshot();
-    snapshot.adapterOptions = {};
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       type: 'password',
