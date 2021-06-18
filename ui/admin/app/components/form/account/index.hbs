@@ -1,0 +1,8 @@
+{{#if @model.type}}
+  {{component
+    (concat 'form/account/' @model.type)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+  }}
+{{/if}}

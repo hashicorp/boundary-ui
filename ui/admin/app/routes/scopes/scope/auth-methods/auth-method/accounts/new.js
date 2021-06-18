@@ -8,11 +8,11 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
    * @return {AccountModel}
    */
   model() {
-    const { id: auth_method_id } = this.modelFor(
+    const { id: auth_method_id, type } = this.modelFor(
       'scopes.scope.auth-methods.auth-method'
     );
     return this.store.createRecord('account', {
-      type: 'password',
+      type,
       auth_method_id,
     });
   }
