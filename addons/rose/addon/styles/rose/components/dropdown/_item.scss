@@ -7,8 +7,14 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
 .rose-dropdown-item {
   @include type.type(s);
   min-width: (sizing.rems(m)) * 20;
-  $line-height: math.div(36, 14);
-  line-height: $line-height;
+  $paddingY: math.div(
+    sizing.rems(xl) - (sizing.rems(m) + sizing.rems(xxxs)),
+    2
+  );
+  $paddingX: sizing.rems(s);
+  padding: $paddingY $paddingX;
+  //$line-height: math.div(36, 14);
+  //line-height: $line-height;
 
   --color: var(--stark);
   --background-color: transparent;
@@ -16,21 +22,22 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
   color: var(--color);
   background-color: var(--background-color);
 
-  &:hover {
-    --background-color: var(--ui-gray-subtler-5);
-  }
-
   .rose-form-radio {
     color: currentColor;
     margin-bottom: 0;
 
     .rose-form-radio-label {
       display: block;
+      margin: -#{$paddingY} -#{$paddingX};
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-left: sizing.rems(s);
       padding-right: sizing.rems(xl);
       font-weight: normal;
+
+      &:hover {
+        background-color: var(--ui-gray-subtler-5);
+      }
 
       &::after {
         top: sizing.rems(xxs) + sizing.rems(xxxs);
@@ -61,15 +68,5 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
         }
       }
     }
-  }
-}
-
-.rose-dropdown-condensed .rose-dropdown-item {
-  @include type.type(s);
-  color: var(--ui-gray-starker-1);
-
-  &:hover {
-    // To override original
-    background-color: transparent;
   }
 }
