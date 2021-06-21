@@ -13,27 +13,3 @@
     color: var(--ui-gray);
   }
 }
-
-// Styles for condensed verion. Some are overrides
-.rose-dropdown-condensed .rose-dropdown-section {
-  border-bottom: sizing.rems(xxxxs) solid var(--ui-border);
-  margin: sizing.rems(xxs) 0;
-  padding: sizing.rems(xs) sizing.rems(s);
-
-  &:first-child {
-    margin-top: 0;
-  }
-
-  &:last-child {
-    border: none;
-    margin-bottom: 0;
-  }
-
-  .rose-dropdown-section-title {
-    @include type.type(s, normal);
-    padding: 0; // To clear the inherit padding.
-    text-transform: capitalize; // To override original
-    color: var(--ui-gray-starker-4);
-    margin-bottom: sizing.rems(xxs);
-  }
-}
