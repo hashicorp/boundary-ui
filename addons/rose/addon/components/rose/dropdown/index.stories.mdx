@@ -63,6 +63,24 @@ A simple dropdown component with support for links and buttons.
   }}</Story>
 </Preview>
 
+<Preview>
+  <Story name="Dropdown with Key Value Items" height="13rem">{{
+    template: hbs`
+      <Rose::Dropdown @text="View details" @showCaret={{showCaret}} as |dropdown|>
+        <dropdown.key-value>
+          <:key>Name</:key>
+          <:value>Key/Value</:value>
+        </dropdown.key-value>
+        <dropdown.separator />
+        <dropdown.key-value>
+          <:key>Description</:key>
+          <:value>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda illo ratione libero ducimus magnam, porro sed provident repellat mollitia a, repellendus placeat. Magni consequuntur cumque, debitis obcaecati dolores quasi natus?</:value>
+        </dropdown.key-value>
+      </Rose::Dropdown>
+    `,
+  }}</Story>
+</Preview>
+
 
 ```html
   <Rose::Dropdown @text="Choose One&hellip;" as |dropdown|>
