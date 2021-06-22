@@ -13,10 +13,10 @@ module('Integration | Component | card', function (hooks) {
 
   test('it renders with content', async function (assert) {
     await render(hbs`
-      <Card as |card|>
-        <card.header></card.header>
-        <card.body></card.body>
-        <card.footer></card.footer>
+      <Card>
+        <:header></:header>
+        <:body></:body>
+        <:footer></:footer>
       </Card>
     `);
 
@@ -30,11 +30,10 @@ module('Integration | Component | card', function (hooks) {
     await render(hbs`
       <Card
         @heading='This is a heading test'
-        @icon='key'
-      as |card|>
-        <card.header></card.header>
-        <card.body></card.body>
-        <card.footer></card.footer>
+        @icon='key'>
+        <:header></:header>
+        <:body></:body>
+        <:footer></:footer>
       </Card>
     `);
 
