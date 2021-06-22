@@ -1,3 +1,30 @@
+<h2>KeyValue Dropdown</h2>
+<Rose::Dropdown
+  @text="Credential library details"
+  @showCaret={{true}}
+  as |dropdown|
+>
+  <dropdown.key-value>
+    <:key>ID</:key>
+    <:value>cl_nbv9375hLHs</:value>
+  </dropdown.key-value>
+
+  <dropdown.separator />
+
+  <dropdown.key-value>
+    <:key>Name</:key>
+    <:value>Key/Value</:value>
+  </dropdown.key-value>
+
+  <dropdown.separator />
+
+  <dropdown.key-value>
+    <:key>Description</:key>
+    <:value>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda illo ratione libero ducimus magnam, porro sed provident repellat mollitia a, repellendus placeat. Magni consequuntur cumque, debitis obcaecati dolores quasi natus?</:value>
+  </dropdown.key-value>
+
+</Rose::Dropdown>
+
 <h2>Condensed dropdown</h2>
 <Rose::Dropdown
   @style="condensed"
