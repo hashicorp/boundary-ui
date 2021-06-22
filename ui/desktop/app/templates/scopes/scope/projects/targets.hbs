@@ -32,20 +32,20 @@
 
             {{!-- <Rose::Separator />
 
-            <h3>Credentials</h3>
+            <h3>Credentials</h3>--}}
 
-            <Card @heading='Credentials' @icon='app-icons/credentials'>
+            <Card @heading="Credentials" @icon='app-icons/credentials'>
               <:body>
                 <Rose::Table @style='condensed' as |table|>
                   <table.header as |header|>
                     <header.row as |row|>
-                      <row.headerCell @shrink={{true}}>Key</row.headerCell>
+                      <row.headerCell>Key</row.headerCell>
                       <row.headerCell colspan='2'>Value</row.headerCell>
                     </header.row>
                   </table.header>
                   <table.body as |body|>
                     <body.row as |row|>
-                      <row.headerCell>Foo</row.headerCell>
+                      <row.headerCell>foo</row.headerCell>
                       <row.cell>Value</row.cell>
                     </body.row>
                     <body.row as |row|>
@@ -56,7 +56,7 @@
                 </Rose::Table>
               </:body>
             </Card>
---}}
+
           </:body>
           <:footer>
             <div>
