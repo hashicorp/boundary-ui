@@ -15,8 +15,8 @@ module('Integration | Component | reveal', function (hooks) {
       />
     `);
     assert.ok(find('.reveal'));
-    assert.ok(find('.reveal-summary'));
-    assert.ok(find('.reveal-summary').textContent.trim(), 'View content');
+    assert.ok(find('.reveal-trigger'));
+    assert.ok(find('.reveal-trigger').textContent.trim(), 'View content');
   });
 
   test('it renders with content, opens, show the content, close and hide the content', async function (assert) {
