@@ -35,6 +35,15 @@
             <h3>Credentials</h3>
 
             <Card @heading="Credentials" @icon='app-icons/credentials'>
+              <:header>
+                <Rose::Dropdown
+                  @style="condensed"
+                  @text="Credential library details"
+                  @showCaret={{true}}
+                  as |dropdown|
+                >
+                </Rose::Dropdown>
+              </:header>
               <:body>
                 <Rose::Table @style='condensed' as |table|>
                   <table.header as |header|>
@@ -55,8 +64,25 @@
                   </table.body>
                 </Rose::Table>
               </:body>
-            </Card>
-            }}
+              <:footer>
+                <Reveal
+                  @textWhenOpen='Hide content'
+                  @textWhenClose='View content'
+                >
+                  <pre>
+                    <code>
+  {
+    "auth": null,
+    "lease_duration": 3600,
+    "lease_id": "",
+    "renewable": false
+  }
+                    </code>
+                  </pre>
+                </Reveal>
+              </:footer>
+            </Card> --}}
+
           </:body>
           <:footer>
             <div>
