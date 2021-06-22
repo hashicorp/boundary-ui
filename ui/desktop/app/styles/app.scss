@@ -373,30 +373,26 @@
     border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     display: flex;
     justify-content: flex-start;
-    padding: sizing.rems(s);
+    padding: sizing.rems(s) sizing.rems(m);
 
     h2 {
       @include type.type(s, normal);
       color: var(--ui-gray-starker-1);
+      margin: 0;
+      padding: sizing.rems(xxs) + sizing.rems(xxxs) 0;
     }
 
-    div,
-    h2 {
-      display: flex;
-      flex-shrink: 1;
-      width: 100%;
+    .rose-icon {
+      margin-right: sizing.rems(xxxs);
     }
   }
 
   .card-body {
-    display: flex;
-    flex-direction: column;
     padding: sizing.rems(s);
   }
 
   .card-footer {
     border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
-    display: flex;
     padding: sizing.rems(s);
   }
 }
