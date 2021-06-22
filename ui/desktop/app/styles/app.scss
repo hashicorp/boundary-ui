@@ -346,7 +346,6 @@
 
   .rose-dialog-footer {
     align-items: center;
-    display: flex;
 
     div:nth-child(1) {
       display: flex;
@@ -360,35 +359,40 @@
       width: 50%;
     }
   }
+}
 
-  // .credentials-card {
-  //   display: flex;
-  //   flex-direction: column;
-  //   margin-bottom: 12px;
+// Card component (app/componetns/card)
+.card {
+  border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: sizing.rems(m);
 
-  //   &:last-child { margin-bottom: 0; }
+  .card-header {
+    align-items: center;
+    border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    display: flex;
+    justify-content: flex-start;
+    padding: sizing.rems(s) sizing.rems(m);
 
-  //   .credentials-card-header {
-  //     display: flex;
-  //     flex-direction: row;
+    h2 {
+      @include type.type(s, normal);
+      color: var(--ui-gray-starker-1);
+      margin: 0;
+      padding: sizing.rems(xxs) + sizing.rems(xxxs) 0;
+    }
 
-  //     div {
-  //       display: flex;
-  //       width: 50%;
+    .rose-icon {
+      margin-right: sizing.rems(xxxs);
+    }
+  }
 
-  //       &:last-child {
-  //         justify-content: flex-end;
-  //       }
-  //     }
-  //     // border-bottom: 1px solid grey;
-  //   }
+  .card-body {
+    padding: sizing.rems(s);
+  }
 
-  //   .credentials-card-body {
-  //     // background: yellow;
-  //   }
-
-  //   .credentials-card-footer {
-  //     // background: pink;
-  //   }
-  // }
+  .card-footer {
+    border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    padding: sizing.rems(s);
+  }
 }

@@ -9,6 +9,10 @@
   .rose-table-row {
     border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     text-align: left;
+
+    &:last-child {
+      border-bottom: 0;
+    }
   }
 
   // This styles are add to stop the input to apply extra margin (default on forms)
@@ -39,6 +43,9 @@
 
   .rose-table-header-cell {
     @include type.type(s, semibold);
+  }
+
+  .rose-table-header .rose-table-header-cell {
     color: var(--ui-gray);
   }
 
@@ -67,11 +74,27 @@
   }
 
   &.rose-table-condensed {
-    .rose-table-cell {
+    .rose-table-cell,
+    .rose-table-header-cell {
       @include type.type(s);
       $lineHeight: math.div(36, 14);
       line-height: $lineHeight;
-      padding: math.div(sizing.rems(s), 2) sizing.rems(s);
+      padding: sizing.rems(xxs) + sizing.rems(xxxxs) sizing.rems(s);
+
+      &:first-child {
+        padding-left: 0;
+      }
+    }
+    .rose-table-header {
+      .rose-table-header-cell {
+        $lineHeight: math.div(16, 14);
+        line-height: $lineHeight;
+        padding: sizing.rems(xs) sizing.rems(s);
+
+        &:first-child {
+          padding-left: 0;
+        }
+      }
     }
   }
 

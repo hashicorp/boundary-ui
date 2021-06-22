@@ -1,0 +1,27 @@
+<section class='card'>
+  {{#if (if (has-block 'header') true @heading)}}
+    <header class='card-header'>
+      {{#if @heading}}
+        <h2>
+          {{#if @icon}}
+            <Rose::Icon @name={{@icon}} @size='medium' />
+          {{/if}}
+          {{@heading}}
+        </h2>
+      {{/if}}
+
+      {{yield to='header'}}
+
+    </header>
+  {{/if}}
+
+  <div class='card-body'>
+    {{yield to='body'}}
+  </div>
+
+  {{#if (has-block 'footer')}}
+    <footer class='card-footer'>
+      {{yield to='footer'}}
+    </footer>
+  {{/if}}
+</section>
