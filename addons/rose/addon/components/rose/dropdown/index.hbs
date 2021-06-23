@@ -1,6 +1,6 @@
 <details
   ...attributes
-  class="rose-dropdown {{if @dropdownRight "rose-dropdown-right"}}"
+  class="rose-dropdown {{if @dropdownRight "rose-dropdown-right"}} {{if @style (concat "rose-dropdown-" @style)}}"
   {{on-click-outside this.close}}
 >
 
@@ -22,14 +22,28 @@
 
   </summary>
 
-  <div class="rose-dropdown-content" {{on-click-inside this.close}}>
-    {{yield (hash
-      link=(component "rose/dropdown/link" style=this.style)
-      button=(component "rose/dropdown/button" style=this.style)
-      item=(component "rose/anonymous" class="rose-dropdown-item")
-      separator=(component "rose/anonymous" tagName="hr" class="rose-dropdown-separator")
-      section=(component "rose/dropdown/section" style=this.style)
-    )}}
-  </div>
+  {{#if @ignoreClickInside}}
+    <div class="rose-dropdown-content">
+      {{yield (hash
+        link=(component "rose/dropdown/link" style=this.style)
+        button=(component "rose/dropdown/button" style=this.style)
+        item=(component "rose/anonymous" class="rose-dropdown-item")
+        separator=(component "rose/anonymous" tagName="hr" class="rose-dropdown-separator")
+        section=(component "rose/dropdown/section" style=this.style)
+        key-value=(component "rose/dropdown/key-value")
+      )}}
+    </div>
+  {{else}}
+    <div class="rose-dropdown-content" {{on-click-inside this.close}}>
+      {{yield (hash
+        link=(component "rose/dropdown/link" style=this.style)
+        button=(component "rose/dropdown/button" style=this.style)
+        item=(component "rose/anonymous" class="rose-dropdown-item")
+        separator=(component "rose/anonymous" tagName="hr" class="rose-dropdown-separator")
+        section=(component "rose/dropdown/section" style=this.style)
+        key-value=(component "rose/dropdown/key-value")
+      )}}
+    </div>
+  {{/if}}
 
 </details>

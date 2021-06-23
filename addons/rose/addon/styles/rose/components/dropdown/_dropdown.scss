@@ -5,6 +5,7 @@ $xs: sizing.rems(xs); // 8
 $xxs: sizing.rems(xxs); // 4
 $chevron: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
 $chevronWhite: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ffffff' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
+$chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23626873' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
 
 .rose-dropdown {
   --background-image-light: #{$chevron};
@@ -120,5 +121,27 @@ $chevronWhite: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23f
     height: sizing.rems(xxxxs);
     border: none;
     margin: $xxs 0;
+  }
+
+  // Styles for condensed verion. Some are overrides
+  &.rose-dropdown-condensed {
+    --background-image: #{$chevronGrey};
+    border: sizing.rems(xxxxs) solid var(--ui-border);
+    border-radius: sizing.rems(xxs);
+
+    .rose-dropdown-trigger {
+      color: var(--ui-gray-starker-1);
+      padding: 0 sizing.rems(s); // To clear the inherit padding.
+
+      &.show-caret {
+        padding-right: sizing.rems(l) + sizing.rems(xs); // 32
+        background-position: right sizing.rems(xs) center;
+      }
+    }
+
+    .rose-dropdown-content {
+      border: none;
+      border: sizing.rems(xxxxs) solid var(--ui-border);
+    }
   }
 }

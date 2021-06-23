@@ -6,6 +6,7 @@
     "scss/at-extend-no-missing-placeholder": null,
     "function-parentheses-space-inside": null,
     "property-no-vendor-prefix": null,
-    "at-rule-no-vendor-prefix": null
+    "at-rule-no-vendor-prefix": null,
+    "order/properties-alphabetical-order": null
   }
 }

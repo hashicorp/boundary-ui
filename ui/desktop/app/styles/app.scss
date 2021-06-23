@@ -346,7 +346,6 @@
 
   .rose-dialog-footer {
     align-items: center;
-    display: flex;
 
     div:nth-child(1) {
       display: flex;
@@ -360,35 +359,90 @@
       width: 50%;
     }
   }
+}
 
-  // .credentials-card {
-  //   display: flex;
-  //   flex-direction: column;
-  //   margin-bottom: 12px;
+// Reveal component (app/components/reveal)
+$chevron-up: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563FF' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M7.41 16L12 11.42L16.59 16L18 14.59L12 8.59L6 14.59L7.41 16Z' /></svg>");
+$chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563FF' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17L7.41 8.59L6 10L12 16L18 10L16.59 8.59Z' /></svg>");
 
-  //   &:last-child { margin-bottom: 0; }
+.reveal {
+  --trigger-color: var(--action);
 
-  //   .credentials-card-header {
-  //     display: flex;
-  //     flex-direction: row;
+  .reveal-trigger {
+    background: url($chevron-down) no-repeat right center;
+    color: var(--trigger-color);
+    cursor: default;
+    display: inline-block;
+    overflow: hidden;
+    padding-right: sizing.rems(l);
+    white-space: nowrap;
 
-  //     div {
-  //       display: flex;
-  //       width: 50%;
+    // Hide default twistie triangle
+    // Firefox
+    list-style-type: none;
+    // Webkit / Chromium
+    &::-webkit-details-marker {
+      display: none;
+    }
 
-  //       &:last-child {
-  //         justify-content: flex-end;
-  //       }
-  //     }
-  //     // border-bottom: 1px solid grey;
-  //   }
+    &::marker {
+      display: none;
+    }
 
-  //   .credentials-card-body {
-  //     // background: yellow;
-  //   }
+    &:hover {
+      --trigger-color: var(--action-starker-1);
+    }
+  }
 
-  //   .credentials-card-footer {
-  //     // background: pink;
-  //   }
-  // }
+  &:not([open]) {
+    .reveal-trigger-text-open {
+      display: none;
+    }
+  }
+
+  &[open] {
+    .reveal-trigger {
+      background: url($chevron-up) no-repeat right center;
+    }
+
+    .reveal-trigger-text-close {
+      display: none;
+    }
+  }
+}
+
+// Card component (app/components/card)
+.card {
+  border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: sizing.rems(m);
+
+  .card-header {
+    align-items: center;
+    border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    display: flex;
+    justify-content: flex-start;
+    padding: sizing.rems(s) sizing.rems(m);
+
+    h2 {
+      @include type.type(s, normal);
+      color: var(--ui-gray-starker-1);
+      margin: 0;
+      padding: sizing.rems(xxs) + sizing.rems(xxxs) 0;
+    }
+
+    .rose-icon {
+      margin-right: sizing.rems(xxxs);
+    }
+  }
+
+  .card-body {
+    padding: sizing.rems(s);
+  }
+
+  .card-footer {
+    border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+    padding: sizing.rems(s);
+  }
 }
