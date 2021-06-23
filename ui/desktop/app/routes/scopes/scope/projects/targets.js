@@ -109,7 +109,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
       const connectionDetails = await this.ipc.invoke('connect', options);
 
       // Associate the connection details with the session
-      const { session_id, address, port } = connectionDetails;
+      const { session_id, address, port, credentials } = connectionDetails;
       const session = await this.store.findRecord('session', session_id);
 
       // Flag the session has been open in the desktop client
@@ -119,6 +119,9 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
       // we don't have to manually persist the proxy details.
       session.proxy_address = address;
       session.proxy_port = port;
+      if (credentials) {
+        credentials.forEach(cred => session.addCredential(cred));
+      }
     } catch(e) {
       this.confirm.confirm(e.message, { isConnectError: true })
         // Retry
