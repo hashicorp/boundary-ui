@@ -17,7 +17,8 @@
       <table.header as |header|>
         <header.row as |row|>
           <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.username.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
           <row.headerCell>{{t 'resources.auth-method.title'}}</row.headerCell>
         </header.row>
       </table.header>
@@ -31,7 +32,12 @@
                 onChange={{fn this.toggleAccount account}}
               />
             </row.cell>
-            <row.cell>{{account.username}}</row.cell>
+            <row.cell>{{account.accountName}}</row.cell>
+            <row.cell>
+              <Rose::Badge>
+                {{t (concat 'resources.auth-method.types.' account.type)}}
+              </Rose::Badge>
+            </row.cell>
             <row.cell>
               <code>{{account.auth_method_id}}</code>
             </row.cell>
