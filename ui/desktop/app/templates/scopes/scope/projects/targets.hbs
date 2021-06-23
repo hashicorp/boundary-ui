@@ -1,3 +1,5 @@
+{{! template-lint-disable no-bare-strings  }}
+
 {{page-title (t 'resources.target.title_plural')}}
 
 {{#each @model as |target|}}
@@ -85,41 +87,6 @@
                   </table.body>
                 </Rose::Table>
               </:body>
-            </Card>
-            {{!--  <Rose::Separator />
-
-            <h3>Credentials</h3>
-
-            <Card @heading="Credentials" @icon='app-icons/credentials'>
-              <:header>
-                <Rose::Dropdown
-                  @style="condensed"
-                  @text="Credential library details"
-                  @showCaret={{true}}
-                  as |dropdown|
-                >
-                </Rose::Dropdown>
-              </:header>
-              <:body>
-                <Rose::Table @style='condensed' as |table|>
-                  <table.header as |header|>
-                    <header.row as |row|>
-                      <row.headerCell>Key</row.headerCell>
-                      <row.headerCell colspan='2'>Value</row.headerCell>
-                    </header.row>
-                  </table.header>
-                  <table.body as |body|>
-                    <body.row as |row|>
-                      <row.headerCell>foo</row.headerCell>
-                      <row.cell>Value</row.cell>
-                    </body.row>
-                    <body.row as |row|>
-                      <row.headerCell>ttl</row.headerCell>
-                      <row.cell>Test</row.cell>
-                    </body.row>
-                  </table.body>
-                </Rose::Table>
-              </:body>
               <:footer>
                 <Reveal
                   @textWhenOpen='Hide content'
@@ -127,18 +94,13 @@
                 >
                   <pre>
                     <code>
-  {
-    "auth": null,
-    "lease_duration": 3600,
-    "lease_id": "",
-    "renewable": false
-  }
+                      { "auth": null, "lease_duration": 3600, "lease_id": "",
+                      "renewable": false }
                     </code>
                   </pre>
                 </Reveal>
               </:footer>
-            </Card> --}}
-
+            </Card>
           </:body>
           <:footer>
             <div>
@@ -148,15 +110,6 @@
               >
                 {{t 'actions.close'}}
               </Rose::Button>
-            </div>
-            <div>
-              {{! <Rose::LinkButton
-              @route='scopes.scope.projects.sessions'
-              @style='inline-link-action'
-              @iconRight='chevron-right'
-            >
-              View sessions
-            </Rose::LinkButton> }}
             </div>
           </:footer>
         </DialogDetail>

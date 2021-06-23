@@ -395,14 +395,20 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 
   &:not([open]) {
+    .reveal-trigger-text-close {
+      background: $chevron-down no-repeat right center;
+      padding-right: sizing.rems(l);
+    }
+
     .reveal-trigger-text-open {
       display: none;
     }
   }
 
   &[open] {
-    .reveal-trigger {
-      background: url($chevron-up) no-repeat right center;
+    .reveal-trigger-text-open {
+      background: $chevron-up no-repeat right center;
+      padding-right: sizing.rems(l);
     }
 
     .reveal-trigger-text-close {
