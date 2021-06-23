@@ -23,7 +23,26 @@ export default class AccountSerializer extends ApplicationSerializer {
     switch (snapshot.record.type) {
       case 'password':
         return this.serializePassword(...arguments);
+      case 'oidc':
+        return this.serializeOIDC(...arguments);
     }
+  }
+
+  /**
+   * OIDC serialization limits the `attributes` posted on create and omits
+   * `attributes` entirely on update.
+   */
+  serializeOIDC(snapshot) {
+    const { isNew } = snapshot?.record;
+    let serialized = super.serialize(...arguments);
+    delete serialized.attributes;
+    if (isNew) {
+      serialized.attributes = {};
+      const { issuer, subject } = snapshot.attr('attributes').record;
+      if (issuer) serialized.attributes.issuer = issuer;
+      if (subject) serialized.attributes.subject = subject;
+    }
+    return serialized;
   }
 
   /**

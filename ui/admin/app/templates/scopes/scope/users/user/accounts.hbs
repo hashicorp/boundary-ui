@@ -6,7 +6,7 @@
     <table.header as |header|>
       <header.row as |row|>
         <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
         <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
         <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
       </header.row>
@@ -15,11 +15,13 @@
       {{#each @model.accounts as |account|}}
         <body.row as |row|>
           <row.headerCell>
-            {{account.displayName}}
+            {{account.accountName}}
             <p>{{account.description}}</p>
           </row.headerCell>
           <row.cell>
-            {{account.username}}
+            <Rose::Badge>
+              {{t (concat 'resources.auth-method.types.' account.type)}}
+            </Rose::Badge>
           </row.cell>
           <row.cell>
             <Copyable

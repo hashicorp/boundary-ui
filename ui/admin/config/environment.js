@@ -89,7 +89,7 @@ module.exports = function (environment) {
       'primary-auth-method': true,
       oidc: true,
       'oidc-crud': true,
-      'oidc-account-crud': false,
+      'oidc-account-crud': true,
       search: false,
       filter: false,
       capabilities: false,

@@ -4,9 +4,11 @@
   >
     {{t 'titles.details'}}
   </nav.link>
-  <nav.link
-    @route='scopes.scope.auth-methods.auth-method.accounts.account.set-password'
-  >
-    {{t 'actions.set-password'}}
-  </nav.link>
+  {{#if @model.isPassword}}
+    <nav.link
+      @route='scopes.scope.auth-methods.auth-method.accounts.account.set-password'
+    >
+      {{t 'actions.set-password'}}
+    </nav.link>
+  {{/if}}
 </Rose::Nav::Tabs>

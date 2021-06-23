@@ -10,15 +10,14 @@ module('Unit | Model | account', function (hooks) {
     assert.ok(model);
   });
 
-  test('it has an username attribute for password account', function (assert) {
+  test('it has an accountName attribute for password account', function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     let model = store.createRecord('account', {
-      name: 'name',
       type: 'password',
     });
-    assert.notOk(model.username);
-    model.attributes.login_name = 'username';
-    assert.equal(model.username, 'username');
+    assert.notOk(model.accountName);
+    model.attributes.login_name = 'foobar';
+    assert.equal(model.accountName, 'foobar');
   });
 });
