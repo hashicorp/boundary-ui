@@ -66,7 +66,7 @@ A simple dropdown component with support for links and buttons.
 <Preview>
   <Story name="Dropdown with Key Value Items" height="13rem">{{
     template: hbs`
-      <Rose::Dropdown @text="View details" @showCaret={{showCaret}} as |dropdown|>
+      <Rose::Dropdown @text="View details" @showCaret={{showCaret}} @ignoreClickInside={{true}} as |dropdown|>
         <dropdown.key-value>
           <:key>Name</:key>
           <:value>Key/Value</:value>
@@ -142,4 +142,15 @@ form field.
     </Rose::Dropdown>
   </form.radioGroup>
 </Rose::Form>
+```
+
+Closing dropdown after clicking inside it's content can be ignored using `ignoreClickInside`. This is useful when dropdown contains keyvalue items that users need to select/copy/interact with.
+
+```html
+<Rose::Dropdown @text="View details" @showCaret={{true}} @ignoreClickInside={{true}} as |dropdown|>
+  <dropdown.key-value>
+    <:key>ID</:key>
+    <:value>cl_nbv9375hLHs</:value>
+  </dropdown.key-value>
+</Rose::Dropdown>
 ```
