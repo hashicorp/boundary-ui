@@ -15,8 +15,7 @@ const generateMenuTemplate = () => {
       type: 'none',
       message: config.productName,
       detail: `${appVersion}\n${appCommit}\n\n${cliVersion}\n\n${copyright}`,
-    };
-    dialog.showMessageBox(dialogOpts);
+    });
   };
 
   return [
