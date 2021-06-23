@@ -19,7 +19,8 @@
         >
           <:body>
             <h3>{{t 'resources.target.messages.proxy_url.title'}}
-              (<code>{{t 'resources.target.types.tcp'}}</code>)</h3>
+              {{!-- (<code>{{t 'resources.target.types.tcp'}}</code>)</h3> --}}
+              ({{t 'resources.target.types.tcp'}})</h3>
             <p>
               <Copyable
                 @text={{session.proxy}}
@@ -30,7 +31,56 @@
               </Copyable>
             </p>
 
-            {{!-- <Rose::Separator />
+            <Rose::Separator />
+
+            {{!-- TODO: Conditional for when credentials aren't available 
+              older versions of cli --}}
+            <h3>{{t 'resources.session.credential.title_plural'}}</h3>
+            <Card
+              @heading={{t 'resources.session.credential.title'}}
+              @icon='app-icons/credentials'
+            >
+              <:header>
+                <Rose::Dropdown @text={{t 'resources.session.credential.actions.detail'}}
+                  @style='condensed'
+                  @dropdownRight={{true}} as |dropdown|>
+                    <dropdown.key-value>
+                      <:key>{{t 'form.id.label'}}</:key>
+                      <:value>cl_nbv9375hLHs</:value>
+                    </dropdown.key-value>
+                    <dropdown.key-value>
+                      <:key>{{t 'form.name.label'}}</:key>
+                      <:value>Key/Value</:value>
+                    </dropdown.key-value>
+                    <dropdown.key-value>
+                      <:key>{{t 'form.description.label'}}</:key>
+                      <:value>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut nobis, nemo cum omnis saepe reprehenderit eaque non odit iste magni quod voluptatem soluta dolor beatae libero consequatur, perferendis rem molestias.</:value>
+                    </dropdown.key-value>
+                </Rose::Dropdown>
+              </:header>
+              <:body>
+                {{!-- TODO: Iterate through all credentials --}}
+                <Rose::Table @style='condensed' as |table|>
+                  <table.header as |header|>
+                    <header.row as |row|>
+                      <row.headerCell>Key</row.headerCell>
+                      <row.headerCell colspan='2'>Value</row.headerCell>
+                    </header.row>
+                  </table.header>
+                  <table.body as |body|>
+                    <body.row as |row|>
+                      <row.headerCell>foo</row.headerCell>
+                      <row.cell>Value</row.cell>
+                    </body.row>
+                    <body.row as |row|>
+                      <row.headerCell>ttl</row.headerCell>
+                      <row.cell>Test</row.cell>
+                    </body.row>
+                  </table.body>
+                </Rose::Table>
+              </:body>
+            </Card>
+            {{!--  <Rose::Separator />
 
             <h3>Credentials</h3>
 
@@ -94,13 +144,13 @@
               </Rose::Button>
             </div>
             <div>
-              {{! <Rose::LinkButton
-              @route='index'
+              {{!-- <Rose::LinkButton
+              @route='scopes.scope.projects.sessions'
               @style='inline-link-action'
               @iconRight='chevron-right'
             >
-
-            </Rose::LinkButton> }}
+              View sessions
+            </Rose::LinkButton> --}}
             </div>
           </:footer>
         </DialogDetail>

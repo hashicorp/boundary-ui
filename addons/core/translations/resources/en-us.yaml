@@ -147,6 +147,11 @@ session:
       description: No active sessions available to display yet.
   actions:
     connect: Connect
+  credential:
+    title: Credential
+    title_plural: Credentials
+    actions:
+      detail: Credential library details
 org:
   title: Org
   title_plural: Orgs
