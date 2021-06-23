@@ -395,14 +395,20 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 
   &:not([open]) {
+    .reveal-trigger-text-close {
+      background: $chevron-down no-repeat right center;
+      padding-right: sizing.rems(l);
+    }
+
     .reveal-trigger-text-open {
       display: none;
     }
   }
 
   &[open] {
-    .reveal-trigger {
-      background: url($chevron-up) no-repeat right center;
+    .reveal-trigger-text-open {
+      background: $chevron-up no-repeat right center;
+      padding-right: sizing.rems(l);
     }
 
     .reveal-trigger-text-close {
@@ -422,8 +428,8 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     align-items: center;
     border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     display: flex;
-    justify-content: flex-start;
-    padding: sizing.rems(s) sizing.rems(m);
+    justify-content: space-between;
+    padding: sizing.rems(s) sizing.rems(s);
 
     h2 {
       @include type.type(s, normal);

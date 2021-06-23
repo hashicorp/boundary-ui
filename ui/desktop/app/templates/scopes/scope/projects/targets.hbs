@@ -19,7 +19,8 @@
         >
           <:body>
             <h3>{{t 'resources.target.messages.proxy_url.title'}}
-              (<code>{{t 'resources.target.types.tcp'}}</code>)</h3>
+              {{!-- (<code>{{t 'resources.target.types.tcp'}}</code>)</h3> --}}
+              ({{t 'resources.target.types.tcp'}})</h3>
             <p>
               <Copyable
                 @text={{session.proxy}}
@@ -30,21 +31,41 @@
               </Copyable>
             </p>
 
-            {{!-- <Rose::Separator />
+            <Rose::Separator />
 
-            <h3>Credentials</h3>
-
-            <Card @heading="Credentials" @icon='app-icons/credentials'>
+            {{! TODO: Conditional for when credentials aren't available
+            older versions of cli }}
+            <h3>{{t 'resources.session.credential.title_plural'}}</h3>
+            {{!-- <Card
+              @heading={{t 'resources.session.credential.title'}}
+              @icon='app-icons/credentials'
+            >
               <:header>
                 <Rose::Dropdown
-                  @style="condensed"
-                  @text="Credential library details"
-                  @showCaret={{true}}
+                  @text={{t 'resources.session.credential.actions.detail'}}
+                  @style='condensed'
+                  @dropdownRight={{true}}
                   as |dropdown|
                 >
+                  <dropdown.key-value>
+                    <:key>{{t 'form.id.label'}}</:key>
+                    <:value>cl_nbv9375hLHs</:value>
+                  </dropdown.key-value>
+                  <dropdown.key-value>
+                    <:key>{{t 'form.name.label'}}</:key>
+                    <:value>Key/Value</:value>
+                  </dropdown.key-value>
+                  <dropdown.key-value>
+                    <:key>{{t 'form.description.label'}}</:key>
+                    <:value>Lorem ipsum dolor, sit amet consectetur adipisicing
+                      elit. Ut nobis, nemo cum omnis saepe reprehenderit eaque
+                      non odit iste magni quod voluptatem soluta dolor beatae
+                      libero consequatur, perferendis rem molestias.</:value>
+                  </dropdown.key-value>
                 </Rose::Dropdown>
               </:header>
               <:body>
+                {{! TODO: Iterate through all credentials }}
                 <Rose::Table @style='condensed' as |table|>
                   <table.header as |header|>
                     <header.row as |row|>
@@ -71,18 +92,13 @@
                 >
                   <pre>
                     <code>
-  {
-    "auth": null,
-    "lease_duration": 3600,
-    "lease_id": "",
-    "renewable": false
-  }
+                      { "auth": null, "lease_duration": 3600, "lease_id": "",
+                      "renewable": false }
                     </code>
                   </pre>
                 </Reveal>
               </:footer>
             </Card> --}}
-
           </:body>
           <:footer>
             <div>
@@ -92,15 +108,6 @@
               >
                 {{t 'actions.close'}}
               </Rose::Button>
-            </div>
-            <div>
-              {{! <Rose::LinkButton
-              @route='index'
-              @style='inline-link-action'
-              @iconRight='chevron-right'
-            >
-
-            </Rose::LinkButton> }}
             </div>
           </:footer>
         </DialogDetail>
