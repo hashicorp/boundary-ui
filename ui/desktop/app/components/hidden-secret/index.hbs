@@ -1,0 +1,11 @@
+<div class='hidden-secret'>
+  {{! TODO: The span wrap within a div because later we will add the toggle secret icon/button}}
+  <div>
+    <span>{{t 'resources.target.host-set.secret_label'}}</span>
+  </div>
+  <Copyable
+    @text={{@secret}}
+    @buttonText={{t 'actions.copy-to-clipboard'}}
+    @acknowledgeText={{t 'states.copied'}}
+  />
+</div>
