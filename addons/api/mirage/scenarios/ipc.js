@@ -65,10 +65,10 @@ export default function initializeMockIPC(server) {
               name: 'Library Name',
               description: 'Library Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
-              type: 'vault'
+              type: 'vault',
             },
             purpose: 'application',
-            secret: btoa('just-a-random-string')
+            secret: btoa('just-a-random-string'),
           },
           {
             credential_library: {
@@ -76,16 +76,18 @@ export default function initializeMockIPC(server) {
               name: 'Library Name',
               description: 'Library Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
-              type: 'vault'
+              type: 'vault',
             },
             purpose: 'ingress',
-            secret: btoa(JSON.stringify({
-              key1: 'value 1',
-              key2: true,
-              key3: {
-                description: 'nested values'
-              }
-            }))
+            secret: btoa(
+              JSON.stringify({
+                key1: 'value 1',
+                key2: true,
+                key3: {
+                  description: 'nested values',
+                },
+              })
+            ),
           },
           {
             credential_library: {
@@ -93,10 +95,10 @@ export default function initializeMockIPC(server) {
               name: 'Library Name',
               description: 'Library Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
-              type: 'vault'
+              type: 'vault',
             },
             purpose: 'application',
-            secret: btoa('just-a-random-string')
+            secret: btoa('just-a-random-string'),
           },
           {
             credential_library: {
@@ -104,18 +106,20 @@ export default function initializeMockIPC(server) {
               name: 'Library Name',
               description: 'Library Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
-              type: 'vault'
+              type: 'vault',
             },
             purpose: 'egress',
-            secret: btoa(JSON.stringify({
-              key1: 'value 1',
-              key2: true,
-              key3: {
-                description: 'nested values'
-              }
-            }))
+            secret: btoa(
+              JSON.stringify({
+                key1: 'value 1',
+                key2: true,
+                key3: {
+                  description: 'nested values',
+                },
+              })
+            ),
           },
-        ]
+        ],
       };
     }
 
