@@ -1,3 +1,5 @@
+{{! template-lint-disable no-bare-strings  }}
+
 {{page-title (t 'resources.target.title_plural')}}
 
 {{#each @model as |target|}}
@@ -36,7 +38,7 @@
             {{! TODO: Conditional for when credentials aren't available
             older versions of cli }}
             <h3>{{t 'resources.session.credential.title_plural'}}</h3>
-            {{!-- <Card
+            <Card
               @heading={{t 'resources.session.credential.title'}}
               @icon='app-icons/credentials'
             >
@@ -100,7 +102,7 @@
                   </pre>
                 </Reveal>
               </:footer>
-            </Card> --}}
+            </Card>
           </:body>
           <:footer>
             <div>
