@@ -62,6 +62,8 @@ client_secret:
   help: The client secret is set-only and may not be unset.
 client_secret_hmac:
   label: Client Secret HMAC
+secret:
+  label: Secret
 max_age:
   label: Maximum Age
   help: The OIDC "max_age" parameter sent to the Authorization Server indicating a maximum acceptable time in seconds since the user's last authentication before requiring the user to reauthenticate. 0 indicates an immediate need to reauthenticate.
@@ -108,3 +110,7 @@ email:
   label: Email
 full_name:
   label: Full Name
+key:
+  label: Key
+value:
+  label: Value

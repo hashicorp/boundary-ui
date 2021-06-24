@@ -451,4 +451,10 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     padding: sizing.rems(s);
   }
+
+  // Allow text wrapping for copyable content in table
+  .rose-table .copyable {
+    white-space: inherit;
+    word-break: break-word;
+  }
 }
