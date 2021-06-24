@@ -3,31 +3,73 @@ import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
+import { typeOf } from '@ember/utils';
 
+/**
+ *
+ */
 class SessionCredential {
+  // =classes
+
+  /**
+   *
+   */
+  static Library = class Library {
+    id;
+    name;
+    description;
+    type;
+
+    constructor(id, name, description, type) {
+      this.id = id;
+      this.name = name;
+      this.description = description;
+      this.type = type;
+    }
+  };
+
+  /**
+   *
+   */
+  static SecretItem = class SecretItem {
+    key;
+    value;
+
+    constructor(key, value) {
+      this.key = key;
+      this.value = value;
+    }
+  };
+
   // =attributes
   rawCredential;
-  credential_library_id;
-  credential_library_name;
-  credential_library_description;
-  credential_library_type;
+  library;
   purpose;
-  #secret;
+  #rawSecretValue;
 
-  get secret() {
-    return atob(this.#secret);
+  /**
+   * The credential secret as an array of key/value objects.
+   * @type {SessionCredential.SecretItem[]}
+   */
+  get secrets() {
+    if (typeOf(this.#rawSecretValue) === 'object') {
+      return Object.keys(this.#rawSecretValue).map(
+        (key) =>
+          new SessionCredential.SecretItem(key, this.#rawSecretValue[key])
+      );
+    } else {
+      return [new SessionCredential.SecretItem('secret', this.#rawSecretValue)];
+    }
   }
 
   // =methods
 
   constructor(cred) {
+    const { id, name, description, type } = cred.credential_library;
+    this.library = new SessionCredential.Library(id, name, description, type);
+    this.#rawSecretValue = cred.secret;
     this.rawCredential = cred;
-    this.credential_library_id = cred.credential_library.id;
-    this.credential_library_name = cred.credential_library.name;
-    this.credential_library_description = cred.credential_library.description;
-    this.credential_library_type = cred.credential_library.type;
     this.purpose = cred.purpose;
-    this.#secret = cred.secret;
   }
 }
 
@@ -75,6 +117,9 @@ export default class SessionModel extends GeneratedSessionModel {
 
   // =methods
 
+  /**
+   *
+   */
   addCredential(cred) {
     this.credentials.pushObject(new SessionCredential(cred));
   }

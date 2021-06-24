@@ -68,7 +68,7 @@ export default function initializeMockIPC(server) {
               type: 'vault',
             },
             purpose: 'application',
-            secret: btoa('just-a-random-string'),
+            secret: 'just-a-random-string',
           },
           {
             credential_library: {
@@ -79,15 +79,11 @@ export default function initializeMockIPC(server) {
               type: 'vault',
             },
             purpose: 'ingress',
-            secret: btoa(
-              JSON.stringify({
-                key1: 'value 1',
-                key2: true,
-                key3: {
-                  description: 'nested values',
-                },
-              })
-            ),
+            secret: {
+              key1: 'value 1',
+              key2: true,
+              key3: 'test',
+            },
           },
           {
             credential_library: {
@@ -98,7 +94,7 @@ export default function initializeMockIPC(server) {
               type: 'vault',
             },
             purpose: 'application',
-            secret: btoa('just-a-random-string'),
+            secret: 'just-a-random-string',
           },
           {
             credential_library: {
@@ -109,15 +105,11 @@ export default function initializeMockIPC(server) {
               type: 'vault',
             },
             purpose: 'egress',
-            secret: btoa(
-              JSON.stringify({
-                key1: 'value 1',
-                key2: true,
-                key3: {
-                  description: 'nested values',
-                },
-              })
-            ),
+            secret: {
+              key1: 'value 1',
+              key2: true,
+              key3: 'test',
+            },
           },
         ],
       };
