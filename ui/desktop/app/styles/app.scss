@@ -429,7 +429,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     display: flex;
     justify-content: space-between;
-    padding: sizing.rems(s) sizing.rems(s);
+    padding: sizing.rems(s) sizing.rems(s) sizing.rems(s) sizing.rems(m);
 
     h2 {
       @include type.type(s, normal);
