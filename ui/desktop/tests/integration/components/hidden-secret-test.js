@@ -14,7 +14,7 @@ module('Integration | Component | hidden-secret', function (hooks) {
 
     assert.ok(find('.hidden-secret'));
     assert.equal(
-      find('.hidden-secret > div > span').textContent.trim(),
+      find('.hidden-secret > span > span').textContent.trim(),
       '■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■'
     );
   });
