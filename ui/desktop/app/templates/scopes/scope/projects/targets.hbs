@@ -61,60 +61,59 @@
                         <:key>{{t 'form.id.label'}}</:key>
                         <:value>
                           <Copyable
-                            @text={{credential.credential_library_id}}
+                            @text={{credential.library.id}}
                             @buttonText={{t 'actions.copy-to-clipboard'}}
                             @acknowledgeText={{t 'states.copied'}}
                           >
-                            <code>{{credential.credential_library_id}}</code>
+                            <code>{{credential.library.id}}</code>
                           </Copyable>
                         </:value>
                       </dropdown.key-value>
                       <dropdown.key-value>
                         <:key>{{t 'form.type.label'}}</:key>
-                        <:value>{{credential.credential_library_type}}</:value>
+                        <:value>{{credential.library.type}}</:value>
                       </dropdown.key-value>
                       <dropdown.key-value>
                         <:key>{{t 'form.name.label'}}</:key>
-                        <:value>{{credential.credential_library_name}}</:value>
+                        <:value>{{credential.library.name}}</:value>
                       </dropdown.key-value>
                       <dropdown.key-value>
                         <:key>{{t 'form.description.label'}}</:key>
-                        <:value
-                        >{{credential.credential_library_description}}</:value>
+                        <:value>{{credential.library.description}}</:value>
                       </dropdown.key-value>
                     </Rose::Dropdown>
                   </:header>
                   <:body>
-                    <Rose::Table @style='condensed' as |table|>
-                      <table.header as |header|>
-                        <header.row as |row|>
-                          <row.headerCell>{{t
-                              'form.key.label'
-                            }}</row.headerCell>
-                          <row.headerCell colspan='2'>{{t
-                              'form.value.label'
-                            }}</row.headerCell>
-                        </header.row>
-                      </table.header>
-                      <table.body as |body|>
-                        {{#if credential.secret}}
-                          <body.row as |row|>
+                    {{#if credential.secrets}}
+                      <Rose::Table @style='condensed' as |table|>
+                        <table.header as |header|>
+                          <header.row as |row|>
                             <row.headerCell>{{t
-                                'form.secret.label'
+                                'form.key.label'
                               }}</row.headerCell>
-                            <row.cell colspan='2'>
-                              <Copyable
-                                @text={{credential.secret}}
-                                @buttonText={{t 'actions.copy-to-clipboard'}}
-                                @acknowledgeText={{t 'states.copied'}}
-                              >
-                                {{credential.secret}}
-                              </Copyable>
-                            </row.cell>
-                          </body.row>
-                        {{/if}}
-                      </table.body>
-                    </Rose::Table>
+                            <row.headerCell colspan='2'>{{t
+                                'form.value.label'
+                              }}</row.headerCell>
+                          </header.row>
+                        </table.header>
+                        <table.body as |body|>
+                          {{#each credential.secrets as |secret|}}
+                            <body.row as |row|>
+                              <row.headerCell>{{secret.key}}</row.headerCell>
+                              <row.cell colspan='2'>
+                                <Copyable
+                                  @text={{secret.value}}
+                                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                                  @acknowledgeText={{t 'states.copied'}}
+                                >
+                                  {{secret.value}}
+                                </Copyable>
+                              </row.cell>
+                            </body.row>
+                          {{/each}}
+                        </table.body>
+                      </Rose::Table>
+                    {{/if}}
                   </:body>
                   <:footer>
                     <Reveal
