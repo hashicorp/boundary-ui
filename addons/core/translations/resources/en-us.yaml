@@ -150,8 +150,14 @@ session:
   credential:
     title: Credential
     title_plural: Credentials
+    secret:
+      label: Secret
+    credential_library:
+      title: Credential Library
     actions:
-      detail: Credential library details
+      raw-api:
+        show: View raw API output
+        hide: Hide raw API output
 org:
   title: Org
   title_plural: Orgs
@@ -261,3 +267,4 @@ target:
       add:
         title: Add Host Sets
         description: Select host sets to assign to this target.
+    secret: ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
