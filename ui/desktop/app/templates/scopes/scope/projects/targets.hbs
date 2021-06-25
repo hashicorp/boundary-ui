@@ -105,13 +105,7 @@
                             <body.row as |row|>
                               <row.headerCell>{{secret.key}}</row.headerCell>
                               <row.cell colspan='2'>
-                                <Copyable
-                                  @text={{secret.value}}
-                                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                                  @acknowledgeText={{t 'states.copied'}}
-                                >
-                                  {{secret.value}}
-                                </Copyable>
+                                <HiddenSecret @secret={{secret.value}} />
                               </row.cell>
                             </body.row>
                           {{/each}}
