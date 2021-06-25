@@ -1,5 +1,3 @@
-{{! template-lint-disable no-bare-strings  }}
-
 {{page-title (t 'resources.target.title_plural')}}
 
 {{#each @model as |target|}}
@@ -51,7 +49,9 @@
                 >
                   <:header>
                     <Rose::Dropdown
-                      @text={{t 'resources.session.credential.actions.detail'}}
+                      @text={{t
+                        'resources.session.credential.credential_library.title'
+                      }}
                       @style='condensed'
                       @dropdownRight={{true}}
                       @ignoreClickInside={{true}}
@@ -73,14 +73,18 @@
                         <:key>{{t 'form.type.label'}}</:key>
                         <:value>{{credential.library.type}}</:value>
                       </dropdown.key-value>
-                      <dropdown.key-value>
-                        <:key>{{t 'form.name.label'}}</:key>
-                        <:value>{{credential.library.name}}</:value>
-                      </dropdown.key-value>
-                      <dropdown.key-value>
-                        <:key>{{t 'form.description.label'}}</:key>
-                        <:value>{{credential.library.description}}</:value>
-                      </dropdown.key-value>
+                      {{#if credential.library.name}}
+                        <dropdown.key-value>
+                          <:key>{{t 'form.name.label'}}</:key>
+                          <:value>{{credential.library.name}}</:value>
+                        </dropdown.key-value>
+                      {{/if}}
+                      {{#if credential.library.description}}
+                        <dropdown.key-value>
+                          <:key>{{t 'form.description.label'}}</:key>
+                          <:value>{{credential.library.description}}</:value>
+                        </dropdown.key-value>
+                      {{/if}}
                     </Rose::Dropdown>
                   </:header>
                   <:body>

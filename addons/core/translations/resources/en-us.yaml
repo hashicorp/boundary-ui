@@ -152,8 +152,9 @@ session:
     title_plural: Credentials
     secret:
       label: Secret
+    credential_library:
+      title: Credential Library
     actions:
-      detail: Credential library details
       raw-api:
         show: View raw API output
         hide: Hide raw API output
