@@ -2,6 +2,12 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## Next
+
+### New
+
+- Add vault credential support. ([PR](https://github.com/hashicorp/boundary-ui/pull/619))
+
 ## v1.1.0 [CLI 0.3.0] (2021.06.09)
 
 ### Known Issues
