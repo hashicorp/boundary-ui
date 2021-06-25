@@ -446,3 +446,20 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     padding: sizing.rems(s);
   }
 }
+
+// Hidden secret component (app/components/hidden-secret)
+.hidden-secret {
+  display: flex;
+  align-items: center;
+  color: var(--ui-gray-subtler-2);
+
+  .copyable {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .rose-button-ghost {
+    color: var(--ui-gray-subtler-1);
+  }
+}

@@ -1,0 +1,10 @@
+<div class='hidden-secret'>
+  {{! TODO: The span wrap within a div because later we will add the toggle secret icon/button}}
+  <Copyable
+    @text={{@secret}}
+    @buttonText={{t 'actions.copy-to-clipboard'}}
+    @acknowledgeText={{t 'states.copied'}}
+  >
+    <span>{{this.textMask}}</span>
+  </Copyable>
+</div>
