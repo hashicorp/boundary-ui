@@ -86,11 +86,11 @@
       }
     }
     .rose-table-header {
+      border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
       .rose-table-header-cell {
         $lineHeight: math.div(16, 14);
         line-height: $lineHeight;
         padding: sizing.rems(xs) sizing.rems(s);
-
         &:first-child {
           padding-left: 0;
         }
