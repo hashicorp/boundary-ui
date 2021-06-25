@@ -41,9 +41,7 @@
                 <Card
                   @heading={{concat
                     (t 'resources.session.credential.title')
-                    ' ('
-                    credential.purpose
-                    ')'
+                    (if credential.purpose (concat ' (' credential.purpose ')'))
                   }}
                   @icon='app-icons/credential'
                 >
