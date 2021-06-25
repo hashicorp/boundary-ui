@@ -329,6 +329,8 @@
 // Dialog Detail
 // These styles are a Work In Progress. Expect changes (lots of them)
 .dialog-detail {
+  z-index: 6000;
+
   .rose-notification {
     border-left: 0;
     border-right: 0;
@@ -359,6 +361,11 @@
       width: 50%;
     }
   }
+}
+
+// Overlay above everything - including notifications
+.rose-dialog-modal-overlay {
+  z-index: 5500;
 }
 
 // Reveal component (app/components/reveal)
