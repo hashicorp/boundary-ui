@@ -48,6 +48,10 @@ const extract = (artifactPath, destination) => {
 
 module.exports = {
   setup: async () => {
+    if (process.env.BYPASS_CLI_SETUP) {
+      console.warn('WARNING: Bypassing cli setup');
+      return;
+    }
     const artifactPath = await downloadArtifact(artifactVersion);
     await extract(artifactPath, artifactDestination);
   }

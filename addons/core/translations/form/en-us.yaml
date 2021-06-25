@@ -108,3 +108,7 @@ email:
   label: Email
 full_name:
   label: Full Name
+key:
+  label: Key
+value:
+  label: Value

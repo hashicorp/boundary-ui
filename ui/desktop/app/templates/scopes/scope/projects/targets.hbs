@@ -18,71 +18,122 @@
           @dismissButtonText={{t 'actions.ok'}}
         >
           <:body>
-            <h3>{{t 'resources.target.messages.proxy_url.title'}}
-              (<code>{{t 'resources.target.types.tcp'}}</code>)</h3>
+            <h3>
+              {{t 'resources.target.messages.proxy_url.title'}}
+              ({{t 'resources.target.types.tcp'}})
+            </h3>
             <p>
               <Copyable
                 @text={{session.proxy}}
                 @buttonText={{t 'actions.copy-to-clipboard'}}
                 @acknowledgeText={{t 'states.copied'}}
               >
-                <code>{{session.proxy_address}}:{{session.proxy_port}}</code>
+                <code>{{session.proxy}}</code>
               </Copyable>
             </p>
 
-            {{!-- <Rose::Separator />
+            {{#if session.credentials}}
+              <Rose::Separator />
 
-            <h3>Credentials</h3>
+              <h3>{{t 'resources.session.credential.title_plural'}}</h3>
 
-            <Card @heading="Credentials" @icon='app-icons/credentials'>
-              <:header>
-                <Rose::Dropdown
-                  @style="condensed"
-                  @text="Credential library details"
-                  @showCaret={{true}}
-                  as |dropdown|
+              {{#each session.credentials as |credential|}}
+                <Card
+                  @heading={{concat
+                    (t 'resources.session.credential.title')
+                    ' ('
+                    credential.purpose
+                    ')'
+                  }}
+                  @icon='app-icons/credential'
                 >
-                </Rose::Dropdown>
-              </:header>
-              <:body>
-                <Rose::Table @style='condensed' as |table|>
-                  <table.header as |header|>
-                    <header.row as |row|>
-                      <row.headerCell>Key</row.headerCell>
-                      <row.headerCell colspan='2'>Value</row.headerCell>
-                    </header.row>
-                  </table.header>
-                  <table.body as |body|>
-                    <body.row as |row|>
-                      <row.headerCell>foo</row.headerCell>
-                      <row.cell>Value</row.cell>
-                    </body.row>
-                    <body.row as |row|>
-                      <row.headerCell>ttl</row.headerCell>
-                      <row.cell>Test</row.cell>
-                    </body.row>
-                  </table.body>
-                </Rose::Table>
-              </:body>
-              <:footer>
-                <Reveal
-                  @textWhenOpen='Hide content'
-                  @textWhenClose='View content'
-                >
-                  <pre>
-                    <code>
-  {
-    "auth": null,
-    "lease_duration": 3600,
-    "lease_id": "",
-    "renewable": false
-  }
-                    </code>
-                  </pre>
-                </Reveal>
-              </:footer>
-            </Card> --}}
-
+                  <:header>
+                    <Rose::Dropdown
+                      @text={{t
+                        'resources.session.credential.credential_library.title'
+                      }}
+                      @style='condensed'
+                      @dropdownRight={{true}}
+                      @ignoreClickInside={{true}}
+                      as |dropdown|
+                    >
+                      <dropdown.key-value>
+                        <:key>{{t 'form.id.label'}}</:key>
+                        <:value>
+                          <Copyable
+                            @text={{credential.library.id}}
+                            @buttonText={{t 'actions.copy-to-clipboard'}}
+                            @acknowledgeText={{t 'states.copied'}}
+                          >
+                            <code>{{credential.library.id}}</code>
+                          </Copyable>
+                        </:value>
+                      </dropdown.key-value>
+                      <dropdown.key-value>
+                        <:key>{{t 'form.type.label'}}</:key>
+                        <:value>{{credential.library.type}}</:value>
+                      </dropdown.key-value>
+                      {{#if credential.library.name}}
+                        <dropdown.key-value>
+                          <:key>{{t 'form.name.label'}}</:key>
+                          <:value>{{credential.library.name}}</:value>
+                        </dropdown.key-value>
+                      {{/if}}
+                      {{#if credential.library.description}}
+                        <dropdown.key-value>
+                          <:key>{{t 'form.description.label'}}</:key>
+                          <:value>{{credential.library.description}}</:value>
+                        </dropdown.key-value>
+                      {{/if}}
+                    </Rose::Dropdown>
+                  </:header>
+                  <:body>
+                    {{#if credential.secrets}}
+                      <Rose::Table @style='condensed' as |table|>
+                        <table.header as |header|>
+                          <header.row as |row|>
+                            <row.headerCell>{{t
+                                'form.key.label'
+                              }}</row.headerCell>
+                            <row.headerCell colspan='2'>{{t
+                                'form.value.label'
+                              }}</row.headerCell>
+                          </header.row>
+                        </table.header>
+                        <table.body as |body|>
+                          {{#each credential.secrets as |secret|}}
+                            <body.row as |row|>
+                              <row.headerCell>{{secret.key}}</row.headerCell>
+                              <row.cell colspan='2'>
+                                <Copyable
+                                  @text={{secret.value}}
+                                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                                  @acknowledgeText={{t 'states.copied'}}
+                                >
+                                  {{secret.value}}
+                                </Copyable>
+                              </row.cell>
+                            </body.row>
+                          {{/each}}
+                        </table.body>
+                      </Rose::Table>
+                    {{/if}}
+                  </:body>
+                  <:footer>
+                    <Reveal
+                      @textWhenOpen={{t
+                        'resources.session.credential.actions.raw-api.hide'
+                      }}
+                      @textWhenClose={{t
+                        'resources.session.credential.actions.raw-api.show'
+                      }}
+                    >
+                      <pre>{{raw-json credential.rawCredential}}</pre>
+                    </Reveal>
+                  </:footer>
+                </Card>
+              {{/each}}
+            {{/if}}
           </:body>
           <:footer>
             <div>
@@ -92,15 +143,6 @@
               >
                 {{t 'actions.close'}}
               </Rose::Button>
-            </div>
-            <div>
-              {{! <Rose::LinkButton
-              @route='index'
-              @style='inline-link-action'
-              @iconRight='chevron-right'
-            >
-
-            </Rose::LinkButton> }}
             </div>
           </:footer>
         </DialogDetail>

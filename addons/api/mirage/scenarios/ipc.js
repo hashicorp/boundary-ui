@@ -58,6 +58,60 @@ export default function initializeMockIPC(server) {
         port: datatype.number(),
         protocol: type,
         session_id: newSession.id,
+        credentials: [
+          {
+            credential_library: {
+              id: 'clvlt_4cvscMTl0N',
+              name: 'Library Name',
+              description: 'Library Description',
+              credential_store_id: 'csvlt_Q1HFGt7Jpm',
+              type: 'vault',
+            },
+            purpose: 'application',
+            secret: 'just-a-random-string',
+          },
+          {
+            credential_library: {
+              id: 'clvlt_4cvscMTl0N',
+              name: 'Library Name',
+              description: 'Library Description',
+              credential_store_id: 'csvlt_Q1HFGt7Jpm',
+              type: 'vault',
+            },
+            purpose: 'ingress',
+            secret: {
+              key1: 'value 1',
+              key2: true,
+              key3: 'test',
+            },
+          },
+          {
+            credential_library: {
+              id: 'clvlt_9KWscxpcY7',
+              name: 'Library Name',
+              description: 'Library Description',
+              credential_store_id: 'csvlt_Q1HFGt7Jpm',
+              type: 'vault',
+            },
+            purpose: 'application',
+            secret: 'just-a-random-string',
+          },
+          {
+            credential_library: {
+              id: 'clvlt_9KWscxpcY7',
+              name: 'Library Name',
+              description: 'Library Description',
+              credential_store_id: 'csvlt_Q1HFGt7Jpm',
+              type: 'vault',
+            },
+            purpose: 'egress',
+            secret: {
+              key1: 'value 1',
+              key2: true,
+              key3: 'test',
+            },
+          },
+        ],
       };
     }
 
