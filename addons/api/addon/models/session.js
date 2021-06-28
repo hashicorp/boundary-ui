@@ -44,7 +44,6 @@ class SessionCredential {
   // =attributes
   rawCredential;
   library;
-  purpose;
   #rawSecretValue;
 
   /**
@@ -69,7 +68,6 @@ class SessionCredential {
     this.library = new SessionCredential.Library(id, name, description, type);
     this.#rawSecretValue = cred.secret;
     this.rawCredential = cred;
-    this.purpose = cred.purpose;
   }
 }
 

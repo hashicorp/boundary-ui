@@ -67,7 +67,6 @@ export default function initializeMockIPC(server) {
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
-            purpose: 'application',
             secret: 'just-a-random-string',
           },
           {
@@ -78,7 +77,6 @@ export default function initializeMockIPC(server) {
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
-            purpose: 'ingress',
             secret: {
               key1: 'value 1',
               key2: true,
@@ -93,7 +91,6 @@ export default function initializeMockIPC(server) {
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
-            purpose: 'application',
             secret: 'just-a-random-string',
           },
           {
@@ -104,7 +101,6 @@ export default function initializeMockIPC(server) {
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
-            purpose: 'egress',
             secret: {
               key1: 'value 1',
               key2: true,

@@ -39,10 +39,11 @@
 
               {{#each session.credentials as |credential|}}
                 <Card
-                  @heading={{concat
-                    (t 'resources.session.credential.title')
-                    (if credential.purpose (concat ' (' credential.purpose ')'))
-                  }}
+                  @heading='{{t 'resources.session.credential.title'}}
+                    {{if
+                    credential.library.name
+                    (concat ' (' credential.library.name ')')
+                  }}'
                   @icon='app-icons/credential'
                 >
                   <:header>
