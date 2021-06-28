@@ -39,13 +39,11 @@
 
               {{#each session.credentials as |credential|}}
                 <Card
-                  @heading={{concat
-                    (t 'resources.session.credential.title')
-                    (if
-                      credential.library.name
-                      (concat ' (' credential.library.name ')')
-                    )
-                  }}
+                  @heading='{{t 'resources.session.credential.title'}}
+                    {{if
+                    credential.library.name
+                    (concat ' (' credential.library.name ')')
+                  }}'
                   @icon='app-icons/credential'
                 >
                   <:header>
@@ -74,6 +72,12 @@
                         <:key>{{t 'form.type.label'}}</:key>
                         <:value>{{credential.library.type}}</:value>
                       </dropdown.key-value>
+                      {{#if credential.library.name}}
+                        <dropdown.key-value>
+                          <:key>{{t 'form.name.label'}}</:key>
+                          <:value>{{credential.library.name}}</:value>
+                        </dropdown.key-value>
+                      {{/if}}
                       {{#if credential.library.description}}
                         <dropdown.key-value>
                           <:key>{{t 'form.description.label'}}</:key>
