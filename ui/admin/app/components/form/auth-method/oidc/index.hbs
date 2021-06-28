@@ -629,6 +629,16 @@
     {{/if}}
   </form.input>
 
+  {{#unless @model.isNew}}
+    <form.input
+      @value={{@model.attributes.callback_url}}
+      @label={{t 'form.callback_url.label'}}
+      @helperText={{t 'form.callback_url.help'}}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/unless}}
+
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
     @enableEditText={{t 'actions.edit-form'}}
