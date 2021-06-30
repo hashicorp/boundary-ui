@@ -44,20 +44,29 @@ class SessionCredential {
   // =attributes
   rawCredential;
   library;
-  #rawSecretValue;
+  #payloadSecret;
 
   /**
+   * The incoming payload may contain a JSON object under the `decoded` key only
+   * if it can be JSON-decoded.  Some credential stores may not provide JSON,
+   * however, in which case we may have only the raw base64-encoded secret
+   * string.  In the former case, we convert the key/value pairs of the JSON to
+   * an array of `SecretItem` instances.  In the latter case, we return an
+   * array containing a single `SecretItem` instance with key `secret` and a
+   * string value equal to the base64-decoded raw secret.
    * The credential secret as an array of key/value objects.
    * @type {SessionCredential.SecretItem[]}
    */
   get secrets() {
-    if (typeOf(this.#rawSecretValue) === 'object') {
-      return Object.keys(this.#rawSecretValue).map(
-        (key) =>
-          new SessionCredential.SecretItem(key, this.#rawSecretValue[key])
+    if (this.#payloadSecret?.decoded) {
+      const secretJSON = this.#payloadSecret.decoded;
+      return Object.keys(secretJSON).map(
+        (key) => new SessionCredential.SecretItem(key, secretJSON[key])
       );
     } else {
-      return [new SessionCredential.SecretItem('secret', this.#rawSecretValue)];
+      // decode from base64
+      const decodedString = atob(this.#payloadSecret.raw);
+      return [new SessionCredential.SecretItem('secret', decodedString)];
     }
   }
 
@@ -66,7 +75,7 @@ class SessionCredential {
   constructor(cred) {
     const { id, name, description, type } = cred.credential_library;
     this.library = new SessionCredential.Library(id, name, description, type);
-    this.#rawSecretValue = cred.secret;
+    this.#payloadSecret = cred.secret;
     this.rawCredential = cred;
   }
 }
