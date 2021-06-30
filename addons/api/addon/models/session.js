@@ -3,7 +3,6 @@ import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
-import { typeOf } from '@ember/utils';
 
 /**
  *
