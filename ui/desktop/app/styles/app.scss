@@ -328,9 +328,12 @@
 
 // Dialog Detail
 // These styles are a Work In Progress. Expect changes (lots of them)
+.rose-dialog,
 .dialog-detail {
   z-index: 6000;
+}
 
+.dialog-detail {
   .rose-notification {
     border-left: 0;
     border-right: 0;

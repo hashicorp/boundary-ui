@@ -72,7 +72,8 @@
     "css-what": "^5.0.1",
     "trim-newlines": "^3.0.1",
     "clean-css": "^4.1.11",
-    "normalize-url": "^4.5.1"
+    "normalize-url": "^4.5.1",
+    "glob-parent": "^5.1.2"
   },
   "config": {
     "commitizen": {
