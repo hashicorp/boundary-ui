@@ -52,7 +52,7 @@
     "request": "~2.68.0",
     "tunnel-agent": "~0.6.0",
     "cryptiles": "~4.1.2",
-    "prismjs": "~1.23.0",
+    "prismjs": "^1.24.0",
     "npm-user-validate": "^1.0.1",
     "caniuse-lite": "^1.0.30001157",
     "immer": "^8.0.1",
@@ -72,7 +72,10 @@
     "css-what": "^5.0.1",
     "trim-newlines": "^3.0.1",
     "clean-css": "^4.1.11",
-    "mem": "^4.0.0"
+    "mem": "^4.0.0",
+    "minimist": "^1.2.3",
+    "normalize-url": "^4.5.1",
+    "glob-parent": "^5.1.2"
   },
   "config": {
     "commitizen": {
