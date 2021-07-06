@@ -180,7 +180,11 @@
                   @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
-                  @disabled={{if form.isEditable false true}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
                   {{on
                     'click'
                     (fn @removeItemByIndex 'attributes.signing_algorithms' i)
@@ -215,7 +219,11 @@
               <Rose::Button
                 @style='secondary'
                 title={{t 'actions.add'}}
-                @disabled={{if form.isEditable false true}}
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
                 {{on
                   'click'
                   (fn
@@ -273,7 +281,11 @@
                   @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
-                  @disabled={{if form.isEditable false true}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
                   {{on
                     'click'
                     (fn @removeItemByIndex 'attributes.allowed_audiences' i)
@@ -297,7 +309,11 @@
               <Rose::Button
                 @style='secondary'
                 title={{t 'actions.add'}}
-                @disabled={{if form.isEditable false true}}
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
                 {{on
                   'click'
                   (fn
@@ -355,7 +371,11 @@
                   @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
-                  @disabled={{if form.isEditable false true}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
                   {{on
                     'click'
                     (fn @removeItemByIndex 'attributes.claims_scopes' i)
@@ -379,7 +399,11 @@
               <Rose::Button
                 @style='secondary'
                 title={{t 'actions.add'}}
-                @disabled={{if form.isEditable false true}}
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
                 {{on
                   'click'
                   (fn
@@ -456,7 +480,11 @@
                   @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
-                  @disabled={{if form.isEditable false true}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
                   {{on
                     'click'
                     (fn @removeItemByIndex 'attributes.account_claim_maps' i)
@@ -496,7 +524,11 @@
               <Rose::Button
                 @style='secondary'
                 title={{t 'actions.add'}}
-                @disabled={{if form.isEditable false true}}
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
                 {{on
                   'click'
                   (fn @addAccountClaimMapItem this.newFromClaim this.newToClaim)
@@ -549,7 +581,11 @@
                   @style='warning'
                   @iconOnly='trash'
                   title={{t 'actions.remove'}}
-                  @disabled={{if form.isEditable false true}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
                   {{on
                     'click'
                     (fn @removeItemByIndex 'attributes.idp_ca_certs' i)
@@ -572,7 +608,11 @@
               <Rose::Button
                 @style='secondary'
                 title={{t 'actions.add'}}
-                @disabled={{if form.isEditable false true}}
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
                 {{on
                   'click'
                   (fn
