@@ -53,6 +53,12 @@ export default function initializeMockIPC(server) {
         type,
         created_time: new Date().toISOString(),
       });
+      const decoded = {
+        key1: 'value 1',
+        key2: true,
+        key3: 'test',
+      };
+      const raw = btoa(JSON.stringify(decoded));
       return {
         address: window.location.hostname,
         port: datatype.number(),
@@ -67,7 +73,9 @@ export default function initializeMockIPC(server) {
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
-            secret: 'just-a-random-string',
+            secret: {
+              raw: btoa('just-a-random-string'),
+            },
           },
           {
             credential_library: {
@@ -78,20 +86,9 @@ export default function initializeMockIPC(server) {
               type: 'vault',
             },
             secret: {
-              key1: 'value 1',
-              key2: true,
-              key3: 'test',
+              raw,
+              decoded,
             },
-          },
-          {
-            credential_library: {
-              id: 'clvlt_9KWscxpcY7',
-              name: 'Library Name',
-              description: 'Library Description',
-              credential_store_id: 'csvlt_Q1HFGt7Jpm',
-              type: 'vault',
-            },
-            secret: 'just-a-random-string',
           },
           {
             credential_library: {
@@ -102,9 +99,20 @@ export default function initializeMockIPC(server) {
               type: 'vault',
             },
             secret: {
-              key1: 'value 1',
-              key2: true,
-              key3: 'test',
+              raw: btoa('just-a-random-string'),
+            },
+          },
+          {
+            credential_library: {
+              id: 'clvlt_9KWscxpcY7',
+              name: 'Library Name',
+              description: 'Library Description',
+              credential_store_id: 'csvlt_Q1HFGt7Jpm',
+              type: 'vault',
+            },
+            secret: {
+              raw,
+              decoded,
             },
           },
         ],
