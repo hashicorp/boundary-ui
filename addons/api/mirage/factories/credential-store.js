@@ -14,7 +14,7 @@ export default factory.extend({
           address: internet.ip(),
           namespace: random.word(),
           ca_cert: 'ca-cert-123',
-          tls_server_name: internet.address(),
+          tls_server_name: internet.domainName(),
           tls_skip_verify: datatype.boolean(),
           token_hmac: 'token-hmac-abcde0987654321',
           client_certificate: 'client-cert-123',
