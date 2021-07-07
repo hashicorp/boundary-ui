@@ -91,7 +91,7 @@
                       <Rose::Table @style='condensed' as |table|>
                         <table.header as |header|>
                           <header.row as |row|>
-                            <row.headerCell>{{t
+                            <row.headerCell @shrink={{true}}>{{t
                                 'form.key.label'
                               }}</row.headerCell>
                             <row.headerCell colspan='2'>{{t
@@ -102,7 +102,7 @@
                         <table.body as |body|>
                           {{#each credential.secrets as |secret|}}
                             <body.row as |row|>
-                              <row.headerCell>{{secret.key}}</row.headerCell>
+                              <row.headerCell @shrink={{true}}>{{secret.key}}</row.headerCell>
                               <row.cell colspan='2'>
                                 <HiddenSecret @secret={{secret.value}} />
                               </row.cell>

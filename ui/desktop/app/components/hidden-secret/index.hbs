@@ -1,9 +1,20 @@
 <div class='hidden-secret'>
+  <Rose::Icon
+    @name={{if this.secretVisible 'visibility-show' 'visibility-hide'}}
+    @size='large'
+    {{on 'click' this.toggleSecretVisibility}}
+  />
   <Copyable
     @text={{@secret}}
     @buttonText={{t 'actions.copy-to-clipboard'}}
     @acknowledgeText={{t 'states.copied'}}
   >
-    <span>{{this.textMask}}</span>
+    <span>
+      {{#if this.secretVisible}}
+        {{@secret}}
+      {{else}}
+        {{this.textMask}}
+      {{/if}}
+    </span>
   </Copyable>
 </div>
