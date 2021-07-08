@@ -132,6 +132,7 @@ module.exports = function (environment) {
     ENV.featureFlags['primary-auth-method'] = true;
     ENV.featureFlags['oidc'] = true;
     ENV.featureFlags['oidc-crud'] = true;
+    ENV.featureFlags['credential-store'] = true;
     //ENV.featureFlags['oidc-account-crud'] = true;
   }
 
