@@ -86,6 +86,7 @@ Router.map(function () {
           });
         });
       });
+      this.route('credential-stores', function () {});
     });
   });
 

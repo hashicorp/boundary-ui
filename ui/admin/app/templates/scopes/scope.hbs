@@ -83,6 +83,12 @@
             <Rose::Icon @name='app-icons/host-catalogs' @size='medium' />
             {{t 'resources.host-catalog.title_plural'}}
           </nav.link>
+          {{#if (feature-flag 'credential-store')}}
+            <nav.link @route='scopes.scope.credential-stores'>
+              <Rose::Icon @name='app-icons/credential' @size='medium' />
+              {{t 'resources.credential-store.title_plural'}}
+            </nav.link>
+          {{/if}}
         </Rose::Nav::Sidebar>
       {{/if}}
 
