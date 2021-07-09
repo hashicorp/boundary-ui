@@ -32,7 +32,6 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
-    "ember": "^1.0.3",
     "ember-named-blocks-polyfill": "^0.2.4"
   },
   "devDependencies": {
