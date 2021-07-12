@@ -456,6 +456,14 @@ export default function () {
     return new Response(200);
   });
 
+  // credential-stores
+
+  this.get(
+    '/credential-stores',
+    ({ credentialStores }, { queryParams: { scope_id: scopeId } }) =>
+      credentialStores.where({ scopeId })
+  );
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));

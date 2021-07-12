@@ -267,4 +267,7 @@ target:
       add:
         title: Add Host Sets
         description: Select host sets to assign to this target.
-    secret: ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
+credential-store:
+  title: Credential Store
+  title_plural: Credential Stores
+  description: A credential stores is a collection of credentials and credential libraries.
