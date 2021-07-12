@@ -95,7 +95,12 @@
   p {
     margin-bottom: 0;
   }
-
+  .rose-table-header-cell {
+    p {
+      color: var(--ui-gray-subtler-1);
+      font-weight: normal;
+    }
+  }
   .rose-form-checkbox {
     margin-bottom: 0;
 

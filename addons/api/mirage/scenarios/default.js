@@ -49,5 +49,6 @@ export default function (server) {
     server.createList('host-catalog', 2, { scope }, 'withChildren');
     server.createList('target', 2, { scope }, 'withRandomHostSets');
     server.createList('session', 4, { scope }, 'withAssociations');
+    server.createList('credential-store', 3, { scope });
   });
 }
