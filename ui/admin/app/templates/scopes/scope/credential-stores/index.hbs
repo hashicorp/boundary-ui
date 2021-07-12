@@ -1,2 +1,65 @@
-{{page-title 'Index'}}
-{{outlet}}
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.credential-store.title_plural'}}
+    </h2>
+    {{t 'resources.credential-store.description'}}
+  </page.header>
+
+  {{!-- <page.actions>
+    {{#if @model}}
+      <Rose::LinkButton
+        @route='scopes.scope.credential-stores.new'
+        @style='primary'
+      >
+        {{t 'titles.new'}}
+      </Rose::LinkButton>
+    {{/if}}
+  </page.actions> --}}
+
+  <page.body>
+    {{#if @model}}
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+          </header.row>
+        </table.header>
+
+        <table.body as |body|>
+          {{#each @model as |credentialStore|}}
+            <body.row as |row|>
+              <row.headerCell>
+                <LinkTo
+                  @route='scopes.scope.credential-stores.credential-store'
+                  @model={{credentialStore.id}}
+                >
+                  {{credentialStore.displayName}}
+                </LinkTo>
+                <p>{{credentialStore.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                <Rose::Badge>{{credentialStore.type}}</Rose::Badge>
+              </row.cell>
+              <row.cell>
+                <Copyable
+                  @text={{credentialStore.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{credentialStore.id}}</code>
+                </Copyable>
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+    {{/if}}
+  </page.body>
+</Rose::Layout::Page>
