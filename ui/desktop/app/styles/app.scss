@@ -481,6 +481,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   color: var(--ui-gray-subtler-2);
 
   .rose-icon {
+    margin-top: sizing.rems(xxxs);
     margin-right: sizing.rems(s);
   }
 

@@ -5,10 +5,10 @@ import { tracked } from '@glimmer/tracking';
 export default class HiddenSecretComponent extends Component {
   textMask = '■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■';
 
-  @tracked secretVisible = false;
+  @tracked isHidden = false;
 
   @action
   toggleSecretVisibility() {
-    this.secretVisible = !this.secretVisible;
+    this.isHidden = !this.isHidden;
   }
 }
