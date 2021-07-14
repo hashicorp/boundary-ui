@@ -6,8 +6,11 @@
   <page.header>
     <h2>
       {{t 'resources.credential-store.title_plural'}}
+      <DocLink @doc='credential-stores' @iconSize='large' />
     </h2>
-    {{t 'resources.credential-store.description'}}
+    {{#if @model}}
+      <p>{{t 'resources.credential-store.description'}}</p>
+    {{/if}}
   </page.header>
 
   {{!-- <page.actions>
