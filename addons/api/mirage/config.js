@@ -464,6 +464,9 @@ export default function () {
       credentialStores.where({ scopeId })
   );
 
+  this.get('/credential-stores/:id');
+  this.patch('/credential-stores/:id');
+
   // credential-libraries
 
   this.get(
