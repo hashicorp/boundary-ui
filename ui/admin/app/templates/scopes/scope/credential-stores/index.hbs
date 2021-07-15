@@ -11,7 +11,7 @@
     <p>{{t 'resources.credential-store.description'}}</p>
   </page.header>
 
-  {{!-- <page.actions>
+  <page.actions>
     {{#if @model}}
       <Rose::LinkButton
         @route='scopes.scope.credential-stores.new'
@@ -20,7 +20,7 @@
         {{t 'titles.new'}}
       </Rose::LinkButton>
     {{/if}}
-  </page.actions> --}}
+  </page.actions>
 
   <page.body>
     {{#if @model}}
