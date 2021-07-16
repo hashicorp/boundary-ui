@@ -4,7 +4,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreController extend
   // =attributes
 
   /**
-   * A role breadcrumb
+   * A credential store breadcrumb
    * @type {string}
    */
   get breadCrumb() {
