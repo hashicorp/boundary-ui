@@ -2,7 +2,7 @@ import { Factory } from 'ember-cli-mirage';
 import { random, date } from 'faker';
 
 /**
- * GeneratedCredentialStoreModelFactory
+ * GeneratedCredentialLibraryModelFactory
  */
 export default Factory.extend({
   name: () => random.words(),

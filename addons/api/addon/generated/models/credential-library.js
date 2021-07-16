@@ -2,16 +2,16 @@ import BaseModel from '../../models/base';
 import { attr } from '@ember-data/model';
 
 /**
- * A credential store is a resource that can retrieve, store, and potentially
- * generate credentials.
+ * A credential library is a resource that can generate and retrieve
+ * credentials.
  */
-export default class GeneratedCredentialStoreModel extends BaseModel {
+export default class GeneratedCredentialLibraryModel extends BaseModel {
   // =attributes
 
   @attr('string', {
-    description: 'The type of the resource, to help differentiate schemas',
+    description: 'The owning credential store ID.',
   })
-  type;
+  credential_store_id;
 
   @attr('string', {
     description: 'Optional name for identification purposes',
