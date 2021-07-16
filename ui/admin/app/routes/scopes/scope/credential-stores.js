@@ -17,6 +17,10 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
 
   // =actions
 
+  /**
+   * Handle save
+   * @param {CredentialStoreModel} credentialStore
+   */
   @action
   @loading
   @notifyError(({ message }) => message)
@@ -30,6 +34,10 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
     this.refresh();
   }
 
+  /**
+   * Rollback changes on credential stores.
+   * @param {CredentialStoreModel} credentialStore
+   */
   @action
   cancel(credentialStore) {
     const { isNew } = credentialStore;
