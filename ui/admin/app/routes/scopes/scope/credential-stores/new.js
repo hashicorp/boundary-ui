@@ -8,6 +8,7 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
   model() {
     const scopeModel = this.modelFor('scopes.scope');
     return this.store.createRecord('credential-store', {
+      type: 'vault',
       scopeModel,
     });
   }
