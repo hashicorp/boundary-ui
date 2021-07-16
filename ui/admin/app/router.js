@@ -92,6 +92,7 @@ Router.map(function () {
           { path: ':credential_store_id' },
           function () {}
         );
+        this.route('new');
       });
     });
   });
