@@ -87,7 +87,12 @@ Router.map(function () {
         });
       });
       this.route('credential-stores', function () {
-        this.route('credential-store', { path: ':credential_store_id' });
+        this.route(
+          'credential-store',
+          { path: ':credential_store_id' },
+          function () {}
+        );
+        this.route('new');
       });
     });
   });

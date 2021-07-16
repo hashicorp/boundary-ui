@@ -1,5 +1,6 @@
 import factory from '../generated/factories/credential-store';
 import { random, internet, datatype } from 'faker';
+import { trait } from 'ember-cli-mirage';
 
 const types = ['vault'];
 
@@ -22,4 +23,14 @@ export default factory.extend({
         };
     }
   },
+
+  withAssociations: trait({
+    afterCreate(credentialStore, server) {
+      const { scope } = credentialStore;
+      server.createList('credential-library', 2, {
+        scope,
+        credentialStore,
+      });
+    },
+  }),
 });

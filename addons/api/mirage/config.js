@@ -464,6 +464,24 @@ export default function () {
       credentialStores.where({ scopeId })
   );
 
+  this.get('/credential-stores/:id');
+  this.post('/credential-stores');
+  this.patch('/credential-stores/:id');
+
+  // credential-libraries
+
+  this.get(
+    '/credential-libraries',
+    (
+      { credentialLibraries },
+      { queryParams: { credential_store_id: credentialStoreId } }
+    ) => credentialLibraries.where({ credentialStoreId })
+  );
+  this.get('/credential-libraries/:id');
+  this.post('/credential-libraries/:id');
+  this.del('/credential-libraries/:id');
+  this.patch('/credential-libraries/:id');
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));
