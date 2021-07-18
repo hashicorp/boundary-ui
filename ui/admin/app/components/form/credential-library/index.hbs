@@ -1,0 +1,105 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <form.input
+    @name='name'
+    @type='name'
+    @value={{@model.name}}
+    @label={{t 'form.name.label'}}
+    @error={{@model.errors.name}}
+    @helperText={{t 'form.name.help'}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name='description'
+    @type='description'
+    @value={{@model.description}}
+    @label={{t 'form.description.label'}}
+    @error={{@model.errors.description}}
+    @helperText={{t 'form.description.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.input
+    @name='vault_path'
+    @type='text'
+    @value={{@model.attributes_path}}
+    @label={{t 'form.vault_path.label'}}
+    @error={{@model.errors.name}}
+    @helperText={{t 'form.vault_path.help'}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.radioGroup
+    @name='http_method'
+    @selectedValue={{@model.attributes_http_method}}
+    @changed={{fn (mut @model.attributes_http_method)}}
+    as |radioGroup|
+  >
+    {{#each this.httpMethods as |httpMethod|}}
+      <radioGroup.radio @label={{httpMethod}} @value={{httpMethod}} />
+    {{/each}}
+  </form.radioGroup>
+
+  {{#if this.isHttpRequestBodyAllowed}}
+    <form.textarea
+      @name='http_request_body'
+      @type='text'
+      @value={{@model.attributes_http_request_body}}
+      @label={{t 'form.http_request_body.label'}}
+      @error={{@model.errors.description}}
+      @helperText={{t 'form.http_request_body.help'}}
+      disabled={{@model.isSaving}}
+      readonly={{false}}
+      as |field|
+    >
+      {{#if @model.errors.description}}
+        <field.errors as |errors|>
+          {{#each @model.errors.description as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </field.errors>
+      {{/if}}
+    </form.textarea>
+  {{/if}}
+
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
+</Rose::Form>

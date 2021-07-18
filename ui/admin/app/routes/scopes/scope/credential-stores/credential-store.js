@@ -10,7 +10,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
   }
 
   /**
-   * Render credential store header and navigation page sections.
+   * Render credential store header, navigation, and actions page sections.
    * @override
    */
   renderTemplate() {
@@ -24,6 +24,11 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
     this.render('scopes/scope/credential-stores/credential-store/-navigation', {
       into: 'scopes/scope/credential-stores/credential-store',
       outlet: 'navigation',
+    });
+
+    this.render('scopes/scope/credential-stores/credential-store/-actions', {
+      into: 'scopes/scope/credential-stores/credential-store',
+      outlet: 'actions',
     });
   }
 }

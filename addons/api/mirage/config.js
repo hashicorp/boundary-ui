@@ -478,7 +478,15 @@ export default function () {
     ) => credentialLibraries.where({ credentialStoreId })
   );
   this.get('/credential-libraries/:id');
-  this.post('/credential-libraries/:id');
+  this.post(
+    '/credential-libraries',
+    function ({ credentialStores, credentialLibraries }) {
+      const attrs = this.normalizedRequestAttrs();
+      const credentialStore = credentialStores.find(attrs.credentialStoreId);
+      attrs.scopeId = credentialStore.scope.id;
+      return credentialLibraries.create(attrs);
+    }
+  );
   this.del('/credential-libraries/:id');
   this.patch('/credential-libraries/:id');
 

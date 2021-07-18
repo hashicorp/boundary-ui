@@ -275,6 +275,8 @@ credential-library:
   title: Credential Library
   title_plural: Credential Libraries
   description: A credential library is a resource that provides credentials.
+  actions:
+    create: New Credential Library
   messages:
     none:
       title: No Credential Libraries Available

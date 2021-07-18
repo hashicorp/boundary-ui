@@ -115,3 +115,12 @@ value:
 callback_url:
   label: Callback URL
   help: The URL to which the third-party provider sends the authentication response.  Paste this into the provider configuration.
+vault_path:
+  label: Vault Path
+  help: The path in Vault to request credentials from.
+http_method:
+  label: HTTP Method
+  help: The HTTP method the library uses when requesting credentials from Vault.
+http_request_body:
+  label: HTTP Request Body
+  help: The body of the HTTP request the library sends to Vault when requesting credentials.

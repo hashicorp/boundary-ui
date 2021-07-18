@@ -1,0 +1,12 @@
+<Rose::Dropdown
+  @text='{{t 'actions.manage'}}'
+  @dropdownRight={{true}}
+  as |dropdown|
+>
+  <dropdown.link
+    @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
+    @model={{@model}}
+  >
+    {{t 'resources.credential-library.actions.create'}}
+  </dropdown.link>
+</Rose::Dropdown>
