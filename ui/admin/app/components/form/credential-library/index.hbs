@@ -47,7 +47,7 @@
   <form.input
     @name='vault_path'
     @type='text'
-    @value={{@model.attributes_path}}
+    @value={{@model.attributes.path}}
     @label={{t 'form.vault_path.label'}}
     @error={{@model.errors.name}}
     @helperText={{t 'form.vault_path.help'}}
@@ -65,8 +65,8 @@
 
   <form.radioGroup
     @name='http_method'
-    @selectedValue={{@model.attributes_http_method}}
-    @changed={{fn (mut @model.attributes_http_method)}}
+    @selectedValue={{@model.attributes.http_method}}
+    @changed={{fn (mut @model.attributes.http_method)}}
     as |radioGroup|
   >
     {{#each this.httpMethods as |httpMethod|}}
@@ -78,7 +78,7 @@
     <form.textarea
       @name='http_request_body'
       @type='text'
-      @value={{@model.attributes_http_request_body}}
+      @value={{@model.attributes.http_request_body}}
       @label={{t 'form.http_request_body.label'}}
       @error={{@model.errors.description}}
       @helperText={{t 'form.http_request_body.help'}}

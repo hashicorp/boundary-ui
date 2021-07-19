@@ -13,8 +13,8 @@ export default class FormCredentialLibraryIndexComponent extends Component {
    * Only allow HTTP request body field if http_method is set to POST.
    * @type {boolean}
    */
-  @computed('args.model.attributes_http_method')
+  @computed('args.model.attributes.http_method')
   get isHttpRequestBodyAllowed() {
-    return this.args.model.attributes_http_method?.match(/post/i);
+    return this.args.model.attributes.http_method?.match(/post/i);
   }
 }

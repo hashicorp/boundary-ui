@@ -484,6 +484,7 @@ export default function () {
       const attrs = this.normalizedRequestAttrs();
       const credentialStore = credentialStores.find(attrs.credentialStoreId);
       attrs.scopeId = credentialStore.scope.id;
+      console.log(attrs);
       return credentialLibraries.create(attrs);
     }
   );
