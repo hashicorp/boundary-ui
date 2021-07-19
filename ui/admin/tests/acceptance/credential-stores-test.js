@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -21,7 +21,12 @@ module('Acceptance | credential-stores', function (hooks) {
 
   const urls = {
     globalScope: null,
+    orgScope: null,
+    projectScope: null,
     credentialStores: null,
+    credentialStore: null,
+    unknownCredentialStore: null,
+    newCredentialStore: null,
   };
 
   hooks.beforeEach(function () {
@@ -63,12 +68,148 @@ module('Acceptance | credential-stores', function (hooks) {
     assert.equal(currentURL(), urls.credentialStore);
   });
 
-  test('can create a new credential store', async function (assert) {
+  test.skip('visiting an unknown credential store display 404 message', async function (assert) {
+    assert.expect(1);
+    await visit(urls.unknownCredentialStore);
+    await a11yAudit();
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+  });
+
+  test('can create a new credential stores', async function (assert) {
     assert.expect(1);
     const count = getCredentialStoresCount();
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getCredentialStoresCount(), count + 1);
+  });
+
+  test('can cancel create new credential stores', async function (assert) {
+    assert.expect(2);
+    const count = getCredentialStoresCount();
+    await visit(urls.newCredentialStore);
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(currentURL(), urls.credentialStores);
+    assert.equal(getCredentialStoresCount(), count);
+  });
+
+  // Skip this test for now. The request is successful
+  // but we are expecting to not be.
+  test.skip('saving a new credential store with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    this.server.post('/credential-stores', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.newCredentialStore);
+    await click('form [type="submit"]', 'Click new'); // Issue starts here
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
+  });
+
+  test('can save changes to existing credential store', async function (assert) {
+    assert.expect(3);
+    assert.notEqual(instances.credentialStore.name, 'random string');
+    await visit(urls.credentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), urls.credentialStore);
+    assert.equal(
+      this.server.schema.credentialStores.all().models[0].name,
+      'random string'
+    );
+  });
+
+  test('can cancel changes to existing credential store', async function (assert) {
+    assert.expect(2);
+    await visit(urls.credentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.notEqual(instances.credentialStore.name, 'random string');
+    assert.equal(find('[name="name"]').value, instances.credentialStore.name);
+  });
+
+  // Skip this test for now. The request is successful
+  // but we are expecting to not be.
+  test.skip('saving an existing credential store with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    this.server.patch('/credential-stores/:id', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.credentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
+  });
+
+  test.skip('can discard unsaved credential store changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.credentialStore.name, 'random string');
+
+    await visit(urls.credentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    assert.equal(currentURL(), urls.credentialStore);
+
+    try {
+      await visit(urls.credentialStores);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:first-child');
+      assert.equal(currentURL(), urls.credentialStores);
+      assert.notEqual(
+        this.server.schema.credentialStores.all().models[0].name,
+        'random string'
+      );
+    }
   });
 });
