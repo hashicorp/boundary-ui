@@ -62,7 +62,11 @@
       </field.errors>
     {{/if}}
   </form.input>
-
+  <Rose::Form::Fieldset>
+    <:title>{{t 'form.http_method.label'}}</:title>
+    <:description>{{t 'form.http_method.help'}}</:description>
+  </Rose::Form::Fieldset>
+  
   <form.radioGroup
     @name='http_method'
     @selectedValue={{@model.attributes.http_method}}
