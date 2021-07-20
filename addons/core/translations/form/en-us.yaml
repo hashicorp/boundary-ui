@@ -123,4 +123,4 @@ http_method:
   help: The HTTP method the library uses when requesting credentials from Vault.
 http_request_body:
   label: HTTP Request Body
-  help: The body of the HTTP request the library sends to Vault when requesting credentials.
+  help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when http_method is set to POST.
