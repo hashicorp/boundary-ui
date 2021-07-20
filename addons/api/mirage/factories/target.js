@@ -7,7 +7,7 @@ const hostSetChance = 0.3;
 
 export default factory.extend({
   /**
-   * -1 means "unlimited" and we want to generate these on occassion.
+   * -1 means "unlimited" and we want to generate these on occasion.
    */
   session_connection_limit: () => random.arrayElement([-1, datatype.number()]),
 
@@ -25,11 +25,11 @@ export default factory.extend({
   },
 
   /**
-   * Randomly selects existing host sets to assign to target.
+   * Randomly selects existing host sets and credential libraries to assign to target.
    */
-  withRandomHostSets: trait({
+  withAssociations: trait({
     afterCreate(target, server) {
-      let randomlySelectedHostSets;
+      let randomlySelectedHostSets, randomlySelectedCredentialLibraries;
       randomlySelectedHostSets = server.schema.hostSets
         // BLERG:  fun fact, for no reason at all, the element passed
         // into a where function is not a full model instance, as you might
@@ -38,7 +38,15 @@ export default factory.extend({
         // the result set of `where` _is a collection of model instances_.
         .where((hostSet) => hostSet.scopeId === target.scope.id)
         .models.filter(() => randomBoolean(hostSetChance));
-      target.update({ hostSets: randomlySelectedHostSets });
+
+      randomlySelectedCredentialLibraries = server.schema.credentialLibraries
+        .where((credentialLibrary) => credentialLibrary.scopeId === target.scope.id)
+        .models.filter(() => randomBoolean());
+
+      target.update({
+        hostSets: randomlySelectedHostSets,
+        credentialLibraries: randomlySelectedCredentialLibraries,
+      });
     },
   }),
 });

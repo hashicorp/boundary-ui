@@ -23,6 +23,9 @@ export default ApplicationSerializer.extend({
         return { id: host_set_id, host_catalog_id };
       });
     }
+    if (model.credentialLibraryIds?.length) {
+      json.credential_libraries = model.credentialLibraryIds;
+    }
     return json;
   },
 });

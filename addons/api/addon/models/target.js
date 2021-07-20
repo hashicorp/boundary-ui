@@ -21,6 +21,15 @@ export default class TargetModel extends GeneratedTargetModel {
   host_sets;
 
   /**
+   * @type {[FragmentCredentialLibrary]}
+   */
+  @fragmentArray('fragment-credential-library', {
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  credential_libraries;
+
+  /**
    * An array of resolved host set and host catalog instances.  Model instances
    * must already be loaded into the store (this method will not load unloaded
    * instances).  Unresolvable instances are excluded from the array.
@@ -63,6 +72,19 @@ export default class TargetModel extends GeneratedTargetModel {
       (s) => s.isActive || s.isPending
     );
     return Boolean(pendingOrActiveSessions.length);
+  }
+
+  /**
+   * An array of resolved credential library instances.  Model instances
+   * must already be loaded into the store (this method will not load unloaded
+   * instances).  Unresolvable instances are excluded from the array.
+   * @type {[CredentialLibraryModel]}
+   */
+  @computed('credential_libraries.[]', 'store')
+  get credentialLibraries() {
+    return this.credential_libraries
+      .map((id) => this.store.peekRecord('credential-library', id))
+      .filter(Boolean);
   }
 
   // =methods
