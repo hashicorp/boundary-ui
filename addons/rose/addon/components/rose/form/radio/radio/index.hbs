@@ -1,8 +1,8 @@
-<div class="rose-form-radio{{if @error " error"}}">
+<div class="rose-form-radio{{if @error " error"}} {{if @inline "inline"}}">
 
   <RadioButton
     ...attributes
-    @radioClass="rose-form-radio-field"
+    @radioClass="rose-form-radio-field" 
     @radioId={{this.id}}
     type="radio"
     disabled={{@disabled}}
