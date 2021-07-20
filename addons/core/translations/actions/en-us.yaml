@@ -33,3 +33,4 @@ edit-form: Edit Form
 change-origin: Change Origin URL
 change-state: Change State
 close: Close
+toggle-secret: Toggle secret visibility
