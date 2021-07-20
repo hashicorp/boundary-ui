@@ -1,5 +1,3 @@
-<div class="{{if @inline 'radio-group-inline'}}">
 {{yield (hash
   radio=(component 'rose/form/radio/radio' name=@name selectedValue=@selectedValue disabled=@disabled changed=@changed)
 )}}
-</div>
