@@ -4,6 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { Response } from 'miragejs';
 
 module('Acceptance | credential-stores', function (hooks) {
   setupApplicationTest(hooks);
@@ -68,6 +69,8 @@ module('Acceptance | credential-stores', function (hooks) {
     assert.equal(currentURL(), urls.credentialStore);
   });
 
+  // This test is returning an issue regarding not finding resource.
+  // It is a false positive.
   test.skip('visiting an unknown credential store display 404 message', async function (assert) {
     assert.expect(1);
     await visit(urls.unknownCredentialStore);
@@ -94,9 +97,7 @@ module('Acceptance | credential-stores', function (hooks) {
     assert.equal(getCredentialStoresCount(), count);
   });
 
-  // Skip this test for now. The request is successful
-  // but we are expecting to not be.
-  test.skip('saving a new credential store with invalid fields displays error messages', async function (assert) {
+  test('saving a new credential store with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.post('/credential-stores', () => {
       return new Response(
@@ -118,7 +119,7 @@ module('Acceptance | credential-stores', function (hooks) {
       );
     });
     await visit(urls.newCredentialStore);
-    await click('form [type="submit"]', 'Click new'); // Issue starts here
+    await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'The request was invalid.'
@@ -153,9 +154,7 @@ module('Acceptance | credential-stores', function (hooks) {
     assert.equal(find('[name="name"]').value, instances.credentialStore.name);
   });
 
-  // Skip this test for now. The request is successful
-  // but we are expecting to not be.
-  test.skip('saving an existing credential store with invalid fields displays error messages', async function (assert) {
+  test('saving an existing credential store with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.patch('/credential-stores/:id', () => {
       return new Response(
@@ -190,7 +189,7 @@ module('Acceptance | credential-stores', function (hooks) {
     );
   });
 
-  test.skip('can discard unsaved credential store changes via dialog', async function (assert) {
+  test('can discard unsaved credential store changes via dialog', async function (assert) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -198,14 +197,38 @@ module('Acceptance | credential-stores', function (hooks) {
 
     await visit(urls.credentialStore);
     await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
     assert.equal(currentURL(), urls.credentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child');
+      await click('.rose-dialog-footer button:first-child', 'Click Discard');
       assert.equal(currentURL(), urls.credentialStores);
+      assert.notEqual(
+        this.server.schema.credentialStores.all().models[0].name,
+        'random string'
+      );
+    }
+  });
+
+  test('can cancel discard unsaved credential store via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.credentialStore.name, 'random string');
+    await visit(urls.credentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.credentialStore);
+
+    try {
+      await visit(urls.credentialStores);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:last-child');
+      assert.equal(currentURL(), urls.credentialStore);
       assert.notEqual(
         this.server.schema.credentialStores.all().models[0].name,
         'random string'
