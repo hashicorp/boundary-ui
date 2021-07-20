@@ -11,7 +11,12 @@
       {{#each @model as |credentialLibrary|}}
         <body.row as |row|>
           <row.headerCell>
-            {{credentialLibrary.displayName}}
+            <LinkTo
+              @route='scopes.scope.credential-stores.credential-store.credential-libraries.credential-library'
+              @model={{credentialLibrary.id}}
+            >
+              {{credentialLibrary.displayName}}
+            </LinkTo>
             <p>{{credentialLibrary.description}}</p>
           </row.headerCell>
           <row.cell>

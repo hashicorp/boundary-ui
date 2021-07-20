@@ -93,6 +93,11 @@ Router.map(function () {
           function () {
             this.route('credential-libraries', function () {
               this.route('new');
+              this.route(
+                'credential-library',
+                { path: ':credential_library_id' },
+                function () {}
+              );
             });
           }
         );
