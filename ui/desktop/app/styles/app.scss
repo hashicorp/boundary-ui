@@ -478,20 +478,22 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 .hidden-secret {
   display: flex;
   align-items: center;
-  color: var(--ui-gray-subtler-2);
-
-  .rose-icon {
-    margin-top: sizing.rems(xxxs);
-    margin-right: sizing.rems(s);
-  }
 
   .copyable {
     display: flex;
     width: 100%;
     justify-content: space-between;
+
+    .secret-mask {
+      color: var(--ui-gray-subtler-2);
+    }
+
+    .rose-button-ghost { // Copyable button icon.
+      color: var(--ui-gray-subtler-1);
+    }
   }
 
-  .rose-button-ghost {
-    color: var(--ui-gray-subtler-1);
+  .rose-button-ghost { // Hide/Show secret button icon.
+    color: var(--ui-gray);
   }
 }
