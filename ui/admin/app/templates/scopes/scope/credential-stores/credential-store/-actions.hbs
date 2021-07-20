@@ -1,0 +1,17 @@
+<Rose::Dropdown
+  @text={{t 'actions.manage'}}
+  @dropdownRight={{true}}
+  as |dropdown|
+>
+  <dropdown.link @route='scopes.scope.credential-stores.new' @model={{@model}}>
+    {{t 'resources.credential-store.actions.create'}}
+  </dropdown.link>
+  <dropdown.separator />
+  <dropdown.button
+    @style='danger'
+    @disabled={{@model.canSave}}
+    {{on 'click' (route-action 'delete' @model)}}
+  >
+    {{t 'resources.credential-store.actions.delete'}}
+  </dropdown.button>
+</Rose::Dropdown>

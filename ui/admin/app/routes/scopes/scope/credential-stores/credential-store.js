@@ -25,5 +25,10 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
       into: 'scopes/scope/credential-stores/credential-store',
       outlet: 'navigation',
     });
+
+    this.render('scopes/scope/credential-stores/credential-store/-actions', {
+      into: 'scopes/scope/credential-stores/credential-store',
+      outlet: 'actions',
+    });
   }
 }
