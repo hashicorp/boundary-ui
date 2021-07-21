@@ -271,3 +271,11 @@ credential-store:
   title: Credential Store
   title_plural: Credential Stores
   description: A credential stores is a collection of credentials and credential libraries.
+credential-library:
+  title: Credential Library
+  title_plural: Credential Libraries
+  description: A credential library is a resource that provides credentials.
+  messages:
+    none:
+      title: No Credential Libraries Available
+      description: No Credential Libraries available in this credential store.
