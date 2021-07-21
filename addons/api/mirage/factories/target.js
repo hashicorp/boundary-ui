@@ -40,7 +40,9 @@ export default factory.extend({
         .models.filter(() => randomBoolean(hostSetChance));
 
       randomlySelectedCredentialLibraries = server.schema.credentialLibraries
-        .where((credentialLibrary) => credentialLibrary.scopeId === target.scope.id)
+        .where(
+          (credentialLibrary) => credentialLibrary.scopeId === target.scope.id
+        )
         .models.filter(() => randomBoolean());
 
       target.update({

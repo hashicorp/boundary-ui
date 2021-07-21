@@ -21,13 +21,14 @@ export default class TargetModel extends GeneratedTargetModel {
   host_sets;
 
   /**
-   * @type {[FragmentCredentialLibrary]}
+   * Credential library ids are read only and can be
+   * persisted via a dedicated call to `addCredentialLibraries()`.
    */
-  @fragmentArray('fragment-credential-library', {
+  @fragmentArray('fragment-string', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
-  credential_libraries;
+  application_credential_library_ids;
 
   /**
    * An array of resolved host set and host catalog instances.  Model instances
@@ -43,6 +44,24 @@ export default class TargetModel extends GeneratedTargetModel {
         hostCatalog: this.store.peekRecord('host-catalog', host_catalog_id),
       }))
       .filter((hostSetRef) => hostSetRef.model !== null);
+  }
+
+  /**
+   * An array of resolved credential library instances.  Model instances
+   * must already be loaded into the store (this method will not load unloaded
+   * instances).  Unresolvable instances are excluded from the array.
+   * @type {[CredentialLibraryModel]}
+   */
+  @computed('application_credential_library_ids.[]', 'store')
+  get credentialLibraries() {
+    return this.application_credential_library_ids
+      .map((credential_library_fragment) =>
+        this.store.peekRecord(
+          'credential-library',
+          credential_library_fragment.value
+        )
+      )
+      .filter(Boolean);
   }
 
   /**
@@ -72,19 +91,6 @@ export default class TargetModel extends GeneratedTargetModel {
       (s) => s.isActive || s.isPending
     );
     return Boolean(pendingOrActiveSessions.length);
-  }
-
-  /**
-   * An array of resolved credential library instances.  Model instances
-   * must already be loaded into the store (this method will not load unloaded
-   * instances).  Unresolvable instances are excluded from the array.
-   * @type {[CredentialLibraryModel]}
-   */
-  @computed('credential_libraries.[]', 'store')
-  get credentialLibraries() {
-    return this.credential_libraries
-      .map((id) => this.store.peekRecord('credential-library', id))
-      .filter(Boolean);
   }
 
   // =methods
@@ -143,5 +149,67 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   removeHostSet(hostSetID, options) {
     return this.removeHostSets([hostSetID], options);
+  }
+
+  /**
+   * Adds credential libraries via the `add-credential-libraries` method.
+   * See serializer and adapter for more information.
+   * @param {[string]} credentialLibraryIDs
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  addCredentialLibraries(
+    credentialLibraryIDs,
+    options = { adapterOptions: {} }
+  ) {
+    const defaultAdapterOptions = {
+      method: 'add-credential-libraries',
+      credentialLibraryIDs,
+    };
+    // There is no "deep merge" in ES.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
+   * Delete credential libraries via the `remove-credential-libraries` method.
+   * See serializer and adapter for more information.
+   * @param {[string]} credentialLibraryIDs
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  removeCredentialLibraries(
+    credentialLibraryIDs,
+    options = { adapterOptions: {} }
+  ) {
+    const defaultAdapterOptions = {
+      method: 'remove-credential-libraries',
+      credentialLibraryIDs,
+    };
+    // There is no "deep merge" in ES.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
+   * Delete a single credential library set via the `remove-credential-libraries` method.
+   * @param {number} credentialLibraryID
+   * @param {object} options
+   * @return {Promise}
+   */
+  removeCredentialLibrary(credentialLibraryID, options) {
+    return this.removeCredentialLibraries([credentialLibraryID], options);
   }
 }

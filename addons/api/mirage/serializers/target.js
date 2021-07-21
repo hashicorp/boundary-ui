@@ -24,7 +24,7 @@ export default ApplicationSerializer.extend({
       });
     }
     if (model.credentialLibraryIds?.length) {
-      json.credential_libraries = model.credentialLibraryIds;
+      json.application_credential_library_ids = model.credentialLibraryIds;
     }
     return json;
   },
