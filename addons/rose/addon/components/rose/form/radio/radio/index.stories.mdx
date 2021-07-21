@@ -54,3 +54,71 @@ Renders a form radiofield.
     }
   }}</Story>
 </Preview>
+
+
+```htmlbars
+<Rose::Form::Radio::Radio
+  @label="Yes"
+  @error={{false}}
+  @value="yes-agree"
+  @selectedValue="yes-agree"
+  @disabled={{false}}
+  @changed={{fn}}
+  @inline={{true}}
+  />
+```
+
+<Preview>
+  <Story name="Radio with inline style" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Radio::Radio
+        @label='Radiofield1'
+        @error={{error}}
+        @value={{value}}
+        @selectedValue={{selectedValue}}
+        @disabled={{disabled}}
+        @icon={{icon}}
+        @inline={{inline}}
+        />
+      <Rose::Form::Radio::Radio
+        @label='Radiofield2'
+        @error={{error}}
+        @value={{value}}
+        @selectedValue={{selectedValue}}
+        @disabled={{disabled}}
+        @icon={{icon}}
+        @inline={{inline}}
+        />
+      <Rose::Form::Radio::Radio
+        @label='Radiofield3'
+        @error={{error}}
+        @value={{value}}
+        @selectedValue={{selectedValue}}
+        @disabled={{disabled}}
+        @icon={{icon}}
+        @inline={{inline}}
+        />
+    `,
+    context: {
+      error: boolean('error', false),
+      value: text('value', 'value and selectedValue must match to select radiofield'),
+      selectedValue: text(
+        'selectedValue',
+        'value and selectedValue must match to select radiofield'
+      ),
+      disabled: boolean('disabled', false),
+      icon: select(
+        'icon',
+        {
+          'none': null,
+          'user-organization': 'user-organization',
+          'copy-action': 'copy-action',
+          'unfold-more': 'unfold-more',
+          'unfold-less': 'unfold-less',
+        },
+        null
+      ),
+      inline: boolean('inline', false)
+    }
+  }}</Story>
+</Preview>
