@@ -21,14 +21,17 @@ $radio-svg: (
 );
 
 $data-svg-prefix: 'data:image/svg+xml;utf-8,';
-.radio-group-inline {
-  display: flex;
-  .rose-form-radio {
+  .rose-form-radio {   
+    &.inline {
+    display: inline-block;
+     .rose-form-radio-label {
+      margin-right: sizing.rems(s);
+     }
+  }
+  .radio-group-inline {
+    display: flex;
     margin-right: sizing.rems(s);
   }
-}
-
-.rose-form-radio {
   @include type.type(m);
   position: relative;
   margin-bottom: sizing.rems(xs);
