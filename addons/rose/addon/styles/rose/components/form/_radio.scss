@@ -23,11 +23,11 @@ $radio-svg: (
 $data-svg-prefix: 'data:image/svg+xml;utf-8,';
   .rose-form-radio {   
     &.inline {
-    display: inline-block;
-     .rose-form-radio-label {
-      margin-right: sizing.rems(s);
-     }
-  }
+      display: inline-block;
+        .rose-form-radio-label {
+          margin-right: sizing.rems(s);
+        }
+    }
   @include type.type(m);
   position: relative;
   margin-bottom: sizing.rems(xs);
