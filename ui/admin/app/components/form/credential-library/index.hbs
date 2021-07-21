@@ -65,18 +65,20 @@
   <Rose::Form::Fieldset>
     <:title>{{t 'form.http_method.label'}}</:title>
     <:description>{{t 'form.http_method.help'}}</:description>
+    <:body>
+      <form.radioGroup
+        @name='http_method'
+        @selectedValue={{@model.attributes.http_method}}
+        @changed={{fn (mut @model.attributes.http_method)}}
+        @inline={{true}}
+        as |radioGroup|
+      >
+        {{#each this.httpMethods as |httpMethod|}}
+          <radioGroup.radio @label={{httpMethod}} @value={{httpMethod}} />
+        {{/each}}
+      </form.radioGroup>
+    </:body>
   </Rose::Form::Fieldset>
-  
-  <form.radioGroup
-    @name='http_method'
-    @selectedValue={{@model.attributes.http_method}}
-    @changed={{fn (mut @model.attributes.http_method)}}
-    as |radioGroup|
-  >
-    {{#each this.httpMethods as |httpMethod|}}
-      <radioGroup.radio @label={{httpMethod}} @value={{httpMethod}} />
-    {{/each}}
-  </form.radioGroup>
 
   <form.textarea
     @name='http_request_body'
