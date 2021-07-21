@@ -77,7 +77,7 @@ Renders a form input checkbox.
   @checked={{false}}
   @error={{false}}
   @disabled={{false}}
-  @inline={{true}}
+  @inline={{false}}
   />
 ```
 
@@ -92,7 +92,7 @@ Renders a form input checkbox.
         @checked={{checked}}
         @error={{error}}
         @disabled={{disabled}}
-        @inline={{true}}
+        @inline={{inline}}
         />
       <Rose::Form::Checkbox
         @name='checkbox-2'
@@ -102,7 +102,7 @@ Renders a form input checkbox.
         @checked={{checked}}
         @error={{error}}
         @disabled={{disabled}}
-        @inline={{true}}
+        @inline={{inline}}
         />
       <Rose::Form::Checkbox
         @name='checkbox-3'
@@ -112,7 +112,7 @@ Renders a form input checkbox.
         @checked={{checked}}
         @error={{error}}
         @disabled={{disabled}}
-        @inline={{true}}
+        @inline={{inline}}
         />
     `,
     context: {
@@ -121,6 +121,7 @@ Renders a form input checkbox.
       checked: boolean('checked', false),
       error: boolean('error', false),
       disabled: boolean('disabled', false),
+      inline: boolean('inline', false)
     }
   }}</Story>
   

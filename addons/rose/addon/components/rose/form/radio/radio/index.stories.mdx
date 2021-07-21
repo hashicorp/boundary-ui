@@ -78,7 +78,7 @@ Renders a form radiofield.
         @selectedValue={{selectedValue}}
         @disabled={{disabled}}
         @icon={{icon}}
-        @inline={{true}}
+        @inline={{inline}}
         />
       <Rose::Form::Radio::Radio
         @label='Radiofield2'
@@ -87,7 +87,7 @@ Renders a form radiofield.
         @selectedValue={{selectedValue}}
         @disabled={{disabled}}
         @icon={{icon}}
-        @inline={{true}}
+        @inline={{inline}}
         />
       <Rose::Form::Radio::Radio
         @label='Radiofield3'
@@ -96,7 +96,7 @@ Renders a form radiofield.
         @selectedValue={{selectedValue}}
         @disabled={{disabled}}
         @icon={{icon}}
-        @inline={{true}}
+        @inline={{inline}}
         />
     `,
     context: {
@@ -118,6 +118,7 @@ Renders a form radiofield.
         },
         null
       ),
+      inline: boolean('inline', false)
     }
   }}</Story>
 </Preview>

@@ -28,10 +28,6 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
       margin-right: sizing.rems(s);
      }
   }
-  .radio-group-inline {
-    display: flex;
-    margin-right: sizing.rems(s);
-  }
   @include type.type(m);
   position: relative;
   margin-bottom: sizing.rems(xs);
