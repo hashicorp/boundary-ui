@@ -69,13 +69,14 @@ module('Acceptance | credential-stores', function (hooks) {
     assert.equal(currentURL(), urls.credentialStore);
   });
 
-  // This test is returning an issue regarding not finding resource.
-  // It is a false positive.
-  test.skip('visiting an unknown credential store display 404 message', async function (assert) {
+  test('visiting an unknown credential store display 404 message', async function (assert) {
     assert.expect(1);
     await visit(urls.unknownCredentialStore);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+    assert.equal(
+      find('.rose-message-subtitle').textContent.trim(),
+      'Error 404'
+    );
   });
 
   test('can create a new credential stores', async function (assert) {
