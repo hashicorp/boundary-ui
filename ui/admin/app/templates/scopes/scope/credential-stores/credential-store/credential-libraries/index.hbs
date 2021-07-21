@@ -1,0 +1,44 @@
+{{#if @model}}
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model as |credentialLibrary|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{credentialLibrary.displayName}}
+            <p>{{credentialLibrary.description}}</p>
+          </row.headerCell>
+          <row.cell>
+            <Copyable
+              @text={{credentialLibrary.id}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{credentialLibrary.id}}</code>
+            </Copyable>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+
+{{else}}
+
+  <Rose::Layout::Centered>
+    <Rose::Message
+      @title={{t 'resources.credential-library.messages.none.title'}}
+      as |message|
+    >
+      <message.description>
+        {{t 'resources.credential-library.messages.none.description'}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+
+{{/if}}
