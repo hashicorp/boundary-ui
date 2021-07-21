@@ -10,7 +10,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
   }
 
   /**
-   * Render credential store header and navigation page sections.
+   * Render credential store header, navigation and actions page sections.
    * @override
    */
   renderTemplate() {

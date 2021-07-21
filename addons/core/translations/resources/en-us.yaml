@@ -272,7 +272,6 @@ credential-store:
   title_plural: Credential Stores
   description: A credential stores is a collection of credentials and credential libraries.
   actions:
-    create: New Credential Library
     delete: Delete Credential Store
 credential-library:
   title: Credential Library
@@ -282,3 +281,5 @@ credential-library:
     none:
       title: No Credential Libraries Available
       description: No Credential Libraries available in this credential store.
+  actions:
+    create: New Credential Library
