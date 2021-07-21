@@ -3,10 +3,10 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  <dropdown.link @route='scopes.scope.credential-stores.new' @model={{@model}}>
+  {{!-- <dropdown.link @route='scopes.scope.credential-stores.new' @model={{@model}}>
     {{t 'resources.credential-library.actions.create'}}
   </dropdown.link>
-  <dropdown.separator />
+  <dropdown.separator /> --}}
   <dropdown.button
     @style='danger'
     @disabled={{@model.canSave}}
