@@ -271,7 +271,7 @@ module('Acceptance | credential-stores', function (hooks) {
     assert.ok(confirmService.confirm.calledOnce);
   });
 
-  test('deleting a host catalog which errors displays error messages', async function (assert) {
+  test('deleting a credential store which errors displays error messages', async function (assert) {
     assert.expect(1);
     this.server.del('/credential-stores/:id', () => {
       return new Response(
