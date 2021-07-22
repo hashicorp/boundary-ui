@@ -63,17 +63,6 @@
     {{/if}}
   </form.input>
 
-  <form.radioGroup
-    @name='http_method'
-    @selectedValue={{@model.attributes.http_method}}
-    @changed={{fn (mut @model.attributes.http_method)}}
-    as |radioGroup|
-  >
-    {{#each this.httpMethods as |httpMethod|}}
-      <radioGroup.radio @label={{httpMethod}} @value={{httpMethod}} />
-    {{/each}}
-  </form.radioGroup>
-
   <form.fieldset>
     <:title>{{t 'form.http_method.label'}}</:title>
     <:description>{{t 'form.http_method.help'}}</:description>
