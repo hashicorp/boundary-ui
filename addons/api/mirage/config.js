@@ -467,6 +467,7 @@ export default function () {
   this.get('/credential-stores/:id');
   this.post('/credential-stores');
   this.patch('/credential-stores/:id');
+  this.del('/credential-stores/:id');
 
   // credential-libraries
 
