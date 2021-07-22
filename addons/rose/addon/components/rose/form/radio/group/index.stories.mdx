@@ -15,6 +15,7 @@ Renders a form radiofield group.
   @name={{name}}
   @selectedValue="disagree"
   @changed={{fn}}
+  @inline={{false}}
   as |radioGroup|
 >
   <radioGroup.radio
@@ -39,6 +40,7 @@ Renders a form radiofield group.
       @name={{name}}
       @selectedValue={{selectedValue}}
       @changed={{changed}}
+      @inline={{inline}}
       as |radioGroup|
     >
       <radioGroup.radio
@@ -59,6 +61,7 @@ Renders a form radiofield group.
   context: {
     name: text('name', 'mustagree'),
     disabled: boolean('disabled', false),
+    inline: boolean('inline', true),
     selectedValue: text('selectedValue', 'disagree'),
     firstFieldLabel: text('first label', 'Agree'),
     firstFieldValue: text('first value', 'agree'),

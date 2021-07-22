@@ -68,3 +68,61 @@ Renders a form input checkbox.
     }
   }}</Story>
 </Preview>
+
+
+```htmlbars
+<Rose::Form::Checkbox
+  @name="boolean-value"
+  @label="Yes?"
+  @checked={{false}}
+  @error={{false}}
+  @disabled={{false}}
+  @inline={{false}}
+  />
+```
+
+<Preview>
+  <Story name="Checkbox with inline style" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Checkbox
+        @name='checkbox-1'
+        @label='Checkbox1 🛎'
+        @description={{description}}
+        @helperText={{helperText}}
+        @checked={{checked}}
+        @error={{error}}
+        @disabled={{disabled}}
+        @inline={{inline}}
+        />
+      <Rose::Form::Checkbox
+        @name='checkbox-2'
+        @label='Checkbox2 🛎'
+        @description={{description}}
+        @helperText={{helperText}}
+        @checked={{checked}}
+        @error={{error}}
+        @disabled={{disabled}}
+        @inline={{inline}}
+        />
+      <Rose::Form::Checkbox
+        @name='checkbox-3'
+        @label='Checkbox3 🛎'
+        @description={{description}}
+        @helperText={{helperText}}
+        @checked={{checked}}
+        @error={{error}}
+        @disabled={{disabled}}
+        @inline={{inline}}
+        />
+    `,
+    context: {
+      description: text('description', 'Short description in label'),
+      helperText: text('helperText', 'This is an optional help text.'),
+      checked: boolean('checked', false),
+      error: boolean('error', false),
+      disabled: boolean('disabled', false),
+      inline: boolean('inline', false)
+    }
+  }}</Story>
+  
+</Preview>
