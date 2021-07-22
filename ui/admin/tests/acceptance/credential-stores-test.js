@@ -5,6 +5,8 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import { resolve, reject } from 'rsvp';
+import sinon from 'sinon';
 
 module('Acceptance | credential-stores', function (hooks) {
   setupApplicationTest(hooks);
@@ -235,5 +237,55 @@ module('Acceptance | credential-stores', function (hooks) {
         'random string'
       );
     }
+  });
+
+  test('can delete credential store', async function (assert) {
+    assert.expect(1);
+    const count = getCredentialStoresCount();
+    await visit(urls.credentialStore);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getCredentialStoresCount(), count - 1);
+  });
+
+  test('can accept delete credential store via dialog', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(resolve());
+    const count = getCredentialStoresCount();
+    await visit(urls.credentialStore);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getCredentialStoresCount(), count - 1);
+    assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('cannot cancel delete credential store via dialog', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(reject());
+    const count = getCredentialStoresCount();
+    await visit(urls.credentialStore);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getCredentialStoresCount(), count);
+    assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('deleting a credential store which errors displays error messages', async function (assert) {
+    assert.expect(1);
+    this.server.del('/credential-stores/:id', () => {
+      return new Response(
+        490,
+        {},
+        {
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
+        }
+      );
+    });
+    await visit(urls.credentialStore);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });
