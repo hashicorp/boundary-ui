@@ -74,7 +74,7 @@
     {{/each}}
   </form.radioGroup>
 
-  <Rose::Form::Fieldset>
+  <form.fieldset>
     <:title>{{t 'form.http_method.label'}}</:title>
     <:description>{{t 'form.http_method.help'}}</:description>
     <:body>
@@ -90,7 +90,7 @@
         {{/each}}
       </form.radioGroup>
     </:body>
-  </Rose::Form::Fieldset>
+  </form.fieldset>
 
   <form.textarea
     @name='http_request_body'
