@@ -281,3 +281,16 @@ credential-library:
     none:
       title: No Credential Libraries Available
       description: No Credential Libraries available in this credential store.
+  form:
+    vault_path:
+      label: Vault Path
+      help: The path the library uses when requesting credentials from Vault.
+    http_method:
+      label: HTTP Method
+      help: The HTTP method the library uses when requesting credentials from Vault.
+    http_request_body:
+      label: HTTP Request Body
+      help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
+    http_post_method_options:
+      label: HTTP Method POST Options
+      help: The options available for when HTTP method is set to POST.

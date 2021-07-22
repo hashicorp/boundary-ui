@@ -6,7 +6,7 @@ import { fragment } from 'ember-data-model-fragments/attributes';
  * Enum options for credential library.
  */
 export const options = {
-  http_methods: ['GET', 'POST'],
+  http_method: ['GET', 'POST'],
 };
 
 export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {
@@ -15,11 +15,7 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
   // See the application adapter's error normalization method for
   // more information.
 
-  @attr('string', {
-    readOnly: true,
-    defaultValue: options.http_methods[0],
-  })
-  attributes_http_method;
+  @attr('string', { readOnly: true }) attributes_http_method;
   @attr('string', { readOnly: true }) attributes_http_request_body;
   @attr('string', { readOnly: true }) attributes_path;
 
