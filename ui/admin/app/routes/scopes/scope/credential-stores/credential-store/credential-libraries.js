@@ -56,17 +56,16 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    * Handle delete of a credential library
    * @param {CredentialLibraryModel} credentialLibrary
    */
-   @action
-   @loading
-   @confirm('questions.delete-confirm')
-   @notifyError(({ message }) => message)
-   @notifyError(({ message }) => message, { catch: true })
-   async delete(credentialLibrary) {
-     await credentialLibrary.destroyRecord();
-     await this.replaceWith(
-       'scopes.scope.credential-stores.credential-store.credential-libraries'
-     );
-     this.refresh();
-   }
- }
- 
+  @action
+  @loading
+  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(credentialLibrary) {
+    await credentialLibrary.destroyRecord();
+    await this.replaceWith(
+      'scopes.scope.credential-stores.credential-store.credential-libraries'
+    );
+    this.refresh();
+  }
+}
