@@ -91,7 +91,14 @@ Router.map(function () {
           'credential-store',
           { path: ':credential_store_id' },
           function () {
-            this.route('credential-libraries', function () {});
+            this.route('credential-libraries', function () {
+              this.route('new');
+              this.route(
+                'credential-library',
+                { path: ':credential_library_id' },
+                function () {}
+              );
+            });
           }
         );
         this.route('new');

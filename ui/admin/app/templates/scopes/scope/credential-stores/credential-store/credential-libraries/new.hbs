@@ -1,0 +1,7 @@
+{{page-title (t 'titles.new')}}
+
+<Form::CredentialLibrary
+  @model={{@model}}
+  @submit={{route-action 'save' @model}}
+  @cancel={{route-action 'cancel' @model}}
+/>

@@ -11,7 +11,12 @@
       {{#each @model as |credentialLibrary|}}
         <body.row as |row|>
           <row.headerCell>
-            {{credentialLibrary.displayName}}
+            <LinkTo
+              @route='scopes.scope.credential-stores.credential-store.credential-libraries.credential-library'
+              @model={{credentialLibrary.id}}
+            >
+              {{credentialLibrary.displayName}}
+            </LinkTo>
             <p>{{credentialLibrary.description}}</p>
           </row.headerCell>
           <row.cell>
@@ -38,6 +43,12 @@
       <message.description>
         {{t 'resources.credential-library.messages.none.description'}}
       </message.description>
+      <message.link
+        @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
+      >
+        <Rose::Icon @name='plus-circle-outline' />
+        {{t 'titles.new'}}
+      </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>
 

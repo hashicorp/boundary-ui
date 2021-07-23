@@ -223,4 +223,162 @@ module('Unit | Model | target', function (hooks) {
       'Target has two associated sessions loaded in the store'
     );
   });
+
+  test('it has a `credentialLibraries` array of resolved model instances (if those instances are already in the store)', function (assert) {
+    assert.expect(4);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'target',
+        attributes: {
+          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+        },
+      },
+    });
+    const target = store.peekRecord('target', '123abc');
+    assert.equal(
+      target.application_credential_library_ids.length,
+      2,
+      'Target has two entires in application_credential_library_ids'
+    );
+    assert.equal(
+      target.credentialLibraries.length,
+      0,
+      'Target has no resolved credentialLibraries because they are not loaded yet'
+    );
+    store.push({
+      data: {
+        id: '1',
+        type: 'credential-library',
+        attributes: {},
+      },
+    });
+    store.push({
+      data: {
+        id: '2',
+        type: 'credential-library',
+        attributes: {},
+      },
+    });
+    // Since `credentialLibraries` is computed on `application_credential_library_ids`,
+    // not the store itself, it's necessary to do this assignment to kick-off the
+    // computed update.
+    /* eslint-disable no-self-assign */
+    target.application_credential_library_ids =
+      target.application_credential_library_ids;
+    /* eslint-enable no-self-assign */
+    assert.equal(
+      target.application_credential_library_ids.length,
+      2,
+      'Target has two entires in application_credential_library_ids'
+    );
+    assert.equal(
+      target.credentialLibraries.length,
+      2,
+      'Target has two resolved credentialLibraries'
+    );
+  });
+
+  test('it has an `addCredentialLibraries` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
+    this.server.post(
+      '/v1/targets/123abc:add-credential-libraries',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          application_credential_library_ids: ['123_abc', 'foobar'],
+          version: 1,
+        });
+        return { id: '123abc' };
+      }
+    );
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'target',
+        attributes: {
+          name: 'Target',
+          description: 'Description',
+          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+          version: 1,
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    const model = store.peekRecord('target', '123abc');
+    await model.addCredentialLibraries(['123_abc', 'foobar']);
+  });
+
+  test('it has a `removeCredentialLibraries` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
+    this.server.post(
+      '/v1/targets/123abc:remove-credential-libraries',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          application_credential_library_ids: ['1', '2'],
+          version: 1,
+        });
+        return { id: '123abc' };
+      }
+    );
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'target',
+        attributes: {
+          name: 'Target',
+          description: 'Description',
+          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+          version: 1,
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    const model = store.peekRecord('target', '123abc');
+    await model.removeCredentialLibraries(['1', '2']);
+  });
+
+  test('it has a `removeCredentialLibrary` method that deletes a single credential library using `removeCredentialLibraries` method', async function (assert) {
+    assert.expect(1);
+    this.server.post(
+      '/v1/targets/123abc:remove-credential-libraries',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          application_credential_library_ids: ['2'],
+          version: 1,
+        });
+        return { id: '123abc' };
+      }
+    );
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'target',
+        attributes: {
+          name: 'Target',
+          description: 'Description',
+          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+          version: 1,
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    const model = store.peekRecord('target', '123abc');
+    await model.removeCredentialLibrary('2');
+  });
 });
