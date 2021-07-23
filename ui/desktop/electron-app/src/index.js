@@ -12,6 +12,7 @@ const {
   BrowserWindow,
   Menu,
   MenuItem,
+  shell,
 } = require('electron');
 require('./ipc/handlers.js');
 
@@ -166,9 +167,13 @@ app.on('ready', async () => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
+  // Also opens links with target="_blank" in a browser window
   mainWindow.webContents.on('new-window', (event, url) => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
-    if (!url.startsWith('serve://boundary')) event.preventDefault();
+    if (!url.startsWith('serve://boundary')) {
+      event.preventDefault();
+      shell.openExternal(url);
+    }
   });
 
   mainWindow.on('unresponsive', () => {
