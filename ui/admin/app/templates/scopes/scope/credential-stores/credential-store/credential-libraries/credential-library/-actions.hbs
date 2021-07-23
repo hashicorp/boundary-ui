@@ -1,0 +1,13 @@
+<Rose::Dropdown
+  @text={{t 'actions.manage'}}
+  @dropdownRight={{true}}
+  as |dropdown|
+>
+  <dropdown.button
+    @style='danger'
+    @disabled={{@model.canSave}}
+    {{on 'click' (route-action 'delete' @model)}}
+  >
+    {{t 'resources.credential-library.actions.delete'}}
+  </dropdown.button>
+</Rose::Dropdown>
