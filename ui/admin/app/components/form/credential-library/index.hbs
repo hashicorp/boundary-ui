@@ -12,6 +12,7 @@
     @label={{t 'form.name.label'}}
     @error={{@model.errors.name}}
     @helperText={{t 'form.name.help'}}
+    disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
@@ -31,7 +32,7 @@
     @label={{t 'form.description.label'}}
     @error={{@model.errors.description}}
     @helperText={{t 'form.description.help'}}
-    @disabled={{@model.isSaving}}
+    disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
@@ -51,6 +52,7 @@
     @label={{t 'resources.credential-library.form.vault_path.label'}}
     @error={{@model.errors.attributes_path}}
     @helperText={{t 'resources.credential-library.form.vault_path.help'}}
+    disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
@@ -74,6 +76,7 @@
         @selectedValue={{@model.attributes.http_method}}
         @changed={{fn (mut @model.attributes.http_method)}}
         @inline={{true}}
+        disabled={{@model.isSaving}}
         as |radioGroup|
       >
         {{#each this.httpMethodOptions as |httpMethod|}}
