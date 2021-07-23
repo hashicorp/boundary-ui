@@ -94,7 +94,7 @@ module('Acceptance | targets', function (hooks) {
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withRandomHostSets'
+      'withAssociations'
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;

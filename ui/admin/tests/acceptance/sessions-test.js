@@ -55,7 +55,7 @@ module('Acceptance | sessions', function (hooks) {
       'target',
       1,
       { scope: instances.scopes.project },
-      'withRandomHostSets'
+      'withAssociations'
     );
     instances.sessions = this.server.createList(
       'session',
