@@ -87,39 +87,27 @@
   </form.fieldset>
 
   {{#if this.isHttpRequestBodyAllowed}}
-    <form.fieldset>
-      <:title>{{t
-          'resources.credential-library.form.http_post_method_options.label'
-        }}</:title>
-      <:description>{{t
-          'resources.credential-library.form.http_post_method_options.help'
-        }}</:description>
-      <:body>
-        <form.textarea
-          @name='http_request_body'
-          @type='text'
-          @value={{@model.attributes.http_request_body}}
-          @label={{t
-            'resources.credential-library.form.http_request_body.label'
-          }}
-          @error={{@model.errors.attributes_http_request_body}}
-          @helperText={{t
-            'resources.credential-library.form.http_request_body.help'
-          }}
-          disabled={{@model.isSaving}}
-          readonly={{false}}
-          as |field|
-        >
-          {{#if @model.errors.attributes_http_request_body}}
-            <field.errors as |errors|>
-              {{#each @model.errors.attributes_http_request_body as |error|}}
-                <errors.message>{{error.message}}</errors.message>
-              {{/each}}
-            </field.errors>
-          {{/if}}
-        </form.textarea>
-      </:body>
-    </form.fieldset>
+    <form.textarea
+      @name='http_request_body'
+      @type='text'
+      @value={{@model.attributes.http_request_body}}
+      @label={{t 'resources.credential-library.form.http_request_body.label'}}
+      @error={{@model.errors.attributes_http_request_body}}
+      @helperText={{t
+        'resources.credential-library.form.http_request_body.help'
+      }}
+      @disabled={{this.cannotSaveHttpRequestBody}}
+      readonly={{false}}
+      as |field|
+    >
+      {{#if @model.errors.attributes_http_request_body}}
+        <field.errors as |errors|>
+          {{#each @model.errors.attributes_http_request_body as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </field.errors>
+      {{/if}}
+    </form.textarea>
   {{/if}}
 
   <form.actions
