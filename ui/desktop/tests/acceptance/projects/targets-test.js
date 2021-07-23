@@ -101,7 +101,7 @@ module('Acceptance | projects | targets', function (hooks) {
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withRandomHostSets'
+      'withAssociations'
     );
 
     instances.session = this.server.create(
