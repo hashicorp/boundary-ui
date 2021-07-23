@@ -280,9 +280,19 @@ credential-library:
   title: Credential Library
   title_plural: Credential Libraries
   description: A credential library is a resource that provides credentials.
+  actions:
+    create: New Credential Library
   messages:
     none:
       title: No Credential Libraries Available
       description: No Credential Libraries available in this credential store.
-  actions:
-    create: New Credential Library
+  form:
+    vault_path:
+      label: Vault Path
+      help: The path the library uses when requesting credentials from Vault.
+    http_method:
+      label: HTTP Method
+      help: The HTTP method the library uses when requesting credentials from Vault.
+    http_request_body:
+      label: HTTP Method POST Request Body
+      help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
