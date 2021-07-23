@@ -9,11 +9,11 @@ export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Ro
    * @return {Promise{[CredentialLibraryModel]}}
    */
   beforeModel() {
-    const { application_credential_library_ids: credential_library_ids } =
+    const { application_credential_library_ids: credential_libraries } =
       this.modelFor('scopes.scope.targets.target');
     return hash({
       credentialLibraries: all(
-        credential_library_ids.map((credential_library) =>
+        credential_libraries.map((credential_library) =>
           this.store.findRecord(
             'credential-library',
             credential_library.value,
