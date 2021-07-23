@@ -5,8 +5,7 @@ export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Ro
   // =methods
 
   /**
-   * Loads all credential libraries under the current target
-   * and it's parent scope.
+   * Loads all credential libraries under the current target.
    * @return {Promise{[CredentialLibraryModel]}}
    */
   beforeModel() {
