@@ -12,6 +12,16 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
   selectedCredentialLibraryIDs = A();
 
   /**
+   * Checks for unassigned credential libraries.
+   * @param {[CredentialLibraryModel]} filteredCredentialLibraries
+   * @type {boolean}
+   */
+  @computed('filteredCredentialLibraries.length')
+  get hasAvailableCredentialLibraries() {
+    return this.filteredCredentialLibraries.length > 0;
+  }
+
+  /**
    * Filter out credential libraries not already added to the target.
    * @type {[CredentialLibraryModel]}
    */

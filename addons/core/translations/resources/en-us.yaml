@@ -273,6 +273,9 @@ target:
       welcome:
         title: Welcome to Credential Libraries
         description: No credential libraries in this target.
+      none:
+        title: No Credential Libraries Available
+        description: No credential libraries available to add to this target.
       add:
         title: Add Credential Libraries
         description: Select credential libraries to assign to this target.
