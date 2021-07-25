@@ -8,7 +8,9 @@
       {{t 'resources.credential-store.title_plural'}}
       <DocLink @doc='credential-stores' @iconSize='large' />
     </h2>
-    <p>{{t 'resources.credential-store.description'}}</p>
+    {{#if @model}}
+      <p>{{t 'resources.credential-store.description'}}</p>
+    {{/if}}
   </page.header>
 
   <page.actions>
@@ -61,6 +63,25 @@
           {{/each}}
         </table.body>
       </Rose::Table>
+
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.credential-store.messages.welcome.title'}}
+          as |message|
+        >
+          <message.description>
+            {{t 'resources.credential-store.description'}}
+          </message.description>
+          <message.link @route='scopes.scope.credential-stores.new'>
+            <Rose::Icon @name='plus-circle-outline' />
+            {{t 'titles.new'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
     {{/if}}
+
   </page.body>
+
 </Rose::Layout::Page>
