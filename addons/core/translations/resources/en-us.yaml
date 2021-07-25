@@ -275,7 +275,10 @@ target:
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
-  description: A credential stores is a collection of credentials and credential libraries.
+  description: A credential store is a collection of credentials and credential libraries.
+  messages:
+    welcome:
+      title: Welcome to Credential Stores
   actions:
     delete: Delete Credential Store
 credential-library:
