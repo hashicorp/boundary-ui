@@ -5,7 +5,9 @@
   <nav.link @route='scopes.scope.targets.target.host-sets'>
     {{t 'resources.host-set.title_plural'}}
   </nav.link>
-  <nav.link @route='scopes.scope.targets.target.credential-libraries'>
-    {{t 'resources.credential-library.title_plural'}}
-  </nav.link>
+  {{#if (feature-flag 'credential-store')}}
+    <nav.link @route='scopes.scope.targets.target.credential-libraries'>
+      {{t 'resources.credential-library.title_plural'}}
+    </nav.link>
+  {{/if}}
 </Rose::Nav::Tabs>
