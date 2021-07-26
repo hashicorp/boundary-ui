@@ -1,7 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, click } from '@ember/test-helpers';
+import { visit, currentURL, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
@@ -29,6 +30,7 @@ module('Acceptance | credential-library', function (hooks) {
     credentialLibrary: null,
     credentialLibraries: null,
     newCredentialLibrary: null,
+    unknownCredentialLibrary: null,
   };
 
   hooks.beforeEach(function () {
@@ -56,10 +58,29 @@ module('Acceptance | credential-library', function (hooks) {
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
+    urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
     // Generate resource couner
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
     authenticateSession({});
+  });
+
+  test('visiting credential-libraries', async function (assert) {
+    assert.expect(2);
+    await visit(urls.credentialLibraries);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.credentialLibraries);
+    await visit(urls.credentialLibrary);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.credentialLibrary);
+  });
+
+  test('visiting an unknown credentila library displays 404 message', async function (assert) {
+    assert.expect(1);
+    await visit(urls.unknownCredentialLibrary);
+    await a11yAudit();
+    console.debug(find('.rose-message-subtitle'));
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 
   test('can delete credential library', async function (assert) {
