@@ -203,6 +203,7 @@ module('Unit | Serializer | application', function (hooks) {
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
           host_sets: [],
+          application_credential_library_ids: [],
         },
         relationships: {},
       },
