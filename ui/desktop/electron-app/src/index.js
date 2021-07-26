@@ -167,10 +167,11 @@ app.on('ready', async () => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
-  // Also opens links with target="_blank" in a browser window
+  // Opens external links in the host default browser.
+  // We just allow boundaryproject.io domain to open on external window (for now).
   mainWindow.webContents.on('new-window', (event, url) => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
-    if (!url.startsWith('serve://boundary')) {
+    if (url.startsWith('https://boundaryproject.io/')) {
       event.preventDefault();
       shell.openExternal(url);
     }
