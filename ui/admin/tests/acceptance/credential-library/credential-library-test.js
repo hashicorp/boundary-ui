@@ -137,6 +137,112 @@ module('Acceptance | credential-library', function (hooks) {
     );
   });
 
+  test.skip('can save changes to existing credential library', async function (assert) {
+    assert.expect(3);
+    assert.notEqual(instances.credentialLibrary.name, 'random string');
+    await visit(urls.credentialLibrary);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.equal(
+      this.server.schema.credentialLibraries.all().models[0].name,
+      'random string'
+    );
+  });
+
+  test('can cancel changes to existing credential library', async function (assert) {
+    assert.expect(2);
+    await visit(urls.credentialLibrary);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.notEqual(instances.credentialStore.name, 'random string');
+    assert.equal(find('[name="name"]').value, instances.credentialLibrary.name);
+  });
+
+  test('saving an existing credential library with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    this.server.patch('/credential-libraries/:id', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.credentialLibrary);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
+  });
+
+  test('can discard unsaved credential library changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.credentialLibrary.name, 'random string');
+
+    await visit(urls.credentialLibrary);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.credentialLibrary);
+
+    try {
+      await visit(urls.credentialLibraries);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:first-child', 'Click Discard');
+      assert.equal(currentURL(), urls.credentialLibraries);
+      assert.notEqual(
+        this.server.schema.credentialLibraries.all().models[0].name,
+        'random string'
+      );
+    }
+  });
+
+  test('can cancel discard unsaved credential library via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.credentialLibrary.name, 'random string');
+    await visit(urls.credentialLibrary);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.credentialLibrary);
+
+    try {
+      await visit(urls.credentialLibraries);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:last-child');
+      assert.equal(currentURL(), urls.credentialLibrary);
+      assert.notEqual(
+        this.server.schema.credentialLibraries.all().models[0].name,
+        'random string'
+      );
+    }
+  });
+
   test('can delete credential library', async function (assert) {
     assert.expect(1);
     const count = getCredentialLibraryCount();
