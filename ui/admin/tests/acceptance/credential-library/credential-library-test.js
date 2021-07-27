@@ -147,4 +147,22 @@ module('Acceptance | credential-library', function (hooks) {
     assert.equal(getCredentialLibraryCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
+
+  test('deleting a credential library which errors displays error messages', async function (assert) {
+    assert.expect(1);
+    this.server.del('/credential-libraries/:id', () => {
+      return new Response(
+        490,
+        {},
+        {
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
+        }
+      );
+    });
+    await visit(urls.credentialLibrary);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+  });
 });
