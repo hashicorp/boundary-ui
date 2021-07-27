@@ -267,6 +267,11 @@ target:
       add:
         title: Add Host Sets
         description: Select host sets to assign to this target.
+  credential-library:
+    messages:
+      welcome:
+        title: Welcome to Credential Libraries
+        description: No credential libraries in this target.
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
@@ -282,6 +287,7 @@ credential-library:
   description: A credential library is a resource that provides credentials.
   actions:
     create: New Credential Library
+    delete: Delete Credential Library
   messages:
     none:
       title: No Credential Libraries Available
