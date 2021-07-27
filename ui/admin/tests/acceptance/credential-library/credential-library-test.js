@@ -1,9 +1,10 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click } from '@ember/test-helpers';
+import { visit, click, fillIn, currentURL, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
 
@@ -58,6 +59,7 @@ module('Acceptance | credential-library', function (hooks) {
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
+    urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
     // Generate resource couner
     getCredentialLibraryCount = () =>
@@ -65,7 +67,7 @@ module('Acceptance | credential-library', function (hooks) {
     authenticateSession({});
   });
 
-  test('visiting credential-libraries', async function (assert) {
+  test('visiting credential libraries', async function (assert) {
     assert.expect(2);
     await visit(urls.credentialLibraries);
     await a11yAudit();
@@ -75,12 +77,64 @@ module('Acceptance | credential-library', function (hooks) {
     assert.equal(currentURL(), urls.credentialLibrary);
   });
 
-  test('visiting an unknown credentila library displays 404 message', async function (assert) {
+  test('visiting an unknown credential library displays 404 message', async function (assert) {
     assert.expect(1);
     await visit(urls.unknownCredentialLibrary);
     await a11yAudit();
     console.debug(find('.rose-message-subtitle'));
     assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+  });
+
+  test('can create a credential library', async function (assert) {
+    assert.expect(1);
+    const count = getCredentialLibraryCount();
+    await visit(urls.newCredentialLibrary);
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.equal(getCredentialLibraryCount(), count + 1);
+  });
+
+  test('can cancel create a new credential library', async function (assert) {
+    assert.expect(2);
+    const count = getCredentialLibraryCount();
+    await visit(urls.newCredentialLibrary);
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(currentURL(), urls.credentialLibraries);
+    assert.equal(getCredentialLibraryCount(), count);
+  });
+
+  test('saving a new credential library with invalid fields displays error messasges', async function (assert) {
+    assert.expect(2);
+    this.server.post('/credential-libraries', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.newCredentialLibrary);
+    await click('[type="submit"]');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
   });
 
   test('can delete credential library', async function (assert) {
@@ -113,5 +167,23 @@ module('Acceptance | credential-library', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.equal(getCredentialLibraryCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('deleting a credential library which errors displays error messages', async function (assert) {
+    assert.expect(1);
+    this.server.del('/credential-libraries/:id', () => {
+      return new Response(
+        490,
+        {},
+        {
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
+        }
+      );
+    });
+    await visit(urls.credentialLibrary);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });

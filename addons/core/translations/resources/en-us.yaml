@@ -254,6 +254,7 @@ target:
     create: New Target
     delete: Delete Target
     add-host-sets: Add Host Sets
+    add-credential-libraries: Add Credential Libraries
   types:
     tcp: TCP
   host-set:
@@ -267,6 +268,17 @@ target:
       add:
         title: Add Host Sets
         description: Select host sets to assign to this target.
+  credential-library:
+    messages:
+      welcome:
+        title: Welcome to Credential Libraries
+        description: No credential libraries in this target.
+      none:
+        title: No Credential Libraries Available
+        description: No credential libraries available to add to this target.
+      add:
+        title: Add Credential Libraries
+        description: Select credential libraries to assign to this target.
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
