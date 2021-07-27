@@ -1,5 +1,9 @@
 import Route from '@ember/routing/route';
-import { hash, all } from 'rsvp';
+import { all } from 'rsvp';
+import { action } from '@ember/object';
+import loading from 'ember-loading/decorator';
+import { confirm } from 'core/decorators/confirm';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Route {
   // =methods
@@ -11,17 +15,13 @@ export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Ro
   beforeModel() {
     const { application_credential_library_ids: credential_libraries } =
       this.modelFor('scopes.scope.targets.target');
-    return hash({
-      credentialLibraries: all(
-        credential_libraries.map((credential_library) =>
-          this.store.findRecord(
-            'credential-library',
-            credential_library.value,
-            { reload: true }
-          )
-        )
-      ),
-    });
+    return all(
+      credential_libraries.map((credential_library) =>
+        this.store.findRecord('credential-library', credential_library.value, {
+          reload: true,
+        })
+      )
+    );
   }
 
   /**
@@ -30,5 +30,22 @@ export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Ro
    */
   model() {
     return this.modelFor('scopes.scope.targets.target');
+  }
+
+  // =actions
+
+  /**
+   * Remove a credential library from the current target.
+   * @param {TargetModel} target
+   * @param {CredentialLibraryModel} credentialLibrary
+   */
+  @action
+  @loading
+  @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
+  async removeCredentialLibrary(target, credentialLibrary) {
+    await target.removeCredentialLibrary(credentialLibrary.id);
+    this.refresh();
   }
 }
