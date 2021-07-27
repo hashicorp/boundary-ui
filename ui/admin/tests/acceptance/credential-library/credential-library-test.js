@@ -137,7 +137,7 @@ module('Acceptance | credential-library', function (hooks) {
     );
   });
 
-  test.skip('can save changes to existing credential library', async function (assert) {
+  test('can save changes to existing credential library', async function (assert) {
     assert.expect(3);
     assert.notEqual(instances.credentialLibrary.name, 'random string');
     await visit(urls.credentialLibrary);
