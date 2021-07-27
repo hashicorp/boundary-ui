@@ -5,6 +5,14 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
+
+  <form.input
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    readonly={{true}}
+    @disabled={{true}}
+  />
+
   <form.input
     @name='name'
     @type='name'
