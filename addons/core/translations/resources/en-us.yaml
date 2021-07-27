@@ -267,6 +267,11 @@ target:
       add:
         title: Add Host Sets
         description: Select host sets to assign to this target.
+  credential-library:
+    messages:
+      welcome:
+        title: Welcome to Credential Libraries
+        description: No credential libraries in this target.
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
