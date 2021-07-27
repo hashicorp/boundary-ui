@@ -1,8 +1,9 @@
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, click, fillIn, currentURL, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
 
@@ -56,10 +57,63 @@ module('Acceptance | credential-library', function (hooks) {
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
+    urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     // Generate resource couner
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
     authenticateSession({});
+  });
+
+  test('can create a credential library', async function (assert) {
+    assert.expect(1);
+    const count = getCredentialLibraryCount();
+    await visit(urls.newCredentialLibrary);
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.equal(getCredentialLibraryCount(), count + 1);
+  });
+
+  test('can cancel create a new credential library', async function (assert) {
+    assert.expect(2);
+    const count = getCredentialLibraryCount();
+    await visit(urls.newCredentialLibrary);
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(currentURL(), urls.credentialLibraries);
+    assert.equal(getCredentialLibraryCount(), count);
+  });
+
+  test('saving a new credential library with invalid fields displays error messasges', async function (assert) {
+    assert.expect(2);
+    this.server.post('/credential-libraries', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.newCredentialLibrary);
+    await click('[type="submit"]');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
   });
 
   test('can delete credential library', async function (assert) {
