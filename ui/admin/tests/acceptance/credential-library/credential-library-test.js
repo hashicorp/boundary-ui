@@ -58,7 +58,7 @@ module('Acceptance | credential-library', function (hooks) {
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
-    // Generate resource couner
+    // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
     authenticateSession({});
