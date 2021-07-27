@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
+import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrariesRoute extends Route {
@@ -46,6 +47,23 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   async save(credentialLibrary) {
     await credentialLibrary.save();
     await this.transitionTo(
+      'scopes.scope.credential-stores.credential-store.credential-libraries'
+    );
+    this.refresh();
+  }
+
+  /**
+   * Handle delete of a credential library
+   * @param {CredentialLibraryModel} credentialLibrary
+   */
+  @action
+  @loading
+  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(credentialLibrary) {
+    await credentialLibrary.destroyRecord();
+    await this.replaceWith(
       'scopes.scope.credential-stores.credential-store.credential-libraries'
     );
     this.refresh();
