@@ -1,0 +1,55 @@
+{{#if this.hasAvailableCredentialLibraries}}
+  <Rose::Form
+    class='full-width'
+    @onSubmit={{fn this.submit @submit}}
+    @cancel={{@cancel}}
+    @disabled={{@model.isSaving}}
+    @error={{@model.errors.base}}
+    as |form|
+  >
+    <form.actions
+      @submitText={{t 'resources.target.actions.add-credential-libraries'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+
+    <Rose::Table as |table|>
+      <table.header as |header|>
+        <header.row as |row|>
+          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        </header.row>
+      </table.header>
+      <table.body as |body|>
+        {{#each this.filteredCredentialLibraries as |credentialLibrary|}}
+          <body.row as |row|>
+            <row.headerCell>
+              <form.checkbox
+                @label={{credentialLibrary.id}}
+                @description={{credentialLibrary.description}}
+                onChange={{fn this.toggleCredentialLibrary credentialLibrary}}
+              />
+            </row.headerCell>
+            <row.cell>{{credentialLibrary.name}}</row.cell>
+          </body.row>
+        {{/each}}
+      </table.body>
+    </Rose::Table>
+  </Rose::Form>
+{{/if}}
+
+{{#unless this.hasAvailableCredentialLibraries}}
+  <Rose::Layout::Centered>
+    <Rose::Message
+      @title={{t 'resources.target.credential-library.messages.none.title'}}
+      as |message|
+    >
+      <message.description>
+        {{t 'resources.target.credential-library.messages.none.description'}}
+      </message.description>
+      <message.link @route='scopes.scope.targets.target.credential-libraries'>
+        <Rose::Icon @name='chevron-left' />
+        {{t 'actions.back'}}
+      </message.link>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+{{/unless}}
