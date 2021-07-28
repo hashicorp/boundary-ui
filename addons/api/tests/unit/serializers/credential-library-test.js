@@ -9,6 +9,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-library');
     const record = store.createRecord('credential-library', {
+      type: 'vault',
       name: 'Name',
       description: 'Description',
       attributes: {
@@ -20,6 +21,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
+      type: 'vault',
       credential_store_id: null,
       name: 'Name',
       description: 'Description',
@@ -40,6 +42,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         id: '1',
         type: 'credential-library',
         attributes: {
+          type: 'vault',
           name: 'Name',
           description: 'Description',
           attributes: {
@@ -54,6 +57,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
+      type: 'vault',
       credential_store_id: null,
       name: 'Name',
       description: 'Description',
