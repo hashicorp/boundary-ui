@@ -8,10 +8,11 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    * @return {CredentialLibraryModel}
    */
   model() {
-    const { id: credential_store_id } = this.modelFor(
+    const { id: credential_store_id, type } = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
     return this.store.createRecord('credential-library', {
+      type,
       credential_store_id,
     });
   }
