@@ -157,7 +157,10 @@ module('Acceptance | credential-library', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.notEqual(instances.credentialStore.name, 'random string');
+    assert.notEqual(
+      this.server.schema.credentialLibraries.all().models[0].name,
+      'random string'
+    );
     assert.equal(find('[name="name"]').value, instances.credentialLibrary.name);
   });
 
