@@ -92,6 +92,15 @@
     {{/if}}
   </form.input>
 
+  {{#unless @model.isNew}}
+    <form.input
+      @value={{@model.attributes.token_hmac}}
+      @label={{t 'resources.credential-store.form.token_hmac.label'}}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/unless}}
+
   <form.input
     @name='namespace'
     @type='text'
@@ -140,7 +149,17 @@
       (mut @model.attributes.tls_skip_verify)
       (if @model.attributes.tls_skip_verify false true)
     }}
-  />
+    @error={{@model.errors.attributes_tls_skip_verify}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_tls_skip_verify}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_tls_skip_verify as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.checkbox>
 
   <form.textarea
     @name='client_certificate'
@@ -183,6 +202,17 @@
       </field.errors>
     {{/if}}
   </form.textarea>
+
+  {{#unless @model.isNew}}
+    <form.input
+      @value={{@model.attributes.client_certificate_key_hmac}}
+      @label={{t
+        'resources.credential-store.form.client_certificate_key_hmac.label'
+      }}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/unless}}
 
   <form.textarea
     @name='ca_cert'
