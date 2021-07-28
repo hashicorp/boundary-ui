@@ -171,8 +171,8 @@ app.on('ready', async () => {
   // We just allow boundaryproject.io domain to open on external window (for now).
   mainWindow.webContents.on('new-window', (event, url) => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
+    event.preventDefault();
     if (url.startsWith('https://boundaryproject.io/')) {
-      event.preventDefault();
       shell.openExternal(url);
     }
   });
