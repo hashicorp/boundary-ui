@@ -280,14 +280,14 @@ target:
         title: Add Credential Libraries
         description: Select credential libraries to assign to this target.
 credential-store:
-  title: Credential Store
-  title_plural: Credential Stores
-  description: A credential store is a collection of credentials and credential libraries.
+  title: Credential Source
+  title_plural: Credential Sources
+  description: A credential source is a collection of credentials and credential libraries.
   messages:
     welcome:
-      title: Welcome to Credential Stores
+      title: Welcome to Credential Sources
   actions:
-    delete: Delete Credential Store
+    delete: Delete Credential Source
   types:
     vault: Vault
 credential-library:
@@ -300,7 +300,7 @@ credential-library:
   messages:
     none:
       title: No Credential Libraries Available
-      description: No Credential Libraries available in this credential store.
+      description: No Credential Libraries available in this credential source.
   form:
     vault_path:
       label: Vault Path
