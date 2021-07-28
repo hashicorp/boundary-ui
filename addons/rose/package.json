@@ -83,7 +83,7 @@
     "prettier": "^2.2.1",
     "qunit": "^2.13.0",
     "qunit-dom": "^1.6.0",
-    "sass": "^1.26.5",
+    "sass": "^1.36.0",
     "sass-lint": "^1.13.1"
   },
   "engines": {
