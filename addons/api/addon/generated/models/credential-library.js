@@ -9,6 +9,11 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   // =attributes
 
   @attr('string', {
+    description: 'The type of the resource, to help differentiate schemas',
+  })
+  type;
+
+  @attr('string', {
     description: 'The owning credential store ID.',
   })
   credential_store_id;
