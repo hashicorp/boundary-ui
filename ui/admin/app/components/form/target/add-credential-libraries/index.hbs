@@ -17,6 +17,7 @@
         <header.row as |row|>
           <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
         </header.row>
       </table.header>
       <table.body as |body|>
@@ -30,6 +31,13 @@
               />
             </row.headerCell>
             <row.cell>{{credentialLibrary.name}}</row.cell>
+            <row.cell>
+              <Rose::Badge>{{t
+                  (concat
+                    'resources.credential-library.types.' credentialLibrary.type
+                  )
+                }}</Rose::Badge>
+            </row.cell>
           </body.row>
         {{/each}}
       </table.body>
