@@ -158,6 +158,9 @@ module.exports = function (environment) {
     ENV.sessionPollingTimeoutSeconds = 0.25;
     ENV.oidcPollingTimeoutSeconds = 0;
     ENV.enableConfirmService = false;
+
+    // Enable tests for development features
+    ENV.featureFlags['credential-store'] = true;
   }
 
   if (environment === 'production') {
