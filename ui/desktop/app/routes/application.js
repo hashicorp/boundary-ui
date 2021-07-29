@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import jQuery from 'jquery';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
@@ -29,18 +28,6 @@ export default class ApplicationRoute extends Route {
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
     return this.origin.updateOrigin();
-  }
-
-  /**
-   * Adds listener on target=_blank links so that they may be opened in an
-   * external browser.
-   */
-  afterModel() {
-    const ipc = this.ipc;
-    /* eslint-disable-next-line ember/no-jquery */
-    jQuery(document).on('click', 'a[href][target="_blank"]', function () {
-      ipc.invoke('openExternal', this.href);
-    });
   }
 
   /**
