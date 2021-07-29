@@ -95,7 +95,7 @@ module.exports = function (environment) {
       search: false,
       filter: false,
       capabilities: false,
-      'credential-store': false,
+      'credential-store': true,
     },
   };
 
@@ -131,11 +131,7 @@ module.exports = function (environment) {
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
 
     // Enable features in development
-    ENV.featureFlags['primary-auth-method'] = true;
-    ENV.featureFlags['oidc'] = true;
-    ENV.featureFlags['oidc-crud'] = true;
-    ENV.featureFlags['credential-store'] = true;
-    //ENV.featureFlags['oidc-account-crud'] = true;
+    // ENV.featureFlags['credential-store'] = true;
   }
 
   if (environment === 'test') {
@@ -160,7 +156,7 @@ module.exports = function (environment) {
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
-    ENV.featureFlags['credential-store'] = true;
+    // ENV.featureFlags['credential-store'] = true;
   }
 
   if (environment === 'production') {
