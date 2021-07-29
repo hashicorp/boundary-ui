@@ -56,7 +56,7 @@ module.exports = function (environment) {
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
         'credential-store': '/credential-stores',
-        'credential-source': '/credential-sources',
+        'credential-library': '/credential-libraries',
         host: '/hosts',
         'host.new': '/hosts/new',
         role: '/roles',
