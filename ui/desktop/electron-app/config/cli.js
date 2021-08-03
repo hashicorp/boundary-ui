@@ -5,7 +5,6 @@ const https = require('https');
 const decompress = require('decompress');
 const { isMac, isWindows } = require('../src/helpers/platform.js');
 
-const artifactVersion = '0.4.0';
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
 
 const downloadArtifact = (version) => {
@@ -28,11 +27,13 @@ const downloadArtifact = (version) => {
     console.log('Create tmp artifact directory: ', tmpDir);
 
     const artifactFileName = url.split('/').pop();
-    if (!artifactFileName) reject('Could not find artifact filename in: ', url);
+    if (!artifactFileName)
+      reject(`Could not find artifact filename in: ${url}.`);
 
     const artifactPath = path.resolve(tmpDir, artifactFileName);
     console.log('Download artifact url: ', url);
     https.get(url, (response) => {
+      if (response.statusCode >= 400) reject('Could not access artifact url.');
       const stream = response.pipe(fs.createWriteStream(artifactPath));
       stream.on('close', () => resolve(artifactPath));
       stream.on('error', reject);
@@ -52,7 +53,16 @@ module.exports = {
       console.warn('WARNING: Bypassing cli setup');
       return;
     }
-    const artifactPath = await downloadArtifact(artifactVersion);
-    await extract(artifactPath, artifactDestination);
-  }
-}
+    try {
+      const artifactVersion = await fs.promises.readFile(
+        path.resolve(__dirname, 'cli', 'VERSION'),
+        'utf8'
+      );
+      const artifactPath = await downloadArtifact(artifactVersion);
+      await extract(artifactPath, artifactDestination);
+    } catch (e) {
+      console.error('ERROR: Failed setting up CLI.', e);
+      process.exit(1);
+    }
+  },
+};
