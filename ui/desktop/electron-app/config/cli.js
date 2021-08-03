@@ -33,7 +33,7 @@ const downloadArtifact = (version) => {
     const artifactPath = path.resolve(tmpDir, artifactFileName);
     console.log('Download artifact url: ', url);
     https.get(url, (response) => {
-      if (response.statusCode > 400) reject('Could not access artifact url.');
+      if (response.statusCode >= 400) reject('Could not access artifact url.');
       const stream = response.pipe(fs.createWriteStream(artifactPath));
       stream.on('close', () => resolve(artifactPath));
       stream.on('error', reject);
