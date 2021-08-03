@@ -2,6 +2,14 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## Next
+
+## v1.2.1 [CLI 0.5.0] (2021.08.03)
+
+### New
+
+- Add secret toggle capability to connection details dialog. ([PR](https://github.com/hashicorp/boundary-ui/pull/637))
+
 ## v1.2.0 [CLI 0.4.0] (2021.06.29)
 
 ### New
