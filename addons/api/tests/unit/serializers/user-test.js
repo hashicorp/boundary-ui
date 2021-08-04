@@ -62,6 +62,7 @@ module('Unit | Serializer | user', function (hooks) {
         id: '1',
         type: 'user',
         attributes: {
+          authorized_actions: [],
           name: 'user 1',
           scope: { scope_id: 'o_123' },
           account_ids: [],

@@ -67,6 +67,7 @@ module('Unit | Serializer | host set', function (hooks) {
         id: '1',
         type: 'host-set',
         attributes: {
+          authorized_actions: [],
           name: 'Host Set 1',
           host_ids: [{ value: '1' }, { value: '2' }, { value: '3' }],
         },
@@ -96,6 +97,7 @@ module('Unit | Serializer | host set', function (hooks) {
         id: '1',
         type: 'host-set',
         attributes: {
+          authorized_actions: [],
           name: 'Host Set 1',
           scope: { scope_id: 'o_123' },
           host_ids: [],
