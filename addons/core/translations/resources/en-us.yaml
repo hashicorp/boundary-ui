@@ -253,29 +253,96 @@ target:
   actions:
     create: New Target
     delete: Delete Target
-    add-host-sets: Add Host Sets
+    add-host-sets: Add Host Sources
+    add-credential-libraries: Add Credential Sources
   types:
     tcp: TCP
   host-set:
+    title: Host Source
+    title_plural: Host Sources
     messages:
       welcome:
-        title: Welcome to Host Sets
-        description: No hosts sets in this target.
+        title: Welcome to Host Sources
+        description: No hosts sources in this target.
       none:
-        title: No Host Sets Available
-        description: No hosts sets available to add to target.
+        title: No Host Sources Available
+        description: No hosts sources available to add to target.
       add:
-        title: Add Host Sets
-        description: Select host sets to assign to this target.
+        title: Add Host Sources
+        description: Select host sources to assign to this target.
+  credential-library:
+    title: Credential Source
+    title_plural: Credential Sources
+    messages:
+      welcome:
+        title: Welcome to Credential Sources
+        description: No credential sources in this target.
+      none:
+        title: No Credential Sources Available
+        description: No credential sources available to add to this target.
+      add:
+        title: Add Credential Sources
+        description: Select credential sources to assign to this target.
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
-  description: A credential stores is a collection of credentials and credential libraries.
+  description: A credential store is a collection of credentials and credential libraries.
+  messages:
+    welcome:
+      title: Welcome to Credential Stores
+  actions:
+    delete: Delete Credential Store
+  types:
+    vault: Vault
+  form:
+    address:
+      label: Address
+      help: The address of the Vault server. This should be a complete URL such as https://127.0.0.1:8200.
+    namespace:
+      label: Namespace
+      help: A Vault namespace. Requires Vault Enterprise.
+    ca_cert:
+      label: CA Certificate
+      help: A PEM-encoded CA certificate to verify the Vault server's TLS certificate.
+    tls_server_name:
+      label: TLS Server Name
+      help: Name to use as the SNI host when connecting to Vault via TLS.
+    tls_skip_verify:
+      label: TLS Skip Verify
+      help: Disable verification of TLS certificates. Using this option is highly discouraged as it decreases the security of data transmissions to and from the Vault server.
+    token:
+      label: Token
+      help: A token used for accessing Vault.
+    token_hmac:
+      label: Token HMAC
+    client_certificate:
+      label: Client Certificate
+      help: A PEM-encoded client certificate to use for TLS authentication to the Vault server.
+    client_certificate_key:
+      label: Client Certificate Key
+      help: A PEM-encoded private key matching the client certificate from Client Certificate.
+    client_certificate_key_hmac:
+      label: Client Certificate Key HMAC
 credential-library:
   title: Credential Library
   title_plural: Credential Libraries
   description: A credential library is a resource that provides credentials.
+  actions:
+    create: New Credential Library
+    delete: Delete Credential Library
   messages:
     none:
       title: No Credential Libraries Available
       description: No Credential Libraries available in this credential store.
+  form:
+    vault_path:
+      label: Vault Path
+      help: The path the library uses when requesting credentials from Vault.
+    http_method:
+      label: HTTP Method
+      help: The HTTP method the library uses when requesting credentials from Vault.
+    http_request_body:
+      label: HTTP Method POST Request Body
+      help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
+  types:
+    vault: Vault

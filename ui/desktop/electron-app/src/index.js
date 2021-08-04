@@ -12,6 +12,7 @@ const {
   BrowserWindow,
   Menu,
   MenuItem,
+  shell,
 } = require('electron');
 require('./ipc/handlers.js');
 
@@ -166,9 +167,14 @@ app.on('ready', async () => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
+  // Opens external links in the host default browser.
+  // We just allow boundaryproject.io domain to open on external window (for now).
   mainWindow.webContents.on('new-window', (event, url) => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
-    if (!url.startsWith('serve://boundary')) event.preventDefault();
+    event.preventDefault();
+    if (url.startsWith('https://boundaryproject.io/')) {
+      shell.openExternal(url);
+    }
   });
 
   mainWindow.on('unresponsive', () => {

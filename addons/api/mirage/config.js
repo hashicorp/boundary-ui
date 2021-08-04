@@ -366,10 +366,10 @@ export default function () {
       const target = targets.find(id);
       const updatedAttrs = {
         version: attrs.version,
-        hostSetIds: target.hostSetIds,
       };
       // If adding host sets, push them into the array
       if (method === 'add-host-sets') {
+        updatedAttrs.hostSetIds = target.hostSetIds;
         attrs.hostSetIds.forEach((id) => {
           if (!updatedAttrs.hostSetIds.includes(id)) {
             updatedAttrs.hostSetIds.push(id);
@@ -378,9 +378,27 @@ export default function () {
       }
       // If deleting host sets, filter them out of the array
       if (method === 'remove-host-sets') {
+        updatedAttrs.hostSetIds = target.hostSetIds;
         updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
           return !attrs.hostSetIds.includes(id);
         });
+      }
+      // If adding credential libraries, push them into the array
+      if (method === 'add-credential-libraries') {
+        updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
+        attrs.applicationCredentialLibraryIds.forEach((id) => {
+          if (!updatedAttrs.credentialLibraryIds.includes(id)) {
+            updatedAttrs.credentialLibraryIds.push(id);
+          }
+        });
+      }
+      // If deleting credential libraries, filter them out of the array
+      if (method === 'remove-credential-libraries') {
+        updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
+        updatedAttrs.credentialLibraryIds =
+          updatedAttrs.credentialLibraryIds.filter((id) => {
+            return !attrs.applicationCredentialLibraryIds.includes(id);
+          });
       }
       return target.update(updatedAttrs);
     }
@@ -467,6 +485,7 @@ export default function () {
   this.get('/credential-stores/:id');
   this.post('/credential-stores');
   this.patch('/credential-stores/:id');
+  this.del('/credential-stores/:id');
 
   // credential-libraries
 
@@ -478,7 +497,15 @@ export default function () {
     ) => credentialLibraries.where({ credentialStoreId })
   );
   this.get('/credential-libraries/:id');
-  this.post('/credential-libraries/:id');
+  this.post(
+    '/credential-libraries',
+    function ({ credentialStores, credentialLibraries }) {
+      const attrs = this.normalizedRequestAttrs();
+      const credentialStore = credentialStores.find(attrs.credentialStoreId);
+      attrs.scopeId = credentialStore.scope.id;
+      return credentialLibraries.create(attrs);
+    }
+  );
   this.del('/credential-libraries/:id');
   this.patch('/credential-libraries/:id');
 

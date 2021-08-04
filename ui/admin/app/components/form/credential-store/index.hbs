@@ -52,6 +52,188 @@
     {{/if}}
   </form.textarea>
 
+  <form.input
+    @name='address'
+    @type='text'
+    @value={{@model.attributes.address}}
+    @label={{t 'resources.credential-store.form.address.label'}}
+    @error={{@model.errors.attributes_address}}
+    @helperText={{t 'resources.credential-store.form.address.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_address}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_address as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name='token'
+    @type='text'
+    @value={{@model.attributes.token}}
+    @label={{t 'resources.credential-store.form.token.label'}}
+    @error={{@model.errors.attributes_token}}
+    @helperText={{t 'resources.credential-store.form.token.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_token}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_token as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  {{#unless @model.isNew}}
+    <form.input
+      @value={{@model.attributes.token_hmac}}
+      @label={{t 'resources.credential-store.form.token_hmac.label'}}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/unless}}
+
+  <form.input
+    @name='namespace'
+    @type='text'
+    @value={{@model.attributes.namespace}}
+    @label={{t 'resources.credential-store.form.namespace.label'}}
+    @error={{@model.errors.attributes_namespace}}
+    @helperText={{t 'resources.credential-store.form.namespace.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_namespace}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_namespace as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name='tls_server_name'
+    @type='text'
+    @value={{@model.attributes.tls_server_name}}
+    @label={{t 'resources.credential-store.form.tls_server_name.label'}}
+    @error={{@model.errors.attributes_tls_server_name}}
+    @helperText={{t 'resources.credential-store.form.tls_server_name.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_tls_server_name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_tls_server_name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.checkbox
+    @label={{t 'resources.credential-store.form.tls_skip_verify.label'}}
+    @helperText={{t 'resources.credential-store.form.tls_skip_verify.help'}}
+    @checked={{@model.attributes.tls_skip_verify}}
+    onChange={{fn
+      (mut @model.attributes.tls_skip_verify)
+      (if @model.attributes.tls_skip_verify false true)
+    }}
+    @error={{@model.errors.attributes_tls_skip_verify}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_tls_skip_verify}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_tls_skip_verify as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.checkbox>
+
+  <form.textarea
+    @name='client_certificate'
+    @type='text'
+    @value={{@model.attributes.client_certificate}}
+    @label={{t 'resources.credential-store.form.client_certificate.label'}}
+    @error={{@model.errors.attributes_client_certificate}}
+    @helperText={{t 'resources.credential-store.form.client_certificate.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_client_certificate}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_client_certificate as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.textarea
+    @name='client_certificate_key'
+    @type='text'
+    @value={{@model.attributes.client_certificate_key}}
+    @label={{t 'resources.credential-store.form.client_certificate_key.label'}}
+    @error={{@model.errors.attributes_client_certificate_key}}
+    @helperText={{t
+      'resources.credential-store.form.client_certificate_key.help'
+    }}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_client_certificate_key}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_client_certificate_key as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  {{#unless @model.isNew}}
+    <form.input
+      @value={{@model.attributes.client_certificate_key_hmac}}
+      @label={{t
+        'resources.credential-store.form.client_certificate_key_hmac.label'
+      }}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/unless}}
+
+  <form.textarea
+    @name='ca_cert'
+    @type='text'
+    @value={{@model.attributes.ca_cert}}
+    @label={{t 'resources.credential-store.form.ca_cert.label'}}
+    @error={{@model.errors.attributes_ca_cert}}
+    @helperText={{t 'resources.credential-store.form.ca_cert.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.attributes_ca_cert}}
+      <field.errors as |errors|>
+        {{#each @model.errors.attributes_ca_cert as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
   <form.actions
     @disabled={{if @model.cannotSave @model.cannotSave}}
     @enableEditText={{t 'actions.edit-form'}}

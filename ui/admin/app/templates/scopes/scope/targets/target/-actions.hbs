@@ -6,6 +6,13 @@
   <dropdown.link @route='scopes.scope.targets.target.add-host-sets'>
     {{t 'resources.target.actions.add-host-sets'}}
   </dropdown.link>
+  {{#if (feature-flag 'credential-store')}}
+    <dropdown.link
+      @route='scopes.scope.targets.target.add-credential-libraries'
+    >
+      {{t 'resources.target.actions.add-credential-libraries'}}
+    </dropdown.link>
+  {{/if}}
   <dropdown.separator />
   <dropdown.button
     @style='danger'

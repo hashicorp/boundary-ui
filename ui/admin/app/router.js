@@ -65,6 +65,8 @@ Router.map(function () {
         this.route('target', { path: ':target_id' }, function () {
           this.route('host-sets', function () {});
           this.route('add-host-sets');
+          this.route('credential-libraries');
+          this.route('add-credential-libraries');
         });
         this.route('new');
       });
@@ -91,7 +93,14 @@ Router.map(function () {
           'credential-store',
           { path: ':credential_store_id' },
           function () {
-            this.route('credential-libraries', function () {});
+            this.route('credential-libraries', function () {
+              this.route('new');
+              this.route(
+                'credential-library',
+                { path: ':credential_library_id' },
+                function () {}
+              );
+            });
           }
         );
         this.route('new');

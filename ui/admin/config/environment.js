@@ -55,7 +55,8 @@ module.exports = function (environment) {
         'host-set': '/host-sets',
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
-        'credential-stores': '/credential-stores',
+        'credential-store': '/credential-stores',
+        'credential-library': '/credential-libraries',
         host: '/hosts',
         'host.new': '/hosts/new',
         role: '/roles',
@@ -94,7 +95,7 @@ module.exports = function (environment) {
       search: false,
       filter: false,
       capabilities: false,
-      'credential-store': false,
+      'credential-store': true,
     },
   };
 
@@ -130,11 +131,7 @@ module.exports = function (environment) {
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
 
     // Enable features in development
-    ENV.featureFlags['primary-auth-method'] = true;
-    ENV.featureFlags['oidc'] = true;
-    ENV.featureFlags['oidc-crud'] = true;
-    ENV.featureFlags['credential-store'] = true;
-    //ENV.featureFlags['oidc-account-crud'] = true;
+    // ENV.featureFlags['credential-store'] = true;
   }
 
   if (environment === 'test') {
@@ -157,6 +154,9 @@ module.exports = function (environment) {
     ENV.sessionPollingTimeoutSeconds = 0.25;
     ENV.oidcPollingTimeoutSeconds = 0;
     ENV.enableConfirmService = false;
+
+    // Enable tests for development features
+    // ENV.featureFlags['credential-store'] = true;
   }
 
   if (environment === 'production') {

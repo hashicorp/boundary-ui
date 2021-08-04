@@ -4,7 +4,7 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Serializer | target', function (hooks) {
   setupTest(hooks);
 
-  test('it serializes targets normally, without host sets', function (assert) {
+  test('it serializes targets normally, without host sets or credential libraries', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -15,6 +15,7 @@ module('Unit | Serializer | target', function (hooks) {
         { host_set_id: '1', host_catalog_id: '2' },
         { host_set_id: '3', host_catalog_id: '4' },
       ],
+      application_credential_library_ids: [{ value: '1' }, { value: '2' }],
       scope: {
         scope_id: 'org_1',
         type: 'org',
@@ -63,6 +64,27 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
+  test('it serializes only credential libraries and version when an `adapterOptions.credentialLibraryIDs` array is passed', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'User',
+      description: 'Description',
+      application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      credentialLibraryIDs: ['4', '5'],
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      application_credential_library_ids: ['4', '5'],
+      version: 1,
+    });
+  });
+
   test('it normalizes records with array fields', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -75,6 +97,7 @@ module('Unit | Serializer | target', function (hooks) {
         { host_set_id: '1', host_catalog_id: '2' },
         { host_set_id: '3', host_catalog_id: '4' },
       ],
+      application_credential_library_ids: ['1'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -92,13 +115,14 @@ module('Unit | Serializer | target', function (hooks) {
             { host_set_id: '1', host_catalog_id: '2' },
             { host_set_id: '3', host_catalog_id: '4' },
           ],
+          application_credential_library_ids: [{ value: '1' }],
         },
         relationships: {},
       },
     });
   });
 
-  test('it normalizes missing host_sets to empty array', function (assert) {
+  test('it normalizes missing host_sets and credential libraries to empty array', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -122,6 +146,7 @@ module('Unit | Serializer | target', function (hooks) {
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
           host_sets: [],
+          application_credential_library_ids: [],
         },
         relationships: {},
       },

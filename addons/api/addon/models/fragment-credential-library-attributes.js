@@ -1,5 +1,6 @@
 import Fragment from 'ember-data-model-fragments/fragment';
 import { attr } from '@ember-data/model';
+import { options } from './credential-library';
 
 export default class FragmentCredentialLibraryAttributesModel extends Fragment {
   //= attributes (vault)
@@ -7,6 +8,7 @@ export default class FragmentCredentialLibraryAttributesModel extends Fragment {
   @attr('string', {
     description:
       'The HTTP method the library uses when requesting credentials from Vault.',
+    defaultValue: () => options.http_method[0],
   })
   http_method;
 

@@ -39,7 +39,8 @@ export default class BaseModel extends Model {
   @attr({
     readOnly: true,
     emptyArrayIfMissing: true,
-  }) authorized_actions;
+  })
+  authorized_actions;
 
   set scopeModel(model) {
     if (model) {
