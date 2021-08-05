@@ -6,14 +6,12 @@
   <dropdown.link @route='scopes.scope.users.user.add-accounts'>
     {{t 'resources.user.actions.add-accounts'}}
   </dropdown.link>
-  {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
-      @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'delete' @model)}}
-    >
-      {{t 'resources.user.actions.delete'}}
-    </dropdown.button>
-  {{/if}}
+  <dropdown.separator />
+  <dropdown.button
+    @style='danger'
+    @disabled={{@model.canSave}}
+    {{on 'click' (route-action 'delete' @model)}}
+  >
+    {{t 'resources.user.actions.delete'}}
+  </dropdown.button>
 </Rose::Dropdown>

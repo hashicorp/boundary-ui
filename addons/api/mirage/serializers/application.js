@@ -61,8 +61,6 @@ export default RestSerializer.extend({
         type: model.scope.type,
       };
     }
-    // TODO:  make these toggleable
-    json.authorized_actions = ['read', 'update', 'delete'];
     return json;
   },
 
