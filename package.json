@@ -75,7 +75,8 @@
     "mem": "^4.0.0",
     "minimist": "^1.2.3",
     "normalize-url": "^4.5.1",
-    "glob-parent": "^5.1.2"
+    "glob-parent": "^5.1.2",
+    "xmldom": "github:xmldom/xmldom#0.7.0"
   },
   "config": {
     "commitizen": {
