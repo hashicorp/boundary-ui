@@ -110,6 +110,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          authorized_actions: [],
           name: 'Target 1',
           host_sets: [
             { host_set_id: '1', host_catalog_id: '2' },
@@ -143,6 +144,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          authorized_actions: [],
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
           host_sets: [],

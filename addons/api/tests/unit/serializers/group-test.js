@@ -66,6 +66,7 @@ module('Unit | Serializer | group', function (hooks) {
         id: '1',
         type: 'group',
         attributes: {
+          authorized_actions: [],
           name: 'Group 1',
           scope: { scope_id: 'o_123' },
           member_ids: [],

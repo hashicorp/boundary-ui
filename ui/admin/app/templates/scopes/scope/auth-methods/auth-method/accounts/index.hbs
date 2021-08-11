@@ -18,13 +18,17 @@
         {{#each @model as |account|}}
           <body.row as |row|>
             <row.headerCell scope='row'>
-              <LinkTo
-                @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                @model={{account.id}}
-              >
+              {{#if (can 'read model' account)}}
+                <LinkTo
+                  @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                  @model={{account.id}}
+                >
+                  {{account.accountName}}
+                </LinkTo>
+              {{else}}
                 {{account.accountName}}
-                <p>{{account.description}}</p>
-              </LinkTo>
+              {{/if}}
+              <p>{{account.description}}</p>
             </row.headerCell>
             <row.cell>
               <code>{{account.attributes.issuer}}</code>
@@ -68,13 +72,17 @@
         {{#each @model as |account|}}
           <body.row as |row|>
             <row.headerCell>
-              <LinkTo
-                @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                @model={{account.id}}
-              >
+              {{#if (can 'read model' account)}}
+                <LinkTo
+                  @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                  @model={{account.id}}
+                >
+                  {{account.accountName}}
+                </LinkTo>
+              {{else}}
                 {{account.accountName}}
-                <p>{{account.description}}</p>
-              </LinkTo>
+              {{/if}}
+              <p>{{account.description}}</p>
             </row.headerCell>
             <row.cell>
               {{account.attributes.login_name}}

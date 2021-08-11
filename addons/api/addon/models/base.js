@@ -1,4 +1,5 @@
 import Model from '@ember-data/model';
+import { attr } from '@ember-data/model';
 import { fragment } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
 
@@ -34,6 +35,12 @@ export default class BaseModel extends Model {
   @fragment('fragment-scope') scope;
 
   // =attributes
+
+  @attr({
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  authorized_actions;
 
   set scopeModel(model) {
     if (model) {
