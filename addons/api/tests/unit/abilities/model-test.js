@@ -1,0 +1,68 @@
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+
+module('Unit | Abilities | Model', function (hooks) {
+  setupTest(hooks);
+
+  test('it reflects when a given model may be read based on authorized_actions', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:can');
+    const model = {
+      authorized_actions: ['read'],
+    };
+    assert.ok(service.can('read model', model));
+    model.authorized_actions = [];
+    assert.notOk(service.can('read model', model));
+  });
+
+  test('it reflects when a given model may be updated based on authorized_actions', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:can');
+    const model = {
+      authorized_actions: ['update'],
+    };
+    assert.ok(service.can('update model', model));
+    model.authorized_actions = [];
+    assert.notOk(service.can('update model', model));
+  });
+
+  test('it reflects when a given model may be saved based on isNew and authorized_actions', function (assert) {
+    assert.expect(4);
+    const service = this.owner.lookup('service:can');
+    let model = {
+      isNew: false,
+      authorized_actions: ['update'],
+    };
+    assert.ok(service.can('save model', model));
+    model = {
+      isNew: false,
+      authorized_actions: [],
+    };
+    assert.notOk(service.can('save model', model));
+    // Model instances are always saveable at this level when isNew is true.
+    // In practice, the ability to _create_ a resource depends not on instance
+    // authorization, but on collection authorization, which is
+    // tested separately.
+    model = {
+      isNew: true,
+      authorized_actions: ['update'],
+    };
+    assert.ok(service.can('save model', model));
+    model = {
+      isNew: true,
+      authorized_actions: [],
+    };
+    assert.ok(service.can('save model', model));
+  });
+
+  test('it reflects when a given model may be deleted based on authorized_actions', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:can');
+    const model = {
+      authorized_actions: ['delete'],
+    };
+    assert.ok(service.can('delete model', model));
+    model.authorized_actions = [];
+    assert.notOk(service.can('delete model', model));
+  });
+});

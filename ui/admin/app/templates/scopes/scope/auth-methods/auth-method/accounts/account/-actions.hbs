@@ -1,13 +1,15 @@
-<Rose::Dropdown
-  @text='{{t 'actions.manage'}}'
-  @dropdownRight={{true}}
-  as |dropdown|
->
-  <dropdown.button
-    @style='danger'
-    @disabled={{@model.canSave}}
-    {{on 'click' (route-action 'deleteAccount' @model)}}
+{{#if (can 'delete model' @model)}}
+  <Rose::Dropdown
+    @text='{{t 'actions.manage'}}'
+    @dropdownRight={{true}}
+    as |dropdown|
   >
-    {{t 'resources.account.actions.delete'}}
-  </dropdown.button>
-</Rose::Dropdown>
+    <dropdown.button
+      @style='danger'
+      @disabled={{@model.canSave}}
+      {{on 'click' (route-action 'deleteAccount' @model)}}
+    >
+      {{t 'resources.account.actions.delete'}}
+    </dropdown.button>
+  </Rose::Dropdown>
+{{/if}}

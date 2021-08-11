@@ -1,7 +1,15 @@
 import factory from '../generated/factories/account';
 import { random, internet } from 'faker';
+import permissions from '../helpers/permissions';
 
 export default factory.extend({
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('account') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
   attributes() {
     switch (this.type) {
       case 'password':
