@@ -7,11 +7,13 @@
     {{t 'resources.group.actions.add-members'}}
   </dropdown.link>
   <dropdown.separator />
-  <dropdown.button
-    @style='danger'
-    @disabled={{@model.canSave}}
-    {{on 'click' (route-action 'delete' @model)}}
-  >
-    {{t 'resources.group.actions.delete'}}
-  </dropdown.button>
+  {{#if (can 'delete model' @model)}}
+    <dropdown.button
+      @style='danger'
+      @disabled={{@model.canSave}}
+      {{on 'click' (route-action 'delete' @model)}}
+    >
+      {{t 'resources.group.actions.delete'}}
+    </dropdown.button>
+  {{/if}}
 </Rose::Dropdown>

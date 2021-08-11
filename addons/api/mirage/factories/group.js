@@ -1,7 +1,15 @@
 import factory from '../generated/factories/group';
 import { trait } from 'ember-cli-mirage';
+import permissions from '../helpers/permissions';
 
 export default factory.extend({
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('account') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
   id: (i) => `group-${i}`,
 
   /**
