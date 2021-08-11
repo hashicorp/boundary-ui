@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
+import { visit, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -11,7 +11,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | accounts', function (hooks) {
+module('Acceptance | accounts | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -27,7 +27,6 @@ module('Acceptance | accounts', function (hooks) {
     orgScope: null,
     authMethods: null,
     accounts: null,
-    newAccount: null,
     account: null,
   };
 
@@ -50,7 +49,6 @@ module('Acceptance | accounts', function (hooks) {
     urls.authMethods = `${urls.orgScope}/auth-methods`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     urls.accounts = `${urls.authMethod}/accounts`;
-    urls.newAccount = `${urls.accounts}/new`;
     urls.account = `${urls.accounts}/${instances.account.id}`;
   });
 
@@ -61,69 +59,44 @@ module('Acceptance | accounts', function (hooks) {
     }
   });
 
-  test('visiting accounts', async function (assert) {
-    assert.expect(1);
-    await visit(urls.accounts);
-    await a11yAudit();
-    assert.equal(currentURL(), urls.accounts);
-  });
-
-  test('can create a new account', async function (assert) {
+  test('can delete an account', async function (assert) {
     assert.expect(1);
     const accountsCount = this.server.db.accounts.length;
-    await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'Account name');
-    await fillIn('[name="description"]', 'description');
-    await fillIn('[name="login_name"]', 'username');
-    await fillIn('[name="password"]', 'password');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.accounts.length, accountsCount + 1);
+    await visit(urls.account);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(this.server.db.accounts.length, accountsCount - 1);
   });
 
-  test('can cancel a new account creation', async function (assert) {
-    assert.expect(2);
-    const accountsCount = this.server.db.accounts.length;
-    await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'Account name');
-    await click('form button:not([type="submit"])');
-    assert.equal(this.server.db.accounts.length, accountsCount);
-    assert.equal(currentURL(), urls.accounts);
+  test('cannot delete an account without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.account.authorized_actions =
+      instances.account.authorized_actions.filter((item) => item !== 'delete');
+    await visit(urls.account);
+    assert.notOk(
+      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+    );
   });
 
-  test('saving a new account with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/accounts', () => {
+  test('errors are displayed when delete on account fails', async function (assert) {
+    assert.expect(1);
+    this.server.del('/accounts/:id', () => {
       return new Response(
-        400,
+        490,
         {},
         {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
         }
       );
     });
-    await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'new account');
-    await click('form [type="submit"]');
+    await visit(urls.account);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     await a11yAudit();
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
+      'Oops.',
       'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
     );
   });
 });
