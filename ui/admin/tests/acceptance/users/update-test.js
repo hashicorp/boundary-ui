@@ -16,7 +16,7 @@ module('Acceptance | users', function (hooks) {
 
   let orgScope;
   let usersURL;
-  let newUserURL;
+  let userURL;
 
   hooks.beforeEach(function () {
     orgScope = this.server.create(
@@ -27,34 +27,37 @@ module('Acceptance | users', function (hooks) {
       'withChildren'
     );
 
+    const user = this.server.create('user', {
+      scope: orgScope,
+    });
+
     usersURL = `/scopes/${orgScope.id}/users`;
-    newUserURL = `${usersURL}/new`;
+    userURL = `${usersURL}/${user.id}`;
 
     authenticateSession({});
   });
+  test('can save changes to an existing user', async function (assert) {
+    assert.expect(2);
+    await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Updated user name');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), userURL);
+    assert.equal(this.server.db.users[0].name, 'Updated user name');
+  });
 
-  test('can create new users', async function (assert) {
+  test('can cancel changes to an existing user', async function (assert) {
     assert.expect(1);
-    const usersCount = this.server.db.users.length;
-    await visit(newUserURL);
-    await fillIn('[name="name"]', 'User name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.users.length, usersCount + 1);
-  });
-
-  test('can cancel creation of a new user', async function (assert) {
-    assert.expect(2);
-    const usersCount = this.server.db.users.length;
-    await visit(newUserURL);
-    await fillIn('[name="name"]', 'User name');
+    await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Unsaved user name');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), usersURL);
-    assert.equal(this.server.db.users.length, usersCount);
+    assert.notEqual(find('[name="name"]').value, 'Unsaved user name');
   });
 
-  test('saving a new user with invalid fields displays error messages', async function (assert) {
+  test('saving an existing user with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/users', () => {
+    this.server.patch('/users/:id', () => {
       return new Response(
         400,
         {},
@@ -73,7 +76,8 @@ module('Acceptance | users', function (hooks) {
         }
       );
     });
-    await visit(newUserURL);
+    await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
     assert.ok(
