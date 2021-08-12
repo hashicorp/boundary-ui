@@ -53,7 +53,7 @@ module('Acceptance | groups', function (hooks) {
     assert.equal(this.server.db.groups[0].name, 'Updated admin group');
   });
 
-  test('cannot make changes an existing group without proper authorization', async function (assert) {
+  test('cannot make changes to an existing group without proper authorization', async function (assert) {
     assert.expect(1);
     instances.group.authorized_actions =
       instances.group.authorized_actions.filter((item) => item !== 'update');
