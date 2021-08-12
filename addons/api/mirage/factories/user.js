@@ -3,7 +3,7 @@ import permissions from '../helpers/permissions';
 
 export default factory.extend({
   authorized_actions: () =>
-    permissions.authorizedActionsFor('account') || [
+    permissions.authorizedActionsFor('user') || [
       'no-op',
       'read',
       'update',
