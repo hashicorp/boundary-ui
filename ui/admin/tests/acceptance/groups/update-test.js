@@ -42,6 +42,7 @@ module('Acceptance | groups', function (hooks) {
     urls.group = `${urls.groups}/${instances.group.id}`;
     urls.newGroup = `${urls.groups}/new`;
   });
+
   test('can save changes to an existing group', async function (assert) {
     assert.expect(2);
     await visit(urls.group);
@@ -50,6 +51,14 @@ module('Acceptance | groups', function (hooks) {
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), urls.group);
     assert.equal(this.server.db.groups[0].name, 'Updated admin group');
+  });
+
+  test('cannot make changes an existing group without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.group.authorized_actions =
+      instances.group.authorized_actions.filter((item) => item !== 'update');
+    await visit(urls.group);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
   });
 
   test('can cancel changes to an existing group', async function (assert) {
