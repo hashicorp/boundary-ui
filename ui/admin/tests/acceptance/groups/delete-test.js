@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -43,58 +43,43 @@ module('Acceptance | groups', function (hooks) {
     urls.newGroup = `${urls.groups}/new`;
   });
 
-  test('can create new group', async function (assert) {
+  test('can delete a group', async function (assert) {
     assert.expect(1);
     const groupsCount = this.server.db.groups.length;
-    await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.groups.length, groupsCount + 1);
+    await visit(urls.group);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(this.server.db.groups.length, groupsCount - 1);
   });
 
-  test('can cancel new group creation', async function (assert) {
-    assert.expect(2);
-    const groupsCount = this.server.db.groups.length;
-    await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.groups);
-    assert.equal(this.server.db.groups.length, groupsCount);
+  test('cannot delete a group without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.group.authorized_actions =
+      instances.group.authorized_actions.filter((item) => item !== 'delete');
+    await visit(urls.group);
+    assert.notOk(
+      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+    );
   });
 
-  test('saving a new group with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/groups', () => {
+  test('errors are displayed when delete project fails', async function (assert) {
+    assert.expect(1);
+    this.server.del('/groups/:id', () => {
       return new Response(
-        400,
+        490,
         {},
         {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
         }
       );
     });
-    await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
-    await click('[type="submit"]');
+    await visit(urls.group);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
+      'Oops.',
       'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
     );
   });
 });
