@@ -6,8 +6,8 @@
   <dropdown.link @route='scopes.scope.groups.group.add-members'>
     {{t 'resources.group.actions.add-members'}}
   </dropdown.link>
-  <dropdown.separator />
   {{#if (can 'delete model' @model)}}
+    <dropdown.separator />
     <dropdown.button
       @style='danger'
       @disabled={{@model.canSave}}
