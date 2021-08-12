@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -73,54 +72,6 @@ module('Acceptance | roles', function (hooks) {
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(find('[name="name"]').value, 'Updated admin role');
-  });
-
-  test('can create new role', async function (assert) {
-    assert.expect(1);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.roles.length, rolesCount + 1);
-  });
-
-  test('can cancel new role creation', async function (assert) {
-    assert.expect(2);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.roles);
-    assert.equal(this.server.db.roles.length, rolesCount);
-  });
-
-  test('saving a new role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/roles', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'new target');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
-    assert.ok(find('.rose-form-error-message'));
   });
 
   test('saving an existing role with invalid fields displays error messages', async function (assert) {
