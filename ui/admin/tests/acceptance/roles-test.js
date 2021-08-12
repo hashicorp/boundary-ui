@@ -56,25 +56,6 @@ module('Acceptance | roles', function (hooks) {
     urls.newRole = `${urls.roles}/new`;
   });
 
-  test('can save changes to an existing role', async function (assert) {
-    assert.expect(2);
-    await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Updated admin role');
-    await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.role);
-    assert.equal(this.server.db.roles[0].name, 'Updated admin role');
-  });
-
-  test('can cancel changes to an existing role', async function (assert) {
-    assert.expect(1);
-    await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Updated admin role');
-    await click('.rose-form-actions [type="button"]');
-    assert.notEqual(find('[name="name"]').value, 'Updated admin role');
-  });
-
   test('can create new role', async function (assert) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
@@ -121,42 +102,5 @@ module('Acceptance | roles', function (hooks) {
     await a11yAudit();
     assert.ok(find('[role="alert"]'));
     assert.ok(find('.rose-form-error-message'));
-  });
-
-  test('saving an existing role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.patch('/roles/:id', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
   });
 });
