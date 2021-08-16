@@ -131,7 +131,7 @@ module.exports = function (environment) {
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
 
     // Enable features in development
-    // ENV.featureFlags['credential-store'] = true;
+    ENV.featureFlags['capabilities'] = true;
   }
 
   if (environment === 'test') {
@@ -156,7 +156,7 @@ module.exports = function (environment) {
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
-    // ENV.featureFlags['credential-store'] = true;
+    ENV.featureFlags['capabilities'] = true;
   }
 
   if (environment === 'production') {

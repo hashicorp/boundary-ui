@@ -80,7 +80,7 @@ module.exports = function (environment) {
     ENV.autoOrigin = true;
 
     // Enable features in development
-    ENV.featureFlags['oidc'] = true;
+    ENV.featureFlags['capabilities'] = true;
   }
 
   if (environment === 'test') {
@@ -103,6 +103,9 @@ module.exports = function (environment) {
     ENV.storage = {
       memory: true,
     };
+
+    // Enable tests for development features
+    ENV.featureFlags['capabilities'] = true;
   }
 
   if (environment === 'production') {
