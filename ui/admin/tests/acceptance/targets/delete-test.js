@@ -1,8 +1,10 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
+import { resolve, reject } from 'rsvp';
+import sinon from 'sinon';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -59,55 +61,63 @@ module('Acceptance | targets', function (hooks) {
     authenticateSession({});
   });
 
-  test('can create new targets', async function (assert) {
+  test('can delete target', async function (assert) {
     assert.expect(1);
     const count = getTargetCount();
-    await visit(urls.newTarget);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.equal(getTargetCount(), count + 1);
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getTargetCount(), count - 1);
   });
 
-  test('can cancel create new targets', async function (assert) {
+  test('can accept delete target via dialog', async function (assert) {
     assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(resolve());
     const count = getTargetCount();
-    await visit(urls.newTarget);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.targets);
-    assert.equal(getTargetCount(), count);
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getTargetCount(), count - 1);
+    assert.ok(confirmService.confirm.calledOnce);
   });
 
-  test('saving a new target with invalid fields displays error messages', async function (assert) {
+  test('cannot cancel delete target via dialog', async function (assert) {
     assert.expect(2);
-    this.server.post('/targets', () => {
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(reject());
+    const count = getTargetCount();
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getTargetCount(), count);
+    assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('cannot delete target without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter((item) => item !== 'delete');
+    await visit(urls.target);
+    assert.notOk(
+      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+    );
+  });
+
+  test('deleting a target which errors displays error messages', async function (assert) {
+    assert.expect(1);
+    this.server.del('/targets/:id', () => {
       return new Response(
-        400,
+        490,
         {},
         {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
         }
       );
     });
-    await visit(urls.newTarget);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
-    );
+    await visit(urls.target);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });

@@ -38,12 +38,16 @@
           {{#each @model as |target|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo
-                  @route='scopes.scope.targets.target'
-                  @model={{target.id}}
-                >
+                {{#if (can 'read model' target)}}
+                  <LinkTo
+                    @route='scopes.scope.targets.target'
+                    @model={{target.id}}
+                  >
+                    {{target.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{target.displayName}}
-                </LinkTo>
+                {{/if}}
                 <p>{{target.description}}</p>
               </row.headerCell>
               <row.cell>

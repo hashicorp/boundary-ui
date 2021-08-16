@@ -1,8 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -13,8 +13,6 @@ import {
 module('Acceptance | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let getTargetCount;
 
   const instances = {
     scopes: {
@@ -55,59 +53,31 @@ module('Acceptance | targets', function (hooks) {
     urls.unknownTarget = `${urls.targets}/foo`;
     urls.newTarget = `${urls.targets}/new`;
     // Generate resource couner
-    getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new targets', async function (assert) {
-    assert.expect(1);
-    const count = getTargetCount();
-    await visit(urls.newTarget);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.equal(getTargetCount(), count + 1);
-  });
-
-  test('can cancel create new targets', async function (assert) {
+  test('visiting targets', async function (assert) {
     assert.expect(2);
-    const count = getTargetCount();
-    await visit(urls.newTarget);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await visit(urls.targets);
+    await a11yAudit();
     assert.equal(currentURL(), urls.targets);
-    assert.equal(getTargetCount(), count);
+    await visit(urls.target);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.target);
   });
 
-  test('saving a new target with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/targets', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.newTarget);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
-    );
+  test('cannot navigate to target form without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter((item) => item !== 'read');
+    await visit(urls.target);
+    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+  });
+
+  test('visiting an unknown target displays 404 message', async function (assert) {
+    assert.expect(1);
+    await visit(urls.unknownTarget);
+    await a11yAudit();
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 });
