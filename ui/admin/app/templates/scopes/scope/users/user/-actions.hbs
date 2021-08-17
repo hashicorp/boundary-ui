@@ -1,12 +1,12 @@
-<Rose::Dropdown
-  @text='{{t 'actions.manage'}}'
-  @dropdownRight={{true}}
-  as |dropdown|
->
-  <dropdown.link @route='scopes.scope.users.user.add-accounts'>
-    {{t 'resources.user.actions.add-accounts'}}
-  </dropdown.link>
-  {{#if (can 'delete model' @model)}}
+{{#if (can 'delete model' @model)}}
+  <Rose::Dropdown
+    @text='{{t 'actions.manage'}}'
+    @dropdownRight={{true}}
+    as |dropdown|
+  >
+    <dropdown.link @route='scopes.scope.users.user.add-accounts'>
+      {{t 'resources.user.actions.add-accounts'}}
+    </dropdown.link>
     <dropdown.separator />
     <dropdown.button
       @style='danger'
@@ -15,5 +15,5 @@
     >
       {{t 'resources.user.actions.delete'}}
     </dropdown.button>
-  {{/if}}
-</Rose::Dropdown>
+  </Rose::Dropdown>
+{{/if}}
