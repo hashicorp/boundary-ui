@@ -10,7 +10,7 @@ import {
   //   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | auth methods', function (hooks) {
+module('Acceptance | auth methods | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
