@@ -209,7 +209,7 @@ module('Acceptance | projects | targets', function (hooks) {
     await visit(urls.targets);
   });
 
-  test('cannot navigate to an account form without proper authorization', async function (assert) {
+  test('cannot navigate to a target without proper authorization', async function (assert) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
