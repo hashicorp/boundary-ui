@@ -54,6 +54,14 @@ module('Acceptance | users', function (hooks) {
     assert.equal(this.server.db.users[0].name, 'Updated user name');
   });
 
+  test('cannot make changes to an existing user without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.user.authorized_actions =
+      instances.user.authorized_actions.filter((item) => item !== 'update');
+    await visit(userURL);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+  });
+
   test('can cancel changes to an existing user', async function (assert) {
     assert.expect(1);
     await visit(userURL);
@@ -61,14 +69,6 @@ module('Acceptance | users', function (hooks) {
     await fillIn('[name="name"]', 'Unsaved user name');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(find('[name="name"]').value, 'Unsaved user name');
-  });
-
-  test('cannot make changes to an existing user without proper authorization', async function (assert) {
-    assert.expect(1);
-    instances.user.authorized_actions =
-      instances.user.authorized_actions.filter((item) => item !== 'update');
-    await visit(userURL);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
   });
 
   test('saving an existing user with invalid fields displays error messages', async function (assert) {
