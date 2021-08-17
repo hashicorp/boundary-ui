@@ -65,6 +65,14 @@ module('Acceptance | roles | update', function (hooks) {
     assert.equal(this.server.db.roles[0].name, 'Updated admin role');
   });
 
+  test('cannot make changes to an existing role without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.role.authorized_actions =
+      instances.role.authorized_actions.filter((item) => item !== 'update');
+    await visit(urls.role);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+  });
+
   test('can cancel changes to an existing role', async function (assert) {
     assert.expect(1);
     await visit(urls.role);
