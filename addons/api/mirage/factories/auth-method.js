@@ -6,7 +6,7 @@ const types = ['password', 'oidc'];
 
 export default factory.extend({
   authorized_actions: () =>
-    permissions.authorizedActionsFor('auth') || [
+    permissions.authorizedActionsFor('auth-method') || [
       'no-op',
       'read',
       'update',
