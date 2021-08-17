@@ -1,11 +1,19 @@
 import factory from '../generated/factories/target';
 import { trait } from 'ember-cli-mirage';
 import { random, datatype } from 'faker';
+import permissions from '../helpers/permissions';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
 
 export default factory.extend({
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('target') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
   /**
    * -1 means "unlimited" and we want to generate these on occasion.
    */

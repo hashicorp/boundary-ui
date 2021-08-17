@@ -37,9 +37,13 @@
           {{#each @model as |user|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo @route='scopes.scope.users.user' @model={{user.id}}>
+                {{#if (can 'read model' user)}}
+                  <LinkTo @route='scopes.scope.users.user' @model={{user.id}}>
+                    {{user.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{user.displayName}}
-                </LinkTo>
+                {{/if}}
                 <p>{{user.description}}</p>
               </row.headerCell>
               <row.cell>

@@ -10,13 +10,21 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | users', function (hooks) {
+module('Acceptance | users | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let orgScope;
   let usersURL;
-  let newUserURL;
+  let userURL;
+
+  const instances = {
+    scopes: {
+      global: null,
+      org: null,
+    },
+    user: null,
+  };
 
   hooks.beforeEach(function () {
     orgScope = this.server.create(
@@ -27,34 +35,45 @@ module('Acceptance | users', function (hooks) {
       'withChildren'
     );
 
+    instances.user = this.server.create('user', {
+      scope: orgScope,
+    });
+
     usersURL = `/scopes/${orgScope.id}/users`;
-    newUserURL = `${usersURL}/new`;
+    userURL = `${usersURL}/${instances.user.id}`;
 
     authenticateSession({});
   });
+  test('can save changes to an existing user', async function (assert) {
+    assert.expect(2);
+    await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Updated user name');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), userURL);
+    assert.equal(this.server.db.users[0].name, 'Updated user name');
+  });
 
-  test('can create new users', async function (assert) {
+  test('cannot make changes to an existing user without proper authorization', async function (assert) {
     assert.expect(1);
-    const usersCount = this.server.db.users.length;
-    await visit(newUserURL);
-    await fillIn('[name="name"]', 'User name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.users.length, usersCount + 1);
+    instances.user.authorized_actions =
+      instances.user.authorized_actions.filter((item) => item !== 'update');
+    await visit(userURL);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
   });
 
-  test('can cancel creation of a new user', async function (assert) {
-    assert.expect(2);
-    const usersCount = this.server.db.users.length;
-    await visit(newUserURL);
-    await fillIn('[name="name"]', 'User name');
+  test('can cancel changes to an existing user', async function (assert) {
+    assert.expect(1);
+    await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Unsaved user name');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), usersURL);
-    assert.equal(this.server.db.users.length, usersCount);
+    assert.notEqual(find('[name="name"]').value, 'Unsaved user name');
   });
 
-  test('saving a new user with invalid fields displays error messages', async function (assert) {
+  test('saving an existing user with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/users', () => {
+    this.server.patch('/users/:id', () => {
       return new Response(
         400,
         {},
@@ -73,7 +92,8 @@ module('Acceptance | users', function (hooks) {
         }
       );
     });
-    await visit(newUserURL);
+    await visit(userURL);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
     assert.ok(
