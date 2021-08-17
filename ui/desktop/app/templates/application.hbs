@@ -43,7 +43,7 @@
         {{#if this.session.isAuthenticated}}
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
-            @icon='app-icons/user-profile'
+            @icon='flight/user-circle-16'
             as |dropdown|
           >
             <dropdown.button {{on 'click' (route-action 'invalidateSession')}}>

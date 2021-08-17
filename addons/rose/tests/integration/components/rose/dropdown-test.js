@@ -24,7 +24,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
   });
 
   test('it supports an icon', async function (assert) {
-    await render(hbs`<Rose::Dropdown @icon="user-square-fill" />`);
+    await render(hbs`<Rose::Dropdown @icon="flight/user-circle-16" />`);
     assert.ok(find('svg'));
   });
 
