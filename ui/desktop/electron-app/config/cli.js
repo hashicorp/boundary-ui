@@ -3,7 +3,7 @@ const os = require('os');
 const path = require('path');
 const https = require('https');
 const decompress = require('decompress');
-const { isMac, isWindows } = require('../src/helpers/platform.js');
+const { isMac, isWindows, isLinux } = require('../src/helpers/platform.js');
 
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
 
@@ -17,6 +17,11 @@ const downloadArtifact = (version) => {
 
   if (isWindows()) {
     archivePlatform.name = 'windows';
+    archivePlatform.arch = 'amd64';
+  }
+
+  if (isLinux() || process.env.CLI_LINUX_DEBIAN_SUPPORT) {
+    archivePlatform.name = 'linux';
     archivePlatform.arch = 'amd64';
   }
 
