@@ -59,13 +59,21 @@ module('Acceptance | accounts | update', function (hooks) {
     }
   });
 
-  test('can update an account and save changes', async function (assert) {
+  test('can update resource and save changes', async function (assert) {
     assert.expect(1);
     await visit(urls.account);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await click('form [type="submit"]:not(:disabled)');
     assert.equal(this.server.db.accounts[0].name, 'update name');
+  });
+
+  test('cannot update resource without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.account.authorized_actions =
+      instances.account.authorized_actions.filter((item) => item !== 'update');
+    await visit(urls.account);
+    assert.notOk(find('form [type="button"]'));
   });
 
   test('can update an account and cancel changes', async function (assert) {
