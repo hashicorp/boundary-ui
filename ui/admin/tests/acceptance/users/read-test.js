@@ -24,6 +24,7 @@ module('Acceptance | users', function (hooks) {
     },
     user: null,
   };
+
   hooks.beforeEach(function () {
     orgScope = this.server.create(
       'scope',
