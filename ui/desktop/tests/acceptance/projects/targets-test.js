@@ -209,6 +209,14 @@ module('Acceptance | projects | targets', function (hooks) {
     await visit(urls.targets);
   });
 
+  test('cannot navigate to an account form without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter((item) => item !== 'read');
+    await visit(urls.target);
+    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+  });
+
   test('connecting to a target', async function (assert) {
     assert.expect(4);
     stubs.ipcService.withArgs('cliExists').returns(true);

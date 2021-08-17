@@ -24,12 +24,16 @@
           {{#each @model as |model|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo
-                  @route='scopes.scope.projects.targets.target'
-                  @model={{model.id}}
-                >
+                {{#if (can 'read model' model)}}
+                  <LinkTo
+                    @route='scopes.scope.projects.targets.target'
+                    @model={{model.id}}
+                  >
+                    {{model.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{model.displayName}}
-                </LinkTo>
+                {{/if}}
                 {{#if model.target.description}}
                   <p>{{model.target.description}}</p>
                 {{/if}}
