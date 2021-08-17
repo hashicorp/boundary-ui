@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -10,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | groups', function (hooks) {
+module('Acceptance | groups | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -43,28 +43,36 @@ module('Acceptance | groups', function (hooks) {
     urls.newGroup = `${urls.groups}/new`;
   });
 
-  test('can create new group', async function (assert) {
+  test('can save changes to an existing group', async function (assert) {
+    assert.expect(2);
+    await visit(urls.group);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Updated admin group');
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), urls.group);
+    assert.equal(this.server.db.groups[0].name, 'Updated admin group');
+  });
+
+  test('cannot make changes to an existing group without proper authorization', async function (assert) {
     assert.expect(1);
-    const groupsCount = this.server.db.groups.length;
-    await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.groups.length, groupsCount + 1);
+    instances.group.authorized_actions =
+      instances.group.authorized_actions.filter((item) => item !== 'update');
+    await visit(urls.group);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
   });
 
-  test('can cancel new group creation', async function (assert) {
-    assert.expect(2);
-    const groupsCount = this.server.db.groups.length;
-    await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
+  test('can cancel changes to an existing group', async function (assert) {
+    assert.expect(1);
+    await visit(urls.group);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Updated admin group');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.groups);
-    assert.equal(this.server.db.groups.length, groupsCount);
+    assert.notEqual(find('[name="name"]').value, 'Updated admin group');
   });
 
-  test('saving a new group with invalid fields displays error messages', async function (assert) {
+  test('saving an existing group with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/groups', () => {
+    this.server.patch('/groups/:id', () => {
       return new Response(
         400,
         {},
@@ -83,8 +91,9 @@ module('Acceptance | groups', function (hooks) {
         }
       );
     });
-    await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
+    await visit(urls.group);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
