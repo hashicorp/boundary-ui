@@ -76,7 +76,7 @@
     "minimist": "^1.2.3",
     "normalize-url": "^4.5.1",
     "glob-parent": "^5.1.2",
-    "tar": "^3.2.3 - ^4.4.15 - ^5.0.7 - ^6.1.2",
+    "tar": "^6.1.2",
     "xmldom": "github:xmldom/xmldom#0.7.0"
   },
   "config": {
