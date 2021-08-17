@@ -1,18 +1,18 @@
 <Rose::Nav::Sidebar @title={{t 'titles.iam'}} as |nav|>
   <nav.link @route='scopes.scope.users'>
-    <Rose::Icon @name='app-icons/users' @size='medium' />
+    <Rose::Icon @name='flight/users-16' @size='medium' />
     {{t 'resources.user.title_plural'}}
   </nav.link>
   <nav.link @route='scopes.scope.groups'>
-    <Rose::Icon @name='app-icons/group' @size='medium' />
+    <Rose::Icon @name='flight/folder-users-16' @size='medium' />
     {{t 'resources.group.title_plural'}}
   </nav.link>
   <nav.link @route='scopes.scope.roles'>
-    <Rose::Icon @name='app-icons/roles' @size='medium' />
+    <Rose::Icon @name='flight/identity-user-16' @size='medium' />
     {{t 'resources.role.title_plural'}}
   </nav.link>
   <nav.link @route='scopes.scope.auth-methods'>
-    <Rose::Icon @name='app-icons/auth-method' @size='medium' />
+    <Rose::Icon @name='flight/lock-16' @size='medium' />
     {{t 'resources.auth-method.title_plural'}}
   </nav.link>
 </Rose::Nav::Sidebar>
