@@ -23,7 +23,7 @@ module.exports = function (defaults) {
       importCss: false,
     },
     svg: {
-      paths: ['../../addons/core/public'],
+      paths: ['../../addons/core/public', '../../addons/rose/public'],
     },
   });
 

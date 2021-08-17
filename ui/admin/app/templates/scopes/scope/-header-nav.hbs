@@ -2,8 +2,8 @@
   @text={{this.scopes.selectedOrg.displayName}}
   @icon={{if
     this.scopes.selectedOrg.isGlobal
-    'app-icons/global'
-    'app-icons/org'
+    'flight/globe-16'
+    'flight/org-16'
   }}
   as |dropdown|
 >
@@ -23,7 +23,7 @@
 {{#if this.scopes.selectedProject}}
   <Rose::Dropdown
     @text={{this.scopes.selectedProject.displayName}}
-    @icon='app-icons/project'
+    @icon='flight/grid-16'
     as |dropdown|
   >
     {{#each this.scopes.projects as |scope|}}
