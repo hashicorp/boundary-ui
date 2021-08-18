@@ -1,9 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { Response } from 'miragejs';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -11,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | roles', function (hooks) {
+module('Acceptance | roles | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -56,51 +55,26 @@ module('Acceptance | roles', function (hooks) {
     urls.newRole = `${urls.roles}/new`;
   });
 
-  test('can create new role', async function (assert) {
+  test('visiting roles', async function (assert) {
     assert.expect(1);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.roles.length, rolesCount + 1);
-  });
-
-  test('can cancel new role creation', async function (assert) {
-    assert.expect(2);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.roles);
-    assert.equal(this.server.db.roles.length, rolesCount);
-  });
-
-  test('saving a new role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/roles', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'new target');
-    await click('form [type="submit"]');
+    await visit(urls.roles);
     await a11yAudit();
-    assert.ok(find('[role="alert"]'));
-    assert.ok(find('.rose-form-error-message'));
+    assert.equal(currentURL(), urls.roles);
+  });
+
+  test('can navigate to a role form', async function (assert) {
+    assert.expect(1);
+    await visit(urls.roles);
+    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await a11yAudit();
+    assert.equal(currentURL(), urls.role);
+  });
+
+  test('cannot navigate to a role form without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.role.authorized_actions =
+      instances.role.authorized_actions.filter((item) => item !== 'read');
+    await visit(urls.roles);
+    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
   });
 });
