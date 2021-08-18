@@ -21,7 +21,7 @@
       <header.utilities as |utilities|>
         {{#if this.isWindowsOS}}
           <Rose::Button
-            @iconOnly='cancel-plain'
+            @iconOnly='flight/x-16'
             @style='warning'
             class='button-window-close'
             {{on 'click' (route-action 'close')}}
@@ -107,7 +107,7 @@
     <Rose::Dialog
       @heading={{t 'states.error'}}
       @dismissButtonText={{t 'actions.ok'}}
-      @icon='cancel-square-fill'
+      @icon='flight/x-square-16'
       @style='error'
       @modal={{true}}
       @dismiss={{deny}}
@@ -134,7 +134,7 @@
     <Rose::Dialog
       @heading={{t 'actions.confirm'}}
       @dismissButtonText={{t 'actions.cancel'}}
-      @icon='alert-triangle'
+      @icon='flight/alert-triangle-16'
       @style='warning'
       @modal={{true}}
       @dismiss={{deny}}
