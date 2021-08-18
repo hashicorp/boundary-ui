@@ -1,8 +1,7 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -11,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | roles', function (hooks) {
+module('Acceptance | roles | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -56,51 +55,43 @@ module('Acceptance | roles', function (hooks) {
     urls.newRole = `${urls.roles}/new`;
   });
 
-  test('can create new role', async function (assert) {
+  test('can delete a role', async function (assert) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('[type="submit"]');
-    assert.equal(this.server.db.roles.length, rolesCount + 1);
+    await visit(urls.role);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(this.server.db.roles.length, rolesCount - 1);
   });
 
-  test('can cancel new role creation', async function (assert) {
-    assert.expect(2);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.roles);
-    assert.equal(this.server.db.roles.length, rolesCount);
+  test('cannot delete a role without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.role.authorized_actions =
+      instances.role.authorized_actions.filter((item) => item !== 'delete');
+    await visit(urls.role);
+    assert.notOk(
+      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+    );
   });
 
-  test('saving a new role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/roles', () => {
+  test('errors are displayed when delete project fails', async function (assert) {
+    assert.expect(1);
+    this.server.del('/roles/:id', () => {
       return new Response(
-        400,
+        490,
         {},
         {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
         }
       );
     });
-    await visit(urls.newRole);
-    await fillIn('[name="name"]', 'new target');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(find('[role="alert"]'));
-    assert.ok(find('.rose-form-error-message'));
+    await visit(urls.role);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'Oops.',
+      'Displays primary error message.'
+    );
   });
 });
