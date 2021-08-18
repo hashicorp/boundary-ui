@@ -76,6 +76,19 @@
                 }}
                 {{#if authMethod.isOIDC}}
                   {{#if (feature-flag 'oidc-crud')}}
+                    {{#if (can 'read model' authMethod)}}
+                      <LinkTo
+                        @route='scopes.scope.auth-methods.auth-method'
+                        @model={{authMethod.id}}
+                      >
+                        {{authMethod.displayName}}
+                      </LinkTo>
+                    {{else}}
+                      {{authMethod.displayName}}
+                    {{/if}}
+                  {{/if}}
+                {{else}}
+                  {{#if (can 'read model' authMethod)}}
                     <LinkTo
                       @route='scopes.scope.auth-methods.auth-method'
                       @model={{authMethod.id}}
@@ -85,13 +98,6 @@
                   {{else}}
                     {{authMethod.displayName}}
                   {{/if}}
-                {{else}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method'
-                    @model={{authMethod.id}}
-                  >
-                    {{authMethod.displayName}}
-                  </LinkTo>
                 {{/if}}
                 <p>{{authMethod.description}}</p>
               </row.headerCell>
