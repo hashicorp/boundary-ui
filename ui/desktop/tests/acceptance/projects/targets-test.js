@@ -209,7 +209,7 @@ module('Acceptance | projects | targets', function (hooks) {
     await visit(urls.targets);
   });
 
-  test('cannot navigate to a target form without proper authorization', async function (assert) {
+  test('cannot navigate to a target without proper authorization', async function (assert) {
     assert.expect(1);
     later(async () => {
       run.cancelTimers();
