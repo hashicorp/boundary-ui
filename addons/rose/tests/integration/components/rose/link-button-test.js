@@ -51,7 +51,7 @@ module('Integration | Component | rose/link-button', function (hooks) {
 
   test('it supports only icon with @iconOnly', async function (assert) {
     await render(
-      hbs`<Rose::LinkButton @route="index" @iconOnly="help-circle-outline" />`
+      hbs`<Rose::LinkButton @route="index" @iconOnly="flight/help-16" />`
     );
     assert.ok(find('.rose-icon'));
     assert.ok(find('.has-icon-only'));

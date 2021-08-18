@@ -27,13 +27,12 @@ export default class ErrorMessageComponent extends MessageComponent {
   @computed('args.status')
   get icon() {
     switch (this.args.status) {
+      case '404':
+        return 'flight/help-16';
       case '401':
       case '403':
-        return 'disabled';
-      case '404':
-        return 'help-circle-outline';
       default:
-        return 'alert-circle-outline';
+        return 'flight/alert-circle-16';
     }
   }
 
