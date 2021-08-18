@@ -1,8 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -10,11 +10,9 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | hosts', function (hooks) {
+module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let getHostCount;
 
   const instances = {
     scopes: {
@@ -66,59 +64,31 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     urls.unknownHost = `${urls.hosts}/foo`;
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
-    getHostCount = () => this.server.schema.hosts.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new host', async function (assert) {
-    assert.expect(1);
-    const count = getHostCount();
-    await visit(urls.newHost);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.equal(getHostCount(), count + 1);
-  });
-
-  test('can cancel create new host', async function (assert) {
+  test('visiting hosts', async function (assert) {
     assert.expect(2);
-    const count = getHostCount();
-    await visit(urls.newHost);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await visit(urls.hosts);
+    await a11yAudit();
     assert.equal(currentURL(), urls.hosts);
-    assert.equal(getHostCount(), count);
+    await visit(urls.host);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.host);
   });
 
-  test('saving a new host with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/hosts', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.newHost);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
-    );
+  test('cannot navigate to a role form without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.host.authorized_actions =
+      instances.host.authorized_actions.filter((item) => item !== 'read');
+    await visit(urls.hosts);
+    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+  });
+
+  test('visiting an unknown host displays 404 message', async function (assert) {
+    assert.expect(1);
+    await visit(urls.unknownHost);
+    await a11yAudit();
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 });

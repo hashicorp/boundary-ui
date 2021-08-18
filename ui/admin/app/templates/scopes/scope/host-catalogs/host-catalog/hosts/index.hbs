@@ -13,12 +13,14 @@
       {{#each @model as |host|}}
         <body.row as |row|>
           <row.headerCell>
-            <LinkTo
-              @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
-              @model={{host.id}}
-            >
-              {{host.displayName}}
-            </LinkTo>
+            {{#if (can 'read model' host)}}
+              <LinkTo
+                @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
+                @model={{host.id}}
+              >
+                {{host.displayName}}
+              </LinkTo>
+            {{/if}}
             <p>{{host.description}}</p>
           </row.headerCell>
           <row.cell>
