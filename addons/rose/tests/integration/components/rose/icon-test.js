@@ -7,12 +7,12 @@ module('Integration | Component | rose/icon', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    await render(hbs`<Rose::Icon @name="unfold-more" />`);
+    await render(hbs`<Rose::Icon @name="flight/globe-16" />`);
     assert.ok(find('svg'));
   });
 
   test('it supports optional @size', async function (assert) {
-    await render(hbs`<Rose::Icon @name="unfold-more" @size="small" />`);
+    await render(hbs`<Rose::Icon @name="flight/globe-16" @size="small" />`);
     assert.ok(find('.small'));
   });
 });

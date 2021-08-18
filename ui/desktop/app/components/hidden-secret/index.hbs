@@ -1,7 +1,7 @@
 <div class='hidden-secret'>
   <Rose::Button
     @style='ghost'
-    @iconOnly={{if this.isHidden 'visibility-show' 'visibility-hide'}}
+    @iconOnly={{if this.isHidden 'flight/eye-16' 'flight/eye-off-16'}}
     {{on 'click' this.toggleSecretVisibility}}
   >
     {{t 'actions.toggle-secret'}}

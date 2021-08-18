@@ -10,7 +10,6 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     this.includeStyles(app);
-    this.includeIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
   },
@@ -39,24 +38,6 @@ module.exports = {
 
     // Include the addon styles
     app.options.sassOptions.includePaths.push(styleTree);
-  },
-
-  /**
-   * Finds the structure-icons folder and includes it into the
-   * ember-inline-svg addon.
-   */
-  includeIcons(app) {
-    const iconPackagePath = require.resolve('@hashicorp/structure-icons');
-    const iconsPath = path.resolve(iconPackagePath, '..');
-
-    app.options.svg = app.options.svg || {};
-    app.options.svg.paths = app.options.svg.paths || [];
-
-    app.options.svg.paths.push(iconsPath);
-
-    this.addons.forEach((addon) => {
-      if (addon.name === 'ember-inline-svg') addon.included(app);
-    });
   },
 
   /**
