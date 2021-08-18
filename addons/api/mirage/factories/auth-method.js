@@ -1,9 +1,17 @@
 import factory from '../generated/factories/auth-method';
 import { trait } from 'ember-cli-mirage';
+import permissions from '../helpers/permissions';
 
 const types = ['password', 'oidc'];
 
 export default factory.extend({
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('auth-method') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
   id: (i) => `auth-method-id-${i}`,
 
   // Cycle through available types
