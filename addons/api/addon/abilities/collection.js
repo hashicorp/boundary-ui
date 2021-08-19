@@ -3,7 +3,7 @@ import { Ability } from 'ember-can';
 /**
  * Generic ability provides abilities common to all models in the API.
  */
-export default class ModelAbility extends Ability {
+export default class CollectionAbility extends Ability {
   // =permissions
 
   /**
