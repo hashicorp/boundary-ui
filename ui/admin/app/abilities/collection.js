@@ -1,7 +1,7 @@
 import CollectionAbility from 'api/abilities/collection';
 import { inject as service } from '@ember/service';
 
-export default class OverrideModelAbility extends CollectionAbility {
+export default class OverrideCollectionAbility extends CollectionAbility {
   // =services
 
   @service features;
