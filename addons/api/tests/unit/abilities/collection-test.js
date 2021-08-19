@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Abilities | Model', function (hooks) {
+module('Unit | Abilities | Collection', function (hooks) {
   setupTest(hooks);
 
   test('it reflects when a resource may be listed based on authorized_collection_actions', function (assert) {
@@ -13,7 +13,7 @@ module('Unit | Abilities | Model', function (hooks) {
       },
     };
     assert.ok(service.can('list collection', model, { collection: 'foobars' }));
-    model.authorized_collection_actions = [];
+    model.authorized_collection_actions.foobars = [];
     assert.notOk(
       service.can('list collection', model, { collection: 'foobars' })
     );
@@ -30,7 +30,7 @@ module('Unit | Abilities | Model', function (hooks) {
     assert.ok(
       service.can('create collection', model, { collection: 'foobars' })
     );
-    model.authorized_collection_actions = [];
+    model.authorized_collection_actions.foobars = [];
     assert.notOk(
       service.can('create collection', model, { collection: 'foobars' })
     );
