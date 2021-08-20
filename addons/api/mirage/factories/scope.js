@@ -4,6 +4,19 @@ import { trait } from 'ember-cli-mirage';
 export default factory.extend({
   type: 'global',
 
+  authorized_collection_actions: () => {
+    return {
+      users: ['create', ''],
+      // groups: ['create', 'list'],
+      // roles: ['create', 'list'],
+      // 'auth-methods': ['create', 'list'],
+      // sessopms: ['list'],
+      // targets: ['create', 'list'],
+      // 'host-catalogs': ['create', 'list'],
+      // 'credential-stores': ['create', 'list'],
+    };
+  },
+
   /**
    * Generates realistic-ish IDs while still being deterministic.
    */

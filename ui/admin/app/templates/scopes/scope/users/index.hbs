@@ -15,10 +15,12 @@
   </page.header>
 
   <page.actions>
-    {{#if @model}}
-      <Rose::LinkButton @route='scopes.scope.users.new' @style='primary'>{{t
-          'titles.new'
-        }}</Rose::LinkButton>
+    {{#if (can 'create collection' this.scope collection='users')}}
+      {{#if @model}}
+        <Rose::LinkButton @route='scopes.scope.users.new' @style='primary'>{{t
+            'titles.new'
+          }}</Rose::LinkButton>
+      {{/if}}
     {{/if}}
   </page.actions>
 
@@ -69,11 +71,26 @@
         >
           <message.description>
             {{t 'resources.user.description'}}
+            {{#if (can 'create collection' this.scope collection='users')}}
+              {{#unless (can 'list collection' this.scope collection='users')}}
+                <br>
+                <br>
+                <Rose::Notification
+                  @style="info"
+                  @heading="Create Only"
+                >
+                  Oh noes!  Resources you create won't appear here because you
+                  have create permission, but not list.
+                </Rose::Notification>
+              {{/unless}}
+            {{/if}}
           </message.description>
-          <message.link @route='scopes.scope.users.new'>
-            <Rose::Icon @name='plus-circle-outline' />
-            {{t 'titles.new'}}
-          </message.link>
+          {{#if (can 'create collection' this.scope collection='users')}}
+            <message.link @route='scopes.scope.users.new'>
+              <Rose::Icon @name='plus-circle-outline' />
+              {{t 'titles.new'}}
+            </message.link>
+          {{/if}}
         </Rose::Message>
       </Rose::Layout::Centered>
 
