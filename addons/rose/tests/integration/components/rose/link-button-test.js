@@ -35,7 +35,7 @@ module('Integration | Component | rose/link-button', function (hooks) {
 
   test('it supports left icon with @iconLeft', async function (assert) {
     await render(
-      hbs`<Rose::LinkButton @route="index" @iconLeft="chevron-left" />`
+      hbs`<Rose::LinkButton @route="index" @iconLeft="flight/chevron-left-16" />`
     );
     assert.ok(find('.rose-icon'));
     assert.ok(find('.has-icon-left'));
