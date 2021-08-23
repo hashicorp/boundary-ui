@@ -1,10 +1,18 @@
 import factory from '../generated/factories/credential-store';
 import { random, internet, datatype } from 'faker';
 import { trait } from 'ember-cli-mirage';
+import permissions from '../helpers/permissions';
 
 const types = ['vault'];
 
 export default factory.extend({
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('credential-store') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
   id: (i) => `credential-store-id-${i}`,
   type: (i) => types[i % types.length],
 
