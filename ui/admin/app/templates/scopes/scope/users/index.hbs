@@ -70,19 +70,21 @@
           as |message|
         >
           <message.description>
-            {{t 'resources.user.description'}}
-            {{#if (can 'create collection' this.scope collection='users')}}
-              {{#unless (can 'list collection' this.scope collection='users')}}
-                <br>
-                <br>
-                <Rose::Notification
-                  @style="info"
-                  @heading="Create Only"
-                >
-                  Oh noes!  Resources you create won't appear here because you
-                  have create permission, but not list.
-                </Rose::Notification>
-              {{/unless}}
+            {{#if (can 'list collection' this.scope collection='users')}}
+              {{! can list (at least):  show default welcome message}}
+              {{t 'resources.user.description'}}
+            {{else if (can 'create collection' this.scope collection='users')}}
+              {{! can create (only):  show create-but-not-list welcome message}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.user.title_plural')
+              }}
+            {{else}}
+              {{! can neither list nor create }}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.user.title_plural')
+              }}
             {{/if}}
           </message.description>
           {{#if (can 'create collection' this.scope collection='users')}}

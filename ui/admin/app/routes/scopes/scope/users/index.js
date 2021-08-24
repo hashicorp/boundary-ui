@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeUsersIndexRoute extends Route {
-
   // =methods
 
   setupController(controller) {
@@ -9,5 +8,4 @@ export default class ScopesScopeUsersIndexRoute extends Route {
     super.setupController(...arguments);
     controller.setProperties({ scope });
   }
-
 }
