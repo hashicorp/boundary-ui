@@ -41,12 +41,16 @@
           {{#each @model as |hostCatalog|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo
-                  @route='scopes.scope.host-catalogs.host-catalog'
-                  @model={{hostCatalog.id}}
-                >
+                {{#if (can 'read model' hostCatalog)}}
+                  <LinkTo
+                    @route='scopes.scope.host-catalogs.host-catalog'
+                    @model={{hostCatalog.id}}
+                  >
+                    {{hostCatalog.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{hostCatalog.displayName}}
-                </LinkTo>
+                {{/if}}
                 <p>{{hostCatalog.description}}</p>
               </row.headerCell>
               <row.cell>

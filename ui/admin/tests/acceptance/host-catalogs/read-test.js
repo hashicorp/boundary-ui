@@ -1,8 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -10,11 +10,9 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs', function (hooks) {
+module('Acceptance | host-catalogs | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let gethostCatalogCount;
 
   const instances = {
     scopes: {
@@ -54,61 +52,33 @@ module('Acceptance | host-catalogs', function (hooks) {
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
     urls.newHostCatalog = `${urls.hostCatalogs}/new`;
-    // Generate resource couner
-    gethostCatalogCount = () =>
-      this.server.schema.hostCatalogs.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new host catalogs', async function (assert) {
-    assert.expect(1);
-    const count = gethostCatalogCount();
-    await visit(urls.newHostCatalog);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.equal(gethostCatalogCount(), count + 1);
-  });
-
-  test('can cancel create new host catalogs', async function (assert) {
+  test('visiting host catalogs', async function (assert) {
     assert.expect(2);
-    const count = gethostCatalogCount();
-    await visit(urls.newHostCatalog);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await visit(urls.hostCatalogs);
+    await a11yAudit();
     assert.equal(currentURL(), urls.hostCatalogs);
-    assert.equal(gethostCatalogCount(), count);
+    await visit(urls.hostCatalog);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.hostCatalog);
   });
 
-  test('saving a new host catalog with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.post('/host-catalogs', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
+  test('cannot navigate to a host catalog form without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.hostCatalog.authorized_actions =
+      instances.hostCatalog.authorized_actions.filter(
+        (item) => item !== 'read'
       );
-    });
-    await visit(urls.newHostCatalog);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
-    );
+    await visit(urls.hostCatalog);
+    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+  });
+
+  test('visiting an unknown host catalog displays 404 message', async function (assert) {
+    assert.expect(1);
+    await visit(urls.unknownHostCatalog);
+    await a11yAudit();
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 });
