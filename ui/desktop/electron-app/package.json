@@ -46,6 +46,7 @@
     "yargs-parser": "~20.2.7",
     "trim-newlines": "^3.0.1",
     "normalize-url": "^4.5.1",
-    "jszip": "^3.7.0"
+    "jszip": "^3.7.0",
+    "path-parse": "^1.0.7"
   }
 }
