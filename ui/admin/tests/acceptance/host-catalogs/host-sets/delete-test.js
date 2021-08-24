@@ -1,8 +1,10 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
+import { resolve, reject } from 'rsvp';
+import sinon from 'sinon';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -10,7 +12,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | host sets', function (hooks) {
+module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -70,55 +72,63 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
     authenticateSession({});
   });
 
-  test('can create new host', async function (assert) {
+  test('can delete host', async function (assert) {
     assert.expect(1);
     const count = getHostSetCount();
-    await visit(urls.newHostSet);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.equal(getHostSetCount(), count + 1);
+    await visit(urls.hostSet);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getHostSetCount(), count - 1);
   });
 
-  test('can cancel create new host', async function (assert) {
+  test('can accept delete host set via dialog', async function (assert) {
     assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(resolve());
     const count = getHostSetCount();
-    await visit(urls.newHostSet);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hostSets);
-    assert.equal(getHostSetCount(), count);
+    await visit(urls.hostSet);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getHostSetCount(), count - 1);
+    assert.ok(confirmService.confirm.calledOnce);
   });
 
-  test('saving a new host set with invalid fields displays error messages', async function (assert) {
+  test('cannot delete host set without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.hostSet.authorized_actions =
+      instances.hostSet.authorized_actions.filter((item) => item !== 'delete');
+    await visit(urls.hostSet);
+    assert.notOk(
+      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+    );
+  });
+
+  test('cannot cancel delete host set via dialog', async function (assert) {
     assert.expect(2);
-    this.server.post('/host-sets', () => {
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    confirmService.confirm = sinon.fake.returns(reject());
+    const count = getHostSetCount();
+    await visit(urls.hostSet);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.equal(getHostSetCount(), count);
+    assert.ok(confirmService.confirm.calledOnce);
+  });
+
+  test('deleting a host set which errors displays error messages', async function (assert) {
+    assert.expect(1);
+    this.server.del('/host-sets/:id', () => {
       return new Response(
-        400,
+        490,
         {},
         {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          status: 490,
+          code: 'error',
+          message: 'Oops.',
         }
       );
     });
-    await visit(urls.newHostSet);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
-    );
+    await visit(urls.hostSet);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });
