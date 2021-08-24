@@ -13,12 +13,14 @@
   >
     {{t 'resources.host-set.actions.add-hosts'}}
   </dropdown.link>
-  <dropdown.separator />
-  <dropdown.button
-    @style='danger'
-    @disabled={{@model.canSave}}
-    {{on 'click' (route-action 'deleteHostSet' @model)}}
-  >
-    {{t 'resources.host-set.actions.delete'}}
-  </dropdown.button>
+  {{#if (can 'delete model' @model)}}
+    <dropdown.separator />
+    <dropdown.button
+      @style='danger'
+      @disabled={{@model.canSave}}
+      {{on 'click' (route-action 'deleteHostSet' @model)}}
+    >
+      {{t 'resources.host-set.actions.delete'}}
+    </dropdown.button>
+  {{/if}}
 </Rose::Dropdown>
