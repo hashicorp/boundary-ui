@@ -2068,7 +2068,7 @@
 
 "@hashicorp/flight-icons@^0.0.3-beta":
   version "0.0.3-beta"
-  resolved "https://registry.yarnpkg.com/@hashicorp/flight/-/flight-icons-0.0.3-beta.tgz#26b6b22e4c709559ed4c9ab0e87a0874c919b909"
+  resolved "https://registry.yarnpkg.com/@hashicorp/flight-icons/-/flight-icons-0.0.3-beta.tgz#26b6b22e4c709559ed4c9ab0e87a0874c919b909"
   integrity sha512-K+rS0p3YKPqNDHYP9Mz+7vmU5wsvm8wjI3h8rs/y6f84agC9LyhkmZQBy/RRAMXeyYsa3sq8cJc6jcj/nuR23g==
 
 "@humanwhocodes/config-array@^0.5.0":
