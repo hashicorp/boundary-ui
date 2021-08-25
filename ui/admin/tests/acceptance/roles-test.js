@@ -56,40 +56,6 @@ module('Acceptance | roles', function (hooks) {
     urls.newRole = `${urls.roles}/new`;
   });
 
-  test('visiting roles', async function (assert) {
-    assert.expect(1);
-    await visit(urls.roles);
-    await a11yAudit();
-    assert.equal(currentURL(), urls.roles);
-  });
-
-  test('can navigate to a role form', async function (assert) {
-    assert.expect(1);
-    await visit(urls.roles);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
-    await a11yAudit();
-    assert.equal(currentURL(), urls.role);
-  });
-
-  test('can save changes to an existing role', async function (assert) {
-    assert.expect(2);
-    await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Updated admin role');
-    await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.role);
-    assert.equal(this.server.db.roles[0].name, 'Updated admin role');
-  });
-
-  test('can cancel changes to an existing role', async function (assert) {
-    assert.expect(1);
-    await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Updated admin role');
-    await click('.rose-form-actions [type="button"]');
-    assert.notEqual(find('[name="name"]').value, 'Updated admin role');
-  });
-
   test('can create new role', async function (assert) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
@@ -107,14 +73,6 @@ module('Acceptance | roles', function (hooks) {
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), urls.roles);
     assert.equal(this.server.db.roles.length, rolesCount);
-  });
-
-  test('can delete a role', async function (assert) {
-    assert.expect(1);
-    const rolesCount = this.server.db.roles.length;
-    await visit(urls.role);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(this.server.db.roles.length, rolesCount - 1);
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
@@ -144,64 +102,5 @@ module('Acceptance | roles', function (hooks) {
     await a11yAudit();
     assert.ok(find('[role="alert"]'));
     assert.ok(find('.rose-form-error-message'));
-  });
-
-  test('saving an existing role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.patch('/roles/:id', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
-  });
-
-  test('errors are displayed when delete project fails', async function (assert) {
-    assert.expect(1);
-    this.server.del('/roles/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        }
-      );
-    });
-    await visit(urls.role);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
-    );
   });
 });

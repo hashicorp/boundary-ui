@@ -37,9 +37,13 @@
           {{#each @model as |role|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo @route='scopes.scope.roles.role' @model={{role.id}}>
+                {{#if (can 'read model' role)}}
+                  <LinkTo @route='scopes.scope.roles.role' @model={{role.id}}>
+                    {{role.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{role.displayName}}
-                </LinkTo>
+                {{/if}}
                 <p>{{role.description}}</p>
               </row.headerCell>
               <row.cell>
