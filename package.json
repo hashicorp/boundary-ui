@@ -19,6 +19,7 @@
     "build:ui:desktop:win": "docker-compose -f docker-compose-embedding.yml run build-desktop-production && yarn build:ui:desktop:app",
     "build:ui:desktop:production": "cd ui/desktop && yarn build:production",
     "build:ui:desktop:app": "cd ui/desktop && yarn build:desktop",
+    "build:ui:desktop:app:linux": "cd ui/desktop && yarn build:desktop:linux",
     "lint": "npm-run-all lint:*",
     "lint:addons-api": "cd addons/api && yarn lint",
     "lint:addons-auth": "cd addons/auth && yarn lint",
