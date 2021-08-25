@@ -100,3 +100,6 @@ ember-test/
 
 # Autoupdate
 nextVersion/
+
+# Vagrant
+.vagrant/

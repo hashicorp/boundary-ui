@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  config.vm.synced_folder "../../../out/artifacts", "/vagrant-desktop-app", create: true,  owner: "vagrant", group: "vagrant", automount: true
+
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = true  
+    # Customize the amount of memory on the VM:
+    vb.memory = "4096"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt update -y
+    sudo apt upgrade -y
+    # Install desktop
+    sudo apt install -y --no-install-recommends lubuntu-desktop
+    sudo apt install -y --no-install-recommends virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
+    # Setup localhost ssh
+    yes | ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
+    cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+    # Add vagrant to administrator group
+    sudo usermod -aG sudo vagrant
+    # Add vagrant to shared folder
+    sudo usermod -aG vboxsf vagrant
+    # Setup boundary cli
+    sudo apt install docker.io -y
+    sudo groupadd docker
+    sudo usermod -aG docker vagrant
+    sudo apt install curl unzip
+    cd /home/vagrant/Desktop
+    curl https://releases.hashicorp.com/boundary/0.5.0/boundary_0.5.0_linux_amd64.zip -o boundary-cli.zip
+    unzip boundary-cli.zip
+    # Restart
+    sudo shutdown -r now
+  SHELL
+
+  config.vm.post_up_message = "Login using username/password: vagrant/vagrant. Boundary Desktop artifacts: /media/sf_vagrant-boundary-desktop-app. Boundary CLI: /home/vagrant/Desktop."
+end
