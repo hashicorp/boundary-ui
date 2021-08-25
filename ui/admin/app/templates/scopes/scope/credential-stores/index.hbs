@@ -39,12 +39,16 @@
           {{#each @model as |credentialStore|}}
             <body.row as |row|>
               <row.headerCell>
-                <LinkTo
-                  @route='scopes.scope.credential-stores.credential-store'
-                  @model={{credentialStore.id}}
-                >
+                {{#if (can 'read model' credentialStore)}}
+                  <LinkTo
+                    @route='scopes.scope.credential-stores.credential-store'
+                    @model={{credentialStore.id}}
+                  >
+                    {{credentialStore.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{credentialStore.displayName}}
-                </LinkTo>
+                {{/if}}
                 <p>{{credentialStore.description}}</p>
               </row.headerCell>
               <row.cell>

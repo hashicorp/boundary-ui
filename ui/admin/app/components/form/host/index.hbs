@@ -71,12 +71,12 @@
       </field.errors>
     {{/if}}
   </form.input>
-
-  <form.actions
-    @disabled={{if @model.cannotSave @model.cannotSave}}
-    @enableEditText={{t 'actions.edit-form'}}
-    @submitText={{t 'actions.save'}}
-    @cancelText={{t 'actions.cancel'}}
-  />
-
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @disabled={{if @model.cannotSave @model.cannotSave}}
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
 </Rose::Form>

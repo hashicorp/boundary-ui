@@ -1,7 +1,15 @@
 import factory from '../generated/factories/role';
 import { trait } from 'ember-cli-mirage';
+import permissions from '../helpers/permissions';
 
 export default factory.extend({
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('role') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   grant_strings: () => [
     'id=*;action=*',

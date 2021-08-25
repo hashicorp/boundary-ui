@@ -209,6 +209,17 @@ module('Acceptance | projects | targets', function (hooks) {
     await visit(urls.targets);
   });
 
+  test('cannot navigate to a target without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter((item) => item !== 'read');
+    later(async () => {
+      run.cancelTimers();
+      assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    }, 750);
+    await visit(urls.targets);
+  });
+
   test('connecting to a target', async function (assert) {
     assert.expect(4);
     stubs.ipcService.withArgs('cliExists').returns(true);
