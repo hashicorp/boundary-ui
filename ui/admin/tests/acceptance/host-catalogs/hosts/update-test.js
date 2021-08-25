@@ -10,11 +10,9 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | hosts', function (hooks) {
+module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let getHostCount;
 
   const instances = {
     scopes: {
@@ -66,32 +64,44 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     urls.unknownHost = `${urls.hosts}/foo`;
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
-    getHostCount = () => this.server.schema.hosts.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new host', async function (assert) {
-    assert.expect(1);
-    const count = getHostCount();
-    await visit(urls.newHost);
+  test('can save changes to existing host', async function (assert) {
+    assert.expect(3);
+    assert.notEqual(instances.host.name, 'random string');
+    await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.equal(getHostCount(), count + 1);
+    await click('.rose-form-actions [type="submit"]');
+    assert.equal(currentURL(), urls.host);
+    assert.equal(
+      this.server.schema.hosts.all().models[0].name,
+      'random string'
+    );
   });
 
-  test('can cancel create new host', async function (assert) {
+  test('cannot make changes to an existing host without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.host.authorized_actions =
+      instances.host.authorized_actions.filter((item) => item !== 'update');
+    await visit(urls.host);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+  });
+
+  test('can cancel changes to existing host', async function (assert) {
     assert.expect(2);
-    const count = getHostCount();
-    await visit(urls.newHost);
+    await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hosts);
-    assert.equal(getHostCount(), count);
+    assert.notEqual(instances.host.name, 'random string');
+    assert.equal(find('[name="name"]').value, instances.host.name);
   });
 
-  test('saving a new host with invalid fields displays error messages', async function (assert) {
+  test('saving an existing host with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/hosts', () => {
+    this.server.patch('/hosts/:id', () => {
       return new Response(
         400,
         {},
@@ -110,7 +120,9 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
         }
       );
     });
-    await visit(urls.newHost);
+    await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
@@ -120,5 +132,49 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
     );
+  });
+
+  test('can discard unsaved host changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.host.name, 'random string');
+    await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.host);
+    try {
+      await visit(urls.hosts);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:first-child');
+      assert.equal(currentURL(), urls.hosts);
+      assert.notEqual(
+        this.server.schema.hosts.all().models[0].name,
+        'random string'
+      );
+    }
+  });
+
+  test('can cancel discard unsaved host changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.host.name, 'random string');
+    await visit(urls.host);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.equal(currentURL(), urls.host);
+    try {
+      await visit(urls.hosts);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:last-child');
+      assert.equal(currentURL(), urls.host);
+      assert.notEqual(
+        this.server.schema.hosts.all().models[0].name,
+        'random string'
+      );
+    }
   });
 });
