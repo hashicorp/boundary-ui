@@ -34,14 +34,20 @@ module('Integration | Component | rose/button', function (hooks) {
   });
 
   test('it supports left and right icons', async function (assert) {
-    await render(hbs`<Rose::Button @iconLeft="flight/chevron-left-16" />`);
+    await render(
+      hbs`<Rose::Button @iconLeft="flight-icons/chevron-left-16" />`
+    );
     assert.ok(find('.has-icon-left .rose-icon'));
-    await render(hbs`<Rose::Button @iconRight="flight/chevron-left-16" />`);
+    await render(
+      hbs`<Rose::Button @iconRight="flight-icons/chevron-left-16" />`
+    );
     assert.ok(find('.has-icon-right .rose-icon'));
   });
 
   test('it supports an icon-only type', async function (assert) {
-    await render(hbs`<Rose::Button @iconOnly="flight/chevron-left-16" />`);
+    await render(
+      hbs`<Rose::Button @iconOnly="flight-icons/chevron-left-16" />`
+    );
     assert.ok(find('.has-icon-only .rose-icon'));
   });
 });

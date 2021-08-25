@@ -16,14 +16,12 @@ module.exports = {
    */
   includePublic(app) {
     const publicPath = path.resolve('public');
-    const rosePublicPath = path.resolve('../rose/public');
     const dummyPublicPath = path.resolve('tests/dummy/public');
 
     app.options.svg = app.options.svg || {};
     app.options.svg.paths = app.options.svg.paths || [];
 
     app.options.svg.paths.push(publicPath);
-    app.options.svg.paths.push(rosePublicPath);
     if (this.isDevelopingAddon()) app.options.svg.paths.push(dummyPublicPath);
 
     this.addons.forEach((addon) => {

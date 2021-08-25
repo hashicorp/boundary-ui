@@ -12,7 +12,7 @@ to trigger actions or to submit forms.  Avoid using buttons as simple links to
 other routes.  For accessibility, use links instead.
 
 ```htmlbars
-<Rose::Button @style="primary" @iconRight="flight/arrow-right-circle-16">
+<Rose::Button @style="primary" @iconRight="flight-icons/arrow-right-circle-16">
   Action
 </Rose::Button>
 ```
@@ -49,18 +49,18 @@ other routes.  For accessibility, use links instead.
       iconLeft: select(
         'iconLeft',
         {
-          'flight/check-circle-16': 'flight/check-circle-16',
-          'flight/clipboard-copy-16': 'flight/clipboard-copy-16',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'flight/check-circle-16'
+        'flight-icons/check-circle-16'
       ),
       iconRight: select(
         'iconRight',
         {
-          'flight/check-circle-16': 'flight/check-circle-16',
-          'flight/clipboard-copy-16': 'flight/clipboard-copy-16',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'flight/clipboard-copy-16'
+        'flight-icons/clipboard-copy-16'
       ),
       onClick: action('clicked'),
     },
@@ -81,10 +81,10 @@ button in this case for accessibility.
       iconOnly: select(
         'iconOnly',
         {
-          'flight/check-circle-16': 'flight/check-circle-16',
-          'flight/clipboard-copy-16': 'flight/clipboard-copy-16',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'flight/check-circle-16'
+        'flight-icons/check-circle-16'
       ),
     },
   }}</Story>

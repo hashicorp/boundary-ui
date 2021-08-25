@@ -69,8 +69,12 @@
           @text={{this.selectedGrantScope.displayName}}
           @icon={{if
             this.selectedGrantScope.isProject
-            'flight/grid-16'
-            (if this.selectedGrantScope.isOrg 'flight/org-16' 'flight/globe-16')
+            'flight-icons/grid-16'
+            (if
+              this.selectedGrantScope.isOrg
+              'flight-icons/org-16'
+              'flight-icons/globe-16'
+            )
           }}
           as |dropdown|
         >

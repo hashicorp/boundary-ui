@@ -11,7 +11,7 @@ A simple dropdown component with support for links and buttons.
 <Preview>
   <Story name="Basic Dropdown" height="7rem">{{
     template: hbs`
-      <Rose::Dropdown @text="Choose One&hellip;" @icon="flight/org-16" @showCaret={{showCaret}} as |dropdown|>
+      <Rose::Dropdown @text="Choose One&hellip;" @icon="flight-icons/org-16" @showCaret={{showCaret}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
         <dropdown.separator />
@@ -31,7 +31,7 @@ A simple dropdown component with support for links and buttons.
 <Preview>
   <Story name="Icon-only Dropdown" height="5rem">{{
     template: hbs`
-      <Rose::Dropdown @text="Choose One&hellip;" @icon="flight/org-16" @iconOnly={{true}} as |dropdown|>
+      <Rose::Dropdown @text="Choose One&hellip;" @icon="flight-icons/org-16" @iconOnly={{true}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
         <dropdown.separator />
@@ -117,7 +117,7 @@ Dropdown supports `danger` styling through `style` attribute.
 Dropdown indicator can be hidden using `showCaret` attribute.
 
 ```html
-<Rose::Dropdown @showCaret={{true}} @icon="flight/more-horizontal-16" as |dropdown|>
+<Rose::Dropdown @showCaret={{true}} @icon="flight-icons/more-horizontal-16" as |dropdown|>
     <dropdown.link @route="index">Menu item</dropdown.link>
     <dropdown.button>Button menu item</dropdown.button>
 </Rose::Dropdown>

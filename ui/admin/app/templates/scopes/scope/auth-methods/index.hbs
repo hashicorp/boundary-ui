@@ -123,7 +123,7 @@
                     @dropdownRight={{true}}
                     @iconOnly={{true}}
                     @showCaret={{false}}
-                    @icon='flight/more-horizontal-16'
+                    @icon='flight-icons/more-horizontal-16'
                     as |dropdown|
                   >
                     {{#unless authMethod.isPrimary}}
@@ -165,7 +165,7 @@
             @route='scopes.scope.auth-methods.new'
             @query={{hash type='password'}}
           >
-            <Rose::Icon @name='flight/plus-circle-16' />
+            <Rose::Icon @name='flight-icons/plus-circle-16' />
             {{t 'titles.new'}}
           </message.link>
         </Rose::Message>

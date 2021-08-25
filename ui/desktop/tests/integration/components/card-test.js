@@ -30,7 +30,7 @@ module('Integration | Component | card', function (hooks) {
     await render(hbs`
       <Card
         @heading='This is a heading test'
-        @icon='flight/key-16'>
+        @icon='flight-icons/key-16'>
         <:header></:header>
         <:body></:body>
         <:footer></:footer>
