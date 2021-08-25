@@ -23,7 +23,7 @@ module.exports = {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],
     icon: './assets/app-icons/icon',
     name: config.productName,
-    appVersion: config.version,
+    appVersion: config.releaseVersion,
     appBundleId: 'com.electron.boundary',
     appCopyright: config.copyright,
     osxSign: {
@@ -68,17 +68,14 @@ module.exports = {
       }
     },
     postMake: (forgeConfig, options) => {
-      // Copy post make artifacts into flatter folder structure.
+      // Copy artifacts into release folder
       options.forEach(({ artifacts, platform, arch }) => {
         // Generate platform arch folder name
-        const destination = path.join(
-          'out',
-          'artifacts',
-          `${platform}-${arch}`
-        );
+        const folder = `boundary-desktop_${forgeConfig.packagerConfig.appVersion}_${platform}_${arch}`;
+        const destination = path.join('out', 'artifacts', folder);
         if (!fs.existsSync(destination))
           fs.mkdirSync(destination, { recursive: true });
-        // Copy artifacts into platform folder
+        // Copy artifacts
         artifacts.forEach(async (artifact) => {
           const artifactDestination = path.join(
             destination,
