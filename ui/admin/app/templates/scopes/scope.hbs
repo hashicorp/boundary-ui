@@ -72,10 +72,7 @@
         --}}
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
           <nav.link @route='scopes.scope.sessions'>
-            <Rose::Icon
-              @name='flight-icons/arrow-right-circle-16'
-              @size='medium'
-            />
+            <Rose::Icon @name='flight-icons/entry-point-16' @size='medium' />
             {{t 'resources.session.title_plural'}}
           </nav.link>
           <nav.link @route='scopes.scope.targets'>

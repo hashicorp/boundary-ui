@@ -17,9 +17,7 @@ module('Integration | Component | rose/badge', function (hooks) {
   });
 
   test('it renders an icon using @icon', async function (assert) {
-    await render(
-      hbs`<Rose::Badge @icon="flight-icons/arrow-right-circle-16" />`
-    );
+    await render(hbs`<Rose::Badge @icon="flight-icons/entry-point-16" />`);
     assert.ok(find('.rose-icon'));
   });
 
