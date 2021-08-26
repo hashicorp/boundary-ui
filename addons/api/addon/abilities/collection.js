@@ -29,7 +29,8 @@ export default class CollectionAbility extends Ability {
    * @return {boolean}
    */
   hasAuthorizedCollectionAction(action) {
-    const { authorized_collection_actions } = this.model;
+    const authorized_collection_actions =
+      (this.model || {}).authorized_collection_actions || {};
     const collection = this.collection || {};
     return authorized_collection_actions[collection]?.includes(action);
   }

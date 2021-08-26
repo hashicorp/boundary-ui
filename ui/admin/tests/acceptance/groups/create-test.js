@@ -10,10 +10,10 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | groups', function (hooks) {
+module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
+  let orgScope;
   const instances = {
     scopes: {
       global: null,
@@ -22,7 +22,6 @@ module('Acceptance | groups', function (hooks) {
     group: null,
   };
   const urls = {
-    orgScope: null,
     groups: null,
     group: null,
     newGroup: null,
@@ -31,6 +30,14 @@ module('Acceptance | groups', function (hooks) {
   hooks.beforeEach(function () {
     authenticateSession({});
     instances.scopes.global = this.server.create('scope', { id: 'global' });
+    orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: 'global', type: 'global' },
+      },
+      'withChildren'
+    );
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -50,6 +57,13 @@ module('Acceptance | groups', function (hooks) {
     await fillIn('[name="name"]', 'group name');
     await click('[type="submit"]');
     assert.equal(this.server.db.groups.length, groupsCount + 1);
+  });
+
+  test('cannot create new group without proper authorization', async function (assert) {
+    assert.expect(1);
+    orgScope.authorized_collection_actions.groups = ['list'];
+    await visit(urls.groups);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-primary'));
   });
 
   test('can cancel new group creation', async function (assert) {
