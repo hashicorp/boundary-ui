@@ -14,14 +14,12 @@ module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let globalScope;
   let orgScope;
   let orgURL;
   let usersURL;
   let newUserURL;
 
   hooks.beforeEach(function () {
-    globalScope = this.server.create('scope', { id: 'global' });
     orgScope = this.server.create(
       'scope',
       {
@@ -58,7 +56,9 @@ module('Acceptance | users | create', function (hooks) {
     assert.expect(2);
     orgScope.authorized_collection_actions.users = [];
     await visit(orgURL);
-    assert.notOk(orgScope.authorized_collection_actions.users.includes('create'));
+    assert.notOk(
+      orgScope.authorized_collection_actions.users.includes('create')
+    );
     assert.notOk(find(`[href="${orgURL}/users"]`));
   });
 
