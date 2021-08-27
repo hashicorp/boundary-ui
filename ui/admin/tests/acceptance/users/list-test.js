@@ -51,8 +51,6 @@ module('Acceptance | users | list', function (hooks) {
       scope: instances.org,
     });
     orgURL = `/scopes/${urls.orgScope.id}`;
-    //urls.orgScope = `/scopes/${instances.org.id}/scopes`;
-
     urls.users = `/scopes/${urls.orgScope.id}/users`;
     authenticateSession({});
   });
