@@ -22,7 +22,7 @@ const sessionManager = require('./services/session-manager.js');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
-const { isWindows } = require('./helpers/platform.js');
+const { isMac } = require('./helpers/platform.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -117,7 +117,7 @@ app.on('ready', async () => {
     width: 1280,
     height: 760,
     titleBarStyle: 'hiddenInset',
-    frame: !isWindows(),
+    frame: isMac(),
     webPreferences: {
       partition,
       sandbox: true,
