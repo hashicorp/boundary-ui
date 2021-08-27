@@ -98,10 +98,12 @@
             <Rose::Icon @name='app-icons/users' @size='medium' />
             {{t 'resources.user.title_plural'}}
           </nav.link>
-          <nav.link @route='scopes.scope.groups'>
-            <Rose::Icon @name='app-icons/group' @size='medium' />
-            {{t 'resources.group.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='groups')}}
+            <nav.link @route='scopes.scope.groups'>
+              <Rose::Icon @name='app-icons/group' @size='medium' />
+              {{t 'resources.group.title_plural'}}
+            </nav.link>
+          {{/if}}
           <nav.link @route='scopes.scope.roles'>
             <Rose::Icon @name='app-icons/roles' @size='medium' />
             {{t 'resources.role.title_plural'}}
