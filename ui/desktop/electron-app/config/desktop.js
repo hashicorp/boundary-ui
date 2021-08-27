@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { isLinux } = require('../src/helpers/platform.js');
 
 // Create config
 const createConfig = () => {
@@ -11,7 +12,7 @@ const createConfig = () => {
     releaseCommit: process.env.RELEASE_COMMIT,
   };
 
-  if (process.env.CLI_LINUX_DEBIAN_SUPPORT) {
+  if (isLinux() || process.env.BUILD_DEBIAN) {
     config.name = 'boundary-desktop';
     config.productName = 'boundary-desktop';
   }

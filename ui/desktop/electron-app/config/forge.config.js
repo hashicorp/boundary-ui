@@ -12,7 +12,7 @@ console.log(`[forge-config] Release version: ${config.releaseVersion}`);
 if (
   isMac() &&
   !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY &&
-  !process.env.CLI_LINUX_DEBIAN_SUPPORT
+  !process.env.BUILD_DEBIAN
 )
   console.warn(
     '[forge-config] WARNING: Could not find signing identity. Proceeding without signing.'
@@ -63,29 +63,28 @@ module.exports = {
     postPackage: async (forgeConfig, options) => {
       if (options.spinner) {
         options.spinner.info(
-          `Completed packaging for platform: ${options.platform} arch: ${options.arch} at ${options.outputPaths[0]}`
+          `Packaged for ${options.platform}-${options.arch} at ${options.outputPaths[0]}`
         );
       }
     },
     postMake: (forgeConfig, options) => {
       // Copy artifacts into release folder
       options.forEach(({ artifacts, platform, arch }) => {
-        // Generate platform arch folder name
-        const folder = `boundary-desktop_${forgeConfig.packagerConfig.appVersion}_${platform}_${arch}`;
-        const destination = path.join('out', 'artifacts', folder);
+        // Generate release name
+        const version = forgeConfig.packagerConfig.appVersion;
+        const destination = path.join('out', 'release', version);
         if (!fs.existsSync(destination))
           fs.mkdirSync(destination, { recursive: true });
         // Copy artifacts
         artifacts.forEach(async (artifact) => {
-          const artifactDestination = path.join(
-            destination,
-            path.basename(artifact)
-          );
-          console.log(`Copy ${artifact} into ${artifactDestination}.`);
+          const name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(artifact)}`;
+          const artifactDestination = path.join(destination, name);
+          console.log(`[release] Found artifact: ${artifact}`);
           try {
             await fs.promises.copyFile(artifact, artifactDestination);
+            console.log(`[release] Copied artifact: ${path.resolve(artifactDestination)}`);
           } catch (e) {
-            console.log(`Could not copy ${artifact}`, e);
+            console.warn(`[release] Could not copy ${artifact}`, e);
           }
         });
       });

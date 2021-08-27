@@ -16,7 +16,7 @@
     "build:development": "ember build",
     "prebuild:desktop": "cross-os prebuild:desktop",
     "build:desktop": "yarn build:desktop:install && yarn --cwd electron-app make",
-    "build:desktop:linux": "yarn build:desktop:install && CLI_LINUX_DEBIAN_SUPPORT=true yarn --cwd electron-app make --platform linux --arch x64",
+    "build:desktop:debian": "yarn build:desktop:install && BUILD_DEBIAN=true yarn --cwd electron-app make --platform linux --arch x64",
     "build:desktop:install": "yarn install --cwd electron-app",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",

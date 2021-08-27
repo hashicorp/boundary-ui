@@ -9,7 +9,6 @@ const artifactDestination = path.resolve(__dirname, '..', 'cli');
 
 const downloadArtifact = (version) => {
   const archivePlatform = {};
-  // TODO: Support all available build machines
   if (isMac()) {
     archivePlatform.name = 'darwin';
     archivePlatform.arch = 'amd64';
@@ -20,10 +19,23 @@ const downloadArtifact = (version) => {
     archivePlatform.arch = 'amd64';
   }
 
-  if (isLinux() || process.env.CLI_LINUX_DEBIAN_SUPPORT) {
+  if (isLinux()) {
+    let arch = os.arch();
+    // Map x64 to amd64 cli artifact
+    if (arch.match(/(x64)/i)) arch = 'amd64';
+    archivePlatform.name = os.platform();
+    archivePlatform.arch = arch;
+  }
+
+  // Set cli artifact to linux-amd64 when building debian artifacts on macOS
+  if (process.env.BUILD_DEBIAN) {
     archivePlatform.name = 'linux';
     archivePlatform.arch = 'amd64';
   }
+
+  console.log(
+    `Download cli for platform: ${archivePlatform.name} arch: ${archivePlatform.arch}`
+  );
 
   const archiveName = `boundary_${version}_${archivePlatform.name}_${archivePlatform.arch}.zip`;
   const url = `https://releases.hashicorp.com/boundary/${version}/${archiveName}`;

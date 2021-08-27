@@ -4,7 +4,8 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
 
-  config.vm.synced_folder "../../../out/artifacts", "/vagrant-desktop-app", create: true,  owner: "vagrant", group: "vagrant", automount: true
+  # Share desktop artifacts folder
+  config.vm.synced_folder "../../../out/release", "/vagrant-desktop-app", create: true,  owner: "vagrant", group: "vagrant", automount: true
 
   config.vm.provider "virtualbox" do |vb|
     # Display the VirtualBox GUI when booting the machine
@@ -13,6 +14,7 @@ Vagrant.configure("2") do |config|
     vb.memory = "4096"
   end
 
+  # Setup for testing desktop
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt update -y
     sudo apt upgrade -y
@@ -38,5 +40,21 @@ Vagrant.configure("2") do |config|
     sudo shutdown -r now
   SHELL
 
-  config.vm.post_up_message = "Login using username/password: vagrant/vagrant. Boundary Desktop artifacts: /media/sf_vagrant-boundary-desktop-app. Boundary CLI: /home/vagrant/Desktop."
+  # Setup for developing desktop
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt remove cmdtest
+    sudo apt install -y npm curl git
+
+    git clone https://github.com/hashicorp/boundary-ui.git /home/vagrant/Desktop/boundary-ui
+    sudo npm install yarn
+    # Setup node 12 source
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    sudo apt install -y nodejs
+
+    # Install boundary-ui dependencies
+    cd /home/vagrant/Desktop/boundary-ui
+    yarn install
+  SHELL
+
+  config.vm.post_up_message = "Login using username/password: vagrant/vagrant.\nBoundary Desktop: /media/sf_vagrant-boundary-desktop-app.\nBoundary CLI: /home/vagrant/Desktop."
 end
