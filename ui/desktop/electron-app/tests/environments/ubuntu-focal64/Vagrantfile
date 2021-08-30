@@ -14,25 +14,28 @@ Vagrant.configure("2") do |config|
     vb.memory = "4096"
   end
 
-  # Setup for testing desktop
   config.vm.provision "shell", inline: <<-SHELL
-    sudo apt update -y
-    sudo apt upgrade -y
-    # Install desktop
-    sudo apt install -y --no-install-recommends lubuntu-desktop
-    sudo apt install -y --no-install-recommends virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
+    sudo apt-get update -y
+    sudo apt-get upgrade -y
+    # sudo apt-get install -y --no-install-recommends virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11 curl
     # Setup localhost ssh
-    yes | ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
-    cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+    # yes | ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
+    # cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
     # Add vagrant to administrator group
     sudo usermod -aG sudo vagrant
     # Add vagrant to shared folder
     sudo usermod -aG vboxsf vagrant
+  SHELL
+
+  # Setup for testing desktop
+  config.vm.provision "test", type: "shell", inline: <<-SHELL
+    # Install desktop GUI
+    sudo apt-get install -y --no-install-recommends lubuntu-desktop
     # Setup boundary cli
-    sudo apt install docker.io -y
+    sudo apt-get install docker.io -y
     sudo groupadd docker
     sudo usermod -aG docker vagrant
-    sudo apt install curl unzip
+    sudo apt-get install -y unzip
     cd /home/vagrant/Desktop
     curl https://releases.hashicorp.com/boundary/0.5.0/boundary_0.5.0_linux_amd64.zip -o boundary-cli.zip
     unzip boundary-cli.zip
@@ -41,15 +44,15 @@ Vagrant.configure("2") do |config|
   SHELL
 
   # Setup for developing desktop
-  config.vm.provision "shell", inline: <<-SHELL
-    sudo apt remove cmdtest
-    sudo apt install -y npm curl git
+  config.vm.provision "development", type: "shell", inline: <<-SHELL
+    sudo apt-get remove cmdtest
+    sudo apt-get install -y npm git
 
     git clone https://github.com/hashicorp/boundary-ui.git /home/vagrant/Desktop/boundary-ui
     sudo npm install yarn
     # Setup node 12 source
     curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-    sudo apt install -y nodejs
+    sudo apt-get install -y nodejs
 
     # Install boundary-ui dependencies
     cd /home/vagrant/Desktop/boundary-ui
