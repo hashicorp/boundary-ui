@@ -53,7 +53,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     authenticateSession({});
   });
 
-  test('can navigate to users with proper authorization', async function (assert) {
+  test('can navigate to auth methods with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(orgURL);
     assert.ok(

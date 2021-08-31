@@ -13,28 +13,26 @@
 
   <page.actions>
 
-    {{#if @model}}
-      {{#if (can 'create collection' this.scope collection='auth-methods')}}
-        {{#if @model}}
-          <Rose::Dropdown
-            @text={{t 'titles.new'}}
-            @dropdownRight={{true}}
-            as |dropdown|
+    {{#if (can 'create collection' this.scopeModel collection='auth-methods')}}
+      {{#if @model}}
+        <Rose::Dropdown
+          @text={{t 'titles.new'}}
+          @dropdownRight={{true}}
+          as |dropdown|
+        >
+          <dropdown.link
+            @route='scopes.scope.auth-methods.new'
+            @query={{hash type='password'}}
           >
-            <dropdown.link
-              @route='scopes.scope.auth-methods.new'
-              @query={{hash type='password'}}
-            >
-              {{t 'resources.auth-method.types.password'}}
-            </dropdown.link>
-            <dropdown.link
-              @route='scopes.scope.auth-methods.new'
-              @query={{hash type='oidc'}}
-            >
-              {{t 'resources.auth-method.types.oidc'}}
-            </dropdown.link>
-          </Rose::Dropdown>
-        {{/if}}
+            {{t 'resources.auth-method.types.password'}}
+          </dropdown.link>
+          <dropdown.link
+            @route='scopes.scope.auth-methods.new'
+            @query={{hash type='oidc'}}
+          >
+            {{t 'resources.auth-method.types.oidc'}}
+          </dropdown.link>
+        </Rose::Dropdown>
       {{/if}}
     {{/if}}
   </page.actions>
