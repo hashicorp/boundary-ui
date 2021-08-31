@@ -19,6 +19,7 @@ module('Acceptance | roles | list', function (hooks) {
       global: null,
       org: null,
     },
+    orgScope: null,
   };
 
   const urls = {
@@ -26,20 +27,10 @@ module('Acceptance | roles | list', function (hooks) {
       org: null,
     },
     roles: null,
-    orgScope: null,
   };
 
   hooks.beforeEach(function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
-    urls.orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-        scope: { id: 'global', type: 'global' },
-      },
-      'withChildren'
-    );
-    instances.org = this.server.create(
+    instances.orgScope = this.server.create(
       'scope',
       {
         type: 'org',
@@ -48,11 +39,11 @@ module('Acceptance | roles | list', function (hooks) {
       'withChildren'
     );
     instances.role = this.server.create('role', {
-      scope: instances.org,
+      scope: instances.orgScope,
     });
-    orgURL = `/scopes/${urls.orgScope.id}`;
+    orgURL = `/scopes/${instances.orgScope.id}`;
 
-    urls.roles = `/scopes/${urls.orgScope.id}/roles`;
+    urls.roles = `/scopes/${instances.orgScope.id}/roles`;
     authenticateSession({});
   });
 
@@ -60,24 +51,24 @@ module('Acceptance | roles | list', function (hooks) {
     assert.expect(2);
     await visit(orgURL);
     assert.ok(
-      urls.orgScope.authorized_collection_actions.roles.includes('list')
+      instances.orgScope.authorized_collection_actions.roles.includes('list')
     );
     assert.ok(find(`[href="${urls.roles}"]`));
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
     assert.expect(2);
-    urls.orgScope.authorized_collection_actions.roles = [];
+    instances.orgScope.authorized_collection_actions.roles = [];
     await visit(orgURL);
     assert.notOk(
-      urls.orgScope.authorized_collection_actions.roles.includes('list')
+      instances.orgScope.authorized_collection_actions.roles.includes('list')
     );
     assert.notOk(find(`[href="${urls.roles}"]`));
   });
 
   test('User can navigate to index with only create action', async function (assert) {
     assert.expect(1);
-    urls.orgScope.authorized_collection_actions.roles = ['create'];
+    instances.orgScope.authorized_collection_actions.roles = ['create'];
     await visit(orgURL);
     assert.ok(find(`[href="${urls.roles}"]`));
   });

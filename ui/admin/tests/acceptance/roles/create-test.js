@@ -16,7 +16,6 @@ module('Acceptance | roles | create', function (hooks) {
   setupMirage(hooks);
 
   let orgURL;
-  let orgScope;
 
   const instances = {
     scopes: {
@@ -25,16 +24,17 @@ module('Acceptance | roles | create', function (hooks) {
       project: null,
     },
     role: null,
+    orgScope: null,
   };
   const urls = {
-    orgScope: null,
     roles: null,
     role: null,
     newRoleURL: null,
   };
 
   hooks.beforeEach(function () {
-    orgScope = this.server.create(
+    authenticateSession({});
+    instances.orgScope = this.server.create(
       'scope',
       {
         type: 'org',
@@ -43,30 +43,29 @@ module('Acceptance | roles | create', function (hooks) {
       'withChildren'
     );
 
-    orgURL = `/scopes/${orgScope.id}`;
-    authenticateSession({});
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
-    instances.scopes.org = this.server.create('scope', {
-      type: 'org',
-      scope: { id: 'global', type: 'global' },
-    });
+    // instances.scopes.global = this.server.create('scope', { id: 'global' });
+    // instances.scopes.org = this.server.create('scope', {
+    //   type: 'org',
+    //   scope: { id: 'global', type: 'global' },
+    // });
     // The project scope is not yet used for role tests (though it will be
     // in the future).  This is created simply to test the grant scope loading
     // mechanism.
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
+      scope: { id: instances.orgScope.id, type: instances.orgScope.type },
     });
     instances.role = this.server.create(
       'role',
       {
-        scope: instances.scopes.org,
+        scope: instances.orgScope,
       },
       'withPrincipals'
     );
-    urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
+    urls.roles = `/scopes/${instances.orgScope.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.newRoleURL = `${urls.roles}/new`;
+    orgURL = `/scopes/${instances.orgScope.id}`;
   });
 
   test('can create new role', async function (assert) {
@@ -81,18 +80,20 @@ module('Acceptance | roles | create', function (hooks) {
   test('can navigate to new roles route with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(orgURL);
-    assert.ok(orgScope.authorized_collection_actions.roles.includes('create'));
-    assert.ok(find(`[href="${orgURL}/roles"]`));
+    assert.ok(
+      instances.orgScope.authorized_collection_actions.roles.includes('create')
+    );
+    assert.ok(find(`[href="${urls.roles}"]`));
   });
 
   test('cannot navigate to new roles route without proper authorization', async function (assert) {
     assert.expect(2);
-    orgScope.authorized_collection_actions.roles = [];
+    instances.orgScope.authorized_collection_actions.roles = [];
     await visit(orgURL);
     assert.notOk(
-      orgScope.authorized_collection_actions.roles.includes('create')
+      instances.orgScope.authorized_collection_actions.roles.includes('create')
     );
-    assert.notOk(find(`[href="${orgURL}/roles"]`));
+    assert.notOk(find(`[href="${urls.roles}"]`));
   });
 
   test('can cancel new role creation', async function (assert) {
