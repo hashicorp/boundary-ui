@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-export default class ScopesScopeUsersIndexRoute extends Route {
+export default class ScopesScopeRolesIndexRoute extends Route {
   // =methods
 
   setupController(controller) {

@@ -15,7 +15,7 @@
   </page.header>
 
   <page.actions>
-    {{#if (can 'create collection' this.scope collection='users')}}
+    {{#if (can 'create collection' this.scope collection='roles')}}
       {{#if @model}}
         <Rose::LinkButton @route='scopes.scope.roles.new' @style='primary'>{{t
             'titles.new'
