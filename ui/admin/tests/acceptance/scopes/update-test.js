@@ -83,6 +83,13 @@ module('Acceptance | scopes | update', function (hooks) {
     );
   });
 
+  test('cannot save changes to without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.scopes.org.update({ authorized_actions: [] });
+    await visit(urls.orgScopeEdit);
+    assert.notOk(find('form [type="button"]'));
+  });
+
   test('can cancel changes to existing scope', async function (assert) {
     assert.expect(2);
     await visit(urls.orgScopeEdit);

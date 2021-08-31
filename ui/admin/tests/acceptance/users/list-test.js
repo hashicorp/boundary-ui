@@ -20,14 +20,14 @@ module('Acceptance | users | list', function (hooks) {
     scopes: {
       global: null,
       org: null,
-    }
+    },
   };
 
   const urls = {
     scopes: {
-      org: null
+      org: null,
     },
-    users: null
+    users: null,
   };
 
   hooks.beforeEach(function () {

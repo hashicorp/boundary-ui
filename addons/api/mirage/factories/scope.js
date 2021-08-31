@@ -1,8 +1,17 @@
 import factory from '../generated/factories/scope';
 import { trait } from 'ember-cli-mirage';
+import permissions from '../helpers/permissions';
 
 export default factory.extend({
   type: 'global',
+
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('scope') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
 
   authorized_collection_actions: () => {
     return {
