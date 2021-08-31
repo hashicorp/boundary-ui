@@ -42,6 +42,11 @@ export default class BaseModel extends Model {
   })
   authorized_actions;
 
+  @attr({
+    readOnly: true,
+  })
+  authorized_collection_actions;
+
   set scopeModel(model) {
     if (model) {
       const json = model.serialize();
@@ -52,7 +57,7 @@ export default class BaseModel extends Model {
 
   /**
    * Convenience for getting and setting the parent scope ID.
-   * @type {string
+   * @type {string}
    */
   @computed('scope.scope_id')
   get scopeID() {

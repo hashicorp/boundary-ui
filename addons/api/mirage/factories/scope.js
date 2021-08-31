@@ -3,6 +3,11 @@ import { trait } from 'ember-cli-mirage';
 
 export default factory.extend({
   type: 'global',
+  authorized_collection_actions: () => {
+    return {
+      'host-catalogs': ['create', 'list'],
+    };
+  },
 
   /**
    * Generates realistic-ish IDs while still being deterministic.
