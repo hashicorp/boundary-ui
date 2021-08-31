@@ -106,10 +106,12 @@
             <Rose::Icon @name='app-icons/roles' @size='medium' />
             {{t 'resources.role.title_plural'}}
           </nav.link>
-          <nav.link @route='scopes.scope.auth-methods'>
-            <Rose::Icon @name='app-icons/auth-method' @size='medium' />
-            {{t 'resources.auth-method.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='auth-methods')}}
+            <nav.link @route='scopes.scope.auth-methods'>
+              <Rose::Icon @name='app-icons/auth-method' @size='medium' />
+              {{t 'resources.auth-method.title_plural'}}
+            </nav.link>
+          {{/if}}
         </Rose::Nav::Sidebar>
       {{/unless}}
 

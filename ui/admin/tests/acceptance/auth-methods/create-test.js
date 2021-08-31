@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -12,7 +11,7 @@ import {
 } from 'ember-simple-auth/test-support';
 import { enableFeature } from 'ember-feature-flags/test-support';
 
-module('Acceptance | auth methods', function (hooks) {
+module('Acceptance | auth-methods | create ', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -22,64 +21,33 @@ module('Acceptance | auth methods', function (hooks) {
       org: null,
     },
     authMethod: null,
+    orgScope: null,
   };
+
   const urls = {
     orgScope: null,
     authMethods: null,
     newAuthMethod: null,
     authMethod: null,
+    orgURL: null,
   };
 
   hooks.beforeEach(function () {
-    // Setup Mirage mock resources for this test
     authenticateSession({});
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
-    instances.scopes.org = this.server.create('scope', {
+    instances.orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
+
     instances.authMethod = this.server.create('auth-method', {
-      scope: instances.scopes.org,
+      scope: instances.orgScope,
     });
 
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
+    urls.orgURL = `/scopes/${instances.orgScope.id}`;
+    urls.authMethods = `${urls.orgURL}/auth-methods`;
     urls.newAuthMethod = `${urls.authMethods}/new?type=password`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
-  });
-
-  test('visiting auth methods', async function (assert) {
-    assert.expect(1);
-    await visit(urls.authMethods);
-    await a11yAudit();
-    assert.equal(currentURL(), urls.authMethods);
-  });
-
-  test('can navigate to an auth method form', async function (assert) {
-    assert.expect(1);
-    await visit(urls.authMethods);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
-    await a11yAudit();
-    assert.equal(currentURL(), urls.authMethod);
-  });
-
-  test('can update an auth method and save changes', async function (assert) {
-    assert.expect(1);
-    await visit(urls.authMethod);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.authMethods[0].name, 'update name');
-  });
-
-  test('can update an auth method and cancel changes', async function (assert) {
-    assert.expect(1);
-    await visit(urls.authMethod);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
-    await click('form button:not([type="submit"])');
-    assert.notEqual(this.server.db.authMethods[0].name, 'update name');
   });
 
   test('can create new auth method', async function (assert) {
@@ -90,6 +58,34 @@ module('Acceptance | auth methods', function (hooks) {
     await fillIn('[name="description"]', 'description');
     await click('form [type="submit"]:not(:disabled)');
     assert.equal(this.server.db.authMethods.length, authMethodsCount + 1);
+  });
+
+  test('can navigate to new auth-methods route with proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.orgScope.authorized_collection_actions['auth-methods'] = [
+      'create',
+      'list',
+    ];
+    await visit(urls.orgURL);
+    assert.ok(
+      instances.orgScope.authorized_collection_actions['auth-methods'].includes(
+        'create'
+      )
+    );
+    console.log(urls.orgURL);
+    assert.ok(find(`[href="${urls.authMethods}"]`));
+  });
+
+  test('cannot navigate to new auth-methods route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.orgScope.authorized_collection_actions['auth-methods'] = [];
+    await visit(urls.orgURL);
+    assert.notOk(
+      instances.orgScope.authorized_collection_actions['auth-methods'].includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.authMethods}"]`));
   });
 
   test('can cancel new auth method creation', async function (assert) {
@@ -106,7 +102,7 @@ module('Acceptance | auth methods', function (hooks) {
   test('user can make primary an auth method', async function (assert) {
     assert.expect(2);
     assert.notOk(
-      instances.scopes.org.primaryAuthMethodId,
+      instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.'
     );
     enableFeature('primary-auth-method');
@@ -114,7 +110,7 @@ module('Acceptance | auth methods', function (hooks) {
     await click(
       '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
     );
-    const scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.equal(
       scope.primaryAuthMethodId,
       instances.authMethod.id,
@@ -136,7 +132,7 @@ module('Acceptance | auth methods', function (hooks) {
       );
     });
     assert.notOk(
-      instances.scopes.org.primaryAuthMethodId,
+      instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.'
     );
     enableFeature('primary-auth-method');
@@ -149,11 +145,11 @@ module('Acceptance | auth methods', function (hooks) {
 
   test('user can remove as primary an auth method', async function (assert) {
     assert.expect(2);
-    instances.scopes.org.update({
+    instances.orgScope.update({
       primaryAuthMethodId: instances.authMethod.id,
     });
     assert.ok(
-      instances.scopes.org.primaryAuthMethodId,
+      instances.orgScope.primaryAuthMethodId,
       'Primary auth method is set.'
     );
     enableFeature('primary-auth-method');
@@ -161,7 +157,7 @@ module('Acceptance | auth methods', function (hooks) {
     await click(
       '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
     );
-    const scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
   });
 
@@ -178,11 +174,11 @@ module('Acceptance | auth methods', function (hooks) {
         }
       );
     });
-    instances.scopes.org.update({
+    instances.orgScope.update({
       primaryAuthMethodId: instances.authMethod.id,
     });
     assert.ok(
-      instances.scopes.org.primaryAuthMethodId,
+      instances.orgScope.primaryAuthMethodId,
       'Primary auth method is set.'
     );
     enableFeature('primary-auth-method');
@@ -196,7 +192,7 @@ module('Acceptance | auth methods', function (hooks) {
   test('user can make and remove primary auth methods from index', async function (assert) {
     assert.expect(3);
     assert.notOk(
-      instances.scopes.org.primaryAuthMethodId,
+      instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.'
     );
     enableFeature('primary-auth-method');
@@ -204,7 +200,7 @@ module('Acceptance | auth methods', function (hooks) {
     await click(
       '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
     );
-    let scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    let scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.equal(
       scope.primaryAuthMethodId,
       instances.authMethod.id,
@@ -213,7 +209,7 @@ module('Acceptance | auth methods', function (hooks) {
     await click(
       '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
     );
-    scope = this.server.schema.scopes.find(instances.scopes.org.id);
+    scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
   });
 });
