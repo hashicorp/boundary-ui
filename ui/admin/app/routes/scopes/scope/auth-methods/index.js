@@ -12,9 +12,4 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     const scopeModel = this.modelFor('scopes.scope');
     controller.scopeModel = scopeModel;
   }
-  // setupController(controller) {
-  //   const scope = this.modelFor('scopes.scope');
-  //   super.setupController(...arguments);
-  //   controller.setProperties({ scope });
-  // }
 }
