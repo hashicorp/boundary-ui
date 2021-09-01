@@ -36,12 +36,10 @@ A dialog component with optional modal capabilities.
       icon: select(
         'icon',
         {
-          'check-circle-outline': 'check-circle-outline',
-          'copy-action': 'copy-action',
-          'unfold-more': 'unfold-more',
-          'unfold-less': 'unfold-less'
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'check-circle-outline'
+        'flight-icons/check-circle-16'
       ),
       style: select(
         'style',
@@ -60,7 +58,7 @@ A dialog component with optional modal capabilities.
 <Rose::Dialog
   @modal={{true}}
   @dismiss={{@dismissFn}}
-  @icon="check-circle-outline"
+  @icon="flight-icons/check-circle-16"
   @heading="Heading"
   @dismissButtonText="Dismiss"
 as |dialog|>

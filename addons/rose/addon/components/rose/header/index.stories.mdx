@@ -27,7 +27,7 @@ A header component that allows three distinct sections to be configured: brand, 
     <utilities.dropdown
       @text="user@example.net"
       @iconOnly={{true}}
-      @icon="user-square-fill" as |dropdown|
+      @icon="flight-icons/user-circle-16" as |dropdown|
     >
       <dropdown.link @route="index">Menu item</dropdown.link>
       <dropdown.link @route="about">Menu item</dropdown.link>
@@ -69,13 +69,11 @@ A header component that allows three distinct sections to be configured: brand, 
       dropdownIcon: select(
         'dropdownIcon',
         {
-          'user-square-fill': 'user-square-fill',
-          'check-circle-outline': 'check-circle-outline',
-          'copy-action': 'copy-action',
-          'unfold-more': 'unfold-more',
-          'unfold-less': 'unfold-less',
+          'flight-icons/user-circle-16': 'flight-icons/user-circle-16',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'user-square-fill'
+        'flight-icons/user-circle-16'
       ),
     },
   }}</Story>

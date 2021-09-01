@@ -11,7 +11,7 @@
 
     <Rose::Dropdown
       @text={{t 'actions.choose-different-org'}}
-      @icon='user-organization'
+      @icon='flight-icons/org-16'
       as |dropdown|
     >
       <dropdown.link @route='scopes.scope.authenticate' @model='global'>
@@ -67,7 +67,7 @@
       <Rose::Layout::Centered>
         <Rose::Message
           @title={{t 'resources.auth-method.messages.none.title'}}
-          @icon='alert-circle-outline'
+          @icon='flight-icons/alert-circle-16'
           as |message|
         >
           <message.description>
