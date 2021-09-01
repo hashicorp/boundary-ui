@@ -3,8 +3,10 @@
     @text={{t (concat 'states.' @model.attributes.state)}}
     @icon={{if
       @model.isInactive
-      'disabled'
-      (if @model.isPrivate 'lock-closed-outline' 'check-circle-outline')
+      'flight-icons/x-circle-16'
+      (if
+        @model.isPrivate 'flight-icons/lock-16' 'flight-icons/check-circle-16'
+      )
     }}
     @dropdownRight={{true}}
     as |dropdown|

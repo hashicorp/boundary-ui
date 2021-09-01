@@ -16,7 +16,7 @@
         <header.utilities as |utilities|>
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
-            @icon='app-icons/user-profile'
+            @icon='flight-icons/user-circle-16'
             as |dropdown|
           >
             <dropdown.link @route='account.change-password'>
@@ -100,7 +100,7 @@
     <Rose::Dialog
       @heading={{t 'titles.abandon-confirm'}}
       @dismissButtonText={{t 'actions.cancel'}}
-      @icon='alert-triangle'
+      @icon='flight-icons/alert-triangle-16'
       @style='warning'
       @modal={{true}}
       @dismiss={{deny}}
@@ -126,7 +126,7 @@
         (t 'actions.confirm')
       }}
       @dismissButtonText={{t 'actions.cancel'}}
-      @icon='alert-triangle'
+      @icon='flight-icons/alert-triangle-16'
       @style='warning'
       @modal={{true}}
       @dismiss={{deny}}
