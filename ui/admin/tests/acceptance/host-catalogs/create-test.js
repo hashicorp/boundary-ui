@@ -71,7 +71,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     authenticateSession({});
   });
 
-  test('can create new host catalogs', async function (assert) {
+  test('Users can create new host catalogs', async function (assert) {
     assert.expect(1);
     const count = gethostCatalogCount();
     await visit(urls.newHostCatalog);
@@ -80,7 +80,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.equal(gethostCatalogCount(), count + 1);
   });
 
-  test('can cancel create new host catalogs', async function (assert) {
+  test('Users can cancel create new host catalogs', async function (assert) {
     assert.expect(2);
     const count = gethostCatalogCount();
     await visit(urls.newHostCatalog);
@@ -90,7 +90,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.equal(gethostCatalogCount(), count);
   });
 
-  test('can navigate to new host catalogs route with proper authorization', async function (assert) {
+  test('Users can navigate to new host catalogs route with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.projectScope);
     assert.ok(
@@ -101,7 +101,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.ok(find(`[href="${urls.hostCatalogs}"]`));
   });
 
-  test('cannot navigate to new host catalogs route without proper authorization', async function (assert) {
+  test('Users cannot navigate to new host catalogs route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       [];

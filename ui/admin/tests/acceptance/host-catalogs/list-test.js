@@ -52,7 +52,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       scope: instances.scopes.project,
     });
 
-    // orgURL = `/scopes/${instances.orgScope.id}`;
     urls.hostCatalogs = `/scopes/${instances.orgScope.id}/host-catalogs`;
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.orgScope.id}/scopes`;
@@ -63,7 +62,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     authenticateSession({});
   });
 
-  test('can navigate to host catalogs with proper authorization', async function (assert) {
+  test('Users can navigate to host catalogs with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.projectScope);
     assert.ok(
