@@ -12,7 +12,6 @@ import {
 module('Acceptance | roles | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  let orgURL;
 
   const instances = {
     scopes: {
@@ -27,6 +26,7 @@ module('Acceptance | roles | list', function (hooks) {
       org: null,
     },
     roles: null,
+    orgScope: null,
   };
 
   hooks.beforeEach(function () {
@@ -41,7 +41,7 @@ module('Acceptance | roles | list', function (hooks) {
     instances.role = this.server.create('role', {
       scope: instances.orgScope,
     });
-    orgURL = `/scopes/${instances.orgScope.id}`;
+    urls.orgScope = `/scopes/${instances.orgScope.id}`;
 
     urls.roles = `/scopes/${instances.orgScope.id}/roles`;
     authenticateSession({});
@@ -49,7 +49,7 @@ module('Acceptance | roles | list', function (hooks) {
 
   test('can navigate to roles with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.ok(
       instances.orgScope.authorized_collection_actions.roles.includes('list')
     );
@@ -59,7 +59,7 @@ module('Acceptance | roles | list', function (hooks) {
   test('User cannot navigate to index without either list or create actions', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions.roles = [];
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.notOk(
       instances.orgScope.authorized_collection_actions.roles.includes('list')
     );
@@ -69,7 +69,7 @@ module('Acceptance | roles | list', function (hooks) {
   test('User can navigate to index with only create action', async function (assert) {
     assert.expect(1);
     instances.orgScope.authorized_collection_actions.roles = ['create'];
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.ok(find(`[href="${urls.roles}"]`));
   });
 });

@@ -15,8 +15,6 @@ module('Acceptance | roles | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgURL;
-
   const instances = {
     scopes: {
       global: null,
@@ -29,7 +27,8 @@ module('Acceptance | roles | create', function (hooks) {
   const urls = {
     roles: null,
     role: null,
-    newRoleURL: null,
+    newRole: null,
+    orgScope: null,
   };
 
   hooks.beforeEach(function () {
@@ -43,11 +42,6 @@ module('Acceptance | roles | create', function (hooks) {
       'withChildren'
     );
 
-    // instances.scopes.global = this.server.create('scope', { id: 'global' });
-    // instances.scopes.org = this.server.create('scope', {
-    //   type: 'org',
-    //   scope: { id: 'global', type: 'global' },
-    // });
     // The project scope is not yet used for role tests (though it will be
     // in the future).  This is created simply to test the grant scope loading
     // mechanism.
@@ -64,14 +58,14 @@ module('Acceptance | roles | create', function (hooks) {
     );
     urls.roles = `/scopes/${instances.orgScope.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
-    urls.newRoleURL = `${urls.roles}/new`;
-    orgURL = `/scopes/${instances.orgScope.id}`;
+    urls.newRole = `${urls.roles}/new`;
+    urls.orgScope = `/scopes/${instances.orgScope.id}`;
   });
 
   test('can create new role', async function (assert) {
     assert.expect(1);
     const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRoleURL);
+    await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('[type="submit"]');
     assert.equal(this.server.db.roles.length, rolesCount + 1);
@@ -79,7 +73,7 @@ module('Acceptance | roles | create', function (hooks) {
 
   test('can navigate to new roles route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.ok(
       instances.orgScope.authorized_collection_actions.roles.includes('create')
     );
@@ -89,7 +83,7 @@ module('Acceptance | roles | create', function (hooks) {
   test('cannot navigate to new roles route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions.roles = [];
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.notOk(
       instances.orgScope.authorized_collection_actions.roles.includes('create')
     );
@@ -99,7 +93,7 @@ module('Acceptance | roles | create', function (hooks) {
   test('can cancel new role creation', async function (assert) {
     assert.expect(2);
     const rolesCount = this.server.db.roles.length;
-    await visit(urls.newRoleURL);
+    await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), urls.roles);
@@ -127,7 +121,7 @@ module('Acceptance | roles | create', function (hooks) {
         }
       );
     });
-    await visit(urls.newRoleURL);
+    await visit(urls.newRole);
     await fillIn('[name="name"]', 'new target');
     await click('form [type="submit"]');
     await a11yAudit();
