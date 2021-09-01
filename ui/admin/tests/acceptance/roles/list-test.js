@@ -47,7 +47,7 @@ module('Acceptance | roles | list', function (hooks) {
     authenticateSession({});
   });
 
-  test('can navigate to roles with proper authorization', async function (assert) {
+  test('Users can navigate to roles with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.orgScope);
     assert.ok(
@@ -56,7 +56,7 @@ module('Acceptance | roles | list', function (hooks) {
     assert.ok(find(`[href="${urls.roles}"]`));
   });
 
-  test('User cannot navigate to index without either list or create actions', async function (assert) {
+  test('Users cannot navigate to index without either list or create actions', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions.roles = [];
     await visit(urls.orgScope);
@@ -66,7 +66,7 @@ module('Acceptance | roles | list', function (hooks) {
     assert.notOk(find(`[href="${urls.roles}"]`));
   });
 
-  test('User can navigate to index with only create action', async function (assert) {
+  test('Users can navigate to index with only create action', async function (assert) {
     assert.expect(1);
     instances.orgScope.authorized_collection_actions.roles = ['create'];
     await visit(urls.orgScope);

@@ -71,7 +71,7 @@ module('Acceptance | roles | create', function (hooks) {
     assert.equal(this.server.db.roles.length, rolesCount + 1);
   });
 
-  test('can navigate to new roles route with proper authorization', async function (assert) {
+  test('Users can navigate to new roles route with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.orgScope);
     assert.ok(
@@ -80,7 +80,7 @@ module('Acceptance | roles | create', function (hooks) {
     assert.ok(find(`[href="${urls.roles}"]`));
   });
 
-  test('cannot navigate to new roles route without proper authorization', async function (assert) {
+  test('Users cannot navigate to new roles route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions.roles = [];
     await visit(urls.orgScope);
