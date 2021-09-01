@@ -32,7 +32,9 @@ module('Integration | Component | rose/dropdown/button', function (hooks) {
   });
 
   test('it supports an icon-only type', async function (assert) {
-    await render(hbs`<Rose::Dropdown::Button @iconOnly="chevron-left" />`);
+    await render(
+      hbs`<Rose::Dropdown::Button @iconOnly="flight-icons/chevron-left-16" />`
+    );
     assert.ok(find('.has-icon-only .rose-icon'));
   });
 });
