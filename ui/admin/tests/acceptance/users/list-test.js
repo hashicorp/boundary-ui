@@ -47,7 +47,7 @@ module('Acceptance | users | list', function (hooks) {
     authenticateSession({});
   });
 
-  test('can navigate to users with proper authorization', async function (assert) {
+  test('Users can navigate to users with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(orgURL);
     assert.ok(
