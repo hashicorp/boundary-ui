@@ -5,7 +5,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 
-module('Acceptance | credential-stores', function (hooks) {
+module('Acceptance | credential-stores | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -21,7 +21,6 @@ module('Acceptance | credential-stores', function (hooks) {
 
   const urls = {
     globalScope: null,
-    orgScope: null,
     projectScope: null,
     credentialStores: null,
     credentialStore: null,
@@ -45,7 +44,6 @@ module('Acceptance | credential-stores', function (hooks) {
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
@@ -58,7 +56,7 @@ module('Acceptance | credential-stores', function (hooks) {
     authenticateSession({});
   });
 
-  test('can create a new credential stores', async function (assert) {
+  test('Users can create a new credential stores', async function (assert) {
     assert.expect(1);
     const count = getCredentialStoresCount();
     await visit(urls.newCredentialStore);
@@ -67,7 +65,7 @@ module('Acceptance | credential-stores', function (hooks) {
     assert.equal(getCredentialStoresCount(), count + 1);
   });
 
-  test('can cancel create new credential stores', async function (assert) {
+  test('Users can cancel create new credential stores', async function (assert) {
     assert.expect(2);
     const count = getCredentialStoresCount();
     await visit(urls.newCredentialStore);
@@ -75,6 +73,20 @@ module('Acceptance | credential-stores', function (hooks) {
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), urls.credentialStores);
     assert.equal(getCredentialStoresCount(), count);
+  });
+
+  test('Users cannot navigate to new credential stores route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions[
+      'credential-stores'
+    ] = [];
+    await visit(urls.projectScope);
+    assert.notOk(
+      instances.scopes.project.authorized_collection_actions[
+        'credential-stores'
+      ].includes('create')
+    );
+    assert.notOk(find(`[href="${urls.credentialStores}"]`));
   });
 
   test('saving a new credential store with invalid fields displays error messages', async function (assert) {

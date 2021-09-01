@@ -13,7 +13,7 @@ export default factory.extend({
       // sessopms: ['list'],
       // targets: ['create', 'list'],
       // 'host-catalogs': ['create', 'list'],
-      // 'credential-stores': ['create', 'list'],
+      'credential-stores': ['create', 'list'],
     };
   },
 

@@ -14,13 +14,16 @@
   </page.header>
 
   <page.actions>
-    {{#if @model}}
-      <Rose::LinkButton
-        @route='scopes.scope.credential-stores.new'
-        @style='primary'
-      >
-        {{t 'titles.new'}}
-      </Rose::LinkButton>
+
+    {{#if (can 'create collection' this.scope collection='credential-stores')}}
+      {{#if @model}}
+        <Rose::LinkButton
+          @route='scopes.scope.credential-stores.new'
+          @style='primary'
+        >
+          {{t 'titles.new'}}
+        </Rose::LinkButton>
+      {{/if}}
     {{/if}}
   </page.actions>
 
@@ -79,12 +82,35 @@
           as |message|
         >
           <message.description>
-            {{t 'resources.credential-store.description'}}
+            {{#if
+              (can 'list collection' this.scope collection='credential-stores')
+            }}
+              {{! can list (at least):  show default welcome message}}
+              {{t 'resources.credential-store.description'}}
+            {{else if (can
+              'create collection' this.scope collection='credential-stores'
+            )}}
+              {{! can create (only):  show create-but-not-list welcome message}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.credential-store.title_plural')
+              }}
+            {{else}}
+              {{! can neither list nor create }}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.user.title_plural')
+              }}
+            {{/if}}
           </message.description>
-          <message.link @route='scopes.scope.credential-stores.new'>
-            <Rose::Icon @name='plus-circle-outline' />
-            {{t 'titles.new'}}
-          </message.link>
+          {{#if
+            (can 'create collection' this.scope collection='credential-stores')
+          }}
+            <message.link @route='scopes.scope.credential-stores.new'>
+              <Rose::Icon @name='plus-circle-outline' />
+              {{t 'titles.new'}}
+            </message.link>
+          {{/if}}
         </Rose::Message>
       </Rose::Layout::Centered>
 
