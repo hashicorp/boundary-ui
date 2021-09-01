@@ -75,10 +75,12 @@
             <Rose::Icon @name='app-icons/action-session' @size='medium' />
             {{t 'resources.session.title_plural'}}
           </nav.link>
-          <nav.link @route='scopes.scope.targets'>
-            <Rose::Icon @name='app-icons/target' @size='medium' />
-            {{t 'resources.target.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='targets')}}
+            <nav.link @route='scopes.scope.targets'>
+              <Rose::Icon @name='app-icons/target' @size='medium' />
+              {{t 'resources.target.title_plural'}}
+            </nav.link>
+          {{/if}}
           <nav.link @route='scopes.scope.host-catalogs'>
             <Rose::Icon @name='app-icons/host-catalogs' @size='medium' />
             {{t 'resources.host-catalog.title_plural'}}

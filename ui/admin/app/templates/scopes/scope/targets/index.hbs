@@ -15,13 +15,14 @@
   </page.header>
 
   <page.actions>
-    {{#if @model}}
-      <Rose::LinkButton @route='scopes.scope.targets.new' @style='primary'>
-        {{t 'titles.new'}}
-      </Rose::LinkButton>
+    {{#if (can 'create collection' this.scope collection='targets')}}
+      {{#if @model}}
+        <Rose::LinkButton @route='scopes.scope.targets.new' @style='primary'>{{t
+            'titles.new'
+          }}</Rose::LinkButton>
+      {{/if}}
     {{/if}}
   </page.actions>
-
   <page.body>
 
     {{#if @model}}
@@ -79,12 +80,34 @@
           as |message|
         >
           <message.description>
-            {{t 'resources.target.description'}}
+
+            {{#if (can 'list collection' this.scope collection='targets')}}
+              {{! can list (at least):  show default welcome message}}
+              {{t 'resources.target.description'}}
+            {{else if (can
+              'create collection' this.scope collection='targets'
+            )}}
+              {{! can create (only):  show create-but-not-list welcome message}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.target.title_plural')
+              }}
+            {{else}}
+              {{! can neither list nor create }}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.target.title_plural')
+              }}
+
+            {{/if}}
           </message.description>
-          <message.link @route='scopes.scope.targets.new'>
-            <Rose::Icon @name='plus-circle-outline' />
-            {{t 'titles.new'}}
-          </message.link>
+
+          {{#if (can 'create collection' this.scope collection='targets')}}
+            <message.link @route='scopes.scope.targets.new'>
+              <Rose::Icon @name='plus-circle-outline' />
+              {{t 'titles.new'}}
+            </message.link>
+          {{/if}}
         </Rose::Message>
       </Rose::Layout::Centered>
 

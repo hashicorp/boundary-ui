@@ -11,7 +11,7 @@ export default factory.extend({
       // roles: ['create', 'list'],
       // 'auth-methods': ['create', 'list'],
       // sessopms: ['list'],
-      // targets: ['create', 'list'],
+      targets: ['create', 'list'],
       // 'host-catalogs': ['create', 'list'],
       // 'credential-stores': ['create', 'list'],
     };
