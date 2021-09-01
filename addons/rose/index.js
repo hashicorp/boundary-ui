@@ -10,7 +10,7 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     this.includeStyles(app);
-    this.includeIcons(app);
+    this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
   },
@@ -45,8 +45,10 @@ module.exports = {
    * Finds the structure-icons folder and includes it into the
    * ember-inline-svg addon.
    */
-  includeIcons(app) {
-    const iconPackagePath = require.resolve('@hashicorp/structure-icons');
+  includeFlightIcons(app) {
+    const iconPackagePath = path.resolve(
+      '../../node_modules/@hashicorp/flight-icons'
+    );
     const iconsPath = path.resolve(iconPackagePath, '..');
 
     app.options.svg = app.options.svg || {};

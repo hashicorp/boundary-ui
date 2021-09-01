@@ -2066,10 +2066,10 @@
   resolved "https://registry.yarnpkg.com/@handlebars/parser/-/parser-1.1.0.tgz#d6dbc7574774b238114582410e8fee0dc3532bdf"
   integrity sha512-rR7tJoSwJ2eooOpYGxGGW95sLq6GXUaS1UtWvN7pei6n2/okYvCGld9vsUTvkl2migxbkszsycwtMf/GEc1k1A==
 
-"@hashicorp/structure-icons@^1.9.0-0":
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/@hashicorp/structure-icons/-/structure-icons-1.9.2.tgz#c75f955b2eec414ecb92f3926c79b4ca01731d3c"
-  integrity sha512-AffJv0V9npr1EWlM1XrpaKPG9PzddV48OE+jspqy7aRoFZB5++oNnPx4MZQKmFInOljnzNwfktVRkJiQHy7haw==
+"@hashicorp/flight-icons@0.0.6-beta":
+  version "0.0.6-beta"
+  resolved "https://registry.yarnpkg.com/@hashicorp/flight-icons/-/flight-icons-0.0.6-beta.tgz#49da48d4966c13ef0636a9853dc208fccc8d5c88"
+  integrity sha512-GJHFPig7n26mMyMDPuUiD2Szp8wEskkcLKxWGAx0wyCGASYotLgAYHAGfa4uLlUOsIkibxKjc/7Y/0ttQeN9hQ==
 
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
