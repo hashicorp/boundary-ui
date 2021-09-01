@@ -71,10 +71,12 @@
         </Rose::Nav::Sidebar>
         --}}
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
-          <nav.link @route='scopes.scope.sessions'>
-            <Rose::Icon @name='app-icons/action-session' @size='medium' />
-            {{t 'resources.session.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='sessions')}}
+            <nav.link @route='scopes.scope.sessions'>
+              <Rose::Icon @name='app-icons/action-session' @size='medium' />
+              {{t 'resources.session.title_plural'}}
+            </nav.link>
+          {{/if}}
           <nav.link @route='scopes.scope.targets'>
             <Rose::Icon @name='app-icons/target' @size='medium' />
             {{t 'resources.target.title_plural'}}

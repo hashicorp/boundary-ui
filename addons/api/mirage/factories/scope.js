@@ -10,7 +10,7 @@ export default factory.extend({
       // groups: ['create', 'list'],
       // roles: ['create', 'list'],
       // 'auth-methods': ['create', 'list'],
-      // sessopms: ['list'],
+      sessions: ['list'],
       // targets: ['create', 'list'],
       // 'host-catalogs': ['create', 'list'],
       // 'credential-stores': ['create', 'list'],
