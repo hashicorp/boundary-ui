@@ -7,8 +7,8 @@ export default factory.extend({
   authorized_collection_actions: () => {
     return {
       users: ['create', 'list'],
-      // groups: ['create', 'list'],
-      // roles: ['create', 'list'],
+      groups: ['create', 'list'],
+      roles: ['create', 'list'],
       // 'auth-methods': ['create', 'list'],
       // sessopms: ['list'],
       targets: ['create', 'list'],

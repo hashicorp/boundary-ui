@@ -13,7 +13,7 @@ Card link component wraps content with `LinkTo` component. Supports title and de
   @title='Card title'
   @description='Card description'
   @id='resource_id_1234'
-  @icon='user-organization'
+  @icon='flight-icons/org-16'
   @route='about'/>
 ```
 
@@ -32,11 +32,9 @@ Card link component wraps content with `LinkTo` component. Supports title and de
       description: text('description', 'Card description'),
       id: text('id', 'resource_id_1234'),
       icon: select('icon', {
-          'user-organization': 'user-organization',
-          'partner': 'partner',
-          'gift-fill': 'gift-fill',
+          'flight-icons/org-16': 'flight-icons/org-16',
         },
-        'user-organization'
+        'flight-icons/org-16'
       ),
     },
   }}</Story>
