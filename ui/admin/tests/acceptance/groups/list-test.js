@@ -9,7 +9,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | users | list', function (hooks) {
+module('Acceptance | groups | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let orgURL;
@@ -19,13 +19,14 @@ module('Acceptance | users | list', function (hooks) {
       global: null,
       org: null,
     },
+    orgScope: null,
   };
 
   const urls = {
     scopes: {
       org: null,
     },
-    users: null,
+    groups: null,
   };
 
   hooks.beforeEach(function () {
@@ -38,37 +39,38 @@ module('Acceptance | users | list', function (hooks) {
       },
       'withChildren'
     );
-    instances.user = this.server.create('user', {
+    instances.group = this.server.create('group', {
       scope: instances.orgScope,
     });
     orgURL = `/scopes/${instances.orgScope.id}`;
-    urls.users = `/scopes/${instances.orgScope.id}/users`;
+
+    urls.groups = `/scopes/${instances.orgScope.id}/groups`;
     authenticateSession({});
   });
 
-  test('Users can navigate to users with proper authorization', async function (assert) {
+  test('can navigate to groups with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(orgURL);
     assert.ok(
-      instances.orgScope.authorized_collection_actions.users.includes('list')
+      instances.orgScope.authorized_collection_actions.groups.includes('list')
     );
-    assert.ok(find(`[href="${urls.users}"]`));
+    assert.ok(find(`[href="${urls.groups}"]`));
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
     assert.expect(2);
-    instances.orgScope.authorized_collection_actions.users = [];
+    instances.orgScope.authorized_collection_actions.groups = [];
     await visit(orgURL);
     assert.notOk(
-      instances.orgScope.authorized_collection_actions.users.includes('list')
+      instances.orgScope.authorized_collection_actions.groups.includes('list')
     );
-    assert.notOk(find(`[href="${urls.users}"]`));
+    assert.notOk(find(`[href="${urls.groups}"]`));
   });
 
   test('User can navigate to index with only create action', async function (assert) {
     assert.expect(1);
-    instances.orgScope.authorized_collection_actions.users = ['create'];
+    instances.orgScope.authorized_collection_actions.groups = ['create'];
     await visit(orgURL);
-    assert.ok(find(`[href="${urls.users}"]`));
+    assert.ok(find(`[href="${urls.groups}"]`));
   });
 });

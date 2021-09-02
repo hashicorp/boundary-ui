@@ -10,9 +10,10 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | groups', function (hooks) {
+module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  let orgURL;
 
   const instances = {
     scopes: {
@@ -20,9 +21,9 @@ module('Acceptance | groups', function (hooks) {
       org: null,
     },
     group: null,
+    orgScope: null,
   };
   const urls = {
-    orgScope: null,
     groups: null,
     group: null,
     newGroup: null,
@@ -30,17 +31,21 @@ module('Acceptance | groups', function (hooks) {
 
   hooks.beforeEach(function () {
     authenticateSession({});
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
-    instances.scopes.org = this.server.create('scope', {
-      type: 'org',
-      scope: { id: 'global', type: 'global' },
-    });
+    instances.orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: 'global', type: 'global' },
+      },
+      'withChildren'
+    );
     instances.group = this.server.create('group', {
-      scope: instances.scopes.org,
+      scope: instances.orgScope,
     });
-    urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
+    urls.groups = `/scopes/${instances.orgScope.id}/groups`;
     urls.group = `${urls.groups}/${instances.group.id}`;
     urls.newGroup = `${urls.groups}/new`;
+    orgURL = `/scopes/${instances.orgScope.id}`;
   });
 
   test('can create new group', async function (assert) {
@@ -52,6 +57,24 @@ module('Acceptance | groups', function (hooks) {
     assert.equal(this.server.db.groups.length, groupsCount + 1);
   });
 
+  test('can navigate to new groups route with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(orgURL);
+    assert.ok(
+      instances.orgScope.authorized_collection_actions.groups.includes('create')
+    );
+    assert.ok(find(`[href="${urls.groups}"]`));
+  });
+
+  test('cannot navigate to new groups route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.orgScope.authorized_collection_actions.groups = [];
+    await visit(orgURL);
+    assert.notOk(
+      instances.orgScope.authorized_collection_actions.groups.includes('create')
+    );
+    assert.notOk(find(`[href="${urls.groups}"]`));
+  });
   test('can cancel new group creation', async function (assert) {
     assert.expect(2);
     const groupsCount = this.server.db.groups.length;
