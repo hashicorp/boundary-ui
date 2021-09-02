@@ -79,7 +79,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     assert.equal(getHostSetCount(), count + 1);
   });
 
-  test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
+  test('Users cannot navigate to new host sets route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostCatalog);
