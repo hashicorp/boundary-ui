@@ -12,7 +12,7 @@ export default factory.extend({
       'auth-methods': ['create', 'list'],
       // sessopms: ['list'],
       // targets: ['create', 'list'],
-      // 'host-catalogs': ['create', 'list'],
+      'host-catalogs': ['create', 'list'],
       // 'credential-stores': ['create', 'list'],
     };
   },

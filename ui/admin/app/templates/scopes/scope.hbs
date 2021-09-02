@@ -79,10 +79,12 @@
             <Rose::Icon @name='flight-icons/crosshair-16' @size='medium' />
             {{t 'resources.target.title_plural'}}
           </nav.link>
-          <nav.link @route='scopes.scope.host-catalogs'>
-            <Rose::Icon @name='flight-icons/collections-16' @size='medium' />
-            {{t 'resources.host-catalog.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='host-catalogs')}}
+            <nav.link @route='scopes.scope.host-catalogs'>
+              <Rose::Icon @name='flight-icons/collections-16' @size='medium' />
+              {{t 'resources.host-catalog.title_plural'}}
+            </nav.link>
+          {{/if}}
           {{#if (feature-flag 'credential-store')}}
             <nav.link @route='scopes.scope.credential-stores'>
               <Rose::Icon @name='flight-icons/key-16' @size='medium' />
