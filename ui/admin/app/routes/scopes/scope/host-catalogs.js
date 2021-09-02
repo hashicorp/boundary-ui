@@ -11,7 +11,7 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   @service intl;
   @service notify;
   @service session;
-
+  @service can;
   // =methods
 
   /**
@@ -26,8 +26,13 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
    * @return {Promise{[HostCatalogModel]}}
    */
   async model() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    return this.store.query('host-catalog', { scope_id });
+    const scope = this.modelFor('scopes.scope');
+    const { id: scope_id } = scope;
+    if (
+      this.can.can('list collection', scope, { collection: 'host-catalogs' })
+    ) {
+      return this.store.query('host-catalog', { scope_id });
+    }
   }
 
   // =actions

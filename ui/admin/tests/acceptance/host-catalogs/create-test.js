@@ -10,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs', function (hooks) {
+module('Acceptance | host-catalogs | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -22,6 +22,7 @@ module('Acceptance | host-catalogs', function (hooks) {
       org: null,
       project: null,
     },
+    orgScope: null,
   };
   const urls = {
     globalScope: null,
@@ -35,6 +36,14 @@ module('Acceptance | host-catalogs', function (hooks) {
   hooks.beforeEach(function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: 'global', type: 'global' },
+      },
+      'withChildren'
+    );
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -46,21 +55,23 @@ module('Acceptance | host-catalogs', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
+
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
+    urls.orgScope = `/scopes/${instances.orgScope.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
+
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
-    urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
     urls.newHostCatalog = `${urls.hostCatalogs}/new`;
     // Generate resource couner
     gethostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
+
     authenticateSession({});
   });
 
-  test('can create new host catalogs', async function (assert) {
+  test('Users can create new host catalogs', async function (assert) {
     assert.expect(1);
     const count = gethostCatalogCount();
     await visit(urls.newHostCatalog);
@@ -69,7 +80,7 @@ module('Acceptance | host-catalogs', function (hooks) {
     assert.equal(gethostCatalogCount(), count + 1);
   });
 
-  test('can cancel create new host catalogs', async function (assert) {
+  test('Users can cancel create new host catalogs', async function (assert) {
     assert.expect(2);
     const count = gethostCatalogCount();
     await visit(urls.newHostCatalog);
@@ -77,6 +88,30 @@ module('Acceptance | host-catalogs', function (hooks) {
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), urls.hostCatalogs);
     assert.equal(gethostCatalogCount(), count);
+  });
+
+  test('Users can navigate to new host catalogs route with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.projectScope);
+    assert.ok(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('create')
+    );
+    assert.ok(find(`[href="${urls.hostCatalogs}"]`));
+  });
+
+  test('Users cannot navigate to new host catalogs route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions['host-catalogs'] =
+      [];
+    await visit(urls.projectScope);
+    assert.notOk(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('create')
+    );
+    assert.notOk(find(`[href="${urls.hostCatalogs}"]`));
   });
 
   test('saving a new host catalog with invalid fields displays error messages', async function (assert) {
