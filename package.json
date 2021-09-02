@@ -76,7 +76,7 @@
     "minimist": "^1.2.3",
     "normalize-url": "^4.5.1",
     "glob-parent": "^5.1.2",
-    "tar": "^6.1.2",
+    "tar": "^6.1.9",
     "path-parse": "^1.0.7"
   },
   "config": {
