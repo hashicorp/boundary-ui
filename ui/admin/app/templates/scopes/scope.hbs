@@ -71,20 +71,24 @@
         </Rose::Nav::Sidebar>
         --}}
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
-          <nav.link @route='scopes.scope.sessions'>
-            <Rose::Icon @name='flight-icons/entry-point-16' @size='medium' />
-            {{t 'resources.session.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='sessions')}}
+            <nav.link @route='scopes.scope.sessions'>
+              <Rose::Icon @name='app-icons/action-session' @size='medium' />
+              {{t 'resources.session.title_plural'}}
+            </nav.link>
+          {{/if}}
           {{#if (can 'navigate collection' @model collection='targets')}}
             <nav.link @route='scopes.scope.targets'>
               <Rose::Icon @name='flight-icons/crosshair-16' @size='medium' />
               {{t 'resources.target.title_plural'}}
             </nav.link>
           {{/if}}
-          <nav.link @route='scopes.scope.host-catalogs'>
-            <Rose::Icon @name='flight-icons/collections-16' @size='medium' />
-            {{t 'resources.host-catalog.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='host-catalogs')}}
+            <nav.link @route='scopes.scope.host-catalogs'>
+              <Rose::Icon @name='flight-icons/collections-16' @size='medium' />
+              {{t 'resources.host-catalog.title_plural'}}
+            </nav.link>
+          {{/if}}
           {{#if (feature-flag 'credential-store')}}
             <nav.link @route='scopes.scope.credential-stores'>
               <Rose::Icon @name='flight-icons/key-16' @size='medium' />
@@ -117,10 +121,12 @@
               {{t 'resources.role.title_plural'}}
             </nav.link>
           {{/if}}
-          <nav.link @route='scopes.scope.auth-methods'>
-            <Rose::Icon @name='flight-icons/lock-16' @size='medium' />
-            {{t 'resources.auth-method.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='auth-methods')}}
+            <nav.link @route='scopes.scope.auth-methods'>
+              <Rose::Icon @name='flight-icons/lock-16' @size='medium' />
+              {{t 'resources.auth-method.title_plural'}}
+            </nav.link>
+          {{/if}}
         </Rose::Nav::Sidebar>
       {{/unless}}
 
