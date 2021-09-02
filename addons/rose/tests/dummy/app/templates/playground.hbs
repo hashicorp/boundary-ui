@@ -19,7 +19,7 @@
         <utilities.dropdown
           @text="user@example.net"
           @iconOnly={{true}}
-          @icon="user-square-fill" as |dropdown|
+          @icon="flight-icons/user-circle-16" as |dropdown|
         >
           <dropdown.link @route="index">Menu item</dropdown.link>
           <dropdown.link @route="about">Menu item</dropdown.link>
@@ -82,7 +82,7 @@
                 <input.field />
               </item.cell>
               <item.cell>
-                <Rose::Button @style="secondary" @iconOnly="trash" title="Remove">Remove</Rose::Button>
+                <Rose::Button @style="secondary" @iconOnly="flight-icons/trash-16" title="Remove">Remove</Rose::Button>
               </item.cell>
             </list.item>
           </Rose::Form::Input>
