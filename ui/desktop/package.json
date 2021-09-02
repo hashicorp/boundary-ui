@@ -43,6 +43,7 @@
   "cross-os": {
     "prebuild:desktop": {
       "darwin": "cp -r dist/ electron-app/ember-dist/",
+      "linux": "cp -r dist/ electron-app/ember-dist/",
       "win32": "(robocopy dist electron-app\\ember-dist /MIR) ^& exit 0"
     }
   },

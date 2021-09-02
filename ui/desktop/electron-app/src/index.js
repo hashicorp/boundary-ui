@@ -22,7 +22,7 @@ const sessionManager = require('./services/session-manager.js');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
-const { isMac } = require('./helpers/platform.js');
+const { isMac, isLinux } = require('./helpers/platform.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -113,7 +113,7 @@ app.on('ready', async () => {
   }
   Menu.setApplicationMenu(menuTemplate);
 
-  mainWindow = new BrowserWindow({
+  const browserWindowOptions = {
     width: 1280,
     height: 760,
     titleBarStyle: 'hiddenInset',
@@ -131,7 +131,14 @@ app.on('ready', async () => {
       preload: preloadPath /* eng-disable PRELOAD_JS_CHECK */,
       disableBlinkFeatures: 'Auxclick',
     },
-  });
+  };
+
+  // To show app icon in toolbar in linux, set browser window icon.
+  // This is a limitation of electron build.
+  if (isLinux())
+    browserWindowOptions.icon = path.join(__dirname, '..', 'assets', 'app-icons', 'icon.png');
+
+  mainWindow = new BrowserWindow(browserWindowOptions);
 
   // If the user-specified origin changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
