@@ -57,7 +57,7 @@ export default class BaseModel extends Model {
 
   /**
    * Convenience for getting and setting the parent scope ID.
-   * @type {string
+   * @type {string}
    */
   @computed('scope.scope_id')
   get scopeID() {

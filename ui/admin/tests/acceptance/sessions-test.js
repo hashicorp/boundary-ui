@@ -15,13 +15,13 @@ import {
 module('Acceptance | sessions', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
   const instances = {
     scopes: {
       global: null,
       org: null,
     },
     sessions: null,
+    orgScope: null,
   };
   const urls = {
     orgScope: null,
@@ -31,6 +31,14 @@ module('Acceptance | sessions', function (hooks) {
   hooks.beforeEach(function () {
     authenticateSession({});
     instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: 'global', type: 'global' },
+      },
+      'withChildren'
+    );
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -66,6 +74,7 @@ module('Acceptance | sessions', function (hooks) {
       },
       'withAssociations'
     );
+    urls.orgScope = `/scopes/${instances.scopes.project.id}`;
     urls.sessions = `/scopes/${instances.scopes.project.id}/sessions`;
   });
 
@@ -79,6 +88,38 @@ module('Acceptance | sessions', function (hooks) {
       assert.equal(findAll('tbody tr').length, instances.sessions.length);
     }, 750);
     await visit(urls.sessions);
+  });
+
+  test('Users cannot navigate to sessions without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions.sessions = [];
+    authenticateSession({});
+    later(async () => {
+      run.cancelTimers();
+      assert.notOk(
+        instances.scopes.project.authorized_collection_actions.sessions.includes(
+          'list'
+        )
+      );
+      assert.notOk(find(`[href="${urls.sessions}"]`));
+    }, 750);
+    await visit(urls.orgScope);
+  });
+
+  test('Users can navigate to sessions with proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions.sessions = ['list'];
+    authenticateSession({});
+    later(async () => {
+      run.cancelTimers();
+      assert.ok(
+        instances.scopes.project.authorized_collection_actions.sessions.includes(
+          'list'
+        )
+      );
+      assert.ok(find(`[href="${urls.sessions}"]`));
+    }, 750);
+    await visit(urls.orgScope);
   });
 
   test('visiting sessions without users or targets is OK', async function (assert) {

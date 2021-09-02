@@ -45,14 +45,14 @@ module('Acceptance | users | create', function (hooks) {
     assert.equal(this.server.db.users.length, usersCount + 1);
   });
 
-  test('can navigate to new users route with proper authorization', async function (assert) {
+  test('Users can navigate to new users route with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(orgURL);
     assert.ok(orgScope.authorized_collection_actions.users.includes('create'));
     assert.ok(find(`[href="${orgURL}/users"]`));
   });
 
-  test('cannot navigate to new users route without proper authorization', async function (assert) {
+  test('Users cannot navigate to new users route without proper authorization', async function (assert) {
     assert.expect(2);
     orgScope.authorized_collection_actions.users = [];
     await visit(orgURL);
