@@ -13,8 +13,8 @@ export default class CopyableComponent extends Component {
   id = generateComponentID();
   copyableButtonId = `copyable-button-${this.id}`;
 
-  actionIcon = 'copy-action';
-  successIcon = 'copy-success';
+  actionIcon = 'flight-icons/clipboard-copy-16';
+  successIcon = 'flight-icons/clipboard-checked-16';
   actionText = this.args.buttonText;
   successText = this.args.acknowledgeText;
 

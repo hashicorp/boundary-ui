@@ -12,25 +12,28 @@
   </page.breadcrumbs>
 
   <page.actions>
-    {{#if @model}}
-      <Rose::Dropdown
-        @text={{t 'titles.new'}}
-        @dropdownRight={{true}}
-        as |dropdown|
-      >
-        <dropdown.link
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='password'}}
+
+    {{#if (can 'create collection' this.scopeModel collection='auth-methods')}}
+      {{#if @model}}
+        <Rose::Dropdown
+          @text={{t 'titles.new'}}
+          @dropdownRight={{true}}
+          as |dropdown|
         >
-          {{t 'resources.auth-method.types.password'}}
-        </dropdown.link>
-        <dropdown.link
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='oidc'}}
-        >
-          {{t 'resources.auth-method.types.oidc'}}
-        </dropdown.link>
-      </Rose::Dropdown>
+          <dropdown.link
+            @route='scopes.scope.auth-methods.new'
+            @query={{hash type='password'}}
+          >
+            {{t 'resources.auth-method.types.password'}}
+          </dropdown.link>
+          <dropdown.link
+            @route='scopes.scope.auth-methods.new'
+            @query={{hash type='oidc'}}
+          >
+            {{t 'resources.auth-method.types.oidc'}}
+          </dropdown.link>
+        </Rose::Dropdown>
+      {{/if}}
     {{/if}}
   </page.actions>
 
@@ -129,7 +132,7 @@
                     @dropdownRight={{true}}
                     @iconOnly={{true}}
                     @showCaret={{false}}
-                    @icon='more-horizontal'
+                    @icon='flight-icons/more-horizontal-16'
                     as |dropdown|
                   >
                     {{#unless authMethod.isPrimary}}
@@ -165,15 +168,38 @@
           as |message|
         >
           <message.description>
-            {{t 'resources.auth-method.messages.welcome.description'}}
+            {{#if (can 'list collection' this.scope collection='auth-methods')}}
+              {{! can list (at least):  show default welcome message}}
+              {{t 'resources.auth-method.messages.welcome.description'}}
+            {{else if (can
+              'create collection' this.scope collection='auth-methods'
+            )}}
+              {{! can create (only):  show create-but-not-list welcome message}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.auth-method.title_plural')
+              }}
+            {{else}}
+              {{! can neither list nor create }}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.auth-method.title_plural')
+              }}
+            {{/if}}
           </message.description>
           <message.link
             @route='scopes.scope.auth-methods.new'
             @query={{hash type='password'}}
           >
-            <Rose::Icon @name='plus-circle-outline' />
+            <Rose::Icon @name='flight-icons/plus-circle-16' />
             {{t 'titles.new'}}
           </message.link>
+          {{#if (can 'create collection' this.scope collection='auth-methods')}}
+            <message.link @route='scopes.scope.auth-method.new'>
+              <Rose::Icon @name='plus-circle-outline' />
+              {{t 'titles.new'}}
+            </message.link>
+          {{/if}}
         </Rose::Message>
       </Rose::Layout::Centered>
 
