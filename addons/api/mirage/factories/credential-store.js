@@ -13,6 +13,11 @@ export default factory.extend({
       'update',
       'delete',
     ],
+  authorized_collection_actions: () => {
+    return {
+      'credential-libraries': ['create', 'list'],
+    };
+  },
   id: (i) => `credential-store-id-${i}`,
   type: (i) => types[i % types.length],
 

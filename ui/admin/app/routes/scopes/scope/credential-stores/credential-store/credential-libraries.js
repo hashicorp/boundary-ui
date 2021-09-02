@@ -3,19 +3,28 @@ import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrariesRoute extends Route {
   // =methods
+  @service can;
 
   /**
    * Loads all credential libraries under the current credential store.
    * @return {Promise{[CredentialLibraryModel]}}
    */
   model() {
-    const { id: credential_store_id } = this.modelFor(
+    const scope = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
-    return this.store.query('credential-library', { credential_store_id });
+    const { id: credential_store_id } = scope;
+    if (
+      this.can.can('list collection', scope, {
+        collection: 'credential-libraries',
+      })
+    ) {
+      return this.store.query('credential-library', { credential_store_id });
+    }
   }
 
   // =actions

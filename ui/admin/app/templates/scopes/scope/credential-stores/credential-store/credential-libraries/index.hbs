@@ -53,7 +53,28 @@
       as |message|
     >
       <message.description>
-        {{t 'resources.credential-library.messages.none.description'}}
+        {{#if
+          (can 'list collection' this.scope collection='credential-libraries')
+        }}
+          {{! can list (at least):  show default welcome message}}
+          {{t 'resources.credential-library.messages.none.description'}}
+
+        {{else if (can
+          'create collection' this.scope collection='credential-libraries'
+        )}}
+          {{! can create (only):  show create-but-not-list welcome message}}
+          {{t
+            'descriptions.create-but-not-list'
+            resource=(t 'resources.credential-library.title_plural')
+          }}
+        {{else}}
+          {{! can neither list nor create }}
+          {{t
+            'descriptions.neither-list-nor-create'
+            resource=(t 'resources.credential-library.title_plural')
+          }}
+        {{/if}}
+
       </message.description>
       <message.link
         @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'

@@ -81,10 +81,17 @@
           <message.description>
             {{t 'resources.credential-store.description'}}
           </message.description>
-          <message.link @route='scopes.scope.credential-stores.new'>
-            <Rose::Icon @name='plus-circle-outline' />
-            {{t 'titles.new'}}
-          </message.link>
+          {{#if
+            (can
+              'create collection' this.scope collection='credential-libraries'
+            )
+          }}
+            <message.link @route='scopes.scope.credential-stores.new'>
+              <Rose::Icon @name='plus-circle-outline' />
+              {{t 'titles.new'}}
+            </message.link>
+          {{/if}}
+
         </Rose::Message>
       </Rose::Layout::Centered>
 
