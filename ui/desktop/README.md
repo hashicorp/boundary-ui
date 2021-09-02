@@ -41,6 +41,7 @@ List of available project commands.  `yarn run <command-name>`
 | ------- | ----------- |
 | build:development | Builds the UI in development mode. |
 | build | Builds the UI for production. |
+| build:desktop:debian | Builds debian based linux artifacts on MacOS. |
 | lint | Runs all lint commands. |
 | lint:hbs | Lints `hbs` template files. |
 | lint:js | Lints `js` files. |
@@ -76,7 +77,6 @@ These environment variables may be used to customized the build.
 | `APP_UPDATER_CURRENT_VERSION` | Version of client. |
 | `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
-| `BUILD_DEBIAN` | Enable to build debian artifacts on MacOS. |
 | `BYPASS_CLI_SETUP` | Disable download and extraction of cli. For development use only. |
 
 ### Building for Production
@@ -91,11 +91,19 @@ yarn build
 ```
 
 `BOUNDARY_DESKTOP_SIGNING_IDENTITY` environment variable must be provided
-to codesign in production.
+to codesign MacOS artifacts in production.
 
 The static production assets are saved into the `dist/` folder.
 The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
 packaging. CLI version is defined in `electron-app/config/cli.js`.
+
+To build debian based linux artifacts on MacOS, additional [MacOS tools](https://www.electronforge.io/config/makers/deb) need to be installed before running the following commands from this folder.
+
+```
+yarn install
+yarn build:production # Build assets
+yarn build:desktop:debian # Build app
+```
 
 #### Environment Variables
 

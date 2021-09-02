@@ -1,6 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# User --provision-with option to setup machine for either cli or development
+# To setup a machine for testing:
+#    vagrant up --provision-with setup,cli
+# To setup a machine for developing desktop client:
+#    vagrant up --provision-with setup,development
+# To destroy machine:
+#    vagrant destroy -f
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
 
@@ -14,13 +22,10 @@ Vagrant.configure("2") do |config|
     vb.memory = "4096"
   end
 
-  config.vm.provision "shell", inline: <<-SHELL
+  config.vm.provision "setup", type: "shell", inline: <<-SHELL
     sudo apt-get update -y
     sudo apt-get upgrade -y
-    # sudo apt-get install -y --no-install-recommends virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11 curl
-    # Setup localhost ssh
-    # yes | ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
-    # cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+    sudo apt-get install curl
     # Add vagrant to administrator group
     sudo usermod -aG sudo vagrant
     # Add vagrant to shared folder
@@ -28,36 +33,40 @@ Vagrant.configure("2") do |config|
   SHELL
 
   # Setup for testing desktop
-  config.vm.provision "test", type: "shell", inline: <<-SHELL
-    # Install desktop GUI
+  config.vm.provision "cli", type: "shell", inline: <<-SHELL
+    # Install ubuntu desktop GUI
     sudo apt-get install -y --no-install-recommends lubuntu-desktop
     # Setup boundary cli
     sudo apt-get install docker.io -y
     sudo groupadd docker
     sudo usermod -aG docker vagrant
     sudo apt-get install -y unzip
-    cd /home/vagrant/Desktop
     curl https://releases.hashicorp.com/boundary/0.5.0/boundary_0.5.0_linux_amd64.zip -o boundary-cli.zip
-    unzip boundary-cli.zip
+    unzip -o boundary-cli.zip -d /home/vagrant/desktop/
+    # Setup localhost ssh
+    yes | ssh-keygen -t rsa -N "" -f /home/vagrant/.ssh/id_rsa -C vagrant@ubuntu-focal
+    cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+    sudo chown -R vagrant:vagrant .ssh
     # Restart
     sudo shutdown -r now
   SHELL
 
   # Setup for developing desktop
   config.vm.provision "development", type: "shell", inline: <<-SHELL
+    # Setup node 12 source
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+
     sudo apt-get remove cmdtest
     sudo apt-get install -y npm git
 
     git clone https://github.com/hashicorp/boundary-ui.git /home/vagrant/Desktop/boundary-ui
-    sudo npm install yarn
-    # Setup node 12 source
-    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+    sudo npm install -g yarn
 
     # Install boundary-ui dependencies
     cd /home/vagrant/Desktop/boundary-ui
     yarn install
   SHELL
 
-  config.vm.post_up_message = "Login using username/password: vagrant/vagrant.\nBoundary Desktop: /media/sf_vagrant-boundary-desktop-app.\nBoundary CLI: /home/vagrant/Desktop."
+  config.vm.post_up_message = "Login using username/password: vagrant/vagrant.\nBoundary Desktop Artifacts: /media/sf_vagrant-boundary-desktop-app.\nBoundary CLI: /home/vagrant/desktop/boundary."
 end

@@ -31,11 +31,14 @@ export default class ApplicationRoute extends Route {
   }
 
   /**
-   * Add OS config on controller
+   * Add OS config on controller.
+   * Display OS container actions (minimize, fullscreen, close) for
+   * Windows and Linux. Not enabled for MacOS.
    */
   async setupController(controller) {
     controller.set('isMacOS', await this.ipc.invoke('isMacOS'));
     controller.set('isWindowsOS', await this.ipc.invoke('isWindowsOS'));
+    controller.set('showFrameActions', !controller.isMacOS);
   }
 
   // =actions
