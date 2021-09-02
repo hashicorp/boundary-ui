@@ -28,13 +28,15 @@
     </Copyable>
   </page.header>
 
-  <page.navigation>
-    <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope'>
-        {{t 'titles.details'}}
-      </nav.link>
-    </Rose::Nav::Tabs>
-  </page.navigation>
+  {{#if (can 'read model' @model)}}
+    <page.navigation>
+      <Rose::Nav::Tabs as |nav|>
+        <nav.link @route='scopes.scope'>
+          {{t 'titles.details'}}
+        </nav.link>
+      </Rose::Nav::Tabs>
+    </page.navigation>
+  {{/if}}
 
   {{#if (can 'delete model' @model)}}
     <page.actions>
@@ -59,11 +61,21 @@
   {{/if}}
 
   <page.body>
-    <Form::Scope
-      @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-    />
+    {{#if (can 'read model' @model)}}
+      <Form::Scope
+        @model={{@model}}
+        @submit={{route-action 'save' @model}}
+        @cancel={{route-action 'cancel' @model}}
+      />
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message as |message|>
+          <message.description>
+            {{t 'resources.scope.messages.cannot_read'}}
+          </message.description>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/if}}
   </page.body>
 
 </Rose::Layout::Page>
