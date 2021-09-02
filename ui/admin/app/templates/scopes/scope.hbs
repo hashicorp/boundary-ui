@@ -77,10 +77,12 @@
               {{t 'resources.session.title_plural'}}
             </nav.link>
           {{/if}}
-          <nav.link @route='scopes.scope.targets'>
-            <Rose::Icon @name='flight-icons/crosshair-16' @size='medium' />
-            {{t 'resources.target.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='targets')}}
+            <nav.link @route='scopes.scope.targets'>
+              <Rose::Icon @name='flight-icons/crosshair-16' @size='medium' />
+              {{t 'resources.target.title_plural'}}
+            </nav.link>
+          {{/if}}
           {{#if (can 'navigate collection' @model collection='host-catalogs')}}
             <nav.link @route='scopes.scope.host-catalogs'>
               <Rose::Icon @name='flight-icons/collections-16' @size='medium' />
