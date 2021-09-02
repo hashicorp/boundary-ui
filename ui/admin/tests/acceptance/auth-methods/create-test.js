@@ -50,7 +50,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
   });
 
-  test('can create new auth method', async function (assert) {
+  test('Users can create new auth method', async function (assert) {
     assert.expect(1);
     const authMethodsCount = this.server.db.authMethods.length;
     await visit(urls.newAuthMethod);
@@ -60,7 +60,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     assert.equal(this.server.db.authMethods.length, authMethodsCount + 1);
   });
 
-  test('can navigate to new auth-methods route with proper authorization', async function (assert) {
+  test('Users can navigate to new auth-methods route with proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
@@ -75,7 +75,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     assert.ok(find(`[href="${urls.authMethods}"]`));
   });
 
-  test('cannot navigate to new auth-methods route without proper authorization', async function (assert) {
+  test('Users cannot navigate to new auth-methods route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [];
     await visit(urls.orgURL);
