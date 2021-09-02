@@ -83,6 +83,15 @@ module('Acceptance | scopes | delete', function (hooks) {
     assert.equal(getScopeCount('org'), orgScopeCount - 1);
   });
 
+  test('cannot delete scope without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.scopes.org.update({ authorized_actions: [] });
+    await visit(urls.orgScopeEdit);
+    assert.notOk(
+      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+    );
+  });
+
   test('can accept delete scope via dialog', async function (assert) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');

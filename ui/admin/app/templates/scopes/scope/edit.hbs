@@ -36,25 +36,27 @@
     </Rose::Nav::Tabs>
   </page.navigation>
 
-  <page.actions>
-    <Rose::Dropdown
-      @text='{{t 'actions.manage'}}'
-      @dropdownRight={{true}}
-      as |dropdown|
-    >
-      <dropdown.button
-        @style='danger'
-        @disabled={{@model.canSave}}
-        {{on 'click' (route-action 'delete' @model)}}
+  {{#if (can 'delete model' @model)}}
+    <page.actions>
+      <Rose::Dropdown
+        @text='{{t 'actions.manage'}}'
+        @dropdownRight={{true}}
+        as |dropdown|
       >
-        {{#if @model.isOrg}}
-          {{t 'resources.org.actions.delete'}}
-        {{else}}
-          {{t 'resources.project.actions.delete'}}
-        {{/if}}
-      </dropdown.button>
-    </Rose::Dropdown>
-  </page.actions>
+        <dropdown.button
+          @style='danger'
+          @disabled={{@model.canSave}}
+          {{on 'click' (route-action 'delete' @model)}}
+        >
+          {{#if @model.isOrg}}
+            {{t 'resources.org.actions.delete'}}
+          {{else}}
+            {{t 'resources.project.actions.delete'}}
+          {{/if}}
+        </dropdown.button>
+      </Rose::Dropdown>
+    </page.actions>
+  {{/if}}
 
   <page.body>
     <Form::Scope
