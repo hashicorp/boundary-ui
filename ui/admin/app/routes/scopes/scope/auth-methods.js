@@ -11,6 +11,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @service intl;
   @service notify;
   @service session;
+  @service can;
 
   // =methods
 
@@ -26,8 +27,13 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    * @return {Promise[AuthMethodModel]}
    */
   async model() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    return this.store.query('auth-method', { scope_id });
+    const scope = this.modelFor('scopes.scope');
+    const { id: scope_id } = scope;
+    if (
+      this.can.can('list collection', scope, { collection: 'auth-methods' })
+    ) {
+      return this.store.query('auth-method', { scope_id });
+    }
   }
 
   // =actions

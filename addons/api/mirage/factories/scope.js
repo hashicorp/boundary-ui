@@ -9,7 +9,7 @@ export default factory.extend({
       users: ['create', 'list'],
       groups: ['create', 'list'],
       roles: ['create', 'list'],
-      // 'auth-methods': ['create', 'list'],
+      'auth-methods': ['create', 'list'],
       // sessopms: ['list'],
       targets: ['create', 'list'],
       // 'host-catalogs': ['create', 'list'],
