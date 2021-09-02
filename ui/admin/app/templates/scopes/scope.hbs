@@ -106,10 +106,15 @@
               {{t 'resources.group.title_plural'}}
             </nav.link>
           {{/if}}
-          <nav.link @route='scopes.scope.roles'>
-            <Rose::Icon @name='flight-icons/identity-user-16' @size='medium' />
-            {{t 'resources.role.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='roles')}}
+            <nav.link @route='scopes.scope.roles'>
+              <Rose::Icon
+                @name='flight-icons/identity-user-16'
+                @size='medium'
+              />
+              {{t 'resources.role.title_plural'}}
+            </nav.link>
+          {{/if}}
           {{#if (can 'navigate collection' @model collection='auth-methods')}}
             <nav.link @route='scopes.scope.auth-methods'>
               <Rose::Icon @name='flight-icons/lock-16' @size='medium' />

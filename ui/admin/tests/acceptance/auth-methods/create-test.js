@@ -19,6 +19,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     scopes: {
       global: null,
       org: null,
+      project: null,
     },
     authMethod: null,
     orgScope: null,
@@ -29,14 +30,22 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     authMethods: null,
     newAuthMethod: null,
     authMethod: null,
-    orgURL: null,
   };
 
   hooks.beforeEach(function () {
     authenticateSession({});
-    instances.orgScope = this.server.create('scope', {
-      type: 'org',
-      scope: { id: 'global', type: 'global' },
+    instances.orgScope = this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: 'global', type: 'global' },
+      },
+      'withChildren'
+    );
+
+    instances.scopes.project = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.orgScope.id, type: instances.orgScope.type },
     });
 
     instances.authMethod = this.server.create('auth-method', {
@@ -44,8 +53,8 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     });
 
     // Generate route URLs for resources
-    urls.orgURL = `/scopes/${instances.orgScope.id}`;
-    urls.authMethods = `${urls.orgURL}/auth-methods`;
+    urls.orgScope = `/scopes/${instances.orgScope.id}`;
+    urls.authMethods = `${urls.orgScope}/auth-methods`;
     urls.newAuthMethod = `${urls.authMethods}/new?type=password`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
   });
@@ -66,7 +75,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       'create',
       'list',
     ];
-    await visit(urls.orgURL);
+    await visit(urls.orgScope);
     assert.ok(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'create'
@@ -78,7 +87,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
   test('Users cannot navigate to new auth-methods route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [];
-    await visit(urls.orgURL);
+    await visit(urls.orgScope);
     assert.notOk(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'create'
