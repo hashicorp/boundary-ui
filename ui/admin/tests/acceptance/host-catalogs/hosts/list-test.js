@@ -84,9 +84,10 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts = ['create'];
     await visit(urls.hostCatalog);
     assert.ok(find(`[href="${urls.hosts}"]`));
+    assert.ok(find(`.rose-layout-page-actions [href="${urls.newHost}"]`));
   });
 });
