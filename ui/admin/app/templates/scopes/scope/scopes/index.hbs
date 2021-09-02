@@ -43,7 +43,11 @@
             @title={{scope.name}}
             @description={{scope.description}}
             @id={{scope.id}}
-            @icon={{if scope.isOrg 'app-icons/org' 'app-icons/project'}}
+            @icon={{if
+              scope.isOrg
+              'flight-icons/org-16'
+              'flight-icons/grid-16'
+            }}
             @route='scopes.scope'
             @model={{scope.id}}
           />
@@ -62,7 +66,7 @@
               {{t 'resources.org.description'}}
             </message.description>
             <message.link @route='scopes.scope.new'>
-              <Rose::Icon @name='plus-circle-outline' />
+              <Rose::Icon @name='flight-icons/plus-circle-16' />
               {{t 'titles.new'}}
             </message.link>
           </Rose::Message>
@@ -79,7 +83,7 @@
               {{t 'resources.project.description'}}
             </message.description>
             <message.link @route='scopes.scope.new'>
-              <Rose::Icon @name='plus-circle-outline' />
+              <Rose::Icon @name='flight-icons/plus-circle-16' />
               {{t 'titles.new'}}
             </message.link>
           </Rose::Message>

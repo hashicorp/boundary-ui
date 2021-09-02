@@ -13,7 +13,7 @@ When style definition isn't supplied, a default style will be supplied.
 Styles: outline, dark, informational, informational-outline, success, success-outline, error, error-outline, warning, warning-outline, alert, alert-outline
 
 ```html
-<Rose::Badge @style="outline" @icon="user-organization">Badge</Rose::Badge>
+<Rose::Badge @style="outline" @icon="flight-icons/org-16">Badge</Rose::Badge>
 ```
 
 <Preview>
@@ -43,11 +43,9 @@ Styles: outline, dark, informational, informational-outline, success, success-ou
         'none'
       ),
       icon: select('icon', {
-          'user-organization': 'user-organization',
-          'partner': 'partner',
-          'gift-fill': 'gift-fill',
+          'flight-icons/org-16': 'flight-icons/org-16',
         },
-        'user-organization'
+        'flight-icons/org-16'
       ),
     }
   }}</Story>
@@ -58,7 +56,7 @@ Styles: outline, dark, informational, informational-outline, success, success-ou
     template: hbs`
     <Rose::Badge>default style</Rose::Badge>
     <Rose::Badge @style="outline">outline</Rose::Badge>
-    <Rose::Badge @icon="user-organization">default style with icon</Rose::Badge>
+    <Rose::Badge @icon="flight-icons/org-16">default style with icon</Rose::Badge>
     <Rose::Badge @style="dark">dark</Rose::Badge>
     <Rose::Badge @style="informational">informational</Rose::Badge>
     <Rose::Badge @style="informational-outline">informational-outline</Rose::Badge>
