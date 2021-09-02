@@ -10,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | targets', function (hooks) {
+module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -33,7 +33,6 @@ module('Acceptance | targets', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -66,6 +65,29 @@ module('Acceptance | targets', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getTargetCount(), count + 1);
+  });
+
+  test('can navigate to new targets route with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.projectScope);
+    assert.ok(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create'
+      )
+    );
+    assert.ok(find(`[href="${urls.targets}"]`));
+  });
+
+  test('cannot navigate to new targets route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions.targets = [];
+    await visit(urls.projectScope);
+    assert.notOk(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.targets}"]`));
   });
 
   test('can cancel create new targets', async function (assert) {
