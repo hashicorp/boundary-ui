@@ -12,7 +12,7 @@ Styles supported: primary, secondary, warning, and ghost.
 Disabling link button is not supported as it is an action on form components only.
 
 ```html
-<Rose::LinkButton @route="index" @style="primary" @iconRight="chevron-right">
+<Rose::LinkButton @route="index" @style="primary" @iconRight="flight-icons/entry-point-16">
   Content
 </Rose::LinkButton>
 ```
@@ -45,21 +45,18 @@ Disabling link button is not supported as it is an action on form components onl
       iconLeft: select(
         'iconLeft',
         {
-          'check-circle-outline': 'check-circle-outline',
-          'copy-action': 'copy-action',
-          'unfold-more': 'unfold-more',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'copy-action'
+        'flight-icons/clipboard-copy-16'
       ),
       iconRight: select(
         'iconRight',
         {
-          'check-circle-outline': 'check-circle-outline',
-          'chevron-right': 'chevron-right',
-          'copy-action': 'copy-action',
-          'search': 'search',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'chevron-right'
+        'flight-icons/clipboard-copy-16'
       ),
     },
   }}</Story>
@@ -68,7 +65,7 @@ Disabling link button is not supported as it is an action on form components onl
 Similar to `Rose::Button`, icon only link button is supported.
 
 ```html
-<Rose::LinkButton @route="index" @style="primary" @iconOnly="help-circle-outline" />
+<Rose::LinkButton @route="index" @style="primary" @iconOnly="flight-icons/help-16" />
 ```
 
 <Preview>
@@ -91,12 +88,10 @@ Similar to `Rose::Button`, icon only link button is supported.
       iconOnly: select(
         'iconOnly',
         {
-          'check-circle-outline': 'check-circle-outline',
-          'help-circle-outline': 'help-circle-outline',
-          'plus-circle-fill': 'plus-circle-fill',
-          'user-square-outline': 'user-square-outline',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/help-16': 'flight-icons/help-16',
         },
-        'help-circle-outline'
+        'flight-icons/help-16'
       ),
     },
   }}</Story>

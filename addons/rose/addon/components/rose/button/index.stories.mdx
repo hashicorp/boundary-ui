@@ -12,7 +12,7 @@ to trigger actions or to submit forms.  Avoid using buttons as simple links to
 other routes.  For accessibility, use links instead.
 
 ```htmlbars
-<Rose::Button @style="primary" @iconRight="chevron-right">
+<Rose::Button @style="primary" @iconRight="flight-icons/entry-point-16">
   Action
 </Rose::Button>
 ```
@@ -49,23 +49,18 @@ other routes.  For accessibility, use links instead.
       iconLeft: select(
         'iconLeft',
         {
-          'check-circle-outline': 'check-circle-outline',
-          'copy-action': 'copy-action',
-          'unfold-more': 'unfold-more',
-          'unfold-less': 'unfold-less',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'check-circle-outline'
+        'flight-icons/check-circle-16'
       ),
       iconRight: select(
         'iconRight',
         {
-          'check-circle-outline': 'check-circle-outline',
-          'copy-action': 'chevron-right',
-          'copy-action': 'copy-action',
-          'unfold-more': 'unfold-more',
-          'unfold-less': 'unfold-less',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'chevron-right'
+        'flight-icons/clipboard-copy-16'
       ),
       onClick: action('clicked'),
     },
@@ -86,12 +81,10 @@ button in this case for accessibility.
       iconOnly: select(
         'iconOnly',
         {
-          'check-circle-outline': 'check-circle-outline',
-          'copy-action': 'copy-action',
-          'unfold-more': 'unfold-more',
-          'unfold-less': 'unfold-less',
+          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
+          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
         },
-        'check-circle-outline'
+        'flight-icons/check-circle-16'
       ),
     },
   }}</Story>
