@@ -4,10 +4,10 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   // =methods
 
   setupController(controller) {
-    const scope = this.modelFor(
+    const credentialStore = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
     super.setupController(...arguments);
-    controller.setProperties({ scope });
+    controller.setProperties({ credentialStore });
   }
 }

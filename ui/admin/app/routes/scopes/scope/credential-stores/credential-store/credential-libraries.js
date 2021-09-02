@@ -14,12 +14,12 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    * @return {Promise{[CredentialLibraryModel]}}
    */
   model() {
-    const scope = this.modelFor(
+    const credentialStore = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
-    const { id: credential_store_id } = scope;
+    const { id: credential_store_id } = credentialStore;
     if (
-      this.can.can('list collection', scope, {
+      this.can.can('list collection', credentialStore, {
         collection: 'credential-libraries',
       })
     ) {

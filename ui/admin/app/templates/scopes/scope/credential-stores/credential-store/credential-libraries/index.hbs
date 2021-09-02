@@ -54,13 +54,19 @@
     >
       <message.description>
         {{#if
-          (can 'list collection' this.scope collection='credential-libraries')
+          (can
+            'list collection'
+            this.credentialStore
+            collection='credential-libraries'
+          )
         }}
           {{! can list (at least):  show default welcome message}}
           {{t 'resources.credential-library.description'}}
 
         {{else if (can
-          'create collection' this.scope collection='credential-libraries'
+          'create collection'
+          this.credentialStore
+          collection='credential-libraries'
         )}}
           {{! can create (only):  show create-but-not-list welcome message}}
           {{t
@@ -77,7 +83,11 @@
 
       </message.description>
       {{#if
-        (can 'create collection' this.scope collection='credential-libraries')
+        (can
+          'create collection'
+          this.credentialStore
+          collection='credential-libraries'
+        )
       }}
         <message.link
           @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
