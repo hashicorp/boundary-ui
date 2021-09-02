@@ -3,11 +3,6 @@ import { trait } from 'ember-cli-mirage';
 
 export default factory.extend({
   type: 'global',
-  authorized_collection_actions: () => {
-    return {
-      'host-catalogs': ['create', 'list'],
-    };
-  },
 
   authorized_collection_actions: () => {
     return {
@@ -17,7 +12,7 @@ export default factory.extend({
       // 'auth-methods': ['create', 'list'],
       // sessopms: ['list'],
       // targets: ['create', 'list'],
-      // 'host-catalogs': ['create', 'list'],
+      'host-catalogs': ['create', 'list'],
       // 'credential-stores': ['create', 'list'],
     };
   },
