@@ -18,11 +18,13 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
    * @return {Promise{[HostSetModel]}}
    */
   model() {
-    const scope = this.modelFor('scopes.scope.host-catalogs.host-catalog');
+    const hostCatalog = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog'
+    );
 
-    const { id: host_catalog_id } = scope;
+    const { id: host_catalog_id } = hostCatalog;
     if (
-      this.can.can('list collection', scope, {
+      this.can.can('list collection', hostCatalog, {
         collection: 'host-sets',
       })
     ) {
