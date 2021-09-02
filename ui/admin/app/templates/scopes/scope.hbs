@@ -18,7 +18,7 @@
       {{#if @model.isGlobal}}
         <Rose::Nav::Sidebar @title={{t 'titles.general'}} as |nav|>
           <nav.link @route='scopes.scope.scopes'>
-            <Rose::Icon @name='app-icons/org' @size='medium' />
+            <Rose::Icon @name='flight-icons/org-16' @size='medium' />
             {{t 'resources.org.title_plural'}}
           </nav.link>
         </Rose::Nav::Sidebar>
@@ -28,12 +28,12 @@
         <Rose::Nav::Sidebar @title={{t 'titles.general'}} as |nav|>
           {{#if this.session.data.authenticated.isGlobal}}
             <nav.link @route='scopes.scope.scopes' @model='global'>
-              <Rose::Icon @name='app-icons/org' @size='medium' />
+              <Rose::Icon @name='flight-icons/org-16' @size='medium' />
               {{t 'resources.org.title_plural'}}
             </nav.link>
           {{/if}}
           <nav.link @route='scopes.scope.scopes'>
-            <Rose::Icon @name='app-icons/project' @size='medium' />
+            <Rose::Icon @name='flight-icons/grid-16' @size='medium' />
             {{t 'resources.project.title_plural'}}
           </nav.link>
         </Rose::Nav::Sidebar>
@@ -43,12 +43,12 @@
         <Rose::Nav::Sidebar @title={{t 'titles.general'}} as |nav|>
           {{#if this.session.data.authenticated.isGlobal}}
             <nav.link @route='scopes.scope.scopes' @model='global'>
-              <Rose::Icon @name='app-icons/org' @size='medium' />
+              <Rose::Icon @name='flight-icons/org-16' @size='medium' />
               {{t 'resources.org.title_plural'}}
             </nav.link>
           {{/if}}
           <nav.link @route='scopes.scope.scopes' @model={{@model.scopeID}}>
-            <Rose::Icon @name='app-icons/project' @size='medium' />
+            <Rose::Icon @name='flight-icons/grid-16' @size='medium' />
             {{t 'resources.project.title_plural'}}
           </nav.link>
         </Rose::Nav::Sidebar>
@@ -58,13 +58,13 @@
         <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
           <nav.link @route="scopes.scope.groups">
             <Rose::Icon
-              @name="app-icons/group"
+              @name="flight-icons/folder-users-16"
               @size="medium" />
             {{t "resources.group.title_plural"}}
           </nav.link>
           <nav.link @route="scopes.scope.roles">
             <Rose::Icon
-              @name="app-icons/roles"
+              @name="flight-icons/identity-user-16"
               @size="medium" />
             {{t "resources.role.title_plural"}}
           </nav.link>
@@ -72,20 +72,20 @@
         --}}
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
           <nav.link @route='scopes.scope.sessions'>
-            <Rose::Icon @name='app-icons/action-session' @size='medium' />
+            <Rose::Icon @name='flight-icons/entry-point-16' @size='medium' />
             {{t 'resources.session.title_plural'}}
           </nav.link>
           <nav.link @route='scopes.scope.targets'>
-            <Rose::Icon @name='app-icons/target' @size='medium' />
+            <Rose::Icon @name='flight-icons/crosshair-16' @size='medium' />
             {{t 'resources.target.title_plural'}}
           </nav.link>
           <nav.link @route='scopes.scope.host-catalogs'>
-            <Rose::Icon @name='app-icons/host-catalogs' @size='medium' />
+            <Rose::Icon @name='flight-icons/collections-16' @size='medium' />
             {{t 'resources.host-catalog.title_plural'}}
           </nav.link>
           {{#if (feature-flag 'credential-store')}}
             <nav.link @route='scopes.scope.credential-stores'>
-              <Rose::Icon @name='app-icons/credentials' @size='medium' />
+              <Rose::Icon @name='flight-icons/key-16' @size='medium' />
               {{t 'resources.credential-store.title_plural'}}
             </nav.link>
           {{/if}}
@@ -94,22 +94,24 @@
 
       {{#unless @model.isProject}}
         <Rose::Nav::Sidebar @title={{t 'titles.iam'}} as |nav|>
-          <nav.link @route='scopes.scope.users'>
-            <Rose::Icon @name='app-icons/users' @size='medium' />
-            {{t 'resources.user.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='users')}}
+            <nav.link @route='scopes.scope.users'>
+              <Rose::Icon @name='flight-icons/users-16' @size='medium' />
+              {{t 'resources.user.title_plural'}}
+            </nav.link>
+          {{/if}}
           {{#if (can 'navigate collection' @model collection='groups')}}
             <nav.link @route='scopes.scope.groups'>
-              <Rose::Icon @name='app-icons/group' @size='medium' />
+              <Rose::Icon @name='flight-icons/folder-users-16' @size='medium' />
               {{t 'resources.group.title_plural'}}
             </nav.link>
           {{/if}}
           <nav.link @route='scopes.scope.roles'>
-            <Rose::Icon @name='app-icons/roles' @size='medium' />
+            <Rose::Icon @name='flight-icons/identity-user-16' @size='medium' />
             {{t 'resources.role.title_plural'}}
           </nav.link>
           <nav.link @route='scopes.scope.auth-methods'>
-            <Rose::Icon @name='app-icons/auth-method' @size='medium' />
+            <Rose::Icon @name='flight-icons/lock-16' @size='medium' />
             {{t 'resources.auth-method.title_plural'}}
           </nav.link>
         </Rose::Nav::Sidebar>
