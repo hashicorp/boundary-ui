@@ -42,6 +42,11 @@ export default class BaseModel extends Model {
   })
   authorized_actions;
 
+  @attr({
+    readOnly: true,
+  })
+  authorized_collection_actions;
+
   set scopeModel(model) {
     if (model) {
       const json = model.serialize();

@@ -94,10 +94,12 @@
 
       {{#unless @model.isProject}}
         <Rose::Nav::Sidebar @title={{t 'titles.iam'}} as |nav|>
-          <nav.link @route='scopes.scope.users'>
-            <Rose::Icon @name='flight-icons/users-16' @size='medium' />
-            {{t 'resources.user.title_plural'}}
-          </nav.link>
+          {{#if (can 'navigate collection' @model collection='users')}}
+            <nav.link @route='scopes.scope.users'>
+              <Rose::Icon @name='flight-icons/users-16' @size='medium' />
+              {{t 'resources.user.title_plural'}}
+            </nav.link>
+          {{/if}}
           <nav.link @route='scopes.scope.groups'>
             <Rose::Icon @name='flight-icons/folder-users-16' @size='medium' />
             {{t 'resources.group.title_plural'}}
