@@ -10,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | host sets', function (hooks) {
+module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -77,6 +77,18 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getHostSetCount(), count + 1);
+  });
+
+  test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
+    await visit(urls.hostCatalog);
+    assert.notOk(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.hostSets}"]`));
   });
 
   test('can cancel create new host', async function (assert) {
