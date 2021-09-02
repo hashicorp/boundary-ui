@@ -7,12 +7,12 @@ export default factory.extend({
   authorized_collection_actions: () => {
     return {
       users: ['create', 'list'],
+      sessions: ['list'],
       groups: ['create', 'list'],
       roles: ['create', 'list'],
-      // 'auth-methods': ['create', 'list'],
-      // sessopms: ['list'],
+      'auth-methods': ['create', 'list'],
       // targets: ['create', 'list'],
-      // 'host-catalogs': ['create', 'list'],
+      'host-catalogs': ['create', 'list'],
       // 'credential-stores': ['create', 'list'],
     };
   },
