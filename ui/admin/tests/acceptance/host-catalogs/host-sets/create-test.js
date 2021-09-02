@@ -70,13 +70,25 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     authenticateSession({});
   });
 
-  test('can create new host', async function (assert) {
+  test('can create new host sets', async function (assert) {
     assert.expect(1);
     const count = getHostSetCount();
     await visit(urls.newHostSet);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getHostSetCount(), count + 1);
+  });
+
+  test('Users cannot create a new host set without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
+    await visit(urls.hostCatalog);
+    assert.notOk(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHostSet}"]`));
   });
 
   test('Users cannot navigate to new host sets route without proper authorization', async function (assert) {
