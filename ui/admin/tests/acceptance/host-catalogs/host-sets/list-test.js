@@ -30,6 +30,7 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
     hostCatalog: null,
     hostSets: null,
     hostSet: null,
+    newHostSet: null,
   };
 
   hooks.beforeEach(function () {
@@ -58,6 +59,7 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.hostSets = `${urls.hostCatalog}/host-sets`;
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
+    urls.newHostSet = `${urls.hostSets}/new`;
     authenticateSession({});
   });
 
@@ -85,11 +87,12 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
   });
 
   test('Users can navigate to index with only create action', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [
       'create',
     ];
     await visit(urls.hostCatalog);
     assert.ok(find(`[href="${urls.hostSets}"]`));
+    assert.ok(find(`.rose-layout-page-actions [href="${urls.newHostSet}"]`));
   });
 });
