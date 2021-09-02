@@ -12,7 +12,6 @@ import {
 module('Acceptance | auth-methods | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  let orgURL;
 
   const instances = {
     scopes: {
@@ -27,6 +26,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
       org: null,
     },
     authMethods: null,
+    orgScope: null,
   };
 
   hooks.beforeEach(function () {
@@ -48,14 +48,14 @@ module('Acceptance | auth-methods | list', function (hooks) {
       'withChildren'
     );
 
-    orgURL = `/scopes/${instances.orgScope.id}`;
+    urls.orgScope = `/scopes/${instances.orgScope.id}`;
     urls.authMethods = `/scopes/${instances.orgScope.id}/auth-methods`;
     authenticateSession({});
   });
 
   test('can navigate to auth methods with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.ok(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'list'
@@ -67,7 +67,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
   test('User cannot navigate to index without either list or create actions', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [];
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.notOk(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'list'
@@ -81,7 +81,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
     ];
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.ok(find(`[href="${urls.authMethods}"]`));
   });
 });

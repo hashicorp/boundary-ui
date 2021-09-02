@@ -72,7 +72,6 @@ module('Acceptance | auth-methods | create ', function (hooks) {
         'create'
       )
     );
-    console.log(urls.orgURL);
     assert.ok(find(`[href="${urls.authMethods}"]`));
   });
 
