@@ -8,7 +8,7 @@ export default factory.extend({
     return {
       users: ['create', 'list'],
       groups: ['create', 'list'],
-      // roles: ['create', 'list'],
+      roles: ['create', 'list'],
       // 'auth-methods': ['create', 'list'],
       // sessopms: ['list'],
       // targets: ['create', 'list'],
