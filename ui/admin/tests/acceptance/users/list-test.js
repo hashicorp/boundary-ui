@@ -19,7 +19,6 @@ module('Acceptance | users | list', function (hooks) {
       global: null,
       org: null,
     },
-    orgScope: null,
   };
 
   const urls = {

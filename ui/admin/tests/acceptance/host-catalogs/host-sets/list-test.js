@@ -1,8 +1,7 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -10,11 +9,9 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | host sets', function (hooks) {
+module('Acceptance | host-catalogs | host sets | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let getHostSetCount;
 
   const instances = {
     scopes: {
@@ -33,7 +30,6 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
     hostCatalog: null,
     hostSets: null,
     hostSet: null,
-    unknownHostSet: null,
     newHostSet: null,
   };
 
@@ -63,62 +59,40 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.hostSets = `${urls.hostCatalog}/host-sets`;
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
-    urls.unknownHostSet = `${urls.hostSets}/foo`;
     urls.newHostSet = `${urls.hostSets}/new`;
-    // Generate resource couner
-    getHostSetCount = () => this.server.schema.hostSets.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new host', async function (assert) {
-    assert.expect(1);
-    const count = getHostSetCount();
-    await visit(urls.newHostSet);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert.equal(getHostSetCount(), count + 1);
+  test('Users can navigate to host-sets with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.hostCatalog);
+    assert.ok(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
+        'list'
+      )
+    );
+    assert.ok(find(`[href="${urls.hostSets}"]`));
   });
 
-  test('can cancel create new host', async function (assert) {
+  test('Users cannot navigate to index without either list or create actions', async function (assert) {
     assert.expect(2);
-    const count = getHostSetCount();
-    await visit(urls.newHostSet);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hostSets);
-    assert.equal(getHostSetCount(), count);
+    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
+    await visit(urls.hostCatalog);
+    assert.notOk(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
+        'list'
+      )
+    );
+    assert.notOk(find(`[href="${urls.hostSets}"]`));
   });
 
-  test('saving a new host set with invalid fields displays error messages', async function (assert) {
+  test('Users can navigate to index with only create action', async function (assert) {
     assert.expect(2);
-    this.server.post('/host-sets', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.newHostSet);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
-    );
+    instances.hostCatalog.authorized_collection_actions['host-sets'] = [
+      'create',
+    ];
+    await visit(urls.hostCatalog);
+    assert.ok(find(`[href="${urls.hostSets}"]`));
+    assert.ok(find(`.rose-layout-page-actions [href="${urls.newHostSet}"]`));
   });
 });

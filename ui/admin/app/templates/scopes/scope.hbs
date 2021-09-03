@@ -73,7 +73,7 @@
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
           {{#if (can 'navigate collection' @model collection='sessions')}}
             <nav.link @route='scopes.scope.sessions'>
-              <Rose::Icon @name='app-icons/action-session' @size='medium' />
+              <Rose::Icon @name='flight-icons/entry-point-16' @size='medium' />
               {{t 'resources.session.title_plural'}}
             </nav.link>
           {{/if}}
@@ -89,11 +89,15 @@
               {{t 'resources.host-catalog.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if (feature-flag 'credential-store')}}
-            <nav.link @route='scopes.scope.credential-stores'>
-              <Rose::Icon @name='flight-icons/key-16' @size='medium' />
-              {{t 'resources.credential-store.title_plural'}}
-            </nav.link>
+          {{#if
+            (can 'navigate collection' @model collection='credential-stores')
+          }}
+            {{#if (feature-flag 'credential-store')}}
+              <nav.link @route='scopes.scope.credential-stores'>
+                <Rose::Icon @name='flight-icons/key-16' @size='medium' />
+                {{t 'resources.credential-store.title_plural'}}
+              </nav.link>
+            {{/if}}
           {{/if}}
         </Rose::Nav::Sidebar>
       {{/if}}
