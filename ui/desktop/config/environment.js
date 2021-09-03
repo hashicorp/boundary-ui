@@ -58,7 +58,7 @@ module.exports = function (environment) {
       oidc: true,
       search: false,
       filter: false,
-      capabilities: false,
+      capabilities: true,
       'credential-store': false,
     },
   };
