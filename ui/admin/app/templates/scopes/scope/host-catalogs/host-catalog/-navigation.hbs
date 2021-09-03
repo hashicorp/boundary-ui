@@ -2,10 +2,14 @@
   <nav.link @route='scopes.scope.host-catalogs.host-catalog.index'>
     {{t 'titles.details'}}
   </nav.link>
-  <nav.link @route='scopes.scope.host-catalogs.host-catalog.hosts'>
-    {{t 'resources.host.title_plural'}}
-  </nav.link>
-  <nav.link @route='scopes.scope.host-catalogs.host-catalog.host-sets'>
-    {{t 'resources.host-set.title_plural'}}
-  </nav.link>
+  {{#if (can 'navigate collection' @model collection='hosts')}}
+    <nav.link @route='scopes.scope.host-catalogs.host-catalog.hosts'>
+      {{t 'resources.host.title_plural'}}
+    </nav.link>
+  {{/if}}
+  {{#if (can 'navigate collection' @model collection='host-sets')}}
+    <nav.link @route='scopes.scope.host-catalogs.host-catalog.host-sets'>
+      {{t 'resources.host-set.title_plural'}}
+    </nav.link>
+  {{/if}}
 </Rose::Nav::Tabs>
