@@ -55,12 +55,16 @@
       </dropdown.button>
     {{/if}}
   {{/if}}
-  <dropdown.link
-    @route='scopes.scope.auth-methods.auth-method.accounts.new'
-    @model={{@model}}
-  >
-    {{t 'resources.account.actions.create'}}
-  </dropdown.link>
+  {{#if (can 'create collection' @model collection='accounts')}}
+
+    <dropdown.link
+      @route='scopes.scope.auth-methods.auth-method.accounts.new'
+      @model={{@model}}
+    >
+      {{t 'resources.account.actions.create'}}
+    </dropdown.link>
+  {{/if}}
+
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button

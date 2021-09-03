@@ -11,7 +11,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | accounts', function (hooks) {
+module('Acceptance | accounts | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -78,6 +78,41 @@ module('Acceptance | accounts', function (hooks) {
     await fillIn('[name="password"]', 'password');
     await click('form [type="submit"]:not(:disabled)');
     assert.equal(this.server.db.accounts.length, accountsCount + 1);
+  });
+
+  test('Users cannot create a new account without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.authMethod.authorized_collection_actions.accounts = [];
+    await visit(urls.authMethod);
+    assert.notOk(
+      instances.authMethod.authorized_collection_actions.accounts.includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`.rose-layout-page-actions [href="${urls.newAccount}"]`));
+  });
+
+  test('Users can navigate to new account route with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.authMethod);
+    assert.ok(
+      instances.authMethod.authorized_collection_actions.accounts.includes(
+        'create'
+      )
+    );
+    assert.ok(find(`[href="${urls.accounts}"]`));
+  });
+
+  test('Users cannot navigate to new account route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.authMethod.authorized_collection_actions.accounts = [];
+    await visit(urls.authMethod);
+    assert.notOk(
+      instances.authMethod.authorized_collection_actions.accounts.includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.accounts}"]`));
   });
 
   test('can cancel a new account creation', async function (assert) {
