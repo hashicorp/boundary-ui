@@ -10,6 +10,11 @@ export default factory.extend({
       'update',
       'delete',
     ],
+  authorized_collection_actions: () => {
+    return {
+      'host-sets': ['create', 'list'],
+    };
+  },
   withChildren: trait({
     afterCreate(hostCatalog, server) {
       const { scope } = hostCatalog;

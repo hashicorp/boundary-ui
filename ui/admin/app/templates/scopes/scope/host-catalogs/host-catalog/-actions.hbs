@@ -9,12 +9,15 @@
   >
     {{t 'resources.host.actions.create'}}
   </dropdown.link>
-  <dropdown.link
-    @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
-    @model={{@model}}
-  >
-    {{t 'resources.host-set.actions.create'}}
-  </dropdown.link>
+  {{#if (can 'create collection' @model collection='host-sets')}}
+
+    <dropdown.link
+      @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
+      @model={{@model}}
+    >
+      {{t 'resources.host-set.actions.create'}}
+    </dropdown.link>
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button
