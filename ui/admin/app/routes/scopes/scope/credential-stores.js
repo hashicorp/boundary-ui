@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
@@ -6,14 +7,21 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeCredentialStoresRoute extends Route {
   // =methods
-
+  @service can;
   /**
    * Load all credential stores under current scope
    * @returns {Promise[CredentialStoreModel]}
    */
   async model() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    return this.store.query('credential-store', { scope_id });
+    const scope = this.modelFor('scopes.scope');
+    const { id: scope_id } = scope;
+    if (
+      this.can.can('list collection', scope, {
+        collection: 'credential-stores',
+      })
+    ) {
+      return this.store.query('credential-store', { scope_id });
+    }
   }
 
   // =actions

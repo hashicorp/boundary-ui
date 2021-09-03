@@ -19,10 +19,10 @@ export default factory.extend({
       sessions: ['list'],
       groups: ['create', 'list'],
       roles: ['create', 'list'],
+      targets: ['create', 'list'],
+      'credential-stores': ['create', 'list'],
       'auth-methods': ['create', 'list'],
-      // targets: ['create', 'list'],
       'host-catalogs': ['create', 'list'],
-      // 'credential-stores': ['create', 'list'],
     };
   },
 

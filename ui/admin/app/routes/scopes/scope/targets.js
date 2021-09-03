@@ -11,6 +11,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   @service intl;
   @service notify;
   @service session;
+  @service can;
 
   // =methods
 
@@ -26,8 +27,11 @@ export default class ScopesScopeTargetsRoute extends Route {
    * @return {Promise{[TargetModel]}}
    */
   async model() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    return this.store.query('target', { scope_id });
+    const scope = this.modelFor('scopes.scope');
+    const { id: scope_id } = scope;
+    if (this.can.can('list collection', scope, { collection: 'targets' })) {
+      return this.store.query('target', { scope_id });
+    }
   }
 
   // =actions
