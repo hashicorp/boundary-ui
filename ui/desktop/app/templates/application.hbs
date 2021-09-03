@@ -19,23 +19,26 @@
       {{/if}}
 
       <header.utilities as |utilities|>
-        {{#if this.showFrameActions}}
+        {{#if this.showWindowActions}}
           <Rose::Button
             @iconOnly='flight-icons/x-16'
             @style='warning'
             class='button-window-close'
+            title={{t 'actions.close'}}
             {{on 'click' (route-action 'close')}}
           />
           <Rose::Button
-            @iconOnly='box-outline'
+            @iconOnly='flight-icons/square-16'
             @style='secondary'
             class='button-window-fullscreen'
+            title={{t 'actions.fullscreen'}}
             {{on 'click' (route-action 'toggleFullScreen')}}
           />
           <Rose::Button
-            @iconOnly='minus-plain'
+            @iconOnly='flight-icons/minus-16'
             @style='secondary'
             class='button-window-minimize'
+            title={{t 'actions.minimize'}}
             {{on 'click' (route-action 'minimize')}}
           />
         {{/if}}
