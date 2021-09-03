@@ -10,11 +10,11 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | hosts', function (hooks) {
+module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let getHostCount;
+  let getHostSetCount;
 
   const instances = {
     scopes: {
@@ -31,10 +31,10 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     projectScope: null,
     hostCatalogs: null,
     hostCatalog: null,
-    hosts: null,
-    host: null,
-    unknownHost: null,
-    newHost: null,
+    hostSets: null,
+    hostSet: null,
+    unknownHostSet: null,
+    newHostSet: null,
   };
 
   hooks.beforeEach(function () {
@@ -51,7 +51,7 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
-    instances.host = this.server.create('host', {
+    instances.hostSet = this.server.create('host-set', {
       scope: instances.scopes.project,
       hostCatalog: instances.hostCatalog,
     });
@@ -61,37 +61,61 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
-    urls.hosts = `${urls.hostCatalog}/hosts`;
-    urls.host = `${urls.hosts}/${instances.host.id}`;
-    urls.unknownHost = `${urls.hosts}/foo`;
-    urls.newHost = `${urls.hosts}/new`;
+    urls.hostSets = `${urls.hostCatalog}/host-sets`;
+    urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
+    urls.unknownHostSet = `${urls.hostSets}/foo`;
+    urls.newHostSet = `${urls.hostSets}/new`;
     // Generate resource couner
-    getHostCount = () => this.server.schema.hosts.all().models.length;
+    getHostSetCount = () => this.server.schema.hostSets.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new host', async function (assert) {
+  test('can create new host sets', async function (assert) {
     assert.expect(1);
-    const count = getHostCount();
-    await visit(urls.newHost);
+    const count = getHostSetCount();
+    await visit(urls.newHostSet);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getHostCount(), count + 1);
+    assert.equal(getHostSetCount(), count + 1);
+  });
+
+  test('Users cannot create a new host set without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
+    await visit(urls.hostCatalog);
+    assert.notOk(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHostSet}"]`));
+  });
+
+  test('Users cannot navigate to new host sets route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
+    await visit(urls.hostCatalog);
+    assert.notOk(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.hostSets}"]`));
   });
 
   test('can cancel create new host', async function (assert) {
     assert.expect(2);
-    const count = getHostCount();
-    await visit(urls.newHost);
+    const count = getHostSetCount();
+    await visit(urls.newHostSet);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hosts);
-    assert.equal(getHostCount(), count);
+    assert.equal(currentURL(), urls.hostSets);
+    assert.equal(getHostSetCount(), count);
   });
 
-  test('saving a new host with invalid fields displays error messages', async function (assert) {
+  test('saving a new host set with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/hosts', () => {
+    this.server.post('/host-sets', () => {
       return new Response(
         400,
         {},
@@ -110,7 +134,7 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
         }
       );
     });
-    await visit(urls.newHost);
+    await visit(urls.newHostSet);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
