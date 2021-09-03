@@ -42,7 +42,7 @@ module('Integration | Component | rose/card/link', function (hooks) {
 
   test('it renders with @icon', async function (assert) {
     await render(
-      hbs`<Rose::Card::Link @title="foo" @icon="alert-circle-outline" />`
+      hbs`<Rose::Card::Link @title="foo" @icon="flight-icons/alert-circle-16" />`
     );
     assert.ok(find('.rose-icon'));
   });

@@ -1,3 +1,10 @@
 import Route from '@ember/routing/route';
+export default class ScopesScopeGroupsIndexRoute extends Route {
+  // =methods
 
-export default class ScopesScopeGroupsIndexRoute extends Route {}
+  setupController(controller) {
+    const scope = this.modelFor('scopes.scope');
+    super.setupController(...arguments);
+    controller.setProperties({ scope });
+  }
+}

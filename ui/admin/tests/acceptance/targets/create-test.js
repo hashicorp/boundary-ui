@@ -2,14 +2,19 @@ import { module, test } from 'qunit';
 import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import {
+  authenticateSession,
+  // These are left here intentionally for future reference.
+  //currentSession,
+  //invalidateSession,
+} from 'ember-simple-auth/test-support';
 
-module('Acceptance | credential-stores', function (hooks) {
+module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let getCredentialStoresCount;
+  let getTargetCount;
 
   const instances = {
     scopes: {
@@ -18,19 +23,16 @@ module('Acceptance | credential-stores', function (hooks) {
       project: null,
     },
   };
-
   const urls = {
     globalScope: null,
     orgScope: null,
     projectScope: null,
-    credentialStores: null,
-    credentialStore: null,
-    unknownCredentialStore: null,
-    newCredentialStore: null,
+    targets: null,
+    target: null,
+    newTarget: null,
   };
 
   hooks.beforeEach(function () {
-    // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -40,46 +42,67 @@ module('Acceptance | credential-stores', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.credentialStore = this.server.create('credential-store', {
+    instances.target = this.server.create('target', {
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.credentialStores = `${urls.projectScope}/credential-stores`;
-    urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
-    urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
-    urls.newCredentialStore = `${urls.credentialStores}/new`;
-    // Generate resource counter
-    getCredentialStoresCount = () => {
-      return this.server.schema.credentialStores.all().models.length;
-    };
+    urls.targets = `${urls.projectScope}/targets`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.unknownTarget = `${urls.targets}/foo`;
+    urls.newTarget = `${urls.targets}/new`;
+    // Generate resource couner
+    getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
   });
 
-  test('can create a new credential stores', async function (assert) {
+  test('can create new targets', async function (assert) {
     assert.expect(1);
-    const count = getCredentialStoresCount();
-    await visit(urls.newCredentialStore);
+    const count = getTargetCount();
+    await visit(urls.newTarget);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getCredentialStoresCount(), count + 1);
+    assert.equal(getTargetCount(), count + 1);
   });
 
-  test('can cancel create new credential stores', async function (assert) {
+  test('can navigate to new targets route with proper authorization', async function (assert) {
     assert.expect(2);
-    const count = getCredentialStoresCount();
-    await visit(urls.newCredentialStore);
+    await visit(urls.projectScope);
+    assert.ok(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create'
+      )
+    );
+    assert.ok(find(`[href="${urls.targets}"]`));
+  });
+
+  test('cannot navigate to new targets route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions.targets = [];
+    await visit(urls.projectScope);
+    assert.notOk(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.targets}"]`));
+  });
+
+  test('can cancel create new targets', async function (assert) {
+    assert.expect(2);
+    const count = getTargetCount();
+    await visit(urls.newTarget);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.credentialStores);
-    assert.equal(getCredentialStoresCount(), count);
+    assert.equal(currentURL(), urls.targets);
+    assert.equal(getTargetCount(), count);
   });
 
-  test('saving a new credential store with invalid fields displays error messages', async function (assert) {
+  test('saving a new target with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/credential-stores', () => {
+    this.server.post('/targets', () => {
       return new Response(
         400,
         {},
@@ -98,7 +121,7 @@ module('Acceptance | credential-stores', function (hooks) {
         }
       );
     });
-    await visit(urls.newCredentialStore);
+    await visit(urls.newTarget);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),

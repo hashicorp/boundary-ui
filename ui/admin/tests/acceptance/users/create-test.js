@@ -10,11 +10,12 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | users', function (hooks) {
+module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let orgScope;
+  let orgURL;
   let usersURL;
   let newUserURL;
 
@@ -23,10 +24,12 @@ module('Acceptance | users', function (hooks) {
       'scope',
       {
         type: 'org',
+        scope: { id: 'global', type: 'global' },
       },
       'withChildren'
     );
 
+    orgURL = `/scopes/${orgScope.id}`;
     usersURL = `/scopes/${orgScope.id}/users`;
     newUserURL = `${usersURL}/new`;
 
@@ -40,6 +43,23 @@ module('Acceptance | users', function (hooks) {
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
     assert.equal(this.server.db.users.length, usersCount + 1);
+  });
+
+  test('Users can navigate to new users route with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(orgURL);
+    assert.ok(orgScope.authorized_collection_actions.users.includes('create'));
+    assert.ok(find(`[href="${orgURL}/users"]`));
+  });
+
+  test('Users cannot navigate to new users route without proper authorization', async function (assert) {
+    assert.expect(2);
+    orgScope.authorized_collection_actions.users = [];
+    await visit(orgURL);
+    assert.notOk(
+      orgScope.authorized_collection_actions.users.includes('create')
+    );
+    assert.notOk(find(`[href="${orgURL}/users"]`));
   });
 
   test('can cancel creation of a new user', async function (assert) {
