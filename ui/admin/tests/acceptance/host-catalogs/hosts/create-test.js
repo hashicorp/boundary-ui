@@ -10,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | hosts', function (hooks) {
+module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -77,6 +77,40 @@ module('Acceptance | host-catalogs | hosts', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getHostCount(), count + 1);
+  });
+
+  test('Users cannot create a new host without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions.hosts = [];
+    await visit(urls.hostCatalog);
+    assert.notOk(
+      instances.hostCatalog.authorized_collection_actions.hosts.includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHost}"]`));
+  });
+  test('Users can navigate to new host catalogs route with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.hostCatalog);
+    assert.ok(
+      instances.hostCatalog.authorized_collection_actions.hosts.includes(
+        'create'
+      )
+    );
+    assert.ok(find(`[href="${urls.hosts}"]`));
+  });
+
+  test('Users cannot navigate to new host catalogs route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions.hosts = [];
+    await visit(urls.hostCatalog);
+    assert.notOk(
+      instances.hostCatalog.authorized_collection_actions.hosts.includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.hosts}"]`));
   });
 
   test('can cancel create new host', async function (assert) {

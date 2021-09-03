@@ -346,3 +346,8 @@ credential-library:
       help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
   types:
     vault: Vault
+scope:
+  title: Scope
+  title_plural: Scopes
+  messages:
+    cannot_read: While you do not have permission to read this scope, you may have permission to view resources within it.

@@ -1,8 +1,17 @@
 import factory from '../generated/factories/scope';
 import { trait } from 'ember-cli-mirage';
+import permissions from '../helpers/permissions';
 
 export default factory.extend({
   type: 'global',
+
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('scope') || [
+      'no-op',
+      'read',
+      'update',
+      'delete',
+    ],
 
   authorized_collection_actions: () => {
     return {
@@ -10,10 +19,10 @@ export default factory.extend({
       sessions: ['list'],
       groups: ['create', 'list'],
       roles: ['create', 'list'],
+      targets: ['create', 'list'],
+      'credential-stores': ['create', 'list'],
       'auth-methods': ['create', 'list'],
-      // targets: ['create', 'list'],
       'host-catalogs': ['create', 'list'],
-      // 'credential-stores': ['create', 'list'],
     };
   },
 

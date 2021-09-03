@@ -10,35 +10,29 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | host sets', function (hooks) {
+module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let getHostSetCount;
+  let getTargetCount;
 
   const instances = {
     scopes: {
       global: null,
       org: null,
       project: null,
-      hostCatalog: null,
-      host: null,
     },
   };
   const urls = {
     globalScope: null,
     orgScope: null,
     projectScope: null,
-    hostCatalogs: null,
-    hostCatalog: null,
-    hostSets: null,
-    hostSet: null,
-    unknownHostSet: null,
-    newHostSet: null,
+    targets: null,
+    target: null,
+    newTarget: null,
   };
 
   hooks.beforeEach(function () {
-    // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -48,50 +42,67 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.hostCatalog = this.server.create('host-catalog', {
+    instances.target = this.server.create('target', {
       scope: instances.scopes.project,
-    });
-    instances.hostSet = this.server.create('host-set', {
-      scope: instances.scopes.project,
-      hostCatalog: instances.hostCatalog,
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
-    urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
-    urls.hostSets = `${urls.hostCatalog}/host-sets`;
-    urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
-    urls.unknownHostSet = `${urls.hostSets}/foo`;
-    urls.newHostSet = `${urls.hostSets}/new`;
+    urls.targets = `${urls.projectScope}/targets`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.unknownTarget = `${urls.targets}/foo`;
+    urls.newTarget = `${urls.targets}/new`;
     // Generate resource couner
-    getHostSetCount = () => this.server.schema.hostSets.all().models.length;
+    getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new host', async function (assert) {
+  test('can create new targets', async function (assert) {
     assert.expect(1);
-    const count = getHostSetCount();
-    await visit(urls.newHostSet);
+    const count = getTargetCount();
+    await visit(urls.newTarget);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getHostSetCount(), count + 1);
+    assert.equal(getTargetCount(), count + 1);
   });
 
-  test('can cancel create new host', async function (assert) {
+  test('can navigate to new targets route with proper authorization', async function (assert) {
     assert.expect(2);
-    const count = getHostSetCount();
-    await visit(urls.newHostSet);
+    await visit(urls.projectScope);
+    assert.ok(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create'
+      )
+    );
+    assert.ok(find(`[href="${urls.targets}"]`));
+  });
+
+  test('cannot navigate to new targets route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions.targets = [];
+    await visit(urls.projectScope);
+    assert.notOk(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create'
+      )
+    );
+    assert.notOk(find(`[href="${urls.targets}"]`));
+  });
+
+  test('can cancel create new targets', async function (assert) {
+    assert.expect(2);
+    const count = getTargetCount();
+    await visit(urls.newTarget);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hostSets);
-    assert.equal(getHostSetCount(), count);
+    assert.equal(currentURL(), urls.targets);
+    assert.equal(getTargetCount(), count);
   });
 
-  test('saving a new host set with invalid fields displays error messages', async function (assert) {
+  test('saving a new target with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
-    this.server.post('/host-sets', () => {
+    this.server.post('/targets', () => {
       return new Response(
         400,
         {},
@@ -110,7 +121,7 @@ module('Acceptance | host-catalogs | host sets', function (hooks) {
         }
       );
     });
-    await visit(urls.newHostSet);
+    await visit(urls.newTarget);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
