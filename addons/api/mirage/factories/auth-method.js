@@ -12,6 +12,11 @@ export default factory.extend({
       'update',
       'delete',
     ],
+  authorized_collection_actions: () => {
+    return {
+      accounts: ['create', 'list'],
+    };
+  },
   id: (i) => `auth-method-id-${i}`,
 
   // Cycle through available types
