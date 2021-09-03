@@ -5,14 +5,12 @@
 This vagrant script is used to setup Ubuntu in Virtualbox and deploy both the desktop client and cli
 in preparation for testing linux support for desktop client.
 
+Install vagrant guest additions plugin: `vagrant plugin install vagrant-vbguest`.
+
 ## Setup Desktop
-For staged or release build:
-- Download Desktop Client `*.deb` package from release url to `ubuntu-focal64/staged-release`
- ```
-wget -P staged-release http://hc-releases-boundary-desktop-staging.s3-website-us-east-1.amazonaws.com/boundary-desktop/1.3.0/boundary-desktop_1.3.0_linux_amd64.deb
-```
 For using locally built debian artifacts:
-- Refer to 'Building for Production' section in /boundary-ui/ui/desktop/README to build debian artifacts on MacOS
+- Refer to 'Building for Production' section in /boundary-ui/ui/desktop/README to build debian
+  artifacts on MacOS
 
 ## Setup Ubuntu
 - Create a ubuntu desktop box using vagrant: `vagrant up --provision-with setup,cli,staged-desktop`
@@ -41,7 +39,6 @@ Vagrant.configure("2") do |config|
 
   # Share desktop artifacts folder
   config.vm.synced_folder "../../../out/release", "/vagrant-desktop-app", create: true,  owner: "vagrant", group: "vagrant", automount: true
-  config.vm.synced_folder "./staged-release", "/vagrant-desktop-staged-app", create: true,  owner: "vagrant", group: "vagrant", automount: true
 
   config.vm.provider "virtualbox" do |vb|
     # Display the VirtualBox GUI when booting the machine
@@ -99,7 +96,8 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "staged-desktop", type: "shell", inline: <<-SHELL
-    sudo cp -r /media/sf_vagrant-desktop-staged-app/. /home/vagrant/Desktop
+    sudo apt install wget -y
+    wget -P /home/vagrant/Desktop/ http://hc-releases-boundary-desktop-staging.s3-website-us-east-1.amazonaws.com/boundary-desktop/1.3.0/boundary-desktop_1.3.0_linux_amd64.deb
   SHELL
 
   config.vm.post_up_message = "Login using username/password: vagrant/vagrant.\nArtifacts: /home/vagrant/Desktop"
