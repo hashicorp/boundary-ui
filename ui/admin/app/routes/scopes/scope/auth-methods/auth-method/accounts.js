@@ -10,7 +10,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
 
   @service intl;
   @service notify;
-
+  @service can;
   // =methods
 
   /**
@@ -18,10 +18,15 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    * @return {Promise{[AccountModel]}}
    */
   model() {
-    const { id: auth_method_id } = this.modelFor(
-      'scopes.scope.auth-methods.auth-method'
-    );
-    return this.store.query('account', { auth_method_id });
+    const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
+    const { id: auth_method_id } = authMethod;
+    if (
+      this.can.can('list collection', authMethod, {
+        collection: 'accounts',
+      })
+    ) {
+      return this.store.query('account', { auth_method_id });
+    }
   }
 
   // =actions

@@ -6,7 +6,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 
-module('Acceptance | credential-libraries', function (hooks) {
+module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -91,6 +91,20 @@ module('Acceptance | credential-libraries', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getCredentialLibraryCount(), count + 1);
+  });
+
+  test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.credentialStore.authorized_collection_actions[
+      'credential-libraries'
+    ] = [];
+    await visit(urls.credentialStore);
+    assert.notOk(
+      instances.credentialStore.authorized_collection_actions[
+        'credential-libraries'
+      ].includes('create')
+    );
+    assert.notOk(find(`[href="${urls.credentialLibraries}"]`));
   });
 
   test('can cancel create a new credential library', async function (assert) {
