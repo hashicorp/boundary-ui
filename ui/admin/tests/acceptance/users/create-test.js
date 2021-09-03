@@ -20,6 +20,7 @@ module('Acceptance | users | create', function (hooks) {
   let newUserURL;
 
   hooks.beforeEach(function () {
+    this.server.create('scope', { id: 'global' });
     orgScope = this.server.create(
       'scope',
       {

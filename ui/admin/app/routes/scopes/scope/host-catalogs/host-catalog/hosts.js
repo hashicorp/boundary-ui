@@ -10,7 +10,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
 
   @service intl;
   @service notify;
-
+  @service can;
   // =methods
 
   /**
@@ -18,10 +18,17 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
    * @return {Promise{[HostModel]}}
    */
   model() {
-    const { id: host_catalog_id } = this.modelFor(
+    const hostCatalog = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog'
     );
-    return this.store.query('host', { host_catalog_id });
+    const { id: host_catalog_id } = hostCatalog;
+    if (
+      this.can.can('list collection', hostCatalog, {
+        collection: 'hosts',
+      })
+    ) {
+      return this.store.query('host', { host_catalog_id });
+    }
   }
 
   // =actions

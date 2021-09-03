@@ -51,14 +51,36 @@
       as |message|
     >
       <message.description>
-        {{t 'resources.host-set.description'}}
+
+        {{#if (can 'list collection' this.hostCatalog collection='host-sets')}}
+          {{! can list (at least):  show default welcome message}}
+          {{t 'resources.host-set.description'}}
+
+        {{else if (can
+          'create collection' this.hostCatalog collection='host-sets'
+        )}}
+          {{! can create (only):  show create-but-not-list welcome message}}
+          {{t
+            'descriptions.create-but-not-list'
+            resource=(t 'resources.host-set.title_plural')
+          }}
+        {{else}}
+          {{! can neither list nor create }}
+          {{t
+            'descriptions.neither-list-nor-create'
+            resource=(t 'resources.host-set.title_plural')
+          }}
+        {{/if}}
       </message.description>
-      <message.link
-        @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
-      >
-        <Rose::Icon @name='flight-icons/plus-circle-16' />
-        {{t 'titles.new'}}
-      </message.link>
+
+      {{#if (can 'create collection' this.hostCatalog collection='host-sets')}}
+        <message.link
+          @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
+        >
+          <Rose::Icon @name='flight-icons/plus-circle-16' />
+          {{t 'titles.new'}}
+        </message.link>
+      {{/if}}
     </Rose::Message>
   </Rose::Layout::Centered>
 
