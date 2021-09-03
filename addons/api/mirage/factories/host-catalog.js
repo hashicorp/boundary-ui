@@ -12,6 +12,7 @@ export default factory.extend({
     ],
   authorized_collection_actions: () => {
     return {
+      hosts: ['create', 'list'],
       'host-sets': ['create', 'list'],
     };
   },
