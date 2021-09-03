@@ -3,12 +3,15 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  <dropdown.link
-    @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
-    @model={{@model}}
-  >
-    {{t 'resources.credential-library.actions.create'}}
-  </dropdown.link>
+  {{#if (can 'create collection' @model collection='credential-libraries')}}
+
+    <dropdown.link
+      @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
+      @model={{@model}}
+    >
+      {{t 'resources.credential-library.actions.create'}}
+    </dropdown.link>
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button
