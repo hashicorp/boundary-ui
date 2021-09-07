@@ -12,28 +12,25 @@
   </page.breadcrumbs>
 
   <page.actions>
-
     {{#if (can 'create collection' this.scopeModel collection='auth-methods')}}
-      {{#if @model}}
-        <Rose::Dropdown
-          @text={{t 'titles.new'}}
-          @dropdownRight={{true}}
-          as |dropdown|
+      <Rose::Dropdown
+        @text={{t 'titles.new'}}
+        @dropdownRight={{true}}
+        as |dropdown|
+      >
+        <dropdown.link
+          @route='scopes.scope.auth-methods.new'
+          @query={{hash type='password'}}
         >
-          <dropdown.link
-            @route='scopes.scope.auth-methods.new'
-            @query={{hash type='password'}}
-          >
-            {{t 'resources.auth-method.types.password'}}
-          </dropdown.link>
-          <dropdown.link
-            @route='scopes.scope.auth-methods.new'
-            @query={{hash type='oidc'}}
-          >
-            {{t 'resources.auth-method.types.oidc'}}
-          </dropdown.link>
-        </Rose::Dropdown>
-      {{/if}}
+          {{t 'resources.auth-method.types.password'}}
+        </dropdown.link>
+        <dropdown.link
+          @route='scopes.scope.auth-methods.new'
+          @query={{hash type='oidc'}}
+        >
+          {{t 'resources.auth-method.types.oidc'}}
+        </dropdown.link>
+      </Rose::Dropdown>
     {{/if}}
   </page.actions>
 
@@ -168,11 +165,13 @@
           as |message|
         >
           <message.description>
-            {{#if (can 'list collection' this.scope collection='auth-methods')}}
+            {{#if
+              (can 'list collection' this.scopeModel collection='auth-methods')
+            }}
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.auth-method.messages.welcome.description'}}
             {{else if (can
-              'create collection' this.scope collection='auth-methods'
+              'create collection' this.scopeModel collection='auth-methods'
             )}}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t
@@ -187,15 +186,6 @@
               }}
             {{/if}}
           </message.description>
-          {{#if (can 'create collection' this.scope collection='auth-methods')}}
-            <message.link
-              @route='scopes.scope.auth-methods.new'
-              @query={{hash type='password'}}
-            >
-              <Rose::Icon @name='flight-icons/plus-circle-16' />
-              {{t 'titles.new'}}
-            </message.link>
-          {{/if}}
         </Rose::Message>
       </Rose::Layout::Centered>
 
