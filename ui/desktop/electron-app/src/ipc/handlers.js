@@ -5,7 +5,7 @@ const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
-const { isMac, isWindows } = require('../helpers/platform.js');
+const { isMac, isWindows, isLinux } = require('../helpers/platform.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -38,9 +38,23 @@ handle('openExternal', async (href) => {
   const isLocalhost =
     href.startsWith('http://localhost') || href.startsWith('http://127.0.0.1');
   if (isSecure || isLocalhost || isDev) {
-    // openExternal is necessary in order to display documentation and to
-    // support arbitrary OIDC flows.  The protocol is validated (see above).
-    shell.openExternal(href); /* eng-disable OPEN_EXTERNAL_JS_CHECK */
+    /**
+     * Launch browser to display documentation and to support arbitrary OIDC flows.
+     * The protocol is validated (see above).
+     * In linux, launch application (xdg-open) does not launch browser window
+     * and fails silently. As a bypass, launch a new browser window attached
+     * to main window.
+     */
+    if (isLinux()) {
+      const browserWindow = new BrowserWindow({
+        parent: BrowserWindow.getFocusedWindow(),
+      });
+      browserWindow.loadURL(href);
+      browserWindow.show();
+    } else {
+      // openExternal is necessary to open urls in Windows and MacOS
+      shell.openExternal(href); /* eng-disable OPEN_EXTERNAL_JS_CHECK */
+    }
   } else {
     throw new Error(
       `URLs may only be opened over HTTPS in an external browser.

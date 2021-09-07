@@ -13,7 +13,7 @@ For using locally built debian artifacts:
   artifacts on MacOS
 
 ## Setup Ubuntu
-- Create a ubuntu desktop box using vagrant: `vagrant up --provision-with setup,cli,staged-desktop`
+- Create a ubuntu desktop box using vagrant: `vagrant up --provision-with setup,cli,staged-desktop`.
 - Desktop client artifact and cli will be available in `/home/vagrant/Desktop` after logging into ubuntu.
   Username/password for login: vagrant/vagrant. Navigate to `/home/vagrant/Desktop` in a terminal app.
 - To install desktop app use either `apt` or `dpkg`
@@ -24,12 +24,12 @@ For using locally built debian artifacts:
 
 ## Provision types
 User --provision-with option to setup machine for either cli or development
-Setup for testing:
+Setup for testing staged desktop release:
+  vagrant up --provision-with setup,cli,staged-desktop
+Setup for testing artifacts built locally:
    vagrant up --provision-with setup,cli
 Setup for developing desktop client:
    vagrant up --provision-with setup,development
-Setup for staged desktop release:
-  vagrant up --provision-with setup,cli,staged-desktop
 To destroy machine:
    vagrant destroy -f
 =end
@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "setup", type: "shell", inline: <<-SHELL
     sudo apt-get update -y
     sudo apt-get upgrade -y
-    sudo apt-get install curl
+    sudo apt-get install curl firefox
     # Add vagrant to administrator group
     sudo usermod -aG sudo vagrant
     # Add vagrant to shared folder
@@ -85,7 +85,7 @@ Vagrant.configure("2") do |config|
     sudo apt-get install -y nodejs
 
     sudo apt-get remove cmdtest
-    sudo apt-get install -y npm git
+    sudo apt-get install -y npm git chromium-browser
 
     git clone https://github.com/hashicorp/boundary-ui.git /home/vagrant/Desktop/boundary-ui
     sudo npm install -g yarn
