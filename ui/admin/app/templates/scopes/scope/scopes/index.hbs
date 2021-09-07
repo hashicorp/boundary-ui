@@ -26,10 +26,12 @@
   </page.header>
 
   <page.actions>
-    {{#if @model.subScopes}}
-      <Rose::LinkButton @route='scopes.scope.new' @style='primary'>
-        {{t 'titles.new'}}
-      </Rose::LinkButton>
+    {{#if (can 'create collection' @model.currentScope collection='scopes')}}
+      {{#if @model.subScopes}}
+        <Rose::LinkButton @route='scopes.scope.new' @style='primary'>
+          {{t 'titles.new'}}
+        </Rose::LinkButton>
+      {{/if}}
     {{/if}}
   </page.actions>
 
@@ -82,10 +84,14 @@
             <message.description>
               {{t 'resources.project.description'}}
             </message.description>
-            <message.link @route='scopes.scope.new'>
-              <Rose::Icon @name='flight-icons/plus-circle-16' />
-              {{t 'titles.new'}}
-            </message.link>
+            {{#if
+              (can 'create collection' @model.currentScope collection='scopes')
+            }}
+              <message.link @route='scopes.scope.new'>
+                <Rose::Icon @name='flight-icons/plus-circle-16' />
+                {{t 'titles.new'}}
+              </message.link>
+            {{/if}}
           </Rose::Message>
         </Rose::Layout::Centered>
       {{/if}}
