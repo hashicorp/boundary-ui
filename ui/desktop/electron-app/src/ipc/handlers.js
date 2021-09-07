@@ -5,7 +5,7 @@ const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
-const { isMac, isWindows } = require('../helpers/platform.js');
+const { isMac } = require('../helpers/platform.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -72,11 +72,6 @@ handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
  * Check for MacOS OS
  */
 handle('isMacOS', () => isMac());
-
-/**
- * Check for Windows OS
- */
-handle('isWindowsOS', () => isWindows());
 
 /**
  * Minimize window

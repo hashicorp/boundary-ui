@@ -35,7 +35,6 @@ export default class ApplicationRoute extends Route {
    */
   async setupController(controller) {
     controller.set('isMacOS', await this.ipc.invoke('isMacOS'));
-    controller.set('isWindowsOS', await this.ipc.invoke('isWindowsOS'));
   }
 
   // =actions
