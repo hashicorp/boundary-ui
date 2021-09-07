@@ -41,7 +41,7 @@ List of available project commands.  `yarn run <command-name>`
 | ------- | ----------- |
 | build:development | Builds the UI in development mode. |
 | build | Builds the UI for production. |
-| build:desktop:debian | Builds debian based linux artifacts on MacOS. |
+| build:desktop:debianOnMacOS | Builds debian based linux artifacts on MacOS. |
 | lint | Runs all lint commands. |
 | lint:hbs | Lints `hbs` template files. |
 | lint:js | Lints `js` files. |
@@ -102,7 +102,7 @@ To build debian based linux artifacts on MacOS, additional [MacOS tools](https:/
 ```
 yarn install
 yarn build:production # Build assets
-yarn build:desktop:debian # Build app
+yarn build:desktop:debianOnMacOS # Build app
 ```
 
 #### Environment Variables
