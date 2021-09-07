@@ -12,7 +12,7 @@ const createConfig = () => {
     releaseCommit: process.env.RELEASE_COMMIT,
   };
 
-  if (isLinux() || process.env.BUILD_DEBIAN) {
+  if (process.env.BUILD_DEBIAN) {
     config.name = 'boundary-desktop';
     config.productName = 'boundary-desktop';
   }

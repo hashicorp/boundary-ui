@@ -52,12 +52,14 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      options: {
-        name: config.name,
-        productName: config.productName,
-        version: config.releaseVersion,
-        description: 'Desktop Client for Boundary',
-        productDescription: 'Desktop Client for Boundary',
+      config: {
+        options: {
+          name: 'boundary-desktop',
+          version: config.releaseVersion,
+          icon: './assets/app-icons/icon.png',
+          description: 'Desktop Client for Boundary',
+          productDescription: 'Desktop Client for Boundary',
+        },
       },
     },
   ],
