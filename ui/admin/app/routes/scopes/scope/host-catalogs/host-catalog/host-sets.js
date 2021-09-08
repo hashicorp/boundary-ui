@@ -59,10 +59,16 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   )
   async save(hostSet) {
     await hostSet.save();
-    await this.transitionTo(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
-      hostSet
-    );
+    if (this.can.can('read model', hostSet)) {
+      await this.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
+        hostSet
+      );
+    } else {
+      await this.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.host-sets'
+      );
+    }
     this.refresh();
   }
 
