@@ -55,10 +55,16 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   )
   async save(credentialLibrary) {
     await credentialLibrary.save();
-    await this.transitionTo(
-      'scopes.scope.credential-stores.credential-store.credential-libraries.credential-library',
-      credentialLibrary
-    );
+    if (this.can.can('read model', credentialLibrary)) {
+      await this.transitionTo(
+        'scopes.scope.credential-stores.credential-store.credential-libraries.credential-library',
+        credentialLibrary
+      );
+    } else {
+      await this.transitionTo(
+        'scopes.scope.credential-stores.credential-store.credential-libraries'
+      );
+    }
     this.refresh();
   }
 
