@@ -58,7 +58,11 @@ export default class ScopesScopeRolesRoute extends Route {
   )
   async save(role) {
     await role.save();
-    await this.transitionTo('scopes.scope.roles.role', role);
+    if (this.can.can('read model', role)) {
+      await this.transitionTo('scopes.scope.roles.role', role);
+    } else {
+      await this.transitionTo('scopes.scope.roles');
+    }
     this.refresh();
   }
 
