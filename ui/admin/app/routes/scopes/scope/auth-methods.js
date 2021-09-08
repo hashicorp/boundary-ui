@@ -66,7 +66,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
         authMethod
       );
     } else {
-      await this.transitionTo('scopes.scope.auth-method');
+      await this.transitionTo('scopes.scope.auth-methods');
     }
     this.refresh();
   }
