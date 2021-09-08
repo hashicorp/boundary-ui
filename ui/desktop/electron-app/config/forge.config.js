@@ -26,7 +26,7 @@ module.exports = {
     appVersion: config.releaseVersion,
     appBundleId: 'com.electron.boundary',
     appCopyright: config.copyright,
-    executableName: 'boundary-desktop',
+    executableName: config.executableName,
     osxSign: {
       identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
       'hardened-runtime': true,
