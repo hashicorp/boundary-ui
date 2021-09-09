@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
     cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
     sudo chown -R vagrant:vagrant .ssh
     # Restart
-    sudo shutdown -r now
+    # sudo shutdown -r now
   SHELL
 
   # Setup for developing desktop
@@ -96,8 +96,11 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "staged-desktop", type: "shell", inline: <<-SHELL
+    # Download staged desktop
     sudo apt install wget -y
     wget -P /home/vagrant/Desktop/ http://hc-releases-boundary-desktop-staging.s3-website-us-east-1.amazonaws.com/boundary-desktop/1.3.0/boundary-desktop_1.3.0_linux_amd64.deb
+    # Install
+    sudo apt install /home/vagrant/Desktop/boundary-desktop_1.3.0_linux_amd64.deb
   SHELL
 
   config.vm.post_up_message = "Login using username/password: vagrant/vagrant.\nArtifacts: /home/vagrant/Desktop"
