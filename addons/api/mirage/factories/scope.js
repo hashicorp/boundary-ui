@@ -15,6 +15,7 @@ export default factory.extend({
 
   authorized_collection_actions: () => {
     return {
+      scopes: ['create', 'list'],
       users: ['create', 'list'],
       sessions: ['list'],
       groups: ['create', 'list'],

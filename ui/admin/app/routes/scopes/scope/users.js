@@ -59,7 +59,11 @@ export default class ScopesScopeUsersRoute extends Route {
   )
   async save(user) {
     await user.save();
-    await this.transitionTo('scopes.scope.users.user', user);
+    if (this.can.can('read model', user)) {
+      await this.transitionTo('scopes.scope.users.user', user);
+    } else {
+      await this.transitionTo('scopes.scope.users');
+    }
     this.refresh();
   }
 

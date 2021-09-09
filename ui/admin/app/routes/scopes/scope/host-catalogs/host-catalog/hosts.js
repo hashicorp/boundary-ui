@@ -58,10 +58,14 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   )
   async save(host) {
     await host.save();
-    await this.transitionTo(
-      'scopes.scope.host-catalogs.host-catalog.hosts.host',
-      host
-    );
+    if (this.can.can('read model', host)) {
+      await this.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.hosts.host',
+        host
+      );
+    } else {
+      await this.transitionTo('scopes.scope.host-catalogs.host-catalog.hosts');
+    }
     this.refresh();
   }
 

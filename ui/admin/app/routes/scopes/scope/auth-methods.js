@@ -60,10 +60,14 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   )
   async save(authMethod) {
     await authMethod.save();
-    await this.transitionTo(
-      'scopes.scope.auth-methods.auth-method',
-      authMethod
-    );
+    if (this.can.can('read model', authMethod)) {
+      await this.transitionTo(
+        'scopes.scope.auth-methods.auth-method',
+        authMethod
+      );
+    } else {
+      await this.transitionTo('scopes.scope.auth-methods');
+    }
     this.refresh();
   }
 
