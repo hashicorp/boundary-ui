@@ -41,6 +41,7 @@ List of available project commands.  `yarn run <command-name>`
 | ------- | ----------- |
 | build:development | Builds the UI in development mode. |
 | build | Builds the UI for production. |
+| build:desktop:debianOnMacOS | Builds debian based linux artifacts on MacOS. |
 | lint | Runs all lint commands. |
 | lint:hbs | Lints `hbs` template files. |
 | lint:js | Lints `js` files. |
@@ -82,11 +83,11 @@ These environment variables may be used to customized the build.
 
 | Variable | Description |
 | -------- | ----------- |
-| `BYPASS_CLI_SETUP` | Set to `true` to launch without bootstrapping the CLI (see above). |
 | `DEBUG_APP_UPDATER` | Enable to debug app updater feature. Must be enabled for all `APP_UPDATER_*` variables to be used. |
 | `APP_UPDATER_CURRENT_VERSION` | Version of client. |
 | `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
+| `BYPASS_CLI_SETUP` | Enable to disallow download and extraction of cli. For development use only. |
 
 ### Building for Production
 
@@ -100,7 +101,7 @@ yarn build
 ```
 
 `BOUNDARY_DESKTOP_SIGNING_IDENTITY` environment variable must be provided
-to codesign in production.
+to codesign MacOS artifacts in production.
 
 The static production assets are saved into the `dist/` folder.
 The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
@@ -110,6 +111,14 @@ Similar to running in development, you can also use `BYPASS_CLI_SETUP=true` to
 bypass the download of the CLI, which can be useful for pre-release testing. See
 [Developing Using Non-Release Versions of
 Boundary](#developing-using-non-release-versions-of-boundary) for more details.
+
+To build debian based linux artifacts on MacOS, additional [MacOS tools](https://www.electronforge.io/config/makers/deb) need to be installed before running the following commands from this folder.
+
+```
+yarn install
+yarn build:production # Build assets
+yarn build:desktop:debianOnMacOS # Build app
+```
 
 #### Environment Variables
 

@@ -15,7 +15,9 @@
     "build:production": "cross-env EMBER_CLI_ELECTRON=true ember build --environment=production",
     "build:development": "ember build",
     "prebuild:desktop": "cross-os prebuild:desktop",
-    "build:desktop": "cd electron-app && yarn install && yarn make",
+    "build:desktop": "yarn build:desktop:install && yarn --cwd electron-app make",
+    "build:desktop:debianOnMacOS": "yarn build:desktop:install && BUILD_DEBIAN=true yarn --cwd electron-app make --platform linux --arch x64",
+    "build:desktop:install": "yarn install --cwd electron-app",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
@@ -41,6 +43,7 @@
   "cross-os": {
     "prebuild:desktop": {
       "darwin": "cp -r dist/ electron-app/ember-dist/",
+      "linux": "cp -r dist/ electron-app/ember-dist/",
       "win32": "(robocopy dist electron-app\\ember-dist /MIR) ^& exit 0"
     }
   },

@@ -1,0 +1,107 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+=begin
+This vagrant script is used to setup Ubuntu in Virtualbox and deploy both the desktop client and cli
+in preparation for testing linux support for desktop client.
+
+Install vagrant guest additions plugin: `vagrant plugin install vagrant-vbguest`.
+
+## Setup Desktop
+For using locally built debian artifacts:
+- Refer to 'Building for Production' section in /boundary-ui/ui/desktop/README to build debian
+  artifacts on MacOS
+
+## Setup Ubuntu
+- Create a ubuntu desktop box using vagrant: `vagrant up --provision-with setup,cli,staged-desktop`.
+- Desktop client artifact and cli will be available in `/home/vagrant/Desktop` after logging into ubuntu.
+  Username/password for login: vagrant/vagrant. Navigate to `/home/vagrant/Desktop` in a terminal app.
+- To install desktop app use either `apt` or `dpkg`
+	-  `sudo apt install ./boundary-desktop_1.3.0_linux_amd64.deb`
+	-  `sudo dpkg -i ./boundary-desktop_1.3.0_linux_amd64.deb`
+	-  To launch desktop client from terminal: `boundary-desktop`
+- To launch cli: `./boundary dev`
+
+## Provision types
+User --provision-with option to setup machine for either cli or development
+Setup for testing staged desktop release:
+  vagrant up --provision-with setup,cli,staged-desktop
+Setup for testing artifacts built locally:
+   vagrant up --provision-with setup,cli
+Setup for developing desktop client:
+   vagrant up --provision-with setup,development
+To destroy machine:
+   vagrant destroy -f
+=end
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  # Share desktop artifacts folder
+  config.vm.synced_folder "../../../out/release", "/vagrant-desktop-app", create: true,  owner: "vagrant", group: "vagrant", automount: true
+
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = true  
+    # Customize the amount of memory on the VM:
+    vb.memory = "4096"
+  end
+
+  config.vm.provision "setup", type: "shell", inline: <<-SHELL
+    sudo apt-get update -y
+    sudo apt-get upgrade -y
+    sudo apt-get install curl firefox
+    # Add vagrant to administrator group
+    sudo usermod -aG sudo vagrant
+    # Add vagrant to shared folder
+    sudo usermod -aG vboxsf vagrant
+  SHELL
+
+  # Setup for testing desktop
+  config.vm.provision "cli", type: "shell", inline: <<-SHELL
+    # Install ubuntu desktop GUI
+    # For GNOME desktop:
+    # sudo apt install gnome-session gnome-terminal
+    sudo apt-get install -y --no-install-recommends lubuntu-desktop
+    # Setup boundary cli
+    sudo apt-get install docker.io -y
+    sudo groupadd docker
+    sudo usermod -aG docker vagrant
+    sudo apt-get install -y unzip
+    curl https://releases.hashicorp.com/boundary/0.5.0/boundary_0.5.0_linux_amd64.zip -o boundary-cli.zip
+    unzip -o boundary-cli.zip -d /home/vagrant/Desktop/
+    # Setup localhost ssh
+    yes | ssh-keygen -t rsa -N "" -f /home/vagrant/.ssh/id_rsa -C vagrant@ubuntu-focal
+    cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+    sudo chown -R vagrant:vagrant .ssh
+    # Restart
+    # sudo shutdown -r now
+  SHELL
+
+  # Setup for developing desktop
+  config.vm.provision "development", type: "shell", inline: <<-SHELL
+    # Setup node 12 source
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+
+    sudo apt-get remove cmdtest
+    sudo apt-get install -y npm git chromium-browser
+
+    git clone https://github.com/hashicorp/boundary-ui.git /home/vagrant/Desktop/boundary-ui
+    sudo npm install -g yarn
+
+    # Install boundary-ui dependencies
+    cd /home/vagrant/Desktop/boundary-ui
+    yarn install
+  SHELL
+
+  config.vm.provision "staged-desktop", type: "shell", inline: <<-SHELL
+    # Download staged desktop
+    sudo apt install wget -y
+    wget -P /home/vagrant/Desktop/ http://hc-releases-boundary-desktop-staging.s3-website-us-east-1.amazonaws.com/boundary-desktop/1.3.0/boundary-desktop_1.3.0_linux_amd64.deb
+    # Install
+    sudo apt install /home/vagrant/Desktop/boundary-desktop_1.3.0_linux_amd64.deb
+  SHELL
+
+  config.vm.post_up_message = "Login using username/password: vagrant/vagrant.\nArtifacts: /home/vagrant/Desktop"
+end
