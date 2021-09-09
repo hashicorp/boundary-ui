@@ -34,3 +34,5 @@ change-origin: Change Origin URL
 change-state: Change State
 close: Close
 toggle-secret: Toggle secret visibility
+minimize: Minimize
+fullscreen: Fullscreen

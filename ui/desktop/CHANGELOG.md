@@ -4,6 +4,12 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ## Next
 
+## v1.3.0 [CLI 0.6.0] (2021.09.09)
+
+### New
+
+- Add Debian based linux support for client. ([PR](https://github.com/hashicorp/boundary-ui/pull/719))
+
 ## v1.2.1 [CLI 0.5.0] (2021.08.03)
 
 ### New
