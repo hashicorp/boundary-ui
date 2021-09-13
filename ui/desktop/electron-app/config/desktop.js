@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { isLinux } = require('../src/helpers/platform.js');
 
 // Create config
 const createConfig = () => {
@@ -9,7 +10,15 @@ const createConfig = () => {
     copyright: `Copyright © ${new Date().getFullYear()} HashiCorp, Inc.`,
     releaseVersion: process.env.RELEASE_VERSION,
     releaseCommit: process.env.RELEASE_COMMIT,
+    executableName: 'Boundary',
   };
+
+  if (process.env.BUILD_DEBIAN) {
+    config.name = 'boundary-desktop';
+    config.productName = 'boundary-desktop';
+  }
+
+  if (isLinux() || process.env.BUILD_DEBIAN) config.executableName = 'boundary-desktop';
 
   if (!config.releaseVersion) config.releaseVersion = '0.0.0';
   return config;

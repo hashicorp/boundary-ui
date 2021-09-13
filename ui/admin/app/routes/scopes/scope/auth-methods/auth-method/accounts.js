@@ -60,10 +60,14 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
       adapterOptions.password = password;
     }
     await account.save({ adapterOptions });
-    await this.transitionTo(
-      'scopes.scope.auth-methods.auth-method.accounts.account',
-      account
-    );
+    if (this.can.can('read model', account)) {
+      await this.transitionTo(
+        'scopes.scope.auth-methods.auth-method.accounts.account',
+        account
+      );
+    } else {
+      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
+    }
     this.refresh();
   }
 

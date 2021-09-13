@@ -71,7 +71,6 @@
           as |message|
         >
           <message.description>
-            {{t 'resources.group.description'}}
             {{#if (can 'list collection' this.scope collection='groups')}}
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.group.description'}}

@@ -57,7 +57,11 @@ export default class ScopesScopeGroupsRoute extends Route {
   )
   async save(group) {
     await group.save();
-    await this.transitionTo('scopes.scope.groups.group', group);
+    if (this.can.can('read model', group)) {
+      await this.transitionTo('scopes.scope.groups.group', group);
+    } else {
+      await this.transitionTo('scopes.scope.groups');
+    }
     this.refresh();
   }
 

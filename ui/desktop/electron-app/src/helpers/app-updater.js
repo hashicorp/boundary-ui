@@ -4,7 +4,7 @@ const https = require('https');
 const semver = require('semver');
 const { parse } = require('node-html-parser');
 const { autoUpdater, dialog } = require('electron');
-const { isWindows } = require('../helpers/platform.js');
+const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
 
 let currentVersion = config.releaseVersion;
@@ -124,8 +124,11 @@ const displayDownloadPrompt = (version, url) => {
  **/
 module.exports = {
   run: async ({ suppressNoUpdatePrompt } = {}) => {
-    // Do nothing on Windows - yet
-    if (isWindows()) return;
+    /**
+     * Disable app updater check for linux as update is unsupported.
+     * TODO: Enable for windows pending feature dev. Windows is supported.
+     */
+    if (isWindows() || isLinux()) return;
 
     let latestVersion;
     if (debug) {

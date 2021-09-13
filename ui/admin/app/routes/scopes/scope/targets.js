@@ -60,7 +60,11 @@ export default class ScopesScopeTargetsRoute extends Route {
   )
   async save(target) {
     await target.save();
-    await this.transitionTo('scopes.scope.targets.target', target);
+    if (this.can.can('read model', target)) {
+      await this.transitionTo('scopes.scope.targets.target', target);
+    } else {
+      await this.transitionTo('scopes.scope.targets');
+    }
     this.refresh();
   }
 

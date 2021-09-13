@@ -5,7 +5,7 @@ const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
-const { isMac, isWindows } = require('../helpers/platform.js');
+const { isMac } = require('../helpers/platform.js');
 
 /**
  * Returns the current runtime origin, which is used by the main thread to
@@ -38,8 +38,10 @@ handle('openExternal', async (href) => {
   const isLocalhost =
     href.startsWith('http://localhost') || href.startsWith('http://127.0.0.1');
   if (isSecure || isLocalhost || isDev) {
-    // openExternal is necessary in order to display documentation and to
-    // support arbitrary OIDC flows.  The protocol is validated (see above).
+    /**
+     * Launch browser to display documentation and to support arbitrary OIDC flows
+     * using openExternal. The protocol is validated (see above).
+     */
     shell.openExternal(href); /* eng-disable OPEN_EXTERNAL_JS_CHECK */
   } else {
     throw new Error(
@@ -70,11 +72,6 @@ handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
  * Check for MacOS OS
  */
 handle('isMacOS', () => isMac());
-
-/**
- * Check for Windows OS
- */
-handle('isWindowsOS', () => isWindows());
 
 /**
  * Minimize window
