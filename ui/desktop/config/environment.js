@@ -59,7 +59,7 @@ module.exports = function (environment) {
       search: false,
       filter: false,
       capabilities: true,
-      'credential-store': false,
+      'credential-store': true,
     },
   };
 
