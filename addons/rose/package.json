@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "babel-loader": "^8.1.0",
-    "ember-cli-babel": "^7.23.0",
+    "ember-cli-babel": "^7.26.6",
     "ember-cli-htmlbars": "^5.3.1",
     "ember-focus-trap": "^0.4.0",
     "ember-named-blocks-polyfill": "^0.2.4",

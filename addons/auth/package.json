@@ -21,7 +21,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "ember-cli-babel": "^7.23.0",
+    "ember-cli-babel": "^7.26.6",
     "ember-cli-htmlbars": "^5.3.1",
     "ember-simple-auth": "^3.0.1"
   },

@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "ember-can": "^3.1.0",
-    "ember-cli-babel": "^7.23.0",
+    "ember-cli-babel": "^7.26.6",
     "ember-cli-htmlbars": "^5.3.1",
     "ember-cli-mirage": "^1.1.8",
     "ember-data": "^3.20.0",
