@@ -48,7 +48,7 @@
     "core": "*",
     "doctoc": "^2.0.1",
     "ember-a11y-testing": "^4.0.7",
-    "ember-auto-import": "^1.10.1",
+    "ember-auto-import": "^1.12.0",
     "ember-breadcrumbs": "^0.2.3",
     "ember-cli": "~3.28.0",
     "ember-cli-app-version": "^5.0.0",
