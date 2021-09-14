@@ -1930,7 +1930,7 @@
   dependencies:
     tslib "^2.1.0"
 
-"@glimmer/component@^1.0.3":
+"@glimmer/component@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@glimmer/component/-/component-1.0.4.tgz#1c85a5181615a6647f6acfaaed68e28ad7e9626e"
   integrity sha512-sS4N8wtcKfYdUJ6O3m8nbTut6NjErdz94Ap8VB1ekcg4WSD+7sI7Nmv6kt2rdPoe363nUdjUbRBzHNWhLzraBw==
