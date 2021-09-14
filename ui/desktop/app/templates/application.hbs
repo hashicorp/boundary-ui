@@ -1,3 +1,5 @@
+
+
 {{page-title (app-name)}}
 
 <Rose::Layout::Global
@@ -8,7 +10,7 @@
   <layout.header>
     <Rose::Header
       class='{{if (is-loading) ' loading'}}
-        {{if this.isMacOS ' header-cushion'}}'
+        {{if this.hasMacOSFrame ' header-cushion'}}'
       as |header|
     >
       <header.brand @logo='logo-app' @text={{app-name}} />

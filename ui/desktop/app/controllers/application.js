@@ -15,13 +15,12 @@ export default class ApplicationController extends Controller {
   // =attributes
 
   /**
-   * Display OS window actions (minimize, fullscreen, close) for
-   * Windows and Linux as OS frame/shell is disable.
-   * Does not apply to MacOS.
+   * Check for MacOS frame
    * @type {boolean}
    */
-  @computed('isMacOS')
-  get isFrameless() {
-    return !this.isMacOS;
+  @computed('isMacOS', 'isFrameless')
+  get hasMacOSFrame() {
+    console.log('hasMacOSFrame ', this.isMacOS && !this.isFrameless);
+    return this.isMacOS && !this.isFrameless;
   }
 }

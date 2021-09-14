@@ -69,7 +69,14 @@ handle('connect', ({ target_id, token, host_id }) =>
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
 
 /**
- * Check for MacOS OS
+ * Check for frameless window state. Only MacOS uses default OS frame.
+ * Frameless window disables OS window actions (minimize, fullscreen, close).
+ * Enable `BYPASS_OS_SHELL` to bypass OS verification for frame.
+ */
+handle('isFrameless', () => !isMac() || process.env.BYPASS_OS_SHELL);
+
+/**
+ * Check for MacOS
  */
 handle('isMacOS', () => isMac());
 

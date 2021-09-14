@@ -113,11 +113,18 @@ app.on('ready', async () => {
   }
   Menu.setApplicationMenu(menuTemplate);
 
+  /**
+   * Enable electron OS frame for MacOS only.
+   * Disable frame regardless of OS using `BYPASS_OS_SHELL`
+   */
+  let showFrame = isMac();
+  if (process.env.BYPASS_OS_SHELL) showFrame = false;
+
   const browserWindowOptions = {
     width: 1280,
     height: 760,
-    titleBarStyle: 'hiddenInset',
-    frame: isMac(),
+    frame: showFrame,
+    titleBarStyle: showFrame ? 'hiddenInset' : 'none',
     webPreferences: {
       partition,
       sandbox: true,

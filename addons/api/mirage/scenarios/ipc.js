@@ -127,10 +127,10 @@ export default function initializeMockIPC(server) {
     }
 
     /**
-     * Check for browsers running on windows OS
+     * Check for OS frame
      */
-    isWindowsOS() {
-      return Boolean(window.navigator.userAgent.match(/(windows)/i));
+    isFrameless() {
+      return true;
     }
 
     /**
