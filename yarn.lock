@@ -1764,10 +1764,35 @@
     resolve "^1.8.1"
     semver "^7.3.2"
 
+"@embroider/macros@^0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@embroider/macros/-/macros-0.41.0.tgz#3e78b6f388d7229906abf4c75edfff8bb0208aca"
+  integrity sha512-QISzwEEfLsskZeL0jyZDs1RoQSotwBWj+4upTogNHuxQP5j/9H3IMG/3QB1gh8GEpbudATb/cS4NDYK3UBxufw==
+  dependencies:
+    "@embroider/shared-internals" "0.41.0"
+    assert-never "^1.1.0"
+    ember-cli-babel "^7.23.0"
+    lodash "^4.17.10"
+    resolve "^1.8.1"
+    semver "^7.3.2"
+
 "@embroider/shared-internals@0.40.0":
   version "0.40.0"
   resolved "https://registry.yarnpkg.com/@embroider/shared-internals/-/shared-internals-0.40.0.tgz#2f768c60f4f35ba5f9228f046f70324851e8bfe2"
   integrity sha512-Ovr/i0Qgn6W6jdGXMvYJKlRoRpyBY9uhYozDSFKlBjeEmRJ0Plp7OST41+O5Td6Pqp+Rv2jVSnGzhA/MpC++NQ==
+  dependencies:
+    ember-rfc176-data "^0.3.17"
+    fs-extra "^7.0.1"
+    lodash "^4.17.10"
+    pkg-up "^3.1.0"
+    resolve-package-path "^1.2.2"
+    semver "^7.3.2"
+    typescript-memoize "^1.0.0-alpha.3"
+
+"@embroider/shared-internals@0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@embroider/shared-internals/-/shared-internals-0.41.0.tgz#2553f026d4f48ea1fd11235501feb63bf49fa306"
+  integrity sha512-fiqUVB6cfh2UBEFE4yhT5EzagkZ1Q26+OhBV0nJszFEJZx4DqVIb3pxSSZ8P+HhpxuJsQ2XpMA/j02ZPFZfbdQ==
   dependencies:
     ember-rfc176-data "^0.3.17"
     fs-extra "^7.0.1"
@@ -9169,15 +9194,16 @@ ember-fetch@^8.1.1:
     node-fetch "^2.6.1"
     whatwg-fetch "^3.6.2"
 
-ember-focus-trap@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/ember-focus-trap/-/ember-focus-trap-0.4.0.tgz#b69a3a65a49784e2b3a19082655a585cfdaad473"
-  integrity sha512-NHKjTS1xoSS+fURDhAp5oyR7ZTTBnC4KVGw/VlUbFolx7jdLCePHuQdhnrhT02B1VP1dlX2RxnNvNiT2IcoA1w==
+ember-focus-trap@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/ember-focus-trap/-/ember-focus-trap-0.7.0.tgz#8c3fa66a0d393dad2994db82e2fa227103875fc0"
+  integrity sha512-WHOD8jTcCzsRb0cU8J5SKObrxbdD8rPSWrSUjZ2QYu9dVbaXg6/hZxcN5JrmPY1ArnsRaLMPdOUALYeZTP29og==
   dependencies:
-    ember-auto-import "^1.5.3"
-    ember-cli-babel "^7.18.0"
+    "@embroider/macros" "^0.41.0"
+    ember-auto-import "^1.11.2"
+    ember-cli-babel "^7.26.3"
     ember-modifier-manager-polyfill "^1.2.0"
-    focus-trap "^5.1.0"
+    focus-trap "^6.4.0"
 
 "ember-get-config@^0.2.4 || ^0.3.0", ember-get-config@^0.3.0:
   version "0.3.0"
@@ -10924,13 +10950,12 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-focus-trap@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-5.1.0.tgz#64a0bfabd95c382103397dbc96bfef3a3cf8e5ad"
-  integrity sha512-CkB/nrO55069QAUjWFBpX6oc+9V90Qhgpe6fBWApzruMq5gnlh90Oo7iSSDK7pKiV5ugG6OY2AXM5mxcmL3lwQ==
+focus-trap@^6.4.0:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.6.1.tgz#761ce2c82ddd72beeb049e968bc8414e25b704aa"
+  integrity sha512-x9BWuAeF5UrfWuYKJ3jYrjcVYSYptS9CqtxH5IH7lPlZrMsaugKeAa0HtoZSBZe5DmeTMx2m0qY464ZMzqarzw==
   dependencies:
-    tabbable "^4.0.0"
-    xtend "^4.0.1"
+    tabbable "^5.2.1"
 
 follow-redirects@^1.0.0:
   version "1.14.1"
@@ -20093,10 +20118,10 @@ sync-disk-cache@^2.0.0:
     rimraf "^3.0.0"
     username-sync "^1.0.2"
 
-tabbable@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-4.0.0.tgz#5bff1d1135df1482cf0f0206434f15eadbeb9261"
-  integrity sha512-H1XoH1URcBOa/rZZWxLxHCtOdVUEev+9vo5YdYhC9tCY4wnybX+VQrCYuy9ubkg69fCBxCONJOSLGfw0DWMffQ==
+tabbable@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.2.1.tgz#e3fda7367ddbb172dcda9f871c0fdb36d1c4cd9c"
+  integrity sha512-40pEZ2mhjaZzK0BnI+QGNjJO8UYx9pP5v7BGe17SORTO0OEuuaAwQTkAp8whcZvqon44wKFOikD+Al11K3JICQ==
 
 table@^3.7.8:
   version "3.8.3"
