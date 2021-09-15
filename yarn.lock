@@ -9260,7 +9260,7 @@ ember-inline-svg@^1.0.0:
     svgo "~1.2.2"
     walk-sync "~2.0.2"
 
-ember-intl@^5.5.0:
+ember-intl@^5.7.0:
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/ember-intl/-/ember-intl-5.7.0.tgz#2381a6a210e39bcf1e879308538ec72903b0da7a"
   integrity sha512-NcQFPeV9wxyOX7Tb0y+84CXHPt5XleYUlszywx5aQgJQ4yE6in3kHjI804CRKtLz6OY0rzVfTa5Jc/y8CtI+0Q==
