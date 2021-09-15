@@ -8,7 +8,7 @@
   <layout.header>
     <Rose::Header
       class='{{if (is-loading) ' loading'}}
-        {{if this.hasMacOSFrame ' header-cushion'}}'
+        {{if this.isFrameMacOS ' header-cushion'}}'
       as |header|
     >
       <header.brand @logo='logo-app' @text={{app-name}} />

@@ -19,8 +19,7 @@ export default class ApplicationController extends Controller {
    * @type {boolean}
    */
   @computed('isMacOS', 'isFrameless')
-  get hasMacOSFrame() {
-    console.log('hasMacOSFrame ', this.isMacOS && !this.isFrameless);
+  get isFrameMacOS() {
     return this.isMacOS && !this.isFrameless;
   }
 }

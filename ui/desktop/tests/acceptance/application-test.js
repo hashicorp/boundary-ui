@@ -48,20 +48,30 @@ module('Acceptance | origin', function (hooks) {
   });
 
   test('visiting index on MacOS hides custom window actions', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     stubs.ipcService.withArgs('isMacOS').returns(true);
+    stubs.ipcService.withArgs('isFrameless').returns(false);
     await visit(urls.origin);
-    assert.notOk(find('.button-window-close'));
-    assert.notOk(find('.button-window-minimize'));
-    assert.notOk(find('.button-window-fullscreen'));
+    assert.notOk(find('.button-window-close'), 'Window close button');
+    assert.notOk(find('.button-window-minimize'), 'Window minimize button');
+    assert.notOk(find('.button-window-fullscreen'), 'Window fullscreen button');
+    assert.ok(
+      find('.rose-header.header-cushion'),
+      'Adds header padding around native window actions'
+    );
   });
 
   test('visiting index on non-MacOS shows custom window actions', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     stubs.ipcService.withArgs('isMacOS').returns(false);
+    stubs.ipcService.withArgs('isFrameless').returns(true);
     await visit(urls.origin);
-    assert.ok(find('.button-window-close'));
-    assert.ok(find('.button-window-minimize'));
-    assert.ok(find('.button-window-fullscreen'));
+    assert.ok(find('.button-window-close'), 'Window close button');
+    assert.ok(find('.button-window-minimize'), 'Window minimize button');
+    assert.ok(find('.button-window-fullscreen'), 'Window fullscreen button');
+    assert.notOk(
+      find('.rose-header.header-cushion'),
+      'Disables header padding around native window actions'
+    );
   });
 });

@@ -18,6 +18,7 @@ class MockIPC {
 
   resetOrigin() {}
   isMacOS() {}
+  isFrameless() {}
 }
 
 /**
