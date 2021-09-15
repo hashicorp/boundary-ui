@@ -35,7 +35,7 @@
     "ember-named-blocks-polyfill": "^0.2.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
+    "@babel/core": "^7.15.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^1.0.2",
     "@ember/test-helpers": "^2.4.2",
