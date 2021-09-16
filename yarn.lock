@@ -8654,10 +8654,10 @@ ember-auto-import@^1.12.0:
     walk-sync "^0.3.3"
     webpack "^4.43.0"
 
-ember-autofocus-modifier@^1.1.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/ember-autofocus-modifier/-/ember-autofocus-modifier-1.2.1.tgz#70eab9fef785f1d2cd7d0a84dde9bcd9178c71ea"
-  integrity sha512-vOUY8QpKjyVAjrDYMh5WGqtUtt5R+hCDUsYigtXRYJ71YluzBFuuMKjuguM/J7Z4YBzq7+E3ymydDhwAR98KDg==
+ember-autofocus-modifier@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ember-autofocus-modifier/-/ember-autofocus-modifier-2.0.0.tgz#8ec6dfb0d53cf7ad2a4f8bb1976a3f13710410ef"
+  integrity sha512-25I1QugUkfy7PeS/dAs3n0Vblp0hnle5WOhOAMLutr/FtUBUgY10qbfnV9zTu/+Nb2mR488CgKpVS+8iBzl1jA==
   dependencies:
     ember-cli-babel "^7.26.4"
     ember-modifier "^2.1.1"
