@@ -108,8 +108,8 @@
     "rose": "*",
     "sass": "^1.41.0",
     "sinon": "^11.1.2",
-    "stylelint": "^13.8.0",
-    "stylelint-config-sass-guidelines": "^7.1.0"
+    "stylelint": "^13.13.1",
+    "stylelint-config-sass-guidelines": "^8.0.0"
   },
   "engines": {
     "node": ">=10 <=15"
