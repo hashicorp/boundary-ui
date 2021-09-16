@@ -100,7 +100,9 @@ module('Acceptance | projects | targets', function (hooks) {
     );
     instances.target = this.server.create(
       'target',
-      { scope: instances.scopes.project },
+      {
+        scope: instances.scopes.project,
+      },
       'withAssociations'
     );
 
@@ -249,6 +251,24 @@ module('Acceptance | projects | targets', function (hooks) {
         find('.rose-dialog-body .copyable-content').textContent.trim(),
         'a_123:p_123'
       );
+    }, 750);
+    await visit(urls.targets);
+  });
+
+  test('cannot connect to a target without proper authorization', async function (assert) {
+    assert.expect(3);
+    instances.target.update({
+      authorized_actions: instances.target.authorized_actions.filter(
+        (action) => action != 'authorize-session'
+      ),
+    });
+    assert.notOk(
+      instances.target.authorized_actions.includes('authorize-session')
+    );
+    later(async () => {
+      run.cancelTimers();
+      assert.ok(find('tbody tr:first-child'));
+      assert.notOk(find('tbody tr:first-child td:last-child button'));
     }, 750);
     await visit(urls.targets);
   });

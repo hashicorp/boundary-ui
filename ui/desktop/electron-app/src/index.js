@@ -136,7 +136,13 @@ app.on('ready', async () => {
   // To show app icon in toolbar in linux, set browser window icon.
   // This is a limitation of electron build.
   if (isLinux())
-    browserWindowOptions.icon = path.join(__dirname, '..', 'assets', 'app-icons', 'icon.png');
+    browserWindowOptions.icon = path.join(
+      __dirname,
+      '..',
+      'assets',
+      'app-icons',
+      'icon.png'
+    );
 
   mainWindow = new BrowserWindow(browserWindowOptions);
 
