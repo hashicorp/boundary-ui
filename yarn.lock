@@ -1356,7 +1356,7 @@
   resolved "https://registry.yarnpkg.com/@doyensec/csp-evaluator/-/csp-evaluator-1.0.3.tgz#0d0405cbfb5bb814c24b8a73736a9700da2c681f"
   integrity sha512-Nz2QxdGiYh7nHgRU4R5/v6NDGW+IYv7j7dyQgpjtl4aJzrwHAdoZ0yxz7/YO8bgIOyDJJlF7jbUqjYpPClk9ZQ==
 
-"@doyensec/electronegativity@^1.8.1":
+"@doyensec/electronegativity@^1.9.1":
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/@doyensec/electronegativity/-/electronegativity-1.9.1.tgz#fc528b775cfb8416e8791a5c51d39d08b4d9686e"
   integrity sha512-G2gnxQRgpRoVJkqS22YntY509XOE5Ix4Y5mrw3S/vqLnF4XwCDpnfofyOYP1mmNgdOD9YS4hYxQ/5VT+iY5Orw==
