@@ -87,7 +87,8 @@ These environment variables may be used to customized the build.
 | `APP_UPDATER_CURRENT_VERSION` | Version of client. |
 | `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
-| `BYPASS_CLI_SETUP` | Enable to disallow download and extraction of cli. For development use only. |
+| `BYPASS_CLI_SETUP` | Disable download and extraction of cli. For development use only. |
+| `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 
 ### Building for Production
 
