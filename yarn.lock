@@ -9557,7 +9557,7 @@ ember-named-blocks-polyfill@^0.2.4:
     ember-cli-babel "^7.19.0"
     ember-cli-version-checker "^5.1.1"
 
-ember-notify@^6.0.0:
+ember-notify@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/ember-notify/-/ember-notify-6.0.1.tgz#bc1c0c623488dbe984bb047d905cbc3d7c56cf8c"
   integrity sha512-OzDsj6JpTqMIC0w7AB0umxWmzVX29VfRHTs3c6KZ6ew3D0cUMqI1OclJygXez/NKubPKZI3BSOgg1hohNOwqUQ==
