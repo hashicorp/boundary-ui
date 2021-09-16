@@ -1,14 +1,14 @@
 {{page-title (app-name)}}
 
 <Rose::Layout::Global
-  class='{{if this.isFrameless ' layout-scroll'}}'
+  class='{{if this.isWindowChromeless ' layout-scroll'}}'
   as |layout|
 >
 
   <layout.header>
     <Rose::Header
       class='{{if (is-loading) ' loading'}}
-        {{if this.isFrameMacOS ' header-cushion'}}'
+        {{if this.hasMacOSChrome ' header-cushion'}}'
       as |header|
     >
       <header.brand @logo='logo-app' @text={{app-name}} />
@@ -19,7 +19,7 @@
       {{/if}}
 
       <header.utilities as |utilities|>
-        {{#if this.isFrameless}}
+        {{#if this.isWindowChromeless}}
           <Rose::Button
             @iconOnly='flight-icons/x-16'
             @style='warning'

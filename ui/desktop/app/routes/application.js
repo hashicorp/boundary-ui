@@ -34,8 +34,11 @@ export default class ApplicationRoute extends Route {
    * Add window frame config on controller.
    */
   async setupController(controller) {
-    controller.set('isMacOS', await this.ipc.invoke('isMacOS'));
-    controller.set('isFrameless', await this.ipc.invoke('isFrameless'));
+    controller.set('hasMacOSChrome', await this.ipc.invoke('hasMacOSChrome'));
+    controller.set(
+      'isWindowChromeless',
+      await this.ipc.invoke('isWindowChromeless')
+    );
   }
 
   // =actions
