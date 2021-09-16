@@ -18,7 +18,7 @@ Title can be configured with optional icon and subtitle.
         {{description}}
       </message.description>
       <message.link @route="index">
-        <Rose::Icon @name="flight-icons/chevron-left-16" />
+        <Rose::Icon @name="flight-icons/svg/chevron-left-16" />
         Go back
       </message.link>
       <message.link @route="index">
@@ -33,23 +33,23 @@ Title can be configured with optional icon and subtitle.
       icon: select(
         'icon',
         {
-          'flight-icons/alert-circle-16': 'flight-icons/alert-circle-16',
-          'flight-icons/help-16': 'flight-icons/help-16',
+          'flight-icons/svg/alert-circle-16': 'flight-icons/svg/alert-circle-16',
+          'flight-icons/svg/help-16': 'flight-icons/svg/help-16',
         },
-        'flight-icons/help-16'
+        'flight-icons/svg/help-16'
       ),
     },
   }}</Story>
 </Preview>
 
 ```html
-<Rose::Message @title="Page not found" @subtitle="Error 404" @icon="flight-icons/alert-circle-16" as |message|>
+<Rose::Message @title="Page not found" @subtitle="Error 404" @icon="flight-icons/svg/alert-circle-16" as |message|>
   <message.description>
       You must be granted permissions to view this data. Ask your administrator
       if you think you should have access.
   </message.description>
   <message.link @route="index">
-    <Rose::Icon @name="flight-icons/chevron-left-16" />
+    <Rose::Icon @name="flight-icons/svg/chevron-left-16" />
     Go back
   </message.link>
   <message.link @route="index">Need help?</message.link>

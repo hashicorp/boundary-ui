@@ -3,9 +3,11 @@
     @text={{t (concat 'states.' @model.attributes.state)}}
     @icon={{if
       @model.isInactive
-      'flight-icons/x-circle-16'
+      'flight-icons/svg/x-circle-16'
       (if
-        @model.isPrivate 'flight-icons/lock-16' 'flight-icons/check-circle-16'
+        @model.isPrivate
+        'flight-icons/svg/lock-16'
+        'flight-icons/svg/check-circle-16'
       )
     }}
     @dropdownRight={{true}}

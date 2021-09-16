@@ -8,17 +8,17 @@ export default class RoseNotificationComponent extends Component {
    */
   @computed('style')
   get icon() {
-    let icon = 'flight-icons/info-16';
+    let icon = 'flight-icons/svg/info-16';
 
     switch (this.style) {
       case 'error':
-        icon = 'flight-icons/x-square-16';
+        icon = 'flight-icons/svg/x-square-16';
         break;
       case 'success':
-        icon = 'flight-icons/check-circle-16';
+        icon = 'flight-icons/svg/check-circle-16';
         break;
       case 'warning':
-        icon = 'flight-icons/alert-triangle-16';
+        icon = 'flight-icons/svg/alert-triangle-16';
         break;
     }
 
