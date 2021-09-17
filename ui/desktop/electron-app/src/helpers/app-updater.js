@@ -125,6 +125,11 @@ const displayDownloadPrompt = (version, url) => {
 module.exports = {
   run: async ({ suppressNoUpdatePrompt } = {}) => {
     /**
+     * Ignore app updater prompts.
+     */
+    if (process.env.BYPASS_APP_UPDATER) return;
+
+    /**
      * Disable app updater check for linux as update is unsupported.
      * TODO: Enable for windows pending feature dev. Windows is supported.
      */
