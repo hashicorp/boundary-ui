@@ -67,7 +67,17 @@ To run as a desktop app:
 The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
 build. CLI version is defined in `electron-app/config/cli.js`.
 
-#### Environment Variables
+### Developing Using Non-Release Versions of Boundary
+
+You can also develop using a non-release version of Boundary - bypassing the
+above CLI download behavior - by manually placing the version of Boundary that
+you want to develop with in the `electron-app/cli/` directly (you may need to
+create the directory).
+
+After doing this, run yarn with `BYPASS_CLI_SETUP=true`; example: 
+`BYPASS_CLI_SETUP=true yarn start:desktop`.
+
+### Environment Variables
 
 These environment variables may be used to customized the build.
 
@@ -78,6 +88,7 @@ These environment variables may be used to customized the build.
 | `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
 | `BYPASS_CLI_SETUP` | Disable download and extraction of cli. For development use only. |
+| `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 
 ### Building for Production
 
@@ -97,6 +108,11 @@ The static production assets are saved into the `dist/` folder.
 The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
 packaging. CLI version is defined in `electron-app/config/cli.js`.
 
+Similar to running in development, you can also use `BYPASS_CLI_SETUP=true` to
+bypass the download of the CLI, which can be useful for pre-release testing. See
+[Developing Using Non-Release Versions of
+Boundary](#developing-using-non-release-versions-of-boundary) for more details.
+
 To build debian based linux artifacts on MacOS, additional [MacOS tools](https://www.electronforge.io/config/makers/deb) need to be installed before running the following commands from this folder.
 
 ```
@@ -113,6 +129,7 @@ These environment variables may be used to customized the build.
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 | `BOUNDARY_DESKTOP_SIGNING_IDENTITY` | | The name of the certificate to use when signing (e.g. Developer ID Application: * (*)). |
+| `BYPASS_CLI_SETUP` | Set to `true` to launch without bootstrapping the CLI (see above). |
 
 ### Running Tests
 
