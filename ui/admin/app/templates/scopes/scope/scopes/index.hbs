@@ -47,8 +47,8 @@
             @id={{scope.id}}
             @icon={{if
               scope.isOrg
-              'flight-icons/org-16'
-              'flight-icons/grid-16'
+              'flight-icons/svg/org-16'
+              'flight-icons/svg/grid-16'
             }}
             @route='scopes.scope'
             @model={{scope.id}}
@@ -71,7 +71,7 @@
               (can 'create collection' @model.currentScope collection='scopes')
             }}
               <message.link @route='scopes.scope.new'>
-                <Rose::Icon @name='flight-icons/plus-circle-16' />
+                <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
                 {{t 'titles.new'}}
               </message.link>
             {{/if}}
@@ -92,7 +92,7 @@
               (can 'create collection' @model.currentScope collection='scopes')
             }}
               <message.link @route='scopes.scope.new'>
-                <Rose::Icon @name='flight-icons/plus-circle-16' />
+                <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
                 {{t 'titles.new'}}
               </message.link>
             {{/if}}

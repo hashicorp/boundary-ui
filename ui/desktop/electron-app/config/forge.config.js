@@ -4,20 +4,6 @@ const { isMac } = require('../src/helpers/platform.js');
 const fs = require('fs');
 const path = require('path');
 
-console.log(`\n[forge-config] Release commit: ${config.releaseCommit}`);
-console.log(`[forge-config] Release version: ${config.releaseVersion}`);
-
-// MacOS signing identity.
-// Ignore signing identity warning for debian builds run on MacOS
-if (
-  isMac() &&
-  !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY &&
-  !process.env.BUILD_DEBIAN
-)
-  console.warn(
-    '[forge-config] WARNING: Could not find signing identity. Proceeding without signing.'
-  );
-
 module.exports = {
   packagerConfig: {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],
@@ -65,6 +51,21 @@ module.exports = {
     },
   ],
   hooks: {
+    prePackage: () => {
+      console.log(`\n[package] Release commit: ${config.releaseCommit}`);
+      console.log(`[package] Release version: ${config.releaseVersion}`);
+
+      // Check for MacOS signing identity.
+      // Ignore signing identity warning for debian builds made on MacOS
+      if (
+        isMac() &&
+        !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY &&
+        !process.env.BUILD_DEBIAN
+      )
+        console.warn(
+          '[package] WARNING: Could not find signing identity. Proceeding without signing.'
+        );
+    },
     postPackage: async (forgeConfig, options) => {
       if (options.spinner) {
         options.spinner.info(
