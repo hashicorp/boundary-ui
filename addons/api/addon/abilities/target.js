@@ -1,7 +1,7 @@
 import ModelAbility from './model';
 
 /**
- * Generic ability provides abilities common to all models in the API.
+ * Provides a `connect` ability for targets.
  */
 export default class TargetAbility extends ModelAbility {
   // =permissions
