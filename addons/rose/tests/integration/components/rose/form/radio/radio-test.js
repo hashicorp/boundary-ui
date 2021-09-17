@@ -19,7 +19,7 @@ module('Integration | Component | rose/form/radio/radio', function (hooks) {
 
   test('it supports an icon', async function (assert) {
     await render(
-      hbs`<Rose::Form::Radio::Radio @icon="flight-icons/user-circle-16" />`
+      hbs`<Rose::Form::Radio::Radio @icon="flight-icons/svg/user-circle-16" />`
     );
     assert.ok(find('svg'));
   });

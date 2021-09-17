@@ -35,7 +35,7 @@ module('Integration | Component | rose/link-button', function (hooks) {
 
   test('it supports left icon with @iconLeft', async function (assert) {
     await render(
-      hbs`<Rose::LinkButton @route="index" @iconLeft="flight-icons/chevron-left-16" />`
+      hbs`<Rose::LinkButton @route="index" @iconLeft="flight-icons/svg/chevron-left-16" />`
     );
     assert.ok(find('.rose-icon'));
     assert.ok(find('.has-icon-left'));
@@ -43,7 +43,7 @@ module('Integration | Component | rose/link-button', function (hooks) {
 
   test('it supports left icon with @iconRight', async function (assert) {
     await render(
-      hbs`<Rose::LinkButton @route="index" @iconRight="flight-icons/entry-point-16" />`
+      hbs`<Rose::LinkButton @route="index" @iconRight="flight-icons/svg/entry-point-16" />`
     );
     assert.ok(find('.rose-icon'));
     assert.ok(find('.has-icon-right'));
@@ -51,7 +51,7 @@ module('Integration | Component | rose/link-button', function (hooks) {
 
   test('it supports only icon with @iconOnly', async function (assert) {
     await render(
-      hbs`<Rose::LinkButton @route="index" @iconOnly="flight-icons/help-16" />`
+      hbs`<Rose::LinkButton @route="index" @iconOnly="flight-icons/svg/help-16" />`
     );
     assert.ok(find('.rose-icon'));
     assert.ok(find('.has-icon-only'));

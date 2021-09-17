@@ -12,7 +12,7 @@ Styles supported: primary, secondary, warning, and ghost.
 Disabling link button is not supported as it is an action on form components only.
 
 ```html
-<Rose::LinkButton @route="index" @style="primary" @iconRight="flight-icons/entry-point-16">
+<Rose::LinkButton @route="index" @style="primary" @iconRight="flight-icons/svg/entry-point-16">
   Content
 </Rose::LinkButton>
 ```
@@ -45,18 +45,18 @@ Disabling link button is not supported as it is an action on form components onl
       iconLeft: select(
         'iconLeft',
         {
-          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
-          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
+          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
+          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
         },
-        'flight-icons/clipboard-copy-16'
+        'flight-icons/svg/clipboard-copy-16'
       ),
       iconRight: select(
         'iconRight',
         {
-          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
-          'flight-icons/clipboard-copy-16': 'flight-icons/clipboard-copy-16',
+          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
+          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
         },
-        'flight-icons/clipboard-copy-16'
+        'flight-icons/svg/clipboard-copy-16'
       ),
     },
   }}</Story>
@@ -65,7 +65,7 @@ Disabling link button is not supported as it is an action on form components onl
 Similar to `Rose::Button`, icon only link button is supported.
 
 ```html
-<Rose::LinkButton @route="index" @style="primary" @iconOnly="flight-icons/help-16" />
+<Rose::LinkButton @route="index" @style="primary" @iconOnly="flight-icons/svg/help-16" />
 ```
 
 <Preview>
@@ -88,10 +88,10 @@ Similar to `Rose::Button`, icon only link button is supported.
       iconOnly: select(
         'iconOnly',
         {
-          'flight-icons/check-circle-16': 'flight-icons/check-circle-16',
-          'flight-icons/help-16': 'flight-icons/help-16',
+          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
+          'flight-icons/svg/help-16': 'flight-icons/svg/help-16',
         },
-        'flight-icons/help-16'
+        'flight-icons/svg/help-16'
       ),
     },
   }}</Story>
