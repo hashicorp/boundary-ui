@@ -12,9 +12,9 @@ export default class TargetModel extends GeneratedTargetModel {
   @fragment('fragment-target-attributes', { defaultValue: {} }) attributes;
 
   /**
-   * @type {[FragmentHostSetModel]}
+   * @type {[FragmentHostSourceModel]}
    */
-  @fragmentArray('fragment-host-set', {
+  @fragmentArray('fragment-host-source', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
