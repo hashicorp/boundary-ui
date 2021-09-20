@@ -28,11 +28,11 @@ export default class ErrorMessageComponent extends MessageComponent {
   get icon() {
     switch (this.args.status) {
       case '404':
-        return 'flight-icons/help-16';
+        return 'flight-icons/svg/help-16';
       case '401':
       case '403':
       default:
-        return 'flight-icons/alert-circle-16';
+        return 'flight-icons/svg/alert-circle-16';
     }
   }
 

@@ -13,6 +13,7 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'authorize-session',
     ],
   /**
    * -1 means "unlimited" and we want to generate these on occasion.

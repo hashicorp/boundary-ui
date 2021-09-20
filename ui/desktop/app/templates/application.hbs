@@ -21,21 +21,21 @@
       <header.utilities as |utilities|>
         {{#if this.isWindowChromeless}}
           <Rose::Button
-            @iconOnly='flight-icons/x-16'
+            @iconOnly='flight-icons/svg/x-16'
             @style='warning'
             class='button-window-close'
             title={{t 'actions.close'}}
             {{on 'click' (route-action 'close')}}
           />
           <Rose::Button
-            @iconOnly='flight-icons/square-16'
+            @iconOnly='flight-icons/svg/square-16'
             @style='secondary'
             class='button-window-fullscreen'
             title={{t 'actions.fullscreen'}}
             {{on 'click' (route-action 'toggleFullScreen')}}
           />
           <Rose::Button
-            @iconOnly='flight-icons/minus-16'
+            @iconOnly='flight-icons/svg/minus-16'
             @style='secondary'
             class='button-window-minimize'
             title={{t 'actions.minimize'}}
@@ -46,7 +46,7 @@
         {{#if this.session.isAuthenticated}}
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
-            @icon='flight-icons/user-circle-16'
+            @icon='flight-icons/svg/user-circle-16'
             as |dropdown|
           >
             <dropdown.button {{on 'click' (route-action 'invalidateSession')}}>
@@ -110,7 +110,7 @@
     <Rose::Dialog
       @heading={{t 'states.error'}}
       @dismissButtonText={{t 'actions.ok'}}
-      @icon='flight-icons/x-square-16'
+      @icon='flight-icons/svg/x-square-16'
       @style='error'
       @modal={{true}}
       @dismiss={{deny}}
@@ -137,7 +137,7 @@
     <Rose::Dialog
       @heading={{t 'actions.confirm'}}
       @dismissButtonText={{t 'actions.cancel'}}
-      @icon='flight-icons/alert-triangle-16'
+      @icon='flight-icons/svg/alert-triangle-16'
       @style='warning'
       @modal={{true}}
       @dismiss={{deny}}
