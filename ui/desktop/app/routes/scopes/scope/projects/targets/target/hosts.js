@@ -21,8 +21,8 @@ export default class ScopesScopeProjectsTargetsTargetHostsRoute extends Route {
     const target = this.modelFor('scopes.scope.projects.targets.target');
     // Load all host-sets
     const hostSets = await all(
-      target.host_sets.map(({ host_set_id }) =>
-        this.store.findRecord('host-set', host_set_id)
+      target.host_sets.map(({ host_source_id }) =>
+        this.store.findRecord('host-set', host_source_id)
       )
     );
 

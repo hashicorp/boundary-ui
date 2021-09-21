@@ -15,8 +15,8 @@ module('Unit | Model | target', function (hooks) {
         type: 'target',
         attributes: {
           host_sets: [
-            { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '2' },
+            { host_source_id: '1', host_catalog_id: '2' },
+            { host_source_id: '3', host_catalog_id: '2' },
           ],
         },
       },
@@ -91,8 +91,8 @@ module('Unit | Model | target', function (hooks) {
           name: 'Target',
           description: 'Description',
           host_sets: [
-            { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' },
+            { host_source_id: '1', host_catalog_id: '2' },
+            { host_source_id: '3', host_catalog_id: '4' },
           ],
           version: 1,
           scope: {
@@ -128,8 +128,8 @@ module('Unit | Model | target', function (hooks) {
           name: 'Target',
           description: 'Description',
           host_sets: [
-            { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' },
+            { host_source_id: '1', host_catalog_id: '2' },
+            { host_source_id: '3', host_catalog_id: '4' },
           ],
           version: 1,
           scope: {
@@ -165,8 +165,8 @@ module('Unit | Model | target', function (hooks) {
           name: 'Target',
           description: 'Description',
           host_sets: [
-            { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' },
+            { host_source_id: '1', host_catalog_id: '2' },
+            { host_source_id: '3', host_catalog_id: '4' },
           ],
           version: 1,
           scope: {

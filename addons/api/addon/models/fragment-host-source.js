@@ -7,7 +7,7 @@ export default class FragmentHostSourceModel extends Fragment {
   @attr('string', {
     description: 'ID of the related host set',
   })
-  host_set_id;
+  host_source_id;
 
   @attr('string', {
     description: 'ID of the catalog to which the host set belongs',

@@ -22,7 +22,7 @@ export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
   beforeModel() {
     const { scopeID, host_sets } = this.modelFor('scopes.scope.targets.target');
     const promises = host_sets.map(
-      ({ host_set_id, host_catalog_id: hostCatalogID }) =>
+      ({ host_source_id, host_catalog_id: hostCatalogID }) =>
         hash({
           // TODO:  multiple host sets may belong to the same catalog,
           // resulting in the catalog being loaded multiple times.
@@ -30,7 +30,7 @@ export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
           hostCatalog: this.store.findRecord('host-catalog', hostCatalogID, {
             adapterOptions: { scopeID },
           }),
-          hostSet: this.store.findRecord('host-set', host_set_id, {
+          hostSet: this.store.findRecord('host-set', host_source_id, {
             adapterOptions: { scopeID, hostCatalogID },
           }),
         })

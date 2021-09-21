@@ -12,8 +12,8 @@ module('Unit | Serializer | target', function (hooks) {
       name: 'User',
       description: 'Description',
       host_sets: [
-        { host_set_id: '1', host_catalog_id: '2' },
-        { host_set_id: '3', host_catalog_id: '4' },
+        { host_source_id: '1', host_catalog_id: '2' },
+        { host_source_id: '3', host_catalog_id: '4' },
       ],
       application_credential_library_ids: [{ value: '1' }, { value: '2' }],
       scope: {
@@ -48,8 +48,8 @@ module('Unit | Serializer | target', function (hooks) {
       name: 'User',
       description: 'Description',
       host_sets: [
-        { host_set_id: '1', host_catalog_id: '2' },
-        { host_set_id: '3', host_catalog_id: '4' },
+        { host_source_id: '1', host_catalog_id: '2' },
+        { host_source_id: '3', host_catalog_id: '4' },
       ],
       version: 1,
     });
@@ -94,8 +94,8 @@ module('Unit | Serializer | target', function (hooks) {
       id: '1',
       name: 'Target 1',
       host_sets: [
-        { host_set_id: '1', host_catalog_id: '2' },
-        { host_set_id: '3', host_catalog_id: '4' },
+        { host_source_id: '1', host_catalog_id: '2' },
+        { host_source_id: '3', host_catalog_id: '4' },
       ],
       application_credential_library_ids: ['1'],
     };
@@ -113,8 +113,8 @@ module('Unit | Serializer | target', function (hooks) {
           authorized_actions: [],
           name: 'Target 1',
           host_sets: [
-            { host_set_id: '1', host_catalog_id: '2' },
-            { host_set_id: '3', host_catalog_id: '4' },
+            { host_source_id: '1', host_catalog_id: '2' },
+            { host_source_id: '3', host_catalog_id: '4' },
           ],
           application_credential_library_ids: [{ value: '1' }],
         },

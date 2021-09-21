@@ -39,8 +39,8 @@ export default class TargetModel extends GeneratedTargetModel {
   @computed('host_sets.[]', 'store')
   get hostSets() {
     return this.host_sets
-      .map(({ host_set_id, host_catalog_id }) => ({
-        model: this.store.peekRecord('host-set', host_set_id),
+      .map(({ host_source_id, host_catalog_id }) => ({
+        model: this.store.peekRecord('host-set', host_source_id),
         hostCatalog: this.store.peekRecord('host-catalog', host_catalog_id),
       }))
       .filter((hostSetRef) => hostSetRef.model !== null);
