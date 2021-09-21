@@ -29,7 +29,7 @@ export default class FormTargetAddHostSetsComponent extends Component {
   get filteredHostSets() {
     // Get IDs for host sets already added to the current target
     const alreadyAddedHostSetIDs = this.args.model.host_sets.map(
-      ({ host_set_id }) => host_set_id
+      ({ host_source_id }) => host_source_id
     );
     const notAddedHostSets = this.args.hostSets.filter(
       ({ id }) => !alreadyAddedHostSetIDs.includes(id)
