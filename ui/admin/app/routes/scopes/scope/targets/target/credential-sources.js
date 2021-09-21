@@ -44,8 +44,8 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
   @confirm('questions.remove-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.remove-success')
-  async removeCredentialLibrary(target, credentialLibrary) {
-    await target.removeCredentialLibrary(credentialLibrary.id);
+  async removeCredentialSource(target, credentialLibrary) {
+    await target.removeCredentialSource(credentialLibrary.id);
     this.refresh();
   }
 }

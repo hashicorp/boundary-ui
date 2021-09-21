@@ -35,7 +35,7 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     target: null,
     credentialLibraries: null,
     credentialLibrary: null,
-    addCredentialLibraries: null,
+    addCredentialSources: null,
   };
 
   hooks.beforeEach(function () {

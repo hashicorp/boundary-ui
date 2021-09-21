@@ -68,7 +68,7 @@ module('Unit | Model | host set', function (hooks) {
     await model.addHost('foobar');
   });
 
-  test('it has a `removeHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has a `removeHosts` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post('/v1/host-sets/123abc:remove-hosts', (schema, request) => {
       const body = JSON.parse(request.requestBody);

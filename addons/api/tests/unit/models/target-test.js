@@ -72,7 +72,7 @@ module('Unit | Model | target', function (hooks) {
     assert.ok(target.hostSets[0].hostCatalog, 'Host catalog is resolved');
   });
 
-  test('it has an `addHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has an `addHostSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post('/v1/targets/123abc:add-host-sets', (schema, request) => {
       const body = JSON.parse(request.requestBody);
@@ -103,10 +103,10 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.addHostSets(['123_abc', 'foobar']);
+    await model.addHostSources(['123_abc', 'foobar']);
   });
 
-  test('it has a `removeHostSets` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has a `removeHostSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-host-sets',
@@ -140,10 +140,10 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.removeHostSets(['1', '3']);
+    await model.removeHostSources(['1', '3']);
   });
 
-  test('it has a `removeHostSet` method that deletes a single host set using `removeHostSets` method', async function (assert) {
+  test('it has a `removeHostSource` method that deletes a single host set using `removeHostSources` method', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-host-sets',
@@ -177,7 +177,7 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.removeHostSet('3');
+    await model.removeHostSource('3');
   });
 
   test('it has a `sessions` array of session instances associated with the target (if those instances are already in the store)', function (assert) {
@@ -280,7 +280,7 @@ module('Unit | Model | target', function (hooks) {
     );
   });
 
-  test('it has an `addCredentialLibraries` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has an `addCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:add-credential-libraries',
@@ -311,10 +311,10 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.addCredentialLibraries(['123_abc', 'foobar']);
+    await model.addCredentialSources(['123_abc', 'foobar']);
   });
 
-  test('it has a `removeCredentialLibraries` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has a `removeCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-credential-libraries',
@@ -345,10 +345,10 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.removeCredentialLibraries(['1', '2']);
+    await model.removeCredentialSources(['1', '2']);
   });
 
-  test('it has a `removeCredentialLibrary` method that deletes a single credential library using `removeCredentialLibraries` method', async function (assert) {
+  test('it has a `removeCredentialSource` method that deletes a single credential library using `removeCredentialSources` method', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-credential-libraries',
@@ -379,6 +379,6 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.removeCredentialLibrary('2');
+    await model.removeCredentialSource('2');
   });
 });

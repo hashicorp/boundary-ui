@@ -71,7 +71,7 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async save(target, hostSetIDs) {
-    await target.addHostSets(hostSetIDs);
+    await target.addHostSources(hostSetIDs);
     this.replaceWith('scopes.scope.targets.target.host-sources');
   }
 

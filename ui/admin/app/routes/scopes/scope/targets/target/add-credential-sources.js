@@ -77,7 +77,7 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async save(target, credentialLibraryIDs) {
-    await target.addCredentialLibraries(credentialLibraryIDs);
+    await target.addCredentialSources(credentialLibraryIDs);
     this.replaceWith('scopes.scope.targets.target.credential-sources');
   }
 

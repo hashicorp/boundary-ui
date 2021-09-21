@@ -22,7 +22,7 @@ export default class TargetModel extends GeneratedTargetModel {
 
   /**
    * Credential library ids are read only and can be
-   * persisted via a dedicated call to `addCredentialLibraries()`.
+   * persisted via a dedicated call to `addCredentialSources()`.
    */
   @fragmentArray('fragment-string', {
     readOnly: true,
@@ -103,7 +103,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addHostSets(hostSetIDs, options = { adapterOptions: {} }) {
+  addHostSources(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-host-sets',
       hostSetIDs,
@@ -126,7 +126,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeHostSets(hostSetIDs, options = { adapterOptions: {} }) {
+  removeHostSources(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'remove-host-sets',
       hostSetIDs,
@@ -147,8 +147,8 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options
    * @return {Promise}
    */
-  removeHostSet(hostSetID, options) {
-    return this.removeHostSets([hostSetID], options);
+  removeHostSource(hostSetID, options) {
+    return this.removeHostSources([hostSetID], options);
   }
 
   /**
@@ -159,10 +159,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addCredentialLibraries(
-    credentialLibraryIDs,
-    options = { adapterOptions: {} }
-  ) {
+  addCredentialSources(credentialLibraryIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-credential-libraries',
       credentialLibraryIDs,
@@ -185,7 +182,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeCredentialLibraries(
+  removeCredentialSources(
     credentialLibraryIDs,
     options = { adapterOptions: {} }
   ) {
@@ -209,7 +206,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options
    * @return {Promise}
    */
-  removeCredentialLibrary(credentialLibraryID, options) {
-    return this.removeCredentialLibraries([credentialLibraryID], options);
+  removeCredentialSource(credentialLibraryID, options) {
+    return this.removeCredentialSources([credentialLibraryID], options);
   }
 }

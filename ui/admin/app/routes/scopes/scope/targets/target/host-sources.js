@@ -58,8 +58,8 @@ export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
   @confirm('questions.remove-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.remove-success')
-  async removeHostSet(target, hostSet) {
-    await target.removeHostSet(hostSet.id);
+  async removeHostSource(target, hostSet) {
+    await target.removeHostSource(hostSet.id);
     this.refresh();
   }
 }
