@@ -253,8 +253,8 @@ target:
   actions:
     create: New Target
     delete: Delete Target
-    add-host-sets: Add Host Sources
-    add-credential-libraries: Add Credential Sources
+    add-host-sources: Add Host Sources
+    add-credential-sources: Add Credential Sources
   types:
     tcp: TCP
   host-source:

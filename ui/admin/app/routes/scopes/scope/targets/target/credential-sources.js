@@ -5,7 +5,7 @@ import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Route {
+export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Route {
   // =methods
 
   /**

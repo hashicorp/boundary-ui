@@ -1,4 +1,4 @@
-{{page-title (t 'resources.target.actions.add-host-sets')}}
+{{page-title (t 'resources.target.actions.add-host-sources')}}
 
 {{#if @model.hostSets}}
   <Form::Target::AddHostSets
@@ -19,7 +19,7 @@
       <message.description>
         {{t 'resources.target.host-source.messages.none.description'}}
       </message.description>
-      <message.link @route='scopes.scope.targets.target.host-sets'>
+      <message.link @route='scopes.scope.targets.target.host-sources'>
         <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
         {{t 'actions.back'}}
       </message.link>

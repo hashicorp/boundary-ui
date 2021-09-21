@@ -2,11 +2,11 @@
   <nav.link @route='scopes.scope.targets.target.index'>
     {{t 'titles.details'}}
   </nav.link>
-  <nav.link @route='scopes.scope.targets.target.host-sets'>
+  <nav.link @route='scopes.scope.targets.target.host-sources'>
     {{t 'resources.target.host-source.title_plural'}}
   </nav.link>
   {{#if (feature-flag 'credential-store')}}
-    <nav.link @route='scopes.scope.targets.target.credential-libraries'>
+    <nav.link @route='scopes.scope.targets.target.credential-sources'>
       {{t 'resources.target.credential-source.title_plural'}}
     </nav.link>
   {{/if}}

@@ -9,7 +9,7 @@
   >
 
     <form.actions
-      @submitText={{t 'resources.target.actions.add-host-sets'}}
+      @submitText={{t 'resources.target.actions.add-host-sources'}}
       @cancelText={{t 'actions.cancel'}}
     />
 
@@ -58,7 +58,7 @@
       <message.description>
         {{t 'resources.target.host-source.messages.none.description'}}
       </message.description>
-      <message.link @route='scopes.scope.targets.target.host-sets'>
+      <message.link @route='scopes.scope.targets.target.host-sources'>
         <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
         {{t 'actions.back'}}
       </message.link>

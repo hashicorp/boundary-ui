@@ -6,7 +6,7 @@ import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
+export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
   // =services
 
   @service intl;

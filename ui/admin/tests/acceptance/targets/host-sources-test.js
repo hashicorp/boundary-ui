@@ -11,7 +11,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | targets | host-sets', function (hooks) {
+module('Acceptance | targets | host-sources', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -60,17 +60,17 @@ module('Acceptance | targets | host-sets', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `/scopes/${instances.scopes.project.id}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.targetHostSets = `${urls.target}/host-sets`;
-    urls.targetAddHostSets = `${urls.target}/add-host-sets`;
+    urls.targetHostSources = `${urls.target}/host-sources`;
+    urls.targetAddHostSources = `${urls.target}/add-host-sources`;
     authenticateSession({});
   });
 
   test('visiting target host sets', async function (assert) {
     assert.expect(3);
     const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
+    await visit(urls.targetHostSources);
     await a11yAudit();
-    assert.equal(currentURL(), urls.targetHostSets);
+    assert.equal(currentURL(), urls.targetHostSources);
     assert.ok(targetHostSetCount);
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
   });
@@ -78,7 +78,7 @@ module('Acceptance | targets | host-sets', function (hooks) {
   test('can remove a host sets', async function (assert) {
     assert.expect(2);
     const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
+    await visit(urls.targetHostSources);
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
@@ -99,7 +99,7 @@ module('Acceptance | targets | host-sets', function (hooks) {
       );
     });
     const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
+    await visit(urls.targetHostSources);
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]'));
@@ -108,32 +108,32 @@ module('Acceptance | targets | host-sets', function (hooks) {
   test('select and save host sets to add', async function (assert) {
     assert.expect(3);
     instances.target.update({ hostSetIds: [] });
-    await visit(urls.targetHostSets);
+    await visit(urls.targetHostSources);
     assert.equal(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.targetAddHostSets);
+    assert.equal(currentURL(), urls.targetAddHostSources);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
     await click('tbody label');
     await click('tbody label');
     await click('form [type="submit"]');
-    await visit(urls.targetHostSets);
+    await visit(urls.targetHostSources);
     assert.equal(findAll('tbody tr').length, 1);
   });
 
   test('select and cancel host sets to add', async function (assert) {
     assert.expect(4);
     const targetHostSetCount = instances.target.hostSets.length;
-    await visit(urls.targetHostSets);
+    await visit(urls.targetHostSources);
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
     // first, remove a target host set (otherwise none would be available to add)
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.targetAddHostSets);
+    assert.equal(currentURL(), urls.targetAddHostSources);
     await click('tbody label');
     await click('form [type="button"]');
-    await visit(urls.targetHostSets);
+    await visit(urls.targetHostSources);
     assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
   });
 
@@ -152,12 +152,12 @@ module('Acceptance | targets | host-sets', function (hooks) {
       );
     });
     instances.target.update({ hostSetIds: [] });
-    await visit(urls.targetAddHostSets);
+    await visit(urls.targetAddHostSources);
     assert.equal(instances.target.hostSets.length, 0);
-    assert.equal(currentURL(), urls.targetAddHostSets);
+    assert.equal(currentURL(), urls.targetAddHostSources);
     await click('tbody label');
     await click('form [type="submit"]');
-    assert.equal(currentURL(), urls.targetAddHostSets);
+    assert.equal(currentURL(), urls.targetAddHostSources);
     assert.equal(instances.target.hostSets.length, 0);
   });
 });
