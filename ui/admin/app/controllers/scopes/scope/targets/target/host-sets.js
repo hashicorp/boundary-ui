@@ -13,6 +13,6 @@ export default class ScopesScopeTargetsTargetHostSetsController extends Controll
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.target.host-set.title_plural');
+    return this.intl.t('resources.target.host-source.title_plural');
   }
 }

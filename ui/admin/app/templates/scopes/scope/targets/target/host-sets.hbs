@@ -1,4 +1,4 @@
-{{page-title (t 'resources.target.host-set.title_plural')}}
+{{page-title (t 'resources.target.host-source.title_plural')}}
 
 {{#if @model.hostSets}}
 
@@ -61,11 +61,11 @@
 
   <Rose::Layout::Centered>
     <Rose::Message
-      @title={{t 'resources.target.host-set.messages.welcome.title'}}
+      @title={{t 'resources.target.host-source.messages.welcome.title'}}
       as |message|
     >
       <message.description>
-        {{t 'resources.target.host-set.messages.welcome.description'}}
+        {{t 'resources.target.host-source.messages.welcome.description'}}
       </message.description>
       <message.link @route='scopes.scope.targets.target.add-host-sets'>
         <Rose::Icon @name='flight-icons/svg/plus-circle-16' />

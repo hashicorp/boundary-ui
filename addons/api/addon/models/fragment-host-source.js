@@ -5,7 +5,7 @@ export default class FragmentHostSourceModel extends Fragment {
   // =attributes
 
   @attr('string', {
-    description: 'ID of the related host set',
+    description: 'ID of the related host source',
   })
   host_source_id;
 
