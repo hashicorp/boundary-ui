@@ -368,7 +368,7 @@ export default function () {
         version: attrs.version,
       };
       // If adding host sets, push them into the array
-      if (method === 'add-host-sets') {
+      if (method === 'add-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
         attrs.hostSetIds.forEach((id) => {
           if (!updatedAttrs.hostSetIds.includes(id)) {
@@ -377,7 +377,7 @@ export default function () {
         });
       }
       // If deleting host sets, filter them out of the array
-      if (method === 'remove-host-sets') {
+      if (method === 'remove-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
         updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
           return !attrs.hostSetIds.includes(id);

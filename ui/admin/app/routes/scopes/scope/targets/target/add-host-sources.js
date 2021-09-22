@@ -42,7 +42,7 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   }
 
   /**
-   * Renders the add-host-sets-specific header template.
+   * Renders the add-host-sources-specific header template.
    * @override
    */
   renderTemplate() {

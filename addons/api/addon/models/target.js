@@ -96,7 +96,7 @@ export default class TargetModel extends GeneratedTargetModel {
   // =methods
 
   /**
-   * Adds host sets via the `add-host-sets` method.
+   * Adds host sets via the `add-host-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} hostSetIDs
    * @param {object} options
@@ -105,7 +105,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   addHostSources(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'add-host-sets',
+      method: 'add-host-sources',
       hostSetIDs,
     };
     // There is no "deep merge" in ES.
@@ -119,7 +119,7 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete host sets via the `remove-host-sets` method.
+   * Delete host sets via the `remove-host-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} hostSetIDs
    * @param {object} options
@@ -128,7 +128,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   removeHostSources(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'remove-host-sets',
+      method: 'remove-host-sources',
       hostSetIDs,
     };
     // There is no "deep merge" in ES.
@@ -142,7 +142,7 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete a single host set via the `remove-host-sets` method.
+   * Delete a single host set via the `remove-host-sources` method.
    * @param {number} hostSetID
    * @param {object} options
    * @return {Promise}
