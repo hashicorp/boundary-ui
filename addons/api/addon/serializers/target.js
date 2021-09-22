@@ -17,14 +17,15 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
-    const hostSetIDs = snapshot?.adapterOptions?.hostSetIDs;
-    if (hostSetIDs)
-      serialized = this.serializeWithHostSets(snapshot, hostSetIDs);
-    const credentialLibraryIDs = snapshot?.adapterOptions?.credentialLibraryIDs;
-    if (credentialLibraryIDs)
-      serialized = this.serializeWithCredentialLibraries(
+    const hostSourceIDs = snapshot?.adapterOptions?.hostSetIDs;
+    if (hostSourceIDs) {
+      serialized = this.serializeWithHostSources(snapshot, hostSourceIDs);
+    }
+    const credentialSourceIDs = snapshot?.adapterOptions?.credentialLibraryIDs;
+    if (credentialSourceIDs)
+      serialized = this.serializeWithCredentialSources(
         snapshot,
-        credentialLibraryIDs
+        credentialSourceIDs
       );
     return serialized;
   }
@@ -36,10 +37,10 @@ export default class TargetSerializer extends ApplicationSerializer {
    * @param {[string]} hostSetIDs
    * @return {object}
    */
-  serializeWithHostSets(snapshot, hostSetIDs) {
+  serializeWithHostSources(snapshot, hostSourceIDs) {
     return {
       version: snapshot.attr('version'),
-      host_set_ids: hostSetIDs,
+      host_set_ids: hostSourceIDs,
     };
   }
 
@@ -50,10 +51,10 @@ export default class TargetSerializer extends ApplicationSerializer {
    * @param {[string]} credentialLibraryIDs
    * @return {object}
    */
-  serializeWithCredentialLibraries(snapshot, credentialLibraryIDs) {
+  serializeWithCredentialSources(snapshot, credentialSourceIDs) {
     return {
       version: snapshot.attr('version'),
-      application_credential_library_ids: credentialLibraryIDs,
+      application_credential_library_ids: credentialSourceIDs,
     };
   }
 }
