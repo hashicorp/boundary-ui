@@ -386,7 +386,7 @@ export default function () {
       // If adding credential libraries, push them into the array
       if (method === 'add-credential-libraries') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
-        attrs.applicationCredentialLibraryIds.forEach((id) => {
+        attrs.applicationCredentialSourceIds.forEach((id) => {
           if (!updatedAttrs.credentialLibraryIds.includes(id)) {
             updatedAttrs.credentialLibraryIds.push(id);
           }
@@ -397,7 +397,7 @@ export default function () {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialLibraryIds =
           updatedAttrs.credentialLibraryIds.filter((id) => {
-            return !attrs.applicationCredentialLibraryIds.includes(id);
+            return !attrs.applicationCredentialSourceIds.includes(id);
           });
       }
       return target.update(updatedAttrs);

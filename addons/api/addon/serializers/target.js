@@ -54,7 +54,7 @@ export default class TargetSerializer extends ApplicationSerializer {
   serializeWithCredentialSources(snapshot, credentialSourceIDs) {
     return {
       version: snapshot.attr('version'),
-      application_credential_library_ids: credentialSourceIDs,
+      application_credential_source_ids: credentialSourceIDs,
     };
   }
 }

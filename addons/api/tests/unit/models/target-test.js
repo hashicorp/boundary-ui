@@ -232,15 +232,15 @@ module('Unit | Model | target', function (hooks) {
         id: '123abc',
         type: 'target',
         attributes: {
-          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+          application_credential_source_ids: [{ value: '1' }, { value: '2' }],
         },
       },
     });
     const target = store.peekRecord('target', '123abc');
     assert.equal(
-      target.application_credential_library_ids.length,
+      target.application_credential_source_ids.length,
       2,
-      'Target has two entires in application_credential_library_ids'
+      'Target has two entires in application_credential_source_ids'
     );
     assert.equal(
       target.credentialLibraries.length,
@@ -261,17 +261,17 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `credentialLibraries` is computed on `application_credential_library_ids`,
+    // Since `credentialLibraries` is computed on `application_credential_source_ids`,
     // not the store itself, it's necessary to do this assignment to kick-off the
     // computed update.
     /* eslint-disable no-self-assign */
-    target.application_credential_library_ids =
-      target.application_credential_library_ids;
+    target.application_credential_source_ids =
+      target.application_credential_source_ids;
     /* eslint-enable no-self-assign */
     assert.equal(
-      target.application_credential_library_ids.length,
+      target.application_credential_source_ids.length,
       2,
-      'Target has two entires in application_credential_library_ids'
+      'Target has two entires in application_credential_source_ids'
     );
     assert.equal(
       target.credentialLibraries.length,
@@ -287,7 +287,7 @@ module('Unit | Model | target', function (hooks) {
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
-          application_credential_library_ids: ['123_abc', 'foobar'],
+          application_credential_source_ids: ['123_abc', 'foobar'],
           version: 1,
         });
         return { id: '123abc' };
@@ -301,7 +301,7 @@ module('Unit | Model | target', function (hooks) {
         attributes: {
           name: 'Target',
           description: 'Description',
-          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+          application_credential_source_ids: [{ value: '1' }, { value: '2' }],
           version: 1,
           scope: {
             scope_id: 'o_1',
@@ -321,7 +321,7 @@ module('Unit | Model | target', function (hooks) {
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
-          application_credential_library_ids: ['1', '2'],
+          application_credential_source_ids: ['1', '2'],
           version: 1,
         });
         return { id: '123abc' };
@@ -335,7 +335,7 @@ module('Unit | Model | target', function (hooks) {
         attributes: {
           name: 'Target',
           description: 'Description',
-          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+          application_credential_source_ids: [{ value: '1' }, { value: '2' }],
           version: 1,
           scope: {
             scope_id: 'o_1',
@@ -355,7 +355,7 @@ module('Unit | Model | target', function (hooks) {
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
-          application_credential_library_ids: ['2'],
+          application_credential_source_ids: ['2'],
           version: 1,
         });
         return { id: '123abc' };
@@ -369,7 +369,7 @@ module('Unit | Model | target', function (hooks) {
         attributes: {
           name: 'Target',
           description: 'Description',
-          application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+          application_credential_source_ids: [{ value: '1' }, { value: '2' }],
           version: 1,
           scope: {
             scope_id: 'o_1',

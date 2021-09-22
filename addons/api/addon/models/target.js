@@ -28,7 +28,7 @@ export default class TargetModel extends GeneratedTargetModel {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
-  application_credential_library_ids;
+  application_credential_source_ids;
 
   /**
    * An array of resolved host set and host catalog instances.  Model instances
@@ -52,9 +52,9 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel]}
    */
-  @computed('application_credential_library_ids.[]', 'store')
+  @computed('application_credential_source_ids.[]', 'store')
   get credentialLibraries() {
-    return this.application_credential_library_ids
+    return this.application_credential_source_ids
       .map((credential_library_fragment) =>
         this.store.peekRecord(
           'credential-library',

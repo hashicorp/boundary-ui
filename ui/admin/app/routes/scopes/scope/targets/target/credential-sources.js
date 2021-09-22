@@ -13,7 +13,7 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
    * @return {Promise{[CredentialLibraryModel]}}
    */
   beforeModel() {
-    const { application_credential_library_ids: credential_libraries } =
+    const { application_credential_source_ids: credential_libraries } =
       this.modelFor('scopes.scope.targets.target');
     return all(
       credential_libraries.map((credential_library) =>

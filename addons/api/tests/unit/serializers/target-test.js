@@ -15,7 +15,7 @@ module('Unit | Serializer | target', function (hooks) {
         { host_source_id: '1', host_catalog_id: '2' },
         { host_source_id: '3', host_catalog_id: '4' },
       ],
-      application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+      application_credential_source_ids: [{ value: '1' }, { value: '2' }],
       scope: {
         scope_id: 'org_1',
         type: 'org',
@@ -71,7 +71,7 @@ module('Unit | Serializer | target', function (hooks) {
     const record = store.createRecord('target', {
       name: 'User',
       description: 'Description',
-      application_credential_library_ids: [{ value: '1' }, { value: '2' }],
+      application_credential_source_ids: [{ value: '1' }, { value: '2' }],
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -80,7 +80,7 @@ module('Unit | Serializer | target', function (hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      application_credential_library_ids: ['4', '5'],
+      application_credential_source_ids: ['4', '5'],
       version: 1,
     });
   });
@@ -97,7 +97,7 @@ module('Unit | Serializer | target', function (hooks) {
         { host_source_id: '1', host_catalog_id: '2' },
         { host_source_id: '3', host_catalog_id: '4' },
       ],
-      application_credential_library_ids: ['1'],
+      application_credential_source_ids: ['1'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -116,7 +116,7 @@ module('Unit | Serializer | target', function (hooks) {
             { host_source_id: '1', host_catalog_id: '2' },
             { host_source_id: '3', host_catalog_id: '4' },
           ],
-          application_credential_library_ids: [{ value: '1' }],
+          application_credential_source_ids: [{ value: '1' }],
         },
         relationships: {},
       },
@@ -148,7 +148,7 @@ module('Unit | Serializer | target', function (hooks) {
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
           host_sets: [],
-          application_credential_library_ids: [],
+          application_credential_source_ids: [],
         },
         relationships: {},
       },
