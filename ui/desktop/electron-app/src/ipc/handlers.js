@@ -69,17 +69,22 @@ handle('connect', ({ target_id, token, host_id }) =>
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
 
 /**
- * Check frame/chrome state. Only enabled on non-MacOS.
- */
-handle('isWindowChromeless', () =>
-  process.env.DISABLE_WINDOW_CHROME ? false : !isMac()
-);
-
-/**
- * Check for MacOS chrome
+ * Check for OS window chrome. Enabled on MacOS only.
+ * Window chrome is disabled regardless of platform when
+ * `DISABLE_WINDOW_CHROME` env var is enabled.
  */
 handle('hasMacOSChrome', () =>
   process.env.DISABLE_WINDOW_CHROME ? false : isMac()
+);
+
+/**
+ * Show window actions for non-MacOS platforms.
+ * Window actions are disabled regardless of platform when
+ * `DISABLE_WINDOW_CHROME` env var is enabled.
+ */
+handle(
+  'showWindowActions',
+  () => !isMac() || process.env.DISABLE_WINDOW_CHROME
 );
 
 /**

@@ -1,7 +1,7 @@
 {{page-title (app-name)}}
 
 <Rose::Layout::Global
-  class='{{if this.isWindowChromeless ' layout-scroll'}}'
+  class='{{if this.showWindowActions ' layout-scroll'}}'
   as |layout|
 >
 
@@ -19,7 +19,7 @@
       {{/if}}
 
       <header.utilities as |utilities|>
-        {{#if this.isWindowChromeless}}
+        {{#if this.showWindowActions}}
           <Rose::Button
             @iconOnly='flight-icons/svg/x-16'
             @style='warning'

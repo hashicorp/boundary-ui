@@ -49,7 +49,7 @@ module('Acceptance | origin', function (hooks) {
 
   test('visiting index with chrome disabled hides custom window actions', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('isWindowChromeless').returns(false);
+    stubs.ipcService.withArgs('showWindowActions').returns(false);
     await visit(urls.origin);
     assert.notOk(find('.button-window-close'), 'Window close button');
     assert.notOk(find('.button-window-minimize'), 'Window minimize button');
@@ -58,7 +58,7 @@ module('Acceptance | origin', function (hooks) {
 
   test('visiting index with chrome enabled shows custom window actions', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('isWindowChromeless').returns(true);
+    stubs.ipcService.withArgs('showWindowActions').returns(true);
     await visit(urls.origin);
     assert.ok(find('.button-window-close'), 'Window close button');
     assert.ok(find('.button-window-minimize'), 'Window minimize button');

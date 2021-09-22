@@ -36,8 +36,8 @@ export default class ApplicationRoute extends Route {
   async setupController(controller) {
     controller.set('hasMacOSChrome', await this.ipc.invoke('hasMacOSChrome'));
     controller.set(
-      'isWindowChromeless',
-      await this.ipc.invoke('isWindowChromeless')
+      'showWindowActions',
+      await this.ipc.invoke('showWindowActions')
     );
   }
 

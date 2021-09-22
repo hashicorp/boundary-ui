@@ -129,8 +129,8 @@ export default function initializeMockIPC(server) {
     /**
      * Check for OS chrome state
      */
-    isWindowChromeless() {
-      return false;
+    showWindowActions() {
+      return true;
     }
 
     /**
