@@ -384,7 +384,7 @@ export default function () {
         });
       }
       // If adding credential libraries, push them into the array
-      if (method === 'add-credential-libraries') {
+      if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         attrs.applicationCredentialSourceIds.forEach((id) => {
           if (!updatedAttrs.credentialLibraryIds.includes(id)) {
@@ -393,7 +393,7 @@ export default function () {
         });
       }
       // If deleting credential libraries, filter them out of the array
-      if (method === 'remove-credential-libraries') {
+      if (method === 'remove-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialLibraryIds =
           updatedAttrs.credentialLibraryIds.filter((id) => {

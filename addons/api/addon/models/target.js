@@ -152,7 +152,7 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Adds credential libraries via the `add-credential-libraries` method.
+   * Adds credential libraries via the `add-credential-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} credentialLibraryIDs
    * @param {object} options
@@ -161,7 +161,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   addCredentialSources(credentialLibraryIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'add-credential-libraries',
+      method: 'add-credential-sources',
       credentialLibraryIDs,
     };
     // There is no "deep merge" in ES.
@@ -175,7 +175,7 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete credential libraries via the `remove-credential-libraries` method.
+   * Delete credential libraries via the `remove-credential-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} credentialLibraryIDs
    * @param {object} options
@@ -187,7 +187,7 @@ export default class TargetModel extends GeneratedTargetModel {
     options = { adapterOptions: {} }
   ) {
     const defaultAdapterOptions = {
-      method: 'remove-credential-libraries',
+      method: 'remove-credential-sources',
       credentialLibraryIDs,
     };
     // There is no "deep merge" in ES.
@@ -201,7 +201,7 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete a single credential library set via the `remove-credential-libraries` method.
+   * Delete a single credential library set via the `remove-credential-sources` method.
    * @param {number} credentialLibraryID
    * @param {object} options
    * @return {Promise}

@@ -283,7 +283,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has an `addCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:add-credential-libraries',
+      '/v1/targets/123abc:add-credential-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
@@ -317,7 +317,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has a `removeCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:remove-credential-libraries',
+      '/v1/targets/123abc:remove-credential-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
@@ -351,7 +351,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has a `removeCredentialSource` method that deletes a single credential library using `removeCredentialSources` method', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:remove-credential-libraries',
+      '/v1/targets/123abc:remove-credential-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
