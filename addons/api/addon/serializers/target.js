@@ -31,7 +31,7 @@ export default class TargetSerializer extends ApplicationSerializer {
   }
 
   /**
-   * Returns a payload containing only the host_set_ids array using IDs
+   * Returns a payload containing only the host_source_ids array using IDs
    * passed into the function (rather than existing host sets on the model).
    * @param {Snapshot} snapshot
    * @param {[string]} hostSetIDs
@@ -40,7 +40,7 @@ export default class TargetSerializer extends ApplicationSerializer {
   serializeWithHostSources(snapshot, hostSourceIDs) {
     return {
       version: snapshot.attr('version'),
-      host_set_ids: hostSourceIDs,
+      host_source_ids: hostSourceIDs,
     };
   }
 

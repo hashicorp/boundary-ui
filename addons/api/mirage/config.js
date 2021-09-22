@@ -370,7 +370,7 @@ export default function () {
       // If adding host sets, push them into the array
       if (method === 'add-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
-        attrs.hostSetIds.forEach((id) => {
+        attrs.hostSourceIds.forEach((id) => {
           if (!updatedAttrs.hostSetIds.includes(id)) {
             updatedAttrs.hostSetIds.push(id);
           }
@@ -380,7 +380,7 @@ export default function () {
       if (method === 'remove-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
         updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
-          return !attrs.hostSetIds.includes(id);
+          return !attrs.hostSourceIds.includes(id);
         });
       }
       // If adding credential libraries, push them into the array

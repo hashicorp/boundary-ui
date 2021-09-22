@@ -204,7 +204,7 @@ module('Unit | Serializer | application', function (hooks) {
           authorized_actions: [],
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
-          host_sets: [],
+          host_sources: [],
           application_credential_source_ids: [],
         },
         relationships: {},

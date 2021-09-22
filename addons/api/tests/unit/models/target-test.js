@@ -14,7 +14,7 @@ module('Unit | Model | target', function (hooks) {
         id: '123abc',
         type: 'target',
         attributes: {
-          host_sets: [
+          host_sources: [
             { host_source_id: '1', host_catalog_id: '2' },
             { host_source_id: '3', host_catalog_id: '2' },
           ],
@@ -23,9 +23,9 @@ module('Unit | Model | target', function (hooks) {
     });
     const target = store.peekRecord('target', '123abc');
     assert.equal(
-      target.host_sets.length,
+      target.host_sources.length,
       2,
-      'Target has two entires in host_sets'
+      'Target has two entires in host_sources'
     );
     assert.equal(
       target.hostSets.length,
@@ -46,14 +46,14 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `hostSets` is computed on `host_sets`, not the store itself,
+    // Since `hostSets` is computed on `host_sources`, not the store itself,
     // it's necessary to do this assignment to kick-off the computed update.
     // eslint-disable-next-line no-self-assign
-    target.host_sets = target.host_sets;
+    target.host_sources = target.host_sources;
     assert.equal(
-      target.host_sets.length,
+      target.host_sources.length,
       2,
-      'Target has two entires in host_sets'
+      'Target has two entires in host_sources'
     );
     assert.equal(target.hostSets.length, 2, 'Target has two resolved hostSets');
     assert.notOk(
@@ -68,7 +68,7 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     // eslint-disable-next-line no-self-assign
-    target.host_sets = target.host_sets;
+    target.host_sources = target.host_sources;
     assert.ok(target.hostSets[0].hostCatalog, 'Host catalog is resolved');
   });
 
@@ -79,7 +79,7 @@ module('Unit | Model | target', function (hooks) {
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
-          host_set_ids: ['123_abc', 'foobar'],
+          host_source_ids: ['123_abc', 'foobar'],
           version: 1,
         });
         return { id: '123abc' };
@@ -93,7 +93,7 @@ module('Unit | Model | target', function (hooks) {
         attributes: {
           name: 'Target',
           description: 'Description',
-          host_sets: [
+          host_sources: [
             { host_source_id: '1', host_catalog_id: '2' },
             { host_source_id: '3', host_catalog_id: '4' },
           ],
@@ -116,7 +116,7 @@ module('Unit | Model | target', function (hooks) {
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
-          host_set_ids: ['1', '3'],
+          host_source_ids: ['1', '3'],
           version: 1,
         });
         return { id: '123abc' };
@@ -130,7 +130,7 @@ module('Unit | Model | target', function (hooks) {
         attributes: {
           name: 'Target',
           description: 'Description',
-          host_sets: [
+          host_sources: [
             { host_source_id: '1', host_catalog_id: '2' },
             { host_source_id: '3', host_catalog_id: '4' },
           ],
@@ -153,7 +153,7 @@ module('Unit | Model | target', function (hooks) {
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
-          host_set_ids: ['3'],
+          host_source_ids: ['3'],
           version: 1,
         });
         return { id: '123abc' };
@@ -167,7 +167,7 @@ module('Unit | Model | target', function (hooks) {
         attributes: {
           name: 'Target',
           description: 'Description',
-          host_sets: [
+          host_sources: [
             { host_source_id: '1', host_catalog_id: '2' },
             { host_source_id: '3', host_catalog_id: '4' },
           ],

@@ -11,7 +11,7 @@ module('Unit | Serializer | target', function (hooks) {
     const record = store.createRecord('target', {
       name: 'User',
       description: 'Description',
-      host_sets: [
+      host_sources: [
         { host_source_id: '1', host_catalog_id: '2' },
         { host_source_id: '3', host_catalog_id: '4' },
       ],
@@ -40,14 +40,14 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
-  test('it serializes only host sets and version when an `adapterOptions.hostSetIDs` array is passed', function (assert) {
+  test('it serializes only host sources and version when an `adapterOptions.hostSetIDs` array is passed', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
       name: 'User',
       description: 'Description',
-      host_sets: [
+      host_sources: [
         { host_source_id: '1', host_catalog_id: '2' },
         { host_source_id: '3', host_catalog_id: '4' },
       ],
@@ -59,12 +59,12 @@ module('Unit | Serializer | target', function (hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      host_set_ids: ['4', '5'],
+      host_source_ids: ['4', '5'],
       version: 1,
     });
   });
 
-  test('it serializes only credential libraries and version when an `adapterOptions.credentialLibraryIDs` array is passed', function (assert) {
+  test('it serializes only credential sources and version when an `adapterOptions.credentialLibraryIDs` array is passed', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -93,7 +93,7 @@ module('Unit | Serializer | target', function (hooks) {
     const payload = {
       id: '1',
       name: 'Target 1',
-      host_sets: [
+      host_sources: [
         { host_source_id: '1', host_catalog_id: '2' },
         { host_source_id: '3', host_catalog_id: '4' },
       ],
@@ -112,7 +112,7 @@ module('Unit | Serializer | target', function (hooks) {
         attributes: {
           authorized_actions: [],
           name: 'Target 1',
-          host_sets: [
+          host_sources: [
             { host_source_id: '1', host_catalog_id: '2' },
             { host_source_id: '3', host_catalog_id: '4' },
           ],
@@ -123,7 +123,7 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
-  test('it normalizes missing host_sets and credential libraries to empty array', function (assert) {
+  test('it normalizes missing host_sources and credential libraries to empty array', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -147,7 +147,7 @@ module('Unit | Serializer | target', function (hooks) {
           authorized_actions: [],
           name: 'Target 1',
           scope: { scope_id: 'o_123' },
-          host_sets: [],
+          host_sources: [],
           application_credential_source_ids: [],
         },
         relationships: {},

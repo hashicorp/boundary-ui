@@ -18,7 +18,7 @@ export default class TargetModel extends GeneratedTargetModel {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
-  host_sets;
+  host_sources;
 
   /**
    * Credential library ids are read only and can be
@@ -36,9 +36,9 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[{model: HostSetModel, hostCatalog: HostCatalogModel}]}
    */
-  @computed('host_sets.[]', 'store')
+  @computed('host_sources.[]', 'store')
   get hostSets() {
-    return this.host_sets
+    return this.host_sources
       .map(({ host_source_id, host_catalog_id }) => ({
         model: this.store.peekRecord('host-set', host_source_id),
         hostCatalog: this.store.peekRecord('host-catalog', host_catalog_id),
