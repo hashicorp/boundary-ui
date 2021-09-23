@@ -31,8 +31,8 @@ export default class TargetSerializer extends ApplicationSerializer {
   }
 
   /**
-   * Returns a payload containing only the host_source_ids array using IDs
-   * passed into the function (rather than existing host sets on the model).
+   * Returns a payload containing only version and an array of passed IDs,
+   * rather than existing instances on the model.
    * @param {Snapshot} snapshot
    * @param {[string]} hostSetIDs
    * @return {object}
@@ -45,10 +45,10 @@ export default class TargetSerializer extends ApplicationSerializer {
   }
 
   /**
-   * Returns a payload containing only the credential_library_ids array using IDs
-   * passed into the function (rather than existing credential libraries on the model).
+   * Returns a payload containing only version and an array of passed IDs,
+   * rather than existing instances on the model.
    * @param {Snapshot} snapshot
-   * @param {[string]} credentialLibraryIDs
+   * @param {[string]} credentialSourceIDs
    * @return {object}
    */
   serializeWithCredentialSources(snapshot, credentialSourceIDs) {

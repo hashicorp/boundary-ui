@@ -76,7 +76,7 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   }
 
   /**
-   * Redirect to target host sets as if nothing ever happened.
+   * Redirect to target host sources as if nothing ever happened.
    */
   @action
   cancel() {

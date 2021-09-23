@@ -21,7 +21,7 @@ export default class TargetModel extends GeneratedTargetModel {
   host_sources;
 
   /**
-   * Credential library ids are read only and can be
+   * Credential source ids are read only and can be
    * persisted via a dedicated call to `addCredentialSources()`.
    */
   @fragmentArray('fragment-string', {
@@ -55,11 +55,8 @@ export default class TargetModel extends GeneratedTargetModel {
   @computed('application_credential_source_ids.[]', 'store')
   get credentialLibraries() {
     return this.application_credential_source_ids
-      .map((credential_library_fragment) =>
-        this.store.peekRecord(
-          'credential-library',
-          credential_library_fragment.value
-        )
+      .map((source) =>
+        this.store.peekRecord('credential-library', source.value)
       )
       .filter(Boolean);
   }

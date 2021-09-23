@@ -123,7 +123,7 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
-  test('it normalizes missing host_sources and credential libraries to empty array', function (assert) {
+  test('it normalizes missing host_sources and application_credential_source_ids to empty array', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');

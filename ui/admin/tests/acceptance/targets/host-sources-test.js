@@ -65,7 +65,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     authenticateSession({});
   });
 
-  test('visiting target host sets', async function (assert) {
+  test('visiting target host sources', async function (assert) {
     assert.expect(3);
     const targetHostSetCount = instances.target.hostSets.length;
     await visit(urls.targetHostSources);

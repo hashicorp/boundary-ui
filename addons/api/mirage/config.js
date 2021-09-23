@@ -367,7 +367,7 @@ export default function () {
       const updatedAttrs = {
         version: attrs.version,
       };
-      // If adding host sets, push them into the array
+      // If adding host sources, push them into the array
       if (method === 'add-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
         attrs.hostSourceIds.forEach((id) => {
@@ -376,14 +376,14 @@ export default function () {
           }
         });
       }
-      // If deleting host sets, filter them out of the array
+      // If deleting host sources, filter them out of the array
       if (method === 'remove-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
         updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
           return !attrs.hostSourceIds.includes(id);
         });
       }
-      // If adding credential libraries, push them into the array
+      // If adding credential sources, push them into the array
       if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         attrs.applicationCredentialSourceIds.forEach((id) => {
@@ -392,7 +392,7 @@ export default function () {
           }
         });
       }
-      // If deleting credential libraries, filter them out of the array
+      // If deleting credential sources, filter them out of the array
       if (method === 'remove-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialLibraryIds =

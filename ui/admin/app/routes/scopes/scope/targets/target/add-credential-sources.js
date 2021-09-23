@@ -82,7 +82,7 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
   }
 
   /**
-   * Redirect to target credential libraries as if nothing ever happened.
+   * Redirect to target credential sources as if nothing ever happened.
    */
   @action
   cancel() {
