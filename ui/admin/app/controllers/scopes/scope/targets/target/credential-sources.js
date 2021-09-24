@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
-export default class ScopesScopeTargetsTargetCredentialLibrariesController extends Controller {
+export default class ScopesScopeTargetsTargetCredentialSourcesController extends Controller {
   // =services
 
   @service intl;
@@ -13,6 +13,6 @@ export default class ScopesScopeTargetsTargetCredentialLibrariesController exten
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.credential-library.title_plural');
+    return this.intl.t('resources.target.credential-source.title_plural');
   }
 }
