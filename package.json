@@ -78,6 +78,7 @@
     "glob-parent": "^5.1.2",
     "tar": "^6.1.9",
     "path-parse": "^1.0.7",
+    "tmpl": "^1.0.5",
     "set-value": "^4.0.1"
   },
   "config": {
