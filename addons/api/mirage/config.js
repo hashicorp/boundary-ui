@@ -367,37 +367,37 @@ export default function () {
       const updatedAttrs = {
         version: attrs.version,
       };
-      // If adding host sets, push them into the array
-      if (method === 'add-host-sets') {
+      // If adding host sources, push them into the array
+      if (method === 'add-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
-        attrs.hostSetIds.forEach((id) => {
+        attrs.hostSourceIds.forEach((id) => {
           if (!updatedAttrs.hostSetIds.includes(id)) {
             updatedAttrs.hostSetIds.push(id);
           }
         });
       }
-      // If deleting host sets, filter them out of the array
-      if (method === 'remove-host-sets') {
+      // If deleting host sources, filter them out of the array
+      if (method === 'remove-host-sources') {
         updatedAttrs.hostSetIds = target.hostSetIds;
         updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
-          return !attrs.hostSetIds.includes(id);
+          return !attrs.hostSourceIds.includes(id);
         });
       }
-      // If adding credential libraries, push them into the array
-      if (method === 'add-credential-libraries') {
+      // If adding credential sources, push them into the array
+      if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
-        attrs.applicationCredentialLibraryIds.forEach((id) => {
+        attrs.applicationCredentialSourceIds.forEach((id) => {
           if (!updatedAttrs.credentialLibraryIds.includes(id)) {
             updatedAttrs.credentialLibraryIds.push(id);
           }
         });
       }
-      // If deleting credential libraries, filter them out of the array
-      if (method === 'remove-credential-libraries') {
+      // If deleting credential sources, filter them out of the array
+      if (method === 'remove-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialLibraryIds =
           updatedAttrs.credentialLibraryIds.filter((id) => {
-            return !attrs.applicationCredentialLibraryIds.includes(id);
+            return !attrs.applicationCredentialSourceIds.includes(id);
           });
       }
       return target.update(updatedAttrs);

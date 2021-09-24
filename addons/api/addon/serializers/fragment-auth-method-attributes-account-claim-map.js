@@ -1,6 +1,6 @@
 import JSONSerializer from '@ember-data/serializer/json';
 
-export default class FragmentHostSetSerializer extends JSONSerializer {
+export default class FragmentHostSourceSerializer extends JSONSerializer {
   // =methods
 
   /**

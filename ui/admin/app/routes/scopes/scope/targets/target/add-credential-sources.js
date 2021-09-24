@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetAddCredentialLibrariesRoute extends Route {
+export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends Route {
   // =services
 
   @service intl;
@@ -49,13 +49,10 @@ export default class ScopesScopeTargetsTargetAddCredentialLibrariesRoute extends
   renderTemplate() {
     super.renderTemplate(...arguments);
 
-    this.render(
-      'scopes/scope/targets/target/add-credential-libraries/-header',
-      {
-        into: 'scopes/scope/targets/target',
-        outlet: 'header',
-      }
-    );
+    this.render('scopes/scope/targets/target/add-credential-sources/-header', {
+      into: 'scopes/scope/targets/target',
+      outlet: 'header',
+    });
 
     this.render('-empty', {
       into: 'scopes/scope/targets/target',
@@ -80,15 +77,15 @@ export default class ScopesScopeTargetsTargetAddCredentialLibrariesRoute extends
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async save(target, credentialLibraryIDs) {
-    await target.addCredentialLibraries(credentialLibraryIDs);
-    this.replaceWith('scopes.scope.targets.target.credential-libraries');
+    await target.addCredentialSources(credentialLibraryIDs);
+    this.replaceWith('scopes.scope.targets.target.credential-sources');
   }
 
   /**
-   * Redirect to target credential libraries as if nothing ever happened.
+   * Redirect to target credential sources as if nothing ever happened.
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.targets.target.credential-libraries');
+    this.replaceWith('scopes.scope.targets.target.credential-sources');
   }
 }
