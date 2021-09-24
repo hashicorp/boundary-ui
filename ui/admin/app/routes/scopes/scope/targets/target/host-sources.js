@@ -6,7 +6,7 @@ import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
+export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
   // =services
 
   @service intl;
@@ -20,9 +20,11 @@ export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
    * @return {Promise{[HostSetModel, HostCatalogModel]}}
    */
   beforeModel() {
-    const { scopeID, host_sets } = this.modelFor('scopes.scope.targets.target');
-    const promises = host_sets.map(
-      ({ host_set_id, host_catalog_id: hostCatalogID }) =>
+    const { scopeID, host_sources } = this.modelFor(
+      'scopes.scope.targets.target'
+    );
+    const promises = host_sources.map(
+      ({ host_source_id, host_catalog_id: hostCatalogID }) =>
         hash({
           // TODO:  multiple host sets may belong to the same catalog,
           // resulting in the catalog being loaded multiple times.
@@ -30,7 +32,7 @@ export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
           hostCatalog: this.store.findRecord('host-catalog', hostCatalogID, {
             adapterOptions: { scopeID },
           }),
-          hostSet: this.store.findRecord('host-set', host_set_id, {
+          hostSet: this.store.findRecord('host-set', host_source_id, {
             adapterOptions: { scopeID, hostCatalogID },
           }),
         })
@@ -58,8 +60,8 @@ export default class ScopesScopeTargetsTargetHostSetsRoute extends Route {
   @confirm('questions.remove-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.remove-success')
-  async removeHostSet(target, hostSet) {
-    await target.removeHostSet(hostSet.id);
+  async removeHostSource(target, hostSet) {
+    await target.removeHostSource(hostSet.id);
     this.refresh();
   }
 }

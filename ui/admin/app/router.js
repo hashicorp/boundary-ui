@@ -63,10 +63,10 @@ Router.map(function () {
 
       this.route('targets', function () {
         this.route('target', { path: ':target_id' }, function () {
-          this.route('host-sets', function () {});
-          this.route('add-host-sets');
-          this.route('credential-libraries');
-          this.route('add-credential-libraries');
+          this.route('host-sources', function () {});
+          this.route('add-host-sources');
+          this.route('credential-sources');
+          this.route('add-credential-sources');
         });
         this.route('new');
       });
