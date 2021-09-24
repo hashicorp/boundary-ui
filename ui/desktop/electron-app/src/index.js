@@ -115,7 +115,8 @@ app.on('ready', async () => {
 
   /**
    * Enable electron OS window frame/chrome for MacOS only.
-   * Disable frame/chrome regardless of OS when `DISABLE_WINDOW_CHROME` is set.
+   * Disable frame/chrome regardless of OS when
+   * `DISABLE_WINDOW_CHROME=true`.
    */
   let showWindowChrome = isMac();
   if (process.env.DISABLE_WINDOW_CHROME) showWindowChrome = false;
