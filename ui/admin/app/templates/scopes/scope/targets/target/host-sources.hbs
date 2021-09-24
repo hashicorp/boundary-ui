@@ -1,6 +1,6 @@
-{{page-title (t 'resources.target.credential-library.title_plural')}}
+{{page-title (t 'resources.target.host-source.title_plural')}}
 
-{{#if @model.credentialLibraries}}
+{{#if @model.hostSets}}
 
   <Rose::Table as |table|>
     <table.header as |header|>
@@ -12,34 +12,24 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each @model.credentialLibraries as |credentialLibrary|}}
+      {{#each @model.hostSets as |hostSet|}}
         <body.row as |row|>
           <row.headerCell>
-            <LinkTo
-              @route='scopes.scope.credential-stores.credential-store.credential-libraries.credential-library'
-              @models={{array
-                credentialLibrary.credential_store_id
-                credentialLibrary.id
-              }}
-            >
-              {{credentialLibrary.displayName}}
-            </LinkTo>
-            <p>{{credentialLibrary.description}}</p>
+            {{hostSet.model.displayName}}
+            <p>{{hostSet.model.description}}</p>
           </row.headerCell>
           <row.cell>
             <Rose::Badge>{{t
-                (concat
-                  'resources.credential-library.types.' credentialLibrary.type
-                )
+                (concat 'resources.host-set.types.' hostSet.model.type)
               }}</Rose::Badge>
           </row.cell>
           <row.cell>
             <Copyable
-              @text={{credentialLibrary.id}}
+              @text={{hostSet.model.id}}
               @buttonText={{t 'actions.copy-to-clipboard'}}
               @acknowledgeText={{t 'states.copied'}}
             >
-              <code>{{credentialLibrary.id}}</code>
+              <code>{{hostSet.model.id}}</code>
             </Copyable>
           </row.cell>
           <row.cell>
@@ -48,16 +38,14 @@
               @iconOnly={{true}}
               @showCaret={{false}}
               @dropdownRight={{true}}
-              @text={{t 'actions.manage'}}
+              @text='{{t 'actions.manage'}}'
               as |dropdown|
             >
               <dropdown.button
                 @style='danger'
                 {{on
                   'click'
-                  (route-action
-                    'removeCredentialLibrary' @model credentialLibrary
-                  )
+                  (route-action 'removeHostSource' @model hostSet.model)
                 }}
               >
                 {{t 'actions.remove'}}
@@ -73,17 +61,15 @@
 
   <Rose::Layout::Centered>
     <Rose::Message
-      @title={{t 'resources.target.credential-library.messages.welcome.title'}}
+      @title={{t 'resources.target.host-source.messages.welcome.title'}}
       as |message|
     >
       <message.description>
-        {{t 'resources.target.credential-library.messages.welcome.description'}}
+        {{t 'resources.target.host-source.messages.welcome.description'}}
       </message.description>
-      <message.link
-        @route='scopes.scope.targets.target.add-credential-libraries'
-      >
+      <message.link @route='scopes.scope.targets.target.add-host-sources'>
         <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-        {{t 'resources.target.actions.add-credential-libraries'}}
+        {{t 'resources.target.actions.add-host-sources'}}
       </message.link>
     </Rose::Message>
   </Rose::Layout::Centered>

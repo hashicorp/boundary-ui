@@ -8,7 +8,7 @@
     as |form|
   >
     <form.actions
-      @submitText={{t 'resources.target.actions.add-credential-libraries'}}
+      @submitText={{t 'resources.target.actions.add-credential-sources'}}
       @cancelText={{t 'actions.cancel'}}
     />
 
@@ -48,13 +48,13 @@
 {{#unless this.hasAvailableCredentialLibraries}}
   <Rose::Layout::Centered>
     <Rose::Message
-      @title={{t 'resources.target.credential-library.messages.none.title'}}
+      @title={{t 'resources.target.credential-source.messages.none.title'}}
       as |message|
     >
       <message.description>
-        {{t 'resources.target.credential-library.messages.none.description'}}
+        {{t 'resources.target.credential-source.messages.none.description'}}
       </message.description>
-      <message.link @route='scopes.scope.targets.target.credential-libraries'>
+      <message.link @route='scopes.scope.targets.target.credential-sources'>
         <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
         {{t 'actions.back'}}
       </message.link>

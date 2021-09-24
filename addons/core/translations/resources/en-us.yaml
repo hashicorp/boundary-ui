@@ -253,11 +253,11 @@ target:
   actions:
     create: New Target
     delete: Delete Target
-    add-host-sets: Add Host Sources
-    add-credential-libraries: Add Credential Sources
+    add-host-sources: Add Host Sources
+    add-credential-sources: Add Credential Sources
   types:
     tcp: TCP
-  host-set:
+  host-source:
     title: Host Source
     title_plural: Host Sources
     messages:
@@ -270,7 +270,7 @@ target:
       add:
         title: Add Host Sources
         description: Select host sources to assign to this target.
-  credential-library:
+  credential-source:
     title: Credential Source
     title_plural: Credential Sources
     messages:

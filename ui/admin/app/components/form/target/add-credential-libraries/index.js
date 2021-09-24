@@ -26,13 +26,13 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
    * @type {[CredentialLibraryModel]}
    */
   @computed(
-    'args.{credentialLibraries.[],model.application_credential_library_ids.[]}'
+    'args.{credentialLibraries.[],model.application_credential_source_ids.[]}'
   )
   get filteredCredentialLibraries() {
     // Get IDs for credential libraries already added to the current target
     const currentCredentialLibraryIDs =
-      this.args.model.application_credential_library_ids.map(
-        (credentialLibrary) => credentialLibrary.value
+      this.args.model.application_credential_source_ids.map(
+        (source) => source.value
       );
     const notAddedCredentialLibraries = this.args.credentialLibraries.filter(
       ({ id }) => !currentCredentialLibraryIDs.includes(id)

@@ -17,14 +17,14 @@ export default ApplicationSerializer.extend({
     );
     const { hostSets } = this.schema;
     if (model.hostSetIds?.length) {
-      json.host_sets = model.hostSetIds.map((host_set_id) => {
+      json.host_sources = model.hostSetIds.map((host_set_id) => {
         const hostSet = hostSets.find(host_set_id);
         const host_catalog_id = hostSet?.hostCatalog?.id;
         return { id: host_set_id, host_catalog_id };
       });
     }
     if (model.credentialLibraryIds?.length) {
-      json.application_credential_library_ids = model.credentialLibraryIds;
+      json.application_credential_source_ids = model.credentialLibraryIds;
     }
     return json;
   },
