@@ -5,7 +5,7 @@ import { all } from 'rsvp';
 import loading from 'ember-loading/decorator';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetAddHostSetsRoute extends Route {
+export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   // =services
 
   @service intl;
@@ -42,13 +42,13 @@ export default class ScopesScopeTargetsTargetAddHostSetsRoute extends Route {
   }
 
   /**
-   * Renders the add-host-sets-specific header template.
+   * Renders the add-host-sources-specific header template.
    * @override
    */
   renderTemplate() {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/targets/target/add-host-sets/-header', {
+    this.render('scopes/scope/targets/target/add-host-sources/-header', {
       into: 'scopes/scope/targets/target',
       outlet: 'header',
     });
@@ -71,15 +71,15 @@ export default class ScopesScopeTargetsTargetAddHostSetsRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async save(target, hostSetIDs) {
-    await target.addHostSets(hostSetIDs);
-    this.replaceWith('scopes.scope.targets.target.host-sets');
+    await target.addHostSources(hostSetIDs);
+    this.replaceWith('scopes.scope.targets.target.host-sources');
   }
 
   /**
-   * Redirect to target host sets as if nothing ever happened.
+   * Redirect to target host sources as if nothing ever happened.
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.targets.target.host-sets');
+    this.replaceWith('scopes.scope.targets.target.host-sources');
   }
 }

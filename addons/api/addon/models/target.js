@@ -12,23 +12,23 @@ export default class TargetModel extends GeneratedTargetModel {
   @fragment('fragment-target-attributes', { defaultValue: {} }) attributes;
 
   /**
-   * @type {[FragmentHostSetModel]}
+   * @type {[FragmentHostSourceModel]}
    */
-  @fragmentArray('fragment-host-set', {
+  @fragmentArray('fragment-host-source', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
-  host_sets;
+  host_sources;
 
   /**
-   * Credential library ids are read only and can be
-   * persisted via a dedicated call to `addCredentialLibraries()`.
+   * Credential source ids are read only and can be
+   * persisted via a dedicated call to `addCredentialSources()`.
    */
   @fragmentArray('fragment-string', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
-  application_credential_library_ids;
+  application_credential_source_ids;
 
   /**
    * An array of resolved host set and host catalog instances.  Model instances
@@ -36,11 +36,11 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[{model: HostSetModel, hostCatalog: HostCatalogModel}]}
    */
-  @computed('host_sets.[]', 'store')
+  @computed('host_sources.[]', 'store')
   get hostSets() {
-    return this.host_sets
-      .map(({ host_set_id, host_catalog_id }) => ({
-        model: this.store.peekRecord('host-set', host_set_id),
+    return this.host_sources
+      .map(({ host_source_id, host_catalog_id }) => ({
+        model: this.store.peekRecord('host-set', host_source_id),
         hostCatalog: this.store.peekRecord('host-catalog', host_catalog_id),
       }))
       .filter((hostSetRef) => hostSetRef.model !== null);
@@ -52,14 +52,11 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel]}
    */
-  @computed('application_credential_library_ids.[]', 'store')
+  @computed('application_credential_source_ids.[]', 'store')
   get credentialLibraries() {
-    return this.application_credential_library_ids
-      .map((credential_library_fragment) =>
-        this.store.peekRecord(
-          'credential-library',
-          credential_library_fragment.value
-        )
+    return this.application_credential_source_ids
+      .map((source) =>
+        this.store.peekRecord('credential-library', source.value)
       )
       .filter(Boolean);
   }
@@ -96,16 +93,16 @@ export default class TargetModel extends GeneratedTargetModel {
   // =methods
 
   /**
-   * Adds host sets via the `add-host-sets` method.
+   * Adds host sets via the `add-host-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} hostSetIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addHostSets(hostSetIDs, options = { adapterOptions: {} }) {
+  addHostSources(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'add-host-sets',
+      method: 'add-host-sources',
       hostSetIDs,
     };
     // There is no "deep merge" in ES.
@@ -119,16 +116,16 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete host sets via the `remove-host-sets` method.
+   * Delete host sets via the `remove-host-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} hostSetIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeHostSets(hostSetIDs, options = { adapterOptions: {} }) {
+  removeHostSources(hostSetIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'remove-host-sets',
+      method: 'remove-host-sources',
       hostSetIDs,
     };
     // There is no "deep merge" in ES.
@@ -142,29 +139,26 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete a single host set via the `remove-host-sets` method.
+   * Delete a single host set via the `remove-host-sources` method.
    * @param {number} hostSetID
    * @param {object} options
    * @return {Promise}
    */
-  removeHostSet(hostSetID, options) {
-    return this.removeHostSets([hostSetID], options);
+  removeHostSource(hostSetID, options) {
+    return this.removeHostSources([hostSetID], options);
   }
 
   /**
-   * Adds credential libraries via the `add-credential-libraries` method.
+   * Adds credential libraries via the `add-credential-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} credentialLibraryIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addCredentialLibraries(
-    credentialLibraryIDs,
-    options = { adapterOptions: {} }
-  ) {
+  addCredentialSources(credentialLibraryIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'add-credential-libraries',
+      method: 'add-credential-sources',
       credentialLibraryIDs,
     };
     // There is no "deep merge" in ES.
@@ -178,19 +172,19 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete credential libraries via the `remove-credential-libraries` method.
+   * Delete credential libraries via the `remove-credential-sources` method.
    * See serializer and adapter for more information.
    * @param {[string]} credentialLibraryIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeCredentialLibraries(
+  removeCredentialSources(
     credentialLibraryIDs,
     options = { adapterOptions: {} }
   ) {
     const defaultAdapterOptions = {
-      method: 'remove-credential-libraries',
+      method: 'remove-credential-sources',
       credentialLibraryIDs,
     };
     // There is no "deep merge" in ES.
@@ -204,12 +198,12 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete a single credential library set via the `remove-credential-libraries` method.
+   * Delete a single credential library set via the `remove-credential-sources` method.
    * @param {number} credentialLibraryID
    * @param {object} options
    * @return {Promise}
    */
-  removeCredentialLibrary(credentialLibraryID, options) {
-    return this.removeCredentialLibraries([credentialLibraryID], options);
+  removeCredentialSource(credentialLibraryID, options) {
+    return this.removeCredentialSources([credentialLibraryID], options);
   }
 }

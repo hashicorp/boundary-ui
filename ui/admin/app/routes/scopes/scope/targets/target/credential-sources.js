@@ -5,7 +5,7 @@ import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Route {
+export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Route {
   // =methods
 
   /**
@@ -13,7 +13,7 @@ export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Ro
    * @return {Promise{[CredentialLibraryModel]}}
    */
   beforeModel() {
-    const { application_credential_library_ids: credential_libraries } =
+    const { application_credential_source_ids: credential_libraries } =
       this.modelFor('scopes.scope.targets.target');
     return all(
       credential_libraries.map((credential_library) =>
@@ -44,8 +44,8 @@ export default class ScopesScopeTargetsTargetCredentialLibrariesRoute extends Ro
   @confirm('questions.remove-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.remove-success')
-  async removeCredentialLibrary(target, credentialLibrary) {
-    await target.removeCredentialLibrary(credentialLibrary.id);
+  async removeCredentialSource(target, credentialLibrary) {
+    await target.removeCredentialSource(credentialLibrary.id);
     this.refresh();
   }
 }
