@@ -27,7 +27,7 @@ test.afterEach(async () => {
 });
 
 test.describe('Authentication end to end test suite', async () => {
-  test('Authenticates using user and password method and deauthenticates  ', async () => {
+  test('Authenticates using user and password method and deauthenticates ', async () => {
     const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
     // Override local storage origin
     await boundaryWindow.evaluate(() =>
@@ -103,6 +103,53 @@ test.describe('Authentication end to end test suite', async () => {
     // Take screenshot
     await boundaryWindow.screenshot({
       path: returnScreenshotPath('afterLogout'),
+      fullPage: true,
+    });
+  });
+
+  test('Authenticates using user and wrong password, it can not authenticate', async () => {
+    const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
+    // Override local storage origin
+    await boundaryWindow.evaluate(() =>
+      window.localStorage.setItem('desktop:origin', null)
+    );
+    const originValue = 'http://localhost:9200';
+    const authLoginNameValue = 'admin';
+    const authLoginPasswordValue = '123456';
+
+    // Fill the origin input
+    await boundaryWindow.fill('.ember-text-field', originValue);
+    // Take screenshot
+    await boundaryWindow.screenshot({
+      path: returnScreenshotPath('fillOrigin'),
+      fullPage: true,
+    });
+
+    // Click the submit button
+    // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
+    // More info about it here: https://github.com/microsoft/playwright/issues/1808
+    await boundaryWindow.$eval('button[type="submit"]', (element) =>
+      element.click()
+    );
+    // Fill user & password
+    await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
+    await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
+
+    // Click submit
+    await boundaryWindow.$eval('button[type="submit"]', (element) =>
+      element.click()
+    );
+
+    // Wait for the notification
+    await boundaryWindow.waitForSelector('.rose-notification-body');
+    // Expect the notification to alert authentication has failed.
+    expect(
+      await boundaryWindow.innerText('div.rose-notification-body')
+    ).toEqual('Authentication Failed');
+
+    // Take screenshot
+    await boundaryWindow.screenshot({
+      path: returnScreenshotPath('notificationFailed'),
       fullPage: true,
     });
   });
