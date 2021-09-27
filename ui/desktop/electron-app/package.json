@@ -48,6 +48,7 @@
     "normalize-url": "^4.5.1",
     "jszip": "^3.7.0",
     "path-parse": "^1.0.7",
-    "tar": "^6.1.9"
+    "tar": "^6.1.9",
+    "nth-check": "^2.0.1"
   }
 }
