@@ -64,7 +64,7 @@ module.exports = function (environment) {
         session: '/sessions',
         target: '/targets',
         'target.new': '/targets/new',
-        'target.add-host-sets': '/targets/add-host-sets',
+        'target.add-host-sources': '/targets/add-host-sets',
         user: '/users',
       },
     },

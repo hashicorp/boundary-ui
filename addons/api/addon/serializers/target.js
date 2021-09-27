@@ -17,43 +17,44 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
-    const hostSetIDs = snapshot?.adapterOptions?.hostSetIDs;
-    if (hostSetIDs)
-      serialized = this.serializeWithHostSets(snapshot, hostSetIDs);
-    const credentialLibraryIDs = snapshot?.adapterOptions?.credentialLibraryIDs;
-    if (credentialLibraryIDs)
-      serialized = this.serializeWithCredentialLibraries(
+    const hostSourceIDs = snapshot?.adapterOptions?.hostSetIDs;
+    if (hostSourceIDs) {
+      serialized = this.serializeWithHostSources(snapshot, hostSourceIDs);
+    }
+    const credentialSourceIDs = snapshot?.adapterOptions?.credentialLibraryIDs;
+    if (credentialSourceIDs)
+      serialized = this.serializeWithCredentialSources(
         snapshot,
-        credentialLibraryIDs
+        credentialSourceIDs
       );
     return serialized;
   }
 
   /**
-   * Returns a payload containing only the host_set_ids array using IDs
-   * passed into the function (rather than existing host sets on the model).
+   * Returns a payload containing only version and an array of passed IDs,
+   * rather than existing instances on the model.
    * @param {Snapshot} snapshot
    * @param {[string]} hostSetIDs
    * @return {object}
    */
-  serializeWithHostSets(snapshot, hostSetIDs) {
+  serializeWithHostSources(snapshot, hostSourceIDs) {
     return {
       version: snapshot.attr('version'),
-      host_set_ids: hostSetIDs,
+      host_source_ids: hostSourceIDs,
     };
   }
 
   /**
-   * Returns a payload containing only the credential_library_ids array using IDs
-   * passed into the function (rather than existing credential libraries on the model).
+   * Returns a payload containing only version and an array of passed IDs,
+   * rather than existing instances on the model.
    * @param {Snapshot} snapshot
-   * @param {[string]} credentialLibraryIDs
+   * @param {[string]} credentialSourceIDs
    * @return {object}
    */
-  serializeWithCredentialLibraries(snapshot, credentialLibraryIDs) {
+  serializeWithCredentialSources(snapshot, credentialSourceIDs) {
     return {
       version: snapshot.attr('version'),
-      application_credential_library_ids: credentialLibraryIDs,
+      application_credential_source_ids: credentialSourceIDs,
     };
   }
 }
