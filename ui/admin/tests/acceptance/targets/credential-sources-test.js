@@ -160,6 +160,16 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     assert.equal(findAll('tbody tr').length, count - 1);
   });
 
+  test('cannot remove credential libraries without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter(
+        (item) => item !== 'remove-credential-sources'
+      );
+    await visit(urls.credentialSources);
+    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
+  });
+
   test('removing a target credential library which errors displays error messages', async function (assert) {
     assert.expect(2);
     this.server.post('/targets/:idMethod', () => {

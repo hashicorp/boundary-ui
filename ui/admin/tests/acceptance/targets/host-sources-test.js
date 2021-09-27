@@ -75,13 +75,23 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
   });
 
-  test('can remove a host sets', async function (assert) {
+  test('can remove a host set', async function (assert) {
     assert.expect(2);
     const targetHostSetCount = instances.target.hostSets.length;
     await visit(urls.targetHostSources);
     assert.equal(findAll('tbody tr').length, targetHostSetCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, targetHostSetCount - 1);
+  });
+
+  test('cannot remove a host set without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter(
+        (item) => item !== 'remove-host-sources'
+      );
+    await visit(urls.targetHostSources);
+    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
   });
 
   test('removing a target host set which errors displays error messages', async function (assert) {
