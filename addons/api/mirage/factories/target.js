@@ -15,10 +15,8 @@ export default factory.extend({
       'delete',
       'authorize-session',
       'add-host-sources',
-      'set-host-sources',
       'remove-host-sources',
       'add-credential-sources',
-      'set-credential-sources',
       'remove-credential-sources',
     ],
 

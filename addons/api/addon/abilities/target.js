@@ -16,8 +16,22 @@ export default class TargetAbility extends ModelAbility {
   /**
    * @type {boolean}
    */
+  get canAddHostSources() {
+    return this.hasAuthorizedAction('add-host-sources');
+  }
+
+  /**
+   * @type {boolean}
+   */
   get canRemoveHostSources() {
     return this.hasAuthorizedAction('remove-host-sources');
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get canAddCredentialSources() {
+    return this.hasAuthorizedAction('add-credential-sources');
   }
 
   /**

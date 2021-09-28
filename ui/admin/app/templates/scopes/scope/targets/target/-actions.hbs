@@ -3,13 +3,19 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  <dropdown.link @route='scopes.scope.targets.target.add-host-sources'>
-    {{t 'resources.target.actions.add-host-sources'}}
-  </dropdown.link>
-  {{#if (feature-flag 'credential-store')}}
-    <dropdown.link @route='scopes.scope.targets.target.add-credential-sources'>
-      {{t 'resources.target.actions.add-credential-sources'}}
+  {{#if (can 'addHostSources target' @model)}}
+    <dropdown.link @route='scopes.scope.targets.target.add-host-sources'>
+      {{t 'resources.target.actions.add-host-sources'}}
     </dropdown.link>
+  {{/if}}
+  {{#if (feature-flag 'credential-store')}}
+    {{#if (can 'addCredentialSources target' @model)}}
+      <dropdown.link
+        @route='scopes.scope.targets.target.add-credential-sources'
+      >
+        {{t 'resources.target.actions.add-credential-sources'}}
+      </dropdown.link>
+    {{/if}}
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
