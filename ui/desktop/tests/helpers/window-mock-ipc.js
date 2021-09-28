@@ -17,7 +17,8 @@ class MockIPC {
   }
 
   resetOrigin() {}
-  isMacOS() {}
+  hasMacOSChrome() {}
+  showWindowActions() {}
 }
 
 /**
