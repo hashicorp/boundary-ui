@@ -32,14 +32,14 @@
     "tree-kill": "^1.2.2"
   },
   "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.54",
-    "@electron-forge/maker-deb": "6.0.0-beta.54",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.54",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.55",
-    "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "@electron-forge/cli": "6.0.0-beta.61",
+    "@electron-forge/maker-deb": "6.0.0-beta.61",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.61",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+    "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "decompress": "^4.2.1",
     "devtron": "^1.4.0",
-    "electron": "12.0.2"
+    "electron": "12.1.2"
   },
   "resolutions": {
     "highlight.js": "^10.4.1",
@@ -48,6 +48,8 @@
     "normalize-url": "^4.5.1",
     "jszip": "^3.7.0",
     "path-parse": "^1.0.7",
-    "tar": "^6.1.9"
+    "tar": "^6.1.9",
+    "ansi-regex": "^5.0.1",
+    "nth-check": "^2.0.1"
   }
 }

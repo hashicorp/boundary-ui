@@ -69,9 +69,22 @@ handle('connect', ({ target_id, token, host_id }) =>
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
 
 /**
- * Check for MacOS OS
+ * Check for OS window chrome. Enabled on MacOS only.
+ * Window chrome is disabled regardless of platform for
+ * `DISABLE_WINDOW_CHROME=true`.
  */
-handle('isMacOS', () => isMac());
+handle('hasMacOSChrome', () =>
+  process.env.DISABLE_WINDOW_CHROME ? false : isMac()
+);
+
+/**
+ * Show window actions for non-MacOS platforms.
+ * Window actions are disabled regardless of platform for
+ * `DISABLE_WINDOW_CHROME=true`.
+ */
+handle('showWindowActions', () =>
+  process.env.DISABLE_WINDOW_CHROME ? false : !isMac()
+);
 
 /**
  * Minimize window
