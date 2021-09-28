@@ -113,11 +113,19 @@ app.on('ready', async () => {
   }
   Menu.setApplicationMenu(menuTemplate);
 
+  /**
+   * Enable electron OS window frame/chrome for MacOS only.
+   * Disable frame/chrome regardless of OS when
+   * `DISABLE_WINDOW_CHROME=true`.
+   */
+  let showWindowChrome = isMac();
+  if (process.env.DISABLE_WINDOW_CHROME) showWindowChrome = false;
+
   const browserWindowOptions = {
     width: 1280,
     height: 760,
-    titleBarStyle: 'hiddenInset',
-    frame: isMac(),
+    frame: showWindowChrome,
+    titleBarStyle: showWindowChrome ? 'hiddenInset' : 'none',
     webPreferences: {
       partition,
       sandbox: true,
