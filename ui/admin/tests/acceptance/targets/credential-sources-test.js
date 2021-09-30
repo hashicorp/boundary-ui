@@ -117,6 +117,16 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     assert.equal(findAll('tbody tr').length, 1);
   });
 
+  test('cannot add credential sources without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter(
+        (item) => item !== 'add-credential-sources'
+      );
+    await visit(urls.credentialSources);
+    assert.notOk(find(`[href="${urls.addCredentialSources}"]`));
+  });
+
   test('can select and cancel credential sources to add', async function (assert) {
     assert.expect(4);
     instances.target.update({ credentialLibraries: [] });
