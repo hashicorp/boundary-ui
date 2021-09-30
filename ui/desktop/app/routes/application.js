@@ -31,10 +31,14 @@ export default class ApplicationRoute extends Route {
   }
 
   /**
-   * Add OS config on controller.
+   * Add window frame config on controller.
    */
   async setupController(controller) {
-    controller.set('isMacOS', await this.ipc.invoke('isMacOS'));
+    controller.set('hasMacOSChrome', await this.ipc.invoke('hasMacOSChrome'));
+    controller.set(
+      'showWindowActions',
+      await this.ipc.invoke('showWindowActions')
+    );
   }
 
   // =actions
