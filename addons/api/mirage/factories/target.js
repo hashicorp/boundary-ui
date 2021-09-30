@@ -14,7 +14,14 @@ export default factory.extend({
       'update',
       'delete',
       'authorize-session',
+      'add-host-sources',
+      'set-host-sources',
+      'remove-host-sources',
+      'add-credential-sources',
+      'set-credential-sources',
+      'remove-credential-sources',
     ],
+
   /**
    * -1 means "unlimited" and we want to generate these on occasion.
    */

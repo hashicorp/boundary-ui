@@ -14,4 +14,26 @@ module('Unit | Abilities | Target', function (hooks) {
     model.authorized_actions = [];
     assert.notOk(service.can('connect target', model));
   });
+
+  test('it reflects when a given target may remove host sources', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:can');
+    const model = {
+      authorized_actions: ['remove-host-sources'],
+    };
+    assert.ok(service.can('removeHostSources target', model));
+    model.authorized_actions = [];
+    assert.notOk(service.can('removeHostSources target', model));
+  });
+
+  test('it reflects when a given target may remove crednetial sources', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:can');
+    const model = {
+      authorized_actions: ['remove-credential-sources'],
+    };
+    assert.ok(service.can('removeCredentialSources target', model));
+    model.authorized_actions = [];
+    assert.notOk(service.can('removeCredentialSources target', model));
+  });
 });
