@@ -12,4 +12,18 @@ export default class RoleAbility extends ModelAbility {
   get canSetGrants() {
     return this.hasAuthorizedAction('set-grants');
   }
+
+  /**
+   * @type {boolean}
+   */
+  get canAddPrincipals() {
+    return this.hasAuthorizedAction('add-principals');
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get canRemovePrincipals() {
+    return this.hasAuthorizedAction('remove-principals');
+  }
 }
