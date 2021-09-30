@@ -63,6 +63,26 @@ module('Acceptance | roles | grants', function (hooks) {
     assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
   });
 
+  test('cannot set grants without proper authorization', async function (assert) {
+    assert.expect(4);
+    const authorized_actions = instances.role.authorized_actions.filter(
+      (item) => item !== 'set-grants'
+    );
+    instances.role.update({ authorized_actions });
+    await visit(urls.grants);
+    assert.equal(
+      findAll('main form').length,
+      1,
+      'New grant form is not displayed.'
+    );
+    assert.notOk(
+      find('main form button:not([type="submit"])'),
+      'Grant delete button is not displayed.'
+    );
+    assert.notOk(find('.rose-form-actions'), 'Form actions are not displayed.');
+    assert.ok(find('main form input[disabled]'), 'Grant fields are disabled.');
+  });
+
   test('update a grant', async function (assert) {
     assert.expect(1);
     this.server.post(

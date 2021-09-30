@@ -9,6 +9,7 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'set-grants',
     ],
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   grant_strings: () => [
