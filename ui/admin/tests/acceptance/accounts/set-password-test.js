@@ -49,7 +49,8 @@ module('Acceptance | accounts | set password', function (hooks) {
     urls.authMethods = `${urls.orgScope}/auth-methods`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     urls.accounts = `${urls.authMethod}/accounts`;
-    urls.setPassword = `${urls.accounts}/${instances.account.id}/set-password`;
+    urls.account = `${urls.accounts}/${instances.account.id}`;
+    urls.setPassword = `${urls.account}/set-password`;
   });
 
   test('visiting account set password', async function (assert) {
@@ -57,6 +58,26 @@ module('Acceptance | accounts | set password', function (hooks) {
     await visit(urls.setPassword);
     await a11yAudit();
     assert.equal(currentURL(), urls.setPassword);
+  });
+
+  test('can navigate to route with proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.account);
+    assert.ok(
+      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`)
+    );
+  });
+
+  test('cannot navigate to route without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.account.authorized_actions.filter(
+      (item) => item !== 'set-password'
+    );
+    instances.account.update({ authorized_actions });
+    await visit(urls.account);
+    assert.notOk(
+      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`)
+    );
   });
 
   test('can set a new password for account', async function (assert) {
