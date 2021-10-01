@@ -99,6 +99,16 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.equal(findAll('tbody tr').length, count - 1);
   });
 
+  test('cannot remove a host without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.hostSet.authorized_actions.filter(
+      (item) => item !== 'remove-hosts'
+    );
+    instances.hostSet.update({ authorized_actions });
+    await visit(urls.hostSetHosts);
+    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
+  });
+
   test('shows error message on host remove error', async function (assert) {
     assert.expect(2);
     this.server.post('/host-sets/:idMethod', () => {
@@ -124,6 +134,22 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await visit(urls.addHosts);
     await a11yAudit();
     assert.equal(currentURL(), urls.addHosts);
+  });
+
+  test('can navigate to add hosts with proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.hostSet);
+    assert.ok(find(`[href="${urls.addHosts}"]`));
+  });
+
+  test('cannot navigate to add hosts without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.hostSet.authorized_actions.filter(
+      (item) => item !== 'add-hosts'
+    );
+    instances.hostSet.update({ authorized_actions });
+    await visit(urls.hostSet);
+    assert.notOk(find(`[href="${urls.addHosts}"]`));
   });
 
   test('select and save hosts to add', async function (assert) {

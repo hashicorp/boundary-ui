@@ -3,16 +3,18 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  <dropdown.link
-    @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host'
-  >
-    {{t 'resources.host-set.actions.create-and-add-host'}}
-  </dropdown.link>
-  <dropdown.link
-    @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.add-hosts'
-  >
-    {{t 'resources.host-set.actions.add-hosts'}}
-  </dropdown.link>
+  {{#if (can 'addHosts hostSet' @model)}}
+    <dropdown.link
+      @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host'
+    >
+      {{t 'resources.host-set.actions.create-and-add-host'}}
+    </dropdown.link>
+    <dropdown.link
+      @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.add-hosts'
+    >
+      {{t 'resources.host-set.actions.add-hosts'}}
+    </dropdown.link>
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button
