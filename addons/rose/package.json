@@ -29,6 +29,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "@babel/core": "^7.15.5",
     "babel-loader": "^8.2.2",
     "ember-cli-babel": "^7.26.6",
     "ember-cli-htmlbars": "^5.7.1",
