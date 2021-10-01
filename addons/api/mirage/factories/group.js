@@ -9,6 +9,8 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'add-members',
+      'remove-members',
     ],
   id: (i) => `group-${i}`,
 
