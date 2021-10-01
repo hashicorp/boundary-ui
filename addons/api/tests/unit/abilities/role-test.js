@@ -4,7 +4,7 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Abilities | Account', function (hooks) {
   setupTest(hooks);
 
-  test('it reflects when a given account may set grants based on authorized_actions', function (assert) {
+  test('it reflects when a given role may set grants based on authorized_actions', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
@@ -15,7 +15,7 @@ module('Unit | Abilities | Account', function (hooks) {
     assert.notOk(service.can('setGrants role', model));
   });
 
-  test('it reflects when a given account may add principals based on authorized_actions', function (assert) {
+  test('it reflects when a given role may add principals based on authorized_actions', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
@@ -26,7 +26,7 @@ module('Unit | Abilities | Account', function (hooks) {
     assert.notOk(service.can('addPrincipals role', model));
   });
 
-  test('it reflects when a given account may remove principals based on authorized_actions', function (assert) {
+  test('it reflects when a given role may remove principals based on authorized_actions', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
