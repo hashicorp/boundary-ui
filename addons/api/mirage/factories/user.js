@@ -8,6 +8,8 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'add-accounts',
+      'remove-accounts',
     ],
   id: (i) => `user-${i}`,
 });

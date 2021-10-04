@@ -61,12 +61,22 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.equal(findAll('tbody tr').length, accountsCount);
   });
 
-  test('can remove a account', async function (assert) {
+  test('can remove an account', async function (assert) {
     assert.expect(2);
     await visit(urls.accounts);
     assert.equal(findAll('tbody tr').length, accountsCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.equal(findAll('tbody tr').length, accountsCount - 1);
+  });
+
+  test('cannot remove an account without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.user.authorized_actions.filter(
+      (item) => item !== 'remove-accounts'
+    );
+    instances.user.update({ authorized_actions });
+    await visit(urls.accounts);
+    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
   });
 
   test('shows error message on account remove', async function (assert) {
@@ -92,8 +102,25 @@ module('Acceptance | users | accounts', function (hooks) {
   test('visiting account add accounts', async function (assert) {
     assert.expect(1);
     await visit(urls.addAccounts);
+    await visit(urls.addAccounts);
     await a11yAudit();
     assert.equal(currentURL(), urls.addAccounts);
+  });
+
+  test('can navigate to add accounts without proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.accounts);
+    assert.ok(find(`[href="${urls.addAccounts}"]`));
+  });
+
+  test('cannot navigate to add accounts without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.user.authorized_actions.filter(
+      (item) => item !== 'add-accounts'
+    );
+    instances.user.update({ authorized_actions });
+    await visit(urls.accounts);
+    assert.notOk(find(`[href="${urls.addAccounts}"]`));
   });
 
   test('select and save accounts to add', async function (assert) {
