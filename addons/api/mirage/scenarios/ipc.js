@@ -120,17 +120,17 @@ export default function initializeMockIPC(server) {
     }
 
     /**
-     * Check for browsers running on mac OS
+     * Check for window chrome on MacOS
      */
-    isMacOS() {
-      return Boolean(window.navigator.userAgent.match(/(macintosh)/i));
+    hasMacOSChrome() {
+      return false;
     }
 
     /**
-     * Check for browsers running on windows OS
+     * Check for OS chrome state
      */
-    isWindowsOS() {
-      return Boolean(window.navigator.userAgent.match(/(windows)/i));
+    showWindowActions() {
+      return true;
     }
 
     /**
