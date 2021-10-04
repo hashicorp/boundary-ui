@@ -29,7 +29,6 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "babel-loader": "^8.2.2",
     "ember-cli-babel": "^7.26.6",
     "ember-cli-htmlbars": "^5.7.1",
     "ember-focus-trap": "^0.7.0",
@@ -39,6 +38,8 @@
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "babel-loader": "^8.2.2",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.4.2",
     "@glimmer/component": "^1.0.4",
