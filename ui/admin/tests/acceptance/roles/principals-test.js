@@ -69,6 +69,16 @@ module('Acceptance | roles | principals', function (hooks) {
     assert.equal(findAll('tbody tr').length, principalsCount - 1);
   });
 
+  test('principal cannot be removed from a role without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.role.authorized_actions.filter(
+      (item) => item !== 'remove-principals'
+    );
+    instances.role.update({ authorized_actions });
+    await visit(urls.rolePrincipals);
+    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
+  });
+
   test('shows error message on principal remove', async function (assert) {
     assert.expect(2);
     this.server.post('/roles/:idMethod', () => {
@@ -87,6 +97,16 @@ module('Acceptance | roles | principals', function (hooks) {
     assert.equal(findAll('tbody tr').length, principalsCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]'));
+  });
+
+  test('cannot navigate to add principals without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.role.authorized_actions.filter(
+      (item) => item !== 'add-principals'
+    );
+    instances.role.update({ authorized_actions });
+    await visit(urls.rolePrincipals);
+    assert.notOk(find('.rose-layout-page-actions a'));
   });
 
   test('select and save principals to add', async function (assert) {
