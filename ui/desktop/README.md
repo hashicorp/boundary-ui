@@ -39,14 +39,19 @@ List of available project commands.  `yarn run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
-| build:development | Builds the UI in development mode. |
 | build | Builds the UI for production. |
+| build:development | Builds the UI in development mode. |
 | build:desktop:debianOnMacOS | Builds debian based linux artifacts on MacOS. |
 | lint | Runs all lint commands. |
+| lint:fix | Runs all automatic linting fixes. |
 | lint:hbs | Lints `hbs` template files. |
+| lint:hbs:fix | Runs the automatic linting fix for `hbs` template files. |
 | lint:js | Lints `js` files. |
+| lint:js:fix | Runs the automatic linting fix for `js` files. |
 | lint:sass | Lints `scss` files. |
+| lint:electron | Runs a linter tool to identify misconfigurations and security anti-patterns in Electron. | 
 | format | Runs all auto-formatters. |
+| format:hbs | Auto-formats `hbs` files using Prettier. |
 | format:js | Auto-formats `js` files using Prettier. |
 | format:sass | Auto-formats `scss` files using Prettier. |
 | start | Runs the dummy app local server. |
