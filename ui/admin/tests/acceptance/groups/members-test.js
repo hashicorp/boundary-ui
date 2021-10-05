@@ -68,6 +68,16 @@ module('Acceptance | groups | members', function (hooks) {
     assert.equal(findAll('tbody tr').length, membersCount - 1);
   });
 
+  test('cannot remove a member without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.group.authorized_actions.filter(
+      (item) => item !== 'remove-members'
+    );
+    instances.group.update({ authorized_actions });
+    await visit(urls.members);
+    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
+  });
+
   test('shows error message on member remove', async function (assert) {
     assert.expect(2);
     this.server.post('/groups/:idMethod', () => {
@@ -93,6 +103,22 @@ module('Acceptance | groups | members', function (hooks) {
     await visit(urls.addMembers);
     await a11yAudit();
     assert.equal(currentURL(), urls.addMembers);
+  });
+
+  test('can navigate to add members with proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.group);
+    assert.ok(find(`[href="${urls.addMembers}"]`));
+  });
+
+  test('cannot navigate to add members without proper authorization', async function (assert) {
+    assert.expect(1);
+    const authorized_actions = instances.group.authorized_actions.filter(
+      (item) => item !== 'add-members'
+    );
+    instances.group.update({ authorized_actions });
+    await visit(urls.group);
+    assert.notOk(find(`[href="${urls.addMembers}"]`));
   });
 
   test('select and save members to add', async function (assert) {

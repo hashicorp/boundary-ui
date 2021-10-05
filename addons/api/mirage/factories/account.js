@@ -9,6 +9,7 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'set-password',
     ],
   attributes() {
     switch (this.type) {

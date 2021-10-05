@@ -3,9 +3,11 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  <dropdown.link @route='scopes.scope.groups.group.add-members'>
-    {{t 'resources.group.actions.add-members'}}
-  </dropdown.link>
+  {{#if (can 'addMembers group' @model)}}
+    <dropdown.link @route='scopes.scope.groups.group.add-members'>
+      {{t 'resources.group.actions.add-members'}}
+    </dropdown.link>
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button

@@ -3,9 +3,11 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  <dropdown.link @route='scopes.scope.roles.role.add-principals'>
-    {{t 'resources.role.principal.actions.add-principals'}}
-  </dropdown.link>
+  {{#if (can 'addPrincipals role' @model)}}
+    <dropdown.link @route='scopes.scope.roles.role.add-principals'>
+      {{t 'resources.role.principal.actions.add-principals'}}
+    </dropdown.link>
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button

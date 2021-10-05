@@ -8,6 +8,8 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'add-hosts',
+      'remove-hosts',
     ],
   id: (i) => `host-set-id-${i}`,
 });

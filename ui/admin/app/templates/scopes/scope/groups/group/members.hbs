@@ -26,21 +26,26 @@
             </Copyable>
           </row.cell>
           <row.cell>
-            <Rose::Dropdown
-              @icon='flight-icons/svg/more-horizontal-16'
-              @iconOnly={{true}}
-              @showCaret={{false}}
-              @dropdownRight={{true}}
-              @text='{{t 'actions.manage'}}'
-              as |dropdown|
-            >
-              <dropdown.button
-                @style='danger'
-                {{on 'click' (route-action 'removeMember' @model.group member)}}
+            {{#if (can 'removeMembers group' @model.group)}}
+              <Rose::Dropdown
+                @icon='flight-icons/svg/more-horizontal-16'
+                @iconOnly={{true}}
+                @showCaret={{false}}
+                @dropdownRight={{true}}
+                @text='{{t 'actions.manage'}}'
+                as |dropdown|
               >
-                {{t 'actions.remove'}}
-              </dropdown.button>
-            </Rose::Dropdown>
+                <dropdown.button
+                  @style='danger'
+                  {{on
+                    'click'
+                    (route-action 'removeMember' @model.group member)
+                  }}
+                >
+                  {{t 'actions.remove'}}
+                </dropdown.button>
+              </Rose::Dropdown>
+            {{/if}}
           </row.cell>
         </body.row>
       {{/each}}
