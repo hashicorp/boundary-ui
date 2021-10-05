@@ -37,7 +37,7 @@ module('Unit | Abilities | Target', function (hooks) {
     assert.notOk(service.can('removeHostSources target', model));
   });
 
-  test('it reflects when a given target may add crednetial sources', function (assert) {
+  test('it reflects when a given target may add credential sources', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {

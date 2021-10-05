@@ -89,6 +89,7 @@ These environment variables may be used to customized the build.
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
 | `BYPASS_CLI_SETUP` | Disable download and extraction of cli. For development use only. |
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
+| `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
 
 ### Building for Production
 
