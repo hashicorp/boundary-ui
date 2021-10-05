@@ -54,11 +54,9 @@ List of available project commands.  `yarn run <command-name>`
 | format:hbs | Auto-formats `hbs` files using Prettier. |
 | format:js | Auto-formats `js` files using Prettier. |
 | format:sass | Auto-formats `scss` files using Prettier. |
-| prestart:desktop | Generate forge config file based on platform. |
 | start | Runs the dummy app local server as web app. |
 | start:desktop | Runs the dummy app as an electron app. |
 | clean:coverage | Cleans coverage reporting directory. |
-| pretest | Runs `clean:coverage`. |
 | test | Runs all tests in random order, with coverage reporting. |
 | test:ember | Runs ember tests in random order, with coverage reporting. |
 | doc:toc | Automatically generates a table of contents for this README file. |
