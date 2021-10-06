@@ -16,22 +16,25 @@
     <Rose::Table as |table|>
       <table.header as |header|>
         <header.row as |row|>
-          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.description.label'}}</row.headerCell>
         </header.row>
       </table.header>
       <table.body as |body|>
         {{#each this.filteredPrincipals as |principal|}}
           <body.row as |row|>
-            <row.cell>
+            <row.headerCell>
               <form.checkbox
-                @label={{principal.id}}
-                @description={{principal.description}}
+                @label={{principal.displayName}}
                 onChange={{fn this.togglePrincipal principal}}
               />
-            </row.cell>
-            <row.cell>{{principal.name}}</row.cell>
+              {{#if principal.accountName}}
+                <br /><Rose::Badge>{{principal.accountName}}</Rose::Badge>
+              {{/if}}
+            </row.headerCell>
+            <row.cell>{{principal.id}}</row.cell>
             <row.cell>
               <Rose::Badge>{{t
                   (concat
@@ -40,6 +43,7 @@
                   )
                 }}</Rose::Badge>
             </row.cell>
+            <row.cell>{{principal.description}}</row.cell>
           </body.row>
         {{/each}}
       </table.body>
