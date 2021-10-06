@@ -1,6 +1,6 @@
-# Client Connect UI
+# Desktop client UI
 
-The client UI for Boundary.
+The desktop client UI for Boundary.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -31,7 +31,7 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-See boundary-ui README for installation instructions.
+See [boundary-ui README](https://github.com/hashicorp/boundary-ui#installation) for installation instructions.
 
 ## Yarn Commands
 
@@ -39,24 +39,32 @@ List of available project commands.  `yarn run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
-| build:development | Builds the UI in development mode. |
 | build | Builds the UI for production. |
+| build:development | Builds the UI in development mode. |
 | build:desktop:debianOnMacOS | Builds debian based linux artifacts on MacOS. |
 | lint | Runs all lint commands. |
+| lint:fix | Runs all automatic linting fixes. |
 | lint:hbs | Lints `hbs` template files. |
+| lint:hbs:fix | Runs the automatic linting fix for `hbs` template files. |
 | lint:js | Lints `js` files. |
+| lint:js:fix | Runs the automatic linting fix for `js` files. |
 | lint:sass | Lints `scss` files. |
+| lint:electron | Runs a linter tool to identify misconfigurations and security anti-patterns in Electron. | 
 | format | Runs all auto-formatters. |
+| format:hbs | Auto-formats `hbs` files using Prettier. |
 | format:js | Auto-formats `js` files using Prettier. |
 | format:sass | Auto-formats `scss` files using Prettier. |
-| start | Runs the dummy app local server. |
+| start | Runs the dummy app local server as web app. |
 | start:desktop | Runs the dummy app as an electron app. |
+| clean:coverage | Cleans coverage reporting directory. |
 | test | Runs all tests in random order, with coverage reporting. |
+| test:ember | Runs ember tests in random order, with coverage reporting. |
 | doc:toc | Automatically generates a table of contents for this README file. |
 
 
 ## Running / Development
 
+To run as web app:
 * `yarn start`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 * Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
@@ -90,11 +98,12 @@ These environment variables may be used to customized the build.
 | `BYPASS_CLI_SETUP` | Disable download and extraction of cli. For development use only. |
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 | `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
+| `ENABLE_MIRAGE` | Enable (`true`) or disable (`false`) mirage. Default value is `true`. |
 
 ### Building for Production
 
 Before executing a build, be sure to set any environment variables necessary
-for your target [environment](#environment-variables).  To build this UI for
+for your target [environment](#environment-variables). To build this UI for
 production, run the following commands from this folder:
 
 ```bash

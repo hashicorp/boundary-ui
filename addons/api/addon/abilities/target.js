@@ -1,7 +1,7 @@
 import ModelAbility from './model';
 
 /**
- * Provides a `connect` ability for targets.
+ * Provides abilities for targets.
  */
 export default class TargetAbility extends ModelAbility {
   // =permissions
