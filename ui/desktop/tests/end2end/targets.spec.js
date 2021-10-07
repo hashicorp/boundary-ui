@@ -75,7 +75,11 @@ test.describe('Targets end to end test suite', async () => {
     await boundaryWindow.waitForSelector('section.dialog-detail');
     // Take screenshot
     await boundaryWindow.screenshot({
+<<<<<<< HEAD
       path: generateScreenshotPath('targetConnectionDetails'),
+=======
+      path: returnScreenshotPath('targetConnectionDetails'),
+>>>>>>> 5f79634d (test: 💍 Add connect to target e2e test)
       fullPage: true,
     });
     // Click copyable in popup
@@ -104,7 +108,11 @@ test.describe('Targets end to end test suite', async () => {
 
     // Take screenshot
     await boundaryWindow.screenshot({
+<<<<<<< HEAD
       path: generateScreenshotPath('sessions'),
+=======
+      path: returnScreenshotPath('sessions'),
+>>>>>>> 5f79634d (test: 💍 Add connect to target e2e test)
       fullPage: true,
     });
 
