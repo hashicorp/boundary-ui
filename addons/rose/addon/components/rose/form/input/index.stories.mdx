@@ -17,6 +17,7 @@ Renders a simple form input.
   @label="Email"
   @helperText="Enter your email"
   @error={{false}}
+  @icon='flight-icons/svg/org-16'
   @disabled={{false}}
   readonly={{false}}
 />
@@ -50,6 +51,7 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         @label={{label}}
         @helperText={{helperText}}
         @error={{false}}
+        @icon={{icon}}
         @disabled={{disabled}}
         readonly={{read-only}}
         />
@@ -69,6 +71,10 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
       label: text('label', 'Label'),
       helperText: text('helperText', 'Helper text'),
       disabled: boolean('disabled', false),
+      icon: select('icon', {
+          'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
+        },
+      ),
       'read-only': boolean('readonly', false),
     }
   }}</Story>

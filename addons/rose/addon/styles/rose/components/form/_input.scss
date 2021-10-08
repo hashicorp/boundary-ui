@@ -4,6 +4,15 @@
 .rose-form-input {
   margin-bottom: sizing.rems(m);
 }
+.rose-input-icon-wrapper {
+  position: relative;
+  .rose-icon.medium {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+}
+
 
 .rose-form-input-field {
   @include type.type(m);
