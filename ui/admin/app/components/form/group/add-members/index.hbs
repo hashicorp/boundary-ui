@@ -30,7 +30,15 @@
                 onChange={{fn this.toggleMember user}}
               />
               {{#if user.accountName}}
-                <br /><Rose::Badge>{{user.accountName}}</Rose::Badge>
+                {{!
+                  The following is a formatting hack since we don't have a great
+                  way to manage micro-whitespace or alignment among separate
+                  components without resorting to heavy-handed grids
+                  or contextualization.  This is a one-off.
+                }}
+                <br />
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                <Rose::Badge>{{user.accountName}}</Rose::Badge>
               {{/if}}
             </row.headerCell>
             <row.cell><code>{{user.id}}</code></row.cell>
