@@ -64,6 +64,28 @@ A simple dropdown component with support for links and buttons.
 </Preview>
 
 <Preview>
+  <Story name="Dropdown with Checkboxes" height="13rem">{{
+    template: hbs`
+      <Rose::Form as |form|>
+        <form.checkboxGroup @name="color" @selectedValue="red" as |checkboxGroup|>
+          <Rose::Dropdown @text="Color" as |dropdown|>
+            <dropdown.item>
+              <checkboxGroup.checkbox @label="Red" @value="red" />
+            </dropdown.item>
+            <dropdown.item>
+              <checkboxGroup.checkbox @label="Green" @value="green" />
+            </dropdown.item>
+            <dropdown.item>
+              <checkboxGroup.checkbox @label="Blue" @value="blue" />
+            </dropdown.item>
+          </Rose::Dropdown>
+        </form.checkboxGroup>
+      </Rose::Form>
+    `,
+  }}</Story>
+</Preview>
+
+<Preview>
   <Story name="Dropdown with Key Value Items" height="13rem">{{
     template: hbs`
       <Rose::Dropdown @text="View details" @showCaret={{showCaret}} @ignoreClickInside={{true}} as |dropdown|>

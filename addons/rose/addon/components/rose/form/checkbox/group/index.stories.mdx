@@ -1,0 +1,87 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Checkbox/Group" component="Form/Checkbox/Group" />
+
+# Form checkboxfield group
+
+Renders a form checkboxfield group.
+
+```htmlbars
+<Rose::Form::Checkbox::Group
+  @disabled={{false}}
+  @name={{name}}
+  @selectedValue="disagree"
+  @changed={{fn}}
+  @inline={{false}}
+  as |checkboxGroup|
+>
+  <checkboxGroup.checkbox
+    @label="Agree"
+    @value="agree"
+  />
+  <checkboxGroup.checkbox
+    @label="disagree"
+    @value="disagree"
+  />
+  <checkboxGroup.checkbox
+    @label="maybe"
+    @value="maybe"
+  />
+</Rose::Form::Checkbox::Group>
+```
+<Preview>
+  <Story name="Basic" height="10rem">{{
+  template: hbs`
+    <Rose::Form::Checkbox::Group
+      @disabled={{disabled}}
+      @description={{description}}
+      @name={{name}}
+      @checked={{checked}}
+      @inline={{inline}}
+      as |checkboxGroup|
+    >
+      <checkboxGroup.checkbox
+       @name='checkbox-1'
+        @label='Checkbox1 🛎'
+        @description={{description}}
+        @helperText={{helperText}}
+        @checked={{checked}}
+        @error={{error}}
+        @disabled={{disabled}}
+        @inline={{inline}}
+      />
+      <checkboxGroup.checkbox
+           @name='checkbox-2'
+        @label='Checkbox2 🛎'
+        @description={{description}}
+        @helperText={{helperText}}
+        @checked={{checked}}
+        @error={{error}}
+        @disabled={{disabled}}
+        @inline={{inline}}
+      />
+      <checkboxGroup.checkbox
+        @name='checkbox-3'
+        @label='Checkbox3 🛎'
+        @description={{description}}
+        @helperText={{helperText}}
+        @checked={{checked}}
+        @error={{error}}
+        @disabled={{disabled}}
+        @inline={{inline}}
+      />
+    </Rose::Form::Checkbox::Group>
+  `,
+  context: {
+    helperText: text('helperText', 'This is an optional help text.'),
+    disabled: boolean('disabled', false),
+    inline: boolean('inline', true),
+    checked: boolean('checked', false),
+    error: boolean('error', false),
+    description: text('description', 'Short description in label'),
+  }
+  }}</Story>
+</Preview>

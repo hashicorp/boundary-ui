@@ -17,21 +17,36 @@
     {{#if @model}}
       <Rose::Toolbar as |toolbar|>
       <Rose::Form class="flex" as |form| >
-        <form.input
+      <form.input
     {{!-- @value={{@model.type}} --}}
     {{!-- @label={{t 'form.type.label'}} --}}
-     @name='search'
+    @name='search'
     @type='search'
-                      @icon='flight-icons/svg/key-16'
-
+    @placeholder= 'Search'
+    @icon='flight-icons/svg/key-16'
   />
-
- <form.input
-    {{!-- @value={{@model.type}} --}}
-    {{!-- @label={{t 'form.type.label'}} --}}
-     @name='search'
-    @type='search'
-  />
+   <form.checkboxGroup
+                  @name='theme'
+                  {{!-- @checked={{this.session.data.theme}} --}}
+                  as |checkboxGroup|
+                >
+                  <dropdown.item>
+                    dwqdwq
+                    <checkboxGroup.checkbox @label='dawdwq' />
+                  </dropdown.item>
+                  <dropdown.item>
+                    <checkboxGroup.checkbox
+                      @label='dwefdwes'
+                      @value='light'
+                    />
+                  </dropdown.item>
+                  <dropdown.item>
+                    <checkboxGroup.checkbox
+                      @label='darllll'
+                      @value='dark'
+                    />
+                  </dropdown.item>
+   </form.checkboxGroup>
       </Rose::Form>
       </Rose::Toolbar>
       <Rose::Table as |table|>

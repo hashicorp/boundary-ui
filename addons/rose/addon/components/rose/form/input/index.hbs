@@ -15,6 +15,7 @@
       type=@type
       disabled=@disabled
       error=@error
+      placeholder=@placeholder
       aria-describedby=(concat (if @helperText (concat 'helper-text-' this.id)) (if @error (concat ' errors-' this.id)))
     )
     errors=(component 'rose/form/errors'
@@ -23,7 +24,6 @@
   )}}
 {{else}}
   <div class="rose-form-input">
-
     <Rose::Form::Label @for={{this.id}} @error={{@error}}>
       {{@label}}
     </Rose::Form::Label>
@@ -48,11 +48,12 @@
       @type={{@type}}
       @disabled={{@disabled}}
       @error={{@error}}
+      @placeholder={{@placeholder}}
       @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
 </div>
     
     {{else}} 
-                      <Rose::Form::Input::Input
+   <Rose::Form::Input::Input
       ...attributes
       @id={{this.id}}
       @name={{@name}}
@@ -60,6 +61,7 @@
       @type={{@type}}
       @disabled={{@disabled}}
       @error={{@error}}
+      @placeholder={{@placeholder}}
       @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
     {{/if}}
     {{yield (hash

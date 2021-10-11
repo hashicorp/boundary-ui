@@ -1,6 +1,8 @@
 .rose-toolbar {
-    display: flex;
-    background-color: lightgrey;
+    background-color:#FBFBFC;
+    .rose-form {
+        display: flex;
+    }
 }
 
 .rose-layout-page-actions {
