@@ -1,12 +1,13 @@
-<button
+<div>
+<input
   ...attributes
-  type={{if @submit "submit" "button"}}
+  type={{"checkbox"}}
   disabled={{if @disabled "disabled"}}
   class="rose-dropdown-button {{if  @style (concat "rose-dropdown-button-" @style)}} {{if @iconOnly "has-icon-only"}}"
-  >
+  />
   <span class="rose-dropdown-button-wrapper">
     <span class="rose-dropdown-button-body">
       {{yield}}
     </span>
   </span>
-</button>
+</div>

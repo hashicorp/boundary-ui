@@ -67,7 +67,7 @@ A simple dropdown component with support for links and buttons.
   <Story name="Dropdown with Checkboxes" height="13rem">{{
     template: hbs`
       <Rose::Form as |form|>
-        <form.checkboxGroup @name="color" @selectedValue="red" as |checkboxGroup|>
+        <form.checkboxGroup @name="color" @checked="red" as |checkboxGroup|>
           <Rose::Dropdown @text="Color" as |dropdown|>
             <dropdown.item>
               <checkboxGroup.checkbox @label="Red" @value="red" />
