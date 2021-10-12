@@ -4,7 +4,7 @@ const { _electron: electron } = require('playwright');
 const path = require('path');
 
 let electronApp = null;
-const returnScreenshotPath = (fileName) => {
+const generateScreenshotPath = (fileName) => {
   const screenshotPath = 'tests/end2end/screenshots/authentication/';
   const screenshotFormat = '.png';
   return path.join(screenshotPath, fileName).concat(screenshotFormat);
@@ -43,7 +43,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('.ember-text-field', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: returnScreenshotPath('fillOrigin'),
+        path: generateScreenshotPath('fillOrigin'),
         fullPage: true,
       });
 
@@ -59,7 +59,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: returnScreenshotPath('fillUserPassword'),
+        path: generateScreenshotPath('fillUserPassword'),
         fullPage: true,
       });
 
@@ -75,7 +75,7 @@ test.describe('Authentication end to end test suite', async () => {
       );
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: returnScreenshotPath('afterLogin'),
+        path: generateScreenshotPath('afterLogin'),
         fullPage: true,
       });
 
@@ -90,7 +90,7 @@ test.describe('Authentication end to end test suite', async () => {
       expect(await boundaryWindow.isVisible('details'));
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: returnScreenshotPath('userDropdown'),
+        path: generateScreenshotPath('userDropdown'),
         fullPage: true,
       });
 
@@ -107,7 +107,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: returnScreenshotPath('afterLogout'),
+        path: generateScreenshotPath('afterLogout'),
         fullPage: true,
       });
     });
@@ -126,7 +126,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('.ember-text-field', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: returnScreenshotPath('fillOrigin'),
+        path: generateScreenshotPath('fillOrigin'),
         fullPage: true,
       });
 
@@ -156,7 +156,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: returnScreenshotPath('notificationFailed'),
+        path: generateScreenshotPath('notificationFailed'),
         fullPage: true,
       });
     });
