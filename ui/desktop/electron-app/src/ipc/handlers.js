@@ -33,8 +33,7 @@ handle('resetOrigin', async () => runtimeSettings.resetOrigin());
  * allowed except in the case of localhost (which enables development and
  * testing workflows).  Insecure URLs are allowed in dev mode.
  */
-handle('openExternal', async (href) => { // This is who redirects on OIDC
-  console.log('Carlos: openExternal Call');
+handle('openExternal', async (href) => {
   const isSecure = href.startsWith('https://');
   const isLocalhost =
     href.startsWith('http://localhost') || href.startsWith('http://127.0.0.1');
