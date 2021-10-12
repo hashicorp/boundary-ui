@@ -156,6 +156,22 @@ We rely on `ember-a11y-testing` to validate accessibility in acceptance tests.
 If you write acceptance tests, please ensure at least one validation per
 route using `await a11yAudit();`.
 
+### Running end to end Tests
+
+Just tested with Mac x64 and M1 arm64
+
+*Be aware this is a temporary process that can suffer changes and eventually will be automated.*
+
+This process will explain how to run end to end test in your local environment. The process will assume next:
+- You already run the Boundary UI [installation process](https://github.com/hashicorp/boundary-ui#installation).
+- You have Boundary installed, see [the installation guide](https://learn.hashicorp.com/tutorials/boundary/getting-started-install?in=boundary/getting-started).
+
+Steps:
+- Open a terminal and run `$ boundary dev`.
+- Open another terminal and navigate to `$ boundary-ui/ui/desktop` folder.
+- Run `$ yarn run e2e` and tests will start run.
+- You can check the screenshots the tests take: `desktop/tests/end2end/screenshots`.
+
 ### Deploying
 
 TBD
