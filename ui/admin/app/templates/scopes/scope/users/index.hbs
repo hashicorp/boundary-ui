@@ -46,6 +46,9 @@
                 {{else}}
                   {{user.displayName}}
                 {{/if}}
+                {{#if user.accountName}}
+                  <br /><Rose::Badge>{{user.accountName}}</Rose::Badge>
+                {{/if}}
                 <p>{{user.description}}</p>
               </row.headerCell>
               <row.cell>

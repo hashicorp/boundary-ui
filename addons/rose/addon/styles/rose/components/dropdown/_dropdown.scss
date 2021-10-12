@@ -27,6 +27,7 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
 
   position: relative;
   display: inline-block;
+  vertical-align: middle;
 
   .rose-dropdown-trigger {
     @include type.type(button, semibold);

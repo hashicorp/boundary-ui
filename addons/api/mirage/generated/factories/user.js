@@ -1,5 +1,5 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date, datatype } from 'faker';
+import { random, date, datatype, internet } from 'faker';
 
 /**
  * GeneratedUserModelFactory
@@ -11,4 +11,5 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   disabled: () => datatype.boolean(),
+  email: () => internet.email().toLowerCase(),
 });

@@ -47,7 +47,13 @@
                   <code>{{sessionAggregate.session.id}}</code>
                 </Copyable>
               </row.headerCell>
-              <row.cell>{{sessionAggregate.user.displayName}}</row.cell>
+              <row.cell>
+                <code>{{sessionAggregate.user.id}}</code>
+                {{#if sessionAggregate.user.accountName}}
+                  <br /><Rose::Badge
+                  >{{sessionAggregate.user.accountName}}</Rose::Badge>
+                {{/if}}
+              </row.cell>
               <row.cell>{{sessionAggregate.target.displayName}}</row.cell>
               <row.cell>
                 <time

@@ -15,6 +15,9 @@
         <body.row as |row|>
           <row.headerCell>
             {{member.displayName}}
+            {{#if member.accountName}}
+              <br /><Rose::Badge>{{member.accountName}}</Rose::Badge>
+            {{/if}}
           </row.headerCell>
           <row.cell>
             <Copyable
