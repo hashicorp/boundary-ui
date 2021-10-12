@@ -158,7 +158,7 @@ route using `await a11yAudit();`.
 
 ### Running end to end Tests
 
-Just tested with Mac x64 and M1 arm64
+**The end-to-end test suite is supported for Mac, x64 and arm64 (M1) chips.**
 
 *Be aware this is a temporary process that can suffer changes and eventually will be automated.*
 
