@@ -69,13 +69,11 @@
     margin-right: sizing.rems(xs);
   }
 }
-.flex .rose-form{
-  display: flex;
-}
+
 .rose-form {
-  // &:not(.full-width) {
-  //   width: 66%;
-  // }
+  &:not(.full-width) {
+    width: 66%;
+  }
 
   .rose-form-input {
     width: 100%;
