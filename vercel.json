@@ -1,0 +1,3 @@
+{
+  "rewrites": [{ "source": "addons/rose/metadata.json", "destination": "" }]
+}
