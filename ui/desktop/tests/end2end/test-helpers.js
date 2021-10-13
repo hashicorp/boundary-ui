@@ -9,13 +9,18 @@ const path = require('path');
  */
 exports.generateScreenshotPath = (screenshotTestDirectory, fileName) => {
   const screenshotFormat = '.png';
+<<<<<<< HEAD
   const screenshotsRootPath = path.join(__dirname, 'screenshots');
+=======
+  const screenshotsRootPath = path.join(__dirname, '/screenshots/');
+>>>>>>> 8c489b81 (refactor: 💡 Create generateScreenshotPath as test helper)
   const screenshotPath = path.join(
     screenshotsRootPath,
     screenshotTestDirectory
   );
   return path.join(screenshotPath, fileName).concat(screenshotFormat);
 };
+<<<<<<< HEAD
 
 /**
  *
@@ -42,3 +47,5 @@ exports.returnExecutablePath = (platform, arch) => {
     console.error(error);
   }
 };
+=======
+>>>>>>> 8c489b81 (refactor: 💡 Create generateScreenshotPath as test helper)
