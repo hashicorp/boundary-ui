@@ -4,7 +4,7 @@ const { _electron: electron } = require('playwright');
 const path = require('path');
 
 let electronApp = null;
-const returnScreenshotPath = (fileName) => {
+const generateScreenshotPath = (fileName) => {
   const screenshotPath = 'tests/end2end/screenshots/targets/';
   const screenshotFormat = '.png';
   return path.join(screenshotPath, fileName).concat(screenshotFormat);
@@ -75,7 +75,7 @@ test.describe('Targets end to end test suite', async () => {
     await boundaryWindow.waitForSelector('section.dialog-detail');
     // Take screenshot
     await boundaryWindow.screenshot({
-      path: returnScreenshotPath('targetConnectionDetails'),
+      path: generateScreenshotPath('targetConnectionDetails'),
       fullPage: true,
     });
     // Click copyable in popup
@@ -104,7 +104,7 @@ test.describe('Targets end to end test suite', async () => {
 
     // Take screenshot
     await boundaryWindow.screenshot({
-      path: returnScreenshotPath('sessions'),
+      path: generateScreenshotPath('sessions'),
       fullPage: true,
     });
 
