@@ -25,7 +25,7 @@
     "test:ember-compatibility": "ember try:each",
     "prestorybook": "yarn build && yarn storybook:build && cp metadata.json dist/metadata.json",
     "storybook": "start-storybook -p 6006 -s dist",
-    "storybook:build": "build-storybook -s dist && sb extract",
+    "storybook:build": "build-storybook -s dist && sb extract && cp metadata.json dist/metadata.json",
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
