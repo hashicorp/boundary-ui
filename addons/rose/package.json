@@ -23,7 +23,7 @@
     "start": "ember serve",
     "test": "ember test",
     "test:ember-compatibility": "ember try:each",
-    "prestorybook": "yarn build && yarn storybook:build",
+    "prestorybook": "yarn build && yarn storybook:build && cp metadata.json dist/metadata.json",
     "storybook": "start-storybook -p 6006 -s dist",
     "storybook:build": "build-storybook -s dist && sb extract",
     "doc:toc": "doctoc README.md"
