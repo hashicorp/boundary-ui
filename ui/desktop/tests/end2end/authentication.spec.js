@@ -10,10 +10,33 @@ const generateScreenshotPath = (fileName) => {
   return path.join(screenshotPath, fileName).concat(screenshotFormat);
 };
 
+// Todo: move this function to a test helpers file so it could be used by other tests.
+// Returns the executable path for the Boundary binary the test suite will run.
+const returnExecutablePath = (platform, arch) => {
+  try {
+    // Just mac
+    if (platform === 'darwin') {
+      if (arch === 'x64') {
+        // Intel chips
+        return 'electron-app/out/Boundary-darwin-x64/Boundary.app/Contents/MacOS/Boundary';
+      } else if (arch === 'arm64') {
+        // M1 chips
+        return 'electron-app/out/Boundary-darwin-arm64/Boundary.app/Contents/MacOS/Boundary';
+      } else {
+        throw new Error('The test suite is not compatible with your arch.');
+      }
+    } else {
+      throw new Error('The test suite is not compatible with your Platform.');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+const executablePath = returnExecutablePath(process.platform, process.arch);
+
 test.beforeEach(async () => {
   electronApp = await electron.launch({
-    executablePath:
-      'electron-app/out/Boundary-darwin-arm64/Boundary.app/Contents/MacOS/Boundary',
+    executablePath: executablePath,
     env: {
       NODE_ENV: 'test',
       BYPASS_APP_UPDATER: true,
