@@ -37,7 +37,7 @@
     "pretest": "yarn clean:coverage",
     "test": "npm-run-all lint test:*",
     "test:ember": "cross-env COVERAGE=true ember exam --random",
-    "e2e": "yarn run build && npx playwright test --headed",
+    "e2e": "yarn run build && yarn run e2e:dev",
     "e2e:dev": "npx playwright test --headed",
     "postinstall": "cd electron-app && yarn install",
     "posttest": "ember coverage-merge && yarn clean:coverage"
