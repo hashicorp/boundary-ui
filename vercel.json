@@ -1,3 +1,0 @@
-{
-  "rewrites": [{ "source": "/metadata.json", "destination": "/dist/metadata.json" }]
-}
