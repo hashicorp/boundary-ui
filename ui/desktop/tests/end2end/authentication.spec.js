@@ -1,14 +1,10 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-const path = require('path');
+const { generateScreenshotPath } = require('./test-helpers');
 
 let electronApp = null;
-const generateScreenshotPath = (fileName) => {
-  const screenshotPath = 'tests/end2end/screenshots/authentication/';
-  const screenshotFormat = '.png';
-  return path.join(screenshotPath, fileName).concat(screenshotFormat);
-};
+const screenshotsDirectory = 'authentication/';
 
 // TODO: move this function to a test helpers file so it could be used by other tests.
 // Returns the executable path for the Boundary binary the test suite will run.
@@ -66,7 +62,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('fillOrigin'),
+        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
         fullPage: true,
       });
 
@@ -82,7 +78,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('fillUserPassword'),
+        path: generateScreenshotPath(screenshotsDirectory, 'fillUserPassword'),
         fullPage: true,
       });
 
@@ -99,7 +95,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('afterLogin'),
+        path: generateScreenshotPath(screenshotsDirectory, 'afterLogin'),
         fullPage: true,
       });
 
@@ -114,7 +110,7 @@ test.describe('Authentication end to end test suite', async () => {
       expect(await boundaryWindow.isVisible('details'));
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('userDropdown'),
+        path: generateScreenshotPath(screenshotsDirectory, 'userDropdown'),
         fullPage: true,
       });
 
@@ -131,7 +127,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('afterLogout'),
+        path: generateScreenshotPath(screenshotsDirectory, 'afterLogout'),
         fullPage: true,
       });
     });
@@ -150,7 +146,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('fillOrigin'),
+        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
         fullPage: true,
       });
 
@@ -180,7 +176,10 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('notificationFailed'),
+        path: generateScreenshotPath(
+          screenshotsDirectory,
+          'notificationFailed'
+        ),
         fullPage: true,
       });
     });
