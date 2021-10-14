@@ -23,9 +23,11 @@
   )}}
 {{else}}
   <div class="rose-form-input">
+
     <Rose::Form::Label @for={{this.id}} @error={{@error}}>
       {{@label}}
     </Rose::Form::Label>
+
     {{#if @helperText}}
       <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}>
         {{@helperText}}

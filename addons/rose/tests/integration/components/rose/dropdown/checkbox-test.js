@@ -12,13 +12,13 @@ module('Integration | Component | rose/dropdown/checkbox', function (hooks) {
     assert.ok(find('.rose-dropdown-button'));
   });
 
-  test.skip('it is disabled when @disabled={{true}}', async function (assert) {
+  test('it is disabled when @disabled={{true}}', async function (assert) {
     await render(hbs`<Rose::Dropdown::Checkbox @disabled={{true}} />`);
-    assert.equal(find('button').disabled, true);
+    assert.equal(find('input').disabled, true);
   });
 
-  test.skip('it is of type="checkbox"', async function (assert) {
+  test('it is of type="checkbox"', async function (assert) {
     await render(hbs`<Rose::Dropdown::Checkbox />`);
-    assert.equal(find('checkbox').type, 'checkbox');
+    assert.equal(find('input').type, 'checkbox');
   });
 });
