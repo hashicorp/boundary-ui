@@ -16,21 +16,33 @@
     <Rose::Table as |table|>
       <table.header as |header|>
         <header.row as |row|>
-          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+          <row.headerCell>{{t 'form.description.label'}}</row.headerCell>
         </header.row>
       </table.header>
       <table.body as |body|>
         {{#each this.availableUsers as |user|}}
           <body.row as |row|>
-            <row.cell>
+            <row.headerCell>
               <form.checkbox
-                @label={{user.id}}
-                @description={{user.description}}
+                @label={{user.displayName}}
                 onChange={{fn this.toggleMember user}}
               />
-            </row.cell>
-            <row.cell>{{user.name}}</row.cell>
+              {{#if user.accountName}}
+                {{!
+                  The following is a formatting hack since we don't have a great
+                  way to manage micro-whitespace or alignment among separate
+                  components without resorting to heavy-handed grids
+                  or contextualization.  This is a one-off.
+                }}
+                <br />
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                <Rose::Badge>{{user.accountName}}</Rose::Badge>
+              {{/if}}
+            </row.headerCell>
+            <row.cell><code>{{user.id}}</code></row.cell>
+            <row.cell>{{user.description}}</row.cell>
           </body.row>
         {{/each}}
       </table.body>

@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Abilities | Account', function (hooks) {
+module('Unit | Abilities | Role', function (hooks) {
   setupTest(hooks);
 
   test('it reflects when a given role may set grants based on authorized_actions', function (assert) {

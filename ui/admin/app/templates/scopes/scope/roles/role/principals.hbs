@@ -16,6 +16,9 @@
         <body.row as |row|>
           <row.headerCell>
             {{principal.model.displayName}}
+            {{#if principal.model.accountName}}
+              <br /><Rose::Badge>{{principal.model.accountName}}</Rose::Badge>
+            {{/if}}
           </row.headerCell>
           <row.cell>
             {{t (concat 'resources.role.principal.types.' principal.type)}}

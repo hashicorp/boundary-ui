@@ -1,5 +1,6 @@
 import GeneratedUserModel from '../generated/models/user';
 import { attr } from '@ember-data/model';
+import { computed } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class UserModel extends GeneratedUserModel {
@@ -15,6 +16,35 @@ export default class UserModel extends GeneratedUserModel {
     emptyArrayIfMissing: true,
   })
   account_ids;
+
+  /**
+   * Represents the user's primary account email, if any.
+   * @type {string}
+   */
+  @attr('string', { readOnly: true }) email;
+
+  /**
+   * Represents the user's primary account full_name, if any.
+   * @type {string}
+   */
+  @attr('string', { readOnly: true }) full_name;
+
+  /**
+   * Represents the user's primary account login_name, if any.
+   * @type {string}
+   */
+  @attr('string', { readOnly: true }) login_name;
+
+  /**
+   * Convenience for getting a reasonable string that names the account.
+   * There are many options, so we fallback in order of precedence.
+   * @type {string}
+   */
+  @computed('email,full_name,login_name,displayName')
+  get accountName() {
+    const { email, full_name, login_name } = this;
+    return email || full_name || login_name;
+  }
 
   // =methods
 

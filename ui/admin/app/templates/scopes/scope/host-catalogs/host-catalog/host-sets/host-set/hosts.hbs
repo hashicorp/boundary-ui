@@ -36,21 +36,23 @@
             </Copyable>
           </row.cell>
           <row.cell>
-            <Rose::Dropdown
-              @icon='flight-icons/svg/more-horizontal-16'
-              @iconOnly={{true}}
-              @showCaret={{false}}
-              @dropdownRight={{true}}
-              @text='{{t 'actions.manage'}}'
-              as |dropdown|
-            >
-              <dropdown.button
-                @style='danger'
-                {{on 'click' (route-action 'removeHost' @model.hostSet host)}}
+            {{#if (can 'removeHosts hostSet' @model.hostSet)}}
+              <Rose::Dropdown
+                @icon='flight-icons/svg/more-horizontal-16'
+                @iconOnly={{true}}
+                @showCaret={{false}}
+                @dropdownRight={{true}}
+                @text='{{t 'actions.manage'}}'
+                as |dropdown|
               >
-                {{t 'actions.remove'}}
-              </dropdown.button>
-            </Rose::Dropdown>
+                <dropdown.button
+                  @style='danger'
+                  {{on 'click' (route-action 'removeHost' @model.hostSet host)}}
+                >
+                  {{t 'actions.remove'}}
+                </dropdown.button>
+              </Rose::Dropdown>
+            {{/if}}
           </row.cell>
         </body.row>
       {{/each}}

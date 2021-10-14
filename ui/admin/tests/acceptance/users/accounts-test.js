@@ -107,7 +107,7 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.equal(currentURL(), urls.addAccounts);
   });
 
-  test('can navigate to add accounts without proper authorization', async function (assert) {
+  test('can navigate to add accounts with proper authorization', async function (assert) {
     assert.expect(1);
     await visit(urls.accounts);
     assert.ok(find(`[href="${urls.addAccounts}"]`));

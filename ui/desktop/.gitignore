@@ -27,3 +27,6 @@
 
 # Vagrant
 .vagrant/
+
+# End 2 end testing screenshots
+/tests/end2end/screenshots/
