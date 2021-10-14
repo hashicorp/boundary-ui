@@ -20,7 +20,6 @@ Renders a simple form input.
   @icon='flight-icons/svg/org-16'
   @disabled={{false}}
   readonly={{false}}
-  @placeholder='Text here'
 />
 ```
 
@@ -55,7 +54,6 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         @icon={{icon}}
         @disabled={{disabled}}
         readonly={{read-only}}
-        @placeholder={{placeholder}}
         />
     `,
     context: {
@@ -78,7 +76,7 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         },
       ),
       'read-only': boolean('readonly', false),
-      placeholder: text('placeholder', 'Placeholder')
+      placeholder: text('placeholder', 'text here')
     }
   }}</Story>
 </Preview>
