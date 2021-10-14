@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-<<<<<<< HEAD
 const {
   generateScreenshotPath,
   returnExecutablePath,
@@ -10,12 +9,6 @@ const {
 let electronApp = null;
 const screenshotsDirectory = 'targets/';
 const executablePath = returnExecutablePath(process.platform, process.arch);
-=======
-const { generateScreenshotPath } = require('./test-helpers');
-
-let electronApp = null;
-const screenshotsDirectory = 'targets/';
->>>>>>> 8c489b81 (refactor: 💡 Create generateScreenshotPath as test helper)
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
