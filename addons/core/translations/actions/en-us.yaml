@@ -35,3 +35,5 @@ close: Close
 toggle-secret: Toggle secret visibility
 minimize: Minimize
 fullscreen: Fullscreen
+filter: 
+ status: status

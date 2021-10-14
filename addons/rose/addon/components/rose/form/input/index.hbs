@@ -34,7 +34,14 @@
       </Rose::Form::HelperText>
     {{/if}}
 
-    <Rose::Form::Input::Input
+   
+    <div class="rose-input-icon-wrapper">
+       {{#if @icon}}
+            <Rose::Icon
+              @name={{@icon}}
+              @size="medium" />
+    {{/if}}
+                  <Rose::Form::Input::Input
       ...attributes
       @id={{this.id}}
       @name={{@name}}
@@ -43,7 +50,7 @@
       @disabled={{@disabled}}
       @error={{@error}}
       @aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
-
+</div>
     {{yield (hash
       errors=(component 'rose/form/errors'
         id=(concat 'errors-' this.id)
