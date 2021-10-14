@@ -42,3 +42,14 @@ exports.returnExecutablePath = (platform, arch) => {
     console.error(error);
   }
 };
+
+/**
+ *
+ * @param {*} appWindow
+ * @param {*} selector
+ */
+exports.customClick = async (appWindow, selector) => {
+  // Due to an error with await appWindow.click('button[type="submit"]'); we are using a workaround.
+  // More info about it here: https://github.com/microsoft/playwright/issues/1808
+  await appWindow.$eval(selector, (element) => element.click());
+};
