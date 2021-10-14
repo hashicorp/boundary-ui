@@ -44,12 +44,11 @@ exports.returnExecutablePath = (platform, arch) => {
 };
 
 /**
- *
- * @param {*} appWindow
- * @param {*} selector
+ * Performs a click with a workarouind due to an error with plain playwright click.
+ * More info about the issue here: https://github.com/microsoft/playwright/issues/1808
+ * @param {*} appWindow The current electron window.
+ * @param {*} selector The DOM element selector.
  */
 exports.customClick = async (appWindow, selector) => {
-  // Due to an error with await appWindow.click('button[type="submit"]'); we are using a workaround.
-  // More info about it here: https://github.com/microsoft/playwright/issues/1808
   await appWindow.$eval(selector, (element) => element.click());
 };
