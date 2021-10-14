@@ -58,11 +58,11 @@ test.describe('Targets end to end test suite', async () => {
     await boundaryWindow.$eval('button[type="submit"]', (element) =>
       element.click()
     );
+
     // Check we are in Targets
-    await boundaryWindow.waitForSelector('h2 >> text=Targets');
-    expect(await boundaryWindow.innerText('h2 >> text=Targets')).toEqual(
-      'Targets '
-    );
+    await boundaryWindow.waitForURL('**/#/scopes/global/projects/targets');
+    const windowUrl = new URL(await boundaryWindow.url());
+    expect(windowUrl.hash).toEqual('#/scopes/global/projects/targets');
 
     // Click connect to a target
     await boundaryWindow.waitForSelector('table.rose-table');
