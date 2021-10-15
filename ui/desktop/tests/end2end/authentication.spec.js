@@ -62,8 +62,8 @@ test.describe('Authentication end to end test suite', async () => {
       const authLoginPasswordValue = 'password';
 
       // Fill the origin input
-      await boundaryWindow.waitForSelector('.ember-text-field');
-      await boundaryWindow.fill('.ember-text-field', originValue);
+      await boundaryWindow.waitForSelector('[name=host]');
+      await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
         path: generateScreenshotPath('fillOrigin'),
@@ -147,7 +147,7 @@ test.describe('Authentication end to end test suite', async () => {
       const authLoginPasswordValue = '123456';
 
       // Fill the origin input
-      await boundaryWindow.fill('.ember-text-field', originValue);
+      await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
         path: generateScreenshotPath('fillOrigin'),
@@ -206,8 +206,8 @@ test.describe('Authentication end to end test suite', async () => {
       const originValue = 'http://localhost:9200';
 
       // Fill the origin input
-      await boundaryWindow.waitForSelector('.ember-text-field');
-      await boundaryWindow.fill('.ember-text-field', originValue);
+      await boundaryWindow.waitForSelector('[name=host]');
+      await boundaryWindow.fill('[name=host]', originValue);
 
       // Click the submit button
       // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
