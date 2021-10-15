@@ -35,11 +35,11 @@
     {{/if}}
 
     <div class="rose-input-icon-wrapper">
-       {{#if @icon}}
-          <Rose::Icon
-            @name={{@icon}}
-            @size="medium" />
-       {{/if}}
+      {{#if @icon}}
+        <Rose::Icon
+          @name={{@icon}}
+          @size="medium" />
+      {{/if}}
       <Rose::Form::Input::Input
         ...attributes
         @id={{this.id}}
