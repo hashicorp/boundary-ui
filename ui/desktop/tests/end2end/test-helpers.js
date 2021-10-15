@@ -9,7 +9,7 @@ const path = require('path');
  */
 exports.generateScreenshotPath = (screenshotTestDirectory, fileName) => {
   const screenshotFormat = '.png';
-  const screenshotsRootPath = path.join(__dirname, '/screenshots/');
+  const screenshotsRootPath = path.join(__dirname, 'screenshots');
   const screenshotPath = path.join(
     screenshotsRootPath,
     screenshotTestDirectory
