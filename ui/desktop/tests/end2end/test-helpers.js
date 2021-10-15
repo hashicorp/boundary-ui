@@ -16,3 +16,29 @@ exports.generateScreenshotPath = (screenshotTestDirectory, fileName) => {
   );
   return path.join(screenshotPath, fileName).concat(screenshotFormat);
 };
+
+/**
+ *
+ * @param {string} platform The operating system.
+ * @param {string} arch The CPU architecture.
+ * @returns A full path where the Desktop Client executable is located.
+ */
+exports.returnExecutablePath = (platform, arch) => {
+  try {
+    switch (platform) {
+      case 'darwin':
+        switch (arch) {
+          case 'x64': // Intel chips
+            return 'electron-app/out/Boundary-darwin-x64/Boundary.app/Contents/MacOS/Boundary';
+          case 'arm64': // M1 chips
+            return 'electron-app/out/Boundary-darwin-arm64/Boundary.app/Contents/MacOS/Boundary';
+          default:
+            throw new Error('The test suite is not compatible with your arch.');
+        }
+      default:
+        throw new Error('The test suite is not compatible with your platform.');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
