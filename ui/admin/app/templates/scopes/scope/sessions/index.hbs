@@ -15,25 +15,6 @@
   <page.body>
 
     {{#if @model}}
- <Rose::Form as |form|>
-          <Rose::Dropdown
-            @text='dd'
-            @ignoreClickInside={{true}}
-            as |dropdown|
-          >
-            <form.checkboxGroup @name='status' as |checkboxGroup|>
-              {{#each this.availableSessions as |session|}}
-                <dropdown.item>
-                  <checkboxGroup.checkbox
-                    @checked={{session.isCancelable}}
-                    @label={{session.status}}
-                  />
-                </dropdown.item>
-              {{/each}}
-            </form.checkboxGroup>
-
-          </Rose::Dropdown>
-        </Rose::Form>
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
