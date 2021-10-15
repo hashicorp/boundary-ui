@@ -1,16 +1,12 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-const path = require('path');
+const { generateScreenshotPath } = require('./test-helpers');
 
 let electronApp = null;
-const generateScreenshotPath = (fileName) => {
-  const screenshotPath = 'tests/end2end/screenshots/authentication/';
-  const screenshotFormat = '.png';
-  return path.join(screenshotPath, fileName).concat(screenshotFormat);
-};
+const screenshotsDirectory = 'authentication/';
 
-// Todo: move this function to a test helpers file so it could be used by other tests.
+// TODO: move this function to a test helpers file so it could be used by other tests.
 // Returns the executable path for the Boundary binary the test suite will run.
 const returnExecutablePath = (platform, arch) => {
   try {
@@ -62,11 +58,11 @@ test.describe('Authentication end to end test suite', async () => {
       const authLoginPasswordValue = 'password';
 
       // Fill the origin input
-      await boundaryWindow.waitForSelector('.ember-text-field');
-      await boundaryWindow.fill('.ember-text-field', originValue);
+      await boundaryWindow.waitForSelector('[name=host]');
+      await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('fillOrigin'),
+        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
         fullPage: true,
       });
 
@@ -82,7 +78,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('fillUserPassword'),
+        path: generateScreenshotPath(screenshotsDirectory, 'fillUserPassword'),
         fullPage: true,
       });
 
@@ -91,14 +87,15 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.$eval('button[type="submit"]', (element) =>
         element.click()
       );
+
       // Check we are in Targets
-      await boundaryWindow.waitForSelector('h2 >> text=Targets');
-      expect(await boundaryWindow.innerText('h2 >> text=Targets')).toEqual(
-        'Targets '
-      );
+      await boundaryWindow.waitForURL('**/#/scopes/global/projects/targets');
+      const windowUrl = new URL(await boundaryWindow.url());
+      expect(windowUrl.hash).toEqual('#/scopes/global/projects/targets');
+
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('afterLogin'),
+        path: generateScreenshotPath(screenshotsDirectory, 'afterLogin'),
         fullPage: true,
       });
 
@@ -113,7 +110,7 @@ test.describe('Authentication end to end test suite', async () => {
       expect(await boundaryWindow.isVisible('details'));
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('userDropdown'),
+        path: generateScreenshotPath(screenshotsDirectory, 'userDropdown'),
         fullPage: true,
       });
 
@@ -130,7 +127,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('afterLogout'),
+        path: generateScreenshotPath(screenshotsDirectory, 'afterLogout'),
         fullPage: true,
       });
     });
@@ -146,10 +143,10 @@ test.describe('Authentication end to end test suite', async () => {
       const authLoginPasswordValue = '123456';
 
       // Fill the origin input
-      await boundaryWindow.fill('.ember-text-field', originValue);
+      await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('fillOrigin'),
+        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
         fullPage: true,
       });
 
@@ -179,7 +176,10 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath('notificationFailed'),
+        path: generateScreenshotPath(
+          screenshotsDirectory,
+          'notificationFailed'
+        ),
         fullPage: true,
       });
     });
@@ -205,8 +205,8 @@ test.describe('Authentication end to end test suite', async () => {
       const originValue = 'http://localhost:9200';
 
       // Fill the origin input
-      await boundaryWindow.waitForSelector('.ember-text-field');
-      await boundaryWindow.fill('.ember-text-field', originValue);
+      await boundaryWindow.waitForSelector('[name=host]');
+      await boundaryWindow.fill('[name=host]', originValue);
 
       // Click the submit button
       // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
