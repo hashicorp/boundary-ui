@@ -78,9 +78,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Opens user dropdown
       await boundaryWindow.waitForSelector('.rose-header-utilities');
-      await boundaryWindow.$eval('.rose-header-utilities summary', (element) =>
-        element.click()
-      );
+      await customClick(boundaryWindow, '.rose-header-utilities summary');
 
       // User dropdown is visible
       await boundaryWindow.waitForSelector('details[open]');
@@ -183,15 +181,11 @@ test.describe('Authentication end to end test suite', async () => {
       // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
       // More info about it here: https://github.com/microsoft/playwright/issues/1808
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await boundaryWindow.$eval('button[type="submit"]', (element) =>
-        element.click()
-      );
+      await customClick(boundaryWindow, 'button[type="submit"]');
 
       // Click tab OIDC
       await boundaryWindow.waitForSelector('main >> div.branded-card >> nav');
-      await boundaryWindow.$eval('a:text("OIDC")', (element) => {
-        element.click();
-      });
+      await customClick(boundaryWindow, 'a:text("OIDC")');
 
       await boundaryWindow.pause();
     });
