@@ -18,6 +18,7 @@ Renders a simple form input.
   @helperText="Enter your email"
   @error={{false}}
   @disabled={{false}}
+  @icon='flight-icons/svg/search-16'
   readonly={{false}}
 />
 ```
@@ -70,6 +71,10 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
       helperText: text('helperText', 'Helper text'),
       disabled: boolean('disabled', false),
       'read-only': boolean('readonly', false),
+      icon: select('icon', {
+        'flight-icons/svg/search-16': 'flight-icons/svg/search-16',
+      },
+      ),
     }
   }}</Story>
 </Preview>
