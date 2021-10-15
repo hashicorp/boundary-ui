@@ -1,0 +1,27 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Toolbar" component="Toolbar" />
+
+# Toolbar
+
+A toolbar component that allows two distinct sections to be configured: search, filter
+
+```htmlbars
+<Rose::Toolbar as |toolbar|>
+  <toolbar.search />
+  <toolbar.filter />
+</Rose::Toolbar>
+```
+
+<Preview>
+  <Story name="Toolbar">{{
+    template: hbs`
+    <Rose::Toolbar as |toolbar|>
+      <toolbar.search style="background: var(--brand-gray-5);">Search</toolbar.search>
+      <toolbar.filter style="background: var(--brand-gray-8);">Filter</toolbar.filter>
+     </Rose::Toolbar>
+    `,
+  }}</Story>
+</Preview>
