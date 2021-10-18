@@ -1,15 +1,18 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-const { generateScreenshotPath } = require('./test-helpers');
+const {
+  generateScreenshotPath,
+  returnExecutablePath,
+} = require('./test-helpers');
 
 let electronApp = null;
 const screenshotsDirectory = 'targets/';
+const executablePath = returnExecutablePath(process.platform, process.arch);
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
-    executablePath:
-      'electron-app/out/Boundary-darwin-arm64/Boundary.app/Contents/MacOS/Boundary',
+    executablePath: executablePath,
     env: {
       NODE_ENV: 'test',
       BYPASS_APP_UPDATER: true,

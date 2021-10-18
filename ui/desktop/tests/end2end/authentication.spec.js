@@ -1,33 +1,13 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-const { generateScreenshotPath } = require('./test-helpers');
+const {
+  generateScreenshotPath,
+  returnExecutablePath,
+} = require('./test-helpers');
 
 let electronApp = null;
 const screenshotsDirectory = 'authentication/';
-
-// TODO: move this function to a test helpers file so it could be used by other tests.
-// Returns the executable path for the Boundary binary the test suite will run.
-const returnExecutablePath = (platform, arch) => {
-  try {
-    // Just mac
-    if (platform === 'darwin') {
-      if (arch === 'x64') {
-        // Intel chips
-        return 'electron-app/out/Boundary-darwin-x64/Boundary.app/Contents/MacOS/Boundary';
-      } else if (arch === 'arm64') {
-        // M1 chips
-        return 'electron-app/out/Boundary-darwin-arm64/Boundary.app/Contents/MacOS/Boundary';
-      } else {
-        throw new Error('The test suite is not compatible with your arch.');
-      }
-    } else {
-      throw new Error('The test suite is not compatible with your Platform.');
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
 const executablePath = returnExecutablePath(process.platform, process.arch);
 
 test.beforeEach(async () => {
