@@ -16,18 +16,4 @@ module('Integration | Component | rose/toolbar', function (hooks) {
     await render(hbs`<Rose::Toolbar id="toolbar"/>`);
     assert.ok(find('#toolbar'));
   });
-
-  test('it renders with filter', async function (assert) {
-    await render(hbs`<Rose::Toolbar as |toolbar| >
-      <toolbar.filter />
-    </Rose::Toolbar>`);
-    assert.ok(find('.rose-toolbar-filter'));
-  });
-
-  test('it renders with search', async function (assert) {
-    await render(hbs`<Rose::Toolbar as |toolbar| >
-      <toolbar.search />
-    </Rose::Toolbar>`);
-    assert.ok(find('.rose-toolbar-search'));
-  });
 });

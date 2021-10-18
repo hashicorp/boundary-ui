@@ -9,9 +9,7 @@ import { action } from '@storybook/addon-actions';
 A toolbar component that allows two distinct sections to be configured: search, filter
 
 ```htmlbars
-<Rose::Toolbar as |toolbar|>
-  <toolbar.search />
-  <toolbar.filter />
+<Rose::Toolbar as |toolbar| class="rose-toolbar">
 </Rose::Toolbar>
 ```
 
@@ -19,8 +17,6 @@ A toolbar component that allows two distinct sections to be configured: search, 
   <Story name="Toolbar">{{
     template: hbs`
     <Rose::Toolbar as |toolbar|>
-      <toolbar.search>Search</toolbar.search>
-      <toolbar.filter>Filter</toolbar.filter>
      </Rose::Toolbar>
     `,
   }}</Story>
