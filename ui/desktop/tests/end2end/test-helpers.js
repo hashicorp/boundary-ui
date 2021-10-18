@@ -49,6 +49,6 @@ exports.returnExecutablePath = (platform, arch) => {
  * @param {*} appWindow The current electron window.
  * @param {*} selector The DOM element selector.
  */
-exports.customClick = async (appWindow, selector) => {
+exports.click = async (appWindow, selector) => {
   await appWindow.$eval(selector, (element) => element.click());
 };

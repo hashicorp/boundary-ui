@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-const {
-  generateScreenshotPath,
-  returnExecutablePath,
-  customClick,
-} = require('./test-helpers');
+const helpers = require('./test-helpers');
 
 let electronApp = null;
 const screenshotsDirectory = 'targets/';
-const executablePath = returnExecutablePath(process.platform, process.arch);
+const executablePath = helpers.returnExecutablePath(
+  process.platform,
+  process.arch
+);
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
@@ -44,7 +43,7 @@ test.describe('Targets end to end test suite', async () => {
 
     // Click the submit button
     await boundaryWindow.waitForSelector('button[type="submit"]');
-    await customClick(boundaryWindow, 'button[type="submit"]');
+    await helpers.click(boundaryWindow, 'button[type="submit"]');
 
     // Fill user & password
     await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
@@ -52,7 +51,7 @@ test.describe('Targets end to end test suite', async () => {
 
     // Click submit
     await boundaryWindow.waitForSelector('button[type="submit"]');
-    await customClick(boundaryWindow, 'button[type="submit"]');
+    await helpers.click(boundaryWindow, 'button[type="submit"]');
 
     // Check we are in Targets
     await boundaryWindow.waitForURL('**/#/scopes/global/projects/targets');
@@ -61,7 +60,7 @@ test.describe('Targets end to end test suite', async () => {
 
     // Click connect to a target
     await boundaryWindow.waitForSelector('table.rose-table');
-    await customClick(
+    await helpers.click(
       boundaryWindow,
       'table.rose-table >> tbody >> tr >> nth=0 >> button >> text=Connect'
     );
@@ -70,7 +69,7 @@ test.describe('Targets end to end test suite', async () => {
     await boundaryWindow.waitForSelector('section.dialog-detail');
     // Take screenshot
     await boundaryWindow.screenshot({
-      path: generateScreenshotPath(
+      path: helpers.generateScreenshotPath(
         screenshotsDirectory,
         'targetConnectionDetails'
       ),
@@ -78,7 +77,7 @@ test.describe('Targets end to end test suite', async () => {
     });
     // Click copyable in popup
     // TODO: read clipboard value. Running into issues reading clipboard, so will take a shortcut for now
-    await customClick(
+    await helpers.click(
       boundaryWindow,
       'section.dialog-detail >> div.rose-dialog-body >> button'
     );
@@ -88,21 +87,21 @@ test.describe('Targets end to end test suite', async () => {
     );
 
     // Click close popup
-    await customClick(
+    await helpers.click(
       boundaryWindow,
       'section.dialog-detail >> footer >> button'
     );
 
     // On left nav menu, click Sessions
     await boundaryWindow.waitForSelector('section.rose-layout-global >> aside');
-    await customClick(
+    await helpers.click(
       boundaryWindow,
       'section.rose-layout-global >> aside >> nav >> a >> text=Sessions'
     );
 
     // Take screenshot
     await boundaryWindow.screenshot({
-      path: generateScreenshotPath(screenshotsDirectory, 'sessions'),
+      path: helpers.generateScreenshotPath(screenshotsDirectory, 'sessions'),
       fullPage: true,
     });
 

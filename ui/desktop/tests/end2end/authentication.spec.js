@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-const {
-  generateScreenshotPath,
-  returnExecutablePath,
-  customClick,
-} = require('./test-helpers');
+const helpers = require('./test-helpers');
 
 let electronApp = null;
 const screenshotsDirectory = 'authentication/';
-const executablePath = returnExecutablePath(process.platform, process.arch);
+const executablePath = helpers.returnExecutablePath(
+  process.platform,
+  process.arch
+);
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
@@ -44,26 +43,32 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'fillOrigin'
+        ),
         fullPage: true,
       });
 
       // Click the submit button
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await customClick(boundaryWindow, 'button[type="submit"]');
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Fill user & password
       await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
       await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'fillUserPassword'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'fillUserPassword'
+        ),
         fullPage: true,
       });
 
       // Click submit
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await customClick(boundaryWindow, 'button[type="submit"]');
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Check we are in Targets
       await boundaryWindow.waitForURL('**/#/scopes/global/projects/targets');
@@ -72,26 +77,32 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'afterLogin'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'afterLogin'
+        ),
         fullPage: true,
       });
 
       // Opens user dropdown
       await boundaryWindow.waitForSelector('.rose-header-utilities');
-      await customClick(boundaryWindow, '.rose-header-utilities summary');
+      await helpers.click(boundaryWindow, '.rose-header-utilities summary');
 
       // User dropdown is visible
       await boundaryWindow.waitForSelector('details[open]');
       expect(await boundaryWindow.isVisible('details'));
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'userDropdown'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'userDropdown'
+        ),
         fullPage: true,
       });
 
       // Clicks Deauthenticate
       await boundaryWindow.waitForSelector('text="Deauthenticate"');
-      await customClick(boundaryWindow, 'text="Deauthenticate"');
+      await helpers.click(boundaryWindow, 'text="Deauthenticate"');
 
       // Makes sure we are log out
       await boundaryWindow.waitForSelector('main >> div.branded-card');
@@ -101,7 +112,10 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'afterLogout'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'afterLogout'
+        ),
         fullPage: true,
       });
     });
@@ -120,13 +134,16 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'fillOrigin'
+        ),
         fullPage: true,
       });
 
       // Click the submit button
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await customClick(boundaryWindow, 'button[type="submit"]');
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Fill user & password
       await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
@@ -134,7 +151,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Click submit
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await customClick(boundaryWindow, 'button[type="submit"]');
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Wait for the notification
       await boundaryWindow.waitForSelector('.rose-notification-body');
@@ -145,7 +162,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(
+        path: helpers.generateScreenshotPath(
           screenshotsDirectory,
           'notificationFailed'
         ),
@@ -181,11 +198,11 @@ test.describe('Authentication end to end test suite', async () => {
       // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
       // More info about it here: https://github.com/microsoft/playwright/issues/1808
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await customClick(boundaryWindow, 'button[type="submit"]');
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Click tab OIDC
       await boundaryWindow.waitForSelector('main >> div.branded-card >> nav');
-      await customClick(boundaryWindow, 'a:text("OIDC")');
+      await helpers.click(boundaryWindow, 'a:text("OIDC")');
 
       await boundaryWindow.pause();
     });
