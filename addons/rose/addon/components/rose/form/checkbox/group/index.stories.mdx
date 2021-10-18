@@ -13,22 +13,23 @@ Renders a form checkboxfield group.
 <Rose::Form::Checkbox::Group
   @disabled={{false}}
   @name={{name}}
-  @selectedValue="disagree"
-  @changed={{fn}}
   @inline={{false}}
   as |checkboxGroup|
 >
   <checkboxGroup.checkbox
-    @label="Agree"
-    @value="agree"
+    @label="Checkbox1"
+    @value="Checkbox1"
+    @checked={{checked}}
   />
   <checkboxGroup.checkbox
-    @label="disagree"
-    @value="disagree"
+    @label="Checkbox2"
+    @value="Checkbox2"
+    @checked={{checked}}
   />
   <checkboxGroup.checkbox
-    @label="maybe"
-    @value="maybe"
+    @label="Checkbox3"
+    @value="Checkbox3"
+    @checked={{checked}}
   />
 </Rose::Form::Checkbox::Group>
 ```
@@ -39,7 +40,6 @@ Renders a form checkboxfield group.
       @disabled={{disabled}}
       @description={{description}}
       @name={{name}}
-      @checked={{checked}}
       @inline={{inline}}
       as |checkboxGroup|
     >
