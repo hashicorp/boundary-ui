@@ -34,7 +34,7 @@
       </Rose::Form::HelperText>
     {{/if}}
 
-    <div class="rose-input-wrapper">
+    <div class="rose-input-wrapper {{if @icon 'icon'}}">
       {{#if @icon}}
         <Rose::Icon
           @name={{@icon}}
