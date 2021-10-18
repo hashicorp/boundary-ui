@@ -1,10 +1,1 @@
-.rose-toolbar {
-  background-color: #fbfbfc;
-  display: flex;
-  .rose-form {
-    display: flex;
-  }
-  .rose-dropdown {
-    margin-left: auto;
-  }
-}
+@import 'toolbar';
