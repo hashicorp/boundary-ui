@@ -42,3 +42,13 @@ exports.returnExecutablePath = (platform, arch) => {
     console.error(error);
   }
 };
+
+/**
+ * Performs a click with a workarouind due to an error with plain playwright click.
+ * More info about the issue here: https://github.com/microsoft/playwright/issues/1808
+ * @param {*} appWindow The current electron window.
+ * @param {*} selector The DOM element selector.
+ */
+exports.click = async (appWindow, selector) => {
+  await appWindow.$eval(selector, (element) => element.click());
+};
