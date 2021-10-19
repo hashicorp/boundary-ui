@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { _electron: electron } = require('playwright');
-const {
-  generateScreenshotPath,
-  returnExecutablePath,
-} = require('./test-helpers');
+const helpers = require('./test-helpers');
 
 let electronApp = null;
 const screenshotsDirectory = 'authentication/';
-const executablePath = returnExecutablePath(process.platform, process.arch);
+const executablePath = helpers.returnExecutablePath(
+  process.platform,
+  process.arch
+);
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
@@ -29,6 +29,7 @@ test.describe('Authentication end to end test suite', async () => {
   test.describe('user/password authentication test suite', async () => {
     test('Authenticates using user and password method and deauthenticates ', async () => {
       const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
+
       // Override local storage origin
       await boundaryWindow.evaluate(() =>
         window.localStorage.setItem('desktop:origin', null)
@@ -42,31 +43,32 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'fillOrigin'
+        ),
         fullPage: true,
       });
 
       // Click the submit button
-      // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
-      // More info about it here: https://github.com/microsoft/playwright/issues/1808
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await boundaryWindow.$eval('button[type="submit"]', (element) =>
-        element.click()
-      );
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
+
       // Fill user & password
       await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
       await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'fillUserPassword'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'fillUserPassword'
+        ),
         fullPage: true,
       });
 
       // Click submit
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await boundaryWindow.$eval('button[type="submit"]', (element) =>
-        element.click()
-      );
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Check we are in Targets
       await boundaryWindow.waitForURL('**/#/scopes/global/projects/targets');
@@ -75,39 +77,45 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'afterLogin'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'afterLogin'
+        ),
         fullPage: true,
       });
 
       // Opens user dropdown
       await boundaryWindow.waitForSelector('.rose-header-utilities');
-      await boundaryWindow.$eval('.rose-header-utilities summary', (element) =>
-        element.click()
-      );
+      await helpers.click(boundaryWindow, '.rose-header-utilities summary');
 
       // User dropdown is visible
       await boundaryWindow.waitForSelector('details[open]');
       expect(await boundaryWindow.isVisible('details'));
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'userDropdown'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'userDropdown'
+        ),
         fullPage: true,
       });
 
       // Clicks Deauthenticate
       await boundaryWindow.waitForSelector('text="Deauthenticate"');
-      await boundaryWindow.$eval('text="Deauthenticate"', (element) =>
-        element.click()
-      );
+      await helpers.click(boundaryWindow, 'text="Deauthenticate"');
 
       // Makes sure we are log out
       await boundaryWindow.waitForSelector('main >> div.branded-card');
       expect(await boundaryWindow.isVisible('h2 >> text=Authenticate'));
-      // ToDo: create an assertion checking localstorage ember_simple_auth-session key
+      // TODO: create an assertion checking localstorage ember_simple_auth-session key
+      // TODO: try to check we are log out by url
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'afterLogout'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'afterLogout'
+        ),
         fullPage: true,
       });
     });
@@ -126,26 +134,24 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.fill('[name=host]', originValue);
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(screenshotsDirectory, 'fillOrigin'),
+        path: helpers.generateScreenshotPath(
+          screenshotsDirectory,
+          'fillOrigin'
+        ),
         fullPage: true,
       });
 
       // Click the submit button
-      // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
-      // More info about it here: https://github.com/microsoft/playwright/issues/1808
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await boundaryWindow.$eval('button[type="submit"]', (element) =>
-        element.click()
-      );
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
+
       // Fill user & password
       await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
       await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
 
       // Click submit
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await boundaryWindow.$eval('button[type="submit"]', (element) =>
-        element.click()
-      );
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Wait for the notification
       await boundaryWindow.waitForSelector('.rose-notification-body');
@@ -156,7 +162,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Take screenshot
       await boundaryWindow.screenshot({
-        path: generateScreenshotPath(
+        path: helpers.generateScreenshotPath(
           screenshotsDirectory,
           'notificationFailed'
         ),
@@ -192,15 +198,11 @@ test.describe('Authentication end to end test suite', async () => {
       // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
       // More info about it here: https://github.com/microsoft/playwright/issues/1808
       await boundaryWindow.waitForSelector('button[type="submit"]');
-      await boundaryWindow.$eval('button[type="submit"]', (element) =>
-        element.click()
-      );
+      await helpers.click(boundaryWindow, 'button[type="submit"]');
 
       // Click tab OIDC
       await boundaryWindow.waitForSelector('main >> div.branded-card >> nav');
-      await boundaryWindow.$eval('a:text("OIDC")', (element) => {
-        element.click();
-      });
+      await helpers.click(boundaryWindow, 'a:text("OIDC")');
 
       await boundaryWindow.pause();
     });

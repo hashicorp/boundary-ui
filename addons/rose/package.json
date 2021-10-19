@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build:development": "ember build",
-    "build": "ember build --environment=production",
+    "build": "ember build --environment=production && cp metadata.json dist/metadata.json",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
@@ -48,6 +48,7 @@
     "@storybook/addon-docs": "^6.3.8",
     "@storybook/addon-knobs": "^6.3.1",
     "@storybook/addons": "^6.3.9",
+    "@storybook/api": "^6.3.12",
     "@storybook/cli": "^6.3.10",
     "@storybook/ember": "^6.3.8",
     "@storybook/ember-cli-storybook": "^0.4.0",
