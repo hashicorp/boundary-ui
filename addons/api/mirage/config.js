@@ -438,8 +438,9 @@ export default function () {
             sessionModel?.scope?.scope?.id === scope_id
           );
         });
+      } else {
+        resultSet = sessions.where((session) => session.scopeId === scope_id);
       }
-      resultSet = sessions.where((session) => session.scopeId === scope_id);
       return resultSet.filter(makeBooleanFilter(filter));
     }
   );
