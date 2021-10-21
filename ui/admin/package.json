@@ -35,6 +35,7 @@
     "ember-named-blocks-polyfill": "^0.2.4"
   },
   "devDependencies": {
+    "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "@babel/core": "^7.15.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^1.0.2",

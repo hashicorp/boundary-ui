@@ -33,6 +33,7 @@
     "ember-fetch": "^8.1.1"
   },
   "devDependencies": {
+    "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "@babel/core": "^7.15.8",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.4.2",
