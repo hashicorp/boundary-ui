@@ -5,14 +5,14 @@
   margin-bottom: sizing.rems(m);
 }
 
-.rose-input-wrapper.icon {
+.rose-input-wrapper {
   position: relative;
   .rose-icon {
     position: absolute;
     left: 10px;
     top: 10px;
   }
-  .rose-form-input-field {
+  .rose-icon + .rose-form-input-field {
     padding-left: 30px;
   }
 }
