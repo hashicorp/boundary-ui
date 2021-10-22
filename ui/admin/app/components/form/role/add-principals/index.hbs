@@ -28,7 +28,7 @@
             <row.headerCell>
               <form.checkbox
                 @label={{principal.displayName}}
-                onChange={{fn this.togglePrincipal principal}}
+                @onChange={{fn this.togglePrincipal principal}}
               />
               {{#if principal.accountName}}
                 {{!
