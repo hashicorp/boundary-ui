@@ -25,33 +25,22 @@ test.afterEach(async () => {
   electronApp = null; // Not sure we should do this.
 });
 
-test.describe('Targets end to end test suite', async () => {
+test.describe.only('Targets end to end test suite', async () => {
   test('Connects to a target', async () => {
     const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
+
     // Override local storage origin
     await boundaryWindow.evaluate(() =>
       window.localStorage.setItem('desktop:origin', null)
     );
 
-    const originValue = 'http://localhost:9200';
-    const authLoginNameValue = 'admin';
-    const authLoginPasswordValue = 'password';
-
-    // Fill the origin input
-    await boundaryWindow.waitForSelector('[name=host]');
-    await boundaryWindow.fill('[name=host]', originValue);
-
-    // Click the submit button
-    await boundaryWindow.waitForSelector('button[type="submit"]');
-    await helpers.click(boundaryWindow, 'button[type="submit"]');
-
-    // Fill user & password
-    await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
-    await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
-
-    // Click submit
-    await boundaryWindow.waitForSelector('button[type="submit"]');
-    await helpers.click(boundaryWindow, 'button[type="submit"]');
+    // Perform the login
+    await helpers.login(
+      boundaryWindow,
+      'http://localhost:9200',
+      'admin',
+      'password'
+    );
 
     // Check we are in Targets
     await boundaryWindow.waitForURL('**/#/scopes/global/projects/targets');
