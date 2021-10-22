@@ -58,6 +58,11 @@ module('Integration | Component | rose/form/input', function (hooks) {
     assert.ok(await find('[disabled]'));
   });
 
+  test('it supports an icon using @icon', async function (assert) {
+    await render(hbs`<Rose::Form::Input @icon="flight-icons/svg/search-16" />`);
+    assert.ok(find('.rose-icon'));
+  });
+
   test('it supports readonly attribute', async function (assert) {
     await render(hbs`<Rose::Form::Input readonly={{true}} />`);
     assert.ok(await find('[readonly]'));

@@ -4,6 +4,7 @@ import { authHandler, deauthHandler } from './route-handlers/auth';
 import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
+import makeBooleanFilter from './helpers/bexpr-filter';
 
 export default function () {
   initializeMockIPC(this);
@@ -408,7 +409,8 @@ export default function () {
 
   this.get(
     '/sessions',
-    function ({ sessions }, { queryParams: { scope_id, recursive } }) {
+    function ({ sessions }, { queryParams: { scope_id, recursive, filter } }) {
+      let resultSet;
       // To simulate changes to `session.status` that may occur in the backend,
       // we quietly randomize the value of the field on GET.
       // To populate sessions for logged in user,
@@ -427,17 +429,19 @@ export default function () {
         });
       }
       if (recursive && scope_id === 'global') {
-        return sessions.all();
+        resultSet = sessions.all();
       } else if (recursive) {
-        return sessions.where((session) => {
+        resultSet = sessions.where((session) => {
           const sessionModel = sessions.find(session.id);
           return (
             session.scopeId === scope_id ||
             sessionModel?.scope?.scope?.id === scope_id
           );
         });
+      } else {
+        resultSet = sessions.where((session) => session.scopeId === scope_id);
       }
-      return sessions.where((session) => session.scopeId === scope_id);
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
