@@ -1,7 +1,19 @@
 import { makeEvaluator } from 'js-bexpr';
-import SessionSerializer from '../serializers/session';
+import { underscore } from '@ember/string';
 
-const serializer = new SessionSerializer();
+/**
+ * Because Mirage, a record cannot be serialized outside of a route handler
+ * context.  Here is a quick and dirty attempt to serialize attribute names
+ * to underscore format.  This is not entirely realistic, but may suffice.
+ */
+const quickSerialize = (item) => {
+  const json = item.toJSON();
+  Object.keys(json).forEach((key) => {
+    const newKey = underscore(key);
+    json[newKey] = json[key];
+  });
+  return json;
+};
 
 /**
  * Creates a filter function that operates on a single object, which itself
@@ -11,9 +23,9 @@ export default (expression) => {
   if (expression) {
     const evaluator = makeEvaluator(expression);
     // Since API query selectors begin with `/item`, the instance is wrapped.
-    return (item) => {
-      const json = serializer.serialize(item);
-      return evaluator({ item: json });
+    return (record) => {
+      const item = quickSerialize(record);
+      return evaluator({ item });
     };
   } else {
     // If no expression was passed, always return true,
