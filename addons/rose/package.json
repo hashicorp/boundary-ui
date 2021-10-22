@@ -44,6 +44,7 @@
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "@hashicorp/flight-icons": "^1.0.0",
+    "@storybook/addon-a11y": "^6.3.12",
     "@storybook/addon-actions": "^6.3.10",
     "@storybook/addon-docs": "^6.3.8",
     "@storybook/addon-knobs": "^6.3.1",
