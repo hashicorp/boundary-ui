@@ -4,11 +4,18 @@ const { _electron: electron } = require('playwright');
 const helpers = require('./test-helpers');
 
 let electronApp = null;
+// Subdirectory within tests/end2end/screenshots where the screenshots of this test suite will be stored.
 const screenshotsDirectory = 'targets/';
+// Path where the Boundary Desktop client binary is generated
 const executablePath = helpers.returnExecutablePath(
   process.platform,
   process.arch
 );
+
+// Set login variables
+const originValue = 'http://localhost:9200';
+const loginUsername = 'admin';
+const loginPassword = 'password';
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
@@ -25,7 +32,7 @@ test.afterEach(async () => {
   electronApp = null; // Not sure we should do this.
 });
 
-test.describe.only('Targets end to end test suite', async () => {
+test.describe('Targets end to end test suite', async () => {
   test('Connects to a target', async () => {
     const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
 
@@ -37,9 +44,9 @@ test.describe.only('Targets end to end test suite', async () => {
     // Perform the login
     await helpers.login(
       boundaryWindow,
-      'http://localhost:9200',
-      'admin',
-      'password'
+      originValue,
+      loginUsername,
+      loginPassword
     );
 
     // Check we are in Targets
