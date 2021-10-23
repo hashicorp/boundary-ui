@@ -47,7 +47,7 @@ module('Unit | Model | base', function (hooks) {
     assert.notEqual(model.scopeID, scope.id);
     model.scopeModel = scope;
     assert.equal(model.scopeID, scope.id);
-    assert.equal(model.scope.isOrg, true);
+    assert.true(model.scope.isOrg);
   });
 
   test('it has a displayName attribute', function (assert) {
@@ -78,18 +78,18 @@ module('Unit | Model | base', function (hooks) {
       },
     });
     const model = store.peekRecord('user', '1');
-    assert.equal(model.canSave, false);
-    assert.equal(model.cannotSave, true);
+    assert.false(model.canSave);
+    assert.true(model.cannotSave);
     // Should be able to save if dirty
     model.name = 'User';
-    assert.equal(model.hasDirtyAttributes, true);
-    assert.equal(model.canSave, true);
-    assert.equal(model.cannotSave, false);
+    assert.true(model.hasDirtyAttributes);
+    assert.true(model.canSave);
+    assert.false(model.cannotSave);
     // Should not be able to save while currently saving
     model.transitionTo('updated.inFlight');
-    assert.equal(model.isSaving, true);
-    assert.equal(model.canSave, false);
-    assert.equal(model.cannotSave, true);
+    assert.true(model.isSaving);
+    assert.false(model.canSave);
+    assert.true(model.cannotSave);
     model.transitionTo('loaded');
   });
 

@@ -7,6 +7,7 @@ module('Integration | Modifier | on-click-outside', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it fires event when an outside element is clicked', async function (assert) {
+    assert.expect(2);
     this.set('clickedOutside', (element, event) => {
       assert.ok(element);
       assert.equal(event.target.id, 'outside');

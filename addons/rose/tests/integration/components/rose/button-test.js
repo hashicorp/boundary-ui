@@ -23,7 +23,7 @@ module('Integration | Component | rose/button', function (hooks) {
 
   test('it is disabled when @disabled={{true}}', async function (assert) {
     await render(hbs`<Rose::Button @disabled={{true}} />`);
-    assert.equal(find('button').disabled, true);
+    assert.true(find('button').disabled);
   });
 
   test('it adds a style class', async function (assert) {
