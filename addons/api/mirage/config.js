@@ -1,10 +1,11 @@
-import Ember from 'ember';
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
+
+const isTesting = config.environment === 'test';
 
 export default function () {
   initializeMockIPC(this);
@@ -417,7 +418,7 @@ export default function () {
       // update alternate sessions to auth user.
       // But only if not in testing mode.
       // In tests, we need deterministic statuses.
-      if (!Ember.testing) {
+      if (!isTesting) {
         sessions.all().models.forEach((session) => {
           session.update({
             status: pickRandomStatusString(),
@@ -446,7 +447,7 @@ export default function () {
   );
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
     const session = sessions.find(id);
-    if (!Ember.testing) {
+    if (!isTesting) {
       session.update({
         status: pickRandomStatusString(),
       });
