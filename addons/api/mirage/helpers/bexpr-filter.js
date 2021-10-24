@@ -23,9 +23,9 @@ export default (expression) => {
   if (expression) {
     const evaluator = makeEvaluator(expression);
     // Since API query selectors begin with `/item`, the instance is wrapped.
-    return (item) => {
-      const json = quickSerialize(item);
-      return evaluator({ item: json });
+    return (record) => {
+      const item = quickSerialize(record);
+      return evaluator({ item });
     };
   } else {
     // If no expression was passed, always return true,
