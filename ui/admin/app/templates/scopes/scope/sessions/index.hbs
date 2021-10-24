@@ -22,7 +22,9 @@
             @ignoreClickInside={{true}}
             as |dropdown|
           >
+          {{{log this.availableSessions 'dddd'}}}
             <form.checkboxGroup @name='status' as |checkboxGroup|>
+              {{{log this.availableSessions 'dddd'}}}
               {{#each this.availableSessions as |session|}}
                 <dropdown.item>
                   <checkboxGroup.checkbox
