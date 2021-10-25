@@ -4,11 +4,18 @@ const { _electron: electron } = require('playwright');
 const helpers = require('./test-helpers');
 
 let electronApp = null;
+// Subdirectory within tests/end2end/screenshots where the screenshots of this test suite will be stored.
 const screenshotsDirectory = 'targets/';
+// Path where the Boundary Desktop client binary is generated
 const executablePath = helpers.returnExecutablePath(
   process.platform,
   process.arch
 );
+
+// Set login variables
+const originValue = 'http://localhost:9200';
+const loginUsername = 'admin';
+const loginPassword = 'password';
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
@@ -28,30 +35,19 @@ test.afterEach(async () => {
 test.describe('Targets end to end test suite', async () => {
   test('Connects to a target', async () => {
     const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
+
     // Override local storage origin
     await boundaryWindow.evaluate(() =>
       window.localStorage.setItem('desktop:origin', null)
     );
 
-    const originValue = 'http://localhost:9200';
-    const authLoginNameValue = 'admin';
-    const authLoginPasswordValue = 'password';
-
-    // Fill the origin input
-    await boundaryWindow.waitForSelector('[name=host]');
-    await boundaryWindow.fill('[name=host]', originValue);
-
-    // Click the submit button
-    await boundaryWindow.waitForSelector('button[type="submit"]');
-    await helpers.click(boundaryWindow, 'button[type="submit"]');
-
-    // Fill user & password
-    await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
-    await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
-
-    // Click submit
-    await boundaryWindow.waitForSelector('button[type="submit"]');
-    await helpers.click(boundaryWindow, 'button[type="submit"]');
+    // Perform the login
+    await helpers.login(
+      boundaryWindow,
+      originValue,
+      loginUsername,
+      loginPassword
+    );
 
     // Check we are in Targets
     await boundaryWindow.waitForURL('**/#/scopes/global/projects/targets');

@@ -27,7 +27,7 @@
             <row.headerCell>
               <form.checkbox
                 @label={{user.displayName}}
-                onChange={{fn this.toggleMember user}}
+                @onChange={{fn this.toggleMember user}}
               />
               {{#if user.accountName}}
                 {{!

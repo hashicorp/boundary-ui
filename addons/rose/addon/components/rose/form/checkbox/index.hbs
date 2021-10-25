@@ -6,6 +6,7 @@
     id={{this.id}}
     name={{@name}}
     disabled={{@disabled}}
+    onChange={{@onChange}}
     @type="checkbox"
     @checked={{if @checked true false}}
     aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
