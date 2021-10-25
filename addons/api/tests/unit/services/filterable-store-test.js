@@ -1,15 +1,17 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { Response } from 'miragejs';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
 module('Unit | Service | filterable-store', function (hooks) {
   setupTest(hooks);
-
+  setupMirage(hooks);
   let store;
 
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:filterable-store');
 
-    store.createRecord('account', {
+    store.createRecord('session', {
       id: 'i_1234567890',
       scope: {
         id: '123',
@@ -18,7 +20,10 @@ module('Unit | Service | filterable-store', function (hooks) {
   });
 
   test('it supports query filtering', function (assert) {
-    tore.filterByIds('account', { scope_id: '123' });
+    this.server.get('/v1/sessions?scope_id=123', () => {
+      new Response({});
+    });
+    store.filterByIds('session', { scope_id: '123' });
     assert.ok(store);
   });
 
