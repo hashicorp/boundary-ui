@@ -23,7 +23,7 @@ module('Integration | Component | rose/badge', function (hooks) {
 
   test('it styles content using @style', async function (assert) {
     assert.expect(14);
-    let styles = [
+    const styles = [
       'outline',
       'dark',
       'informational',
