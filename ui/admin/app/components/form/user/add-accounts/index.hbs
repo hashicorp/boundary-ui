@@ -29,7 +29,7 @@
               <form.checkbox
                 @label={{account.id}}
                 @description={{account.description}}
-                onChange={{fn this.toggleAccount account}}
+                @onChange={{fn this.toggleAccount account}}
               />
             </row.cell>
             <row.cell>{{account.accountName}}</row.cell>
