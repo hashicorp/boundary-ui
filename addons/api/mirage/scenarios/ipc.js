@@ -1,6 +1,7 @@
-import Ember from 'ember';
 import config from 'ember-get-config';
 import { datatype } from 'faker';
+
+const isTesting = config.environment === 'test';
 
 export default function initializeMockIPC(server) {
   /**
@@ -149,7 +150,7 @@ export default function initializeMockIPC(server) {
    *
    * Initializes mock IPC only in a non-Electron non-testing context.
    */
-  if (!config.isElectron && !Ember.testing) {
+  if (!config.isElectron && !isTesting) {
     const mockIPC = new MockIPC();
     window.addEventListener('message', async function (event) {
       if (event.origin !== window.location.origin) return;

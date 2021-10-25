@@ -36,12 +36,11 @@
     "core": "*",
     "doctoc": "^2.0.1",
     "ember-auto-import": "^1.12.0",
-    "ember-cli": "~3.28.0",
+    "ember-cli": "~3.28.3",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
-    "ember-cli-update": "^0.54.6",
     "ember-cookies": "^0.5.2",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.1",
@@ -50,7 +49,7 @@
     "ember-page-title": "^6.2.2",
     "ember-qunit": "^5.1.4",
     "ember-resolver": "^8.0.3",
-    "ember-source": "~3.24.0",
+    "ember-source": "~3.28.4",
     "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^3.7.0",
     "ember-try": "^1.4.0",
@@ -59,6 +58,7 @@
     "eslint-plugin-ember": "^10.5.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-qunit": "^6.2.0",
     "loader.js": "^4.7.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.0",
@@ -66,7 +66,7 @@
     "qunit-dom": "^2.0.0"
   },
   "engines": {
-    "node": ">=10 <=15"
+    "node": ">=12 <=17"
   },
   "ember": {
     "edition": "octane"

@@ -73,7 +73,7 @@ module('Unit | Service | ipc', function (hooks) {
     });
   });
 
-  test('IPCRequests reject if receiving an Error instance, where the rejection value is the parsed JSON Error message', async (assert) => {
+  test('IPCRequests reject if receiving an Error instance, where the rejection value is the parsed JSON Error message', async function (assert) {
     assert.expect(1);
     const stringifiedPayload = JSON.stringify({
       foo: 'bar',
