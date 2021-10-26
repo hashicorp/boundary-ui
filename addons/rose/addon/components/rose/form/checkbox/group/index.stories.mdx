@@ -1,0 +1,54 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+import { text, boolean, select, object } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Checkbox/Group" component="Form/Checkbox/Group" />
+
+# Form checkboxfield group
+
+Renders a form checkboxfield group.
+
+```htmlbars
+<Rose::Form::Checkbox::Group
+  @name='checkbox-group'
+  @items={{this.items}}
+  @selectedItems={{this.selectedItems}}
+  @onChange={{fn this.onChange}}
+  as |group|
+>
+  <group.checkbox
+    @label={{group.item.name}}
+    value={{group.item.id}} />
+</Rose::Form::Checkbox::Group>
+```
+<Preview>
+  <Story name="Basic" height="10rem">{{
+  template: hbs`
+    <Rose::Form::Checkbox::Group
+      @name={{name}}
+      @inline={{inline}}
+      @disabled={{disabled}}
+      @items={{items}}
+      @selectedItems={{selectedItems}}
+      @onChange={{onChange}}
+      as |group|
+    >
+      <group.checkbox
+        @label={{group.item.name}}
+        value={{group.item.id}} />
+    </Rose::Form::Checkbox::Group>
+  `,
+  context: {
+    inline: boolean('inline', true),
+    disabled: boolean('disabled', false),
+    items: object('items', [
+      { id: 1, name: 'Foo' },
+      { id: 2, name: 'Bar' },
+      { id: 3, name: 'Baz' },
+    ]),
+    selectedItems: object('selectedItems', []),
+    onChange: action('changed'),
+  }
+  }}</Story>
+</Preview>

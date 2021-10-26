@@ -60,17 +60,17 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
 
   test('it is not checked by default', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox />`);
-    assert.equal(find('input').checked, false);
+    assert.false(find('input').checked);
   });
 
   test('it is not disabled by default', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox />`);
-    assert.equal(find('input').disabled, false);
+    assert.false(find('input').disabled);
   });
 
   test('it is checked when @checked={{true}}', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox @checked={{true}} />`);
-    assert.equal(find('input').checked, true);
+    assert.true(find('input').checked);
   });
 
   test('it marks error when @error={{true}}', async function (assert) {
@@ -80,6 +80,6 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
 
   test('it is disabled when @disabled={{true}}', async function (assert) {
     await render(hbs`<Rose::Form::Checkbox @disabled={{true}} />`);
-    assert.equal(find('input').disabled, true);
+    assert.true(find('input').disabled);
   });
 });

@@ -95,12 +95,12 @@ module('Acceptance | groups | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
+    assert.equal(
+      find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.ok(
+    assert.equal(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

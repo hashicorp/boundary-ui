@@ -43,13 +43,13 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
       </Rose::Form::Radio::Group>
     `);
 
-    assert.equal(findAll('[type="radio"]')[0].checked, false);
-    assert.equal(findAll('[type="radio"]')[1].checked, true);
+    assert.false(findAll('[type="radio"]')[0].checked);
+    assert.true(findAll('[type="radio"]')[1].checked);
 
     await click(findAll('[type="radio"]')[0]);
 
-    assert.equal(findAll('[type="radio"]')[0].checked, true);
-    assert.equal(findAll('[type="radio"]')[1].checked, false);
+    assert.true(findAll('[type="radio"]')[0].checked);
+    assert.false(findAll('[type="radio"]')[1].checked);
   });
 
   test('it reflects active radiofield value in @selectedValue and triggers a @changed function', async function (assert) {
@@ -100,19 +100,19 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
       </Rose::Form::Radio::Group>
     `);
 
-    assert.equal(findAll('[type="radio"]')[0].checked, false);
-    assert.equal(findAll('[type="radio"]')[1].checked, false);
+    assert.false(findAll('[type="radio"]')[0].checked);
+    assert.false(findAll('[type="radio"]')[1].checked);
 
     this.set('selectedValue', 'flamingo');
-    assert.equal(findAll('[type="radio"]')[0].checked, false);
-    assert.equal(findAll('[type="radio"]')[1].checked, true);
+    assert.false(findAll('[type="radio"]')[0].checked);
+    assert.true(findAll('[type="radio"]')[1].checked);
 
     this.set('selectedValue', 'pegion');
-    assert.equal(findAll('[type="radio"]')[0].checked, true);
-    assert.equal(findAll('[type="radio"]')[1].checked, false);
+    assert.true(findAll('[type="radio"]')[0].checked);
+    assert.false(findAll('[type="radio"]')[1].checked);
 
     this.set('selectedValue', 'dog');
-    assert.equal(findAll('[type="radio"]')[0].checked, false);
-    assert.equal(findAll('[type="radio"]')[1].checked, false);
+    assert.false(findAll('[type="radio"]')[0].checked);
+    assert.false(findAll('[type="radio"]')[1].checked);
   });
 });
