@@ -30,7 +30,7 @@ module('Unit | Service | storage', function (hooks) {
     assert.equal(service.getItem('foo'), 'bar');
   });
 
-  test("it's in-memory storage is implicitly refreshed for every test case", function (assert) {
+  test("it's in-memory storage is implicitly refreshed for every test case, and thus values from previous runs are not present", function (assert) {
     assert.expect(1);
     const service = this.owner.lookup('service:storage');
     assert.notOk(service.getItem('foo'));

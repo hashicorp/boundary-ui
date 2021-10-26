@@ -27,7 +27,7 @@
               <form.checkbox
                 @label={{credentialLibrary.id}}
                 @description={{credentialLibrary.description}}
-                onChange={{fn this.toggleCredentialLibrary credentialLibrary}}
+                @onChange={{fn this.toggleCredentialLibrary credentialLibrary}}
               />
             </row.headerCell>
             <row.cell>{{credentialLibrary.name}}</row.cell>

@@ -46,9 +46,34 @@ exports.returnExecutablePath = (platform, arch) => {
 /**
  * Performs a click with a workarouind due to an error with plain playwright click.
  * More info about the issue here: https://github.com/microsoft/playwright/issues/1808
- * @param {*} appWindow The current electron window.
- * @param {*} selector The DOM element selector.
+ * @param {object} appWindow The electron window to perform the action.
+ * @param {string} selector The DOM element selector.
  */
 exports.click = async (appWindow, selector) => {
   await appWindow.$eval(selector, (element) => element.click());
+};
+
+/**
+ * Performs login on the app window provided with the credentials provided.
+ * @param {object} appWindow The electron window to perform the action.
+ * @param {string} origin URL origin to set.
+ * @param {string} username Username to login.
+ * @param {string} password Password to login.
+ */
+exports.login = async (appWindow, origin, username, password) => {
+  // Fill the origin input
+  await appWindow.waitForSelector('[name=host]');
+  await appWindow.fill('[name=host]', origin);
+
+  // Click the set origin submit button
+  await appWindow.waitForSelector('button[type="submit"]');
+  await this.click(appWindow, 'button[type="submit"]');
+
+  // Fill user & password
+  await appWindow.fill('[name="identification"]', username);
+  await appWindow.fill('[name="password"]', password);
+
+  // Click submit
+  await appWindow.waitForSelector('button[type="submit"]');
+  await this.click(appWindow, 'button[type="submit"]');
 };

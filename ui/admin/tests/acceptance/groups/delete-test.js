@@ -76,8 +76,8 @@ module('Acceptance | groups | delete', function (hooks) {
     });
     await visit(urls.group);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
+    assert.equal(
+      find('.rose-notification-body').textContent.trim(),
       'Oops.',
       'Displays primary error message.'
     );

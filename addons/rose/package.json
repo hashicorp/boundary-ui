@@ -38,6 +38,7 @@
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
   },
   "devDependencies": {
+    "ember-get-config": "^0.3.0",
     "@babel/core": "^7.15.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.4.2",
@@ -50,6 +51,7 @@
     "@storybook/addons": "^6.3.9",
     "@storybook/api": "^6.3.12",
     "@storybook/cli": "^6.3.10",
+    "@storybook/components": "^6.3.12",
     "@storybook/ember": "^6.3.8",
     "@storybook/ember-cli-storybook": "^0.4.0",
     "babel-eslint": "^10.1.0",
@@ -57,13 +59,13 @@
     "broccoli-asset-rev": "^3.0.0",
     "doctoc": "^2.0.1",
     "ember-auto-import": "^1.12.0",
-    "ember-cli": "~3.28.0",
+    "ember-cli": "~3.28.3",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
     "ember-cli-sass": "^10.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
-    "ember-cli-update": "^0.54.6",
+    "ember-composable-helpers": "^4.5.0",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.1",
     "ember-inline-svg": "^1.0.0",
@@ -73,7 +75,7 @@
     "ember-page-title": "^6.2.2",
     "ember-qunit": "^5.1.4",
     "ember-resolver": "^8.0.3",
-    "ember-source": "~3.24.0",
+    "ember-source": "~3.28.4",
     "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^3.7.0",
     "ember-try": "^1.4.0",
@@ -82,6 +84,7 @@
     "eslint-plugin-ember": "^10.5.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-qunit": "^6.2.0",
     "loader.js": "^4.7.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.0",
@@ -90,10 +93,11 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sass": "^1.41.0",
-    "sass-lint": "^1.13.1"
+    "sass-lint": "^1.13.1",
+    "webpack": "^5.59.1"
   },
   "engines": {
-    "node": ">=10 <=15"
+    "node": ">=12 <=17"
   },
   "ember": {
     "edition": "octane"

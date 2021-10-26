@@ -29,7 +29,7 @@
               <form.checkbox
                 @label={{hostSet.id}}
                 @description={{hostSet.description}}
-                onChange={{fn this.toggleHostSet hostSet}}
+                @onChange={{fn this.toggleHostSet hostSet}}
               />
             </row.cell>
             <row.cell>{{hostSet.name}}</row.cell>

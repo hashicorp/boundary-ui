@@ -81,7 +81,7 @@
     @label={{t 'form.disable_discovered_config_validation.label'}}
     @helperText={{t 'form.disable_discovered_config_validation.help'}}
     @checked={{@model.attributes.disable_discovered_config_validation}}
-    onChange={{fn
+    @onChange={{fn
       (mut @model.attributes.disable_discovered_config_validation)
       (if @model.attributes.disable_discovered_config_validation false true)
     }}

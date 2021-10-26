@@ -102,38 +102,38 @@ module('Acceptance | auth methods | oidc', function (hooks) {
   });
 
   // FIXME: How to mock just one request routed to /auth-methods and let everything else passthrough?
-  // test('errors are displayed when state update fails', async function (assert) {
-  //   assert.expect(2);
-  //   this.server.post('/auth-methods/:idMethod', (_, request) => {
-  //     // Only respond to state update with error
-  //     if (request.params.idMethod.match(/(change-state)/i)) {
-  //       return new Response(
-  //         400,
-  //         {},
-  //         {
-  //           status: 400,
-  //           code: 'error',
-  //           message: 'Sorry!',
-  //         }
-  //       );
-  //     }
-  //     return request;
-  //   });
-  //   const newState = 'inactive';
-  //   await visit(urls.authMethod);
-  //   await click('.rose-layout-page-actions .rose-dropdown-trigger');
-  //   await click(`.rose-dropdown[open] input[value="${newState}"]`);
-  //   // debugger;
-  //   const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
-  //   assert.notEqual(
-  //     newState,
-  //     authMethod.attributes.state,
-  //     'Auth method state is not be updated.'
-  //   );
-  //   assert.ok(
-  //     find('[role="alert"]').textContent.trim(),
-  //     'Sorry!',
-  //     'Displays error message.'
-  //   );
-  // });
+  test.skip('errors are displayed when state update fails', async function (assert) {
+    assert.expect(2);
+    this.server.post('/auth-methods/:idMethod', (_, request) => {
+      // Only respond to state update with error
+      if (request.params.idMethod.match(/(change-state)/i)) {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'error',
+            message: 'Sorry!',
+          }
+        );
+      }
+      return request;
+    });
+    const newState = 'inactive';
+    await visit(urls.authMethod);
+    await click('.rose-layout-page-actions .rose-dropdown-trigger');
+    await click(`.rose-dropdown[open] input[value="${newState}"]`);
+    // debugger;
+    const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
+    assert.notEqual(
+      newState,
+      authMethod.attributes.state,
+      'Auth method state is not be updated.'
+    );
+    assert.ok(
+      find('.rose-notification-body').textContent.trim(),
+      'Sorry!',
+      'Displays error message.'
+    );
+  });
 });

@@ -1,20 +1,46 @@
+{{!
+  Ember's LinkTo component won't accept nullish @query or @model, so we have to
+  overcompensate by duplicating it four times, one for every combination.
+  This is really unpleasant.
+}}
 {{#if @model}}
-  <LinkTo
-    ...attributes
-    @route={{@route}}
-    @query={{@query}}
-    @model={{@model}}
-    class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
-  >
-    {{yield}}
-  </LinkTo>
+  {{#if @query}}
+    <LinkTo
+      ...attributes
+      @route={{@route}}
+      @query={{@query}}
+      @model={{@model}}
+      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+    >
+      {{yield}}
+    </LinkTo>
+  {{else}}
+    <LinkTo
+      ...attributes
+      @route={{@route}}
+      @model={{@model}}
+      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+    >
+      {{yield}}
+    </LinkTo>
+  {{/if}}
 {{else}}
-  <LinkTo
-    ...attributes
-    @route={{@route}}
-    @query={{@query}}
-    class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
-  >
-    {{yield}}
-  </LinkTo>
+  {{#if @query}}
+    <LinkTo
+      ...attributes
+      @route={{@route}}
+      @query={{@query}}
+      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+    >
+      {{yield}}
+    </LinkTo>
+  {{else}}
+    <LinkTo
+      ...attributes
+      @route={{@route}}
+      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+    >
+      {{yield}}
+    </LinkTo>
+  {{/if}}
 {{/if}}
