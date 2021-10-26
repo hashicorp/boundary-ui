@@ -38,6 +38,7 @@
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
   },
   "devDependencies": {
+    "ember-get-config": "^0.3.0",
     "@babel/core": "^7.15.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.4.2",
@@ -92,7 +93,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sass": "^1.41.0",
-    "sass-lint": "^1.13.1"
+    "sass-lint": "^1.13.1",
+    "webpack": "^5.59.1"
   },
   "engines": {
     "node": ">=12 <=17"
