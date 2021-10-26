@@ -38,6 +38,7 @@
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
   },
   "devDependencies": {
+    "ember-get-config": "^0.3.0",
     "@babel/core": "^7.15.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.4.2",
