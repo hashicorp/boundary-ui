@@ -1,7 +1,12 @@
+@use '../../variables/sizing';
+
+$xxs: sizing.rems(xxs); // 4
+$xxxxs: sizing.rems(xxxxs); // 1
+
 .rose-toolbar {
   background-color: var(--ui-gray-subtler-6);
   display: flex;
-  padding: 5px;
+  padding: $xxs + $xxxxs;
   .rose-form {
     display: flex;
   }
