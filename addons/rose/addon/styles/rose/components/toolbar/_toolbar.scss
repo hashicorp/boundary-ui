@@ -1,16 +1,32 @@
 @use '../../variables/sizing';
+@use '../../variables/media';
 
 $xxs: sizing.rems(xxs); // 4
 $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-toolbar {
   background-color: var(--ui-gray-subtler-6);
-  display: flex;
-  padding: $xxs + $xxxxs;
+
   .rose-form {
     display: flex;
+    display: grid;
+    padding: $xxs + $xxxxs;
+    grid-template-areas:
+      'search filter';
+    grid-template-columns: auto;
+
+    .rose-filter {
+      grid-area: filter;
+    }
   }
-  .rose-dropdown {
-    margin-left: auto;
+}
+
+
+@media (max-width: media.width(small)) {
+  .rose-toolbar {
+    grid-template-columns: auto;
+    grid-template-areas:
+      'search'
+      'filter'
   }
 }
