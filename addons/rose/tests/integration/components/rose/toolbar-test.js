@@ -7,12 +7,13 @@ module('Integration | Component | rose/toolbar', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
+    assert.expect(1);
     await render(hbs`<Rose::Toolbar />`);
-    assert.ok(find('div'));
     assert.ok(find('.rose-toolbar'));
   });
 
   test('it renders with attributes', async function (assert) {
+    assert.expect(1);
     await render(hbs`<Rose::Toolbar id="toolbar"/>`);
     assert.ok(find('#toolbar'));
   });
