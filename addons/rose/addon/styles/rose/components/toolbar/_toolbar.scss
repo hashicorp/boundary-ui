@@ -8,7 +8,6 @@ $xxxxs: sizing.rems(xxxxs); // 1
   background-color: var(--ui-gray-subtler-6);
 
   .rose-form {
-    display: flex;
     display: grid;
     padding: $xxs + $xxxxs;
     grid-template-areas:
