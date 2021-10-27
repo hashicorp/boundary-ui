@@ -81,6 +81,7 @@ module.exports = function (environment) {
 
     // Enable features in development
     ENV.featureFlags['capabilities'] = true;
+    ENV.featureFlags['filter'] = true;
   }
 
   if (environment === 'test') {
@@ -106,6 +107,7 @@ module.exports = function (environment) {
 
     // Enable tests for development features
     ENV.featureFlags['capabilities'] = true;
+    ENV.featureFlags['filter'] = true;
   }
 
   if (environment === 'production') {
