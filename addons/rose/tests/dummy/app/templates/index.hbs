@@ -1,3 +1,28 @@
+<h2>Checkbox Group</h2>
+<Rose::Form::Checkbox::Group
+  @items={{this.items}}
+  @selectedItems={{this.selectedItems}}
+  @onChange={{this.checkboxGroupChanged}}
+  as |group|
+>
+  <group.checkbox
+    @label={{group.item.name}}
+    value={{group.item.id}} />
+</Rose::Form::Checkbox::Group>
+
+<p>
+  Items selected:
+  {{#each this.selectedItems as |selected|}}
+    {{selected.id}},
+  {{/each}}
+</p>
+
+<Rose::Button @style='primary' {{on 'click' this.clearSelected}}>
+  Clear Selected Items
+</Rose::Button>
+
+<Rose::Separator />
+
 <h2>KeyValue Dropdown</h2>
 <Rose::Dropdown
   @text="Credential library details"

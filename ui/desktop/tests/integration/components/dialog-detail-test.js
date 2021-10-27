@@ -13,7 +13,7 @@ module('Integration | Component | dialog-detail', function (hooks) {
 
   test('it renders with content', async function (assert) {
     await render(hbs`
-      <DialogDetail>
+      <DialogDetail as |dialogDetail|>
         <dialogDetail.notification />
         <dialogDetail.body>
           <h2>Test</h2>

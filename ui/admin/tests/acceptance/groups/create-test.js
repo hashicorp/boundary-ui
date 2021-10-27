@@ -109,12 +109,12 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.newGroup);
     await fillIn('[name="name"]', 'group name');
     await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
+    assert.equal(
+      find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.ok(
+    assert.equal(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

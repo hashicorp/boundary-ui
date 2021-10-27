@@ -145,7 +145,7 @@
     @label={{t 'resources.credential-store.form.tls_skip_verify.label'}}
     @helperText={{t 'resources.credential-store.form.tls_skip_verify.help'}}
     @checked={{@model.attributes.tls_skip_verify}}
-    onChange={{fn
+    @onChange={{fn
       (mut @model.attributes.tls_skip_verify)
       (if @model.attributes.tls_skip_verify false true)
     }}

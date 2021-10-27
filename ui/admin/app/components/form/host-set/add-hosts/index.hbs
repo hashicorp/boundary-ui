@@ -28,7 +28,7 @@
               <form.checkbox
                 @label={{host.id}}
                 @description={{host.description}}
-                onChange={{fn this.toggleHost host}}
+                @onChange={{fn this.toggleHost host}}
               />
             </row.cell>
             <row.cell>{{host.name}}</row.cell>

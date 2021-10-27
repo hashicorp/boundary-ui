@@ -102,50 +102,12 @@ module('Acceptance | auth methods | update', function (hooks) {
     await fillIn('[name="name"]', 'existing auth method');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
+    assert.equal(
+      find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
-  });
-
-  test('saving an existing auth method with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
-    this.server.patch('/auth-methods/:id', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
-        }
-      );
-    });
-    await visit(urls.authMethod);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'existing auth method');
-    await click('form [type="submit"]');
-    await a11yAudit();
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.ok(
+    assert.equal(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

@@ -4,11 +4,18 @@ const { _electron: electron } = require('playwright');
 const helpers = require('./test-helpers');
 
 let electronApp = null;
+// Subdirectory within tests/end2end/screenshots where the screenshots of this test suite will be stored.
 const screenshotsDirectory = 'authentication/';
+// Path where the Boundary Desktop client binary is generated
 const executablePath = helpers.returnExecutablePath(
   process.platform,
   process.arch
 );
+
+// Set login variables
+const originValue = 'http://localhost:9200';
+const loginUsername = 'admin';
+const loginPassword = 'password';
 
 test.beforeEach(async () => {
   electronApp = await electron.launch({
@@ -34,29 +41,15 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.evaluate(() =>
         window.localStorage.setItem('desktop:origin', null)
       );
-      const originValue = 'http://localhost:9200';
-      const authLoginNameValue = 'admin';
-      const authLoginPasswordValue = 'password';
 
-      // Fill the origin input
-      await boundaryWindow.waitForSelector('[name=host]');
-      await boundaryWindow.fill('[name=host]', originValue);
-      // Take screenshot
-      await boundaryWindow.screenshot({
-        path: helpers.generateScreenshotPath(
-          screenshotsDirectory,
-          'fillOrigin'
-        ),
-        fullPage: true,
-      });
+      // Perform login
+      await helpers.login(
+        boundaryWindow,
+        originValue,
+        loginUsername,
+        loginPassword
+      );
 
-      // Click the submit button
-      await boundaryWindow.waitForSelector('button[type="submit"]');
-      await helpers.click(boundaryWindow, 'button[type="submit"]');
-
-      // Fill user & password
-      await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
-      await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
       // Take screenshot
       await boundaryWindow.screenshot({
         path: helpers.generateScreenshotPath(
@@ -126,32 +119,13 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.evaluate(() =>
         window.localStorage.setItem('desktop:origin', null)
       );
-      const originValue = 'http://localhost:9200';
-      const authLoginNameValue = 'admin';
-      const authLoginPasswordValue = '123456';
-
-      // Fill the origin input
-      await boundaryWindow.fill('[name=host]', originValue);
-      // Take screenshot
-      await boundaryWindow.screenshot({
-        path: helpers.generateScreenshotPath(
-          screenshotsDirectory,
-          'fillOrigin'
-        ),
-        fullPage: true,
-      });
-
-      // Click the submit button
-      await boundaryWindow.waitForSelector('button[type="submit"]');
-      await helpers.click(boundaryWindow, 'button[type="submit"]');
-
-      // Fill user & password
-      await boundaryWindow.fill('[name="identification"]', authLoginNameValue);
-      await boundaryWindow.fill('[name="password"]', authLoginPasswordValue);
-
-      // Click submit
-      await boundaryWindow.waitForSelector('button[type="submit"]');
-      await helpers.click(boundaryWindow, 'button[type="submit"]');
+      // Perform login
+      await helpers.login(
+        boundaryWindow,
+        originValue,
+        loginUsername,
+        '123456789'
+      );
 
       // Wait for the notification
       await boundaryWindow.waitForSelector('.rose-notification-body');
