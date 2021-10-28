@@ -18,7 +18,7 @@
       {{#if (feature-flag 'filter')}}
         <Rose::Toolbar>
           <Rose::Form class='full-width' as |form|>
-            <section class='rose-filter'>
+            <section>
               <Rose::Dropdown
                 @text={{t 'actions.filter.status'}}
                 @ignoreClickInside={{true}}
