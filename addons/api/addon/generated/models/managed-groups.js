@@ -48,6 +48,7 @@ export default class GeneratedManagedGroupModel extends BaseModel {
   @attr('array', {
     description:
       'The IDs of the current set of members (accounts) that are associated with this ManagedGroup.',
+    readOnly: true,
   })
-  member_ids
+  member_ids;
 }

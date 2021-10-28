@@ -22,7 +22,6 @@ module('Unit | Serializer | Managed groups', function (hooks) {
     assert.deepEqual(serializedRecord, {
       name: 'Group',
       description: 'Description',
-      member_ids: ['1', '2'],
       version: 1,
       auth_method_id: '1234',
       type: '80',
@@ -53,7 +52,6 @@ module('Unit | Serializer | Managed groups', function (hooks) {
     assert.deepEqual(serializedRecord, {
       name: 'Group Test',
       description: 'Description for the test',
-      member_ids: ['1', '2'],
       version: 1,
       auth_method_id: '1234',
       type: '80',
