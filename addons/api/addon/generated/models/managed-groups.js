@@ -44,4 +44,10 @@ export default class GeneratedManagedGroupModel extends BaseModel {
       'The ID of the Auth Method that is associated with this ManagedGroup',
   })
   auth_method_id;
+
+  @attr('array', {
+    description:
+      'The IDs of the current set of members (accounts) that are associated with this ManagedGroup.',
+  })
+  member_ids
 }
