@@ -17,7 +17,7 @@
     {{#if @model}}
       {{#if (feature-flag 'filter')}}
         <Rose::Toolbar>
-          <Rose::Form as |form|>
+        <Rose::Form as |form|>
             <Rose::Dropdown
               @text={{t 'form.status.label'}}
               @ignoreClickInside={{true}}
