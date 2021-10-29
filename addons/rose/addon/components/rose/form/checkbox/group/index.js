@@ -22,6 +22,7 @@ export default class RoseFormCheckboxGroupComponent extends Component {
    */
   @action
   toggleItem(item) {
+    console.log(item, 'itemmmmm')
     const selectedItems = this.args.selectedItems || [];
     const currentItems = [...selectedItems];
 

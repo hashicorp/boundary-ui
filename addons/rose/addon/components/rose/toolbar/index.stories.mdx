@@ -1,0 +1,24 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Toolbar" component="Toolbar" />
+
+# Toolbar
+
+renders a toolbar 
+
+```htmlbars
+<Rose::Toolbar as |toolbar|>
+</Rose::Toolbar>
+```
+
+<Preview>
+  <Story name="Toolbar">{{
+    template: hbs`
+    <Rose::Toolbar as |toolbar|>
+    toolbar
+     </Rose::Toolbar>
+    `,
+  }}</Story>
+</Preview>
