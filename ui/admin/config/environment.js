@@ -2,12 +2,13 @@
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
+const ROOT_URL = process.env.ROOT_URL || '/';
 
 module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'admin',
     environment,
-    rootURL: '/',
+    rootURL: ROOT_URL,
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
