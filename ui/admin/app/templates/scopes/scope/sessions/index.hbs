@@ -15,29 +15,27 @@
   <page.body>
 
     {{#if @model}}
-       {{#if (feature-flag 'filter')}}
+      {{#if (feature-flag 'filter')}}
         <Rose::Toolbar>
-          <Rose::Form as |form|>
+          <Rose::Form>
             <Rose::Dropdown
               @text={{t 'form.status.label'}}
               @ignoreClickInside={{true}}
               as |dropdown|
             >
-            {{{log this.selectedItems 'ssss'}}}
               <Rose::Form::Checkbox::Group
-                @items={{this.availableSessions}} 
+                @items={{this.availableSessions}}
                 @selectedItems={{this.selectedItems}}
-                {{!-- @onChange={{this.checkboxGroupChanged}} --}}
-              as |group|>
-                {{!-- {{#each this.availableSessions as |session|}} --}}
-                  <dropdown.item>
-                    <group.checkbox
-                      {{!-- @checked={{group.item.isCancelable}} --}}
-                      @label={{group.item.id}}
-                      value={{group.item.name}}
-                    />
-                  </dropdown.item>
-                {{!-- {{/each}} --}}
+                @onChange={{this.checkboxGroupChanged}}
+                as |group|
+              >
+                <dropdown.item>
+                  <group.checkbox
+                    @checked={{group.item.isCancelable}}
+                    @label={{group.item.status}}
+                    value={{group.item.status}}
+                  />
+                </dropdown.item>
               </Rose::Form::Checkbox::Group>
             </Rose::Dropdown>
           </Rose::Form>

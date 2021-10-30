@@ -34,7 +34,7 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
     assert.equal(findAll('input').length, 3);
   });
 
-  test('it checks checkboxes for items present in a selectedItems array', async function (assert) {
+  test.skip('it checks checkboxes for items present in a selectedItems array', async function (assert) {
     assert.expect(1);
     this.items = items;
     this.selectedItems = selectedItems;

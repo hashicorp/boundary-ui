@@ -35,7 +35,7 @@ module.exports = function (environment) {
     companyName: 'HashiCorp',
 
     notifyTimeout: 4000,
-    sessionPollingTimeoutSeconds:1111111112.5,
+    sessionPollingTimeoutSeconds: 1111111112.5,
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
