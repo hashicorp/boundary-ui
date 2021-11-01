@@ -15,6 +15,18 @@
   <page.body>
 
     {{#if @model}}
+      {{#if (feature-flag 'filter')}}
+        <Rose::Toolbar>
+          <Rose::Form>
+            <section>
+              <Rose::Dropdown
+                @text={{t 'form.status.label'}}
+                @ignoreClickInside={{true}}
+              />
+            </section>
+          </Rose::Form>
+        </Rose::Toolbar>
+      {{/if}}
 
       <Rose::Table as |table|>
         <table.header as |header|>
