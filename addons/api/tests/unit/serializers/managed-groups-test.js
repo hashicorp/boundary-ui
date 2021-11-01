@@ -25,6 +25,9 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       version: 1,
       auth_method_id: '1234',
       type: '80',
+      attributes: {
+        filter: 'OIDC',
+      },
     });
   });
 
@@ -43,6 +46,9 @@ module('Unit | Serializer | Managed groups', function (hooks) {
           version: 1,
           auth_method_id: '1234',
           type: '80',
+          attributes: {
+            filter: 'key=value',
+          },
         },
       },
     });
@@ -55,6 +61,9 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       version: 1,
       auth_method_id: '1234',
       type: '80',
+      attributes: {
+        filter: 'key=value',
+      },
     });
   });
 });

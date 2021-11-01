@@ -14,7 +14,7 @@ export default class FragmentManagedGroupsAttributesSerializer extends JSONSeria
   serializeAttribute(snapshot, json, key, attribute) {
     const { type, options } = attribute;
     let value = super.serializeAttribute(...arguments);
-    // COnvert empty strin to null.
+    // Convert empty string to null.
     if (type === 'string' && json[key] === '') json[key] = null;
     // Do not serialize read-only attributes.
     if (options.readOnly) delete json[key];

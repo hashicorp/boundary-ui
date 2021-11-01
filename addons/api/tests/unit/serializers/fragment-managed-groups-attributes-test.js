@@ -12,11 +12,10 @@ module(
       const record = store.createRecord('fragment-managed-groups-attributes', {
         filter: '',
       });
-      // const serializedRecord = record.serialize();
-      // assert.deepEqual(serializedRecord, {
-      //   filter: null,
-      // });
-      assert.equal(1, 1);
+      const serializedRecord = record.serialize();
+      assert.deepEqual(serializedRecord, {
+        filter: null,
+      });
     });
   }
 );
