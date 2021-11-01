@@ -7,7 +7,6 @@ export default class FragmentManagedGroupsAttributesModel extends Fragment {
   @attr('string', {
     description:
       'The boolean expression filter to use to determine membership.',
-    defaultValue: () => 'OIDC',
   })
   filter;
 }

@@ -4,7 +4,7 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Serializer | Managed groups', function (hooks) {
   setupTest(hooks);
 
-  test('it serializes correctly on create', function (assert) {
+  test('it serializes correctly on create with no filter provided', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-groups');
@@ -14,7 +14,6 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       member_ids: ['1', '2'],
       version: 1,
       auth_method_id: '1234',
-      type: '80',
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -24,9 +23,68 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       description: 'Description',
       version: 1,
       auth_method_id: '1234',
-      type: '80',
+      type: 'OIDC',
       attributes: {
-        filter: 'OIDC',
+        filter: null,
+      },
+    });
+  });
+
+  test('it serializes correctly on create when filter provided', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('managed-groups');
+    const record = store.createRecord('managed-groups', {
+      name: 'Group',
+      description: 'Description',
+      member_ids: ['1', '2'],
+      version: 1,
+      auth_method_id: '1234',
+      type: 'OIDC',
+      attributes: {
+        filter: 'key=value',
+      },
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {};
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      name: 'Group',
+      description: 'Description',
+      version: 1,
+      auth_method_id: '1234',
+      type: 'OIDC',
+      attributes: {
+        filter: 'key=value',
+      },
+    });
+  });
+
+  test('it does not serialize readOnly attributes', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('managed-groups');
+    const record = store.createRecord('managed-groups', {
+      name: 'Group',
+      description: 'Description',
+      version: 1,
+      auth_method_id: '1234',
+      member_ids: ['1', '2'],
+      created_time: Date.now(),
+      updated_time: Date.now(),
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {};
+    const serializedRecord = serializer.serialize(snapshot);
+    console.log(JSON.stringify(serializedRecord));
+    assert.deepEqual(serializedRecord, {
+      name: 'Group',
+      description: 'Description',
+      version: 1,
+      auth_method_id: '1234',
+      type: 'OIDC',
+      attributes: {
+        filter: null,
       },
     });
   });
@@ -45,7 +103,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
           member_ids: ['1', '2'],
           version: 1,
           auth_method_id: '1234',
-          type: '80',
+          type: 'OIDC',
           attributes: {
             filter: 'key=value',
           },
@@ -60,7 +118,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       description: 'Description for the test',
       version: 1,
       auth_method_id: '1234',
-      type: '80',
+      type: 'OIDC',
       attributes: {
         filter: 'key=value',
       },
