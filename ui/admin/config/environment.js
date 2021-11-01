@@ -35,7 +35,7 @@ module.exports = function (environment) {
     companyName: 'HashiCorp',
 
     notifyTimeout: 4000,
-    sessionPollingTimeoutSeconds: 1111111112.5,
+    sessionPollingTimeoutSeconds: 2.5,
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
@@ -132,7 +132,6 @@ module.exports = function (environment) {
 
     // Enable features in development
     ENV.featureFlags['capabilities'] = true;
-    ENV.featureFlags['filter'] = true;
   }
 
   if (environment === 'test') {
@@ -158,7 +157,6 @@ module.exports = function (environment) {
 
     // Enable tests for development features
     ENV.featureFlags['capabilities'] = true;
-    ENV.featureFlags['filter'] = true;
   }
 
   if (environment === 'production') {
