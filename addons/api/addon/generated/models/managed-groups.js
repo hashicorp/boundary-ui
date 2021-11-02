@@ -36,7 +36,6 @@ export default class GeneratedManagedGroupModel extends BaseModel {
 
   @attr('string', {
     description: 'The type of this ManagedGroup.',
-    defaultValue: () => 'OIDC',
   })
   type;
 

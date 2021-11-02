@@ -23,7 +23,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       description: 'Description',
       version: 1,
       auth_method_id: '1234',
-      type: 'OIDC',
+      type: null,
       attributes: {
         filter: null,
       },
@@ -40,7 +40,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       member_ids: ['1', '2'],
       version: 1,
       auth_method_id: '1234',
-      type: 'OIDC',
+      type: 'typeA',
       attributes: {
         filter: 'key=value',
       },
@@ -53,7 +53,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       description: 'Description',
       version: 1,
       auth_method_id: '1234',
-      type: 'OIDC',
+      type: 'typeA',
       attributes: {
         filter: 'key=value',
       },
@@ -76,13 +76,12 @@ module('Unit | Serializer | Managed groups', function (hooks) {
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
     const serializedRecord = serializer.serialize(snapshot);
-    console.log(JSON.stringify(serializedRecord));
     assert.deepEqual(serializedRecord, {
       name: 'Group',
       description: 'Description',
       version: 1,
       auth_method_id: '1234',
-      type: 'OIDC',
+      type: null,
       attributes: {
         filter: null,
       },
