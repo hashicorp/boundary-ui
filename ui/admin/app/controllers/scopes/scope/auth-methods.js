@@ -6,10 +6,6 @@ export default class ScopesScopeAuthMethodsController extends Controller {
 
   @service intl;
 
-  // =queryParams
-
-  queryParams = ['filter-type'];
-
   // =attributes
 
   /**
