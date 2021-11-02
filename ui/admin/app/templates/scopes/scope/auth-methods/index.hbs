@@ -37,16 +37,36 @@
   <page.body>
 
     <Rose::Form as |form|>
-      <form.checkboxGroup
-        @name='filterType'
-        @items={{this.filters.type.items}}
-        @selectedItems={{this.filters.type.selectedItems}}
-        @onChange={{route-action 'filterBy' 'type'}}
-      as |group|>
-        <group.checkbox
-          @label={{group.item}}
-          value={{group.item}} />
-      </form.checkboxGroup>
+      <form.fieldset>
+        <:title>Type</:title>
+        <:body>
+          <form.checkboxGroup
+            @name='type'
+            @items={{this.filters.type.items}}
+            @selectedItems={{this.filters.type.selectedItems}}
+            @onChange={{route-action 'filterBy' 'type'}}
+          as |group|>
+            <group.checkbox
+              @label={{group.item}}
+              value={{group.item}} />
+          </form.checkboxGroup>
+        </:body>
+      </form.fieldset>
+      <form.fieldset>
+        <:title>Type</:title>
+        <:body>
+          <form.checkboxGroup
+            @name='is_primary'
+            @items={{this.filters.is_primary.items}}
+            @selectedItems={{this.filters.is_primary.selectedItems}}
+            @onChange={{route-action 'filterBy' 'is_primary'}}
+          as |group|>
+            <group.checkbox
+              @label={{group.item}}
+              value={{group.item}} />
+          </form.checkboxGroup>
+        </:body>
+      </form.fieldset>
     </Rose::Form>
 
     {{#if @model}}

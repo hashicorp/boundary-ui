@@ -23,6 +23,10 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     'filter-type': {
       refreshModel: true,
       replace: true
+    },
+    'filter-is_primary': {
+      refreshModel: true,
+      replace: true
     }
   };
 
@@ -201,6 +205,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   @action
   filterBy(field, value) {
-    this.transitionTo({ queryParams: { 'filter-type': JSON.stringify(value) }});
+    const queryParams = {};
+    queryParams[`filter-${field}`] = JSON.stringify(value);
+    this.transitionTo({ queryParams });
   }
 }
