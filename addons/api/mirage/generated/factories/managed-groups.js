@@ -11,7 +11,7 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   version: () => datatype.number(),
-  type: Math.random() < 0.5 ? 'password' : 'OIDC',
+  type: 'OIDC',
   auth_method_id: () => datatype.number(),
   member_ids: () => datatype.array(),
 });
