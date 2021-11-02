@@ -5,6 +5,10 @@ import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
+const filterOptions = {
+  types: ['password', 'oidc']
+};
+
 export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
 
@@ -12,6 +16,15 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @service notify;
   @service session;
   @service can;
+
+  // =queryParams
+
+  queryParams = {
+    'filter-type': {
+      refreshModel: true,
+      replace: true
+    }
+  };
 
   // =methods
 
@@ -184,5 +197,10 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     const array = authMethod.attributes.account_claim_maps;
     const value = { from, to };
     array.addObject(value);
+  }
+
+  @action
+  filterBy(field, value) {
+    this.transitionTo({ queryParams: { 'filter-type': JSON.stringify(value) }});
   }
 }
