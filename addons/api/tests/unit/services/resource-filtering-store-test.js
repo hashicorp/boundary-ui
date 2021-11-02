@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 module('Unit | Service | resource-filtering-store', function (hooks) {
@@ -22,8 +22,8 @@ module('Unit | Service | resource-filtering-store', function (hooks) {
   });
 
   // TODO: Is it possible to capture mirage API requests in this test?
-  // test('it supports query filters', function (assert) {
-  //   const models = service.queryBy('session', {}, { scope_id: '123' });
-  //   assert.ok(service);
-  // });
+  skip('it supports query filters', function (assert) {
+    service.queryBy('session', {}, { scope_id: '123' });
+    assert.ok(service);
+  });
 });
