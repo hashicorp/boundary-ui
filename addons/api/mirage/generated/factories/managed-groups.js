@@ -11,7 +11,15 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   version: () => datatype.number(),
-  type: 'OIDC',
-  auth_method_id: () => datatype.number(),
-  member_ids: () => datatype.array(),
+  type: 'oidc',
+  attributes: function () {
+    switch (this.type) {
+      case 'oidc':
+        return {
+          filter: random.words(),
+        };
+      default:
+        return;
+    }
+  },
 });

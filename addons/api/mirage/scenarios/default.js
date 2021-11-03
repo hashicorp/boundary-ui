@@ -24,13 +24,13 @@ export default function (server) {
     'auth-method',
     1,
     { scope: globalScope },
-    'withAccountsAndUsers'
+    'withAccountsAndUsersAndManagedGroups'
   );
   const orgAuthMethods = server.createList(
     'auth-method',
     3,
     { scope: orgScope },
-    'withAccountsAndUsers'
+    'withAccountsAndUsersAndManagedGroups'
   );
   // Assign primary auth methods per scope
   // TODO make this generic
@@ -44,7 +44,7 @@ export default function (server) {
   server.createList('role', 1, { scope: globalScope }, 'withPrincipals');
   server.createList('role', 5, { scope: orgScope }, 'withPrincipals');
 
-  server.createList('managed-group', 2, { scope: globalScope }, 'withMembers');
+  // server.createList('managed-group', 2, { scope: globalScope }, 'withMembers');
 
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
