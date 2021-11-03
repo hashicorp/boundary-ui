@@ -5,10 +5,6 @@ import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-const filterOptions = {
-  types: ['password', 'oidc']
-};
-
 export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
 

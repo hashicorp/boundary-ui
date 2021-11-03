@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { setupFilters } from '../../../utils/setupFilters';
 
 export default class ScopesScopeAuthMethodsIndexRoute extends Route {
   // =methods
@@ -10,18 +11,17 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     const scopeModel = this.modelFor('scopes.scope');
-    const type = this.controllerFor('scopes.scope.auth-methods')['filter-type'];
-    const is_primary = this.controllerFor('scopes.scope.auth-methods')['filter-is_primary'];
+    const route = 'scopes.scope.auth-methods'
     controller.setProperties({
       scopeModel,
-      filters: {
+       filters: {
         type: {
           items: ['password', 'oidc'],
-          selectedItems: type ? JSON.parse(type) : null
+          selectedItems: setupFilters(this, route,'type')
         },
         is_primary: {
           items: [true, false],
-          selectedItems: is_primary ? JSON.parse(is_primary) : null
+          selectedItems: setupFilters(this, route,'is_primary')
         }
       }
     });
