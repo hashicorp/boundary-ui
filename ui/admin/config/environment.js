@@ -96,6 +96,7 @@ module.exports = function (environment) {
       filter: false,
       capabilities: true,
       'credential-store': true,
+      'managed-groups': false,
     },
   };
 
@@ -133,6 +134,7 @@ module.exports = function (environment) {
     // Enable features in development
     ENV.featureFlags['capabilities'] = true;
     ENV.featureFlags['filter'] = true;
+    ENV.featureFlags['managed-groups'] = true;
   }
 
   if (environment === 'test') {
@@ -159,6 +161,7 @@ module.exports = function (environment) {
     // Enable tests for development features
     ENV.featureFlags['capabilities'] = true;
     ENV.featureFlags['filter'] = true;
+    ENV.featureFlags['managed-groups'] = true;
   }
 
   if (environment === 'production') {
