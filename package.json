@@ -81,7 +81,8 @@
     "nth-check": "^2.0.1",
     "tmpl": "^1.0.5",
     "set-value": "^4.0.1",
-    "ansi-regex": "^5.0.1"
+    "ansi-regex": "^5.0.1",
+    "ember-cli-babel": "^7.26.6"
   },
   "config": {
     "commitizen": {

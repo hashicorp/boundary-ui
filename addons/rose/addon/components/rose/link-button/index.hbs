@@ -1,26 +1,33 @@
-<span class="rose-button-wrapper">
-  {{#if @iconLeft}}
-    <Rose::Icon
-      @name={{@iconLeft}}
-      @size="medium"
-    />
-  {{/if}}
+<LinkTo
+  class="rose-link-button {{if @style (concat "rose-button-" @style)}} {{if @iconOnly 'has-icon-only'}} {{if @iconLeft 'has-icon-left'}} {{if @iconRight 'has-icon-right'}}"
+  @route={{if @route @route}}
+  @query={{if @query @query}}
+  @model={{if @model @model}}
+  ...attributes>
+  <span class="rose-button-wrapper">
+    {{#if @iconLeft}}
+      <Rose::Icon
+        @name={{@iconLeft}}
+        @size="medium"
+      />
+    {{/if}}
 
-  <span class="rose-button-body">
-    {{yield}}
+    <span class="rose-button-body">
+      {{yield}}
+    </span>
+
+    {{#if @iconOnly}}
+      <Rose::Icon
+        @name={{@iconOnly}}
+        @size="medium"
+      />
+    {{/if}}
+
+    {{#if @iconRight}}
+      <Rose::Icon
+        @name={{@iconRight}}
+        @size="medium"
+      />
+    {{/if}}
   </span>
-
-  {{#if @iconOnly}}
-    <Rose::Icon
-      @name={{@iconOnly}}
-      @size="medium"
-    />
-  {{/if}}
-
-  {{#if @iconRight}}
-    <Rose::Icon
-      @name={{@iconRight}}
-      @size="medium"
-    />
-  {{/if}}
-</span>
+</LinkTo>
