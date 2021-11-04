@@ -25,16 +25,16 @@
                 as |dropdown|
               >
                 <Rose::Form::Checkbox::Group
-                  @items={{this.availableSessions}}
-                  @selectedItems={{this.selectedItems}}
-                  @onChange={{this.checkboxGroupChanged}}
+                  @name='status'
+                  @items={{this.filters.status.items}}
+                  @selectedItems={{this.filters.status.selectedItems}}
+                  {{!-- @onChange={{route-action 'filterBy' 'status'}} --}}
                   as |group|
                 >
                   <dropdown.item>
                     <group.checkbox
-                      @checked={{group.item.isCancelable}}
-                      @label={{group.item.status}}
-                      value={{group.item.status}}
+                      @label={{group.item}}
+                      value={{group.item}}
                     />
                   </dropdown.item>
                 </Rose::Form::Checkbox::Group>
