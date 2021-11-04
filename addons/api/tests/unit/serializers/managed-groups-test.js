@@ -102,7 +102,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
           member_ids: ['1', '2'],
           version: 1,
           auth_method_id: '1234',
-          type: 'OIDC',
+          type: 'oidc',
           attributes: {
             filter: 'key=value',
           },
@@ -117,7 +117,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
       description: 'Description for the test',
       version: 1,
       auth_method_id: '1234',
-      type: 'OIDC',
+      type: 'oidc',
       attributes: {
         filter: 'key=value',
       },
