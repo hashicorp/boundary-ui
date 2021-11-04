@@ -1,14 +1,14 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Serializer | Managed groups', function (hooks) {
+module('Unit | Serializer | Managed group', function (hooks) {
   setupTest(hooks);
 
   test('it serializes correctly on create with no filter provided', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('managed-groups');
-    const record = store.createRecord('managed-groups', {
+    const serializer = store.serializerFor('managed-group');
+    const record = store.createRecord('managed-group', {
       name: 'Group',
       description: 'Description',
       member_ids: ['1', '2'],
@@ -33,8 +33,8 @@ module('Unit | Serializer | Managed groups', function (hooks) {
   test('it serializes correctly on create when filter provided', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('managed-groups');
-    const record = store.createRecord('managed-groups', {
+    const serializer = store.serializerFor('managed-group');
+    const record = store.createRecord('managed-group', {
       name: 'Group',
       description: 'Description',
       member_ids: ['1', '2'],
@@ -63,8 +63,8 @@ module('Unit | Serializer | Managed groups', function (hooks) {
   test('it does not serialize readOnly attributes', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('managed-groups');
-    const record = store.createRecord('managed-groups', {
+    const serializer = store.serializerFor('managed-group');
+    const record = store.createRecord('managed-group', {
       name: 'Group',
       description: 'Description',
       version: 1,
@@ -91,11 +91,11 @@ module('Unit | Serializer | Managed groups', function (hooks) {
   test('it serializes correctly on update', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('managed-groups');
+    const serializer = store.serializerFor('managed-group');
     store.push({
       data: {
         id: '1',
-        type: 'managed-groups',
+        type: 'managed-group',
         attributes: {
           name: 'Group Test',
           description: 'Description for the test',
@@ -109,7 +109,7 @@ module('Unit | Serializer | Managed groups', function (hooks) {
         },
       },
     });
-    const record = store.peekRecord('managed-groups', '1');
+    const record = store.peekRecord('managed-group', '1');
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {

@@ -1,6 +1,6 @@
 import JSONSerializer from '@ember-data/serializer/json';
 
-export default class FragmentManagedGroupsAttributesSerializer extends JSONSerializer {
+export default class FragmentManagedGroupAttributesSerializer extends JSONSerializer {
   /**
    * If an attribute is annotated as readOnly in the model, don't serialize it.
    * Otherwise delegate to default attribute serializer.

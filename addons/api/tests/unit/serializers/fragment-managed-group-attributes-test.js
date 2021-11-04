@@ -9,7 +9,7 @@ module(
     test('it serializes empty string to null', function (assert) {
       assert.expect(1);
       const store = this.owner.lookup('service:store');
-      const record = store.createRecord('fragment-managed-groups-attributes', {
+      const record = store.createRecord('fragment-managed-group-attributes', {
         filter: '',
       });
       const serializedRecord = record.serialize();

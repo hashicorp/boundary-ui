@@ -1,13 +1,12 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Model | fragment managed groups attributes', function (hooks) {
+module('Unit | Model | managed group', function (hooks) {
   setupTest(hooks);
 
-  // Replace this with your real tests.
   test('it exists', function (assert) {
     let store = this.owner.lookup('service:store');
-    let model = store.createRecord('fragment-managed-groups-attributes', {});
+    let model = store.createRecord('managed-group', {});
     assert.ok(model);
   });
 });
