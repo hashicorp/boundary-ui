@@ -44,8 +44,6 @@ export default function (server) {
   server.createList('role', 1, { scope: globalScope }, 'withPrincipals');
   server.createList('role', 5, { scope: orgScope }, 'withPrincipals');
 
-  // server.createList('managed-group', 2, { scope: globalScope }, 'withMembers');
-
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 2, { scope }, 'withChildren');

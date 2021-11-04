@@ -28,13 +28,13 @@ export default factory.extend({
   withAccountsAndUsersAndManagedGroups: trait({
     afterCreate(authMethod, server) {
       const { scope, type } = authMethod;
-      console.log('This is the test');
+
       server.createList('user', 5, { scope }).map((user) => {
         const { id } = server.create('account', { scope, type, authMethod });
         user.update({ accountIds: [id] });
       });
-      // We need to get the authmethod ID
-      // server.createList('managed-group', 2, { scope, authMethodId: id })
+
+      server.createList('managed-group', 2, { scope, authMethod });
     },
   }),
 });

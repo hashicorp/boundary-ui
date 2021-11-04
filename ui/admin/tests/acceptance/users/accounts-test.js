@@ -43,7 +43,7 @@ module('Acceptance | users | accounts', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withAccountsAndUsers'
+      'withAccountsAndUsersAndManagedGroups'
     );
     instances.user = this.server.schema.users.all().models[0];
     accountsCount = instances.user.accountIds.length;
