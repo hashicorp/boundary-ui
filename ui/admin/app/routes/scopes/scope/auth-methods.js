@@ -18,12 +18,12 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   queryParams = {
     'filter-type': {
       refreshModel: true,
-      replace: true
+      replace: true,
     },
     'filter-is_primary': {
       refreshModel: true,
-      replace: true
-    }
+      replace: true,
+    },
   };
 
   // =methods

@@ -11,19 +11,19 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     const scopeModel = this.modelFor('scopes.scope');
-    const route = 'scopes.scope.auth-methods'
+    const route = 'scopes.scope.auth-methods';
     controller.setProperties({
       scopeModel,
-       filters: {
+      filters: {
         type: {
           items: ['password', 'oidc'],
-          selectedItems: setupFilters(this, route,'type')
+          selectedItems: setupFilters(this, route, 'type'),
         },
         is_primary: {
           items: [true, false],
-          selectedItems: setupFilters(this, route,'is_primary')
-        }
-      }
+          selectedItems: setupFilters(this, route, 'is_primary'),
+        },
+      },
     });
   }
 }

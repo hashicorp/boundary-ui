@@ -45,10 +45,9 @@
             @items={{this.filters.type.items}}
             @selectedItems={{this.filters.type.selectedItems}}
             @onChange={{route-action 'filterBy' 'type'}}
-          as |group|>
-            <group.checkbox
-              @label={{group.item}}
-              value={{group.item}} />
+            as |group|
+          >
+            <group.checkbox @label={{group.item}} value={{group.item}} />
           </form.checkboxGroup>
         </:body>
       </form.fieldset>
@@ -60,10 +59,9 @@
             @items={{this.filters.is_primary.items}}
             @selectedItems={{this.filters.is_primary.selectedItems}}
             @onChange={{route-action 'filterBy' 'is_primary'}}
-          as |group|>
-            <group.checkbox
-              @label={{group.item}}
-              value={{group.item}} />
+            as |group|
+          >
+            <group.checkbox @label={{group.item}} value={{group.item}} />
           </form.checkboxGroup>
         </:body>
       </form.fieldset>
