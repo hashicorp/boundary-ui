@@ -2,7 +2,7 @@ import { Factory } from 'ember-cli-mirage';
 import { random, date, datatype } from 'faker';
 
 /**
- * GeneratedManagedGroupsFactory
+ * GeneratedManagedGroupFactory
  * A managed group is a resource that represents a collection of accounts.
  */
 export default Factory.extend({
