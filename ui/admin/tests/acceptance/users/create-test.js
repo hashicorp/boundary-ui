@@ -15,7 +15,6 @@ module('Acceptance | users | create', function (hooks) {
   setupMirage(hooks);
 
   let orgScope;
-  let orgURL;
   let usersURL;
   let newUserURL;
 
@@ -30,7 +29,6 @@ module('Acceptance | users | create', function (hooks) {
       'withChildren'
     );
 
-    orgURL = `/scopes/${orgScope.id}`;
     usersURL = `/scopes/${orgScope.id}/users`;
     newUserURL = `${usersURL}/new`;
 
@@ -48,19 +46,19 @@ module('Acceptance | users | create', function (hooks) {
 
   test('Users can navigate to new users route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(orgURL);
+    await visit(usersURL);
     assert.ok(orgScope.authorized_collection_actions.users.includes('create'));
-    assert.ok(find(`[href="${orgURL}/users"]`));
+    assert.ok(find(`[href="${newUserURL}"]`));
   });
 
   test('Users cannot navigate to new users route without proper authorization', async function (assert) {
     assert.expect(2);
     orgScope.authorized_collection_actions.users = [];
-    await visit(orgURL);
+    await visit(usersURL);
     assert.notOk(
       orgScope.authorized_collection_actions.users.includes('create')
     );
-    assert.notOk(find(`[href="${orgURL}/users"]`));
+    assert.notOk(find(`[href="${newUserURL}"]`));
   });
 
   test('can cancel creation of a new user', async function (assert) {

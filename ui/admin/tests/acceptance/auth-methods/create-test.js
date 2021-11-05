@@ -75,25 +75,25 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       'create',
       'list',
     ];
-    await visit(urls.orgScope);
+    await visit(urls.authMethods);
     assert.ok(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'create'
       )
     );
-    assert.ok(find(`[href="${urls.authMethods}"]`));
+    assert.ok(find(`[href="${urls.newAuthMethod}"]`));
   });
 
   test('Users cannot navigate to new auth-methods route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [];
-    await visit(urls.orgScope);
+    await visit(urls.authMethods);
     assert.notOk(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.authMethods}"]`));
+    assert.notOk(find(`[href="${urls.newAuthMethod}"]`));
   });
 
   test('can cancel new auth method creation', async function (assert) {

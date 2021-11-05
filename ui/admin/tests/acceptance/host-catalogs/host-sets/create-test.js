@@ -94,13 +94,13 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   test('Users cannot navigate to new host sets route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
-    await visit(urls.hostCatalog);
+    await visit(urls.hostSets);
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.hostSets}"]`));
+    assert.notOk(find(`[href="${urls.newHostSet}"]`));
   });
 
   test('can cancel create new host', async function (assert) {
