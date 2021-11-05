@@ -3,7 +3,7 @@ import { filterBy } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { defer, resolve } from 'rsvp';
-import config from 'ember-get-config';
+import { getOwner } from '@ember/application';
 
 /**
  * A simple service that emits Confirmation instances and
@@ -17,13 +17,21 @@ import config from 'ember-get-config';
 export default class ConfirmationsService extends Service {
   // =attributes
 
+  #enabled;
+
   /**
    * When the confirm service is disabled, it always returns resolving promises.
    * By default the service is enabled but it is useful to disable it for test
    * purposes.
    * @type {boolean}
    */
-  enabled = config.enableConfirmService ?? true;
+  get enabled() {
+    const config = getOwner(this).resolveRegistration('config:environment');
+    return this.#enabled ?? config.enableConfirmService ?? true;
+  }
+  set enabled(value) {
+    this.#enabled = value;
+  }
 
   /**
    * @type {Array}
