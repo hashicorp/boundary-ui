@@ -2,7 +2,7 @@ import RESTAdapter from '@ember-data/adapter/rest';
 import { serializeIntoHash } from '@ember-data/adapter/-private';
 /* eslint-disable-next-line ember/no-mixins */
 import AdapterBuildURLMixin from '../mixins/adapter-build-url';
-import config from 'ember-get-config';
+import { getOwner } from '@ember/application';
 import { get } from '@ember/object';
 import { InvalidError } from '@ember-data/adapter/error';
 import { dasherize } from '@ember/string';
@@ -44,19 +44,36 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
 ) {
   // =attributes
 
+  #host;
+  #namespace;
+
   /**
    * Sets host to the `api.host` string in the application's config,
    * if set.
    * @type {string}
    */
-  host = get(config, 'api.host');
+  get host() {
+    const config = getOwner(this).resolveRegistration('config:environment');
+    return this.#host || get(config, 'api.host');
+  }
+  set host(value) {
+    // Setting this value is useful for testing purposes.
+    this.#host = value;
+  }
 
   /**
    * Sets namespace to the `api.namespace` string in the application's config,
    * if set.
    * @type {string}
    */
-  namespace = get(config, 'api.namespace');
+  get namespace() {
+    const config = getOwner(this).resolveRegistration('config:environment');
+    return this.#namespace || get(config, 'api.namespace');
+  }
+  set namespace(value) {
+    // Setting this value is useful for testing purposes.
+    this.#namespace = value;
+  }
 
   // =methods
 
