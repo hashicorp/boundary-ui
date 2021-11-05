@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { resourceFilter } from '../../../decorators/resource-filter';
 
 const filterOptions = {
   types: ['password', 'oidc']
@@ -19,16 +20,19 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   // =queryParams
 
-  queryParams = {
-    'filter-type': {
-      refreshModel: true,
-      replace: true
-    },
-    'filter-is_primary': {
-      refreshModel: true,
-      replace: true
-    }
-  };
+  // queryParams = {
+  //   'filter-type': {
+  //     refreshModel: true,
+  //     replace: true
+  //   },
+  //   'filter-is_primary': {
+  //     refreshModel: true,
+  //     replace: true
+  //   }
+  // };
+
+  @resourceFilter(['password', 'oidc']) type;
+  @resourceFilter([true, false]) is_primary;
 
   // =methods
 
