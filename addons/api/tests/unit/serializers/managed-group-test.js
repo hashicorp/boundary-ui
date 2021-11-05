@@ -60,6 +60,41 @@ module('Unit | Serializer | Managed group', function (hooks) {
     });
   });
 
+  test('it does not serialize version when it has null or undefined value', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('managed-group');
+    store.push({
+      data: {
+        id: '1',
+        type: 'managed-group',
+        attributes: {
+          name: 'Group Test',
+          description: 'Description for the test',
+          member_ids: ['1', '2'],
+          version: undefined,
+          auth_method_id: '1234',
+          type: 'oidc',
+          attributes: {
+            filter: 'key=value',
+          },
+        },
+      },
+    });
+    const record = store.peekRecord('managed-group', '1');
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      name: 'Group Test',
+      description: 'Description for the test',
+      auth_method_id: '1234',
+      type: 'oidc',
+      attributes: {
+        filter: 'key=value',
+      },
+    });
+  });
+
   test('it does not serialize readOnly attributes', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
