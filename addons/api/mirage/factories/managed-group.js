@@ -11,10 +11,4 @@ export default factory.extend({
       'update',
       'delete',
     ],
-
-  authorized_collection_actions: () => {
-    return {
-      accounts: ['create', 'list'],
-    };
-  },
 });
