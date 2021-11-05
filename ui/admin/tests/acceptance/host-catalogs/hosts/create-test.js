@@ -90,27 +90,27 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     );
     assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHost}"]`));
   });
-  test('Users can navigate to new host catalogs route with proper authorization', async function (assert) {
+  test('Users can navigate to new host route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(urls.hostCatalog);
+    await visit(urls.hosts);
     assert.ok(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
         'create'
       )
     );
-    assert.ok(find(`[href="${urls.hosts}"]`));
+    assert.ok(find(`[href="${urls.newHost}"]`));
   });
 
-  test('Users cannot navigate to new host catalogs route without proper authorization', async function (assert) {
+  test('Users cannot navigate to new host route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts = [];
-    await visit(urls.hostCatalog);
+    await visit(urls.hosts);
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.hosts}"]`));
+    assert.notOk(find(`[href="${urls.newHost}"]`));
   });
 
   test('can cancel create new host', async function (assert) {

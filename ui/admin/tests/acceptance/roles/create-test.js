@@ -73,21 +73,21 @@ module('Acceptance | roles | create', function (hooks) {
 
   test('Users can navigate to new roles route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(urls.orgScope);
+    await visit(urls.roles);
     assert.ok(
       instances.orgScope.authorized_collection_actions.roles.includes('create')
     );
-    assert.ok(find(`[href="${urls.roles}"]`));
+    assert.ok(find(`[href="${urls.newRole}"]`));
   });
 
   test('Users cannot navigate to new roles route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions.roles = [];
-    await visit(urls.orgScope);
+    await visit(urls.roles);
     assert.notOk(
       instances.orgScope.authorized_collection_actions.roles.includes('create')
     );
-    assert.notOk(find(`[href="${urls.roles}"]`));
+    assert.notOk(find(`[href="${urls.newRole}"]`));
   });
 
   test('can cancel new role creation', async function (assert) {

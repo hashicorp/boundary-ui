@@ -29,7 +29,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     credentialLibrary: null,
     credentialLibraries: null,
     newCredentialLibrary: null,
-    unknownCredentialLibrary: null,
   };
 
   hooks.beforeEach(function () {
@@ -59,7 +58,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
-    urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
@@ -76,14 +74,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.equal(currentURL(), urls.credentialLibrary);
   });
 
-  test('visiting an unknown credential library displays 404 message', async function (assert) {
-    assert.expect(1);
-    await visit(urls.unknownCredentialLibrary);
-    await a11yAudit();
-    console.debug(find('.rose-message-subtitle'));
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
-  });
-
   test('can create a credential library', async function (assert) {
     assert.expect(1);
     const count = getCredentialLibraryCount();
@@ -98,13 +88,13 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = [];
-    await visit(urls.credentialStore);
+    await visit(urls.credentialLibraries);
     assert.notOk(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
       ].includes('create')
     );
-    assert.notOk(find(`[href="${urls.credentialLibraries}"]`));
+    assert.notOk(find(`[href="${urls.newCredentialLibrary}"]`));
   });
 
   test('can cancel create a new credential library', async function (assert) {

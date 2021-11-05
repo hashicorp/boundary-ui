@@ -69,25 +69,25 @@ module('Acceptance | targets | create', function (hooks) {
 
   test('can navigate to new targets route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(urls.projectScope);
+    await visit(urls.targets);
     assert.ok(
       instances.scopes.project.authorized_collection_actions.targets.includes(
         'create'
       )
     );
-    assert.ok(find(`[href="${urls.targets}"]`));
+    assert.ok(find(`[href="${urls.newTarget}"]`));
   });
 
   test('cannot navigate to new targets route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.scopes.project.authorized_collection_actions.targets = [];
-    await visit(urls.projectScope);
+    await visit(urls.targets);
     assert.notOk(
       instances.scopes.project.authorized_collection_actions.targets.includes(
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.targets}"]`));
+    assert.notOk(find(`[href="${urls.newTarget}"]`));
   });
 
   test('can cancel create new targets', async function (assert) {
