@@ -1,8 +1,6 @@
 <LinkTo
   class="rose-link-button {{if @style (concat "rose-button-" @style)}} {{if @iconOnly 'has-icon-only'}} {{if @iconLeft 'has-icon-left'}} {{if @iconRight 'has-icon-right'}}"
-  @route={{if @route @route}}
-  @query={{if @query @query}}
-  @model={{if @model @model}}
+  @route={{@route}}
   ...attributes>
   <span class="rose-button-wrapper">
     {{#if @iconLeft}}

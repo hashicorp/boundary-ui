@@ -92,26 +92,26 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
   test('Users can navigate to new host catalogs route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(urls.projectScope);
+    await visit(urls.hostCatalogs);
     assert.ok(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
       ].includes('create')
     );
-    assert.ok(find(`[href="${urls.hostCatalogs}"]`));
+    assert.ok(find(`[href="${urls.newHostCatalog}"]`));
   });
 
   test('Users cannot navigate to new host catalogs route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       [];
-    await visit(urls.projectScope);
+    await visit(urls.hostCatalogs);
     assert.notOk(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
       ].includes('create')
     );
-    assert.notOk(find(`[href="${urls.hostCatalogs}"]`));
+    assert.notOk(find(`[href="${urls.newHostCatalog}"]`));
   });
 
   test('saving a new host catalog with invalid fields displays error messages', async function (assert) {
