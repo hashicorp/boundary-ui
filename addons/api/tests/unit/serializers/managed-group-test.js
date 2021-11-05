@@ -40,7 +40,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
       member_ids: ['1', '2'],
       version: 1,
       auth_method_id: '1234',
-      type: 'typeA',
+      type: 'oidc',
       attributes: {
         filter: 'key=value',
       },
@@ -53,7 +53,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
       description: 'Description',
       version: 1,
       auth_method_id: '1234',
-      type: 'typeA',
+      type: 'oidc',
       attributes: {
         filter: 'key=value',
       },
