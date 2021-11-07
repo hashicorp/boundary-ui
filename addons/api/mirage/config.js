@@ -8,7 +8,7 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 const isTesting = config.environment === 'test';
 
 export default function () {
-  initializeMockIPC(this);
+  initializeMockIPC(this, config);
 
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';

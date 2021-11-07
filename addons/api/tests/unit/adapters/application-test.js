@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import config from 'ember-get-config';
 import RESTAdapter from '@ember-data/adapter/rest';
 import { InvalidError } from '@ember-data/adapter/error';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -9,6 +8,12 @@ import { Response } from 'miragejs';
 module('Unit | Adapter | application', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
+
+  let config;
+
+  hooks.beforeEach(function () {
+    config = this.owner.resolveRegistration('config:environment');
+  });
 
   test('its namespace is equal to the configured namespace', function (assert) {
     assert.expect(2);
