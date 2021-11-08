@@ -24,13 +24,13 @@ export default function (server) {
     'auth-method',
     1,
     { scope: globalScope },
-    'withAccountsAndUsers'
+    'withAccountsAndUsersAndManagedGroups'
   );
   const orgAuthMethods = server.createList(
     'auth-method',
     3,
     { scope: orgScope },
-    'withAccountsAndUsers'
+    'withAccountsAndUsersAndManagedGroups'
   );
   // Assign primary auth methods per scope
   // TODO make this generic

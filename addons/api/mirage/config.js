@@ -514,6 +514,14 @@ export default function () {
   this.del('/credential-libraries/:id');
   this.patch('/credential-libraries/:id');
 
+  // managed-groups
+  this.get(
+    '/managed-groups',
+    ({ managedGroups }, { queryParams: { auth_method_id: authMethodId } }) => {
+      return managedGroups.where({ authMethodId });
+    }
+  );
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));

@@ -23,15 +23,18 @@ export default factory.extend({
   type: (i) => types[i % types.length],
 
   /**
-   * Adds accounts (with associated users) to auth method.
+   * Adds accounts (with associated users) to auth method and managed groups.
    */
-  withAccountsAndUsers: trait({
+  withAccountsAndUsersAndManagedGroups: trait({
     afterCreate(authMethod, server) {
       const { scope, type } = authMethod;
+
       server.createList('user', 5, { scope }).map((user) => {
         const { id } = server.create('account', { scope, type, authMethod });
         user.update({ accountIds: [id] });
       });
+
+      server.createList('managed-group', 2, { scope, authMethod });
     },
   }),
 });
