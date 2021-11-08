@@ -6,10 +6,6 @@ import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from '../../../decorators/resource-filter';
 
-const filterOptions = {
-  types: ['password', 'oidc']
-};
-
 export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
 
@@ -18,18 +14,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @service session;
   @service can;
 
-  // =queryParams
-
-  // queryParams = {
-  //   'filter-type': {
-  //     refreshModel: true,
-  //     replace: true
-  //   },
-  //   'filter-is_primary': {
-  //     refreshModel: true,
-  //     replace: true
-  //   }
-  // };
+  // =resource filters
 
   @resourceFilter(['password', 'oidc']) type;
   @resourceFilter([true, false]) is_primary;
@@ -209,8 +194,6 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   @action
   filterBy(field, value) {
-    const queryParams = {};
-    queryParams[`filter-${field}`] = JSON.stringify(value);
-    this.transitionTo({ queryParams });
+    this[field] = value;
   }
 }

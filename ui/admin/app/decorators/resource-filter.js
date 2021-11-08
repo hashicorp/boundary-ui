@@ -8,6 +8,16 @@ export function resourceFilter(filterName, allowedValues) {
       refreshModel: true,
       replace: true,
     };
-    return descriptor;
+    return {
+      get() {
+        const value = this._router.currentRoute.queryParams[filterName];
+        return value ? JSON.parse(value) : null;
+      },
+      set(value) {
+        const queryParams = {};
+        queryParams[filterName] = JSON.stringify(value);
+        this.transitionTo({ queryParams });
+      },
+    };
   };
 }
