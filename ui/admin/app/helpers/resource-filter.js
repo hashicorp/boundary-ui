@@ -11,7 +11,7 @@ export default class extends Helper {
 
   @service router;
 
-  @observes('router._router.currentRoute')
+  @observes('router.currentRoute')
   onQueryParamsChanged() {
     this.recompute();
   }
@@ -24,9 +24,9 @@ export default class extends Helper {
    */
   compute([routeName, filterName]) {
     const queryParamName = `filter-${filterName}`;
-    const currentValue = JSON.parse(
-      this.router._router.currentRoute.queryParams[queryParamName]
-    );
+    const rawValue =
+      this.router.currentRoute.queryParams[queryParamName];
+    const currentValue = rawValue ? JSON.parse(rawValue) : null;
     return currentValue;
   }
 }
