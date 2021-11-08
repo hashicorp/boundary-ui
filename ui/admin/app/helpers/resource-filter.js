@@ -1,6 +1,7 @@
 import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
-import { observes } from '@ember-decorators/object';
+import { getOwner } from '@ember/application';
+import { action } from '@ember/object';
 
 /**
  * This helper returns true or false based on the state of the ember-loading
@@ -11,22 +12,43 @@ export default class extends Helper {
 
   @service router;
 
-  @observes('router.currentRoute')
-  onQueryParamsChanged() {
-    this.recompute();
+  // =methods
+
+  // =lifecycle management methods
+
+  init() {
+    super.init(...arguments);
+    this.router.on('routeWillChange', this.routeWillChange);
   }
 
-  // =methods
+  willDestroy() {
+    this.router.off('routeWillChange', this.routeWillChange);
+    super.willDestroy();
+  }
+
+  // =compute method
 
   /**
    * Returns true if "something" is loading according to ember-loading.
    * @return {boolean}
    */
   compute([routeName, filterName]) {
+    const owner = getOwner(this);
+    // Filter options
+    const route = owner.lookup(`route:${routeName}`);
+    const filterOptionsName = `filter-options-${filterName}`;
+    const items = route[filterOptionsName];
+    // Selected filters
     const queryParamName = `filter-${filterName}`;
-    const rawValue =
-      this.router.currentRoute.queryParams[queryParamName];
-    const currentValue = rawValue ? JSON.parse(rawValue) : null;
-    return currentValue;
+    const rawValue = this.router.currentRoute.queryParams[queryParamName];
+    const selectedItems = rawValue ? JSON.parse(rawValue) : [];
+    return { items, selectedItems };
+  }
+
+  // =actions
+
+  @action
+  routeWillChange() {
+    this.recompute();
   }
 }
