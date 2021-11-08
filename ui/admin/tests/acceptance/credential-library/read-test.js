@@ -77,4 +77,12 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     await visit(urls.credentialLibraries);
     assert.notOk(find('main tbody .rose-table-header-cell a'));
   });
+
+  test('visiting an unknown credential library displays 404 message', async function (assert) {
+    assert.expect(1);
+    await visit(urls.unknownCredentialLibrary);
+    await a11yAudit();
+    console.debug(find('.rose-message-subtitle'));
+    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+  });
 });

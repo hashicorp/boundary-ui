@@ -13,7 +13,6 @@ import {
 module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  let orgURL;
 
   const instances = {
     scopes: {
@@ -45,7 +44,6 @@ module('Acceptance | groups | create', function (hooks) {
     urls.groups = `/scopes/${instances.orgScope.id}/groups`;
     urls.group = `${urls.groups}/${instances.group.id}`;
     urls.newGroup = `${urls.groups}/new`;
-    orgURL = `/scopes/${instances.orgScope.id}`;
   });
 
   test('can create new group', async function (assert) {
@@ -59,21 +57,21 @@ module('Acceptance | groups | create', function (hooks) {
 
   test('can navigate to new groups route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(orgURL);
+    await visit(urls.groups);
     assert.ok(
       instances.orgScope.authorized_collection_actions.groups.includes('create')
     );
-    assert.ok(find(`[href="${urls.groups}"]`));
+    assert.ok(find(`[href="${urls.newGroup}"]`));
   });
 
   test('cannot navigate to new groups route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.orgScope.authorized_collection_actions.groups = [];
-    await visit(orgURL);
+    await visit(urls.groups);
     assert.notOk(
       instances.orgScope.authorized_collection_actions.groups.includes('create')
     );
-    assert.notOk(find(`[href="${urls.groups}"]`));
+    assert.notOk(find(`[href="${urls.newGroup}"]`));
   });
   test('can cancel new group creation', async function (assert) {
     assert.expect(2);

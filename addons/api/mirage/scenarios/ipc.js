@@ -1,9 +1,8 @@
-import config from 'ember-get-config';
 import { datatype } from 'faker';
 
-const isTesting = config.environment === 'test';
+export default function initializeMockIPC(server, config) {
+  const isTesting = config.environment === 'test';
 
-export default function initializeMockIPC(server) {
   /**
    * We strive to make this application runnable in a regular web browser, since
    * it is a convenient environment for development and testing.  But only an
