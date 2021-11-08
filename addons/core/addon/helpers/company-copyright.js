@@ -1,7 +1,10 @@
-import { helper } from '@ember/component/helper';
-import config from 'ember-get-config';
+import Helper from '@ember/component/helper';
+import { getOwner } from '@ember/application';
 
-export default helper(function companyCopyright() {
-  const currentYear = new Date().getFullYear();
-  return `© ${currentYear} ${config.companyName}`;
-});
+export default class extends Helper {
+  compute() {
+    const config = getOwner(this).resolveRegistration('config:environment');
+    const currentYear = new Date().getFullYear();
+    return `© ${currentYear} ${config.companyName}`;
+  }
+}
