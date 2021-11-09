@@ -16,6 +16,9 @@ import { inject as service } from '@ember/service';
 export class ResourceFilter {
   // =attributes
 
+  /**
+   * @type {?object}
+   */
   #filterObject;
 
   /**
@@ -46,6 +49,7 @@ export class ResourceFilter {
   /**
    * @param {string} key
    * @param value
+   * @return {string}
    */
   equals(key, value) {
     return `"/item/${key}" == "${value}"`;
@@ -53,6 +57,7 @@ export class ResourceFilter {
 
   /**
    * @param {string[]} clauses
+   * @return {string}
    */
   and(clauses) {
     return clauses.join(' and ');
@@ -60,6 +65,7 @@ export class ResourceFilter {
 
   /**
    * @param {string[]} clauses
+   * @return {string}
    */
   or(clauses) {
     return clauses.join(' or ');
@@ -67,15 +73,32 @@ export class ResourceFilter {
 
   /**
    * @param {string} expression
+   * @return {string}
    */
   parenthetical(expression) {
     return `(${expression})`;
   }
 }
 
+/**
+ *
+ */
 export default class ResourceFilterStoreService extends Service {
+  // =services
+
   @service store;
 
+  // =methods
+
+  /**
+   * Similar to Ember's built-in `store.query`, except this method accepts
+   * an additional argument `filterObject` representing a query filter
+   * (see ResourceFilter class above).
+   * @param {string} modelName
+   * @param {object} filterObject
+   * @param {?object} storeQuery
+   * @return {Promise}
+   */
   queryBy(modelName, filterObject = {}, storeQuery = {}) {
     console.log(filterObject);
     const filter = new ResourceFilter(filterObject);
