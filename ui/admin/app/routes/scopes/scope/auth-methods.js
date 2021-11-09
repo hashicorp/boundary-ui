@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { resourceFilter } from '../../../decorators/resource-filter';
 
 export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
@@ -13,11 +12,6 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @service notify;
   @service session;
   @service can;
-
-  // =resource filters
-
-  @resourceFilter(['password', 'oidc']) type;
-  @resourceFilter([true, false]) is_primary;
 
   // =methods
 
@@ -190,10 +184,5 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     const array = authMethod.attributes.account_claim_maps;
     const value = { from, to };
     array.addObject(value);
-  }
-
-  @action
-  filterBy(field, value) {
-    this[field] = value;
   }
 }
