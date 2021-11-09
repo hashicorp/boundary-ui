@@ -17,27 +17,32 @@
     {{#if @model}}
       {{#if (feature-flag 'filter')}}
         <Rose::Toolbar>
-          <Rose::Form>
+          <Rose::Form as |form|>
             <section>
               <Rose::Dropdown
                 @text={{t 'form.status.label'}}
                 @ignoreClickInside={{true}}
                 as |dropdown|
               >
-                <Rose::Form::Checkbox::Group
-                  @name='status'
-                  @items={{this.filters.status.items}}
-                  @selectedItems={{this.filters.status.selectedItems}}
-                  {{!-- @onChange={{route-action 'filterBy' 'status'}} --}}
-                  as |group|
-                >
-                  <dropdown.item>
-                    <group.checkbox
-                      @label={{group.item}}
-                      value={{group.item}}
-                    />
-                  </dropdown.item>
-                </Rose::Form::Checkbox::Group>
+                {{#with
+                  (resource-filter 'scopes.scope.sessions' 'status')
+                  as |filter|
+                }}
+                  <form.checkboxGroup
+                    @name='type'
+                    @items={{filter.items}}
+                    @selectedItems={{filter.selectedItems}}
+                    @onChange={{route-action 'filterBy' 'status'}}
+                    as |group|
+                  >
+                    <dropdown.item>
+                      <group.checkbox
+                        @label={{group.item}}
+                        value={{group.item}}
+                      />
+                    </dropdown.item>
+                  </form.checkboxGroup>
+                {{/with}}
               </Rose::Dropdown>
             </section>
           </Rose::Form>
