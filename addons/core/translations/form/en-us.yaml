@@ -115,3 +115,5 @@ value:
 callback_url:
   label: Callback URL
   help: The URL to which the third-party provider sends the authentication response.  Paste this into the provider configuration.
+filter:
+  label: Filter
