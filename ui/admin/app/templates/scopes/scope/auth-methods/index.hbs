@@ -35,6 +35,48 @@
   </page.actions>
 
   <page.body>
+
+    <Rose::Form as |form|>
+      <form.fieldset>
+        <:title>Type</:title>
+        <:body>
+          {{#with
+            (resource-filter 'scopes.scope.auth-methods' 'type')
+            as |filter|
+          }}
+            <form.checkboxGroup
+              @name='type'
+              @items={{filter.items}}
+              @selectedItems={{filter.selectedItems}}
+              @onChange={{route-action 'filterBy' 'type'}}
+              as |group|
+            >
+              <group.checkbox @label={{group.item}} value={{group.item}} />
+            </form.checkboxGroup>
+          {{/with}}
+        </:body>
+      </form.fieldset>
+      <form.fieldset>
+        <:title>Primary</:title>
+        <:body>
+          {{#with
+            (resource-filter 'scopes.scope.auth-methods' 'is_primary')
+            as |filter|
+          }}
+            <form.checkboxGroup
+              @name='is_primary'
+              @items={{filter.items}}
+              @selectedItems={{filter.selectedItems}}
+              @onChange={{route-action 'filterBy' 'is_primary'}}
+              as |group|
+            >
+              <group.checkbox @label={{group.item}} value={{group.item}} />
+            </form.checkboxGroup>
+          {{/with}}
+        </:body>
+      </form.fieldset>
+    </Rose::Form>
+
     {{#if @model}}
 
       {{#if (feature-flag 'primary-auth-method')}}
