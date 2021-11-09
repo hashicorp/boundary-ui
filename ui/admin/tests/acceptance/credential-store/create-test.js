@@ -24,7 +24,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
     projectScope: null,
     credentialStores: null,
     credentialStore: null,
-    unknownCredentialStore: null,
     newCredentialStore: null,
   };
 
@@ -47,7 +46,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
-    urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
     urls.newCredentialStore = `${urls.credentialStores}/new`;
     // Generate resource counter
     getCredentialStoresCount = () => {
@@ -80,13 +78,13 @@ module('Acceptance | credential-stores | create', function (hooks) {
     instances.scopes.project.authorized_collection_actions[
       'credential-stores'
     ] = [];
-    await visit(urls.projectScope);
+    await visit(urls.credentialStores);
     assert.notOk(
       instances.scopes.project.authorized_collection_actions[
         'credential-stores'
       ].includes('create')
     );
-    assert.notOk(find(`[href="${urls.credentialStores}"]`));
+    assert.notOk(find(`[href="${urls.newCredentialStore}"]`));
   });
 
   test('saving a new credential store with invalid fields displays error messages', async function (assert) {

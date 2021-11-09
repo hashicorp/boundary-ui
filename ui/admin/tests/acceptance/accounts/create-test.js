@@ -94,25 +94,25 @@ module('Acceptance | accounts | create', function (hooks) {
 
   test('Users can navigate to new account route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(urls.authMethod);
+    await visit(urls.accounts);
     assert.ok(
       instances.authMethod.authorized_collection_actions.accounts.includes(
         'create'
       )
     );
-    assert.ok(find(`[href="${urls.accounts}"]`));
+    assert.ok(find(`[href="${urls.newAccount}"]`));
   });
 
   test('Users cannot navigate to new account route without proper authorization', async function (assert) {
     assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts = [];
-    await visit(urls.authMethod);
+    await visit(urls.accounts);
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.accounts}"]`));
+    assert.notOk(find(`[href="${urls.newAccount}"]`));
   });
 
   test('can cancel a new account creation', async function (assert) {

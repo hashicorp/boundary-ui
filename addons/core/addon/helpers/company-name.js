@@ -1,6 +1,9 @@
-import { helper } from '@ember/component/helper';
-import config from 'ember-get-config';
+import Helper from '@ember/component/helper';
+import { getOwner } from '@ember/application';
 
-export default helper(function companyName() {
-  return config.companyName;
-});
+export default class extends Helper {
+  compute() {
+    const config = getOwner(this).resolveRegistration('config:environment');
+    return config.companyName;
+  }
+}

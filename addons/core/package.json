@@ -34,7 +34,6 @@
     "ember-cli-babel": "^7.26.6",
     "ember-cli-htmlbars": "^5.7.1",
     "ember-feature-flags": "^6.0.0",
-    "ember-get-config": "^0.3.0",
     "ember-intl": "^5.7.0",
     "ember-loading": "^0.4.0",
     "ember-route-action-helper": "^2.0.8",

@@ -8,7 +8,7 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 const isTesting = config.environment === 'test';
 
 export default function () {
-  initializeMockIPC(this);
+  initializeMockIPC(this, config);
 
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
@@ -513,6 +513,14 @@ export default function () {
   );
   this.del('/credential-libraries/:id');
   this.patch('/credential-libraries/:id');
+
+  // managed-groups
+  this.get(
+    '/managed-groups',
+    ({ managedGroups }, { queryParams: { auth_method_id: authMethodId } }) => {
+      return managedGroups.where({ authMethodId });
+    }
+  );
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

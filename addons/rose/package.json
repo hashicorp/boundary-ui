@@ -38,13 +38,13 @@
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
   },
   "devDependencies": {
-    "ember-get-config": "^0.3.0",
     "@babel/core": "^7.15.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.4.2",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "@hashicorp/flight-icons": "^1.0.0",
+    "@storybook/addon-a11y": "^6.3.12",
     "@storybook/addon-actions": "^6.3.10",
     "@storybook/addon-docs": "^6.3.8",
     "@storybook/addon-knobs": "^6.3.1",
