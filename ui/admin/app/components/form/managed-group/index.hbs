@@ -47,6 +47,7 @@
 
   <form.input
     @value={{@model.attributes.filter}}
+    @helperText={{t 'form.filter.help'}}
     @label={{t 'form.filter.label'}}
     readonly={{true}}
     @disabled={{true}}

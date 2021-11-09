@@ -117,3 +117,4 @@ callback_url:
   help: The URL to which the third-party provider sends the authentication response.  Paste this into the provider configuration.
 filter:
   label: Filter
+  help: A boolean expression defining a filter run against the provided information.
