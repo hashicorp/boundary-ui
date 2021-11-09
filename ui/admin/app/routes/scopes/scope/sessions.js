@@ -6,6 +6,7 @@ import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
+import { resourceFilter } from '../../../decorators/resource-filter';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -17,6 +18,10 @@ export default class ScopesScopeSessionsRoute extends Route {
   @service notify;
   @service session;
 
+    // =resource filters
+
+  @resourceFilter(['active', 'pending', 'canceling', 'terminated']) status;
+    
   // =attributes
 
   /**
@@ -108,5 +113,9 @@ export default class ScopesScopeSessionsRoute extends Route {
   async cancelSession(session) {
     await session.cancelSession();
   }
-
+  
+  @action
+  filterBy(field, value) {
+    this[field] = value;
+  }
 }
