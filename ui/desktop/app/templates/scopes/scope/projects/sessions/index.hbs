@@ -24,6 +24,41 @@
           </header.row>
         </table.header>
         <table.body as |body|>
+       {{#if @model}}
+      {{#if (feature-flag 'filter')}}
+        <Rose::Toolbar>
+          <Rose::Form as |form|>
+            <section>
+              <Rose::Dropdown
+                @text={{t 'form.status.label'}}
+                @ignoreClickInside={{true}}
+                as |dropdown|
+              >
+                {{#with
+                  (resource-filter 'scopes.scope.sessions' 'status')
+                  as |filter|
+                }}
+                  <form.checkboxGroup
+                    @name='type'
+                    @items={{filter.items}}
+                    @selectedItems={{filter.selectedItems}}
+                    @onChange={{route-action 'filterBy' 'status'}}
+                    as |group|
+                  >
+                    <dropdown.item>
+                      <group.checkbox
+                        @label={{group.item}}
+                        value={{group.item}}
+                      />
+                    </dropdown.item>
+                  </form.checkboxGroup>
+                {{/with}}
+              </Rose::Dropdown>
+            </section>
+          </Rose::Form>
+        </Rose::Toolbar>
+      {{/if}}
+      {{/if}}
           {{#each this.sorted as |model|}}
             <body.row as |row|>
               <row.headerCell class='nowrap'>
