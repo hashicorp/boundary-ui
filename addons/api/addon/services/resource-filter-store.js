@@ -100,7 +100,6 @@ export default class ResourceFilterStoreService extends Service {
    * @return {Promise}
    */
   queryBy(modelName, filterObject = {}, storeQuery = {}) {
-    console.log(filterObject);
     const filter = new ResourceFilter(filterObject);
     const query = Object.assign({}, storeQuery);
     // Apply filters to store query when available
