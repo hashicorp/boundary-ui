@@ -13,6 +13,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
 
   @service ipc;
   @service session;
+  @service resourceFilterStore;
 
   // =attributes
 
@@ -52,8 +53,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     const { id: scope_id } = this.modelFor('scopes.scope');
     const { user_id } = this.session.data.authenticated;
     await this.store.query('target', { recursive: true, scope_id });
-    return await this.store.query('session', {
-      filter: `"/item/user_id" == "${user_id}"`,
+    return await this.resourceFilterStore.queryBy('session', { user_id }, {
       recursive: true,
       scope_id
     });
