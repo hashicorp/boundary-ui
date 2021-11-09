@@ -4,7 +4,11 @@
     @dropdownRight={{true}}
     as |dropdown|
   >
-    <dropdown.button @style='danger' @disabled={{@model.canSave}}>
+    <dropdown.button
+      @style='danger'
+      @disabled={{@model.canSave}}
+      {{on 'click' (route-action 'deleteManagedGroup' @model)}}
+    >
       {{t 'resources.managed-group.actions.delete'}}
     </dropdown.button>
   </Rose::Dropdown>
