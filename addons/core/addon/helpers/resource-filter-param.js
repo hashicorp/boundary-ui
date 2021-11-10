@@ -29,14 +29,14 @@ export default class ResourceFilterParamHelper extends Helper {
    */
   constructor() {
     super(...arguments);
-    this.router.on('routeWillChange', this.routeWillChange);
+    this.router.on('routeDidChange', this.routeDidChange);
   }
 
   /**
    * Stop listening to route events when this helper is destroyed.
    */
   willDestroy() {
-    this.router.off('routeWillChange', this.routeWillChange);
+    this.router.off('routeDidChange', this.routeDidChange);
     super.willDestroy();
   }
 
@@ -56,13 +56,7 @@ export default class ResourceFilterParamHelper extends Helper {
     const allowedValues = route[filterAllowedValuesKey];
     // Selected filters
     const rawValue = route[name];
-    let value = rawValue;
-    try {
-      value = JSON.parse(rawValue);
-    } catch (e) {
-      /* ignore parse errors */
-    }
-    const selectedValue = rawValue ? value : null;
+    const selectedValue = rawValue || null;
     return { name, allowedValues, selectedValue };
   }
 
@@ -73,7 +67,7 @@ export default class ResourceFilterParamHelper extends Helper {
    * route query params change.
    */
   @action
-  routeWillChange() {
+  routeDidChange() {
     this.recompute();
   }
 }

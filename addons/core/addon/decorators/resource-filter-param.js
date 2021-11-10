@@ -27,7 +27,7 @@
  *       // via a route transition.
  *       this.status = status;
  *       // Log the value of query param `filter-status`.
- *       console.log(this.status);
+ *       log(this.status);
  *     }
  *   }
  *
@@ -64,8 +64,10 @@ export function resourceFilterParam(allowedValues, defaultValue) {
        * Returns the JSON-parsed query parameter value OR defaultValue.
        */
       get() {
-        const value = this._router.currentRoute.queryParams[filterKey];
-        return value ? JSON.parse(value) : defaultValue || null;
+        const value =
+          this._router.currentRoute.queryParams[filterKey] ||
+          JSON.stringify(defaultValue);
+        return value ? JSON.parse(value) : null;
       },
 
       /**
