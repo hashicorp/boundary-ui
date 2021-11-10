@@ -16,7 +16,7 @@
  *
  * @example
  *
- *   export default class ScopesScopeAuthMethodsRoute extends Route {
+ *   export default class MyRoute extends Route {
  *
  *     @resourceFilterParam(['active', 'pending'], ['active'])
  *     status;
@@ -65,7 +65,7 @@ export function resourceFilterParam(allowedValues, defaultValue) {
        */
       get() {
         const value =
-          this._router.currentRoute.queryParams[filterKey] ||
+          this.paramsFor(this.routeName)[filterKey] ||
           JSON.stringify(defaultValue);
         return value ? JSON.parse(value) : null;
       },
