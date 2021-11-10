@@ -55,6 +55,7 @@ Router.map(function () {
             });
             this.route('new');
           });
+          this.route('managed-groups', function () {});
         });
         this.route('new');
       });
