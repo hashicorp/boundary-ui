@@ -64,7 +64,7 @@ export function resourceFilterParam(allowedValues, defaultValue) {
        * Returns the JSON-parsed query parameter value OR defaultValue.
        */
       get() {
-        const value = this.currentRoute.queryParams[filterName];
+        const value = this.router.currentRoute.queryParams[filterName];
         return value ? JSON.parse(value) : defaultValue || null;
       },
 
