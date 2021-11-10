@@ -56,7 +56,7 @@ export function resourceFilterParam(allowedValues, defaultValue) {
 
     // Store the allowed values for future lookup
     // (via `ResourceFilterParamHelper`).
-    target[filterOptionsName] = allowedValue;
+    target[filterOptionsName] = allowedValues;
 
     // Override the decorated attribute with a getter and setter.
     return {
