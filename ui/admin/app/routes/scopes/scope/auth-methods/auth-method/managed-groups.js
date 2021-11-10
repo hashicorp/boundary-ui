@@ -49,11 +49,9 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
   async save(managedGroup) {
-    debugger;
     await managedGroup.save();
     await this.transitionTo(
-      'scopes.scope.auth-methods.auth-method.managed-groups',
-      managedGroup
+      'scopes.scope.auth-methods.auth-method.managed-groups'
     );
     this.refresh();
   }

@@ -18,8 +18,10 @@
                 @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
                 @model={{managed-group.id}}
               >
-                {{managed-group.name}}
+                {{managed-group.displayName}}
               </LinkTo>
+            {{else}}
+              {{managed-group.displayName}}
             {{/if}}
           </row.headerCell>
           <row.cell>{{managed-group.description}}</row.cell>
