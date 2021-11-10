@@ -1,0 +1,11 @@
+{{#if (can 'delete model' @model)}}
+  <Rose::Dropdown
+    @text={{t 'actions.manage'}}
+    @dropdownRight={{true}}
+    as |dropdown|
+  >
+    <dropdown.button @style='danger' @disabled={{@model.canSave}}>
+      {{t 'resources.managed-group.actions.delete'}}
+    </dropdown.button>
+  </Rose::Dropdown>
+{{/if}}

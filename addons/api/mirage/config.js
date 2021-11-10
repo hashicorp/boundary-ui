@@ -521,6 +521,7 @@ export default function () {
       return managedGroups.where({ authMethodId });
     }
   );
+  this.get('/managed-groups/:id');
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

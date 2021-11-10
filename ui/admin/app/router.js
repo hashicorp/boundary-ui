@@ -55,7 +55,13 @@ Router.map(function () {
             });
             this.route('new');
           });
-          this.route('managed-groups', function () {});
+          this.route('managed-groups', function () {
+            this.route(
+              'managed-group',
+              { path: ':managed_group_id' },
+              function () {}
+            );
+          });
         });
         this.route('new');
       });

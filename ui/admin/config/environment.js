@@ -48,6 +48,7 @@ module.exports = function (environment) {
         account: '/accounts',
         'account.new': '/accounts/new',
         'auth-method': '/auth-methods',
+        'managed-groups': '/managed-groups',
         group: '/groups',
         'group.add-members': '/groups/add-members',
         'host-catalog': '/host-catalogs',
