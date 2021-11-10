@@ -357,3 +357,4 @@ managed-group:
   description: A managed group is a resource that represents a collection of accounts.
   actions:
     delete: Delete Managed Group
+    create: Create Managed Group

@@ -523,6 +523,19 @@ export default function () {
   );
   this.get('/managed-groups/:id');
   this.del('/managed-groups/:id');
+  this.post(
+    '/managed-groups/:idMethod',
+    function ({ managedGroups }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const managedGroup = managedGroups.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+        attributes: managedGroup.attributes,
+      };
+      return managedGroup.update(updatedAttrs);
+    }
+  );
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { confirm } from 'core/decorators/confirm';
+import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
+import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends Route {
@@ -31,6 +31,21 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
     if (isNew) {
       this.transitionTo('scopes.scope.auth-methods.auth-method.managed-groups');
     }
+  }
+
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
+  async save(managedGroup) {
+    await managedGroup.save();
+    await this.transitionTo(
+      'scopes.scope.auth-methods.auth-method.managed-groups.managed-group',
+      managedGroup
+    );
+    this.refresh();
   }
 
   /**

@@ -1,4 +1,11 @@
-<Rose::Form as |form|>
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
   <form.input
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
@@ -51,5 +58,11 @@
     @label={{t 'form.filter.label'}}
     readonly={{true}}
     @disabled={{true}}
+  />
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
   />
 </Rose::Form>
