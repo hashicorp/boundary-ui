@@ -52,12 +52,18 @@ export default class ResourceFilterParamHelper extends Helper {
     const owner = getOwner(this);
     // Filter options
     const route = owner.lookup(`route:${routeName}`);
-    const filterOptionsName = `filter-options-${name}`;
-    const value = route[filterOptionsName];
+    const filterAllowedValuesKey = `filter-allowed-values-${name}`;
+    const allowedValues = route[filterAllowedValuesKey];
     // Selected filters
     const rawValue = route[name];
-    const selectedValue = rawValue ? JSON.parse(rawValue) : null;
-    return { name, value, selectedValue };
+    let value = rawValue;
+    try {
+      value = JSON.parse(rawValue);
+    } catch (e) {
+      /* ignore parse errors */
+    }
+    const selectedValue = rawValue ? value : null;
+    return { name, allowedValues, selectedValue };
   }
 
   // =actions

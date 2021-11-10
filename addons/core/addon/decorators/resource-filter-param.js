@@ -40,8 +40,8 @@ export function resourceFilterParam(allowedValues, defaultValue) {
    * @return {object{get, set}}
    */
   return function (target, name /*, descriptor*/) {
-    const filterName = `filter-${name}`;
-    const filterOptionsName = `filter-options-${name}`;
+    const filterKey = `filter-${name}`;
+    const filterAllowedValuesKey = `filter-allowed-values-${name}`;
 
     // If the route has no query params specified yet, declare them.
     if (!Object.keys(target.queryParams).length) target.queryParams = {};
@@ -49,14 +49,14 @@ export function resourceFilterParam(allowedValues, defaultValue) {
     // Add the resource filter query parameter to the route.  Resource filter
     // param changes refresh the model but do not contribute to browser history.
     // See https://guides.emberjs.com/release/routing/query-params/
-    target.queryParams[filterName] = {
+    target.queryParams[filterKey] = {
       refreshModel: true,
       replace: true,
     };
 
     // Store the allowed values for future lookup
     // (via `ResourceFilterParamHelper`).
-    target[filterOptionsName] = allowedValues;
+    target[filterAllowedValuesKey] = allowedValues;
 
     // Override the decorated attribute with a getter and setter.
     return {
@@ -64,7 +64,7 @@ export function resourceFilterParam(allowedValues, defaultValue) {
        * Returns the JSON-parsed query parameter value OR defaultValue.
        */
       get() {
-        const value = this._router.currentRoute.queryParams[filterName];
+        const value = this._router.currentRoute.queryParams[filterKey];
         return value ? JSON.parse(value) : defaultValue || null;
       },
 
@@ -76,7 +76,7 @@ export function resourceFilterParam(allowedValues, defaultValue) {
        */
       set(value) {
         const queryParams = {};
-        queryParams[filterName] = JSON.stringify(value);
+        queryParams[filterKey] = JSON.stringify(value);
         this.transitionTo({ queryParams });
       },
     };
