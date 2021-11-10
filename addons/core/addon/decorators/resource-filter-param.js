@@ -9,7 +9,8 @@
  * Additionally, resource filter params may declare `allowedValues`, an array
  * containing the set of values the parameter may take.  While unenforced,
  * `allowedValues` are useful metadata about a resource filter and may be fetch
- * via `ResourceFilterParamHelper`.
+ * via `ResourceFilterParamHelper`.  An optional default value may be specified
+ * via `defaultValue` passed to the decorator.
  *
  * @see ResourceFilterParamHelper
  *
@@ -17,7 +18,7 @@
  *
  *   export default class ScopesScopeAuthMethodsRoute extends Route {
  *
- *     @resourceFilterParam(['active', 'pending'])
+ *     @resourceFilterParam(['active', 'pending'], ['active'])
  *     status;
  *
  *     @action
@@ -31,7 +32,7 @@
  *   }
  *
  */
-export function resourceFilterParam(allowedValues) {
+export function resourceFilterParam(allowedValues, defaultValue) {
   /**
    * @param {object} target
    * @param {string} name
@@ -55,16 +56,16 @@ export function resourceFilterParam(allowedValues) {
 
     // Store the allowed values for future lookup
     // (via `ResourceFilterParamHelper`).
-    target[filterOptionsName] = allowedValues;
+    target[filterOptionsName] = allowedValue;
 
     // Override the decorated attribute with a getter and setter.
     return {
       /**
-       * Returns the JSON-parsed query parameter value.
+       * Returns the JSON-parsed query parameter value OR defaultValue.
        */
       get() {
         const value = this.currentRoute.queryParams[filterName];
-        return value ? JSON.parse(value) : null;
+        return value ? JSON.parse(value) : defaultValue || null;
       },
 
       /**
