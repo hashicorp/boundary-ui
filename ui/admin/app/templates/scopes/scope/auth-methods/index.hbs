@@ -52,6 +52,38 @@
         {{/unless}}
       {{/if}}
 
+      {{#if (feature-flag 'filter')}}
+        <Rose::Toolbar>
+          <Rose::Form as |form|>
+            {{#with
+              (resource-filter-param 'scopes.scope.auth-methods' 'type')
+              as |filter|
+            }}
+              <Rose::Dropdown
+                @text={{t (concat 'form.' filter.name '.label')}}
+                @ignoreClickInside={{true}}
+                as |dropdown|
+              >
+                <form.checkboxGroup
+                  @name={{filter.name}}
+                  @items={{filter.allowedValues}}
+                  @selectedItems={{filter.selectedValue}}
+                  @onChange={{route-action 'filterBy' filter.name}}
+                  as |group|
+                >
+                  <dropdown.item>
+                    <group.checkbox
+                      @label={{group.item}}
+                      value={{group.item}}
+                    />
+                  </dropdown.item>
+                </form.checkboxGroup>
+              </Rose::Dropdown>
+            {{/with}}
+          </Rose::Form>
+        </Rose::Toolbar>
+      {{/if}}
+
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>

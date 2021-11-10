@@ -34,7 +34,6 @@ export class ResourceFilter {
         );
       })
       .flat();
-    console.log(this.#filterObject, clauses);
     return this.and(clauses);
   }
 
