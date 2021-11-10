@@ -1,4 +1,5 @@
 import factory from '../generated/factories/managed-group';
+import { random } from 'faker';
 import permissions from '../helpers/permissions';
 
 export default factory.extend({
@@ -11,4 +12,17 @@ export default factory.extend({
       'update',
       'delete',
     ],
+
+  attributes() {
+    switch (this.type) {
+      case 'oidc':
+        return {
+          filter: random.word(),
+        };
+      default:
+        return {
+          filter: '',
+        };
+    }
+  },
 });
