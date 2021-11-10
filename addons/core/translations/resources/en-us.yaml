@@ -358,3 +358,7 @@ managed-group:
   actions:
     delete: Delete Managed Group
     create: Create Managed Group
+  messages:
+    welcome:
+      title: Welcome to Managed Groups
+      description: Create and manage managed groups for an auth method.

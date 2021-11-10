@@ -21,7 +21,13 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   model() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     const { id: auth_method_id } = authMethod;
-    return this.store.query('managed-group', { auth_method_id });
+    const canListManagedGroups = this.can.can('list collection', authMethod, {
+      collection: 'managed-groups',
+    });
+
+    if (canListManagedGroups) {
+      return this.store.query('managed-group', { auth_method_id });
+    }
   }
 
   // =actions
