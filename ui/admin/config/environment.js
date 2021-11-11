@@ -48,6 +48,7 @@ module.exports = function (environment) {
         account: '/accounts',
         'account.new': '/accounts/new',
         'auth-method': '/auth-methods',
+        'managed-groups': '/managed-groups',
         group: '/groups',
         'group.add-members': '/groups/add-members',
         'host-catalog': '/host-catalogs',
@@ -96,6 +97,7 @@ module.exports = function (environment) {
       filter: false,
       capabilities: true,
       'credential-store': true,
+      'managed-groups': false,
     },
   };
 
@@ -133,6 +135,7 @@ module.exports = function (environment) {
     // Enable features in development
     ENV.featureFlags['capabilities'] = true;
     ENV.featureFlags['filter'] = true;
+    ENV.featureFlags['managed-groups'] = true;
   }
 
   if (environment === 'test') {
@@ -159,6 +162,7 @@ module.exports = function (environment) {
     // Enable tests for development features
     ENV.featureFlags['capabilities'] = true;
     ENV.featureFlags['filter'] = true;
+    ENV.featureFlags['managed-groups'] = true;
   }
 
   if (environment === 'production') {

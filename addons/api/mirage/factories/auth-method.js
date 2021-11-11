@@ -34,7 +34,9 @@ export default factory.extend({
         user.update({ accountIds: [id] });
       });
 
-      server.createList('managed-group', 2, { scope, authMethod });
+      if (type === 'oidc') {
+        server.createList('managed-group', 2, { scope, authMethod });
+      }
     },
   }),
 });
