@@ -147,7 +147,7 @@ form fields.
 
 ```html
 <Rose::Form as |form|>
-  <Rose::Dropdown @text="Dogs"   @ignoreClickInside={{true}} as |dropdown|>
+  <Rose::Dropdown @text="Items" @ignoreClickInside={{true}} as |dropdown|>
 <Rose::Form::Checkbox::Group
   @name='checkbox-group'
   @items={{this.items}}
@@ -168,10 +168,10 @@ form fields.
 
 
 <Preview>
-  <Story name="Basic Sample" height="10rem">{{
+  <Story name="Dropdown with Checkboxes" height="10rem">{{
   template: hbs`
   <Rose::Form as |form|>
-   <Rose::Dropdown   @ignoreClickInside={{true}} @text="Dogs" as |dropdown|>
+   <Rose::Dropdown   @ignoreClickInside={{true}} @text="Items" as |dropdown|>
     <Rose::Form::Checkbox::Group
       @name={{name}}
       @inline={{inline}}
