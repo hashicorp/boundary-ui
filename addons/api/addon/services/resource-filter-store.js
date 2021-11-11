@@ -10,7 +10,7 @@ import { inject as service } from '@ember/service';
  *     type: 'oidc',
  *     status: ['active', 'pending']
  *   });
- *   console.log(filter.queryExpression);
+ *   log(filter.queryExpression);
  *   // ("/item/type" == "oidc") and ("/item/status" == "active" or "/item/status" == "pending")
  */
 export class ResourceFilter {
