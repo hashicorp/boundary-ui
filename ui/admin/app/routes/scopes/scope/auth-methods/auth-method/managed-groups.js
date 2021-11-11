@@ -1,14 +1,19 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { confirm } from 'core/decorators/confirm';
+import { inject as service } from '@ember/service';
 import loading from 'ember-loading/decorator';
+import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends Route {
   // =services
 
+  @service intl;
   @service notify;
+  @service can;
+
+  //=methods
+
   /**
    *
    * @returns {Promise{[ManagedGroupsModel]}}
@@ -31,6 +36,24 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
     if (isNew) {
       this.transitionTo('scopes.scope.auth-methods.auth-method.managed-groups');
     }
+  }
+
+  /**
+   * Save a managed group in current scope.
+   * @param {ManagedGroupModel} managedGroup
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success'
+  )
+  async save(managedGroup) {
+    await managedGroup.save();
+    await this.transitionTo(
+      'scopes.scope.auth-methods.auth-method.managed-groups'
+    );
+    this.refresh();
   }
 
   /**

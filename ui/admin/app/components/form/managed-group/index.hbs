@@ -1,4 +1,11 @@
-<Rose::Form as |form|>
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
   <form.input
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
@@ -46,10 +53,27 @@
   </form.textarea>
 
   <form.input
+    @name='filter'
+    @type='text'
     @value={{@model.attributes.filter}}
-    @helperText={{t 'form.filter.help'}}
     @label={{t 'form.filter.label'}}
-    readonly={{true}}
-    @disabled={{true}}
+    @error={{@model.errors.attributes_filter}}
+    @helperText={{t 'form.filter.help'}}
+    as |field|
+  >
+    {{#if @model.errors.filter}}
+      <field.errors as |errors|>
+        {{#each @model.errors.filter as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.actions
+    @disabled={{if @model.cannotSave @model.cannotSave}}
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
   />
 </Rose::Form>

@@ -523,6 +523,7 @@ export default function () {
   );
   this.get('/managed-groups/:id');
   this.del('/managed-groups/:id');
+  this.post('/managed-groups');
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
