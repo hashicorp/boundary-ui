@@ -44,8 +44,6 @@
       height: sizing.rems(m);
       pointer-events: none;
       content: ' ';
-      border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-      border-radius: sizing.rems(xxxs);
     }
 
     &::after {

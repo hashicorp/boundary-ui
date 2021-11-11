@@ -69,4 +69,68 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       }
     }
   }
+
+  .rose-form-checkbox {
+    margin-bottom: sizing.rems(xxxs);
+    &.outline {
+      .rose-form-checkbox-label {
+        &::after {
+          border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+          border-radius: sizing.rems(xxxs);
+      }
+    }
+  }
+    .rose-form-checkbox-label{
+      display: block;
+      padding-top: 0.5625rem;
+      padding-bottom: 0.5625rem;
+      padding-left: 0.75rem;
+      padding-right: 2.25rem;
+      font-weight: 400;
+      &::after {
+        right: sizing.rems(xxs);
+        left: auto;
+        top: sizing.rems(xxs);
+        transform: scale(0.9);
+        position: absolute;
+        display: block;
+        width: sizing.rems(l);
+        height: sizing.rems(l);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      &::before {
+        position: absolute;
+        top: 0.5rem;
+        left: 0;
+        display: block;
+        width: 1rem;
+        height: 1rem;
+        pointer-events: none;
+        content: " ";
+        border: none;
+      }
+    }
+    .rose-form-checkbox-field {
+      &:not(:checked) {
+        ~ .rose-form-checkbox-label {
+          &::after {
+            opacity: 0.25;
+          }
+        }
+      }
+      &:checked {
+        ~ .rose-form-checkbox-label {
+          color: var(--action);
+        }
+      }
+
+      &:disabled {
+        ~ .rose-form-checkbox-label {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
 }

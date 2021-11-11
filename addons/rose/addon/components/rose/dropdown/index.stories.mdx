@@ -1,6 +1,7 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
-import { boolean } from '@storybook/addon-knobs';
+import { boolean, object } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 
 <Meta title="Rose|Dropdown" component="Dropdown" />
 
@@ -123,8 +124,8 @@ Dropdown indicator can be hidden using `showCaret` attribute.
 </Rose::Dropdown>
 ```
 
-Dropdowns also support radio buttons.  Currently, this is the only supported
-form field.
+Dropdowns also support radio buttons.  Currently, radio buttons and checkboxes are the supported
+form fields.
 
 ```html
 <Rose::Form as |form|>
@@ -143,6 +144,70 @@ form field.
   </form.radioGroup>
 </Rose::Form>
 ```
+
+```html
+<Rose::Form as |form|>
+  <Rose::Dropdown @text="Dogs"   @ignoreClickInside={{true}} as |dropdown|>
+<Rose::Form::Checkbox::Group
+  @name='checkbox-group'
+  @items={{this.items}}
+  @selectedItems={{this.selectedItems}}
+  @onChange={{fn this.onChange}}
+  as |group|
+>
+<dropdown.item>
+  <group.checkbox
+    @label={{group.item.name}}
+    value={{group.item.id}} />
+    </dropdown.item>
+</Rose::Form::Checkbox::Group>
+
+ </Rose::Dropdown>
+</Rose::Form>
+```
+
+
+<Preview>
+  <Story name="Basic Sample" height="10rem">{{
+  template: hbs`
+  <Rose::Form as |form|>
+   <Rose::Dropdown   @ignoreClickInside={{true}} @text="Dogs" as |dropdown|>
+    <Rose::Form::Checkbox::Group
+      @name={{name}}
+      @inline={{inline}}
+      @disabled={{disabled}}
+      @items={{items}}
+      @selectedItems={{selectedItems}}
+      @onChange={{onChange}}
+      as |group|
+    >
+    <dropdown.item>
+      <group.checkbox
+        @label={{group.item.name}}
+        value={{group.item.id}} 
+        @outline={{outline}}
+      />
+        </dropdown.item>
+    </Rose::Form::Checkbox::Group>
+     </Rose::Dropdown>
+    </Rose::Form>
+  `,
+  context: {
+    inline: boolean('inline', false),
+    disabled: boolean('disabled', false),
+    outline: boolean('outline', true),
+    items: object('items', [
+      { id: 1, name: 'Foo' },
+      { id: 2, name: 'Bar' },
+      { id: 3, name: 'Baz' },
+    ]),
+    selectedItems: object('selectedItems', []),
+    onChange: action('changed'),
+  }
+  }}</Story>
+</Preview>
+
+
 
 Closing dropdown after clicking inside it's content can be ignored using `ignoreClickInside`. This is useful when dropdown contains keyvalue items that users need to select/copy/interact with.
 
