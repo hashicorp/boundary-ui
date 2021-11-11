@@ -12,7 +12,18 @@
     <table.body as |body|>
       {{#each @model as |managed-group|}}
         <body.row as |row|>
-          <row.headerCell>{{managed-group.name}}</row.headerCell>
+          <row.headerCell>
+            {{#if (can 'read model' managed-group)}}
+              <LinkTo
+                @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
+                @model={{managed-group.id}}
+              >
+                {{managed-group.displayName}}
+              </LinkTo>
+            {{else}}
+              {{managed-group.displayName}}
+            {{/if}}
+          </row.headerCell>
           <row.cell>{{managed-group.description}}</row.cell>
           <row.cell>
             <Rose::Badge>{{managed-group.type}}</Rose::Badge>
