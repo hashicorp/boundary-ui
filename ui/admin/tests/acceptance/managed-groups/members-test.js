@@ -10,7 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | managed-groups | accounts', function (hooks) {
+module('Acceptance | managed-groups | members', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -28,7 +28,7 @@ module('Acceptance | managed-groups | accounts', function (hooks) {
     authMethods: null,
     managedGroups: null,
     managedGroup: null,
-    managedGroupAccounts: null,
+    managedGroupMembers: null,
   };
 
   hooks.beforeEach(function () {
@@ -54,16 +54,16 @@ module('Acceptance | managed-groups | accounts', function (hooks) {
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     urls.managedGroups = `${urls.authMethod}/managed-groups`;
     urls.managedGroup = `${urls.managedGroups}/${instances.managedGroup.id}`;
-    urls.managedGroupAccounts = `${urls.managedGroup}/accounts`;
+    urls.managedGroupMembers = `${urls.managedGroup}/members`;
   });
 
   test('User can navigate to index', async function (assert) {
     assert.expect(3);
-    const accountsCount = instances.managedGroup.memberIds.length;
-    await visit(urls.managedGroupAccounts);
+    const membersCount = instances.managedGroup.memberIds.length;
+    await visit(urls.managedGroupMembers);
     await a11yAudit();
-    assert.equal(currentURL(), urls.managedGroupAccounts);
-    assert.ok(accountsCount);
-    assert.equal(findAll('tbody tr').length, accountsCount);
+    assert.equal(currentURL(), urls.managedGroupMembers);
+    assert.ok(membersCount);
+    assert.equal(findAll('tbody tr').length, membersCount);
   });
 });
