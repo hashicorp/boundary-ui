@@ -50,6 +50,7 @@
           }}
             <Rose::Dropdown
               @text={{t (concat 'form.' filter.name '.label')}}
+              @count={{filter.selectedValue.length}}
               @ignoreClickInside={{true}}
               as |dropdown|
             >
