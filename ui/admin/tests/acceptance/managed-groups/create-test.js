@@ -4,6 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { Response } from 'miragejs';
 
 module('Acceptance | managed-groups | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -120,8 +121,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     assert.equal(currentURL(), urls.managedGroups);
   });
 
-  // Temporary skipping this test because we did not implement mandatory fields in manageg groups
-  test.skip('When user saving a new managed group with invalid fields displays error message', async function (assert) {
+  test('When user saving a new managed group with invalid fields displays error message', async function (assert) {
     assert.expect(2);
     this.server.post('/managed-groups', () => {
       return new Response(
