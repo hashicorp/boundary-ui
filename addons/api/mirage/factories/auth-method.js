@@ -15,6 +15,7 @@ export default factory.extend({
   authorized_collection_actions: () => {
     return {
       accounts: ['create', 'list'],
+      'managed-groups': ['create', 'list'],
     };
   },
   id: (i) => `auth-method-id-${i}`,
@@ -34,7 +35,9 @@ export default factory.extend({
         user.update({ accountIds: [id] });
       });
 
-      server.createList('managed-group', 2, { scope, authMethod });
+      if (type === 'oidc') {
+        server.createList('managed-group', 2, { scope, authMethod });
+      }
     },
   }),
 });

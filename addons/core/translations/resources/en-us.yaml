@@ -351,3 +351,14 @@ scope:
   title_plural: Scopes
   messages:
     cannot_read: While you do not have permission to read this scope, you may have permission to view resources within it.
+managed-group:
+  title: Managed Group
+  title_plural: Managed Groups
+  description: A managed group represents a collection of accounts.
+  actions:
+    delete: Delete Managed Group
+    create: Create Managed Group
+  messages:
+    welcome:
+      title: Welcome to Managed Groups
+      description: Create and manage managed groups for an auth method.

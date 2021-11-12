@@ -1,0 +1,86 @@
+{{#if @model}}
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.description.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+      </header.row>
+    </table.header>
+
+    <table.body as |body|>
+      {{#each @model as |managed-group|}}
+        <body.row as |row|>
+          <row.headerCell>
+            {{#if (can 'read model' managed-group)}}
+              <LinkTo
+                @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
+                @model={{managed-group.id}}
+              >
+                {{managed-group.displayName}}
+              </LinkTo>
+            {{else}}
+              {{managed-group.displayName}}
+            {{/if}}
+          </row.headerCell>
+          <row.cell>{{managed-group.description}}</row.cell>
+          <row.cell>
+            <Rose::Badge>{{managed-group.type}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <Copyable
+              @text={{managed-group.id}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{managed-group.id}}</code>
+            </Copyable>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+{{else}}
+  <Rose::Layout::Centered>
+    <Rose::Message
+      @title={{t 'resources.managed-group.messages.welcome.title'}}
+      as |message|
+    >
+      <message.description>
+
+        {{#if
+          (can 'list collection' this.authMethod collection='managed-groups')
+        }}
+          {{! Can list (at least): show default welcome message }}
+          {{t 'resources.managed-group.description'}}
+        {{else if (can
+          'create collection' this.authMethod collection='managed-groups'
+        )}}
+          {{! Can create only: show create but not list welcome message }}
+          {{t
+            'descriptions.create-but-not-list'
+            resource=(t 'resources.managed-group.title_plural')
+          }}
+        {{else}}
+          {{! Can neither list nor create }}
+          {{t
+            'descriptions.neither-list-nor-create'
+            resource=(t 'resources.managed-group.title_plural')
+          }}
+        {{/if}}
+      </message.description>
+
+      {{#if
+        (can 'create collection' this.authMethod collection='managed-groups')
+      }}
+        <message.link
+          @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
+        >
+          <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
+          {{t 'resources.managed-group.actions.create'}}
+        </message.link>
+      {{/if}}
+    </Rose::Message>
+  </Rose::Layout::Centered>
+{{/if}}
