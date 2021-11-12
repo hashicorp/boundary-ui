@@ -175,7 +175,6 @@ form fields.
    <Rose::Dropdown   @ignoreClickInside={{true}} @text="Items" as |dropdown|>
     <Rose::Form::Checkbox::Group
       @name={{name}}
-      @inline={{inline}}
       @disabled={{disabled}}
       @items={{items}}
       @selectedItems={{selectedItems}}
@@ -193,7 +192,6 @@ form fields.
     </Rose::Form>
   `,
   context: {
-    inline: boolean('inline', false),
     disabled: boolean('disabled', false),
     items: object('items', [
       { id: 1, name: 'Foo' },

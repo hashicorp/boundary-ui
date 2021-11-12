@@ -90,8 +90,9 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
         top: sizing.rems(xxs) + sizing.rems(xxxs);
         right: sizing.rems(xs);
         left: auto;
-        border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+        border: sizing.rems(xxxs) solid var(--ui-gray-subtler-2);
         border-radius: sizing.rems(xxxs);
+        transform: scale(0.66);
       }
 
       &::before {
@@ -120,6 +121,10 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
         ~ .rose-form-checkbox-label {
           color: var(--action);
           background-color: var(--action-subtler-1h);
+          &::after {
+            border-color: var(--action);
+            background-size: sizing.rems(m);
+          }
         }
       }
 
