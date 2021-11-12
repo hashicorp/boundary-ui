@@ -368,9 +368,3 @@ managed-group:
     messages:
       title: Welcome to Members
       description: No members in this managed group.
-    # member:
-    #   title: Welcome to Members
-    #   description: No members in this managed group.
-# member:
-#   title: Member
-#   title_plural: Members
