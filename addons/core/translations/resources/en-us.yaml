@@ -364,7 +364,7 @@ managed-group:
       description: Create and manage managed groups for an auth method.
     member:
       title: Welcome to Members
-      description: No accounts in this managed group.
+      description: No members in this managed group.
 member:
   title: Member
   title_plural: Members
