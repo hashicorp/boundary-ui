@@ -73,7 +73,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
   .rose-form-checkbox {
     color: currentColor;
     margin-bottom: 0;
-    .rose-form-checkbox-label{
+    .rose-form-checkbox-label {
       display: block;
       margin: -#{$paddingY} -#{$paddingX};
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
@@ -102,53 +102,37 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
         width: sizing.rems(m);
         height: sizing.rems(m);
         pointer-events: none;
-        content: " ";
+        content: ' ';
         border: none;
       }
     }
+
     .rose-form-checkbox-field {
-      &:not(:disabled) {
-        &:hover {
-          ~ .rose-form-checkbox-label {
-            &::after {
-              border-color:  var(--ui-gray);
-            }
-          }
-        }
-      }
-      &:disabled {
+      &:hover {
         ~ .rose-form-checkbox-label {
           &::after {
-            border-color: var(--ui-gray-subtler-2);
-            background-color: var(--ui-gray-subtler-4);
-          }
-        }
-  
-        &:checked {
-          ~ .rose-form-checkbox-label {
-            &::after {
-              background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 8 8'><path fill='%23bac1cc' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
-            }
+            border-color: var(--ui-gray);
           }
         }
       }
-      &:not(:checked) {
-        ~ .rose-form-radio-label {
-          &::after {
-            opacity: 0.25;
-          }
-        }
-      }
+
       &:checked {
-        ~ .rose-form-radio-label {
+        ~ .rose-form-checkbox-label {
           color: var(--action);
           background-color: var(--action-subtler-1h);
         }
       }
 
       &:disabled {
-        ~ .rose-form-radio-label {
+        ~ .rose-form-checkbox-label {
           opacity: 0.5;
+          &::after {
+            border-color: var(--ui-gray-subtler-2);
+            background-color: var(--ui-gray-subtler-4);
+          }
+          &::before {
+            background: none;
+          }
         }
       }
     }
