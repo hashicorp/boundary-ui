@@ -15,6 +15,7 @@ export default factory.extend({
   authorized_collection_actions: () => {
     return {
       accounts: ['create', 'list'],
+      'managed-groups': ['create', 'list'],
     };
   },
   id: (i) => `auth-method-id-${i}`,

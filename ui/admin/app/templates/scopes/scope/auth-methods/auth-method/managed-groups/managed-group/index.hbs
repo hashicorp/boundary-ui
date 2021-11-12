@@ -1,1 +1,5 @@
-<Form::ManagedGroup @model={{@model}} />
+<Form::ManagedGroup
+  @model={{@model}}
+  @submit={{route-action 'save' @model}}
+  @cancel={{route-action 'cancel' @model}}
+/>
