@@ -79,7 +79,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-left: sizing.rems(s);
-      padding-right: sizing.rems(xl);
+      padding-right: sizing.rems(xl) + sizing.rems(l);
       font-weight: normal;
 
       &:hover {
