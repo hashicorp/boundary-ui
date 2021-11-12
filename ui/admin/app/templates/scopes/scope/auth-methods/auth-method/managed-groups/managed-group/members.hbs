@@ -1,4 +1,4 @@
-{{page-title (t 'resources.member.title_plural')}}
+{{page-title (t 'resources.managed-group.member.title_plural')}}
 
 {{#if @model}}
   <Rose::Table as |table|>
@@ -51,11 +51,11 @@
 {{else}}
   <Rose::Layout::Centered>
     <Rose::Message
-      @title={{t 'resources.managed-group.messages.members.title'}}
+      @title={{t 'resources.managed-group.member.messages.title'}}
       as |message|
     >
       <message.description>
-        {{t 'resources.managed-group.messages.members.description'}}
+        {{t 'resources.managed-group.member.messages.description'}}
       </message.description>
     </Rose::Message>
   </Rose::Layout::Centered>

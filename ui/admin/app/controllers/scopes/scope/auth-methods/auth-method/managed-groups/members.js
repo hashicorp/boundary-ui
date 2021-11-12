@@ -12,6 +12,6 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsMembersControl
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.member.title_plural');
+    return this.intl.t('resources.managed-group.member.title_plural');
   }
 }
