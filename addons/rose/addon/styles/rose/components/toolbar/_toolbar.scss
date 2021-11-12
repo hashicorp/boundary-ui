@@ -6,8 +6,11 @@ $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-toolbar {
   background-color: var(--ui-gray-subtler-6);
+  padding: $xxs + $xxxxs;
 
-  .rose-form {
-    padding: $xxs + $xxxxs;
+  button {
+    display: inline-block;
+    font-weight: normal;
+    vertical-align: middle;
   }
 }

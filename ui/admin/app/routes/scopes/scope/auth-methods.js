@@ -197,8 +197,21 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     array.addObject(value);
   }
 
+  /**
+   * Sets the specified resource filter field to the specified value.
+   * @param {string} field
+   * @param value
+   */
   @action
   filterBy(field, value) {
     this[field] = value;
+  }
+
+  /**
+   * Clears and filter selections.
+   */
+  @action
+  clearAllFilters() {
+    this.type = [];
   }
 }

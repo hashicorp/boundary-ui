@@ -72,6 +72,16 @@
               </form.checkboxGroup>
             </Rose::Dropdown>
           {{/with}}
+
+          {{#if
+            (has-resource-filter-param-selections 'scopes.scope.auth-methods')
+          }}
+            <Rose::Button
+              @style='inline-link-action'
+              @iconLeft='flight-icons/svg/x-16'
+              {{on 'click' (route-action 'clearAllFilters')}}
+            >{{t 'actions.clear-all-filters'}}</Rose::Button>
+          {{/if}}
         </Rose::Form>
       </Rose::Toolbar>
     {{/if}}
