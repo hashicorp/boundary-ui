@@ -36,7 +36,17 @@ export default factory.extend({
       });
 
       if (type === 'oidc') {
-        server.createList('managed-group', 2, { scope, authMethod });
+        server
+          .createList('managed-group', 2, { scope, authMethod })
+          .map((managedGroup) => {
+            const accounts = server.createList('account', 2, {
+              scope,
+              type,
+              authMethod,
+            });
+            const accountIds = accounts.map((account) => account.id);
+            managedGroup.update({ memberIds: accountIds });
+          });
       }
     },
   }),
