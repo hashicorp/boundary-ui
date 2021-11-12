@@ -21,7 +21,13 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   model() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     const { id: auth_method_id } = authMethod;
-    return this.store.query('managed-group', { auth_method_id });
+    const canListManagedGroups = this.can.can('list collection', authMethod, {
+      collection: 'managed-groups',
+    });
+
+    if (canListManagedGroups) {
+      return this.store.query('managed-group', { auth_method_id });
+    }
   }
 
   // =actions
@@ -50,9 +56,16 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   )
   async save(managedGroup) {
     await managedGroup.save();
-    await this.transitionTo(
-      'scopes.scope.auth-methods.auth-method.managed-groups'
-    );
+    if (this.can.can('read model', managedGroup)) {
+      await this.transitionTo(
+        'scopes.scope.auth-methods.auth-method.managed-groups.managed-group',
+        managedGroup
+      );
+    } else {
+      await this.transitionTo(
+        'scopes.scope.auth-methods.auth-method.managed-groups'
+      );
+    }
     this.refresh();
   }
 
@@ -65,7 +78,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   @confirm('questions.delete-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
-  async deleteManagedGroup(managedGroup) {
+  async delete(managedGroup) {
     await managedGroup.destroyRecord();
     await this.replaceWith(
       'scopes.scope.auth-methods.auth-method.managed-groups'
