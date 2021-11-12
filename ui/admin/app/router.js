@@ -59,7 +59,9 @@ Router.map(function () {
             this.route(
               'managed-group',
               { path: ':managed_group_id' },
-              function () {}
+              function () {
+                this.route('members');
+              }
             );
             this.route('new');
           });

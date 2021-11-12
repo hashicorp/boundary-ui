@@ -123,7 +123,6 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
     await click(`.rose-dropdown[open] input[value="${newState}"]`);
-    // debugger;
     const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
     assert.notEqual(
       newState,
