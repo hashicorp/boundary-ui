@@ -26,6 +26,11 @@ export class ResourceFilter {
    */
   get queryExpression() {
     const clauses = Object.keys(this.#filterObject)
+      .filter((key) => {
+        const value = this.#filterObject[key];
+        const valuesArray = Array.isArray(value) ? value : [value];
+        return value && valuesArray.length;
+      })
       .map((key) => {
         const value = this.#filterObject[key];
         const valuesArray = Array.isArray(value) ? value : [value];
@@ -34,6 +39,7 @@ export class ResourceFilter {
         );
       })
       .flat();
+
     return this.and(clauses);
   }
 
