@@ -159,7 +159,6 @@ form fields.
   <group.checkbox
     @label={{group.item.name}}
     value={{group.item.id}} 
-    @outline={{outline}}
     />
     </dropdown.item>
 </Rose::Form::Checkbox::Group>
@@ -186,8 +185,7 @@ form fields.
     <dropdown.item>
       <group.checkbox
         @label={{group.item.name}}
-        value={{group.item.id}} 
-        @outline={{outline}}
+        value={{group.item.id}}
       />
         </dropdown.item>
     </Rose::Form::Checkbox::Group>
@@ -197,7 +195,6 @@ form fields.
   context: {
     inline: boolean('inline', false),
     disabled: boolean('disabled', false),
-    outline: boolean('outline', true),
     items: object('items', [
       { id: 1, name: 'Foo' },
       { id: 2, name: 'Bar' },

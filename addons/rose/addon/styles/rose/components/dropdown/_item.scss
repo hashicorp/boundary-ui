@@ -71,35 +71,29 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
   }
 
   .rose-form-checkbox {
-    margin-bottom: sizing.rems(xxxs);
-    &.outline {
-      .rose-form-checkbox-label {
-        &::after {
-          border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-          border-radius: sizing.rems(xxxs);
-      }
-    }
-  }
+    color: currentColor;
+    margin-bottom: 0;
     .rose-form-checkbox-label{
       display: block;
-      padding-top: 0.5625rem;
-      padding-bottom: 0.5625rem;
-      padding-left: 0.75rem;
-      padding-right: 2.25rem;
-      font-weight: 400;
-      &::after {
-        right: sizing.rems(xxs);
-        left: auto;
-        top: sizing.rems(xxs);
-        transform: scale(0.9);
-        position: absolute;
-        display: block;
-        width: sizing.rems(l);
-        height: sizing.rems(l);
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
+      margin: -#{$paddingY} -#{$paddingX};
+      padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
+      padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
+      padding-left: sizing.rems(s);
+      padding-right: sizing.rems(xl);
+      font-weight: normal;
+
+      &:hover {
+        background-color: var(--ui-gray-subtler-5);
       }
+
+      &::after {
+        top: sizing.rems(xxs) + sizing.rems(xxxs);
+        right: sizing.rems(xs);
+        left: auto;
+        border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+        border-radius: sizing.rems(xxxs);
+      }
+
       &::before {
         position: absolute;
         top: sizing.rems(xs);
@@ -113,21 +107,47 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       }
     }
     .rose-form-checkbox-field {
-      &:not(:checked) {
+      &:not(:disabled) {
+        &:hover {
+          ~ .rose-form-checkbox-label {
+            &::after {
+              border-color:  var(--ui-gray);
+            }
+          }
+        }
+      }
+      &:disabled {
         ~ .rose-form-checkbox-label {
+          &::after {
+            border-color: var(--ui-gray-subtler-2);
+            background-color: var(--ui-gray-subtler-4);
+          }
+        }
+  
+        &:checked {
+          ~ .rose-form-checkbox-label {
+            &::after {
+              background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 8 8'><path fill='%23bac1cc' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
+            }
+          }
+        }
+      }
+      &:not(:checked) {
+        ~ .rose-form-radio-label {
           &::after {
             opacity: 0.25;
           }
         }
       }
       &:checked {
-        ~ .rose-form-checkbox-label {
+        ~ .rose-form-radio-label {
           color: var(--action);
+          background-color: var(--action-subtler-1h);
         }
       }
 
       &:disabled {
-        ~ .rose-form-checkbox-label {
+        ~ .rose-form-radio-label {
           opacity: 0.5;
         }
       }
