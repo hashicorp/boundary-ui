@@ -363,7 +363,7 @@ managed-group:
       title: Welcome to Managed Groups
       description: Create and manage managed groups for an auth method.
     member:
-      title: Welcome to Accounts
+      title: Welcome to Members
       description: No accounts in this managed group.
 member:
   title: Member
