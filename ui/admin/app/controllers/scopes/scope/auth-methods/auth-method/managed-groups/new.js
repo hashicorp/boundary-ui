@@ -7,8 +7,9 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsNewController 
   @service intl;
 
   // =attributes
+
   /**
-   * Translated new managed group breadcrumb
+   * Translated new account breadcrumb
    * @type {string}
    */
   get breadCrumb() {
