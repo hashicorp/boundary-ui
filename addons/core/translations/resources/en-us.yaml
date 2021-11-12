@@ -354,3 +354,7 @@ scope:
 managed-group:
   title: Managed Group
   title_plural: Managed Groups
+  description: A managed group represents a collection of accounts.
+  actions:
+    delete: Delete Managed Group
+    create: Create Managed Group

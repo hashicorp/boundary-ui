@@ -5,6 +5,14 @@ import { A } from '@ember/array';
 
 export default class ManagedGroupModel extends GeneratedManagedGroupModel {
   // =attributes
+
+  // =error attributes
+  // These attributes exist solely to capture errors on nested fields.
+  // See the application adapter's error normalization method for
+  // more information.
+
+  @attr('string', { readOnly: true }) attributes_filter;
+
   /**
    * Members is read-only under normal circumstances.  But members can
    * be persisted via calls to `addMembers()` or `removeMembers()`.

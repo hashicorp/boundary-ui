@@ -11,15 +11,4 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   version: () => datatype.number(),
-  type: 'oidc',
-  attributes: function () {
-    switch (this.type) {
-      case 'oidc':
-        return {
-          filter: random.words(),
-        };
-      default:
-        return;
-    }
-  },
 });
