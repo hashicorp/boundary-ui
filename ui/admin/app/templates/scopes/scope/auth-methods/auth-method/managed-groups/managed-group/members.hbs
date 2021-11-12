@@ -1,0 +1,62 @@
+{{page-title (t 'resources.managed-group.member.title_plural')}}
+
+{{#if @model}}
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.issuer.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.subject.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.email.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.full_name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @model as |member|}}
+        <body.row as |row|>
+          <row.headerCell scope='row'>
+            {{member.accountName}}
+            <p>{{member.description}}</p>
+          </row.headerCell>
+          <row.cell>
+            <code>{{member.attributes.issuer}}</code>
+          </row.cell>
+          <row.cell>
+            <code>{{member.attributes.subject}}</code>
+          </row.cell>
+          <row.cell>
+            <code>{{member.attributes.email}}</code>
+          </row.cell>
+          <row.cell>
+            {{member.attributes.full_name}}
+          </row.cell>
+          <row.cell>
+            <Rose::Badge>{{member.type}}</Rose::Badge>
+          </row.cell>
+          <row.cell>
+            <Copyable
+              @text={{member.id}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{member.id}}</code>
+            </Copyable>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+{{else}}
+  <Rose::Layout::Centered>
+    <Rose::Message
+      @title={{t 'resources.managed-group.member.messages.title'}}
+      as |message|
+    >
+      <message.description>
+        {{t 'resources.managed-group.member.messages.description'}}
+      </message.description>
+    </Rose::Message>
+  </Rose::Layout::Centered>
+{{/if}}
