@@ -39,7 +39,6 @@ export class ResourceFilter {
         );
       })
       .flat();
-
     return this.and(clauses);
   }
 
