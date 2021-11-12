@@ -60,7 +60,6 @@ Router.map(function () {
               'managed-group',
               { path: ':managed_group_id' },
               function () {
-                this.route('accounts');
                 this.route('members');
               }
             );
