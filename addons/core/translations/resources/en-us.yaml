@@ -362,3 +362,6 @@ managed-group:
     welcome:
       title: Welcome to Managed Groups
       description: Create and manage managed groups for an auth method.
+    accounts:
+      title: Welcome to Accounts
+      description: No accounts in this managed group.

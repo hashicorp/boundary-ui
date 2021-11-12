@@ -77,8 +77,17 @@ export default function () {
   // Auth Method Accounts
   this.get(
     '/accounts',
-    ({ accounts }, { queryParams: { auth_method_id: authMethodId } }) => {
-      return accounts.where({ authMethodId });
+    (
+      { accounts },
+      { queryParams: { auth_method_id: authMethodId, filter } }
+    ) => {
+      let resultSet;
+      if (authMethodId) {
+        resultSet = accounts.where({ authMethodId });
+      } else {
+        resultSet = accounts.all();
+      }
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.post('/accounts');
