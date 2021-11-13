@@ -69,4 +69,78 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       }
     }
   }
+
+  .rose-form-checkbox {
+    color: currentColor;
+    margin-bottom: 0;
+    .rose-form-checkbox-label {
+      display: block;
+      margin: -#{$paddingY} -#{$paddingX};
+      padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
+      padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
+      padding-left: sizing.rems(s);
+      padding-right: sizing.rems(xl) + sizing.rems(l);
+      font-weight: normal;
+
+      &:hover {
+        background-color: var(--ui-gray-subtler-5);
+      }
+
+      &::after {
+        //top: 0.25rem
+        top: sizing.rems(xxs);
+        right: sizing.rems(xs);
+        left: auto;
+        border: sizing.rems(xxxs) solid var(--ui-gray-subtler-2);
+        border-radius: sizing.rems(xxxs);
+        transform: scale(0.66);
+      }
+
+      &::before {
+        position: absolute;
+        top: sizing.rems(xs);
+        left: 0;
+        display: block;
+        width: sizing.rems(m);
+        height: sizing.rems(m);
+        pointer-events: none;
+        content: ' ';
+        border: none;
+      }
+    }
+
+    .rose-form-checkbox-field {
+      &:hover {
+        ~ .rose-form-checkbox-label {
+          &::after {
+            border-color: var(--ui-gray);
+          }
+        }
+      }
+
+      &:checked {
+        ~ .rose-form-checkbox-label {
+          color: var(--action);
+          background-color: var(--action-subtler-1h);
+          &::after {
+            border-color: var(--action);
+            background-size: sizing.rems(m);
+          }
+        }
+      }
+
+      &:disabled {
+        ~ .rose-form-checkbox-label {
+          opacity: 0.5;
+          &::after {
+            border-color: var(--ui-gray-subtler-2);
+            background-color: var(--ui-gray-subtler-4);
+          }
+          &::before {
+            background: none;
+          }
+        }
+      }
+    }
+  }
 }
