@@ -79,7 +79,7 @@ export default class ScopesScopeSessionsRoute extends Route {
               this.store.findRecord('target', session.target_id)
             )
           : null,
-          }))
+      }))
     );
     // Sort sessions by time created...
     let sortedSessionAggregates =
