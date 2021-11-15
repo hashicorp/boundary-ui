@@ -57,8 +57,6 @@ export default class ScopesScopeSessionsRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-  //  const sessions = await this.store.query('session', { scope_id });
-
     const { status } = this;
     const sessions = await this.resourceFilterStore.queryBy(
       'session',
@@ -91,7 +89,6 @@ export default class ScopesScopeSessionsRoute extends Route {
       ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status === 'active'),
       ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status !== 'active'),
     ];
-    console.log(sessionAggregates, 'sorted aggrefa')
     return sortedSessionAggregates;
   }
 
@@ -129,7 +126,6 @@ export default class ScopesScopeSessionsRoute extends Route {
    */
     @action
     filterBy(field, value) {
-      console.log(field, value, 'actionnnn')
       this[field] = value;
     }
   

@@ -13,60 +13,50 @@
   </page.header>
 
   <page.body>
-    {{{log  @model (has-resource-filter-param-selections 'scopes.scope.sessions') 'ppppp'}}}
-    {{{log (resource-filter-param 'scopes.scope.sessions' 'status') 'ferfre' }}}
+    {{#if
+      (or @model (has-resource-filter-param-selections 'scopes.scope.sessions'))
+    }}
+      <Rose::Toolbar>
+        <Rose::Form as |form|>
+          {{#with
+            (resource-filter-param 'scopes.scope.sessions' 'status')
+            as |filter|
+          }}
+            <Rose::Dropdown
+              @text={{t (concat 'form.' filter.name '.label')}}
+              @count={{filter.selectedValue.length}}
+              @ignoreClickInside={{true}}
+              as |dropdown|
+            >
 
-      {{#if
-        (or
-          @model
-          (has-resource-filter-param-selections 'scopes.scope.sessions')
-        )
-      }}
-        <Rose::Toolbar>
-          <Rose::Form as |form|>
-            {{#with
-              (resource-filter-param 'scopes.scope.sessions' 'status')
-              as |filter|
-            }}
-              <Rose::Dropdown
-                @text={{t (concat 'form.' filter.name '.label')}}
-                @count={{filter.selectedValue.length}}
-                @ignoreClickInside={{true}}
-                as |dropdown|
+              <form.checkboxGroup
+                @name={{filter.name}}
+                @items={{filter.allowedValues}}
+                @selectedItems={{filter.selectedValue}}
+                @onChange={{route-action 'filterBy' filter.name}}
+                as |group|
               >
-            
-                <form.checkboxGroup
-                  @name={{filter.name}}
-                  @items={{filter.allowedValues}}
-                  @selectedItems={{filter.selectedValue}}
-                  @onChange={{route-action 'filterBy' filter.name}}
-                  as |group|
-                >
-                  <dropdown.item>
-                    <group.checkbox
-                      @label={{t
-                        (concat 'resources.session.status.' group.item)
-                      }}
-                      value={{group.item}}
-                    />
-                  </dropdown.item>
-                </form.checkboxGroup>
-              </Rose::Dropdown>
-            {{/with}}
+                <dropdown.item>
+                  <group.checkbox
+                    @label={{t (concat 'resources.session.status.' group.item)}}
+                    value={{group.item}}
+                  />
+                </dropdown.item>
+              </form.checkboxGroup>
+            </Rose::Dropdown>
+          {{/with}}
 
-            {{#if
-              (has-resource-filter-param-selections 'scopes.scope.sessions')
-            }}
-              <Rose::Button
-                @style='inline-link-action'
-                @iconLeft='flight-icons/svg/x-16'
-                {{on 'click' (route-action 'clearAllFilters')}}
-              >{{t 'actions.clear-all-filters'}}
-              </Rose::Button>
-            {{/if}}
-          </Rose::Form>
-        </Rose::Toolbar>
-      {{/if}}
+          {{#if (has-resource-filter-param-selections 'scopes.scope.sessions')}}
+            <Rose::Button
+              @style='inline-link-action'
+              @iconLeft='flight-icons/svg/x-16'
+              {{on 'click' (route-action 'clearAllFilters')}}
+            >{{t 'actions.clear-all-filters'}}
+            </Rose::Button>
+          {{/if}}
+        </Rose::Form>
+      </Rose::Toolbar>
+    {{/if}}
 
     {{#if @model}}
       <Rose::Table as |table|>
@@ -139,9 +129,7 @@
           {{/each}}
         </table.body>
       </Rose::Table>
-      {{else if (has-resource-filter-param-selections
-      'scopes.scope.sessions'
-    )}}
+    {{else if (has-resource-filter-param-selections 'scopes.scope.sessions')}}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
           <message.description>
@@ -149,8 +137,8 @@
           </message.description>
         </Rose::Message>
       </Rose::Layout::Centered>
-      {{else}}
-       <Rose::Layout::Centered>
+    {{else}}
+      <Rose::Layout::Centered>
         <Rose::Message
           @title={{t 'resources.session.messages.none.title'}}
           as |message|
@@ -160,6 +148,6 @@
           </message.description>
         </Rose::Message>
       </Rose::Layout::Centered>
-{{/if}}
+    {{/if}}
   </page.body>
 </Rose::Layout::Page>

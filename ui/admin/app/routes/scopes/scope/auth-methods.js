@@ -39,8 +39,6 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       this.can.can('list collection', scope, { collection: 'auth-methods' })
     ) {
       const { type } = this;
-      console.log(type, 'what is type in authhh')
-
       return this.resourceFilterStore.queryBy(
         'auth-method',
         { type },

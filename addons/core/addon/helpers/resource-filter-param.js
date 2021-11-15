@@ -49,19 +49,14 @@ export default class ResourceFilterParamHelper extends Helper {
    * @return {object}
    */
   compute([routeName, name]) {
-    console.log(routeName, name, 'route namess')
     const owner = getOwner(this);
     // Filter options
     const route = owner.lookup(`route:${routeName}`);
     const filterAllowedValuesKey = `filter-allowed-values-${name}`;
-    console.log(route, filterAllowedValuesKey, 'foiltallowed values')
     const allowedValues = route[filterAllowedValuesKey];
-    console.log(allowedValues, 'allowed values')
-
     // Selected filters
     const rawValue = route[name];
     const selectedValue = rawValue || null;
-    console.log(name, allowedValues, selectedValue, 'pfcrrfe')
     return { name, allowedValues, selectedValue };
   }
 
