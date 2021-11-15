@@ -18,6 +18,9 @@
 
     <span class="rose-dropdown-trigger-text">
       {{@text}}
+      {{#if @count}}
+        <Rose::Badge>{{@count}}</Rose::Badge>
+      {{/if}}
     </span>
 
   </summary>

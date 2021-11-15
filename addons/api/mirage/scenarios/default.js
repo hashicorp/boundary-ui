@@ -22,7 +22,7 @@ export default function (server) {
   // Auth
   const globalAuthMethods = server.createList(
     'auth-method',
-    4,
+    1,
     { scope: globalScope },
     'withAccountsAndUsersAndManagedGroups'
   );

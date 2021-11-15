@@ -39,6 +39,11 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
     border-radius: sizing.rems(xxxs);
     white-space: nowrap;
 
+    .rose-badge {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
     // Hide default twistie triangle
     // Webkit / Chromium
     &::-webkit-details-marker {
@@ -98,6 +103,10 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
 
   &[open] > .rose-dropdown-trigger {
     background-color: var(--ui-gray-subtler-4);
+
+    .rose-badge {
+      --background-color: var(--ui-gray-subtler-3);
+    }
   }
 
   .rose-dropdown-content {

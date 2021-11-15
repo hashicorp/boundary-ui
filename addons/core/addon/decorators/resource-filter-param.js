@@ -46,6 +46,9 @@ export function resourceFilterParam(allowedValues, defaultValue) {
     // If the route has no query params specified yet, declare them.
     if (!Object.keys(target.queryParams).length) target.queryParams = {};
 
+    // If the route has no resource filters list specified yet, create one.
+    if (!target.resourceFilterParams) target.resourceFilterParams = [];
+
     // Add the resource filter query parameter to the route.  Resource filter
     // param changes refresh the model but do not contribute to browser history.
     // See https://guides.emberjs.com/release/routing/query-params/
@@ -53,6 +56,9 @@ export function resourceFilterParam(allowedValues, defaultValue) {
       refreshModel: true,
       replace: true,
     };
+
+    // Note the name of this filter param.
+    target.resourceFilterParams.push(name);
 
     // Store the allowed values for future lookup
     // (via `ResourceFilterParamHelper`).

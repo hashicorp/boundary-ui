@@ -52,7 +52,7 @@ export class ResourceFilter {
    * @return {string}
    */
   equals(key, value) {
-    return `"/item/${key}" == "${value}"`;
+    return value !== null ? `"/item/${key}" == "${value}"` : null;
   }
 
   /**
@@ -76,7 +76,7 @@ export class ResourceFilter {
    * @return {string}
    */
   parenthetical(expression) {
-    return `(${expression})`;
+    return expression ? `(${expression})` : null;
   }
 }
 

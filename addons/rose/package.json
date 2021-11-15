@@ -35,7 +35,8 @@
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-radio-button": "^2.0.1",
     "ember-uuid": "^2.1.0",
-    "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
+    "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774",
+    "ember-composable-helpers": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -65,7 +66,6 @@
     "ember-cli-sass": "^10.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
-    "ember-composable-helpers": "^4.5.0",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.1",
     "ember-inline-svg": "^1.0.0",

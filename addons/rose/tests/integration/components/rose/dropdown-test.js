@@ -23,6 +23,11 @@ module('Integration | Component | rose/dropdown', function (hooks) {
     assert.equal(find('.rose-dropdown-trigger').textContent.trim(), 'Click me');
   });
 
+  test('it supports a count', async function (assert) {
+    await render(hbs`<Rose::Dropdown @text="Click me" @count="2" />`);
+    assert.equal(find('.rose-badge').textContent.trim(), '2');
+  });
+
   test('it supports an icon', async function (assert) {
     await render(
       hbs`<Rose::Dropdown @icon="flight-icons/svg/user-circle-16" />`

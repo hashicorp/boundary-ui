@@ -55,8 +55,9 @@ export default function () {
 
   this.get(
     '/auth-methods',
-    ({ authMethods }, { queryParams: { scope_id: scopeId } }) => {
-      return authMethods.where({ scopeId });
+    ({ authMethods }, { queryParams: { scope_id: scopeId, filter } }) => {
+      const resultSet = authMethods.where({ scopeId });
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.post('/auth-methods');
