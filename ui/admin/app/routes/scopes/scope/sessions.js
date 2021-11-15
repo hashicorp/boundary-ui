@@ -6,6 +6,7 @@ import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
+import { resourceFilterParam } from 'core/decorators/resource-filter-param';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -16,8 +17,11 @@ export default class ScopesScopeSessionsRoute extends Route {
   @service intl;
   @service notify;
   @service session;
+  @service resourceFilterStore;
 
   // =attributes
+
+  @resourceFilterParam(['active', 'pending', 'canceling', 'terminated']) status;
 
   /**
    * A simple Ember Concurrency-based polling task that refreshes the route
@@ -53,7 +57,15 @@ export default class ScopesScopeSessionsRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-    const sessions = await this.store.query('session', { scope_id });
+  //  const sessions = await this.store.query('session', { scope_id });
+
+    const { status } = this;
+    const sessions = await this.resourceFilterStore.queryBy(
+      'session',
+      { status },
+      { scope_id }
+    );
+
     const sessionAggregates = await all(
       sessions.map(session => hash({
         session,
@@ -69,7 +81,7 @@ export default class ScopesScopeSessionsRoute extends Route {
               this.store.findRecord('target', session.target_id)
             )
           : null,
-      }))
+          }))
     );
     // Sort sessions by time created...
     let sortedSessionAggregates =
@@ -79,6 +91,7 @@ export default class ScopesScopeSessionsRoute extends Route {
       ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status === 'active'),
       ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status !== 'active'),
     ];
+    console.log(sessionAggregates, 'sorted aggrefa')
     return sortedSessionAggregates;
   }
 
@@ -109,4 +122,22 @@ export default class ScopesScopeSessionsRoute extends Route {
     await session.cancelSession();
   }
 
+   /**
+   * Sets the specified resource filter field to the specified value.
+   * @param {string} field
+   * @param value
+   */
+    @action
+    filterBy(field, value) {
+      console.log(field, value, 'actionnnn')
+      this[field] = value;
+    }
+  
+    /**
+     * Clears and filter selections.
+     */
+    @action
+    clearAllFilters() {
+      this.status = [];
+    }
 }

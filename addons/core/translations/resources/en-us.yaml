@@ -135,6 +135,11 @@ session:
   title_plural: Sessions
   active_plural: Active Sessions
   description: A session is a connection to a target initiated through Boundary.
+  status:
+    active: Active
+    pending: Pending
+    canceling: Canceling
+    terminated: Terminated
   messages:
     none:
       title: No Sessions
