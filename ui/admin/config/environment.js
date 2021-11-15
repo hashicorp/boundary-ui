@@ -35,7 +35,7 @@ module.exports = function (environment) {
     companyName: 'HashiCorp',
 
     notifyTimeout: 4000,
-    sessionPollingTimeoutSeconds: 111111112.5,
+    sessionPollingTimeoutSeconds: 2.5,
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
@@ -155,7 +155,7 @@ module.exports = function (environment) {
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
     // Polling timeouts should be short
-    ENV.sessionPollingTimeoutSeconds = 111111110.25;
+    ENV.sessionPollingTimeoutSeconds = 0.25;
     ENV.oidcPollingTimeoutSeconds = 0;
     ENV.enableConfirmService = false;
 
