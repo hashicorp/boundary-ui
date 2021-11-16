@@ -4,6 +4,7 @@ import { task, timeout } from 'ember-concurrency';
 import config from '../../../../config/environment';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { resourceFilterParam } from 'core/decorators/resource-filter-param';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -16,6 +17,8 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   @service resourceFilterStore;
 
   // =attributes
+
+  @resourceFilterParam(['active', 'pending', 'canceling', 'terminated']) status;
 
   /**
    * A simple Ember Concurrency-based polling task that refreshes the route
@@ -50,10 +53,11 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
    * @return {Promise{[{session: SessionModel, target: TargetModel}]}}
    */
   async model() {
+    const { status } = this;
     const { id: scope_id } = this.modelFor('scopes.scope');
     const { user_id } = this.session.data.authenticated;
     await this.store.query('target', { recursive: true, scope_id });
-    return await this.resourceFilterStore.queryBy('session', { user_id }, {
+    return await this.resourceFilterStore.queryBy('session', { user_id , status }, {
       recursive: true,
       scope_id
     });
@@ -86,4 +90,22 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     await session.cancelSession();
     await this.ipc.invoke('stop', { session_id: session.id });
   }
+
+    /**
+ * Sets the specified resource filter field to the specified value.
+ * @param {string} field
+ * @param value
+ */
+    @action
+    filterBy(field, value) {
+      this[field] = value;
+    }
+  
+    /**
+     * Clears and filter selections.
+     */
+    @action
+    clearAllFilters() {
+      this.status = [];
+    }
 }
