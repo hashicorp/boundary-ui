@@ -21,7 +21,7 @@ export default class ScopesScopeSessionsRoute extends Route {
 
   // =attributes
 
-  @resourceFilterParam(['active', 'pending', 'canceling', 'terminated']) status;
+  @resourceFilterParam(['active', 'pending', 'canceling', 'terminated'], ['active','pending', 'canceling']) status;
 
   /**
    * A simple Ember Concurrency-based polling task that refreshes the route
