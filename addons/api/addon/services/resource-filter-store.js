@@ -33,7 +33,8 @@ export class ResourceFilter {
           this.or(valuesArray.map((value) => this.equals(key, value)))
         );
       })
-      .flat();
+      .flat()
+      .filter((item) => item);
     return this.and(clauses);
   }
 
