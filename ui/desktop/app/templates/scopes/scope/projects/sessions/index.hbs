@@ -12,7 +12,10 @@
     {{#if (feature-flag 'filter')}}
       {{#if
         (or
-          @model (has-resource-filter-param-selections 'scopes.scope.projects.sessions')
+          @model
+          (has-resource-filter-param-selections
+            'scopes.scope.projects.sessions'
+          )
         )
       }}
         <Rose::Toolbar>
@@ -47,7 +50,9 @@
             {{/with}}
 
             {{#if
-              (has-resource-filter-param-selections 'scopes.scope.projects.sessions')
+              (has-resource-filter-param-selections
+                'scopes.scope.projects.sessions'
+              )
             }}
               <Rose::Button
                 @style='inline-link-action'
@@ -60,9 +65,8 @@
         </Rose::Toolbar>
       {{/if}}
     {{/if}}
-    {{#if @model}}
-    {{#if this.sorted}}
 
+    {{#if this.sorted}}
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
@@ -138,7 +142,9 @@
           {{/each}}
         </table.body>
       </Rose::Table>
-    {{else if (has-resource-filter-param-selections 'scopes.scope.projects.sessions')}}
+    {{else if (has-resource-filter-param-selections
+      'scopes.scope.projects.sessions'
+    )}}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
           <message.description>
@@ -147,7 +153,6 @@
         </Rose::Message>
       </Rose::Layout::Centered>
     {{else}}
-
       <Rose::Layout::Centered>
         <Rose::Message
           @title={{t 'resources.session.messages.none-friendly.title'}}
@@ -158,8 +163,6 @@
           </message.description>
         </Rose::Message>
       </Rose::Layout::Centered>
-
-    {{/if}}
     {{/if}}
   </page.body>
 

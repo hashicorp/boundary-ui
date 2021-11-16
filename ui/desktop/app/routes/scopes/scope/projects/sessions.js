@@ -57,7 +57,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     const { id: scope_id } = this.modelFor('scopes.scope');
     const { user_id } = this.session.data.authenticated;
     await this.store.query('target', { recursive: true, scope_id });
-    return await this.resourceFilterStore.queryBy('session', { user: user_id , status }, {
+    return await this.resourceFilterStore.queryBy('session', { user_id , status }, {
       recursive: true,
       scope_id
     });
