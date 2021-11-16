@@ -159,7 +159,7 @@ app.on('ready', async () => {
   runtimeSettings.onOriginChange(() => mainWindow.loadURL(emberAppURL));
 
   // If you want to open up dev tools programmatically, call
-  mainWindow.openDevTools();
+  // mainWindow.openDevTools();
 
   // Load the ember application
   mainWindow.loadURL(emberAppURL);
