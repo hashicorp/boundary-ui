@@ -162,6 +162,7 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
+    ENV.featureFlags['managed-groups'] = true;
     // here you can enable a production-specific feature
   }
 
