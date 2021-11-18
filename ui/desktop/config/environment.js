@@ -57,7 +57,7 @@ module.exports = function (environment) {
     featureFlags: {
       oidc: true,
       search: false,
-      filter: false,
+      filter: true,
       capabilities: true,
       'credential-store': false,
     },
@@ -80,8 +80,6 @@ module.exports = function (environment) {
     ENV.autoOrigin = true;
 
     // Enable features in development
-    ENV.featureFlags['capabilities'] = true;
-    ENV.featureFlags['filter'] = true;
   }
 
   if (environment === 'test') {
@@ -106,8 +104,6 @@ module.exports = function (environment) {
     };
 
     // Enable tests for development features
-    ENV.featureFlags['capabilities'] = true;
-    ENV.featureFlags['filter'] = true;
   }
 
   if (environment === 'production') {
