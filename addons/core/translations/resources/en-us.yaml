@@ -130,6 +130,7 @@ host:
     delete: Delete Host
   types:
     static: Static
+    plugin: Plugin
 session:
   title: Session
   title_plural: Sessions

@@ -5,7 +5,7 @@ import { random, date, internet, datatype } from 'faker';
  * GeneratedHostModelFactory
  */
 export default Factory.extend({
-  type: 'static',
+  type: () => random.arrayElement(['static', 'plugin']),
   name: () => random.words(),
   description: () => random.words(),
   created_time: () => date.recent(),
