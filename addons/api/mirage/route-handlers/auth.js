@@ -1,6 +1,7 @@
 // import config from '../../config/environment';
 // import { v1 } from 'ember-uuid';
 import { Response } from 'miragejs';
+import tokenGenerator from '../helpers/token-generator';
 
 // /**
 //  * Simulates a cookie-based response to authentication requests.  Any user/pass
@@ -31,27 +32,15 @@ const oidcRequiredAttempts = 3;
 
 const commandHandlers = {
   password: {
-    login: (payload, scopeAttrs) => {
+    login: (payload, scopeAttrs, server) => {
+      console.log(server, 'server in obj')
       if (payload.attributes.login_name === 'error') {
         return new Response(400);
       } else {
         return new Response(
           200,
           {},
-          {
-            attributes: {
-              scope: scopeAttrs,
-              id: 'token123',
-              token: 'thetokenstring',
-              account_id: '1',
-              user_id: 'user123',
-              auth_method_id: 'authmethod123',
-              created_time: '',
-              updated_time: '',
-              last_used_time: '',
-              expiration_time: '',
-            },
-          }
+          tokenGenerator(scopeAttrs, server),
         );
       }
     },
@@ -79,7 +68,7 @@ const commandHandlers = {
           },
         }
       ),
-    token: (_, scopeAttrs) => {
+    token: (_, scopeAttrs, server) => {
       oidcAttemptCounter++;
       if (oidcAttemptCounter < oidcRequiredAttempts) {
         return new Response(202);
@@ -87,20 +76,7 @@ const commandHandlers = {
         return new Response(
           200,
           {},
-          {
-            attributes: {
-              scope: scopeAttrs,
-              id: 'token123',
-              token: 'thetokenstring',
-              account_id: '1',
-              user_id: 'user123',
-              auth_method_id: 'authmethod123',
-              created_time: '',
-              updated_time: '',
-              last_used_time: '',
-              expiration_time: '',
-            },
-          }
+         tokenGenerator(scopeAttrs, server),
         );
       }
     },
@@ -108,32 +84,39 @@ const commandHandlers = {
 };
 
 // Handles all custom methods on /auth-methods/:id route
-export function authHandler({ scopes, authMethods }, request) {
-  const [, id, method] = request.params.id_method.match(
-    /(?<id>.[^:]*):(?<method>(.*))/
-  );
-  const authMethod = authMethods.find(id);
-
-  if (method === 'authenticate') {
-    const payload = JSON.parse(request.requestBody);
-    const { command } = payload;
-    const scope = scopes.find(authMethod.scopeId);
-    const scopeAttrs = this.serialize(scopes.find(scope.id));
-    return commandHandlers[authMethod.type][command](payload, scopeAttrs);
-  }
-
-  // TODO:  this handler doesn't really belong here, but we already route
-  // POST requests on existing auth methods to this route handler file under the
-  // assumption it would be for authentication.  While authentication should
-  // still occur here, we should handle other custom methods in the
-  // mirage config and route here only for auth.
-  if (method === 'change-state') {
-    const attrs = this.normalizedRequestAttrs();
-    return authMethod.update({
-      attributes: {
-        state: attrs.attributes.state,
-      },
-    });
+export function authHandler(server) {
+  console.log(server, 'SERVERRRR in auth')
+  return function({ scopes, authMethods }, request) {
+    const [, id, method] = request.params.id_method.match(
+      /(?<id>.[^:]*):(?<method>(.*))/
+    );
+    const authMethod = authMethods.find(id);
+  
+    if (method === 'authenticate') {
+      const payload = JSON.parse(request.requestBody);
+      const { command } = payload;
+      const scope = scopes.find(authMethod.scopeId);
+      const scopeAttrs = this.serialize(scopes.find(scope.id));
+      console.log("HERER")
+     //return tokenGenerator(scopeAttrs, server)
+     //console.log('COMMON HANDLEER', commandHandlers[authMethod.type][command](payload, scopeAttrs, server))
+     console.log(commandHandlers[authMethod.type][command](payload, scopeAttrs, server), "TYOEE")
+     return commandHandlers[authMethod.type][command](payload, scopeAttrs, server);
+    }
+  
+    // TODO:  this handler doesn't really belong here, but we already route
+    // POST requests on existing auth methods to this route handler file under the
+    // assumption it would be for authentication.  While authentication should
+    // still occur here, we should handle other custom methods in the
+    // mirage config and route here only for auth.
+    if (method === 'change-state') {
+      const attrs = this.normalizedRequestAttrs();
+      return authMethod.update({
+        attributes: {
+          state: attrs.attributes.state,
+        },
+      });
+    }
   }
 }
 
