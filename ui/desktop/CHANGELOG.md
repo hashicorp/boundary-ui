@@ -2,7 +2,11 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
-## Next
+## v1.4.0 [CLI 0.7.1] (2021.11.18)
+
+### New
+
+- Sessions may now be filtered by status in the UI. ([PR](https://github.com/hashicorp/boundary-ui/pull/860))
 
 ## v1.3.0 [CLI 0.6.0] (2021.09.09)
 
