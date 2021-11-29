@@ -76,7 +76,6 @@ const commandHandlers = {
 
 // Handles all custom methods on /auth-methods/:id route
 export function authHandler(server) {
-  console.log(server, 'SERVERRRR in auth');
   return function ({ scopes, authMethods }, request) {
     const [, id, method] = request.params.id_method.match(
       /(?<id>.[^:]*):(?<method>(.*))/
@@ -88,13 +87,6 @@ export function authHandler(server) {
       const { command } = payload;
       const scope = scopes.find(authMethod.scopeId);
       const scopeAttrs = this.serialize(scopes.find(scope.id));
-      console.log('HERER');
-      //return tokenGenerator(scopeAttrs, server)
-      //console.log('COMMON HANDLEER', commandHandlers[authMethod.type][command](payload, scopeAttrs, server))
-      console.log(
-        commandHandlers[authMethod.type][command](payload, scopeAttrs, server),
-        'TYOEE'
-      );
       return commandHandlers[authMethod.type][command](
         payload,
         scopeAttrs,
