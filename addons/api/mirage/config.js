@@ -9,6 +9,7 @@ const isTesting = config.environment === 'test';
 
 export default function () {
   initializeMockIPC(this, config);
+
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
   // make this `/api`, for example, if your API is namespaced
@@ -416,6 +417,7 @@ export default function () {
   );
 
   // session
+
   this.get(
     '/sessions',
     function ({ sessions }, { queryParams: { scope_id, recursive, filter } }) {
@@ -437,7 +439,6 @@ export default function () {
             });
         });
       }
-
       if (recursive && scope_id === 'global') {
         resultSet = sessions.all();
       } else if (recursive) {
