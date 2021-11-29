@@ -439,9 +439,8 @@ export default function () {
       }
 
       if (recursive && scope_id === 'global') {
-          resultSet = sessions.all();
+        resultSet = sessions.all();
       } else if (recursive) {
-        console.log('recursiverecursive');
         resultSet = sessions.where((session) => {
           const sessionModel = sessions.find(session.id);
           return (
@@ -449,10 +448,10 @@ export default function () {
             sessionModel?.scope?.scope?.id === scope_id
           );
         });
-      } else { 
+      } else {
         resultSet = sessions.where((session) => session.scopeId === scope_id);
       }
-       return resultSet.filter(makeBooleanFilter(filter));
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
