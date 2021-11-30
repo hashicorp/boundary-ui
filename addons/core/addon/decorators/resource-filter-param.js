@@ -1,3 +1,94 @@
+import EmberObject from '@ember/object';
+import { getOwner } from '@ember/application';
+
+/**
+ *
+ */
+class ResourceFilter extends EmberObject {
+  // =attributes
+
+  route;
+  name;
+  allowedValues;
+  defaultValue;
+
+  /**
+   *
+   */
+  get filterKey() {
+    return `filter-${this.name}`;
+  }
+
+  /**
+   *
+   */
+  get value() {
+    const value =
+      this.route.paramsFor(this.route.routeName)[this.filterKey] ||
+      JSON.stringify(this.defaultValue);
+    return value ? JSON.parse(value) : null;
+  }
+
+  /**
+   *
+   */
+  set value(value) {
+    const queryParams = {};
+    queryParams[this.filterKey] = JSON.stringify(value);
+    this.route.transitionTo({ queryParams });
+  }
+
+  // =static methods
+
+  /**
+   *
+   */
+  static setupRouteQueryParams(routeClass, name) {
+    const filterKey = `filter-${name}`;
+
+    // If the route has no query params specified yet, declare them.
+    if (!Object.keys(routeClass.queryParams).length)
+      routeClass.queryParams = {};
+
+    // If the route has no resource filters list specified yet, create one.
+    if (!routeClass.resourceFilterParams) routeClass.resourceFilterParams = [];
+
+    // Add the resource filter query parameter to the route.  Resource filter
+    // param changes refresh the model but do not contribute to browser history.
+    // See https://guides.emberjs.com/release/routing/query-params/
+    routeClass.queryParams[filterKey] = {
+      refreshModel: true,
+      replace: true,
+    };
+  }
+
+  /**
+   *
+   */
+  static getOrCreateRouteResourceFilter(
+    routeInstance,
+    name,
+    allowedValues,
+    defaultValue
+  ) {
+    const owner = getOwner(routeInstance);
+    const containerKey = `route-resource-filter:${name}@${routeInstance.routeName}`;
+    const factory = owner.factoryFor(containerKey);
+    if (!factory) {
+      // create factory
+      class RouteResourceFilter extends this {
+        route = routeInstance;
+        name = name;
+        allowedValues = allowedValues;
+        defaultValue = defaultValue;
+      }
+      owner.register(containerKey, RouteResourceFilter);
+    }
+    const instance = owner.lookup(containerKey);
+    return instance;
+  }
+}
+
 /**
  * A resource filter param is a concise way to express a route query parameter.
  * Resource filter params abstract away a route's query parameter
@@ -40,29 +131,9 @@ export function resourceFilterParam(allowedValues, defaultValue) {
    * @return {object{get, set}}
    */
   return function (target, name /*, descriptor*/) {
-    const filterKey = `filter-${name}`;
-    const filterAllowedValuesKey = `filter-allowed-values-${name}`;
+    ResourceFilter.setupRouteQueryParams(target, name);
 
-    // If the route has no query params specified yet, declare them.
-    if (!Object.keys(target.queryParams).length) target.queryParams = {};
-
-    // If the route has no resource filters list specified yet, create one.
-    if (!target.resourceFilterParams) target.resourceFilterParams = [];
-
-    // Add the resource filter query parameter to the route.  Resource filter
-    // param changes refresh the model but do not contribute to browser history.
-    // See https://guides.emberjs.com/release/routing/query-params/
-    target.queryParams[filterKey] = {
-      refreshModel: true,
-      replace: true,
-    };
-
-    // Note the name of this filter param.
-    target.resourceFilterParams.push(name);
-
-    // Store the allowed values for future lookup
-    // (via `ResourceFilterParamHelper`).
-    target[filterAllowedValuesKey] = allowedValues;
+    let instance;
 
     // Override the decorated attribute with a getter and setter.
     return {
@@ -70,10 +141,13 @@ export function resourceFilterParam(allowedValues, defaultValue) {
        * Returns the JSON-parsed query parameter value OR defaultValue.
        */
       get() {
-        const value =
-          this.paramsFor(this.routeName)[filterKey] ||
-          JSON.stringify(defaultValue);
-        return value ? JSON.parse(value) : null;
+        instance = ResourceFilter.getOrCreateRouteResourceFilter(
+          this,
+          name,
+          allowedValues,
+          defaultValue
+        );
+        return instance.value;
       },
 
       /**
@@ -83,9 +157,7 @@ export function resourceFilterParam(allowedValues, defaultValue) {
        * @param value
        */
       set(value) {
-        const queryParams = {};
-        queryParams[filterKey] = JSON.stringify(value);
-        this.transitionTo({ queryParams });
+        instance.value = value;
       },
     };
   };

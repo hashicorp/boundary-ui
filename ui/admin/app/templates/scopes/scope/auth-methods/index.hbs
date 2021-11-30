@@ -39,7 +39,9 @@
     {{#if
       (or
         @model
-        (has-resource-filter-param-selections 'scopes.scope.auth-methods')
+        (has-resource-filter-param-selections
+          'scopes.scope.auth-methods' 'type'
+        )
       )
     }}
       <Rose::Toolbar>
@@ -74,7 +76,9 @@
           {{/with}}
 
           {{#if
-            (has-resource-filter-param-selections 'scopes.scope.auth-methods')
+            (has-resource-filter-param-selections
+              'scopes.scope.auth-methods' 'type'
+            )
           }}
             <Rose::Button
               @style='inline-link-action'
@@ -208,7 +212,7 @@
       </Rose::Table>
 
     {{else if (has-resource-filter-param-selections
-      'scopes.scope.auth-methods'
+      'scopes.scope.auth-methods' 'type'
     )}}
 
       <Rose::Layout::Centered>

@@ -44,14 +44,14 @@ export default class HasResourceFilterParamSelectionsHelper extends Helper {
 
   /**
    * Returns true if the specified route has a value set for
-   * any resource filter.
+   * any resource filter passed into the helper.
    * @param {string} routeName
+   * @param {string[]} names - names of resource filter fields
    * @return {boolean}
    */
-  compute([routeName]) {
+  compute([routeName, ...names]) {
     const owner = getOwner(this);
     const route = owner.lookup(`route:${routeName}`);
-    const names = route.resourceFilterParams;
     const selectedValues = names.map((name) => route[name] || null).flat();
     const anyTruthy = selectedValues.reduce(
       (previousValue, currentValue) => previousValue || currentValue,

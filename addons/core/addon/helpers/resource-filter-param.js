@@ -50,13 +50,9 @@ export default class ResourceFilterParamHelper extends Helper {
    */
   compute([routeName, name]) {
     const owner = getOwner(this);
-    // Filter options
-    const route = owner.lookup(`route:${routeName}`);
-    const filterAllowedValuesKey = `filter-allowed-values-${name}`;
-    const allowedValues = route[filterAllowedValuesKey];
-    // Selected filters
-    const rawValue = route[name];
-    const selectedValue = rawValue || null;
+    const containerKey = `route-resource-filter:${name}@${routeName}`;
+    const resourceFilter = owner.lookup(containerKey);
+    const { allowedValues, value: selectedValue } = resourceFilter;
     return { name, allowedValues, selectedValue };
   }
 
