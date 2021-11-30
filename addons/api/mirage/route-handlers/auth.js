@@ -32,11 +32,11 @@ const oidcRequiredAttempts = 3;
 
 const commandHandlers = {
   password: {
-    login: (payload, scopeAttrs, server) => {
+    login: (payload, scopeAttrs, server, id) => {
       if (payload.attributes.login_name === 'error') {
         return new Response(400);
       } else {
-        return new Response(200, {}, tokenGenerator(scopeAttrs, server));
+        return new Response(200, {}, tokenGenerator(scopeAttrs, server, id));
       }
     },
   },
@@ -63,12 +63,12 @@ const commandHandlers = {
           },
         }
       ),
-    token: (_, scopeAttrs, server) => {
+    token: (_, scopeAttrs, server, id) => {
       oidcAttemptCounter++;
       if (oidcAttemptCounter < oidcRequiredAttempts) {
         return new Response(202);
       } else {
-        return new Response(200, {}, tokenGenerator(scopeAttrs, server));
+        return new Response(200, {}, tokenGenerator(scopeAttrs, server, id));
       }
     },
   },
@@ -90,7 +90,8 @@ export function authHandler(server) {
       return commandHandlers[authMethod.type][command](
         payload,
         scopeAttrs,
-        server
+        server,
+        id
       );
     }
 
