@@ -75,7 +75,7 @@ module.exports = {
         path.resolve(__dirname, 'cli', 'VERSION'),
         'utf8'
       );
-      const artifactPath = await downloadArtifact(artifactVersion);
+      const artifactPath = await downloadArtifact(artifactVersion.trim());
       await extract(artifactPath, artifactDestination);
     } catch (e) {
       console.error('ERROR: Failed setting up CLI.', e);
