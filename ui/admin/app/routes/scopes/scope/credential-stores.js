@@ -4,10 +4,15 @@ import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { resourceFilterParam } from 'core/decorators/resource-filter-param';
 
 export default class ScopesScopeCredentialStoresRoute extends Route {
   // =methods
   @service can;
+  @service resourceFilterStore;
+
+  @resourceFilterParam(['vault']) type;
+
   /**
    * Load all credential stores under current scope
    * @returns {Promise[CredentialStoreModel]}
@@ -15,12 +20,17 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
   async model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
+    const { type } = this;
     if (
       this.can.can('list collection', scope, {
         collection: 'credential-stores',
       })
     ) {
-      return this.store.query('credential-store', { scope_id });
+      return this.resourceFilterStore.queryBy(
+        'credential-store',
+        { type },
+        { scope_id }
+      );
     }
   }
 
@@ -67,5 +77,23 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
     await credentialStore.destroyRecord();
     await this.replaceWith('scopes.scope.credential-stores');
     this.refresh();
+  }
+
+  /**
+   * Sets the specified resource filter field to the specified value.
+   * @param {string} field
+   * @param value
+   */
+  @action
+  filterBy(field, value) {
+    this[field] = value;
+  }
+
+  /**
+   * Clears and filter selections.
+   */
+  @action
+  clearAllFilters() {
+    this.status = [];
   }
 }

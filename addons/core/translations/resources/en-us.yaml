@@ -288,6 +288,8 @@ target:
       add:
         title: Add Credential Sources
         description: Select credential sources to assign to this target.
+    types:
+      vault: Vault
 credential-store:
   title: Credential Store
   title_plural: Credential Stores

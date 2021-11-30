@@ -28,6 +28,62 @@
   </page.actions>
 
   <page.body>
+    {{#if (feature-flag 'filter')}}
+      {{#if
+        (or
+          @model
+          (has-resource-filter-param-selections
+            'scopes.scope.credential-stores'
+          )
+        )
+      }}
+        <Rose::Toolbar>
+          <Rose::Form as |form|>
+            {{#with
+              (resource-filter-param 'scopes.scope.credential-stores' 'type')
+              as |filter|
+            }}
+              <Rose::Dropdown
+                @text={{t (concat 'form.' filter.name '.label')}}
+                @count={{filter.selectedValue.length}}
+                @ignoreClickInside={{true}}
+                as |dropdown|
+              >
+                <form.checkboxGroup
+                  @name={{filter.name}}
+                  @items={{filter.allowedValues}}
+                  @selectedItems={{filter.selectedValue}}
+                  @onChange={{route-action 'filterBy' filter.name}}
+                  as |group|
+                >
+                  <dropdown.item>
+                    <group.checkbox
+                      @label={{t
+                        (concat 'resources.credential-store.types.' group.item)
+                      }}
+                      value={{group.item}}
+                    />
+                  </dropdown.item>
+                </form.checkboxGroup>
+              </Rose::Dropdown>
+            {{/with}}
+
+            {{#if
+              (has-resource-filter-param-selections
+                'scopes.scope.credential-stores'
+              )
+            }}
+              <Rose::Button
+                @style='inline-link-action'
+                @iconLeft='flight-icons/svg/x-16'
+                {{on 'click' (route-action 'clearAllFilters')}}
+              >{{t 'actions.clear-all-filters'}}
+              </Rose::Button>
+            {{/if}}
+          </Rose::Form>
+        </Rose::Toolbar>
+      {{/if}}
+    {{/if}}
     {{#if @model}}
       <Rose::Table as |table|>
         <table.header as |header|>
@@ -75,6 +131,16 @@
         </table.body>
       </Rose::Table>
 
+    {{else if (has-resource-filter-param-selections
+      'scopes.scope.credential-stores'
+    )}}
+      <Rose::Layout::Centered>
+        <Rose::Message @title={{t 'titles.no-results'}} as |message|>
+          <message.description>
+            {{t 'descriptions.no-results'}}
+          </message.description>
+        </Rose::Message>
+      </Rose::Layout::Centered>
     {{else}}
       <Rose::Layout::Centered>
         <Rose::Message
