@@ -164,6 +164,7 @@ module('Acceptance | authentication', function (hooks) {
     await fillIn('[name="password"]', 'test');
     later(async () => {
       run.cancelTimers();
+      console.log(JSON.stringify(currentSession()), 'CUREENT SESS');
       assert.ok(currentSession().isAuthenticated);
       await click('.rose-header-utilities .rose-dropdown summary');
       assert.equal(
@@ -185,6 +186,10 @@ module('Acceptance | authentication', function (hooks) {
     await fillIn('[name="password"]', 'test');
     later(async () => {
       run.cancelTimers();
+      console.log(
+        JSON.stringify(currentSession()),
+        '401 responses current session'
+      );
       assert.ok(
         currentSession().isAuthenticated,
         'Session begins authenticated, before encountering 401'
