@@ -26,10 +26,10 @@ module('Unit | Model | host', function (hooks) {
   test('it has isStatic function and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const model = store.createRecord('host', { type: 'static' });
+    const modelA = store.createRecord('host', { type: 'static' });
     const modelB = store.createRecord('host', { type: 'plugin' });
-    assert.equal(typeof model.isStatic, 'boolean');
-    assert.true(model.isStatic);
+    assert.equal(typeof modelA.isStatic, 'boolean');
+    assert.true(modelA.isStatic);
     assert.false(modelB.isStatic);
   });
 });
