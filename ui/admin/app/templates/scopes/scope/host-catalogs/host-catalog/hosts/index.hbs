@@ -11,7 +11,7 @@
     </table.header>
     <table.body as |body|>
       {{#each @model as |host|}}
-        {{#if host.isStaticType}}
+        {{#if host.isStatic}}
           <body.row as |row|>
             <row.headerCell>
               {{#if (can 'read model' host)}}

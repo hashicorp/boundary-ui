@@ -11,7 +11,7 @@ export default class HostModel extends GeneratedHostModel {
   /**
    * @type {boolean}
    */
-  get isStaticType() {
+  get isStatic() {
     return this.type === 'static';
   }
 }
