@@ -17,7 +17,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   // =attributes
 
-  @resourceFilterParam(['password', 'oidc']) type;
+  @resourceFilterParam({ allowed: ['password', 'oidc'] }) type;
 
   // =methods
 
