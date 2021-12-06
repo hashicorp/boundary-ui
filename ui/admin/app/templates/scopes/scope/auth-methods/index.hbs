@@ -39,7 +39,7 @@
     {{#if
       (or
         @model
-        (has-resource-filter-param-selections
+        (has-route-resource-filter-selections
           'scopes.scope.auth-methods' 'type'
         )
       )
@@ -47,7 +47,7 @@
       <Rose::Toolbar>
         <Rose::Form as |form|>
           {{#with
-            (resource-filter-param 'scopes.scope.auth-methods' 'type')
+            (route-resource-filter 'scopes.scope.auth-methods' 'type')
             as |filter|
           }}
             <Rose::Dropdown
@@ -76,7 +76,7 @@
           {{/with}}
 
           {{#if
-            (has-resource-filter-param-selections
+            (has-route-resource-filter-selections
               'scopes.scope.auth-methods' 'type'
             )
           }}
@@ -211,7 +211,7 @@
         </table.body>
       </Rose::Table>
 
-    {{else if (has-resource-filter-param-selections
+    {{else if (has-route-resource-filter-selections
       'scopes.scope.auth-methods' 'type'
     )}}
 

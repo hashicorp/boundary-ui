@@ -3,14 +3,16 @@ import { getOwner } from '@ember/application';
 import { typeOf } from '@ember/utils';
 
 /**
- *
+ * @param value
+ * @return {boolean} true if `value` is a function
  */
 const isFunction = (value) => typeOf(value) === 'function';
 
 /**
- *
+ * Represents a filter on a specific route and maintains filter state.
+ * @class
  */
-class ResourceFilter extends EmberObject {
+class RouteResourceFilter extends EmberObject {
   // =attributes
 
   route;
@@ -18,17 +20,22 @@ class ResourceFilter extends EmberObject {
   defaultValue;
   allowed;
   serialize;
-  deserialize;
+  findBySerialized;
+
+  // =computed
 
   /**
-   *
+   * Query parameter name where the selected value(s) for this filter are
+   * stored in the URL.
+   * @type {string}
    */
   get filterKey() {
     return `filter-${this.name}`;
   }
 
   /**
-   *
+   * The allowed values for this filter.  See `allowed`.
+   * @type {?array}
    */
   get allowedValues() {
     if (isFunction(this.allowed)) {
@@ -38,7 +45,9 @@ class ResourceFilter extends EmberObject {
   }
 
   /**
-   *
+   * Currently selected value(s) for this filter, deserialized from the value of
+   * the associated route query parameter.
+   * @type {?array}
    */
   get value() {
     const decodedValue =
@@ -54,10 +63,6 @@ class ResourceFilter extends EmberObject {
       : null;
     return deserializedValue;
   }
-
-  /**
-   *
-   */
   set value(value) {
     const queryParams = {};
     const serialized = value.map((value) => this.serializeValue(value));
@@ -68,7 +73,8 @@ class ResourceFilter extends EmberObject {
   // =methods
 
   /**
-   *
+   * Calls `serialize` (if set) on the passed value.  Otherwise returns the
+   * value unaltered.
    */
   serializeValue(value) {
     if (this.serialize) {
@@ -78,11 +84,16 @@ class ResourceFilter extends EmberObject {
   }
 
   /**
-   *
+   * Tests if `item` is represented by `serializedValue` when deserializing
+   * items from the query string.  If `findBySerialized` is unspecified,
+   * a simple equality test is used.
+   * @param item
+   * @param {string} serializedValue
+   * @return {boolean} item is represented by `serializedValue`
    */
   deserializeValue(item, serializedValue) {
-    if (this.deserialize) {
-      return this.deserialize(...arguments);
+    if (this.findBySerialized) {
+      return this.findBySerialized(...arguments);
     }
     return item === serializedValue;
   }
@@ -90,7 +101,12 @@ class ResourceFilter extends EmberObject {
   // =static methods
 
   /**
-   *
+   * Configures the specified route with a query parameter of `name` that, when
+   * changed, refreshes the route model and replaces history (rather than
+   * advancing history).
+   * @static
+   * @param {Route} routeClass
+   * @param {string} name
    */
   static setupRouteQueryParams(routeClass, name) {
     const filterKey = `filter-${name}`;
@@ -112,7 +128,15 @@ class ResourceFilter extends EmberObject {
   }
 
   /**
-   *
+   * Factory method to instantiate an instance of this class.
+   * @static
+   * @param {Route} routeInstance
+   * @param {string} name
+   * @param {array|function} allowed
+   * @param {?array} defaultValue
+   * @param {?function} serialize
+   * @param {?function} findBySerialized
+   * @return {RouteResourceFilter}
    */
   static getOrCreateRouteResourceFilter(
     routeInstance,
@@ -120,22 +144,22 @@ class ResourceFilter extends EmberObject {
     allowed,
     defaultValue,
     serialize,
-    deserialize
+    findBySerialized
   ) {
     const owner = getOwner(routeInstance);
     const containerKey = `route-resource-filter:${name}@${routeInstance.routeName}`;
     const factory = owner.factoryFor(containerKey);
     if (!factory) {
       // create factory
-      class RouteResourceFilter extends this {
+      class AppliedRouteResourceFilter extends this {
         route = routeInstance;
         name = name;
         allowed = allowed;
         defaultValue = defaultValue;
         serialize = serialize;
-        deserialize = deserialize;
+        findBySerialized = findBySerialized;
       }
-      owner.register(containerKey, RouteResourceFilter);
+      owner.register(containerKey, AppliedRouteResourceFilter);
     }
     const instance = owner.lookup(containerKey);
     return instance;
@@ -143,18 +167,18 @@ class ResourceFilter extends EmberObject {
 }
 
 /**
- * A resource filter param is a concise way to express a route query parameter.
+ * This decorator provides a concise way to express a route resource filter.
  * Resource filter params abstract away a route's query parameter
- * interface, treating a query param as a simple attribute on a route instance.
+ * interface, treating a query param as just an attribute on a route instance.
  * Getting the attribute value is equivalent to looking up the associated query
  * parameter.  Setting the attribute is equivalent to transitioning to the route
  * and passing the associated query parameter value.
  *
  * Additionally, resource filter params may declare `allowed`, an array
- * containing the set of values the parameter may take.  While unenforced,
- * `allowed` are useful metadata about a resource filter and may be fetch
- * via `ResourceFilterParamHelper`.  An optional default value may be specified
- * via `defaultValue` passed to the decorator.
+ * (or function returning an array) containing the set of values the parameter
+ * may take.  While unenforced, `allowed` are useful metadata about a resource
+ * filter and may be fetch via `ResourceFilterParamHelper`.  An optional default
+ * value may be specified via `defaultValue` passed to the decorator.
  *
  * @see ResourceFilterParamHelper
  *
@@ -162,7 +186,10 @@ class ResourceFilter extends EmberObject {
  *
  *   export default class MyRoute extends Route {
  *
- *     @resourceFilterParam(['active', 'pending'], ['active'])
+ *     @resourceFilterParam({
+ *       allowed: ['active', 'pending'],
+ *       defaultvalue: ['active'],         // optional
+ *     })
  *     status;
  *
  *     @action
@@ -180,7 +207,7 @@ export function resourceFilterParam({
   allowed,
   defaultValue,
   serialize,
-  deserialize,
+  findBySerialized,
 }) {
   /**
    * @param {object} target
@@ -189,7 +216,7 @@ export function resourceFilterParam({
    * @return {object{get, set}}
    */
   return function (target, name /*, descriptor*/) {
-    ResourceFilter.setupRouteQueryParams(target, name);
+    RouteResourceFilter.setupRouteQueryParams(target, name);
 
     let instance;
 
@@ -199,13 +226,13 @@ export function resourceFilterParam({
        * Returns the current value of the resource filter.
        */
       get() {
-        instance = ResourceFilter.getOrCreateRouteResourceFilter(
+        instance = RouteResourceFilter.getOrCreateRouteResourceFilter(
           this,
           name,
           allowed,
           defaultValue,
           serialize,
-          deserialize
+          findBySerialized
         );
         return instance.value;
       },

@@ -6,7 +6,7 @@ import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
-import { resourceFilterParam } from 'core/decorators/resource-filter-param';
+import { resourceFilterParam } from 'core/decorators/route-resource-filter';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -128,7 +128,7 @@ export default class ScopesScopeSessionsRoute extends Route {
     filterBy(field, value) {
       this[field] = value;
     }
-  
+
     /**
      * Clears and filter selections.
      */
