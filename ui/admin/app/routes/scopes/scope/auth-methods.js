@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import loading from 'ember-loading/decorator';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { resourceFilterParam } from 'core/decorators/route-resource-filter';
+import { resourceFilter } from 'core/decorators/resource-filter';
 
 export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
@@ -17,7 +17,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   // =attributes
 
-  @resourceFilterParam({ allowed: ['password', 'oidc'] }) type;
+  @resourceFilter({ allowed: ['password', 'oidc'] }) type;
 
   // =methods
 

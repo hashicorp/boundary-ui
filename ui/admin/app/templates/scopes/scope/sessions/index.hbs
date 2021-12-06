@@ -16,14 +16,13 @@
     {{#if (feature-flag 'filter')}}
       {{#if
         (or
-          @model
-          (has-route-resource-filter-selections 'scopes.scope.sessions' 'type')
+          @model (has-resource-filter-selections 'scopes.scope.sessions' 'type')
         )
       }}
         <Rose::Toolbar>
           <Rose::Form as |form|>
             {{#with
-              (route-resource-filter 'scopes.scope.sessions' 'status')
+              (resource-filter 'scopes.scope.sessions' 'status')
               as |filter|
             }}
               <Rose::Dropdown
@@ -52,9 +51,7 @@
             {{/with}}
 
             {{#if
-              (has-route-resource-filter-selections
-                'scopes.scope.sessions' 'type'
-              )
+              (has-resource-filter-selections 'scopes.scope.sessions' 'type')
             }}
               <Rose::Button
                 @style='inline-link-action'
@@ -139,9 +136,7 @@
         </table.body>
       </Rose::Table>
 
-    {{else if (has-route-resource-filter-selections
-      'scopes.scope.sessions' 'type'
-    )}}
+    {{else if (has-resource-filter-selections 'scopes.scope.sessions' 'type')}}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
           <message.description>

@@ -13,7 +13,7 @@
       {{#if
         (or
           @model
-          (has-route-resource-filter-selections
+          (has-resource-filter-selections
             'scopes.scope.projects.sessions' 'type'
           )
         )
@@ -21,7 +21,7 @@
         <Rose::Toolbar>
           <Rose::Form as |form|>
             {{#with
-              (route-resource-filter 'scopes.scope.projects.sessions' 'status')
+              (resource-filter 'scopes.scope.projects.sessions' 'status')
               as |filter|
             }}
               <Rose::Dropdown
@@ -50,7 +50,7 @@
             {{/with}}
 
             {{#if
-              (has-route-resource-filter-selections
+              (has-resource-filter-selections
                 'scopes.scope.projects.sessions' 'type'
               )
             }}
@@ -142,7 +142,7 @@
           {{/each}}
         </table.body>
       </Rose::Table>
-    {{else if (has-route-resource-filter-selections
+    {{else if (has-resource-filter-selections
       'scopes.scope.projects.sessions' 'type'
     )}}
       <Rose::Layout::Centered>

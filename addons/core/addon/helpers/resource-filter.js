@@ -7,15 +7,15 @@ import { action } from '@ember/object';
  * Use this helper to fetch the current value of a resource filter param,
  * as well as its allowedValues.
  *
- * @see resourceFilterParam (decorator)
+ * @see resourceFilter (decorator)
  *
  * @example
  *
- *   {{#with route-resource-filter 'status' as |param|}}
+ *   {{#with resource-filter 'status' as |param|}}
  *     {{param.name}} / {{param.value}} / {{param.selectedValue}}
  *   {{/with}}
  */
-export default class RouteResourceFilterHelper extends Helper {
+export default class ResourceFilterHelper extends Helper {
   // =services
 
   @service router;
@@ -50,7 +50,7 @@ export default class RouteResourceFilterHelper extends Helper {
    */
   compute([routeName, name]) {
     const owner = getOwner(this);
-    const containerKey = `route-resource-filter:${name}@${routeName}`;
+    const containerKey = `resource-filter:${name}@${routeName}`;
     const resourceFilter = owner.lookup(containerKey);
     const { allowedValues, value: selectedValue } = resourceFilter;
     return { name, allowedValues, selectedValue };

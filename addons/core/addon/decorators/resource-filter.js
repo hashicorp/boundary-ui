@@ -147,7 +147,7 @@ class RouteResourceFilter extends EmberObject {
     findBySerialized
   ) {
     const owner = getOwner(routeInstance);
-    const containerKey = `route-resource-filter:${name}@${routeInstance.routeName}`;
+    const containerKey = `resource-filter:${name}@${routeInstance.routeName}`;
     const factory = owner.factoryFor(containerKey);
     if (!factory) {
       // create factory
@@ -186,7 +186,7 @@ class RouteResourceFilter extends EmberObject {
  *
  *   export default class MyRoute extends Route {
  *
- *     @resourceFilterParam({
+ *     @resourceFilter({
  *       allowed: ['active', 'pending'],
  *       defaultvalue: ['active'],         // optional
  *     })
@@ -203,7 +203,7 @@ class RouteResourceFilter extends EmberObject {
  *   }
  *
  */
-export function resourceFilterParam({
+export function resourceFilter({
   allowed,
   defaultValue,
   serialize,

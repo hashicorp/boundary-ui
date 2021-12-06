@@ -11,7 +11,7 @@ import { action } from '@ember/object';
  *
  * @example
  *
- *   {{#if (has-route-resource-filter-selections 'route.name' 'field')}}
+ *   {{#if (has-resource-filter-selections 'route.name' 'field')}}
  *     Field has filter selections.
  *   {{/if}}
  */
