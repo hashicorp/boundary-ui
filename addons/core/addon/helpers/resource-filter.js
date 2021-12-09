@@ -4,18 +4,18 @@ import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 
 /**
- * Use this helper to determine if a resource filter for a route has any
- * currently selected value.
+ * Use this helper to fetch the current value of a resource filter param,
+ * as well as its allowedValues.
  *
- * @see resourceFilterParam (decorator)
+ * @see resourceFilter (decorator)
  *
  * @example
  *
- *   {{#if (has-resource-filter-param-selections 'route.name' 'field')}}
- *     Field has filter selections.
- *   {{/if}}
+ *   {{#with resource-filter 'status' as |param|}}
+ *     {{param.name}} / {{param.value}} / {{param.selectedValue}}
+ *   {{/with}}
  */
-export default class HasResourceFilterParamSelectionsHelper extends Helper {
+export default class ResourceFilterHelper extends Helper {
   // =services
 
   @service router;
@@ -43,21 +43,17 @@ export default class HasResourceFilterParamSelectionsHelper extends Helper {
   // =compute method
 
   /**
-   * Returns true if the specified route has a value set for
-   * any resource filter.
-   * @param {string} routeName
-   * @return {boolean}
+   * Returns an object containing `name`, `value`, and `selectedValue`.
+   * `name` - The name of the resource filter param.
+   * `value` - The value of the resource filter param
+   * @return {object}
    */
-  compute([routeName]) {
+  compute([routeName, name]) {
     const owner = getOwner(this);
-    const route = owner.lookup(`route:${routeName}`);
-    const names = route.resourceFilterParams;
-    const selectedValues = names.map((name) => route[name] || null).flat();
-    const anyTruthy = selectedValues.reduce(
-      (previousValue, currentValue) => previousValue || currentValue,
-      false
-    );
-    return Boolean(anyTruthy);
+    const containerKey = `resource-filter:${name}@${routeName}`;
+    const resourceFilter = owner.lookup(containerKey);
+    const { allowedValues, value: selectedValue } = resourceFilter;
+    return { name, allowedValues, selectedValue };
   }
 
   // =actions

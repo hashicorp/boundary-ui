@@ -4,7 +4,7 @@ import { task, timeout } from 'ember-concurrency';
 import config from '../../../../config/environment';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { resourceFilterParam } from 'core/decorators/resource-filter-param';
+import { resourceFilter } from 'core/decorators/resource-filter';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -18,7 +18,10 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
 
   // =attributes
 
-  @resourceFilterParam(['active', 'pending', 'canceling', 'terminated'], ['active','pending', 'canceling']) status;
+  @resourceFilter({
+    allowed: ['active', 'pending', 'canceling', 'terminated'],
+    defaultValue: ['active','pending', 'canceling']
+  }) status;
 
   /**
    * A simple Ember Concurrency-based polling task that refreshes the route
@@ -100,7 +103,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     filterBy(field, value) {
       this[field] = value;
     }
-  
+
     /**
      * Clears and filter selections.
      */
