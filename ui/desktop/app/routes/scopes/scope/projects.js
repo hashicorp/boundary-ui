@@ -19,6 +19,7 @@ export default class ScopesScopeProjectsRoute extends Route {
   // =services
 
   @service session;
+  @service resourceFilterStore;
 
   // =methods
 
@@ -34,8 +35,12 @@ export default class ScopesScopeProjectsRoute extends Route {
    * @return {Promise{ScopeModel}}
    */
   model() {
-    return this.store
-      .query('scope', { recursive: true, scope_id: 'global' })
-      .filter(({ isProject }) => isProject);
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    const projects = this.resourceFilterStore.queryBy(
+      'scope',
+      { type: 'project' },
+      { recursive: true, scope_id }
+    );
+    return projects;
   }
 }
