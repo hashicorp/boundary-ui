@@ -11,38 +11,41 @@
     </table.header>
     <table.body as |body|>
       {{#each @model as |host|}}
-        <body.row as |row|>
-          <row.headerCell>
-            {{#if (can 'read model' host)}}
-              <LinkTo
-                @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
-                @model={{host.id}}
-              >
+        {{#if host.isStatic}}
+          <body.row as |row|>
+            <row.headerCell>
+              {{#if (can 'read model' host)}}
+                <LinkTo
+                  @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
+                  @model={{host.id}}
+                >
+
+                  {{host.displayName}}
+                </LinkTo>
+              {{else}}
                 {{host.displayName}}
-              </LinkTo>
-            {{else}}
-              {{host.displayName}}
-            {{/if}}
-            <p>{{host.description}}</p>
-          </row.headerCell>
-          <row.cell>
-            <Rose::Badge>
-              {{t (concat 'resources.host.types.' host.type)}}
-            </Rose::Badge>
-          </row.cell>
-          <row.cell>
-            <Copyable
-              @text={{host.id}}
-              @buttonText={{t 'actions.copy-to-clipboard'}}
-              @acknowledgeText={{t 'states.copied'}}
-            >
-              <code>{{host.id}}</code>
-            </Copyable>
-          </row.cell>
-          <row.cell>
-            <code>{{host.attributes.address}}</code>
-          </row.cell>
-        </body.row>
+              {{/if}}
+              <p>{{host.description}}</p>
+            </row.headerCell>
+            <row.cell>
+              <Rose::Badge>
+                {{t (concat 'resources.host.types.' host.type)}}
+              </Rose::Badge>
+            </row.cell>
+            <row.cell>
+              <Copyable
+                @text={{host.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{host.id}}</code>
+              </Copyable>
+            </row.cell>
+            <row.cell>
+              <code>{{host.attributes.address}}</code>
+            </row.cell>
+          </body.row>
+        {{/if}}
       {{/each}}
     </table.body>
   </Rose::Table>
