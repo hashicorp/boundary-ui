@@ -121,5 +121,6 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     @action
     clearAllFilters() {
       this.status = [];
+      this.project = [];
     }
 }

@@ -14,7 +14,7 @@
         (or
           @model
           (has-resource-filter-selections
-            'scopes.scope.projects.sessions' 'type'
+            'scopes.scope.projects.sessions' 'status' 'project'
           )
         )
       }}
@@ -78,7 +78,7 @@
 
             {{#if
               (has-resource-filter-selections
-                'scopes.scope.projects.sessions' 'type'
+                'scopes.scope.projects.sessions' 'status' 'project'
               )
             }}
               <Rose::Button
@@ -170,7 +170,7 @@
         </table.body>
       </Rose::Table>
     {{else if (has-resource-filter-selections
-      'scopes.scope.projects.sessions' 'type'
+      'scopes.scope.projects.sessions' 'status' 'project'
     )}}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
