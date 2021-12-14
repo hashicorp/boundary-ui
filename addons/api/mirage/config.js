@@ -26,16 +26,18 @@ export default function () {
 
   this.get(
     '/scopes',
-    ({ scopes }, { queryParams: { scope_id, recursive } }) => {
+    ({ scopes }, { queryParams: { scope_id, recursive, filter } }) => {
+      let resultSet;
       // Default parent scope is global
       if (!scope_id) scope_id = 'global';
       if (recursive && scope_id === 'global') {
-        return scopes.all();
+        resultSet = scopes.all();
       } else {
-        return scopes.where((scope) => {
+        resultSet = scopes.where((scope) => {
           return scope.scope ? scope.scope.id === scope_id : false;
         });
       }
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.post('/scopes', function ({ scopes }) {

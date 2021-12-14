@@ -14,7 +14,7 @@
         (or
           @model
           (has-resource-filter-selections
-            'scopes.scope.projects.sessions' 'type'
+            'scopes.scope.projects.sessions' 'status' 'project'
           )
         )
       }}
@@ -49,9 +49,36 @@
               </Rose::Dropdown>
             {{/with}}
 
+            {{#with
+              (resource-filter 'scopes.scope.projects.sessions' 'project')
+              as |filter|
+            }}
+              <Rose::Dropdown
+                @text={{t (concat 'resources.' filter.name '.title')}}
+                @count={{filter.selectedValue.length}}
+                @ignoreClickInside={{true}}
+                as |dropdown|
+              >
+                <form.checkboxGroup
+                  @name={{filter.name}}
+                  @items={{filter.allowedValues}}
+                  @selectedItems={{filter.selectedValue}}
+                  @onChange={{route-action 'filterBy' filter.name}}
+                  as |group|
+                >
+                  <dropdown.item>
+                    <group.checkbox
+                      @label={{group.item.displayName}}
+                      value={{group.item}}
+                    />
+                  </dropdown.item>
+                </form.checkboxGroup>
+              </Rose::Dropdown>
+            {{/with}}
+
             {{#if
               (has-resource-filter-selections
-                'scopes.scope.projects.sessions' 'type'
+                'scopes.scope.projects.sessions' 'status' 'project'
               )
             }}
               <Rose::Button
@@ -143,7 +170,7 @@
         </table.body>
       </Rose::Table>
     {{else if (has-resource-filter-selections
-      'scopes.scope.projects.sessions' 'type'
+      'scopes.scope.projects.sessions' 'status' 'project'
     )}}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
