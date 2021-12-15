@@ -2,6 +2,14 @@
 
 {{#if @model.hosts}}
   <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.address.label'}}</row.headerCell>
+        <row.headerCell />
+      </header.row>
+    </table.header>
     <table.body as |body|>
       {{#each @model.hosts as |host|}}
         <body.row as |row|>
