@@ -81,7 +81,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
    * When this route is activated (entered), begin polling for changes.
    */
   activate() {
-    this.poller.perform();
+    // this.poller.perform();
   }
 
   /**

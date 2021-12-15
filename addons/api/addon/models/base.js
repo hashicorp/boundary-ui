@@ -47,6 +47,10 @@ export default class BaseModel extends Model {
   })
   authorized_collection_actions;
 
+  get scopeModel() {
+    const id = this.scopeID;
+    return this.store.peekRecord('scope', id);
+  }
   set scopeModel(model) {
     if (model) {
       const json = model.serialize();
