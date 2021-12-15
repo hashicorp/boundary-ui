@@ -173,14 +173,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
 
   test('visiting index', async function (assert) {
     assert.expect(2);
-    // Because we are generating host with different types but just showing on the list
-    // the type = static, we have to apply a filter here
-    const rawHostsList = this.server.schema.hosts.all();
-    const filteredHostsList = rawHostsList.filter((host) => {
-      if (host.type === 'static') {
-        return host;
-      }
-    }).length;
+    const hostsCount = this.server.schema.hosts.all().models.length;
     // This later/cancelTimers technique allows us to test a page with
     // active polling.  Normally an acceptance test waits for all runloop timers
     // to stop before returning from an awaited test, but polling means that
@@ -190,7 +183,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
       run.cancelTimers();
       // await a11yAudit();
       assert.equal(currentURL(), urls.hosts);
-      assert.equal(findAll('tbody tr').length, filteredHostsList);
+      assert.equal(findAll('tbody tr').length, hostsCount);
     }, 750);
     await visit(urls.hosts);
   });

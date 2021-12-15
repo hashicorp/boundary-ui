@@ -1,45 +1,36 @@
 {{page-title (t 'resources.host-set.title_plural')}}
 
 {{#if @model.hosts}}
-
   <Rose::Table as |table|>
     <table.body as |body|>
       {{#each @model.hosts as |host|}}
-        {{#if host.isStatic}}
-          <body.row as |row|>
-            <row.cell>
-              {{host.displayName}}
-              <p>{{host.description}}</p>
-            </row.cell>
-            <row.cell>
-              <Copyable
-                @text={{host.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{host.id}}</code>
-              </Copyable>
-            </row.cell>
-            <row.cell>{{host.attributes.address}}</row.cell>
-            <row.cell>
-              <Rose::Badge>{{t
-                  (concat 'resources.host.types.' host.type)
-                }}</Rose::Badge>
-            </row.cell>
-            <row.cell>
-              <Rose::Button
-                @style='secondary'
-                {{on 'click' (route-action 'connect' @model.target host)}}
-              >
-                {{t 'resources.session.actions.connect'}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        {{/if}}
+        <body.row as |row|>
+          <row.cell>
+            {{host.displayName}}
+            <p>{{host.description}}</p>
+          </row.cell>
+          <row.cell>
+            <Copyable
+              @text={{host.id}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{host.id}}</code>
+            </Copyable>
+          </row.cell>
+          <row.cell>{{host.attributes.address}}</row.cell>
+          <row.cell>
+            <Rose::Button
+              @style='secondary'
+              {{on 'click' (route-action 'connect' @model.target host)}}
+            >
+              {{t 'resources.session.actions.connect'}}
+            </Rose::Button>
+          </row.cell>
+        </body.row>
       {{/each}}
     </table.body>
   </Rose::Table>
-
 {{else}}
 
   <Rose::Layout::Centered>
