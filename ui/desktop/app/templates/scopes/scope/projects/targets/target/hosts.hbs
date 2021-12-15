@@ -1,7 +1,6 @@
 {{page-title (t 'resources.host-set.title_plural')}}
 
 {{#if @model.hosts}}
-
   <Rose::Table as |table|>
     <table.header as |header|>
       <header.row as |row|>
@@ -40,7 +39,6 @@
       {{/each}}
     </table.body>
   </Rose::Table>
-
 {{else}}
 
   <Rose::Layout::Centered>
