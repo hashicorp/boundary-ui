@@ -7,11 +7,4 @@ export default class HostModel extends GeneratedHostModel {
    * @type {FragmentHostAttributesModel}
    */
   @fragment('fragment-host-attributes', { defaultValue: {} }) attributes;
-
-  /**
-   * @type {boolean}
-   */
-  get isStatic() {
-    return this.type === 'static';
-  }
 }
