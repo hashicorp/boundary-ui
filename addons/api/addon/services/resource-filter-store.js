@@ -8,10 +8,11 @@ import { inject as service } from '@ember/service';
  * @example
  *   const filter = new ResourceFilter({
  *     type: 'oidc',
- *     status: ['active', 'pending']
+ *     status: ['active', 'pending'],
+ *     authorized_actions: [{ contains: 'read' }]
  *   });
  *   log(filter.queryExpression);
- *   // ("/item/type" == "oidc") and ("/item/status" == "active" or "/item/status" == "pending")
+ *   // ("/item/type" == "oidc") and ("/item/status" == "active" or "/item/status" == "pending") and ("read" in "/item/authorized_actions")
  */
 export class ResourceFilter {
   // =attributes
@@ -30,7 +31,14 @@ export class ResourceFilter {
         const value = this.#filterObject[key];
         const valuesArray = Array.isArray(value) ? value : [value];
         return this.parenthetical(
-          this.or(valuesArray.map((value) => this.equals(key, value)))
+          this.or(
+            valuesArray.map((value) => {
+              if (value && value.contains) {
+                return this.in(value.contains, key);
+              }
+              return this.equals(key, value);
+            })
+          )
         );
       })
       .flat()
@@ -54,6 +62,15 @@ export class ResourceFilter {
    */
   equals(key, value) {
     return value !== null ? `"/item/${key}" == "${value}"` : null;
+  }
+
+  /**
+   * @param {string} key
+   * @param value
+   * @return {string}
+   */
+  in(value, key) {
+    return value !== null ? `"${value}" in "/item/${key}"` : null;
   }
 
   /**

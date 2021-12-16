@@ -9,6 +9,85 @@
   </page.header>
 
   <page.body>
+    {{#if (feature-flag 'filter')}}
+      {{#if
+        (or
+          @model
+          (has-resource-filter-selections
+            'scopes.scope.projects.targets' 'project'
+          )
+        )
+      }}
+        <Rose::Toolbar>
+          <Rose::Form as |form|>
+            {{#with
+              (resource-filter 'scopes.scope.projects.targets' 'project')
+              as |filter|
+            }}
+              <Rose::Dropdown
+                @text={{t (concat 'resources.' filter.name '.title')}}
+                @count={{filter.selectedValue.length}}
+                @ignoreClickInside={{true}}
+                as |dropdown|
+              >
+                <ul>
+                  {{#with
+                    (group-by filter.allowedValues 'scopeModel')
+                    as |groups|
+                  }}
+                    {{#each groups as |groupedItems|}}
+                      <li>
+                        <dropdown.item>
+                          <Rose::Icon
+                            @name='flight-icons/svg/org-16'
+                            @size='medium'
+                          />
+                          {{groupedItems.key.displayName}}
+                        </dropdown.item>
+                        <ul class='indent-label-2'>
+                          <form.checkboxGroup
+                            @name={{filter.name}}
+                            @items={{groupedItems.items}}
+                            @selectedItems={{filter.selectedValue}}
+                            @onChange={{route-action 'filterBy' filter.name}}
+                            as |group|
+                          >
+                            <li>
+                              <dropdown.item>
+                                <group.checkbox
+                                  @label={{group.item.displayName}}
+                                  value={{group.item}}
+                                />
+                              </dropdown.item>
+                            </li>
+                          </form.checkboxGroup>
+                        </ul>
+                      </li>
+                    {{/each}}
+                  {{/with}}
+                </ul>
+
+                {{!  }}
+              </Rose::Dropdown>
+            {{/with}}
+
+            {{#if
+              (has-resource-filter-selections
+                'scopes.scope.projects.targets' 'project'
+              )
+            }}
+              <Rose::Button
+                @style='inline-link-action'
+                @iconLeft='flight-icons/svg/x-16'
+                {{on 'click' (route-action 'clearAllFilters')}}
+              >{{t 'actions.clear-all-filters'}}
+              </Rose::Button>
+            {{/if}}
+          </Rose::Form>
+        </Rose::Toolbar>
+      {{/if}}
+    {{/if}}
+
     {{#if @model}}
       <Rose::Table as |table|>
         <table.header as |header|>

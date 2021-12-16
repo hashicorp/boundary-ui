@@ -10,9 +10,10 @@ module('Unit | Service | resource-filter-store', function (hooks) {
     const filter = new ResourceFilter({
       type: 'oidc',
       status: ['active', 'pending'],
+      authorized_actions: [{ contains: 'read' }],
     });
     const expected =
-      '("/item/type" == "oidc") and ("/item/status" == "active" or "/item/status" == "pending")';
+      '("/item/type" == "oidc") and ("/item/status" == "active" or "/item/status" == "pending") and ("read" in "/item/authorized_actions")';
     assert.equal(filter.queryExpression, expected);
   });
 });

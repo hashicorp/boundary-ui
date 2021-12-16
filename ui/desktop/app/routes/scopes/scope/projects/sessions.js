@@ -105,22 +105,22 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     await this.ipc.invoke('stop', { session_id: session.id });
   }
 
-    /**
- * Sets the specified resource filter field to the specified value.
- * @param {string} field
- * @param value
- */
-    @action
-    filterBy(field, value) {
-      this[field] = value;
-    }
+  /**
+   * Sets the specified resource filter field to the specified value.
+   * @param {string} field
+   * @param value
+   */
+  @action
+  filterBy(field, value) {
+    this[field] = value;
+  }
 
-    /**
-     * Clears and filter selections.
-     */
-    @action
-    clearAllFilters() {
-      this.status = [];
-      this.project = [];
-    }
+  /**
+   * Clears and filter selections.
+   */
+  @action
+  clearAllFilters() {
+    this.status = [];
+    this.project = [];
+  }
 }

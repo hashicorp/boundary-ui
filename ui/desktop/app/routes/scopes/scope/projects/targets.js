@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import config from '../../../../config/environment';
+import { resourceFilter } from 'core/decorators/resource-filter';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -15,8 +16,15 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @service origin;
   @service notify;
   @service confirm;
+  @service resourceFilterStore;
 
   // =attributes
+
+  @resourceFilter({
+    allowed: (route) => route.modelFor('scopes.scope.projects'),
+    serialize: ({ id }) => id,
+    findBySerialized: ({ id }, value) => id === value
+  }) project;
 
   /**
    * A simple Ember Concurrency-based polling task that refreshes the route
@@ -52,13 +60,17 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
     const { user_id } = this.session.data.authenticated;
-    await this.store.query('session', {
-      filter: `"/item/user_id" == "${user_id}"`,
+    const projects = this.project || [];
+    await this.resourceFilterStore.queryBy('session', { user_id }, {
       recursive: true,
       scope_id
     });
-    return this.store.query('target', {
-      filter: '"authorize-session" in "/item/authorized_actions"',
+    return this.resourceFilterStore.queryBy('target', {
+      scope_id: projects.map(({ id }) => id),
+      authorized_actions: [
+        { contains: 'authorize-session' },
+      ]
+    }, {
       recursive: true,
       scope_id
     });
@@ -128,5 +140,23 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
         .then(() => this.connect(model))
         .catch(() => null /* no op */);
     }
+  }
+
+  /**
+   * Sets the specified resource filter field to the specified value.
+   * @param {string} field
+   * @param value
+   */
+  @action
+  filterBy(field, value) {
+    this[field] = value;
+  }
+
+  /**
+   * Clears and filter selections.
+   */
+  @action
+  clearAllFilters() {
+    this.project = [];
   }
 }
