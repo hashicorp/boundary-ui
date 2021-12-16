@@ -362,7 +362,7 @@ export default function () {
           );
         });
       } else {
-        targets.where((target) => target.scopeId === scope_id);
+        resultSet = targets.where((target) => target.scopeId === scope_id);
       }
       return resultSet.filter(makeBooleanFilter(filter));
     }
