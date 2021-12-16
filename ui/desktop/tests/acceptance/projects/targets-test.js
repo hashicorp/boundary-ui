@@ -255,7 +255,11 @@ module('Acceptance | projects | targets', function (hooks) {
     await visit(urls.targets);
   });
 
-  test('cannot connect to a target without proper authorization', async function (assert) {
+  // Skipping because this test doesn't make sense.  Users will never even see
+  // targets for which they do not have authorize-session.  The only reason this
+  // test ever passed was because filtering in target mocks wasn't previously
+  // implemented.
+  test.skip('cannot connect to a target without proper authorization', async function (assert) {
     assert.expect(3);
     instances.target.update({
       authorized_actions: instances.target.authorized_actions.filter(
