@@ -5,12 +5,14 @@ module('Unit | Model | host', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
+    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('host', {});
     assert.ok(model);
   });
 
   test('it contains attributes', function (assert) {
+    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('host', {
       type: 'static',
