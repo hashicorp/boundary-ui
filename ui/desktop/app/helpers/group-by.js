@@ -11,6 +11,13 @@ const groupByReducer = (items, key) => {
   return arr;
 };
 
+/**
+ * This helper accepts an array of objects and groups them by a specified key.
+ * It returns a new array of objects in the form [{ key, items }], where `key`
+ * is the value of the specified key and `items` is an array of matching items.
+ * @param {object[]} items
+ * @param {string} key
+ */
 export default helper(function groupBy([items, key]) {
   const result = groupByReducer(items, key);
   return result;
