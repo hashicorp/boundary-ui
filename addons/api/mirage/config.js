@@ -349,19 +349,22 @@ export default function () {
 
   this.get(
     '/targets',
-    function ({ targets }, { queryParams: { scope_id, recursive } }) {
+    function ({ targets }, { queryParams: { scope_id, recursive, filter } }) {
+      let resultSet;
       if (recursive && scope_id === 'global') {
-        return targets.all();
+        resultSet = targets.all();
       } else if (recursive) {
-        return targets.where((target) => {
+        resultSet = targets.where((target) => {
           const targetModel = targets.find(target.id);
           return (
             target.scopeId === scope_id ||
             targetModel?.scope?.scope?.id === scope_id
           );
         });
+      } else {
+        targets.where((target) => target.scopeId === scope_id);
       }
-      return targets.where((target) => target.scopeId === scope_id);
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.post('/targets', function ({ targets }) {
