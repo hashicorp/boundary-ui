@@ -7,7 +7,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ### New
 
 - Add sessions filtering by project. ([PR](https://github.com/hashicorp/boundary-ui/pull/880))
-- Add targets filtering by project.
+- Add targets filtering by project. ([PR](https://github.com/hashicorp/boundary-ui/pull/883))
 
 ## v1.4.0 [CLI 0.7.1] (2021.11.18)
 
