@@ -13,8 +13,8 @@ module('Unit | Model | base', function (hooks) {
     assert.ok(model);
   });
 
-  test('it may have a scope fragment', function (assert) {
-    assert.expect(1);
+  test('it may have a scope fragment (and thus a scopeModel)', function (assert) {
+    assert.expect(2);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -37,6 +37,7 @@ module('Unit | Model | base', function (hooks) {
     const scope = store.peekRecord('scope', 'o_1');
     const model = store.peekRecord('user', '123abc');
     assert.equal(model.scope.scope_id, scope.id);
+    assert.equal(model.scopeModel.id, scope.id);
   });
 
   test('it may accept a `scopeModel` for convenience, instead of a fragment', function (assert) {

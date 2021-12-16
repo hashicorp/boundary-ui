@@ -95,15 +95,22 @@
       }
     }
 
+    .rose-icon {
+      margin-right: sizing.rems(xxs);
+      margin-left: sizing.rems(xxs);
+    }
+
     .indent-label-1 {
-      .rose-form-radio-label {
+      .rose-form-radio-label,
+      .rose-form-checkbox-label {
         padding-left: $indent;
       }
     }
 
     .indent-label-2 {
-      .rose-form-radio-label {
-        padding-left: $indent + $icon-width;
+      .rose-form-radio-label,
+      .rose-form-checkbox-label {
+        padding-left: $indent * 1.5;
       }
     }
 
