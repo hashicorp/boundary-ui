@@ -35,7 +35,6 @@
     "ember-named-blocks-polyfill": "^0.2.4"
   },
   "devDependencies": {
-    "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "@babel/core": "^7.16.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^1.0.2",
@@ -72,6 +71,7 @@
     "ember-modifier": "^2.1.2",
     "ember-notify": "^6.0.1",
     "ember-page-title": "^6.2.2",
+    "ember-pollster": "^0.0.1-beta.2",
     "ember-qunit": "^5.1.4",
     "ember-resolver": "^8.0.3",
     "ember-source": "~3.28.4",
@@ -84,6 +84,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-qunit": "^6.2.0",
     "faker": "^5.5.3",
+    "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.0",

@@ -2,8 +2,8 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { all, hash } from 'rsvp';
-import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
+import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
 import { resourceFilter } from 'core/decorators/resource-filter';
@@ -11,7 +11,6 @@ import { resourceFilter } from 'core/decorators/resource-filter';
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeSessionsRoute extends Route {
-
   // =services
 
   @service intl;
@@ -23,26 +22,14 @@ export default class ScopesScopeSessionsRoute extends Route {
 
   @resourceFilter({
     allowed: ['active', 'pending', 'canceling', 'terminated'],
-    defaultValue: ['active','pending', 'canceling']
-  }) status;
+    defaultValue: ['active', 'pending', 'canceling'],
+  })
+  status;
 
-  /**
-   * A simple Ember Concurrency-based polling task that refreshes the route
-   * every POLL_TIMEOUT_SECONDS seconds.  This is necessary to display changes
-   * to session `status` that may occur.
-   *
-   * NOTE:  tasks are sort of attributes and sort of methods, but they are not
-   * language-level constructs.  Thus we annotate this task as if it
-   * is an attribute.
-   * @type {Task}
-   */
-  @task(function * () {
-    while(true) {
-      yield timeout(POLL_TIMEOUT_SECONDS * 1000);
-      yield this.refresh();
-    }
-  /* eslint-disable-next-line prettier/prettier */
-  }).drop() poller;
+  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
+  poller() {
+    return this.refresh();
+  }
 
   // =methods
 
@@ -68,45 +55,34 @@ export default class ScopesScopeSessionsRoute extends Route {
     );
 
     const sessionAggregates = await all(
-      sessions.map(session => hash({
-        session,
-        user: session.user_id
-          ? (
-              this.store.peekRecord('user', session.user_id) ||
+      sessions.map((session) =>
+        hash({
+          session,
+          user: session.user_id
+            ? this.store.peekRecord('user', session.user_id) ||
               this.store.findRecord('user', session.user_id)
-            )
-          : null,
-        target: session.target_id
-          ? (
-              this.store.peekRecord('target', session.target_id) ||
+            : null,
+          target: session.target_id
+            ? this.store.peekRecord('target', session.target_id) ||
               this.store.findRecord('target', session.target_id)
-            )
-          : null,
-      }))
+            : null,
+        })
+      )
     );
     // Sort sessions by time created...
-    let sortedSessionAggregates =
-      A(sessionAggregates).sortBy('session.created_time').reverse();
+    let sortedSessionAggregates = A(sessionAggregates)
+      .sortBy('session.created_time')
+      .reverse();
     // Then move active sessions to the top...
     sortedSessionAggregates = [
-      ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status === 'active'),
-      ...sortedSessionAggregates.filter((aggregate) => aggregate.session.status !== 'active'),
+      ...sortedSessionAggregates.filter(
+        (aggregate) => aggregate.session.status === 'active'
+      ),
+      ...sortedSessionAggregates.filter(
+        (aggregate) => aggregate.session.status !== 'active'
+      ),
     ];
     return sortedSessionAggregates;
-  }
-
-  /**
-   * When this route is activated (entered), begin polling for changes.
-   */
-  activate() {
-    this.poller.perform();
-  }
-
-  /**
-   * When this route is deactivated (exited), stop polling for changes.
-   */
-  deactivate() {
-    this.poller.cancelAll();
   }
 
   // =actions
@@ -122,21 +98,21 @@ export default class ScopesScopeSessionsRoute extends Route {
     await session.cancelSession();
   }
 
-   /**
+  /**
    * Sets the specified resource filter field to the specified value.
    * @param {string} field
    * @param value
    */
-    @action
-    filterBy(field, value) {
-      this[field] = value;
-    }
+  @action
+  filterBy(field, value) {
+    this[field] = value;
+  }
 
-    /**
-     * Clears and filter selections.
-     */
-    @action
-    clearAllFilters() {
-      this.status = [];
-    }
+  /**
+   * Clears and filter selections.
+   */
+  @action
+  clearAllFilters() {
+    this.status = [];
+  }
 }

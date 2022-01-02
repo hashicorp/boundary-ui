@@ -3,7 +3,6 @@ import { visit, currentURL, findAll, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { run, later } from '@ember/runloop';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -81,45 +80,36 @@ module('Acceptance | sessions', function (hooks) {
   test('visiting sessions', async function (assert) {
     assert.expect(2);
     authenticateSession({});
-    later(async () => {
-      run.cancelTimers();
-      await a11yAudit();
-      assert.equal(currentURL(), urls.sessions);
-      assert.equal(findAll('tbody tr').length, instances.sessions.length);
-    }, 750);
     await visit(urls.sessions);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.sessions);
+    assert.equal(findAll('tbody tr').length, instances.sessions.length);
   });
 
   test('Users cannot navigate to sessions without proper authorization', async function (assert) {
     assert.expect(2);
     instances.scopes.project.authorized_collection_actions.sessions = [];
     authenticateSession({});
-    later(async () => {
-      run.cancelTimers();
-      assert.notOk(
-        instances.scopes.project.authorized_collection_actions.sessions.includes(
-          'list'
-        )
-      );
-      assert.notOk(find(`[href="${urls.sessions}"]`));
-    }, 750);
     await visit(urls.orgScope);
+    assert.notOk(
+      instances.scopes.project.authorized_collection_actions.sessions.includes(
+        'list'
+      )
+    );
+    assert.notOk(find(`[href="${urls.sessions}"]`));
   });
 
   test('Users can navigate to sessions with proper authorization', async function (assert) {
     assert.expect(2);
     instances.scopes.project.authorized_collection_actions.sessions = ['list'];
     authenticateSession({});
-    later(async () => {
-      run.cancelTimers();
-      assert.ok(
-        instances.scopes.project.authorized_collection_actions.sessions.includes(
-          'list'
-        )
-      );
-      assert.ok(find(`[href="${urls.sessions}"]`));
-    }, 750);
     await visit(urls.orgScope);
+    assert.ok(
+      instances.scopes.project.authorized_collection_actions.sessions.includes(
+        'list'
+      )
+    );
+    assert.ok(find(`[href="${urls.sessions}"]`));
   });
 
   test('visiting sessions without users or targets is OK', async function (assert) {
@@ -129,37 +119,28 @@ module('Acceptance | sessions', function (hooks) {
       targetId: null,
     });
     authenticateSession({});
-    later(async () => {
-      run.cancelTimers();
-      await a11yAudit();
-      assert.equal(currentURL(), urls.sessions);
-      assert.equal(findAll('tbody tr').length, instances.sessions.length);
-    }, 750);
     await visit(urls.sessions);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.sessions);
+    assert.equal(findAll('tbody tr').length, instances.sessions.length);
   });
 
   test('cancelling a session', async function (assert) {
     assert.expect(2);
     authenticateSession({});
-    later(async () => {
-      run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-success'));
-    }, 750);
     await visit(urls.sessions);
     assert.equal(currentURL(), urls.sessions);
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-success'));
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
     assert.expect(2);
     this.server.post('/sessions/:id_method', () => new Response(400));
     authenticateSession({});
-    later(async () => {
-      run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-error'));
-    }, 750);
     await visit(urls.sessions);
     assert.equal(currentURL(), urls.sessions);
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-error'));
   });
 });
