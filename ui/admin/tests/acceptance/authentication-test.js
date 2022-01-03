@@ -12,7 +12,7 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-//import { run, later } from '@ember/runloop';
+import { runAllJobs } from 'ember-pollster/test-support';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
@@ -383,6 +383,9 @@ module('Acceptance | authentication', function (hooks) {
     );
     await visit(authMethodOIDCAuthenticateURL);
     await click('form [type="submit"]');
+    // explicitly poll multiple times to trigger mock OIDC auth
+    await runAllJobs();
+    await runAllJobs();
   });
 
   // TODO:  test OIDC retry and cancel
