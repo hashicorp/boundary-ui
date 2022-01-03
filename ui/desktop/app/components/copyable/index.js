@@ -1,13 +1,12 @@
 import Component from '@glimmer/component';
+import ClipboardJS from 'clipboard';
 import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
 import { generateComponentID } from 'rose/utilities/component-auto-id';
-import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import ClipboardJS from 'clipboard';
+import { later } from '@ember/runloop';
 
 export default class CopyableComponent extends Component {
-
   // =attributes
 
   id = generateComponentID();
@@ -22,23 +21,10 @@ export default class CopyableComponent extends Component {
 
   clipboard = null;
 
-  /**
-   * A Ember Concurrency-based task that updates copy icon to a success state
-   * and back after 1 second. This icon flash indicates success on
-   * copy to clipboard action.
-   *
-   * NOTE:  tasks are sort of attributes and sort of methods, but they are not
-   * language-level constructs.  Thus we annotate this task as if it
-   * is an attribute.
-   * @type {Task}
-   */
-  /* istanbul ignore next */
-  @task(function * () {
+  confirmCopy() {
     this.copied = true;
-    yield timeout(1000);
-    this.copied = false;
-  /* eslint-disable-next-line prettier/prettier */
-  }).drop() confirmCopyTimer;
+    later(() => (this.copied = false), 1000);
+  }
 
   /**
    * Checks for ClipboardJS support.
@@ -77,12 +63,12 @@ export default class CopyableComponent extends Component {
       // container to a modal (if exists), since this is the only container
       // a user would be able to interact with.  If a modal doesn't exist,
       // container is set to `undefined` and thus uses the default body element.
-      container: this.getFirstElementByClassName('rose-dialog')
+      container: this.getFirstElementByClassName('rose-dialog'),
     });
     /* istanbul ignore next */
     this.clipboard.on('success', (clipboardEvent) => {
       clipboardEvent.clearSelection();
-      this.confirmCopyTimer.perform();
+      this.confirmCopy();
     });
   }
 
@@ -93,7 +79,5 @@ export default class CopyableComponent extends Component {
   tearDown() {
     this.clipboard?.destroy();
     this.clipboard = null;
-    this.confirmCopyTimer.cancelAll();
   }
-
 }
