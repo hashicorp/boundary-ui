@@ -6,6 +6,7 @@ export default class ScopesIndexRoute extends Route {
   // =services
 
   @service session;
+  @service router;
 
   // =methods
 
@@ -21,9 +22,9 @@ export default class ScopesIndexRoute extends Route {
       'data.authenticated.scope.id'
     );
     if (authenticatedScopeID) {
-      this.transitionTo('scopes.scope', authenticatedScopeID);
+      this.router.transitionTo('scopes.scope', authenticatedScopeID);
     } else {
-      this.transitionTo('scopes.scope', 'global');
+      this.router.transitionTo('scopes.scope', 'global');
     }
   }
 }

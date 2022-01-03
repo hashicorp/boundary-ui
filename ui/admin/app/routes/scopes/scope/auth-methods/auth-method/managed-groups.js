@@ -41,7 +41,9 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
     const { isNew } = managedGroup;
     managedGroup.rollbackAttributes();
     if (isNew) {
-      this.transitionTo('scopes.scope.auth-methods.auth-method.managed-groups');
+      this.router.transitionTo(
+        'scopes.scope.auth-methods.auth-method.managed-groups'
+      );
     }
   }
 
@@ -58,12 +60,12 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   async save(managedGroup) {
     await managedGroup.save();
     if (this.can.can('read model', managedGroup)) {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method.managed-groups.managed-group',
         managedGroup
       );
     } else {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method.managed-groups'
       );
     }

@@ -20,7 +20,7 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
   /**
@@ -47,7 +47,7 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   cancel(hostCatalog) {
     const { isNew } = hostCatalog;
     hostCatalog.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.host-catalogs');
+    if (isNew) this.router.transitionTo('scopes.scope.host-catalogs');
   }
 
   /**
@@ -63,7 +63,7 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   )
   async save(hostCatalog) {
     await hostCatalog.save();
-    await this.transitionTo(
+    await this.router.transitionTo(
       'scopes.scope.host-catalogs.host-catalog',
       hostCatalog
     );

@@ -6,9 +6,12 @@ import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeCredentialStoresRoute extends Route {
-  // =methods
+  // =services
+
   @service can;
   @service router;
+
+  // =methods
 
   /**
    * Load all credential stores under current scope
@@ -38,7 +41,7 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
   @notifySuccess('notifications.save-success')
   async save(credentialStore) {
     await credentialStore.save();
-    await this.transitionTo(
+    await this.router.transitionTo(
       'scopes.scope.credential-stores.credential-store',
       credentialStore
     );
@@ -53,7 +56,7 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
   cancel(credentialStore) {
     const { isNew } = credentialStore;
     credentialStore.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.credential-stores');
+    if (isNew) this.router.transitionTo('scopes.scope.credential-stores');
   }
 
   /**

@@ -5,6 +5,7 @@ export default class AccountRoute extends Route {
   // =services
 
   @service session;
+  @service router;
 
   // =methods
 
@@ -12,6 +13,6 @@ export default class AccountRoute extends Route {
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 }

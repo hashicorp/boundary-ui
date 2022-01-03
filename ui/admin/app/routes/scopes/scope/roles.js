@@ -20,7 +20,7 @@ export default class ScopesScopeRolesRoute extends Route {
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
   /**
@@ -44,7 +44,7 @@ export default class ScopesScopeRolesRoute extends Route {
   cancel(role) {
     const { isNew } = role;
     role.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.roles');
+    if (isNew) this.router.transitionTo('scopes.scope.roles');
   }
 
   /**
@@ -60,9 +60,9 @@ export default class ScopesScopeRolesRoute extends Route {
   async save(role) {
     await role.save();
     if (this.can.can('read model', role)) {
-      await this.transitionTo('scopes.scope.roles.role', role);
+      await this.router.transitionTo('scopes.scope.roles.role', role);
     } else {
-      await this.transitionTo('scopes.scope.roles');
+      await this.router.transitionTo('scopes.scope.roles');
     }
     this.refresh();
   }

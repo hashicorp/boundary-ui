@@ -117,7 +117,7 @@ export default class ScopesScopeRoute extends Route {
   cancel(scope) {
     const { isNew } = scope;
     scope.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope');
+    if (isNew) this.router.transitionTo('scopes.scope');
   }
 
   /**
@@ -134,7 +134,7 @@ export default class ScopesScopeRoute extends Route {
   async save(scope) {
     const { isNew } = scope;
     await scope.save();
-    await this.transitionTo('scopes.scope.edit', scope);
+    await this.router.transitionTo('scopes.scope.edit', scope);
     if (isNew) this.refresh();
   }
 

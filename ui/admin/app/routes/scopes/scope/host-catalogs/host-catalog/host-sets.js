@@ -45,7 +45,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
     const { isNew } = hostSet;
     hostSet.rollbackAttributes();
     if (isNew)
-      this.transitionTo('scopes.scope.host-catalogs.host-catalog.host-sets');
+      this.router.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.host-sets'
+      );
   }
 
   /**
@@ -62,12 +64,12 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   async save(hostSet) {
     await hostSet.save();
     if (this.can.can('read model', hostSet)) {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
         hostSet
       );
     } else {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.host-sets'
       );
     }
