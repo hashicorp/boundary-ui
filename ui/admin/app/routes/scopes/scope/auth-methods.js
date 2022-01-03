@@ -14,6 +14,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @service session;
   @service can;
   @service resourceFilterStore;
+  @service router;
 
   // =attributes
 
@@ -97,7 +98,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     // Reload the scope, since this is where the primary_auth_method_id is
     // stored.  An auth method deletion could affect this field.
     await scopeModel.reload();
-    await this.replaceWith('scopes.scope.auth-methods');
+    await this.router.replaceWith('scopes.scope.auth-methods');
     this.refresh();
   }
 

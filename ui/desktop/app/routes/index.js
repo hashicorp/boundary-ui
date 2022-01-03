@@ -5,6 +5,7 @@ export default class IndexRoute extends Route {
   // =services
 
   @service origin;
+  @service router;
 
   // =methods
 
@@ -14,9 +15,9 @@ export default class IndexRoute extends Route {
   redirect() {
     const rendererOrigin = this.origin.rendererOrigin;
     if (!rendererOrigin) {
-      this.replaceWith('origin');
+      this.router.replaceWith('origin');
     } else {
-      this.replaceWith('scopes');
+      this.router.replaceWith('scopes');
     }
   }
 }

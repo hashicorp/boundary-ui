@@ -8,6 +8,8 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeCredentialStoresRoute extends Route {
   // =methods
   @service can;
+  @service router;
+
   /**
    * Load all credential stores under current scope
    * @returns {Promise[CredentialStoreModel]}
@@ -65,7 +67,7 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(credentialStore) {
     await credentialStore.destroyRecord();
-    await this.replaceWith('scopes.scope.credential-stores');
+    await this.router.replaceWith('scopes.scope.credential-stores');
     this.refresh();
   }
 }

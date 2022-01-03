@@ -34,6 +34,9 @@ module('Acceptance | authentication', function (hooks) {
       global: null,
       org: null,
     },
+    user: null,
+    target: null,
+    session: null,
   };
 
   const stubs = {
@@ -65,6 +68,10 @@ module('Acceptance | authentication', function (hooks) {
   };
 
   hooks.beforeEach(function () {
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.global,
+    });
+
     invalidateSession();
 
     // create scopes
@@ -90,6 +97,22 @@ module('Acceptance | authentication', function (hooks) {
       scope: instances.scopes.org,
       type: 'password',
     });
+
+    instances.target = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withAssociations'
+    );
+    instances.session = this.server.create(
+      'session',
+      {
+        scope: instances.scopes.project,
+        target: instances.target,
+        status: 'active',
+        user: instances.user,
+      },
+      'withAssociations'
+    );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
@@ -176,16 +199,20 @@ module('Acceptance | authentication', function (hooks) {
 
   test('401 responses result in deauthentication', async function (assert) {
     assert.expect(3);
-    await visit(urls.authenticate.methods.global);
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    await click('[type="submit"]');
+    authenticateSession({
+      scope: {
+        id: instances.scopes.global.id,
+        type: instances.scopes.global.type,
+      },
+    });
+    await visit(urls.sessions);
     assert.ok(
       currentSession().isAuthenticated,
       'Session begins authenticated, before encountering 401'
     );
     assert.ok(currentURL(), urls.targets);
     this.server.get('/sessions', () => new Response(401));
+    await visit(urls.targets);
     await visit(urls.sessions);
     assert.notOk(
       currentSession().isAuthenticated,

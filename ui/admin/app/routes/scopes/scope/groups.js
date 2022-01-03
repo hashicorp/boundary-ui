@@ -12,6 +12,8 @@ export default class ScopesScopeGroupsRoute extends Route {
   @service notify;
   @service session;
   @service can;
+  @service router;
+
   // =methods
 
   /**
@@ -76,7 +78,7 @@ export default class ScopesScopeGroupsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(group) {
     await group.destroyRecord();
-    await this.replaceWith('scopes.scope.groups');
+    await this.router.replaceWith('scopes.scope.groups');
     this.refresh();
   }
 }

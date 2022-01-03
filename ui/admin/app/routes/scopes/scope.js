@@ -12,6 +12,7 @@ export default class ScopesScopeRoute extends Route {
   @service intl;
   @service session;
   @service scope;
+  @service router;
 
   // =methods
 
@@ -149,7 +150,7 @@ export default class ScopesScopeRoute extends Route {
   async delete(scope) {
     const { scopeID } = scope;
     await scope.destroyRecord();
-    await this.replaceWith('scopes.scope.scopes', scopeID);
+    await this.router.replaceWith('scopes.scope.scopes', scopeID);
     //this.refresh();
   }
 }

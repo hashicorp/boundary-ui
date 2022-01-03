@@ -11,6 +11,8 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   @service intl;
   @service notify;
   @service can;
+  @service router;
+
   // =methods
 
   /**
@@ -82,7 +84,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   @notifySuccess('notifications.delete-success')
   async deleteAccount(account) {
     await account.destroyRecord();
-    await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
+    await this.router.replaceWith(
+      'scopes.scope.auth-methods.auth-method.accounts'
+    );
     this.refresh();
   }
 }

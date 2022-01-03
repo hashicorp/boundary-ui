@@ -257,7 +257,8 @@
   border-radius: sizing.rems(xxxs);
   margin: 0 auto;
   margin-top: sizing.rems(l) * 1.25;
-  padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2) (sizing.rems(l) * 3);
+  padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2)
+    (sizing.rems(l) * 3);
   position: relative;
   width: sizing.rems(l) * 16;
 
@@ -323,7 +324,6 @@
   margin: sizing.rems(l) 0 0 0;
   text-align: center;
 }
-
 
 // Dialog Detail
 // These styles are a Work In Progress. Expect changes (lots of them)
@@ -487,12 +487,14 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
       color: var(--ui-gray-subtler-2);
     }
 
-    .rose-button-ghost { // Copyable button icon.
+    .rose-button-ghost {
+      // Copyable button icon.
       color: var(--ui-gray-subtler-1);
     }
   }
 
-  .rose-button-ghost { // Hide/Show secret button icon.
+  .rose-button-ghost {
+    // Hide/Show secret button icon.
     color: var(--ui-gray);
   }
 }

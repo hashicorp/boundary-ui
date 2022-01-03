@@ -9,6 +9,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -40,7 +41,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   @notifySuccess('notifications.save-success')
   async setPassword(account, password) {
     await account.setPassword(password);
-    await this.replaceWith(
+    await this.router.replaceWith(
       'scopes.scope.auth-methods.auth-method.accounts.account.set-password'
     );
   }

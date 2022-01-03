@@ -12,6 +12,7 @@ export default class ScopesScopeRolesRoute extends Route {
   @service notify;
   @service session;
   @service can;
+  @service router;
 
   // =methods
 
@@ -77,7 +78,7 @@ export default class ScopesScopeRolesRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(role) {
     await role.destroyRecord();
-    await this.replaceWith('scopes.scope.roles');
+    await this.router.replaceWith('scopes.scope.roles');
     this.refresh();
   }
 }

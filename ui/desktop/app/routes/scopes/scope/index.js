@@ -5,6 +5,7 @@ export default class ScopesScopeIndexRoute extends Route {
   // =services
 
   @service session;
+  @service router;
 
   // =methods
 
@@ -15,9 +16,9 @@ export default class ScopesScopeIndexRoute extends Route {
    */
   redirect() {
     if (!this.session.isAuthenticated) {
-      this.replaceWith('scopes.scope.authenticate');
+      this.router.replaceWith('scopes.scope.authenticate');
     } else {
-      this.replaceWith('scopes.scope.projects.targets');
+      this.router.replaceWith('scopes.scope.projects.targets');
     }
   }
 }

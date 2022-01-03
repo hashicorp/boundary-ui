@@ -11,6 +11,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   @service intl;
   @service notify;
   @service can;
+  @service router;
+
   // =methods
 
   /**
@@ -80,7 +82,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   @notifySuccess('notifications.delete-success')
   async deleteHost(host) {
     await host.destroyRecord();
-    await this.replaceWith('scopes.scope.host-catalogs.host-catalog.hosts');
+    await this.router.replaceWith(
+      'scopes.scope.host-catalogs.host-catalog.hosts'
+    );
     this.refresh();
   }
 }

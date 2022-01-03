@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrariesRoute extends Route {
   // =methods
   @service can;
+  @service router;
 
   /**
    * Loads all credential libraries under the current credential store.
@@ -79,7 +80,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @notifySuccess('notifications.delete-success')
   async delete(credentialLibrary) {
     await credentialLibrary.destroyRecord();
-    await this.replaceWith(
+    await this.router.replaceWith(
       'scopes.scope.credential-stores.credential-store.credential-libraries'
     );
     this.refresh();

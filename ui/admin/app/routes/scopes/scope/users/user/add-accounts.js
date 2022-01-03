@@ -10,6 +10,7 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -74,7 +75,7 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
   @notifySuccess('notifications.add-success')
   async addAccounts(user, accountIDs) {
     await user.addAccounts(accountIDs);
-    await this.replaceWith('scopes.scope.users.user.accounts');
+    await this.router.replaceWith('scopes.scope.users.user.accounts');
   }
 
   /**
@@ -82,6 +83,6 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.users.user.accounts');
+    this.router.replaceWith('scopes.scope.users.user.accounts');
   }
 }
