@@ -13,12 +13,39 @@ export default class ApplicationRoute extends Route {
 
   @service session;
   @service confirm;
+  @service router;
 
   // =attributes
 
   routeIfUnauthenticated = 'index';
 
   // =methods
+
+  constructor() {
+    super(...arguments);
+    /**
+     * If user attempts to navigate away from unsaved changes, the user is
+     * asked to confirm that they would like to discard the changes.  If the
+     * user chooses discard, changes on the model are rolled back and the
+     * transition is retried.  If the user cancels discard, the transition is
+     * aborted.
+     */
+    this.router.on('routeWillChange', async (transition) => {
+      const fromName = transition?.from?.name;
+      const toName = transition?.to?.name;
+      const maybeModel = transition?.from?.attributes;
+      if (fromName !== toName && maybeModel?.hasDirtyAttributes) {
+        transition.abort();
+        try {
+          await this.confirm.confirm('abandon', { isAbandonConfirm: true });
+          maybeModel?.rollbackAttributes();
+          transition.retry();
+        } catch (e) {
+          // if user denies, do nothing
+        }
+      }
+    });
+  }
 
   beforeModel() {
     const theme = this.session.get('data.theme');
@@ -61,29 +88,6 @@ export default class ApplicationRoute extends Route {
       return false;
     }
     return true;
-  }
-
-  /**
-   * If user attempts to navigate away from unsaved changes, the user is
-   * asked to confirm that they would like to discard the changes.  If the
-   * user chooses discard, changes on the model are rolled back and the
-   * transition is retried.  If the user cancels discard, the transition is
-   * aborted.
-   * @param {Transition} transition
-   */
-  @action
-  async willTransition(transition) {
-    const maybeModel = transition?.from?.attributes;
-    if (maybeModel?.hasDirtyAttributes) {
-      transition.abort();
-      try {
-        await this.confirm.confirm('abandon', { isAbandonConfirm: true });
-        maybeModel?.rollbackAttributes();
-        transition.retry();
-      } catch (e) {
-        // if user denies, do nothing
-      }
-    }
   }
 
   /**
