@@ -1,15 +1,14 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
-import config from '../../../../config/environment';
 import { action } from '@ember/object';
+import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import config from '../../../../config/environment';
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeProjectsSessionsRoute extends Route {
-
   // =services
 
   @service ipc;
@@ -20,32 +19,16 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
 
   @resourceFilter({
     allowed: ['active', 'pending', 'canceling', 'terminated'],
-    defaultValue: ['active','pending', 'canceling']
-  }) status;
+    defaultValue: ['active', 'pending', 'canceling'],
+  })
+  status;
 
   @resourceFilter({
     allowed: (route) => route.modelFor('scopes.scope.projects'),
     serialize: ({ id }) => id,
-    findBySerialized: ({ id }, value) => id === value
-  }) project;
-
-  /**
-   * A simple Ember Concurrency-based polling task that refreshes the route
-   * every POLL_TIMEOUT_SECONDS seconds.  This is necessary to display changes
-   * to session `status` that may occur.
-   *
-   * NOTE:  tasks are sort of attributes and sort of methods, but they are not
-   * language-level constructs.  Thus we annotate this task as if it
-   * is an attribute.
-   * @type {Task}
-   */
-  @task(function * () {
-    while(true) {
-      yield timeout(POLL_TIMEOUT_SECONDS * 1000);
-      yield this.refresh();
-    }
-  /* eslint-disable-next-line prettier/prettier */
-  }).drop() poller;
+    findBySerialized: ({ id }, value) => id === value,
+  })
+  project;
 
   // =methods
 
@@ -67,28 +50,23 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     const { user_id } = this.session.data.authenticated;
     const projects = this.project || [];
     await this.store.query('target', { recursive: true, scope_id });
-    return await this.resourceFilterStore.queryBy('session', {
-      user_id,
-      status,
-      scope_id: projects.map(({ id }) => id)
-    }, {
-      recursive: true,
-      scope_id
-    });
+    return await this.resourceFilterStore.queryBy(
+      'session',
+      {
+        user_id,
+        status,
+        scope_id: projects.map(({ id }) => id),
+      },
+      {
+        recursive: true,
+        scope_id,
+      }
+    );
   }
 
-  /**
-   * When this route is activated (entered), begin polling for changes.
-   */
-  activate() {
-    this.poller.perform();
-  }
-
-  /**
-   * When this route is deactivated (exited), stop polling for changes.
-   */
-  deactivate() {
-    this.poller.cancelAll();
+  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
+  poller() {
+    return this.refresh();
   }
 
   // =actions
