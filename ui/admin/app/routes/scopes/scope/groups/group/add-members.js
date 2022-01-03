@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
