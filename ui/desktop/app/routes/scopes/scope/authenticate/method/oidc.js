@@ -1,38 +1,19 @@
 import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
 import { action } from '@ember/object';
+import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifyError } from 'core/decorators/notify';
 import config from '../../../../../config/environment';
 
 const POLL_TIMEOUT_SECONDS = config.oidcPollingTimeoutSeconds;
 
 export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
-
   // =services
 
   @service session;
 
   // =attributes
-
-  /**
-   * A simple Ember Concurrency-based polling task that refreshes the route
-   * every POLL_TIMEOUT_SECONDS seconds.  This is necessary to display changes
-   * to session `status` that may occur.
-   *
-   * NOTE:  tasks are sort of attributes and sort of methods, but they are not
-   * language-level constructs.  Thus we annotate this task as if it
-   * is an attribute.
-   * @type {Task}
-   */
-  @task(function * () {
-    while(!this.session.isAuthenticated) {
-      yield timeout(POLL_TIMEOUT_SECONDS * 1000);
-      yield this.refresh();
-    }
-  /* eslint-disable-next-line prettier/prettier */
-  }).drop() poller;
 
   // =methods
 
@@ -46,25 +27,9 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
     return oidc.attemptFetchToken({ scope, authMethod });
   }
 
-  /**
-   * If authenticated, redirects to index for further processing.
-   */
-  redirect() {
-    if (this.session.isAuthenticated) this.replaceWith('index');
-  }
-
-  /**
-   * When this route is activated (entered), begin polling for changes.
-   */
-  activate() {
-    this.poller.perform();
-  }
-
-  /**
-   * When this route is deactivated (exited), stop polling for changes.
-   */
-  deactivate() {
-    this.poller.cancelAll();
+  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
+  poller() {
+    this.refresh();
   }
 
   /**
@@ -78,5 +43,4 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
     // rethrow the error to activate the notifyError decorator
     throw e;
   }
-
 }
