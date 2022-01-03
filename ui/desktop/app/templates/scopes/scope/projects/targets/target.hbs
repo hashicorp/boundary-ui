@@ -3,15 +3,45 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    {{outlet 'header'}}
+    <h2>
+      {{@model.displayName}}
+      {{#if @model.isActive}}
+        &nbsp;
+        <Rose::Badge @style='success'>
+          {{t 'states.active'}}
+        </Rose::Badge>
+      {{/if}}
+    </h2>
+    <p>{{@model.description}}</p>
+    <p>
+      <Copyable
+        @text={{@model.id}}
+        @buttonText={{t 'actions.copy-to-clipboard'}}
+        @acknowledgeText={{t 'states.copied'}}
+      >
+        <code>{{@model.id}}</code>
+      </Copyable>
+    </p>
   </page.header>
 
   <page.actions>
-    {{outlet 'actions'}}
+    <Rose::Button
+      @style='primary'
+      {{on 'click' (route-action 'connect' @model)}}
+    >
+      {{t 'resources.session.actions.connect'}}
+    </Rose::Button>
   </page.actions>
 
   <page.navigation>
-    {{outlet 'navigation'}}
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.projects.targets.target.sessions'>
+        {{t 'resources.session.active_plural'}}
+      </nav.link>
+      <nav.link @route='scopes.scope.projects.targets.target.hosts'>
+        {{t 'resources.host.title_plural'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
   </page.navigation>
 
   <page.body>
