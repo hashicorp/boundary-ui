@@ -28,7 +28,7 @@
     </Rose::Form::Label>
 
     {{#if @helperText}}
-      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}>
+      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}  @link={{@link}} @linkText={{@linkText}}>
         {{@helperText}}
       </Rose::Form::HelperText>
     {{/if}}
