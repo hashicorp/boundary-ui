@@ -1,79 +1,101 @@
 {{page-title (t 'resources.target.host-source.title_plural')}}
 
-{{#if @model.hostSets}}
+<Rose::Layout::Page as |page|>
 
-  <Rose::Table as |table|>
-    <table.header as |header|>
-      <header.row as |row|>
-        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-        <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-      </header.row>
-    </table.header>
-    <table.body as |body|>
-      {{#each @model.hostSets as |hostSet|}}
-        <body.row as |row|>
-          <row.headerCell>
-            {{hostSet.model.displayName}}
-            <p>{{hostSet.model.description}}</p>
-          </row.headerCell>
-          <row.cell>
-            <Rose::Badge>{{t
-                (concat 'resources.host-set.types.' hostSet.model.type)
-              }}</Rose::Badge>
-          </row.cell>
-          <row.cell>
-            <Copyable
-              @text={{hostSet.model.id}}
-              @buttonText={{t 'actions.copy-to-clipboard'}}
-              @acknowledgeText={{t 'states.copied'}}
-            >
-              <code>{{hostSet.model.id}}</code>
-            </Copyable>
-          </row.cell>
-          <row.cell>
-            {{#if (can 'removeHostSources target' @model)}}
-              <Rose::Dropdown
-                @icon='flight-icons/svg/more-horizontal-16'
-                @iconOnly={{true}}
-                @showCaret={{false}}
-                @dropdownRight={{true}}
-                @text='{{t 'actions.manage'}}'
-                as |dropdown|
-              >
-                <dropdown.button
-                  @style='danger'
-                  {{on
-                    'click'
-                    (route-action 'removeHostSource' @model hostSet.model)
-                  }}
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <Targets::Target::Header @model={{@model}} />
+  </page.header>
+
+  <page.navigation>
+    <Targets::Target::Nav @model={{@model}} />
+  </page.navigation>
+
+  <page.actions>
+    <Targets::Target::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.body>
+    {{#if @model.hostSets}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model.hostSets as |hostSet|}}
+            <body.row as |row|>
+              <row.headerCell>
+                {{hostSet.model.displayName}}
+                <p>{{hostSet.model.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                <Rose::Badge>{{t
+                    (concat 'resources.host-set.types.' hostSet.model.type)
+                  }}</Rose::Badge>
+              </row.cell>
+              <row.cell>
+                <Copyable
+                  @text={{hostSet.model.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
                 >
-                  {{t 'actions.remove'}}
-                </dropdown.button>
-              </Rose::Dropdown>
-            {{/if}}
-          </row.cell>
-        </body.row>
-      {{/each}}
-    </table.body>
-  </Rose::Table>
+                  <code>{{hostSet.model.id}}</code>
+                </Copyable>
+              </row.cell>
+              <row.cell>
+                {{#if (can 'removeHostSources target' @model)}}
+                  <Rose::Dropdown
+                    @icon='flight-icons/svg/more-horizontal-16'
+                    @iconOnly={{true}}
+                    @showCaret={{false}}
+                    @dropdownRight={{true}}
+                    @text='{{t 'actions.manage'}}'
+                    as |dropdown|
+                  >
+                    <dropdown.button
+                      @style='danger'
+                      {{on
+                        'click'
+                        (route-action 'removeHostSource' @model hostSet.model)
+                      }}
+                    >
+                      {{t 'actions.remove'}}
+                    </dropdown.button>
+                  </Rose::Dropdown>
+                {{/if}}
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
 
-{{else}}
+    {{else}}
 
-  <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.target.host-source.messages.welcome.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.target.host-source.messages.welcome.description'}}
-      </message.description>
-      <message.link @route='scopes.scope.targets.target.add-host-sources'>
-        <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-        {{t 'resources.target.actions.add-host-sources'}}
-      </message.link>
-    </Rose::Message>
-  </Rose::Layout::Centered>
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.target.host-source.messages.welcome.title'}}
+          as |message|
+        >
+          <message.description>
+            {{t 'resources.target.host-source.messages.welcome.description'}}
+          </message.description>
+          <message.link @route='scopes.scope.targets.target.add-host-sources'>
+            <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
+            {{t 'resources.target.actions.add-host-sources'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
 
-{{/if}}
+    {{/if}}
+  </page.body>
+
+</Rose::Layout::Page>

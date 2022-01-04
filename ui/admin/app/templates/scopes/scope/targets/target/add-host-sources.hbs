@@ -1,28 +1,46 @@
 {{page-title (t 'resources.target.actions.add-host-sources')}}
 
-{{#if @model.hostSets}}
-  <Form::Target::AddHostSets
-    @model={{@model.target}}
-    @hostCatalogs={{@model.hostCatalogs}}
-    @hostSets={{@model.hostSets}}
-    @submit={{route-action 'save' @model.target}}
-    @cancel={{route-action 'cancel'}}
-  />
-{{/if}}
+<Rose::Layout::Page as |page|>
 
-{{#unless @model.hostSets}}
-  <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.target.host-source.messages.none.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.target.host-source.messages.none.description'}}
-      </message.description>
-      <message.link @route='scopes.scope.targets.target.host-sources'>
-        <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-        {{t 'actions.back'}}
-      </message.link>
-    </Rose::Message>
-  </Rose::Layout::Centered>
-{{/unless}}
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.target.host-source.messages.add.title'}}
+      <DocLink @doc='target.add-host-sources' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.target.host-source.messages.add.description'}}</p>
+  </page.header>
+
+  <page.body>
+    {{#if @model.hostSets}}
+      <Form::Target::AddHostSets
+        @model={{@model.target}}
+        @hostCatalogs={{@model.hostCatalogs}}
+        @hostSets={{@model.hostSets}}
+        @submit={{route-action 'save' @model.target}}
+        @cancel={{route-action 'cancel'}}
+      />
+    {{/if}}
+
+    {{#unless @model.hostSets}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.target.host-source.messages.none.title'}}
+          as |message|
+        >
+          <message.description>
+            {{t 'resources.target.host-source.messages.none.description'}}
+          </message.description>
+          <message.link @route='scopes.scope.targets.target.host-sources'>
+            <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
+            {{t 'actions.back'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/unless}}
+  </page.body>
+
+</Rose::Layout::Page>
