@@ -9,7 +9,6 @@ import {
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -174,52 +173,35 @@ module('Acceptance | projects | targets', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(2);
     const targetsCount = this.server.schema.targets.all().models.length;
-    // This later/cancelTimers technique allows us to test a page with
-    // active polling.  Normally an acceptance test waits for all runloop timers
-    // to stop before returning from an awaited test, but polling means that
-    // runloop timers exist indefinitely.  We thus schedule a cancelation before
-    // proceeding with our tests.
-    later(async () => {
-      run.cancelTimers();
-      await a11yAudit();
-      assert.equal(currentURL(), urls.targets);
-      assert.equal(findAll('tbody tr').length, targetsCount);
-    }, 750);
     await visit(urls.targets);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.targets);
+    assert.equal(findAll('tbody tr').length, targetsCount);
   });
 
   test('visiting a target', async function (assert) {
     assert.expect(1);
-    later(async () => {
-      run.cancelTimers();
-      await click('tbody tr th a');
-      assert.equal(currentURL(), urls.sessions);
-    }, 750);
     await visit(urls.targets);
+    await click('tbody tr th a');
+    assert.equal(currentURL(), urls.sessions);
   });
 
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
-    later(async () => {
-      run.cancelTimers();
-      assert.equal(
-        find('.rose-message-title').textContent.trim(),
-        'No Targets Available'
-      );
-    }, 750);
     await visit(urls.targets);
+    assert.equal(
+      find('.rose-message-title').textContent.trim(),
+      'No Targets Available'
+    );
   });
 
   test('cannot navigate to a target without proper authorization', async function (assert) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    later(async () => {
-      run.cancelTimers();
-      assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
-    }, 750);
     await visit(urls.targets);
+    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
   });
 
   test('connecting to a target', async function (assert) {
@@ -233,26 +215,22 @@ module('Acceptance | projects | targets', function (hooks) {
     });
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-
-    later(async () => {
-      run.cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.dialog-detail'), 'Success dialog');
-      assert.equal(findAll('.rose-dialog-footer button').length, 1);
-      assert.equal(
-        find('.rose-dialog-footer button').textContent.trim(),
-        'Close',
-        'Cannot retry'
-      );
-      assert.equal(
-        find('.rose-dialog-body .copyable-content').textContent.trim(),
-        'a_123:p_123'
-      );
-    }, 750);
     await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.dialog-detail'), 'Success dialog');
+    assert.equal(findAll('.rose-dialog-footer button').length, 1);
+    assert.equal(
+      find('.rose-dialog-footer button').textContent.trim(),
+      'Close',
+      'Cannot retry'
+    );
+    assert.equal(
+      find('.rose-dialog-body .copyable-content').textContent.trim(),
+      'a_123:p_123'
+    );
   });
 
   // Skipping because this test doesn't make sense.  Users will never even see
@@ -269,12 +247,9 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.notOk(
       instances.target.authorized_actions.includes('authorize-session')
     );
-    later(async () => {
-      run.cancelTimers();
-      assert.ok(find('tbody tr:first-child'));
-      assert.notOk(find('tbody tr:first-child td:last-child button'));
-    }, 750);
     await visit(urls.targets);
+    assert.ok(find('tbody tr:first-child'));
+    assert.notOk(find('tbody tr:first-child td:last-child button'));
   });
 
   test('handles cli error on connect', async function (assert) {
@@ -282,20 +257,16 @@ module('Acceptance | projects | targets', function (hooks) {
     stubs.ipcService.withArgs('cliExists').returns(true);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-
-    later(async () => {
-      run.cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
-    }, 750);
     await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.equal(dialogButtons.length, 2);
+    assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+    assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
   });
 
   test('handles connect error', async function (assert) {
@@ -304,20 +275,16 @@ module('Acceptance | projects | targets', function (hooks) {
     stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-
-    later(async () => {
-      run.cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
-    }, 750);
     await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.equal(dialogButtons.length, 2);
+    assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+    assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
   });
 
   test('can retry on error', async function (assert) {
@@ -325,18 +292,14 @@ module('Acceptance | projects | targets', function (hooks) {
     stubs.ipcService.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-
-    later(async () => {
-      run.cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      const firstErrorDialog = find('.rose-dialog');
-      await click('.rose-dialog footer .rose-button-primary', 'Retry');
-      const secondErrorDialog = find('.rose-dialog');
-      assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
-    }, 750);
     await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    const firstErrorDialog = find('.rose-dialog');
+    await click('.rose-dialog footer .rose-button-primary', 'Retry');
+    const secondErrorDialog = find('.rose-dialog');
+    assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
   });
 });

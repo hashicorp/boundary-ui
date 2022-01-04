@@ -151,9 +151,6 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
-    // Polling timeouts should be short
-    ENV.sessionPollingTimeoutSeconds = 0.25;
-    ENV.oidcPollingTimeoutSeconds = 0;
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
