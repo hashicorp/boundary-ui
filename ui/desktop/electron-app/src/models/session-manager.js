@@ -18,9 +18,11 @@ class SessionManager {
    * @param {string} target_id
    * @param {string} token
    * @param {string} host_id
+   * @param {string} listenAddr
+   * @param {string} listenPort
    */
-  start(addr, target_id, token, host_id) {
-    const session = new Session(addr, target_id, token, host_id);
+  start(addr, target_id, token, host_id, listenAddr, listenPort) {
+    const session = new Session(addr, target_id, token, host_id, listenAddr, listenPort);
     this.#sessions.push(session);
     return session.start();
   }

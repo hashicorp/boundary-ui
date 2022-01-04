@@ -95,7 +95,27 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
         token: this.session.data.authenticated.token,
       };
 
-      if (host) options.host_id = host.id;
+      if (host) {
+        options.host_id = host.id;
+
+        // If target name starts with 3-numbers and dash example 123-test-target
+        // And host name starts with 2-numbers and dash example 1-test-host
+        // Boundary Desktop will create local proxy to selected target on local port based on numbers in name of target and host example 127.0.0.1:12301
+        const targetPortMatch = model.name.match(/^(\d{3})-.+$/)
+        const hostPortMatch = host.name.match(/^(\d{1}|\d{2})-.+$/)
+
+        if (targetPortMatch && hostPortMatch && targetPortMatch.length == 2 && hostPortMatch.length == 2){
+          options.listenPort = `${targetPortMatch[1]}${hostPortMatch[1].padStart(2,'0')}`;
+        }
+        
+        // If host name ends with dash and ip address example 1-test-0.0.0.0
+        // Boundary Desktop will create proxy to selected target that will be listened on selected IP
+        const hostAddressMatch = host.name.match(/.+-(\d+.\d+.\d+.\d+)$/)
+
+        if (hostAddressMatch && hostAddressMatch.length == 2) {
+          options.listenAddr = hostAddressMatch[1]
+        }
+      }
 
       // Create target session
       const connectionDetails = await this.ipc.invoke('connect', options);

@@ -11,6 +11,8 @@ class Session {
   #process;
   #targetId;
   #proxyDetails;
+  #listenAddr;
+  #listenPort;
 
   /**
    * Initialize a session to a controller address
@@ -19,12 +21,16 @@ class Session {
    * @param {string} targetId
    * @param {string} token
    * @param {string} hostId
+   * @param {string} listenAddr
+   * @param {string} listenPort
    */
-  constructor(addr, targetId, token, hostId) {
+  constructor(addr, targetId, token, hostId, listenAddr, listenPort) {
     this.#addr = addr;
     this.#targetId = targetId;
     this.#token = token;
     this.#hostId = hostId;
+    this.#listenAddr = listenAddr;
+    this.#listenPort = listenPort;
   }
 
   /**
@@ -102,6 +108,14 @@ class Session {
     if (this.#hostId) {
       sanitized.host_id = sanitizer.base62EscapeAndValidate(this.#hostId);
       command.push(`-host-id=${sanitized.host_id}`);
+    }
+
+    if (this.#listenAddr) {
+      command.push(`-listen-addr=${this.#listenAddr}`);
+    }
+
+    if (this.#listenPort) {
+      command.push(`-listen-port=${this.#listenPort}`);
     }
     return command;
   }
