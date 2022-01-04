@@ -12,6 +12,7 @@ export default class AccountChangePasswordRoute extends Route {
   @service session;
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -42,7 +43,7 @@ export default class AccountChangePasswordRoute extends Route {
     // redirects depending on the authentication context.  These additional
     // redirects may abort this initial transition, resulting in a
     // TransitionAborted error, which we do not want to show to the user.
-    await this.replaceWith('index').catch(() => {});
+    await this.router.replaceWith('index').catch(() => {});
   }
 
   /**
@@ -50,6 +51,6 @@ export default class AccountChangePasswordRoute extends Route {
    */
   @action
   cancel() {
-    this.replaceWith('index');
+    this.router.replaceWith('index');
   }
 }

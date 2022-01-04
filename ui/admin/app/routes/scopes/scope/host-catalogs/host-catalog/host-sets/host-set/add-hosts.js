@@ -10,6 +10,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -75,7 +76,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
   @notifySuccess('notifications.add-success')
   async addHosts(hostSet, hostIDs) {
     await hostSet.addHosts(hostIDs);
-    await this.replaceWith(
+    await this.router.replaceWith(
       'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
     );
   }
@@ -85,7 +86,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
    */
   @action
   cancel() {
-    this.replaceWith(
+    this.router.replaceWith(
       'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
     );
   }

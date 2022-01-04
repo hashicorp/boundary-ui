@@ -12,8 +12,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
   // =services
 
   @service session;
-
-  // =attributes
+  @service router;
 
   // =methods
 
@@ -39,7 +38,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
   @action
   @notifyError(() => 'errors.authentication-failed.title', { catch: true })
   error(e) {
-    this.transitionTo('scopes.scope.authenticate.method.index');
+    this.router.transitionTo('scopes.scope.authenticate.method.index');
     // rethrow the error to activate the notifyError decorator
     throw e;
   }

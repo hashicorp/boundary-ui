@@ -12,6 +12,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   @service notify;
   @service ipc;
   @service intl;
+  @service router;
 
   // =methods
 
@@ -67,14 +68,14 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
           requestCookies,
           { scope, authMethod }
         );
-        this.transitionTo('index');
+        this.router.transitionTo('index');
         break;
       case 'oidc':
         await this.startOIDCAuthentication(authenticatorName, {
           scope,
           authMethod,
         });
-        this.transitionTo('scopes.scope.authenticate.method.oidc');
+        this.router.transitionTo('scopes.scope.authenticate.method.oidc');
         break;
     }
   }

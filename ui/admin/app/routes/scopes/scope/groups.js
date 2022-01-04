@@ -12,13 +12,15 @@ export default class ScopesScopeGroupsRoute extends Route {
   @service notify;
   @service session;
   @service can;
+  @service router;
+
   // =methods
 
   /**
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
   /**
@@ -42,7 +44,7 @@ export default class ScopesScopeGroupsRoute extends Route {
   cancel(group) {
     const { isNew } = group;
     group.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.groups');
+    if (isNew) this.router.transitionTo('scopes.scope.groups');
   }
 
   /**
@@ -58,9 +60,9 @@ export default class ScopesScopeGroupsRoute extends Route {
   async save(group) {
     await group.save();
     if (this.can.can('read model', group)) {
-      await this.transitionTo('scopes.scope.groups.group', group);
+      await this.router.transitionTo('scopes.scope.groups.group', group);
     } else {
-      await this.transitionTo('scopes.scope.groups');
+      await this.router.transitionTo('scopes.scope.groups');
     }
     this.refresh();
   }
@@ -76,7 +78,7 @@ export default class ScopesScopeGroupsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(group) {
     await group.destroyRecord();
-    await this.replaceWith('scopes.scope.groups');
+    await this.router.replaceWith('scopes.scope.groups');
     this.refresh();
   }
 }

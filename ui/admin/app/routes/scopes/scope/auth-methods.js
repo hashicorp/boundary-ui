@@ -14,6 +14,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @service session;
   @service can;
   @service resourceFilterStore;
+  @service router;
 
   // =attributes
 
@@ -25,7 +26,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
   /**
@@ -56,7 +57,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   cancel(authMethod) {
     const { isNew } = authMethod;
     authMethod.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.auth-methods');
+    if (isNew) this.router.transitionTo('scopes.scope.auth-methods');
   }
 
   /**
@@ -72,12 +73,12 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   async save(authMethod) {
     await authMethod.save();
     if (this.can.can('read model', authMethod)) {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method',
         authMethod
       );
     } else {
-      await this.transitionTo('scopes.scope.auth-methods');
+      await this.router.transitionTo('scopes.scope.auth-methods');
     }
     this.refresh();
   }
@@ -97,7 +98,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     // Reload the scope, since this is where the primary_auth_method_id is
     // stored.  An auth method deletion could affect this field.
     await scopeModel.reload();
-    await this.replaceWith('scopes.scope.auth-methods');
+    await this.router.replaceWith('scopes.scope.auth-methods');
     this.refresh();
   }
 

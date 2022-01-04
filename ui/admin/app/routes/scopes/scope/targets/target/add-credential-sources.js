@@ -10,6 +10,7 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -78,7 +79,7 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
   @notifySuccess('notifications.add-success')
   async save(target, credentialLibraryIDs) {
     await target.addCredentialSources(credentialLibraryIDs);
-    this.replaceWith('scopes.scope.targets.target.credential-sources');
+    this.router.replaceWith('scopes.scope.targets.target.credential-sources');
   }
 
   /**
@@ -86,6 +87,6 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.targets.target.credential-sources');
+    this.router.replaceWith('scopes.scope.targets.target.credential-sources');
   }
 }

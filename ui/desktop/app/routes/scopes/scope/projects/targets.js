@@ -16,6 +16,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   @service notify;
   @service confirm;
   @service resourceFilterStore;
+  @service router;
 
   // =attributes
 
@@ -32,7 +33,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
   /**

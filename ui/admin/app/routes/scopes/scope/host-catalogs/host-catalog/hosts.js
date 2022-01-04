@@ -11,6 +11,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   @service intl;
   @service notify;
   @service can;
+  @service router;
+
   // =methods
 
   /**
@@ -42,7 +44,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
     const { isNew } = host;
     host.rollbackAttributes();
     if (isNew)
-      this.transitionTo('scopes.scope.host-catalogs.host-catalog.hosts');
+      this.router.transitionTo('scopes.scope.host-catalogs.host-catalog.hosts');
   }
 
   /**
@@ -59,12 +61,14 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   async save(host) {
     await host.save();
     if (this.can.can('read model', host)) {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.hosts.host',
         host
       );
     } else {
-      await this.transitionTo('scopes.scope.host-catalogs.host-catalog.hosts');
+      await this.router.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.hosts'
+      );
     }
     this.refresh();
   }
@@ -80,7 +84,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   @notifySuccess('notifications.delete-success')
   async deleteHost(host) {
     await host.destroyRecord();
-    await this.replaceWith('scopes.scope.host-catalogs.host-catalog.hosts');
+    await this.router.replaceWith(
+      'scopes.scope.host-catalogs.host-catalog.hosts'
+    );
     this.refresh();
   }
 }

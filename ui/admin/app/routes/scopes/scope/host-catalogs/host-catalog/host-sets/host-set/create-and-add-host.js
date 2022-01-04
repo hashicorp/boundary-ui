@@ -9,6 +9,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -70,7 +71,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
     );
     await host.save();
     await hostSet.addHost(host.id);
-    await this.replaceWith(
+    await this.router.replaceWith(
       'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
     );
   }
@@ -80,7 +81,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
    */
   @action
   cancel() {
-    this.replaceWith(
+    this.router.replaceWith(
       'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
     );
   }

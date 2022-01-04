@@ -11,6 +11,8 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   @service intl;
   @service notify;
   @service can;
+  @service router;
+
   // =methods
 
   /**
@@ -40,7 +42,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
     const { isNew } = account;
     account.rollbackAttributes();
     if (isNew)
-      this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
+      this.router.transitionTo(
+        'scopes.scope.auth-methods.auth-method.accounts'
+      );
   }
 
   /**
@@ -61,12 +65,14 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
     }
     await account.save({ adapterOptions });
     if (this.can.can('read model', account)) {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method.accounts.account',
         account
       );
     } else {
-      await this.transitionTo('scopes.scope.auth-methods.auth-method.accounts');
+      await this.router.transitionTo(
+        'scopes.scope.auth-methods.auth-method.accounts'
+      );
     }
     this.refresh();
   }
@@ -82,7 +88,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   @notifySuccess('notifications.delete-success')
   async deleteAccount(account) {
     await account.destroyRecord();
-    await this.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
+    await this.router.replaceWith(
+      'scopes.scope.auth-methods.auth-method.accounts'
+    );
     this.refresh();
   }
 }

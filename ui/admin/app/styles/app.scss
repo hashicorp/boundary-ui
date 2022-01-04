@@ -51,7 +51,7 @@
 
   .rose-dropdown {
     $icon-width: sizing.rems(m) + sizing.rems(s);
-    $indent:  $icon-width + sizing.rems(xs);
+    $indent: $icon-width + sizing.rems(xs);
 
     .rose-form-radio-label {
       display: flex;
@@ -129,7 +129,14 @@
   &.loading {
     &::after {
       animation: gradient 1s linear infinite;
-      background: repeating-linear-gradient(to right, var(--subtle), var(--subtle), var(--info), var(--subtle), var(--subtle));
+      background: repeating-linear-gradient(
+        to right,
+        var(--subtle),
+        var(--subtle),
+        var(--info),
+        var(--subtle),
+        var(--subtle)
+      );
       background-position: -100% 0;
       background-size: 200% auto;
       content: ' ';
@@ -140,8 +147,12 @@
       top: 100%;
 
       @keyframes gradient {
-        0%   { background-position: -100% 0; }
-        100% { background-position: -200% 0; }
+        0% {
+          background-position: -100% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
       }
     }
   }
@@ -183,8 +194,12 @@
     color: inherit;
 
     @keyframes fadeBackground {
-      0%   { background-color: var(--action-subtler-1); }
-      100% { background-color: transparent; }
+      0% {
+        background-color: var(--action-subtler-1);
+      }
+      100% {
+        background-color: transparent;
+      }
     }
   }
 }

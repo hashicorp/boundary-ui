@@ -12,6 +12,7 @@ export default class ScopesScopeRoute extends Route {
   @service intl;
   @service session;
   @service scope;
+  @service router;
 
   // =methods
 
@@ -116,7 +117,7 @@ export default class ScopesScopeRoute extends Route {
   cancel(scope) {
     const { isNew } = scope;
     scope.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope');
+    if (isNew) this.router.transitionTo('scopes.scope');
   }
 
   /**
@@ -133,7 +134,7 @@ export default class ScopesScopeRoute extends Route {
   async save(scope) {
     const { isNew } = scope;
     await scope.save();
-    await this.transitionTo('scopes.scope.edit', scope);
+    await this.router.transitionTo('scopes.scope.edit', scope);
     if (isNew) this.refresh();
   }
 
@@ -149,7 +150,7 @@ export default class ScopesScopeRoute extends Route {
   async delete(scope) {
     const { scopeID } = scope;
     await scope.destroyRecord();
-    await this.replaceWith('scopes.scope.scopes', scopeID);
+    await this.router.replaceWith('scopes.scope.scopes', scopeID);
     //this.refresh();
   }
 }

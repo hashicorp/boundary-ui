@@ -12,6 +12,7 @@ export default class ScopesScopeUsersRoute extends Route {
   @service notify;
   @service session;
   @service can;
+  @service router;
 
   // =methods
 
@@ -19,7 +20,7 @@ export default class ScopesScopeUsersRoute extends Route {
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
   /**
@@ -43,7 +44,7 @@ export default class ScopesScopeUsersRoute extends Route {
   cancel(user) {
     const { isNew } = user;
     user.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.users');
+    if (isNew) this.router.transitionTo('scopes.scope.users');
   }
 
   /**
@@ -60,9 +61,9 @@ export default class ScopesScopeUsersRoute extends Route {
   async save(user) {
     await user.save();
     if (this.can.can('read model', user)) {
-      await this.transitionTo('scopes.scope.users.user', user);
+      await this.router.transitionTo('scopes.scope.users.user', user);
     } else {
-      await this.transitionTo('scopes.scope.users');
+      await this.router.transitionTo('scopes.scope.users');
     }
     this.refresh();
   }
@@ -78,7 +79,7 @@ export default class ScopesScopeUsersRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(user) {
     await user.destroyRecord();
-    await this.replaceWith('scopes.scope.users');
+    await this.router.replaceWith('scopes.scope.users');
     this.refresh();
   }
 }

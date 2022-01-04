@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAuthenticateIndexRoute extends Route {
+  // =services
+
+  @service router;
+
   // =methods
 
   /**
@@ -12,7 +17,10 @@ export default class ScopesScopeAuthenticateIndexRoute extends Route {
   redirect({ authMethods }) {
     const firstAuthMethod = authMethods.firstObject;
     if (firstAuthMethod) {
-      this.transitionTo('scopes.scope.authenticate.method', firstAuthMethod);
+      this.router.transitionTo(
+        'scopes.scope.authenticate.method',
+        firstAuthMethod
+      );
     }
   }
 }
