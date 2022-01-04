@@ -44,6 +44,11 @@ class RouteResourceFilter extends EmberObject {
     return this.allowed;
   }
 
+  get router() {
+    const owner = getOwner(this.route);
+    return owner.lookup('service:router');
+  }
+
   /**
    * Currently selected value(s) for this filter, deserialized from the value of
    * the associated route query parameter.
@@ -67,7 +72,7 @@ class RouteResourceFilter extends EmberObject {
     const queryParams = {};
     const serialized = value.map((value) => this.serializeValue(value));
     queryParams[this.filterKey] = JSON.stringify(serialized);
-    this.route.transitionTo({ queryParams });
+    this.router.transitionTo(this.route.routeName, { queryParams });
   }
 
   // =methods

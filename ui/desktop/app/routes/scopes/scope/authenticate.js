@@ -7,11 +7,13 @@ export default class ScopesScopeAuthenticateRoute extends Route {
 
   @service session;
   @service origin;
+  @service router;
 
   // =methods
 
   beforeModel() {
-    if (this.session.isAuthenticated) this.replaceWith('scopes.scope.index');
+    if (this.session.isAuthenticated)
+      this.router.replaceWith('scopes.scope.index');
   }
 
   /**
@@ -29,7 +31,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   }
 
   redirect() {
-    if (!this.origin.rendererOrigin) this.replaceWith('index');
+    if (!this.origin.rendererOrigin) this.router.replaceWith('index');
   }
 
   /**

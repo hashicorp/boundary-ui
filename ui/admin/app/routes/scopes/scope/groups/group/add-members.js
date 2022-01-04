@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
@@ -10,6 +10,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -70,7 +71,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   @notifySuccess('notifications.add-success')
   async addMembers(group, userIDs) {
     await group.addMembers(userIDs);
-    await this.replaceWith('scopes.scope.groups.group.members');
+    await this.router.replaceWith('scopes.scope.groups.group.members');
   }
 
   /**
@@ -78,6 +79,6 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.groups.group.members');
+    this.router.replaceWith('scopes.scope.groups.group.members');
   }
 }

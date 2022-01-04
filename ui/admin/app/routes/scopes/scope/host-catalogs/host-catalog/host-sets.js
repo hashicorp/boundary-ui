@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
@@ -11,6 +11,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   @service intl;
   @service notify;
   @service can;
+  @service router;
+
   // =methods
 
   /**
@@ -43,7 +45,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
     const { isNew } = hostSet;
     hostSet.rollbackAttributes();
     if (isNew)
-      this.transitionTo('scopes.scope.host-catalogs.host-catalog.host-sets');
+      this.router.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.host-sets'
+      );
   }
 
   /**
@@ -60,12 +64,12 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   async save(hostSet) {
     await hostSet.save();
     if (this.can.can('read model', hostSet)) {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
         hostSet
       );
     } else {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.host-sets'
       );
     }
@@ -83,6 +87,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   @notifySuccess('notifications.delete-success')
   async deleteHostSet(hostSet) {
     await hostSet.destroyRecord();
-    await this.replaceWith('scopes.scope.host-catalogs.host-catalog.host-sets');
+    await this.router.replaceWith(
+      'scopes.scope.host-catalogs.host-catalog.host-sets'
+    );
   }
 }

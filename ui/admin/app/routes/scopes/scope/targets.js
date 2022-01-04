@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
@@ -12,6 +12,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   @service notify;
   @service session;
   @service can;
+  @service router;
 
   // =methods
 
@@ -19,7 +20,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    * If arriving here unauthenticated, redirect to index for further processing.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.transitionTo('index');
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
   /**
@@ -44,7 +45,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   cancel(target) {
     const { isNew } = target;
     target.rollbackAttributes();
-    if (isNew) this.transitionTo('scopes.scope.targets');
+    if (isNew) this.router.transitionTo('scopes.scope.targets');
   }
 
   /**
@@ -61,9 +62,9 @@ export default class ScopesScopeTargetsRoute extends Route {
   async save(target) {
     await target.save();
     if (this.can.can('read model', target)) {
-      await this.transitionTo('scopes.scope.targets.target', target);
+      await this.router.transitionTo('scopes.scope.targets.target', target);
     } else {
-      await this.transitionTo('scopes.scope.targets');
+      await this.router.transitionTo('scopes.scope.targets');
     }
     this.refresh();
   }
@@ -79,7 +80,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(target) {
     await target.destroyRecord();
-    await this.replaceWith('scopes.scope.targets');
+    await this.router.replaceWith('scopes.scope.targets');
     this.refresh();
   }
 }

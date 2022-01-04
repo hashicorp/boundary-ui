@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAuthenticateMethodRoute extends Route {
@@ -12,6 +12,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   @service notify;
   @service intl;
   @service windowManager;
+  @service router;
 
   // =methods
 
@@ -60,14 +61,14 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
           requestCookies,
           { scope, authMethod }
         );
-        this.transitionTo('index');
+        this.router.transitionTo('index');
         break;
       case 'oidc':
         await this.startOIDCAuthentication(authenticatorName, {
           scope,
           authMethod,
         });
-        this.transitionTo('scopes.scope.authenticate.method.oidc');
+        this.router.transitionTo('scopes.scope.authenticate.method.oidc');
         break;
     }
   }

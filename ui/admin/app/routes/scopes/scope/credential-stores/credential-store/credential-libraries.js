@@ -1,13 +1,17 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrariesRoute extends Route {
-  // =methods
+  // =services
+
   @service can;
+  @service router;
+
+  // =methods
 
   /**
    * Loads all credential libraries under the current credential store.
@@ -38,7 +42,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     const { isNew } = credentialLibrary;
     credentialLibrary.rollbackAttributes();
     if (isNew)
-      this.transitionTo(
+      this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credential-libraries'
       );
   }
@@ -56,12 +60,12 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   async save(credentialLibrary) {
     await credentialLibrary.save();
     if (this.can.can('read model', credentialLibrary)) {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credential-libraries.credential-library',
         credentialLibrary
       );
     } else {
-      await this.transitionTo(
+      await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credential-libraries'
       );
     }
@@ -79,7 +83,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @notifySuccess('notifications.delete-success')
   async delete(credentialLibrary) {
     await credentialLibrary.destroyRecord();
-    await this.replaceWith(
+    await this.router.replaceWith(
       'scopes.scope.credential-stores.credential-store.credential-libraries'
     );
     this.refresh();
