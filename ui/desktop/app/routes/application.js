@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { getOwner } from '@ember/application';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 
 export default class ApplicationRoute extends Route {
   // =services

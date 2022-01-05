@@ -9,7 +9,6 @@ import {
   getRootElement,
   //setupOnerror,
 } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -35,6 +34,9 @@ module('Acceptance | authentication', function (hooks) {
       global: null,
       org: null,
     },
+    user: null,
+    target: null,
+    session: null,
   };
 
   const stubs = {
@@ -66,6 +68,10 @@ module('Acceptance | authentication', function (hooks) {
   };
 
   hooks.beforeEach(function () {
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.global,
+    });
+
     invalidateSession();
 
     // create scopes
@@ -91,6 +97,22 @@ module('Acceptance | authentication', function (hooks) {
       scope: instances.scopes.org,
       type: 'password',
     });
+
+    instances.target = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withAssociations'
+    );
+    instances.session = this.server.create(
+      'session',
+      {
+        scope: instances.scopes.project,
+        target: instances.target,
+        status: 'active',
+        user: instances.user,
+      },
+      'withAssociations'
+    );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
@@ -162,42 +184,40 @@ module('Acceptance | authentication', function (hooks) {
     await visit(urls.authenticate.methods.global);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
-    later(async () => {
-      run.cancelTimers();
-      assert.ok(currentSession().isAuthenticated);
-      await click('.rose-header-utilities .rose-dropdown summary');
-      assert.equal(
-        find(
-          '.rose-header-utilities .rose-dropdown-content button'
-        ).textContent.trim(),
-        'Deauthenticate'
-      );
-      await click('.rose-header-utilities .rose-dropdown-content button');
-      assert.notOk(currentSession().isAuthenticated);
-    }, 750);
     await click('[type="submit"]');
+    assert.ok(currentSession().isAuthenticated);
+    await click('.rose-header-utilities .rose-dropdown summary');
+    assert.equal(
+      find(
+        '.rose-header-utilities .rose-dropdown-content button'
+      ).textContent.trim(),
+      'Deauthenticate'
+    );
+    await click('.rose-header-utilities .rose-dropdown-content button');
+    assert.notOk(currentSession().isAuthenticated);
   });
 
   test('401 responses result in deauthentication', async function (assert) {
     assert.expect(3);
-    await visit(urls.authenticate.methods.global);
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    later(async () => {
-      run.cancelTimers();
-      assert.ok(
-        currentSession().isAuthenticated,
-        'Session begins authenticated, before encountering 401'
-      );
-      assert.ok(currentURL(), urls.targets);
-      this.server.get('/sessions', () => new Response(401));
-      await visit(urls.sessions);
-      assert.notOk(
-        currentSession().isAuthenticated,
-        'Session is unauthenticated, after encountering 401'
-      );
-    }, 750);
-    await click('[type="submit"]');
+    authenticateSession({
+      scope: {
+        id: instances.scopes.global.id,
+        type: instances.scopes.global.type,
+      },
+    });
+    await visit(urls.sessions);
+    assert.ok(
+      currentSession().isAuthenticated,
+      'Session begins authenticated, before encountering 401'
+    );
+    assert.ok(currentURL(), urls.targets);
+    this.server.get('/sessions', () => new Response(401));
+    await visit(urls.targets);
+    await visit(urls.sessions);
+    assert.notOk(
+      currentSession().isAuthenticated,
+      'Session is unauthenticated, after encountering 401'
+    );
   });
 
   test('color theme is applied from session data', async function (assert) {
@@ -208,29 +228,25 @@ module('Acceptance | authentication', function (hooks) {
         type: instances.scopes.global.type,
       },
     });
-    later(async () => {
-      run.cancelTimers();
-      // system default
-      assert.notOk(currentSession().get('data.theme'));
-      assert.notOk(getRootElement().classList.contains('rose-theme-light'));
-      assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
-      // toggle light mode
-      await click('[name="theme"][value="light"]');
-      assert.equal(currentSession().get('data.theme'), 'light');
-      assert.ok(getRootElement().classList.contains('rose-theme-light'));
-      assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
-      // toggle dark mode
-      await click('[name="theme"][value="dark"]');
-      assert.equal(currentSession().get('data.theme'), 'dark');
-      assert.notOk(getRootElement().classList.contains('rose-theme-light'));
-      assert.ok(getRootElement().classList.contains('rose-theme-dark'));
-      // toggle system default
-      await click('[name="theme"][value=""]');
-      assert.notOk(currentSession().get('data.theme'));
-      assert.notOk(getRootElement().classList.contains('rose-theme-light'));
-      assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
-    }, 750);
-
     await visit(urls.scopes.org);
+    // system default
+    assert.notOk(currentSession().get('data.theme'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle light mode
+    await click('[name="theme"][value="light"]');
+    assert.equal(currentSession().get('data.theme'), 'light');
+    assert.ok(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle dark mode
+    await click('[name="theme"][value="dark"]');
+    assert.equal(currentSession().get('data.theme'), 'dark');
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.ok(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle system default
+    await click('[name="theme"][value=""]');
+    assert.notOk(currentSession().get('data.theme'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 });

@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { A } from '@ember/array';
 
 /**

@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { all } from 'rsvp';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
@@ -10,6 +10,7 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -72,7 +73,7 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   @notifySuccess('notifications.add-success')
   async save(target, hostSetIDs) {
     await target.addHostSources(hostSetIDs);
-    this.replaceWith('scopes.scope.targets.target.host-sources');
+    this.router.replaceWith('scopes.scope.targets.target.host-sources');
   }
 
   /**
@@ -80,6 +81,6 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.targets.target.host-sources');
+    this.router.replaceWith('scopes.scope.targets.target.host-sources');
   }
 }

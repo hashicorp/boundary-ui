@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import config from '../config/environment';
 
 export default class OriginRoute extends Route {
@@ -12,6 +12,7 @@ export default class OriginRoute extends Route {
   @service origin;
   @service intl;
   @service notify;
+  @service router;
 
   // =attributes
 
@@ -40,7 +41,7 @@ export default class OriginRoute extends Route {
    * processing.  User must be logged out before changing the origin.
    */
   beforeModel() {
-    if (this.session.isAuthenticated) this.replaceWith('index');
+    if (this.session.isAuthenticated) this.router.replaceWith('index');
   }
 
   /**
@@ -71,7 +72,7 @@ export default class OriginRoute extends Route {
   async setOrigin(origin) {
     try {
       await this.origin.setOrigin(origin);
-      this.replaceWith('index');
+      this.router.replaceWith('index');
     } catch (e) {
       // If scopes do not load, we assume this is not a Boundary API
       const errorMessage = this.intl.t(

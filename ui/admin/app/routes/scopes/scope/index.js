@@ -5,6 +5,7 @@ export default class ScopesScopeIndexRoute extends Route {
   // =services
 
   @service session;
+  @service router;
 
   // =methods
 
@@ -15,11 +16,11 @@ export default class ScopesScopeIndexRoute extends Route {
    */
   redirect(model) {
     if (!this.session.isAuthenticated) {
-      this.transitionTo('scopes.scope.authenticate');
+      this.router.transitionTo('scopes.scope.authenticate');
     } else if (model.isProject) {
-      this.transitionTo('scopes.scope.edit');
+      this.router.transitionTo('scopes.scope.edit');
     } else {
-      this.transitionTo('scopes.scope.scopes');
+      this.router.transitionTo('scopes.scope.scopes');
     }
   }
 }

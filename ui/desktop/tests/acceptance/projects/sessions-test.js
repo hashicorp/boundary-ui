@@ -9,7 +9,6 @@ import {
   //getRootElement
   //setupOnerror,
 } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -167,112 +166,79 @@ module('Acceptance | projects | sessions', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(2);
     const sessionsCount = this.server.schema.sessions.all().models.length;
-    // This later/cancelTimers technique allows us to test a page with
-    // active polling.  Normally an acceptance test waits for all runloop timers
-    // to stop before returning from an awaited test, but polling means that
-    // runloop timers exist indefinitely.  We thus schedule a cancelation before
-    // proceeding with our tests.
-    later(async () => {
-      run.cancelTimers();
-      // await a11yAudit();
-      assert.equal(currentURL(), urls.sessions);
-      assert.equal(findAll('tbody tr').length, sessionsCount);
-    }, 750);
     await visit(urls.sessions);
+    assert.equal(currentURL(), urls.sessions);
+    assert.equal(findAll('tbody tr').length, sessionsCount);
   });
 
   test('visiting empty sessions', async function (assert) {
     assert.expect(1);
     this.server.get('/sessions', () => new Response(200));
-    later(async () => {
-      run.cancelTimers();
-      await a11yAudit();
-      assert.ok(
-        find('.rose-message-title').textContent.trim(),
-        'No Sessions Available'
-      );
-    }, 750);
     await visit(urls.sessions);
+    await a11yAudit();
+    assert.ok(
+      find('.rose-message-title').textContent.trim(),
+      'No Sessions Available'
+    );
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
     assert.expect(2);
     instances.session.update({ targetId: undefined });
     const sessionsCount = this.server.schema.sessions.all().models.length;
-    later(async () => {
-      run.cancelTimers();
-      await a11yAudit();
-      assert.equal(currentURL(), urls.sessions);
-      assert.equal(findAll('tbody tr').length, sessionsCount);
-    }, 750);
     await visit(urls.sessions);
+    await a11yAudit();
+    assert.equal(currentURL(), urls.sessions);
+    assert.equal(findAll('tbody tr').length, sessionsCount);
   });
 
   test('can identify active sessions', async function (assert) {
     assert.expect(1);
-    later(async () => {
-      run.cancelTimers();
-      assert.ok(
-        find('tbody tr:first-child th:first-child .session-status-active')
-      );
-    }, 750);
     await visit(urls.sessions);
+    assert.ok(
+      find('tbody tr:first-child th:first-child .session-status-active')
+    );
   });
 
   test('cannot identify pending sessions', async function (assert) {
     assert.expect(1);
     instances.session.update({ status: 'pending' });
-    later(async () => {
-      run.cancelTimers();
-      assert.notOk(
-        find('tbody tr:first-child th:first-child .session-status-active')
-      );
-    }, 750);
     await visit(urls.sessions);
+    assert.notOk(
+      find('tbody tr:first-child th:first-child .session-status-active')
+    );
   });
 
   test('cannot identify terminated sessions', async function (assert) {
     assert.expect(1);
     instances.session.update({ status: 'terminated' });
-    later(async () => {
-      run.cancelTimers();
-      assert.notOk(
-        find('tbody tr:first-child th:first-child .session-status-active')
-      );
-    }, 750);
     await visit(urls.sessions);
+    assert.notOk(
+      find('tbody tr:first-child th:first-child .session-status-active')
+    );
   });
 
   test('cancelling a session', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop');
-    later(async () => {
-      run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-success'));
-    }, 750);
     await visit(urls.sessions);
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-success'));
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
     assert.expect(1);
     this.server.post('/sessions/:id_method', () => new Response(400));
-    later(async () => {
-      run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-error'));
-    }, 750);
     await visit(urls.sessions);
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-error'));
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop').throws();
-    later(async () => {
-      run.cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-error'));
-    }, 750);
     await visit(urls.sessions);
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-error'));
   });
 });

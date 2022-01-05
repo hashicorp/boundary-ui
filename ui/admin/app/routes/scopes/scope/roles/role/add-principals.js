@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
-import loading from 'ember-loading/decorator';
+import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
@@ -10,6 +10,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
 
   @service intl;
   @service notify;
+  @service router;
 
   // =methods
 
@@ -64,7 +65,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   @notifySuccess('notifications.add-success')
   async addPrincipals(role, principalIDs) {
     await role.addPrincipals(principalIDs);
-    this.replaceWith('scopes.scope.roles.role.principals');
+    this.router.replaceWith('scopes.scope.roles.role.principals');
   }
 
   /**
@@ -72,6 +73,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    */
   @action
   cancel() {
-    this.replaceWith('scopes.scope.roles.role.principals');
+    this.router.replaceWith('scopes.scope.roles.role.principals');
   }
 }
