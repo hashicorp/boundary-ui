@@ -11,7 +11,7 @@ Displays helpful messages related to a form field.  This component is used
 by form fields and should not be used directly.
 
 ```html
-<Rose::Form::HelperText @id="helper-text-{{field.id}}" @link='text link' @linkText='text goes here'>
+<Rose::Form::HelperText @id="helper-text-{{field.id}}" @link='link' @linkText='link text goes here'>
   Helper text
 </Rose::Form::HelperText>
 ```
@@ -26,7 +26,7 @@ by form fields and should not be used directly.
     context: {
       error: boolean('error', false),
       link: text('link', 'http://www.example.net/'),
-      linkText: text('linkText', 'link text')
+      linkText: text('linkText', 'sample link text')
     },
   }}</Story>
 </Preview>
