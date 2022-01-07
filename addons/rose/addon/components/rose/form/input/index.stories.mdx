@@ -16,6 +16,8 @@ Renders a simple form input.
   @value="info@example.com"
   @label="Email"
   @helperText="Enter your email"
+  @link='www.example.net'
+  @linkText='sample link text'
   @error={{false}}
   @disabled={{false}}
   @icon='flight-icons/svg/search-16'
@@ -33,6 +35,8 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
   @value="info@example.com"
   @label="Email"
   @helperText="Enter your email"
+  @link='www.example.net'
+  @linkText='sample link text'
   @error={{false}}
   @disabled={{false}}
   readonly={{false}}
@@ -50,6 +54,8 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}
+        @link={{link}}
+        @linkText={{linkText}}
         @error={{false}}
         @disabled={{disabled}}
         readonly={{read-only}}
@@ -70,6 +76,8 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
       value: text('value', 'Value'),
       label: text('label', 'Label'),
       helperText: text('helperText', 'Helper text'),
+      link: text('link', 'link goes here'),
+      linkText: text('linkText', 'link text'),
       disabled: boolean('disabled', false),
       'read-only': boolean('readonly', false),
       icon: select(
@@ -93,6 +101,8 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         @value={{value}}
         @label={{label}}
         @helperText={{helperText}}
+        @link={{link}}
+        @linkText={{linkText}}
         @error={{true}}
         @disabled={{disabled}}
         readonly={{read-only}}
@@ -117,6 +127,8 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
       value: text('value', 'Value'),
       label: text('label', 'Label'),
       helperText: text('helperText', 'Helper text'),
+      link: text('link', 'link goes here'),
+      linkText: text('linkText', 'link text'),
       disabled: boolean('disabled', false),
       'read-only': boolean('readonly', false),
     }
