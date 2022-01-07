@@ -97,6 +97,7 @@
     "ember-source": "~3.28.4",
     "ember-template-lint": "^3.7.0",
     "ember-template-lint-plugin-prettier": "^2.0.0",
+    "ember-wormhole": "^0.6.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-ember": "^10.5.4",

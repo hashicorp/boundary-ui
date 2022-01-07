@@ -12,11 +12,10 @@
       as |header|
     >
       <header.brand @logo='logo-app' @text={{app-name}} />
-      {{#if this.session.isAuthenticated}}
-        <header.nav>
-          {{outlet 'header-nav'}}
-        </header.nav>
-      {{/if}}
+
+      <header.nav>
+        <div id='header-nav'></div>
+      </header.nav>
 
       <header.utilities as |utilities|>
         {{#if this.showWindowActions}}

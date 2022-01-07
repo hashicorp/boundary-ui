@@ -74,18 +74,4 @@ export default class ScopesScopeRoute extends Route {
     const scopes = this.scopes;
     controller.setProperties({ scopes });
   }
-
-  /**
-   * Renders the scope-specific sidebar template.
-   * @override
-   * @param {object} controller
-   * @param {object} model
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-    this.render('scopes/scope/-header-nav', {
-      into: 'application',
-      outlet: 'header-nav',
-    });
-  }
 }
