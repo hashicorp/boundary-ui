@@ -18,6 +18,8 @@ Renders a simple form textarea.
   @error={{false}}
   @disabled={{false}}
   readonly={{false}}
+  @link='www.example.net'
+  @linkText='link text goes here'
 />
 ```
 
@@ -32,12 +34,16 @@ Renders a simple form textarea.
         @error={{false}}
         @disabled={{disabled}}
         readonly={{read-only}}
+        @link='www.example.net'
+        @linkText='link text goes here'
         />
     `,
     context: {
       value: text('value', 'Value'),
       label: text('label', 'Label'),
       helperText: text('helperText', 'Helper text'),
+      link: text('link', 'link'),
+      linkText: text('linkText', 'link text goes here'),
       disabled: boolean('disabled', false),
       'read-only': boolean('readonly', false),
     }
