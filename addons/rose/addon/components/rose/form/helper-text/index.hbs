@@ -4,4 +4,9 @@
   ...attributes
 >
   {{yield}}
+  {{#if @link}} 
+    {{#if @linkText}}
+      <a href={{@link}} target='_blank' rel='noreferrer noopener'>{{@linkText}}</a>
+    {{/if}}
+  {{/if}}
 </span>
