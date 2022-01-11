@@ -43,29 +43,6 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
     };
   }
 
-  /**
-   * Renders credential libraries specific header template.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/targets/target/add-credential-sources/-header', {
-      into: 'scopes/scope/targets/target',
-      outlet: 'header',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/targets/target',
-      outlet: 'navigation',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/targets/target',
-      outlet: 'actions',
-    });
-  }
-
   // =actions
 
   /**
