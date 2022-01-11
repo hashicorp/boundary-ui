@@ -42,29 +42,6 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
     };
   }
 
-  /**
-   * Renders the add-host-sources-specific header template.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/targets/target/add-host-sources/-header', {
-      into: 'scopes/scope/targets/target',
-      outlet: 'header',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/targets/target',
-      outlet: 'navigation',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/targets/target',
-      outlet: 'actions',
-    });
-  }
-
   // =actions
 
   @action
