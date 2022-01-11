@@ -12,12 +12,8 @@
     @disabled={{@disabled}}
     @changed={{@changed}} />
 
-  <label class="rose-form-radio-label" for={{this.id}}>
-     {{#if @helperText}}
-      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}} @link={{@link}} @linkText={{@linkText}}>
-        {{@helperText}}
-      </Rose::Form::HelperText>
-    {{/if}}
+  <label class="rose-form-radio-label{{if @helperText " helperText"}}" for={{this.id}}>
+
     {{#if @icon}}
       <Rose::Icon
         @name={{@icon}}
@@ -26,7 +22,11 @@
     {{/if}}
 
     {{@label}}
-
+     {{#if @helperText}}
+      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}} @link={{@link}} @linkText={{@linkText}}>
+        {{@helperText}}
+      </Rose::Form::HelperText>
+    {{/if}}
   </label>
 
   {{yield}}

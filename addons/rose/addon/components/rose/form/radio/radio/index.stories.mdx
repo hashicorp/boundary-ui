@@ -65,6 +65,7 @@ Renders a form radiofield.
   @disabled={{false}}
   @changed={{fn}}
   @inline={{true}}
+  @helperText={{helperText}}
   />
 ```
 
@@ -79,6 +80,7 @@ Renders a form radiofield.
         @disabled={{disabled}}
         @icon={{icon}}
         @inline={{inline}}
+        @helperText={{helperText}}
         />
       <Rose::Form::Radio::Radio
         @label='Radiofield2'
@@ -88,6 +90,7 @@ Renders a form radiofield.
         @disabled={{disabled}}
         @icon={{icon}}
         @inline={{inline}}
+        @helperText={{helperText}}
         />
       <Rose::Form::Radio::Radio
         @label='Radiofield3'
@@ -97,6 +100,7 @@ Renders a form radiofield.
         @disabled={{disabled}}
         @icon={{icon}}
         @inline={{inline}}
+        @helperText={{helperText}}
         />
     `,
     context: {
@@ -106,6 +110,7 @@ Renders a form radiofield.
         'selectedValue',
         'value and selectedValue must match to select radiofield'
       ),
+      helperText: text('helperText', 'Helper text'),
       disabled: boolean('disabled', false),
       icon: select(
         'icon',
