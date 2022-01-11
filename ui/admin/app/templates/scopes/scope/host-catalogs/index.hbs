@@ -41,39 +41,37 @@
         </table.header>
         <table.body as |body|>
           {{#each @model as |hostCatalog|}}
-            {{#if hostCatalog.isStatic}}
-              <body.row as |row|>
-                <row.headerCell>
-                  {{#if (can 'read model' hostCatalog)}}
-                    <LinkTo
-                      @route='scopes.scope.host-catalogs.host-catalog'
-                      @model={{hostCatalog.id}}
-                    >
-                      {{hostCatalog.displayName}}
-                    </LinkTo>
-                  {{else}}
-                    {{hostCatalog.displayName}}
-                  {{/if}}
-                  <p>{{hostCatalog.description}}</p>
-                </row.headerCell>
-                <row.cell>
-                  <Rose::Badge>
-                    {{t
-                      (concat 'resources.host-catalog.types.' hostCatalog.type)
-                    }}
-                  </Rose::Badge>
-                </row.cell>
-                <row.cell>
-                  <Copyable
-                    @text={{hostCatalog.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
+            <body.row as |row|>
+              <row.headerCell>
+                {{#if (can 'read model' hostCatalog)}}
+                  <LinkTo
+                    @route='scopes.scope.host-catalogs.host-catalog'
+                    @model={{hostCatalog.id}}
                   >
-                    <code>{{hostCatalog.id}}</code>
-                  </Copyable>
-                </row.cell>
-              </body.row>
-            {{/if}}
+                    {{hostCatalog.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{hostCatalog.displayName}}
+                {{/if}}
+                <p>{{hostCatalog.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                <Rose::Badge>
+                  {{t
+                    (concat 'resources.host-catalog.types.' hostCatalog.type)
+                  }}
+                </Rose::Badge>
+              </row.cell>
+              <row.cell>
+                <Copyable
+                  @text={{hostCatalog.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{hostCatalog.id}}</code>
+                </Copyable>
+              </row.cell>
+            </body.row>
           {{/each}}
         </table.body>
       </Rose::Table>
