@@ -95,7 +95,7 @@
     "sinon": "^11.1.2"
   },
   "engines": {
-    "node": ">=12 <=17"
+    "node": "12.* || 14.* || 16.*"
   },
   "ember": {
     "edition": "octane"
