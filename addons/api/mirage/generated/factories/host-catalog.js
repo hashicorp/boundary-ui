@@ -11,4 +11,15 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   disabled: () => datatype.boolean(),
+  plugin: function () {
+    if (this.type == 'plugin') {
+      return {
+        id: `pl_${datatype.hexaDecimal(5)}`,
+        name: random.arrayElement(['azure', 'aws']),
+        description: random.words(),
+      };
+    } else {
+      return undefined;
+    }
+  },
 });

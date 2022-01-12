@@ -49,7 +49,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   version;
 
-  @attr('string', {
+  @attr({
     description: 'Plugin information for this resource.',
     readOnly: true,
   })

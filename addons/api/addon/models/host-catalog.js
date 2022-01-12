@@ -2,6 +2,14 @@ import GeneratedHostCatalogModel from '../generated/models/host-catalog';
 
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   /**
+   * Returns if the host-catalog is static type or not.
+   * @type {boolean}
+   */
+  get isStatic() {
+    return this.type === 'static';
+  }
+
+  /**
    * Returns if the host-catalog is a plugin or not.
    * @type {boolean}
    */
@@ -23,5 +31,13 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    */
   get isAzure() {
     return this.plugin.name === 'azure';
+  }
+
+  /** If host-catalog is a plugins returns its name,
+   * otherwise returns the host-catalog type
+   * @type {string}
+   */
+  get compositeType() {
+    return this.isPlugin ? this.plugin.name : this.type;
   }
 }
