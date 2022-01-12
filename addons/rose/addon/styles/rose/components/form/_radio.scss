@@ -32,7 +32,7 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
   position: relative;
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
-  .rose-form-radio-label.helperText {
+  .rose-form-radio-label.helper-text {
     display: flex;
     .rose-form-helper-text {
       margin-left: sizing.rems(xxs);
