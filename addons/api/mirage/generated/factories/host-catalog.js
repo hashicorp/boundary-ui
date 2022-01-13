@@ -18,8 +18,6 @@ export default Factory.extend({
         name: random.arrayElement(['azure', 'aws']),
         description: random.words(),
       };
-    } else {
-      return undefined;
     }
   },
 });
