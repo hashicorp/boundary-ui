@@ -33,11 +33,16 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
   position: relative;
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
+
   .helper-text {
     display: flex;
+    align-items: center;
+
     .rose-form-helper-text {
+      font-weight: normal;
       margin-left: sizing.rems(xxs);
-      line-height: typography.line-height(m);
+      line-height: typography.line-height(xl);
+      margin-bottom: 0;
     }
   }
   .rose-form-radio-label {
