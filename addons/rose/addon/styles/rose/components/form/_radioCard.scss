@@ -1,0 +1,17 @@
+.rose-form-radio-card {
+    position: relative;
+    width: 370px;
+    height: 115px;    
+    background: #FFFFFF;
+    border: 1px solid #BAC1CC;    
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+  .rose-form-radio-field {
+    top: 89px;
+    right: 176px;
+    position: absolute;
+  }
+  .rose-form-radio-label {
+      color: #000;
+  }
+}

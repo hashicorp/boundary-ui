@@ -1,6 +1,7 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
-@use 'sass:math';
+@use '../../variables/typography';
+
 $radio-svg: (
   'default':
     "<svg viewBox='0 0 24 24' fill='%23aaaaaa' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' /></svg>",
@@ -32,12 +33,11 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
   position: relative;
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
-  .rose-form-radio-label.helper-text {
+  .helper-text {
     display: flex;
     .rose-form-helper-text {
       margin-left: sizing.rems(xxs);
-      $lineHeight: math.div(20, 14);
-      line-height: $lineHeight;
+      line-height: typography.line-height(m);
     }
   }
   .rose-form-radio-label {
