@@ -16,27 +16,4 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
       auth_method_id,
     });
   }
-
-  /**
-   * Renders new account templates for header, navigation, and action page sections.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/auth-methods/auth-method/accounts/new/-header', {
-      into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'header',
-    });
-
-    this.render('_empty', {
-      into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'actions',
-    });
-
-    this.render('_empty', {
-      into: 'scopes/scope/auth-methods/auth-method',
-      outlet: 'navigation',
-    });
-  }
 }

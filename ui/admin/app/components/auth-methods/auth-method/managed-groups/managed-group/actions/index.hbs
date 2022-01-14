@@ -7,7 +7,7 @@
     <dropdown.button
       @style='danger'
       @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'delete' @model)}}
+      {{on 'click' (route-action 'deleteManagedGroup' @model)}}
     >
       {{t 'resources.managed-group.actions.delete'}}
     </dropdown.button>

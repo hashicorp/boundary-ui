@@ -11,23 +11,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   @service notify;
   @service router;
 
-  // =methods
-
-  /**
-   * Renders the route-set specific page sections
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-    this.render(
-      'scopes/scope/auth-methods/auth-method/accounts/account/set-password/-header',
-      {
-        into: 'scopes/scope/auth-methods/auth-method',
-        outlet: 'header',
-      }
-    );
-  }
-
   // =actions
 
   /**

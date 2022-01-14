@@ -1,5 +1,23 @@
-<Form::ManagedGroup
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'titles.new'}}
+      {{! TODO: change the icon link }}
+      <DocLink @doc='account.new' @iconSize='large' />
+    </h2>
+  </page.header>
+
+  <page.body>
+    <Form::ManagedGroup
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
