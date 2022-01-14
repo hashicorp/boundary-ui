@@ -49,7 +49,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
       this.type = 'static';
     } else {
       this.type = 'plugin';
-      this.plugin = { name: type }
+      this.plugin = { name: type };
     }
   }
 }

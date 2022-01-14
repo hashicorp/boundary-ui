@@ -79,7 +79,7 @@ module('Unit | Model | host catalog', function (hooks) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host-catalog', {
-      compositeType: 'aws'
+      compositeType: 'aws',
     });
     const modelStatic = store.createRecord('host-catalog', {
       compositeType: 'static',
