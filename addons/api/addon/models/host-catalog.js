@@ -40,4 +40,16 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
   get compositeType() {
     return this.isPlugin ? this.plugin.name : this.type;
   }
+
+  /**
+   * Sets type, if type is different than static, sets plugin name to type
+   */
+  set compositeType(type) {
+    if (type === 'static') {
+      this.type = 'static';
+    } else {
+      this.type = 'plugin';
+      this.plugin.name = type;
+    }
+  }
 }

@@ -57,4 +57,37 @@ module('Unit | Model | host catalog', function (hooks) {
     assert.true(modelAzure.isAzure);
     assert.false(modelRandom.isAzure);
   });
+
+  test('get compositeType returns expected values', async function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const modelPlugin = store.createRecord('host-catalog', {
+      type: 'plugin',
+      plugin: { name: 'Test name' },
+    });
+    const modelStatic = store.createRecord('host-catalog', {
+      type: 'static',
+    });
+    assert.equal(typeof modelPlugin.compositeType, 'string');
+    assert.equal(modelPlugin.compositeType, 'Test name');
+    assert.equal(modelStatic.compositeType, 'static');
+  });
+
+  test('set compositeType sets expected values', async function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const modelPlugin = store.createRecord('host-catalog', {
+      type: 'plugin',
+      plugin: { name: 'Test name' },
+    });
+    const modelStatic = store.createRecord('host-catalog', {
+      type: 'static',
+    });
+    modelPlugin.set('compositeType', 'aws');
+    modelStatic.set('compositeType', 'static');
+
+    assert.equal(modelPlugin.type, 'plugin');
+    assert.equal(modelPlugin.plugin.name, 'aws');
+    assert.equal(modelStatic.type, 'static');
+  });
 });
