@@ -15,7 +15,7 @@ export default Factory.extend({
     if (this.type == 'plugin') {
       return {
         id: `pl_${datatype.hexaDecimal(5)}`,
-        name: random.arrayElement(['azure', 'aws']),
+        name: i % 2 ? 'aws' : 'azure',
         description: random.words(),
       };
     }
