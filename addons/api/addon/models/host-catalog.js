@@ -22,7 +22,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isAWS() {
-    return this.plugin.name === 'aws';
+    return this.compositeType === 'aws';
   }
 
   /**
@@ -30,7 +30,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isAzure() {
-    return this.plugin.name === 'azure';
+    return this.compositeType === 'azure';
   }
 
   /** If host-catalog is a plugins returns its name,
@@ -49,7 +49,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
       this.type = 'static';
     } else {
       this.type = 'plugin';
-      this.plugin.name = type;
+      this.plugin = { name: type }
     }
   }
 }

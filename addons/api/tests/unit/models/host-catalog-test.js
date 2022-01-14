@@ -34,6 +34,7 @@ module('Unit | Model | host catalog', function (hooks) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('host-catalog', {
+      type: 'plugin',
       plugin: { name: 'aws' },
     });
     const modelRandom = store.createRecord('host-catalog', {
@@ -48,6 +49,7 @@ module('Unit | Model | host catalog', function (hooks) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAzure = store.createRecord('host-catalog', {
+      type: 'plugin',
       plugin: { name: 'azure' },
     });
     const modelRandom = store.createRecord('host-catalog', {
