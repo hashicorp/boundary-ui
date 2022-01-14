@@ -11,7 +11,7 @@ export default Factory.extend({
   created_time: () => date.recent(),
   updated_time: () => date.recent(),
   disabled: () => datatype.boolean(),
-  plugin: function () {
+  plugin: function (i) {
     if (this.type == 'plugin') {
       return {
         id: `pl_${datatype.hexaDecimal(5)}`,
