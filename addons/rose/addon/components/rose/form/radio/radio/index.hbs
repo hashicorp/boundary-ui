@@ -1,5 +1,5 @@
 <div class="{{this.className}} {{if @error " error"}} {{if @inline "inline"}}">
-
+ <span class='radio-wrapper'>
   <RadioButton
     ...attributes
     @radioClass="rose-form-radio-field"
@@ -11,7 +11,7 @@
     @groupValue={{@selectedValue}}
     @disabled={{@disabled}}
     @changed={{@changed}} />
-
+  </span>
   <label class="rose-form-radio-label" for={{this.id}}>
 
     {{#if @icon}}

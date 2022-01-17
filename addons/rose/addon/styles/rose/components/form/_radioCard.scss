@@ -1,22 +1,73 @@
 .rose-form-radio-card {
-     position: relative;
-    width: 370px;
-    height: 115px;    
-    background: #FFFFFF;
-    border: 1px solid #BAC1CC;    
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 2px;
-    font-size: 14px;
-    font-weight: bold;
-  .rose-form-radio-field {
-    top: 89px;
-    right: 176px;
-    position: absolute;
+  box-sizing: content-box;
+  flex-basis: 7rem;
+  width: 350px;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  display: flex;
+  border-radius: 2px;
+  text-align: center;
+  color: #6f7682;
+  font-weight: 600;
+  line-height: 1;
+  font-size: 12px;
+  border: 1px solid #bac1cc;
+  min-height: 115px;
+  /* Elevation / Low */
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+  .radio-wrapper {
+    background: #f7f8fa;
+    width: 100%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    .rose-form-radio-field {
+      &:checked {
+        .radio-wrapper {
+          background: red;
+        }
+      }
+    }
   }
+  &:hover {
+    border: 1px solid #6f7682;
+    .radio-wrapper {
+      background: #f7f8fa;
+    }
+  }
+
   .rose-form-radio-label {
-      color: #000;
-      margin-top: 16px;
-      display: block;
-      margin-left: 48px;
+    width: 350px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+    display: block;
+    position: absolute;
+    /* top: 40px; */
+    padding-top: 30px;
+    padding-bottom: 70px;
+    text-align: left;
+    &::before {
+      content: "";
+      padding-left: 40px;
+    }
+    &:checked {
+      background-color: salmon;
+    }
+  }
+  .rose-form-radio-label:checked {
+    background: red;
+  }
+
+  .rose-form-radio-field {
+    &:not(:disabled) {
+      &:checked {
+        ~ .rose-form-radio-label {
+          background: red;
+        }
+      }
+    }
   }
 }
