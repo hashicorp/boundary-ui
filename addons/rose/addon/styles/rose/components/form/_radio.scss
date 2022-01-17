@@ -34,7 +34,7 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
 
-  .helper-text {
+  .rose-form-radio-label {
     display: flex;
     align-items: center;
 
@@ -44,8 +44,7 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
       line-height: typography.line-height(xl);
       margin-bottom: 0;
     }
-  }
-  .rose-form-radio-label {
+
     @include type.type(s, semibold);
     color: currentColor;
     padding-left: sizing.rems(l);
