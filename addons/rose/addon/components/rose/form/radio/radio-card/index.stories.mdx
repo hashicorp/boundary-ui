@@ -9,7 +9,7 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 Renders a form radiofield.
 
 ```htmlbars
-<Rose::Form::Radio::RadioCard
+<Rose::Form::Radio::RadioCard::Wide
   @label="Yes"
   @error={{false}}
   @value="yes-agree"
@@ -20,9 +20,9 @@ Renders a form radiofield.
 ```
 
 <Preview>
-  <Story name="Basic" height="10rem">{{
+  <Story name="Wide" height="10rem">{{
     template: hbs`
-      <Rose::Form::Radio::RadioCard
+      <Rose::Form::Radio::RadioCard::Wide
         @label={{label}}
         @error={{error}}
         @value={{value}}
@@ -32,7 +32,7 @@ Renders a form radiofield.
         />
     `,
     context: {
-      label: text('text', 'Radiofield'),
+      label: text('text', 'AWS'),
       error: boolean('error', false),
       value: text('value', 'value and selectedValue must match to select radiofield'),
       selectedValue: text(
@@ -55,49 +55,30 @@ Renders a form radiofield.
 
 
 ```htmlbars
-<Rose::Form::Radio::RadioCard
+<Rose::Form::Radio::RadioCard::Tile
   @label="Yes"
   @error={{false}}
   @value="yes-agree"
   @selectedValue="yes-agree"
   @disabled={{false}}
   @changed={{fn}}
-  @inline={{true}}
   />
 ```
 
 <Preview>
-  <Story name="Radio with inline style" height="10rem">{{
+  <Story name="Tile" height="10rem">{{
     template: hbs`
-      <Rose::Form::Radio::RadioCard
-        @label='Radiofield1'
+      <Rose::Form::Radio::RadioCard::Tile
+        @label={{label}}
         @error={{error}}
         @value={{value}}
         @selectedValue={{selectedValue}}
         @disabled={{disabled}}
         @icon={{icon}}
-        @inline={{inline}}
-        />
-      <Rose::Form::Radio::RadioCard
-        @label='Radiofield2'
-        @error={{error}}
-        @value={{value}}
-        @selectedValue={{selectedValue}}
-        @disabled={{disabled}}
-        @icon={{icon}}
-        @inline={{inline}}
-        />
-      <Rose::Form::Radio::RadioCard
-        @label='Radiofield3'
-        @error={{error}}
-        @value={{value}}
-        @selectedValue={{selectedValue}}
-        @disabled={{disabled}}
-        @icon={{icon}}
-        @inline={{inline}}
         />
     `,
     context: {
+      label: text('text', 'AWS Tile'),
       error: boolean('error', false),
       value: text('value', 'value and selectedValue must match to select radiofield'),
       selectedValue: text(
@@ -114,7 +95,6 @@ Renders a form radiofield.
         },
         null
       ),
-      inline: boolean('inline', false)
     }
   }}</Story>
 </Preview>

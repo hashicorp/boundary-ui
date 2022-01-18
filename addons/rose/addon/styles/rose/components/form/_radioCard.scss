@@ -1,73 +1,208 @@
-.rose-form-radio-card {
-  box-sizing: content-box;
-  flex-basis: 7rem;
-  width: 350px;
-  flex-direction: column-reverse;
-  justify-content: space-between;
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-form-radio-card-wide {
+  position: relative;
   display: flex;
-  border-radius: 2px;
-  text-align: center;
-  color: #6f7682;
-  font-weight: 600;
-  line-height: 1;
-  font-size: 12px;
-  border: 1px solid #bac1cc;
-  min-height: 115px;
-  /* Elevation / Low */
+  align-items: center;
+  width: 350px;
+  justify-content: center;
 
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 2px;
-  .radio-wrapper {
-    background: #f7f8fa;
-    width: 100%;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    .rose-form-radio-field {
-      &:checked {
-        .radio-wrapper {
-          background: red;
-        }
-      }
-    }
-  }
-  &:hover {
-    border: 1px solid #6f7682;
-    .radio-wrapper {
-      background: #f7f8fa;
-    }
-  }
 
+  .overlay {
+    position: absolute;
+    height: 30px;
+    background-color: #f7f8fa;
+    width: 348px;
+    bottom: 1px;
+    right: 0;
+  }
   .rose-form-radio-label {
-    width: 350px;
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
     color: #000;
+    width: 350px;
+    height: 115px;
     display: block;
-    position: absolute;
-    /* top: 40px; */
-    padding-top: 30px;
-    padding-bottom: 70px;
+    position: relative;
     text-align: left;
-    &::before {
-      content: "";
-      padding-left: 40px;
-    }
-    &:checked {
-      background-color: salmon;
-    }
+    word-break: break-all;
+    border: 1px solid #bac1cc;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    padding: 19px;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
   }
-  .rose-form-radio-label:checked {
-    background: red;
-  }
-
   .rose-form-radio-field {
+    position: absolute;
+    margin-bottom: 3px;
+    z-index: 1;
+    bottom: 3px;
     &:not(:disabled) {
-      &:checked {
+      &:hover {
         ~ .rose-form-radio-label {
-          background: red;
+          border: 1px solid #6f7682;
         }
       }
+      &:checked {
+        ~ .rose-form-radio-label {
+          .overlay {
+            background-color: #f0f5ff;
+          }
+          border: 1px solid #1563ff;
+        }
+      }
+    }
+
+    &:disabled {
+      ~ .rose-form-radio-label {
+        border: 1px solid #dce0e6;
+        background-color: #fbfbfc;
+        color: #626873;
+      }
+    }
+  }
+
+  &.error {
+    color: var(--failure);
+    .rose-form-radio-field {
+      opacity: 0;
+      &:not(:disabled):not(:focus) {
+        ~ .rose-form-radio-label {
+          .overlay {
+            background-color: #f9ecee;
+          }
+          border: 1px solid #c73445;
+        }
+        &:checked {
+          ~ .rose-form-radio-label {
+            &::after {
+              position: absolute;
+              bottom: 3px;
+              right: 161px;
+              display: block;
+              width: 1.2rem;
+              height: 1.2rem;
+              transform: scale(2);
+              pointer-events: none;
+              content: " ";
+              background: no-repeat 50%/50% 50%;
+              background-image: url($data-svg-prefix + map-get(
+                $radio-svg,
+                'error-checked'
+              ));              /* text-align: center; */
+              z-index: 2;       
+            }
+          }
+        }
+      }
+
+
+    }
+  }
+}
+
+.rose-form-radio-card-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 240px;
+  justify-content: center;
+
+
+  .overlay {
+    position: absolute;
+    height: 30px;
+    background-color: #f7f8fa;
+    width: 238px;
+    bottom: 1px;
+    right: 0;
+  }
+  .rose-form-radio-label {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+    width: 240px;
+    height: 145px;
+    display: block;
+    position: relative;
+    text-align: left;
+    word-break: break-all;
+    border: 1px solid #bac1cc;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    padding: 19px;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+  }
+  .rose-form-radio-field {
+    position: absolute;
+    margin-bottom: 3px;
+    z-index: 1;
+    bottom: 3px;
+    &:not(:disabled) {
+      &:hover {
+        ~ .rose-form-radio-label {
+          border: 1px solid #6f7682;
+        }
+      }
+      &:checked {
+        ~ .rose-form-radio-label {
+          .overlay {
+            background-color: #f0f5ff;
+          }
+          border: 1px solid #1563ff;
+        }
+      }
+    }
+
+    &:disabled {
+      ~ .rose-form-radio-label {
+        border: 1px solid #dce0e6;
+        background-color: #fbfbfc;
+        color: #626873;
+      }
+    }
+  }
+
+  &.error {
+    color: var(--failure);
+    .rose-form-radio-field {
+      opacity: 0;
+      &:not(:disabled):not(:focus) {
+        ~ .rose-form-radio-label {
+          .overlay {
+            background-color: #f9ecee;
+          }
+          border: 1px solid #c73445;
+        }
+        &:checked {
+          ~ .rose-form-radio-label {
+            &::after {
+              position: absolute;
+              bottom: 3px;
+              right: 109px;
+              display: block;
+              width: 1.2rem;
+              height: 1.2rem;
+              transform: scale(2);
+              pointer-events: none;
+              content: " ";
+              background: no-repeat 50%/50% 50%;
+              background-image: url($data-svg-prefix + map-get(
+                $radio-svg,
+                'error-checked'
+              ));              /* text-align: center; */
+              z-index: 2;       
+            }
+          }
+        }
+      }
+
+
     }
   }
 }
