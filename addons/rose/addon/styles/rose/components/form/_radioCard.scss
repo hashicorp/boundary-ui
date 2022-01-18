@@ -1,11 +1,12 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 
+//sizing 
 .rose-form-radio-card-wide {
   position: relative;
   display: flex;
   align-items: center;
-  width: 350px;
+  width: (sizing.rems(m)) * 20;
   justify-content: center;
 
   .radio-card-overlay {
