@@ -8,7 +8,6 @@
   width: 350px;
   justify-content: center;
 
-
   .overlay {
     position: absolute;
     height: 30px;
@@ -33,7 +32,7 @@
     border-radius: 2px;
     padding: 19px;
     box-sizing: border-box;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
   .rose-form-radio-field {
     position: absolute;
@@ -87,19 +86,17 @@
               height: 1.2rem;
               transform: scale(2);
               pointer-events: none;
-              content: " ";
+              content: ' ';
               background: no-repeat 50%/50% 50%;
               background-image: url($data-svg-prefix + map-get(
-                $radio-svg,
-                'error-checked'
-              ));              /* text-align: center; */
-              z-index: 2;       
+                  $radio-svg,
+                  'error-checked'
+                )); /* text-align: center; */
+              z-index: 2;
             }
           }
         }
       }
-
-
     }
   }
 }
@@ -110,7 +107,6 @@
   align-items: center;
   width: 240px;
   justify-content: center;
-
 
   .overlay {
     position: absolute;
@@ -136,7 +132,7 @@
     border-radius: 2px;
     padding: 19px;
     box-sizing: border-box;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
   .rose-form-radio-field {
     position: absolute;
@@ -190,19 +186,17 @@
               height: 1.2rem;
               transform: scale(2);
               pointer-events: none;
-              content: " ";
+              content: ' ';
               background: no-repeat 50%/50% 50%;
               background-image: url($data-svg-prefix + map-get(
-                $radio-svg,
-                'error-checked'
-              ));              /* text-align: center; */
-              z-index: 2;       
+                  $radio-svg,
+                  'error-checked'
+                )); /* text-align: center; */
+              z-index: 2;
             }
           }
         }
       }
-
-
     }
   }
 }
