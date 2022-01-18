@@ -1,19 +1,19 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
+@use '../../variables/typography';
 
-//sizing 
 .rose-form-radio-card-wide {
   position: relative;
   display: flex;
   align-items: center;
-  width: (sizing.rems(m)) * 20;
+  width: (sizing.rems(m)) * 23;
   justify-content: center;
 
   .radio-card-overlay {
     position: absolute;
-    height: 30px;
+    height: sizing.rems(l) + sizing.rems(xxs);
     background-color: #f7f8fa;
-    width: 348px;
+    width: 100%;
     bottom: 1px;
     right: 0;
   }
@@ -22,8 +22,8 @@
     font-weight: bold;
     font-size: 14px;
     color: #000;
-    width: 350px;
-    height: 115px;
+    width: (sizing.rems(m)) * 23;
+    height: (sizing.rems(m)) * 7.5;
     display: block;
     position: relative;
     text-align: left;
@@ -37,9 +37,8 @@
   }
   .rose-form-radio-field {
     position: absolute;
-    margin-bottom: 3px;
     z-index: 1;
-    bottom: 3px;
+    bottom: sizing.rems(xs);
     &:not(:disabled) {
       &:hover {
         ~ .rose-form-radio-label {
@@ -80,11 +79,11 @@
           ~ .rose-form-radio-label {
             &::after {
               position: absolute;
-              bottom: 3px;
-              right: 161px;
+              bottom: 5px;
+              right: 174px;
               display: block;
-              width: 1.2rem;
-              height: 1.2rem;
+              width: sizing.rems(m);
+              height: sizing.rems(m);
               transform: scale(2);
               pointer-events: none;
               content: ' ';
@@ -106,14 +105,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: 240px;
+  width: (sizing.rems(m)) * 15;
   justify-content: center;
 
   .radio-card-overlay {
     position: absolute;
-    height: 30px;
+    height: sizing.rems(l) + sizing.rems(xxs);
     background-color: #f7f8fa;
-    width: 238px;
+    width: 100%;
     bottom: 1px;
     right: 0;
   }
@@ -122,8 +121,9 @@
     font-weight: bold;
     font-size: 14px;
     color: #000;
-    width: 240px;
-    height: 145px;
+    width: (sizing.rems(m)) * 15;
+    height: (sizing.rems(m)) * 9;
+
     display: block;
     position: relative;
     text-align: left;
@@ -137,9 +137,8 @@
   }
   .rose-form-radio-field {
     position: absolute;
-    margin-bottom: 3px;
     z-index: 1;
-    bottom: 3px;
+    bottom: sizing.rems(xs);
     &:not(:disabled) {
       &:hover {
         ~ .rose-form-radio-label {
@@ -180,11 +179,11 @@
           ~ .rose-form-radio-label {
             &::after {
               position: absolute;
-              bottom: 3px;
+              bottom: sizing.rems(xxs);
               right: 109px;
               display: block;
-              width: 1.2rem;
-              height: 1.2rem;
+              width: sizing.rems(m);
+              height: sizing.rems(m);
               transform: scale(2);
               pointer-events: none;
               content: ' ';
