@@ -1,4 +1,5 @@
-<div class="{{this.className}} {{if @error " error"}} {{if @inline "inline"}}">
+<div class="rose-form-radio{{if @error " error"}} {{if @inline "inline"}}">
+
   <RadioButton
     ...attributes
     @radioClass="rose-form-radio-field"
@@ -11,7 +12,6 @@
     @disabled={{@disabled}}
     @changed={{@changed}} />
 
-
   <label class="rose-form-radio-label" for={{this.id}}>
 
     {{#if @icon}}
@@ -22,8 +22,9 @@
     {{/if}}
 
     {{@label}}
-  <span class="overlay"></span>
+  <span class="radio-card-overlay"></span>
   </label>
+
   {{yield}}
 
 </div>

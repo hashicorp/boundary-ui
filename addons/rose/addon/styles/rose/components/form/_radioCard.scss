@@ -8,7 +8,7 @@
   width: 350px;
   justify-content: center;
 
-  .overlay {
+  .radio-card-overlay {
     position: absolute;
     height: 30px;
     background-color: #f7f8fa;
@@ -47,7 +47,7 @@
       }
       &:checked {
         ~ .rose-form-radio-label {
-          .overlay {
+          .radio-card-overlay {
             background-color: #f0f5ff;
           }
           border: 1px solid #1563ff;
@@ -70,7 +70,7 @@
       opacity: 0;
       &:not(:disabled):not(:focus) {
         ~ .rose-form-radio-label {
-          .overlay {
+          .radio-card-overlay {
             background-color: #f9ecee;
           }
           border: 1px solid #c73445;
@@ -108,7 +108,7 @@
   width: 240px;
   justify-content: center;
 
-  .overlay {
+  .radio-card-overlay {
     position: absolute;
     height: 30px;
     background-color: #f7f8fa;
@@ -147,7 +147,7 @@
       }
       &:checked {
         ~ .rose-form-radio-label {
-          .overlay {
+          .radio-card-overlay {
             background-color: #f0f5ff;
           }
           border: 1px solid #1563ff;
@@ -170,7 +170,7 @@
       opacity: 0;
       &:not(:disabled):not(:focus) {
         ~ .rose-form-radio-label {
-          .overlay {
+          .radio-card-overlay {
             background-color: #f9ecee;
           }
           border: 1px solid #c73445;
