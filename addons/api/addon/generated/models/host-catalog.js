@@ -48,4 +48,10 @@ export default class GeneratedHostCatalogModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
+
+  @attr({
+    description: 'Plugin information for this resource.',
+    readOnly: true,
+  })
+  plugin;
 }

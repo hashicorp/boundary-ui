@@ -41,39 +41,49 @@
         </table.header>
         <table.body as |body|>
           {{#each @model as |hostCatalog|}}
-            {{#if hostCatalog.isStatic}}
-              <body.row as |row|>
-                <row.headerCell>
-                  {{#if (can 'read model' hostCatalog)}}
-                    <LinkTo
-                      @route='scopes.scope.host-catalogs.host-catalog'
-                      @model={{hostCatalog.id}}
-                    >
-                      {{hostCatalog.displayName}}
-                    </LinkTo>
-                  {{else}}
+            <body.row as |row|>
+              <row.headerCell>
+                {{#if (can 'read model' hostCatalog)}}
+                  <LinkTo
+                    @route='scopes.scope.host-catalogs.host-catalog'
+                    @model={{hostCatalog.id}}
+                  >
                     {{hostCatalog.displayName}}
-                  {{/if}}
-                  <p>{{hostCatalog.description}}</p>
-                </row.headerCell>
-                <row.cell>
+                  </LinkTo>
+                {{else}}
+                  {{hostCatalog.displayName}}
+                {{/if}}
+                <p>{{hostCatalog.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                {{#if hostCatalog.isStatic}}
                   <Rose::Badge>
                     {{t
                       (concat 'resources.host-catalog.types.' hostCatalog.type)
                     }}
                   </Rose::Badge>
-                </row.cell>
-                <row.cell>
-                  <Copyable
-                    @text={{hostCatalog.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
+                {{else}}
+                  <Rose::Badge
+                    @icon={{concat
+                      'flight-icons/svg/'
+                      hostCatalog.compositeType
+                      '-color-16'
+                    }}
                   >
-                    <code>{{hostCatalog.id}}</code>
-                  </Copyable>
-                </row.cell>
-              </body.row>
-            {{/if}}
+                    {{hostCatalog.compositeType}}
+                  </Rose::Badge>
+                {{/if}}
+              </row.cell>
+              <row.cell>
+                <Copyable
+                  @text={{hostCatalog.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{hostCatalog.id}}</code>
+                </Copyable>
+              </row.cell>
+            </body.row>
           {{/each}}
         </table.body>
       </Rose::Table>
