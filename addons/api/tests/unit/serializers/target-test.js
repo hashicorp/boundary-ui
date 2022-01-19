@@ -20,6 +20,7 @@ module('Unit | Serializer | target', function (hooks) {
         scope_id: 'org_1',
         type: 'org',
       },
+      default_port: 1234,
       version: 1,
       type: 'tcp',
     });
@@ -35,7 +36,7 @@ module('Unit | Serializer | target', function (hooks) {
       session_max_seconds: 28800,
       session_connection_limit: 1,
       attributes: {
-        default_port: null,
+        default_port: 1234,
       },
     });
   });
@@ -117,6 +118,40 @@ module('Unit | Serializer | target', function (hooks) {
             { host_source_id: '3', host_catalog_id: '4' },
           ],
           application_credential_source_ids: [{ value: '1' }],
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes records with nested attributes', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const targetModelClass = store.createRecord('target').constructor;
+    const payload = {
+      id: '1',
+      name: 'Target 1',
+      attributes: {
+        default_port: 1234,
+      },
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      targetModelClass,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'target',
+        attributes: {
+          application_credential_source_ids: [],
+          authorized_actions: [],
+          host_sources: [],
+          name: 'Target 1',
+          default_port: 1234,
         },
         relationships: {},
       },
