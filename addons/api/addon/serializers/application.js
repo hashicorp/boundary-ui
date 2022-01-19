@@ -51,7 +51,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     // TODO:  disabled is temporarily disabled
     if (key === 'disabled') delete json[key];
     // Push nested attributes down into the attributes key
-    if (options.isNestedAttribute && json[key]) {
+    if (options.isNestedAttribute && json[key] !== undefined) {
       if (!json.attributes) json.attributes = {};
       json.attributes[key] = json[key];
       delete json[key];
