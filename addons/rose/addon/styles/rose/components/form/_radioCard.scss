@@ -91,7 +91,7 @@
               background-image: url($data-svg-prefix + map-get(
                   $radio-svg,
                   'error-checked'
-                )); /* text-align: center; */
+                ));
               z-index: 2;
             }
           }
