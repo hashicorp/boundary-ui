@@ -21,6 +21,19 @@ $radio-svg: (
 );
 
 $data-svg-prefix: 'data:image/svg+xml;utf-8,';
+
+.radio-field-wrapper {
+  &.inline {
+    display: inline-flex;
+    .rose-form-radio-label {
+      margin-right: sizing.rems(s);
+    }
+  }
+  .rose-form-radio-card-tile,
+  .rose-form-radio-card-wide {
+    margin-bottom: sizing.rems(s);
+  }
+}
 .rose-form-radio {
   &.inline {
     display: inline-block;
