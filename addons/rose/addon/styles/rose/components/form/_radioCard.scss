@@ -2,17 +2,24 @@
 @use '../../utilities/type';
 @use '../../variables/typography';
 
+$l: sizing.rems(l); // 16
+$m: sizing.rems(m); // 16
+$size-xs: sizing.rems(xs); // 8
+$size-xxs: sizing.rems(xxs); // 4
+$size-xxxs: sizing.rems(xxxs); // 2
+$size-xxxxs: sizing.rems(xxxxs); // 1
+
 .rose-form-radio-card-wide {
   position: relative;
   display: flex;
   align-items: center;
-  width: (sizing.rems(m)) * 23;
+  width: ($m) * 23;
   justify-content: center;
 
   .radio-card-overlay {
     position: absolute;
-    height: sizing.rems(l) + sizing.rems(xxs);
-    background-color: #f7f8fa;
+    height: $l + $size-xxs;
+    background-color: var(--ui-gray-subtler-5);
     width: 100%;
     bottom: 1px;
     right: 0;
@@ -21,34 +28,35 @@
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
-    color: #000;
-    width: (sizing.rems(m)) * 23;
-    height: (sizing.rems(m)) * 7.5;
+    color: var(--black);
+    width: ($m) * 23;
+    height: ($m) * 7.5;
     display: block;
     position: relative;
     text-align: left;
     word-break: break-all;
     border: 1px solid #bac1cc;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 $size-xxs $size-xxs
+      rgba(var(--stark-components), var(--opacity-2));
     border-radius: 2px;
     padding: 19px;
     box-sizing: border-box;
-    background-color: #ffffff;
+    background-color: var(--white);
   }
   .rose-form-radio-field {
     position: absolute;
     z-index: 1;
-    bottom: sizing.rems(xs);
+    bottom: $size-xs;
     &:not(:disabled) {
       &:hover {
         ~ .rose-form-radio-label {
-          border: 1px solid #6f7682;
+          border: 1px solid var(--ui-gray);
         }
       }
       &:checked {
         ~ .rose-form-radio-label {
           .radio-card-overlay {
-            background-color: #f0f5ff;
+            background-color: var(--action-subtler-1h);
           }
           border: 1px solid #1563ff;
         }
@@ -57,9 +65,9 @@
 
     &:disabled {
       ~ .rose-form-radio-label {
-        border: 1px solid #dce0e6;
-        background-color: #fbfbfc;
-        color: #626873;
+        border: 1px solid var(--ui-border-subtler-1);
+        background-color: var(--ui-gray-subtler-6);
+        color: var(--ui-gray-starker-1);
       }
     }
   }
@@ -67,23 +75,23 @@
   &.error {
     color: var(--failure);
     .rose-form-radio-field {
-      opacity: 0;
       &:not(:disabled):not(:focus) {
         ~ .rose-form-radio-label {
           .radio-card-overlay {
-            background-color: #f9ecee;
+            background-color: var(--action-subtler-1h);
           }
-          border: 1px solid #c73445;
+          border: $xxxxs solid #c73445;
         }
         &:checked {
+          opacity: 0;
           ~ .rose-form-radio-label {
             &::after {
               position: absolute;
               bottom: 5px;
               right: 174px;
               display: block;
-              width: sizing.rems(m);
-              height: sizing.rems(m);
+              width: $m;
+              height: $m;
               transform: scale(2);
               pointer-events: none;
               content: ' ';
@@ -105,13 +113,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: (sizing.rems(m)) * 15;
+  width: ($m) * 15;
   justify-content: center;
 
   .radio-card-overlay {
     position: absolute;
-    height: sizing.rems(l) + sizing.rems(xxs);
-    background-color: #f7f8fa;
+    height: $l + $size-xxs;
+    background-color: var(--ui-gray-subtler-5);
     width: 100%;
     bottom: 1px;
     right: 0;
@@ -120,46 +128,46 @@
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
-    color: #000;
-    width: (sizing.rems(m)) * 15;
-    height: (sizing.rems(m)) * 9;
+    color: var(--black);
+    width: ($m) * 15;
+    height: ($m) * 9;
 
     display: block;
     position: relative;
     text-align: left;
     word-break: break-all;
-    border: 1px solid #bac1cc;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border: $xxxxs solid var(--ui-border);
+    box-shadow: 0 $size-xxs $size-xxs
+      rgba(var(--stark-components), var(--opacity-2));
     border-radius: 2px;
     padding: 19px;
     box-sizing: border-box;
-    background-color: #ffffff;
+    background-color: var(--white);
   }
   .rose-form-radio-field {
     position: absolute;
     z-index: 1;
-    bottom: sizing.rems(xs);
+    bottom: $size-xs;
     &:not(:disabled) {
       &:hover {
         ~ .rose-form-radio-label {
-          border: 1px solid #6f7682;
+          border: $xxxxs solid var(--ui-gray);
         }
       }
       &:checked {
         ~ .rose-form-radio-label {
           .radio-card-overlay {
-            background-color: #f0f5ff;
+            background-color: var(--action-subtler-1h);
           }
-          border: 1px solid #1563ff;
+          border: $xxxxs solid #1563ff;
         }
       }
     }
-
     &:disabled {
       ~ .rose-form-radio-label {
-        border: 1px solid #dce0e6;
-        background-color: #fbfbfc;
-        color: #626873;
+        border: $xxxxs solid var(--ui-border-subtler-1);
+        background-color: var(--ui-gray-subtler-6);
+        color: var(--ui-gray-starker-1);
       }
     }
   }
@@ -167,23 +175,23 @@
   &.error {
     color: var(--failure);
     .rose-form-radio-field {
-      opacity: 0;
       &:not(:disabled):not(:focus) {
         ~ .rose-form-radio-label {
           .radio-card-overlay {
-            background-color: #f9ecee;
+            background-color: var(--failure--subtler-1);
           }
-          border: 1px solid #c73445;
+          border: $xxxxs solid #c73445;
         }
         &:checked {
+          opacity: 0;
           ~ .rose-form-radio-label {
             &::after {
               position: absolute;
-              bottom: sizing.rems(xxs);
+              bottom: $size-xxs;
               right: 109px;
               display: block;
-              width: sizing.rems(m);
-              height: sizing.rems(m);
+              width: $m;
+              height: $m;
               transform: scale(2);
               pointer-events: none;
               content: ' ';
