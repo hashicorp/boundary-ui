@@ -78,7 +78,7 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
       &:not(:disabled):not(:focus) {
         ~ .rose-form-radio-label {
           .radio-card-overlay {
-            background-color: var(--action-subtler-1h);
+            background-color: var(--failure--subtler-1);
           }
           border: $xxxxs solid #c73445;
         }
