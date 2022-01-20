@@ -38,29 +38,6 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
     return { user, authMethods, accounts };
   }
 
-  /**
-   * Renders the route-set specific page sections
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/users/user/add-accounts/-header', {
-      into: 'scopes/scope/users/user',
-      outlet: 'header',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/users/user',
-      outlet: 'actions',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/users/user',
-      outlet: 'navigation',
-    });
-  }
-
   // =actions
 
   /**

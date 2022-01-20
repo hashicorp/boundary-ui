@@ -1,79 +1,101 @@
 {{page-title (t 'resources.user.messages.accounts.title')}}
 
-{{#if @model.accounts}}
+<Rose::Layout::Page as |page|>
 
-  <Rose::Table as |table|>
-    <table.header as |header|>
-      <header.row as |row|>
-        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-        <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-      </header.row>
-    </table.header>
-    <table.body as |body|>
-      {{#each @model.accounts as |account|}}
-        <body.row as |row|>
-          <row.headerCell>
-            {{account.accountName}}
-            <p>{{account.description}}</p>
-          </row.headerCell>
-          <row.cell>
-            <Rose::Badge>
-              {{t (concat 'resources.auth-method.types.' account.type)}}
-            </Rose::Badge>
-          </row.cell>
-          <row.cell>
-            <Copyable
-              @text={{account.id}}
-              @buttonText={{t 'actions.copy-to-clipboard'}}
-              @acknowledgeText={{t 'states.copied'}}
-            >
-              <code>{{account.id}}</code>
-            </Copyable>
-          </row.cell>
-          <row.cell>
-            {{#if (can 'removeAccounts user' @model.user)}}
-              <Rose::Dropdown
-                @icon='flight-icons/svg/more-horizontal-16'
-                @iconOnly={{true}}
-                @showCaret={{false}}
-                @dropdownRight={{true}}
-                @text='{{t 'actions.manage'}}'
-                as |dropdown|
-              >
-                <dropdown.button
-                  @style='danger'
-                  {{on
-                    'click'
-                    (route-action 'removeAccount' @model.user account)
-                  }}
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <Users::User::Header @model={{@model.user}} />
+  </page.header>
+
+  <page.navigation>
+    <Users::User::Nav @model={{@model.user}} />
+  </page.navigation>
+
+  <page.actions>
+    <Users::User::Actions @model={{@model.user}} />
+  </page.actions>
+
+  <page.body>
+    {{#if @model.accounts}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model.accounts as |account|}}
+            <body.row as |row|>
+              <row.headerCell>
+                {{account.accountName}}
+                <p>{{account.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                <Rose::Badge>
+                  {{t (concat 'resources.auth-method.types.' account.type)}}
+                </Rose::Badge>
+              </row.cell>
+              <row.cell>
+                <Copyable
+                  @text={{account.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
                 >
-                  {{t 'actions.remove'}}
-                </dropdown.button>
-              </Rose::Dropdown>
-            {{/if}}
-          </row.cell>
-        </body.row>
-      {{/each}}
-    </table.body>
-  </Rose::Table>
+                  <code>{{account.id}}</code>
+                </Copyable>
+              </row.cell>
+              <row.cell>
+                {{#if (can 'removeAccounts user' @model.user)}}
+                  <Rose::Dropdown
+                    @icon='flight-icons/svg/more-horizontal-16'
+                    @iconOnly={{true}}
+                    @showCaret={{false}}
+                    @dropdownRight={{true}}
+                    @text='{{t 'actions.manage'}}'
+                    as |dropdown|
+                  >
+                    <dropdown.button
+                      @style='danger'
+                      {{on
+                        'click'
+                        (route-action 'removeAccount' @model.user account)
+                      }}
+                    >
+                      {{t 'actions.remove'}}
+                    </dropdown.button>
+                  </Rose::Dropdown>
+                {{/if}}
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
 
-{{else}}
+    {{else}}
 
-  <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.user.messages.accounts.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.user.messages.accounts.description'}}
-      </message.description>
-      <message.link @route='scopes.scope.users.user.add-accounts'>
-        <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-        {{t 'resources.user.actions.add-accounts'}}
-      </message.link>
-    </Rose::Message>
-  </Rose::Layout::Centered>
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.user.messages.accounts.title'}}
+          as |message|
+        >
+          <message.description>
+            {{t 'resources.user.messages.accounts.description'}}
+          </message.description>
+          <message.link @route='scopes.scope.users.user.add-accounts'>
+            <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
+            {{t 'resources.user.actions.add-accounts'}}
+          </message.link>
+        </Rose::Message>
+      </Rose::Layout::Centered>
 
-{{/if}}
+    {{/if}}
+  </page.body>
+
+</Rose::Layout::Page>

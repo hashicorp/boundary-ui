@@ -12,15 +12,19 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupMe
    * Returns the previously loaded managed group instances memebrs.
    * @return {Promise{[AccountModel]}}
    */
-  model() {
-    const { auth_method_id, member_ids } = this.modelFor(
+  async model() {
+    const managedGroup = this.modelFor(
       'scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
     );
+    const { auth_method_id, member_ids } = managedGroup;
 
-    return this.resourceFilterStore.queryBy(
-      'account',
-      { id: member_ids },
-      { auth_method_id }
-    );
+    return {
+      managedGroup,
+      members: await this.resourceFilterStore.queryBy(
+        'account',
+        { id: member_ids },
+        { auth_method_id }
+      ),
+    };
   }
 }

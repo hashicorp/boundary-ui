@@ -23,6 +23,11 @@
 
     {{@label}}
   <span class="radio-card-overlay"></span>
+     {{#if @helperText}}
+      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}} @link={{@link}} @linkText={{@linkText}}>
+        {{@helperText}}
+      </Rose::Form::HelperText>
+    {{/if}}
   </label>
 
   {{yield}}
