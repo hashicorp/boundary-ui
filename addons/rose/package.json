@@ -31,12 +31,12 @@
   "dependencies": {
     "ember-cli-babel": "^7.26.8",
     "ember-cli-htmlbars": "^5.7.1",
+    "ember-composable-helpers": "^4.5.0",
     "ember-focus-trap": "^0.7.0",
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-radio-button": "^2.0.1",
     "ember-uuid": "^2.1.0",
-    "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774",
-    "ember-composable-helpers": "^4.5.0"
+    "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
@@ -44,7 +44,7 @@
     "@ember/test-helpers": "^2.4.2",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
-    "@hashicorp/flight-icons": "^1.0.0",
+    "@hashicorp/flight-icons": "^2.0.1",
     "@storybook/addon-a11y": "^6.3.12",
     "@storybook/addon-actions": "^6.3.10",
     "@storybook/addon-docs": "^6.3.8",
@@ -53,8 +53,10 @@
     "@storybook/api": "^6.3.12",
     "@storybook/cli": "^6.3.10",
     "@storybook/components": "^6.3.12",
+    "@storybook/core-events": "^6.3.0",
     "@storybook/ember": "^6.3.8",
     "@storybook/ember-cli-storybook": "^0.4.0",
+    "@storybook/theming": "^6.3.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "broccoli-asset-rev": "^3.0.0",
