@@ -43,6 +43,8 @@ export default class ApplicationSerializer extends RESTSerializer {
     if (type === 'string' && json[key] === '') json[key] = null;
     // Do not serialize read-only attributes.
     if (options.readOnly) delete json[key];
+    // Only serialize write-once fields on create.
+    if (options.writeOnce && !snapshot.record.isNew) delete json[key];
     // Version is sent only if it has a non-nullish value
     if (key === 'version') {
       if (json[key] === null || json[key] === undefined) delete json[key];

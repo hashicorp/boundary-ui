@@ -73,14 +73,14 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     isNestedAttribute: true,
-    readOnly: true,
+    writeOnce: true,
     description: '',
   })
   access_key_id;
 
   @attr('string', {
     isNestedAttribute: true,
-    readOnly: true,
+    writeOnce: true,
     description: '',
   })
   secret_access_key;
@@ -107,14 +107,14 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     isNestedAttribute: true,
-    readOnly: true,
+    writeOnce: true,
     description: '',
   })
   secret_id;
 
   @attr('string', {
     isNestedAttribute: true,
-    readOnly: true,
+    writeOnce: true,
     description: '',
   })
   secret_value;

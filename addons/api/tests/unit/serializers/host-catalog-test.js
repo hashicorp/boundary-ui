@@ -40,7 +40,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(serializedRecord, expectedResult);
   });
 
-  test('it serializes an AWS plugin as expected, ignoring read-only and Azure fields', async function (assert) {
+  test('it serializes an AWS plugin as expected, ignoring Azure fields', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-catalog');
@@ -76,7 +76,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(serializedRecord, expectedResult);
   });
 
-  test('it serializes an Azure plugin as expected, ignoring read-only and Aws fields', async function (assert) {
+  test('it serializes an Azure plugin as expected, ignoring AWS fields', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-catalog');
