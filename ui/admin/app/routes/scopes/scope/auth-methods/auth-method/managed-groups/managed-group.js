@@ -14,36 +14,4 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
       reload: true,
     });
   }
-
-  /**
-   * Render the route-set specific page sections
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render(
-      'scopes/scope/auth-methods/auth-method/managed-groups/managed-group/-header',
-      {
-        into: 'scopes/scope/auth-methods/auth-method',
-        outlet: 'header',
-      }
-    );
-
-    this.render(
-      'scopes/scope/auth-methods/auth-method/managed-groups/managed-group/-actions',
-      {
-        into: 'scopes/scope/auth-methods/auth-method',
-        outlet: 'actions',
-      }
-    );
-
-    this.render(
-      'scopes/scope/auth-methods/auth-method/managed-groups/managed-group/-navigation',
-      {
-        into: 'scopes/scope/auth-methods/auth-method',
-        outlet: 'navigation',
-      }
-    );
-  }
 }

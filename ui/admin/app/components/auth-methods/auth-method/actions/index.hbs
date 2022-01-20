@@ -21,7 +21,7 @@
           @changed={{route-action 'changeState'}}
           as |radioGroup|
         >
-          {{#each this.oidcStates as |state|}}
+          {{#each @model.options.oidc.state as |state|}}
             <dropdown.item>
               <radioGroup.radio
                 @label={{t (concat 'states.' state)}}
