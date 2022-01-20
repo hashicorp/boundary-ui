@@ -1,5 +1,27 @@
-<Form::User
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <Users::User::Header @model={{@model}} />
+  </page.header>
+
+  <page.navigation>
+    <Users::User::Nav @model={{@model}} />
+  </page.navigation>
+
+  <page.actions>
+    <Users::User::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.body>
+    <Form::User
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
