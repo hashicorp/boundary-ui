@@ -29,10 +29,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'static',
       description: 'this is a static host-catalog',
       type: 'static',
-      attributes: {
-        disable_credential_rotation: true,
-        tenant_id: 'a1b2c3',
-      },
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
@@ -55,12 +51,10 @@ module('Unit | Serializer | host catalog', function (hooks) {
       plugin: { name: 'aws' }, // Read-only field
       disable_credential_rotation: true,
       tenant_id: 'a1b2c3',
-      fake_field: 'testing fake field',
       client_id: 'a1b2c3',
       subscription_id: 'a1b2c3',
       region: 'spain',
       secret_id: 'a1b2c3', // Read-only field
-      access_key_id: '1a2b3c', // Azure specific field
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
@@ -90,7 +84,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
       disable_credential_rotation: true,
       region: 'spain',
       access_key_id: 'a1b2c3', // Read-only field
-      fake_field: 'testing fake field',
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
