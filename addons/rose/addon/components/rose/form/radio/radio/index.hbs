@@ -1,4 +1,4 @@
-<div class="rose-form-radio{{if @error " error"}} {{if @inline "inline"}}">
+<div class="{{this.className}} {{if @error " error"}} {{if @inline "inline"}}">
 
   <RadioButton
     ...attributes
@@ -22,7 +22,11 @@
     {{/if}}
 
     {{@label}}
-
+     {{#if @helperText}}
+      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}} @link={{@link}} @linkText={{@linkText}}>
+        {{@helperText}}
+      </Rose::Form::HelperText>
+    {{/if}}
   </label>
 
   {{yield}}
