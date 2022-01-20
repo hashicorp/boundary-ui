@@ -536,9 +536,10 @@ export default function () {
       return managedGroups.where({ authMethodId });
     }
   );
-  this.get('/managed-groups/:id');
-  this.del('/managed-groups/:id');
   this.post('/managed-groups');
+  this.get('/managed-groups/:id');
+  this.patch('/managed-groups/:id');
+  this.del('/managed-groups/:id');
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

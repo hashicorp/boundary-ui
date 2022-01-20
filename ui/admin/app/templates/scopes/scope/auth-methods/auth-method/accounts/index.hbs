@@ -1,149 +1,175 @@
-{{#if @model}}
-  {{! OIDC accounts display more fields }}
-  {{#if @model.firstObject.isOIDC}}
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.issuer.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.subject.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.email.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.full_name.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each @model as |account|}}
-          <body.row as |row|>
-            <row.headerCell scope='row'>
-              {{#if (can 'read model' account)}}
-                <LinkTo
-                  @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                  @model={{account.id}}
-                >
-                  {{account.accountName}}
-                </LinkTo>
-              {{else}}
-                {{account.accountName}}
-              {{/if}}
-              <p>{{account.description}}</p>
-            </row.headerCell>
-            <row.cell>
-              <code>{{account.attributes.issuer}}</code>
-            </row.cell>
-            <row.cell>
-              <code>{{account.attributes.subject}}</code>
-            </row.cell>
-            <row.cell>
-              <code>{{account.attributes.email}}</code>
-            </row.cell>
-            <row.cell>
-              {{account.attributes.full_name}}
-            </row.cell>
-            <row.cell>
-              <Rose::Badge>{{account.type}}</Rose::Badge>
-            </row.cell>
-            <row.cell>
-              <Copyable
-                @text={{account.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{account.id}}</code>
-              </Copyable>
-            </row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
-  {{else}}
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each @model as |account|}}
-          <body.row as |row|>
-            <row.headerCell>
-              {{#if (can 'read model' account)}}
-                <LinkTo
-                  @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                  @model={{account.id}}
-                >
-                  {{account.accountName}}
-                </LinkTo>
-              {{else}}
-                {{account.accountName}}
-              {{/if}}
-              <p>{{account.description}}</p>
-            </row.headerCell>
-            <row.cell>
-              {{account.attributes.login_name}}
-            </row.cell>
-            <row.cell>
-              <Rose::Badge>{{account.type}}</Rose::Badge>
-            </row.cell>
-            <row.cell>
-              <Copyable
-                @text={{account.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{account.id}}</code>
-              </Copyable>
-            </row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
-  {{/if}}
-{{else}}
+<Rose::Layout::Page as |page|>
 
-  <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.account.messages.welcome.title'}}
-      as |message|
-    >
-      <message.description>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
 
-        {{#if (can 'list collection' this.authMethod collection='accounts')}}
-          {{! can list (at least):  show default welcome message}}
-          {{t 'resources.account.description'}}
+  <page.header>
+    <AuthMethods::AuthMethod::Header @model={{@model.authMethod}} />
+  </page.header>
 
-        {{else if (can
-          'create collection' this.authMethod collection='accounts'
-        )}}
-          {{! can create (only):  show create-but-not-list welcome message}}
-          {{t
-            'descriptions.create-but-not-list'
-            resource=(t 'resources.account.title_plural')
-          }}
-        {{else}}
-          {{! can neither list nor create }}
-          {{t
-            'descriptions.neither-list-nor-create'
-            resource=(t 'resources.account.title_plural')
-          }}
-        {{/if}}
+  <page.navigation>
+    <AuthMethods::AuthMethod::Nav @model={{@model.authMethod}} />
+  </page.navigation>
 
-      </message.description>
+  <page.actions>
+    <AuthMethods::AuthMethod::Actions @model={{@model.authMethod}} />
+  </page.actions>
 
-      {{#if (can 'create collection' this.authMethod collection='accounts')}}
-
-        <message.link
-          @route='scopes.scope.auth-methods.auth-method.accounts.new'
-        >
-          <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-          {{t 'resources.account.actions.create'}}
-        </message.link>
+  <page.body>
+    {{#if @model.accounts}}
+      {{! OIDC accounts display more fields }}
+      {{#if @model.accounts.firstObject.isOIDC}}
+        <Rose::Table as |table|>
+          <table.header as |header|>
+            <header.row as |row|>
+              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.issuer.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.subject.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.email.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.full_name.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+            </header.row>
+          </table.header>
+          <table.body as |body|>
+            {{#each @model.accounts as |account|}}
+              <body.row as |row|>
+                <row.headerCell scope='row'>
+                  {{#if (can 'read model' account)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                      @model={{account.id}}
+                    >
+                      {{account.accountName}}
+                    </LinkTo>
+                  {{else}}
+                    {{account.accountName}}
+                  {{/if}}
+                  <p>{{account.description}}</p>
+                </row.headerCell>
+                <row.cell>
+                  <code>{{account.attributes.issuer}}</code>
+                </row.cell>
+                <row.cell>
+                  <code>{{account.attributes.subject}}</code>
+                </row.cell>
+                <row.cell>
+                  <code>{{account.attributes.email}}</code>
+                </row.cell>
+                <row.cell>
+                  {{account.attributes.full_name}}
+                </row.cell>
+                <row.cell>
+                  <Rose::Badge>{{account.type}}</Rose::Badge>
+                </row.cell>
+                <row.cell>
+                  <Copyable
+                    @text={{account.id}}
+                    @buttonText={{t 'actions.copy-to-clipboard'}}
+                    @acknowledgeText={{t 'states.copied'}}
+                  >
+                    <code>{{account.id}}</code>
+                  </Copyable>
+                </row.cell>
+              </body.row>
+            {{/each}}
+          </table.body>
+        </Rose::Table>
+      {{else}}
+        <Rose::Table as |table|>
+          <table.header as |header|>
+            <header.row as |row|>
+              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+              <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+            </header.row>
+          </table.header>
+          <table.body as |body|>
+            {{#each @model.accounts as |account|}}
+              <body.row as |row|>
+                <row.headerCell>
+                  {{#if (can 'read model' account)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                      @model={{account.id}}
+                    >
+                      {{account.accountName}}
+                    </LinkTo>
+                  {{else}}
+                    {{account.accountName}}
+                  {{/if}}
+                  <p>{{account.description}}</p>
+                </row.headerCell>
+                <row.cell>
+                  {{account.attributes.login_name}}
+                </row.cell>
+                <row.cell>
+                  <Rose::Badge>{{account.type}}</Rose::Badge>
+                </row.cell>
+                <row.cell>
+                  <Copyable
+                    @text={{account.id}}
+                    @buttonText={{t 'actions.copy-to-clipboard'}}
+                    @acknowledgeText={{t 'states.copied'}}
+                  >
+                    <code>{{account.id}}</code>
+                  </Copyable>
+                </row.cell>
+              </body.row>
+            {{/each}}
+          </table.body>
+        </Rose::Table>
       {{/if}}
-    </Rose::Message>
-  </Rose::Layout::Centered>
+    {{else}}
 
-{{/if}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.account.messages.welcome.title'}}
+          as |message|
+        >
+          <message.description>
+
+            {{#if
+              (can 'list collection' this.authMethod collection='accounts')
+            }}
+              {{! can list (at least):  show default welcome message}}
+              {{t 'resources.account.description'}}
+
+            {{else if (can
+              'create collection' this.authMethod collection='accounts'
+            )}}
+              {{! can create (only):  show create-but-not-list welcome message}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.account.title_plural')
+              }}
+            {{else}}
+              {{! can neither list nor create }}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.account.title_plural')
+              }}
+            {{/if}}
+
+          </message.description>
+
+          {{#if
+            (can 'create collection' this.authMethod collection='accounts')
+          }}
+
+            <message.link
+              @route='scopes.scope.auth-methods.auth-method.accounts.new'
+            >
+              <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
+              {{t 'resources.account.actions.create'}}
+            </message.link>
+          {{/if}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+  </page.body>
+
+</Rose::Layout::Page>

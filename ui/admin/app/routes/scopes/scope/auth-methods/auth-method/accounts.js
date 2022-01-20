@@ -19,16 +19,23 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
    * Returns accounts for the current auth method.
    * @return {Promise{[AccountModel]}}
    */
-  model() {
+  async model() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     const { id: auth_method_id } = authMethod;
+    let accounts;
+
     if (
       this.can.can('list collection', authMethod, {
         collection: 'accounts',
       })
     ) {
-      return this.store.query('account', { auth_method_id });
+      accounts = await this.store.query('account', { auth_method_id });
     }
+
+    return {
+      authMethod,
+      accounts,
+    };
   }
 
   // =actions

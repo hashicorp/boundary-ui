@@ -1,5 +1,28 @@
-<Form::Account
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <AuthMethods::AuthMethod::Accounts::Account::Header @model={{@model}} />
+  </page.header>
+
+  <page.navigation>
+    <AuthMethods::AuthMethod::Accounts::Account::Nav @model={{@model}} />
+  </page.navigation>
+
+  <page.actions>
+    <AuthMethods::AuthMethod::Accounts::Account::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.body>
+    <Form::Account
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+
+  </page.body>
+
+</Rose::Layout::Page>
