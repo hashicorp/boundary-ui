@@ -55,13 +55,16 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   plugin;
 
+  // AWS & Azure
+
   @attr('boolean', {
     isNestedAttribute: true,
     description: '',
   })
   disable_credential_rotation;
 
-  // Azure specific
+  // AWS specific
+
   @attr('string', {
     isNestedAttribute: true,
     description: '',
@@ -82,7 +85,8 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   secret_access_key;
 
-  // AWS specific
+  // Azure specific
+
   @attr('string', {
     isNestedAttribute: true,
     description: '',
