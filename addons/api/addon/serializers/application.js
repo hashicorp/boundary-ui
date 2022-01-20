@@ -50,6 +50,12 @@ export default class ApplicationSerializer extends RESTSerializer {
     // Do not serialize `disabled` fields.
     // TODO:  disabled is temporarily disabled
     if (key === 'disabled') delete json[key];
+    // Push nested attributes down into the attributes key
+    if (options.isNestedAttribute && json[key] !== undefined) {
+      if (!json.attributes) json.attributes = {};
+      json.attributes[key] = json[key];
+      delete json[key];
+    }
     return value;
   }
 
@@ -195,9 +201,37 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {Object}
    */
   normalize(typeClass, hash) {
-    const normalizedHash = copy(hash, true);
+    let normalizedHash = copy(hash, true);
     const scopeID = get(normalizedHash, 'scope.id');
     if (scopeID) normalizedHash.scope.scope_id = scopeID;
+    normalizedHash = this.normalizeNestedAttributes(typeClass, normalizedHash);
     return super.normalize(typeClass, normalizedHash);
+  }
+
+  /**
+   * Certain typed resources in the API have type-specific fields nested under
+   * an `attributes` key in the payload
+   * (e.g. `attributes: { fieldName: '123' }`).  Since Ember Data lacks
+   * first-class support for nested attributes, these fields must be hoisted up
+   * into the main body of the payload.
+   *
+   * In order to annotate a field as being a nested attribute, add the key name
+   * to the `nestedAttributes` field on the serializer:
+   *   `@attr('string', { isNestedAttribute: true }) fieldName;`
+   *
+   * @param {Model} typeClass
+   * @param {Object} hash
+   * @return {Object}
+   */
+  normalizeNestedAttributes(typeClass, hash) {
+    const normalizedHash = copy(hash, true);
+    typeClass.attributes.forEach((attribute) => {
+      const { isNestedAttribute } = attribute.options;
+      const attributeValue = normalizedHash.attributes?.[attribute.name];
+      if (isNestedAttribute && attributeValue) {
+        normalizedHash[attribute.name] = attributeValue;
+      }
+    });
+    return normalizedHash;
   }
 }

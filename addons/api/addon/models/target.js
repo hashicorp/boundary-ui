@@ -1,15 +1,16 @@
 import GeneratedTargetModel from '../generated/models/target';
-import { fragment, fragmentArray } from 'ember-data-model-fragments/attributes';
+import { attr } from '@ember-data/model';
+import { fragmentArray } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
 
 export default class TargetModel extends GeneratedTargetModel {
   // =attributes
 
-  /**
-   * Attributes of this resource, if any, represented as a JSON fragment.
-   * @type {FragmentTargetAttributesModel}
-   */
-  @fragment('fragment-target-attributes', { defaultValue: {} }) attributes;
+  @attr('number', {
+    isNestedAttribute: true,
+    description: 'The  default port a target should use if present.',
+  })
+  default_port;
 
   /**
    * @type {[FragmentHostSourceModel]}
