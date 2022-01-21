@@ -44,11 +44,6 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   attributes;
 
-  @attr({
-    description: 'Secrets specific to the plugin type',
-  })
-  secrets;
-
   @attr('number', {
     description: 'Current version number of this resource.',
   })
@@ -78,14 +73,12 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     isNestedSecret: true,
-    writeOnly: true,
     description: '',
   })
   access_key_id;
 
   @attr('string', {
     isNestedSecret: true,
-    writeOnly: true,
     description: '',
   })
   secret_access_key;
@@ -112,14 +105,12 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     isNestedSecret: true,
-    writeOnly: true,
     description: '',
   })
   secret_id;
 
   @attr('string', {
     isNestedSecret: true,
-    writeOnly: true,
     description: '',
   })
   secret_value;
