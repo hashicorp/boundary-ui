@@ -29,6 +29,7 @@ Renders a form radiofield in a Wide format.
         @selectedValue={{selectedValue}}
         @disabled={{disabled}}
         @icon={{icon}}
+        @helperText={{helperText}}
         />
     `,
     context: {
@@ -39,6 +40,7 @@ Renders a form radiofield in a Wide format.
         'selectedValue',
         'value and selectedValue must match to select radiofield'
       ),
+      helperText: text('helperText', 'Record financial transactions using'),
       disabled: boolean('disabled', false),
       icon: select(
         'icon',
