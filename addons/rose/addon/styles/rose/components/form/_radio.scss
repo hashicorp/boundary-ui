@@ -1,5 +1,6 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
+@use '../../variables/typography';
 
 $radio-svg: (
   'default':
@@ -47,9 +48,18 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
   color: var(--ui-gray);
 
   .rose-form-radio-label {
+    display: flex;
+    align-items: center;
+    .rose-form-helper-text {
+      font-weight: normal;
+      margin-left: sizing.rems(xxs);
+      margin-bottom: 0;
+    }
+
     @include type.type(s, semibold);
     color: currentColor;
     padding-left: sizing.rems(l);
+    padding-top: sizing.rems(xxxs);
 
     .rose-icon {
       margin-right: sizing.rems(xxs);

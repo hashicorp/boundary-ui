@@ -19,16 +19,24 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
    *
    * @returns {Promise{[ManagedGroupsModel]}}
    */
-  model() {
+  async model() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     const { id: auth_method_id } = authMethod;
     const canListManagedGroups = this.can.can('list collection', authMethod, {
       collection: 'managed-groups',
     });
+    let managedGroups;
 
     if (canListManagedGroups) {
-      return this.store.query('managed-group', { auth_method_id });
+      managedGroups = await this.store.query('managed-group', {
+        auth_method_id,
+      });
     }
+
+    return {
+      authMethod,
+      managedGroups,
+    };
   }
 
   // =actions
@@ -81,7 +89,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   @confirm('questions.delete-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
-  async delete(managedGroup) {
+  async deleteManagedGroup(managedGroup) {
     await managedGroup.destroyRecord();
     await this.router.replaceWith(
       'scopes.scope.auth-methods.auth-method.managed-groups'

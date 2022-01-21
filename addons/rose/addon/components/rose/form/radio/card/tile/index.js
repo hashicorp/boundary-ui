@@ -1,6 +1,6 @@
 import RoseFormRadioRadioComponent from '../../radio';
 
-export default class RoseFormRadioRadioCardComponent extends RoseFormRadioRadioComponent {
+export default class RoseFormRadioCardComponent extends RoseFormRadioRadioComponent {
   // =attributes
 
   className = 'rose-form-radio-card-tile';

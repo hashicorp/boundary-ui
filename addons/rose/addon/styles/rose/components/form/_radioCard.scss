@@ -21,13 +21,13 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
     height: $l + $size-xxs;
     background-color: var(--ui-gray-subtler-5);
     width: 100%;
-    bottom: 1px;
+    bottom: 0;
     right: 0;
   }
   .rose-form-radio-label {
     font-style: normal;
     font-weight: bold;
-    font-size: 14px;
+    font-size: typography.font-size(s);
     color: var(--black);
     width: ($m) * 23;
     height: ($m) * 7.5;
@@ -35,13 +35,20 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
     position: relative;
     text-align: left;
     word-break: break-all;
-    border: 1px solid #bac1cc;
+    border: $size-xxxxs solid #bac1cc;
     box-shadow: 0 $size-xxs $size-xxs
       rgba(var(--stark-components), var(--opacity-2));
-    border-radius: 2px;
-    padding: 19px;
+    border-radius: $size-xxxs;
+    padding: $s $l;
     box-sizing: border-box;
     background-color: var(--white);
+    .rose-form-helper-text {
+      font-weight: normal;
+    }
+    .rose-icon {
+      padding-right: $size-xxs;
+      padding-left: $size-xxs;
+    }
   }
   .rose-form-radio-field {
     position: absolute;
@@ -50,7 +57,7 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
     &:not(:disabled) {
       &:hover {
         ~ .rose-form-radio-label {
-          border: 1px solid var(--ui-gray);
+          border: $size-xxxxs solid var(--ui-gray);
         }
       }
       &:checked {
@@ -58,14 +65,14 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
           .radio-card-overlay {
             background-color: var(--action-subtler-1h);
           }
-          border: 1px solid #1563ff;
+          border: $size-xxxxs solid #1563ff;
         }
       }
     }
 
     &:disabled {
       ~ .rose-form-radio-label {
-        border: 1px solid var(--ui-border-subtler-1);
+        border: $size-xxxxs solid var(--ui-border-subtler-1);
         background-color: var(--ui-gray-subtler-6);
         color: var(--ui-gray-starker-1);
       }
@@ -73,22 +80,21 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
   }
 
   &.error {
-    color: var(--failure);
     .rose-form-radio-field {
       &:not(:disabled):not(:focus) {
         ~ .rose-form-radio-label {
           .radio-card-overlay {
-            background-color: var(--failure--subtler-1);
+            background-color: var(--failure-subtler-1);
           }
-          border: $xxxxs solid #c73445;
+          border-color: var(--failure);
         }
         &:checked {
           opacity: 0;
           ~ .rose-form-radio-label {
             &::after {
               position: absolute;
-              bottom: 5px;
-              right: 174px;
+              bottom: $size-xxs + $size-xxxs;
+              right: sizing.rems(m) * 10.9;
               display: block;
               width: $m;
               height: $m;
@@ -121,28 +127,32 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
     height: $l + $size-xxs;
     background-color: var(--ui-gray-subtler-5);
     width: 100%;
-    bottom: 1px;
+    bottom: 0;
     right: 0;
   }
   .rose-form-radio-label {
     font-style: normal;
     font-weight: bold;
-    font-size: 14px;
+    font-size: typography.font-size(s);
     color: var(--black);
     width: ($m) * 15;
     height: ($m) * 9;
-
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
     text-align: left;
     word-break: break-all;
     border: $xxxxs solid var(--ui-border);
     box-shadow: 0 $size-xxs $size-xxs
       rgba(var(--stark-components), var(--opacity-2));
-    border-radius: 2px;
-    padding: 19px;
+    border-radius: $size-xxxs;
+    padding: $m $size-xxs;
     box-sizing: border-box;
     background-color: var(--white);
+    .rose-form-helper-text {
+      font-weight: normal;
+    }
   }
   .rose-form-radio-field {
     position: absolute;
@@ -173,14 +183,13 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
   }
 
   &.error {
-    color: var(--failure);
     .rose-form-radio-field {
       &:not(:disabled):not(:focus) {
         ~ .rose-form-radio-label {
           .radio-card-overlay {
-            background-color: var(--failure--subtler-1);
+            background-color: var(--failure-subtler-1);
           }
-          border: $xxxxs solid #c73445;
+          border-color: var(--failure);
         }
         &:checked {
           opacity: 0;
@@ -188,7 +197,7 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
             &::after {
               position: absolute;
               bottom: $size-xxs;
-              right: 109px;
+              right: sizing.rems(m) * 6.8;
               display: block;
               width: $m;
               height: $m;
