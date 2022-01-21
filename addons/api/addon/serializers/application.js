@@ -57,9 +57,11 @@ export default class ApplicationSerializer extends RESTSerializer {
       delete json[key];
     }
     // Push nested secrets down into the secrets key
-    if (options.isNestedSecret && json[key]) {
-      if (!json.secrets) json.secrets = {};
-      json.secrets[key] = json[key];
+    if (options.isNestedSecret) {
+      if (json[key]) {
+        if (!json.secrets) json.secrets = {};
+        json.secrets[key] = json[key];
+      }
       delete json[key];
     }
     return value;
