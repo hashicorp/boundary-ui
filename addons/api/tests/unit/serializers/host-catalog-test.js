@@ -61,6 +61,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
       attributes: {
         disable_credential_rotation: true,
         region: 'spain',
+      },
+      secrets: {
         access_key_id: 'foobars',
         secret_access_key: 'testing',
       },
@@ -96,6 +98,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
         tenant_id: 'a1b2c3',
         client_id: 'a1b2c3',
         subscription_id: 'a1b2c3',
+      },
+      secrets: {
         secret_id: 'a1b2c3',
         secret_value: 'a1b2c3',
       },
@@ -131,6 +135,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
       attributes: {
         disable_credential_rotation: false,
         region: 'andorra',
+      },
+      secrets: {
         access_key_id: 'foobars',
         secret_access_key: 'testing',
       },
@@ -170,6 +176,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
         tenant_id: 'a1b2c3',
         client_id: 'foobars12',
         subscription_id: 'barsfoo21',
+      },
+      secrets: {
         secret_id: 'secretBar12',
         secret_value: 'secretValue21',
       },

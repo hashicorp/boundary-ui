@@ -40,6 +40,12 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
       if (!fieldsByType[compositeType].includes(key))
         delete json.attributes[key];
     }
+    // This deletes any fields that don't belong to the record type
+    if (isPlugin && options.isNestedSecret && json.secrets) {
+      if (!fieldsByType[compositeType].includes(key)) delete json.secrets[key];
+    }
+
+    // new one for isNestedSecret
     return value;
   }
 
@@ -47,6 +53,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     const serialized = super.serialize(...arguments);
     // Delete unnecessary fields for static host-catalog
     delete serialized.attributes;
+    delete serialized.secrets;
     return serialized;
   }
 }

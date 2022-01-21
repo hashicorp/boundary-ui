@@ -44,6 +44,11 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   attributes;
 
+  @attr({
+    description: 'Secrets specific to the plugin type',
+  })
+  secrets;
+
   @attr('number', {
     description: 'Current version number of this resource.',
   })
@@ -72,14 +77,14 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   region;
 
   @attr('string', {
-    isNestedAttribute: true,
+    isNestedSecret: true,
     writeOnly: true,
     description: '',
   })
   access_key_id;
 
   @attr('string', {
-    isNestedAttribute: true,
+    isNestedSecret: true,
     writeOnly: true,
     description: '',
   })
@@ -106,14 +111,14 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   subscription_id;
 
   @attr('string', {
-    isNestedAttribute: true,
+    isNestedSecret: true,
     writeOnly: true,
     description: '',
   })
   secret_id;
 
   @attr('string', {
-    isNestedAttribute: true,
+    isNestedSecret: true,
     writeOnly: true,
     description: '',
   })
