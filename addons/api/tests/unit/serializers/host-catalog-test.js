@@ -170,7 +170,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
           tenant_id: 'a1b2c3',
           client_id: 'foobars12',
           subscription_id: 'barsfoo21',
-          // these are Azure read-only fields and should NOT be included on update
           secret_id: 'secretBar12',
           secret_value: 'secretValue21',
         },
