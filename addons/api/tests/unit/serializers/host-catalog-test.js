@@ -187,6 +187,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
         tenant_id: 'a1b2c3',
         client_id: 'foobars12',
         subscription_id: 'barsfoo21',
+        secret_id: 'secretBar12',
+        secret_value: 'secretValue21',
       },
     };
     const serializedRecord = serializer.serialize(snapshot);
