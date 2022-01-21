@@ -43,8 +43,6 @@ export default class ApplicationSerializer extends RESTSerializer {
     if (type === 'string' && json[key] === '') json[key] = null;
     // Do not serialize read-only attributes.
     if (options.readOnly) delete json[key];
-    // Only serialize write-once fields on create.
-    if (options.writeOnce && !snapshot.record.isNew) delete json[key];
     // Version is sent only if it has a non-nullish value
     if (key === 'version') {
       if (json[key] === null || json[key] === undefined) delete json[key];
@@ -207,6 +205,10 @@ export default class ApplicationSerializer extends RESTSerializer {
     const scopeID = get(normalizedHash, 'scope.id');
     if (scopeID) normalizedHash.scope.scope_id = scopeID;
     normalizedHash = this.normalizeNestedAttributes(typeClass, normalizedHash);
+    // Delete any lingering values on write-only fields
+    typeClass.attributes.forEach((attribute) => {
+      if (attribute.options.writeOnly) hash[attribute.name] = null;
+    });
     return super.normalize(typeClass, normalizedHash);
   }
 
