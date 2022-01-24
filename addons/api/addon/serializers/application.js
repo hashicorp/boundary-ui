@@ -56,6 +56,14 @@ export default class ApplicationSerializer extends RESTSerializer {
       json.attributes[key] = json[key];
       delete json[key];
     }
+    // Push nested secrets down into the secrets key
+    if (options.isNestedSecret) {
+      if (json[key]) {
+        if (!json.secrets) json.secrets = {};
+        json.secrets[key] = json[key];
+      }
+      delete json[key];
+    }
     return value;
   }
 
@@ -205,6 +213,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     const scopeID = get(normalizedHash, 'scope.id');
     if (scopeID) normalizedHash.scope.scope_id = scopeID;
     normalizedHash = this.normalizeNestedAttributes(typeClass, normalizedHash);
+    normalizedHash = this.normalizeNestedSecrets(typeClass, normalizedHash);
     return super.normalize(typeClass, normalizedHash);
   }
 
@@ -224,14 +233,36 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {Object}
    */
   normalizeNestedAttributes(typeClass, hash) {
-    const normalizedHash = copy(hash, true);
     typeClass.attributes.forEach((attribute) => {
       const { isNestedAttribute } = attribute.options;
-      const attributeValue = normalizedHash.attributes?.[attribute.name];
+      const attributeValue = hash.attributes?.[attribute.name];
       if (isNestedAttribute && attributeValue) {
-        normalizedHash[attribute.name] = attributeValue;
+        hash[attribute.name] = attributeValue;
       }
     });
-    return normalizedHash;
+    return hash;
+  }
+
+  /**
+   * If an attribute is declared with the `isNestedSecret` option, it will
+   * be explicitly unset in the incoming payload to `null`.  This helps ensure
+   * secret values do not linger in the UI.
+   *
+   * For example:
+   *   `@attr('string', { isNestedSecret: true }) superSecretShhh;`
+   *
+   * @param {Model} typeClass
+   * @param {Object} hash
+   * @return {Object}
+   */
+  normalizeNestedSecrets(typeClass, hash) {
+    typeClass.attributes.forEach((attribute) => {
+      const {
+        name,
+        options: { isNestedSecret },
+      } = attribute;
+      if (isNestedSecret) hash[name] = null;
+    });
+    return hash;
   }
 }
