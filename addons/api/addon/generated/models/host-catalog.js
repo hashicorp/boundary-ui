@@ -54,4 +54,64 @@ export default class GeneratedHostCatalogModel extends BaseModel {
     readOnly: true,
   })
   plugin;
+
+  // AWS & Azure
+
+  @attr('boolean', {
+    isNestedAttribute: true,
+    description: '',
+  })
+  disable_credential_rotation;
+
+  // AWS specific
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: '',
+  })
+  region;
+
+  @attr('string', {
+    isNestedSecret: true,
+    description: '',
+  })
+  access_key_id;
+
+  @attr('string', {
+    isNestedSecret: true,
+    description: '',
+  })
+  secret_access_key;
+
+  // Azure specific
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: '',
+  })
+  tenant_id;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: '',
+  })
+  client_id;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: '',
+  })
+  subscription_id;
+
+  @attr('string', {
+    isNestedSecret: true,
+    description: '',
+  })
+  secret_id;
+
+  @attr('string', {
+    isNestedSecret: true,
+    description: '',
+  })
+  secret_value;
 }
