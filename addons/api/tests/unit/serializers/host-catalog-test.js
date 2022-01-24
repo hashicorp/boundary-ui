@@ -35,7 +35,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes an AWS plugin as expected, ignoring Azure fields', async function (assert) {
+  test('it serializes a new aws plugin as expected, ignoring azure fields', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
@@ -70,7 +70,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes an Azure plugin as expected, ignoring AWS fields', async function (assert) {
+  test('it serializes a new azure record as expected, ignoring aws fields', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
@@ -78,7 +78,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'Azure',
       description: 'this is a Azure plugin host-catalog',
       disable_credential_rotation: true,
-      // these are AWS fields and should be included
       region: 'spain',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
@@ -107,7 +106,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes aws correctly on update', function (assert) {
+  test('it serializes an existing aws record correctly', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
@@ -122,8 +121,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
             name: 'aws',
           },
           region: 'andorra',
-          access_key_id: 'foobars',
-          secret_access_key: 'testing',
         },
       },
     });
@@ -136,15 +133,11 @@ module('Unit | Serializer | host catalog', function (hooks) {
         disable_credential_rotation: false,
         region: 'andorra',
       },
-      secrets: {
-        access_key_id: 'foobars',
-        secret_access_key: 'testing',
-      },
     };
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes azure correctly on update', function (assert) {
+  test('it serializes an existing azure record correctly', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
@@ -161,8 +154,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
           tenant_id: 'a1b2c3',
           client_id: 'foobars12',
           subscription_id: 'barsfoo21',
-          secret_id: 'secretBar12',
-          secret_value: 'secretValue21',
         },
       },
     });
@@ -176,10 +167,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
         tenant_id: 'a1b2c3',
         client_id: 'foobars12',
         subscription_id: 'barsfoo21',
-      },
-      secrets: {
-        secret_id: 'secretBar12',
-        secret_value: 'secretValue21',
       },
     };
     assert.deepEqual(record.serialize(), expectedResult);

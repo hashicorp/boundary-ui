@@ -20,5 +20,4 @@ export default Factory.extend({
       };
     }
   },
-  disable_credential_rotation: () => datatype.boolean(),
 });

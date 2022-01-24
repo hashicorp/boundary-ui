@@ -18,23 +18,23 @@ export default factory.extend({
     };
   },
   attributes() {
-    if (this.plugin) {
-      switch (this.plugin.name) {
-        case 'aws':
-          return {
-            tenant_id: datatype.hexaDecimal(6),
-            client_id: datatype.hexaDecimal(6),
-            subscription_id: datatype.hexaDecimal(8),
-            secret_id: datatype.hexaDecimal(6),
-            secret_value: datatype.string(12),
-          };
-        case 'azure':
-          return {
-            region: address.state(),
-            access_key_id: datatype.hexaDecimal(8),
-            secret_access_key: datatype.string(12),
-          };
-      }
+    switch (this.plugin?.name) {
+      case 'aws':
+        return {
+          disable_credential_rotation: datatype.boolean(),
+          tenant_id: datatype.hexaDecimal(6),
+          client_id: datatype.hexaDecimal(6),
+          subscription_id: datatype.hexaDecimal(8),
+          secret_id: datatype.hexaDecimal(6),
+          secret_value: datatype.string(12),
+        };
+      case 'azure':
+        return {
+          disable_credential_rotation: datatype.boolean(),
+          region: address.state(),
+          access_key_id: datatype.hexaDecimal(8),
+          secret_access_key: datatype.string(12),
+        };
     }
   },
   withChildren: trait({
