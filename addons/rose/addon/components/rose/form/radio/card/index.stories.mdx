@@ -1,0 +1,110 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { text, boolean, select } from '@storybook/addon-knobs';
+
+<Meta title="Rose|Form/Radio/Radio/Card" component="Form/Radio/Radio/Card" />
+
+# Form Radiofield in a wide format
+
+Renders a form radiofield in a Wide format.
+
+```htmlbars
+<Rose::Form::Radio::Card
+  @label="Yes"
+  @error={{false}}
+  @value="yes-agree"
+  @selectedValue="yes-agree"
+  @disabled={{false}}
+  @changed={{fn}}
+  @layout='wide'
+  />
+```
+
+<Preview>
+  <Story name="Basic Wide" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Radio::Card
+        @label={{label}}
+        @error={{error}}
+        @value={{value}}
+        @selectedValue={{selectedValue}}
+        @disabled={{disabled}}
+        @icon={{icon}}
+        @helperText={{helperText}}
+        @layout='wide'
+        />
+    `,
+    context: {
+      label: text('text', 'AWS'),
+      error: boolean('error', false),
+      value: text('value', 'value and selectedValue must match to select radiofield'),
+      selectedValue: text(
+        'selectedValue',
+        'value and selectedValue must match to select radiofield'
+      ),
+      helperText: text('helperText', 'Record financial transactions using'),
+      disabled: boolean('disabled', false),
+      icon: select(
+        'icon',
+        {
+          'none': null,
+          'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
+          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
+        },
+        null
+      ),
+    }
+  }}</Story>
+</Preview>
+
+
+Renders a form radiofield in a tile format.
+
+```htmlbars
+<Rose::Form::Radio::Card
+  @label="Yes"
+  @error={{false}}
+  @value="yes-agree"
+  @selectedValue="yes-agree"
+  @disabled={{false}}
+  @changed={{fn}}
+  @layout='tile'
+  />
+```
+
+<Preview>
+  <Story name="Basic tile" height="10rem">{{
+    template: hbs`
+      <Rose::Form::Radio::Card
+        @label={{label}}
+        @error={{error}}
+        @value={{value}}
+        @selectedValue={{selectedValue}}
+        @disabled={{disabled}}
+        @icon={{icon}}
+        @helperText={{helperText}}
+        @layout='tile'
+        />
+    `,
+    context: {
+      label: text('text', 'AWS'),
+      error: boolean('error', false),
+      value: text('value', 'value and selectedValue must match to select radiofield'),
+      selectedValue: text(
+        'selectedValue',
+        'value and selectedValue must match to select radiofield'
+      ),
+      helperText: text('helperText', 'Record financial transactions using'),
+      disabled: boolean('disabled', false),
+      icon: select(
+        'icon',
+        {
+          'none': null,
+          'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
+          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
+        },
+        null
+      ),
+    }
+  }}</Story>
+</Preview>
