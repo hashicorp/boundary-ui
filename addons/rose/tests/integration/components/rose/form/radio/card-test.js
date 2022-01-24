@@ -14,7 +14,7 @@ module('Integration | Component | rose/form/radio/card', function (hooks) {
 
   test('it renders in a tile format when tile layout is applied', async function (assert) {
     await render(hbs`<Rose::Form::Radio::Card @layout="tile"/>`);
-    assert.ok(await find('.rose-form-radio-card-tile'));
+    assert.ok(await find('.tile'));
   });
 
   test('it supports an icon', async function (assert) {
