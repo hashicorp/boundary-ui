@@ -10,22 +10,6 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   @service intl;
   @service notify;
 
-  // =methods
-
-  /**
-   * Renders the grants-specific header template.
-   * Empties the actions and navigation outlets and renders a custom empty header.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/roles/role/grants/-header', {
-      into: 'scopes/scope/roles/role',
-      outlet: 'header',
-    });
-  }
-
   // =actions
 
   /**
