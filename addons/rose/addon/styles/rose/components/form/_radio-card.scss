@@ -3,7 +3,7 @@
 @use '../../variables/typography';
 
 $size-xxl: sizing.rems(xxl); //48
-$size-xl: sizing.rems(xl); //48
+$size-xl: sizing.rems(xl); //36
 $size-l: sizing.rems(l); // 24
 $size-m: sizing.rems(m); // 16
 $size-s: sizing.rems(s); //12
@@ -11,7 +11,6 @@ $size-xs: sizing.rems(xs); // 8
 $size-xxs: sizing.rems(xxs); // 4
 $size-xxxs: sizing.rems(xxxs); // 2
 $size-xxxxs: sizing.rems(xxxxs); // 1
-
 
 $radio-svg: (
   'default':
@@ -34,7 +33,7 @@ $radio-svg: (
 
 .rose-form-radio-card {
   &.wide {
-    width:  ($size-m) * 23;
+    width: ($size-m) * 23;
     .rose-icon {
       --size: #{$size-m};
     }
@@ -42,9 +41,9 @@ $radio-svg: (
 
   &.tile {
     width: ($size-m) * 15;
-   
+
     .rose-icon {
-      --size: #{$size-m + $size-xxs + $size-xxxs};
+      --size: #{$size-xl - $size-xxs - $size-xxxs};
     }
     .rose-form-radio-label {
       display: flex;
@@ -52,7 +51,7 @@ $radio-svg: (
       align-items: center;
       height: $size-m * 9;
       &::after {
-        left:  $size-xl * 3.1;
+        left: $size-xl * 3.1;
       }
     }
   }
@@ -70,9 +69,8 @@ $radio-svg: (
     right: 0;
   }
   .rose-form-radio-label {
-    font-style: normal;
-    font-weight: bold;
-    font-size: typography.font-size(s);
+    @include type.type(s, bold);
+    display: flex;
     color: var(--black);
     width: ($size-m) * 23;
     height: ($size-m) * 7.4;
@@ -88,7 +86,7 @@ $radio-svg: (
     box-sizing: border-box;
     background-color: var(--white);
     .rose-form-helper-text {
-      font-weight: normal;
+      @include type.type(xs, normal);
     }
 
     &::after {
