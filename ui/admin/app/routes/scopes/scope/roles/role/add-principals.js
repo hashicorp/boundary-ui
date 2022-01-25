@@ -28,30 +28,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     });
   }
 
-  /**
-   * Renders the add-principals-specific header template.
-   * Empties the actions and navigation outlets and renders a custom empty header.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/roles/role/add-principals/-header', {
-      into: 'scopes/scope/roles/role',
-      outlet: 'header',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/roles/role',
-      outlet: 'navigation',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/roles/role',
-      outlet: 'actions',
-    });
-  }
-
   // =actions
 
   /**
