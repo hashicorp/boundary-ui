@@ -1,8 +1,26 @@
 {{page-title (t 'resources.group.messages.add-members.title')}}
 
-<Form::Group::AddMembers
-  @model={{@model.group}}
-  @users={{@model.users}}
-  @submit={{route-action 'addMembers' @model.group}}
-  @cancel={{route-action 'cancel'}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.group.messages.add-members.title'}}
+      <DocLink @doc='group.add-members' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.group.messages.add-members.description'}}</p>
+  </page.header>
+
+  <page.body>
+    <Form::Group::AddMembers
+      @model={{@model.group}}
+      @users={{@model.users}}
+      @submit={{route-action 'addMembers' @model.group}}
+      @cancel={{route-action 'cancel'}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>

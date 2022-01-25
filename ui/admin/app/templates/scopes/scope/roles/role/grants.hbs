@@ -1,9 +1,42 @@
 {{page-title (t 'resources.role.grant.title_plural')}}
 
-<Form::Role::Grants
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-  @addGrant={{route-action 'addGrant' @model}}
-  @removeGrant={{route-action 'removeGrant' @model}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.role.title'}}
+      <DocLink @doc='role' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.role.grant.description'}}</p>
+    <Copyable
+      @text={{@model.id}}
+      @buttonText={{t 'actions.copy-to-clipboard'}}
+      @acknowledgeText={{t 'states.copied'}}
+    >
+      <code>{{@model.id}}</code>
+    </Copyable>
+  </page.header>
+
+  <page.actions>
+    <Roles::Role::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.navigation>
+    <Roles::Role::Nav @model={{@model}} />
+  </page.navigation>
+
+  <page.body>
+    <Form::Role::Grants
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+      @addGrant={{route-action 'addGrant' @model}}
+      @removeGrant={{route-action 'removeGrant' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
