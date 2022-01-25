@@ -1,6 +1,28 @@
-<Form::Role
-  @model={{@model}}
-  @grantScopes={{this.grantScopes}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <Roles::Role::Header @model={{@model}} />
+  </page.header>
+
+  <page.actions>
+    <Roles::Role::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.navigation>
+    <Roles::Role::Nav @model={{@model}} />
+  </page.navigation>
+
+  <page.body>
+    <Form::Role
+      @model={{@model}}
+      @grantScopes={{this.grantScopes}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
