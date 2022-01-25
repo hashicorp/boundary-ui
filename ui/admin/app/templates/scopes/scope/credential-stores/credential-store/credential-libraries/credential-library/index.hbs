@@ -1,5 +1,57 @@
-<Form::CredentialLibrary
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.credential-library.title'}}
+      <DocLink @doc='credential-library' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.credential-library.description'}}</p>
+    <Copyable
+      @text={{@model.id}}
+      @buttonText={{t 'actions.copy-to-clipboard'}}
+      @acknowledgeText={{t 'states.copied'}}
+    >
+      <code>{{@model.id}}</code>
+    </Copyable>
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link
+        @route='scopes.scope.credential-stores.credential-store.credential-libraries.credential-library.index'
+      >
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.actions>
+    {{#if (can 'delete model' @model)}}
+      <Rose::Dropdown
+        @text={{t 'actions.manage'}}
+        @dropdownRight={{true}}
+        as |dropdown|
+      >
+        <dropdown.button
+          @style='danger'
+          @disabled={{@model.canSave}}
+          {{on 'click' (route-action 'deleteCredentialLibrary' @model)}}
+        >
+          {{t 'resources.credential-library.actions.delete'}}
+        </dropdown.button>
+      </Rose::Dropdown>
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+    <Form::CredentialLibrary
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>
