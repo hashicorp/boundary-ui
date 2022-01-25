@@ -81,7 +81,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @confirm('questions.delete-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
-  async delete(credentialLibrary) {
+  async deleteCredentialLibrary(credentialLibrary) {
     await credentialLibrary.destroyRecord();
     await this.router.replaceWith(
       'scopes.scope.credential-stores.credential-store.credential-libraries'
