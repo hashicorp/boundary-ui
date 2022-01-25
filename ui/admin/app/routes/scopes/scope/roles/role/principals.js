@@ -45,20 +45,6 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     });
   }
 
-  /**
-   * Renders the principals-specific header template.
-   * Empties the actions and navigation outlets and renders a custom empty header.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/roles/role/principals/-header', {
-      into: 'scopes/scope/roles/role',
-      outlet: 'header',
-    });
-  }
-
   // =actions
 
   /**
