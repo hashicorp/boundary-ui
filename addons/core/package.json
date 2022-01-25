@@ -32,7 +32,7 @@
     "auth": "*",
     "ember-browser-services": "^2.0.0",
     "ember-cli-babel": "^7.26.8",
-    "ember-cli-htmlbars": "^5.7.1",
+    "ember-cli-htmlbars": "^6.0.1",
     "ember-feature-flags": "^6.0.0",
     "ember-intl": "^5.7.0",
     "ember-loading": "^2.0.0",
