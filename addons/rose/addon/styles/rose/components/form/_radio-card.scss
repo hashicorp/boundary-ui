@@ -32,6 +32,10 @@ $radio-svg: (
 );
 
 .rose-form-radio-card {
+  $cardWideWidth: $size-m * 11;
+  $cardTileWidth: $size-m * 7.25;
+  $borderWidth: $size-xxxs * 2;
+
   &.wide {
     width: ($size-m) * 23;
     .rose-icon {
@@ -51,7 +55,7 @@ $radio-svg: (
       align-items: center;
       height: $size-m * 9;
       &::after {
-        left: $size-xl * 3.1;
+        left: $cardTileWidth - $borderWidth;
       }
     }
   }
@@ -92,7 +96,7 @@ $radio-svg: (
     &::after {
       position: absolute;
       bottom: $size-xxs;
-      right: $size-xxl * 3.7;
+      right: $cardWideWidth - $borderWidth;
       display: block;
       width: $size-m;
       height: $size-m;
