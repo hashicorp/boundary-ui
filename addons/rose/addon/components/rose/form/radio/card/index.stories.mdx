@@ -35,7 +35,7 @@ Renders a form radiofield in a Wide format.
         />
     `,
     context: {
-      label: text('text', 'AWS'),
+      label: text('text', 'Azure'),
       error: boolean('error', false),
       value: text('value', 'value and selectedValue must match to select radiofield'),
       selectedValue: text(
@@ -44,14 +44,6 @@ Renders a form radiofield in a Wide format.
       ),
       helperText: text('helperText', 'Record financial transactions using'),
       disabled: boolean('disabled', false),
-      icon: select(
-        'icon',
-        {
-          'none': null,
-          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
-        },
-        null
-      ),
     }
   }}</Story>
 </Preview>
@@ -86,7 +78,7 @@ Renders a form radiofield in a tile format.
         />
     `,
     context: {
-      label: text('text', 'AWS'),
+      label: text('text', 'Azure'),
       error: boolean('error', false),
       value: text('value', 'value and selectedValue must match to select radiofield'),
       selectedValue: text(

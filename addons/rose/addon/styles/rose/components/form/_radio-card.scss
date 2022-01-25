@@ -38,16 +38,14 @@ $radio-svg: (
 
   &.wide {
     width: ($size-m) * 23;
-    .rose-icon {
-      --size: #{$size-m};
-    }
   }
 
   &.tile {
     width: ($size-m) * 15;
 
     .rose-icon {
-      --size: #{$size-xl - $size-xxs - $size-xxxs};
+      --size: #{$size-xl};
+      padding: $size-xxxs;
     }
     .rose-form-radio-label {
       display: flex;
@@ -71,6 +69,8 @@ $radio-svg: (
     width: 100%;
     bottom: 0;
     right: 0;
+    border-bottom-left-radius: $size-xxxs;
+    border-bottom-right-radius: $size-xxxs;
   }
   .rose-form-radio-label {
     @include type.type(s, bold);
@@ -85,7 +85,7 @@ $radio-svg: (
     border: $size-xxxxs solid var(--ui-gray-subtler-6);
     box-shadow: 0 $size-xxs $size-xxs
       rgba(var(--stark-components), var(--opacity-2));
-    border-radius: $size-xxxs;
+    border-radius: $size-xxs;
     padding: $size-s $size-m;
     box-sizing: border-box;
     background-color: var(--white);
@@ -95,7 +95,7 @@ $radio-svg: (
 
     &::after {
       position: absolute;
-      bottom: $size-xxs;
+      bottom: $size-xxs + $size-xxxxs;
       right: $cardWideWidth - $borderWidth;
       display: block;
       width: $size-m;
@@ -176,6 +176,15 @@ $radio-svg: (
       &:not(:disabled):not(:focus) {
         &:not(:disabled):not(:focus) {
           ~ .rose-form-radio-label {
+            color: var(--ui-gray);
+            border: $size-xxxxs solid var(--failure);
+
+            .radio-card-overlay {
+              background-color: var(--failure-subtler-2);
+            }
+            .rose-form-helper-text.error {
+              color: var(--ui-gray);
+            }
             &::after {
               background-image: url($data-svg-prefix + map-get(
                   $radio-svg,
@@ -186,6 +195,11 @@ $radio-svg: (
 
           &:checked {
             ~ .rose-form-radio-label {
+              color: var(--ui-gray);
+              border: $size-xxxxs solid var(--failure);
+              .radio-card-overlay {
+                background-color: var(--failure-subtler-2);
+              }
               &::after {
                 background-image: url($data-svg-prefix + map-get(
                     $radio-svg,
