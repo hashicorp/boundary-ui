@@ -1,6 +1,7 @@
 import factory from '../generated/factories/host-catalog';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
+import { datatype, address } from 'faker';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -15,6 +16,26 @@ export default factory.extend({
       hosts: ['create', 'list'],
       'host-sets': ['create', 'list'],
     };
+  },
+  attributes() {
+    switch (this.plugin?.name) {
+      case 'aws':
+        return {
+          disable_credential_rotation: datatype.boolean(),
+          tenant_id: datatype.hexaDecimal(6),
+          client_id: datatype.hexaDecimal(6),
+          subscription_id: datatype.hexaDecimal(8),
+          secret_id: datatype.hexaDecimal(6),
+          secret_value: datatype.string(12),
+        };
+      case 'azure':
+        return {
+          disable_credential_rotation: datatype.boolean(),
+          region: address.state(),
+          access_key_id: datatype.hexaDecimal(8),
+          secret_access_key: datatype.string(12),
+        };
+    }
   },
   withChildren: trait({
     afterCreate(hostCatalog, server) {
