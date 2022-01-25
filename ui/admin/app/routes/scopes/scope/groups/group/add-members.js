@@ -34,29 +34,6 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
     });
   }
 
-  /**
-   * Renders the route-set specific page sections
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render('scopes/scope/groups/group/add-members/-header', {
-      into: 'scopes/scope/groups/group',
-      outlet: 'header',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/groups/group',
-      outlet: 'actions',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/groups/group',
-      outlet: 'navigation',
-    });
-  }
-
   // =actions
 
   /**

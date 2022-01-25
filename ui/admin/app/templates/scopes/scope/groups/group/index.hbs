@@ -1,5 +1,27 @@
-<Form::Group
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <Groups::Group::Header @model={{@model}} />
+  </page.header>
+
+  <page.navigation>
+    <Groups::Group::Nav @model={{@model}} />
+  </page.navigation>
+
+  <page.actions>
+    <Groups::Group::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.body>
+    <Form::Group
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
