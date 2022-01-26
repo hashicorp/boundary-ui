@@ -18,8 +18,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   model(params) {
     const scopeModel = this.modelFor('scopes.scope');
-    // TODO Use model provider type method
-    //  to set params.type to 'static' if type is not provided
+    // FIXME Should default static type be specified when type is undefined?
     params.type = 'static';
     return this.store.createRecord('host-catalog', {
       type: params.type,
