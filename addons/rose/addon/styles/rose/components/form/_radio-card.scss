@@ -61,7 +61,7 @@ $radio-svg: (
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
+  margin-right: $size-xs;
   .radio-card-overlay {
     position: absolute;
     height: $size-l + $size-xxs;
