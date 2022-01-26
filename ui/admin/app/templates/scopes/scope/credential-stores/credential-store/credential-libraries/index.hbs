@@ -1,102 +1,128 @@
-{{#if @model}}
+<Rose::Layout::Page as |page|>
 
-  <Rose::Table as |table|>
-    <table.header as |header|>
-      <header.row as |row|>
-        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-      </header.row>
-    </table.header>
-    <table.body as |body|>
-      {{#each @model as |credentialLibrary|}}
-        <body.row as |row|>
-          <row.headerCell>
-            {{#if (can 'read model' credentialLibrary)}}
-              <LinkTo
-                @route='scopes.scope.credential-stores.credential-store.credential-libraries.credential-library'
-                @model={{credentialLibrary.id}}
-              >
-                {{credentialLibrary.displayName}}
-              </LinkTo>
-            {{else}}
-              {{credentialLibrary.displayName}}
-            {{/if}}
-            <p>{{credentialLibrary.description}}</p>
-          </row.headerCell>
-          <row.cell>
-            <Rose::Badge>{{t
-                (concat
-                  'resources.credential-library.types.' credentialLibrary.type
-                )
-              }}</Rose::Badge>
-          </row.cell>
-          <row.cell>
-            <Copyable
-              @text={{credentialLibrary.id}}
-              @buttonText={{t 'actions.copy-to-clipboard'}}
-              @acknowledgeText={{t 'states.copied'}}
-            >
-              <code>{{credentialLibrary.id}}</code>
-            </Copyable>
-          </row.cell>
-        </body.row>
-      {{/each}}
-    </table.body>
-  </Rose::Table>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
 
-{{else}}
+  <page.header>
+    <CredentialStores::CredentialStore::Header
+      @model={{this.credentialStore}}
+    />
+  </page.header>
 
-  <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.credential-library.messages.none.title'}}
-      as |message|
-    >
-      <message.description>
-        {{#if
-          (can
-            'list collection'
-            this.credentialStore
-            collection='credential-libraries'
-          )
-        }}
-          {{! can list (at least):  show default welcome message}}
-          {{t 'resources.credential-library.description'}}
+  <page.navigation>
+    <CredentialStores::CredentialStore::Nav @model={{this.credentialStore}} />
+  </page.navigation>
 
-        {{else if (can
-          'create collection'
-          this.credentialStore
-          collection='credential-libraries'
-        )}}
-          {{! can create (only):  show create-but-not-list welcome message}}
-          {{t
-            'descriptions.create-but-not-list'
-            resource=(t 'resources.credential-library.title_plural')
-          }}
-        {{else}}
-          {{! can neither list nor create }}
-          {{t
-            'descriptions.neither-list-nor-create'
-            resource=(t 'resources.credential-library.title_plural')
-          }}
-        {{/if}}
+  <page.actions>
+    <CredentialStores::CredentialStore::Actions
+      @model={{this.credentialStore}}
+    />
+  </page.actions>
 
-      </message.description>
-      {{#if
-        (can
-          'create collection'
-          this.credentialStore
-          collection='credential-libraries'
-        )
-      }}
-        <message.link
-          @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
+  <page.body>
+    {{#if @model}}
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |credentialLibrary|}}
+            <body.row as |row|>
+              <row.headerCell>
+                {{#if (can 'read model' credentialLibrary)}}
+                  <LinkTo
+                    @route='scopes.scope.credential-stores.credential-store.credential-libraries.credential-library'
+                    @model={{credentialLibrary.id}}
+                  >
+                    {{credentialLibrary.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{credentialLibrary.displayName}}
+                {{/if}}
+                <p>{{credentialLibrary.description}}</p>
+              </row.headerCell>
+              <row.cell>
+                <Rose::Badge>{{t
+                    (concat
+                      'resources.credential-library.types.'
+                      credentialLibrary.type
+                    )
+                  }}</Rose::Badge>
+              </row.cell>
+              <row.cell>
+                <Copyable
+                  @text={{credentialLibrary.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{credentialLibrary.id}}</code>
+                </Copyable>
+              </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
+
+    {{else}}
+
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.credential-library.messages.none.title'}}
+          as |message|
         >
-          <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-          {{t 'titles.new'}}
-        </message.link>
-      {{/if}}
-    </Rose::Message>
-  </Rose::Layout::Centered>
+          <message.description>
+            {{#if
+              (can
+                'list collection'
+                this.credentialStore
+                collection='credential-libraries'
+              )
+            }}
+              {{! can list (at least):  show default welcome message}}
+              {{t 'resources.credential-library.description'}}
 
-{{/if}}
+            {{else if (can
+              'create collection'
+              this.credentialStore
+              collection='credential-libraries'
+            )}}
+              {{! can create (only):  show create-but-not-list welcome message}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.credential-library.title_plural')
+              }}
+            {{else}}
+              {{! can neither list nor create }}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.credential-library.title_plural')
+              }}
+            {{/if}}
+
+          </message.description>
+          {{#if
+            (can
+              'create collection'
+              this.credentialStore
+              collection='credential-libraries'
+            )
+          }}
+            <message.link
+              @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
+            >
+              <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
+              {{t 'titles.new'}}
+            </message.link>
+          {{/if}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
+
+    {{/if}}
+  </page.body>
+</Rose::Layout::Page>

@@ -16,31 +16,4 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       credential_store_id,
     });
   }
-
-  /**
-   * Renders new credential library specific templates for header, navigation,
-   * and action page sections.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render(
-      'scopes/scope/credential-stores/credential-store/credential-libraries/new/-header',
-      {
-        into: 'scopes/scope/credential-stores/credential-store',
-        outlet: 'header',
-      }
-    );
-
-    this.render('_empty', {
-      into: 'scopes/scope/credential-stores/credential-store',
-      outlet: 'navigation',
-    });
-
-    this.render('_empty', {
-      into: 'scopes/scope/credential-stores/credential-store',
-      outlet: 'actions',
-    });
-  }
 }
