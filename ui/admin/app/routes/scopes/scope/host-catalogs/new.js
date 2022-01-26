@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
 export default class ScopesScopeHostCatalogsNewRoute extends Route {
   // =attributes
@@ -24,5 +25,14 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
       type: params.type,
       scopeModel,
     });
+  }
+
+  /**
+   * Update type of host catalog
+   * @param {string} type
+   */
+  @action
+  async changeType(type) {
+    await this.router.replaceWith({ type });
   }
 }
