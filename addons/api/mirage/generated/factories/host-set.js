@@ -5,7 +5,7 @@ import { random, date, datatype } from 'faker';
  * GeneratedHostSetModelFactory
  */
 export default Factory.extend({
-  type: () => this.hostCatalog.type,
+  type: 'static',
   name: () => random.words(),
   description: () => random.words(),
   created_time: () => date.recent(),
