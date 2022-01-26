@@ -50,4 +50,10 @@ export default class GeneratedHostSetModel extends BaseModel {
     readOnly: true,
   })
   size;
+
+  @attr({
+    description: 'Plugin information for this resource',
+    readOnly: true,
+  })
+  plugin;
 }
