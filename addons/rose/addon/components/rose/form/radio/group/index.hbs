@@ -1,6 +1,4 @@
-<div class="radio-field-wrapper {{if @inline "inline"}}">
   {{yield (hash
   radio=(component 'rose/form/radio/radio' name=@name selectedValue=@selectedValue disabled=@disabled changed=@changed inline=@inline)
-  card=(component 'rose/form/radio/card' name=@name selectedValue=@selectedValue disabled=@disabled changed=@changed inline=@inline layout=@layout)
+  card=(component 'rose/form/radio/card' name=@name selectedValue=@selectedValue disabled=@disabled changed=@changed layout=@layout)
 )}}
-</div>

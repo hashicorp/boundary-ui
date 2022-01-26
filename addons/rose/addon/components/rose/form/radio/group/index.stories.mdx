@@ -119,7 +119,6 @@ Renders a form radiofield group.
       @name={{name}}
       @selectedValue={{selectedValue}}
       @changed={{changed}}
-      @inline={{inline}}
       as |radioGroup|
     >
       <radioGroup.card
@@ -131,11 +130,13 @@ Renders a form radiofield group.
       <radioGroup.card
         @label={{secondFieldLabel}}
         @value={{secondFieldValue}}
+        @icon={{secondFieldIcon}}
         @layout="tile"
       />
       <radioGroup.card
         @label={{thirdFieldLabel}}
         @value={{thirdFieldValue}}
+        @icon={{thirdFieldIcon}}
         @layout="tile"
       />
     </Rose::Form::Radio::Group>
@@ -143,12 +144,27 @@ Renders a form radiofield group.
   context: {
     name: text('name', 'mustagree'),
     disabled: boolean('disabled', false),
-    inline: boolean('inline', true),
     selectedValue: text('selectedValue', 'disagree'),
     firstFieldLabel: text('first label', 'Agree'),
     firstFieldValue: text('first value', 'agree'),
     firstFieldIcon: select(
         'firstFieldIcon',
+        {
+          'none': null,
+          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
+        },
+        null
+      ),
+         secondFieldIcon: select(
+        'secondFieldIcon',
+        {
+          'none': null,
+          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
+        },
+        null
+      ),
+         thirdFieldIcon: select(
+        'thirdFieldIcon',
         {
           'none': null,
           'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
@@ -193,7 +209,6 @@ Renders a form radiofield group.
       @name={{name}}
       @selectedValue={{selectedValue}}
       @changed={{changed}}
-      @inline={{inline}}
       as |radioGroup|
     >
       <radioGroup.card
@@ -217,7 +232,6 @@ Renders a form radiofield group.
   context: {
     name: text('name', 'mustagree'),
     disabled: boolean('disabled', false),
-    inline: boolean('inline', true),
     selectedValue: text('selectedValue', 'disagree'),
     firstFieldLabel: text('first label', 'Agree'),
     firstFieldValue: text('first value', 'agree'),
