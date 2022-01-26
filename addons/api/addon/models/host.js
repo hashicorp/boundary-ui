@@ -9,7 +9,7 @@ export default class HostModel extends GeneratedHostModel {
   @fragment('fragment-host-attributes', { defaultValue: {} }) attributes;
 
   /**
-   * Returns if the host is static type or not.
+   * True if the host is static.
    * @type {boolean}
    */
   get isStatic() {
@@ -17,7 +17,7 @@ export default class HostModel extends GeneratedHostModel {
   }
 
   /**
-   * Returns if the host is plugin or not.
+   * True if the host is plugin.
    * @type {boolean}
    */
   get isPlugin() {
@@ -25,7 +25,7 @@ export default class HostModel extends GeneratedHostModel {
   }
 
   /**
-   * Returns if host plugin is AWS or not.
+   * True if the host plugin type is AWS.
    * @type {boolean}
    */
   get isAWS() {
@@ -33,7 +33,7 @@ export default class HostModel extends GeneratedHostModel {
   }
 
   /**
-   * Returns if hist is Azure or not.
+   * True if the host plugin type is Azure.
    * @type {boolean}
    */
   get isAzure() {
@@ -41,8 +41,8 @@ export default class HostModel extends GeneratedHostModel {
   }
 
   /**
-   * If host is a plugin return its name,
-   * otherwise returns the host type
+   * If host is a plugin return `plugin.name`,
+   * otherwise return the host type.
    * @type {string}
    */
   get compositeType() {
@@ -50,7 +50,8 @@ export default class HostModel extends GeneratedHostModel {
   }
 
   /**
-   * Sets type, if type is different than static, sets plugin name to type
+   * Sets `type`. If type is different than `static`, sets `type` to `plugin`
+   * and `plugin.name` to the specified type.
    */
   set compositeType(type) {
     if (type === 'static') {
