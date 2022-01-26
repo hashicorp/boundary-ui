@@ -85,6 +85,7 @@ host-catalog:
     delete: Delete Host Catalog
   types:
     static: Static
+    unknown: Unknown
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -111,6 +112,7 @@ host-set:
         description: No hosts available for selection.
   types:
     static: Static
+    unknown: Unknown
 host:
   title: Host
   title_plural: Hosts
@@ -130,6 +132,7 @@ host:
     delete: Delete Host
   types:
     static: Static
+    unknown: Unknown
 session:
   title: Session
   title_plural: Sessions

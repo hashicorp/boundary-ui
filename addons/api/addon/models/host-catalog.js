@@ -1,8 +1,12 @@
 import GeneratedHostCatalogModel from '../generated/models/host-catalog';
 
+export const types = ['aws', 'azure'];
+
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
+  // =attributes
+
   /**
-   * Returns if the host-catalog is static type or not.
+   * True if the host catalog is static.
    * @type {boolean}
    */
   get isStatic() {
@@ -10,7 +14,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
   }
 
   /**
-   * Returns if the host-catalog is a plugin or not.
+   * True if the host catalog is a plugin.
    * @type {boolean}
    */
   get isPlugin() {
@@ -18,7 +22,15 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
   }
 
   /**
-   * Returns if host-catalog plugin is AWS or not
+   * True if the host catalog is an unknown type.
+   * @type {boolean}
+   */
+  get isUnknown() {
+    return this.isPlugin && !types.includes(this.plugin.name);
+  }
+
+  /**
+   * True if host catalog plugin type is AWS.
    * @type {boolean}
    */
   get isAWS() {
@@ -26,23 +38,27 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
   }
 
   /**
-   * Return if host-catalog plugin is Azure or not.
+   * True if host catalog plugin type is Azure.
    * @type {boolean}
    */
   get isAzure() {
     return this.compositeType === 'azure';
   }
 
-  /** If host-catalog is a plugins returns its name,
-   * otherwise returns the host-catalog type
+  /**
+   * If host catalog is a plugin return `plugin.name`,
+   * otherwise return the host catalog type.
    * @type {string}
    */
   get compositeType() {
-    return this.isPlugin ? this.plugin.name : this.type;
+    if (this.isUnknown) return 'unknown';
+    if (this.isPlugin) return this.plugin.name;
+    return 'static';
   }
 
   /**
-   * Sets type, if type is different than static, sets plugin name to type
+   * Sets `type`.  If type is different than `static`, sets `type` to `plugin`
+   * and `plugin.name` to the specified type.
    */
   set compositeType(type) {
     if (type === 'static') {

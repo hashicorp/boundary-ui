@@ -10,28 +10,51 @@ module('Unit | Model | host catalog', function (hooks) {
     assert.ok(model);
   });
 
-  test('it has isStatic function and returns the expected values', async function (assert) {
+  test('it has isStatic property and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const modelA = store.createRecord('host-catalog', { type: 'static' });
-    const modelB = store.createRecord('host-catalog', { type: 'plugin' });
-    assert.equal(typeof modelA.isStatic, 'boolean');
-    assert.true(modelA.isStatic);
+    const modelA = store.createRecord('host-catalog', { compositeType: 'aws' });
+    const modelB = store.createRecord('host-catalog', {
+      compositeType: 'foobar',
+    });
+    const modelC = store.createRecord('host-catalog', {
+      compositeType: 'static',
+    });
+    assert.false(modelA.isStatic);
     assert.false(modelB.isStatic);
+    assert.true(modelC.isStatic);
   });
 
-  test('it has isPlugin function and returns the expected values', async function (assert) {
-    assert.expect(3);
+  test('it has isPlugin property and returns the expected values', async function (assert) {
+    assert.expect(2);
     const store = this.owner.lookup('service:store');
-    const modelPlugin = store.createRecord('host-catalog', { type: 'plugin' });
-    const modelStatic = store.createRecord('host-catalog', { type: 'static' });
-    assert.equal(typeof modelPlugin.isPlugin, 'boolean');
+    const modelPlugin = store.createRecord('host-catalog', {
+      compositeType: 'aws',
+    });
+    const modelStatic = store.createRecord('host-catalog', {
+      compositeType: 'static',
+    });
     assert.true(modelPlugin.isPlugin);
     assert.false(modelStatic.isPlugin);
   });
 
-  test('it has isAWS function and returns the expected values', async function (assert) {
+  test('it has isUnknown property and returns the expected values', async function (assert) {
     assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const modelA = store.createRecord('host-catalog', {
+      compositeType: 'static',
+    });
+    const modelB = store.createRecord('host-catalog', { compositeType: 'aws' });
+    const modelC = store.createRecord('host-catalog', {
+      compositeType: 'no-such-type',
+    });
+    assert.false(modelA.isUnknown);
+    assert.false(modelB.isUnknown);
+    assert.true(modelC.isUnknown);
+  });
+
+  test('it has isAWS property and returns the expected values', async function (assert) {
+    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('host-catalog', {
       type: 'plugin',
@@ -40,13 +63,12 @@ module('Unit | Model | host catalog', function (hooks) {
     const modelRandom = store.createRecord('host-catalog', {
       plugin: { name: 'random' },
     });
-    assert.equal(typeof modelAws.isAWS, 'boolean');
     assert.true(modelAws.isAWS);
     assert.false(modelRandom.isAWS);
   });
 
-  test('it has isAzure function and return the expected values', async function (assert) {
-    assert.expect(3);
+  test('it has isAzure property and return the expected values', async function (assert) {
+    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelAzure = store.createRecord('host-catalog', {
       type: 'plugin',
@@ -55,7 +77,6 @@ module('Unit | Model | host catalog', function (hooks) {
     const modelRandom = store.createRecord('host-catalog', {
       plugin: { name: 'random' },
     });
-    assert.equal(typeof modelAzure.isAzure, 'boolean');
     assert.true(modelAzure.isAzure);
     assert.false(modelRandom.isAzure);
   });
@@ -63,16 +84,20 @@ module('Unit | Model | host catalog', function (hooks) {
   test('get compositeType returns expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const modelPlugin = store.createRecord('host-catalog', {
-      type: 'plugin',
-      plugin: { name: 'Test name' },
-    });
-    const modelStatic = store.createRecord('host-catalog', {
+    const modelA = store.createRecord('host-catalog', {
       type: 'static',
     });
-    assert.equal(typeof modelPlugin.compositeType, 'string');
-    assert.equal(modelPlugin.compositeType, 'Test name');
-    assert.equal(modelStatic.compositeType, 'static');
+    const modelB = store.createRecord('host-catalog', {
+      type: 'plugin',
+      plugin: { name: 'aws' },
+    });
+    const modelC = store.createRecord('host-catalog', {
+      type: 'plugin',
+      plugin: { name: 'no-such-type' },
+    });
+    assert.equal(modelA.compositeType, 'static');
+    assert.equal(modelB.compositeType, 'aws');
+    assert.equal(modelC.compositeType, 'unknown');
   });
 
   test('set compositeType sets expected values', async function (assert) {
@@ -84,7 +109,6 @@ module('Unit | Model | host catalog', function (hooks) {
     const modelStatic = store.createRecord('host-catalog', {
       compositeType: 'static',
     });
-
     assert.equal(modelPlugin.type, 'plugin');
     assert.equal(modelPlugin.plugin.name, 'aws');
     assert.equal(modelStatic.type, 'static');
