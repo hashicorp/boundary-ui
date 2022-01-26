@@ -13,9 +13,4 @@ export default Factory.extend({
   attributes: () => {
     return { address: internet.ipv6() };
   },
-  plugin: function () {
-    if (this.type === 'plugin') {
-      return this.hostCatalog.plugin;
-    }
-  },
 });
