@@ -12,4 +12,9 @@ export default factory.extend({
       'remove-hosts',
     ],
   id: (i) => `host-set-id-${i}`,
+  plugin() {
+    if (this.type === 'plugin') {
+      return this.hostCatalog.plugin;
+    }
+  },
 });
