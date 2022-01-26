@@ -13,9 +13,7 @@ export default factory.extend({
     ],
   id: (i) => `host-set-id-${i}`,
   type() {
-    if (this.hostCatalog) {
-      return this.hostCatalog.type;
-    }
+    return this.hostCatalog?.type || factory.attrs.type;
   },
   plugin() {
     if (this.type === 'plugin') {
