@@ -43,7 +43,7 @@
           {{#each @model as |hostCatalog|}}
             <body.row as |row|>
               <row.headerCell>
-                {{#if (can 'read model' hostCatalog)}}
+                {{#if (can 'read host-catalog' hostCatalog)}}
                   <LinkTo
                     @route='scopes.scope.host-catalogs.host-catalog'
                     @model={{hostCatalog.id}}
@@ -82,7 +82,12 @@
                       '-color-16'
                     }}
                   >
-                    {{hostCatalog.compositeType}}
+                    {{t
+                      (concat
+                        'resources.host-catalog.types.'
+                        hostCatalog.compositeType
+                      )
+                    }}
                   </Rose::Badge>
                 {{/if}}
               </row.cell>

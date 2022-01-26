@@ -86,6 +86,8 @@ host-catalog:
   types:
     static: Static
     unknown: Unknown
+    aws: AWS
+    azure: Azure
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -113,6 +115,8 @@ host-set:
   types:
     static: Static
     unknown: Unknown
+    aws: AWS
+    azure: Azure
 host:
   title: Host
   title_plural: Hosts
@@ -133,6 +137,8 @@ host:
   types:
     static: Static
     unknown: Unknown
+    aws: AWS
+    azure: Azure
 session:
   title: Session
   title_plural: Sessions
