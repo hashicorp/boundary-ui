@@ -58,9 +58,10 @@ $radio-svg: (
     }
   }
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin: $size-m $size-xs $size-xl 0;
 
   .radio-card-overlay {
     position: absolute;
@@ -81,8 +82,7 @@ $radio-svg: (
     display: block;
     position: relative;
     text-align: left;
-    word-break: break-all;
-    border: $size-xxxxs solid var(--ui-gray-subtler-6);
+    border: $size-xxxxs solid var(--ui-gray-subtler-2);
     box-shadow: 0 $size-xxs $size-xxs
       rgba(var(--stark-components), var(--opacity-2));
     border-radius: $size-xxs;
