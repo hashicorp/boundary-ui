@@ -42,21 +42,25 @@
       </field.errors>
     {{/if}}
   </form.textarea>
-
-  <Rose::Form::Radio::Group @name='types' as |radioGroup|>
-    <radioGroup.card
-      @label={{t 'resources.host-catalog.types.static'}}
-      @value='static'
-      @helperText={{t 'resources.host-catalog.form.types.static.help'}}
-      @layout='tile'
-    />
-    <radioGroup.card
-      @label={{t 'resources.host-catalog.types.dynamic'}}
-      @value='dynamic'
-      @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
-      @layout='tile'
-    />
-  </Rose::Form::Radio::Group>
+  <form.fieldset>
+    <:title>{{t 'resources.host-catalog.type'}}</:title>
+    <:body>
+      <form.radioGroup @name='types' as |radioGroup|>
+        <radioGroup.card
+          @label={{t 'resources.host-catalog.types.static'}}
+          @value='static'
+          @helperText={{t 'resources.host-catalog.form.types.static.help'}}
+          @layout='wide'
+        />
+        <radioGroup.card
+          @label={{t 'resources.host-catalog.types.dynamic'}}
+          @value='dynamic'
+          @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
+          @layout='wide'
+        />
+      </form.radioGroup>
+    </:body>
+  </form.fieldset>
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
@@ -66,3 +70,5 @@
     />
   {{/if}}
 </Rose::Form>
+
+{{{log @model.compositeType 'compostite type'}}}

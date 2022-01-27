@@ -78,6 +78,7 @@ host-catalog:
   title: Host Catalog
   title_plural: Host Catalogs
   description: A host catalog is a collection of hosts and host sets.
+  type: Type
   messages:
     welcome:
       title: Welcome to Host Catalogs
