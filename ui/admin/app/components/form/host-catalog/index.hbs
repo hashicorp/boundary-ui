@@ -45,6 +45,20 @@
       </field.errors>
     {{/if}}
   </form.textarea>
+
+  <p>Place Radio Button Group Here</p>
+
+  {{#if @model.isNew}}
+    {{#if @model.type}}
+      {{component
+        (concat 'form/host-catalog/' @model.type)
+        model=@model
+        submit=@submit
+        cancel=@cancel
+      }}
+    {{/if}}
+  {{/if}}
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}

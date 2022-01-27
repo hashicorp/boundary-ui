@@ -1,17 +1,37 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
 export default class ScopesScopeHostCatalogsNewRoute extends Route {
+  // =attributes
+
+  queryParams = {
+    type: {
+      refreshModel: true,
+    },
+  };
+
   // =methods
 
   /**
    * Creates a new unsaved host catalog belonging to the current scope.
    * @return {HostCatalogModel}
    */
-  model() {
+  model(params) {
     const scopeModel = this.modelFor('scopes.scope');
+    // FIXME Should default static type be specified when type is undefined?
+    params.type = 'static';
     return this.store.createRecord('host-catalog', {
-      type: 'static',
+      type: params.type,
       scopeModel,
     });
+  }
+
+  /**
+   * Update type of host catalog
+   * @param {string} type
+   */
+  @action
+  async changeType(type) {
+    await this.router.replaceWith({ type });
   }
 }
