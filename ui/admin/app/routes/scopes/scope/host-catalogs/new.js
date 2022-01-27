@@ -23,12 +23,15 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   model(params) {
     const scopeModel = this.modelFor('scopes.scope');
-    // FIXME Should default static type be specified when type is undefined?
-    params.type = 'static';
+    if (!params.type) params.type = 'static';
     return this.store.createRecord('host-catalog', {
       type: params.type,
       scopeModel,
     });
+  }
+
+  afterModel(model) {
+    this.router.replaceWith({ queryParams: { type: model.compositeType } });
   }
 
   /**
@@ -37,6 +40,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   @action
   async changeType(type) {
-    await this.router.replaceWith({ type });
+    console.log(type, 'GET TYPE HERE');
+    await this.router.replaceWith({ queryParams: { type } });
   }
 }
