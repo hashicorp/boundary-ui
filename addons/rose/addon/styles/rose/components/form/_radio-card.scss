@@ -82,7 +82,6 @@ $radio-svg: (
     display: block;
     position: relative;
     text-align: left;
-    word-break: break-all;
     border: $size-xxxxs solid var(--ui-gray-subtler-2);
     box-shadow: 0 $size-xxs $size-xxs
       rgba(var(--stark-components), var(--opacity-2));
