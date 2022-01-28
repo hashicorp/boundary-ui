@@ -12,6 +12,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   queryParams = {
     type: {
       refreshModel: true,
+      replace: true
     },
   };
 
@@ -23,7 +24,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   model(params) {
     const scopeModel = this.modelFor('scopes.scope');
-    if (!params.type) params.type = 'static';
+    if (!params.type) params.type = 'plugin';
     return this.store.createRecord('host-catalog', {
       type: params.type,
       scopeModel,
