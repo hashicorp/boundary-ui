@@ -25,8 +25,10 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   model(params) {
     const scopeModel = this.modelFor('scopes.scope');
     if (!params.type) params.type = 'plugin';
+    params.name = 'Avon';
     return this.store.createRecord('host-catalog', {
       type: params.type,
+      name: params.name,
       scopeModel,
     });
   }

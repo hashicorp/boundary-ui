@@ -2,8 +2,8 @@ COMES JERE
 {{{log 'BLLL' @model.compositeType}}}
 {{{log 'NNFRM' @model.isNew}}}
 
-{{#if @model.isNew}}
-{{!-- {{#if @model.compositeType}} --}}
+{{!-- {{#if @model.isNew}} --}}
+{{#if @model.compositeType}}
   {{component
     (concat 'form/host-catalog/' @model.compositeType)
     model=@model
