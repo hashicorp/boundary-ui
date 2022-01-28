@@ -1,7 +1,14 @@
 import factory from '../generated/factories/host-catalog';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
-import { datatype, address } from 'faker';
+import { datatype, address, random } from 'faker';
+
+const types = ['static', 'plugin'];
+// Represents known plugin types, except "foobar" which models the possibility
+// of receiving an _unknown_ type, which the UI must handle gracefully.
+const pluginTypes = ['aws', 'azure', 'foobar'];
+
+let pluginTypeCounter = 1;
 
 export default factory.extend({
   authorized_actions: () =>
@@ -17,6 +24,22 @@ export default factory.extend({
       'host-sets': ['create', 'list'],
     };
   },
+
+  id: (i) => `host-catalog-id-${i}`,
+
+  // Cycle through available types
+  type: (i) => types[i % types.length],
+
+  plugin: function (i) {
+    if (this.type === 'plugin') {
+      return {
+        id: `plugin-id-${i}`,
+        name: pluginTypes[pluginTypeCounter++ % pluginTypes.length],
+        description: random.words(),
+      };
+    }
+  },
+
   attributes() {
     switch (this.plugin?.name) {
       case 'aws':
