@@ -24,8 +24,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   model(params) {
     const scopeModel = this.modelFor('scopes.scope');
-    if (!params.type) params.type = 'plugin';
-    params.name = 'Avon';
+    if (!params.type) params.type = 'static';
     return this.store.createRecord('host-catalog', {
       compositeType: params.type, //static or aws or azure
       scopeModel,
