@@ -79,7 +79,7 @@
           <message.description>
             {{#if
               (can
-                'list collection'
+                'list model'
                 this.credentialStore
                 collection='credential-libraries'
               )
@@ -88,7 +88,7 @@
               {{t 'resources.credential-library.description'}}
 
             {{else if (can
-              'create collection'
+              'create model'
               this.credentialStore
               collection='credential-libraries'
             )}}
@@ -108,7 +108,7 @@
           </message.description>
           {{#if
             (can
-              'create collection'
+              'create model'
               this.credentialStore
               collection='credential-libraries'
             )

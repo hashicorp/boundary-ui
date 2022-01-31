@@ -1,19 +1,12 @@
 import ModelAbility from 'api/abilities/model';
-import { inject as service } from '@ember/service';
 
 export default class OverrideModelAbility extends ModelAbility {
-  // =services
-
-  @service features;
-
-  // =methods
-
   /**
-   * If the capabilities feature flag is disabled, actions are always
-   * authorized.  This mimics pre-capabilities behavior.
+   * Navigating to a resource is allowed if either list or create grants
+   * are present.
+   * @type {boolean}
    */
-  hasAuthorizedAction() {
-    if (!this.features.isEnabled('capabilities')) return true;
-    return super.hasAuthorizedAction(...arguments);
+  get canNavigate() {
+    return this.canList || this.canCreate;
   }
 }

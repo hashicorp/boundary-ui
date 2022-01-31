@@ -2,7 +2,7 @@
   <nav.link @route='scopes.scope.credential-stores.credential-store.index'>
     {{t 'titles.details'}}
   </nav.link>
-  {{#if (can 'navigate collection' @model collection='credential-libraries')}}
+  {{#if (can 'navigate model' @model collection='credential-libraries')}}
 
     <nav.link
       @route='scopes.scope.credential-stores.credential-store.credential-libraries'

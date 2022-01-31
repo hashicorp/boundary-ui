@@ -26,7 +26,7 @@
   </page.header>
 
   <page.actions>
-    {{#if (can 'create collection' @model.currentScope collection='scopes')}}
+    {{#if (can 'create model' @model.currentScope collection='scopes')}}
       {{#if @model.subScopes}}
         <Rose::LinkButton @route='scopes.scope.new' @style='primary'>
           {{t 'titles.new'}}
@@ -67,9 +67,7 @@
             <message.description>
               {{t 'resources.org.description'}}
             </message.description>
-            {{#if
-              (can 'create collection' @model.currentScope collection='scopes')
-            }}
+            {{#if (can 'create model' @model.currentScope collection='scopes')}}
               <message.link @route='scopes.scope.new'>
                 <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
                 {{t 'titles.new'}}
@@ -88,9 +86,7 @@
             <message.description>
               {{t 'resources.project.description'}}
             </message.description>
-            {{#if
-              (can 'create collection' @model.currentScope collection='scopes')
-            }}
+            {{#if (can 'create model' @model.currentScope collection='scopes')}}
               <message.link @route='scopes.scope.new'>
                 <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
                 {{t 'titles.new'}}

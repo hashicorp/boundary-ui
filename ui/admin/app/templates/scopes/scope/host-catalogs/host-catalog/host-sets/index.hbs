@@ -27,7 +27,7 @@
           <row.cell>
             {{#if hostSet.isStatic}}
               <Rose::Badge>
-                {{t (concat 'resources.host-set.types.' hostSet.type)}}
+                {{t (concat 'resources.host-set.types.' hostSet.compositeType)}}
               </Rose::Badge>
             {{else}}
               <Rose::Badge
@@ -37,7 +37,7 @@
                   '-color-16'
                 }}
               >
-                {{hostSet.compositeType}}
+                {{t (concat 'resources.host-set.types.' hostSet.compositeType)}}
               </Rose::Badge>
             {{/if}}
           </row.cell>
@@ -64,13 +64,11 @@
     >
       <message.description>
 
-        {{#if (can 'list collection' this.hostCatalog collection='host-sets')}}
+        {{#if (can 'list model' this.hostCatalog collection='host-sets')}}
           {{! can list (at least):  show default welcome message}}
           {{t 'resources.host-set.description'}}
 
-        {{else if (can
-          'create collection' this.hostCatalog collection='host-sets'
-        )}}
+        {{else if (can 'create model' this.hostCatalog collection='host-sets')}}
           {{! can create (only):  show create-but-not-list welcome message}}
           {{t
             'descriptions.create-but-not-list'
@@ -85,7 +83,7 @@
         {{/if}}
       </message.description>
 
-      {{#if (can 'create collection' this.hostCatalog collection='host-sets')}}
+      {{#if (can 'create model' this.hostCatalog collection='host-sets')}}
         <message.link
           @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
         >
