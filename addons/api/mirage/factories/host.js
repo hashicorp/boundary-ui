@@ -10,4 +10,12 @@ export default factory.extend({
       'delete',
     ],
   id: (i) => `host-id-${i}`,
+  type() {
+    return this.hostCatalog?.type || factory.attrs.type;
+  },
+  plugin() {
+    if (this.type === 'plugin') {
+      return this.hostCatalog.plugin;
+    }
+  },
 });

@@ -85,6 +85,9 @@ host-catalog:
     delete: Delete Host Catalog
   types:
     static: Static
+    unknown: Unknown
+    aws: AWS
+    azure: Azure
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -111,6 +114,9 @@ host-set:
         description: No hosts available for selection.
   types:
     static: Static
+    unknown: Unknown
+    aws: AWS
+    azure: Azure
 host:
   title: Host
   title_plural: Hosts
@@ -130,6 +136,9 @@ host:
     delete: Delete Host
   types:
     static: Static
+    unknown: Unknown
+    aws: AWS
+    azure: Azure
 session:
   title: Session
   title_plural: Sessions

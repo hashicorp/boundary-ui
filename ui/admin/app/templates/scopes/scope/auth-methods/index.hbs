@@ -12,7 +12,7 @@
   </page.breadcrumbs>
 
   <page.actions>
-    {{#if (can 'create collection' this.scopeModel collection='auth-methods')}}
+    {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
       <Rose::Dropdown
         @text={{t 'titles.new'}}
         @dropdownRight={{true}}
@@ -227,13 +227,11 @@
           as |message|
         >
           <message.description>
-            {{#if
-              (can 'list collection' this.scopeModel collection='auth-methods')
-            }}
+            {{#if (can 'list model' this.scopeModel collection='auth-methods')}}
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.auth-method.messages.welcome.description'}}
             {{else if (can
-              'create collection' this.scopeModel collection='auth-methods'
+              'create model' this.scopeModel collection='auth-methods'
             )}}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t

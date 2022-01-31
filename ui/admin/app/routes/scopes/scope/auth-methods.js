@@ -36,9 +36,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   async model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
-    if (
-      this.can.can('list collection', scope, { collection: 'auth-methods' })
-    ) {
+    if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
       const { type } = this;
       return this.resourceFilterStore.queryBy(
         'auth-method',
