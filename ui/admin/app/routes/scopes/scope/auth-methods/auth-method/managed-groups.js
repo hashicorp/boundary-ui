@@ -22,7 +22,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   async model() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     const { id: auth_method_id } = authMethod;
-    const canListManagedGroups = this.can.can('list collection', authMethod, {
+    const canListManagedGroups = this.can.can('list model', authMethod, {
       collection: 'managed-groups',
     });
     let managedGroups;

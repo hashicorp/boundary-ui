@@ -95,7 +95,6 @@ module.exports = function (environment) {
       'oidc-account-crud': true,
       search: false,
       filter: true,
-      capabilities: true,
       'credential-store': true,
       'managed-groups': true,
     },

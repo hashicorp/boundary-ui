@@ -25,7 +25,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
     let accounts;
 
     if (
-      this.can.can('list collection', authMethod, {
+      this.can.can('list model', authMethod, {
         collection: 'accounts',
       })
     ) {
