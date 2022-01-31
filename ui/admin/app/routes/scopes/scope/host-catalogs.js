@@ -30,9 +30,7 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   async model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
-    if (
-      this.can.can('list collection', scope, { collection: 'host-catalogs' })
-    ) {
+    if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
       return this.store.query('host-catalog', { scope_id });
     }
   }

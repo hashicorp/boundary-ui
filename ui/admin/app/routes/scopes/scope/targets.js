@@ -30,7 +30,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   async model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
-    if (this.can.can('list collection', scope, { collection: 'targets' })) {
+    if (this.can.can('list model', scope, { collection: 'targets' })) {
       return this.store.query('target', { scope_id });
     }
   }

@@ -3,7 +3,7 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  {{#if (can 'create collection' @model collection='credential-libraries')}}
+  {{#if (can 'create model' @model collection='credential-libraries')}}
 
     <dropdown.link
       @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
