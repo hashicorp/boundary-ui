@@ -69,14 +69,12 @@
           <message.description>
 
             {{#if
-              (can
-                'list collection' this.authMethod collection='managed-groups'
-              )
+              (can 'list model' this.authMethod collection='managed-groups')
             }}
               {{! Can list (at least): show default welcome message }}
               {{t 'resources.managed-group.description'}}
             {{else if (can
-              'create collection' this.authMethod collection='managed-groups'
+              'create model' this.authMethod collection='managed-groups'
             )}}
               {{! Can create only: show create but not list welcome message }}
               {{t
@@ -93,9 +91,7 @@
           </message.description>
 
           {{#if
-            (can
-              'create collection' this.authMethod collection='managed-groups'
-            )
+            (can 'create model' this.authMethod collection='managed-groups')
           }}
             <message.link
               @route='scopes.scope.auth-methods.auth-method.managed-groups.new'

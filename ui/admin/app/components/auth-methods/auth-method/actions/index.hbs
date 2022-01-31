@@ -57,7 +57,7 @@
       </dropdown.button>
     {{/if}}
   {{/if}}
-  {{#if (can 'create collection' @model collection='accounts')}}
+  {{#if (can 'create model' @model collection='accounts')}}
 
     <dropdown.link
       @route='scopes.scope.auth-methods.auth-method.accounts.new'
@@ -68,7 +68,7 @@
   {{/if}}
 
   {{#if (feature-flag 'managed-groups')}}
-    {{#if (can 'create collection' @model collection='managed-groups')}}
+    {{#if (can 'create model' @model collection='managed-groups')}}
       {{#if @model.isOIDC}}
         <dropdown.link
           @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
