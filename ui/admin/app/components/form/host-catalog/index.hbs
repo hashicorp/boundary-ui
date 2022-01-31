@@ -1,8 +1,4 @@
-COMES JERE
-{{{log 'BLLL' @model.compositeType}}}
-{{{log 'NNFRM' @model.isNew}}}
-
-{{!-- {{#if @model.isNew}} --}}
+{{#if @model.isNew}}
 {{#if @model.compositeType}}
   {{component
     (concat 'form/host-catalog/' @model.compositeType)
@@ -10,5 +6,5 @@ COMES JERE
     submit=@submit
     cancel=@cancel
   }}
-{{!-- {{/if}} --}}
+{{/if}}
 {{/if}}

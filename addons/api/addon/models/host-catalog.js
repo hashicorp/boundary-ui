@@ -26,15 +26,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isUnknown() {
-    console.log(this.isPlugin, 'IS IT PLUGIN', this.plugin, types);
-    // if(this.plugin === undefined) {
-    //   console.log('in USEFNNFNF')
-    //   return false;
-    // } else {
-    //   console.log('in ELSE EE')
-
-      return this.isPlugin && !types.includes(this.plugin.name);
-    // }
+    return this.isPlugin && !types.includes(this.plugin.name);
   }
 
   /**
@@ -59,8 +51,6 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {string}
    */
   get compositeType() {
-    console.log(this, this.isPlugin, 'WHAT IS PLUGNI');
-   // if(this.plugin === undefined) return 'static';
     if (this.isUnknown) return 'unknown';
     if (this.isPlugin) return this.plugin.name;
     return 'static';
@@ -75,9 +65,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
       this.type = 'static';
     } else {
       this.type = 'plugin';
-     
       this.plugin = { name: type };
-      console.log('COMPOSITI' ,  this.plugin, type)
     }
   }
 }
