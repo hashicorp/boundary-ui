@@ -2,7 +2,7 @@
   <nav.link @route='scopes.scope.auth-methods.auth-method.index'>
     {{t 'titles.details'}}
   </nav.link>
-  {{#if (can 'navigate collection' @model collection='accounts')}}
+  {{#if (can 'navigate model' @model collection='accounts')}}
 
     <nav.link @route='scopes.scope.auth-methods.auth-method.accounts'>
       {{t 'resources.account.title_plural'}}
@@ -10,7 +10,7 @@
   {{/if}}
 
   {{#if (feature-flag 'managed-groups')}}
-    {{#if (can 'navigate collection' @model collection='managed-groups')}}
+    {{#if (can 'navigate model' @model collection='managed-groups')}}
       {{#if @model.isOIDC}}
         <nav.link @route='scopes.scope.auth-methods.auth-method.managed-groups'>
           {{t 'resources.managed-group.title_plural'}}

@@ -71,7 +71,7 @@
         </Rose::Nav::Sidebar>
         --}}
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
-          {{#if (can 'navigate collection' @model collection='sessions')}}
+          {{#if (can 'navigate model' @model collection='sessions')}}
             <nav.link @route='scopes.scope.sessions'>
               <Rose::Icon
                 @name='flight-icons/svg/entry-point-16'
@@ -80,7 +80,7 @@
               {{t 'resources.session.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if (can 'navigate collection' @model collection='targets')}}
+          {{#if (can 'navigate model' @model collection='targets')}}
             <nav.link @route='scopes.scope.targets'>
               <Rose::Icon
                 @name='flight-icons/svg/crosshair-16'
@@ -89,7 +89,7 @@
               {{t 'resources.target.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if (can 'navigate collection' @model collection='host-catalogs')}}
+          {{#if (can 'navigate model' @model collection='host-catalogs')}}
             <nav.link @route='scopes.scope.host-catalogs'>
               <Rose::Icon
                 @name='flight-icons/svg/collections-16'
@@ -98,9 +98,7 @@
               {{t 'resources.host-catalog.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if
-            (can 'navigate collection' @model collection='credential-stores')
-          }}
+          {{#if (can 'navigate model' @model collection='credential-stores')}}
             {{#if (feature-flag 'credential-store')}}
               <nav.link @route='scopes.scope.credential-stores'>
                 <Rose::Icon @name='flight-icons/svg/key-16' @size='medium' />
@@ -113,13 +111,13 @@
 
       {{#unless @model.isProject}}
         <Rose::Nav::Sidebar @title={{t 'titles.iam'}} as |nav|>
-          {{#if (can 'navigate collection' @model collection='users')}}
+          {{#if (can 'navigate model' @model collection='users')}}
             <nav.link @route='scopes.scope.users'>
               <Rose::Icon @name='flight-icons/svg/users-16' @size='medium' />
               {{t 'resources.user.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if (can 'navigate collection' @model collection='groups')}}
+          {{#if (can 'navigate model' @model collection='groups')}}
             <nav.link @route='scopes.scope.groups'>
               <Rose::Icon
                 @name='flight-icons/svg/folder-users-16'
@@ -128,7 +126,7 @@
               {{t 'resources.group.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if (can 'navigate collection' @model collection='roles')}}
+          {{#if (can 'navigate model' @model collection='roles')}}
             <nav.link @route='scopes.scope.roles'>
               <Rose::Icon
                 @name='flight-icons/svg/identity-user-16'
@@ -137,7 +135,7 @@
               {{t 'resources.role.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if (can 'navigate collection' @model collection='auth-methods')}}
+          {{#if (can 'navigate model' @model collection='auth-methods')}}
             <nav.link @route='scopes.scope.auth-methods'>
               <Rose::Icon @name='flight-icons/svg/lock-16' @size='medium' />
               {{t 'resources.auth-method.title_plural'}}

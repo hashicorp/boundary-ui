@@ -15,7 +15,7 @@
   </page.header>
 
   <page.actions>
-    {{#if (can 'create collection' this.scope collection='host-catalogs')}}
+    {{#if (can 'create model' this.scope collection='host-catalogs')}}
       {{#if @model}}
         <Rose::LinkButton
           @route='scopes.scope.host-catalogs.new'
@@ -113,13 +113,11 @@
           as |message|
         >
           <message.description>
-            {{#if
-              (can 'list collection' this.scope collection='host-catalogs')
-            }}
+            {{#if (can 'list model' this.scope collection='host-catalogs')}}
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.host-catalog.description'}}
             {{else if (can
-              'create collection' this.scope collection='host-catalogs'
+              'create model' this.scope collection='host-catalogs'
             )}}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t
@@ -134,9 +132,7 @@
               }}
             {{/if}}
           </message.description>
-          {{#if
-            (can 'create collection' this.scope collection='host-catalogs')
-          }}
+          {{#if (can 'create model' this.scope collection='host-catalogs')}}
             <message.link @route='scopes.scope.host-catalogs.new'>
               <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
               {{t 'titles.new'}}

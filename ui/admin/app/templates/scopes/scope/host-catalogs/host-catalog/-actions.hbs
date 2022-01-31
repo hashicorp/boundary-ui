@@ -3,7 +3,7 @@
   @dropdownRight={{true}}
   as |dropdown|
 >
-  {{#if (can 'create collection' @model collection='hosts')}}
+  {{#if (can 'create model' @model collection='hosts')}}
     <dropdown.link
       @route='scopes.scope.host-catalogs.host-catalog.hosts.new'
       @model={{@model}}
@@ -11,7 +11,7 @@
       {{t 'resources.host.actions.create'}}
     </dropdown.link>
   {{/if}}
-  {{#if (can 'create collection' @model collection='host-sets')}}
+  {{#if (can 'create model' @model collection='host-sets')}}
     <dropdown.link
       @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
       @model={{@model}}
