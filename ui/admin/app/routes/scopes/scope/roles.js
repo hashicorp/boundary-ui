@@ -30,7 +30,7 @@ export default class ScopesScopeRolesRoute extends Route {
   async model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
-    if (this.can.can('list collection', scope, { collection: 'roles' })) {
+    if (this.can.can('list model', scope, { collection: 'roles' })) {
       return this.store.query('role', { scope_id });
     }
   }

@@ -45,6 +45,20 @@ export default class ModelAbility extends Ability {
     return false;
   }
 
+  /**
+   * @type {boolean}
+   */
+  get canList() {
+    return this.hasAuthorizedCollectionAction('list');
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get canCreate() {
+    return this.hasAuthorizedCollectionAction('create');
+  }
+
   // =methods
 
   /**
@@ -55,5 +69,18 @@ export default class ModelAbility extends Ability {
    */
   hasAuthorizedAction(action) {
     return this.model.authorized_actions?.includes(action);
+  }
+
+  /**
+   * Returns true if the given action is contained in the ability model's
+   * `authorized_collection_actions` array.
+   * @param {string} action
+   * @return {boolean}
+   */
+  hasAuthorizedCollectionAction(action) {
+    const authorized_collection_actions =
+      (this.model || {}).authorized_collection_actions || {};
+    const collection = this.collection || {};
+    return authorized_collection_actions[collection]?.includes(action);
   }
 }
