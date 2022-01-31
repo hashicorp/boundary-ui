@@ -131,14 +131,12 @@
         >
           <message.description>
 
-            {{#if
-              (can 'list collection' this.authMethod collection='accounts')
-            }}
+            {{#if (can 'list model' this.authMethod collection='accounts')}}
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.account.description'}}
 
             {{else if (can
-              'create collection' this.authMethod collection='accounts'
+              'create model' this.authMethod collection='accounts'
             )}}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t
@@ -155,9 +153,7 @@
 
           </message.description>
 
-          {{#if
-            (can 'create collection' this.authMethod collection='accounts')
-          }}
+          {{#if (can 'create model' this.authMethod collection='accounts')}}
 
             <message.link
               @route='scopes.scope.auth-methods.auth-method.accounts.new'

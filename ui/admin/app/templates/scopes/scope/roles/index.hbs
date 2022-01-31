@@ -15,7 +15,7 @@
   </page.header>
 
   <page.actions>
-    {{#if (can 'create collection' this.scope collection='roles')}}
+    {{#if (can 'create model' this.scope collection='roles')}}
       {{#if @model}}
         <Rose::LinkButton @route='scopes.scope.roles.new' @style='primary'>{{t
             'titles.new'
@@ -70,10 +70,10 @@
           as |message|
         >
           <message.description>
-            {{#if (can 'list collection' this.scope collection='roles')}}
+            {{#if (can 'list model' this.scope collection='roles')}}
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.roles.description'}}
-            {{else if (can 'create collection' this.scope collection='roles')}}
+            {{else if (can 'create model' this.scope collection='roles')}}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t
                 'descriptions.create-but-not-list'
@@ -87,7 +87,7 @@
               }}
             {{/if}}
           </message.description>
-          {{#if (can 'create collection' this.scope collection='roles')}}
+          {{#if (can 'create model' this.scope collection='roles')}}
             <message.link @route='scopes.scope.roles.new'>
               <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
               {{t 'titles.new'}}
