@@ -86,7 +86,8 @@
     "jsonpointer": "5.0.0",
     "json-schema": "^0.4.0",
     "follow-redirects": "^1.14.7",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "shelljs": "^0.8.5"
   },
   "config": {
     "commitizen": {
