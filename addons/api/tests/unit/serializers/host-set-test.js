@@ -13,6 +13,7 @@ module('Unit | Serializer | host set', function (hooks) {
       description: 'Description',
       host_catalog_id: '123',
       version: 1,
+      preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -22,6 +23,7 @@ module('Unit | Serializer | host set', function (hooks) {
       description: 'Description',
       host_catalog_id: '123',
       version: 1,
+      preferred_endpoints: ['option 1', 'option 2'],
     });
   });
 
@@ -55,6 +57,7 @@ module('Unit | Serializer | host set', function (hooks) {
       id: '1',
       name: 'Host Set 1',
       host_ids: ['1', '2', '3'],
+      preferred_endpoints: ['option 1', 'option 2'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -70,6 +73,7 @@ module('Unit | Serializer | host set', function (hooks) {
           authorized_actions: [],
           name: 'Host Set 1',
           host_ids: [{ value: '1' }, { value: '2' }, { value: '3' }],
+          preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
         },
         relationships: {},
       },
@@ -101,6 +105,39 @@ module('Unit | Serializer | host set', function (hooks) {
           name: 'Host Set 1',
           scope: { scope_id: 'o_123' },
           host_ids: [],
+          preferred_endpoints: [],
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes missing preferred_endpoints to empty array', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-set');
+    const hostSet = store.createRecord('host-set').constructor;
+    const payload = {
+      id: '1',
+      name: 'Host Set 1',
+      scope: { id: 'o_123' },
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostSet,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'host-set',
+        attributes: {
+          authorized_actions: [],
+          name: 'Host Set 1',
+          scope: { scope_id: 'o_123' },
+          host_ids: [],
+          preferred_endpoints: [],
         },
         relationships: {},
       },
