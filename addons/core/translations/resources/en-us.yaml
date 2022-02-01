@@ -89,6 +89,14 @@ host-catalog:
     unknown: Unknown
     aws: AWS
     azure: Azure
+    dynamic: Dynamic
+  form:
+    provider-details: Provider Details 
+    types:
+      static: 
+        help: Provide a list of hosts and host sets with static addresses
+      dynamic: 
+        help: Automate discovery of target hosts and services on Azure or AWS
 host-set:
   title: Host Set
   title_plural: Host Sets

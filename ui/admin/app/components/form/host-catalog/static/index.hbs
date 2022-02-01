@@ -43,9 +43,14 @@
     {{/if}}
   </form.textarea>
   <form.fieldset>
-    <:title>{{t 'resources.host-catalog.type'}}</:title>
+    <:title>{{t 'form.type.label'}}</:title>
     <:body>
-      <form.radioGroup @name='types' as |radioGroup|>
+      <form.radioGroup
+        @name='types'
+        @selectedValue={{@model.type}}
+        @changed={{@toggleType}}
+        as |radioGroup|
+      >
         <radioGroup.card
           @label={{t 'resources.host-catalog.types.static'}}
           @value='static'
@@ -61,6 +66,33 @@
       </form.radioGroup>
     </:body>
   </form.fieldset>
+
+  {{#if @showDynamicPlugins}}
+    <form.fieldset>
+      <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
+      <:body>
+        <form.radioGroup
+          @name='plugins'
+          @changed={{route-action 'changeType'}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label='AWS'
+            @value='aws'
+            @helperText={{t 'resources.host-catalog.form.types.static.help'}}
+            @layout='tile'
+          />
+          <radioGroup.card
+            @label='Azure'
+            @value='azure'
+            @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
+            @layout='tile'
+          />
+        </form.radioGroup>
+      </:body>
+    </form.fieldset>
+  {{/if}}
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
@@ -70,5 +102,3 @@
     />
   {{/if}}
 </Rose::Form>
-
-{{{log @model.compositeType 'compostite type'}}}

@@ -6,13 +6,12 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   // =services
 
   @service router;
-
   // =attributes
 
   queryParams = {
     type: {
       refreshModel: true,
-      replace: true
+      replace: true,
     },
   };
 

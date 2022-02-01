@@ -1,10 +1,24 @@
 {{#if @model.isNew}}
-{{#if @model.compositeType}}
-  {{component
-    (concat 'form/host-catalog/' @model.compositeType)
-    model=@model
-    submit=@submit
-    cancel=@cancel
-  }}
-{{/if}}
+  <div>{{@model.type}} {{@model.compositeType}}</div>
+  {{#if @model.isStatic}}
+    {{component
+      (concat 'form/host-catalog/' @model.compositeType)
+      model=@model
+      submit=@submit
+      cancel=@cancel
+      toggleType=this.toggleType
+      showDynamicPlugins=this.showDynamicPlugins
+    }}
+  {{/if}}
+
+  {{#if this.showDynamicPlugins}}
+    {{component
+      (concat 'form/host-catalog/' @model.compositeType)
+      model=@model
+      submit=@submit
+      cancel=@cancel
+      toggleType=this.toggleType
+      showDynamicPlugins=this.showDynamicPlugins
+    }}
+  {{/if}}
 {{/if}}
