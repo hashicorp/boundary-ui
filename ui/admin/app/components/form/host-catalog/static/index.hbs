@@ -13,6 +13,7 @@
     @label={{t 'form.name.label'}}
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
+    disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
@@ -82,13 +83,13 @@
             as |radioGroup|
           >
             <radioGroup.card
-              @label='AWS'
+              @label={{t 'resources.host-catalog.form.types.aws'}}
               @value='aws'
               @helperText={{t 'resources.host-catalog.form.types.static.help'}}
               @layout='tile'
             />
             <radioGroup.card
-              @label='Azure'
+              @label={{t 'resources.host-catalog.form.types.azure'}}
               @value='azure'
               @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
               @layout='tile'
