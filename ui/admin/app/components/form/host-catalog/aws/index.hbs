@@ -46,9 +46,9 @@
     <:title>{{t 'form.type.label'}}</:title>
     <:body>
       <form.radioGroup
-        @name='types'
-        @selectedValue={{@model.type}}
+        @name='aws-types'
         @changed={{@toggleType}}
+        @selectedValue='dynamic'
         as |radioGroup|
       >
         <radioGroup.card
@@ -72,7 +72,8 @@
       <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
       <:body>
         <form.radioGroup
-          @name='plugins'
+          @name='aws-plugins'
+          @selectedValue={{@model.compositeType}}
           @changed={{route-action 'changeType'}}
           as |radioGroup|
         >
@@ -92,6 +93,30 @@
       </:body>
     </form.fieldset>
   {{/if}}
+
+  <form.input
+    @name='Region'
+    @type='region'
+    @value='region'
+    @label='Region'
+    readonly={{false}}
+  />
+
+  <form.input
+    @name='accesskey'
+    @type='accesskey'
+    @value='accesskey'
+    @label='Access key ID'
+    readonly={{false}}
+  />
+
+  <form.input
+    @name='secretaccesskey'
+    @type='secretaccesskey'
+    @value='secretaccesskey'
+    @label='Secret Access Key'
+    readonly={{false}}
+  />
 
   {{#if (can 'save model' @model)}}
     <form.actions

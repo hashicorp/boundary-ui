@@ -1,12 +1,17 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeHostCatalogsNewRoute extends Route {
+  // =services
+
+  @service router;
   // =attributes
 
   queryParams = {
     type: {
       refreshModel: true,
+      replace: true,
     },
   };
 
@@ -18,12 +23,15 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   model(params) {
     const scopeModel = this.modelFor('scopes.scope');
-    // FIXME Should default static type be specified when type is undefined?
-    params.type = 'static';
+    if (!params.type) params.type = 'static';
     return this.store.createRecord('host-catalog', {
-      type: params.type,
+      compositeType: params.type, //static or aws or azure
       scopeModel,
     });
+  }
+
+  afterModel(model) {
+    this.router.replaceWith({ queryParams: { type: model.compositeType } });
   }
 
   /**
@@ -32,6 +40,6 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   @action
   async changeType(type) {
-    await this.router.replaceWith({ type });
+    await this.router.replaceWith({ queryParams: { type } });
   }
 }
