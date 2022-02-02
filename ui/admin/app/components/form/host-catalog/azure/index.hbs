@@ -2,7 +2,6 @@
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
-  @disabled={{@model.isSaving}}
   @error={{@model.errors.base}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
@@ -45,7 +44,7 @@
       </field.errors>
     {{/if}}
   </form.textarea>
-  
+
   {{#if @model.isNew}}
     <form.fieldset>
       <:title>{{t 'form.type.label'}}</:title>

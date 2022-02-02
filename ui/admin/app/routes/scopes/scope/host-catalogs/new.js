@@ -37,7 +37,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   @action
   async changeType(type) {
     const model = this.modelFor('scopes.scope.host-catalogs.new');
-    if(!type) type = 'static'; // Unknown host catalog type defaults to 'static'
+    if (!type) type = 'static'; // Unknown host catalog type defaults to 'static'
     if (model.isUnknown) type = 'aws'; //Is this the default case for plugin type?
     model.compositeType = type;
     await this.router.replaceWith({ queryParams: { type } });
