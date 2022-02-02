@@ -66,11 +66,17 @@ export default class HostSetModel extends GeneratedHostSetModel {
   })
   host_ids;
 
-  // Not sure if re-use this fragment.
   @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true, // Not sure if should be true.
+    emptyArrayIfMissing: true,
   })
   preferred_endpoints;
+
+  // AWS specific
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  filters;
 
   // =methods
 
