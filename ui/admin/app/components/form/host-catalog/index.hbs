@@ -1,24 +1,38 @@
-{{#if @model.isNew}}
-  <div>{{@model.type}} {{@model.compositeType}}</div>
-  {{#if @model.isStatic}}
-    {{component
-      (concat 'form/host-catalog/' @model.compositeType)
-      model=@model
-      submit=@submit
-      cancel=@cancel
-      toggleType=this.toggleType
-      showDynamicPlugins=this.showDynamicPlugins
-    }}
-  {{/if}}
+{{component
+    (concat 'form/host-catalog/' @model.compositeType)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+    changeType=@changeType
+  }}
 
-  {{#if this.showDynamicPlugins}}
-    {{component
-      (concat 'form/host-catalog/' @model.compositeType)
-      model=@model
-      submit=@submit
-      cancel=@cancel
-      toggleType=this.toggleType
-      showDynamicPlugins=this.showDynamicPlugins
-    }}
+{{!-- {{#if @model.isStatic}}
+  {{component
+    (concat 'form/host-catalog/' @model.type)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+    form=form
+    toggleType=this.toggleType
+    showDynamicPlugins=this.showDynamicPlugins
+  }}
+{{else if @model.isPlugin}}
+  Model is plugin
+  {{#if @model.isAWS}}
+    Model is Aws
+  {{else if @model.isAzure}}
+    Model is Azure
   {{/if}}
-{{/if}}
+{{/if}} --}}
+
+{{!-- {{#if @model.type}}
+  {{component
+    (concat 'form/auth-method/' @model.type)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+    removeItemByIndex=@removeItemByIndex
+    addStringItem=@addStringItem
+    addAccountClaimMapItem=@addAccountClaimMapItem
+  }}
+{{/if}} --}}

@@ -2,6 +2,8 @@
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
   <form.input
@@ -42,32 +44,33 @@
       </field.errors>
     {{/if}}
   </form.textarea>
-  <form.fieldset>
-    <:title>{{t 'form.type.label'}}</:title>
-    <:body>
-      <form.radioGroup
-        @name='aws-types'
-        @changed={{@toggleType}}
-        @selectedValue='dynamic'
-        as |radioGroup|
-      >
-        <radioGroup.card
-          @label={{t 'resources.host-catalog.types.static'}}
-          @value='static'
-          @helperText={{t 'resources.host-catalog.form.types.static.help'}}
-          @layout='wide'
-        />
-        <radioGroup.card
-          @label={{t 'resources.host-catalog.types.dynamic'}}
-          @value='dynamic'
-          @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
-          @layout='wide'
-        />
-      </form.radioGroup>
-    </:body>
-  </form.fieldset>
+  
+  {{#if @model.isNew}}
+    <form.fieldset>
+      <:title>{{t 'form.type.label'}}</:title>
+      <:body>
+        <form.radioGroup
+          @name='types'
+          @selectedValue={{@model.type}}
+          @changed={{route-action 'changeType'}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label={{t 'resources.host-catalog.types.static'}}
+            @value='static'
+            @helperText={{t 'resources.host-catalog.form.types.static.help'}}
+            @layout='wide'
+          />
+          <radioGroup.card
+            @label={{t 'resources.host-catalog.types.dynamic'}}
+            @value='plugin'
+            @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
+            @layout='wide'
+          />
+        </form.radioGroup>
+      </:body>
+    </form.fieldset>
 
-  {{#if @showDynamicPlugins}}
     <form.fieldset>
       <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
       <:body>
@@ -92,13 +95,32 @@
         </form.radioGroup>
       </:body>
     </form.fieldset>
+  {{else}}
+    <form.fieldset>
+      <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
+      <:body>
+        <form.radioGroup
+          @name='aws-plugin'
+          @selectedValue={{@model.compositeType}}
+          @disabled={{true}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label='AWS'
+            @value='aws'
+            @helperText={{t 'resources.host-catalog.form.types.static.help'}}
+            @layout='tile'
+          />
+        </form.radioGroup>
+      </:body>
+    </form.fieldset>
   {{/if}}
 
   <form.input
     @name='Region'
     @type='region'
     @value='region'
-    @label='Region'
+    @label='AWS Region'
     readonly={{false}}
   />
 

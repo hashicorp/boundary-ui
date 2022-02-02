@@ -6,12 +6,12 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   // =services
 
   @service router;
+
   // =attributes
 
   queryParams = {
     type: {
       refreshModel: true,
-      replace: true,
     },
   };
 
@@ -21,17 +21,13 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    * Creates a new unsaved host catalog belonging to the current scope.
    * @return {HostCatalogModel}
    */
-  model(params) {
+  model() {
     const scopeModel = this.modelFor('scopes.scope');
-    if (!params.type) params.type = 'static';
-    return this.store.createRecord('host-catalog', {
-      compositeType: params.type, //static or aws or azure
-      scopeModel,
-    });
+    return this.store.createRecord('host-catalog', { scopeModel });
   }
 
-  afterModel(model) {
-    this.router.replaceWith({ queryParams: { type: model.compositeType } });
+  afterModel(model, transition) {
+    this.changeType(transition.to.queryParams?.type);
   }
 
   /**
@@ -40,6 +36,10 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    */
   @action
   async changeType(type) {
+    const model = this.modelFor('scopes.scope.host-catalogs.new');
+    if(!type) type = 'static'; // Unknown host catalog type defaults to 'static'
+    if (model.isUnknown) type = 'aws'; //Is this the default case for plugin type?
+    model.compositeType = type;
     await this.router.replaceWith({ queryParams: { type } });
   }
 }
