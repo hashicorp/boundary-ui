@@ -51,7 +51,7 @@
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
         <form.radioGroup
-          @name='azure-plugins'
+          @name='azure_plugins'
           @selectedValue={{@model.type}}
           @changed={{route-action 'changeType'}}
           as |radioGroup|
@@ -71,12 +71,12 @@
         </form.radioGroup>
       </:body>
     </form.fieldset>
-
+    <Rose::Separator />
     <form.fieldset>
       <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
       <:body>
         <form.radioGroup
-          @name='aws-plugins'
+          @name='aws_plugins'
           @selectedValue={{@model.compositeType}}
           @changed={{route-action 'changeType'}}
           as |radioGroup|
@@ -84,14 +84,12 @@
           <radioGroup.card
             @label={{t 'resources.host-catalog.types.aws'}}
             @value='aws'
-            @helperText={{t 'resources.host-catalog.form.types.static.help'}}
             @layout='tile'
             @icon='flight-icons/svg/aws-color-16'
           />
           <radioGroup.card
             @label={{t 'resources.host-catalog.types.azure'}}
             @value='azure'
-            @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
             @layout='tile'
             @icon='flight-icons/svg/azure-color-16'
           />
@@ -103,7 +101,7 @@
       <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
       <:body>
         <form.radioGroup
-          @name='azure-plugin'
+          @name='azure_plugin'
           @selectedValue={{@model.compositeType}}
           @disabled={{true}}
           as |radioGroup|
@@ -111,7 +109,6 @@
           <radioGroup.card
             @label={{t 'resources.host-catalog.types.azure'}}
             @value='azure'
-            @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
             @layout='tile'
             @icon='flight-icons/svg/azure-color-16'
           />

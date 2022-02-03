@@ -51,7 +51,7 @@
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
         <form.radioGroup
-          @name='static-types'
+          @name='static_types'
           @selectedValue={{@model.type}}
           @changed={{route-action 'changeType'}}
           as |radioGroup|
@@ -73,11 +73,12 @@
     </form.fieldset>
 
     {{#if @model.isPlugin}}
+      <Rose::Separator />
       <form.fieldset>
         <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
         <:body>
           <form.radioGroup
-            @name='aws-plugins'
+            @name='aws_plugins'
             @selectedValue={{@model.compositeType}}
             @changed={{route-action 'changeType'}}
             as |radioGroup|
@@ -85,13 +86,11 @@
             <radioGroup.card
               @label={{t 'resources.host-catalog.types.aws'}}
               @value='aws'
-              @helperText={{t 'resources.host-catalog.types.static.help'}}
               @layout='tile'
             />
             <radioGroup.card
               @label={{t 'resources.host-catalog.types.azure'}}
               @value='azure'
-              @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
               @layout='tile'
             />
           </form.radioGroup>
