@@ -11,6 +11,11 @@ const pluginTypes = ['aws', 'azure', 'foobar'];
 let pluginTypeCounter = 1;
 
 export default factory.extend({
+  id: (i) => `host-catalog-id-${i}`,
+
+  // Cycle through available types
+  type: (i) => types[i % types.length],
+
   authorized_actions: () =>
     permissions.authorizedActionsFor('host-catalog') || [
       'no-op',
@@ -18,17 +23,14 @@ export default factory.extend({
       'update',
       'delete',
     ],
-  authorized_collection_actions: () => {
+  authorized_collection_actions: function () {
+    const isStatic = this.type === 'static';
     return {
-      hosts: ['create', 'list'],
+      // only static catalogs allow host create at this time
+      hosts: isStatic ? ['create', 'list'] : ['list'],
       'host-sets': ['create', 'list'],
     };
   },
-
-  id: (i) => `host-catalog-id-${i}`,
-
-  // Cycle through available types
-  type: (i) => types[i % types.length],
 
   plugin: function (i) {
     if (this.type === 'plugin') {
