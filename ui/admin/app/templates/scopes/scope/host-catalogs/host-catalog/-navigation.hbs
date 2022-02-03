@@ -2,12 +2,12 @@
   <nav.link @route='scopes.scope.host-catalogs.host-catalog.index'>
     {{t 'titles.details'}}
   </nav.link>
-  {{#if (can 'navigate model' @model collection='hosts')}}
+  {{#if (can 'navigate host-catalog' @model collection='hosts')}}
     <nav.link @route='scopes.scope.host-catalogs.host-catalog.hosts'>
       {{t 'resources.host.title_plural'}}
     </nav.link>
   {{/if}}
-  {{#if (can 'navigate model' @model collection='host-sets')}}
+  {{#if (can 'navigate host-catalog' @model collection='host-sets')}}
     <nav.link @route='scopes.scope.host-catalogs.host-catalog.host-sets'>
       {{t 'resources.host-set.title_plural'}}
     </nav.link>
