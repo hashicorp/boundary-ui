@@ -51,7 +51,7 @@
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
         <form.radioGroup
-          @name='types'
+          @name='static-types'
           @selectedValue={{@model.type}}
           @changed={{route-action 'changeType'}}
           as |radioGroup|
