@@ -27,7 +27,6 @@ export default class HostSetSerializer extends ApplicationSerializer {
     if (hostIDs) {
       return this.serializeWithHostIDs(snapshot, hostIDs);
     } else {
-      console.log('Carlos: ', snapshot.record.compositeType);
       switch (snapshot.record.compositeType) {
         case 'static':
           return this.serializeStatic(...arguments);

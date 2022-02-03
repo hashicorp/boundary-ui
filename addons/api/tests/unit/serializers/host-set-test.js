@@ -4,17 +4,6 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Serializer | host set', function (hooks) {
   setupTest(hooks);
 
-  // DONE // Serializes host sets normally, no host_ids, no plugin.
-  // DONE // Serializes host sets only host_ids.
-  // DONE // Serializes host sets as expected for a Aws plugin.
-  // DONE // Serializes host sets as expected for Azure plugin.
-  // WIP // Normalizes records with array fields.
-  // ? // Normalizes records missing host_ids to empty array.
-  // ? // Normalizes missing preferred_endpoints to empty array.
-  // ? // Normalizes records with array fields, static.
-  // ? // Normalizes records with array fields, aws.
-  // ? // Normalizes records with array fields, azure.
-
   test('it serializes host sets normally, without host_ids', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -104,7 +93,7 @@ module('Unit | Serializer | host set', function (hooks) {
     });
   });
 
-  test.skip('it normalizes records with array fields', function (assert) {
+  test('it normalizes records with array fields', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
@@ -114,7 +103,8 @@ module('Unit | Serializer | host set', function (hooks) {
       name: 'Host Set 1',
       type: 'static',
       host_ids: ['1', '2', '3'],
-      preferred_endpoints: ['option 1', 'option 2'],
+      preferred_endpoints: ['endpoint 1', 'endpoint 2'],
+      filters: ['filter 1', 'filter 2'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -132,14 +122,18 @@ module('Unit | Serializer | host set', function (hooks) {
           authorized_actions: [],
           name: 'Host Set 1',
           host_ids: [{ value: '1' }, { value: '2' }, { value: '3' }],
-          preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
+          preferred_endpoints: [
+            { value: 'endpoint 1' },
+            { value: 'endpoint 2' },
+          ],
+          filters: [{ value: 'filter 1' }, { value: 'filter 2' }],
         },
         relationships: {},
       },
     });
   });
 
-  test.skip('it normalizes missing host_ids to empty array', function (assert) {
+  test('it normalizes missing host_ids to empty array', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
@@ -165,13 +159,14 @@ module('Unit | Serializer | host set', function (hooks) {
           scope: { scope_id: 'o_123' },
           host_ids: [],
           preferred_endpoints: [],
+          filters: [],
         },
         relationships: {},
       },
     });
   });
 
-  test.skip('it normalizes missing preferred_endpoints to empty array', function (assert) {
+  test('it normalizes missing array fields to empty array', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
@@ -197,6 +192,7 @@ module('Unit | Serializer | host set', function (hooks) {
           scope: { scope_id: 'o_123' },
           host_ids: [],
           preferred_endpoints: [],
+          filters: [],
         },
         relationships: {},
       },
