@@ -13,14 +13,12 @@ module('Unit | Serializer | host set', function (hooks) {
       description: 'Description',
       host_catalog_id: '123',
       version: 1,
-      preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
     });
     assert.deepEqual(record.serialize(), {
       name: 'Host Set 1',
       description: 'Description',
       host_catalog_id: '123',
       version: 1,
-      preferred_endpoints: ['option 1', 'option 2'],
     });
   });
 

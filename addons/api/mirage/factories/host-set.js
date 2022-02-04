@@ -31,7 +31,7 @@ export default factory.extend({
   },
   // AWS specific
   filters() {
-    if (this.type === 'plugin' && this.plugin?.name === 'aws') {
+    if (this.plugin?.name === 'aws') {
       const filtersAmount = datatype.number({ min: 1, max: 5 });
       let result = [];
       for (let i = 0; i < filtersAmount; ++i) {
@@ -42,7 +42,7 @@ export default factory.extend({
   },
   // Azure specific
   filter() {
-    if (this.type === 'plugin' && this.plugin?.name === 'azure') {
+    if (this.plugin?.name === 'azure') {
       return `${database.column}=${database.collation}`;
     }
   },

@@ -1,8 +1,8 @@
 import ApplicationSerializer from './application';
 
 const fieldByType = {
-  aws: ['filters'],
-  azure: ['filter'],
+  aws: ['preferred_endpoints', 'filters'],
+  azure: ['preferred_endpoints', 'filter'],
 };
 export default class HostSetSerializer extends ApplicationSerializer {
   // =properties
@@ -53,6 +53,7 @@ export default class HostSetSerializer extends ApplicationSerializer {
     let serialized = super.serialize(...arguments);
     // Delete unnecessary fields for static type
     delete serialized.attributes;
+    delete serialized.preferred_endpoints;
     return serialized;
   }
 
