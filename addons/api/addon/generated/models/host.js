@@ -45,8 +45,26 @@ export default class GeneratedHostModel extends BaseModel {
   version;
 
   @attr({
+    description: 'Attributes specific to the host type',
+  })
+  attributes;
+
+  @attr('string', {
+    description: 'The address (DNS or IP name) used to reach the host',
+    isNestedAttribute: true,
+  })
+  address;
+
+  @attr({
     description: 'Plugin information for this resource.',
     readOnly: true,
   })
   plugin;
+
+  @attr('string', {
+    description: '',
+    readOnly: true,
+    isNestedAttribute: true,
+  })
+  external_id;
 }
