@@ -91,7 +91,8 @@ host-catalog:
     azure: Azure
     dynamic: Dynamic
   form:
-    provider-details: Provider Details 
+    provider-details: 
+      label: Provider Details
     types:
       static: 
         help: Provide a list of hosts and host sets with static addresses
