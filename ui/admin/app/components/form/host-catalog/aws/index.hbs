@@ -53,7 +53,7 @@
         <form.radioGroup
           @name='types'
           @selectedValue={{@model.type}}
-          @changed={{route-action 'changeType'}}
+          @changed={{@changeType}}
           as |radioGroup|
         >
           <radioGroup.card
@@ -80,7 +80,7 @@
         <form.radioGroup
           @name='aws_plugin'
           @selectedValue={{@model.compositeType}}
-          @changed={{route-action 'changeType'}}
+          @changed={{@changeType}}
           as |radioGroup|
         >
           <radioGroup.card
