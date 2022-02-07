@@ -51,7 +51,7 @@
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
         <form.radioGroup
-          @name='azure_plugin'
+          @name='provider'
           @selectedValue={{@model.type}}
           @changed={{@changeType}}
           as |radioGroup|
@@ -76,7 +76,7 @@
       <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
       <:body>
         <form.radioGroup
-          @name='aws_plugin'
+          @name='provider'
           @selectedValue={{@model.compositeType}}
           @changed={{@changeType}}
           as |radioGroup|
@@ -101,7 +101,7 @@
       <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
       <:body>
         <form.radioGroup
-          @name='azure_plugin'
+          @name='provider'
           @selectedValue={{@model.compositeType}}
           @disabled={{true}}
           as |radioGroup|
