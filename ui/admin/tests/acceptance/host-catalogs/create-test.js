@@ -86,7 +86,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     );
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="description"]', 'random string');
-    await fillIn('[name="static_types"]', 'static');
+    await fillIn('[name="static_type"]', 'static');
     await click('[type="submit"]');
     assert.equal(gethostCatalogCount(), count + 1);
   });

@@ -78,7 +78,7 @@
       <:title>{{t 'resources.host-catalog.form.provider-details'}}</:title>
       <:body>
         <form.radioGroup
-          @name='aws_plugins'
+          @name='aws_plugin'
           @selectedValue={{@model.compositeType}}
           @changed={{route-action 'changeType'}}
           as |radioGroup|
