@@ -56,4 +56,11 @@ export default class GeneratedHostSetModel extends BaseModel {
     readOnly: true,
   })
   plugin;
+
+  // Azure specific
+  @attr('string', {
+    description: '',
+    isNestedAttribute: true,
+  })
+  filter;
 }
