@@ -118,3 +118,13 @@ callback_url:
 filter:
   label: Filter
   help: A boolean expression defining a filter run against the provided information.
+tenant_id: 
+  label: Tenant ID
+subscription_id:
+  label: Subscription ID
+access_key_id:
+  label: Access Key ID
+secret_access_key:
+  label: Secret Access Key
+region: 
+  label: Region

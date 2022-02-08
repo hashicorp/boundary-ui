@@ -78,16 +78,32 @@ host-catalog:
   title: Host Catalog
   title_plural: Host Catalogs
   description: A host catalog is a collection of hosts and host sets.
+  type: Type
   messages:
     welcome:
       title: Welcome to Host Catalogs
   actions:
     delete: Delete Host Catalog
   types:
-    static: Static
-    unknown: Unknown
-    aws: AWS
-    azure: Azure
+    static:
+      label: Static
+      help: Provide a list of hosts and host sets with static addresses
+    unknown:
+      label: Unknown
+    aws:
+      label: AWS
+    azure:
+      label: Azure
+    dynamic: 
+      label: Dynamic
+      help: Automate discovery of target hosts and services on Azure or AWS
+  form:
+    provider:
+      label: Provider Details
+      description: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
+      choose_a_provider: 
+        label: Choose a provider 
+        description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
 host-set:
   title: Host Set
   title_plural: Host Sets
