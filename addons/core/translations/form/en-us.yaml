@@ -120,11 +120,23 @@ filter:
   help: A boolean expression defining a filter run against the provided information.
 tenant_id: 
   label: Tenant ID
+  help: The tenant (directory) ID for your Azure Active Directory application.
+  link-text: Learn more
 subscription_id:
   label: Subscription ID
+  help: The subscription ID for the subscription with read access.
+  link-text: Learn more
 access_key_id:
   label: Access Key ID
+  help: The access key ID found on the Security Credentials page in AWS.
+  link-text: Learn more
 secret_access_key:
   label: Secret Access Key
+  help: The subscription ID for the subscription with read access.
+  link-text: Learn more
 region: 
   label: Region
+provider_client_id: 
+  label: Client ID
+  link-text : Learn more
+  help: The client ID for the client you want Boundary to use.

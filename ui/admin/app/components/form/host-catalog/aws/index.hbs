@@ -132,13 +132,34 @@
   {{/if}}
 
   <form.input
-    @name='Region'
+    @name='region'
     @type='region'
     @value={{@model.region}}
     @label={{t 'form.region.label'}}
     readonly={{false}}
   />
 
+  <form.input
+    @name='access_key_id'
+    @type='access_key_id'
+    @value={{@model.access_key_id}}
+    @label={{t 'form.access_key_id.label'}}
+    @helperText={{t 'form.access_key_id.help'}}
+    @linkText={{t 'form.access_key_id.link-text'}}
+    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    readonly={{false}}
+  />
+
+  <form.input
+    @name='secret_access_key'
+    @type='secret_access_key'
+    @value={{@model.secret_access_key}}
+    @label={{t 'form.secret_access_key.label'}}
+    @helperText={{t 'form.secret_access_key.help'}}
+    @linkText={{t 'form.secret_access_key.link-text'}}
+    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    readonly={{false}}
+  />
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
