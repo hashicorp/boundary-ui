@@ -136,3 +136,7 @@ secret_access_key:
   link-text: Learn more
 region: 
   label: Region
+provider_client_id: 
+  label: Client ID
+  link-text : Learn more
+  help: The client ID for the client you want Boundary to use.

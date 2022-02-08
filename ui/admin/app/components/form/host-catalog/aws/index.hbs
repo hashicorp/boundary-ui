@@ -139,7 +139,7 @@
     readonly={{false}}
   />
 
-    <form.input
+  <form.input
     @name='access_key_id'
     @type='access_key_id'
     @helperText={{t 'form.access_key_id.help'}}
@@ -150,11 +150,12 @@
     readonly={{false}}
   />
 
-    <form.input
+  <form.input
     @name='secret_access_key'
     @type='secret_access_key'
     @value={{@model.secret_access_key}}
     @label={{t 'form.secret_access_key.label'}}
+    @helperText={{t 'form.secret_access_key.help'}}
     @linkText={{t 'form.secret_access_key.link-text'}}
     @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
     readonly={{false}}
