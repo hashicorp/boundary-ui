@@ -132,7 +132,7 @@
   {{/if}}
 
   <form.input
-    @name='Region'
+    @name='region'
     @type='region'
     @value={{@model.region}}
     @label={{t 'form.region.label'}}
@@ -142,10 +142,10 @@
   <form.input
     @name='access_key_id'
     @type='access_key_id'
-    @helperText={{t 'form.access_key_id.help'}}
-    @linkText={{t 'form.access_key_id.link-text'}}
     @value={{@model.access_key_id}}
     @label={{t 'form.access_key_id.label'}}
+    @helperText={{t 'form.access_key_id.help'}}
+    @linkText={{t 'form.access_key_id.link-text'}}
     @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
     readonly={{false}}
   />
