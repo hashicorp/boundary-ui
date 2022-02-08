@@ -48,4 +48,64 @@ module('Unit | Serializer | host', function (hooks) {
       },
     });
   });
+
+  test('it normalizes type static record', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host');
+    const host = store.createRecord('host').constructor;
+    const payload = {
+      id: '1',
+      name: 'host test',
+      type: 'static',
+    };
+    const normalized = serializer.normalizeSingleResponse(store, host, payload);
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'host',
+        attributes: {
+          name: 'host test',
+          type: 'static',
+          authorized_actions: [],
+          dns_names: [],
+          ip_addresses: [],
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes type plugin (aws) record', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host');
+    const host = store.createRecord('host').constructor;
+    const payload = {
+      id: '1',
+      name: 'host test',
+      type: 'plugin',
+      plugin: {
+        name: 'aws',
+      },
+    };
+    const normalized = serializer.normalizeSingleResponse(store, host, payload);
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'host',
+        attributes: {
+          name: 'host test',
+          type: 'plugin',
+          authorized_actions: [],
+          dns_names: [],
+          ip_addresses: [],
+          plugin: { name: 'aws' },
+        },
+        relationships: {},
+      },
+    });
+  });
 });

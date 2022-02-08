@@ -1,13 +1,28 @@
 import GeneratedHostModel from '../generated/models/host';
+import { attr } from '@ember-data/model';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
 
 export default class HostModel extends GeneratedHostModel {
+  // =attributes (nested under attributes)
   @fragmentArray('fragment-string', {
     readOnly: true,
     emptyArrayIfMissing: true,
     isNestedAttribute: true,
   })
   ip_addresses;
+
+  @attr('string', {
+    description: 'The address (DNS or IP name) used to reach the host',
+    isNestedAttribute: true,
+  })
+  address;
+
+  @attr('string', {
+    description: '',
+    readOnly: true,
+    isNestedAttribute: true,
+  })
+  external_id;
 
   // Aws specific
   @fragmentArray('fragment-string', {
