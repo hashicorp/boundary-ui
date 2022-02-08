@@ -58,6 +58,9 @@ module('Unit | Serializer | host', function (hooks) {
       id: '1',
       name: 'host test',
       type: 'static',
+      ip_addresses: ['10.0.0.1', '10.0.0.2', '10.0.0.3'],
+      authorized_actions: ['no-op', 'read'],
+      dns_names: ['test.example.internal', 'test.example.external'],
     };
     const normalized = serializer.normalizeSingleResponse(store, host, payload);
     assert.deepEqual(normalized, {
@@ -68,9 +71,16 @@ module('Unit | Serializer | host', function (hooks) {
         attributes: {
           name: 'host test',
           type: 'static',
-          authorized_actions: [],
-          dns_names: [],
-          ip_addresses: [],
+          authorized_actions: ['no-op', 'read'],
+          dns_names: [
+            { value: 'test.example.internal' },
+            { value: 'test.example.external' },
+          ],
+          ip_addresses: [
+            { value: '10.0.0.1' },
+            { value: '10.0.0.2' },
+            { value: '10.0.0.3' },
+          ],
         },
         relationships: {},
       },
@@ -89,6 +99,9 @@ module('Unit | Serializer | host', function (hooks) {
       plugin: {
         name: 'aws',
       },
+      ip_addresses: ['10.0.0.1', '10.0.0.2', '10.0.0.3'],
+      authorized_actions: ['no-op', 'read'],
+      dns_names: ['test.example.internal', 'test.example.external'],
     };
     const normalized = serializer.normalizeSingleResponse(store, host, payload);
     assert.deepEqual(normalized, {
@@ -99,9 +112,16 @@ module('Unit | Serializer | host', function (hooks) {
         attributes: {
           name: 'host test',
           type: 'plugin',
-          authorized_actions: [],
-          dns_names: [],
-          ip_addresses: [],
+          authorized_actions: ['no-op', 'read'],
+          dns_names: [
+            { value: 'test.example.internal' },
+            { value: 'test.example.external' },
+          ],
+          ip_addresses: [
+            { value: '10.0.0.1' },
+            { value: '10.0.0.2' },
+            { value: '10.0.0.3' },
+          ],
           plugin: { name: 'aws' },
         },
         relationships: {},
