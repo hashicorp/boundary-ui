@@ -3,7 +3,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Nav|Link" component="Nav/Tabs" />
+<Meta title="Rose|Nav|Link" component="Nav/Link" />
 
 # Generic Navigation Link
 
@@ -14,7 +14,7 @@ Proxies the built-in `LinkTo` component, applying a class `rose-nav-link`.
 ```
 
 <Preview>
-  <Story name="Basic Tabs">{{
+  <Story name="Basic Nav Link">{{
     template: hbs`
       <Rose::Nav::Link @route='index'>Text</nav.link>
     `,
