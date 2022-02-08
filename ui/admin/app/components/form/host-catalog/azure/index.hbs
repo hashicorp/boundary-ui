@@ -126,6 +126,28 @@
     @type='tenant_id'
     @value={{@model.tenant_id}}
     @label={{t 'form.tenant_id.label'}}
+    @linkText={{t 'form.tenant_id.link-text'}}
+    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    readonly={{false}}
+  />
+
+  <form.input
+    @name='subscription_id'
+    @type='subscription_id'
+    @value={{@model.subscription_id}}
+    @label={{t 'form.subscription_id.label'}}
+    @linkText={{t 'form.subscription_id.link-text'}}
+    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    readonly={{false}}
+  />
+
+  <form.input
+    @name='client_id'
+    @type='client_id'
+    @value={{@model.client_id}}
+    @label={{t 'form.client_id.label'}}
+    {{!-- @linkText={{t 'form.subscription_id.link-text'}} --}}
+    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
     readonly={{false}}
   />
 
