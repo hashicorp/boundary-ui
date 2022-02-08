@@ -51,7 +51,7 @@
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
         <form.radioGroup
-          @name='static_type'
+          @name='types'
           @selectedValue={{@model.type}}
           @changed={{@changeType}}
           as |radioGroup|
@@ -75,9 +75,17 @@
     {{#if @model.isPlugin}}
       <Rose::Separator />
       <form.fieldset>
+        <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
+      </form.fieldset>
+
+      <form.fieldset>
         <:title>{{t
-            'resources.host-catalog.form.provider_details.label'
+            'resources.host-catalog.form.provider.choose_a_provider.label'
           }}</:title>
+        <:description>{{t
+            'resources.host-catalog.form.provider.choose_a_provider.description'
+          }}</:description>
+
         <:body>
           <form.radioGroup
             @name='provider'
