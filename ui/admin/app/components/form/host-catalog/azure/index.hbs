@@ -47,11 +47,15 @@
   </form.textarea>
 
   {{#if @model.isNew}}
+    {{!-- <form.label>{{t
+          'resources.host-catalog.form.provider.label'
+        }}</form.label> --}}
+
     <form.fieldset>
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
         <form.radioGroup
-          @name='provider'
+          @name='types'
           @selectedValue={{@model.type}}
           @changed={{@changeType}}
           as |radioGroup|
@@ -72,10 +76,18 @@
       </:body>
     </form.fieldset>
     <Rose::Separator />
+
+    <form.fieldset>
+      <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
+    </form.fieldset>
     <form.fieldset>
       <:title>{{t
-          'resources.host-catalog.form.provider_details.label'
+          'resources.host-catalog.form.provider.choose_a_provider.label'
         }}</:title>
+      <:description>{{t
+          'resources.host-catalog.form.provider.choose_a_provider.description'
+        }}</:description>
+
       <:body>
         <form.radioGroup
           @name='provider'
@@ -99,10 +111,13 @@
       </:body>
     </form.fieldset>
   {{else}}
+
     <form.fieldset>
-      <:title>{{t
-          'resources.host-catalog.form.provider_details.label'
-        }}</:title>
+      <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
+      <:description>{{t
+          'resources.host-catalog.form.provider.description'
+        }}</:description>
+
       <:body>
         <form.radioGroup
           @name='provider'

@@ -81,7 +81,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await visit(urls.newStaticHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="description"]', 'random string');
-    await fillIn('[name="static_type"]', 'static');
+    await fillIn('[name="types"]', 'static');
     await click('[type="submit"]');
     assert.equal(gethostCatalogCount(), count + 1);
   });
