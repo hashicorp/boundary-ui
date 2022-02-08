@@ -1,4 +1,3 @@
-{{@model.type}} {{@model.compositeType}}
 <Rose::Form
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
@@ -47,35 +46,35 @@
     {{/if}}
   </form.textarea>
 
-    <form.input
+  <form.input
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
     readonly={{true}}
     @disabled={{true}}
   />
 
-     <form.fieldset>
-      <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
-      <:description>{{t
-          'resources.host-catalog.form.provider.description'
-        }}</:description>
+  <form.fieldset>
+    <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
+    <:description>{{t
+        'resources.host-catalog.form.provider.description'
+      }}</:description>
 
-      <:body>
-        <form.radioGroup
-          @name='provider'
-          @selectedValue={{@model.compositeType}}
-          @disabled={{true}}
-          as |radioGroup|
-        >
-          <radioGroup.card
-            @label={{@model.compositeType}}
-            @value={{@model.compositeType}}
-            @layout='tile'
-            @icon='flight-icons/svg/aws-color-16'
-          />
-        </form.radioGroup>
-      </:body>
-    </form.fieldset>
+    <:body>
+      <form.radioGroup
+        @name='provider'
+        @selectedValue={{@model.compositeType}}
+        @disabled={{true}}
+        as |radioGroup|
+      >
+        <radioGroup.card
+          @label={{@model.compositeType}}
+          @value={{@model.compositeType}}
+          @layout='tile'
+          @icon='flight-icons/svg/aws-color-16'
+        />
+      </form.radioGroup>
+    </:body>
+  </form.fieldset>
 
   <form.textarea
     @name='filter'
@@ -84,6 +83,7 @@
     @label={{t 'form.provider_filter.label'}}
     @helperText={{t 'form.provider_filter.help'}}
     @linkText={{t 'form.provider_filter.link-text'}}
+    @link='https://docs.aws.amazon.com/ARG/latest/APIReference/API_ListGroupResources.html'
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
     readonly={{false}}
