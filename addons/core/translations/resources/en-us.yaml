@@ -85,19 +85,21 @@ host-catalog:
   actions:
     delete: Delete Host Catalog
   types:
-    static: Static
-    unknown: Unknown
-    aws: AWS
-    azure: Azure
-    dynamic: Dynamic
+    static:
+      label: Static
+      help: Provide a list of hosts and host sets with static addresses
+    unknown:
+      label: Unknown
+    aws:
+      label: AWS
+    azure:
+      label: Azure
+    dynamic: 
+      label: Dynamic
+      help: Automate discovery of target hosts and services on Azure or AWS
   form:
-    provider-details: 
+    provider_details: 
       label: Provider Details
-    types:
-      static: 
-        help: Provide a list of hosts and host sets with static addresses
-      dynamic: 
-        help: Automate discovery of target hosts and services on Azure or AWS
 host-set:
   title: Host Set
   title_plural: Host Sets

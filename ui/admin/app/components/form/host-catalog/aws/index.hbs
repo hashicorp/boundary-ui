@@ -57,15 +57,15 @@
           as |radioGroup|
         >
           <radioGroup.card
-            @label={{t 'resources.host-catalog.types.static'}}
+            @label={{t 'resources.host-catalog.types.static.label'}}
             @value='static'
-            @helperText={{t 'resources.host-catalog.form.types.static.help'}}
+            @helperText={{t 'resources.host-catalog.types.static.help'}}
             @layout='wide'
           />
           <radioGroup.card
-            @label={{t 'resources.host-catalog.types.dynamic'}}
+            @label={{t 'resources.host-catalog.types.dynamic.label'}}
             @value='plugin'
-            @helperText={{t 'resources.host-catalog.form.types.dynamic.help'}}
+            @helperText={{t 'resources.host-catalog.types.dynamic.help'}}
             @layout='wide'
           />
         </form.radioGroup>
@@ -76,7 +76,7 @@
 
     <form.fieldset>
       <:title>{{t
-          'resources.host-catalog.form.provider-details.label'
+          'resources.host-catalog.form.provider_details.label'
         }}</:title>
       <:body>
         <form.radioGroup
@@ -86,13 +86,13 @@
           as |radioGroup|
         >
           <radioGroup.card
-            @label={{t 'resources.host-catalog.types.aws'}}
+            @label={{t 'resources.host-catalog.types.aws.label'}}
             @value='aws'
             @layout='tile'
             @icon='flight-icons/svg/aws-color-16'
           />
           <radioGroup.card
-            @label={{t 'resources.host-catalog.types.azure'}}
+            @label={{t 'resources.host-catalog.types.azure.label'}}
             @value='azure'
             @layout='tile'
             @icon='flight-icons/svg/azure-color-16'
@@ -103,7 +103,7 @@
   {{else}}
     <form.fieldset>
       <:title>{{t
-          'resources.host-catalog.form.provider-details.label'
+          'resources.host-catalog.form.provider_details.label'
         }}</:title>
       <:body>
         <form.radioGroup
@@ -113,7 +113,7 @@
           as |radioGroup|
         >
           <radioGroup.card
-            @label={{t 'resources.host-catalog.types.aws'}}
+            @label={{t 'resources.host-catalog.types.aws.label'}}
             @value='aws'
             @layout='tile'
             @icon='flight-icons/svg/aws-color-16'
