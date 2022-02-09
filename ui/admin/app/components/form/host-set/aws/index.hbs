@@ -76,26 +76,11 @@
     </:body>
   </form.fieldset>
 
-  <form.textarea
-    @name='filter'
-    @type='filter'
-    @value={{@model.filters}}
-    @label={{t 'form.provider_filter.label'}}
-    @helperText={{t 'form.provider_filter.help'}}
-    @linkText={{t 'form.provider_filter.link-text'}}
-    @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
-    readonly={{false}}
-    as |field|
-  >
-    {{#if @model.errors.filters}}
-      <field.errors as |errors|>
-        {{#each @model.errors.filters as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.textarea>
+  {{! placeholder for filter, update me when the model is ready }}
+  <Rose::Form::Fieldset>
+    <:title>{{t 'form.provider_filter.label'}}</:title>
+    <:description>{{t 'form.provider_filter.help'}}</:description>
+  </Rose::Form::Fieldset>
 
   {{#if (can 'save model' @model)}}
     <form.actions
