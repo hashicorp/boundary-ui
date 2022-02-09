@@ -53,24 +53,52 @@
     {{/if}}
   </form.textarea>
 
-  <form.input
-    @name='address'
-    @type='text'
-    @value={{@model.attributes.address}}
-    @label={{t 'form.address.label'}}
-    @error={{@model.errors.name}}
-    @helperText={{t 'form.address.help'}}
-    readonly={{false}}
-    as |field|
-  >
-    {{#if @model.errors.name}}
-      <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
+  {{#if @model.isPlugin}}
+    <form.fieldset>
+      <:title>{{t 'resources.host.form.provider.label'}}</:title>
+      <:body>
+        <form.radioGroup
+          @name='provider'
+          @selectedValue={{@model.compositeType}}
+          @disabled={{true}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label={{@model.compositeType}}
+            @value={{@model.compositeType}}
+            @layout='tile'
+            @icon={{concat
+              'flight-icons/svg/'
+              @model.compositeType
+              '-color-16'
+            }}
+          />
+        </form.radioGroup>
+      </:body>
+    </form.fieldset>
+
+  {{else}}
+
+    <form.input
+      @name='address'
+      @type='text'
+      @value={{@model.attributes.address}}
+      @label={{t 'form.address.label'}}
+      @error={{@model.errors.name}}
+      @helperText={{t 'form.address.help'}}
+      readonly={{false}}
+      as |field|
+    >
+      {{#if @model.errors.name}}
+        <field.errors as |errors|>
+          {{#each @model.errors.name as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </field.errors>
+      {{/if}}
+    </form.input>
+
+  {{/if}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}

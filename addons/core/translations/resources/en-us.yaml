@@ -155,6 +155,9 @@ host:
     unknown: Unknown
     aws: AWS
     azure: Azure
+  form:
+    provider:
+      label: Provider Details
 session:
   title: Session
   title_plural: Sessions
