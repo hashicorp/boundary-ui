@@ -18,20 +18,23 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   // =methods
 
   /**
-   * Rollback/destroy any new, unsaved instances from this route before
-   * creating another.
-   */
-  beforeModel() {
-    if (this.currentModel?.isNew) this.currentModel.rollbackAttributes();
-  }
-
-  /**
    * Creates a new unsaved host catalog belonging to the current scope.
+   * Also rollback/destroy any new, unsaved instances from this route before
+   * creating another, but reuse name/description if available.
    * @return {HostCatalogModel}
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope');
-    return this.store.createRecord('host-catalog', { scopeModel });
+    let name, description;
+    if (this.currentModel?.isNew) {
+      ({ name, description } = this.currentModel);
+      this.currentModel.rollbackAttributes();
+    }
+    return this.store.createRecord('host-catalog', {
+      scopeModel,
+      name,
+      description,
+    });
   }
 
   afterModel(model, transition) {
