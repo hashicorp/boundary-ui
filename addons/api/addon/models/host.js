@@ -1,12 +1,35 @@
 import GeneratedHostModel from '../generated/models/host';
-import { fragment } from 'ember-data-model-fragments/attributes';
+import { attr } from '@ember-data/model';
 
 export default class HostModel extends GeneratedHostModel {
-  /**
-   * Attributes of this resource, if any, represented as a JSON fragment.
-   * @type {FragmentHostAttributesModel}
-   */
-  @fragment('fragment-host-attributes', { defaultValue: {} }) attributes;
+  // =attributes
+
+  // Static specific fields
+  @attr('string', {
+    description: 'The address (DNS or IP name) used to reach the host',
+    isNestedAttribute: true,
+  })
+  address;
+
+  // Plugin specific fields
+  @attr({
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  ip_addresses;
+
+  @attr('string', {
+    description: '',
+    readOnly: true,
+  })
+  external_id;
+
+  // Aws specific
+  @attr({
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  dns_names;
 
   /**
    * True if the host is static.
