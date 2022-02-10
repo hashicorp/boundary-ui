@@ -151,10 +151,15 @@ host:
     create: New Host
     delete: Delete Host
   types:
-    static: Static
-    unknown: Unknown
-    aws: AWS
-    azure: Azure
+    static:
+      label: Static
+      help: Provide a list of hosts and host sets with static addresses
+    unknown:
+      label: Unknown
+    aws:
+      label: AWS
+    azure:
+      label: Azure
   form:
     provider:
       label: Provider Details

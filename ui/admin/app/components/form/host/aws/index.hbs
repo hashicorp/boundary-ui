@@ -1,0 +1,83 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+
+  <form.input
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    readonly={{true}}
+    @disabled={{true}}
+  />
+
+  <form.input
+    @name='name'
+    @type='name'
+    @value={{@model.name}}
+    @label={{t 'form.name.label'}}
+    @error={{@model.errors.name}}
+    @helperText={{t 'form.name.help'}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name='description'
+    @type='description'
+    @value={{@model.description}}
+    @label={{t 'form.description.label'}}
+    @error={{@model.errors.description}}
+    @helperText={{t 'form.description.help'}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.fieldset>
+    <:title>{{t 'resources.host.form.provider.label'}}</:title>
+    <:body>
+      <form.radioGroup
+        @name='provider'
+        @selectedValue={{@model.compositeType}}
+        @disabled={{true}}
+        as |radioGroup|
+      >
+        <radioGroup.card
+          @label={{t 'resources.host.types.aws.label'}}
+          @value={{@model.compositeType}}
+          @layout='tile'
+          @icon={{concat 'flight-icons/svg/' @model.compositeType '-color-16'}}
+        />
+      </form.radioGroup>
+    </:body>
+  </form.fieldset>
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @disabled={{if @model.cannotSave @model.cannotSave}}
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+</Rose::Form>
