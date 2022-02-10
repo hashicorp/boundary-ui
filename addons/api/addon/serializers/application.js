@@ -266,7 +266,7 @@ export default class ApplicationSerializer extends RESTSerializer {
       // FIXME: This could be improved
       if (isNestedSecret) {
         hash[name] = null;
-        if (attributeValue) {
+        if (typeof attributeValue != 'undefined') {
           hash[name] = attributeValue;
         }
       }
