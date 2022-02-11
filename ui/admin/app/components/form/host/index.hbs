@@ -6,7 +6,9 @@
     cancel=@cancel
   }}
 {{else}}
-{{{log @model}}} modellllll
+  {{! create-and-add-host cancel route doesn't 
+have a model and this else part is required to prevent 
+erroring out here. This has been noted in the tech debt doc to further investigate }}
   {{component
     (concat 'form/host/' 'static')
     model=@model
