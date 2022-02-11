@@ -1,18 +1,26 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends Route {
-  // =methods
+  // =services
+  @service router;
 
+  // =methods
   /**
    * Creates a new unsaved host set in current host catalog scope.
    * @return {HostSetModel}
    */
   model() {
-    const { id: host_catalog_id } = this.modelFor(
+    const { id: host_catalog_id, compositeType } = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog'
     );
+    if (this.currentModel?.isNew) {
+      this.currentModel.rollbackAttributes();
+    }
+    console.log('typedwed', compositeType);
     return this.store.createRecord('host-set', {
-      type: 'static',
+      compositeType,
       host_catalog_id,
     });
   }
@@ -46,5 +54,13 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
       outlet: 'actions',
       model: model,
     });
+  }
+  /**
+   * Update type of host set
+   * @param {string} type
+   */
+  @action
+  async changeType(type) {
+    await this.router.replaceWith({ queryParams: { type } });
   }
 }

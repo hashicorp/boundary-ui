@@ -27,7 +27,11 @@
           <row.cell>
             {{#if hostSet.isStatic}}
               <Rose::Badge>
-                {{t (concat 'resources.host-set.types.' hostSet.compositeType)}}
+                {{t
+                  (concat
+                    'resources.host-set.types.' hostSet.compositeType '.label'
+                  )
+                }}
               </Rose::Badge>
             {{else}}
               <Rose::Badge
@@ -37,7 +41,11 @@
                   '-color-16'
                 }}
               >
-                {{t (concat 'resources.host-set.types.' hostSet.compositeType)}}
+                {{t
+                  (concat
+                    'resources.host-set.types.' hostSet.compositeType '.label'
+                  )
+                }}
               </Rose::Badge>
             {{/if}}
           </row.cell>

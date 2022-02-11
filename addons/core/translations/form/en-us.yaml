@@ -139,6 +139,7 @@ region:
 provider:
   label: Provider Details
   description: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
+  help: 
   client: 
     label: Client ID
     help: The client ID for the client you want Boundary to use.
@@ -146,3 +147,7 @@ provider:
   choose_a_provider: 
     label: Choose a provider 
     description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
+  filter: 
+    label: Filter
+    help: Create a filter to select resources using values such as tag name or tag value. Filter format is specific to each provider.
+    link-text: Learn more about using filters for Azure resources.
