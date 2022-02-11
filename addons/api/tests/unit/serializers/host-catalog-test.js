@@ -4,14 +4,6 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Serializer | host catalog', function (hooks) {
   setupTest(hooks);
 
-  // Replace this with your real tests.
-  test('it exists', function (assert) {
-    const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('host-catalog');
-
-    assert.ok(serializer);
-  });
-
   test('it serializes records', function (assert) {
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {});
@@ -170,5 +162,160 @@ module('Unit | Serializer | host catalog', function (hooks) {
       },
     };
     assert.deepEqual(record.serialize(), expectedResult);
+  });
+
+  test('it normalizes an static host catalog as expected', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-catalog');
+    const hostCatalog = store.createRecord('host-catalog').constructor;
+    const payload = {
+      id: '1',
+      name: 'Host catalog test',
+      description: 'Test description',
+      authorized_actions: ['no-op'],
+      type: 'static',
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostCatalog,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      data: {
+        id: '1',
+        type: 'host-catalog',
+        attributes: {
+          name: 'Host catalog test',
+          description: 'Test description',
+          authorized_actions: ['no-op'],
+          type: 'static',
+          access_key_id: null,
+          secret_access_key: null,
+          secret_id: null,
+          secret_value: null,
+        },
+        relationships: {},
+      },
+      included: [],
+    });
+  });
+
+  test('it normalizes an aws plugin type host catalog as expected', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-catalog');
+    const hostCatalog = store.createRecord('host-catalog').constructor;
+    const payload = {
+      id: '1',
+      name: 'Host catalog test',
+      description: 'Test description',
+      authorized_actions: ['no-op'],
+      type: 'plugin',
+      plugin: {
+        id: 'plugin-id-5',
+        name: 'aws',
+        description: 'aws host catalog',
+      },
+      attributes: {
+        disable_credential_rotation: false,
+        region: 'Illinois',
+      },
+      secrets: {
+        access_key_id: '0xF3B0a6f8',
+        secret_access_key: 'zq{2:IVc8@W^',
+      },
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostCatalog,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      data: {
+        id: '1',
+        type: 'host-catalog',
+        attributes: {
+          name: 'Host catalog test',
+          type: 'plugin',
+          description: 'Test description',
+          authorized_actions: ['no-op'],
+          plugin: {
+            id: 'plugin-id-5',
+            name: 'aws',
+            description: 'aws host catalog',
+          },
+          disable_credential_rotation: false,
+          region: 'Illinois',
+          access_key_id: '0xF3B0a6f8',
+          secret_access_key: 'zq{2:IVc8@W^',
+          secret_id: null,
+          secret_value: null,
+        },
+        relationships: {},
+      },
+      included: [],
+    });
+  });
+
+  test('it normalizes an azure plugin type host catalog as expected', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-catalog');
+    const hostCatalog = store.createRecord('host-catalog').constructor;
+    const payload = {
+      id: '1',
+      name: 'Host catalog test',
+      description: 'Test description',
+      authorized_actions: ['no-op', 'read', 'update', 'delete'],
+      type: 'plugin',
+      plugin: {
+        id: 'plugin-id-6',
+        name: 'azure',
+        description: 'azure host catalog',
+      },
+      attributes: {
+        disable_credential_rotation: true,
+        tenant_id: 'tenant',
+        client_id: 'client',
+        subscription_id: 'subscription',
+      },
+      secrets: {
+        secret_id: '0xF3B0a6f8',
+        secret_value: 'zq{2:IVc8@W^',
+      },
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostCatalog,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      data: {
+        id: '1',
+        type: 'host-catalog',
+        attributes: {
+          name: 'Host catalog test',
+          type: 'plugin',
+          description: 'Test description',
+          authorized_actions: ['no-op', 'read', 'update', 'delete'],
+          plugin: {
+            id: 'plugin-id-6',
+            name: 'azure',
+            description: 'azure host catalog',
+          },
+          disable_credential_rotation: true,
+          secret_id: '0xF3B0a6f8',
+          secret_value: 'zq{2:IVc8@W^',
+          client_id: 'client',
+          tenant_id: 'tenant',
+          subscription_id: 'subscription',
+          access_key_id: null,
+          secret_access_key: null,
+        },
+        relationships: {},
+      },
+      included: [],
+    });
   });
 });
