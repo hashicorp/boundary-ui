@@ -47,10 +47,6 @@
   </form.textarea>
 
   {{#if @model.isNew}}
-    {{!-- <form.label>{{t
-          'resources.host-catalog.form.provider.label'
-        }}</form.label> --}}
-
     <form.fieldset>
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
@@ -78,14 +74,14 @@
     <Rose::Separator />
 
     <form.fieldset>
-      <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
+      <:title>{{t 'form.provider.label'}}</:title>
     </form.fieldset>
     <form.fieldset>
       <:title>{{t
-          'resources.host-catalog.form.provider.choose_a_provider.label'
+          'form.provider.choose_a_provider.label'
         }}</:title>
       <:description>{{t
-          'resources.host-catalog.form.provider.choose_a_provider.description'
+          'form.provider.choose_a_provider.description'
         }}</:description>
 
       <:body>
@@ -113,9 +109,9 @@
   {{else}}
 
     <form.fieldset>
-      <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
+      <:title>{{t 'form.provider.label'}}</:title>
       <:description>{{t
-          'resources.host-catalog.form.provider.description'
+          'form.provider.description'
         }}</:description>
 
       <:body>
@@ -162,9 +158,9 @@
     @name='client_id'
     @type='client_id'
     @value={{@model.client_id}}
-    @label={{t 'form.provider_client_id.label'}}
-    @helperText={{t 'form.provider_client_id.help'}}
-    @linkText={{t 'form.provider_client_id.link-text'}}
+    @label={{t 'form.provider.client.label'}}
+    @helperText={{t 'form.provider.client.help'}}
+    @linkText={{t 'form.provider.client.link-text'}}
     @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
     readonly={{false}}
   />

@@ -136,7 +136,13 @@ secret_access_key:
   link-text: Learn more
 region: 
   label: Region
-provider_client_id: 
-  label: Client ID
-  link-text : Learn more
-  help: The client ID for the client you want Boundary to use.
+provider:
+  label: Provider Details
+  description: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
+  client: 
+    label: Client ID
+    help: The client ID for the client you want Boundary to use.
+    link-text : Learn more
+  choose_a_provider: 
+    label: Choose a provider 
+    description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.

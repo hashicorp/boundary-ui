@@ -228,7 +228,10 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   test('create and cancel host add to host set', async function (assert) {
     assert.expect(1);
     await visit(urls.createAndAddHost);
+    console.log(urls.createAndAddHost, 'CREATE AND HST')
     await click('form [type="button"]');
+    console.log( urls.hostSetHosts, '222CREATE AND HST')
+
     assert.equal(currentURL(), urls.hostSetHosts);
   });
 
