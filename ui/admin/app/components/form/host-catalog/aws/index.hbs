@@ -74,15 +74,13 @@
 
     <Rose::Separator />
     <form.fieldset>
-      <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
+      <:title>{{t 'form.provider.label'}}</:title>
     </form.fieldset>
 
     <form.fieldset>
-      <:title>{{t
-          'resources.host-catalog.form.provider.choose_a_provider.label'
-        }}</:title>
+      <:title>{{t 'form.provider.choose_a_provider.label'}}</:title>
       <:description>{{t
-          'resources.host-catalog.form.provider.choose_a_provider.description'
+          'form.provider.choose_a_provider.description'
         }}</:description>
 
       <:body>
@@ -109,10 +107,8 @@
     </form.fieldset>
   {{else}}
     <form.fieldset>
-      <:title>{{t 'resources.host-catalog.form.provider.label'}}</:title>
-      <:description>{{t
-          'resources.host-catalog.form.provider.description'
-        }}</:description>
+      <:title>{{t 'form.provider.label'}}</:title>
+      <:description>{{t 'form.provider.description'}}</:description>
       <:body>
         <form.radioGroup
           @name='provider'
