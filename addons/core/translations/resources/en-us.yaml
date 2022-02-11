@@ -129,10 +129,15 @@ host-set:
         title: No Hosts Available
         description: No hosts available for selection.
   types:
-    static: Static
-    unknown: Unknown
-    aws: AWS
-    azure: Azure
+    static:
+      label: Static
+      help: Provide a list of hosts and host sets with static addresses
+    unknown:
+      label: Unknown
+    aws:
+      label: AWS
+    azure:
+      label: Azure
 host:
   title: Host
   title_plural: Hosts
