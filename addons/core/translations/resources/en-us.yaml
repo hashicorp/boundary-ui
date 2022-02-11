@@ -97,13 +97,6 @@ host-catalog:
     dynamic: 
       label: Dynamic
       help: Automate discovery of target hosts and services on Azure or AWS
-  form:
-    provider:
-      label: Provider Details
-      description: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
-      choose_a_provider: 
-        label: Choose a provider 
-        description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -165,9 +158,6 @@ host:
       label: AWS
     azure:
       label: Azure
-  form:
-    provider:
-      label: Provider Details
 session:
   title: Session
   title_plural: Sessions
