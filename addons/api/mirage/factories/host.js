@@ -51,10 +51,7 @@ export default factory.extend({
       ip_addresses: returnIpAddressesArray(),
       external_id: datatype.uuid(),
       // Only aws plugins have dns_names
-      dns_names:
-        this.type != 'static' && this.plugin?.name === 'aws'
-          ? returnDnsNames()
-          : undefined,
+      dns_names: this.plugin?.name === 'aws' ? returnDnsNames() : undefined,
     };
   },
 });
