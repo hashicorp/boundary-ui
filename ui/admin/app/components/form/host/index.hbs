@@ -1,6 +1,15 @@
-{{component
-  (concat 'form/host/' @model.compositeType)
-  model=@model
-  submit=@submit
-  cancel=@cancel
-}}
+{{#if @model.compositeType}}
+  {{component
+    (concat 'form/host/' @model.compositeType)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+  }}
+{{else}}
+  {{component
+    (concat 'form/host/' 'static')
+    model=@model
+    submit=@submit
+    cancel=@cancel
+  }}
+{{/if}}
