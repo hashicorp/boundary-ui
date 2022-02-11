@@ -43,7 +43,7 @@ export default factory.extend({
   // Azure specific
   filter() {
     if (this.plugin?.name === 'azure') {
-      return `${database.column}=${database.collation}`;
+      return `${database.column()}=${database.collation()}`;
     }
   },
 });
