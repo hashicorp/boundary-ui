@@ -6,7 +6,7 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  
+
   <form.input
     @name='name'
     @type='name'
@@ -94,9 +94,9 @@
           </header.row>
         </table.header>
         <table.body as |body|>
-           {{#each @model.filters as |filter i|}}
-            <body.row as |row|>  
-            <row.cell>
+          {{#each @model.filters as |filter i|}}
+            <body.row as |row|>
+              <row.cell>
                 <form.input
                   @type='text'
                   @value={{filter.value}}
@@ -104,10 +104,9 @@
                   @contextual={{true}}
                   as |field|
                 >
-                  <field.label>FIELDD</field.label>
                   <field.field />
                 </form.input>
-              </row.cell> 
+              </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
                   @style='warning'
@@ -118,23 +117,19 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'filters' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'filters' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
-              </row.cell>  
-             </body.row>
-          {{/each}}  
+              </row.cell>
+            </body.row>
+          {{/each}}
 
           <body.row as |row|>
             <row.cell>
               <form.input
                 @type='text'
-                @name='ddddd'
-                @value={{@model.aa}}
+                @value={{@model.filter}}
                 @label={{t 'resources.auth-method.titles.new-from-claim'}}
               />
             </row.cell>
@@ -142,18 +137,12 @@
               <Rose::Button
                 @style='secondary'
                 title={{t 'actions.add'}}
-               
                 @disabled={{if
                   @model.isNew
                   false
                   (if form.isEditable false true)
                 }}
-                {{on
-                  'click'
-                  (fn
-                    @addStringItem 'filters' @model.aa
-                  )
-                }}
+                {{on 'click' (fn @addStringItem 'filters' @model.filter)}}
               >
                 {{t 'actions.add'}}
               </Rose::Button>

@@ -58,23 +58,23 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
    * @param {string} property
    * @param {string} value
    */
-   @action
-   async addStringItem(hostSet, property, value) {
-     const array = hostSet.get(property);
-     array.addObject({ value });
-   }
- 
-     /**
-    * Removes an item from array `property` at `index` on the
-    * passed `authMethod`.  This is used to manage entries in fragment array
-    * fields such as `signing_algorithms`.
-    * @param {hostSetModel} authMethod
-    * @param {string} property
-    * @param {number} index
-    */
-      @action
-      async removeItemByIndex(hostSet, property, index) {
-        const array = hostSet.get(property);
-        array.removeAt(index);
-      }
+  @action
+  async addStringItem(hostSet, property, value) {
+    const array = hostSet.get(property);
+    array.addObject({ value });
+  }
+
+  /**
+   * Removes an item from array `property` at `index` on the
+   * passed `authMethod`.  This is used to manage entries in fragment array
+   * fields such as `signing_algorithms`.
+   * @param {hostSetModel} authMethod
+   * @param {string} property
+   * @param {number} index
+   */
+  @action
+  async removeItemByIndex(hostSet, property, index) {
+    const array = hostSet.get(property);
+    array.removeAt(index);
+  }
 }
