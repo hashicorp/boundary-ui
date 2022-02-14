@@ -6,7 +6,7 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-
+  
   <form.input
     @name='name'
     @type='name'
@@ -80,6 +80,90 @@
   <Rose::Form::Fieldset>
     <:title>{{t 'form.provider.filter.label'}}</:title>
     <:description>{{t 'form.provider.filter.help'}}</:description>
+    <:body>
+      {{#if @model.errors.filters}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.filters as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
+      <Rose::Table @style='condensed' as |table|>
+        <table.header as |header|>
+          <header.row @hidden={{true}} as |row|>
+            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
+            <row.headerCell />
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+           {{#each @model.filters as |filter i|}}
+            <body.row as |row|>  
+            <row.cell>
+                <form.input
+                  @type='text'
+                  @value={{filter.value}}
+                  @error={{@model.errors.filters}}
+                  @contextual={{true}}
+                  as |field|
+                >
+                  <field.label>FIELDD</field.label>
+                  <field.field />
+                </form.input>
+              </row.cell> 
+              <row.cell @shrink={{true}}>
+                <Rose::Button
+                  @style='warning'
+                  @iconOnly='flight-icons/svg/trash-16'
+                  title={{t 'actions.remove'}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
+                  {{on
+                    'click'
+                    (fn @removeItemByIndex 'filters' i)
+                  }}
+                >
+                  {{t 'actions.remove'}}
+                </Rose::Button>
+              </row.cell>  
+             </body.row>
+          {{/each}}  
+
+          <body.row as |row|>
+            <row.cell>
+              <form.input
+                @type='text'
+                @name='ddddd'
+                @value={{@model.aa}}
+                @label={{t 'resources.auth-method.titles.new-from-claim'}}
+              />
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+               
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
+                {{on
+                  'click'
+                  (fn
+                    @addStringItem 'filters' @model.aa
+                  )
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
+        </table.body>
+      </Rose::Table>
+    </:body>
   </Rose::Form::Fieldset>
 
   {{#if (can 'save model' @model)}}
