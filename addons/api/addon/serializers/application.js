@@ -264,7 +264,7 @@ export default class ApplicationSerializer extends RESTSerializer {
         options: { isNestedSecret },
       } = attribute;
       const value = hash.secrets?.[name];
-      if (isNestedSecret) hash[name] = value;
+      if (isNestedSecret) hash[name] = value || null;
     });
     return hash;
   }
