@@ -270,7 +270,19 @@ export default function () {
       return hostCatalogs.where({ scopeId });
     }
   );
-  this.post('/host-catalogs');
+  this.post(
+    '/host-catalogs',
+    function ({ hostCatalogs }, { queryParams: { plugin_name } }) {
+      const attrs = this.normalizedRequestAttrs();
+      if (plugin_name) {
+        attrs.type = 'plugin';
+        attrs.plugin = {
+          name: plugin_name,
+        };
+      }
+      return hostCatalogs.create(attrs);
+    }
+  );
   this.get('/host-catalogs/:id');
   this.patch('/host-catalogs/:id');
   this.del('/host-catalogs/:id');
