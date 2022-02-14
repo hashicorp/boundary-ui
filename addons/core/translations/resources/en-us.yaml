@@ -89,7 +89,7 @@ host-catalog:
       label: Static
       help: Provide a list of hosts and host sets with static addresses
     unknown:
-      label: Unknown
+      label: Plugin
     aws:
       label: AWS
     azure:
