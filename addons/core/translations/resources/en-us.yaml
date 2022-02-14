@@ -121,16 +121,6 @@ host-set:
       add-none:
         title: No Hosts Available
         description: No hosts available for selection.
-  types:
-    static:
-      label: Static
-      help: Provide a list of hosts and host sets with static addresses
-    unknown:
-      label: Unknown
-    aws:
-      label: AWS
-    azure:
-      label: Azure
 host:
   title: Host
   title_plural: Hosts
@@ -148,16 +138,6 @@ host:
     add: Add Host
     create: New Host
     delete: Delete Host
-  types:
-    static:
-      label: Static
-      help: Provide a list of hosts and host sets with static addresses
-    unknown:
-      label: Unknown
-    aws:
-      label: AWS
-    azure:
-      label: Azure
 session:
   title: Session
   title_plural: Sessions

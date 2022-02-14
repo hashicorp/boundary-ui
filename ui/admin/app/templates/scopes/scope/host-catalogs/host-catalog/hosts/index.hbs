@@ -30,7 +30,9 @@
             {{#if host.isStatic}}
               <Rose::Badge>
                 {{t
-                  (concat 'resources.host.types.' host.compositeType '.label')
+                  (concat
+                    'resources.host-catalog.types.' host.compositeType '.label'
+                  )
                 }}
               </Rose::Badge>
             {{else}}
@@ -42,7 +44,9 @@
                 }}
               >
                 {{t
-                  (concat 'resources.host.types.' host.compositeType '.label')
+                  (concat
+                    'resources.host-catalog.types.' host.compositeType '.label'
+                  )
                 }}
               </Rose::Badge>
             {{/if}}
