@@ -8,12 +8,19 @@
 >
 
   <form.input
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    readonly={{true}}
+    @disabled={{true}}
+  />
+
+  <form.input
     @name='name'
     @type='name'
     @value={{@model.name}}
     @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
+    @helperText={{t 'form.name.help'}}
     readonly={{false}}
     as |field|
   >
@@ -31,8 +38,8 @@
     @type='description'
     @value={{@model.description}}
     @label={{t 'form.description.label'}}
-    @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
+    @helperText={{t 'form.description.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
@@ -46,17 +53,8 @@
     {{/if}}
   </form.textarea>
 
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
-
   <form.fieldset>
     <:title>{{t 'form.provider.label'}}</:title>
-    <:description>{{t 'form.provider.description'}}</:description>
-
     <:body>
       <form.radioGroup
         @name='provider'
@@ -65,36 +63,14 @@
         as |radioGroup|
       >
         <radioGroup.card
-          @label={{t 'resources.host-set.types.azure.label'}}
+          @label={{t 'resources.host.types.azure.label'}}
           @value={{@model.compositeType}}
           @layout='tile'
-          @icon='flight-icons/svg/azure-color-16'
+          @icon={{concat 'flight-icons/svg/' @model.compositeType '-color-16'}}
         />
       </form.radioGroup>
     </:body>
   </form.fieldset>
-
-  {{! placeholder for filter, update me when the model is ready }}
-  <form.textarea
-    @name='filter'
-    @type='filter'
-    @value={{@model.filter}}
-    @label={{t 'form.provider.filter.label'}}
-    @helperText={{t 'form.provider.filter.help'}}
-    @linkText={{t 'form.provider.filter.link-text'}}
-    @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
-    readonly={{false}}
-    as |field|
-  >
-    {{#if @model.errors.filter}}
-      <field.errors as |errors|>
-        {{#each @model.errors.filter as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.textarea>
 
   {{#if (can 'save model' @model)}}
     <form.actions
