@@ -58,14 +58,14 @@
     @type='text'
     @value={{@model.address}}
     @label={{t 'form.address.label'}}
-    @error={{@model.errors.name}}
+    @error={{@model.errors.address}}
     @helperText={{t 'form.address.help'}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.name}}
+    {{#if @model.errors.address}}
       <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
+        {{#each @model.errors.address as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
