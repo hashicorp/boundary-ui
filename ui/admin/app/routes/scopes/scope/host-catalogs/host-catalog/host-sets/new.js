@@ -63,4 +63,28 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
   async changeType(type) {
     await this.router.replaceWith({ queryParams: { type } });
   }
+  /**
+   * Adds a string item to array `property` on the passed `filter`.
+   
+   * @param {hostSetModel} hostSet
+   * @param {string} property
+   * @param {string} value
+   */
+  @action
+  async addStringItem(hostSet, property, value) {
+    const array = hostSet.get(property);
+    array.addObject({ value });
+  }
+  /**
+   * Removes an item from array `property` at `index` on the
+   * passed `hostSet`.
+   * @param {hostSetModel} hostSet
+   * @param {string} property
+   * @param {number} index
+   */
+  @action
+  async removeItemByIndex(hostSet, property, index) {
+    const array = hostSet.get(property);
+    array.removeAt(index);
+  }
 }
