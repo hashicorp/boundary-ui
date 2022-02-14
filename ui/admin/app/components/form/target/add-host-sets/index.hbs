@@ -34,9 +34,7 @@
             </row.cell>
             <row.cell>{{hostSet.name}}</row.cell>
             <row.cell>
-              <Rose::Badge>{{t
-                  (concat 'resources.host-set.types.' hostSet.type)
-                }}</Rose::Badge>
+              <HostCatalogTypeBadge @model={{hostSet}} />
             </row.cell>
             <row.cell>
               <code>{{hostSet.host_catalog_id}}</code>
