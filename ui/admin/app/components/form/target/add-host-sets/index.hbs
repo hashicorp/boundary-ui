@@ -33,11 +33,33 @@
               />
             </row.cell>
             <row.cell>{{hostSet.name}}</row.cell>
-            <row.cell>
-              <Rose::Badge>{{t
-                  (concat 'resources.host-catalog.types.' hostSet.type '.label')
-                }}</Rose::Badge>
-            </row.cell>
+            {{#if hostSet.isPlugin}}
+              <Rose::Badge
+                @icon={{concat
+                  'flight-icons/svg/'
+                  hostSet.compositeType
+                  '-color-16'
+                }}
+              >
+                {{t
+                  (concat
+                    'resources.host-catalog.types.'
+                    hostSet.compositeType
+                    '.label'
+                  )
+                }}
+              </Rose::Badge>
+            {{else}}
+              <Rose::Badge>
+                {{t
+                  (concat
+                    'resources.host-catalog.types.'
+                    hostSet.compositeType
+                    '.label'
+                  )
+                }}
+              </Rose::Badge>
+            {{/if}}
             <row.cell>
               <code>{{hostSet.host_catalog_id}}</code>
             </row.cell>
