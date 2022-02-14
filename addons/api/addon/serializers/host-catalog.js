@@ -1,5 +1,4 @@
 import ApplicationSerializer from './application';
-import { copy } from 'ember-copy';
 
 const fieldsByType = {
   aws: [
@@ -56,12 +55,5 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     delete serialized.attributes;
     delete serialized.secrets;
     return serialized;
-  }
-
-  normalize(typeClass, hash, ...rest) {
-    let normalizedHash = copy(hash, true);
-    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
-    delete normalized.data.attributes.attributes;
-    return normalized;
   }
 }
