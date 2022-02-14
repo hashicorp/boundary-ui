@@ -77,9 +77,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
   }
   /**
    * Removes an item from array `property` at `index` on the
-   * passed `authMethod`.  This is used to manage entries in fragment array
-   * fields such as `signing_algorithms`.
-   * @param {hostSetModel} authMethod
+   * passed `hostSet`. 
+   * @param {hostSetModel} hostSet
    * @param {string} property
    * @param {number} index
    */
