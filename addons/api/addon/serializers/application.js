@@ -234,11 +234,13 @@ export default class ApplicationSerializer extends RESTSerializer {
    */
   normalizeNestedAttributes(typeClass, hash) {
     typeClass.attributes.forEach((attribute) => {
-      const { isNestedAttribute } = attribute.options;
-      const attributeValue = hash.attributes?.[attribute.name];
-      if (isNestedAttribute && typeof attributeValue != 'undefined') {
-        hash[attribute.name] = attributeValue;
-      }
+      const {
+        name,
+        options: { isNestedAttribute },
+      } = attribute;
+      const value = hash.attributes?.[name];
+      const isUndefined = value === undefined;
+      if (isNestedAttribute && !isUndefined) hash[name] = value;
     });
     return hash;
   }
@@ -261,15 +263,8 @@ export default class ApplicationSerializer extends RESTSerializer {
         name,
         options: { isNestedSecret },
       } = attribute;
-      const attributeValue = hash.secrets?.[name];
-
-      // FIXME: This could be improved
-      if (isNestedSecret) {
-        hash[name] = null;
-        if (typeof attributeValue != 'undefined') {
-          hash[name] = attributeValue;
-        }
-      }
+      const value = hash.secrets?.[name];
+      if (isNestedSecret) hash[name] = value;
     });
     return hash;
   }
