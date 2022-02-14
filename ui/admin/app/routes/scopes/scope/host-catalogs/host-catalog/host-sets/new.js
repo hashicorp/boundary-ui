@@ -77,7 +77,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
   }
   /**
    * Removes an item from array `property` at `index` on the
-   * passed `hostSet`. 
+   * passed `hostSet`.
    * @param {hostSetModel} hostSet
    * @param {string} property
    * @param {number} index

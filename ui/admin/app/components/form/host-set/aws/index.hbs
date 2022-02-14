@@ -127,10 +127,7 @@
 
           <body.row as |row|>
             <row.cell>
-              <form.input
-                @type='text'
-                @value={{@model.filter}}
-              />
+              <form.input @type='text' @value={{@model.filter}} />
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button
