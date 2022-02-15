@@ -144,6 +144,10 @@ provider:
     label: Client ID
     help: The client ID for the client you want Boundary to use.
     link-text : Learn more
+    secret: 
+      label: Client secret value
+      help: The client secret value for the client you want Boundary to use
+      link-text: Learn more
   choose_a_provider: 
     label: Choose a provider 
     description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.

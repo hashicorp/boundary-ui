@@ -161,6 +161,16 @@
     readonly={{false}}
   />
 
+  <form.input
+    @name='secret_value'
+    @type='secret_value'
+    @label={{t 'form.provider.client.secret.label'}}
+    @helperText={{t 'form.provider.client.secret.help'}}
+    @linkText={{t 'form.provider.client.secret.link-text'}}
+    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    readonly={{false}}
+  />
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
