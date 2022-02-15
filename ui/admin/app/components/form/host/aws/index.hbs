@@ -71,9 +71,9 @@
       </form.radioGroup>
     </:body>
   </form.fieldset>
-  {{#each @model.ip_addresses as |address|}}
+  {{#each @model.ip_addresses as |ip_address|}}
     <form.input
-      @value={{address}}
+      @value={{ip_address}}
       @label={{t 'form.type.address'}}
       readonly={{true}}
       @disabled={{true}}
