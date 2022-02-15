@@ -71,7 +71,14 @@
       </form.radioGroup>
     </:body>
   </form.fieldset>
-
+  {{#each @model.ip_addresses as |address|}}
+    <form.input
+      @value={{address}}
+      @label={{t 'form.type.address'}}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/each}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
