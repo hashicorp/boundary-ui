@@ -15,10 +15,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
     const { id: host_catalog_id, compositeType } = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog'
     );
-    if (this.currentModel?.isNew) {
-      this.currentModel.rollbackAttributes();
-    }
-    console.log('typedwed', compositeType);
     return this.store.createRecord('host-set', {
       compositeType,
       host_catalog_id,
@@ -55,17 +51,10 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
       model: model,
     });
   }
-  /**
-   * Update type of host set
-   * @param {string} type
-   */
-  @action
-  async changeType(type) {
-    await this.router.replaceWith({ queryParams: { type } });
-  }
+
   /**
    * Adds a string item to array `property` on the passed `filter`.
-   
+
    * @param {hostSetModel} hostSet
    * @param {string} property
    * @param {string} value
