@@ -76,8 +76,8 @@
 
   {{! placeholder for filter, update me when the model is ready }}
   <Rose::Form::Fieldset>
-    <:title>{{t 'titles.filter'}}</:title>
-    <:description>{{t 'descriptions.filter'}}</:description>
+    <:title>{{t 'form.host_set_filter.label'}}</:title>
+    <:description>{{t 'form.host_set_filter.help'}}</:description>
     <:body>
       {{#if @model.errors.filters}}
         <Rose::Form::Errors as |errors|>
