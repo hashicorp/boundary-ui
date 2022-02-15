@@ -118,7 +118,7 @@ callback_url:
 filter:
   label: Filter
   help: A boolean expression defining a filter run against the provided information.
-tenant_id: 
+tenant_id:
   label: Tenant ID
   help: The tenant (directory) ID for your Azure Active Directory application.
   link-text: Learn more
@@ -134,20 +134,22 @@ secret_access_key:
   label: Secret Access Key
   help: The subscription ID for the subscription with read access.
   link-text: Learn more
-region: 
+region:
   label: Region
 provider:
   label: Provider Details
   description: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
-  help: 
-  client: 
+  help:
+  client:
     label: Client ID
     help: The client ID for the client you want Boundary to use.
     link-text : Learn more
-  choose_a_provider: 
-    label: Choose a provider 
+  choose_a_provider:
+    label: Choose a provider
     description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
-  filter: 
+  filter:
     label: Filter
     help: Create a filter to select resources using values such as tag name or tag value. Filter format is specific to each provider.
     link-text: Learn more about using filters for Azure resources.
+disable_credential_rotation:
+  label: Disable credential rotation
