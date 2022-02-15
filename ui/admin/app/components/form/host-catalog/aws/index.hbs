@@ -13,7 +13,6 @@
     @label={{t 'form.name.label'}}
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
-    disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
@@ -33,7 +32,6 @@
     @label={{t 'form.description.label'}}
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
@@ -152,6 +150,16 @@
     @linkText={{t 'actions.learn-more'}}
     readonly={{false}}
   />
+
+  <form.checkbox
+    @name='disable_credential_rotation'
+    @checked={{@model.disable_credential_rotation}}
+    @label={{t 'form.disable_credential_rotation.label'}}
+    @onChange={{fn this.toggleDisableCredentialRotation @model}}
+  />
+
+  &nbsp;
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}

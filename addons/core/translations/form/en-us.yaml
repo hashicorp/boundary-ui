@@ -118,7 +118,7 @@ callback_url:
 filter:
   label: Filter
   help: A boolean expression defining a filter run against the provided information.
-tenant_id: 
+tenant_id:
   label: Tenant ID
   help: The tenant (directory) ID for your Azure Active Directory application.
 subscription_id:
