@@ -183,15 +183,19 @@ module('Unit | Model | host set', function (hooks) {
   test('get compositeType return expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const modelPlugin = store.createRecord('host-set', {
+    const modelPlugin1 = store.createRecord('host-set', {
+      type: 'plugin',
+      plugin: { name: 'aws' },
+    });
+    const modelPlugin2 = store.createRecord('host-set', {
       type: 'plugin',
       plugin: { name: 'Test name' },
     });
     const modelStatic = store.createRecord('host-set', {
       type: 'static',
     });
-    assert.equal(typeof modelPlugin.compositeType, 'string');
-    assert.equal(modelPlugin.compositeType, 'Test name');
+    assert.equal(modelPlugin1.compositeType, 'aws');
+    assert.equal(modelPlugin2.compositeType, 'unknown');
     assert.equal(modelStatic.compositeType, 'static');
   });
 
