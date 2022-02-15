@@ -74,13 +74,11 @@
     <Rose::Separator />
 
     <form.fieldset>
-      <:title>{{t 'form.provider.label'}}</:title>
+      <:title>{{t 'titles.provider'}}</:title>
     </form.fieldset>
     <form.fieldset>
-      <:title>{{t 'form.provider.choose_a_provider.label'}}</:title>
-      <:description>{{t
-          'form.provider.choose_a_provider.description'
-        }}</:description>
+      <:title>{{t 'titles.choose-a-provider'}}</:title>
+      <:description>{{t 'descriptions.choose-a-provider'}}</:description>
 
       <:body>
         <form.radioGroup
@@ -107,8 +105,8 @@
   {{else}}
 
     <form.fieldset>
-      <:title>{{t 'form.provider.label'}}</:title>
-      <:description>{{t 'form.provider.description'}}</:description>
+      <:title>{{t 'titles.provider'}}</:title>
+      <:description>{{t 'descriptions.provider'}}</:description>
 
       <:body>
         <form.radioGroup
@@ -134,8 +132,7 @@
     @value={{@model.tenant_id}}
     @label={{t 'form.tenant_id.label'}}
     @helperText={{t 'form.tenant_id.help'}}
-    @linkText={{t 'form.tenant_id.link-text'}}
-    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    @linkText={{t 'titles.learn-more'}}
     readonly={{false}}
   />
 
@@ -145,8 +142,7 @@
     @value={{@model.subscription_id}}
     @label={{t 'form.subscription_id.label'}}
     @helperText={{t 'form.subscription_id.help'}}
-    @linkText={{t 'form.subscription_id.link-text'}}
-    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    @linkText={{t 'titles.learn-more'}}
     readonly={{false}}
   />
 
@@ -154,20 +150,18 @@
     @name='client_id'
     @type='client_id'
     @value={{@model.client_id}}
-    @label={{t 'form.provider.client.label'}}
-    @helperText={{t 'form.provider.client.help'}}
-    @linkText={{t 'form.provider.client.link-text'}}
-    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    @label={{t 'form.azure_client_id.label'}}
+    @helperText={{t 'form.azure_client_id.help'}}
+    @linkText={{t 'titles.learn-more'}}
     readonly={{false}}
   />
 
   <form.input
     @name='secret_value'
     @type='secret_value'
-    @label={{t 'form.provider.client.secret.label'}}
-    @helperText={{t 'form.provider.client.secret.help'}}
-    @linkText={{t 'form.provider.client.secret.link-text'}}
-    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    @label={{t 'titles.secret'}}
+    @helperText={{t 'descriptions.secret'}}
+    @linkText={{t 'titles.learn-more'}}
     readonly={{false}}
   />
 

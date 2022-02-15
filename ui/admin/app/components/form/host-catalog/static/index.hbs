@@ -75,14 +75,12 @@
     {{#if @model.isPlugin}}
       <Rose::Separator />
       <form.fieldset>
-        <:title>{{t 'form.provider.label'}}</:title>
+        <:title>{{t 'titles.provider'}}</:title>
       </form.fieldset>
 
       <form.fieldset>
-        <:title>{{t 'form.provider.choose_a_provider.label'}}</:title>
-        <:description>{{t
-            'form.provider.choose_a_provider.description'
-          }}</:description>
+        <:title>{{t 'titles.choose-a-provider'}}</:title>
+        <:description>{{t 'descriptions.choose-a-provider'}}</:description>
 
         <:body>
           <form.radioGroup

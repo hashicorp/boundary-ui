@@ -54,8 +54,8 @@
   />
 
   <form.fieldset>
-    <:title>{{t 'form.provider.label'}}</:title>
-    <:description>{{t 'form.provider.description'}}</:description>
+    <:title>{{t 'titles.provider'}}</:title>
+    <:description>{{t 'descriptions.provider'}}</:description>
 
     <:body>
       <form.radioGroup
@@ -79,9 +79,9 @@
     @name='filter'
     @type='filter'
     @value={{@model.filter}}
-    @label={{t 'form.provider.filter.label'}}
-    @helperText={{t 'form.provider.filter.help'}}
-    @linkText={{t 'form.provider.filter.link-text'}}
+    @label={{t 'titles.filter'}}
+    @helperText={{t 'descriptions.filter'}}
+    @linkText={{t 'form. tiltes.learn-more'}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
     readonly={{false}}

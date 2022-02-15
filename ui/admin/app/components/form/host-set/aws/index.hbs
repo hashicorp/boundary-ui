@@ -54,8 +54,8 @@
   />
 
   <form.fieldset>
-    <:title>{{t 'form.provider.label'}}</:title>
-    <:description>{{t 'form.provider.description'}}</:description>
+    <:title>{{t 'titles.provider'}}</:title>
+    <:description>{{t 'descriptions.provider'}}</:description>
 
     <:body>
       <form.radioGroup
@@ -76,8 +76,8 @@
 
   {{! placeholder for filter, update me when the model is ready }}
   <Rose::Form::Fieldset>
-    <:title>{{t 'form.provider.filter.label'}}</:title>
-    <:description>{{t 'form.provider.filter.help'}}</:description>
+    <:title>{{t 'titles.filter'}}</:title>
+    <:description>{{t 'descriptions.filter'}}</:description>
     <:body>
       {{#if @model.errors.filters}}
         <Rose::Form::Errors as |errors|>
