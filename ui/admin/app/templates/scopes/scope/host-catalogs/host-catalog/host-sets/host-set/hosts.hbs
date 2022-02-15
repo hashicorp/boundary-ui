@@ -26,29 +26,7 @@
             <p>{{host.description}}</p>
           </row.headerCell>
           <row.cell>
-            {{#if host.isStatic}}
-              <Rose::Badge>
-                {{t
-                  (concat
-                    'resources.host-catalog.types.' host.compositeType '.label'
-                  )
-                }}
-              </Rose::Badge>
-            {{else}}
-              <Rose::Badge
-                @icon={{concat
-                  'flight-icons/svg/'
-                  host.compositeType
-                  '-color-16'
-                }}
-              >
-                {{t
-                  (concat
-                    'resources.host-catalog.types.' host.compositeType '.label'
-                  )
-                }}
-              </Rose::Badge>
-            {{/if}}
+            <HostCatalogTypeBadge @model={{host}} />
           </row.cell>
           <row.cell>
             <Copyable
