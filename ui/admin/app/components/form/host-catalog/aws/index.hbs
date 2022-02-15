@@ -157,7 +157,7 @@
 
   <form.checkbox
     @name='disable_credential_rotation'
-    @value={{@model.disable_credential_rotation}}
+    @checked={{@model.disable_credential_rotation}}
     @label={{t 'form.disable_credential_rotation.label'}}
     @onChange={{fn this.toggleDisableCredentialRotation @model}}
   />

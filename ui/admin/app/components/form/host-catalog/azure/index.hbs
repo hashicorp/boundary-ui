@@ -159,15 +159,6 @@
     readonly={{false}}
   />
 
-  <form.checkbox
-    @name='disable_credential_rotation'
-    @value={{@model.disable_credential_rotation}}
-    @label={{t 'form.disable_credential_rotation.label'}}
-    @disabled={{true}}
-  />
-
-  &nbsp;
-
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
