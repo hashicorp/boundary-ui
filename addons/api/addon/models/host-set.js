@@ -1,5 +1,6 @@
 import GeneratedHostSetModel from '../generated/models/host-set';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
+import { types } from './host-catalog';
 
 export default class HostSetModel extends GeneratedHostSetModel {
   // =attributes
@@ -18,6 +19,14 @@ export default class HostSetModel extends GeneratedHostSetModel {
    */
   get isPlugin() {
     return this.type === 'plugin';
+  }
+
+  /**
+   * True if the host set is an unknown type.
+   * @type {boolean}
+   */
+  get isUnknown() {
+    return this.isPlugin && !types.includes(this.plugin?.name);
   }
 
   /**
@@ -41,7 +50,9 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {string}
    */
   get compositeType() {
-    return this.plugin ? this.plugin.name : this.type;
+    if (this.isUnknown) return 'unknown';
+    if (this.isPlugin) return this.plugin.name;
+    return 'static';
   }
 
   /**

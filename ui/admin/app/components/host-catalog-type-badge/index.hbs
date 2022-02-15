@@ -1,0 +1,15 @@
+{{#if @model.isStatic}}
+  <Rose::Badge>
+    {{t (concat 'resources.host-catalog.types.' @model.compositeType '.label')}}
+  </Rose::Badge>
+{{else if @model.isUnknown}}
+  <Rose::Badge>
+    {{t (concat 'resources.host-catalog.types.' @model.compositeType '.label')}}
+  </Rose::Badge>
+{{else}}
+  <Rose::Badge
+    @icon={{concat 'flight-icons/svg/' @model.compositeType '-color-16'}}
+  >
+    {{t (concat 'resources.host-catalog.types.' @model.compositeType '.label')}}
+  </Rose::Badge>
+{{/if}}
