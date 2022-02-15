@@ -18,7 +18,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
     if (this.currentModel?.isNew) {
       this.currentModel.rollbackAttributes();
     }
-    console.log('typedwed', compositeType);
     return this.store.createRecord('host-set', {
       compositeType,
       host_catalog_id,
