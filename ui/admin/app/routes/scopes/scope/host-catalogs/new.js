@@ -23,22 +23,23 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    * creating another, but reuse name/description if available.
    * @return {HostCatalogModel}
    */
-  model() {
+  model({ type: compositeType = 'static' }) {
     const scopeModel = this.modelFor('scopes.scope');
-    let name, description;
+    let name, description, disable_credential_rotation;
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
       this.currentModel.rollbackAttributes();
     }
+    if (compositeType === 'azure') {
+      disable_credential_rotation = true;
+    }
     return this.store.createRecord('host-catalog', {
       scopeModel,
+      compositeType,
       name,
       description,
+      disable_credential_rotation,
     });
-  }
-
-  afterModel(model, transition) {
-    this.changeType(transition.to.queryParams?.type);
   }
 
   /**
@@ -46,11 +47,8 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
    * @param {string} type
    */
   @action
-  async changeType(type) {
-    const model = this.modelFor('scopes.scope.host-catalogs.new');
-    if (!type) type = 'static'; // Unknown host catalog type defaults to 'static'
-    if (model.isUnknown) type = 'aws'; //Is this the default case for plugin type?
-    model.compositeType = type;
-    await this.router.replaceWith({ queryParams: { type } });
+  changeType(type) {
+    if (type === 'plugin') type = 'aws';
+    this.router.replaceWith({ queryParams: { type } });
   }
 }
