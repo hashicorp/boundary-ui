@@ -55,6 +55,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   @attr('boolean', {
     isNestedAttribute: true,
     description: '',
+    defaultValue: true,
   })
   disable_credential_rotation;
 

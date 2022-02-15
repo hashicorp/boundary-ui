@@ -122,7 +122,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'aws',
       description: 'test description',
       attributes: {
-        disable_credential_rotation: false,
+        disable_credential_rotation: true,
         region: 'andorra',
       },
     };
@@ -155,7 +155,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'azure',
       description: 'test description',
       attributes: {
-        disable_credential_rotation: false,
+        disable_credential_rotation: true,
         tenant_id: 'a1b2c3',
         client_id: 'foobars12',
         subscription_id: 'barsfoo21',
