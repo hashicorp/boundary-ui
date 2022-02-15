@@ -132,12 +132,6 @@ secret_access_key:
   help: The subscription ID for the subscription with read access.
 region: 
   label: Region
-azure_client_id: 
-  label: Client ID
-  help: The client ID for the client you want Boundary to use.
 secret: 
   label: Client secret value
   help: The client secret value for the client you want Boundary to use
-host_set_filter: 
-  label: Filter
-  help: Create a filter to select resources using values such as tag name or tag value. Filter format is specific to each provider

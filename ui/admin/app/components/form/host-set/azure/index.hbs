@@ -74,13 +74,12 @@
     </:body>
   </form.fieldset>
 
-  {{! placeholder for filter, update me when the model is ready }}
   <form.textarea
     @name='filter'
     @type='filter'
     @value={{@model.filter}}
-    @label={{t 'form.host_set_filter.label'}}
-    @helperText={{t 'form.host_set_filter.help'}}
+    @label={{t 'resources.host-set.filter.label'}}
+    @helperText={{t 'resources.host-set.filter.help'}}
     @linkText={{t 'form. tiltes.learn-more'}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
