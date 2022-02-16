@@ -129,7 +129,7 @@ access_key_id:
   help: The access key ID found on the Security Credentials page in AWS.
 secret_access_key:
   label: Secret Access Key
-  help: The subscription ID for the subscription with read access.
+  help: The secret access key found on the Security Credentials page in AWS.
 region: 
   label: Region
 secret: 
