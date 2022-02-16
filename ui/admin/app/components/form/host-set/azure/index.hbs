@@ -76,7 +76,9 @@
 
   <Rose::Form::Fieldset>
     <:title>{{t 'resources.host-set.form.preferred_endpoints.label'}}</:title>
-
+    <:description>{{t
+        'resources.host-set.form.preferred_endpoints.help'
+      }}</:description>
     <:body>
       {{#if @model.errors.preferred_endpoints}}
         <Rose::Form::Errors as |errors|>

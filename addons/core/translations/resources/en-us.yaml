@@ -113,6 +113,7 @@ host-set:
       help: Create a filter to select resources using values such as tag name or tag value. Filter format is specific to each provider
     preferred_endpoints:
       label: Preferred Endpoints
+      help: Selects addresses of hosts, in cidr:<valid IPv4/6 CIDR> or dns:<globbed name>  format
   messages:
     welcome:
       title: Welcome to Host Sets
