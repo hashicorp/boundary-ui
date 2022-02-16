@@ -111,6 +111,8 @@ host-set:
     filter: 
       label: Filter
       help: Create a filter to select resources using values such as tag name or tag value. Filter format is specific to each provider
+    preferred_endpoints:
+      label: Preferred Endpoints
   messages:
     welcome:
       title: Welcome to Host Sets
