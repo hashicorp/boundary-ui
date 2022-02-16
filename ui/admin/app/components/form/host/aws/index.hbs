@@ -72,18 +72,20 @@
     </:body>
   </form.fieldset>
 
-  {{#each @model.ip_addresses as |ip_address|}}
-    <form.fieldset>
-      <:title>{{t 'titles.ip-addresses'}}</:title>
-      <:body>
+  <form.fieldset>
+    <:title>{{t 'titles.ip-addresses'}}</:title>
+    <:body>
+      {{#each @model.ip_addresses as |ip_address|}}
+
         <form.input
           @value={{ip_address}}
           readonly={{true}}
           @disabled={{true}}
         />
-      </:body>
-    </form.fieldset>
-  {{/each}}
+      {{/each}}
+    </:body>
+  </form.fieldset>
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
