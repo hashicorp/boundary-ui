@@ -72,14 +72,12 @@
 
     <Rose::Separator />
     <form.fieldset>
-      <:title>{{t 'form.provider.label'}}</:title>
+      <:title>{{t 'titles.provider'}}</:title>
     </form.fieldset>
 
     <form.fieldset>
-      <:title>{{t 'form.provider.choose_a_provider.label'}}</:title>
-      <:description>{{t
-          'form.provider.choose_a_provider.description'
-        }}</:description>
+      <:title>{{t 'titles.choose-a-provider'}}</:title>
+      <:description>{{t 'descriptions.choose-a-provider'}}</:description>
 
       <:body>
         <form.radioGroup
@@ -105,8 +103,8 @@
     </form.fieldset>
   {{else}}
     <form.fieldset>
-      <:title>{{t 'form.provider.label'}}</:title>
-      <:description>{{t 'form.provider.description'}}</:description>
+      <:title>{{t 'titles.provider'}}</:title>
+      <:description>{{t 'descriptions.provider'}}</:description>
       <:body>
         <form.radioGroup
           @name='provider'
@@ -139,8 +137,7 @@
     @value={{@model.access_key_id}}
     @label={{t 'form.access_key_id.label'}}
     @helperText={{t 'form.access_key_id.help'}}
-    @linkText={{t 'form.access_key_id.link-text'}}
-    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    @linkText={{t 'actions.learn-more'}}
     readonly={{false}}
   />
 
@@ -150,8 +147,7 @@
     @value={{@model.secret_access_key}}
     @label={{t 'form.secret_access_key.label'}}
     @helperText={{t 'form.secret_access_key.help'}}
-    @linkText={{t 'form.secret_access_key.link-text'}}
-    @link='https://learn.hashicorp.com/tutorials/boundary/cloud-host-catalogs#set-up-cloud-hosts'
+    @linkText={{t 'actions.learn-more'}}
     readonly={{false}}
   />
 

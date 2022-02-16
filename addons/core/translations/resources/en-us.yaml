@@ -84,7 +84,7 @@ host-catalog:
       title: Welcome to Host Catalogs
   actions:
     delete: Delete Host Catalog
-  help: 
+  help:
     static: Provide a list of hosts and host sets with static addresses
     dynamic: Automate discovery of target hosts and services on Azure or AWS
   types:
@@ -93,6 +93,10 @@ host-catalog:
     aws: AWS
     azure: Azure
     dynamic: Dynamic
+  form:
+    azure_client_id:
+      label: Client ID
+      help: The client ID for the client you want Boundary to use.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -103,6 +107,10 @@ host-set:
     delete: Delete Host Set
     create-and-add-host: Create and Add Host
     add-hosts: Add Existing Host
+  form:
+    filter: 
+      label: Filter
+      help: Create a filter to select resources using values such as tag name or tag value. Filter format is specific to each provider
   messages:
     welcome:
       title: Welcome to Host Sets
