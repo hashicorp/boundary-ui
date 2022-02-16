@@ -103,6 +103,7 @@
                   @value={{endpoint.value}}
                   @error={{@model.errors.preferred_endpoints}}
                   @contextual={{true}}
+                  @placeholder='cidr:2001:4860:4860::8888/32'
                   as |field|
                 >
                   <field.field />
@@ -128,7 +129,11 @@
 
           <body.row as |row|>
             <row.cell>
-              <form.input @type='text' @value={{@model.preferred_endpoint}} />
+              <form.input
+                @type='text'
+                @value={{@model.preferred_endpoint}}
+                @placeholder='cidr:2001:4860:4860::8888/32'
+              />
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button
