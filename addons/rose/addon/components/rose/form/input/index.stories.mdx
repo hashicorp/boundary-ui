@@ -22,7 +22,6 @@ Renders a simple form input.
   @disabled={{false}}
   @icon='flight-icons/svg/search-16'
   readonly={{false}}
-  placeholder='this is a placeholder'
 />
 ```
 
@@ -41,7 +40,6 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
   @error={{false}}
   @disabled={{false}}
   readonly={{false}}
-  placeholder='la la la'
 >
 
 </Rose::Form::Input>
@@ -62,7 +60,6 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         @disabled={{disabled}}
         readonly={{read-only}}
         @icon={{icon}}
-        placeholder={{placeholder}}
         />
     `,
     context: {
@@ -78,7 +75,6 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
       ),
       value: text('value', 'Value'),
       label: text('label', 'Label'),
-      placeholder: text('placeholder', 'this is a placeholder'),
       helperText: text('helperText', 'Helper text'),
       link: text('link', 'link goes here'),
       linkText: text('linkText', 'link text'),
