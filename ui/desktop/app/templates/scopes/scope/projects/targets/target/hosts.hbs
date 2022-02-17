@@ -29,6 +29,8 @@
           <row.cell>
             {{#if host.isStatic}}
               {{host.address}}
+            {{else}}
+              {{t 'resources.host-catalog.types.dynamic'}}
             {{/if}}
           </row.cell>
           <row.cell>
