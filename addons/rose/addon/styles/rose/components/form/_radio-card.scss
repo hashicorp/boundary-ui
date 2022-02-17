@@ -32,12 +32,12 @@ $radio-svg: (
 );
 
 .rose-form-radio-card {
-  $cardWideWidth: $size-m * 11;
+  $cardWideWidth: $size-m * 10;
   $cardTileWidth: $size-m * 7.25;
   $borderWidth: $size-xxxs * 2;
 
   &.wide {
-    width: ($size-m) * 23;
+    width: ($size-m) * 20;
   }
 
   &.tile {
