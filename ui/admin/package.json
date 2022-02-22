@@ -46,7 +46,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "clipboard": "^2.0.8",
     "core": "*",
-    "doctoc": "^2.0.1",
+    "doctoc": "^2.1.0",
     "ember-a11y-testing": "^4.2.0",
     "ember-auto-import": "^1.12.0",
     "ember-breadcrumbs": "^0.2.3",
