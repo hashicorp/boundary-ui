@@ -34,7 +34,7 @@
     "ember-cli-htmlbars": "^5.7.1",
     "ember-focus-trap": "^0.7.0",
     "ember-named-blocks-polyfill": "^0.2.5",
-    "ember-radio-button": "^2.0.1",
+    "ember-radio-button": "github:yapplabs/ember-radio-button.git#b2ab65f",
     "ember-uuid": "^2.1.0",
     "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774"
   },
@@ -44,7 +44,7 @@
     "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
-    "@hashicorp/flight-icons": "^2.0.1",
+    "@hashicorp/flight-icons": "^2.1.0",
     "@storybook/addon-a11y": "^6.3.12",
     "@storybook/addon-actions": "^6.3.10",
     "@storybook/addon-docs": "^6.3.8",

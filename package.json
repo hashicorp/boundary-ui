@@ -89,6 +89,8 @@
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5",
     "ember-template-recast": "^6.0.0",
+    "engine.io": "^5.2.1",
+    "markdown-it": "^12.3.2",
     "mout": "^1.2.3"
   },
   "config": {
