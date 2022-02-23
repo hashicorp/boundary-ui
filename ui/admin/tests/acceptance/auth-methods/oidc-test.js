@@ -64,7 +64,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
     assert.equal(
-      find('.rose-dropdown[open] input[aria-checked=true]').value,
+      find('.rose-dropdown[open] input:checked').value,
       instances.authMethod.attributes.state
     );
   });
