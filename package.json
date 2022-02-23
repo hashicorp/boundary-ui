@@ -87,7 +87,8 @@
     "json-schema": "^0.4.0",
     "follow-redirects": "^1.14.7",
     "node-fetch": "^2.6.7",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "markdown-it": "^12.3.2"
   },
   "config": {
     "commitizen": {
