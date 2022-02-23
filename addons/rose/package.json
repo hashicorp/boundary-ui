@@ -44,7 +44,7 @@
     "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
-    "@hashicorp/flight-icons": "^2.0.1",
+    "@hashicorp/flight-icons": "^2.1.0",
     "@storybook/addon-a11y": "^6.3.12",
     "@storybook/addon-actions": "^6.3.10",
     "@storybook/addon-docs": "^6.3.8",
