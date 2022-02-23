@@ -4,7 +4,7 @@
 
   <layout.header>
     <Rose::Header class='{{if (is-loading) ' loading'}}' as |header|>
-      <header.brand @logo='logo-app' @text={{app-name}} />
+      <header.brand @logo='logo-app' @text={{(app-name)}} />
 
       {{#if this.session.isAuthenticated}}
         <header.nav>
@@ -71,11 +71,11 @@
 
   <layout.footer>
     <Rose::Footer as |footer|>
-      <footer.brand @logo='logo-company' @text={{company-name}} />
+      <footer.brand @logo='logo-company' @text={{(company-name)}} />
       <footer.text>{{company-copyright}}</footer.text>
       <footer.text>{{app-name}}</footer.text>
       <footer.nav as |nav|>
-        <nav.link @href={{doc-url}}>
+        <nav.link @href={{(doc-url)}}>
           {{t 'titles.documentation'}}
         </nav.link>
       </footer.nav>
