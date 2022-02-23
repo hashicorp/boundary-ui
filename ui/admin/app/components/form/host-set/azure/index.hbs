@@ -74,6 +74,94 @@
     </:body>
   </form.fieldset>
 
+  <Rose::Form::Fieldset>
+    <:title>{{t 'resources.host-set.form.preferred_endpoints.label'}}</:title>
+    <:description>{{t
+        'resources.host-set.form.preferred_endpoints.help'
+      }}</:description>
+    <:body>
+      {{#if @model.errors.preferred_endpoints}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.preferred_endpoints as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
+      <Rose::Table @style='condensed' as |table|>
+        <table.header as |header|>
+          <header.row @hidden={{true}} as |row|>
+            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
+            <row.headerCell />
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model.preferred_endpoints as |endpoint i|}}
+            <body.row as |row|>
+              <row.cell>
+                <form.input
+                  @type='text'
+                  @value={{endpoint.value}}
+                  @error={{@model.errors.preferred_endpoints}}
+                  @contextual={{true}}
+                  placeholder='cidr:2001:4860:4860::8888/32'
+                  as |field|
+                >
+                  <field.field />
+                </form.input>
+              </row.cell>
+              <row.cell @shrink={{true}}>
+                <Rose::Button
+                  @style='warning'
+                  @iconOnly='flight-icons/svg/trash-16'
+                  title={{t 'actions.remove'}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
+                  {{on 'click' (fn @removeItemByIndex 'preferred_endpoints' i)}}
+                >
+                  {{t 'actions.remove'}}
+                </Rose::Button>
+              </row.cell>
+            </body.row>
+          {{/each}}
+
+          <body.row as |row|>
+            <row.cell>
+              <form.input
+                @type='text'
+                @value={{@model.preferred_endpoint}}
+                placeholder='cidr:2001:4860:4860::8888/32'
+              />
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
+                {{on
+                  'click'
+                  (fn
+                    @addStringItem
+                    'preferred_endpoints'
+                    @model.preferred_endpoint
+                  )
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
+        </table.body>
+      </Rose::Table>
+    </:body>
+  </Rose::Form::Fieldset>
+
   <form.textarea
     @name='filter'
     @type='filter'

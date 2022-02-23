@@ -2,6 +2,12 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.4.2 [CLI 0.7.5] (2022.02.17)
+
+### New
+
+- Support dynamic host catalogs. ([PR](https://github.com/hashicorp/boundary-ui/pull/981))
+
 ## v1.4.1 [CLI 0.7.3] (2021.12.16)
 
 ### New
