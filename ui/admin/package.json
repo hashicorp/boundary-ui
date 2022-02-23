@@ -32,13 +32,13 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
-    "ember-named-blocks-polyfill": "^0.2.4"
+    "ember-named-blocks-polyfill": "^0.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^2.0.2",
-    "@ember/test-helpers": "^2.4.2",
+    "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "babel-eslint": "^10.1.0",
@@ -46,7 +46,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "clipboard": "^2.0.8",
     "core": "*",
-    "doctoc": "^2.0.1",
+    "doctoc": "^2.1.0",
     "ember-a11y-testing": "^4.2.0",
     "ember-auto-import": "^1.12.0",
     "ember-cli": "~4.1.0",

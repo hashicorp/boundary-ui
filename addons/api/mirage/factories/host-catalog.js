@@ -47,18 +47,29 @@ export default factory.extend({
       case 'aws':
         return {
           disable_credential_rotation: datatype.boolean(),
-          tenant_id: datatype.hexaDecimal(6),
-          client_id: datatype.hexaDecimal(6),
-          subscription_id: datatype.hexaDecimal(8),
-          secret_id: datatype.hexaDecimal(6),
-          secret_value: datatype.string(12),
+          region: address.state(),
         };
       case 'azure':
         return {
           disable_credential_rotation: datatype.boolean(),
-          region: address.state(),
+          tenant_id: datatype.hexaDecimal(6),
+          client_id: datatype.hexaDecimal(6),
+          subscription_id: datatype.hexaDecimal(8),
+        };
+    }
+  },
+
+  secrets() {
+    switch (this.plugin?.name) {
+      case 'aws':
+        return {
           access_key_id: datatype.hexaDecimal(8),
           secret_access_key: datatype.string(12),
+        };
+      case 'azure':
+        return {
+          secret_id: datatype.hexaDecimal(6),
+          secret_value: datatype.string(12),
         };
     }
   },

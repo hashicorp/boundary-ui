@@ -26,7 +26,13 @@
               <code>{{host.id}}</code>
             </Copyable>
           </row.cell>
-          <row.cell>{{host.attributes.address}}</row.cell>
+          <row.cell>
+            {{#if host.isStatic}}
+              {{host.address}}
+            {{else}}
+              {{t 'resources.host-catalog.types.dynamic'}}
+            {{/if}}
+          </row.cell>
           <row.cell>
             <Rose::Button
               @style='secondary'

@@ -1,0 +1,194 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+
+  <form.input
+    @name='name'
+    @type='name'
+    @value={{@model.name}}
+    @label={{t 'form.name.label'}}
+    @helperText={{t 'form.name.help'}}
+    @error={{@model.errors.name}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name='description'
+    @type='description'
+    @value={{@model.description}}
+    @label={{t 'form.description.label'}}
+    @helperText={{t 'form.description.help'}}
+    @error={{@model.errors.description}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.input
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    readonly={{true}}
+    @disabled={{true}}
+  />
+
+  <form.fieldset>
+    <:title>{{t 'titles.provider'}}</:title>
+    <:description>{{t 'descriptions.provider'}}</:description>
+
+    <:body>
+      <form.radioGroup
+        @name='provider'
+        @selectedValue={{@model.compositeType}}
+        @disabled={{true}}
+        as |radioGroup|
+      >
+        <radioGroup.card
+          @label={{t 'resources.host-catalog.types.azure'}}
+          @value={{@model.compositeType}}
+          @layout='tile'
+          @icon='flight-icons/svg/azure-color-16'
+        />
+      </form.radioGroup>
+    </:body>
+  </form.fieldset>
+
+  <Rose::Form::Fieldset>
+    <:title>{{t 'resources.host-set.form.preferred_endpoints.label'}}</:title>
+    <:description>{{t
+        'resources.host-set.form.preferred_endpoints.help'
+      }}</:description>
+    <:body>
+      {{#if @model.errors.preferred_endpoints}}
+        <Rose::Form::Errors as |errors|>
+          {{#each @model.errors.preferred_endpoints as |error|}}
+            <errors.message>{{error.message}}</errors.message>
+          {{/each}}
+        </Rose::Form::Errors>
+      {{/if}}
+      <Rose::Table @style='condensed' as |table|>
+        <table.header as |header|>
+          <header.row @hidden={{true}} as |row|>
+            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
+            <row.headerCell />
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model.preferred_endpoints as |endpoint i|}}
+            <body.row as |row|>
+              <row.cell>
+                <form.input
+                  @type='text'
+                  @value={{endpoint.value}}
+                  @error={{@model.errors.preferred_endpoints}}
+                  @contextual={{true}}
+                  placeholder='cidr:2001:4860:4860::8888/32'
+                  as |field|
+                >
+                  <field.field />
+                </form.input>
+              </row.cell>
+              <row.cell @shrink={{true}}>
+                <Rose::Button
+                  @style='warning'
+                  @iconOnly='flight-icons/svg/trash-16'
+                  title={{t 'actions.remove'}}
+                  @disabled={{if
+                    @model.isNew
+                    false
+                    (if form.isEditable false true)
+                  }}
+                  {{on 'click' (fn @removeItemByIndex 'preferred_endpoints' i)}}
+                >
+                  {{t 'actions.remove'}}
+                </Rose::Button>
+              </row.cell>
+            </body.row>
+          {{/each}}
+
+          <body.row as |row|>
+            <row.cell>
+              <form.input
+                @type='text'
+                @value={{@model.preferred_endpoint}}
+                placeholder='cidr:2001:4860:4860::8888/32'
+              />
+            </row.cell>
+            <row.cell @shrink={{true}}>
+              <Rose::Button
+                @style='secondary'
+                title={{t 'actions.add'}}
+                @disabled={{if
+                  @model.isNew
+                  false
+                  (if form.isEditable false true)
+                }}
+                {{on
+                  'click'
+                  (fn
+                    @addStringItem
+                    'preferred_endpoints'
+                    @model.preferred_endpoint
+                  )
+                }}
+              >
+                {{t 'actions.add'}}
+              </Rose::Button>
+            </row.cell>
+          </body.row>
+        </table.body>
+      </Rose::Table>
+    </:body>
+  </Rose::Form::Fieldset>
+
+  <form.textarea
+    @name='filter'
+    @type='filter'
+    @value={{@model.filter}}
+    @label={{t 'resources.host-set.form.filter.label'}}
+    @helperText={{t 'resources.host-set.form.filter.help'}}
+    @linkText={{t 'form. tiltes.learn-more'}}
+    @error={{@model.errors.description}}
+    disabled={{@model.isSaving}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.filter}}
+      <field.errors as |errors|>
+        {{#each @model.errors.filter as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @disabled={{if @model.cannotSave @model.cannotSave}}
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+</Rose::Form>

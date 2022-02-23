@@ -25,21 +25,7 @@
             <p>{{hostSet.description}}</p>
           </row.headerCell>
           <row.cell>
-            {{#if hostSet.isStatic}}
-              <Rose::Badge>
-                {{t (concat 'resources.host-set.types.' hostSet.compositeType)}}
-              </Rose::Badge>
-            {{else}}
-              <Rose::Badge
-                @icon={{concat
-                  'flight-icons/svg/'
-                  hostSet.compositeType
-                  '-color-16'
-                }}
-              >
-                {{t (concat 'resources.host-set.types.' hostSet.compositeType)}}
-              </Rose::Badge>
-            {{/if}}
+            <HostCatalogTypeBadge @model={{hostSet}} />
           </row.cell>
           <row.cell>
             <Copyable

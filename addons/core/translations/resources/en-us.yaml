@@ -78,16 +78,25 @@ host-catalog:
   title: Host Catalog
   title_plural: Host Catalogs
   description: A host catalog is a collection of hosts and host sets.
+  type: Type
   messages:
     welcome:
       title: Welcome to Host Catalogs
   actions:
     delete: Delete Host Catalog
+  help:
+    static: Provide a list of hosts and host sets with static addresses
+    dynamic: Automate discovery of target hosts and services on Azure or AWS
   types:
     static: Static
-    unknown: Unknown
+    unknown: Plugin
     aws: AWS
     azure: Azure
+    dynamic: Dynamic
+  form:
+    azure_client_id:
+      label: Client ID
+      help: The client ID for the client you want Boundary to use.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -98,6 +107,13 @@ host-set:
     delete: Delete Host Set
     create-and-add-host: Create and Add Host
     add-hosts: Add Existing Host
+  form:
+    filter: 
+      label: Filter
+      help: Create a filter to select resources using values such as tag name or tag value. Filter format is specific to each provider
+    preferred_endpoints:
+      label: Preferred Endpoints
+      help: Selects addresses of hosts, in cidr:<valid IPv4/6 CIDR> or dns:<globbed name>  format
   messages:
     welcome:
       title: Welcome to Host Sets
@@ -112,11 +128,6 @@ host-set:
       add-none:
         title: No Hosts Available
         description: No hosts available for selection.
-  types:
-    static: Static
-    unknown: Unknown
-    aws: AWS
-    azure: Azure
 host:
   title: Host
   title_plural: Hosts
@@ -134,11 +145,6 @@ host:
     add: Add Host
     create: New Host
     delete: Delete Host
-  types:
-    static: Static
-    unknown: Unknown
-    aws: AWS
-    azure: Azure
 session:
   title: Session
   title_plural: Sessions

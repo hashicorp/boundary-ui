@@ -56,40 +56,7 @@
                 <p>{{hostCatalog.description}}</p>
               </row.headerCell>
               <row.cell>
-                {{#if hostCatalog.isStatic}}
-                  <Rose::Badge>
-                    {{t
-                      (concat
-                        'resources.host-catalog.types.'
-                        hostCatalog.compositeType
-                      )
-                    }}
-                  </Rose::Badge>
-                {{else if hostCatalog.isUnknown}}
-                  <Rose::Badge>
-                    {{t
-                      (concat
-                        'resources.host-catalog.types.'
-                        hostCatalog.compositeType
-                      )
-                    }}
-                  </Rose::Badge>
-                {{else}}
-                  <Rose::Badge
-                    @icon={{concat
-                      'flight-icons/svg/'
-                      hostCatalog.compositeType
-                      '-color-16'
-                    }}
-                  >
-                    {{t
-                      (concat
-                        'resources.host-catalog.types.'
-                        hostCatalog.compositeType
-                      )
-                    }}
-                  </Rose::Badge>
-                {{/if}}
+                <HostCatalogTypeBadge @model={{hostCatalog}} />
               </row.cell>
               <row.cell>
                 <Copyable
