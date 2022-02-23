@@ -50,7 +50,7 @@
     }
   },
   "dependencies": {
-    "ember-named-blocks-polyfill": "^0.2.4"
+    "ember-named-blocks-polyfill": "^0.2.5"
   },
   "devDependencies": {
     "@doyensec/electronegativity": "^1.9.1",

@@ -88,6 +88,7 @@
     "follow-redirects": "^1.14.7",
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5",
+    "ember-template-recast": "^6.0.0",
     "engine.io": "^5.2.1"
   },
   "config": {
