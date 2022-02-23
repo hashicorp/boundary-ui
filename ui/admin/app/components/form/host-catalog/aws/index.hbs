@@ -1,0 +1,171 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <form.input
+    @name='name'
+    @type='name'
+    @value={{@model.name}}
+    @label={{t 'form.name.label'}}
+    @helperText={{t 'form.name.help'}}
+    @error={{@model.errors.name}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name='description'
+    @type='description'
+    @value={{@model.description}}
+    @label={{t 'form.description.label'}}
+    @helperText={{t 'form.description.help'}}
+    @error={{@model.errors.description}}
+    readonly={{false}}
+    as |field|
+  >
+    {{#if @model.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  {{#if @model.isNew}}
+    <form.fieldset>
+      <:title>{{t 'form.type.label'}}</:title>
+      <:body>
+        <form.radioGroup
+          @name='types'
+          @selectedValue={{@model.type}}
+          @changed={{@changeType}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label={{t 'resources.host-catalog.types.static'}}
+            @value='static'
+            @helperText={{t 'resources.host-catalog.help.static'}}
+            @layout='wide'
+          />
+          <radioGroup.card
+            @label={{t 'resources.host-catalog.types.dynamic'}}
+            @value='plugin'
+            @helperText={{t 'resources.host-catalog.help.dynamic'}}
+            @layout='wide'
+          />
+        </form.radioGroup>
+      </:body>
+    </form.fieldset>
+
+    <Rose::Separator />
+    <form.fieldset>
+      <:title>{{t 'titles.provider'}}</:title>
+    </form.fieldset>
+
+    <form.fieldset>
+      <:title>{{t 'titles.choose-a-provider'}}</:title>
+      <:description>{{t 'descriptions.choose-a-provider'}}</:description>
+
+      <:body>
+        <form.radioGroup
+          @name='provider'
+          @selectedValue={{@model.compositeType}}
+          @changed={{@changeType}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label={{t 'resources.host-catalog.types.aws'}}
+            @value='aws'
+            @layout='tile'
+            @icon='flight-icons/svg/aws-color-16'
+          />
+          <radioGroup.card
+            @label={{t 'resources.host-catalog.types.azure'}}
+            @value='azure'
+            @layout='tile'
+            @icon='flight-icons/svg/azure-color-16'
+          />
+        </form.radioGroup>
+      </:body>
+    </form.fieldset>
+  {{else}}
+    <form.fieldset>
+      <:title>{{t 'titles.provider'}}</:title>
+      <:description>{{t 'descriptions.provider'}}</:description>
+      <:body>
+        <form.radioGroup
+          @name='provider'
+          @selectedValue={{@model.compositeType}}
+          @disabled={{true}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label={{t 'resources.host-catalog.types.aws'}}
+            @value='aws'
+            @layout='tile'
+            @icon='flight-icons/svg/aws-color-16'
+          />
+        </form.radioGroup>
+      </:body>
+    </form.fieldset>
+  {{/if}}
+
+  <form.input
+    @name='region'
+    @type='region'
+    @value={{@model.region}}
+    @label={{t 'form.region.label'}}
+    readonly={{false}}
+  />
+
+  <form.input
+    @name='access_key_id'
+    @type='access_key_id'
+    @value={{@model.access_key_id}}
+    @label={{t 'form.access_key_id.label'}}
+    @helperText={{t 'form.access_key_id.help'}}
+    @linkText={{t 'actions.learn-more'}}
+    readonly={{false}}
+  />
+
+  <form.input
+    @name='secret_access_key'
+    @type='secret_access_key'
+    @value={{@model.secret_access_key}}
+    @label={{t 'form.secret_access_key.label'}}
+    @helperText={{t 'form.secret_access_key.help'}}
+    @linkText={{t 'actions.learn-more'}}
+    readonly={{false}}
+  />
+
+  <form.checkbox
+    @name='disable_credential_rotation'
+    @checked={{@model.disable_credential_rotation}}
+    @label={{t 'form.disable_credential_rotation.label'}}
+    @onChange={{fn this.toggleDisableCredentialRotation @model}}
+  />
+
+  &nbsp;
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @disabled={{if @model.cannotSave @model.cannotSave}}
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+</Rose::Form>

@@ -14,9 +14,9 @@
     >
       {{t 'resources.host-set.actions.add-hosts'}}
     </dropdown.link>
+    <dropdown.separator />
   {{/if}}
   {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
     <dropdown.button
       @style='danger'
       @disabled={{@model.canSave}}

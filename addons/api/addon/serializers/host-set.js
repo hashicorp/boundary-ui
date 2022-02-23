@@ -1,4 +1,5 @@
 import ApplicationSerializer from './application';
+import { copy } from 'ember-copy';
 
 const fieldByType = {
   aws: ['preferred_endpoints', 'filters'],
@@ -68,5 +69,20 @@ export default class HostSetSerializer extends ApplicationSerializer {
       }
     }
     return value;
+  }
+
+  /**
+   * Temporarily converts `filters` to an array if it is a string.  This is a
+   * quirk of the API.
+   *
+   * TODO:  remove once API consistently returns arrays.
+   */
+  normalize(typeClass, hash, ...rest) {
+    const normalizedHash = copy(hash, true);
+    if (typeof normalizedHash?.filters === 'string') {
+      normalizedHash.filters = [normalizedHash.filters];
+    }
+    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
+    return normalized;
   }
 }

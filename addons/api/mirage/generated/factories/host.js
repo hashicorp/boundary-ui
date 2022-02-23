@@ -1,5 +1,5 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date, internet, datatype } from 'faker';
+import { random, date, datatype, internet } from 'faker';
 
 /**
  * GeneratedHostModelFactory

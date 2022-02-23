@@ -26,7 +26,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isUnknown() {
-    return this.isPlugin && !types.includes(this.plugin.name);
+    return this.isPlugin && !types.includes(this.plugin?.name);
   }
 
   /**
