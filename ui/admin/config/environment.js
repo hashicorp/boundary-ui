@@ -53,10 +53,8 @@ module.exports = function (environment) {
         'group.add-members': '/groups/add-members',
         'host-catalog': '/host-catalogs',
         'host-catalog.new': '/host-catalogs/new',
-        'host-catalog.set-up-cloud-hosts.azure':
-          '/host-catalog-set-up-cloud-hosts-azure',
-        'host-catalog.set-up-cloud-hosts.aws':
-          '/host-catalog-set-up-cloud-hosts-aws',
+        'host-catalog.azure': '/dynamic-host-catalogs-on-azure',
+        'host-catalog.aws': '/dynamic-host-catalogs-on-aws',
         'host-set': '/host-sets',
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
