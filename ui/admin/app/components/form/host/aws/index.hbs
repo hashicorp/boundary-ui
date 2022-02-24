@@ -86,6 +86,17 @@
     </:body>
   </form.fieldset>
 
+  <form.fieldset>
+
+    <:title>{{t 'titles.dns-names'}}</:title>
+    <:body>
+      {{#each @model.dns_names as |dns_name|}}
+
+        <form.input @value={{dns_name}} readonly={{true}} @disabled={{true}} />
+      {{/each}}
+    </:body>
+  </form.fieldset>
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
