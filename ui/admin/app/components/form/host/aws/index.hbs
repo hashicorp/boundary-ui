@@ -76,7 +76,6 @@
     <:title>{{t 'titles.ip-addresses'}}</:title>
     <:body>
       {{#each @model.ip_addresses as |ip_address|}}
-
         <form.input
           @value={{ip_address}}
           readonly={{true}}
@@ -87,11 +86,9 @@
   </form.fieldset>
 
   <form.fieldset>
-
     <:title>{{t 'titles.dns-names'}}</:title>
     <:body>
       {{#each @model.dns_names as |dns_name|}}
-
         <form.input @value={{dns_name}} readonly={{true}} @disabled={{true}} />
       {{/each}}
     </:body>
