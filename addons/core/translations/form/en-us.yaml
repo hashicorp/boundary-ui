@@ -138,4 +138,4 @@ secret:
 disable_credential_rotation:
   label: Disable credential rotation
 dns_names:
-  label: DNS Names
+  label: Latest DNS Names
