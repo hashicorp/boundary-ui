@@ -137,3 +137,5 @@ secret:
   help: The client secret value for the client you want Boundary to use
 disable_credential_rotation:
   label: Disable credential rotation
+dns_names:
+  label: Latest DNS Names
