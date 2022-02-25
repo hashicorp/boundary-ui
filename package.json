@@ -91,7 +91,8 @@
     "ember-template-recast": "^6.0.0",
     "engine.io": "^5.2.1",
     "markdown-it": "^12.3.2",
-    "mout": "^1.2.3"
+    "mout": "^1.2.3",
+    "nanoid": "^3.1.31"
   },
   "config": {
     "commitizen": {
