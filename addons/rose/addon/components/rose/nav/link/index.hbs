@@ -1,0 +1,9 @@
+{{#if @model}}
+  <LinkTo @route={{@route}} @model={{@model}} class="rose-nav-link">
+    {{yield}}
+  </LinkTo>
+{{else}}
+  <LinkTo @route={{@route}} class="rose-nav-link">
+    {{yield}}
+  </LinkTo>
+{{/if}}

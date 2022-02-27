@@ -21,6 +21,6 @@ module('Integration | Component | rose/nav/breadcrumbs', function (hooks) {
       <breadcrumbs.link @route="index" />
       <breadcrumbs.link @route="index" />
     </Rose::Nav::Breadcrumbs>`);
-    assert.equal(findAll('.rose-nav-breadcrumbs-link').length, 2);
+    assert.equal(findAll('.rose-nav-link').length, 2);
   });
 });
