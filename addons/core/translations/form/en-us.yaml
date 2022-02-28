@@ -130,12 +130,14 @@ access_key_id:
 secret_access_key:
   label: Secret Access Key
   help: The secret access key found on the Security Credentials page in AWS.
-region: 
+region:
   label: Region
-secret: 
+secret:
   label: Client secret value
   help: The client secret value for the client you want Boundary to use
 disable_credential_rotation:
   label: Disable credential rotation
 dns_names:
   label: Latest DNS Names
+host:
+  label: Host
