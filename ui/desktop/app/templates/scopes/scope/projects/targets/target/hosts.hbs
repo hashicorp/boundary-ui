@@ -30,7 +30,9 @@
             {{#if host.isStatic}}
               {{host.address}}
             {{else}}
-              {{t 'resources.host-catalog.types.dynamic'}}
+              <Rose::Badge>
+                {{t 'resources.host-catalog.types.dynamic'}}
+              </Rose::Badge>
             {{/if}}
           </row.cell>
           <row.cell>
