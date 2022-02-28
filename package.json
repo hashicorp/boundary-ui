@@ -52,7 +52,7 @@
     "request": "~2.68.0",
     "tunnel-agent": "~0.6.0",
     "cryptiles": "~4.1.2",
-    "prismjs": "^1.25.0",
+    "prismjs": "^1.27.0",
     "npm-user-validate": "^1.0.1",
     "caniuse-lite": "^1.0.30001157",
     "immer": "^9.0.6",
