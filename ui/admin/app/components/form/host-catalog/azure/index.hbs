@@ -76,7 +76,13 @@
     </form.fieldset>
     <form.fieldset>
       <:title>{{t 'titles.choose-a-provider'}}</:title>
-      <:description>{{t 'descriptions.choose-a-provider'}}</:description>
+      <:description>
+        {{concat
+          (t 'descriptions.choose-a-provider')
+          ' '
+          (t 'descriptions.choose-a-provider-azure')
+        }}
+      </:description>
 
       <:body>
         <form.radioGroup
