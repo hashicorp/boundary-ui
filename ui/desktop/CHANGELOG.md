@@ -2,7 +2,7 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
-## v1.4.2 [CLI 0.7.5] (2022.02.17)
+## Next [CLI 0.7.x] ()
 
 ### New
 
