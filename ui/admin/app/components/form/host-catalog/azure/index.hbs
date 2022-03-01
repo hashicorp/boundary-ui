@@ -77,7 +77,11 @@
     <form.fieldset>
       <:title>{{t 'titles.choose-a-provider'}}</:title>
       <:description>
-        {{t 'resources.host-catalog.form.azure_choose_a_provider.description'}}
+        {{concat
+          (t 'descriptions.choose-a-provider')
+          ' '
+          (t 'descriptions.choose-a-provider-azure')
+        }}
       </:description>
 
       <:body>

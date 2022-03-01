@@ -97,10 +97,6 @@ host-catalog:
     azure_client_id:
       label: Client ID
       help: The client ID for the client you want Boundary to use.
-    azure_choose_a_provider:
-      description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin. Boundary does not yet support rotating credentials.
-    aws_choose_a_provider:
-      description: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
 host-set:
   title: Host Set
   title_plural: Host Sets
