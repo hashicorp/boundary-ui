@@ -141,3 +141,5 @@ dns_names:
   label: Latest DNS Names
 host:
   label: Host
+ip_addresses:
+  label: Latest IP Addresses
