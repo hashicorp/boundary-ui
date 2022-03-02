@@ -12,12 +12,14 @@ module('Unit | Serializer | host set', function (hooks) {
       compositeType: 'static',
       description: 'Description',
       host_catalog_id: '123',
+      sync_interval_seconds: 1,
       version: 1,
     });
     assert.deepEqual(record.serialize(), {
       name: 'Host Set 1',
       description: 'Description',
       host_catalog_id: '123',
+      sync_interval_seconds: 1,
       version: 1,
     });
   });
@@ -53,6 +55,7 @@ module('Unit | Serializer | host set', function (hooks) {
       host_catalog_id: '123',
       version: 1,
       preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
+      sync_interval_seconds: 1,
       filters: [{ value: 'filter 1' }, { value: 'filter 2' }],
     });
     assert.deepEqual(record.serialize(), {
@@ -61,6 +64,7 @@ module('Unit | Serializer | host set', function (hooks) {
       host_catalog_id: '123',
       version: 1,
       preferred_endpoints: ['option 1', 'option 2'],
+      sync_interval_seconds: 1,
       attributes: {
         filters: ['filter 1', 'filter 2'],
       },
@@ -77,6 +81,7 @@ module('Unit | Serializer | host set', function (hooks) {
       host_catalog_id: '123',
       version: 1,
       preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
+      sync_interval_seconds: 1,
       filter: 'filter 1 && filter 2',
     });
     assert.deepEqual(record.serialize(), {
@@ -85,6 +90,7 @@ module('Unit | Serializer | host set', function (hooks) {
       host_catalog_id: '123',
       version: 1,
       preferred_endpoints: ['option 1', 'option 2'],
+      sync_interval_seconds: 1,
       attributes: {
         filter: 'filter 1 && filter 2',
       },
