@@ -55,6 +55,7 @@ export default class HostSetSerializer extends ApplicationSerializer {
     // Delete unnecessary fields for static type
     delete serialized.attributes;
     delete serialized.preferred_endpoints;
+    delete serialized.sync_interval_seconds;
     return serialized;
   }
 

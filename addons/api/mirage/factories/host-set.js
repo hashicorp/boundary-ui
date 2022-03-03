@@ -29,7 +29,11 @@ export default factory.extend({
       return result;
     }
   },
-  sync_interval_seconds: () => datatype.number(),
+  sync_interval_seconds() {
+    if (this.type === 'plugin') {
+      return datatype.number();
+    }
+  },
   // AWS specific
   filters() {
     if (this.plugin?.name === 'aws') {

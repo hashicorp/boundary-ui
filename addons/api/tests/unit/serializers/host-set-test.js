@@ -12,14 +12,12 @@ module('Unit | Serializer | host set', function (hooks) {
       compositeType: 'static',
       description: 'Description',
       host_catalog_id: '123',
-      sync_interval_seconds: 1,
       version: 1,
     });
     assert.deepEqual(record.serialize(), {
       name: 'Host Set 1',
       description: 'Description',
       host_catalog_id: '123',
-      sync_interval_seconds: 1,
       version: 1,
     });
   });
