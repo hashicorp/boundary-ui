@@ -57,6 +57,12 @@ export default class GeneratedHostSetModel extends BaseModel {
   })
   plugin;
 
+  @attr('number', {
+    description:
+      "The number of seconds between the time boundary syncs the hosts in this set using this host set's plugin. If not provided a system determined default is used",
+  })
+  sync_interval_seconds;
+
   // Azure specific
   @attr('string', {
     description: '',

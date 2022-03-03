@@ -2,8 +2,8 @@ import ApplicationSerializer from './application';
 import { copy } from 'ember-copy';
 
 const fieldByType = {
-  aws: ['preferred_endpoints', 'filters'],
-  azure: ['preferred_endpoints', 'filter'],
+  aws: ['preferred_endpoints', 'filters', 'sync_interval_seconds'],
+  azure: ['preferred_endpoints', 'filter', 'sync_interval_seconds'],
 };
 export default class HostSetSerializer extends ApplicationSerializer {
   // =properties
@@ -55,6 +55,7 @@ export default class HostSetSerializer extends ApplicationSerializer {
     // Delete unnecessary fields for static type
     delete serialized.attributes;
     delete serialized.preferred_endpoints;
+    delete serialized.sync_interval_seconds;
     return serialized;
   }
 
