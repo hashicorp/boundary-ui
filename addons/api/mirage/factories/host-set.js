@@ -34,7 +34,6 @@ export default factory.extend({
       return datatype.number();
     }
   },
-
   // AWS specific
   filters() {
     if (this.plugin?.name === 'aws') {

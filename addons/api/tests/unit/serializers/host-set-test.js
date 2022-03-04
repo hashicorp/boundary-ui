@@ -82,7 +82,6 @@ module('Unit | Serializer | host set', function (hooks) {
       sync_interval_seconds: 1,
       filter: 'filter 1 && filter 2',
     });
-
     assert.deepEqual(record.serialize(), {
       name: 'Host Set 1',
       description: 'Description',
