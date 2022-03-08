@@ -99,7 +99,7 @@ module.exports = function (environment) {
       filter: true,
       'credential-store': true,
       'managed-groups': true,
-      'ssh-target': true,
+      'ssh-target': false,
     },
   };
 
@@ -135,6 +135,7 @@ module.exports = function (environment) {
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
 
     // Enable features in development
+    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'test') {
@@ -160,7 +161,6 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
-    ENV.featureFlags['ssh-target'] = false;
   }
 
   return ENV;
