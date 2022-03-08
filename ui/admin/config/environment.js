@@ -99,6 +99,7 @@ module.exports = function (environment) {
       filter: true,
       'credential-store': true,
       'managed-groups': true,
+      'ssh-target': true,
     },
   };
 
@@ -159,6 +160,7 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.featureFlags['ssh-target'] = false;
   }
 
   return ENV;
