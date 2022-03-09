@@ -2,7 +2,7 @@ name: Testing Cache
 on: pull_request
 jobs:
   
-  compliance:
+  job1:
     name: License Compliance (test)
     runs-on: ubuntu-latest
     steps:
@@ -15,7 +15,7 @@ jobs:
       - run: yarn install
       - run: yarn run compliance:licenses
   
-  lint:
+  job2:
     name: Lint (test)
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -27,9 +27,9 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - run: yarn install
-      - run: yarn lint
+      - run: yarn lint:addons-api
   
-  test:
+  job3:
     name: Test (test)
     runs-on: ubuntu-latest
     steps:
@@ -40,4 +40,4 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - run: yarn install
-      - run: yarn test
+      - run: yarn test:addons-api
