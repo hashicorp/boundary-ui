@@ -1,0 +1,43 @@
+name: Testing Cache
+on: pull_request
+jobs:
+  
+  compliance:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'yarn'
+          cache-dependency-path: '**/node_modules'
+      - run: yarn install
+      - run: yarn run compliance:licenses
+  
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'yarn'
+          cache-dependency-path: '**/node_modules'
+      - run: yarn install
+      - run: yarn lint
+  
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'yarn'
+          cache-dependency-path: '**/node_modules'
+      - run: yarn install
+      - run: yarn test
