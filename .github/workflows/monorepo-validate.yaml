@@ -14,7 +14,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '16.x'
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:licenses
@@ -32,7 +32,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '16.x'
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn lint
@@ -50,7 +50,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '16.x'
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn test
