@@ -13,6 +13,7 @@ jobs:
           node-version: '16.x'
           cache: 'yarn'
       - run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:licenses
   
   job2:
@@ -27,4 +28,5 @@ jobs:
           node-version: '16.x'
           cache: 'yarn'
       - run: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn lint:addons-api
