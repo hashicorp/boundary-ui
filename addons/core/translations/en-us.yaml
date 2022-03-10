@@ -43,7 +43,7 @@ descriptions:
   choose-a-provider-azure: Boundary does not yet support rotating credentials.
   provider: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
   sync-interval: Number of seconds between the time boundary syncs hosts in this set. Uses system default if unchecked.
-  questions:
+questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
   abandon-confirm: Are you sure you want to navigate away?  Your unsaved changes will be lost.
