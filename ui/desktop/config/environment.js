@@ -59,6 +59,7 @@ module.exports = function (environment) {
       search: false,
       filter: true,
       'credential-store': false,
+      'ssh-target': false,
     },
   };
 
@@ -79,6 +80,7 @@ module.exports = function (environment) {
     ENV.autoOrigin = true;
 
     // Enable features in development
+    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'test') {
