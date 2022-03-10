@@ -184,7 +184,8 @@
   </form.textarea>
   <form.checkbox
     @name='toggle_sync_interval_seconds'
-    @label={{t 'titles.sync-interval-seconds'}}
+    @label={{t 'titles.sync-interval'}}
+    @helperText={{t 'descriptions.sync-interval'}}
     @onChange={{fn this.toggleSyncIntervalSeconds @model}}
     @checked={{@model.sync_interval_seconds}}
   />

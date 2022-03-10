@@ -32,7 +32,7 @@ titles:
   no-results: No Results
   choose-a-provider: Choose a provider
   provider: Provider
-  sync-interval-seconds: Sync Interval Seconds
+  sync-interval: Sync Interval
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   origin-initialization: To get started, please enter your origin URL
@@ -42,7 +42,8 @@ descriptions:
   choose-a-provider: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
   choose-a-provider-azure: Boundary does not yet support rotating credentials.
   provider: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
-questions:
+  sync-interval: Number of seconds between the time boundary syncs hosts in this set. Uses system default if unchecked.
+  questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
   abandon-confirm: Are you sure you want to navigate away?  Your unsaved changes will be lost.
