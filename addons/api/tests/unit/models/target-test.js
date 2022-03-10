@@ -395,7 +395,7 @@ module('Unit | Model | target', function (hooks) {
     assert.false(modelSSH.isTCP);
   });
 
-  test('it has isTCP property and returns the expected values', async function (assert) {
+  test('it has isTCP property and returns the expected values', function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelTCP = store.createRecord('target', {
