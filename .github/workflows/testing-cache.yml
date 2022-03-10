@@ -3,30 +3,41 @@ on: pull_request
 jobs:
   
   job1:
-    name: License Compliance (test)
+    name: job 1 (test)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        id: testing-cache
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        id: yarn-cache
         with:
           node-version: '16.x'
-          cache: 'yarn'
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - run: yarn install
-        if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:licenses
   
   job2:
-    name: Lint (test)
+    name: job 2 (test)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        id: testing-cache
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        id: yarn-cache
         with:
           node-version: '16.x'
-          cache: 'yarn'
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - run: yarn install
         if: steps.cache.outputs.cache-hit != 'true'
       - run: yarn lint:addons-api
