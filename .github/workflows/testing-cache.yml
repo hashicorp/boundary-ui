@@ -35,7 +35,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      - run: yarn install
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:licenses
   
@@ -56,6 +55,5 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      - run: yarn install
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn lint:addons-api
