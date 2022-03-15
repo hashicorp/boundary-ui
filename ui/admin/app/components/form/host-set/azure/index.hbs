@@ -168,7 +168,7 @@
     @value={{@model.filter}}
     @label={{t 'resources.host-set.form.filter.label'}}
     @helperText={{t 'resources.host-set.form.filter.help'}}
-    @linkText={{t 'tiltes.learn-more'}}
+    @linkText={{t 'titles.learn-more'}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
     readonly={{false}}
@@ -186,10 +186,11 @@
     @name='toggle_sync_interval_seconds'
     @label={{t 'titles.sync-interval'}}
     @helperText={{t 'descriptions.sync-interval'}}
-    @onChange={{fn this.toggleSyncIntervalSeconds @model}}
+    @onChange={{fn @toggleSyncIntervalSeconds @model}}
     @checked={{@model.sync_interval_seconds}}
   />
-  {{#if (or this.showSyncIntervalSeconds @model.sync_interval_seconds)}}
+
+  {{#if (or @showSyncIntervalSeconds @model.sync_interval_seconds)}}
     <form.input
       @name='sync_interval_seconds'
       @type='number'

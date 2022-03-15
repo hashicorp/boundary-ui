@@ -240,10 +240,10 @@
     @name='toggle_sync_interval_seconds'
     @label={{t 'titles.sync-interval'}}
     @helperText={{t 'descriptions.sync-interval'}}
-    @onChange={{fn this.toggleSyncIntervalSeconds @model}}
+    @onChange={{fn @toggleSyncIntervalSeconds @model}}
     @checked={{@model.sync_interval_seconds}}
   />
-  {{#if (or this.showSyncIntervalSeconds @model.sync_interval_seconds)}}
+  {{#if (or @showSyncIntervalSeconds @model.sync_interval_seconds)}}
     <form.input
       @name='sync_interval_seconds'
       @type='number'
