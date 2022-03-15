@@ -384,4 +384,24 @@ module('Unit | Model | target', function (hooks) {
     const model = store.peekRecord('target', '123abc');
     await model.removeCredentialSource('2');
   });
+
+  test('it has isSSH property and returns the expected values', function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const modelSSH = store.createRecord('target', {
+      type: 'ssh',
+    });
+    assert.true(modelSSH.isSSH);
+    assert.false(modelSSH.isTCP);
+  });
+
+  test('it has isTCP property and returns the expected values', function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const modelTCP = store.createRecord('target', {
+      type: 'tcp',
+    });
+    assert.true(modelTCP.isTCP);
+    assert.false(modelTCP.isSSH);
+  });
 });
