@@ -277,6 +277,7 @@ target:
     add-credential-sources: Add Credential Sources
   types:
     tcp: TCP
+    ssh: SSH
   host-source:
     title: Host Source
     title_plural: Host Sources
