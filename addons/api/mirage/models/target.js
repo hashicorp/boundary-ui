@@ -1,4 +1,4 @@
-import Model from './default-model';
+import Model from './base';
 import { belongsTo, hasMany } from 'ember-cli-mirage';
 
 export default Model.extend({
