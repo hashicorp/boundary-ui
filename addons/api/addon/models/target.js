@@ -207,4 +207,20 @@ export default class TargetModel extends GeneratedTargetModel {
   removeCredentialSource(credentialLibraryID, options) {
     return this.removeCredentialSources([credentialLibraryID], options);
   }
+
+  /**
+   * True if the target type is tcp.
+   * @type {boolean}
+   */
+  get isTCP() {
+    return this.type === 'tcp';
+  }
+
+  /**
+   * True if the target type is ssh.
+   * @type {boolean}
+   */
+  get isSSH() {
+    return this.type === 'ssh';
+  }
 }

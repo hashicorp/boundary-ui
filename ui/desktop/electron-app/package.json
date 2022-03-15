@@ -53,6 +53,7 @@
     "nth-check": "^2.0.1",
     "json-schema": "^0.4.0",
     "jsonpointer": "^5.0.0",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "plist": "^3.0.4"
   }
 }
