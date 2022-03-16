@@ -2,55 +2,76 @@ name: Validate Monorepo
 on: pull_request
 jobs:
 
-  compliance:
-    name: License Compliance
+  dependencies:
+    name: Install dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
-        id: cache
+        id: node-modules-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-node@v1
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-
+      - uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version: '16.x'
       - run: yarn install
-        if: steps.cache.outputs.cache-hit != 'true'
+
+  compliance:
+    name: License Compliance
+    needs: [dependencies]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: node-modules-cache
+        with:
+          path: '**/node_modules'
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:licenses
 
   lint:
     name: Lint
+    needs: [dependencies]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
-        id: cache
+        id: node-modules-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-node@v1
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-
+      - uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
-      - run: yarn install
-        if: steps.cache.outputs.cache-hit != 'true'
+          node-version: '16.x'
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn lint
 
   test:
     name: Test
+    needs: [dependencies]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
-        id: cache
+        id: node-modules-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-node@v1
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
-      - run: yarn install
-        if: steps.cache.outputs.cache-hit != 'true'
+          node-version: '16.x'
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn test
