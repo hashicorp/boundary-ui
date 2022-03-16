@@ -5,6 +5,7 @@ import permissions from '../helpers/permissions';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
+const types = ['tcp', 'ssh'];
 
 export default factory.extend({
   authorized_actions: () =>
@@ -24,12 +25,12 @@ export default factory.extend({
    * -1 means "unlimited" and we want to generate these on occasion.
    */
   session_connection_limit: () => random.arrayElement([-1, datatype.number()]),
-
+  type: (i) => types[i % types.length],
   /**
    * Generates attributes fields by type.
    */
   afterCreate(target) {
-    if (target.type === 'tcp') {
+    if (target.type === 'tcp' || target.type === 'ssh') {
       target.update({
         attributes: {
           default_port: datatype.number(),
