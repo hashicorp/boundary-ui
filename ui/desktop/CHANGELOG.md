@@ -7,7 +7,6 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ### New
 
 - Support dynamic host catalogs. ([PR](https://github.com/hashicorp/boundary-ui/pull/981))
-- Support SSH type targets. ([PR](https://github.com/hashicorp/boundary-ui/pull/1025))
 
 ## v1.4.1 [CLI 0.7.3] (2021.12.16)
 
