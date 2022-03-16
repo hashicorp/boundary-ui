@@ -182,33 +182,26 @@
       </field.errors>
     {{/if}}
   </form.textarea>
-  <form.checkbox
-    @name='toggle_sync_interval_seconds'
+  <form.input
+    @name='sync_interval_seconds'
+    @type='number'
+    @value={{@model.sync_interval_seconds}}
     @label={{t 'titles.sync-interval'}}
+    @error={{@model.errors.default_port}}
     @helperText={{t 'descriptions.sync-interval'}}
-    @onChange={{fn @toggleSyncIntervalSeconds @model}}
-    @checked={{@model.sync_interval_seconds}}
-  />
+    min='0'
+    step='1'
+    as |field|
+  >
+    {{#if @model.errors.default_port}}
+      <field.errors as |errors|>
+        {{#each @model.errors.default_port as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
 
-  {{#if (or @showSyncIntervalSeconds @model.sync_interval_seconds)}}
-    <form.input
-      @name='sync_interval_seconds'
-      @type='number'
-      @value={{@model.sync_interval_seconds}}
-      @error={{@model.errors.sync_interval_seconds}}
-      readonly={{false}}
-      step='1'
-      as |field|
-    >
-      {{#if @model.errors.sync_interval_seconds}}
-        <field.errors as |errors|>
-          {{#each @model.errors.sync_interval_seconds as |error|}}
-            <errors.message>{{error.message}}</errors.message>
-          {{/each}}
-        </field.errors>
-      {{/if}}
-    </form.input>
-  {{/if}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
