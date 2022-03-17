@@ -102,7 +102,6 @@
     {{/if}}
   </form.input>
 
-  {{! TODO this is a type-specific field }}
   <form.input
     @name='default_port'
     @type='number'
@@ -114,7 +113,6 @@
     step='1'
     as |field|
   >
-    {{! TODO need to figure out how to reference `attributes.errors` here }}
     {{#if @model.errors.default_port}}
       <field.errors as |errors|>
         {{#each @model.errors.default_port as |error|}}
