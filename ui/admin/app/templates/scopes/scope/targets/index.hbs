@@ -14,12 +14,37 @@
     {{/if}}
   </page.header>
 
-  <page.actions>
+  {{!-- <page.actions>
     {{#if (can 'create model' this.scope collection='targets')}}
       {{#if @model}}
         <Rose::LinkButton @route='scopes.scope.targets.new' @style='primary'>{{t
             'titles.new'
           }}</Rose::LinkButton>
+      {{/if}}
+    {{/if}}
+  </page.actions> --}}
+
+  <page.actions>
+    {{#if (can 'create model' this.scope collection='targets')}}
+      {{#if @model}}
+        <Rose::Dropdown
+          @text={{t 'titles.new'}}
+          @dropdownRight={{true}}
+          as |dropdown|
+        >
+          <dropdown.link
+            @route='scopes.scope.targets.new'
+            @query={{hash type='tcp'}}
+          >
+            {{t 'resources.target.types.tcp'}}
+          </dropdown.link>
+          <dropdown.link
+            @route='scopes.scope.targets.new'
+            @query={{hash type='ssh'}}
+          >
+            {{t 'resources.target.types.ssh'}}
+          </dropdown.link>
+        </Rose::Dropdown>
       {{/if}}
     {{/if}}
   </page.actions>

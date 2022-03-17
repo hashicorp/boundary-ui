@@ -1,0 +1,134 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <form.input
+    @name='name'
+    @type='text'
+    @value={{@model.name}}
+    @label={{t 'form.name.label'}}
+    @helperText={{t 'form.name.help'}}
+    @error={{@model.errors.name}}
+    as |field|
+  >
+    {{#if @model.errors.name}}
+      <field.errors as |errors|>
+        {{#each @model.errors.name as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.textarea
+    @name='description'
+    @type='text'
+    @value={{@model.description}}
+    @label={{t 'form.description.label'}}
+    @helperText={{t 'form.description.help'}}
+    @error={{@model.errors.description}}
+    as |field|
+  >
+    {{#if @model.errors.description}}
+      <field.errors as |errors|>
+        {{#each @model.errors.description as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.textarea>
+
+  <form.fieldset>
+    <:title>{{t 'form.type.label'}}</:title>
+    <:body>
+      <form.radioGroup
+        @name='types'
+        @selectedValue={{@model.type}}
+        @changed={{@changeType}}
+        as |radioGroup|
+      >
+        <radioGroup.card
+          @label={{t 'resources.target.types.ssh'}}
+          @value={{@model.type}}
+          @layout='wide'
+          readonly={{true}}
+          @disabled={{true}}
+        />
+      </form.radioGroup>
+    </:body>
+  </form.fieldset>
+
+  <form.input
+    @name='session_max_seconds'
+    @type='number'
+    @value={{@model.session_max_seconds}}
+    @label={{t 'form.session_max_seconds.label'}}
+    @error={{@model.errors.session_max_seconds}}
+    @helperText={{t 'form.session_max_seconds.help'}}
+    min='0'
+    step='1'
+    as |field|
+  >
+    {{#if @model.errors.session_max_seconds}}
+      <field.errors as |errors|>
+        {{#each @model.errors.session_max_seconds as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
+    @name='session_connection_limit'
+    @type='number'
+    @value={{@model.session_connection_limit}}
+    @label={{t 'form.session_connection_limit.label'}}
+    @error={{@model.errors.session_connection_limit}}
+    @helperText={{t 'form.session_connection_limit.help'}}
+    min='-1'
+    step='1'
+    as |field|
+  >
+    {{#if @model.errors.session_connection_limit}}
+      <field.errors as |errors|>
+        {{#each @model.errors.session_connection_limit as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  {{! TODO this is a type-specific field }}
+  <form.input
+    @name='default_port'
+    @type='number'
+    @value={{@model.default_port}}
+    @label={{t 'form.default_port.label'}}
+    @error={{@model.errors.default_port}}
+    @helperText={{t 'form.default_port.help'}}
+    min='0'
+    step='1'
+    as |field|
+  >
+    {{! TODO need to figure out how to reference `attributes.errors` here }}
+    {{#if @model.errors.default_port}}
+      <field.errors as |errors|>
+        {{#each @model.errors.default_port as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @disabled={{if @model.cannotSave @model.cannotSave}}
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+</Rose::Form>

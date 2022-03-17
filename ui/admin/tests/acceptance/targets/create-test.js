@@ -52,7 +52,7 @@ module('Acceptance | targets | create', function (hooks) {
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
-    urls.newTarget = `${urls.targets}/new`;
+    urls.newTarget = `${urls.targets}/new?type=tcp`;
     // Generate resource couner
     getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
