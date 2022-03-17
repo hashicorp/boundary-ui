@@ -143,3 +143,6 @@ host:
   label: Host
 ip_addresses:
   label: Latest IP Addresses
+sync-interval:
+  label: Sync Interval
+  help: Number of seconds between the time Boundary syncs hosts in this set.
