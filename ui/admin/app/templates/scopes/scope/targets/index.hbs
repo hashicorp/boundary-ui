@@ -14,16 +14,6 @@
     {{/if}}
   </page.header>
 
-  {{!-- <page.actions>
-    {{#if (can 'create model' this.scope collection='targets')}}
-      {{#if @model}}
-        <Rose::LinkButton @route='scopes.scope.targets.new' @style='primary'>{{t
-            'titles.new'
-          }}</Rose::LinkButton>
-      {{/if}}
-    {{/if}}
-  </page.actions> --}}
-
   <page.actions>
     {{#if (can 'create model' this.scope collection='targets')}}
       {{#if @model}}
