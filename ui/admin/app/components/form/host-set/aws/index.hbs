@@ -236,6 +236,25 @@
     </:body>
   </Rose::Form::Fieldset>
 
+  <form.input
+    @name='sync_interval_seconds'
+    @type='number'
+    @value={{@model.sync_interval_seconds}}
+    @label={{t 'form.sync-interval.label'}}
+    @error={{@model.errors.sync_interval_seconds}}
+    @helperText={{t 'form.sync-interval.help'}}
+    min='0'
+    step='1'
+    as |field|
+  >
+    {{#if @model.errors.sync_interval_seconds}}
+      <field.errors as |errors|>
+        {{#each @model.errors.sync_interval_seconds as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
