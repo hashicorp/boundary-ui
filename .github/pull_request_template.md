@@ -1,6 +1,6 @@
-## Description
-
 :tickets: [Jira ticket]()
+
+## Description
 
 <!--
 Replace PATH_TO_FEATURE with Vercel link
