@@ -53,6 +53,7 @@
       >
         <radioGroup.card
           @label={{t 'resources.target.types.ssh'}}
+          @helperText={{t 'resources.target.help.ssh'}}
           @value={{@model.type}}
           @layout='wide'
           readonly={{true}}
@@ -109,6 +110,7 @@
     @label={{t 'form.default_port.label'}}
     @error={{@model.errors.default_port}}
     @helperText={{t 'form.default_port.help'}}
+    placeholder='22'
     min='0'
     step='1'
     as |field|

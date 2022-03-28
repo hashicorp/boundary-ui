@@ -53,6 +53,7 @@
       >
         <radioGroup.card
           @label={{t 'resources.target.types.tcp'}}
+          @helperText={{t 'resources.target.help.tcp'}}
           @value={{@model.type}}
           @layout='wide'
           readonly={{true}}
@@ -109,6 +110,7 @@
     @label={{t 'form.default_port.label'}}
     @error={{@model.errors.default_port}}
     @helperText={{t 'form.default_port.help'}}
+    placeholder='443'
     min='0'
     step='1'
     as |field|
