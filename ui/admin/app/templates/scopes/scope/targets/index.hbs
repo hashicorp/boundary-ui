@@ -14,36 +14,6 @@
     {{/if}}
   </page.header>
 
-<<<<<<< HEAD
-  {{!-- <page.actions>
-    {{#if (can 'create model' this.scope collection='targets')}}
-      {{#if @model}}
-        <Rose::Dropdown
-          @text={{t 'titles.new'}}
-          @dropdownRight={{true}}
-          as |dropdown|
-        >
-          <dropdown.link
-            @route='scopes.scope.targets.new'
-            @query={{hash type='tcp'}}
-          >
-            {{t 'resources.target.types.tcp'}}
-          </dropdown.link>
-          {{#if (feature-flag 'ssh-target')}}
-            <dropdown.link
-              @route='scopes.scope.targets.new'
-              @query={{hash type='ssh'}}
-            >
-              {{t 'resources.target.types.ssh'}}
-            </dropdown.link>
-          {{/if}}
-        </Rose::Dropdown>
-      {{/if}}
-    {{/if}}
-  </page.actions> --}}
-
-=======
->>>>>>> f1402640 (chore: 🤖 remove comment)
   <page.actions>
     {{#if (can 'create model' this.scope collection='targets')}}
       {{#if @model}}
