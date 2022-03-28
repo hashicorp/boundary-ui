@@ -279,8 +279,8 @@ target:
     tcp: TCP
     ssh: SSH
   help: 
-    tcp: This target belongs to an SSH host catalog and will use SSH to connect
-    ssh: This target belongs to an TCP host catalog and will use TCP to connect
+    tcp: This target belongs to an TCP host catalog and will use TCP to connect
+    ssh: This target belongs to an SSH host catalog and will use SSH to connect
   host-source:
     title: Host Source
     title_plural: Host Sources
