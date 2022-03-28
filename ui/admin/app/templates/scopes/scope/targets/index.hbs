@@ -28,12 +28,14 @@
           >
             {{t 'resources.target.types.tcp'}}
           </dropdown.link>
-          <dropdown.link
-            @route='scopes.scope.targets.new'
-            @query={{hash type='ssh'}}
-          >
-            {{t 'resources.target.types.ssh'}}
-          </dropdown.link>
+          {{#if (feature-flag 'ssh-target')}}
+            <dropdown.link
+              @route='scopes.scope.targets.new'
+              @query={{hash type='ssh'}}
+            >
+              {{t 'resources.target.types.ssh'}}
+            </dropdown.link>
+          {{/if}}
         </Rose::Dropdown>
       {{/if}}
     {{/if}}
@@ -52,37 +54,74 @@
         </table.header>
         <table.body as |body|>
           {{#each @model as |target|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (can 'read model' target)}}
-                  <LinkTo
-                    @route='scopes.scope.targets.target'
-                    @model={{target.id}}
-                  >
+            {{#if (feature-flag 'ssh-target')}}
+
+              <body.row as |row|>
+                <row.headerCell>
+                  {{#if (can 'read model' target)}}
+                    <LinkTo
+                      @route='scopes.scope.targets.target'
+                      @model={{target.id}}
+                    >
+                      {{target.displayName}}
+                    </LinkTo>
+                  {{else}}
                     {{target.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{target.displayName}}
-                {{/if}}
-                <p>{{target.description}}</p>
-              </row.headerCell>
-              <row.cell>
-                {{#if target.type}}
-                  <Rose::Badge>
-                    {{t (concat 'resources.target.types.' target.type)}}
-                  </Rose::Badge>
-                {{/if}}
-              </row.cell>
-              <row.cell>
-                <Copyable
-                  @text={{target.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{target.id}}</code>
-                </Copyable>
-              </row.cell>
-            </body.row>
+                  {{/if}}
+                  <p>{{target.description}}</p>
+                </row.headerCell>
+                <row.cell>
+                  {{#if target.type}}
+                    <Rose::Badge>
+                      {{t (concat 'resources.target.types.' target.type)}}
+                    </Rose::Badge>
+                  {{/if}}
+                </row.cell>
+                <row.cell>
+                  <Copyable
+                    @text={{target.id}}
+                    @buttonText={{t 'actions.copy-to-clipboard'}}
+                    @acknowledgeText={{t 'states.copied'}}
+                  >
+                    <code>{{target.id}}</code>
+                  </Copyable>
+                </row.cell>
+              </body.row>
+            {{else}}
+              {{#if (eq target.type 'tcp')}}
+                <body.row as |row|>
+                  <row.headerCell>
+                    {{#if (can 'read model' target)}}
+                      <LinkTo
+                        @route='scopes.scope.targets.target'
+                        @model={{target.id}}
+                      >
+                        {{target.displayName}}
+                      </LinkTo>
+                    {{else}}
+                      {{target.displayName}}
+                    {{/if}}
+                    <p>{{target.description}}</p>
+                  </row.headerCell>
+                  <row.cell>
+                    {{#if target.type}}
+                      <Rose::Badge>
+                        {{t (concat 'resources.target.types.' target.type)}}
+                      </Rose::Badge>
+                    {{/if}}
+                  </row.cell>
+                  <row.cell>
+                    <Copyable
+                      @text={{target.id}}
+                      @buttonText={{t 'actions.copy-to-clipboard'}}
+                      @acknowledgeText={{t 'states.copied'}}
+                    >
+                      <code>{{target.id}}</code>
+                    </Copyable>
+                  </row.cell>
+                </body.row>
+              {{/if}}
+            {{/if}}
           {{/each}}
         </table.body>
       </Rose::Table>
