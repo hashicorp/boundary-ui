@@ -29,7 +29,8 @@ module('Acceptance | targets | create', function (hooks) {
     projectScope: null,
     targets: null,
     target: null,
-    newTarget: null,
+    newTCPTarget: null,
+    newSSHTarget: null,
   };
 
   hooks.beforeEach(function () {
@@ -52,16 +53,26 @@ module('Acceptance | targets | create', function (hooks) {
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
-    urls.newTarget = `${urls.targets}/new`;
+    urls.newTCPTarget = `${urls.targets}/new?type=tcp`;
+    urls.newSSHTarget = `${urls.targets}/new?type=ssh`;
     // Generate resource couner
     getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
   });
 
-  test('can create new targets', async function (assert) {
+  test('can create new targets of type TCP', async function (assert) {
     assert.expect(1);
     const count = getTargetCount();
-    await visit(urls.newTarget);
+    await visit(urls.newTCPTarget);
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.equal(getTargetCount(), count + 1);
+  });
+
+  test('can create new targets of type SSH', async function (assert) {
+    assert.expect(1);
+    const count = getTargetCount();
+    await visit(urls.newSSHTarget);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.equal(getTargetCount(), count + 1);
@@ -75,7 +86,7 @@ module('Acceptance | targets | create', function (hooks) {
         'create'
       )
     );
-    assert.ok(find(`[href="${urls.newTarget}"]`));
+    assert.ok(find(`[href="${urls.newTCPTarget}"]`));
   });
 
   test('cannot navigate to new targets route without proper authorization', async function (assert) {
@@ -87,13 +98,13 @@ module('Acceptance | targets | create', function (hooks) {
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.newTarget}"]`));
+    assert.notOk(find(`[href="${urls.newTCPTarget}"]`));
   });
 
   test('can cancel create new targets', async function (assert) {
     assert.expect(2);
     const count = getTargetCount();
-    await visit(urls.newTarget);
+    await visit(urls.newTCPTarget);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.equal(currentURL(), urls.targets);
@@ -121,7 +132,7 @@ module('Acceptance | targets | create', function (hooks) {
         }
       );
     });
-    await visit(urls.newTarget);
+    await visit(urls.newTCPTarget);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
