@@ -9,6 +9,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { enableFeature } from 'ember-feature-flags/test-support';
 
 module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -53,11 +54,18 @@ module('Acceptance | targets | create', function (hooks) {
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
+    urls.newTarget = `${urls.targets}/new`;
     urls.newTCPTarget = `${urls.targets}/new?type=tcp`;
     urls.newSSHTarget = `${urls.targets}/new?type=ssh`;
     // Generate resource couner
     getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
+  });
+
+  test('defaults to a new TCP target when no query param provided', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newTarget);
+    assert.equal(find('input[disabled]').value, 'tcp');
   });
 
   test('can create new targets of type TCP', async function (assert) {
@@ -79,7 +87,8 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can navigate to new targets route with proper authorization', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
+    enableFeature('ssh-target');
     await visit(urls.targets);
     assert.ok(
       instances.scopes.project.authorized_collection_actions.targets.includes(
@@ -87,10 +96,11 @@ module('Acceptance | targets | create', function (hooks) {
       )
     );
     assert.ok(find(`[href="${urls.newTCPTarget}"]`));
+    assert.ok(find(`[href="${urls.newSSHTarget}"]`));
   });
 
   test('cannot navigate to new targets route without proper authorization', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets = [];
     await visit(urls.targets);
     assert.notOk(
@@ -99,9 +109,10 @@ module('Acceptance | targets | create', function (hooks) {
       )
     );
     assert.notOk(find(`[href="${urls.newTCPTarget}"]`));
+    assert.notOk(find(`[href="${urls.newSSHTarget}"]`));
   });
 
-  test('can cancel create new targets', async function (assert) {
+  test('can cancel create new TCP target', async function (assert) {
     assert.expect(2);
     const count = getTargetCount();
     await visit(urls.newTCPTarget);
@@ -111,7 +122,17 @@ module('Acceptance | targets | create', function (hooks) {
     assert.equal(getTargetCount(), count);
   });
 
-  test('saving a new target with invalid fields displays error messages', async function (assert) {
+  test('can cancel create new SSH target', async function (assert) {
+    assert.expect(2);
+    const count = getTargetCount();
+    await visit(urls.newSSHTarget);
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.equal(currentURL(), urls.targets);
+    assert.equal(getTargetCount(), count);
+  });
+
+  test('saving a new TCP target with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.post('/targets', () => {
       return new Response(
@@ -133,6 +154,39 @@ module('Acceptance | targets | create', function (hooks) {
       );
     });
     await visit(urls.newTCPTarget);
+    await click('[type="submit"]');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
+  });
+
+  test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    this.server.post('/targets', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.newSSHTarget);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
