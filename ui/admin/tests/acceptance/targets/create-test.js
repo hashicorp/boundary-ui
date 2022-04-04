@@ -95,7 +95,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert.equal(getTargetCount(), count + 1);
   });
 
-  test('able to navigate to new targets route with proper authorization', async function (assert) {
+  test('can navigate to new targets route with proper authorization', async function (assert) {
     assert.expect(3);
     await visit(urls.targets);
     assert.ok(
@@ -107,7 +107,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert.ok(find(`[href="${urls.newSSHTarget}"]`));
   });
 
-  test('not able to navigate to new targets route without proper authorization', async function (assert) {
+  test('cannot navigate to new targets route without proper authorization', async function (assert) {
     assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets = [];
     await visit(urls.targets);
@@ -120,7 +120,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert.notOk(find(`[href="${urls.newSSHTarget}"]`));
   });
 
-  test('not able to navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
+  test('cannot navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
     featuresService.disable('ssh-target');
     assert.expect(2);
     await visit(urls.targets);
