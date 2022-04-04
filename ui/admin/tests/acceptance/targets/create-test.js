@@ -1,5 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  find,
+  click,
+  fillIn,
+  getContext,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -9,13 +16,13 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { enableFeature } from 'ember-feature-flags/test-support';
 
 module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let getTargetCount;
+  let featuresService;
 
   const instances = {
     scopes: {
@@ -35,6 +42,8 @@ module('Acceptance | targets | create', function (hooks) {
   };
 
   hooks.beforeEach(function () {
+    const { owner } = getContext();
+    featuresService = owner.lookup('service:features');
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -86,9 +95,8 @@ module('Acceptance | targets | create', function (hooks) {
     assert.equal(getTargetCount(), count + 1);
   });
 
-  test('can navigate to new targets route with proper authorization', async function (assert) {
+  test('able to navigate to new targets route with proper authorization', async function (assert) {
     assert.expect(3);
-    enableFeature('ssh-target');
     await visit(urls.targets);
     assert.ok(
       instances.scopes.project.authorized_collection_actions.targets.includes(
@@ -99,7 +107,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert.ok(find(`[href="${urls.newSSHTarget}"]`));
   });
 
-  test('cannot navigate to new targets route without proper authorization', async function (assert) {
+  test('not able to navigate to new targets route without proper authorization', async function (assert) {
     assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets = [];
     await visit(urls.targets);
@@ -109,6 +117,18 @@ module('Acceptance | targets | create', function (hooks) {
       )
     );
     assert.notOk(find(`[href="${urls.newTCPTarget}"]`));
+    assert.notOk(find(`[href="${urls.newSSHTarget}"]`));
+  });
+
+  test('not able to navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
+    featuresService.disable('ssh-target');
+    assert.expect(2);
+    await visit(urls.targets);
+    assert.ok(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create'
+      )
+    );
     assert.notOk(find(`[href="${urls.newSSHTarget}"]`));
   });
 
