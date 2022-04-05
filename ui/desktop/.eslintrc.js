@@ -11,7 +11,14 @@ module.exports = {
     babelOptions: {
       plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
     },
+<<<<<<< HEAD
     // end of babel-config
+=======
+    requireConfigFile: false,
+    babelOptions: {
+      plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+    },
+>>>>>>> Update babel-parser and dependencies within admin/desktop
   },
   plugins: ['ember'],
   extends: [
