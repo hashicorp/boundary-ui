@@ -12,7 +12,7 @@ export default class ScopesScopeScopesController extends Controller {
   /**
    * @type {string}
    */
-  @computed('model.currentScope.{isGlobal,isOrg}')
+  @computed('intl', 'model.currentScope.{isGlobal,isOrg}')
   get breadCrumb() {
     if (this.model.currentScope.isGlobal) {
       return this.intl.t('resources.org.title_plural');
