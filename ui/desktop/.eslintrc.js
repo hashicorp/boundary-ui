@@ -6,13 +6,12 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
-    ecmaFeatures: {
-      legacyDecorators: true,
-    },
+    // This is specific babel-config. If grows consider creating a babel config file
     requireConfigFile: false,
     babelOptions: {
       plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
     },
+    // end of babel-config
   },
   plugins: ['ember'],
   extends: [
