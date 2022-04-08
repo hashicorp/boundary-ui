@@ -43,7 +43,6 @@ export default class ScopesScopeTargetsNewRoute extends Route {
    */
   @action
   changeType(type) {
-    //  if (type === 'plugin') type = 'aws';
     this.router.replaceWith({ queryParams: { type } });
   }
 }
