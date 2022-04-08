@@ -233,6 +233,49 @@ module('Acceptance | projects | targets', function (hooks) {
     );
   });
 
+  test('displays the correct target type (TCP) in the success dialog body', async function (assert) {
+    assert.expect(1);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+
+    assert.ok(find('.rose-dialog-body h3').textContent.trim().includes('TCP'));
+  });
+
+  test('displays the correct target type (SSH) in the success dialog body', async function (assert) {
+    assert.expect(1);
+    instances.target.update({
+      type: 'ssh',
+    });
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'ssh',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+
+    assert.ok(find('.rose-dialog-body h3').textContent.trim().includes('SSH'));
+  });
+
   // Skipping because this test doesn't make sense.  Users will never even see
   // targets for which they do not have authorize-session.  The only reason this
   // test ever passed was because filtering in target mocks wasn't previously
