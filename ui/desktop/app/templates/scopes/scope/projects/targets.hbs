@@ -20,7 +20,7 @@
           <:body>
             <h3>
               {{t 'resources.target.messages.proxy_url.title'}}
-              ({{t 'resources.target.types.tcp'}})
+              ({{t (concat 'resources.target.types.' target.type)}})
             </h3>
             <p>
               <Copyable
