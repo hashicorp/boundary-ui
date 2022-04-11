@@ -36,7 +36,7 @@ export default class GeneratedTargetModel extends BaseModel {
 
   @attr('string', {
     description:
-      'A boolean expression that allows filtering the workers that can handle a session.',
+      'Optional boolean expression to filter the workers that are allowed to satisfy this request.',
   })
   worker_filter;
 
