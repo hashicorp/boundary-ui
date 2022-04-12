@@ -33,7 +33,7 @@ export default class AccountSerializer extends ApplicationSerializer {
    * `attributes` entirely on update.
    */
   serializeOIDC(snapshot) {
-    const { isNew } = snapshot?.record || null;
+    const { isNew } = snapshot?.record || {};
     let serialized = super.serialize(...arguments);
     delete serialized.attributes;
     if (isNew) {
