@@ -13,6 +13,8 @@
     "doc:toc": "doctoc README.md",
     "build:development": "ember build",
     "build": "ember build --environment=production",
+    "build:oss:poc": "EDITION=oss ember build --environment=production",
+    "build:enterprise:poc": "EDITION=enterprise ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",

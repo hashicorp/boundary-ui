@@ -15,6 +15,8 @@
   "scripts": {
     "build": "yarn build:ui:admin",
     "build:ui:admin": "cd ui/admin && yarn build",
+    "build:ui:admin:oss:poc": "cd ui/admin && yarn build:oss:poc",
+    "build:ui:admin:enterprise:poc": "cd ui/admin && yarn build:enterprise:poc",
     "build:ui:desktop": "cd ui/desktop && yarn build",
     "build:ui:desktop:win": "docker-compose -f docker-compose-embedding.yml run build-desktop-production && yarn build:ui:desktop:app",
     "build:ui:desktop:production": "cd ui/desktop && yarn build:production",
