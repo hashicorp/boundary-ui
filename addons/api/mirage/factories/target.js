@@ -25,6 +25,7 @@ export default factory.extend({
    * -1 means "unlimited" and we want to generate these on occasion.
    */
   session_connection_limit: () => random.arrayElement([-1, datatype.number()]),
+  worker_filter: (i) => (i % 2 === 0 ? random.words() : null),
   type: (i) => types[i % types.length],
   /**
    * Generates attributes fields by type.
