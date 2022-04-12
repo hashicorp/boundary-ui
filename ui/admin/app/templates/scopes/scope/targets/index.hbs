@@ -17,26 +17,9 @@
   <page.actions>
     {{#if (can 'create model' this.scope collection='targets')}}
       {{#if @model}}
-        <Rose::Dropdown
-          @text={{t 'titles.new'}}
-          @dropdownRight={{true}}
-          as |dropdown|
-        >
-          <dropdown.link
-            @route='scopes.scope.targets.new'
-            @query={{hash type='tcp'}}
-          >
-            {{t 'resources.target.types.tcp'}}
-          </dropdown.link>
-          {{#if (feature-flag 'ssh-target')}}
-            <dropdown.link
-              @route='scopes.scope.targets.new'
-              @query={{hash type='ssh'}}
-            >
-              {{t 'resources.target.types.ssh'}}
-            </dropdown.link>
-          {{/if}}
-        </Rose::Dropdown>
+        <Rose::LinkButton @route='scopes.scope.targets.new' @style='primary'>{{t
+            'titles.new'
+          }}</Rose::LinkButton>
       {{/if}}
     {{/if}}
   </page.actions>

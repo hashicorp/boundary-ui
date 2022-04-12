@@ -74,7 +74,7 @@ module('Acceptance | targets | create', function (hooks) {
   test('defaults to a new TCP target when no query param provided', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
-    assert.equal(find('input[disabled]').value, 'tcp');
+    assert.equal(find('input[name=types]:checked').value, 'tcp');
   });
 
   test('can create new targets of type TCP', async function (assert) {
@@ -96,19 +96,18 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can navigate to new targets route with proper authorization', async function (assert) {
-    assert.expect(3);
+    assert.expect(2);
     await visit(urls.targets);
     assert.ok(
       instances.scopes.project.authorized_collection_actions.targets.includes(
         'create'
       )
     );
-    assert.ok(find(`[href="${urls.newTCPTarget}"]`));
-    assert.ok(find(`[href="${urls.newSSHTarget}"]`));
+    assert.ok(find(`[href="${urls.newTarget}"]`));
   });
 
   test('cannot navigate to new targets route without proper authorization', async function (assert) {
-    assert.expect(3);
+    assert.expect(2);
     instances.scopes.project.authorized_collection_actions.targets = [];
     await visit(urls.targets);
     assert.notOk(
@@ -116,8 +115,7 @@ module('Acceptance | targets | create', function (hooks) {
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.newTCPTarget}"]`));
-    assert.notOk(find(`[href="${urls.newSSHTarget}"]`));
+    assert.notOk(find(`[href="${urls.newTarget}"]`));
   });
 
   test('cannot navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
