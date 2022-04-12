@@ -34,6 +34,12 @@ export default class GeneratedTargetModel extends BaseModel {
   })
   session_connection_limit;
 
+  @attr('string', {
+    description:
+      'Optional boolean expression to filter the workers that are allowed to satisfy this request.',
+  })
+  worker_filter;
+
   @attr('date', {
     description: 'The time this resource was created\nOutput only.',
     readOnly: true,
