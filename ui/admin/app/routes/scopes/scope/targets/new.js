@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeTargetsNewRoute extends Route {
+  // =services
+
+  @service router;
   // =methods
 
   // =attributes
@@ -11,17 +16,33 @@ export default class ScopesScopeTargetsNewRoute extends Route {
   };
   /**
    * Creates a new unsaved target in current scope.
+   * Also rollback/destroy any new, unsaved instances from this route before
+   * creating another, but reuse name/description if available.
    * @return {TargetModel}
    */
 
-  model(params) {
+  model({ type = 'tcp' }) {
     const scopeModel = this.modelFor('scopes.scope');
-    if (!params.type) {
-      params.type = 'tcp'; //tcp is the default type
+    let name, description;
+    if (this.currentModel?.isNew) {
+      ({ name, description } = this.currentModel);
+      this.currentModel.rollbackAttributes();
     }
+
     return this.store.createRecord('target', {
-      type: params.type,
       scopeModel,
+      type,
+      name,
+      description,
     });
+  }
+
+  /**
+   * Update type of target
+   * @param {string} type
+   */
+  @action
+  changeType(type) {
+    this.router.replaceWith({ queryParams: { type } });
   }
 }
