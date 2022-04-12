@@ -35,7 +35,8 @@ export default class GeneratedTargetModel extends BaseModel {
   session_connection_limit;
 
   @attr('string', {
-    description: '',
+    description:
+      'Optional boolean expression to filter the workers that are allowed to satisfy this request.',
   })
   worker_filter;
 
