@@ -19,6 +19,16 @@ const featureEditions = {
     'ssh-target': true,
   },
 };
+/**
+ *  Return the featureFlag correspondant to the defined EDITION. By default OSS
+ * @returns {object} FeaturesFlag object
+ */
+const getFeaturesEditionObject = () => {
+  if (EDITION === 'enterprise') {
+    return { ...featureEditions.oss, ...featureEditions.enterprise };
+  }
+  return featureEditions.oss;
+};
 
 module.exports = function (environment) {
   let ENV = {
@@ -107,10 +117,7 @@ module.exports = function (environment) {
       directory: '../../addons/api/mirage',
     },
 
-    featureFlags:
-      EDITION === 'enterprise'
-        ? { ...featureEditions.oss, ...featureEditions.enterprise }
-        : featureEditions.oss,
+    featureFlags: getFeaturesEditionObject(),
   };
 
   // Unsafe policy is necessary in development and test environments, but should
@@ -173,6 +180,5 @@ module.exports = function (environment) {
   if (environment === 'production') {
     // here you can enable a production-specific feature
   }
-
   return ENV;
 };
