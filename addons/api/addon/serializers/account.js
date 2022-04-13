@@ -70,7 +70,7 @@ export default class AccountSerializer extends ApplicationSerializer {
     }
     // Change password custom method
     if (snapshot?.adapterOptions?.method === 'change-password') {
-      const { currentPassword, newPassword } = snapshot?.adapterOptions || null;
+      const { currentPassword, newPassword } = snapshot?.adapterOptions || {};
       serialized = this.serializeForChangePassword(
         snapshot,
         currentPassword,
