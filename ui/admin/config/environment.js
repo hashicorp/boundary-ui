@@ -15,19 +15,10 @@ const featureEditions = {
     'credential-store': true,
     'managed-groups': true,
   },
-  enterprise: {
-    'ssh-target': true,
-  },
 };
-/**
- *  Return the featureFlag correspondant to the defined EDITION. By default OSS
- * @returns {object} FeaturesFlag object
- */
-const getFeaturesEditionObject = () => {
-  if (EDITION === 'enterprise') {
-    return { ...featureEditions.oss, ...featureEditions.enterprise };
-  }
-  return featureEditions.oss;
+featureEditions.enterprise = {
+  ...featureEditions.oss,
+  'ssh-target': true,
 };
 
 module.exports = function (environment) {
@@ -117,7 +108,7 @@ module.exports = function (environment) {
       directory: '../../addons/api/mirage',
     },
 
-    featureFlags: getFeaturesEditionObject(),
+    featureFlags: featureEditions[EDITION],
   };
 
   // Unsafe policy is necessary in development and test environments, but should
