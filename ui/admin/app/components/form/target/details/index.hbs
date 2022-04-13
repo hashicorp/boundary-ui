@@ -126,6 +126,24 @@
   </form.input>
 
   <form.input
+    @name='worker_filter'
+    @type='text'
+    @value={{@model.worker_filter}}
+    @label={{t 'form.worker_filter.label'}}
+    @error={{@model.errors.worker_filter}}
+    @helperText={{t 'form.worker_filter.help'}}
+    as |field|
+  >
+    {{#if @model.errors.worker_filter}}
+      <field.errors as |errors|>
+        {{#each @model.errors.worker_filter as |error|}}
+          <errors.message>{{error.message}}</errors.message>
+        {{/each}}
+      </field.errors>
+    {{/if}}
+  </form.input>
+
+  <form.input
     @name='default_port'
     @type='number'
     @value={{@model.default_port}}

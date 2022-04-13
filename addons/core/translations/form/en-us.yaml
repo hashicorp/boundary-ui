@@ -41,6 +41,9 @@ session_max_seconds:
 session_connection_limit:
   label: Maximum Connections
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
+worker_filter:
+  label: Worker Filter
+  help: Target filters are regular expressions that reference worker tags.
 host_set:
   label: Host Set
 grant_scope:
