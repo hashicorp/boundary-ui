@@ -33,7 +33,7 @@ export default class AccountSerializer extends ApplicationSerializer {
    * `attributes` entirely on update.
    */
   serializeOIDC(snapshot) {
-    const { isNew } = snapshot?.record;
+    const { isNew } = snapshot?.record || {};
     let serialized = super.serialize(...arguments);
     delete serialized.attributes;
     if (isNew) {
@@ -70,7 +70,7 @@ export default class AccountSerializer extends ApplicationSerializer {
     }
     // Change password custom method
     if (snapshot?.adapterOptions?.method === 'change-password') {
-      const { currentPassword, newPassword } = snapshot?.adapterOptions;
+      const { currentPassword, newPassword } = snapshot?.adapterOptions || {};
       serialized = this.serializeForChangePassword(
         snapshot,
         currentPassword,
