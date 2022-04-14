@@ -132,6 +132,8 @@
     @label={{t 'form.worker_filter.label'}}
     @error={{@model.errors.worker_filter}}
     @helperText={{t 'form.worker_filter.help'}}
+    @linkText={{t 'actions.learn-more'}}
+    @link={{doc-url 'target.worker-filters'}}
     as |field|
   >
     {{#if @model.errors.worker_filter}}
