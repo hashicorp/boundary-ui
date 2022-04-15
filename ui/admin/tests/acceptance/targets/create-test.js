@@ -78,21 +78,41 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create new targets of type TCP', async function (assert) {
-    assert.expect(1);
+    assert.expect(3);
     const count = getTargetCount();
     await visit(urls.newTCPTarget);
     await fillIn('[name="name"]', 'random string');
+    await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
     assert.equal(getTargetCount(), count + 1);
+    assert.equal(
+      this.server.schema.targets.all().models[getTargetCount() - 1].name,
+      'random string'
+    );
+    assert.equal(
+      this.server.schema.targets.all().models[getTargetCount() - 1]
+        .workerFilter,
+      'random filter'
+    );
   });
 
   test('can create new targets of type SSH', async function (assert) {
-    assert.expect(1);
+    assert.expect(3);
     const count = getTargetCount();
     await visit(urls.newSSHTarget);
     await fillIn('[name="name"]', 'random string');
+    await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
     assert.equal(getTargetCount(), count + 1);
+    assert.equal(
+      this.server.schema.targets.all().models[getTargetCount() - 1].name,
+      'random string'
+    );
+    assert.equal(
+      this.server.schema.targets.all().models[getTargetCount() - 1]
+        .workerFilter,
+      'random filter'
+    );
   });
 
   test('can navigate to new targets route with proper authorization', async function (assert) {
