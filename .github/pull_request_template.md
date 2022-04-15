@@ -1,4 +1,4 @@
-:tickets: [Jira ticket]()
+:tickets: [Jira ticket](https://hashicorp.atlassian.net/browse/JIRA_TICKET_NUMBER)
 
 ## Description
 
