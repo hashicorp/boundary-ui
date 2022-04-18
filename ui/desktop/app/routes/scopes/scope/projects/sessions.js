@@ -1,12 +1,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import runEvery from 'ember-pollster/decorators/route/run-every';
+// import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import config from '../../../../config/environment';
+// import config from '../../../../config/environment';
 
-const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
+// const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeProjectsSessionsRoute extends Route {
   // =services
@@ -65,10 +65,16 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     );
   }
 
-  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
-  poller() {
-    return this.refresh();
-  }
+  /**
+   * Update: disable polling due to large amounts of sessions crashing the app
+   * This is a temp solution till we have a pagination on the UI
+   * and concrete backend solution to support large amounts of sessions.
+   */
+
+  // @runEvery(POLL_TIMEOUT_SECONDS * 1000)
+  // poller() {
+  //   return this.refresh();
+  // }
 
   // =actions
 
