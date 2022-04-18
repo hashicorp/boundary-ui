@@ -90,16 +90,22 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can save changes to existing target', async function (assert) {
-    assert.expect(3);
+    assert.expect(5);
     assert.notEqual(instances.target.name, 'random string');
+    assert.notEqual(instances.target.worker_filter, 'random filter');
     await visit(urls.target);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
+    await fillIn('[name="worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="submit"]');
     assert.equal(currentURL(), urls.target);
     assert.equal(
       this.server.schema.targets.all().models[0].name,
       'random string'
+    );
+    assert.equal(
+      this.server.schema.targets.all().models[0].workerFilter,
+      'random filter'
     );
   });
 
