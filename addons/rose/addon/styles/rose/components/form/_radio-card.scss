@@ -75,7 +75,6 @@ $radio-svg: (
   }
   .rose-form-radio-label {
     @include type.type(s, bold);
-    display: flex;
     color: var(--black);
     width: ($size-m) * 23;
     height: ($size-m) * 7.4;
@@ -88,7 +87,6 @@ $radio-svg: (
     border-radius: $size-xxs;
     padding: $size-s $size-m;
     box-sizing: border-box;
-    background-color: var(--white);
     .rose-form-helper-text {
       @include type.type(xs, normal);
     }
