@@ -279,8 +279,8 @@ target:
     tcp: TCP
     ssh: SSH
   help: 
-    tcp: This target belongs to an TCP host catalog and will use TCP to connect
-    ssh: This target belongs to an SSH host catalog and will use SSH to connect
+    tcp: Connections are made over TCP to support a broad range of protocols, including SSH, RDP, databases, and more.  This is the most general-purpose type.
+    ssh: Protocol-aware connections are made over SSH.  Use when requiring SSH connections to remote hosts.
   host-source:
     title: Host Source
     title_plural: Host Sources

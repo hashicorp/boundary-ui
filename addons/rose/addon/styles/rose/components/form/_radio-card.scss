@@ -76,7 +76,7 @@ $radio-svg: (
   .rose-form-radio-label {
     @include type.type(s, bold);
     width: ($size-m) * 23;
-    height: ($size-m) * 7.4;
+    height: 100%;
     display: block;
     position: relative;
     text-align: left;
@@ -84,10 +84,11 @@ $radio-svg: (
     box-shadow: 0 $size-xxs $size-xxs
       rgba(var(--stark-components), var(--opacity-2));
     border-radius: $size-xxs;
-    padding: $size-s $size-m;
+    padding: $size-s $size-m ($size-xl + $size-m);
     box-sizing: border-box;
     .rose-form-helper-text {
       @include type.type(xs, normal);
+      padding-top: $size-xs;
     }
 
     &::after {
