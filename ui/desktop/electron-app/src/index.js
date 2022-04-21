@@ -42,6 +42,104 @@ protocol.registerSchemesAsPrivileged([
   },
 ]);
 
+const createWindow = (partition, closeWindowCB) => {
+  /**
+   * Enable electron OS window frame/chrome for MacOS only.
+   * Disable frame/chrome regardless of OS when
+   * `DISABLE_WINDOW_CHROME=true`.
+   */
+  let showWindowChrome = isMac();
+  if (process.env.DISABLE_WINDOW_CHROME) showWindowChrome = false;
+
+  const browserWindowOptions = {
+    width: 1280,
+    height: 760,
+    frame: showWindowChrome,
+    titleBarStyle: showWindowChrome ? 'hiddenInset' : 'none',
+    webPreferences: {
+      partition,
+      sandbox: true,
+      webSecurity: true,
+      contextIsolation: true,
+      nodeIntegration: false,
+      enableRemoteModule: false,
+      allowRunningInsecureContent: false,
+      // The preload script establishes the message-based IPC pathway without
+      // exposing new modules to the renderer.
+      preload: preloadPath /* eng-disable PRELOAD_JS_CHECK */,
+      disableBlinkFeatures: 'Auxclick',
+    },
+  };
+
+  // To show app icon in toolbar in linux, set browser window icon.
+  // This is a limitation of electron build.
+  if (isLinux())
+    browserWindowOptions.icon = path.join(
+      __dirname,
+      '..',
+      'assets',
+      'app-icons',
+      'icon.png'
+    );
+
+  const win = new BrowserWindow(browserWindowOptions);
+
+  // If the user-specified origin changes, reload the page so that
+  // the CSP can be refreshed with the this source allowed
+  runtimeSettings.onOriginChange(() => win.loadURL(emberAppURL));
+
+  // Load the ember application
+  win.loadURL(emberAppURL);
+
+  // If a loading operation goes wrong, we'll send Electron back to
+  // Ember App entry point
+  win.webContents.on('did-fail-load', () => {
+    win.loadURL(emberAppURL);
+  });
+
+  win.webContents.on('crashed', () => {
+    console.log(
+      'Your Ember app (or other code) in the main window has crashed.'
+    );
+    console.log(
+      'This is a serious issue that needs to be handled and/or debugged.'
+    );
+  });
+
+  // Prevent navigation outside of serve://boundary per
+  // Electronegativity LIMIT_NAVIGATION_GLOBAL_CHECK
+  win.webContents.on('will-navigate', (event, url) => {
+    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
+    if (!url.startsWith('serve://boundary')) event.preventDefault();
+  });
+
+  // Opens external links in the host default browser.
+  // We just allow boundaryproject.io domain to open on external window (for now).
+  win.webContents.on('new-window', (event, url) => {
+    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
+    event.preventDefault();
+    if (url.startsWith('https://boundaryproject.io/')) {
+      shell.openExternal(url);
+    }
+  });
+
+  win.on('unresponsive', () => {
+    console.log(
+      'Your Ember app (or other code) has made the window unresponsive.'
+    );
+  });
+
+  win.on('responsive', () => {
+    console.log('The main window has become responsive again.');
+  });
+
+  win.on('closed', () => {
+    closeWindowCB();
+  });
+
+  return win;
+};
+
 let mainWindow = null;
 
 app.on('window-all-closed', () => {
@@ -113,104 +211,15 @@ app.on('ready', async () => {
   }
   Menu.setApplicationMenu(menuTemplate);
 
-  /**
-   * Enable electron OS window frame/chrome for MacOS only.
-   * Disable frame/chrome regardless of OS when
-   * `DISABLE_WINDOW_CHROME=true`.
-   */
-  let showWindowChrome = isMac();
-  if (process.env.DISABLE_WINDOW_CHROME) showWindowChrome = false;
-
-  const browserWindowOptions = {
-    width: 1280,
-    height: 760,
-    frame: showWindowChrome,
-    titleBarStyle: showWindowChrome ? 'hiddenInset' : 'none',
-    webPreferences: {
-      partition,
-      sandbox: true,
-      webSecurity: true,
-      contextIsolation: true,
-      nodeIntegration: false,
-      enableRemoteModule: false,
-      allowRunningInsecureContent: false,
-      // The preload script establishes the message-based IPC pathway without
-      // exposing new modules to the renderer.
-      preload: preloadPath /* eng-disable PRELOAD_JS_CHECK */,
-      disableBlinkFeatures: 'Auxclick',
-    },
+  // Close window callback
+  const closeWindowCB = () => {
+    mainWindow = null;
   };
 
-  // To show app icon in toolbar in linux, set browser window icon.
-  // This is a limitation of electron build.
-  if (isLinux())
-    browserWindowOptions.icon = path.join(
-      __dirname,
-      '..',
-      'assets',
-      'app-icons',
-      'icon.png'
-    );
-
-  mainWindow = new BrowserWindow(browserWindowOptions);
-
-  // If the user-specified origin changes, reload the page so that
-  // the CSP can be refreshed with the this source allowed
-  runtimeSettings.onOriginChange(() => mainWindow.loadURL(emberAppURL));
-
-  // If you want to open up dev tools programmatically, call
-  // mainWindow.openDevTools();
-
-  // Load the ember application
-  mainWindow.loadURL(emberAppURL);
+  mainWindow = createWindow(partition, closeWindowCB);
 
   // Check for updates on launch
   appUpdater.run({ suppressNoUpdatePrompt: true });
-
-  // If a loading operation goes wrong, we'll send Electron back to
-  // Ember App entry point
-  mainWindow.webContents.on('did-fail-load', () => {
-    mainWindow.loadURL(emberAppURL);
-  });
-
-  mainWindow.webContents.on('crashed', () => {
-    console.log(
-      'Your Ember app (or other code) in the main window has crashed.'
-    );
-    console.log(
-      'This is a serious issue that needs to be handled and/or debugged.'
-    );
-  });
-
-  // Prevent navigation outside of serve://boundary per
-  // Electronegativity LIMIT_NAVIGATION_GLOBAL_CHECK
-  mainWindow.webContents.on('will-navigate', (event, url) => {
-    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
-    if (!url.startsWith('serve://boundary')) event.preventDefault();
-  });
-  // Opens external links in the host default browser.
-  // We just allow boundaryproject.io domain to open on external window (for now).
-  mainWindow.webContents.on('new-window', (event, url) => {
-    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
-    event.preventDefault();
-    if (url.startsWith('https://boundaryproject.io/')) {
-      shell.openExternal(url);
-    }
-  });
-
-  mainWindow.on('unresponsive', () => {
-    console.log(
-      'Your Ember app (or other code) has made the window unresponsive.'
-    );
-  });
-
-  mainWindow.on('responsive', () => {
-    console.log('The main window has become responsive again.');
-  });
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
 });
 
 /**
