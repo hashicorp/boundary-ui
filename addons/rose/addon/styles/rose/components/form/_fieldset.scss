@@ -8,6 +8,10 @@
     @include type.type(s, semibold);
   }
 
+  .rose-form-fieldset-body {
+    display: flex;
+  }
+
   .rose-form-fieldset-description {
     margin: sizing.rems(xxs) 0;
     @include type.type(xs);
