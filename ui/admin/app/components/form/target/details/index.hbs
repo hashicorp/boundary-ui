@@ -56,13 +56,13 @@
             @label={{t 'resources.target.types.tcp'}}
             @helperText={{t 'resources.target.help.tcp'}}
             @value='tcp'
-            @layout='tile'
+            @layout='wide'
           />
           <radioGroup.card
             @label={{t 'resources.target.types.ssh'}}
             @helperText={{t 'resources.target.help.ssh'}}
             @value='ssh'
-            @layout='tile'
+            @layout='wide'
           />
         </form.radioGroup>
       {{else}}
@@ -75,7 +75,7 @@
             @label={{t (concat 'resources.target.types.' @model.type)}}
             @helperText={{t (concat 'resources.target.help.' @model.type)}}
             @value={{@model.type}}
-            @layout='tile'
+            @layout='wide'
             readonly={{true}}
             @disabled={{true}}
           />
