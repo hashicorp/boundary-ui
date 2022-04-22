@@ -1,16 +1,29 @@
 @use '../../variables/sizing';
 @use '../../variables/media';
 
+$xs: sizing.rems(xs); // 8
 $xxs: sizing.rems(xxs); // 4
+$xxxs: sizing.rems(xxxs); // 2
 $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-toolbar {
   background-color: var(--ui-gray-subtler-6);
   padding: $xxs + $xxxxs;
-
+  display: flex;
   button {
     display: inline-block;
     font-weight: normal;
     vertical-align: middle;
+  }
+  .rose-form {
+    display: flex;
+  }
+  .refresh-button {
+    color: var(--stark);
+    vertical-align: middle;
+    margin: auto ($xs + $xxxs) auto auto;
+  }
+  .loading {
+    color: var(--ui-gray-subtler-1);
   }
 }
