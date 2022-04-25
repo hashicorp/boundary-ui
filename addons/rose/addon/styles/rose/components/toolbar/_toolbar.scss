@@ -1,9 +1,7 @@
 @use '../../variables/sizing';
 @use '../../variables/media';
 
-$xs: sizing.rems(xs); // 8
 $xxs: sizing.rems(xxs); // 4
-$xxxs: sizing.rems(xxxs); // 2
 $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-toolbar {
