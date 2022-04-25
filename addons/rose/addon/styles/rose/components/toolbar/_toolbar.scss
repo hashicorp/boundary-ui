@@ -9,7 +9,6 @@ $xxxxs: sizing.rems(xxxxs); // 1
 .rose-toolbar {
   background-color: var(--ui-gray-subtler-6);
   padding: $xxs + $xxxxs;
-  display: flex;
   button {
     display: inline-block;
     font-weight: normal;
