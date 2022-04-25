@@ -78,7 +78,7 @@ $radio-svg: (
     display: flex;
     color: var(--black);
     width: ($size-m) * 23;
-    height: ($size-m) * 7.4;
+    height: 100%;
     display: block;
     position: relative;
     text-align: left;
@@ -86,11 +86,12 @@ $radio-svg: (
     box-shadow: 0 $size-xxs $size-xxs
       rgba(var(--stark-components), var(--opacity-2));
     border-radius: $size-xxs;
-    padding: $size-s $size-m;
+    padding: $size-s $size-m ($size-xl + $size-m);
     box-sizing: border-box;
     background-color: var(--white);
     .rose-form-helper-text {
       @include type.type(xs, normal);
+      padding-top: $size-xs;
     }
 
     &::after {
