@@ -6,15 +6,15 @@ import hbs from 'htmlbars-inline-precompile';
 module('Integration | Component | rose/loading-button', function (hooks) {
   setupRenderingTest(hooks);
   test('it renders', async function (assert) {
-    this.onClick = () => {};
-    await render(hbs`<Rose::LoadingButton @onClick={{fn this.onClick}}/>`);
+    await render(hbs`<Rose::LoadingButton/>`);
     assert.ok(find('.refresh-button'));
   });
 
   test('it executes a function on refresh button click', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     this.onClick = () => assert.ok(true, 'refresh was clicked');
-    await render(hbs`{{rose/loading-button onClick=this.onClick}}`);
+    await render(hbs`<Rose::LoadingButton @onClick={{this.onClick}}/>`);
+    assert.ok(find('.refresh-button'));
     await click('button');
   });
 });
