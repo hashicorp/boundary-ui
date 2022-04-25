@@ -12,9 +12,9 @@ export default class LoadingButton extends button {
     this.isLoading = true;
     try {
       await this.args.onClick();
-      this.isLoading = false;
     } catch (e) {
-      throw new Error('error refreshing sessions');
+      console.error('Error while loading data', e);
     }
+    this.isLoading = false;
   }
 }

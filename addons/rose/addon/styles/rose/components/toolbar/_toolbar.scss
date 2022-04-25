@@ -18,12 +18,4 @@ $xxxxs: sizing.rems(xxxxs); // 1
   .rose-form {
     display: flex;
   }
-  .refresh-button {
-    color: var(--stark);
-    vertical-align: middle;
-    margin: auto ($xs + $xxxs) auto auto;
-  }
-  .loading {
-    color: var(--ui-gray-subtler-1);
-  }
 }
