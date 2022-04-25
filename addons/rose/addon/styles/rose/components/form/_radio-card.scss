@@ -137,6 +137,15 @@ $radio-svg: (
           }
           .radio-card-overlay {
             background-color: var(--action-subtler-1h);
+            .ember-application.rose-theme-light & {
+              background-color: var(--action-subtler-1h);
+            }
+            @media (prefers-color-scheme: dark) {
+              background-color: var(--action-subtler-1);
+            }
+            .ember-application.rose-theme-dark & {
+              background-color: var(--action-subtler-1);
+            }
           }
           border: $size-xxxxs solid var(--info-subtler-1);
         }
