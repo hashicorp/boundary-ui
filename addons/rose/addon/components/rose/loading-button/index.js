@@ -10,8 +10,8 @@ export default class LoadingButton extends button {
   @action
   async toggleRefresh() {
     this.isLoading = true;
-    await this.args.onClick();
     try {
+      await this.args.onClick();
       this.isLoading = false;
     } catch (e) {
       throw new Error('error refreshing sessions');
