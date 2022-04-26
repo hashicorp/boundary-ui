@@ -7,14 +7,14 @@ module('Integration | Component | rose/loading-button', function (hooks) {
   setupRenderingTest(hooks);
   test('it renders', async function (assert) {
     await render(hbs`<Rose::LoadingButton/>`);
-    assert.ok(find('.rose-refresh-button'));
+    assert.ok(find('.rose-loading-button'));
   });
 
   test('it executes a function on refresh button click', async function (assert) {
     assert.expect(2);
     this.onClick = () => assert.ok(true, 'refresh was clicked');
     await render(hbs`<Rose::LoadingButton @onClick={{this.onClick}}/>`);
-    assert.ok(find('.rose-refresh-button'));
+    assert.ok(find('.rose-loading-button'));
     await click('button');
   });
 });

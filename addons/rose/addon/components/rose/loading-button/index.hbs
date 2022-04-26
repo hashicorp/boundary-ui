@@ -7,7 +7,7 @@
     'flight-icons/svg/reload-16'
     }}
     class={{if
-    this.isLoading 'rose-refresh-button loading' 'rose-refresh-button'}}
+    this.isLoading 'rose-loading-button is-loading' 'rose-loading-button'}}
     @disabled={{this.isLoading}}
     {{on 'click' this.toggleRefresh}}
   >
