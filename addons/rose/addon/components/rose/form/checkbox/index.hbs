@@ -1,31 +1,35 @@
-<div class="rose-form-checkbox{{if @error " error"}} {{if @inline " inline"}}">
+<div class='rose-form-checkbox{{if @error ' error'}} {{if @inline ' inline'}}'>
 
   <Input
     ...attributes
-    class="rose-form-checkbox-field"
+    class='rose-form-checkbox-field'
     id={{this.id}}
     name={{@name}}
     disabled={{@disabled}}
     onChange={{@onChange}}
-    @type="checkbox"
+    @type='checkbox'
     @checked={{if @checked true false}}
-    aria-describedby="{{if @helperText (concat 'helper-text-' this.id)}} {{if @error (concat 'errors-' this.id)}}" />
+    aria-describedby='{{if @helperText (concat 'helper-text-' this.id)}} {{if
+      @error
+      (concat 'errors-' this.id)
+    }}'
+  />
 
-  <label class="rose-form-checkbox-label" for={{this.id}}>
-    <span class="rose-form-checkbox-label-text">{{@label}}</span>
+  <label class='rose-form-checkbox-label' for={{this.id}}>
+    <span class='rose-form-checkbox-label-text'>{{@label}}</span>
     {{#if @description}}
-      <p class="rose-form-checkbox-label-description">{{@description}}</p>
+      <p class='rose-form-checkbox-label-description'>{{@description}}</p>
     {{/if}}
   </label>
 
   {{#if @helperText}}
-    <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}}>
+    <Rose::Form::HelperText @id='helper-text-{{this.id}}' @error={{@error}}>
       {{@helperText}}
     </Rose::Form::HelperText>
   {{/if}}
 
-  {{yield (hash
-    errors=(component 'rose/form/errors' id=(concat 'errors-' this.id))
-  )}}
+  {{yield
+    (hash errors=(component 'rose/form/errors' id=(concat 'errors-' this.id)))
+  }}
 
 </div>
