@@ -82,22 +82,22 @@ const createWindow = (partition, closeWindowCB) => {
       'icon.png'
     );
 
-  const win = new BrowserWindow(browserWindowOptions);
+  const browserWindow = new BrowserWindow(browserWindowOptions);
 
   // If the user-specified origin changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
   runtimeSettings.onOriginChange(() => win.loadURL(emberAppURL));
 
   // Load the ember application
-  win.loadURL(emberAppURL);
+  browserWindow.loadURL(emberAppURL);
 
   // If a loading operation goes wrong, we'll send Electron back to
   // Ember App entry point
-  win.webContents.on('did-fail-load', () => {
-    win.loadURL(emberAppURL);
+  browserWindow.webContents.on('did-fail-load', () => {
+    browserWindow.loadURL(emberAppURL);
   });
 
-  win.webContents.on('crashed', () => {
+  browserWindow.webContents.on('crashed', () => {
     console.log(
       'Your Ember app (or other code) in the main window has crashed.'
     );
@@ -108,14 +108,14 @@ const createWindow = (partition, closeWindowCB) => {
 
   // Prevent navigation outside of serve://boundary per
   // Electronegativity LIMIT_NAVIGATION_GLOBAL_CHECK
-  win.webContents.on('will-navigate', (event, url) => {
+  browserWindow.webContents.on('will-navigate', (event, url) => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     if (!url.startsWith('serve://boundary')) event.preventDefault();
   });
 
   // Opens external links in the host default browser.
   // We just allow boundaryproject.io domain to open on external window (for now).
-  win.webContents.on('new-window', (event, url) => {
+  browserWindow.webContents.on('new-window', (event, url) => {
     /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
     event.preventDefault();
     if (url.startsWith('https://boundaryproject.io/')) {
@@ -123,21 +123,21 @@ const createWindow = (partition, closeWindowCB) => {
     }
   });
 
-  win.on('unresponsive', () => {
+  browserWindow.on('unresponsive', () => {
     console.log(
       'Your Ember app (or other code) has made the window unresponsive.'
     );
   });
 
-  win.on('responsive', () => {
+  browserWindow.on('responsive', () => {
     console.log('The main window has become responsive again.');
   });
 
-  win.on('closed', () => {
+  browserWindow.on('closed', () => {
     closeWindowCB();
   });
 
-  return win;
+  return browserWindow;
 };
 
 let mainWindow = null;
