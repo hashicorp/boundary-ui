@@ -75,8 +75,6 @@ $radio-svg: (
   }
   .rose-form-radio-label {
     @include type.type(s, bold);
-    display: flex;
-    color: var(--black);
     width: ($size-m) * 23;
     height: 100%;
     display: block;
@@ -88,7 +86,6 @@ $radio-svg: (
     border-radius: $size-xxs;
     padding: $size-s $size-m ($size-xl + $size-m);
     box-sizing: border-box;
-    background-color: var(--white);
     .rose-form-helper-text {
       @include type.type(xs, normal);
       padding-top: $size-xs;
@@ -140,6 +137,15 @@ $radio-svg: (
           }
           .radio-card-overlay {
             background-color: var(--action-subtler-1h);
+            .ember-application.rose-theme-light & {
+              background-color: var(--action-subtler-1h);
+            }
+            @media (prefers-color-scheme: dark) {
+              background-color: var(--action-subtler-1);
+            }
+            .ember-application.rose-theme-dark & {
+              background-color: var(--action-subtler-1);
+            }
           }
           border: $size-xxxxs solid var(--info-subtler-1);
         }
