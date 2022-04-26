@@ -1,4 +1,8 @@
-<Rose::LinkButton @route="index" @style="primary" @iconRight="flight-icons/svg/entry-point-16">
+<Rose::LinkButton
+  @route='index'
+  @style='primary'
+  @iconRight='flight-icons/svg/entry-point-16'
+>
   Content
 </Rose::LinkButton>
 
@@ -9,9 +13,7 @@
   @onChange={{this.checkboxGroupChanged}}
   as |group|
 >
-  <group.checkbox
-    @label={{group.item.name}}
-    value={{group.item.id}} />
+  <group.checkbox @label={{group.item.name}} value={{group.item.id}} />
 </Rose::Form::Checkbox::Group>
 
 <p>
@@ -29,7 +31,7 @@
 
 <h2>KeyValue Dropdown</h2>
 <Rose::Dropdown
-  @text="Credential library details"
+  @text='Credential library details'
   @showCaret={{true}}
   @ignoreClickInside={{true}}
   as |dropdown|
@@ -50,62 +52,69 @@
 
   <dropdown.key-value>
     <:key>Description</:key>
-    <:value>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda illo ratione libero ducimus magnam, porro sed provident repellat mollitia a, repellendus placeat. Magni consequuntur cumque, debitis obcaecati dolores quasi natus?</:value>
+    <:value>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
+      illo ratione libero ducimus magnam, porro sed provident repellat mollitia
+      a, repellendus placeat. Magni consequuntur cumque, debitis obcaecati
+      dolores quasi natus?</:value>
   </dropdown.key-value>
 
 </Rose::Dropdown>
 
 <h2>Condensed dropdown</h2>
 <Rose::Dropdown
-  @style="condensed"
-  @text="Credential library details"
+  @style='condensed'
+  @text='Credential library details'
   @showCaret={{true}}
   as |dropdown|
 >
-  <dropdown.section @title="ID">
+  <dropdown.section @title='ID'>
     <dropdown.item>cl_nbv9375hLHs</dropdown.item>
   </dropdown.section>
 
   <dropdown.separator />
 
-  <dropdown.section @title="Name">
+  <dropdown.section @title='Name'>
     <dropdown.item>Key/Value</dropdown.item>
   </dropdown.section>
 
   <dropdown.separator />
 
-  <dropdown.section @title="Description">
-    <dropdown.item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet sem sodales neque ultrices sollicitudin vel sed justo. Vivamus vitae sollicitudin turpis.</dropdown.item>
+  <dropdown.section @title='Description'>
+    <dropdown.item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+      sit amet sem sodales neque ultrices sollicitudin vel sed justo. Vivamus
+      vitae sollicitudin turpis.</dropdown.item>
   </dropdown.section>
 </Rose::Dropdown>
 
 <h2>Normal Dropdown</h2>
 <Rose::Dropdown
-  @text="Credential library details"
+  @text='Credential library details'
   @showCaret={{true}}
   as |dropdown|
 >
-  <dropdown.section @title="ID">
+  <dropdown.section @title='ID'>
     <dropdown.item>cl_nbv9375hLHs</dropdown.item>
   </dropdown.section>
   <dropdown.separator />
 
-  <dropdown.section @title="Name">
+  <dropdown.section @title='Name'>
     <dropdown.item>Key/Value</dropdown.item>
   </dropdown.section>
   <dropdown.separator />
 
-  <dropdown.section @title="Description">
-    <dropdown.item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet sem sodales neque ultrices sollicitudin vel sed justo. Vivamus vitae sollicitudin turpis.</dropdown.item>
+  <dropdown.section @title='Description'>
+    <dropdown.item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+      sit amet sem sodales neque ultrices sollicitudin vel sed justo. Vivamus
+      vitae sollicitudin turpis.</dropdown.item>
   </dropdown.section>
 </Rose::Dropdown>
 
 <h2>Normal Dropdown</h2>
 <Rose::Dropdown
-  @text="Credential library details"
+  @text='Credential library details'
   @showCaret={{true}}
   as |dropdown|
 >
-<dropdown.link @route="about">Menu item</dropdown.link>
-<dropdown.link @route="about">Menu item 2</dropdown.link>
+  <dropdown.link @route='about'>Menu item</dropdown.link>
+  <dropdown.link @route='about'>Menu item 2</dropdown.link>
 </Rose::Dropdown>

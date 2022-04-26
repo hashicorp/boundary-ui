@@ -1,34 +1,33 @@
 <section
   ...attributes
-  class="rose-notification is-{{@style}}{{if @dismiss " is-dismissible"}}"
-  role="alert"
-  aria-live="{{if @dismiss "assertive"}}"
-  aria-atomic="true"
+  class='rose-notification is-{{@style}}{{if @dismiss ' is-dismissible'}}'
+  role='alert'
+  aria-live='{{if @dismiss 'assertive'}}'
+  aria-atomic='true'
 >
 
-  <header class="rose-notification-header">
+  <header class='rose-notification-header'>
     <Rose::Icon
-      class="rose-notification-icon"
+      class='rose-notification-icon'
       @name={{this.icon}}
-      @size="medium" />
+      @size='medium'
+    />
     {{@heading}}
   </header>
 
-  <div class="rose-notification-body">
+  <div class='rose-notification-body'>
     {{yield}}
   </div>
 
   {{#if @dismiss}}
     <button
-      type="button"
-      class="rose-notification-dismiss"
+      type='button'
+      class='rose-notification-dismiss'
       title={{@dismissText}}
-      {{on "click" @dismiss}}
+      {{on 'click' @dismiss}}
     >
-      <Rose::Icon
-        @name="flight-icons/svg/x-16"
-        @size="medium" />
-      <span class="rose-notification-dismiss-text">
+      <Rose::Icon @name='flight-icons/svg/x-16' @size='medium' />
+      <span class='rose-notification-dismiss-text'>
         {{@dismissText}}
       </span>
     </button>
