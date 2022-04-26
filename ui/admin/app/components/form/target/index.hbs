@@ -1,7 +1,9 @@
-{{component
-  (concat 'form/target/' @model.type)
-  model=@model
-  submit=@submit
-  cancel=@cancel
-  changeType=@changeType
-}}
+{{#if @model.type}}
+  {{component
+    (concat 'form/target/' @model.type)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+    changeType=@changeType
+  }}
+{{/if}}
