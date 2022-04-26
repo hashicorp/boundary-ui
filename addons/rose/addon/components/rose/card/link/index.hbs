@@ -1,31 +1,29 @@
-<article ...attributes class="rose-card-link">
+<article ...attributes class='rose-card-link'>
   <LinkTo
     title={{@title}}
-    @route={{if @route @route "index"}}
+    @route={{if @route @route 'index'}}
     @model={{@model}}
   >
-    <div class="rose-card-link-header">
+    <div class='rose-card-link-header'>
       {{#if @title}}
-        <h2 class="rose-card-link-title">
+        <h2 class='rose-card-link-title'>
           {{#if @icon}}
-            <Rose::Icon
-              @name={{@icon}}
-              @size="medium" />
+            <Rose::Icon @name={{@icon}} @size='medium' />
           {{/if}}
-          <span class="rose-card-link-title-text">{{@title}}</span>
+          <span class='rose-card-link-title-text'>{{@title}}</span>
         </h2>
       {{/if}}
     </div>
 
-    <div class="rose-card-link-body">
+    <div class='rose-card-link-body'>
       {{#if @description}}
-        <p class="rose-card-link-description">{{@description}}</p>
+        <p class='rose-card-link-description'>{{@description}}</p>
       {{/if}}
     </div>
 
-    <div class="rose-card-link-footer">
+    <div class='rose-card-link-footer'>
       {{#if @id}}
-        <p class="rose-card-link-footer-id">{{@id}}</p>
+        <p class='rose-card-link-footer-id'>{{@id}}</p>
       {{/if}}
     </div>
   </LinkTo>

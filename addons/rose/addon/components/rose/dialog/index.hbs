@@ -1,41 +1,44 @@
 {{#if @modal}}
-  <div class="rose-dialog-modal-overlay"></div>
+  <div class='rose-dialog-modal-overlay'></div>
 
   <section
     ...attributes
-    role="dialog"
-    class="rose-dialog {{if  @style (concat "rose-dialog-" @style)}} {{if @modal 'modal'}}"
+    role='dialog'
+    class='rose-dialog
+      {{if @style (concat 'rose-dialog-' @style)}}
+      {{if @modal 'modal'}}'
     id={{this.id}}
-    aria-describedby={{concat "dialog-header-" this.id}}
+    aria-describedby={{concat 'dialog-header-' this.id}}
     {{focus-trap}}
   >
 
-    <header
-      class="rose-dialog-header"
-      id={{concat "dialog-header-" this.id}}
-    >
+    <header class='rose-dialog-header' id={{concat 'dialog-header-' this.id}}>
 
       {{#if @icon}}
-        <Rose::Icon @name={{@icon}} @size="medium" />
+        <Rose::Icon @name={{@icon}} @size='medium' />
       {{/if}}
 
-      <h2 class="rose-dialog-heading">{{@heading}}</h2>
+      <h2 class='rose-dialog-heading'>{{@heading}}</h2>
 
       <button
-        type="button"
-        class="rose-dialog-dismiss"
+        type='button'
+        class='rose-dialog-dismiss'
         title={{@dismissButtonText}}
-        {{on "click" (fn this.dismiss @dismiss)}}
+        {{on 'click' (fn this.dismiss @dismiss)}}
       >
-        <Rose::Icon @name="flight-icons/svg/x-16" @size="small" />
+        <Rose::Icon @name='flight-icons/svg/x-16' @size='small' />
       </button>
 
     </header>
 
-    {{yield (hash
-      body=(component 'rose/dialog/body')
-      footer=(component 'rose/anonymous' tagName="footer" class="rose-dialog-footer")
-    )}}
+    {{yield
+      (hash
+        body=(component 'rose/dialog/body')
+        footer=(component
+          'rose/anonymous' tagName='footer' class='rose-dialog-footer'
+        )
+      )
+    }}
 
   </section>
 
@@ -43,35 +46,41 @@
 
   <section
     ...attributes
-    role="dialog"
-    class="rose-dialog {{if  @style (concat "rose-dialog-" @style)}} {{if @modal 'modal'}}"
+    role='dialog'
+    class='rose-dialog
+      {{if @style (concat 'rose-dialog-' @style)}}
+      {{if @modal 'modal'}}'
   >
 
     {{#if @heading}}
-      <header class="rose-dialog-header">
+      <header class='rose-dialog-header'>
 
         {{#if @icon}}
-          <Rose::Icon @name={{@icon}} @size="medium" />
+          <Rose::Icon @name={{@icon}} @size='medium' />
         {{/if}}
 
-        <h2 class="rose-dialog-heading">{{@heading}}</h2>
+        <h2 class='rose-dialog-heading'>{{@heading}}</h2>
 
         <button
-          type="button"
-          class="rose-dialog-dismiss"
+          type='button'
+          class='rose-dialog-dismiss'
           title={{@dismissButtonText}}
-          {{on "click" (fn this.dismiss @dismiss)}}
+          {{on 'click' (fn this.dismiss @dismiss)}}
         >
-          <Rose::Icon @name="flight-icons/svg/x-16" @size="small" />
+          <Rose::Icon @name='flight-icons/svg/x-16' @size='small' />
         </button>
 
       </header>
     {{/if}}
 
-    {{yield (hash
-      body=(component 'rose/dialog/body')
-      footer=(component 'rose/anonymous' tagName="footer" class="rose-dialog-footer")
-    )}}
+    {{yield
+      (hash
+        body=(component 'rose/dialog/body')
+        footer=(component
+          'rose/anonymous' tagName='footer' class='rose-dialog-footer'
+        )
+      )
+    }}
 
   </section>
 
