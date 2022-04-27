@@ -1,22 +1,23 @@
 <details
   ...attributes
-  class="rose-dropdown {{if @dropdownRight "rose-dropdown-right"}} {{if @style (concat "rose-dropdown-" @style)}}"
+  class='rose-dropdown
+    {{if @dropdownRight 'rose-dropdown-right'}}
+    {{if @style (concat 'rose-dropdown-' @style)}}'
   {{on-click-outside this.close}}
 >
 
   <summary
-    class="rose-dropdown-trigger {{if @iconOnly "has-icon-only"}} {{if this.showCaret "show-caret"}}"
+    class='rose-dropdown-trigger
+      {{if @iconOnly 'has-icon-only'}}
+      {{if this.showCaret 'show-caret'}}'
     title={{@text}}
   >
 
     {{#if @icon}}
-      <Rose::Icon
-        @name={{@icon}}
-        @size="medium"
-      />
+      <Rose::Icon @name={{@icon}} @size='medium' />
     {{/if}}
 
-    <span class="rose-dropdown-trigger-text">
+    <span class='rose-dropdown-trigger-text'>
       {{@text}}
       {{#if @count}}
         <Rose::Badge>{{@count}}</Rose::Badge>
@@ -26,26 +27,34 @@
   </summary>
 
   {{#if @ignoreClickInside}}
-    <div class="rose-dropdown-content">
-      {{yield (hash
-        link=(component "rose/dropdown/link" style=this.style)
-        button=(component "rose/dropdown/button" style=this.style)
-        item=(component "rose/anonymous" class="rose-dropdown-item")
-        separator=(component "rose/anonymous" tagName="hr" class="rose-dropdown-separator")
-        section=(component "rose/dropdown/section" style=this.style)
-        key-value=(component "rose/dropdown/key-value")
-      )}}
+    <div class='rose-dropdown-content'>
+      {{yield
+        (hash
+          link=(component 'rose/dropdown/link' style=this.style)
+          button=(component 'rose/dropdown/button' style=this.style)
+          item=(component 'rose/anonymous' class='rose-dropdown-item')
+          separator=(component
+            'rose/anonymous' tagName='hr' class='rose-dropdown-separator'
+          )
+          section=(component 'rose/dropdown/section' style=this.style)
+          key-value=(component 'rose/dropdown/key-value')
+        )
+      }}
     </div>
   {{else}}
-    <div class="rose-dropdown-content" {{on-click-inside this.close}}>
-      {{yield (hash
-        link=(component "rose/dropdown/link" style=this.style)
-        button=(component "rose/dropdown/button" style=this.style)
-        item=(component "rose/anonymous" class="rose-dropdown-item")
-        separator=(component "rose/anonymous" tagName="hr" class="rose-dropdown-separator")
-        section=(component "rose/dropdown/section" style=this.style)
-        key-value=(component "rose/dropdown/key-value")
-      )}}
+    <div class='rose-dropdown-content' {{on-click-inside this.close}}>
+      {{yield
+        (hash
+          link=(component 'rose/dropdown/link' style=this.style)
+          button=(component 'rose/dropdown/button' style=this.style)
+          item=(component 'rose/anonymous' class='rose-dropdown-item')
+          separator=(component
+            'rose/anonymous' tagName='hr' class='rose-dropdown-separator'
+          )
+          section=(component 'rose/dropdown/section' style=this.style)
+          key-value=(component 'rose/dropdown/key-value')
+        )
+      }}
     </div>
   {{/if}}
 

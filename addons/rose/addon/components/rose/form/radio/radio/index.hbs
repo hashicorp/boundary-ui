@@ -1,30 +1,33 @@
-<div class="{{this.className}} {{if @error " error"}} {{if @inline "inline"}}">
+<div class='{{this.className}} {{if @error ' error'}} {{if @inline 'inline'}}'>
 
   <RadioButton
     ...attributes
-    @radioClass="rose-form-radio-field"
+    @radioClass='rose-form-radio-field'
     @radioId={{this.id}}
-    type="radio"
+    type='radio'
     disabled={{@disabled}}
     @name={{@name}}
     @value={{@value}}
     @groupValue={{@selectedValue}}
     @disabled={{@disabled}}
-    @changed={{@changed}} />
+    @changed={{@changed}}
+  />
 
-  <label class="rose-form-radio-label" for={{this.id}}>
+  <label class='rose-form-radio-label' for={{this.id}}>
 
     {{#if @icon}}
-      <Rose::Icon
-        @name={{@icon}}
-        @size="medium"
-      />
+      <Rose::Icon @name={{@icon}} @size='medium' />
     {{/if}}
 
     {{@label}}
-  <span class="radio-card-overlay"></span>
-     {{#if @helperText}}
-      <Rose::Form::HelperText @id="helper-text-{{this.id}}" @error={{@error}} @link={{@link}} @linkText={{@linkText}}>
+    <span class='radio-card-overlay'></span>
+    {{#if @helperText}}
+      <Rose::Form::HelperText
+        @id='helper-text-{{this.id}}'
+        @error={{@error}}
+        @link={{@link}}
+        @linkText={{@linkText}}
+      >
         {{@helperText}}
       </Rose::Form::HelperText>
     {{/if}}

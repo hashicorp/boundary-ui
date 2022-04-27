@@ -1,12 +1,15 @@
 {{#each @items as |item|}}
-  {{yield (hash
-    item=item
-    checkbox=(component 'rose/form/checkbox'
-      name=@name
-      disabled=@disabled
-      inline=@inline
-      checked=(includes item @selectedItems)
-      onChange=(fn this.toggleItem item)
+  {{yield
+    (hash
+      item=item
+      checkbox=(component
+        'rose/form/checkbox'
+        name=@name
+        disabled=@disabled
+        inline=@inline
+        checked=(includes item @selectedItems)
+        onChange=(fn this.toggleItem item)
+      )
     )
-  )}}
+  }}
 {{/each}}

@@ -10,7 +10,8 @@
       @route={{@route}}
       @query={{@query}}
       @model={{@model}}
-      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+      class='rose-dropdown-link
+        {{if @style (concat 'rose-dropdown-link-' @style)}}'
     >
       {{yield}}
     </LinkTo>
@@ -19,7 +20,8 @@
       ...attributes
       @route={{@route}}
       @model={{@model}}
-      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+      class='rose-dropdown-link
+        {{if @style (concat 'rose-dropdown-link-' @style)}}'
     >
       {{yield}}
     </LinkTo>
@@ -30,7 +32,8 @@
       ...attributes
       @route={{@route}}
       @query={{@query}}
-      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+      class='rose-dropdown-link
+        {{if @style (concat 'rose-dropdown-link-' @style)}}'
     >
       {{yield}}
     </LinkTo>
@@ -38,7 +41,8 @@
     <LinkTo
       ...attributes
       @route={{@route}}
-      class="rose-dropdown-link {{if  @style (concat "rose-dropdown-link-" @style)}}"
+      class='rose-dropdown-link
+        {{if @style (concat 'rose-dropdown-link-' @style)}}'
     >
       {{yield}}
     </LinkTo>

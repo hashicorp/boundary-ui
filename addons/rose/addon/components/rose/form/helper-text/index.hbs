@@ -1,12 +1,16 @@
 <span
-  class="rose-form-helper-text{{if @error " error"}}"
+  class='rose-form-helper-text{{if @error ' error'}}'
   id={{@id}}
   ...attributes
 >
   {{yield}}
-  {{#if @link}} 
+  {{#if @link}}
     {{#if @linkText}}
-      <a href={{@link}} target='_blank' rel='noreferrer noopener'>{{@linkText}}</a>
+      <a
+        href={{@link}}
+        target='_blank'
+        rel='noreferrer noopener'
+      >{{@linkText}}</a>
     {{/if}}
   {{/if}}
 </span>
