@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { loading } from 'ember-loading';
 import { all, hash } from 'rsvp';
 import { A } from '@ember/array';
 import runEvery from 'ember-pollster/decorators/route/run-every';
@@ -115,5 +116,14 @@ export default class ScopesScopeSessionsRoute extends Route {
   @action
   clearAllFilters() {
     this.status = [];
+  }
+
+  /**
+   * refreshes session data.
+   */
+  @action
+  @loading
+  async refreshSessions() {
+    return this.refresh();
   }
 }
