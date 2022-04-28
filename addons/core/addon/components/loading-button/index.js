@@ -1,9 +1,9 @@
-import button from '../button/index';
-
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { later } from '@ember/runloop';
 
-export default class LoadingButton extends button {
+export default class LoadingButton extends Component {
   // =actions
   @tracked isLoading = false;
 
@@ -15,6 +15,6 @@ export default class LoadingButton extends button {
     } catch (e) {
       console.error('Error while loading data', e);
     }
-    this.isLoading = false;
+    later(() => (this.isLoading = false), 1000);
   }
 }
