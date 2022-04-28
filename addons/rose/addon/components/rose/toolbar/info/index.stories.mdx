@@ -1,0 +1,25 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+import { action } from '@storybook/addon-actions';
+
+<Meta title="Rose|Toolbar|Info" component="Toolbar Info" />
+
+# Toolbar Info
+
+Used to display non-interactive information in a toolbar.
+
+```htmlbars
+<Rose::Toolbar>
+  <Rose::Toolbar::Info>30 seconds ago</Rose::Toolbar::Info>
+</Rose::Toolbar>
+```
+
+<Preview>
+  <Story name="Toolbar Info">{{
+    template: hbs`
+    <Rose::Toolbar>
+      <Rose::Toolbar::Info>30 seconds ago</Rose::Toolbar::Info>
+    </Rose::Toolbar>
+    `,
+  }}</Story>
+</Preview>
