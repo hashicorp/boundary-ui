@@ -136,6 +136,8 @@
   --ui-gray-starker-4: #{color(ui-gray, 010)};
 
   --ui-header-subtler: #{color(ui-cool-gray, 100)};
+
+  color-scheme: dark;
 }
 
 // Light mode is the default, hence it is applied to `html` by default
