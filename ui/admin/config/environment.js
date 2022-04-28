@@ -2,25 +2,6 @@
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
-const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
-
-// Object that defines edition features.
-const featureEditions = {
-  oss: {
-    'primary-auth-method': true,
-    oidc: true,
-    'oidc-crud': true,
-    'oidc-account-crud': true,
-    search: false,
-    filter: true,
-    'credential-store': true,
-    'managed-groups': true,
-  },
-};
-featureEditions.enterprise = {
-  ...featureEditions.oss,
-  'ssh-target': true,
-};
 
 module.exports = function (environment) {
   let ENV = {
@@ -110,7 +91,17 @@ module.exports = function (environment) {
       directory: '../../addons/api/mirage',
     },
 
-    featureFlags: featureEditions[EDITION],
+    featureFlags: {
+      'primary-auth-method': true,
+      oidc: true,
+      'oidc-crud': true,
+      'oidc-account-crud': true,
+      search: false,
+      filter: true,
+      'credential-store': true,
+      'managed-groups': true,
+      'ssh-target': false,
+    },
   };
 
   // Unsafe policy is necessary in development and test environments, but should
