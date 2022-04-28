@@ -8,7 +8,7 @@ module('Integration | Component | relative-datetime-live', function (hooks) {
 
   test('it renders a relative datetime', async function (assert) {
     assert.expect(6);
-    
+
     const now = Date.now();
 
     this.date = now - 10 * 1000;
