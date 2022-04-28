@@ -112,6 +112,9 @@
               >{{t 'actions.clear-all-filters'}}
               </Rose::Button>
             {{/if}}
+            <Rose::LoadingButton @onClick={{route-action 'refreshSessions'}}>
+              {{t 'actions.refresh'}}
+            </Rose::LoadingButton>
           </Rose::Form>
         </Rose::Toolbar>
       {{/if}}
