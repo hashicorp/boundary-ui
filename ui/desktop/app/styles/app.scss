@@ -39,22 +39,7 @@
 
   .rose-layout-sidebar-sidebar,
   .rose-layout-sidebar-body {
-    overflow-y: scroll;
-  }
-
-  &.layout-scroll {
-    .rose-layout-global-body {
-      overflow-y: auto;
-
-      main {
-        overflow: unset;
-      }
-    }
-
-    .rose-layout-sidebar-sidebar,
-    .rose-layout-sidebar-body {
-      overflow-y: unset;
-    }
+    overflow-y: auto;
   }
 }
 
