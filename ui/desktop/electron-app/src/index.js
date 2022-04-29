@@ -87,7 +87,7 @@ const createWindow = (partition, closeWindowCB) => {
   // If the user-specified origin changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
   runtimeSettings.onOriginChange(() =>
-    browserWindowOptions.loadURL(emberAppURL)
+    browserWindow.loadURL(emberAppURL)
   );
 
   // Load the ember application
