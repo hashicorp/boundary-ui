@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
 import { resourceFilter } from 'core/decorators/resource-filter';
 import runEvery from 'ember-pollster/decorators/route/run-every';
 import config from '../../../../config/environment';
@@ -146,7 +145,6 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
    * refreshes target data.
    */
   @action
-  @loading
   async refreshTargets() {
     return this.refresh();
   }
