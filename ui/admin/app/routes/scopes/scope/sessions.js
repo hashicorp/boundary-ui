@@ -121,9 +121,10 @@ export default class ScopesScopeSessionsRoute extends Route {
   /**
    * refreshes session data.
    */
+
   @action
   @loading
-  async refreshSessions() {
-    return this.refresh();
+  refreshSessions() {
+    return super.refresh(...arguments);
   }
 }
