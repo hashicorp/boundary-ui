@@ -1,5 +1,6 @@
 @use '../../variables/sizing';
 @use '../../variables/media';
+@use '../../utilities/type';
 
 $xxs: sizing.rems(xxs); // 4
 $xxxxs: sizing.rems(xxxxs); // 1
@@ -8,9 +9,19 @@ $xxxxs: sizing.rems(xxxxs); // 1
   background-color: var(--ui-gray-subtler-6);
   padding: $xxs + $xxxxs;
 
-  button {
+  // inside a toolbar, forms are always full-width
+  .rose-form,
+  .rose-form:not(.full-width) {
+    display: flex;
+    width: auto;
+  }
+
+  .rose-button-inline-link-action {
+    @include type.type(button, semibold);
+    color: var(--stark);
     display: inline-block;
-    font-weight: normal;
     vertical-align: middle;
+    $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
+    padding: $yPadding sizing.rems(m);
   }
 }

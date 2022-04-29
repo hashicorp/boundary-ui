@@ -83,6 +83,9 @@
               >{{t 'actions.clear-all-filters'}}
               </Rose::Button>
             {{/if}}
+            <LoadingButton @onClick={{route-action 'refreshTargets'}}>
+              {{t 'actions.refresh'}}
+            </LoadingButton>
           </Rose::Form>
         </Rose::Toolbar>
       {{/if}}
