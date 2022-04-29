@@ -1,0 +1,9 @@
+{{#if this.lastRefreshed}}
+  <Rose::Toolbar::Info>
+    <RelativeDatetimeLive @date={{this.lastRefreshed}} />
+  </Rose::Toolbar::Info>
+{{/if}}
+
+<LoadingButton @onClick={{this.onClick}}>
+  {{t 'actions.refresh'}}
+</LoadingButton>
