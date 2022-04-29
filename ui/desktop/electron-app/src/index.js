@@ -222,6 +222,18 @@ app.on('ready', async () => {
 
   // Check for updates on launch
   appUpdater.run({ suppressNoUpdatePrompt: true });
+
+  /**
+   * Need for Mac OS behaviour of closing the window but not the app.
+   * This allows to reopen the window if the user clicks Boundary icon in the dock
+   * while the app is not close.
+   * More info: https://www.electronjs.org/docs/latest/tutorial/quick-start#open-a-window-if-none-are-open-macos
+   */
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      mainWindow = createWindow(partition, closeWindowCB);
+    }
+  });
 });
 
 /**
