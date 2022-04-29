@@ -95,6 +95,9 @@ export default class RelativeDatetimeLiveComponent extends Component {
    * @type {string}
    */
   get formatted() {
-    return this.intl.formatRelative(this.scaledDelta, { unit: this.unit });
+    return this.intl.formatRelative(this.scaledDelta, {
+      unit: this.unit,
+      numeric: 'auto',
+    });
   }
 }
