@@ -6,8 +6,19 @@ $xxs: sizing.rems(xxs); // 4
 $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-toolbar {
+  display: flex;
   background-color: var(--ui-gray-subtler-6);
   padding: $xxs + $xxxxs;
+
+  .rose-toolbar-primary,
+  .rose-toolbar-secondary {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  .rose-toolbar-secondary {
+    justify-content: flex-end;
+  }
 
   // inside a toolbar, forms are always full-width
   .rose-form,

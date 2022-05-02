@@ -221,7 +221,9 @@
 // Spinning animation for refresh button icon
 .is-loading .rose-icon {
   @keyframes hds-flight-icon-animation-rotation {
-    to {transform: rotate(360deg);}
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   > svg {

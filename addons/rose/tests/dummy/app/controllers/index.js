@@ -14,6 +14,8 @@ export default class IndexController extends Controller {
   @tracked items = [...possibleItems];
   @tracked selectedItems = [possibleItems[2]];
 
+  now = new Date();
+
   // =actions
 
   @action
