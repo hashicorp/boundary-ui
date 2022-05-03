@@ -219,19 +219,15 @@
 }
 
 // Spinning animation for refresh button icon
-.is-loading {
-  .rose-icon {
-    @keyframes hds-flight-icon-animation-rotation {
-      to {transform: rotate(360deg);}
-    }
+@media (prefers-reduced-motion: no-preference) {
+  .is-loading {
+    .rose-icon {
+      @keyframes hds-flight-icon-animation-rotation {
+        to {transform: rotate(360deg);}
+      }
 
-    > svg {
-      animation: hds-flight-icon-animation-rotation 9s linear infinite;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
       > svg {
-        animation-duration: 0.7s;
+        animation: hds-flight-icon-animation-rotation 0.7s linear infinite;
       }
     }
   }
