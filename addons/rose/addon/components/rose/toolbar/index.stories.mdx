@@ -6,10 +6,18 @@ import { action } from '@storybook/addon-actions';
 
 # Toolbar
 
-renders a toolbar 
+Renders a toolbar.  Items may be added directly into the toolbar, or within
+predefined "regions" for left and right alignment, respectively.
 
 ```htmlbars
 <Rose::Toolbar as |toolbar|>
+  // place items here
+  <toolbar.primary>
+    // place left-aligned items here
+  </toolbar.primary>
+  <toolbar.secondary>
+    // place right-aligned items here
+  </toolbar.secondary>
 </Rose::Toolbar>
 ```
 

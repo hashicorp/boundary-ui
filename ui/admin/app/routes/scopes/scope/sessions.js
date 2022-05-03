@@ -116,4 +116,13 @@ export default class ScopesScopeSessionsRoute extends Route {
   clearAllFilters() {
     this.status = [];
   }
+
+  /**
+   * refreshes session data.
+   */
+
+  @action
+  refreshSessions() {
+    return super.refresh(...arguments);
+  }
 }
