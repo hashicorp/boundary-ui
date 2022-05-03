@@ -17,7 +17,7 @@
     "lint:js": "eslint .",
     "lint:sass": "sass-lint -v -q",
     "format": "npm-run-all format:*",
-    "format:hbs": "prettier --write 'addon/**/*.hbs'",
+    "format:hbs": "prettier --write '{addon,tests}/**/*.hbs'",
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "format:sass": "prettier --write addon/**/*.scss",
     "lint:js:fix": "eslint . --fix",
