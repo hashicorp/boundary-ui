@@ -43,7 +43,7 @@ module.exports = function (environment) {
     appName: APP_NAME,
 
     notifyTimeout: 4000,
-    sessionPollingTimeoutSeconds: 18000,
+    sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
