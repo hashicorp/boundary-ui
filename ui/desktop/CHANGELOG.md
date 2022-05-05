@@ -2,6 +2,17 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.4.3 [CLI 0.8.0] (2022.05.04)
+
+### New
+
+- Add manual refresh button in sessions list. ([PR](https://github.com/hashicorp/boundary-ui/pull/1069))
+- Add manual refresh button in targets list. ([PR](https://github.com/hashicorp/boundary-ui/pull/1087))
+
+### Bug Fixes
+
+- Fix window lifecycle for Mac OS. ([PR](https://github.com/hashicorp/boundary-ui/pull/1067))
+
 ## v1.4.2 [CLI 0.7.6] (2022.03.16)
 
 ### New
