@@ -56,7 +56,6 @@
     "node-fetch": "^2.6.7",
     "plist": "^3.0.5",
     "lzma-native": "^8.0.6",
-    "appdmg": "^0.6.4",
     "minimist": "^1.2.6"
   }
 }

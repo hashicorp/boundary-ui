@@ -428,7 +428,7 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-appdmg@^0.6.0, appdmg@^0.6.4:
+appdmg@^0.6.0:
   version "0.6.4"
   resolved "https://registry.yarnpkg.com/appdmg/-/appdmg-0.6.4.tgz#283b85cc761c1d924f2370bd5cdbd92824b12ef3"
   integrity sha512-YTilgNF0DF2DSRzGzzGDxaTMLXlhe3b3HB8RAaoJJ/VJXZbOlzIAcZ7gdPniHUVUuHjGwnS7fUMd4FvO2Rp94A==
