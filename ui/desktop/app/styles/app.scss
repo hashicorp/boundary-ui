@@ -485,20 +485,16 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 }
 
 // Spinning animation for refresh button icon
-.is-loading .rose-icon {
-  @keyframes hds-flight-icon-animation-rotation {
-    to {
-      transform: rotate(360deg);
-    }
-  }
+@media (prefers-reduced-motion: no-preference) {
+  .is-loading {
+    .rose-icon {
+      @keyframes hds-flight-icon-animation-rotation {
+        to {transform: rotate(360deg);}
+      }
 
-  > svg {
-    animation: hds-flight-icon-animation-rotation 9s linear infinite;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    > svg {
-      animation-duration: 0.7s;
+      > svg {
+        animation: hds-flight-icon-animation-rotation 0.7s linear infinite;
+      }
     }
   }
 }
