@@ -211,4 +211,41 @@ module('Unit | Serializer | application', function (hooks) {
       },
     });
   });
+
+  test('it normalizes removed fields correctly', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('user');
+    const user = store.createRecord('user').constructor;
+    const payload = {
+      id: '1',
+      name: 'user 1',
+      scope: { id: 'o_123' },
+    };
+    const normalized = serializer.normalizeUpdateRecordResponse(
+      store,
+      user,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'user',
+        attributes: {
+          authorized_actions: [],
+          name: 'user 1',
+          scope: { scope_id: 'o_123' },
+          account_ids: [],
+          authorized_collection_actions: null,
+          created_time: null,
+          email: null,
+          full_name: null,
+          login_name: null,
+          updated_time: null,
+        },
+        relationships: {},
+      },
+    });
+  });
 });

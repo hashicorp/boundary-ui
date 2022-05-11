@@ -270,10 +270,11 @@ export default class ApplicationSerializer extends RESTSerializer {
   }
 
   /**
-   * If the API returns an updated response with removed fields, we need to explicitly
-   * set any field that is on the model but wasn't returned in the response to `null`.
-   * This will properly let ember data know the field was removed, otherwise it won't
-   * touch the removed field and will use the old value.
+   * If the API returns an updated response with removed fields, we need to
+   * explicitly set any read only field that is on the model but wasn't
+   * returned in the response to `null`.
+   * This will let ember data know the field was removed, otherwise
+   * it won't touch the removed field and will use the old value.
    *
    * @override
    * @param {object} store
