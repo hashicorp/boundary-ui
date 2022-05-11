@@ -137,7 +137,7 @@ export default class ApplicationSerializer extends RESTSerializer {
   }
 
   /**
-   * In our API, singluar resources are _unrooted_, whereas Ember Data expects
+   * In our API, singular resources are _unrooted_, whereas Ember Data expects
    * them to be rooted under their model name, e.g. `{modelName: {…}}`.
    * This method makes this transformation to accommodate Ember Data.
    *
@@ -267,5 +267,46 @@ export default class ApplicationSerializer extends RESTSerializer {
       if (isNestedSecret) hash[name] = value || null;
     });
     return hash;
+  }
+
+  /**
+   * If the API returns an updated response with removed fields, we need to explicitly
+   * set any field that is on the model but wasn't returned in the response to `null`.
+   * This will properly let ember data know the field was removed, otherwise it won't
+   * touch the removed field and will use the old value.
+   *
+   * @override
+   * @param {object} store
+   * @param {object} primaryModelClass
+   * @param {object} payload
+   * @param {?string} id
+   * @param {string} requestType
+   * @return {object}
+   */
+  normalizeUpdateRecordResponse(
+    store,
+    primaryModelClass,
+    payload,
+    id,
+    requestType
+  ) {
+    primaryModelClass.attributes.forEach((attribute) => {
+      const {
+        name,
+        options: { readOnly },
+      } = attribute;
+
+      if (readOnly && !Object.hasOwn(payload, name)) {
+        payload[name] = null;
+      }
+    });
+
+    return super.normalizeUpdateRecordResponse(
+      store,
+      primaryModelClass,
+      payload,
+      id,
+      requestType
+    );
   }
 }

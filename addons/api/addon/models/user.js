@@ -40,7 +40,7 @@ export default class UserModel extends GeneratedUserModel {
    * There are many options, so we fallback in order of precedence.
    * @type {string}
    */
-  @computed('email,full_name,login_name,displayName')
+  @computed('email', 'full_name', 'login_name')
   get accountName() {
     const { email, full_name, login_name } = this;
     return email || full_name || login_name;
