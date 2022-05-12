@@ -31,7 +31,10 @@ class RuntimeSettings {
     // test to see if the origin is API-compatible with the desktop client.
     const scopesEndpoint = `${origin}/v1/scopes`;
     try {
-      await netRequestPromise(scopesEndpoint);
+      const result = await netRequestPromise(scopesEndpoint);
+      if (result.statusCode >= 300) {
+        throw new Error();
+      }
     } catch (e) {
       throw new Error(`Origin ${origin} could not be validated.`);
     }
