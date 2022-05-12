@@ -21,8 +21,8 @@ jobs:
         with:
           node-version: '16.x'
       - run: yarn install
-  build:
-    name: Build Admin UI
+  build-admin-ui-oss:
+    name: Build Admin UI OSS
     needs: [dependencies]
     runs-on: ubuntu-latest
     steps:
@@ -34,13 +34,43 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
-      - uses: actions/setup-node@v3
+      - name: Build
+        uses: actions/setup-node@v3
         with:
           node-version: '16.x'
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-      - run: yarn run build:ui:admin
-      - name: Upload artifact
+      - run: yarn run build:ui:admin:oss
+      - name: Upload artifact admin-ui
         uses: actions/upload-artifact@v3
         with:
           name: admin-ui
+          path: ./ui/admin/dist/
+      - name: Upload artifact admin-ui-oss
+        uses: actions/upload-artifact@v3
+        with:
+          name: admin-ui-oss
+          path: ./ui/admin/dist/
+  build-admin-ui-enterprise:
+    name: Build Admin UI Enterprise
+    needs: [dependencies]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        id: node-modules-cache
+        with:
+          path: '**/node_modules'
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-
+      - name: Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+      - run: yarn run build:ui:admin:enterprise
+      - name: Upload artifact admin-ui-enterprise
+        uses: actions/upload-artifact@v3
+        with:
+          name: admin-ui-enterprise
           path: ./ui/admin/dist/
