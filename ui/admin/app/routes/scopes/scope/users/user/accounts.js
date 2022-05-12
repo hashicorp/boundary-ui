@@ -33,7 +33,7 @@ export default class ScopesScopeUsersUserAccountsRoute extends Route {
   // =actions
 
   /**
-   * Remove a account from the current role and redirect to accounts index.
+   * Remove an account from the current role and redirect to accounts index.
    * @param {UserModel} user
    * @param {AccountModel} account
    */

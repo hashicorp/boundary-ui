@@ -115,4 +115,39 @@ module('Unit | Model | user', function (hooks) {
       'User has empty account_ids by default'
     );
   });
+
+  test('it defaults to null for readonly attributes when response does not have fields', async function (assert) {
+    assert.expect(3);
+    this.server.post('/v1/users/123abc:remove-accounts', (schema, request) => {
+      const body = JSON.parse(request.requestBody);
+      assert.deepEqual(body, {
+        account_ids: ['3'],
+        version: 1,
+      });
+      return { id: '123abc', name: 'newName' };
+    });
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'user',
+        attributes: {
+          name: 'user',
+          description: 'Description',
+          account_ids: ['3'],
+          version: 1,
+          login_name: 'zed',
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    const model = store.peekRecord('user', '123abc');
+    await model.removeAccount('3');
+
+    assert.equal(model.login_name, null);
+    assert.equal(model.name, 'newName');
+  });
 });

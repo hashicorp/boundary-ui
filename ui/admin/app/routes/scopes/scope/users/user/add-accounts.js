@@ -15,7 +15,7 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
   // =methods
 
   /**
-   * Emtpy out any previously loaded acconuts.
+   * Empty out any previously loaded accounts.
    */
   beforeModel() {
     this.store.unloadAll('account');
