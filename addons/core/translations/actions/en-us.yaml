@@ -17,8 +17,8 @@ retry: Retry
 get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
 copy-error-detail-to-clipboard: Copy error detail to clipboard
-authenticate: Authenticate
-deauthenticate: Deauthenticate
+sign-in: Sign In
+sign-out: Sign Out
 choose-org: Choose Scope
 choose-different-org: Choose a different scope
 add-host-set: Create Host Set

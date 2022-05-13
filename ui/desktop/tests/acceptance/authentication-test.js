@@ -179,7 +179,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.equal(currentURL(), urls.origin);
   });
 
-  test('deauthentication redirects to first global authenticate method', async function (assert) {
+  test('signing out redirects to first global authenticate method', async function (assert) {
     assert.expect(3);
     await visit(urls.authenticate.methods.global);
     await fillIn('[name="identification"]', 'test');
@@ -191,7 +191,7 @@ module('Acceptance | authentication', function (hooks) {
       find(
         '.rose-header-utilities .rose-dropdown-content button'
       ).textContent.trim(),
-      'Deauthenticate'
+      'Sign Out'
     );
     await click('.rose-header-utilities .rose-dropdown-content button');
     assert.notOk(currentSession().isAuthenticated);
