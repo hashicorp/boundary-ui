@@ -58,12 +58,14 @@
             @value='tcp'
             @layout='wide'
           />
-          <radioGroup.card
-            @label={{t 'resources.target.types.ssh'}}
-            @helperText={{t 'resources.target.help.ssh'}}
-            @value='ssh'
-            @layout='wide'
-          />
+          {{#if (feature-flag 'ssh-target')}}
+            <radioGroup.card
+              @label={{t 'resources.target.types.ssh'}}
+              @helperText={{t 'resources.target.help.ssh'}}
+              @value='ssh'
+              @layout='wide'
+            />
+          {{/if}}
         </form.radioGroup>
       {{else}}
         <form.radioGroup
