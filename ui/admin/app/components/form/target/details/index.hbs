@@ -46,41 +46,27 @@
     <:title>{{t 'form.type.label'}}</:title>
     <:body>
       {{#if @model.isNew}}
-        {{#if (feature-flag 'ssh-target')}}
-          <form.radioGroup
-            @name='types'
-            @selectedValue={{@model.type}}
-            @changed={{@changeType}}
-            as |radioGroup|
-          >
-            <radioGroup.card
-              @label={{t 'resources.target.types.tcp'}}
-              @helperText={{t 'resources.target.help.tcp'}}
-              @value='tcp'
-              @layout='wide'
-            />
+        <form.radioGroup
+          @name='types'
+          @selectedValue={{@model.type}}
+          @changed={{@changeType}}
+          as |radioGroup|
+        >
+          <radioGroup.card
+            @label={{t 'resources.target.types.tcp'}}
+            @helperText={{t 'resources.target.help.tcp'}}
+            @value='tcp'
+            @layout='wide'
+          />
+          {{#if (feature-flag 'ssh-target')}}
             <radioGroup.card
               @label={{t 'resources.target.types.ssh'}}
               @helperText={{t 'resources.target.help.ssh'}}
               @value='ssh'
               @layout='wide'
             />
-          </form.radioGroup>
-        {{else}}
-          <form.radioGroup
-            @name='types'
-            @selectedValue={{@model.type}}
-            @changed={{@changeType}}
-            as |radioGroup|
-          >
-            <radioGroup.card
-              @label={{t 'resources.target.types.tcp'}}
-              @helperText={{t 'resources.target.help.tcp'}}
-              @value='tcp'
-              @layout='wide'
-            />
-          </form.radioGroup>
-        {{/if}}
+          {{/if}}
+        </form.radioGroup>
       {{else}}
         <form.radioGroup
           @name='types'
