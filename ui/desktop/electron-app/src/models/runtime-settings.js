@@ -32,7 +32,7 @@ class RuntimeSettings {
     const scopesEndpoint = `${origin}/v1/scopes`;
     try {
       const result = await netRequestPromise(scopesEndpoint);
-      if (result.statusCode >= 300) {
+      if (result.statusCode >= 400) {
         throw new Error();
       }
     } catch (e) {
