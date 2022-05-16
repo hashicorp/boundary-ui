@@ -32,7 +32,9 @@ class RuntimeSettings {
     const scopesEndpoint = `${origin}/v1/scopes`;
     try {
       const result = await netRequestPromise(scopesEndpoint);
-      if (result.statusCode >= 400) {
+      // Redirects (3xx) are handled in the netRequest Promist, so we only
+      // throw an error for 4xx or 5xx responses.
+      if (result.statusCode > 399) {
         throw new Error();
       }
     } catch (e) {
