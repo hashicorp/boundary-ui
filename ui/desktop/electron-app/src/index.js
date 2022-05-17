@@ -117,12 +117,13 @@ const createWindow = (partition, closeWindowCB) => {
 
   // Opens external links in the host default browser.
   // We just allow boundaryproject.io domain to open on external window (for now).
-  browserWindow.webContents.on('new-window', (event, url) => {
-    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
-    event.preventDefault();
+  browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https://boundaryproject.io/')) {
       shell.openExternal(url);
     }
+
+    // Prevent opening of a browser window in electron
+    return { action: 'deny' };
   });
 
   browserWindow.on('unresponsive', () => {
