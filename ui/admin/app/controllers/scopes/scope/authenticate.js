@@ -5,12 +5,22 @@ export default class ScopesScopeAuthenticateController extends Controller {
 
   /**
    * Moves the global scope to index 0.
+   * filter out the scopes which has no authenticatable auth methods
    * @type {Array}
    */
+
   get sortedScopes() {
-    return [
-      ...this.model.scopes.filter((scope) => scope.id === 'global'),
-      ...this.model.scopes.filter((scope) => scope.id !== 'global'),
-    ];
+    let filteredScopesIdsWithAuthMethods;
+    this.model.authenticatableAuthMethodsList.map((authMethod) => {
+      if (authMethod.content?.length > 0) {
+        filteredScopesIdsWithAuthMethods = this.model.scopesIdList.filter(
+          (i) => i === authMethod.content.query.scope_id
+        );
+      }
+    });
+
+    return this.model.scopes.filter(
+      (scope) => filteredScopesIdsWithAuthMethods?.indexOf(scope.id) > -1
+    );
   }
 }

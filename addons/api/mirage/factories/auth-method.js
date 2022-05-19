@@ -11,6 +11,7 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'authenticate',
     ],
   authorized_collection_actions: () => {
     return {
