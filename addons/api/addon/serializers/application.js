@@ -291,21 +291,23 @@ export default class ApplicationSerializer extends RESTSerializer {
     id,
     requestType
   ) {
+    const newPayload = copy(payload, true);
+
     primaryModelClass.attributes.forEach((attribute) => {
       const {
         name,
         options: { readOnly },
       } = attribute;
 
-      if (readOnly && !Object.hasOwn(payload, name)) {
-        payload[name] = null;
+      if (readOnly && !Object.prototype.hasOwnProperty.call(newPayload, name)) {
+        newPayload[name] = null;
       }
     });
 
     return super.normalizeUpdateRecordResponse(
       store,
       primaryModelClass,
-      payload,
+      newPayload,
       id,
       requestType
     );
