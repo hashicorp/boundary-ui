@@ -35,7 +35,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
           authenticatableAuthMethodsList.push(
             this.store.query('auth-method', {
               scope_id: scope.id,
-              filter: { authorized_actions: 'authenticate' },
+              filter: { authorized_actions: ['authenticate'] },
             })
           );
         }
