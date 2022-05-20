@@ -3,7 +3,7 @@
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
 const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
-const IS_VERCEL = process.env.VERCEL || false; // To know is is a Vercel deployment
+const IS_VERCEL = process.env.VERCEL || false; // To know if running on Vercel
 
 // Object that defines edition features.
 const featureEditions = {
