@@ -3,6 +3,7 @@
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
 const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
+const IS_VERCEL = process.env.VERCEL || false; // To know is is a Vercel deployment
 
 // Object that defines edition features.
 const featureEditions = {
@@ -144,8 +145,14 @@ module.exports = function (environment) {
     // be explicit.
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
 
-    // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
+    /**
+     * We need to know if this build/deployment is for Vercel.
+     * If is for Vercel we should NOT override any featureFlag.
+     */
+    if (!IS_VERCEL) {
+      // Enable features in development when NOT in Vercel
+      ENV.featureFlags['ssh-target'] = true;
+    }
   }
 
   if (environment === 'test') {
