@@ -1,0 +1,11 @@
+# Anyone attached to this rule will always been assigned to a pull request
+* @gsusmi @randallmorey @calcaide @DhariniJeeva @cameronperera @ZedLi @dvonanderson
+
+# Anyone attached to this rule will be assigned if the admin ui has been changed
+/ui/admin @randallmorey @cameronperera @ZedLi
+
+# Anyone attached to this rule will be assigned if the desktop client has been changed
+/ui/desktop @calcaide @DhariniJeeva @dvonanderson
+
+# Anyone attached to this rule will be assigned if a styles file is changed
+*.scss @joshuaogle
