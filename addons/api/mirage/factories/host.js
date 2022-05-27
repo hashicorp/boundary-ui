@@ -1,9 +1,11 @@
 import factory from '../generated/factories/host';
 import permissions from '../helpers/permissions';
 import { internet, datatype } from 'faker';
+import generateId from '../helpers/id';
 
 export default factory.extend({
-  id: (i) => `host-id-${i}`,
+  id: () => generateId('h_'),
+
   type() {
     return this.hostCatalog?.type || factory.attrs.type;
   },

@@ -1,11 +1,12 @@
 import factory from '../generated/factories/credential-library';
 import { random, system } from 'faker';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 const types = ['vault'];
 
 export default factory.extend({
-  id: (i) => `credential-library-id-${i}`,
+  id: () => generateId('cl_'),
   type: (i) => types[i % types.length],
 
   authorized_actions: () =>
