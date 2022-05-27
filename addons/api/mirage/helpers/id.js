@@ -1,7 +1,7 @@
 const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 /**
- * The Mulberry32 PRGN, JavaScript implementation.  This is a seedable PRNG,
+ * The Mulberry32 PRNG, JavaScript implementation.  This is a seedable PRNG,
  * which we need in order to deterministically generate IDs which are stable
  * across reloads.  Unfortunately, the built-in `Math.random` function
  * is not seedable.
