@@ -154,11 +154,16 @@ List of available project commands.  `yarn run <command-name>`
 | build | Builds the dummy app for production. |
 | lint | Runs all lint commands. |
 | lint:js | Lints `js` files. |
+| lint:js:fix | Runs automatic lint fixes for `js` files. |
+| lint:hbs | Runs lint for `hbs` template files. |
+| lint:hbs:fix | Runs automatic lint fixes for `hbs` template files. |
 | format | Runs all auto-formatters. |
 | format:js | Auto-formats `js` files using Prettier. |
+| format:hbs | Auto-formats `hbs` files using Prettier. |
 | start | Runs the dummy app local server. |
 | test | Runs all tests. |
-| test:all | Runs tests across multiple Ember versions with ember-try. |
+| test:ember-compatibility | Runs tests across multiple Ember versions with ember-try. |
+| precommit | Runs all lint, format and tests. |
 | doc:toc | Automatically generates a table of contents for this README file. |
 
 Additional commands in the monorepo package may affect this projects.
@@ -166,6 +171,7 @@ Additional commands in the monorepo package may affect this projects.
 ## Linting
 
 * `yarn lint:hbs`
+* `yarn lint:hbs --fix`
 * `yarn lint:js`
 * `yarn lint:js --fix`
 

@@ -12,7 +12,7 @@
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
-    "format": "npm run format:js",
+    "format": "yarn run format:js",
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "start": "ember serve",
     "test": "ember test",
