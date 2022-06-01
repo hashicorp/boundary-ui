@@ -2,6 +2,7 @@ import factory from '../generated/factories/credential-store';
 import { random, internet, datatype } from 'faker';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 const types = ['vault'];
 
@@ -18,7 +19,7 @@ export default factory.extend({
       'credential-libraries': ['create', 'list'],
     };
   },
-  id: (i) => `credential-store-id-${i}`,
+  id: () => generateId('cs_'),
   type: (i) => types[i % types.length],
 
   attributes() {

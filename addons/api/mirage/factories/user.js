@@ -1,5 +1,6 @@
 import factory from '../generated/factories/user';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -11,5 +12,5 @@ export default factory.extend({
       'add-accounts',
       'remove-accounts',
     ],
-  id: (i) => `user-${i}`,
+  id: () => generateId('u_'),
 });
