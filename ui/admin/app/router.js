@@ -18,6 +18,15 @@ Router.map(function () {
         });
       });
 
+      this.route('onboarding', function () {
+        this.route('quick-setup', function () {
+          this.route('choose-path');
+          this.route('create-resources', function () {
+            this.route('success');
+          });
+        });
+      });
+
       this.route('scopes', function () {});
       this.route('edit');
       this.route('new');
@@ -122,13 +131,5 @@ Router.map(function () {
 
   this.route('account', function () {
     this.route('change-password');
-  });
-
-  this.route('onboarding', function () {
-    this.route('quick-setup', function () {
-      this.route('choose-path');
-      this.route('create-resources');
-      this.route('success');
-    });
   });
 });
