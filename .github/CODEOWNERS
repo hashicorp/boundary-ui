@@ -1,5 +1,5 @@
 # Anyone attached to this rule will always been assigned to a pull request
-* @gsusmi @randallmorey @calcaide @DhariniJeeva @cameronperera @ZedLi @dvonanderson
+* @hashicorp/boundary-ui
 
 # Anyone attached to this rule will be assigned if the admin ui has been changed
 /ui/admin @randallmorey @cameronperera @ZedLi
