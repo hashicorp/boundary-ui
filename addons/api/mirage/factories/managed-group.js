@@ -1,11 +1,11 @@
 import factory from '../generated/factories/managed-group';
 import { random } from 'faker';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 const types = ['oidc'];
 
 export default factory.extend({
-  id: (i) => `managed-groups-id-${i}`,
   type: (i) => types[i % types.length],
 
   authorized_actions: () =>
@@ -15,6 +15,8 @@ export default factory.extend({
       'update',
       'delete',
     ],
+
+  id: () => generateId('mg_'),
 
   attributes() {
     switch (this.type) {

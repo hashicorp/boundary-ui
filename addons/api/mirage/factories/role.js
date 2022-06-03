@@ -1,6 +1,7 @@
 import factory from '../generated/factories/role';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -18,6 +19,8 @@ export default factory.extend({
     'id=*;action=*',
     'id=*;type=host-catalog;actions=create,read',
   ],
+
+  id: () => generateId('r_'),
 
   /**
    * Adds principals to the role.

@@ -1,6 +1,7 @@
 import factory from '../generated/factories/account';
 import { random, internet } from 'faker';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -11,6 +12,9 @@ export default factory.extend({
       'delete',
       'set-password',
     ],
+
+  id: () => generateId('acct_'),
+
   attributes() {
     switch (this.type) {
       case 'password':

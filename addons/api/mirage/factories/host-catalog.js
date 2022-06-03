@@ -2,6 +2,7 @@ import factory from '../generated/factories/host-catalog';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
 import { datatype, address, random } from 'faker';
+import generateId from '../helpers/id';
 
 const types = ['static', 'plugin'];
 // Represents known plugin types, except "foobar" which models the possibility
@@ -11,7 +12,7 @@ const pluginTypes = ['aws', 'azure', 'foobar'];
 let pluginTypeCounter = 1;
 
 export default factory.extend({
-  id: (i) => `host-catalog-id-${i}`,
+  id: () => generateId('hc_'),
 
   // Cycle through available types
   type: (i) => types[i % types.length],
