@@ -19,7 +19,7 @@ export default class ScopesScopeOnboardingQuickSetupChoosePathRoute extends Rout
         break;
       case 'manual':
       default:
-        this.router.transitionTo('scopes.scope', 'global');
+        this.router.transitionTo('scopes.scope.new', 'global');
         break;
     }
   }
