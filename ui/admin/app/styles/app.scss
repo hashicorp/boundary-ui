@@ -234,3 +234,13 @@
     }
   }
 }
+
+.choose-path {
+  display: block;
+  width: sizing.rems(xl) * 16;
+}
+
+.choose-path-cards {
+  display: flex;
+  justify-content: space-between;
+}
