@@ -1,2 +1,11 @@
-{{page-title 'ChoosePath'}}
-{{outlet}}
+<Rose::Layout::Centered class='choose-path'>
+  <Rose::Frame>
+    <:header>
+      <h2>{{t 'form.choose-path.label'}}</h2>
+    </:header>
+    <:body>
+      <p>{{t 'form.choose-path.help'}}</p>
+      <Form::Onboarding::ChoosePath @submit={{route-action 'choosePath'}} />
+    </:body>
+  </Rose::Frame>
+</Rose::Layout::Centered>

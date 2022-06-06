@@ -1,0 +1,32 @@
+<Rose::Form
+  class='full-width'
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @onSubmit={{fn @submit this.path}}
+  as |form|
+>
+  <form.radioGroup
+    @name='paths'
+    @selectedValue={{this.path}}
+    @changed={{this.toggleRadio}}
+    as |radioGroup|
+  >
+    <radioGroup.card
+      @label={{t 'form.guided.label'}}
+      @value='guided'
+      @helperText={{t 'form.guided.help'}}
+      @layout='tile'
+    />
+    <radioGroup.card
+      @label={{t 'form.manual.label'}}
+      @value='manual'
+      @helperText={{t 'form.manual.help'}}
+      @layout='tile'
+    />
+  </form.radioGroup>
+  <form.actions
+    @disabled={{false}}
+    @submitText={{t 'actions.next'}}
+    @showCancel={{false}}
+  />
+</Rose::Form>
