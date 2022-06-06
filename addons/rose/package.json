@@ -27,6 +27,7 @@
     "prestorybook": "yarn build && yarn storybook:build",
     "storybook": "start-storybook -p 6006 -s dist",
     "storybook:build": "build-storybook -s dist && sb extract",
+    "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {

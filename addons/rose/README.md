@@ -54,6 +54,7 @@ List of available project commands.  `yarn run <command-name>`
 | storybook | Runs the Storybook local server on port 6006.  Be sure to start the standard server (see above) in a separate terminal. |
 | test | Runs all tests. |
 | test:ember-compatibility | Runs tests across multiple Ember versions with ember-try. |
+| precommit | Runs all lint, format and tests. |
 | doc:toc | Automatically generates a table of contents for this README file. |
 
 Additional commands in the monorepo package may affect this projects.
