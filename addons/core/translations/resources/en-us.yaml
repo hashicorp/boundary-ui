@@ -392,3 +392,7 @@ managed-group:
     messages:
       title: Welcome to Members
       description: No members in this managed group.
+onboarding:
+  choose-path:
+    title: Welcome to Boundary
+    description: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
