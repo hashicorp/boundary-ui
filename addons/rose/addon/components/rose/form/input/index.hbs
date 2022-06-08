@@ -22,7 +22,7 @@
     )
   }}
 {{else}}
-  <div class='rose-form-input'>
+  <div class='rose-form-input {{if @inline ' inline'}}'>
 
     <Rose::Form::Label @for={{this.id}} @error={{@error}}>
       {{@label}}

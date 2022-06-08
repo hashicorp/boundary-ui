@@ -32,6 +32,7 @@ titles:
   no-results: No Results
   choose-a-provider: Choose a provider
   provider: Provider
+  quick-setup: Quick Setup
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   origin-initialization: To get started, please enter your origin URL
@@ -41,7 +42,7 @@ descriptions:
   choose-a-provider: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
   choose-a-provider-azure: Boundary does not yet support rotating credentials.
   provider: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
-questions:
+  questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
   abandon-confirm: Are you sure you want to navigate away?  Your unsaved changes will be lost.
@@ -54,3 +55,11 @@ onboarding:
   choose-path:
     title: Welcome to Boundary
     description: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
+  create-resource:
+     title: Creating your first target
+     description: In Boundary, a “target” defines a server that your users will connect to.
+     setup-info:
+      title: We’ll set up scopes & a host catalog for you
+      description: Hosts are organized in host catalogs, which live in projects, which live in orgs. We will create these for you, and they can be edited or deleted later.
+
+  

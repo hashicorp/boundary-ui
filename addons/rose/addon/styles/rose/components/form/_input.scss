@@ -1,10 +1,18 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 
+.rose-form  {
+  .rose-form-input {
+    &.inline {
+      display: inline-block;
+      width: 40%;
+    }
+  }
+}
 .rose-form-input {
   margin-bottom: sizing.rems(m);
 }
-
+ 
 .rose-input-wrapper {
   position: relative;
   .rose-icon {

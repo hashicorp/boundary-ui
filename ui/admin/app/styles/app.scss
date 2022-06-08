@@ -244,3 +244,7 @@
   display: flex;
   justify-content: space-between;
 }
+.create-resources {
+  display: block;
+  width: sizing.rems(xl) * 16;
+}

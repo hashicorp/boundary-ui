@@ -1,0 +1,50 @@
+<Rose::Form
+  class='full-width'
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @onSubmit={{fn @submit this.hostAddress this.targetPort}}
+  as |form|
+>
+
+  <form.checkbox
+    @label={{t 'form.toggle-host-info.label'}}
+    @onChange={{this.toggleTargetSetup}}
+  />
+  {{#if this.showHostInfo}}
+
+    <form.input
+      @name='hostAddress'
+      @type='text'
+      @inline={{true}}
+      @value={{this.hostAddress}}
+      @helperText={{t 'form.create-resource-host-address.help'}}
+      @label={{t 'form.create-resource-host-address.label'}}
+    />
+
+    <form.input
+      @name='targetPort'
+      @type='text'
+      @inline={{true}}
+      @value={{this.targetPort}}
+      @helperText={{t 'form.create-resource-target-port.help'}}
+      @label={{t 'form.create-resource-target-port.label'}}
+    />
+
+  {{/if}}
+  <form.fieldset>
+    <:title>{{t 'onboarding.create-resource.setup-info.title'}}</:title>
+    <:description>{{t 'onboarding.create-resource.setup-info.description'}}
+    </:description>
+
+    <:body>
+      <Image @name='resource-creation' />
+
+    </:body>
+  </form.fieldset>
+
+  <form.actions
+    @disabled={{false}}
+    @submitText={{t 'actions.next'}}
+    @showCancel={{false}}
+  />
+</Rose::Form>

@@ -1,2 +1,13 @@
 {{page-title 'CreateResources'}}
-{{outlet}}
+<Rose::Layout::Centered class='create-resources'>
+  <Rose::Frame>
+    <:header>
+      <h2>{{t 'titles.quick-setup'}}</h2>
+    </:header>
+    <:body>
+      <h3>{{t 'onboarding.create-resource.title'}}</h3>
+      <p>{{t 'onboarding.create-resource.description'}}</p>
+      <Form::Onboarding::CreateResources @submit={{route-action 'submit'}} />
+    </:body>
+  </Rose::Frame>
+</Rose::Layout::Centered>
