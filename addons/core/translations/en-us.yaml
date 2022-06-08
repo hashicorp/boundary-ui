@@ -50,3 +50,7 @@ themes:
   system: System Default
   light: Light
   dark: Dark
+onboarding:
+  choose-path:
+    title: Welcome to Boundary
+    description: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
