@@ -48,11 +48,15 @@ export default class ScopesScopeSessionsRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-    const { status } = this;
+    const filters = { status: this.status };
+    const options = {
+      scope_id,
+      include_terminated: filters.status?.includes('terminated'),
+    };
     const sessions = await this.resourceFilterStore.queryBy(
       'session',
-      { status },
-      { scope_id }
+      filters,
+      options
     );
 
     const sessionAggregates = await all(
