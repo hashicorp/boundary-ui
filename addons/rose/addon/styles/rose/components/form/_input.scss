@@ -5,7 +5,7 @@
   .rose-form-input {
     &.inline {
       display: inline-block;
-      width: 40%;
+      width: sizing.rems(m) * 16; 
     }
   }
 }
