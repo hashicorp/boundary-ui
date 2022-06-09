@@ -40,16 +40,21 @@ List of available project commands.  `yarn run <command-name>`
 | build:development | Builds the dummy app in development mode. |
 | build | Builds the dummy app for production. |
 | lint | Runs all lint commands. |
+| lint:fix | Runs automatic lint fixes for all files. |
 | lint:hbs | Lints template `hbs` files. |
+| lint:hbs:fix | Runs automatic lint fixes for `hbs` files. |
 | lint:js | Lints `js` files. |
+| lint:js:fix | Runs automatic lint fixes for `js` files. |
 | lint:sass | Lints `scss` files. |
 | format | Runs all auto-formatters. |
 | format:js | Auto-formats `js` files using Prettier. |
+| format:hbs | Auto-formats `hbs` files using Prettier. |
 | format:sass | Auto-formats `scss` files using Prettier. |
 | start | Runs the dummy app local server. |
 | storybook | Runs the Storybook local server on port 6006.  Be sure to start the standard server (see above) in a separate terminal. |
 | test | Runs all tests. |
-| test:all | Runs tests across multiple Ember versions with ember-try. |
+| test:ember-compatibility | Runs tests across multiple Ember versions with ember-try. |
+| precommit | Runs all lint, format and tests. |
 | doc:toc | Automatically generates a table of contents for this README file. |
 
 Additional commands in the monorepo package may affect this projects.

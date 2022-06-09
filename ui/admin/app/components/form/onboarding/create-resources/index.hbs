@@ -7,7 +7,7 @@
 >
 
   <form.checkbox
-    @label={{t 'form.toggle-host-info.label'}}
+    @label={{t 'onboarding.quick-start.titles.toggle-resource-info'}}
     @onChange={{this.toggleTargetSetup}}
   />
   {{#if this.showHostInfo}}
@@ -17,8 +17,8 @@
       @type='text'
       @inline={{true}}
       @value={{this.hostAddress}}
-      @helperText={{t 'form.create-resource-host-address.help'}}
-      @label={{t 'form.create-resource-host-address.label'}}
+      @label={{t 'onboarding.quick-start.titles.host-address'}}
+      @helperText={{t 'onboarding.quick-start.descriptions.host-address'}}
     />
 
     <form.input
@@ -26,14 +26,16 @@
       @type='text'
       @inline={{true}}
       @value={{this.targetPort}}
-      @helperText={{t 'form.create-resource-target-port.help'}}
-      @label={{t 'form.create-resource-target-port.label'}}
+      @label={{t 'onboarding.quick-start.titles.target-port'}}
+      @helperText={{t 'onboarding.quick-start.descriptions.target-port'}}
     />
 
   {{/if}}
   <form.fieldset>
-    <:title>{{t 'onboarding.create-resource.setup-info.title'}}</:title>
-    <:description>{{t 'onboarding.create-resource.setup-info.description'}}
+    <:title>{{t 'onboarding.quick-start.titles.resource-setup-info'}}</:title>
+    <:description>{{t
+        'onboarding.quick-start.descriptions.resource-setup-info'
+      }}
     </:description>
 
     <:body>

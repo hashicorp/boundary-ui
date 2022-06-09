@@ -149,17 +149,3 @@ ip_addresses:
 sync-interval:
   label: Sync Interval
   help: Number of seconds between the time Boundary syncs hosts in this set.
-guided:
-  label: Quick setup
-  help: I want to see how Boundary works, help me set up my first scopes and targets.
-manual:
-  label: Manual
-  help: I want to set up my first scopes and targets myself, starting with my first org.
-create-resource-host-address:
-  label: Host Address
-  help: "Example: “192.168.0.1” or IPv6"
-create-resource-target-port:
-  label: Target Port
-  help: "Example: “22”"
-toggle-host-info: 
-  label: I have an IP address and port for my first host
