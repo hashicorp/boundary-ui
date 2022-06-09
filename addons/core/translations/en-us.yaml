@@ -50,3 +50,13 @@ themes:
   system: System Default
   light: Light
   dark: Dark
+onboarding:
+  quick-start:
+    titles:
+      choose-path: Welcome to Boundary
+      quick-setup: Quick setup
+      manual: Manual
+    descriptions:
+      choose-path: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
+      quick-setup: I want to see how Boundary works, help me set up my first scopes and targets.
+      manual: I want to set up my first scopes and targets myself, starting with my first org.
