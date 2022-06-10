@@ -244,3 +244,40 @@
   display: flex;
   justify-content: space-between;
 }
+
+.success-centered {
+  width: min-content;
+}
+
+.success-boundary {
+  .rose-icon {
+    margin-bottom: sizing.rems(xs);
+  }
+}
+
+.success-sub-title {
+  display: inline-flex;
+
+  > h3 {
+    margin-left: sizing.rems(xs);
+    margin-top: sizing.rems(xxs); // this needs to be 0.5rem but not applying for some reason
+  }
+}
+
+.success-link {
+  display: block;
+  margin-top: sizing.rems(xs);
+  text-decoration: none;
+}
+
+.success-image {
+  margin-bottom: sizing.rems(xl);
+  margin-top: sizing.rems(l);
+}
+
+.success-button {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
+  margin-top: sizing.rems(xl);
+}

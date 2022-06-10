@@ -32,6 +32,7 @@ titles:
   no-results: No Results
   choose-a-provider: Choose a provider
   provider: Provider
+  success: Success
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   origin-initialization: To get started, please enter your origin URL
@@ -60,3 +61,16 @@ onboarding:
       choose-path: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
       quick-setup: I want to see how Boundary works, help me set up my first scopes and targets.
       manual: I want to set up my first scopes and targets myself, starting with my first org.
+  success:
+    titles:
+      connect: Connect to your Target
+      desktop: Using Boundary Desktop
+      developers: Developers
+    descriptions:
+      download: Download the Boundary Desktop app to browse and connect to targets (available for Windows, Mac, and Linux)
+      developers: You can also connect to targets using the Boundary CLI or API.
+    links:
+      install: Install the Boundary Desktop app
+      learn: Learn about Boundary Desktop app
+      cli: Learn about Boundary command-line (CLI)
+      api: Learn about Boundary API

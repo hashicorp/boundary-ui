@@ -89,6 +89,10 @@ module.exports = function (environment) {
         'target.add-host-sources': '/targets/add-host-sets',
         'target.worker-filters': '/targets/worker-filters',
         user: '/users',
+        downloads: '/downloads',
+        'getting-started.desktop': '/gettting-started/desktop',
+        'api-client.cli': '/api-client/cli',
+        'api-client.api': '/api-client/api',
       },
     },
 
