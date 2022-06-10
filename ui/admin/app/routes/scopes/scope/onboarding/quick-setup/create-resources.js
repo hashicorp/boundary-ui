@@ -49,7 +49,7 @@ export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends
   @action
   @loading
   @notifyError(({ message }) => message)
-  async submit(hostAddress = '1234', targetPort = '42') {
+  async createResource(hostAddress = '1234', targetPort = '42') {
     try {
       await this.createOnboardingResourcesAndRedirect(hostAddress, targetPort);
     } catch (e) {

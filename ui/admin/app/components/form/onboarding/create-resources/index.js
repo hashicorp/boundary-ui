@@ -7,7 +7,7 @@ export default class FormOnboardingComponent extends Component {
   @tracked showHostInfo = false;
 
   @action
-  toggleTargetSetup() {
+  toggleHostInfoSetup() {
     this.showHostInfo = !this.showHostInfo;
   }
 }
