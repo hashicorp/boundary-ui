@@ -31,6 +31,6 @@ export default class OnboardingRoute extends Route {
    */
   redirect(model) {
     // If there are orgs already created, redirect to index.
-    if (orgs.length) this.router.transitionTo('index');
+    if (model.length) this.router.transitionTo('index');
   }
 }
