@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class ScopesScopeOnboardingQuickSetupChoosePathRoute extends Route {
+export default class OnboardingQuickSetupChoosePathRoute extends Route {
   // =services
 
   @service router;
@@ -13,9 +13,7 @@ export default class ScopesScopeOnboardingQuickSetupChoosePathRoute extends Rout
   choosePath(path = 'guided') {
     switch (path) {
       case 'guided':
-        this.router.transitionTo(
-          'scopes.scope.onboarding.quick-setup.create-resources'
-        );
+        this.router.transitionTo('onboarding.quick-setup.create-resources');
         break;
       case 'manual':
       default:

@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends Route {
+export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   // =services
 
   @service router;
@@ -80,7 +80,7 @@ export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends
       await target.save();
       await target.addHostSources([hostSet.id]);
       this.router.transitionTo(
-        'scopes.scope.onboarding.quick-setup.create-resources.success'
+        'onboarding.quick-setup.create-resources.success'
       );
     } else {
       this.router.transitionTo(
