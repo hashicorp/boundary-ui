@@ -26,6 +26,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
         description: 'Sample project created by quick setup',
       }),
       hostCatalog: this.store.createRecord('host-catalog', {
+        type: 'static',
         name: 'All Databases',
         description: 'Sample host catalog created by quick setup',
       }),
@@ -38,6 +39,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
         description: 'Sample host created by quick setup',
       }),
       target: this.store.createRecord('target', {
+        type: 'tcp',
         name: 'CRM Database target',
         description: 'Sample target created by quick setup',
       }),
