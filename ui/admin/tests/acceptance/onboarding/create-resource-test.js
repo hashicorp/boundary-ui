@@ -9,9 +9,8 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
   setupMirage(hooks);
 
   const urls = {
-    createResources: '/scopes/global/onboarding/quick-setup/create-resources',
-    successPath:
-      '/scopes/global/onboarding/quick-setup/create-resources/success',
+    createResources: '/onboarding/quick-setup/create-resources',
+    successPath: '/onboarding/quick-setup/success',
   };
 
   hooks.beforeEach(function () {

@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-export default class OnboardingQuickSetupCreateResourcesSuccessRoute extends Route {
+export default class OnboardingQuickSetupSuccessRoute extends Route {
   // =methods
 
   model() {

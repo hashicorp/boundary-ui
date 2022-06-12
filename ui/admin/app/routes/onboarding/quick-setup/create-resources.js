@@ -82,9 +82,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
       target.default_port = targetPort;
       await target.save();
       await target.addHostSources([hostSet.id]);
-      this.router.transitionTo(
-        'onboarding.quick-setup.create-resources.success'
-      );
+      this.router.transitionTo('onboarding.quick-setup.success');
     } else {
       this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.hosts',
