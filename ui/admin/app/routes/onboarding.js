@@ -30,6 +30,8 @@ export default class OnboardingRoute extends Route {
    * If any orgs already exist, redirect to index to skip onboarding.
    */
   redirect(model) {
+    console.log(model, 'exost right path????');
+
     // If there are orgs already created, redirect to index.
     if (model.length) this.router.transitionTo('index');
   }
