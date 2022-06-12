@@ -62,7 +62,6 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   }
 
   async createOnboardingResourcesAndRedirect(hostAddress, targetPort) {
-    console.log(hostAddress, targetPort, 'infooo');
     const { org, project, hostCatalog, hostSet, host, target } =
       this.currentModel;
     // The Procedure
