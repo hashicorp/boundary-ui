@@ -50,14 +50,15 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
 
   @action
   @loading
-  @notifyError(({ message }) => message)
+  @notifyError(function () {
+    return this.intl.t('errors.quick-setup-failed.description');
+  })
   async submit(event, hostAddress = '1234', targetPort = '42') {
     try {
       await this.createOnboardingResourcesAndRedirect(hostAddress, targetPort);
     } catch (e) {
-      const message = this.intl.t('errors.quick-setup-failed.description');
       this.router.replaceWith('scopes.scope', 'global');
-      throw new Error(message);
+      throw new Error();
     }
   }
 
