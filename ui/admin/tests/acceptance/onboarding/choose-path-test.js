@@ -9,9 +9,9 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
   setupMirage(hooks);
 
   const urls = {
-    choosePath: '/scopes/global/onboarding/quick-setup/choose-path',
+    choosePath: '/onboarding/quick-setup/choose-path',
     newOrg: '/scopes/global/new',
-    createResources: '/scopes/global/onboarding/quick-setup/create-resources',
+    createResources: '/onboarding/quick-setup/create-resources',
   };
 
   hooks.beforeEach(function () {
