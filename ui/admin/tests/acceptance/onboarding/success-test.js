@@ -20,7 +20,7 @@ module(
       targets: '/scopes/global/targets',
     };
 
-    test('clicking done takes user to targets screen', async function (assert) {
+    test.skip('clicking done takes user to targets screen', async function (assert) {
       assert.expect(1);
       await visit(urls.createResources);
       await click('.success-button');
