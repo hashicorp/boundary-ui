@@ -64,13 +64,13 @@
         {{t 'onboarding.success.links.api'}}
       </a>
 
-      <Rose::LinkButton
+      <Rose::Button
         class='success-button'
-        @route='scopes.scope.targets'
         @style='primary'
+        {{on 'click' (route-action 'routeToTarget' @model)}}
       >
         {{t 'actions.done'}}
-      </Rose::LinkButton>
+      </Rose::Button>
     </:body>
   </Rose::Frame>
 </Rose::Layout::Centered>
