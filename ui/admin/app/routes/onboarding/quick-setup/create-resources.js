@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends Route {
+export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   // =services
 
   @service router;
@@ -26,6 +26,7 @@ export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends
         description: 'Sample project created by quick setup',
       }),
       hostCatalog: this.store.createRecord('host-catalog', {
+        type: 'static',
         name: 'All Databases',
         description: 'Sample host catalog created by quick setup',
       }),
@@ -38,6 +39,7 @@ export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends
         description: 'Sample host created by quick setup',
       }),
       target: this.store.createRecord('target', {
+        type: 'tcp',
         name: 'CRM Database target',
         description: 'Sample target created by quick setup',
       }),
@@ -48,14 +50,15 @@ export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends
 
   @action
   @loading
-  @notifyError(({ message }) => message)
-  async createResource(hostAddress = '1234', targetPort = '42') {
+  @notifyError(function () {
+    return this.intl.t('errors.quick-setup-failed.description');
+  })
+  async createResources(hostAddress = '1234', targetPort = '42') {
     try {
       await this.createOnboardingResourcesAndRedirect(hostAddress, targetPort);
     } catch (e) {
-      const message = this.intl.t('errors.quick-setup-failed.description');
       this.router.replaceWith('scopes.scope', 'global');
-      throw new Error(message);
+      throw new Error();
     }
   }
 
@@ -80,7 +83,7 @@ export default class ScopesScopeOnboardingQuickSetupCreateResourcesRoute extends
       await target.save();
       await target.addHostSources([hostSet.id]);
       this.router.transitionTo(
-        'scopes.scope.onboarding.quick-setup.create-resources.success'
+        'onboarding.quick-setup.create-resources.success'
       );
     } else {
       this.router.transitionTo(
