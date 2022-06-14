@@ -246,67 +246,6 @@
   justify-content: space-between;
 }
 
-.success-centered {
-  width: min-content;
-
-  .rose-frame-header {
-    padding: sizing.rems(l);
-  }
-
-  h2 {
-    font-weight: 700;
-    line-height: 24px;
-    margin: 0;
-  }
-
-  h4 {
-    font-weight: 700;
-    line-height: 19px;
-  }
-
-  a {
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 16px;
-  }
-}
-
-.success-boundary {
-  .rose-icon {
-    margin-bottom: sizing.rems(xs);
-  }
-}
-
-.success-sub-title {
-  display: inline-flex;
-
-  h3 {
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    line-height: 24px;
-    margin-left: sizing.rems(xs);
-    margin-top: sizing.rems(xxs);
-  }
-}
-
-.success-link {
-  display: block;
-  margin-top: sizing.rems(xs);
-  text-decoration: none;
-}
-
-.success-image {
-  margin-bottom: sizing.rems(xl);
-  margin-top: sizing.rems(l);
-}
-
-.success-button {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0;
-  margin-top: sizing.rems(xl);
-}
-
 .create-resources {
   display: block;
   width: sizing.rems(xl) * 15;
@@ -331,7 +270,68 @@
   }
 }
 
-.controller {
+.onboarding-quick-setup-success {
+  width: min-content;
+
+  .rose-frame-header {
+    padding: sizing.rems(l);
+  }
+
+  h2 {
+    font-weight: 700;
+    line-height: 24px;
+    margin: 0;
+  }
+
+  h4 {
+    font-weight: 700;
+    line-height: 19px;
+  }
+
+  a {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+  }
+}
+
+.onboarding-quick-setup-success-boundary {
+  .rose-icon {
+    margin-bottom: sizing.rems(xs);
+  }
+}
+
+.onboarding-quick-setup-success-sub-title {
+  display: inline-flex;
+
+  h3 {
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 24px;
+    margin-left: sizing.rems(xs);
+    margin-top: sizing.rems(xxs);
+  }
+}
+
+.onboarding-quick-setup-success-link {
+  display: block;
+  margin-top: sizing.rems(xs);
+  text-decoration: none;
+}
+
+.onboarding-quick-setup-success-image {
+  margin-bottom: sizing.rems(xl);
+  margin-top: sizing.rems(l);
+}
+
+.onboarding-quick-setup-success-button {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
+  margin-top: sizing.rems(xl);
+}
+
+.onboarding-quick-setup-success-controller {
   margin-top: sizing.rems(l);
 
   h4 {
@@ -346,7 +346,7 @@
   }
 }
 
-.controller-url {
+.onboarding-quick-setup-success-controller-url {
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   border-radius: sizing.rems(xxxs);
   color: var(--action);
@@ -367,7 +367,7 @@
   }
 }
 
-.developers {
+.onboarding-quick-setup-success-developers {
   p {
     margin-bottom: sizing.rems(s);
     margin-top: sizing.rems(xs);
