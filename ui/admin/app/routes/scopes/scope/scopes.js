@@ -23,7 +23,7 @@ export default class ScopesScopeScopesRoute extends Route {
 
   /**
    * Loads sub scopes for the current scope.
-   * @return {Promise
+   * @return {Promise}
    */
   async model() {
     const currentScope = this.modelFor('scopes.scope');

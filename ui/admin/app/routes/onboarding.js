@@ -19,10 +19,9 @@ export default class OnboardingRoute extends Route {
   /**
    * List all scopes (orgs) under global.
    */
-  model() {
+   model() {
     return this.store.query('scope', {
       scope_id: 'global',
-      recursive: true,
     });
   }
 
@@ -31,6 +30,6 @@ export default class OnboardingRoute extends Route {
    */
   redirect(model) {
     // If there are orgs already created, redirect to index.
-    if (model.length) this.router.transitionTo('index');
+    if (model.length === 2) this.router.transitionTo('index');
   }
 }
