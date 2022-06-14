@@ -63,6 +63,13 @@
         <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
         {{t 'onboarding.success.links.api'}}
       </a>
+      <Rose::Button
+        class='success-button'
+        @style='primary'
+        {{on 'click' (route-action 'showTargetList' @model)}}
+      >
+        {{t 'actions.done'}}
+      </Rose::Button>
     </:body>
   </Rose::Frame>
 </Rose::Layout::Centered>
