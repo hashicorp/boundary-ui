@@ -54,16 +54,6 @@ export default class ScopesScopeRoute extends Route {
     orgs = await this.store
       .query('scope', { scope_id: 'global' })
       .catch(() => A([]));
-    
-    //redirect to quick setup if the user has just one org 
-    //(by default every user has one generated org)
-    //BUT this doesn't work when the user selects manual setup, 
-    //cause the below condition holds true for manual as well!!!
-    //we need a way to separate manual from guided
-
-    if (orgs.length < 2 && this.session.isAuthenticated) {
-        this.router.transitionTo('onboarding.quick-setup.choose-path');
-    }
 
     if (model.isProject) {
       projects = await this.store.query('scope', { scope_id: model.scopeID });
