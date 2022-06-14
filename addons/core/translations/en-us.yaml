@@ -73,12 +73,14 @@ onboarding:
       target-port: "Example: “22”"
   success:
     titles:
-      connect: Connect to your Target
+      connect: Connect to your target
       desktop: Using Boundary Desktop
       developers: Developers
+      controller: Controller URL
     descriptions:
       download: Download the Boundary Desktop app to browse and connect to targets (available for Windows, Mac, and Linux)
       developers: You can also connect to targets using the Boundary CLI or API.
+      controller: Use this URL to sign in to Boundary
     links:
       install: Install the Boundary Desktop app
       learn: Learn about Boundary Desktop app

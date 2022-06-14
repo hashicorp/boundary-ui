@@ -22,7 +22,7 @@ module(
     test('check if the done button is present', async function (assert) {
       assert.expect(1);
       await visit(urls.createResources);
-      assert.ok(find('.success-button'));
+      assert.ok(find('.onboarding-quick-setup-success-button'));
     });
   }
 );
