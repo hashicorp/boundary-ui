@@ -63,7 +63,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       this.server.schema.credentialLibraries.all().models.length;
     authenticateSession({});
   });
-
   test('visiting credential libraries', async function (assert) {
     assert.expect(2);
     await visit(urls.credentialLibraries);
