@@ -53,7 +53,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   @notifyError(function () {
     return this.intl.t('errors.quick-setup-failed.description');
   })
-  async createResources(hostAddress = '1234', targetPort = '42') {
+  async createResources(hostAddress, targetPort) {
     try {
       await this.createOnboardingResourcesAndRedirect(hostAddress, targetPort);
     } catch (e) {
