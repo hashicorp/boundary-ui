@@ -32,6 +32,7 @@ titles:
   no-results: No Results
   choose-a-provider: Choose a provider
   provider: Provider
+  success: Success
   create-resources: Create Resources
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
@@ -70,3 +71,17 @@ onboarding:
       resource-setup-info: Hosts are organized in host catalogs, which live in projects, which live in orgs. We will create these for you, and they can be edited or deleted later.
       host-address: "Example: “192.168.0.1” or IPv6"
       target-port: "Example: “22”"
+  success:
+    titles:
+      connect: Connect to your Target
+      desktop: Using Boundary Desktop
+      developers: Developers
+    descriptions:
+      download: Download the Boundary Desktop app to browse and connect to targets (available for Windows, Mac, and Linux)
+      developers: You can also connect to targets using the Boundary CLI or API.
+    links:
+      install: Install the Boundary Desktop app
+      learn: Learn about Boundary Desktop app
+      cli: Learn about Boundary command-line (CLI)
+      api: Learn about Boundary API
+

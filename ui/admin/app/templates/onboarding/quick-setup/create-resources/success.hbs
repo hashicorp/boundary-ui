@@ -1,2 +1,68 @@
-{{page-title 'Success'}}
-{{outlet}}
+{{page-title (t 'titles.success')}}
+<Rose::Layout::Centered class='success-centered'>
+  <Rose::Frame>
+    <:header>
+      <h2>{{t 'onboarding.success.titles.connect'}}</h2>
+    </:header>
+    <:body>
+      <div class='success-boundary'>
+        <div class='success-sub-title'>
+          <Rose::Icon @name='logo-app-background' @size='extra-large' />
+          <h3>
+            {{t 'onboarding.success.titles.desktop'}}
+          </h3>
+        </div>
+
+        <p>{{t 'onboarding.success.descriptions.download'}}</p>
+
+        <a
+          href={{doc-url 'downloads'}}
+          target='_blank'
+          class='success-link'
+          rel='noopener noreferrer'
+        >
+          <Rose::Icon @name='flight-icons/svg/download-16' @size='medium' />
+          {{t 'onboarding.success.links.install'}}
+        </a>
+
+        <a
+          href={{doc-url 'getting-started.desktop'}}
+          target='_blank'
+          class='success-link'
+          rel='noopener noreferrer'
+        >
+          <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+          {{t 'onboarding.success.links.learn'}}
+        </a>
+
+        <div class='success-image'>
+          <Image @name='targets' />
+        </div>
+      </div>
+
+      <h3>{{t 'onboarding.success.titles.developers'}}</h3>
+
+      <p>{{t 'onboarding.success.descriptions.developers'}}</p>
+
+      <a
+        href={{doc-url 'api-client.cli'}}
+        target='_blank'
+        class='success-link'
+        rel='noopener noreferrer'
+      >
+        <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+        {{t 'onboarding.success.links.cli'}}
+      </a>
+
+      <a
+        href={{doc-url 'api-client.api'}}
+        target='_blank'
+        class='success-link'
+        rel='noopener noreferrer'
+      >
+        <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+        {{t 'onboarding.success.links.api'}}
+      </a>
+    </:body>
+  </Rose::Frame>
+</Rose::Layout::Centered>
