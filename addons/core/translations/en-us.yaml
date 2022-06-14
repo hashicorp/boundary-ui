@@ -73,7 +73,7 @@ onboarding:
       target-port: "Example: “22”"
   success:
     titles:
-      connect: Connect to your Target
+      connect: Connect to your target
       desktop: Using Boundary Desktop
       developers: Developers
       controller: Controller URL

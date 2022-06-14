@@ -36,7 +36,7 @@
         </a>
 
         <div class='controller'>
-          <h3>{{t 'onboarding.success.titles.controller'}}</h3>
+          <h4>{{t 'onboarding.success.titles.controller'}}</h4>
           <p>{{t 'onboarding.success.descriptions.controller'}}</p>
           <div class='controller-url'>
             <Copyable
@@ -54,29 +54,31 @@
         </div>
       </div>
 
-      <h3>{{t 'onboarding.success.titles.developers'}}</h3>
+      <div class='developers'>
+        <h4>{{t 'onboarding.success.titles.developers'}}</h4>
 
-      <p>{{t 'onboarding.success.descriptions.developers'}}</p>
+        <p>{{t 'onboarding.success.descriptions.developers'}}</p>
 
-      <a
-        href={{doc-url 'api-client.cli'}}
-        target='_blank'
-        class='success-link'
-        rel='noopener noreferrer'
-      >
-        <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
-        {{t 'onboarding.success.links.cli'}}
-      </a>
+        <a
+          href={{doc-url 'api-client.cli'}}
+          target='_blank'
+          class='success-link'
+          rel='noopener noreferrer'
+        >
+          <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+          {{t 'onboarding.success.links.cli'}}
+        </a>
 
-      <a
-        href={{doc-url 'api-client.api'}}
-        target='_blank'
-        class='success-link'
-        rel='noopener noreferrer'
-      >
-        <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
-        {{t 'onboarding.success.links.api'}}
-      </a>
+        <a
+          href={{doc-url 'api-client.api'}}
+          target='_blank'
+          class='success-link'
+          rel='noopener noreferrer'
+        >
+          <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+          {{t 'onboarding.success.links.api'}}
+        </a>
+      </div>
     </:body>
   </Rose::Frame>
 </Rose::Layout::Centered>

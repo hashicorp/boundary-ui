@@ -248,6 +248,27 @@
 
 .success-centered {
   width: min-content;
+
+  .rose-frame-header {
+    padding: sizing.rems(l);
+  }
+
+  h2 {
+    font-weight: 700;
+    line-height: 24px;
+    margin: 0;
+  }
+
+  h4 {
+    font-weight: 700;
+    line-height: 19px;
+  }
+
+  a {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+  }
 }
 
 .success-boundary {
@@ -259,7 +280,10 @@
 .success-sub-title {
   display: inline-flex;
 
-  > h3 {
+  h3 {
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 24px;
     margin-left: sizing.rems(xs);
     margin-top: sizing.rems(xxs);
   }
@@ -308,7 +332,9 @@
 }
 
 .controller {
-  h3 {
+  margin-top: sizing.rems(l);
+
+  h4 {
     font-weight: 600;
     line-height: 18px;
     margin-bottom: sizing.rems(xxs);
@@ -338,5 +364,12 @@
 
   .copyable-button {
     top: -4px;
+  }
+}
+
+.developers {
+  p {
+    margin-bottom: sizing.rems(s);
+    margin-top: sizing.rems(xs);
   }
 }
