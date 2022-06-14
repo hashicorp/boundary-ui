@@ -281,26 +281,8 @@
   justify-content: center;
   margin-bottom: 0;
   margin-top: sizing.rems(xl);
-  .create-resources {
-    display: block;
-    width: sizing.rems(xl) * 15;
-    .rose-form-fieldset {
-      margin-top: sizing.rems(xl);
-    }
-    .rose-frame-body {
-      p {
-        color: var(--ui-gray);
-      }
-    }
-  }
 }
-.create-resource-cards {
-  display: flex;
-  justify-content: space-between;
-  .rose-form-input {
-    width: sizing.rems(xl) * 6;
-  }
-}
+
 .create-resources {
   display: block;
   width: sizing.rems(xl) * 15;
