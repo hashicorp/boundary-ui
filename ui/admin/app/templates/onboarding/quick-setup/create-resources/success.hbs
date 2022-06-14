@@ -35,6 +35,20 @@
           {{t 'onboarding.success.links.learn'}}
         </a>
 
+        <div class='controller'>
+          <h3>{{t 'onboarding.success.titles.controller'}}</h3>
+          <p>{{t 'onboarding.success.descriptions.controller'}}</p>
+          <div class='controller-url'>
+            <Copyable
+              @text={{this.model.origin}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{this.model.origin}}</code>
+            </Copyable>
+          </div>
+        </div>
+
         <div class='success-image'>
           <Image @name='targets' />
         </div>

@@ -282,12 +282,15 @@
   margin-bottom: 0;
   margin-top: sizing.rems(xl);
 }
+
 .create-resources {
   display: block;
   width: sizing.rems(xl) * 15;
+
   .rose-form-fieldset {
     margin-top: sizing.rems(xl);
   }
+
   .rose-frame-body {
     p {
       color: var(--ui-gray);
@@ -298,7 +301,42 @@
 .create-resource-cards {
   display: flex;
   justify-content: space-between;
+
   .rose-form-input {
     width: sizing.rems(xl) * 6;
+  }
+}
+
+.controller {
+  h3 {
+    font-weight: 600;
+    line-height: 18px;
+    margin-bottom: sizing.rems(xxs);
+  }
+
+  p {
+    color: var(--ui-gray);
+    margin-bottom: sizing.rems(xxs);
+  }
+}
+
+.controller-url {
+  border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+  border-radius: sizing.rems(xxxs);
+  color: var(--action);
+  height: (sizing.rems(xs) * 5);
+
+  .copyable {
+    display: flex;
+    justify-content: space-between;
+    padding: sizing.rems(s);
+  }
+
+  .rose-icon {
+    margin: 0;
+  }
+
+  .copyable-button {
+    top: -4px;
   }
 }
