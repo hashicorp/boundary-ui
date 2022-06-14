@@ -54,6 +54,7 @@ export default class ScopesScopeRoute extends Route {
     orgs = await this.store
       .query('scope', { scope_id: 'global' })
       .catch(() => A([]));
+
     if (model.isProject) {
       projects = await this.store.query('scope', { scope_id: model.scopeID });
     }

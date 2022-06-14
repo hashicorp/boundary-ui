@@ -22,7 +22,6 @@ export default class OnboardingRoute extends Route {
   model() {
     return this.store.query('scope', {
       scope_id: 'global',
-      recursive: true,
     });
   }
 
