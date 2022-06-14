@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -19,11 +19,10 @@ module(
       targets: '/scopes/global/targets',
     };
 
-    test.skip('clicking done takes user to targets screen', async function (assert) {
+    test('check if the done button is present', async function (assert) {
       assert.expect(1);
       await visit(urls.createResources);
-      await click('.success-button');
-      assert.equal(currentURL(), urls.targets);
+      assert.ok(find('.success-button'));
     });
   }
 );
