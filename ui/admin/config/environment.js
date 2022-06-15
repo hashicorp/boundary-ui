@@ -19,7 +19,7 @@ const featureEditions = {
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': true,
+  'ssh-target': false,
 };
 
 module.exports = function (environment) {
@@ -149,7 +149,7 @@ module.exports = function (environment) {
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['ssh-target'] = false;
   }
 
   if (environment === 'test') {
