@@ -11,7 +11,7 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
   const urls = {
     createResources: '/onboarding/quick-setup/create-resources',
     successPath: '/onboarding/quick-setup/create-resources/success',
-    hostCatalogPath: '/scopes/1/host-catalogs/1/hosts',
+    hostCatalogPath: null,
   };
 
   hooks.beforeEach(function () {
@@ -40,6 +40,10 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
     assert.expect(1);
     await visit(urls.createResources);
     await click('[type="submit"]');
+    const projectScopeId = this.server.schema.scopes.where({ type: 'project' })
+      .models[0].scopeId;
+    const hostCatalogId = this.server.schema.hostCatalogs.all().models[0].id;
+    urls.hostCatalogPath = `/scopes/${projectScopeId}/host-catalogs/${hostCatalogId}/hosts`;
     assert.equal(currentURL(), urls.hostCatalogPath);
   });
 });
