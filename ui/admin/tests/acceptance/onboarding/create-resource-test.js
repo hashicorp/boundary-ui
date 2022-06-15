@@ -40,10 +40,10 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
     assert.expect(1);
     await visit(urls.createResources);
     await click('[type="submit"]');
-    const projectScopeId = this.server.schema.scopes.where({ type: 'project' })
-      .models[0].scopeId;
+    const projectId = this.server.schema.scopes.where({ type: 'project' })
+      .models[0].id;
     const hostCatalogId = this.server.schema.hostCatalogs.all().models[0].id;
-    urls.hostCatalogPath = `/scopes/${projectScopeId}/host-catalogs/${hostCatalogId}/hosts`;
+    urls.hostCatalogPath = `/scopes/${projectId}/host-catalogs/${hostCatalogId}/hosts`;
     assert.equal(currentURL(), urls.hostCatalogPath);
   });
 });

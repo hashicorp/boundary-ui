@@ -88,7 +88,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
     } else {
       this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.hosts',
-        org.id,
+        project.id,
         hostCatalog.id
       );
     }
