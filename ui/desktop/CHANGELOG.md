@@ -9,7 +9,6 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 - Use include_terminated flag for listing sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/1126)) 
 - Display auth method names in auth form ([PR](https://github.com/hashicorp/boundary-ui/pull/1113)) 
 
-
 ### Bug Fixes
 -  Unavailable controller url should result in a friendlier error workflow  ([PR](https://github.com/hashicorp/boundary-ui/pull/1107))
 
