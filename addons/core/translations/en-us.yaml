@@ -77,7 +77,7 @@ onboarding:
       desktop: Using Boundary Desktop
       developers: Developers
       controller: Controller URL
-      role: We have created your scopes and target
+      creation-success: We have created your scopes and target
     descriptions:
       download: Download the Boundary Desktop app to browse and connect to targets (available for Windows, Mac, and Linux)
       developers: You can also connect to targets using the Boundary CLI or API.
