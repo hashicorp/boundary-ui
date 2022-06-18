@@ -60,7 +60,6 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
     try {
       await this.createOnboardingResourcesAndRedirect(hostAddress, targetPort);
     } catch (e) {
-      console.log(e);
       this.router.replaceWith('scopes.scope', 'global');
       throw new Error();
     }
