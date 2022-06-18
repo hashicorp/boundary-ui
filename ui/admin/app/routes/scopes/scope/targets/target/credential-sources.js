@@ -16,11 +16,13 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
     const { application_credential_source_ids: credential_libraries } =
       this.modelFor('scopes.scope.targets.target');
     return all(
-      credential_libraries.map((credential_library) =>
-        this.store.findRecord('credential-library', credential_library.value, {
+      credential_libraries.map((credential_library) => {
+        if (!credential_library.value.includes('cred')) {
+         this.store.findRecord('credential-library', credential_library.value, {
           reload: true,
         })
-      )
+        }     
+      })
     );
   }
 
