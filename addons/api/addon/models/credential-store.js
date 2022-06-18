@@ -31,4 +31,14 @@ export default class CredentialStoreModel extends GeneratedCredentialStoreModel 
    * @type {boolean}
    */
   @equal('type', 'vault') isVault;
+
+
+  /**
+   * True if the credential store is static.
+   * @type {boolean}
+   */
+   get isStatic() {
+     console.log(this.type, 'what is type here')
+    return this.type === 'static';
+  }
 }

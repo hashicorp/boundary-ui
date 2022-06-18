@@ -318,6 +318,7 @@ credential-store:
     delete: Delete Credential Store
   types:
     vault: Vault
+    static: Static
   form:
     address:
       label: Address
