@@ -32,9 +32,13 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
       scope_id,
     });
     await all(
-      credentialStores.map(({ id: credential_store_id }) =>
-        this.store.query('credential-library', { credential_store_id })
-      )
+      credentialStores.map(({ id: credential_store_id, isStatic }) => {
+        //credential libraries don't have a type static so exclude them
+        if (!isStatic)
+          return this.store.query('credential-library', {
+            credential_store_id,
+          });
+      })
     );
     const credentialLibraries = this.store.peekAll('credential-library');
     return {

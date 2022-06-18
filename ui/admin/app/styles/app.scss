@@ -128,15 +128,15 @@
 
   &.loading {
     &::after {
-      animation: gradient 1s linear infinite;
-      background: repeating-linear-gradient(
-        to right,
-        var(--subtle),
-        var(--subtle),
-        var(--info),
-        var(--subtle),
-        var(--subtle)
-      );
+      // animation: gradient 1s linear infinite;
+      // background: repeating-linear-gradient(
+      //   to right,
+      //   var(--subtle),
+      //   var(--subtle),
+      //   var(--info),
+      //   var(--subtle),
+      //   var(--subtle)
+      // );
       background-position: -100% 0;
       background-size: 200% auto;
       content: ' ';
