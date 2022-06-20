@@ -1,18 +1,11 @@
 import Component from '@glimmer/component';
-import { computed } from '@ember/object';
+import { action } from '@ember/object';
 
 export default class FormRoleGrantsComponent extends Component {
-  // =attributes
+  // =actions
 
-  /**
-   * Returns the selected grant scope model.
-   * @type {ScopeModel}
-   */
-  @computed('args.model.{store,grant_scope_id}')
-  get selectedGrantScope() {
-    return this.args.model.store.peekRecord(
-      'scope',
-      this.args.model.grant_scope_id
-    );
+  @action
+  updateGrantScopeID(id) {
+    this.args.model.grant_scope_id = id;
   }
 }
