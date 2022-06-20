@@ -41,15 +41,15 @@
                 <Card
                   @heading='{{t 'resources.session.credential.title'}}
                     {{if
-                    credential.library.name
-                    (concat ' (' credential.library.name ')')
+                    credential.source.name
+                    (concat ' (' credential.source.name ')')
                   }}'
                   @icon='flight-icons/svg/key-16'
                 >
                   <:header>
                     <Rose::Dropdown
                       @text={{t
-                        'resources.session.credential.credential_library.title'
+                        'resources.session.credential.credential_source.title'
                       }}
                       @style='condensed'
                       @dropdownRight={{true}}
@@ -60,28 +60,28 @@
                         <:key>{{t 'form.id.label'}}</:key>
                         <:value>
                           <Copyable
-                            @text={{credential.library.id}}
+                            @text={{credential.source.id}}
                             @buttonText={{t 'actions.copy-to-clipboard'}}
                             @acknowledgeText={{t 'states.copied'}}
                           >
-                            <code>{{credential.library.id}}</code>
+                            <code>{{credential.source.id}}</code>
                           </Copyable>
                         </:value>
                       </dropdown.key-value>
                       <dropdown.key-value>
                         <:key>{{t 'form.type.label'}}</:key>
-                        <:value>{{credential.library.type}}</:value>
+                        <:value>{{credential.source.type}}</:value>
                       </dropdown.key-value>
-                      {{#if credential.library.name}}
+                      {{#if credential.source.name}}
                         <dropdown.key-value>
                           <:key>{{t 'form.name.label'}}</:key>
-                          <:value>{{credential.library.name}}</:value>
+                          <:value>{{credential.source.name}}</:value>
                         </dropdown.key-value>
                       {{/if}}
-                      {{#if credential.library.description}}
+                      {{#if credential.source.description}}
                         <dropdown.key-value>
                           <:key>{{t 'form.description.label'}}</:key>
-                          <:value>{{credential.library.description}}</:value>
+                          <:value>{{credential.source.description}}</:value>
                         </dropdown.key-value>
                       {{/if}}
                     </Rose::Dropdown>
