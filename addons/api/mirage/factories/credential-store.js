@@ -4,7 +4,7 @@ import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
-const types = ['vault'];
+const types = ['vault', 'static'];
 
 export default factory.extend({
   authorized_actions: () =>

@@ -31,4 +31,9 @@ export default class CredentialStoreModel extends GeneratedCredentialStoreModel 
    * @type {boolean}
    */
   @equal('type', 'vault') isVault;
+
+  /**
+   * @type {boolean}
+   */
+  @equal('type', 'static') isStatic;
 }

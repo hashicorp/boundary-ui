@@ -66,10 +66,10 @@ export default function initializeMockIPC(server, config) {
         session_id: newSession.id,
         credentials: [
           {
-            credential_library: {
+            credential_source: {
               id: 'clvlt_4cvscMTl0N',
-              name: 'Library Name',
-              description: 'Library Description',
+              name: 'Source Name',
+              description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
@@ -78,10 +78,10 @@ export default function initializeMockIPC(server, config) {
             },
           },
           {
-            credential_library: {
+            credential_source: {
               id: 'clvlt_4cvscMTl0N',
-              name: 'Library Name',
-              description: 'Library Description',
+              name: 'Source Name',
+              description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
@@ -91,10 +91,10 @@ export default function initializeMockIPC(server, config) {
             },
           },
           {
-            credential_library: {
+            credential_source: {
               id: 'clvlt_9KWscxpcY7',
-              name: 'Library Name',
-              description: 'Library Description',
+              name: 'Source Name',
+              description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },
@@ -103,10 +103,10 @@ export default function initializeMockIPC(server, config) {
             },
           },
           {
-            credential_library: {
+            credential_source: {
               id: 'clvlt_9KWscxpcY7',
-              name: 'Library Name',
-              description: 'Library Description',
+              name: 'Source Name',
+              description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
             },

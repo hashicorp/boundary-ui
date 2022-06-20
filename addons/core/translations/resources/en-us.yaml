@@ -172,8 +172,8 @@ session:
     title_plural: Credentials
     secret:
       label: Secret
-    credential_library:
-      title: Credential Library
+    credential_source:
+      title: Credential Source
     actions:
       raw-api:
         show: View raw API output
@@ -318,6 +318,7 @@ credential-store:
     delete: Delete Credential Store
   types:
     vault: Vault
+    static: Static
   form:
     address:
       label: Address
