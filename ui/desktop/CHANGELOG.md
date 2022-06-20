@@ -2,6 +2,17 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.4.4 [CLI 0.9.0] (2022.06.20)
+
+### New
+
+- Use include_terminated flag for listing sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/1126)) 
+- Display auth method names in auth form ([PR](https://github.com/hashicorp/boundary-ui/pull/1113)) 
+
+### Bug Fixes
+-  Unavailable controller url should result in a friendlier error workflow  ([PR](https://github.com/hashicorp/boundary-ui/pull/1107))
+-  fix target connection details overlay to show credential sources ([PR](https://github.com/hashicorp/boundary-ui/pull/1146))
+
 ## v1.4.3 [CLI 0.8.0] (2022.05.04)
 
 ### New
