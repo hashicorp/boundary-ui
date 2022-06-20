@@ -43,6 +43,9 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
         name: 'CRM Database target',
         description: 'Sample target created by quick setup',
       }),
+      role: this.store.createRecord('role', {
+        name: 'crm_db_connect_role',
+      }),
     };
   }
 
@@ -63,7 +66,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   }
 
   async createOnboardingResourcesAndRedirect(hostAddress, targetPort) {
-    const { org, project, hostCatalog, hostSet, host, target } =
+    const { org, project, hostCatalog, hostSet, host, target, role } =
       this.currentModel;
     // The Procedure
     await org.save();
@@ -82,6 +85,13 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
       target.default_port = targetPort;
       await target.save();
       await target.addHostSources([hostSet.id]);
+      role.scopeID = org.id;
+      role.grant_scope_id = project.id;
+      await role.save();
+      await role.saveGrantStrings([
+        `type=target;actions=list`,
+        `id=${target.id};actions=authorize-session`,
+      ]);
       this.router.transitionTo(
         'onboarding.quick-setup.create-resources.success'
       );

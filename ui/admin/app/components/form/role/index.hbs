@@ -63,15 +63,16 @@
       <form.radioGroup
         @name='grant_scope_id'
         @selectedValue={{@model.grant_scope_id}}
+        @changed={{this.updateGrantScopeID}}
         as |radioGroup|
       >
         <Rose::Dropdown
-          @text={{this.selectedGrantScope.displayName}}
+          @text={{@model.grantScope.displayName}}
           @icon={{if
-            this.selectedGrantScope.isProject
+            @model.grantScope.isProject
             'flight-icons/svg/grid-16'
             (if
-              this.selectedGrantScope.isOrg
+              @model.grantScope.isOrg
               'flight-icons/svg/org-16'
               'flight-icons/svg/globe-16'
             )
@@ -120,6 +121,7 @@
         </Rose::Dropdown>
       </form.radioGroup>
     </fieldset>
+    <br />
   {{/unless}}
   {{#if (can 'save model' @model)}}
     <form.actions

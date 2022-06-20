@@ -23,6 +23,13 @@ export default class RoleModel extends GeneratedRoleModel {
    */
   @array('string', { readOnly: true }) grant_strings;
 
+  /**
+   * Convenience for looking up the grant scope, if loaded.
+   */
+  get grantScope() {
+    return this.store.peekRecord('scope', this.grant_scope_id);
+  }
+
   // =methods
 
   /**
