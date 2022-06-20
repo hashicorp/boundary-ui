@@ -13,7 +13,7 @@ class SessionCredential {
   /**
    *
    */
-  static Library = class Library {
+  static Source = class Source {
     id;
     name;
     description;
@@ -42,7 +42,7 @@ class SessionCredential {
 
   // =attributes
   rawCredential;
-  library;
+  source;
   #payloadSecret;
 
   /**
@@ -72,8 +72,8 @@ class SessionCredential {
   // =methods
 
   constructor(cred) {
-    const { id, name, description, type } = cred.credential_library;
-    this.library = new SessionCredential.Library(id, name, description, type);
+    const { id, name, description, type } = cred.credential_source;
+    this.source = new SessionCredential.Source(id, name, description, type);
     this.#payloadSecret = cred.secret;
     this.rawCredential = cred;
   }
