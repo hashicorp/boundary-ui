@@ -124,5 +124,9 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*.hbs": "ember-template-lint --fix"
   }
 }

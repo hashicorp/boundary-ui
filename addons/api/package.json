@@ -80,5 +80,9 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*.hbs": "ember-template-lint --fix"
   }
 }

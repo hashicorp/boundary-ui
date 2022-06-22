@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 yarn compliance:licenses
-yarn lint
+npx lint-staged
 yarn test
