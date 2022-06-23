@@ -72,7 +72,6 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-ember": "^10.5.9",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-qunit": "^6.2.0",
     "faker": "^5.5.3",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
@@ -93,6 +92,7 @@
   },
   "lint-staged": {
     "*.js": "eslint --fix",
-    "*.hbs": "ember-template-lint --fix"
+    "*.hbs": "ember-template-lint --fix",
+    "*.{js,scss}": "prettier --write"
   }
 }

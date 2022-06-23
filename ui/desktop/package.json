@@ -35,7 +35,7 @@
     "start:desktop": "ember electron",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
-    "test": "npm-run-all lint test:*",
+    "test": "npm-run-all test:*",
     "test:ember": "cross-env COVERAGE=true ember exam --random",
     "e2e": "yarn run build && yarn run e2e:dev",
     "e2e:dev": "npx playwright test --headed",
@@ -103,7 +103,6 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-ember": "^10.5.9",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-qunit": "^6.2.0",
     "faker": "^5.5.3",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
@@ -117,6 +116,7 @@
     "sass": "^1.41.0",
     "sinon": "^11.1.2",
     "stylelint": "^13.13.1",
+    "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-sass-guidelines": "^8.0.0"
   },
   "engines": {
@@ -127,6 +127,7 @@
   },
   "lint-staged": {
     "*.js": "eslint --fix",
-    "*.hbs": "ember-template-lint --fix"
+    "*.hbs": "ember-template-lint --fix",
+    "*.{js,scss}": "prettier --write"
   }
 }

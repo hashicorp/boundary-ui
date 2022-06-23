@@ -87,7 +87,6 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-ember": "^10.5.9",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-qunit": "^6.2.0",
     "jest": "^27.4.7",
     "loader.js": "^4.7.0",
@@ -112,6 +111,7 @@
   },
   "lint-staged": {
     "*.js": "eslint --fix",
-    "*.hbs": "ember-template-lint --fix"
+    "*.hbs": "ember-template-lint --fix",
+    "*.{js,scss}": "prettier --write"
   }
 }
