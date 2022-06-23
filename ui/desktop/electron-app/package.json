@@ -22,7 +22,7 @@
     "forge": "config/forge.config.js"
   },
   "dependencies": {
-    "electron-devtools-installer": "^3.1.1",
+    "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "lookpath": "^1.1.0",
