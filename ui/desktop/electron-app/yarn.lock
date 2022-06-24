@@ -2547,11 +2547,6 @@ log-symbols@^4.0.0, log-symbols@^4.1.0:
     chalk "^4.1.0"
     is-unicode-supported "^0.1.0"
 
-lookpath@^1.1.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/lookpath/-/lookpath-1.2.0.tgz#5fccf91497acec085e66d98cb12446c21fe665ae"
-  integrity sha512-cUl+R2bGJcSJiHLVKzGHRTYTBhudbHIgd7s63gfGHteaz0BBKEEz2yw2rgbxZAFze92KlbkiWzL1ylYOmqIPVA==
-
 loud-rejection@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/loud-rejection/-/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
