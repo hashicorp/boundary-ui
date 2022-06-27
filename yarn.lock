@@ -166,6 +166,7 @@
     semver "^6.3.0"
     source-map "^0.5.0"
 
+<<<<<<< HEAD
 "@babel/core@^7.18.5":
   version "7.18.5"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.18.5.tgz#c597fa680e58d571c28dda9827669c78cdd7f000"
@@ -196,6 +197,8 @@
     eslint-visitor-keys "^2.1.0"
     semver "^6.3.0"
 
+=======
+>>>>>>> 6d4b192b (chore: 🤖 Update babel/eslint-parser)
 "@babel/eslint-parser@^7.18.2":
   version "7.18.2"
   resolved "https://registry.yarnpkg.com/@babel/eslint-parser/-/eslint-parser-7.18.2.tgz#e14dee36c010edfb0153cf900c2b0815e82e3245"
