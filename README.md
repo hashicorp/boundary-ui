@@ -66,7 +66,6 @@ List of available project commands.  `yarn run <command-name>`
 |---------------------|---|
 | build               | Builds Admin UI. |
 | test                | Runs tests in CI mode. |
-| commit              | Replaces `git commit`, ensures compliance, audit, lint, and test checks pass before commit is allowed and normalizes commit messages across authors. |
 | lint                | Runs ember-template-lint on all of the hbs, js, and sass files. |
 | compliance:audit    | Checks for issues using `yarn audit` with moderate and above criticality.|
 | compliance:licenses | Checks that all dependencies have OSS-compatible licenses. |
@@ -164,11 +163,12 @@ Enter the origin of your Boundary dev instance, by default is: `http://localhost
 
 ### Committing
 
-Instead of the default `git commit`, we prescribe a custom command that ensures
-linting and other checks pass before a commit may be completed.  It also ensures
-that all contributors author consistent commit messages.  To get started with a
-commit, stage your files as usual.  Then run `yarn commit` and follow the
-on-screen instructions to author your message.
+We use `husky` and `lint-staged` to ensure linting and other checks pass before a
+commit is completed. Simply do a `yarn install` to make sure the hooks are installed.
+
+Use a normal `git commit` to go through the checks, if you need to skip these checks,
+use `git commit --no-verify` to bypass them. However, a consistent commit message will
+still be enforced even if you use `--no-verify`.
 
 #### License Checking
 
