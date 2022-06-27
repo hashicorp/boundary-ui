@@ -14,11 +14,7 @@ module.exports = {
     // end of babel-config
   },
   plugins: ['ember'],
-  extends: [
-    'eslint:recommended',
-    'plugin:ember/recommended',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['eslint:recommended', 'plugin:ember/recommended', 'prettier'],
   env: {
     browser: true,
   },
