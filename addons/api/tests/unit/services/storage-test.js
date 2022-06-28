@@ -8,14 +8,14 @@ module('Unit | Service | storage', function (hooks) {
     assert.expect(1);
     const service = this.owner.lookup('service:storage');
     service.setItem('foo', 'bar');
-    assert.equal(service.getItem('foo'), 'bar');
+    assert.strictEqual(service.getItem('foo'), 'bar');
   });
 
   test('it can remove persisted values', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:storage');
     service.setItem('foo', 'bar');
-    assert.equal(service.getItem('foo'), 'bar');
+    assert.strictEqual(service.getItem('foo'), 'bar');
     service.removeItem('foo');
     assert.notOk(service.getItem('foo'));
   });
@@ -27,7 +27,7 @@ module('Unit | Service | storage', function (hooks) {
     assert.expect(1);
     const service = this.owner.lookup('service:storage');
     service.setItem('foo', 'bar');
-    assert.equal(service.getItem('foo'), 'bar');
+    assert.strictEqual(service.getItem('foo'), 'bar');
   });
 
   test("it's in-memory storage is implicitly refreshed for every test case, and thus values from previous runs are not present", function (assert) {
