@@ -214,7 +214,7 @@ module('Unit | Serializer | target', function (hooks) {
         attributes: {
           authorized_actions: [],
           name: 'Target 1',
-          scope: { scope_id: 'o_123' },
+          scope: { id: 'o_123', scope_id: 'o_123' },
           host_sources: [],
           application_credential_source_ids: [],
         },
