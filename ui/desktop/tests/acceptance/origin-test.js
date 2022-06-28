@@ -11,11 +11,11 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-//import { Response } from 'miragejs';
+// import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
 import {
-  currentSession,
+  // currentSession,
   // authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
@@ -175,19 +175,5 @@ module('Acceptance | origin', function (hooks) {
     assert.notOk(config.autoOrigin, 'autoOrigin is disabled');
     await visit(urls.origin);
     assert.notOk(find('[name="host"]').value, 'Origin field is empty');
-  });
-
-  test('can reset origin on error', async function (assert) {
-    assert.expect(4);
-    this.server.get('/targets', () => new Response(500));
-    await visit(urls.origin);
-    await fillIn('[name="host"]', currentOrigin);
-    await click('[type="submit"]', 'Set origin');
-    await click('[type="submit"]', 'Authenticate');
-    assert.ok(currentSession().isAuthenticated);
-    assert.equal(find('main section button').textContent.trim(), 'Disconnect');
-    await click('main section button');
-    assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
   });
 });
