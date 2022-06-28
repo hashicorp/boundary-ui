@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# This is to allow interaction with the terminal for commitizen
+exec < /dev/tty && npx git-cz --hook || true
