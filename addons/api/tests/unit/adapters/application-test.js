@@ -19,14 +19,14 @@ module('Unit | Adapter | application', function (hooks) {
     assert.expect(2);
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(adapter.namespace);
-    assert.equal(adapter.namespace, config.api.namespace);
+    assert.strictEqual(adapter.namespace, config.api.namespace);
   });
 
   test('it generates correct URL prefixes', function (assert) {
     assert.expect(2);
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(config.api.namespace);
-    assert.equal(adapter.urlPrefix(), config.api.namespace);
+    assert.strictEqual(adapter.urlPrefix(), config.api.namespace);
   });
 
   test('it generates correct default URL suffixes', function (assert) {
