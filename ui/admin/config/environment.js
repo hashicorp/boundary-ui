@@ -19,7 +19,7 @@ const featureEditions = {
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': true,
+  'ssh-target': false,
 };
 
 module.exports = function (environment) {
@@ -89,6 +89,10 @@ module.exports = function (environment) {
         'target.add-host-sources': '/targets/add-host-sets',
         'target.worker-filters': '/targets/worker-filters',
         user: '/users',
+        downloads: '/downloads',
+        'getting-started.desktop': '/gettting-started/desktop',
+        'api-client.cli': '/api-client/cli',
+        'api-client.api': '/api-client/api',
       },
     },
 
@@ -145,7 +149,7 @@ module.exports = function (environment) {
     if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['ssh-target'] = false;
   }
 
   if (environment === 'test') {

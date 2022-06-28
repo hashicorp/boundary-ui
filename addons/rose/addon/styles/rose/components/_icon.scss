@@ -3,6 +3,10 @@
 .rose-icon {
   --size: #{sizing.rems(l)};
 
+  &.extra-large {
+    --size: #{sizing.rems(m) * 2};
+  }
+
   &.medium {
     --size: #{sizing.rems(m)};
   }

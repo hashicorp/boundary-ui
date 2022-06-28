@@ -8,7 +8,7 @@
 
   padding-top: $yPadding;
   padding-bottom: $yPadding;
-  border-bottom: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+  border-bottom: sizing.rems(xxxxs) solid #{color(ui-gray, 700)};
 
   &:last-child {
     border-bottom: 0;
@@ -18,35 +18,39 @@
   .rose-nav-title {
     @include type.type(xs, semibold);
     display: none;
-    color: var(--ui-gray);
+    color: #{color(ui-gray, 400)};
     text-transform: uppercase;
     $lineHeight: math.div(20, 12);
     line-height: $lineHeight;
     padding: 0 sizing.rems(m);
     margin-bottom: $threePX;
-    border-bottom: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
+    border-bottom: sizing.rems(xxxxs) solid #{color(ui-gray, 700)};
   }
 
   .rose-nav-link {
     @include type.type(s);
     display: block;
-    color: var(--stark);
+    color: var(--white);
     $lineHeight: math.div(36, 14);
     line-height: $lineHeight;
     text-decoration: none;
     padding: 0 sizing.rems(m);
     border-right: $threePX solid transparent;
 
-    &.active {
-      color: var(--action);
-      border-color: currentColor;
-      background-color: var(--action-subtler-1h);
+    .rose-icon {
+      opacity: 0.65;
     }
 
     &:hover {
       //text-decoration: underline;
-      color: var(--action);
-      background-color: var(--action-subtler-1h);
+      color: var(--white);
+      background-color: #{color(ui-gray, 800)};
+    }
+
+    &.active {
+      color: var(--white);
+      border-color: #{color(ui-gray, 300)};
+      background-color: #{color(ui-gray, 800)};
     }
   }
 }

@@ -18,7 +18,7 @@ module('Integration | Component | error/message', function (hooks) {
     );
     assert.equal(
       find('.rose-message-description').textContent.trim(),
-      'You are not authenticated. Please authenticate and try again later.'
+      'You are not signed in. Please sign in and try again later.'
     );
     await render(hbs`<Error::Message @status='403' />`);
     assert.equal(

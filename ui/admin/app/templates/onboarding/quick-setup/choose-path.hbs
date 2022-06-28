@@ -1,0 +1,11 @@
+<Rose::Layout::Centered class='choose-path'>
+  <Rose::Frame>
+    <:header>
+      <h2>{{t 'onboarding.quick-start.titles.choose-path'}}</h2>
+    </:header>
+    <:body>
+      <p>{{t 'onboarding.quick-start.descriptions.choose-path'}}</p>
+      <Form::Onboarding::ChoosePath @submit={{route-action 'choosePath'}} />
+    </:body>
+  </Rose::Frame>
+</Rose::Layout::Centered>

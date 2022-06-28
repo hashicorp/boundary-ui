@@ -32,7 +32,11 @@
             @route='scopes.scope.authenticate.method'
             @model={{authMethod.id}}
           >
-            {{t (concat 'resources.auth-method.types.' authMethod.type)}}
+            {{#if authMethod.name}}
+              {{authMethod.name}}
+            {{else}}
+              {{t (concat 'resources.auth-method.types.' authMethod.type)}}
+            {{/if}}
           </nav.link>
         {{/each}}
       {{else}}
@@ -43,7 +47,11 @@
               @route='scopes.scope.authenticate.method'
               @model={{authMethod.id}}
             >
-              {{t (concat 'resources.auth-method.types.' authMethod.type)}}
+              {{#if authMethod.name}}
+                {{authMethod.name}}
+              {{else}}
+                {{t (concat 'resources.auth-method.types.' authMethod.type)}}
+              {{/if}}
             </nav.link>
           {{/unless}}
         {{/each}}

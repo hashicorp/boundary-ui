@@ -1,6 +1,7 @@
 import factory from '../generated/factories/group';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -12,7 +13,8 @@ export default factory.extend({
       'add-members',
       'remove-members',
     ],
-  id: (i) => `group-${i}`,
+
+  id: () => generateId('g_'),
 
   /**
    * Generates some users for the same scope and assigns them to the group

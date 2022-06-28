@@ -86,9 +86,7 @@ const createWindow = (partition, closeWindowCB) => {
 
   // If the user-specified origin changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
-  runtimeSettings.onOriginChange(() =>
-    browserWindow.loadURL(emberAppURL)
-  );
+  runtimeSettings.onOriginChange(() => browserWindow.loadURL(emberAppURL));
 
   // Load the ember application
   browserWindow.loadURL(emberAppURL);
@@ -117,12 +115,13 @@ const createWindow = (partition, closeWindowCB) => {
 
   // Opens external links in the host default browser.
   // We just allow boundaryproject.io domain to open on external window (for now).
-  browserWindow.webContents.on('new-window', (event, url) => {
-    /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
-    event.preventDefault();
+  browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https://boundaryproject.io/')) {
       shell.openExternal(url);
     }
+
+    // Prevent opening of a browser window in electron
+    return { action: 'deny' };
   });
 
   browserWindow.on('unresponsive', () => {

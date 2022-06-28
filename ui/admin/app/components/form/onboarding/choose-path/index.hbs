@@ -1,0 +1,34 @@
+<Rose::Form
+  class='full-width'
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @onSubmit={{fn @submit this.path}}
+  as |form|
+>
+  <form.radioGroup
+    @name='paths'
+    @selectedValue={{this.path}}
+    @changed={{this.toggleRadio}}
+    as |radioGroup|
+  >
+    <div class='choose-path-cards'>
+      <radioGroup.card
+        @label={{t 'onboarding.quick-start.titles.quick-setup'}}
+        @value='guided'
+        @helperText={{t 'onboarding.quick-start.descriptions.quick-setup'}}
+        @layout='tile'
+      />
+      <radioGroup.card
+        @label={{t 'onboarding.quick-start.titles.manual'}}
+        @value='manual'
+        @helperText={{t 'onboarding.quick-start.descriptions.manual'}}
+        @layout='tile'
+      />
+    </div>
+  </form.radioGroup>
+  <form.actions
+    @disabled={{false}}
+    @submitText={{t 'actions.next'}}
+    @showCancel={{false}}
+  />
+</Rose::Form>

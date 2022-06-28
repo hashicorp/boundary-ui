@@ -9,16 +9,18 @@ save: Save
 submit: Submit
 manage: Manage
 confirm: Confirm
+done: Done
 ok: OK
 deny: Deny
 help: Need help?
+next: Next
 back: Back
 retry: Retry
 get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
 copy-error-detail-to-clipboard: Copy error detail to clipboard
-authenticate: Authenticate
-deauthenticate: Deauthenticate
+authenticate: Sign In
+deauthenticate: Sign Out
 choose-org: Choose Scope
 choose-different-org: Choose a different scope
 add-host-set: Create Host Set
