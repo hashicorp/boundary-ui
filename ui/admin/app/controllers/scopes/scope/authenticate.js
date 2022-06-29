@@ -14,13 +14,13 @@ export default class ScopesScopeAuthenticateController extends Controller {
     this.model.authenticatableAuthMethodsList.map((authMethod) => {
       if (authMethod.content?.length > 0) {
         filteredScopesIdsWithAuthMethods = this.model.scopesIdList.filter(
-          (i) => i === authMethod.content.query.scope_id
+          (scopeId) => scopeId === authMethod.content.query.scope_id
         );
       }
     });
 
-    return this.model.scopes.filter(
-      (scope) => filteredScopesIdsWithAuthMethods?.indexOf(scope.id) > -1
+    return this.model.scopes.filter((scope) =>
+      filteredScopesIdsWithAuthMethods?.includes(scope.id)
     );
   }
 }

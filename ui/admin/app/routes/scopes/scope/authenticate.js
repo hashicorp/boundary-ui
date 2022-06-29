@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { hash, all } from 'rsvp';
+import { hash } from 'rsvp';
 
 export default class ScopesScopeAuthenticateRoute extends Route {
   // =services
@@ -22,25 +22,21 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-    const allScopes = await this.modelFor('scopes').filter(
-      (scope) => scope.isOrg
-    );
+    const allScopes = this.modelFor('scopes').filter((scope) => scope.isOrg);
     const scopesIdList = [];
     const authenticatableAuthMethodsList = [];
     //iterate through the scopes list and get authMethods for each scope
-    await all(
-      allScopes.map((scope) => {
-        if (scope) {
-          scopesIdList.push(scope.id);
-          authenticatableAuthMethodsList.push(
-            this.store.query('auth-method', {
-              scope_id: scope.id,
-              filter: { authorized_actions: ['authenticate'] },
-            })
-          );
-        }
-      })
-    );
+    allScopes.forEach((scope) => {
+      if (scope) {
+        scopesIdList.push(scope.id);
+        authenticatableAuthMethodsList.push(
+          this.store.query('auth-method', {
+            scope_id: scope.id,
+            filter: { authorized_actions: ['authenticate'] },
+          })
+        );
+      }
+    });
 
     return hash({
       scope: this.modelFor('scopes.scope'),
