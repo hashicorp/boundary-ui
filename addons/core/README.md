@@ -5,7 +5,6 @@ helpers.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 - [Add core to an App](#add-core-to-an-app)
 - [Installation](#installation)
@@ -16,18 +15,6 @@ helpers.
 - [Documentation URLs](#documentation-urls)
 - [Loading Helper](#loading-helper)
 - [Scope Service](#scope-service)
-- [Yarn Commands](#yarn-commands)
-- [Linting](#linting)
-- [Formatting](#formatting)
-- [Running tests](#running-tests)
-- [Running the dummy application](#running-the-dummy-application)
-- [Contributing](#contributing)
-  - [Building ToC](#building-toc)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-- [Add core to an App](#add-core-to-an-app)
-- [Installation](#installation)
 - [Yarn Commands](#yarn-commands)
 - [Linting](#linting)
 - [Formatting](#formatting)
