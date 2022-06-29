@@ -45,7 +45,7 @@
     "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^8.2.5",
     "broccoli-asset-rev": "^3.0.0",
     "clipboard": "^2.0.8",
     "core": "*",
