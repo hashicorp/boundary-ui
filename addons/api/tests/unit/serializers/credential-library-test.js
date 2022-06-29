@@ -12,10 +12,8 @@ module('Unit | Serializer | credential library', function (hooks) {
       type: 'vault',
       name: 'Name',
       description: 'Description',
-      attributes: {
-        path: '/vault/path',
-        http_method: 'GET',
-      },
+      path: '/vault/path',
+      http_method: 'GET',
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -45,10 +43,8 @@ module('Unit | Serializer | credential library', function (hooks) {
           type: 'vault',
           name: 'Name',
           description: 'Description',
-          attributes: {
-            path: '/vault/path',
-            http_method: 'GET',
-          },
+          path: '/vault/path',
+          http_method: 'GET',
           version: 1,
         },
       },
@@ -67,5 +63,67 @@ module('Unit | Serializer | credential library', function (hooks) {
       },
       version: 1,
     });
+  });
+
+  test('it serializes empty strings to null', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('credential-library', {
+      http_method: '',
+      path: null,
+    });
+    let serializedRecord = record.serialize();
+    assert.deepEqual(serializedRecord, {
+      attributes: {
+        http_method: null,
+        path: null,
+      },
+      credential_store_id: null,
+      description: null,
+      name: null,
+      type: null,
+    });
+  });
+
+  test('it does not serialize http_request_body unless http_method is set to POST', function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('credential-library', {
+      http_method: 'GET',
+      http_request_body: 'body',
+    });
+    let serializedRecord = record.serialize();
+    assert.deepEqual(
+      serializedRecord,
+      {
+        attributes: {
+          http_method: 'GET',
+          path: null,
+        },
+        credential_store_id: null,
+        description: null,
+        name: null,
+        type: null,
+      },
+      'http_request_body attribute is not expected'
+    );
+
+    record.http_method = 'POST';
+    serializedRecord = record.serialize();
+    assert.deepEqual(
+      serializedRecord,
+      {
+        attributes: {
+          http_method: 'POST',
+          http_request_body: 'body',
+          path: null,
+        },
+        credential_store_id: null,
+        description: null,
+        name: null,
+        type: null,
+      },
+      'http_request_body attribute is expected'
+    );
   });
 });
