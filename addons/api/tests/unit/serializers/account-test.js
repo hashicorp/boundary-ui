@@ -13,12 +13,10 @@ module('Unit | Serializer | account', function (hooks) {
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
-      attributes: {
-        issuer: 'issuer',
-        subject: 'sub',
-        full_name: 'full_name',
-        email: 'email',
-      },
+      issuer: 'issuer',
+      subject: 'sub',
+      full_name: 'full_name',
+      email: 'email',
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -49,12 +47,10 @@ module('Unit | Serializer | account', function (hooks) {
           name: 'Name',
           auth_method_id: '1',
           description: 'Description',
-          attributes: {
-            issuer: 'issuer',
-            subject: 'sub',
-            full_name: 'full_name',
-            email: 'email',
-          },
+          issuer: 'issuer',
+          subject: 'sub',
+          full_name: 'full_name',
+          email: 'email',
           version: 1,
         },
       },
@@ -81,9 +77,7 @@ module('Unit | Serializer | account', function (hooks) {
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
-      attributes: {
-        login_name: 'Login Name',
-      },
+      login_name: 'Login Name',
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -109,9 +103,7 @@ module('Unit | Serializer | account', function (hooks) {
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
-      attributes: {
-        login_name: 'Login Name',
-      },
+      login_name: 'Login Name',
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -144,9 +136,7 @@ module('Unit | Serializer | account', function (hooks) {
       type: 'password',
       name: 'Name',
       description: 'Description',
-      attributes: {
-        login_name: 'Login Name',
-      },
+      login_name: 'Login Name',
       auth_method_id: '1',
       version: 1,
     });
@@ -170,9 +160,7 @@ module('Unit | Serializer | account', function (hooks) {
       type: 'password',
       name: 'Name',
       description: 'Description',
-      attributes: {
-        login_name: 'Login Name',
-      },
+      login_name: 'Login Name',
       auth_method_id: '1',
       version: 1,
     });
