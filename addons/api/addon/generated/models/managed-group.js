@@ -44,4 +44,13 @@ export default class GeneratedManagedGroupModel extends BaseModel {
       'The ID of the Auth Method that is associated with this ManagedGroup',
   })
   auth_method_id;
+
+  // =attributes (OIDC)
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description:
+      'The boolean expression filter to use to determine membership.',
+  })
+  filter;
 }
