@@ -43,4 +43,20 @@ export default class GeneratedAccountModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
+
+  // =attributes (password)
+  @attr('string', {
+    for: 'password',
+    isNestedAttribute: true,
+    description: 'The account login name',
+  })
+  login_name;
+
+  // =attributes (OIDC)
+  @attr('string', { for: 'oidc', isNestedAttribute: true }) subject;
+  @attr('string', { for: 'oidc', isNestedAttribute: true }) issuer;
+  @attr('string', { for: 'oidc', isNestedAttribute: true, readOnly: true })
+  email;
+  @attr('string', { for: 'oidc', isNestedAttribute: true, readOnly: true })
+  full_name;
 }
