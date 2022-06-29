@@ -20,7 +20,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    * scope and all scopes (for org navigation).
    * @return {Promise} `{scope, scopes, authMethods}`
    */
-  async model() {
+  model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
     const scopes = this.modelFor('scopes').filter((scope) => scope.isOrg);
     const scopesIdList = [];
