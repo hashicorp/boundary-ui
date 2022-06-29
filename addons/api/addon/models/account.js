@@ -1,16 +1,9 @@
 import GeneratedAccountModel from '../generated/models/account';
-import { fragment } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 
 export default class AccountModel extends GeneratedAccountModel {
   // =attributes
-
-  /**
-   * Attributes of this resource, if any, represented as a JSON fragment.
-   * @type {FragmentAccountAttributesModel}
-   */
-  @fragment('fragment-account-attributes', { defaultValue: {} }) attributes;
 
   /**
    * @type {boolean}
@@ -26,9 +19,9 @@ export default class AccountModel extends GeneratedAccountModel {
    * Convenience for getting username in account.
    * @type {string}
    */
-  @computed('attributes.{email,full_name,login_name}')
+  @computed('{email,full_name,login_name}')
   get accountName() {
-    const { email, full_name, login_name } = this.attributes;
+    const { email, full_name, login_name } = this;
     return email || full_name || login_name;
   }
 
