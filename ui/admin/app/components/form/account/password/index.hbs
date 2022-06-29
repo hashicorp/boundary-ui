@@ -55,7 +55,7 @@
   <form.input
     @name='login_name'
     @type='text'
-    @value={{@model.attributes.login_name}}
+    @value={{@model.login_name}}
     @label={{t 'form.login_name.label'}}
     @error={{@model.errors.login_name}}
     readonly={{false}}

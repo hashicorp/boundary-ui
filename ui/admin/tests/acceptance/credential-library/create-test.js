@@ -48,6 +48,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
+      http_method: 'GET',
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;

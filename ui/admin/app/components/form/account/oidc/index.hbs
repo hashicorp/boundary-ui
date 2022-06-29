@@ -15,25 +15,25 @@
 
   {{#unless @model.isNew}}
     <form.input
-      @value={{@model.attributes.issuer}}
+      @value={{@model.issuer}}
       @label={{t 'form.issuer.label'}}
       readonly={{true}}
       @disabled={{true}}
     />
     <form.input
-      @value={{@model.attributes.subject}}
+      @value={{@model.subject}}
       @label={{t 'form.subject.label'}}
       readonly={{true}}
       @disabled={{true}}
     />
     <form.input
-      @value={{@model.attributes.email}}
+      @value={{@model.email}}
       @label={{t 'form.email.label'}}
       readonly={{true}}
       @disabled={{true}}
     />
     <form.input
-      @value={{@model.attributes.full_name}}
+      @value={{@model.full_name}}
       @label={{t 'form.full_name.label'}}
       readonly={{true}}
       @disabled={{true}}
@@ -83,7 +83,7 @@
     <form.input
       @name='issuer'
       @type='text'
-      @value={{@model.attributes.issuer}}
+      @value={{@model.issuer}}
       @label={{t 'form.issuer.label'}}
       @error={{@model.errors.issuer}}
       readonly={{false}}
@@ -101,7 +101,7 @@
     <form.input
       @name='subject'
       @type='text'
-      @value={{@model.attributes.subject}}
+      @value={{@model.subject}}
       @label={{t 'form.subject.label'}}
       @error={{@model.errors.subject}}
       readonly={{false}}

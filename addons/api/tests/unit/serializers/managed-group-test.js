@@ -41,9 +41,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
       version: 1,
       auth_method_id: '1234',
       type: 'oidc',
-      attributes: {
-        filter: 'key=value',
-      },
+      filter: 'key=value',
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -75,9 +73,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
           version: undefined,
           auth_method_id: '1234',
           type: 'oidc',
-          attributes: {
-            filter: 'key=value',
-          },
+          filter: 'key=value',
         },
       },
     });
@@ -138,9 +134,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
           version: 1,
           auth_method_id: '1234',
           type: 'oidc',
-          attributes: {
-            filter: 'key=value',
-          },
+          filter: 'key=value',
         },
       },
     });

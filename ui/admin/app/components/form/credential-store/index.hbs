@@ -55,17 +55,17 @@
   <form.input
     @name='address'
     @type='text'
-    @value={{@model.attributes.address}}
+    @value={{@model.address}}
     @label={{t 'resources.credential-store.form.address.label'}}
-    @error={{@model.errors.attributes_address}}
+    @error={{@model.errors.address}}
     @helperText={{t 'resources.credential-store.form.address.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_address}}
+    {{#if @model.errors.address}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_address as |error|}}
+        {{#each @model.errors.address as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -75,17 +75,17 @@
   <form.input
     @name='token'
     @type='text'
-    @value={{@model.attributes.token}}
+    @value={{@model.token}}
     @label={{t 'resources.credential-store.form.token.label'}}
-    @error={{@model.errors.attributes_token}}
+    @error={{@model.errors.token}}
     @helperText={{t 'resources.credential-store.form.token.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_token}}
+    {{#if @model.errors.token}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_token as |error|}}
+        {{#each @model.errors.token as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -94,7 +94,7 @@
 
   {{#unless @model.isNew}}
     <form.input
-      @value={{@model.attributes.token_hmac}}
+      @value={{@model.token_hmac}}
       @label={{t 'resources.credential-store.form.token_hmac.label'}}
       readonly={{true}}
       @disabled={{true}}
@@ -104,17 +104,17 @@
   <form.input
     @name='namespace'
     @type='text'
-    @value={{@model.attributes.namespace}}
+    @value={{@model.namespace}}
     @label={{t 'resources.credential-store.form.namespace.label'}}
-    @error={{@model.errors.attributes_namespace}}
+    @error={{@model.errors.namespace}}
     @helperText={{t 'resources.credential-store.form.namespace.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_namespace}}
+    {{#if @model.errors.namespace}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_namespace as |error|}}
+        {{#each @model.errors.namespace as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -124,17 +124,17 @@
   <form.input
     @name='tls_server_name'
     @type='text'
-    @value={{@model.attributes.tls_server_name}}
+    @value={{@model.tls_server_name}}
     @label={{t 'resources.credential-store.form.tls_server_name.label'}}
-    @error={{@model.errors.attributes_tls_server_name}}
+    @error={{@model.errors.tls_server_name}}
     @helperText={{t 'resources.credential-store.form.tls_server_name.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_tls_server_name}}
+    {{#if @model.errors.tls_server_name}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_tls_server_name as |error|}}
+        {{#each @model.errors.tls_server_name as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -144,17 +144,17 @@
   <form.checkbox
     @label={{t 'resources.credential-store.form.tls_skip_verify.label'}}
     @helperText={{t 'resources.credential-store.form.tls_skip_verify.help'}}
-    @checked={{@model.attributes.tls_skip_verify}}
+    @checked={{@model.tls_skip_verify}}
     @onChange={{fn
-      (mut @model.attributes.tls_skip_verify)
-      (if @model.attributes.tls_skip_verify false true)
+      (mut @model.tls_skip_verify)
+      (if @model.tls_skip_verify false true)
     }}
-    @error={{@model.errors.attributes_tls_skip_verify}}
+    @error={{@model.errors.tls_skip_verify}}
     as |field|
   >
-    {{#if @model.errors.attributes_tls_skip_verify}}
+    {{#if @model.errors.tls_skip_verify}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_tls_skip_verify as |error|}}
+        {{#each @model.errors.tls_skip_verify as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -164,17 +164,17 @@
   <form.textarea
     @name='client_certificate'
     @type='text'
-    @value={{@model.attributes.client_certificate}}
+    @value={{@model.client_certificate}}
     @label={{t 'resources.credential-store.form.client_certificate.label'}}
-    @error={{@model.errors.attributes_client_certificate}}
+    @error={{@model.errors.client_certificate}}
     @helperText={{t 'resources.credential-store.form.client_certificate.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_client_certificate}}
+    {{#if @model.errors.client_certificate}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_client_certificate as |error|}}
+        {{#each @model.errors.client_certificate as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -184,9 +184,9 @@
   <form.textarea
     @name='client_certificate_key'
     @type='text'
-    @value={{@model.attributes.client_certificate_key}}
+    @value={{@model.client_certificate_key}}
     @label={{t 'resources.credential-store.form.client_certificate_key.label'}}
-    @error={{@model.errors.attributes_client_certificate_key}}
+    @error={{@model.errors.client_certificate_key}}
     @helperText={{t
       'resources.credential-store.form.client_certificate_key.help'
     }}
@@ -194,9 +194,9 @@
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_client_certificate_key}}
+    {{#if @model.errors.client_certificate_key}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_client_certificate_key as |error|}}
+        {{#each @model.errors.client_certificate_key as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -205,7 +205,7 @@
 
   {{#unless @model.isNew}}
     <form.input
-      @value={{@model.attributes.client_certificate_key_hmac}}
+      @value={{@model.client_certificate_key_hmac}}
       @label={{t
         'resources.credential-store.form.client_certificate_key_hmac.label'
       }}
@@ -217,17 +217,17 @@
   <form.textarea
     @name='ca_cert'
     @type='text'
-    @value={{@model.attributes.ca_cert}}
+    @value={{@model.ca_cert}}
     @label={{t 'resources.credential-store.form.ca_cert.label'}}
-    @error={{@model.errors.attributes_ca_cert}}
+    @error={{@model.errors.ca_cert}}
     @helperText={{t 'resources.credential-store.form.ca_cert.help'}}
     disabled={{@model.isSaving}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_ca_cert}}
+    {{#if @model.errors.ca_cert}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_ca_cert as |error|}}
+        {{#each @model.errors.ca_cert as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
