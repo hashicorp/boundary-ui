@@ -14,65 +14,57 @@
 
   <page.body>
     {{#if (feature-flag 'filter')}}
-      {{#if
-        (or
-          @model
-          (has-resource-filter-selections 'scopes.scope.sessions' 'status')
-        )
-      }}
-        <Rose::Toolbar as |toolbar|>
-          <toolbar.primary>
-            <Rose::Form as |form|>
-              {{#with
-                (resource-filter 'scopes.scope.sessions' 'status')
-                as |filter|
-              }}
-                <Rose::Dropdown
-                  @text={{t (concat 'form.' filter.name '.label')}}
-                  @count={{filter.selectedValue.length}}
-                  @ignoreClickInside={{true}}
-                  as |dropdown|
+      <Rose::Toolbar as |toolbar|>
+        <toolbar.primary>
+          <Rose::Form as |form|>
+            {{#with
+              (resource-filter 'scopes.scope.sessions' 'status')
+              as |filter|
+            }}
+              <Rose::Dropdown
+                @text={{t (concat 'form.' filter.name '.label')}}
+                @count={{filter.selectedValue.length}}
+                @ignoreClickInside={{true}}
+                as |dropdown|
+              >
+                <form.checkboxGroup
+                  @name={{filter.name}}
+                  @items={{filter.allowedValues}}
+                  @selectedItems={{filter.selectedValue}}
+                  @onChange={{route-action 'filterBy' filter.name}}
+                  as |group|
                 >
-                  <form.checkboxGroup
-                    @name={{filter.name}}
-                    @items={{filter.allowedValues}}
-                    @selectedItems={{filter.selectedValue}}
-                    @onChange={{route-action 'filterBy' filter.name}}
-                    as |group|
-                  >
-                    <dropdown.item>
-                      <group.checkbox
-                        @label={{t
-                          (concat 'resources.session.status.' group.item)
-                        }}
-                        value={{group.item}}
-                      />
-                    </dropdown.item>
-                  </form.checkboxGroup>
-                </Rose::Dropdown>
-              {{/with}}
+                  <dropdown.item>
+                    <group.checkbox
+                      @label={{t
+                        (concat 'resources.session.status.' group.item)
+                      }}
+                      value={{group.item}}
+                    />
+                  </dropdown.item>
+                </form.checkboxGroup>
+              </Rose::Dropdown>
+            {{/with}}
 
-              {{#if
-                (has-resource-filter-selections
-                  'scopes.scope.sessions' 'status'
-                )
-              }}
-                <Rose::Button
-                  @style='inline-link-action'
-                  @iconLeft='flight-icons/svg/x-16'
-                  {{on 'click' (route-action 'clearAllFilters')}}
-                >{{t 'actions.clear-all-filters'}}
-                </Rose::Button>
-              {{/if}}
-            </Rose::Form>
-          </toolbar.primary>
+            {{#if
+              (has-resource-filter-selections 'scopes.scope.sessions' 'status')
+            }}
+              <Rose::Button
+                @style='inline-link-action'
+                @iconLeft='flight-icons/svg/x-16'
+                {{on 'click' (route-action 'clearAllFilters')}}
+              >{{t 'actions.clear-all-filters'}}
+              </Rose::Button>
+            {{/if}}
+          </Rose::Form>
+        </toolbar.primary>
 
-          <toolbar.secondary>
-            <ToolbarRefresher @onClick={{route-action 'refreshSessions'}} />
-          </toolbar.secondary>
+        <toolbar.secondary>
+          <ToolbarRefresher @onClick={{route-action 'refreshSessions'}} />
+        </toolbar.secondary>
 
-        </Rose::Toolbar>
-      {{/if}}
+      </Rose::Toolbar>
+
     {{/if}}
     {{#if @model}}
       <Rose::Table as |table|>
