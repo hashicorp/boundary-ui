@@ -44,4 +44,27 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
+
+  //= attributes (vault)
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description:
+      'The HTTP method the library uses when requesting credentials from Vault.',
+    defaultValue: () => 'GET',
+  })
+  http_method;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description:
+      'The body of the HTTP request the library sends to Vault when requesting credentials. Only valid if `http_method` is set to `POST`.',
+  })
+  http_request_body;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The path in Vault to request credentials from.',
+  })
+  path;
 }

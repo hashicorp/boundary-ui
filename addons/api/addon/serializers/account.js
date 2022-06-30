@@ -38,7 +38,7 @@ export default class AccountSerializer extends ApplicationSerializer {
     delete serialized.attributes;
     if (isNew) {
       serialized.attributes = {};
-      const { issuer, subject } = snapshot.attr('attributes').record;
+      const { issuer, subject } = snapshot.record;
       if (issuer) serialized.attributes.issuer = issuer;
       if (subject) serialized.attributes.subject = subject;
     }
