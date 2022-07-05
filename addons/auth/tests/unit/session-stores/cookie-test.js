@@ -84,7 +84,7 @@ module('Unit | Session Store | cookie', function (hooks) {
       sessionStore.cookies.exists(sessionStore.cookieName),
       'session cookie was not set'
     );
-    assert.equal(
+    assert.strictEqual(
       sessionStore.cookies.read(sessionStore.authenticatorCookieName),
       'foobar'
     );
