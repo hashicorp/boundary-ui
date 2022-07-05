@@ -27,7 +27,7 @@ module.exports = function (defaults) {
     svg: {
       paths: ['../../addons/core/public'],
     },
-    CSP_DIRECTIVES: policy,
+    csp_directives: policy,
   });
 
   // Only import when in development or test mode
