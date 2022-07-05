@@ -8,41 +8,41 @@ module('Integration | Component | error/message', function (hooks) {
 
   test('it renders predefined message for known error status', async function (assert) {
     await render(hbs`<Error::Message @status='401' />`);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
       'You are not signed in'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
       'Error 401'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
       'You are not signed in. Please sign in and try again later.'
     );
     await render(hbs`<Error::Message @status='403' />`);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
       'You are not authorized'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
       'Error 403'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
       'You must be granted permissions to view this data. Ask your administrator if you think you should have access.'
     );
     await render(hbs`<Error::Message @status='404' />`);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
       'Resource not found'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
       'Error 404'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
       'We could not find the requested resource. You can ask your administrator or try again later.'
     );
@@ -50,15 +50,15 @@ module('Integration | Component | error/message', function (hooks) {
 
   test('it renders default error for unknown error status', async function (assert) {
     await render(hbs`<Error::Message @status='599' />`);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
       'Something went wrong'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
       'Error 599'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
       "We're not sure what happened.  Please contact your administrator or try again later."
     );
