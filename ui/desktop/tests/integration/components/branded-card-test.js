@@ -18,8 +18,8 @@ module('Integration | Component | branded-card', function (hooks) {
       @title="title"
       @description="description"
     />`);
-    assert.equal(find('.branded-card-title').textContent.trim(), 'title');
-    assert.equal(
+    assert.strictEqual(find('.branded-card-title').textContent.trim(), 'title');
+    assert.strictEqual(
       find('.branded-card-description').textContent.trim(),
       'description'
     );

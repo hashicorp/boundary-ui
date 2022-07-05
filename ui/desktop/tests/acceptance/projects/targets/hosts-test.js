@@ -168,7 +168,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     await visit(urls.hosts);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
@@ -182,8 +182,8 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     later(async () => {
       run.cancelTimers();
       // await a11yAudit();
-      assert.equal(currentURL(), urls.hosts);
-      assert.equal(findAll('tbody tr').length, hostsCount);
+      assert.strictEqual(currentURL(), urls.hosts);
+      assert.strictEqual(findAll('tbody tr').length, hostsCount);
     }, 750);
     await visit(urls.hosts);
   });
@@ -220,12 +220,12 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
         'Activate connect mode'
       );
       assert.ok(find('.dialog-detail'), 'Success dialog');
-      assert.equal(
+      assert.strictEqual(
         find('.rose-dialog-footer .rose-button-secondary').textContent.trim(),
         'Close',
         'Cannot retry'
       );
-      assert.equal(
+      assert.strictEqual(
         find('.rose-dialog-body .copyable-content').textContent.trim(),
         'a_123:p_123'
       );
@@ -247,9 +247,9 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
       );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(dialogButtons.length, 2);
+      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
     await visit(urls.hosts);
   });
@@ -269,9 +269,9 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
       );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(dialogButtons.length, 2);
+      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
     await visit(urls.hosts);
   });
