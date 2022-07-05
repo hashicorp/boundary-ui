@@ -2,6 +2,8 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+const policy = require('./config/content-security-policy');
+
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     hinting: false,
@@ -25,6 +27,7 @@ module.exports = function (defaults) {
     svg: {
       paths: ['../../addons/core/public'],
     },
+    CSP_DIRECTIVES: policy,
   });
 
   // Only import when in development or test mode
