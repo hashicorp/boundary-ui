@@ -18,6 +18,6 @@ module('Integration | Component | rose/footer/nav', function (hooks) {
       <nav.link @href="index"/>
       <nav.link @route="about"/>
     </Rose::Footer::nav>`);
-    assert.equal(findAll('a').length, 2);
+    assert.strictEqual(findAll('a').length, 2);
   });
 });

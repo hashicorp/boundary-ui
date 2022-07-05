@@ -9,7 +9,7 @@ module('Integration | Component | rose/form/radio/card', function (hooks) {
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Form::Radio::Card />`);
     assert.ok(await find('input'));
-    assert.equal(await find('input').type, 'radio');
+    assert.strictEqual(await find('input').type, 'radio');
   });
 
   test('it renders in a tile format when tile layout is applied', async function (assert) {

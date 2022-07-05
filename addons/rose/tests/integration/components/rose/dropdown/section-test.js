@@ -13,7 +13,7 @@ module('Integration | Component | rose/dropdown/section', function (hooks) {
       </Rose::Dropdown::Section>
     `);
     assert.ok(find('.rose-dropdown-section'));
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.strictEqual(this.element.textContent.trim(), 'template block text');
   });
 
   test('it renders with optional @title', async function (assert) {
@@ -22,7 +22,7 @@ module('Integration | Component | rose/dropdown/section', function (hooks) {
         template block text
       </Rose::Dropdown::Section>
     `);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-dropdown-section-title').textContent.trim(),
       'Section Title'
     );
