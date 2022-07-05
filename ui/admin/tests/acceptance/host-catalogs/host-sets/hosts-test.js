@@ -86,17 +86,17 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.expect(2);
     await visit(urls.hostSetHosts);
     await a11yAudit();
-    assert.equal(currentURL(), urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, getHostSetHostCount());
+    assert.strictEqual(currentURL(), urls.hostSetHosts);
+    assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
   });
 
   test('can remove a host', async function (assert) {
     assert.expect(2);
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, count);
+    assert.strictEqual(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, count - 1);
+    assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
   test('cannot remove a host without proper authorization', async function (assert) {
@@ -124,7 +124,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
       );
     });
     await visit(urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, getHostSetHostCount());
+    assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
     await click('tbody tr .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]'));
   });
@@ -133,7 +133,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.expect(1);
     await visit(urls.addHosts);
     await a11yAudit();
-    assert.equal(currentURL(), urls.addHosts);
+    assert.strictEqual(currentURL(), urls.addHosts);
   });
 
   test('can navigate to add hosts with proper authorization', async function (assert) {
@@ -156,31 +156,31 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.expect(3);
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a:nth-child(2)');
-    assert.equal(currentURL(), urls.addHosts);
+    assert.strictEqual(currentURL(), urls.addHosts);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
     await click('tbody label');
     await click('tbody label');
     await click('form [type="submit"]');
     await visit(urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, 1);
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('select and cancel hosts to add', async function (assert) {
     assert.expect(4);
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, count);
+    assert.strictEqual(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, count - 1);
+    assert.strictEqual(findAll('tbody tr').length, count - 1);
     await click('.rose-layout-page-actions a:nth-child(2)');
-    assert.equal(currentURL(), urls.addHosts);
+    assert.strictEqual(currentURL(), urls.addHosts);
     await click('tbody label');
     await click('form [type="button"]');
     await visit(urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, count - 1);
+    assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
   test('shows error message on host add error', async function (assert) {
@@ -208,28 +208,28 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.expect(1);
     await visit(urls.createAndAddHost);
     await a11yAudit();
-    assert.equal(currentURL(), urls.createAndAddHost);
+    assert.strictEqual(currentURL(), urls.createAndAddHost);
   });
 
   test('create and add host to host set', async function (assert) {
     assert.expect(3);
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSet);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a:nth-child(1)');
-    assert.equal(currentURL(), urls.createAndAddHost);
+    assert.strictEqual(currentURL(), urls.createAndAddHost);
     await fillIn('[name="name"]', 'Test Name');
     await fillIn('[name="description"]', 'description');
     await click('form [type="submit"]:not(:disabled)');
     await visit(urls.hostSetHosts);
-    assert.equal(findAll('tbody tr').length, 1);
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('create and cancel host add to host set', async function (assert) {
     assert.expect(1);
     await visit(urls.createAndAddHost);
     await click('form [type="button"]');
-    assert.equal(currentURL(), urls.hostSetHosts);
+    assert.strictEqual(currentURL(), urls.hostSetHosts);
   });
 
   test('shows error message on host creation error', async function (assert) {

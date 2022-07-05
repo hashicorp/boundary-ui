@@ -76,8 +76,8 @@ module('Acceptance | scopes | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.orgScopeEdit);
-    assert.equal(
+    assert.strictEqual(currentURL(), urls.orgScopeEdit);
+    assert.strictEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
       'random string'
     );
@@ -97,7 +97,7 @@ module('Acceptance | scopes | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(instances.scopes.org.name, 'random string');
-    assert.equal(find('[name="name"]').value, instances.scopes.org.name);
+    assert.strictEqual(find('[name="name"]').value, instances.scopes.org.name);
   });
 
   test('saving an existing scope with invalid fields displays error messages', async function (assert) {
@@ -143,13 +143,13 @@ module('Acceptance | scopes | update', function (hooks) {
     await visit(urls.orgScopeEdit);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.orgScopeEdit);
+    assert.strictEqual(currentURL(), urls.orgScopeEdit);
     try {
       await visit(urls.globalScope);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child');
-      assert.equal(currentURL(), urls.globalScope);
+      assert.strictEqual(currentURL(), urls.globalScope);
       assert.notEqual(
         this.server.schema.scopes.where({ type: 'org' }).models[0].name,
         'random string'
@@ -165,13 +165,13 @@ module('Acceptance | scopes | update', function (hooks) {
     await visit(urls.orgScopeEdit);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.orgScopeEdit);
+    assert.strictEqual(currentURL(), urls.orgScopeEdit);
     try {
       await visit(urls.globalScope);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
-      assert.equal(currentURL(), urls.orgScopeEdit);
+      assert.strictEqual(currentURL(), urls.orgScopeEdit);
       assert.notEqual(
         this.server.schema.scopes.where({ type: 'org' }).models[0].name,
         'random string'

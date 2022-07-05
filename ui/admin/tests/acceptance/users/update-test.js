@@ -50,8 +50,8 @@ module('Acceptance | users | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated user name');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), userURL);
-    assert.equal(this.server.db.users[0].name, 'Updated user name');
+    assert.strictEqual(currentURL(), userURL);
+    assert.strictEqual(this.server.db.users[0].name, 'Updated user name');
   });
 
   test('cannot make changes to an existing user without proper authorization', async function (assert) {
@@ -96,12 +96,12 @@ module('Acceptance | users | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

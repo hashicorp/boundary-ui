@@ -78,7 +78,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(1);
     await visit(urls.globalScope);
     await a11yAudit();
-    assert.equal(currentURL(), urls.globalScope);
+    assert.strictEqual(currentURL(), urls.globalScope);
   });
 
   // TODO: this probably shouldn't be the case, but was setup to enable
@@ -93,14 +93,14 @@ module('Acceptance | scopes', function (hooks) {
       return response;
     });
     await visit(urls.globalScope);
-    assert.equal(currentURL(), urls.globalScope);
+    assert.strictEqual(currentURL(), urls.globalScope);
   });
 
   test('visiting org scope', async function (assert) {
     assert.expect(1);
     await visit(urls.orgScope);
     await a11yAudit();
-    assert.equal(currentURL(), urls.orgScope);
+    assert.strictEqual(currentURL(), urls.orgScope);
   });
 
   // NOTE:  In reality, we'd have a third "Global" item listed in the org
@@ -111,23 +111,23 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(3);
     await visit(urls.globalScope);
     await a11yAudit();
-    assert.equal(currentURL(), urls.globalScope);
+    assert.strictEqual(currentURL(), urls.globalScope);
     await click('.rose-header-nav .rose-dropdown a:nth-child(1)');
-    assert.equal(currentURL(), urls.orgScope);
+    assert.strictEqual(currentURL(), urls.orgScope);
     // In reality, there would be a third item in the list
     await click('.rose-header-nav .rose-dropdown a:nth-child(2)');
-    assert.equal(currentURL(), urls.org2Scope);
+    assert.strictEqual(currentURL(), urls.org2Scope);
   });
 
   test('can navigate among project scopes via header navigation', async function (assert) {
     assert.expect(2);
     await visit(urls.projectScope);
     await a11yAudit();
-    assert.equal(currentURL(), urls.projectScopeEdit);
+    assert.strictEqual(currentURL(), urls.projectScopeEdit);
     await click(
       '.rose-header-nav .rose-dropdown + .rose-dropdown a:nth-child(2)'
     );
-    assert.equal(currentURL(), urls.project2ScopeEdit);
+    assert.strictEqual(currentURL(), urls.project2ScopeEdit);
   });
 
   test('can create new org scopes', async function (assert) {
@@ -136,7 +136,7 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.newOrgScope);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getScopeCount('org'), orgScopeCount + 1);
+    assert.strictEqual(getScopeCount('org'), orgScopeCount + 1);
   });
 
   test('can create new project scopes', async function (assert) {
@@ -145,7 +145,7 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.newProjectScope);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getScopeCount('project'), orgScopeCount + 1);
+    assert.strictEqual(getScopeCount('project'), orgScopeCount + 1);
   });
 
   test('can cancel create new org scopes', async function (assert) {
@@ -154,8 +154,8 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.newOrgScope);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.globalScope);
-    assert.equal(getScopeCount('org'), orgScopeCount);
+    assert.strictEqual(currentURL(), urls.globalScope);
+    assert.strictEqual(getScopeCount('org'), orgScopeCount);
   });
 
   test('can cancel create new project scopes', async function (assert) {
@@ -164,8 +164,8 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.newProjectScope);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.orgScope);
-    assert.equal(getScopeCount('project'), projectScopeCount);
+    assert.strictEqual(currentURL(), urls.orgScope);
+    assert.strictEqual(getScopeCount('project'), projectScopeCount);
   });
 
   test('saving a new scope with invalid fields displays error messages', async function (assert) {

@@ -41,7 +41,7 @@ module('Acceptance | users | create', function (hooks) {
     await visit(newUserURL);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
-    assert.equal(this.server.db.users.length, usersCount + 1);
+    assert.strictEqual(this.server.db.users.length, usersCount + 1);
   });
 
   test('Users can navigate to new users route with proper authorization', async function (assert) {
@@ -67,8 +67,8 @@ module('Acceptance | users | create', function (hooks) {
     await visit(newUserURL);
     await fillIn('[name="name"]', 'User name');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), usersURL);
-    assert.equal(this.server.db.users.length, usersCount);
+    assert.strictEqual(currentURL(), usersURL);
+    assert.strictEqual(this.server.db.users.length, usersCount);
   });
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
@@ -95,12 +95,12 @@ module('Acceptance | users | create', function (hooks) {
     await visit(newUserURL);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

@@ -57,16 +57,16 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.expect(2);
     await visit(urls.accounts);
     await a11yAudit();
-    assert.equal(currentURL(), urls.accounts);
-    assert.equal(findAll('tbody tr').length, accountsCount);
+    assert.strictEqual(currentURL(), urls.accounts);
+    assert.strictEqual(findAll('tbody tr').length, accountsCount);
   });
 
   test('can remove an account', async function (assert) {
     assert.expect(2);
     await visit(urls.accounts);
-    assert.equal(findAll('tbody tr').length, accountsCount);
+    assert.strictEqual(findAll('tbody tr').length, accountsCount);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, accountsCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, accountsCount - 1);
   });
 
   test('cannot remove an account without proper authorization', async function (assert) {
@@ -94,7 +94,7 @@ module('Acceptance | users | accounts', function (hooks) {
       );
     });
     await visit(urls.accounts);
-    assert.equal(findAll('tbody tr').length, accountsCount);
+    assert.strictEqual(findAll('tbody tr').length, accountsCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]'));
   });
@@ -104,7 +104,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.addAccounts);
     await visit(urls.addAccounts);
     await a11yAudit();
-    assert.equal(currentURL(), urls.addAccounts);
+    assert.strictEqual(currentURL(), urls.addAccounts);
   });
 
   test('can navigate to add accounts with proper authorization', async function (assert) {
@@ -127,30 +127,30 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.expect(3);
     instances.user.update({ accountIds: [] });
     await visit(urls.accounts);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.addAccounts);
+    assert.strictEqual(currentURL(), urls.addAccounts);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
     await click('tbody label');
     await click('tbody label');
     await click('form [type="submit"]');
     await visit(urls.accounts);
-    assert.equal(findAll('tbody tr').length, 1);
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('select and cancel accounts to add', async function (assert) {
     assert.expect(4);
     await visit(urls.accounts);
-    assert.equal(findAll('tbody tr').length, accountsCount);
+    assert.strictEqual(findAll('tbody tr').length, accountsCount);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, accountsCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, accountsCount - 1);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.addAccounts);
+    assert.strictEqual(currentURL(), urls.addAccounts);
     await click('tbody label');
     await click('form [type="button"]');
     await visit(urls.accounts);
-    assert.equal(findAll('tbody tr').length, accountsCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, accountsCount - 1);
   });
 
   test('shows error message on account add', async function (assert) {

@@ -68,10 +68,10 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.expect(2);
     await visit(urls.credentialLibraries);
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialLibraries);
+    assert.strictEqual(currentURL(), urls.credentialLibraries);
     await visit(urls.credentialLibrary);
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
   test('can create a credential library', async function (assert) {
@@ -80,7 +80,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await visit(urls.newCredentialLibrary);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getCredentialLibraryCount(), count + 1);
+    assert.strictEqual(getCredentialLibraryCount(), count + 1);
   });
 
   test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
@@ -103,8 +103,8 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await visit(urls.newCredentialLibrary);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.credentialLibraries);
-    assert.equal(getCredentialLibraryCount(), count);
+    assert.strictEqual(currentURL(), urls.credentialLibraries);
+    assert.strictEqual(getCredentialLibraryCount(), count);
   });
 
   test('saving a new credential library with invalid fields displays error messasges', async function (assert) {
