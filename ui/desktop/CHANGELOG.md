@@ -7,7 +7,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ### Bug Fixes
 
 - Enable filtering terminated sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/1169)) 
-- fix dropdown overflow issue ([PR](https://github.com/hashicorp/boundary-ui/pull/1160)) 
+- Fix dropdown overflow issue ([PR](https://github.com/hashicorp/boundary-ui/pull/1160)) 
 
 
 ## v1.4.4 [CLI 0.9.0] (2022.06.20)
