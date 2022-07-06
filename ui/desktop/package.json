@@ -114,7 +114,7 @@
     "qunit-dom": "^2.0.0",
     "rose": "*",
     "sass": "^1.41.0",
-    "sinon": "^11.1.2",
+    "sinon": "^14.0.0",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-sass-guidelines": "^8.0.0"
