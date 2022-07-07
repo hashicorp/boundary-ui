@@ -76,7 +76,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     await visit(urls.newHost);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getHostCount(), count + 1);
+    assert.strictEqual(getHostCount(), count + 1);
   });
 
   test('Users cannot create a new host without proper authorization', async function (assert) {
@@ -119,8 +119,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     await visit(urls.newHost);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hosts);
-    assert.equal(getHostCount(), count);
+    assert.strictEqual(currentURL(), urls.hosts);
+    assert.strictEqual(getHostCount(), count);
   });
 
   test('saving a new host with invalid fields displays error messages', async function (assert) {

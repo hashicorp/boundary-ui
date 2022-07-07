@@ -85,8 +85,8 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     assert.expect(2);
     await visit(urls.credentialSources);
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialSources);
-    assert.equal(findAll('tbody tr').length, getCredentialLibraryCount());
+    assert.strictEqual(currentURL(), urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
   });
 
   test('can navigate to a credential library', async function (assert) {
@@ -94,27 +94,27 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     await visit(urls.credentialSources);
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
   test('visiting add credential sources', async function (assert) {
     assert.expect(1);
     await visit(urls.addCredentialSources);
     await a11yAudit();
-    assert.equal(currentURL(), urls.addCredentialSources);
+    assert.strictEqual(currentURL(), urls.addCredentialSources);
   });
 
   test('can select and save credential sources to add', async function (assert) {
     assert.expect(4);
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(findAll('tbody tr').length, 0);
     await visit(urls.addCredentialSources);
-    assert.equal(findAll('tbody tr').length, getCredentialLibraryCount());
+    assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
     await click('tbody label');
     await click('form [type="submit"]');
-    assert.equal(currentURL(), urls.credentialSources);
-    assert.equal(findAll('tbody tr').length, 1);
+    assert.strictEqual(currentURL(), urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('cannot add credential sources without proper authorization', async function (assert) {
@@ -131,13 +131,13 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     assert.expect(4);
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(findAll('tbody tr').length, 0);
     await visit(urls.addCredentialSources);
-    assert.equal(findAll('tbody tr').length, getCredentialLibraryCount());
+    assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
     await click('tbody label');
     await click('form [type="button"]');
-    assert.equal(currentURL(), urls.credentialSources);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(currentURL(), urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 0);
   });
 
   test('adding credential sources which errors displays error message', async function (assert) {
@@ -165,9 +165,9 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     assert.expect(2);
     const count = getCredentialLibraryCount();
     await visit(urls.credentialSources);
-    assert.equal(findAll('tbody tr').length, count);
+    assert.strictEqual(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, count - 1);
+    assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
   test('cannot remove credential libraries without proper authorization', async function (assert) {
@@ -196,7 +196,7 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     });
     const count = getCredentialLibraryCount();
     await visit(urls.credentialSources);
-    assert.equal(findAll('tbody tr').length, count);
+    assert.strictEqual(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]'));
   });

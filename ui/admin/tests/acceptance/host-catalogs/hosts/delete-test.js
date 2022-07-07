@@ -77,7 +77,7 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     const count = getHostCount();
     await visit(urls.host);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostCount(), count - 1);
+    assert.strictEqual(getHostCount(), count - 1);
   });
 
   test('cannot delete a host without proper authorization', async function (assert) {
@@ -98,7 +98,7 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     const count = getHostCount();
     await visit(urls.host);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostCount(), count - 1);
+    assert.strictEqual(getHostCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -110,7 +110,7 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     const count = getHostCount();
     await visit(urls.host);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostCount(), count);
+    assert.strictEqual(getHostCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

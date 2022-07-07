@@ -65,7 +65,7 @@ module('Acceptance | accounts | create', function (hooks) {
     assert.expect(1);
     await visit(urls.accounts);
     await a11yAudit();
-    assert.equal(currentURL(), urls.accounts);
+    assert.strictEqual(currentURL(), urls.accounts);
   });
 
   test('can create a new account', async function (assert) {
@@ -77,7 +77,7 @@ module('Acceptance | accounts | create', function (hooks) {
     await fillIn('[name="login_name"]', 'username');
     await fillIn('[name="password"]', 'password');
     await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.accounts.length, accountsCount + 1);
+    assert.strictEqual(this.server.db.accounts.length, accountsCount + 1);
   });
 
   test('Users cannot create a new account without proper authorization', async function (assert) {
@@ -121,8 +121,8 @@ module('Acceptance | accounts | create', function (hooks) {
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
     await click('form button:not([type="submit"])');
-    assert.equal(this.server.db.accounts.length, accountsCount);
-    assert.equal(currentURL(), urls.accounts);
+    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    assert.strictEqual(currentURL(), urls.accounts);
   });
 
   test('saving a new account with invalid fields displays error messages', async function (assert) {
@@ -150,12 +150,12 @@ module('Acceptance | accounts | create', function (hooks) {
     await fillIn('[name="name"]', 'new account');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

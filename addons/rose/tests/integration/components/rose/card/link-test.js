@@ -17,8 +17,8 @@ module('Integration | Component | rose/card/link', function (hooks) {
 
   test('it renders with @title', async function (assert) {
     await render(hbs`<Rose::Card::Link @title="card title" />`);
-    assert.equal(find('a').title, 'card title');
-    assert.equal(
+    assert.strictEqual(find('a').title, 'card title');
+    assert.strictEqual(
       find('.rose-card-link-title').textContent.trim(),
       'card title'
     );
@@ -26,7 +26,7 @@ module('Integration | Component | rose/card/link', function (hooks) {
 
   test('it renders with @description', async function (assert) {
     await render(hbs`<Rose::Card::Link @description="card description" />`);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-card-link-body').textContent.trim(),
       'card description'
     );
@@ -34,7 +34,7 @@ module('Integration | Component | rose/card/link', function (hooks) {
 
   test('it renders with @id', async function (assert) {
     await render(hbs`<Rose::Card::Link @id="card_id" />`);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-card-link-footer-id').textContent.trim(),
       'card_id'
     );

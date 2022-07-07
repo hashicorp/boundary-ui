@@ -60,10 +60,10 @@ module('Acceptance | targets | read', function (hooks) {
     assert.expect(2);
     await visit(urls.targets);
     await a11yAudit();
-    assert.equal(currentURL(), urls.targets);
+    assert.strictEqual(currentURL(), urls.targets);
     await visit(urls.target);
     await a11yAudit();
-    assert.equal(currentURL(), urls.target);
+    assert.strictEqual(currentURL(), urls.target);
   });
 
   test('cannot navigate to target form without proper authorization', async function (assert) {

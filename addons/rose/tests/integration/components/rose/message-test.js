@@ -15,12 +15,12 @@ module('Integration | Component | rose/message', function (hooks) {
       </Rose::Message>
     `);
     assert.ok(find('.rose-message'));
-    assert.equal(find('.rose-message-title').textContent.trim(), 'Title');
-    assert.equal(find('.rose-message-subtitle').textContent.trim(), 'Subtitle');
-    assert.equal(
+    assert.strictEqual(find('.rose-message-title').textContent.trim(), 'Title');
+    assert.strictEqual(find('.rose-message-subtitle').textContent.trim(), 'Subtitle');
+    assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
       'Description'
     );
-    assert.equal(find('.rose-message-link').textContent.trim(), 'Link');
+    assert.strictEqual(find('.rose-message-link').textContent.trim(), 'Link');
   });
 });

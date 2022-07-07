@@ -80,7 +80,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScopeEdit);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getScopeCount('org'), orgScopeCount - 1);
+    assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
   });
 
   test('cannot delete scope without proper authorization', async function (assert) {
@@ -100,7 +100,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScopeEdit);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getScopeCount('org'), orgScopeCount - 1);
+    assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -112,7 +112,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScopeEdit);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getScopeCount('org'), orgScopeCount);
+    assert.strictEqual(getScopeCount('org'), orgScopeCount);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

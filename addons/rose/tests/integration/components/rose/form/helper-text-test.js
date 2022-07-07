@@ -14,7 +14,7 @@ module('Integration | Component | rose/form/helper-text', function (hooks) {
       </Rose::Form::HelperText>
     `);
     assert.ok(find('.rose-form-helper-text'));
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-helper-text').textContent.trim(),
       'Helper text'
     );

@@ -48,7 +48,7 @@ module('Acceptance | groups | delete', function (hooks) {
     const groupsCount = this.server.db.groups.length;
     await visit(urls.group);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(this.server.db.groups.length, groupsCount - 1);
+    assert.strictEqual(this.server.db.groups.length, groupsCount - 1);
   });
 
   test('cannot delete a group without proper authorization', async function (assert) {
@@ -76,7 +76,7 @@ module('Acceptance | groups | delete', function (hooks) {
     });
     await visit(urls.group);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
       'Displays primary error message.'

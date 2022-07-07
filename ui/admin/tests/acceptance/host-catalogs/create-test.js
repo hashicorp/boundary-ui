@@ -83,7 +83,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await fillIn('[name="description"]', 'random string');
     await fillIn('[name="types"]', 'static');
     await click('[type="submit"]');
-    assert.equal(gethostCatalogCount(), count + 1);
+    assert.strictEqual(gethostCatalogCount(), count + 1);
   });
 
   test('Users can create new dynamic host catalogs', async function (assert) {
@@ -94,7 +94,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await fillIn('[name="description"]', 'random string');
     await fillIn('[name="types"]', 'aws');
     await click('[type="submit"]');
-    assert.equal(gethostCatalogCount(), count + 1);
+    assert.strictEqual(gethostCatalogCount(), count + 1);
   });
 
   test('Users can cancel creation of new static host catalogs', async function (assert) {
@@ -103,8 +103,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await visit(urls.newStaticHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hostCatalogs);
-    assert.equal(gethostCatalogCount(), count);
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
+    assert.strictEqual(gethostCatalogCount(), count);
   });
 
   test('Users can cancel creation of new dynamic host catalogs', async function (assert) {
@@ -113,8 +113,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await visit(urls.newDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hostCatalogs);
-    assert.equal(gethostCatalogCount(), count);
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
+    assert.strictEqual(gethostCatalogCount(), count);
   });
 
   test('Users can navigate to new static host catalogs route with proper authorization', async function (assert) {

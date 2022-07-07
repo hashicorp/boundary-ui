@@ -56,10 +56,10 @@ module('Acceptance | credential-stores | read', function (hooks) {
     assert.expect(2);
     await visit(urls.credentialStores);
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialStores);
+    assert.strictEqual(currentURL(), urls.credentialStores);
     await visit(urls.credentialStore);
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialStore);
+    assert.strictEqual(currentURL(), urls.credentialStore);
   });
 
   test('cannot navigate to a credential store form without proper authorization', async function (assert) {
@@ -76,7 +76,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     assert.expect(1);
     await visit(urls.unknownCredentialStore);
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
       'Error 404'
     );

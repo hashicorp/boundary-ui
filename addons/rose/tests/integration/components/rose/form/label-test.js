@@ -14,6 +14,6 @@ module('Integration | Component | rose/form/label', function (hooks) {
       <//Rose::Form::Label>
     `);
     assert.ok(find('.rose-form-label'));
-    assert.equal(find('.rose-form-label').textContent.trim(), 'Form Label');
+    assert.strictEqual(find('.rose-form-label').textContent.trim(), 'Form Label');
   });
 });

@@ -65,7 +65,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     const count = getCredentialStoresCount();
     await visit(urls.credentialStore);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getCredentialStoresCount(), count - 1);
+    assert.strictEqual(getCredentialStoresCount(), count - 1);
   });
 
   test('cannot delete a credential store without proper authorization', async function (assert) {
@@ -88,7 +88,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     const count = getCredentialStoresCount();
     await visit(urls.credentialStore);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getCredentialStoresCount(), count - 1);
+    assert.strictEqual(getCredentialStoresCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -100,7 +100,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     const count = getCredentialStoresCount();
     await visit(urls.credentialStore);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getCredentialStoresCount(), count);
+    assert.strictEqual(getCredentialStoresCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

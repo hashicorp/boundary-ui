@@ -9,6 +9,6 @@ module('Integration | Helper | company-name', function (hooks) {
   test('it renders', async function (assert) {
     assert.expect(1);
     await render(hbs`{{company-name}}`);
-    assert.equal(this.element.textContent.trim(), 'Company Name');
+    assert.strictEqual(this.element.textContent.trim(), 'Company Name');
   });
 });

@@ -13,6 +13,6 @@ module('Integration | Component | rose/anonymous', function (hooks) {
       {{/rose/anonymous}}
     `);
     assert.ok(find('main'));
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.strictEqual(this.element.textContent.trim(), 'template block text');
   });
 });

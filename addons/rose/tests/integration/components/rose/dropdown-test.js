@@ -20,12 +20,12 @@ module('Integration | Component | rose/dropdown', function (hooks) {
 
   test('it renders with trigger', async function (assert) {
     await render(hbs`<Rose::Dropdown @text="Click me" />`);
-    assert.equal(find('.rose-dropdown-trigger').textContent.trim(), 'Click me');
+    assert.strictEqual(find('.rose-dropdown-trigger').textContent.trim(), 'Click me');
   });
 
   test('it supports a count', async function (assert) {
     await render(hbs`<Rose::Dropdown @text="Click me" @count="2" />`);
-    assert.equal(find('.rose-badge').textContent.trim(), '2');
+    assert.strictEqual(find('.rose-badge').textContent.trim(), '2');
   });
 
   test('it supports an icon', async function (assert) {
@@ -64,8 +64,8 @@ module('Integration | Component | rose/dropdown', function (hooks) {
       <dropdown.button />
     </Rose::Dropdown>`);
     assert.ok(find('.rose-dropdown-content'));
-    assert.equal(findAll('a').length, 2);
-    assert.equal(findAll('button').length, 3);
+    assert.strictEqual(findAll('a').length, 2);
+    assert.strictEqual(findAll('button').length, 3);
   });
 
   test('it is toggled on click on trigger content', async function (assert) {

@@ -18,6 +18,6 @@ module('Unit | Model | account', function (hooks) {
     });
     assert.notOk(model.accountName);
     model.login_name = 'foobar';
-    assert.equal(model.accountName, 'foobar');
+    assert.strictEqual(model.accountName, 'foobar');
   });
 });

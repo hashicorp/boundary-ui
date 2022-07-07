@@ -185,8 +185,8 @@ module('Acceptance | scopes', function (hooks) {
     later(async () => {
       run.cancelTimers();
       await a11yAudit();
-      assert.equal(currentURL(), urls.targets);
-      assert.equal(findAll('tbody tr').length, targetsCount);
+      assert.strictEqual(currentURL(), urls.targets);
+      assert.strictEqual(findAll('tbody tr').length, targetsCount);
     }, 750);
     await visit(urls.targets);
   });
@@ -196,7 +196,7 @@ module('Acceptance | scopes', function (hooks) {
     later(async () => {
       run.cancelTimers();
       await a11yAudit();
-      assert.equal(currentURL(), urls.globalTargets);
+      assert.strictEqual(currentURL(), urls.globalTargets);
     }, 750);
     await visit(urls.scopes.global);
   });
@@ -215,7 +215,7 @@ module('Acceptance | scopes', function (hooks) {
     later(async () => {
       run.cancelTimers();
       await a11yAudit();
-      assert.equal(currentURL(), urls.globalTargets);
+      assert.strictEqual(currentURL(), urls.globalTargets);
     }, 750);
     await visit(urls.scopes.global);
   });
@@ -225,7 +225,7 @@ module('Acceptance | scopes', function (hooks) {
     later(async () => {
       run.cancelTimers();
       await a11yAudit();
-      assert.equal(currentURL(), urls.targets);
+      assert.strictEqual(currentURL(), urls.targets);
     }, 750);
     await visit(urls.scopes.org);
   });
@@ -234,11 +234,11 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(3);
     await later(async () => run.cancelTimers(), 750);
     await visit(urls.targets);
-    await later(async () => assert.equal(currentURL(), urls.targets), 750);
+    await later(async () => assert.strictEqual(currentURL(), urls.targets), 750);
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
-    await later(async () => assert.equal(currentURL(), urls.org2Targets), 750);
+    await later(async () => assert.strictEqual(currentURL(), urls.org2Targets), 750);
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
-    later(async () => assert.equal(currentURL(), urls.globalTargets), 750);
+    later(async () => assert.strictEqual(currentURL(), urls.globalTargets), 750);
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
   });
 
@@ -248,7 +248,7 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.targets);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting a target', async function (assert) {
@@ -256,7 +256,7 @@ module('Acceptance | scopes', function (hooks) {
     later(async () => {
       run.cancelTimers();
       await click('tbody tr th a');
-      assert.equal(currentURL(), urls.targetSessions);
+      assert.strictEqual(currentURL(), urls.targetSessions);
     }, 750);
     await visit(urls.targets);
   });
@@ -293,8 +293,8 @@ module('Acceptance | scopes', function (hooks) {
         'Activate connect mode'
       );
       assert.ok(find('.dialog-detail'), 'Success dialog');
-      assert.equal(findAll('.rose-dialog-footer button').length, 1);
-      assert.equal(
+      assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
+      assert.strictEqual(
         find('.rose-dialog-footer button').textContent.trim(),
         'Close',
         'Cannot retry'
@@ -317,9 +317,9 @@ module('Acceptance | scopes', function (hooks) {
       );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(dialogButtons.length, 2);
+      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
     await visit(urls.scopes.global);
   });
@@ -339,9 +339,9 @@ module('Acceptance | scopes', function (hooks) {
       );
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(dialogButtons.length, 2);
+      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
     await visit(urls.targets);
   });

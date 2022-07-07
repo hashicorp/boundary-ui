@@ -71,10 +71,10 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     assert.expect(2);
     await visit(urls.hosts);
     await a11yAudit();
-    assert.equal(currentURL(), urls.hosts);
+    assert.strictEqual(currentURL(), urls.hosts);
     await visit(urls.host);
     await a11yAudit();
-    assert.equal(currentURL(), urls.host);
+    assert.strictEqual(currentURL(), urls.host);
   });
 
   test('cannot navigate to a role form without proper authorization', async function (assert) {

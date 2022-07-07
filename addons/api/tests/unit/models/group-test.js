@@ -19,12 +19,12 @@ module('Unit | Model | group', function (hooks) {
       },
     });
     const group = store.peekRecord('group', 'group_123');
-    assert.equal(
+    assert.strictEqual(
       group.member_ids.length,
       2,
       'Group has two entires in member_ids'
     );
-    assert.equal(
+    assert.strictEqual(
       group.members.length,
       0,
       'Group has no resolved members because they are not loaded yet'
@@ -45,12 +45,12 @@ module('Unit | Model | group', function (hooks) {
     });
     // eslint-disable-next-line no-self-assign
     group.member_ids = [...group.member_ids];
-    assert.equal(
+    assert.strictEqual(
       group.member_ids.length,
       2,
       'Group has two entires in member_ids'
     );
-    assert.equal(group.members.length, 2, 'Group has two resolved members');
+    assert.strictEqual(group.members.length, 2, 'Group has two resolved members');
   });
 
   test('it has an `addMembers` method that groups a specific POST API endpoint and serialization', async function (assert) {
@@ -156,7 +156,7 @@ module('Unit | Model | group', function (hooks) {
       },
     });
     const group = store.peekRecord('group', 'group_123');
-    assert.equal(
+    assert.strictEqual(
       group.member_ids.length,
       0,
       'Group has empty member_ids by default'
