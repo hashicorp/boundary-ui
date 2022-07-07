@@ -32,7 +32,7 @@ module('Unit | Authenticator | password', function (hooks) {
       return new Response(200);
     });
     authenticator.restore(mockData);
-    assert.equal(applicationAdapter.headers.Authorization, 'Bearer token1234');
+    assert.strictEqual(applicationAdapter.headers.Authorization, 'Bearer token1234');
   });
 
   test('it adds an authorization header to application adapter on authenticate', async function (assert) {
@@ -44,7 +44,7 @@ module('Unit | Authenticator | password', function (hooks) {
     this.server.create('auth-method', { id: authMethod.id, scopeId: 'global' });
     this.server.create('user', { scopeId: 'global' });
     await authenticator.authenticate(creds, null, { scope, authMethod });
-    assert.equal(
+    assert.strictEqual(
       applicationAdapter.headers.Authorization,
       'Bearer thetokenstring'
     );

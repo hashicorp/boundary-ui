@@ -113,7 +113,7 @@ module('Acceptance | targets', function (hooks) {
     await visit(urls.targets);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
@@ -126,7 +126,7 @@ module('Acceptance | targets', function (hooks) {
     later(async () => {
       run.cancelTimers();
       await a11yAudit();
-      assert.equal(currentURL(), urls.targets);
+      assert.strictEqual(currentURL(), urls.targets);
     }, 750);
     await visit(urls.targets);
   });

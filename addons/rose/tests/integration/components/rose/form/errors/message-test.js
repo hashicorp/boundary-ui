@@ -12,6 +12,6 @@ module('Integration | Component | rose/form/errors/message', function (hooks) {
         An error occurred.
       </Rose::Form::Errors::Message>
     `);
-    assert.equal(this.element.textContent.trim(), 'An error occurred.');
+    assert.strictEqual(this.element.textContent.trim(), 'An error occurred.');
   });
 });

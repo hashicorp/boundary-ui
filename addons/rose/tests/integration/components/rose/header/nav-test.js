@@ -16,7 +16,7 @@ module('Integration | Component | rose/header/nav', function (hooks) {
       <nav.link @route="index"/>
       <nav.link @route="about"/>
     </Rose::Header::nav>`);
-    assert.equal(findAll('a').length, 2);
+    assert.strictEqual(findAll('a').length, 2);
   });
 
   test('it renders nav dropdown elements', async function (assert) {
@@ -24,6 +24,6 @@ module('Integration | Component | rose/header/nav', function (hooks) {
       <nav.dropdown />
       <nav.dropdown />
     </Rose::Header::nav>`);
-    assert.equal(findAll('.rose-dropdown').length, 2);
+    assert.strictEqual(findAll('.rose-dropdown').length, 2);
   });
 });

@@ -11,6 +11,6 @@ module('Integration | Helper | format-date-iso-human', function (hooks) {
 
     await render(hbs`{{format-date-iso-human inputValue}}`);
 
-    assert.equal(this.element.textContent.trim(), '2020-01-01 00:00:00');
+    assert.strictEqual(this.element.textContent.trim(), '2020-01-01 00:00:00');
   });
 });

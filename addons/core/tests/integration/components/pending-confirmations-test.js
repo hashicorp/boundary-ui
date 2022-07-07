@@ -15,14 +15,14 @@ module('Integration | Component | pending-confirmations', function (hooks) {
         <div class="pending">Pending</div>
       </PendingConfirmations>
     `);
-    assert.equal(findAll('.pending').length, 0, 'No pending confirmations');
+    assert.strictEqual(findAll('.pending').length, 0, 'No pending confirmations');
     service.confirm();
     await render(hbs`
       <PendingConfirmations as |confirmations|>
         <div class="pending">Pending</div>
       </PendingConfirmations>
     `);
-    assert.equal(findAll('.pending').length, 1, 'One pending confirmations');
+    assert.strictEqual(findAll('.pending').length, 1, 'One pending confirmations');
   });
 
   test('it exposes a confirm action that confirms the confirmation', async function (assert) {

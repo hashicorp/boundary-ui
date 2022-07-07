@@ -41,7 +41,7 @@ module('Acceptance | scopes | read', function (hooks) {
     assert.expect(2);
     await visit(urls.orgScopeEdit);
     await a11yAudit();
-    assert.equal(currentURL(), urls.orgScopeEdit);
+    assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.ok(find('main .rose-form'));
   });
 
@@ -49,7 +49,7 @@ module('Acceptance | scopes | read', function (hooks) {
     assert.expect(2);
     instances.scopes.org.update({ authorized_actions: [] });
     await visit(urls.orgScopeEdit);
-    assert.equal(currentURL(), urls.orgScopeEdit);
+    assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.notOk(find('main .rose-form'));
   });
 });

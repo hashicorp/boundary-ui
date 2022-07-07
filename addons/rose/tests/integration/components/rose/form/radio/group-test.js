@@ -22,9 +22,9 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
       </Rose::Form::Radio::Group>
     `);
 
-    assert.equal(findAll('input').length, 2);
-    assert.equal(findAll('input')[0].name, 'bird');
-    assert.equal(findAll('input')[1].name, 'bird');
+    assert.strictEqual(findAll('input').length, 2);
+    assert.strictEqual(findAll('input')[0].name, 'bird');
+    assert.strictEqual(findAll('input')[1].name, 'bird');
   });
 
   test('it renders with @selectedValue value selected', async function (assert) {
@@ -80,10 +80,10 @@ module('Integration | Component | rose/form/radio/group', function (hooks) {
     assert.notOk(this.selectedValue);
 
     await click(findAll('[type="radio"]')[0]);
-    assert.equal(this.selectedValue, 'pegion');
+    assert.strictEqual(this.selectedValue, 'pegion');
 
     await click(findAll('[type="radio"]')[1]);
-    assert.equal(this.selectedValue, 'flamingo');
+    assert.strictEqual(this.selectedValue, 'flamingo');
   });
 
   test('it uses @selectedValue value to set active radiofield', async function (assert) {

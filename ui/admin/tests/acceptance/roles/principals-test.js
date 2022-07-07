@@ -57,16 +57,16 @@ module('Acceptance | roles | principals', function (hooks) {
     assert.expect(2);
     await visit(urls.rolePrincipals);
     await a11yAudit();
-    assert.equal(currentURL(), urls.rolePrincipals);
-    assert.equal(findAll('tbody tr').length, principalsCount);
+    assert.strictEqual(currentURL(), urls.rolePrincipals);
+    assert.strictEqual(findAll('tbody tr').length, principalsCount);
   });
 
   test('principal can be removed from a role', async function (assert) {
     assert.expect(2);
     await visit(urls.rolePrincipals);
-    assert.equal(findAll('tbody tr').length, principalsCount);
+    assert.strictEqual(findAll('tbody tr').length, principalsCount);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, principalsCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
   });
 
   test('principal cannot be removed from a role without proper authorization', async function (assert) {
@@ -94,7 +94,7 @@ module('Acceptance | roles | principals', function (hooks) {
       );
     });
     await visit(urls.rolePrincipals);
-    assert.equal(findAll('tbody tr').length, principalsCount);
+    assert.strictEqual(findAll('tbody tr').length, principalsCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]'));
   });
@@ -113,31 +113,31 @@ module('Acceptance | roles | principals', function (hooks) {
     assert.expect(3);
     instances.role.update({ userIds: [], groupIds: [] });
     await visit(urls.rolePrincipals);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.addPrincipals);
+    assert.strictEqual(currentURL(), urls.addPrincipals);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
     await click('tbody label');
     await click('tbody label');
     await click('form [type="submit"]');
     await visit(urls.rolePrincipals);
-    assert.equal(findAll('tbody tr').length, 1);
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('select and cancel principals to add', async function (assert) {
     assert.expect(4);
     await visit(urls.rolePrincipals);
-    assert.equal(findAll('tbody tr').length, principalsCount);
+    assert.strictEqual(findAll('tbody tr').length, principalsCount);
     // Remove a principal to populate association view
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, principalsCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.addPrincipals);
+    assert.strictEqual(currentURL(), urls.addPrincipals);
     await click('tbody label');
     await click('form [type="button"]');
     await visit(urls.rolePrincipals);
-    assert.equal(findAll('tbody tr').length, principalsCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
   });
 
   test('shows error message on principal add', async function (assert) {

@@ -62,8 +62,8 @@ module('Acceptance | managed-groups | members', function (hooks) {
     const membersCount = instances.managedGroup.memberIds.length;
     await visit(urls.managedGroupMembers);
     await a11yAudit();
-    assert.equal(currentURL(), urls.managedGroupMembers);
+    assert.strictEqual(currentURL(), urls.managedGroupMembers);
     assert.ok(membersCount);
-    assert.equal(findAll('tbody tr').length, membersCount);
+    assert.strictEqual(findAll('tbody tr').length, membersCount);
   });
 });

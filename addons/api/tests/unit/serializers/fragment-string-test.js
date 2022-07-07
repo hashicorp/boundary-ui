@@ -20,7 +20,7 @@ module('Unit | Serializer | fragment string', function (hooks) {
 
     let serializedRecord = record.serialize();
 
-    assert.equal(serializedRecord, 'string value');
+    assert.strictEqual(serializedRecord, 'string value');
   });
 
   test('it normalizes records', function (assert) {

@@ -107,8 +107,8 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.hostSet);
-    assert.equal(
+    assert.strictEqual(currentURL(), urls.hostSet);
+    assert.strictEqual(
       this.server.schema.hostSets.all().models[0].name,
       'random string'
     );
@@ -129,7 +129,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(instances.hostSet.name, 'random string');
-    assert.equal(find('[name="name"]').value, instances.hostSet.name);
+    assert.strictEqual(find('[name="name"]').value, instances.hostSet.name);
   });
 
   test('saving an existing host set with invalid fields displays error messages', async function (assert) {
@@ -175,13 +175,13 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await visit(urls.hostSet);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.hostSet);
+    assert.strictEqual(currentURL(), urls.hostSet);
     try {
       await visit(urls.hostSets);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child');
-      assert.equal(currentURL(), urls.hostSets);
+      assert.strictEqual(currentURL(), urls.hostSets);
       assert.notEqual(
         this.server.schema.hostSets.all().models[0].name,
         'random string'

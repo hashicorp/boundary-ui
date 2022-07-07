@@ -10,7 +10,7 @@ module('Integration | Modifier | on-click-inside', function (hooks) {
     assert.expect(2);
     this.set('clickedInside', (element) => {
       assert.ok(element);
-      assert.equal(element.id, 'inside');
+      assert.strictEqual(element.id, 'inside');
     });
     await render(hbs`
       <div id="outside"></div>

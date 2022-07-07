@@ -61,7 +61,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     assert.expect(1);
     await visit(urls.managedGroups);
     await a11yAudit();
-    assert.equal(currentURL(), urls.managedGroups);
+    assert.strictEqual(currentURL(), urls.managedGroups);
   });
 
   test('can create a new managed group', async function (assert) {
@@ -71,7 +71,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await fillIn('[name="name"]', 'Managed group name');
     await fillIn('[name="description"]', 'description');
     await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.managedGroups.length, managedGroupsCount + 1);
+    assert.strictEqual(this.server.db.managedGroups.length, managedGroupsCount + 1);
   });
 
   test('User can not create a new managed group without proper authorization', async function (assert) {
@@ -117,8 +117,8 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await visit(urls.newManagedGroup);
     await fillIn('[name="name"]', 'Managed group name');
     await click('form button:not([type="submit"])');
-    assert.equal(this.server.db.managedGroups.length, managedGroupsCount);
-    assert.equal(currentURL(), urls.managedGroups);
+    assert.strictEqual(this.server.db.managedGroups.length, managedGroupsCount);
+    assert.strictEqual(currentURL(), urls.managedGroups);
   });
 
   test('When user saving a new managed group with invalid fields displays error message', async function (assert) {
@@ -146,12 +146,12 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await fillIn('[name="name"]', 'new managed group');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

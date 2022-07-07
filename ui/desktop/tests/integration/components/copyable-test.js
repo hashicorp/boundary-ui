@@ -11,7 +11,7 @@ module('Integration | Component | copyable', function (hooks) {
       hbs`<Copyable @buttonText="Copy me" @text="foo">text</Copyable>`
     );
     assert.ok(find('.copyable'));
-    assert.equal(find('.copyable-content').textContent.trim(), 'text');
-    assert.equal(find('.copyable-button').textContent.trim(), 'Copy me');
+    assert.strictEqual(find('.copyable-content').textContent.trim(), 'text');
+    assert.strictEqual(find('.copyable-button').textContent.trim(), 'Copy me');
   });
 });

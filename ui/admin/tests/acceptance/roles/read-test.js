@@ -59,7 +59,7 @@ module('Acceptance | roles | read', function (hooks) {
     assert.expect(1);
     await visit(urls.roles);
     await a11yAudit();
-    assert.equal(currentURL(), urls.roles);
+    assert.strictEqual(currentURL(), urls.roles);
   });
 
   test('can navigate to a role form', async function (assert) {
@@ -67,7 +67,7 @@ module('Acceptance | roles | read', function (hooks) {
     await visit(urls.roles);
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.role);
+    assert.strictEqual(currentURL(), urls.role);
   });
 
   test('cannot navigate to a role form without proper authorization', async function (assert) {

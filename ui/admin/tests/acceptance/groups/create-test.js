@@ -52,7 +52,7 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.newGroup);
     await fillIn('[name="name"]', 'group name');
     await click('[type="submit"]');
-    assert.equal(this.server.db.groups.length, groupsCount + 1);
+    assert.strictEqual(this.server.db.groups.length, groupsCount + 1);
   });
 
   test('can navigate to new groups route with proper authorization', async function (assert) {
@@ -79,8 +79,8 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.newGroup);
     await fillIn('[name="name"]', 'group name');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.groups);
-    assert.equal(this.server.db.groups.length, groupsCount);
+    assert.strictEqual(currentURL(), urls.groups);
+    assert.strictEqual(this.server.db.groups.length, groupsCount);
   });
 
   test('saving a new group with invalid fields displays error messages', async function (assert) {
@@ -107,12 +107,12 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.newGroup);
     await fillIn('[name="name"]', 'group name');
     await click('[type="submit"]');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

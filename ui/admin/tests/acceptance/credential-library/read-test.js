@@ -65,7 +65,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     await visit(urls.credentialLibraries);
     await click('main tbody .rose-table-header-cell a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
   test('cannot navigate to resource without proper authorization', async function (assert) {

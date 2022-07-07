@@ -12,7 +12,7 @@ module('Integration | Component | rose/table/row/cell', function (hooks) {
       content
     </Rose::Table::Row::Cell>`);
     assert.ok(find('td'));
-    assert.equal(find('.rose-table-cell').textContent.trim(), 'content');
+    assert.strictEqual(find('.rose-table-cell').textContent.trim(), 'content');
   });
 
   test('it renders with attributes', async function (assert) {

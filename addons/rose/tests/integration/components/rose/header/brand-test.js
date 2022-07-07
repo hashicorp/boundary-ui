@@ -13,7 +13,7 @@ module('Integration | Component | rose/header/brand', function (hooks) {
     `);
     assert.ok(find('.rose-header-brand'));
     assert.ok(find('.rose-header-brand svg'));
-    assert.equal(
+    assert.strictEqual(
       find('.rose-header-brand-text').textContent.trim(),
       'Product Name'
     );
