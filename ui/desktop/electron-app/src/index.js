@@ -62,7 +62,6 @@ const createWindow = (partition, closeWindowCB) => {
       webSecurity: true,
       contextIsolation: true,
       nodeIntegration: false,
-      enableRemoteModule: false,
       allowRunningInsecureContent: false,
       // The preload script establishes the message-based IPC pathway without
       // exposing new modules to the renderer.
