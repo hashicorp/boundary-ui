@@ -63,7 +63,7 @@ module('Acceptance | accounts | read', function (hooks) {
     await visit(urls.accounts);
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.account);
+    assert.strictEqual(currentURL(), urls.account);
   });
 
   test('cannot navigate to an account form without proper authorization', async function (assert) {

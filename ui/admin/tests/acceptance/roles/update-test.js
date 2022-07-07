@@ -61,8 +61,8 @@ module('Acceptance | roles | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin role');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.role);
-    assert.equal(this.server.db.roles[0].name, 'Updated admin role');
+    assert.strictEqual(currentURL(), urls.role);
+    assert.strictEqual(this.server.db.roles[0].name, 'Updated admin role');
   });
 
   test('cannot make changes to an existing role without proper authorization', async function (assert) {
@@ -107,12 +107,12 @@ module('Acceptance | roles | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

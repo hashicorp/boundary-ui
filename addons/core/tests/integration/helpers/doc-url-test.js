@@ -14,7 +14,7 @@ module('Integration | Helper | doc-url', function (hooks) {
     await render(hbs`{{doc-url 'account'}}`);
     assert.ok(baseURL);
     assert.ok(path);
-    assert.equal(this.element.textContent.trim(), `${baseURL}${path}`);
+    assert.strictEqual(this.element.textContent.trim(), `${baseURL}${path}`);
   });
 
   test('it throws an error if the specified documentation path cannot be found', async function (assert) {

@@ -60,7 +60,7 @@ module('Acceptance | roles | delete', function (hooks) {
     const rolesCount = this.server.db.roles.length;
     await visit(urls.role);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(this.server.db.roles.length, rolesCount - 1);
+    assert.strictEqual(this.server.db.roles.length, rolesCount - 1);
   });
 
   test('cannot delete a role without proper authorization', async function (assert) {
@@ -88,7 +88,7 @@ module('Acceptance | roles | delete', function (hooks) {
     });
     await visit(urls.role);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
       'Displays primary error message.'

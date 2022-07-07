@@ -15,11 +15,11 @@ module('Integration | Component | rose/form/errors', function (hooks) {
       <//Rose::Form::Errors>
     `);
     assert.ok(find('.rose-form-errors'));
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message:first-child').textContent.trim(),
       'An error occurred.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message:last-child').textContent.trim(),
       'Another error occurred.'
     );

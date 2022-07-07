@@ -62,8 +62,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.hostCatalog);
-    assert.equal(
+    assert.strictEqual(currentURL(), urls.hostCatalog);
+    assert.strictEqual(
       this.server.schema.hostCatalogs.all().models[0].name,
       'random string'
     );
@@ -86,7 +86,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(instances.hostCatalog.name, 'random string');
-    assert.equal(find('[name="name"]').value, instances.hostCatalog.name);
+    assert.strictEqual(find('[name="name"]').value, instances.hostCatalog.name);
   });
 
   test('saving an existing host catalog with invalid fields displays error messages', async function (assert) {
@@ -132,13 +132,13 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await visit(urls.hostCatalog);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.hostCatalog);
+    assert.strictEqual(currentURL(), urls.hostCatalog);
     try {
       await visit(urls.hostCatalogs);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child');
-      assert.equal(currentURL(), urls.hostCatalogs);
+      assert.strictEqual(currentURL(), urls.hostCatalogs);
       assert.notEqual(
         this.server.schema.hostCatalogs.all().models[0].name,
         'random string'
@@ -154,13 +154,13 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await visit(urls.hostCatalog);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.hostCatalog);
+    assert.strictEqual(currentURL(), urls.hostCatalog);
     try {
       await visit(urls.hostCatalogs);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
-      assert.equal(currentURL(), urls.hostCatalog);
+      assert.strictEqual(currentURL(), urls.hostCatalog);
       assert.notEqual(
         this.server.schema.hostCatalogs.all().models[0].name,
         'random string'

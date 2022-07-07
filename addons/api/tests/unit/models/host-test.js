@@ -20,7 +20,7 @@ module('Unit | Model | host', function (hooks) {
         address: '127.0.0.1',
       },
     });
-    assert.equal(model.attributes.address, '127.0.0.1');
+    assert.strictEqual(model.attributes.address, '127.0.0.1');
   });
 
   test('it has isStatic and returns the expected values', async function (assert) {
@@ -28,7 +28,7 @@ module('Unit | Model | host', function (hooks) {
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('host', { type: 'static' });
     const modelB = store.createRecord('host', { type: 'plugin' });
-    assert.equal(typeof modelA.isStatic, 'boolean');
+    assert.strictEqual(typeof modelA.isStatic, 'boolean');
     assert.true(modelA.isStatic);
     assert.false(modelB.isStatic);
   });
@@ -38,7 +38,7 @@ module('Unit | Model | host', function (hooks) {
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host', { type: 'plugin' });
     const modelStatic = store.createRecord('host', { type: 'static' });
-    assert.equal(typeof modelPlugin.isPlugin, 'boolean');
+    assert.strictEqual(typeof modelPlugin.isPlugin, 'boolean');
     assert.true(modelPlugin.isPlugin);
     assert.false(modelStatic.isPlugin);
   });
@@ -53,7 +53,7 @@ module('Unit | Model | host', function (hooks) {
     const modelRandom = store.createRecord('host', {
       plugin: { name: 'random' },
     });
-    assert.equal(typeof modelAws.isAWS, 'boolean');
+    assert.strictEqual(typeof modelAws.isAWS, 'boolean');
     assert.true(modelAws.isAWS);
     assert.false(modelRandom.isAWS);
   });
@@ -68,7 +68,7 @@ module('Unit | Model | host', function (hooks) {
     const modelRandom = store.createRecord('host', {
       plugin: { name: 'random' },
     });
-    assert.equal(typeof modelAzure.isAzure, 'boolean');
+    assert.strictEqual(typeof modelAzure.isAzure, 'boolean');
     assert.true(modelAzure.isAzure);
     assert.false(modelRandom.isAzure);
   });
@@ -83,9 +83,9 @@ module('Unit | Model | host', function (hooks) {
     const modelStatic = store.createRecord('host', {
       type: 'static',
     });
-    assert.equal(typeof modelPlugin.compositeType, 'string');
-    assert.equal(modelPlugin.compositeType, 'Test name');
-    assert.equal(modelStatic.compositeType, 'static');
+    assert.strictEqual(typeof modelPlugin.compositeType, 'string');
+    assert.strictEqual(modelPlugin.compositeType, 'Test name');
+    assert.strictEqual(modelStatic.compositeType, 'static');
   });
 
   test('set compositeType sets expected values', async function (assert) {
@@ -98,8 +98,8 @@ module('Unit | Model | host', function (hooks) {
       compositeType: 'static',
     });
 
-    assert.equal(modelPlugin.type, 'plugin');
-    assert.equal(modelPlugin.plugin.name, 'aws');
-    assert.equal(modelStatic.type, 'static');
+    assert.strictEqual(modelPlugin.type, 'plugin');
+    assert.strictEqual(modelPlugin.plugin.name, 'aws');
+    assert.strictEqual(modelStatic.type, 'static');
   });
 });

@@ -71,10 +71,10 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
     assert.expect(2);
     await visit(urls.hostSets);
     await a11yAudit();
-    assert.equal(currentURL(), urls.hostSets);
+    assert.strictEqual(currentURL(), urls.hostSets);
     await visit(urls.hostSet);
     await a11yAudit();
-    assert.equal(currentURL(), urls.hostSet);
+    assert.strictEqual(currentURL(), urls.hostSet);
   });
 
   test('cannot navigate to a host set form without proper authorization', async function (assert) {

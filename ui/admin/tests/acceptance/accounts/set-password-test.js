@@ -57,7 +57,7 @@ module('Acceptance | accounts | set password', function (hooks) {
     assert.expect(1);
     await visit(urls.setPassword);
     await a11yAudit();
-    assert.equal(currentURL(), urls.setPassword);
+    assert.strictEqual(currentURL(), urls.setPassword);
   });
 
   test('can navigate to route with proper authorization', async function (assert) {
@@ -86,7 +86,7 @@ module('Acceptance | accounts | set password', function (hooks) {
       '/accounts/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
         const attrs = JSON.parse(requestBody);
-        assert.equal(attrs.password, 'update password', 'new password is set');
+        assert.strictEqual(attrs.password, 'update password', 'new password is set');
         const id = idMethod.split(':')[0];
         return { id };
       }

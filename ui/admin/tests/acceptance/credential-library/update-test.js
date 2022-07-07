@@ -67,8 +67,8 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.credentialLibrary);
-    assert.equal(
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(
       this.server.schema.credentialLibraries.all().models[0].name,
       'random string'
     );
@@ -94,7 +94,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       this.server.schema.credentialLibraries.all().models[0].name,
       'random string'
     );
-    assert.equal(find('[name="name"]').value, instances.credentialLibrary.name);
+    assert.strictEqual(find('[name="name"]').value, instances.credentialLibrary.name);
   });
 
   test('saving an existing credential library with invalid fields displays error messages', async function (assert) {
@@ -141,14 +141,14 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await visit(urls.credentialLibrary);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
 
     try {
       await visit(urls.credentialLibraries);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child', 'Click Discard');
-      assert.equal(currentURL(), urls.credentialLibraries);
+      assert.strictEqual(currentURL(), urls.credentialLibraries);
       assert.notEqual(
         this.server.schema.credentialLibraries.all().models[0].name,
         'random string'
@@ -164,14 +164,14 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await visit(urls.credentialLibrary);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
 
     try {
       await visit(urls.credentialLibraries);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
-      assert.equal(currentURL(), urls.credentialLibrary);
+      assert.strictEqual(currentURL(), urls.credentialLibrary);
       assert.notEqual(
         this.server.schema.credentialLibraries.all().models[0].name,
         'random string'

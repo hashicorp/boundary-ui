@@ -44,7 +44,7 @@ module('Acceptance | users | read', function (hooks) {
     assert.expect(1);
     await visit(usersURL);
     await a11yAudit();
-    assert.equal(currentURL(), usersURL);
+    assert.strictEqual(currentURL(), usersURL);
   });
 
   test('cannot navigate to an account form without proper authorization', async function (assert) {

@@ -14,7 +14,7 @@ module('Unit | Mixin | build-url', function (hooks) {
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
     const url = adapter._buildURL('model', 1);
-    assert.equal(url, '/models/1');
+    assert.strictEqual(url, '/models/1');
   });
 
   test('it does not interfere with namespaced URLs', function (assert) {
@@ -26,7 +26,7 @@ module('Unit | Mixin | build-url', function (hooks) {
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
     const url = adapter._buildURL('model', 1);
-    assert.equal(url, '/api/v1/models/1');
+    assert.strictEqual(url, '/api/v1/models/1');
   });
 
   test('it can prepend a prefix', function (assert) {
@@ -40,7 +40,7 @@ module('Unit | Mixin | build-url', function (hooks) {
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
     const url = adapter._buildURL('model', 1);
-    assert.equal(url, '/foo/bars/models/1');
+    assert.strictEqual(url, '/foo/bars/models/1');
   });
 
   test('it can append a suffix', function (assert) {
@@ -54,6 +54,6 @@ module('Unit | Mixin | build-url', function (hooks) {
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');
     const url = adapter._buildURL('model', 1);
-    assert.equal(url, '/models/1:method');
+    assert.strictEqual(url, '/models/1:method');
   });
 });

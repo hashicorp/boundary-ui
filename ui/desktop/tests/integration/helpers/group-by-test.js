@@ -25,6 +25,6 @@ module('Integration | Helper | group-by', function (hooks) {
       </ul>
     `);
 
-    assert.equal(findAll('li').length, 3);
+    assert.strictEqual(findAll('li').length, 3);
   });
 });

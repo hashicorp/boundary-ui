@@ -56,16 +56,16 @@ module('Acceptance | groups | members', function (hooks) {
     assert.expect(2);
     await visit(urls.members);
     await a11yAudit();
-    assert.equal(currentURL(), urls.members);
-    assert.equal(findAll('tbody tr').length, membersCount);
+    assert.strictEqual(currentURL(), urls.members);
+    assert.strictEqual(findAll('tbody tr').length, membersCount);
   });
 
   test('can remove a member', async function (assert) {
     assert.expect(2);
     await visit(urls.members);
-    assert.equal(findAll('tbody tr').length, membersCount);
+    assert.strictEqual(findAll('tbody tr').length, membersCount);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, membersCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, membersCount - 1);
   });
 
   test('cannot remove a member without proper authorization', async function (assert) {
@@ -93,7 +93,7 @@ module('Acceptance | groups | members', function (hooks) {
       );
     });
     await visit(urls.members);
-    assert.equal(findAll('tbody tr').length, membersCount);
+    assert.strictEqual(findAll('tbody tr').length, membersCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.ok(find('[role="alert"]'));
   });
@@ -102,7 +102,7 @@ module('Acceptance | groups | members', function (hooks) {
     assert.expect(1);
     await visit(urls.addMembers);
     await a11yAudit();
-    assert.equal(currentURL(), urls.addMembers);
+    assert.strictEqual(currentURL(), urls.addMembers);
   });
 
   test('can navigate to add members with proper authorization', async function (assert) {
@@ -125,30 +125,30 @@ module('Acceptance | groups | members', function (hooks) {
     assert.expect(3);
     instances.group.update({ memberIds: [] });
     await visit(urls.members);
-    assert.equal(findAll('tbody tr').length, 0);
+    assert.strictEqual(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.addMembers);
+    assert.strictEqual(currentURL(), urls.addMembers);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
     await click('tbody label');
     await click('tbody label');
     await click('form [type="submit"]');
     await visit(urls.members);
-    assert.equal(findAll('tbody tr').length, 1);
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('select and cancel members to add', async function (assert) {
     assert.expect(4);
     await visit(urls.members);
-    assert.equal(findAll('tbody tr').length, membersCount);
+    assert.strictEqual(findAll('tbody tr').length, membersCount);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.equal(findAll('tbody tr').length, membersCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, membersCount - 1);
     await click('.rose-layout-page-actions a');
-    assert.equal(currentURL(), urls.addMembers);
+    assert.strictEqual(currentURL(), urls.addMembers);
     await click('tbody label');
     await click('form [type="button"]');
     await visit(urls.members);
-    assert.equal(findAll('tbody tr').length, membersCount - 1);
+    assert.strictEqual(findAll('tbody tr').length, membersCount - 1);
   });
 
   test('shows error message on member add', async function (assert) {

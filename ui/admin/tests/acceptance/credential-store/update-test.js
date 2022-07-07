@@ -59,8 +59,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.credentialStore);
-    assert.equal(
+    assert.strictEqual(currentURL(), urls.credentialStore);
+    assert.strictEqual(
       this.server.schema.credentialStores.all().models[0].name,
       'random string'
     );
@@ -83,7 +83,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(instances.credentialStore.name, 'random string');
-    assert.equal(find('[name="name"]').value, instances.credentialStore.name);
+    assert.strictEqual(find('[name="name"]').value, instances.credentialStore.name);
   });
 
   test('saving an existing credential store with invalid fields displays error messages', async function (assert) {
@@ -130,14 +130,14 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await visit(urls.credentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.credentialStore);
+    assert.strictEqual(currentURL(), urls.credentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child', 'Click Discard');
-      assert.equal(currentURL(), urls.credentialStores);
+      assert.strictEqual(currentURL(), urls.credentialStores);
       assert.notEqual(
         this.server.schema.credentialStores.all().models[0].name,
         'random string'
@@ -153,14 +153,14 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await visit(urls.credentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.credentialStore);
+    assert.strictEqual(currentURL(), urls.credentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
-      assert.equal(currentURL(), urls.credentialStore);
+      assert.strictEqual(currentURL(), urls.credentialStore);
       assert.notEqual(
         this.server.schema.credentialStores.all().models[0].name,
         'random string'

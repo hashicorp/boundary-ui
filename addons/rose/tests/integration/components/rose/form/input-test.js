@@ -8,8 +8,8 @@ module('Integration | Component | rose/form/input', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Form::Input @value="Text" @label="Label" />`);
-    assert.equal(await find('label').textContent.trim(), 'Label');
-    assert.equal(await find('input').value, 'Text');
+    assert.strictEqual(await find('label').textContent.trim(), 'Label');
+    assert.strictEqual(await find('input').value, 'Text');
   });
 
   test('it displays optional helper text', async function (assert) {
@@ -18,9 +18,9 @@ module('Integration | Component | rose/form/input', function (hooks) {
     const id = fieldEl.id;
     const helperId = `helper-text-${id}`;
     const helperTextEl = find('.rose-form-helper-text');
-    assert.equal(helperTextEl.textContent.trim(), 'Help me');
-    assert.equal(helperTextEl.id, helperId);
-    assert.equal(fieldEl.getAttribute('aria-describedby').trim(), helperId);
+    assert.strictEqual(helperTextEl.textContent.trim(), 'Help me');
+    assert.strictEqual(helperTextEl.id, helperId);
+    assert.strictEqual(fieldEl.getAttribute('aria-describedby').trim(), helperId);
   });
 
   test('it displays optional errors', async function (assert) {
@@ -35,9 +35,9 @@ module('Integration | Component | rose/form/input', function (hooks) {
     const id = fieldEl.id;
     const errorsId = `errors-${id}`;
     const errorMessageEl = find('.rose-form-errors');
-    assert.equal(errorMessageEl.id, errorsId);
-    assert.equal(errorMessageEl.textContent.trim(), 'An error occurred.');
-    assert.equal(
+    assert.strictEqual(errorMessageEl.id, errorsId);
+    assert.strictEqual(errorMessageEl.textContent.trim(), 'An error occurred.');
+    assert.strictEqual(
       fieldEl.getAttribute('aria-describedby').split(' ')[1],
       errorsId
     );
@@ -45,12 +45,12 @@ module('Integration | Component | rose/form/input', function (hooks) {
 
   test('it is type="text" by default', async function (assert) {
     await render(hbs`<Rose::Form::Input />`);
-    assert.equal(await find('input').type, 'text');
+    assert.strictEqual(await find('input').type, 'text');
   });
 
   test('it supports a @type attribute', async function (assert) {
     await render(hbs`<Rose::Form::Input @type="password" />`);
-    assert.equal(await find('input').type, 'password');
+    assert.strictEqual(await find('input').type, 'password');
   });
 
   test('it supports disabled attribute', async function (assert) {

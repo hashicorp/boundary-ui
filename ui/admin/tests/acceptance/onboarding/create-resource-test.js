@@ -33,7 +33,7 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
     await fillIn('[name="hostAddress"]', '0.0.0.0');
     await fillIn('[name="targetPort"]', '22');
     await click('[type="submit"]');
-    assert.equal(currentURL(), urls.successPath);
+    assert.strictEqual(currentURL(), urls.successPath);
   });
 
   test('redirects user to host catalog screen when next is clicked', async function (assert) {
@@ -44,6 +44,6 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
       .models[0].id;
     const hostCatalogId = this.server.schema.hostCatalogs.all().models[0].id;
     urls.hostCatalogPath = `/scopes/${projectId}/host-catalogs/${hostCatalogId}/hosts`;
-    assert.equal(currentURL(), urls.hostCatalogPath);
+    assert.strictEqual(currentURL(), urls.hostCatalogPath);
   });
 });
