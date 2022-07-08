@@ -15,7 +15,7 @@ module('Unit | Service | window-manager', function (hooks) {
       'service:browser/window',
       class extends Service {
         open(url) {
-          assert.equal(url, fakeURL);
+          assert.strictEqual(url, fakeURL);
         }
       }
     );

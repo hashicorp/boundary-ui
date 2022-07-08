@@ -22,7 +22,7 @@ module('Unit | Adapter | host catalog', function (hooks) {
       mockSnapshot,
       'createRecord'
     );
-    assert.equal(createRecordURL, '/v1/host-catalogs');
+    assert.strictEqual(createRecordURL, '/v1/host-catalogs');
   });
 
   test('it generates correct createRecord URLs for dynamic host catalogs with extra query parameter ?plugin_name', function (assert) {
@@ -43,6 +43,6 @@ module('Unit | Adapter | host catalog', function (hooks) {
       mockSnapshot,
       'createRecord'
     );
-    assert.equal(createRecordURL, '/v1/host-catalogs?plugin_name=aws');
+    assert.strictEqual(createRecordURL, '/v1/host-catalogs?plugin_name=aws');
   });
 });

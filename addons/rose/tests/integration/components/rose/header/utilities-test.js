@@ -16,7 +16,7 @@ module('Integration | Component | rose/header/utilities', function (hooks) {
       <nav.dropdown />
       <nav.dropdown />
     </Rose::Header::Utilities>`);
-    assert.equal(findAll('.rose-dropdown').length, 2);
+    assert.strictEqual(findAll('.rose-dropdown').length, 2);
   });
 
   test('it renders nav dropdown elements as right aligned', async function (assert) {

@@ -74,7 +74,7 @@ module('Acceptance | targets | create', function (hooks) {
   test('defaults to a new TCP target when no query param provided', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
-    assert.equal(find('input[name=types]:checked').value, 'tcp');
+    assert.strictEqual(find('input[name=types]:checked').value, 'tcp');
   });
 
   test('can create new targets of type TCP', async function (assert) {
@@ -84,12 +84,12 @@ module('Acceptance | targets | create', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
-    assert.equal(getTargetCount(), count + 1);
-    assert.equal(
+    assert.strictEqual(getTargetCount(), count + 1);
+    assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string'
     );
-    assert.equal(
+    assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1]
         .workerFilter,
       'random filter'
@@ -103,12 +103,12 @@ module('Acceptance | targets | create', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
-    assert.equal(getTargetCount(), count + 1);
-    assert.equal(
+    assert.strictEqual(getTargetCount(), count + 1);
+    assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string'
     );
-    assert.equal(
+    assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1]
         .workerFilter,
       'random filter'
@@ -156,8 +156,8 @@ module('Acceptance | targets | create', function (hooks) {
     await visit(urls.newTCPTarget);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.targets);
-    assert.equal(getTargetCount(), count);
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(getTargetCount(), count);
   });
 
   test('can cancel create new SSH target', async function (assert) {
@@ -166,8 +166,8 @@ module('Acceptance | targets | create', function (hooks) {
     await visit(urls.newSSHTarget);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.targets);
-    assert.equal(getTargetCount(), count);
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(getTargetCount(), count);
   });
 
   test('saving a new TCP target with invalid fields displays error messages', async function (assert) {

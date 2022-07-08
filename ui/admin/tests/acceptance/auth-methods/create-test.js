@@ -66,7 +66,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     await fillIn('[name="name"]', 'AuthMethod name');
     await fillIn('[name="description"]', 'description');
     await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.authMethods.length, authMethodsCount + 1);
+    assert.strictEqual(this.server.db.authMethods.length, authMethodsCount + 1);
   });
 
   test('Users can navigate to new auth-methods route with proper authorization', async function (assert) {
@@ -103,8 +103,8 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     await fillIn('[name="name"]', 'AuthMethod name');
     await fillIn('[name="description"]', 'description');
     await click('form button:not([type="submit"])');
-    assert.equal(this.server.db.authMethods.length, authMethodsCount);
-    assert.equal(currentURL(), urls.authMethods);
+    assert.strictEqual(this.server.db.authMethods.length, authMethodsCount);
+    assert.strictEqual(currentURL(), urls.authMethods);
   });
 
   test('user can make primary an auth method', async function (assert) {
@@ -119,7 +119,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
     );
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
-    assert.equal(
+    assert.strictEqual(
       scope.primaryAuthMethodId,
       instances.authMethod.id,
       'Primary auth method is set.'
@@ -209,7 +209,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
     );
     let scope = this.server.schema.scopes.find(instances.orgScope.id);
-    assert.equal(
+    assert.strictEqual(
       scope.primaryAuthMethodId,
       instances.authMethod.id,
       'Primary auth method is set.'

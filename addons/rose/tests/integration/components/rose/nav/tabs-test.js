@@ -14,6 +14,6 @@ module('Integration | Component | rose/nav/tabs', function (hooks) {
       </Rose::Nav::Tabs>
     `);
     assert.ok(find('.rose-nav-tabs'));
-    assert.equal(find('.rose-nav-link').textContent.trim(), 'Item Name');
+    assert.strictEqual(find('.rose-nav-link').textContent.trim(), 'Item Name');
   });
 });

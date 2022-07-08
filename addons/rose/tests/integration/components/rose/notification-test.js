@@ -16,7 +16,7 @@ module('Integration | Component | rose/notification', function (hooks) {
       </Rose::Notification>
     `);
     assert.ok(find('.rose-notification'));
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'An error occurred.'
     );

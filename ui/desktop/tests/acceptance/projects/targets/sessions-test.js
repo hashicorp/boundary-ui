@@ -173,7 +173,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     await visit(urls.sessions);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
@@ -187,8 +187,8 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     later(async () => {
       run.cancelTimers();
       // await a11yAudit();
-      assert.equal(currentURL(), urls.sessions);
-      assert.equal(findAll('tbody tr').length, sessionsCount);
+      assert.strictEqual(currentURL(), urls.sessions);
+      assert.strictEqual(findAll('tbody tr').length, sessionsCount);
     }, 750);
     await visit(urls.sessions);
   });
@@ -198,7 +198,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     later(async () => {
       run.cancelTimers();
       // await a11yAudit();
-      assert.equal(currentURL(), urls.sessions);
+      assert.strictEqual(currentURL(), urls.sessions);
     }, 750);
     await visit(urls.target);
   });
@@ -253,7 +253,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       run.cancelTimers();
       await click('tbody tr:first-child td:last-child button');
       assert.ok(find('[role="alert"].is-success'));
-      assert.equal(findAll('tbody tr').length, sessionsCount - 1);
+      assert.strictEqual(findAll('tbody tr').length, sessionsCount - 1);
     }, 750);
     await visit(urls.sessions);
   });
@@ -296,12 +296,12 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       run.cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.dialog-detail'), 'Success dialog');
-      assert.equal(
+      assert.strictEqual(
         find('.rose-dialog-footer .rose-button-secondary').textContent.trim(),
         'Close',
         'Cannot retry'
       );
-      assert.equal(
+      assert.strictEqual(
         find('.rose-dialog-body .copyable-content').textContent.trim(),
         'a_123:p_123'
       );
@@ -327,7 +327,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.dialog-detail'), 'Success dialog');
       await click('.rose-dialog-dismiss');
-      assert.equal(
+      assert.strictEqual(
         find(
           'tbody tr:first-child td:nth-child(2) .copyable-content'
         ).textContent.trim(),
@@ -348,9 +348,9 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(dialogButtons.length, 2);
+      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
     await visit(urls.sessions);
   });
@@ -367,9 +367,9 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.equal(dialogButtons.length, 2);
-      assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(dialogButtons.length, 2);
+      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
     }, 750);
     await visit(urls.sessions);
   });
