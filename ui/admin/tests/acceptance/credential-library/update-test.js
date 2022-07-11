@@ -94,7 +94,10 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       this.server.schema.credentialLibraries.all().models[0].name,
       'random string'
     );
-    assert.strictEqual(find('[name="name"]').value, instances.credentialLibrary.name);
+    assert.strictEqual(
+      find('[name="name"]').value,
+      instances.credentialLibrary.name
+    );
   });
 
   test('saving an existing credential library with invalid fields displays error messages', async function (assert) {

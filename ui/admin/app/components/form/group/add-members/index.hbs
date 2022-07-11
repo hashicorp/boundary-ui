@@ -18,6 +18,7 @@
         <header.row as |row|>
           <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+          <row.headerCell>{{t 'resources.scope.title'}}</row.headerCell>
           <row.headerCell>{{t 'form.description.label'}}</row.headerCell>
         </header.row>
       </table.header>
@@ -42,6 +43,9 @@
               {{/if}}
             </row.headerCell>
             <row.cell><code>{{user.id}}</code></row.cell>
+            <row.cell>
+              <ScopeBadge @scope={{user.scopeModel}} />
+            </row.cell>
             <row.cell>{{user.description}}</row.cell>
           </body.row>
         {{/each}}
