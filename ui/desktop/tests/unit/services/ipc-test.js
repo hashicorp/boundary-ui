@@ -38,15 +38,15 @@ module('Unit | Service | ipc', function (hooks) {
     assert.expect(1);
     const service = this.owner.lookup('service:ipc');
     const request = service.invoke('hello', 'world', 'http://localhost:4200');
-    assert.equal(request.constructor, IPCRequest);
+    assert.strictEqual(request.constructor, IPCRequest);
   });
 
   test('IPCRequest objects post messages on their window objects', function (assert) {
     assert.expect(2);
     const myWindow = {
       postMessage(request) {
-        assert.equal(request.method, 'hello');
-        assert.equal(request.payload, 'world');
+        assert.strictEqual(request.method, 'hello');
+        assert.strictEqual(request.payload, 'world');
       },
       MessageChannel: MessageChannelMock,
     };

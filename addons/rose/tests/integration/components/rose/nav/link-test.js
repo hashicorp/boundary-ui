@@ -13,6 +13,6 @@ module('Integration | Component | rose/nav/link', function (hooks) {
         Item Name
       </Rose::Nav::Link>
     `);
-    assert.equal(find('.rose-nav-link').textContent.trim(), 'Item Name');
+    assert.strictEqual(find('.rose-nav-link').textContent.trim(), 'Item Name');
   });
 });

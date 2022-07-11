@@ -68,7 +68,7 @@ module('Acceptance | roles | create', function (hooks) {
     await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('[type="submit"]');
-    assert.equal(this.server.db.roles.length, rolesCount + 1);
+    assert.strictEqual(this.server.db.roles.length, rolesCount + 1);
   });
 
   test('Users can navigate to new roles route with proper authorization', async function (assert) {
@@ -96,8 +96,8 @@ module('Acceptance | roles | create', function (hooks) {
     await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.roles);
-    assert.equal(this.server.db.roles.length, rolesCount);
+    assert.strictEqual(currentURL(), urls.roles);
+    assert.strictEqual(this.server.db.roles.length, rolesCount);
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {

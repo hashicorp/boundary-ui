@@ -49,8 +49,8 @@ module('Acceptance | groups | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin group');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.group);
-    assert.equal(this.server.db.groups[0].name, 'Updated admin group');
+    assert.strictEqual(currentURL(), urls.group);
+    assert.strictEqual(this.server.db.groups[0].name, 'Updated admin group');
   });
 
   test('cannot make changes to an existing group without proper authorization', async function (assert) {
@@ -95,12 +95,12 @@ module('Acceptance | groups | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

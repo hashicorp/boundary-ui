@@ -119,7 +119,7 @@ module('Acceptance | origin', function (hooks) {
     assert.expect(1);
     await visit(urls.origin);
     await a11yAudit();
-    assert.equal(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.origin);
   });
 
   test('visiting index without an origin specified redirects to origin route', async function (assert) {
@@ -127,7 +127,7 @@ module('Acceptance | origin', function (hooks) {
     await visit(urls.index);
     await a11yAudit();
     assert.notOk(mockIPC.origin);
-    assert.equal(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.origin);
   });
 
   test('can set origin', async function (assert) {
@@ -136,8 +136,8 @@ module('Acceptance | origin', function (hooks) {
     await visit(urls.origin);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
-    assert.equal(currentURL(), urls.authenticate.methods.global);
-    assert.equal(mockIPC.origin, currentOrigin);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(mockIPC.origin, currentOrigin);
   });
 
   test('can reset origin before authentication', async function (assert) {
@@ -146,10 +146,10 @@ module('Acceptance | origin', function (hooks) {
     await visit(urls.origin);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
-    assert.equal(currentURL(), urls.authenticate.methods.global);
-    assert.equal(mockIPC.origin, currentOrigin);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(mockIPC.origin, currentOrigin);
     await click('.change-origin a');
-    assert.equal(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.origin);
   });
 
   test('captures error on origin update', async function (assert) {
@@ -166,7 +166,7 @@ module('Acceptance | origin', function (hooks) {
     assert.expect(1);
     config.autoOrigin = true;
     await visit(urls.origin);
-    assert.equal(find('[name="host"]').value, currentOrigin);
+    assert.strictEqual(find('[name="host"]').value, currentOrigin);
     config.autoOrigin = false;
   });
 
@@ -176,4 +176,5 @@ module('Acceptance | origin', function (hooks) {
     await visit(urls.origin);
     assert.notOk(find('[name="host"]').value, 'Origin field is empty');
   });
+
 });

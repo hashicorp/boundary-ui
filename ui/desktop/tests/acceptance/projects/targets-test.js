@@ -167,7 +167,7 @@ module('Acceptance | projects | targets', function (hooks) {
     await visit(urls.targets);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
@@ -175,22 +175,22 @@ module('Acceptance | projects | targets', function (hooks) {
     const targetsCount = this.server.schema.targets.all().models.length;
     await visit(urls.targets);
     await a11yAudit();
-    assert.equal(currentURL(), urls.targets);
-    assert.equal(findAll('tbody tr').length, targetsCount);
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(findAll('tbody tr').length, targetsCount);
   });
 
   test('visiting a target', async function (assert) {
     assert.expect(1);
     await visit(urls.targets);
     await click('tbody tr th a');
-    assert.equal(currentURL(), urls.sessions);
+    assert.strictEqual(currentURL(), urls.sessions);
   });
 
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
     await visit(urls.targets);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
       'No Targets Available'
     );
@@ -221,13 +221,13 @@ module('Acceptance | projects | targets', function (hooks) {
       'Activate connect mode'
     );
     assert.ok(find('.dialog-detail'), 'Success dialog');
-    assert.equal(findAll('.rose-dialog-footer button').length, 1);
-    assert.equal(
+    assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
+    assert.strictEqual(
       find('.rose-dialog-footer button').textContent.trim(),
       'Close',
       'Cannot retry'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-dialog-body .copyable-content').textContent.trim(),
       'a_123:p_123'
     );
@@ -307,9 +307,9 @@ module('Acceptance | projects | targets', function (hooks) {
     );
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
-    assert.equal(dialogButtons.length, 2);
-    assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-    assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+    assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
   });
 
   test('handles connect error', async function (assert) {
@@ -325,9 +325,9 @@ module('Acceptance | projects | targets', function (hooks) {
     );
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
-    assert.equal(dialogButtons.length, 2);
-    assert.equal(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-    assert.equal(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
+    assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
   });
 
   test('can retry on error', async function (assert) {

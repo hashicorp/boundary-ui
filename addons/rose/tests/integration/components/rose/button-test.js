@@ -8,17 +8,17 @@ module('Integration | Component | rose/button', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Button>Button</Rose::Button>`);
-    assert.equal(this.element.textContent.trim(), 'Button');
+    assert.strictEqual(this.element.textContent.trim(), 'Button');
   });
 
   test('it is type="button" by default', async function (assert) {
     await render(hbs`<Rose::Button>Button</Rose::Button>`);
-    assert.equal(find('button').type, 'button');
+    assert.strictEqual(find('button').type, 'button');
   });
 
   test('it is type="submit" when @submit={{true}}', async function (assert) {
     await render(hbs`<Rose::Button @submit={{true}} />`);
-    assert.equal(find('button').type, 'submit');
+    assert.strictEqual(find('button').type, 'submit');
   });
 
   test('it is disabled when @disabled={{true}}', async function (assert) {

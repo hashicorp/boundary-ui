@@ -95,9 +95,9 @@ module('Unit | Model | host catalog', function (hooks) {
       type: 'plugin',
       plugin: { name: 'no-such-type' },
     });
-    assert.equal(modelA.compositeType, 'static');
-    assert.equal(modelB.compositeType, 'aws');
-    assert.equal(modelC.compositeType, 'unknown');
+    assert.strictEqual(modelA.compositeType, 'static');
+    assert.strictEqual(modelB.compositeType, 'aws');
+    assert.strictEqual(modelC.compositeType, 'unknown');
   });
 
   test('set compositeType sets expected values', async function (assert) {
@@ -109,8 +109,8 @@ module('Unit | Model | host catalog', function (hooks) {
     const modelStatic = store.createRecord('host-catalog', {
       compositeType: 'static',
     });
-    assert.equal(modelPlugin.type, 'plugin');
-    assert.equal(modelPlugin.plugin.name, 'aws');
-    assert.equal(modelStatic.type, 'static');
+    assert.strictEqual(modelPlugin.type, 'plugin');
+    assert.strictEqual(modelPlugin.plugin.name, 'aws');
+    assert.strictEqual(modelStatic.type, 'static');
   });
 });

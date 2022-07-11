@@ -66,7 +66,7 @@ module('Acceptance | targets | delete', function (hooks) {
     const count = getTargetCount();
     await visit(urls.target);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getTargetCount(), count - 1);
+    assert.strictEqual(getTargetCount(), count - 1);
   });
 
   test('can accept delete target via dialog', async function (assert) {
@@ -77,7 +77,7 @@ module('Acceptance | targets | delete', function (hooks) {
     const count = getTargetCount();
     await visit(urls.target);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getTargetCount(), count - 1);
+    assert.strictEqual(getTargetCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -89,7 +89,7 @@ module('Acceptance | targets | delete', function (hooks) {
     const count = getTargetCount();
     await visit(urls.target);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getTargetCount(), count);
+    assert.strictEqual(getTargetCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

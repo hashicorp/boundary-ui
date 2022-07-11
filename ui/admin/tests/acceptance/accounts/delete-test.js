@@ -64,7 +64,7 @@ module('Acceptance | accounts | delete', function (hooks) {
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.account);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(this.server.db.accounts.length, accountsCount - 1);
+    assert.strictEqual(this.server.db.accounts.length, accountsCount - 1);
   });
 
   test('cannot delete an account without proper authorization', async function (assert) {
@@ -93,7 +93,7 @@ module('Acceptance | accounts | delete', function (hooks) {
     await visit(urls.account);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
       'Displays primary error message.'

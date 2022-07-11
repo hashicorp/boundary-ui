@@ -18,11 +18,11 @@ module('Unit | Service | confirm', function (hooks) {
     assert.expect(3);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
-    assert.equal(service.pending.length, 0, 'No pending confirmations yet');
+    assert.strictEqual(service.pending.length, 0, 'No pending confirmations yet');
     const confirmation = service.confirm();
-    assert.equal(service.pending.length, 1, 'One pending confirmation created');
+    assert.strictEqual(service.pending.length, 1, 'One pending confirmation created');
     confirmation.confirm();
-    assert.equal(service.pending.length, 0, 'Confirmation was confirmed');
+    assert.strictEqual(service.pending.length, 0, 'Confirmation was confirmed');
   });
 
   test('confirmations may be confirmed or dismissed', function (assert) {

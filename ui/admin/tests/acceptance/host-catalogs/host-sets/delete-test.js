@@ -77,7 +77,7 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     const count = getHostSetCount();
     await visit(urls.hostSet);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostSetCount(), count - 1);
+    assert.strictEqual(getHostSetCount(), count - 1);
   });
 
   test('can accept delete host set via dialog', async function (assert) {
@@ -88,7 +88,7 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     const count = getHostSetCount();
     await visit(urls.hostSet);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostSetCount(), count - 1);
+    assert.strictEqual(getHostSetCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -110,7 +110,7 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     const count = getHostSetCount();
     await visit(urls.hostSet);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getHostSetCount(), count);
+    assert.strictEqual(getHostSetCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

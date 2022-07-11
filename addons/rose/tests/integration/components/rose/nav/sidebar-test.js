@@ -13,8 +13,8 @@ module('Integration | Component | rose/nav/sidebar', function (hooks) {
         <nav.link @route="index">Item Name</nav.link>
       </Rose::Nav::Sidebar>
     `);
-    assert.equal(find('.rose-nav-title').textContent.trim(), 'Title');
-    assert.equal(find('.rose-nav-link').textContent.trim(), 'Item Name');
+    assert.strictEqual(find('.rose-nav-title').textContent.trim(), 'Title');
+    assert.strictEqual(find('.rose-nav-link').textContent.trim(), 'Item Name');
   });
 
   test('it associates title with nav via aria-labelledby', async function (assert) {
@@ -27,7 +27,7 @@ module('Integration | Component | rose/nav/sidebar', function (hooks) {
     const el = find('.rose-nav-sidebar');
     const id = el.id;
     const titleId = `title-${id}`;
-    assert.equal(find('.rose-nav-title').id, titleId);
-    assert.equal(el.getAttribute('aria-labelledby').trim(), titleId);
+    assert.strictEqual(find('.rose-nav-title').id, titleId);
+    assert.strictEqual(el.getAttribute('aria-labelledby').trim(), titleId);
   });
 });
