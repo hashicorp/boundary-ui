@@ -32,6 +32,8 @@ titles:
   no-results: No Results
   choose-a-provider: Choose a provider
   provider: Provider
+  success: Success
+  create-resources: Create Resources
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   origin-initialization: To get started, please enter your origin URL
@@ -50,3 +52,40 @@ themes:
   system: System Default
   light: Light
   dark: Dark
+onboarding:
+  quick-start:
+    titles:
+      choose-path: Welcome to Boundary
+      quick-setup: Quick setup
+      manual: Manual
+      create-resource: Creating your first target
+      resource-setup-info: We’ll set up scopes & a host catalog for you
+      host-address: Host Address
+      target-port: Target Port
+      toggle-resource-info:  I have an IP address and port for my first host
+    descriptions:
+      choose-path: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
+      quick-setup: I want to see how Boundary works, help me set up my first scopes and targets.
+      manual: I want to set up my first scopes and targets myself, starting with my first org.
+      create-resource: In Boundary, a “target” defines a server that your users will connect to.
+      resource-setup-info: Hosts are organized in host catalogs, which live in projects, which live in orgs. We will create these for you, and they can be edited or deleted later.
+      host-address: "Example: “192.168.0.1” or IPv6"
+      target-port: "Example: “22”"
+  success:
+    titles:
+      connect: Connect to your target
+      desktop: Using Boundary Desktop
+      developers: Developers
+      controller: Controller URL
+      creation-success: We have created your scopes and target
+    descriptions:
+      download: Download the Boundary Desktop app to browse and connect to targets (available for Windows, Mac, and Linux)
+      developers: You can also connect to targets using the Boundary CLI or API.
+      controller: Use this URL to sign in to Boundary
+      role: You can now connect to the target with the Boundary Desktop app, command-line (CLI) or API. Boundary grants access to resources based on roles, and we have added you to the `demo` role to give you access to this target. Make sure to add this role to any new users if you want them to access it too.
+    links:
+      install: Install the Boundary Desktop app
+      learn: Learn about Boundary Desktop app
+      cli: Learn about Boundary command-line (CLI)
+      api: Learn about Boundary API
+

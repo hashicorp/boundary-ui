@@ -53,7 +53,7 @@ module('Acceptance | auth methods | delete', function (hooks) {
     const authMethodsCount = this.server.db.authMethods.length;
     await visit(urls.authMethod);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(this.server.db.authMethods.length, authMethodsCount - 1);
+    assert.strictEqual(this.server.db.authMethods.length, authMethodsCount - 1);
   });
 
   test('errors are displayed when delete on an auth method fails', async function (assert) {
@@ -72,7 +72,7 @@ module('Acceptance | auth methods | delete', function (hooks) {
     await visit(urls.authMethod);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
       'Displays primary error message.'

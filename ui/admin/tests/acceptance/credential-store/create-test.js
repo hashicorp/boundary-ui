@@ -60,7 +60,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getCredentialStoresCount(), count + 1);
+    assert.strictEqual(getCredentialStoresCount(), count + 1);
   });
 
   test('Users can cancel create new credential stores', async function (assert) {
@@ -69,8 +69,8 @@ module('Acceptance | credential-stores | create', function (hooks) {
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.credentialStores);
-    assert.equal(getCredentialStoresCount(), count);
+    assert.strictEqual(currentURL(), urls.credentialStores);
+    assert.strictEqual(getCredentialStoresCount(), count);
   });
 
   test('Users cannot navigate to new credential stores route without proper authorization', async function (assert) {

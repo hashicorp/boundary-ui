@@ -160,15 +160,15 @@ module('Acceptance | projects | sessions', function (hooks) {
     await visit(urls.sessions);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
     assert.expect(2);
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.sessions);
-    assert.equal(currentURL(), urls.sessions);
-    assert.equal(findAll('tbody tr').length, sessionsCount);
+    assert.strictEqual(currentURL(), urls.sessions);
+    assert.strictEqual(findAll('tbody tr').length, sessionsCount);
   });
 
   test('visiting empty sessions', async function (assert) {
@@ -188,8 +188,8 @@ module('Acceptance | projects | sessions', function (hooks) {
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.sessions);
     await a11yAudit();
-    assert.equal(currentURL(), urls.sessions);
-    assert.equal(findAll('tbody tr').length, sessionsCount);
+    assert.strictEqual(currentURL(), urls.sessions);
+    assert.strictEqual(findAll('tbody tr').length, sessionsCount);
   });
 
   test('can identify active sessions', async function (assert) {

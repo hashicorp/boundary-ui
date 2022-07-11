@@ -1,3 +1,12 @@
 <div ...attributes class='rose-toolbar'>
-  {{yield}}
+  {{yield
+    (hash
+      primary=(component
+        'rose/anonymous' tagName='span' class='rose-toolbar-primary'
+      )
+      secondary=(component
+        'rose/anonymous' tagName='span' class='rose-toolbar-secondary'
+      )
+    )
+  }}
 </div>

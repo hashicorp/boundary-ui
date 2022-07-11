@@ -36,8 +36,8 @@ module('Unit | Model | base', function (hooks) {
     });
     const scope = store.peekRecord('scope', 'o_1');
     const model = store.peekRecord('user', '123abc');
-    assert.equal(model.scope.scope_id, scope.id);
-    assert.equal(model.scopeModel.id, scope.id);
+    assert.strictEqual(model.scope.scope_id, scope.id);
+    assert.strictEqual(model.scopeModel.id, scope.id);
   });
 
   test('it may accept a `scopeModel` for convenience, instead of a fragment', function (assert) {
@@ -47,7 +47,7 @@ module('Unit | Model | base', function (hooks) {
     const model = store.createRecord('user', '123abc');
     assert.notEqual(model.scopeID, scope.id);
     model.scopeModel = scope;
-    assert.equal(model.scopeID, scope.id);
+    assert.strictEqual(model.scopeID, scope.id);
     assert.true(model.scope.isOrg);
   });
 
@@ -62,10 +62,10 @@ module('Unit | Model | base', function (hooks) {
       },
     });
     const model = store.peekRecord('user', '123abc');
-    assert.equal(model.name, null);
-    assert.equal(model.displayName, '123abc');
+    assert.strictEqual(model.name, undefined);
+    assert.strictEqual(model.displayName, '123abc');
     model.name = 'Test';
-    assert.equal(model.displayName, 'Test');
+    assert.strictEqual(model.displayName, 'Test');
   });
 
   test('it has canSave and cannotSave attributes', function (assert) {

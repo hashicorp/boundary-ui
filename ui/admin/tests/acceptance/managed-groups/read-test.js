@@ -62,7 +62,7 @@ module('Acceptance | managed-groups | read', function (hooks) {
     await visit(urls.managedGroups);
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.managedGroup);
+    assert.strictEqual(currentURL(), urls.managedGroup);
   });
 
   test('User cannot navigate to a managed group form without proper authorization', async function (assert) {

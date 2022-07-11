@@ -1,6 +1,7 @@
 import factory from '../generated/factories/auth-method';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 const types = ['password', 'oidc'];
 
@@ -18,7 +19,8 @@ export default factory.extend({
       'managed-groups': ['create', 'list'],
     };
   },
-  id: (i) => `auth-method-id-${i}`,
+
+  id: () => generateId('am_'),
 
   // Cycle through available types
   type: (i) => types[i % types.length],

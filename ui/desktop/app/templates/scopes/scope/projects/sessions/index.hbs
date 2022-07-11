@@ -10,15 +10,8 @@
 
   <page.body>
     {{#if (feature-flag 'filter')}}
-      {{#if
-        (or
-          @model
-          (has-resource-filter-selections
-            'scopes.scope.projects.sessions' 'status' 'project'
-          )
-        )
-      }}
-        <Rose::Toolbar>
+      <Rose::Toolbar as |toolbar|>
+        <toolbar.primary>
           <Rose::Form as |form|>
             {{#with
               (resource-filter 'scopes.scope.projects.sessions' 'status')
@@ -95,8 +88,6 @@
                     {{/each}}
                   {{/with}}
                 </ul>
-
-                {{!  }}
               </Rose::Dropdown>
             {{/with}}
 
@@ -112,12 +103,14 @@
               >{{t 'actions.clear-all-filters'}}
               </Rose::Button>
             {{/if}}
-            <Rose::LoadingButton @onClick={{route-action 'refreshSessions'}}>
-              {{t 'actions.refresh'}}
-            </Rose::LoadingButton>
           </Rose::Form>
-        </Rose::Toolbar>
-      {{/if}}
+        </toolbar.primary>
+
+        <toolbar.secondary>
+          <ToolbarRefresher @onClick={{route-action 'refreshSessions'}} />
+        </toolbar.secondary>
+
+      </Rose::Toolbar>
     {{/if}}
 
     {{#if this.sorted}}

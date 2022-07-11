@@ -14,13 +14,8 @@
 
   <page.body>
     {{#if (feature-flag 'filter')}}
-      {{#if
-        (or
-          @model
-          (has-resource-filter-selections 'scopes.scope.sessions' 'status')
-        )
-      }}
-        <Rose::Toolbar>
+      <Rose::Toolbar as |toolbar|>
+        <toolbar.primary>
           <Rose::Form as |form|>
             {{#with
               (resource-filter 'scopes.scope.sessions' 'status')
@@ -62,8 +57,14 @@
               </Rose::Button>
             {{/if}}
           </Rose::Form>
-        </Rose::Toolbar>
-      {{/if}}
+        </toolbar.primary>
+
+        <toolbar.secondary>
+          <ToolbarRefresher @onClick={{route-action 'refreshSessions'}} />
+        </toolbar.secondary>
+
+      </Rose::Toolbar>
+
     {{/if}}
     {{#if @model}}
       <Rose::Table as |table|>

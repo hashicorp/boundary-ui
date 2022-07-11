@@ -51,7 +51,7 @@ module('Acceptance | auth methods | read', function (hooks) {
     assert.expect(1);
     await visit(urls.authMethods);
     await a11yAudit();
-    assert.equal(currentURL(), urls.authMethods);
+    assert.strictEqual(currentURL(), urls.authMethods);
   });
 
   test('can navigate to an auth method form', async function (assert) {
@@ -59,7 +59,7 @@ module('Acceptance | auth methods | read', function (hooks) {
     await visit(urls.authMethods);
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.authMethod);
+    assert.strictEqual(currentURL(), urls.authMethod);
   });
 
   test('cannot navigate to an auth method form without proper authorization', async function (assert) {

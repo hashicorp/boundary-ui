@@ -20,7 +20,7 @@ module('Integration | Component | rose/table', function (hooks) {
   test('it renders with caption', async function (assert) {
     await render(hbs`<Rose::Table @caption="table caption"/>`);
     assert.ok(find('caption'));
-    assert.equal(find('caption').textContent.trim(), 'table caption');
+    assert.strictEqual(find('caption').textContent.trim(), 'table caption');
   });
 
   test('it renders with header', async function (assert) {

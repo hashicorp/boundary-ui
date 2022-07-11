@@ -13,14 +13,17 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
    * @return {Promise{[CredentialLibraryModel]}}
    */
   beforeModel() {
-    const { application_credential_source_ids: credential_libraries } =
+    const { application_credential_source_ids: sourceIDFragments } =
       this.modelFor('scopes.scope.targets.target');
     return all(
-      credential_libraries.map((credential_library) =>
-        this.store.findRecord('credential-library', credential_library.value, {
-          reload: true,
-        })
-      )
+      sourceIDFragments.map(({ value }) => {
+        const isStoreOrLibrary = !value.includes('cred');
+        if (isStoreOrLibrary) {
+          return this.store.findRecord('credential-library', value, {
+            reload: true,
+          });
+        }
+      })
     );
   }
 

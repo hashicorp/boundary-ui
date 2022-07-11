@@ -33,28 +33,12 @@
 
     main {
       flex-grow: 1;
-      overflow: auto;
     }
   }
 
   .rose-layout-sidebar-sidebar,
   .rose-layout-sidebar-body {
-    overflow-y: scroll;
-  }
-
-  &.layout-scroll {
-    .rose-layout-global-body {
-      overflow-y: auto;
-
-      main {
-        overflow: unset;
-      }
-    }
-
-    .rose-layout-sidebar-sidebar,
-    .rose-layout-sidebar-body {
-      overflow-y: unset;
-    }
+    overflow-y: auto;
   }
 }
 
@@ -496,5 +480,22 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   .rose-button-ghost {
     // Hide/Show secret button icon.
     color: var(--ui-gray);
+  }
+}
+
+// Spinning animation for refresh button icon
+@media (prefers-reduced-motion: no-preference) {
+  .is-loading {
+    .rose-icon {
+      @keyframes hds-flight-icon-animation-rotation {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      > svg {
+        animation: hds-flight-icon-animation-rotation 0.7s linear infinite;
+      }
+    }
   }
 }

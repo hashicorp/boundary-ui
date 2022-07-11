@@ -48,6 +48,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
+      http_method: 'GET',
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
@@ -63,15 +64,14 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       this.server.schema.credentialLibraries.all().models.length;
     authenticateSession({});
   });
-
   test('visiting credential libraries', async function (assert) {
     assert.expect(2);
     await visit(urls.credentialLibraries);
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialLibraries);
+    assert.strictEqual(currentURL(), urls.credentialLibraries);
     await visit(urls.credentialLibrary);
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
   test('can create a credential library', async function (assert) {
@@ -80,7 +80,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await visit(urls.newCredentialLibrary);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getCredentialLibraryCount(), count + 1);
+    assert.strictEqual(getCredentialLibraryCount(), count + 1);
   });
 
   test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
@@ -103,8 +103,8 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await visit(urls.newCredentialLibrary);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.credentialLibraries);
-    assert.equal(getCredentialLibraryCount(), count);
+    assert.strictEqual(currentURL(), urls.credentialLibraries);
+    assert.strictEqual(getCredentialLibraryCount(), count);
   });
 
   test('saving a new credential library with invalid fields displays error messasges', async function (assert) {

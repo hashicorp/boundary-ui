@@ -2,6 +2,36 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.4.5 [CLI 0.9.1] (2022.07.06)
+
+### Bug Fixes
+
+- Enable filtering terminated sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/1169)) 
+- Fix dropdown overflow issue ([PR](https://github.com/hashicorp/boundary-ui/pull/1160)) 
+
+
+## v1.4.4 [CLI 0.9.0] (2022.06.20)
+
+### New
+
+- Use include_terminated flag for listing sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/1126)) 
+- Display auth method names in auth form ([PR](https://github.com/hashicorp/boundary-ui/pull/1113)) 
+
+### Bug Fixes
+-  Unavailable controller url should result in a friendlier error workflow  ([PR](https://github.com/hashicorp/boundary-ui/pull/1107))
+-  fix target connection details overlay to show credential sources ([PR](https://github.com/hashicorp/boundary-ui/pull/1146))
+
+## v1.4.3 [CLI 0.8.0] (2022.05.04)
+
+### New
+
+- Add manual refresh button in sessions list. ([PR](https://github.com/hashicorp/boundary-ui/pull/1069))
+- Add manual refresh button in targets list. ([PR](https://github.com/hashicorp/boundary-ui/pull/1087))
+
+### Bug Fixes
+
+- Fix window lifecycle for Mac OS. ([PR](https://github.com/hashicorp/boundary-ui/pull/1067))
+
 ## v1.4.2 [CLI 0.7.6] (2022.03.16)
 
 ### New

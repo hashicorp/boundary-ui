@@ -76,7 +76,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     await visit(urls.newHostSet);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.equal(getHostSetCount(), count + 1);
+    assert.strictEqual(getHostSetCount(), count + 1);
   });
 
   test('Users cannot create a new host set without proper authorization', async function (assert) {
@@ -109,8 +109,8 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     await visit(urls.newHostSet);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.equal(currentURL(), urls.hostSets);
-    assert.equal(getHostSetCount(), count);
+    assert.strictEqual(currentURL(), urls.hostSets);
+    assert.strictEqual(getHostSetCount(), count);
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {

@@ -1,0 +1,98 @@
+{{page-title (t 'titles.success')}}
+<Rose::Layout::Centered class='onboarding-quick-setup-success'>
+  <Rose::Frame>
+    <:header>
+      <h2>{{t 'onboarding.success.titles.connect'}}</h2>
+    </:header>
+    <:body>
+      <div class='onboarding-quick-setup-success-role'>
+        <span>
+          <Rose::Icon @name='flight-icons/svg/check-circle-16' />
+          <h3>
+            {{t 'onboarding.success.titles.creation-success'}}
+          </h3>
+        </span>
+        <p>{{t 'onboarding.success.descriptions.role'}}</p>
+      </div>
+      <div class='onboarding-quick-setup-success-sub-title'>
+        <Rose::Icon @name='logo-app-background' @size='extra-large' />
+        <h3>
+          {{t 'onboarding.success.titles.desktop'}}
+        </h3>
+      </div>
+
+      <p>{{t 'onboarding.success.descriptions.download'}}</p>
+
+      <a
+        href={{doc-url 'downloads'}}
+        target='_blank'
+        class='onboarding-quick-setup-success-link'
+        rel='noopener noreferrer'
+      >
+        <Rose::Icon @name='flight-icons/svg/download-16' @size='medium' />
+        {{t 'onboarding.success.links.install'}}
+      </a>
+
+      <a
+        href={{doc-url 'getting-started.desktop'}}
+        target='_blank'
+        class='onboarding-quick-setup-success-link'
+        rel='noopener noreferrer'
+      >
+        <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+        {{t 'onboarding.success.links.learn'}}
+      </a>
+
+      <div class='onboarding-quick-setup-success-controller'>
+        <h4>{{t 'onboarding.success.titles.controller'}}</h4>
+        <p>{{t 'onboarding.success.descriptions.controller'}}</p>
+        <div class='onboarding-quick-setup-success-controller-url'>
+          <Copyable
+            @text={{this.model.origin}}
+            @buttonText={{t 'actions.copy-to-clipboard'}}
+            @acknowledgeText={{t 'states.copied'}}
+          >
+            <code>{{this.model.origin}}</code>
+          </Copyable>
+        </div>
+      </div>
+
+      <div class='onboarding-quick-setup-success-image'>
+        <Image @name='targets' />
+      </div>
+
+      <div class='onboarding-quick-setup-success-developers'>
+        <h4>{{t 'onboarding.success.titles.developers'}}</h4>
+
+        <p>{{t 'onboarding.success.descriptions.developers'}}</p>
+
+        <a
+          href={{doc-url 'api-client.cli'}}
+          target='_blank'
+          class='onboarding-quick-setup-success-link'
+          rel='noopener noreferrer'
+        >
+          <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+          {{t 'onboarding.success.links.cli'}}
+        </a>
+
+        <a
+          href={{doc-url 'api-client.api'}}
+          target='_blank'
+          class='onboarding-quick-setup-success-link'
+          rel='noopener noreferrer'
+        >
+          <Rose::Icon @name='flight-icons/svg/docs-link-16' @size='medium' />
+          {{t 'onboarding.success.links.api'}}
+        </a>
+        <Rose::Button
+          class='onboarding-quick-setup-success-button'
+          @style='primary'
+          {{on 'click' (route-action 'showTargetList' @model)}}
+        >
+          {{t 'actions.done'}}
+        </Rose::Button>
+      </div>
+    </:body>
+  </Rose::Frame>
+</Rose::Layout::Centered>

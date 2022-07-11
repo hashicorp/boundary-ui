@@ -59,8 +59,8 @@ module('Acceptance | roles | grants', function (hooks) {
     assert.expect(2);
     await visit(urls.grants);
     await a11yAudit();
-    assert.equal(currentURL(), urls.grants);
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(currentURL(), urls.grants);
+    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
   });
 
   test('cannot set grants without proper authorization', async function (assert) {
@@ -70,7 +70,7 @@ module('Acceptance | roles | grants', function (hooks) {
     );
     instances.role.update({ authorized_actions });
     await visit(urls.grants);
-    assert.equal(
+    assert.strictEqual(
       findAll('main form').length,
       1,
       'New grant form is not displayed.'
@@ -89,7 +89,7 @@ module('Acceptance | roles | grants', function (hooks) {
       '/roles/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
         const attrs = JSON.parse(requestBody);
-        assert.equal(
+        assert.strictEqual(
           attrs.grant_strings[0],
           'id=123,action=delete',
           'A grant is updated'
@@ -129,7 +129,7 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
     await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
     assert.ok(find('[role="alert"]'));
@@ -141,7 +141,7 @@ module('Acceptance | roles | grants', function (hooks) {
       '/roles/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
         const attrs = JSON.parse(requestBody);
-        assert.equal(
+        assert.strictEqual(
           attrs.grant_strings.length,
           grantsCount + 1,
           'A grant is created'
@@ -180,7 +180,7 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
     await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
     await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
@@ -192,7 +192,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await visit(urls.grants);
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.equal(
+    assert.strictEqual(
       findAll(`${grantsForm} [name="grant"]`).length,
       grantsCount - 1
     );
@@ -203,7 +203,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await visit(urls.grants);
     await click(`${grantsForm} button`);
     await click('.rose-form-actions button:not([type="submit"])');
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
   });
 
   test('shows error message on grant remove', async function (assert) {
@@ -221,7 +221,7 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.equal(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
     assert.ok(find('[role="alert"]'));

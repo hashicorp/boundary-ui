@@ -19,6 +19,6 @@ module('Integration | Component | rose/footer/text', function (hooks) {
     await render(hbs`<Rose::Footer as |footer|>
       <footer.text>content</footer.text>
     </Rose::Footer>`);
-    assert.equal(find('.rose-footer-text').textContent.trim(), 'content');
+    assert.strictEqual(find('.rose-footer-text').textContent.trim(), 'content');
   });
 });

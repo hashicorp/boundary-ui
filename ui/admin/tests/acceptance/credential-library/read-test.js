@@ -65,7 +65,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     await visit(urls.credentialLibraries);
     await click('main tbody .rose-table-header-cell a');
     await a11yAudit();
-    assert.equal(currentURL(), urls.credentialLibrary);
+    assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
   test('cannot navigate to resource without proper authorization', async function (assert) {
@@ -82,7 +82,6 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     assert.expect(1);
     await visit(urls.unknownCredentialLibrary);
     await a11yAudit();
-    console.debug(find('.rose-message-subtitle'));
     assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 });

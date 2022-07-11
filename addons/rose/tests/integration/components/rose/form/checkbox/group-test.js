@@ -31,7 +31,7 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
           value={{group.item.id}} />
       </Rose::Form::Checkbox::Group>
     `);
-    assert.equal(findAll('input').length, 3);
+    assert.strictEqual(findAll('input').length, 3);
   });
 
   test('it checks checkboxes for items present in a selectedItems array', async function (assert) {
@@ -49,7 +49,7 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
           value={{group.item.id}} />
       </Rose::Form::Checkbox::Group>
     `);
-    assert.equal(findAll(':checked').length, 1);
+    assert.strictEqual(findAll(':checked').length, 1);
   });
 
   test('it fires onChange when items are checked, passing an array of selected items', async function (assert) {
@@ -57,8 +57,8 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
     this.items = items;
     this.selectedItems = selectedItems;
     this.onChange = (newlySelectedItems) => {
-      assert.equal(selectedItems.length, 1);
-      assert.equal(newlySelectedItems.length, 2);
+      assert.strictEqual(selectedItems.length, 1);
+      assert.strictEqual(newlySelectedItems.length, 2);
     };
     await render(hbs`
       <Rose::Form::Checkbox::Group
@@ -80,8 +80,8 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
     this.items = items;
     this.selectedItems = selectedItems;
     this.onChange = (newlySelectedItems) => {
-      assert.equal(selectedItems.length, 1);
-      assert.equal(newlySelectedItems.length, 0);
+      assert.strictEqual(selectedItems.length, 1);
+      assert.strictEqual(newlySelectedItems.length, 0);
     };
     await render(hbs`
       <Rose::Form::Checkbox::Group

@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
 import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
@@ -51,19 +50,18 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     const { id: scope_id } = this.modelFor('scopes.scope');
     const { user_id } = this.session.data.authenticated;
     const projects = this.project || [];
+    const filters = {
+      user_id,
+      status,
+      scope_id: projects.map(({ id }) => id),
+    };
+    const options = {
+      recursive: true,
+      scope_id,
+      include_terminated: filters.status?.includes('terminated'),
+    };
     await this.store.query('target', { recursive: true, scope_id });
-    return await this.resourceFilterStore.queryBy(
-      'session',
-      {
-        user_id,
-        status,
-        scope_id: projects.map(({ id }) => id),
-      },
-      {
-        recursive: true,
-        scope_id,
-      }
-    );
+    return await this.resourceFilterStore.queryBy('session', filters, options);
   }
 
   @runEvery(POLL_TIMEOUT_SECONDS * 1000)
@@ -108,7 +106,6 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
    * refreshes session data.
    */
   @action
-  @loading
   async refreshSessions() {
     return this.refresh();
   }

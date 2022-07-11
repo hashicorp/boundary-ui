@@ -54,7 +54,7 @@ module('Acceptance | auth methods | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.authMethods[0].name, 'update name');
+    assert.strictEqual(this.server.db.authMethods[0].name, 'update name');
   });
 
   test('can update an auth method and cancel changes', async function (assert) {
@@ -102,12 +102,12 @@ module('Acceptance | auth methods | update', function (hooks) {
     await fillIn('[name="name"]', 'existing auth method');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

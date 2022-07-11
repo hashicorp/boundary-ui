@@ -1,0 +1,18 @@
+<Rose::Button
+  ...attributes
+  @style='inline-link-action'
+  @iconLeft={{if
+    this.isLoading
+    'flight-icons/svg/loading-16'
+    'flight-icons/svg/reload-16'
+  }}
+  class={{if
+    this.isLoading
+    'loading-button is-loading'
+    'loading-button'
+  }}
+  @disabled={{this.isLoading}}
+  {{on 'click' this.toggleRefresh}}
+>
+  {{yield}}
+</Rose::Button>

@@ -13,6 +13,8 @@
     "doc:toc": "doctoc README.md",
     "build:development": "ember build",
     "build": "ember build --environment=production",
+    "build:oss": "EDITION=oss ember build --environment=production",
+    "build:enterprise": "EDITION=enterprise ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
@@ -35,22 +37,22 @@
     "ember-named-blocks-polyfill": "^0.2.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.5",
-    "@babel/eslint-parser": "^7.17.0",
-    "@babel/plugin-proposal-decorators": "^7.17.8",
+    "@babel/core": "^7.18.5",
+    "@babel/eslint-parser": "^7.18.2",
+    "@babel/plugin-proposal-decorators": "^7.18.6",
     "@ember/optional-features": "^2.0.0",
-    "@ember/render-modifiers": "^2.0.2",
-    "@ember/test-helpers": "^2.6.0",
-    "@glimmer/component": "^1.0.4",
-    "@glimmer/tracking": "^1.0.4",
-    "babel-loader": "^8.2.2",
+    "@ember/render-modifiers": "^2.0.4",
+    "@ember/test-helpers": "^2.8.1",
+    "@glimmer/component": "^1.1.2",
+    "@glimmer/tracking": "^1.1.2",
+    "babel-loader": "^8.2.5",
     "broccoli-asset-rev": "^3.0.0",
     "clipboard": "^2.0.8",
     "core": "*",
-    "doctoc": "^2.1.0",
+    "doctoc": "^2.2.0",
     "ember-a11y-testing": "^4.2.0",
     "ember-auto-import": "^1.12.0",
-    "ember-cli": "~4.1.0",
+    "ember-cli": "^4.4.0",
     "ember-cli-app-version": "^5.0.0",
     "ember-cli-babel": "^7.26.8",
     "ember-cli-code-coverage": "^1.0.3",
@@ -76,12 +78,11 @@
     "ember-source": "~3.28.4",
     "ember-template-lint": "^3.12.0",
     "ember-template-lint-plugin-prettier": "^2.0.0",
-    "eslint": "^8.12.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-ember": "^10.5.9",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-ember": "^10.6.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-qunit": "^6.2.0",
+    "eslint-plugin-qunit": "^7.3.0",
     "faker": "^5.5.3",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
@@ -92,12 +93,17 @@
     "rose": "*",
     "sass": "^1.41.0",
     "sass-lint": "^1.13.1",
-    "sinon": "^11.1.2"
+    "sinon": "^14.0.0"
   },
   "engines": {
     "node": "12.* || 14.* || 16.*"
   },
   "ember": {
     "edition": "octane"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*.hbs": "ember-template-lint --fix",
+    "*.{js,scss}": "prettier --write"
   }
 }

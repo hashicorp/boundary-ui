@@ -1,6 +1,6 @@
 401:
   title: You are not signed in
-  description: You are not authenticated. Please authenticate and try again later.
+  description: You are not signed in. Please sign in and try again later.
 403:
   title: You are not authorized
   description: You must be granted permissions to view this data. Ask your administrator if you think you should have access.
@@ -19,3 +19,5 @@ authentication-failed:
   title: Authentication Failed
 origin-verification-failed:
   description: Unable to connect to the specified origin. Please check the URL and try again.
+quick-setup-failed:
+  description: We're sorry, quick setup was unable to generate all resources.

@@ -43,7 +43,7 @@ module.exports = function (environment) {
     appName: APP_NAME,
 
     notifyTimeout: 4000,
-    sessionPollingTimeoutSeconds: 18000,
+    sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
@@ -80,7 +80,7 @@ module.exports = function (environment) {
     ENV.autoOrigin = true;
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['ssh-target'] = false;
   }
 
   if (environment === 'test') {

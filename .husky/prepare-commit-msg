@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+# Don't run commitizen for merge or squash commits
+if [ "${COMMIT_SOURCE}" = merge ] || [ "${COMMIT_SOURCE}" = squash ];then
+    exit 0
+fi
+
+# This is to allow interaction with the terminal for commitizen
+exec < /dev/tty && npx git-cz --hook || true

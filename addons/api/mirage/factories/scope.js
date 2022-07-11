@@ -1,6 +1,7 @@
 import factory from '../generated/factories/scope';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
+import generateId from '../helpers/id';
 
 export default factory.extend({
   type: 'global',
@@ -27,15 +28,7 @@ export default factory.extend({
     };
   },
 
-  /**
-   * Generates realistic-ish IDs while still being deterministic.
-   */
-  id(i) {
-    let id = 'tv6fv3yz8p';
-    if (i % 3) id = 'xk1i4dk50v';
-    if (i % 2) id = 's9n819zgko';
-    return `s_${id}${i}`;
-  },
+  id: () => generateId('s_'),
 
   withChildren: trait({
     afterCreate(record, server) {

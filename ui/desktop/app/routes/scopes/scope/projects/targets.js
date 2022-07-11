@@ -140,4 +140,12 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   clearAllFilters() {
     this.project = [];
   }
+
+  /**
+   * refreshes target data.
+   */
+  @action
+  async refreshTargets() {
+    return this.refresh();
+  }
 }
