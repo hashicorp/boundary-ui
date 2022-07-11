@@ -14,7 +14,7 @@ module('Unit | Authenticator | password', function (hooks) {
       authenticator.buildAuthEndpointURL(),
       (schema, request) => {
         const json = JSON.parse(request.requestBody);
-        assert.ok(json.token_type, 'Requested token cookies by default');
+        assert.ok(json.type, 'Requested token cookies by default');
         return new Response(200);
       }
     );
@@ -30,7 +30,7 @@ module('Unit | Authenticator | password', function (hooks) {
       authenticator.buildAuthEndpointURL(),
       (schema, request) => {
         const json = JSON.parse(request.requestBody);
-        assert.notOk(json.token_type, 'Did not request tokens cookies');
+        assert.notOk(json.type, 'Did not request tokens cookies');
         return new Response(200);
       }
     );
@@ -48,7 +48,7 @@ module('Unit | Authenticator | password', function (hooks) {
         const json = JSON.parse(request.requestBody);
         assert.deepEqual(json, {
           command: 'login',
-          token_type: 'cookie',
+          type: 'cookie',
           attributes: {
             login_name: 'foo',
             password: 'bar',
