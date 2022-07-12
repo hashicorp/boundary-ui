@@ -10,17 +10,9 @@ export default class ScopesScopeAuthenticateController extends Controller {
    */
 
   get sortedScopes() {
-    let filteredScopesIdsWithAuthMethods;
-    this.model.authenticatableAuthMethodsList.map((authMethod) => {
-      if (authMethod.content?.length > 0) {
-        filteredScopesIdsWithAuthMethods = this.model.scopesIdList.filter(
-          (scopeId) => scopeId === authMethod.content.query.scope_id
-        );
-      }
-    });
-
-    return this.model.scopes.filter((scope) =>
-      filteredScopesIdsWithAuthMethods?.includes(scope.id)
-    );
+    return [
+      ...this.model.scopes.filter((scope) => scope.id === 'global'),
+      ...this.model.scopes.filter((scope) => scope.id !== 'global'),
+    ];
   }
 }

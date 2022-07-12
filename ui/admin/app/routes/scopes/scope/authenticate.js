@@ -20,30 +20,27 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    * scope and all scopes (for org navigation).
    * @return {Promise} `{scope, scopes, authMethods}`
    */
-  model() {
+  async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-    const scopes = this.modelFor('scopes').filter((scope) => scope.isOrg);
-    const scopesIdList = [];
-    const authenticatableAuthMethodsList = [];
-    //iterate through the scopes list and get authMethods for each scope
-    scopes.forEach((scope) => {
-      if (scope) {
-        scopesIdList.push(scope.id);
-        authenticatableAuthMethodsList.push(
-          this.store.query('auth-method', {
-            scope_id: scope.id,
-            filter: { authorized_actions: ['authenticate'] },
-          })
-        );
-      }
+    let scopes = this.modelFor('scopes').filter((scope) => scope.isOrg);
+    let authMethodsOfAllScopes = await this.store.query('auth-method', {
+      scope_id: 'global',
+      recursive: true,
+    });
+    let authMethodsScopeIds = [];
+    //filter the scopes with no auth-methods
+    authMethodsOfAllScopes.map(({ id: auth_id }) => {
+      authMethodsScopeIds.push(
+        this.store.peekRecord('auth-method', auth_id).scopeID
+      );
     });
 
+    scopes = scopes.filter((scope) => authMethodsScopeIds.includes(scope.id));
+    const authMethods = this.store.query('auth-method', { scope_id });
     return hash({
       scope: this.modelFor('scopes.scope'),
       scopes,
-      authMethods: this.store.query('auth-method', { scope_id }),
-      scopesIdList,
-      authenticatableAuthMethodsList,
+      authMethods,
       // for integration testing:
       // authMethods: A([{
       //   id: 'am_1234567890',
