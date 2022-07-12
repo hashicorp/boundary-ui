@@ -5,7 +5,6 @@ export default class ScopesScopeAuthenticateController extends Controller {
 
   /**
    * Moves the global scope to index 0.
-   * filter out the scopes which has no authenticatable auth methods
    * @type {Array}
    */
 
