@@ -96,32 +96,11 @@ module.exports = function (environment) {
       },
     },
 
-    contentSecurityPolicyHeader: 'Content-Security-Policy',
-    contentSecurityPolicyMeta: true,
-    contentSecurityPolicy: {
-      'default-src': ["'none'"],
-      'script-src': ["'self'"],
-      'frame-src': ["'self'"],
-      'font-src': ["'self'"],
-      'connect-src': ["'self'"],
-      'img-src': ["'self'", 'data:'],
-      'style-src': ["'self'"],
-      'media-src': ["'self'"],
-      'manifest-src': ["'self'"],
-    },
-
     'ember-cli-mirage': {
       directory: '../../addons/api/mirage',
     },
 
     featureFlags: featureEditions[EDITION],
-  };
-
-  // Unsafe policy is necessary in development and test environments, but should
-  // not be used in production.
-  const enableUnsafeCSP = () => {
-    ENV.contentSecurityPolicy['script-src'].push("'unsafe-eval'");
-    ENV.contentSecurityPolicy['style-src'].push("'unsafe-inline'");
   };
 
   if (environment === 'development') {
@@ -141,13 +120,6 @@ module.exports = function (environment) {
       },
     };
 
-    enableUnsafeCSP();
-    // TODO: should provide an env var to explicitly add a host to CSP
-    // at build time for any environment (not just development),
-    // rather than automatically include API_HOST.  Changes to CSP should
-    // be explicit.
-    if (API_HOST) ENV.contentSecurityPolicy['connect-src'].push(API_HOST);
-
     // Enable features in development
     ENV.featureFlags['ssh-target'] = false;
   }
@@ -162,9 +134,6 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
-
-    // CSP breaks test coverage, so it is disabled in this environment
-    ENV.contentSecurityPolicyMeta = false;
 
     // Notification timeout should be 0 for fast tests
     ENV.notifyTimeout = 0;
