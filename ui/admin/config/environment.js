@@ -96,8 +96,6 @@ module.exports = function (environment) {
       },
     },
 
-    contentSecurityPolicyHeader: 'Content-Security-Policy',
-
     'ember-cli-mirage': {
       directory: '../../addons/api/mirage',
     },
