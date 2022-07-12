@@ -21,7 +21,7 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
   test('defaults to the guided path', async function (assert) {
     assert.expect(2);
     await visit(urls.choosePath);
-    assert.equal(find('input[name=paths]:checked').value, 'guided');
+    assert.strictEqual(find('input[name=paths]:checked').value, 'guided');
     assert.false(find('input[value=manual]').checked);
   });
 
@@ -29,7 +29,7 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
     assert.expect(2);
     await visit(urls.choosePath);
     await click('[name="paths"][value="manual"]');
-    assert.equal(find('input[name=paths]:checked').value, 'manual');
+    assert.strictEqual(find('input[name=paths]:checked').value, 'manual');
     assert.false(find('input[value=guided]').checked);
   });
 
@@ -37,7 +37,7 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
     assert.expect(1);
     await visit(urls.choosePath);
     await click('[type="submit"]');
-    assert.equal(currentURL(), urls.createResources);
+    assert.strictEqual(currentURL(), urls.createResources);
   });
 
   test('guided path directs user to /global/new route', async function (assert) {
@@ -45,6 +45,6 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
     await visit(urls.choosePath);
     await click('[name="paths"][value="manual"]');
     await click('[type="submit"]');
-    assert.equal(currentURL(), urls.newOrg);
+    assert.strictEqual(currentURL(), urls.newOrg);
   });
 });

@@ -112,13 +112,13 @@ module('Acceptance | projects', function (hooks) {
     await visit(urls.projects);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
     assert.expect(1);
     await visit(urls.projects);
     await a11yAudit();
-    assert.equal(currentURL(), urls.projects);
+    assert.strictEqual(currentURL(), urls.projects);
   });
 });

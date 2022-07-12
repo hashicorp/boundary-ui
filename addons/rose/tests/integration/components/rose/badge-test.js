@@ -13,7 +13,7 @@ module('Integration | Component | rose/badge', function (hooks) {
 
   test('it renders with content', async function (assert) {
     await render(hbs`<Rose::Badge>host-catalog-1</Rose::Badge>`);
-    assert.equal(find('.rose-badge').textContent.trim(), 'host-catalog-1');
+    assert.strictEqual(find('.rose-badge').textContent.trim(), 'host-catalog-1');
   });
 
   test('it renders an icon using @icon', async function (assert) {

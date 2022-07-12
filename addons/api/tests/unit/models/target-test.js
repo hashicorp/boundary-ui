@@ -22,12 +22,12 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const target = store.peekRecord('target', '123abc');
-    assert.equal(
+    assert.strictEqual(
       target.host_sources.length,
       2,
       'Target has two entires in host_sources'
     );
-    assert.equal(
+    assert.strictEqual(
       target.hostSets.length,
       0,
       'Target has no resolved hostSets because they are not loaded yet'
@@ -50,12 +50,12 @@ module('Unit | Model | target', function (hooks) {
     // it's necessary to do this assignment to kick-off the computed update.
     // eslint-disable-next-line no-self-assign
     target.host_sources = target.host_sources;
-    assert.equal(
+    assert.strictEqual(
       target.host_sources.length,
       2,
       'Target has two entires in host_sources'
     );
-    assert.equal(target.hostSets.length, 2, 'Target has two resolved hostSets');
+    assert.strictEqual(target.hostSets.length, 2, 'Target has two resolved hostSets');
     assert.notOk(
       target.hostSets[0].hostCatalog,
       'Host catalog was not resolved because it is not loaded yet'
@@ -193,7 +193,7 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const target = store.peekRecord('target', '123abc');
-    assert.equal(target.sessions.length, 0);
+    assert.strictEqual(target.sessions.length, 0);
     store.push({
       data: {
         id: '1',
@@ -215,12 +215,12 @@ module('Unit | Model | target', function (hooks) {
         attributes: { target_id: '456xyz' },
       },
     });
-    assert.equal(
+    assert.strictEqual(
       store.peekAll('session').length,
       3,
       'There are 3 sessions loaded in the store'
     );
-    assert.equal(
+    assert.strictEqual(
       target.sessions.length,
       2,
       'Target has two associated sessions loaded in the store'
@@ -240,12 +240,12 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const target = store.peekRecord('target', '123abc');
-    assert.equal(
+    assert.strictEqual(
       target.application_credential_source_ids.length,
       2,
       'Target has two entires in application_credential_source_ids'
     );
-    assert.equal(
+    assert.strictEqual(
       target.credentialLibraries.length,
       0,
       'Target has no resolved credentialLibraries because they are not loaded yet'
@@ -271,12 +271,12 @@ module('Unit | Model | target', function (hooks) {
     target.application_credential_source_ids =
       target.application_credential_source_ids;
     /* eslint-enable no-self-assign */
-    assert.equal(
+    assert.strictEqual(
       target.application_credential_source_ids.length,
       2,
       'Target has two entires in application_credential_source_ids'
     );
-    assert.equal(
+    assert.strictEqual(
       target.credentialLibraries.length,
       2,
       'Target has two resolved credentialLibraries'

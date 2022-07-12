@@ -132,7 +132,7 @@ module('Acceptance | authentication', function (hooks) {
     await visit(urls.index);
     await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting authenticate route when there no methods shows a message', async function (assert) {
@@ -140,7 +140,7 @@ module('Acceptance | authentication', function (hooks) {
     instances.authMethods.global.destroy();
     await visit(urls.authenticate.global);
     await a11yAudit();
-    assert.equal(currentURL(), urls.authenticate.global);
+    assert.strictEqual(currentURL(), urls.authenticate.global);
     assert.ok(find('.rose-message'));
   });
 
@@ -149,7 +149,7 @@ module('Acceptance | authentication', function (hooks) {
     this.owner.lookup('service:origin').rendererOrigin = null;
     await visit(urls.authenticate.global);
     await a11yAudit();
-    assert.equal(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.origin);
   });
 
   test('visiting authenticate route when the scope cannot be loaded is allowed', async function (assert) {
@@ -159,7 +159,7 @@ module('Acceptance | authentication', function (hooks) {
     });
     await visit(urls.authenticate.global);
     await a11yAudit();
-    assert.equal(currentURL(), urls.authenticate.methods.global);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('failed authentication shows a notification message', async function (assert) {
@@ -176,7 +176,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(1);
     await visit(urls.authenticate.methods.global);
     await click('.change-origin a');
-    assert.equal(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.origin);
   });
 
   test('signing out redirects to first global authenticate method', async function (assert) {
@@ -187,7 +187,7 @@ module('Acceptance | authentication', function (hooks) {
     await click('[type="submit"]');
     assert.ok(currentSession().isAuthenticated);
     await click('.rose-header-utilities .rose-dropdown summary');
-    assert.equal(
+    assert.strictEqual(
       find(
         '.rose-header-utilities .rose-dropdown-content button'
       ).textContent.trim(),
@@ -235,12 +235,12 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
     // toggle light mode
     await click('[name="theme"][value="light"]');
-    assert.equal(currentSession().get('data.theme'), 'light');
+    assert.strictEqual(currentSession().get('data.theme'), 'light');
     assert.ok(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
     // toggle dark mode
     await click('[name="theme"][value="dark"]');
-    assert.equal(currentSession().get('data.theme'), 'dark');
+    assert.strictEqual(currentSession().get('data.theme'), 'dark');
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.ok(getRootElement().classList.contains('rose-theme-dark'));
     // toggle system default

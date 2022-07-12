@@ -67,7 +67,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     const count = gethostCatalogCount();
     await visit(urls.hostCatalog);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(gethostCatalogCount(), count - 1);
+    assert.strictEqual(gethostCatalogCount(), count - 1);
   });
 
   test('cannot delete host catalog without proper authorization', async function (assert) {
@@ -90,7 +90,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     const count = gethostCatalogCount();
     await visit(urls.hostCatalog);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(gethostCatalogCount(), count - 1);
+    assert.strictEqual(gethostCatalogCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -102,7 +102,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     const count = gethostCatalogCount();
     await visit(urls.hostCatalog);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(gethostCatalogCount(), count);
+    assert.strictEqual(gethostCatalogCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

@@ -9,12 +9,12 @@ module('Integration | Component | rose/form/radio/radio', function (hooks) {
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Form::Radio::Radio />`);
     assert.ok(await find('input'));
-    assert.equal(await find('input').type, 'radio');
+    assert.strictEqual(await find('input').type, 'radio');
   });
 
   test('it renders with label', async function (assert) {
     await render(hbs`<Rose::Form::Radio::Radio @label="Label"/>`);
-    assert.equal(await find('label').textContent.trim(), 'Label');
+    assert.strictEqual(await find('label').textContent.trim(), 'Label');
   });
 
   test('it supports an icon', async function (assert) {

@@ -98,12 +98,12 @@ module('Acceptance | targets | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="submit"]');
-    assert.equal(currentURL(), urls.target);
-    assert.equal(
+    assert.strictEqual(currentURL(), urls.target);
+    assert.strictEqual(
       this.server.schema.targets.all().models[0].name,
       'random string'
     );
-    assert.equal(
+    assert.strictEqual(
       this.server.schema.targets.all().models[0].workerFilter,
       'random filter'
     );
@@ -116,7 +116,7 @@ module('Acceptance | targets | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(instances.target.name, 'random string');
-    assert.equal(find('[name="name"]').value, instances.target.name);
+    assert.strictEqual(find('[name="name"]').value, instances.target.name);
   });
 
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
@@ -162,13 +162,13 @@ module('Acceptance | targets | update', function (hooks) {
     await visit(urls.target);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.target);
+    assert.strictEqual(currentURL(), urls.target);
     try {
       await visit(urls.targets);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:first-child');
-      assert.equal(currentURL(), urls.targets);
+      assert.strictEqual(currentURL(), urls.targets);
       assert.notEqual(
         this.server.schema.targets.all().models[0].name,
         'random string'
@@ -184,13 +184,13 @@ module('Acceptance | targets | update', function (hooks) {
     await visit(urls.target);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.equal(currentURL(), urls.target);
+    assert.strictEqual(currentURL(), urls.target);
     try {
       await visit(urls.targets);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
-      assert.equal(currentURL(), urls.target);
+      assert.strictEqual(currentURL(), urls.target);
       assert.notEqual(
         this.server.schema.targets.all().models[0].name,
         'random string'

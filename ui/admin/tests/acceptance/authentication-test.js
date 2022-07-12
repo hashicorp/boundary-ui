@@ -110,9 +110,22 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(1);
     await visit(authenticateURL);
     await a11yAudit();
-    assert.equal(currentURL(), authMethodAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
 
+<<<<<<< HEAD
+=======
+  test('visiting auth methods authenticate route when there no methods shows a message', async function (assert) {
+    assert.expect(2);
+    authMethod.destroy();
+    authMethodOIDC.destroy();
+    await visit(authenticateURL);
+    await a11yAudit();
+    assert.strictEqual(currentURL(), authenticateURL);
+    assert.ok(find('.rose-message'));
+  });
+
+>>>>>>> main
   test('visiting auth method when the scope cannot be loaded is still allowed', async function (assert) {
     assert.expect(1);
     this.server.get('/scopes', () => {
@@ -120,99 +133,99 @@ module('Acceptance | authentication', function (hooks) {
     });
     await visit(authMethodAuthenticateURL);
     await a11yAudit();
-    assert.equal(currentURL(), authMethodAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
 
   test('visiting any authentication parent route while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(3);
     await visit(indexURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     await visit(scopesURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting change password while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(changePasswordURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting orgs while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(orgsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting org edit while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(orgEditURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting projects while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(projectsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting new project while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(newProjectURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting users while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(usersURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting roles while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(rolesURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting groups while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(groupsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting host catalogs while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(hostCatalogsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting targets while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(targetsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting sessions while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(sessionsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('visiting auth methods while unauthenticated redirects to first global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(authMethodsURL);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
   });
 
@@ -220,22 +233,22 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(1);
     await visit(authMethodAuthenticateURL);
     await a11yAudit();
-    assert.equal(currentURL(), authMethodAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
 
   test('visiting any authentication parent route while already authenticated with an org redirects to projects', async function (assert) {
     assert.expect(6);
     authenticateSession({ scope });
     await visit(indexURL);
-    assert.equal(currentURL(), projectsURL);
+    assert.strictEqual(currentURL(), projectsURL);
     await visit(scopesURL);
-    assert.equal(currentURL(), projectsURL);
+    assert.strictEqual(currentURL(), projectsURL);
     await visit(orgScopeURL);
-    assert.equal(currentURL(), projectsURL);
+    assert.strictEqual(currentURL(), projectsURL);
     await visit(authenticateURL);
-    assert.equal(currentURL(), projectsURL);
+    assert.strictEqual(currentURL(), projectsURL);
     await visit(authMethodAuthenticateURL);
-    assert.equal(currentURL(), projectsURL);
+    assert.strictEqual(currentURL(), projectsURL);
     assert.ok(currentSession().isAuthenticated);
   });
 
@@ -245,11 +258,11 @@ module('Acceptance | authentication', function (hooks) {
       scope: { id: globalScope.id, type: globalScope.type },
     });
     await visit(indexURL);
-    assert.equal(currentURL(), orgsURL);
+    assert.strictEqual(currentURL(), orgsURL);
     await visit(scopesURL);
-    assert.equal(currentURL(), orgsURL);
+    assert.strictEqual(currentURL(), orgsURL);
     await visit(globalAuthenticateURL);
-    assert.equal(currentURL(), orgsURL);
+    assert.strictEqual(currentURL(), orgsURL);
     assert.ok(currentSession().isAuthenticated);
   });
 
@@ -267,11 +280,11 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(4);
     await visit(authMethodGlobalAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodGlobalAuthenticateURL);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
     await click('[type="submit"]');
-    assert.equal(currentURL(), orgsURL);
+    assert.strictEqual(currentURL(), orgsURL);
     assert.ok(currentSession().isAuthenticated);
   });
 
@@ -279,11 +292,11 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(4);
     await visit(authMethodAuthenticateURL);
     assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), authMethodAuthenticateURL);
+    assert.strictEqual(currentURL(), authMethodAuthenticateURL);
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
     await click('[type="submit"]');
-    assert.equal(currentURL(), projectsURL);
+    assert.strictEqual(currentURL(), projectsURL);
     assert.ok(currentSession().isAuthenticated);
   });
 
@@ -338,12 +351,12 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
     // toggle light mode
     await click('[name="theme"][value="light"]');
-    assert.equal(currentSession().get('data.theme'), 'light');
+    assert.strictEqual(currentSession().get('data.theme'), 'light');
     assert.ok(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
     // toggle dark mode
     await click('[name="theme"][value="dark"]');
-    assert.equal(currentSession().get('data.theme'), 'dark');
+    assert.strictEqual(currentSession().get('data.theme'), 'dark');
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.ok(getRootElement().classList.contains('rose-theme-dark'));
     // toggle system default

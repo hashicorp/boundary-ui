@@ -22,7 +22,7 @@ module('Integration | Component | rose/layout/centered', function (hooks) {
     await render(hbs`<Rose::Layout::Centered>
       Layout content
     </Rose::Layout::Centered>`);
-    assert.equal(
+    assert.strictEqual(
       find('.rose-layout-centered').textContent.trim(),
       'Layout content'
     );

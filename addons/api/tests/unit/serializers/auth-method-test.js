@@ -158,9 +158,9 @@ module('Unit | Serializer | auth method', function (hooks) {
     }));
     const record = await store.findRecord('auth-method', 'oidc123');
     const { account_claim_maps } = record.attributes;
-    assert.equal(account_claim_maps.firstObject.from, 'from');
-    assert.equal(account_claim_maps.firstObject.to, 'to');
-    assert.equal(account_claim_maps.lastObject.from, 'foo');
-    assert.equal(account_claim_maps.lastObject.to, 'bar');
+    assert.strictEqual(account_claim_maps.firstObject.from, 'from');
+    assert.strictEqual(account_claim_maps.firstObject.to, 'to');
+    assert.strictEqual(account_claim_maps.lastObject.from, 'foo');
+    assert.strictEqual(account_claim_maps.lastObject.to, 'bar');
   });
 });

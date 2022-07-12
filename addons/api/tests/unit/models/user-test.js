@@ -109,7 +109,7 @@ module('Unit | Model | user', function (hooks) {
       },
     });
     const user = store.peekRecord('user', 'user_123');
-    assert.equal(
+    assert.strictEqual(
       user.account_ids.length,
       0,
       'User has empty account_ids by default'
@@ -147,7 +147,7 @@ module('Unit | Model | user', function (hooks) {
     const model = store.peekRecord('user', '123abc');
     await model.removeAccount('3');
 
-    assert.equal(model.login_name, null);
-    assert.equal(model.name, 'newName');
+    assert.strictEqual(model.login_name, null);
+    assert.strictEqual(model.name, 'newName');
   });
 });

@@ -19,20 +19,20 @@ module('Unit | Adapter | application', function (hooks) {
     assert.expect(2);
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(adapter.namespace);
-    assert.equal(adapter.namespace, config.api.namespace);
+    assert.strictEqual(adapter.namespace, config.api.namespace);
   });
 
   test('it generates correct URL prefixes', function (assert) {
     assert.expect(2);
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(config.api.namespace);
-    assert.equal(adapter.urlPrefix(), config.api.namespace);
+    assert.strictEqual(adapter.urlPrefix(), config.api.namespace);
   });
 
   test('it generates correct default URL suffixes', function (assert) {
     assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
-    assert.equal(adapter.urlSuffix(), '');
+    assert.strictEqual(adapter.urlSuffix(), '');
   });
 
   test('it generates URL suffixes with optional `method` from adapterOptions', function (assert) {
@@ -43,7 +43,7 @@ module('Unit | Adapter | application', function (hooks) {
       adapterOptions: { method },
     });
     assert.ok(config.api.namespace);
-    assert.equal(suffix, ':set-something');
+    assert.strictEqual(suffix, ':set-something');
   });
 
   test('it generates correct complete URLs', function (assert) {
@@ -64,44 +64,44 @@ module('Unit | Adapter | application', function (hooks) {
       mockSnapshot,
       'findRecord'
     );
-    assert.equal(findRecordURL, '/v1/users/1:my-custom-method');
+    assert.strictEqual(findRecordURL, '/v1/users/1:my-custom-method');
     const findAllURL = adapter.buildURL('user', null, mockSnapshot, 'findAll');
-    assert.equal(findAllURL, '/v1/users:my-custom-method');
+    assert.strictEqual(findAllURL, '/v1/users:my-custom-method');
     const findBelongsToURL = adapter.buildURL(
       'user',
       '2',
       mockSnapshot,
       'findBelongsTo'
     );
-    assert.equal(findBelongsToURL, '/v1/users/2:my-custom-method');
+    assert.strictEqual(findBelongsToURL, '/v1/users/2:my-custom-method');
     const createRecordURL = adapter.buildURL(
       'user',
       null,
       mockSnapshot,
       'createRecord'
     );
-    assert.equal(createRecordURL, '/v1/users:my-custom-method');
+    assert.strictEqual(createRecordURL, '/v1/users:my-custom-method');
     const updateRecordURL = adapter.buildURL(
       'user',
       '3',
       mockSnapshot,
       'updateRecord'
     );
-    assert.equal(updateRecordURL, '/v1/users/3:my-custom-method');
+    assert.strictEqual(updateRecordURL, '/v1/users/3:my-custom-method');
     const deleteRecordURL = adapter.buildURL(
       'user',
       '4',
       mockSnapshot,
       'deleteRecord'
     );
-    assert.equal(deleteRecordURL, '/v1/users/4:my-custom-method');
+    assert.strictEqual(deleteRecordURL, '/v1/users/4:my-custom-method');
   });
 
   test('it can request records through the store from a specified scope', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/groups', (_, { queryParams: { scope_id } }) => {
-      assert.equal(scope_id, 'p_456', 'Scoped resource URL was requested.');
+      assert.strictEqual(scope_id, 'p_456', 'Scoped resource URL was requested.');
       return { items: [] };
     });
     await store.query('group', { scope_id: 'p_456' });
@@ -113,7 +113,7 @@ module('Unit | Adapter | application', function (hooks) {
     // TODO this is icky, should be changed to a spy or stub
     const originalAjax = RESTAdapter.prototype.ajax;
     RESTAdapter.prototype.ajax = (url, type) => {
-      assert.equal(type, 'PATCH');
+      assert.strictEqual(type, 'PATCH');
       RESTAdapter.prototype.ajax = originalAjax;
     };
     adapter.ajax('/', 'PUT');
@@ -130,7 +130,7 @@ module('Unit | Adapter | application', function (hooks) {
     // TODO this is icky, should be changed to a spy or stub
     const originalAjax = RESTAdapter.prototype.ajax;
     RESTAdapter.prototype.ajax = (url, type) => {
-      assert.equal(type, 'POST');
+      assert.strictEqual(type, 'POST');
       RESTAdapter.prototype.ajax = originalAjax;
     };
     adapter.updateRecord(store, { modelName: 'user' }, snapshot);
@@ -167,8 +167,8 @@ module('Unit | Adapter | application', function (hooks) {
     };
     const handledResponse = adapter.handleResponse(400, {}, payload);
     assert.ok(handledResponse instanceof InvalidError);
-    assert.equal(handledResponse.errors.length, 1);
-    assert.equal(handledResponse.message, 'The request was invalid.');
+    assert.strictEqual(handledResponse.errors.length, 1);
+    assert.strictEqual(handledResponse.message, 'The request was invalid.');
     assert.ok(handledResponse.errors[0].isInvalid);
   });
 
@@ -197,7 +197,7 @@ module('Unit | Adapter | application', function (hooks) {
       },
     };
     const handledResponse = adapter.handleResponse(400, {}, payload);
-    assert.equal(
+    assert.strictEqual(
       handledResponse.errors.length,
       2,
       'A base error plus one field error'

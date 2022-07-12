@@ -51,7 +51,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     assert.expect(1);
     await visit(urls.changePassword);
     await a11yAudit();
-    assert.equal(currentURL(), urls.changePassword);
+    assert.strictEqual(currentURL(), urls.changePassword);
   });
 
   test('visiting account change password from header', async function (assert) {
@@ -63,7 +63,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     await click(
       '.rose-header-utilities .rose-dropdown .rose-dropdown-content a'
     );
-    assert.equal(currentURL(), urls.changePassword);
+    assert.strictEqual(currentURL(), urls.changePassword);
   });
 
   test('can change password for account', async function (assert) {
@@ -72,12 +72,12 @@ module('Acceptance | accounts | change password', function (hooks) {
       '/accounts/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
         const attrs = JSON.parse(requestBody);
-        assert.equal(
+        assert.strictEqual(
           attrs.current_password,
           'current password',
           'current password is provided'
         );
-        assert.equal(
+        assert.strictEqual(
           attrs.new_password,
           'new password',
           'new password is provided'

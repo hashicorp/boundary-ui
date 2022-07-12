@@ -35,15 +35,15 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     assert.expect(4);
     await renderComponent(false);
     assert.ok(find('.rose-form-fieldset'));
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-fieldset-title').textContent.trim(),
       this.mockTitle
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-fieldset-description').textContent.trim(),
       this.mockDescription
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-fieldset-body').textContent.trim(),
       this.mockBody
     );
@@ -53,12 +53,12 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     assert.expect(4);
     await renderComponent(true);
     assert.ok(find('.rose-form-fieldset'));
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-fieldset-title').textContent.trim(),
       this.mockTitle
     );
     assert.notOk(find('.rose-form-fieldset-description'));
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-fieldset-body').textContent.trim(),
       this.mockBody
     );
@@ -70,7 +70,7 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     const descriptionElement = find('.rose-form-fieldset-description');
     const fieldsetElement = find('.rose-form-fieldset');
 
-    assert.equal(
+    assert.strictEqual(
       fieldsetElement.getAttribute('aria-describedby'),
       descriptionElement.id,
       'Fieldset is described by description'

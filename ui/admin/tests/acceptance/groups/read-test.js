@@ -47,7 +47,7 @@ module('Acceptance | groups | read', function (hooks) {
     assert.expect(1);
     await visit(urls.newGroup);
     await a11yAudit();
-    assert.equal(currentURL(), urls.newGroup);
+    assert.strictEqual(currentURL(), urls.newGroup);
   });
 
   test('cannot navigate to a group form without proper authorization', async function (assert) {

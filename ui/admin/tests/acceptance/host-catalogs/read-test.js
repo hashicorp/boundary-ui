@@ -59,10 +59,10 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     assert.expect(2);
     await visit(urls.hostCatalogs);
     await a11yAudit();
-    assert.equal(currentURL(), urls.hostCatalogs);
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
     await visit(urls.hostCatalog);
     await a11yAudit();
-    assert.equal(currentURL(), urls.hostCatalog);
+    assert.strictEqual(currentURL(), urls.hostCatalog);
   });
 
   test('cannot navigate to a host catalog form without proper authorization', async function (assert) {

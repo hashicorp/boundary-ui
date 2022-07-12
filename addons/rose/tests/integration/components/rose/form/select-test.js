@@ -22,9 +22,9 @@ module('Integration | Component | rose/form/select', function (hooks) {
         </field.field>
       </Rose::Form::Select>
     `);
-    assert.equal(find('label').textContent.trim(), 'Label');
+    assert.strictEqual(find('label').textContent.trim(), 'Label');
     assert.ok(find('select'));
-    assert.equal(findAll('option').length, 4);
+    assert.strictEqual(findAll('option').length, 4);
   });
 
   test('it displays optional helper text', async function (assert) {
@@ -45,9 +45,9 @@ module('Integration | Component | rose/form/select', function (hooks) {
     const id = fieldEl.id;
     const helperId = `helper-text-${id}`;
     const helperTextEl = find('.rose-form-helper-text');
-    assert.equal(helperTextEl.textContent.trim(), 'Help me');
-    assert.equal(helperTextEl.id, helperId);
-    assert.equal(fieldEl.getAttribute('aria-describedby').trim(), helperId);
+    assert.strictEqual(helperTextEl.textContent.trim(), 'Help me');
+    assert.strictEqual(helperTextEl.id, helperId);
+    assert.strictEqual(fieldEl.getAttribute('aria-describedby').trim(), helperId);
   });
 
   test('it displays optional errors', async function (assert) {
@@ -72,9 +72,9 @@ module('Integration | Component | rose/form/select', function (hooks) {
     const id = fieldEl.id;
     const errorsId = `errors-${id}`;
     const errorMessageEl = find('.rose-form-errors');
-    assert.equal(errorMessageEl.id, errorsId);
-    assert.equal(errorMessageEl.textContent.trim(), 'An error occurred.');
-    assert.equal(
+    assert.strictEqual(errorMessageEl.id, errorsId);
+    assert.strictEqual(errorMessageEl.textContent.trim(), 'An error occurred.');
+    assert.strictEqual(
       fieldEl.getAttribute('aria-describedby').split(' ')[1],
       errorsId
     );
@@ -111,15 +111,15 @@ module('Integration | Component | rose/form/select', function (hooks) {
         </field.field>
       </Rose::Form::Select>
     `);
-    assert.equal(find('select').value, 'value-1');
+    assert.strictEqual(find('select').value, 'value-1');
     this.set('value', 'value-2');
-    assert.equal(find('select').value, 'value-2');
+    assert.strictEqual(find('select').value, 'value-2');
   });
 
   test('it triggers an action on change', async function (assert) {
     assert.expect(2);
     this.onChange1 = (value) => {
-      assert.equal(
+      assert.strictEqual(
         value,
         null,
         'On initial render, onChange is triggered with null'
@@ -127,7 +127,7 @@ module('Integration | Component | rose/form/select', function (hooks) {
       this.set('onChange', this.onChange2);
     };
     this.onChange2 = (value) => {
-      assert.equal(value, 'value-1', 'On change, value is passed in.');
+      assert.strictEqual(value, 'value-1', 'On change, value is passed in.');
     };
     this.onChange = this.onChange1;
     await render(hbs`

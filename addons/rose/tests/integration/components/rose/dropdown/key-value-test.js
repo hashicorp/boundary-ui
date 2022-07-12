@@ -14,7 +14,7 @@ module('Integration | Component | rose/dropdown/key-value', function (hooks) {
       </Rose::Dropdown::KeyValue>
     `);
 
-    assert.equal(find('.rose-dropdown-key').textContent.trim(), 'key');
-    assert.equal(find('.rose-dropdown-value').textContent.trim(), 'value');
+    assert.strictEqual(find('.rose-dropdown-key').textContent.trim(), 'key');
+    assert.strictEqual(find('.rose-dropdown-value').textContent.trim(), 'value');
   });
 });

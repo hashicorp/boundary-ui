@@ -9,7 +9,7 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
   test('it renders', async function (assert) {
     assert.expect(3);
     await render(hbs`<Rose::Form::Checkbox @label="Label" />`);
-    assert.equal(find('label').textContent.trim(), 'Label');
+    assert.strictEqual(find('label').textContent.trim(), 'Label');
     assert.ok(find('input'));
     assert.notOk(find('.rose-form-checkbox-label-description'));
   });
@@ -19,11 +19,11 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     await render(
       hbs`<Rose::Form::Checkbox @label="Label" @description="Hello world" />`
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-checkbox-label-text').textContent.trim(),
       'Label'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-checkbox-label-description').textContent.trim(),
       'Hello world'
     );
@@ -35,7 +35,7 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     await render(
       hbs`<Rose::Form::Checkbox @label="Label" @helperText="Hello world" />`
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-helper-text').textContent.trim(),
       'Hello world'
     );
@@ -53,9 +53,9 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     const id = fieldEl.id;
     const errorsId = `errors-${id}`;
     const errorMessageEl = find('.rose-form-errors');
-    assert.equal(errorMessageEl.id, errorsId);
-    assert.equal(errorMessageEl.textContent.trim(), 'An error occurred.');
-    assert.equal(fieldEl.getAttribute('aria-describedby').trim(), errorsId);
+    assert.strictEqual(errorMessageEl.id, errorsId);
+    assert.strictEqual(errorMessageEl.textContent.trim(), 'An error occurred.');
+    assert.strictEqual(fieldEl.getAttribute('aria-describedby').trim(), errorsId);
   });
 
   test('it is not checked by default', async function (assert) {

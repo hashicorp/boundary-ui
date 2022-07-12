@@ -82,8 +82,8 @@ module('Acceptance | sessions', function (hooks) {
     authenticateSession({});
     await visit(urls.sessions);
     await a11yAudit();
-    assert.equal(currentURL(), urls.sessions);
-    assert.equal(findAll('tbody tr').length, instances.sessions.length);
+    assert.strictEqual(currentURL(), urls.sessions);
+    assert.strictEqual(findAll('tbody tr').length, instances.sessions.length);
   });
 
   test('Users cannot navigate to sessions without proper authorization', async function (assert) {
@@ -121,15 +121,15 @@ module('Acceptance | sessions', function (hooks) {
     authenticateSession({});
     await visit(urls.sessions);
     await a11yAudit();
-    assert.equal(currentURL(), urls.sessions);
-    assert.equal(findAll('tbody tr').length, instances.sessions.length);
+    assert.strictEqual(currentURL(), urls.sessions);
+    assert.strictEqual(findAll('tbody tr').length, instances.sessions.length);
   });
 
   test('cancelling a session', async function (assert) {
     assert.expect(2);
     authenticateSession({});
     await visit(urls.sessions);
-    assert.equal(currentURL(), urls.sessions);
+    assert.strictEqual(currentURL(), urls.sessions);
     await click('tbody tr:first-child td:last-child button');
     assert.ok(find('[role="alert"].is-success'));
   });
@@ -139,7 +139,7 @@ module('Acceptance | sessions', function (hooks) {
     this.server.post('/sessions/:id_method', () => new Response(400));
     authenticateSession({});
     await visit(urls.sessions);
-    assert.equal(currentURL(), urls.sessions);
+    assert.strictEqual(currentURL(), urls.sessions);
     await click('tbody tr:first-child td:last-child button');
     assert.ok(find('[role="alert"].is-error'));
   });

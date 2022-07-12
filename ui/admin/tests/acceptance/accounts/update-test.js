@@ -65,7 +65,7 @@ module('Acceptance | accounts | update', function (hooks) {
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
     await click('form [type="submit"]:not(:disabled)');
-    assert.equal(this.server.db.accounts[0].name, 'update name');
+    assert.strictEqual(this.server.db.accounts[0].name, 'update name');
   });
 
   test('cannot update resource without proper authorization', async function (assert) {
@@ -103,7 +103,7 @@ module('Acceptance | accounts | update', function (hooks) {
     await fillIn('[name="name"]', 'save account');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
       'Displays primary error message.'
@@ -136,12 +136,12 @@ module('Acceptance | accounts | update', function (hooks) {
     await fillIn('[name="name"]', 'existing account');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.equal(
+    assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
       'Displays primary error message.'
     );
-    assert.equal(
+    assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.'

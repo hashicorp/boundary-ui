@@ -72,7 +72,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getCredentialLibraryCount(), count - 1);
+    assert.strictEqual(getCredentialLibraryCount(), count - 1);
   });
 
   test('cannot delete resource without proper authorization', async function (assert) {
@@ -95,7 +95,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getCredentialLibraryCount(), count - 1);
+    assert.strictEqual(getCredentialLibraryCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
 
@@ -107,7 +107,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.equal(getCredentialLibraryCount(), count);
+    assert.strictEqual(getCredentialLibraryCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
 

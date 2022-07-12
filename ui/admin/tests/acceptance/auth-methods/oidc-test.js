@@ -56,14 +56,14 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     assert.expect(1);
     await visit(urls.authMethod);
     await a11yAudit();
-    assert.equal(currentURL(), urls.authMethod);
+    assert.strictEqual(currentURL(), urls.authMethod);
   });
 
   test('can view oidc state', async function (assert) {
     assert.expect(1);
     await visit(urls.authMethod);
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
-    assert.equal(
+    assert.strictEqual(
       find('.rose-dropdown[open] input:checked').value,
       instances.authMethod.attributes.state
     );
@@ -76,7 +76,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
     await click(`.rose-dropdown[open] input[value="${updateValue}"]`);
     const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
-    assert.equal(authMethod.attributes.state, updateValue);
+    assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
   test('can update oidc state to active-private', async function (assert) {
@@ -86,7 +86,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
     await click(`.rose-dropdown[open] input[value="${updateValue}"]`);
     const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
-    assert.equal(authMethod.attributes.state, updateValue);
+    assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
   test('can update oidc state to active-public', async function (assert) {
@@ -98,7 +98,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
     await click(`.rose-dropdown[open] input[value="${updateValue}"]`);
     const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
-    assert.equal(authMethod.attributes.state, updateValue);
+    assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
   // FIXME: How to mock just one request routed to /auth-methods and let everything else passthrough?
