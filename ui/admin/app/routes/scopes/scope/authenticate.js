@@ -22,18 +22,20 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-  // Fetch auth methods for the current scope
-  const authMethods = await this.store.query('auth-method', { scope_id });
-  // Preload all auth methods into the store
-  await this.store.query('auth-method', {
-    scope_id: 'global',
-    recursive: true
-  });
-  // Fetch org scopes
-  // and filter out any that have no auth methods
-  const scopes = this.modelFor('scopes').filter(({ id: scope_id, isOrg }) =>
-    isOrg && this.store.peekAll('auth-method').filterBy('scope_id', scope_id).length
-  );
+    // Fetch auth methods for the current scope
+    const authMethods = await this.store.query('auth-method', { scope_id });
+    // Preload all auth methods into the store
+    await this.store.query('auth-method', {
+      scope_id: 'global',
+      recursive: true,
+    });
+    // Fetch org scopes
+    // and filter out any that have no auth methods
+    const scopes = this.modelFor('scopes').filter(
+      ({ id: scope_id, isOrg }) =>
+        isOrg &&
+        this.store.peekAll('auth-method').filterBy('scope_id', scope_id).length
+    );
     return hash({
       scope: this.modelFor('scopes.scope'),
       scopes,

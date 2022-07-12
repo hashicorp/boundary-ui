@@ -55,7 +55,11 @@ module('Unit | Model | target', function (hooks) {
       2,
       'Target has two entires in host_sources'
     );
-    assert.strictEqual(target.hostSets.length, 2, 'Target has two resolved hostSets');
+    assert.strictEqual(
+      target.hostSets.length,
+      2,
+      'Target has two resolved hostSets'
+    );
     assert.notOk(
       target.hostSets[0].hostCatalog,
       'Host catalog was not resolved because it is not loaded yet'

@@ -83,7 +83,10 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(instances.credentialStore.name, 'random string');
-    assert.strictEqual(find('[name="name"]').value, instances.credentialStore.name);
+    assert.strictEqual(
+      find('[name="name"]').value,
+      instances.credentialStore.name
+    );
   });
 
   test('saving an existing credential store with invalid fields displays error messages', async function (assert) {
