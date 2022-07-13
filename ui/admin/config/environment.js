@@ -15,6 +15,7 @@ const featureEditions = {
     filter: true,
     'credential-store': true,
     'managed-groups': true,
+    'static-credentials': false,
   },
 };
 featureEditions.enterprise = {
@@ -122,6 +123,7 @@ module.exports = function (environment) {
 
     // Enable features in development
     ENV.featureFlags['ssh-target'] = false;
+    ENV.featureFlags['static-credentials'] = true;
   }
 
   if (environment === 'test') {
@@ -141,6 +143,7 @@ module.exports = function (environment) {
 
     // Enable tests for development features
     ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['static-credentials'] = true;
   }
 
   if (environment === 'production') {
