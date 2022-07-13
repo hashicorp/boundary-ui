@@ -6,12 +6,44 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
+  {{#if (feature-flag 'static-credentials')}}
+    <form.fieldset>
+      <:title>{{t 'form.type.label'}}</:title>
+      <:body>
+        {{#if @model.isNew}}
+          {{! Code to allow option to select between cred. store types (vault or static) when it is first created goes here}}
+        {{else}}
+          <form.radioGroup
+            @name='types'
+            @selectedValue={{@model.type}}
+            as |radioGroup|
+          >
+            <radioGroup.card
+              @label={{t
+                (concat 'resources.credential-store.types.' @model.type)
+              }}
+              @helperText={{t
+                (concat
+                  'resources.credential-store.form.type.help.' @model.type
+                )
+              }}
+              @value={{@model.type}}
+              @layout='wide'
+              readonly={{true}}
+              @disabled={{true}}
+            />
+          </form.radioGroup>
+        {{/if}}
+      </:body>
+    </form.fieldset>
+  {{else}}
+    <form.input
+      @value={{@model.type}}
+      @label={{t 'form.type.label'}}
+      readonly={{true}}
+      @disabled={{true}}
+    />
+  {{/if}}
 
   <form.input
     @name='name'

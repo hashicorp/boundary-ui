@@ -348,6 +348,9 @@ credential-store:
       help: A PEM-encoded private key matching the client certificate from Client Certificate.
     client_certificate_key_hmac:
       label: Client Certificate Key HMAC
+    type:
+      help:
+        vault: The host details are brokered by a Vault server.
 credential-library:
   title: Credential Library
   title_plural: Credential Libraries
