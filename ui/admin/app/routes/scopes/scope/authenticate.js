@@ -7,7 +7,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
 
   @service session;
   @service router;
-
+  @service resourceFilterStore;
   // =methods
 
   beforeModel() {
@@ -24,13 +24,21 @@ export default class ScopesScopeAuthenticateRoute extends Route {
     const { id: scope_id } = this.modelFor('scopes.scope');
     // Fetch auth methods for the current scope
     const authMethods = await this.store.query('auth-method', { scope_id });
-    // Preload all auth methods into the store
-    await this.store.query('auth-method', {
-      scope_id: 'global',
-      recursive: true,
-    });
+    // Preload all authenticatable auth methods into the store
+    await this.resourceFilterStore.queryBy(
+      'auth-method',
+      {
+        authorized_actions: [{ contains: 'authenticate' }],
+      },
+      {
+        scope_id: 'global',
+        recursive: true,
+      }
+    );
+
     // Fetch org scopes
     // and filter out any that have no auth methods
+
     const scopes = this.modelFor('scopes').filter(
       ({ id: scope_id, isOrg }) =>
         isOrg &&
