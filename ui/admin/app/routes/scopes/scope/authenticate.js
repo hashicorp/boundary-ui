@@ -35,10 +35,8 @@ export default class ScopesScopeAuthenticateRoute extends Route {
         recursive: true,
       }
     );
-
     // Fetch org scopes
     // and filter out any that have no auth methods
-
     const scopes = this.modelFor('scopes').filter(
       ({ id: scope_id, isOrg }) =>
         isOrg &&
