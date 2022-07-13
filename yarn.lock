@@ -11957,13 +11957,16 @@ ember-cli-code-coverage@^1.0.3:
     node-dir "^0.1.17"
     walk-sync "^2.1.0"
 
-ember-cli-content-security-policy@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ember-cli-content-security-policy/-/ember-cli-content-security-policy-1.1.1.tgz#7d91a695319d8f99c317f3a594fba77bbfedf6c7"
-  integrity sha512-QgGAFt1nmsb0qF2YXI5iSM7jJVb09R2hrfX7uR+kkXMb5VyNQXdo2ZlX/DuIbePQVY4q9THpRh8Yf0UHJNbvDQ==
+ember-cli-content-security-policy@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/ember-cli-content-security-policy/-/ember-cli-content-security-policy-2.0.3.tgz#833eca6be4d625f8b1b85cf5bad62544b535b483"
+  integrity sha512-tSGRbR2XiOjHk7oEH7LVF1y5S643rUEjl3mujI6EYPkrQbHaV0WdLyIWJkLvuP1KGnjBfvnLCyiKDFu6z2PjVg==
   dependencies:
     body-parser "^1.17.0"
-    chalk "^2.0.0"
+    chalk "^4.1.1"
+    debug "^4.3.1"
+    ember-cli-babel "^7.26.3"
+    ember-cli-version-checker "^5.0.2"
 
 ember-cli-dependency-checker@^3.2.0:
   version "3.2.0"
@@ -12266,7 +12269,7 @@ ember-cli-version-checker@^4.1.0:
     semver "^6.3.0"
     silent-error "^1.1.1"
 
-ember-cli-version-checker@^5.0.1, ember-cli-version-checker@^5.1.1, ember-cli-version-checker@^5.1.2:
+ember-cli-version-checker@^5.0.1, ember-cli-version-checker@^5.0.2, ember-cli-version-checker@^5.1.1, ember-cli-version-checker@^5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-5.1.2.tgz#649c7b6404902e3b3d69c396e054cea964911ab0"
   integrity sha512-rk7GY+FmLn/2e22HsZs0Ycrz8HQ1W3Fv+2TFOuEFW9optnDXDgkntPBIl6gact/LHsfBM5RKbM3dHsIIeLgl0Q==
@@ -23741,10 +23744,10 @@ shebang-regex@^3.0.0:
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-shell-quote@1.7.2, shell-quote@^1.6.1:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.7.2.tgz#67a7d02c76c9da24f99d20808fcaded0e0e04be2"
-  integrity sha512-mRz/m/JVscCrkMyPqHc/bczi3OQHkLTqXHEFu0zDhK/qfv3UcOA4SVmRCLmos4bhjr9ekVQubj/R7waKapmiQg==
+shell-quote@1.7.2, shell-quote@^1.6.1, shell-quote@^1.7.3:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.7.3.tgz#aa40edac170445b9a431e17bb62c0b881b9c4123"
+  integrity sha512-Vpfqwm4EnqGdlsBFNmHhxhElJYrdfcxPThu+ryKS5J8L/fhAwLazFZtq+S+TWZ9ANj2piSQLGj6NQg+lKPmxrw==
 
 shelljs@^0.6.0, shelljs@^0.8.4, shelljs@^0.8.5:
   version "0.8.5"
