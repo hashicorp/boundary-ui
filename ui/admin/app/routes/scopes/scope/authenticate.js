@@ -23,9 +23,17 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
     // Fetch auth methods for the current scope
-    const authMethods = await this.store.query('auth-method', { scope_id });
+    const authMethods = await this.resourceFilterStore.queryBy(
+      'auth-method',
+      {
+        authorized_actions: [{ contains: 'authenticate' }],
+      },
+      {
+        scope_id,
+      }
+    );
     // Preload all authenticatable auth methods into the store
-    await this.resourceFilterStore.queryBy(
+    const authMethodsForAllScopes = await this.resourceFilterStore.queryBy(
       'auth-method',
       {
         authorized_actions: [{ contains: 'authenticate' }],
@@ -39,8 +47,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
     // and filter out any that have no auth methods
     const scopes = this.modelFor('scopes').filter(
       ({ id: scope_id, isOrg }) =>
-        isOrg &&
-        this.store.peekAll('auth-method').filterBy('scopeID', scope_id).length
+        isOrg && authMethodsForAllScopes.filterBy('scopeID', scope_id).length
     );
     return hash({
       scope: this.modelFor('scopes.scope'),
