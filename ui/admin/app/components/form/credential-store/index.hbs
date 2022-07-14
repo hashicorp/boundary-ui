@@ -12,6 +12,11 @@
       <:body>
         {{#if @model.isNew}}
           {{! Code to allow option to select between cred. store types (vault or static) when it is first created goes here}}
+          <form.input
+            @value={{@model.type}}
+            readonly={{true}}
+            @disabled={{true}}
+          />
         {{else}}
           <form.radioGroup
             @name='types'
