@@ -44,12 +44,20 @@
             </row.headerCell>
             <row.cell>{{principal.id}}</row.cell>
             <row.cell>
-              <Rose::Badge>{{t
+              <Rose::Badge
+                @icon={{if
+                  (eq principal.constructor.modelName 'group')
+                  'flight-icons/svg/folder-users-16'
+                  'flight-icons/svg/user-16'
+                }}
+              >
+                {{t
                   (concat
                     'resources.role.principal.types.'
                     principal.constructor.modelName
                   )
-                }}</Rose::Badge>
+                }}
+              </Rose::Badge>
             </row.cell>
             <row.cell>
               <ScopeBadge @scope={{principal.scopeModel}} />

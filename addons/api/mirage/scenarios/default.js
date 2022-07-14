@@ -51,5 +51,8 @@ export default function (server) {
     server.createList('target', 2, { scope }, 'withAssociations');
     // Sessions have target data. Create it after targets.
     server.createList('session', 4, { scope }, 'withAssociations');
+    // Create IAM resources for project
+    server.createList('group', 3, { scope });
+    server.createList('role', 3, { scope });
   });
 }
