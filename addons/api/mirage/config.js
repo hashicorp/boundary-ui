@@ -126,9 +126,26 @@ export default function () {
   this.post('/scopes/:id_method', deauthHandler);
 
   // IAM : Users
-  this.get('/users', ({ users }, { queryParams: { scope_id: scopeId } }) => {
-    return users.where({ scopeId });
-  });
+  this.get(
+    '/users',
+    ({ users }, { queryParams: { scope_id, recursive, filter } }) => {
+      let resultSet;
+      if (recursive && scope_id === 'global') {
+        resultSet = users.all();
+      } else if (recursive) {
+        resultSet = users.where((user) => {
+          const userModel = users.find(user.id);
+          return (
+            user.scopeId === scope_id ||
+            userModel?.scope?.scope?.id === scope_id
+          );
+        });
+      } else {
+        resultSet = users.where((user) => user.scopeId === scope_id);
+      }
+      return resultSet.filter(makeBooleanFilter(filter));
+    }
+  );
   this.post('/users');
   this.get('/users/:id');
   this.patch('/users/:id');
@@ -160,9 +177,26 @@ export default function () {
   });
 
   // IAM: Groups
-  this.get('/groups', ({ groups }, { queryParams: { scope_id: scopeId } }) => {
-    return groups.where({ scopeId });
-  });
+  this.get(
+    '/groups',
+    ({ groups }, { queryParams: { scope_id, recursive, filter } }) => {
+      let resultSet;
+      if (recursive && scope_id === 'global') {
+        resultSet = groups.all();
+      } else if (recursive) {
+        resultSet = groups.where((group) => {
+          const groupModel = groups.find(group.id);
+          return (
+            group.scopeId === scope_id ||
+            groupModel?.scope?.scope?.id === scope_id
+          );
+        });
+      } else {
+        resultSet = groups.where((group) => group.scopeId === scope_id);
+      }
+      return resultSet.filter(makeBooleanFilter(filter));
+    }
+  );
   this.post('/groups');
   this.get('/groups/:id');
   this.patch('/groups/:id');
