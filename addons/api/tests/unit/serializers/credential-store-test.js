@@ -205,4 +205,42 @@ module('Unit | Serializer | credential store', function (hooks) {
       'client certificate key attribute is expected'
     );
   });
+
+  test('it serializes static-type correctly on create', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('credential-store', {
+      type: 'static',
+      name: 'Static cred store',
+      description: 'Description',
+    });
+    assert.deepEqual(record.serialize(), {
+      type: 'static',
+      name: 'Static cred store',
+      description: 'Description',
+    });
+  });
+
+  test('it serializes static-type correctly on update', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '2',
+        type: 'credential-store',
+        attributes: {
+          type: 'static',
+          name: 'Static update',
+          description: 'Description',
+        },
+      },
+    });
+    const record = store.peekRecord('credential-store', '2');
+    const expectedResult = {
+      type: 'static',
+      name: 'Static update',
+      description: 'Description',
+    };
+    assert.deepEqual(record.serialize(), expectedResult);
+  });
 });

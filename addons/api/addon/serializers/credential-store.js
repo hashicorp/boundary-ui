@@ -6,7 +6,17 @@ export default class CredentialStoreSerializer extends ApplicationSerializer {
    * @method serialize
    * @param {Snapshot} snapshot
    */
-  serialize() {
+  serialize(snapshot) {
+    switch (snapshot.record.type) {
+      case 'static':
+        return this.serializeStatic(...arguments);
+      case 'vault':
+      default:
+        return this.serializeVault(...arguments);
+    }
+  }
+
+  serializeVault() {
     const serialized = super.serialize(...arguments);
     if (serialized.attributes) {
       // Token cannot be unset.  If it's falsy, it must be removed.
@@ -19,6 +29,13 @@ export default class CredentialStoreSerializer extends ApplicationSerializer {
       )
         delete serialized.attributes.client_certificate_key;
     }
+    return serialized;
+  }
+
+  serializeStatic() {
+    const serialized = super.serialize(...arguments);
+    // Delete attributes for static cred store
+    delete serialized.attributes;
     return serialized;
   }
 }
