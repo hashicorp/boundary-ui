@@ -30,7 +30,6 @@ export default class GeneratedTargetModel extends BaseModel {
 
   @attr('number', {
     description: '',
-    defaultValue: 1,
   })
   session_connection_limit;
 

@@ -57,7 +57,7 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   ) {
     const body = JSON.stringify({
       command: 'login',
-      token_type: requestCookies ? 'cookie' : null,
+      type: requestCookies ? 'cookie' : null,
       attributes: { login_name, password },
     });
     const authEndpointURL = this.buildAuthEndpointURL(options);
