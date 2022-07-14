@@ -13,11 +13,15 @@ module('Unit | Model | credential store', function (hooks) {
   test('it has a `isStatic` computed property and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const modelA = store.createRecord('credential-store', { type: 'static' });
-    const modelB = store.createRecord('credential-store', { type: 'vault' });
-    assert.strictEqual(typeof modelA.isStatic, 'boolean');
-    assert.true(modelA.isStatic);
-    assert.false(modelB.isStatic);
+    const modelStatic = store.createRecord('credential-store', {
+      type: 'static',
+    });
+    const modelVault = store.createRecord('credential-store', {
+      type: 'vault',
+    });
+    assert.strictEqual(typeof modelStatic.isStatic, 'boolean');
+    assert.true(modelStatic.isStatic);
+    assert.false(modelVault.isStatic);
   });
 
   test('it has a `isVault` computed property and returns the expected values', async function (assert) {
