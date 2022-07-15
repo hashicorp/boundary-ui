@@ -321,6 +321,7 @@ credential-store:
     static: Static
   help:
     vault: The host details are brokered by a Vault server.
+    static: This host uses static credentials, such as a username and password or key pair.
   form:
     address:
       label: Address
