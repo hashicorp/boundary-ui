@@ -319,6 +319,8 @@ credential-store:
   types:
     vault: Vault
     static: Static
+  help:
+    vault: The host details are brokered by a Vault server.
   form:
     address:
       label: Address
