@@ -8,11 +8,11 @@ export default class CredentialStoreSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     switch (snapshot.record.type) {
-      case 'static':
-        return this.serializeStatic(...arguments);
       case 'vault':
-      default:
         return this.serializeVault(...arguments);
+      case 'static':
+      default:
+        return this.serializeStatic(...arguments);
     }
   }
 
