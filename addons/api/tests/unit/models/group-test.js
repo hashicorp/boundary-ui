@@ -50,7 +50,11 @@ module('Unit | Model | group', function (hooks) {
       2,
       'Group has two entires in member_ids'
     );
-    assert.strictEqual(group.members.length, 2, 'Group has two resolved members');
+    assert.strictEqual(
+      group.members.length,
+      2,
+      'Group has two resolved members'
+    );
   });
 
   test('it has an `addMembers` method that groups a specific POST API endpoint and serialization', async function (assert) {
