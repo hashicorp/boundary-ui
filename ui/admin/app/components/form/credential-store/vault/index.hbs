@@ -11,6 +11,47 @@
       <:title>{{t 'form.type.label'}}</:title>
       <:body>
         {{#if @model.isNew}}
+          <form.radioGroup
+            @name='types'
+            @selectedValue={{@model.type}}
+            @changed={{@changeType}}
+            as |radioGroup|
+          >
+            <radioGroup.card
+              @label={{t 'resources.credential-store.types.static'}}
+              @helperText={{t 'resources.credential-store.help.static'}}
+              @value='static'
+              @layout='wide'
+            />
+            <radioGroup.card
+              @label={{t 'resources.credential-store.types.vault'}}
+              @helperText={{t 'resources.credential-store.help.vault'}}
+              @value='vault'
+              @layout='wide'
+            />
+          </form.radioGroup>
+        {{else}}
+          <form.radioGroup
+            @name='types'
+            @selectedValue={{@model.type}}
+            as |radioGroup|
+          >
+            <radioGroup.card
+              @label={{t
+                (concat 'resources.credential-store.types.' @model.type)
+              }}
+              @helperText={{t
+                (concat 'resources.credential-store.help.' @model.type)
+              }}
+              @value={{@model.type}}
+              @layout='wide'
+              readonly={{true}}
+              @disabled={{true}}
+            />
+          </form.radioGroup>
+        {{/if}}
+
+        {{!-- {{#if @model.isNew}}
           {{! Code to allow option to select between cred. store types (vault or static) when it is first created goes here}}
           <form.input
             @value={{@model.type}}
@@ -36,7 +77,7 @@
               @disabled={{true}}
             />
           </form.radioGroup>
-        {{/if}}
+        {{/if}} --}}
       </:body>
     </form.fieldset>
   {{else}}

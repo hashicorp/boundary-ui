@@ -60,7 +60,10 @@ module('Acceptance | roles | grants', function (hooks) {
     await visit(urls.grants);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.grants);
-    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(
+      findAll(`${grantsForm} [name="grant"]`).length,
+      grantsCount
+    );
   });
 
   test('cannot set grants without proper authorization', async function (assert) {
@@ -129,7 +132,10 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(
+      findAll(`${grantsForm} [name="grant"]`).length,
+      grantsCount
+    );
     await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
     assert.ok(find('[role="alert"]'));
@@ -180,7 +186,10 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(
+      findAll(`${grantsForm} [name="grant"]`).length,
+      grantsCount
+    );
     await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
     await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
@@ -203,7 +212,10 @@ module('Acceptance | roles | grants', function (hooks) {
     await visit(urls.grants);
     await click(`${grantsForm} button`);
     await click('.rose-form-actions button:not([type="submit"])');
-    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(
+      findAll(`${grantsForm} [name="grant"]`).length,
+      grantsCount
+    );
   });
 
   test('shows error message on grant remove', async function (assert) {
@@ -221,7 +233,10 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.strictEqual(findAll(`${grantsForm} [name="grant"]`).length, grantsCount);
+    assert.strictEqual(
+      findAll(`${grantsForm} [name="grant"]`).length,
+      grantsCount
+    );
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
     assert.ok(find('[role="alert"]'));
