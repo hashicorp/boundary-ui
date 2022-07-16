@@ -7,7 +7,7 @@ import {
   find,
   findAll,
   getRootElement,
-  //setupOnerror,
+  setupOnerror,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -125,6 +125,9 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting auth method when the scope cannot be loaded is still allowed', async function (assert) {
     assert.expect(1);
+    setupOnerror(() => {
+      // do nothing, otherwise an uncaught adapter error will fail the test
+    });
     this.server.get('/scopes', () => {
       return new Response(404);
     });

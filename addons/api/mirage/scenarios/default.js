@@ -17,7 +17,7 @@ export default function (server) {
     'withChildren'
   )[0];
 
-  server.create('user', { id: 'authenticateduser' });
+  server.create('user', { id: 'authenticateduser', scope: globalScope });
 
   // Auth
   const globalAuthMethods = server.createList(
