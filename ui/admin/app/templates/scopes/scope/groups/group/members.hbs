@@ -26,6 +26,7 @@
           <header.row as |row|>
             <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+            <row.headerCell>{{t 'resources.scope.title'}}</row.headerCell>
             <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
           </header.row>
         </table.header>
@@ -46,6 +47,9 @@
                 >
                   <code>{{member.id}}</code>
                 </Copyable>
+              </row.cell>
+              <row.cell>
+                <ScopeBadge @scope={{member.scopeModel}} />
               </row.cell>
               <row.cell>
                 {{#if (can 'removeMembers group' @model.group)}}
