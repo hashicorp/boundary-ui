@@ -113,16 +113,6 @@ module('Acceptance | authentication', function (hooks) {
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
 
-  test('visiting auth methods authenticate route when there no methods shows a message', async function (assert) {
-    assert.expect(2);
-    authMethod.destroy();
-    authMethodOIDC.destroy();
-    await visit(authenticateURL);
-    await a11yAudit();
-    assert.strictEqual(currentURL(), authenticateURL);
-    assert.ok(find('.rose-message'));
-  });
-
   test('visiting auth method when the scope cannot be loaded is still allowed', async function (assert) {
     assert.expect(1);
     setupOnerror(() => {

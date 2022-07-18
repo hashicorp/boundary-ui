@@ -96,7 +96,7 @@ module('Unit | Serializer | role', function (hooks) {
         attributes: {
           authorized_actions: [],
           name: 'Role 1',
-          scope: { scope_id: 'o_123' },
+          scope: { id: 'o_123', scope_id: 'o_123' },
           principals: [],
         },
         relationships: {},
