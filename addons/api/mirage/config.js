@@ -57,8 +57,23 @@ export default function () {
 
   this.get(
     '/auth-methods',
-    ({ authMethods }, { queryParams: { scope_id: scopeId, filter } }) => {
-      const resultSet = authMethods.where({ scopeId });
+    ({ authMethods }, { queryParams: { scope_id, recursive, filter } }) => {
+      let resultSet;
+      if (recursive && scope_id === 'global') {
+        resultSet = authMethods.all();
+      } else if (recursive) {
+        resultSet = authMethods.where((authMethod) => {
+          const authMethodModel = authMethods.find(authMethod.id);
+          return (
+            authMethod.scopeId === scope_id ||
+            authMethodModel?.scope?.scope?.id === scope_id
+          );
+        });
+      } else {
+        resultSet = authMethods.where(
+          (authMethod) => authMethod.scopeId === scope_id
+        );
+      }
       return resultSet.filter(makeBooleanFilter(filter));
     }
   );

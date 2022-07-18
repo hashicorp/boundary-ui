@@ -99,12 +99,10 @@
             </nav.link>
           {{/if}}
           {{#if (can 'navigate model' @model collection='credential-stores')}}
-            {{#if (feature-flag 'credential-store')}}
-              <nav.link @route='scopes.scope.credential-stores'>
-                <Rose::Icon @name='flight-icons/svg/key-16' @size='medium' />
-                {{t 'resources.credential-store.title_plural'}}
-              </nav.link>
-            {{/if}}
+            <nav.link @route='scopes.scope.credential-stores'>
+              <Rose::Icon @name='flight-icons/svg/key-16' @size='medium' />
+              {{t 'resources.credential-store.title_plural'}}
+            </nav.link>
           {{/if}}
         </Rose::Nav::Sidebar>
       {{/if}}
