@@ -107,40 +107,47 @@
         </Rose::Nav::Sidebar>
       {{/if}}
 
-      {{#unless @model.isProject}}
-        <Rose::Nav::Sidebar @title={{t 'titles.iam'}} as |nav|>
+      <Rose::Nav::Sidebar @title={{t 'titles.iam'}} as |nav|>
+        {{! Users are available only for org/global scopes }}
+        {{#unless @model.isProject}}
           {{#if (can 'navigate model' @model collection='users')}}
             <nav.link @route='scopes.scope.users'>
               <Rose::Icon @name='flight-icons/svg/users-16' @size='medium' />
               {{t 'resources.user.title_plural'}}
             </nav.link>
           {{/if}}
-          {{#if (can 'navigate model' @model collection='groups')}}
-            <nav.link @route='scopes.scope.groups'>
-              <Rose::Icon
-                @name='flight-icons/svg/folder-users-16'
-                @size='medium'
-              />
-              {{t 'resources.group.title_plural'}}
-            </nav.link>
-          {{/if}}
-          {{#if (can 'navigate model' @model collection='roles')}}
-            <nav.link @route='scopes.scope.roles'>
-              <Rose::Icon
-                @name='flight-icons/svg/identity-user-16'
-                @size='medium'
-              />
-              {{t 'resources.role.title_plural'}}
-            </nav.link>
-          {{/if}}
+        {{/unless}}
+
+        {{! Groups and roles are available for all scopes }}
+        {{#if (can 'navigate model' @model collection='groups')}}
+          <nav.link @route='scopes.scope.groups'>
+            <Rose::Icon
+              @name='flight-icons/svg/folder-users-16'
+              @size='medium'
+            />
+            {{t 'resources.group.title_plural'}}
+          </nav.link>
+        {{/if}}
+        {{#if (can 'navigate model' @model collection='roles')}}
+          <nav.link @route='scopes.scope.roles'>
+            <Rose::Icon
+              @name='flight-icons/svg/identity-user-16'
+              @size='medium'
+            />
+            {{t 'resources.role.title_plural'}}
+          </nav.link>
+        {{/if}}
+
+        {{! Auth methods are available only for org/global scopes }}
+        {{#unless @model.isProject}}
           {{#if (can 'navigate model' @model collection='auth-methods')}}
             <nav.link @route='scopes.scope.auth-methods'>
               <Rose::Icon @name='flight-icons/svg/lock-16' @size='medium' />
               {{t 'resources.auth-method.title_plural'}}
             </nav.link>
           {{/if}}
-        </Rose::Nav::Sidebar>
-      {{/unless}}
+        {{/unless}}
+      </Rose::Nav::Sidebar>
 
       {{#if @model.isOrg}}
         {{#if this.session.data.authenticated.isGlobal}}
