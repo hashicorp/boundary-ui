@@ -87,7 +87,7 @@ module('Unit | Serializer | credential store', function (hooks) {
     });
   });
 
-  test('it serializes empty strings to null', function (assert) {
+  test('it serializes empty strings to null for vault-type credential store', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
@@ -98,6 +98,7 @@ module('Unit | Serializer | credential store', function (hooks) {
       namespace: '',
       tls_server_name: '',
       tls_skip_verify: false,
+      type: 'vault',
     });
     let serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
@@ -112,11 +113,11 @@ module('Unit | Serializer | credential store', function (hooks) {
       },
       description: null,
       name: null,
-      type: null,
+      type: 'vault',
     });
   });
 
-  test('it does not serialize token if present but falsy', function (assert) {
+  test('it does not serialize token if present but falsy for vault-type credential store', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
@@ -128,6 +129,7 @@ module('Unit | Serializer | credential store', function (hooks) {
       namespace: 'foobar',
       tls_server_name: 'yes',
       tls_skip_verify: false,
+      type: 'vault',
     });
     let serializedRecord = record.serialize();
     assert.deepEqual(
@@ -144,13 +146,13 @@ module('Unit | Serializer | credential store', function (hooks) {
         },
         description: null,
         name: null,
-        type: null,
+        type: 'vault',
       },
       'token attribute is not expected'
     );
   });
 
-  test('it does not serialize client certificate key if present but falsy when client certificate is present', function (assert) {
+  test('it does not serialize client certificate key if present but falsy when client certificate is present for vault-type credential store', function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
@@ -162,6 +164,7 @@ module('Unit | Serializer | credential store', function (hooks) {
       namespace: 'foobar',
       tls_server_name: 'yes',
       tls_skip_verify: false,
+      type: 'vault',
     });
     let serializedRecord = record.serialize();
     assert.deepEqual(
@@ -178,7 +181,7 @@ module('Unit | Serializer | credential store', function (hooks) {
         },
         description: null,
         name: null,
-        type: null,
+        type: 'vault',
       },
       'client certificate key attribute is not expected'
     );
@@ -200,9 +203,63 @@ module('Unit | Serializer | credential store', function (hooks) {
         },
         description: null,
         name: null,
-        type: null,
+        type: 'vault',
       },
       'client certificate key attribute is expected'
     );
+  });
+
+  test('it serializes empty strings to null for static-type credential store', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('credential-store', {
+      name: '',
+      description: '',
+      type: 'static',
+    });
+    let serializedRecord = record.serialize();
+    assert.deepEqual(serializedRecord, {
+      description: null,
+      name: null,
+      type: 'static',
+    });
+  });
+
+  test('it serializes static-type correctly on create', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('credential-store', {
+      type: 'static',
+      name: 'Static cred store',
+      description: 'Description',
+    });
+    assert.deepEqual(record.serialize(), {
+      type: 'static',
+      name: 'Static cred store',
+      description: 'Description',
+    });
+  });
+
+  test('it serializes static-type correctly on update', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '2',
+        type: 'credential-store',
+        attributes: {
+          type: 'static',
+          name: 'Static update',
+          description: 'Description',
+        },
+      },
+    });
+    const record = store.peekRecord('credential-store', '2');
+    const expectedResult = {
+      type: 'static',
+      name: 'Static update',
+      description: 'Description',
+    };
+    assert.deepEqual(record.serialize(), expectedResult);
   });
 });
