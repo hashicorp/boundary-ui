@@ -81,7 +81,6 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    *
    * TODO:  generalize this so that all zero values are reified.
    * @override
-   * @see FragmentScope
    * @param {Model} typeClass
    * @param {Object} hash
    * @return {Object}

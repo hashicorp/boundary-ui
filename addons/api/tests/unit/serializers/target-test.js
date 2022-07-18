@@ -34,7 +34,7 @@ module('Unit | Serializer | target', function (hooks) {
       type: 'tcp',
       scope_id: 'org_1',
       session_max_seconds: 28800,
-      session_connection_limit: 1,
+      session_connection_limit: null,
       worker_filter: null,
       attributes: {
         default_port: 1234,
@@ -111,7 +111,7 @@ module('Unit | Serializer | target', function (hooks) {
       type: 'ssh',
       scope_id: 'org_1',
       session_max_seconds: 28800,
-      session_connection_limit: 1,
+      session_connection_limit: null,
       worker_filter: 'worker',
       attributes: {
         default_port: 1234,
@@ -214,7 +214,7 @@ module('Unit | Serializer | target', function (hooks) {
         attributes: {
           authorized_actions: [],
           name: 'Target 1',
-          scope: { scope_id: 'o_123' },
+          scope: { id: 'o_123', scope_id: 'o_123' },
           host_sources: [],
           application_credential_source_ids: [],
         },

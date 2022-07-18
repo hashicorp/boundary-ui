@@ -130,19 +130,28 @@ module('Unit | Serializer | application', function (hooks) {
         {
           id: '1',
           type: 'user',
-          attributes: { name: 'User 1', scope: { scope_id: 'o_123' } },
+          attributes: {
+            name: 'User 1',
+            scope: { id: 'o_123', scope_id: 'o_123' },
+          },
           relationships: {},
         },
         {
           id: '2',
           type: 'user',
-          attributes: { name: 'User 2', scope: { scope_id: 'o_123' } },
+          attributes: {
+            name: 'User 2',
+            scope: { id: 'o_123', scope_id: 'o_123' },
+          },
           relationships: {},
         },
         {
           id: '3',
           type: 'user',
-          attributes: { name: 'User 3', scope: { scope_id: 'o_123' } },
+          attributes: {
+            name: 'User 3',
+            scope: { id: 'o_123', scope_id: 'o_123' },
+          },
           relationships: {},
         },
       ],
@@ -173,7 +182,7 @@ module('Unit | Serializer | application', function (hooks) {
           authorized_actions: [],
           name: 'User 1',
           account_ids: [],
-          scope: { scope_id: 'o_123' },
+          scope: { id: 'o_123', scope_id: 'o_123' },
         },
         relationships: {},
       },
@@ -203,7 +212,7 @@ module('Unit | Serializer | application', function (hooks) {
         attributes: {
           authorized_actions: [],
           name: 'Target 1',
-          scope: { scope_id: 'o_123' },
+          scope: { id: 'o_123', scope_id: 'o_123' },
           host_sources: [],
           application_credential_source_ids: [],
         },
@@ -235,7 +244,7 @@ module('Unit | Serializer | application', function (hooks) {
         attributes: {
           authorized_actions: [],
           name: 'user 1',
-          scope: { scope_id: 'o_123' },
+          scope: { id: 'o_123', scope_id: 'o_123' },
           account_ids: [],
           authorized_collection_actions: null,
           created_time: null,

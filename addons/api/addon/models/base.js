@@ -1,6 +1,5 @@
 import Model from '@ember-data/model';
 import { attr } from '@ember-data/model';
-import { fragment } from 'ember-data-model-fragments/attributes';
 import { computed } from '@ember/object';
 
 /**
@@ -30,9 +29,8 @@ export default class BaseModel extends Model {
 
   /**
    * Scope of this resource, if any, represented as a JSON fragment.
-   * @type {FragmentScope}
    */
-  @fragment('fragment-scope') scope;
+  @attr() scope;
 
   // =attributes
 
@@ -55,6 +53,10 @@ export default class BaseModel extends Model {
     if (model) {
       const json = model.serialize();
       json.scope_id = model.id;
+      json.type = model.type;
+      json.isGlobal = model.isGlobal;
+      json.isOrg = model.isOrg;
+      json.isProject = model.isProject;
       this.scope = json;
     }
   }
