@@ -63,7 +63,10 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     const managedGroupsCount = this.server.db.managedGroups.length;
     await visit(urls.managedGroup);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(this.server.db.managedGroups.length, managedGroupsCount - 1);
+    assert.strictEqual(
+      this.server.db.managedGroups.length,
+      managedGroupsCount - 1
+    );
   });
 
   test('User cannot delete a managed-group without proper authorization', async function (assert) {

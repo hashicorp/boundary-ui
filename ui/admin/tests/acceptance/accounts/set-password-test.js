@@ -86,7 +86,11 @@ module('Acceptance | accounts | set password', function (hooks) {
       '/accounts/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
         const attrs = JSON.parse(requestBody);
-        assert.strictEqual(attrs.password, 'update password', 'new password is set');
+        assert.strictEqual(
+          attrs.password,
+          'update password',
+          'new password is set'
+        );
         const id = idMethod.split(':')[0];
         return { id };
       }

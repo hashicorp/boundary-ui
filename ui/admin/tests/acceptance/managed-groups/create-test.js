@@ -71,7 +71,10 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await fillIn('[name="name"]', 'Managed group name');
     await fillIn('[name="description"]', 'description');
     await click('form [type="submit"]:not(:disabled)');
-    assert.strictEqual(this.server.db.managedGroups.length, managedGroupsCount + 1);
+    assert.strictEqual(
+      this.server.db.managedGroups.length,
+      managedGroupsCount + 1
+    );
   });
 
   test('User can not create a new managed group without proper authorization', async function (assert) {
