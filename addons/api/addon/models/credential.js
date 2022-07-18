@@ -1,5 +1,3 @@
-import Model from '@ember-data/model';
+import GeneratedCredentialModel from '../generated/models/credential';
 
-export default class CredentialModel extends Model {
-
-}
+export default class CredentialModel extends GeneratedCredentialModel {}

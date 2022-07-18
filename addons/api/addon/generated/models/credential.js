@@ -8,14 +8,11 @@ import { attr } from '@ember-data/model';
 export default class GeneratedCredentialModel extends BaseModel {
   // =attributes
 
-  id;
-
-  credential_store_id;
-
-  @attr({
-    description: 'The attributes that are applicable for the specific Credential type.',
+  @attr('string', {
+    description:
+      'The ID of the Credential Store of which this Credential is a part.',
   })
-  attributes;
+  credential_store_id;
 
   @attr('string', {
     description: 'The type of the resource, to help differentiate schemas',
@@ -48,4 +45,19 @@ export default class GeneratedCredentialModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
+
+  // =attributes (username_password)
+  @attr('string', {
+    for: 'username_password',
+    isNestedAttribute: true,
+    description: 'The password hmac for credential.',
+  })
+  password_hmac;
+
+  @attr('string', {
+    for: 'username_password',
+    isNestedAttribute: true,
+    description: 'The username for credential.',
+  })
+  username;
 }
