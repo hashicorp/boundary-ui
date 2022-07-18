@@ -96,7 +96,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     delete serialized.scope;
     // And serialize `scope_id`
     if (this.serializeScopeID) {
-      const scope_id = snapshot?.attr('scope')?.attr('scope_id');
+      const scope_id = snapshot?.attr('scope')?.scope_id;
       if (scope_id) serialized.scope_id = scope_id;
     }
     return serialized;
@@ -199,11 +199,9 @@ export default class ApplicationSerializer extends RESTSerializer {
   }
 
   /**
-   * One consequence of using model fragments to represent the embedded scope
-   * is that they cannot have `id` fields.  We still need to know scope IDs,
-   * so we copy the `scope.id` value into the `scope.scope_id` field.
+   * Hydrates the incoming scope JSON with additional boolean fields and
+   * delegates nested attributes and secrets normalization.
    * @override
-   * @see FragmentScope
    * @param {Model} typeClass
    * @param {Object} hash
    * @return {Object}
@@ -211,7 +209,14 @@ export default class ApplicationSerializer extends RESTSerializer {
   normalize(typeClass, hash) {
     let normalizedHash = copy(hash, true);
     const scopeID = get(normalizedHash, 'scope.id');
+    const scopeType = get(normalizedHash, 'scope.type');
     if (scopeID) normalizedHash.scope.scope_id = scopeID;
+    if (scopeType) {
+      normalizedHash.scope.type = scopeType;
+      normalizedHash.scope.isGlobal = scopeType === 'global';
+      normalizedHash.scope.isOrg = scopeType === 'org';
+      normalizedHash.scope.isProject = scopeType === 'project';
+    }
     normalizedHash = this.normalizeNestedAttributes(typeClass, normalizedHash);
     normalizedHash = this.normalizeNestedSecrets(typeClass, normalizedHash);
     return super.normalize(typeClass, normalizedHash);
