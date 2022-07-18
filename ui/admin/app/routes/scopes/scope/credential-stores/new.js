@@ -6,7 +6,7 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
   // =services
 
   @service router;
-
+  @service features;
   // =attributes
 
   queryParams = {
@@ -27,6 +27,10 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
       this.currentModel.rollbackAttributes();
+    }
+    //hide static type credential stores if the feature flag isn't enabled
+    if (!this.features.isEnabled('static-credentials')) {
+      type = 'vault';
     }
     return this.store.createRecord('credential-store', {
       type,
