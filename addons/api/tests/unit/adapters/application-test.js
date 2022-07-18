@@ -101,7 +101,11 @@ module('Unit | Adapter | application', function (hooks) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/groups', (_, { queryParams: { scope_id } }) => {
-      assert.strictEqual(scope_id, 'p_456', 'Scoped resource URL was requested.');
+      assert.strictEqual(
+        scope_id,
+        'p_456',
+        'Scoped resource URL was requested.'
+      );
       return { items: [] };
     });
     await store.query('group', { scope_id: 'p_456' });
