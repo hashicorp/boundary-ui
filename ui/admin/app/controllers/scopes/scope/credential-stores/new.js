@@ -7,7 +7,7 @@ export default class ScopesScopeCredentialStoresNewController extends Controller
   @service intl;
 
   // =attributes
-
+  queryParams = ['type'];
   /**
    * Breadcrumb for new route
    * @type {string}
