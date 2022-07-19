@@ -20,11 +20,13 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    */
   model() {
     const role = this.modelFor('scopes.scope.roles.role');
-    const { scopeID: scope_id } = role;
     return hash({
       role,
-      users: this.store.query('user', { scope_id }),
-      groups: this.store.query('group', { scope_id }),
+      users: this.store.query('user', { scope_id: 'global', recursive: true }),
+      groups: this.store.query('group', {
+        scope_id: 'global',
+        recursive: true,
+      }),
     });
   }
 
