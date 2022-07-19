@@ -157,6 +157,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       id: 'oidc123',
     }));
     const record = await store.findRecord('auth-method', 'oidc123');
+    console.log(record);
     const { account_claim_maps } = record.attributes;
     assert.strictEqual(account_claim_maps.firstObject.from, 'from');
     assert.strictEqual(account_claim_maps.firstObject.to, 'to');

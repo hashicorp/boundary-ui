@@ -47,12 +47,19 @@ export default class GeneratedCredentialModel extends BaseModel {
   version;
 
   // =attributes (username_password)
+  // @attr('string', {
+  //   for: 'username_password',
+  //   isNestedAttribute: true,
+  //   description: 'The password hmac for credential.',
+  // })
+  // password_hmac;
+
   @attr('string', {
     for: 'username_password',
     isNestedAttribute: true,
-    description: 'The password hmac for credential.',
+    description: 'The password for credential.',
   })
-  password_hmac;
+  password;
 
   @attr('string', {
     for: 'username_password',

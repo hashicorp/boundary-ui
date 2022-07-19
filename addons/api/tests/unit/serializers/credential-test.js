@@ -1,10 +1,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+//import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
 module('Unit | Serializer | credential', function (hooks) {
   setupTest(hooks);
-
-  test('it serializes correctly on create', function(assert) {
+  //setupMirage(hooks);
+  test('it serializes correctly on create', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
@@ -15,21 +16,49 @@ module('Unit | Serializer | credential', function (hooks) {
       type: "username_password",
       name: "Name",
       description: "Description",
-      version: 1, 
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
-    console.log(serializedRecord);
     assert.deepEqual(serializedRecord, {
       attributes: {
-        password_hmac: "pass",
+        password: "pass",
         username: "user",
       },
       credential_store_id: "cs_i7p1eu0Nw8",
       type: "username_password",
       name: "Name",
       description: "Description",
-      version: 1,
     });
-  })
+  });
+
+  test('it normalizes credential record', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup("service:store");
+    const serializer = store.serializerFor('credential');
+    const credentialModelClass = store.createRecord('credential').constructor;
+    const payload = {
+      id: 'cred_123',
+      version: 1,
+      type: 'username_password',
+      attributes: {
+        username: 'username',
+        password: '12345678',
+      }
+    }
+    const normalized = serializer.normalize(credentialModelClass, payload);
+    assert.deepEqual(normalized, {
+      data: {
+        attributes: {
+          password: '',
+          type: 'username_password',
+          username: 'username',
+          version: 1,
+        },
+        id: 'cred_123',
+        relationships: {},
+        type: 'credential',
+      }
+    });
+    
+  });
 })
