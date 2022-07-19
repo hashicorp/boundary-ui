@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { all, hash } from 'rsvp';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { loading } from 'ember-loading';
@@ -10,6 +9,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   // =services
   @service intl;
   @service notify;
+  @service resourceFilterStore;
 
   // =methods
 
@@ -18,31 +18,43 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
    * @param {object} params
    * @return {Promise{RoleModel}}
    */
-  model() {
-    const adapterOptions = { scopeID: this.modelFor('scopes.scope').id };
+  async model() {
     const role = this.modelFor('scopes.scope.roles.role');
-    const users = role.principals
+
+    // Gather user and group IDs as separate arrays, since these
+    // will be queried in separate API queries.
+    const userIDs = role.principals
       .filterBy('type', 'user')
-      .map(({ principal_id }) =>
-        this.store
-          .findRecord('user', principal_id, { adapterOptions })
-          .then((model) => ({
-            type: 'user',
-            model,
-          }))
-      );
-    const groups = role.principals
+      .map(({ principal_id }) => principal_id);
+    const groupIDs = role.principals
       .filterBy('type', 'group')
-      .map(({ principal_id }) =>
-        this.store.findRecord('group', principal_id).then((model) => ({
-          type: 'group',
-          model,
-        }))
-      );
-    return hash({
+      .map(({ principal_id }) => principal_id);
+
+    // Query for users.
+    const users = userIDs?.length
+      ? (
+          await this.resourceFilterStore.queryBy(
+            'user',
+            { id: userIDs },
+            { scope_id: 'global', recursive: true }
+          )
+        ).map((model) => model)
+      : [];
+    // Query for groups.
+    const groups = groupIDs?.length
+      ? (
+          await this.resourceFilterStore.queryBy(
+            'group',
+            { id: groupIDs },
+            { scope_id: 'global', recursive: true }
+          )
+        ).map((model) => model)
+      : [];
+
+    return {
       role,
-      principals: all(users.concat(groups)),
-    });
+      principals: users.concat(groups),
+    };
   }
 
   // =actions
