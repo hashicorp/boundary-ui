@@ -46,36 +46,38 @@
           {{#each @model.principals as |principal|}}
             <body.row as |row|>
               <row.headerCell>
-                {{principal.model.displayName}}
-                {{#if principal.model.accountName}}
-                  <br /><Rose::Badge
-                  >{{principal.model.accountName}}</Rose::Badge>
+                {{principal.displayName}}
+                {{#if principal.accountName}}
+                  <br /><Rose::Badge>{{principal.accountName}}</Rose::Badge>
                 {{/if}}
               </row.headerCell>
               <row.cell>
                 <Copyable
-                  @text={{principal.model.id}}
+                  @text={{principal.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{principal.model.id}}</code>
+                  <code>{{principal.id}}</code>
                 </Copyable>
               </row.cell>
               <row.cell>
                 <Rose::Badge
                   @icon={{if
-                    (eq principal.type 'group')
+                    (eq principal.constructor.modelName 'group')
                     'flight-icons/svg/folder-users-16'
                     'flight-icons/svg/user-16'
                   }}
                 >
                   {{t
-                    (concat 'resources.role.principal.types.' principal.type)
+                    (concat
+                      'resources.role.principal.types.'
+                      principal.constructor.modelName
+                    )
                   }}
                 </Rose::Badge>
               </row.cell>
               <row.cell>
-                <ScopeBadge @scope={{principal.model.scopeModel}} />
+                <ScopeBadge @scope={{principal.scopeModel}} />
               </row.cell>
               <row.cell>
                 {{#if (can 'removePrincipals role' @model.role)}}
@@ -89,10 +91,7 @@
                   >
                     <dropdown.button
                       @style='danger'
-                      {{on
-                        'click'
-                        (route-action 'removePrincipal' principal.model)
-                      }}
+                      {{on 'click' (route-action 'removePrincipal' principal)}}
                     >
                       {{t 'actions.remove'}}
                     </dropdown.button>

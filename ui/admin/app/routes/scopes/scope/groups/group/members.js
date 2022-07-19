@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { hash, all } from 'rsvp';
+import { hash } from 'rsvp';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
@@ -11,6 +11,7 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
 
   @service intl;
   @service notify;
+  @service resourceFilterStore;
 
   // =methods
 
@@ -19,15 +20,16 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
    * @return {Promise{group: GroupModel, members: Promise{[UserModel]}}}
    */
   model() {
-    const { id: scopeID } = this.modelFor('scopes.scope');
     const group = this.modelFor('scopes.scope.groups.group');
     return hash({
       group,
-      members: all(
-        group.member_ids.map((id) =>
-          this.store.findRecord('user', id, { adapterOptions: { scopeID } })
-        )
-      ),
+      members: group.member_ids?.length
+        ? this.resourceFilterStore.queryBy(
+            'user',
+            { id: group.member_ids },
+            { scope_id: 'global', recursive: true }
+          )
+        : [],
     });
   }
 
