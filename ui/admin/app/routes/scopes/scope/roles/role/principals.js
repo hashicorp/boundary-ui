@@ -31,7 +31,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
       .map(({ principal_id }) => principal_id);
 
     // Query for users.
-    let users = userIDs?.length
+    const users = userIDs?.length
       ? (
           await this.resourceFilterStore.queryBy(
             'user',
@@ -41,7 +41,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
         ).map((model) => model)
       : [];
     // Query for groups.
-    let groups = groupIDs?.length
+    const groups = groupIDs?.length
       ? (
           await this.resourceFilterStore.queryBy(
             'group',
