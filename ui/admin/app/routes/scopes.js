@@ -13,7 +13,12 @@ export default class ScopesRoute extends Route {
    * @param {string} params.scope_id
    * @return {Promise{[ScopeModel]}}
    */
-  model() {
+  async model() {
+    // Always preload the global scope, if possible, since the query below
+    // only fetches org scopes.
+    await this.store.findRecord('scope', 'global').catch(() => {
+      /* no op */
+    });
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
     return this.store.findAll('scope').catch(() => A([]));

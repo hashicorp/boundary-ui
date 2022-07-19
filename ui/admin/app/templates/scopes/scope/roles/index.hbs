@@ -72,7 +72,7 @@
           <message.description>
             {{#if (can 'list model' this.scope collection='roles')}}
               {{! can list (at least):  show default welcome message}}
-              {{t 'resources.roles.description'}}
+              {{t 'resources.role.description'}}
             {{else if (can 'create model' this.scope collection='roles')}}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t

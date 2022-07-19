@@ -36,8 +36,9 @@
         <table.header as |header|>
           <header.row as |row|>
             <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t 'resources.scope.title'}}</row.headerCell>
             <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
           </header.row>
         </table.header>
@@ -52,9 +53,6 @@
                 {{/if}}
               </row.headerCell>
               <row.cell>
-                {{t (concat 'resources.role.principal.types.' principal.type)}}
-              </row.cell>
-              <row.cell>
                 <Copyable
                   @text={{principal.model.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
@@ -62,6 +60,22 @@
                 >
                   <code>{{principal.model.id}}</code>
                 </Copyable>
+              </row.cell>
+              <row.cell>
+                <Rose::Badge
+                  @icon={{if
+                    (eq principal.type 'group')
+                    'flight-icons/svg/folder-users-16'
+                    'flight-icons/svg/user-16'
+                  }}
+                >
+                  {{t
+                    (concat 'resources.role.principal.types.' principal.type)
+                  }}
+                </Rose::Badge>
+              </row.cell>
+              <row.cell>
+                <ScopeBadge @scope={{principal.model.scopeModel}} />
               </row.cell>
               <row.cell>
                 {{#if (can 'removePrincipals role' @model.role)}}
