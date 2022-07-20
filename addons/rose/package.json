@@ -112,6 +112,6 @@
   "lint-staged": {
     "*.js": "eslint --fix",
     "*.hbs": "ember-template-lint --fix",
-    "*.{js,scss}": "prettier --write"
+    "*.{js,scss,mdx}": "prettier --write"
   }
 }
