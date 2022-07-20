@@ -384,7 +384,7 @@ credential:
       title: No Credentials Available
       description: No Credentials available in this credential store.
   types:
-    username_password: username_password
+    username_password: Username & Password
 scope:
   title: Scope
   title_plural: Scopes
