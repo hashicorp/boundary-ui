@@ -1,0 +1,7 @@
+<Rose::Badge
+  @icon={{if
+    @scope.isProject
+    'flight-icons/svg/grid-16'
+    (if @scope.isOrg 'flight-icons/svg/org-16' 'flight-icons/svg/globe-16')
+  }}
+>{{@scope.displayName}}</Rose::Badge>

@@ -57,6 +57,7 @@ export default class GeneratedCredentialModel extends BaseModel {
   @attr('string', {
     for: 'username_password',
     isNestedAttribute: true,
+<<<<<<< HEAD
     description: 'The password for credential.',
   })
   password;
@@ -64,6 +65,8 @@ export default class GeneratedCredentialModel extends BaseModel {
   @attr('string', {
     for: 'username_password',
     isNestedAttribute: true,
+=======
+>>>>>>> main
     description: 'The username for credential.',
   })
   username;

@@ -19,6 +19,7 @@
           <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
           <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+          <row.headerCell>{{t 'resources.scope.title'}}</row.headerCell>
           <row.headerCell>{{t 'form.description.label'}}</row.headerCell>
         </header.row>
       </table.header>
@@ -37,19 +38,29 @@
                   components without resorting to heavy-handed grids
                   or contextualization.  This is a one-off.
                 }}
-                <br />
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
                 <Rose::Badge>{{principal.accountName}}</Rose::Badge>
               {{/if}}
             </row.headerCell>
             <row.cell>{{principal.id}}</row.cell>
             <row.cell>
-              <Rose::Badge>{{t
+              <Rose::Badge
+                @icon={{if
+                  (eq principal.constructor.modelName 'group')
+                  'flight-icons/svg/folder-users-16'
+                  'flight-icons/svg/user-16'
+                }}
+              >
+                {{t
                   (concat
                     'resources.role.principal.types.'
                     principal.constructor.modelName
                   )
-                }}</Rose::Badge>
+                }}
+              </Rose::Badge>
+            </row.cell>
+            <row.cell>
+              <ScopeBadge @scope={{principal.scopeModel}} />
             </row.cell>
             <row.cell>{{principal.description}}</row.cell>
           </body.row>
