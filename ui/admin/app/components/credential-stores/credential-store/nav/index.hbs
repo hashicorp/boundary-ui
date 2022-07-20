@@ -11,10 +11,13 @@
       </nav.link>
     {{/if}}
   {{else}}
-    <nav.link
-      @route='scopes.scope.credential-stores.credential-store.credentials'
-    >
-      {{t 'resources.credential.title_plural'}}
-    </nav.link>
+    {{#if (can 'navigate model' @model collection='credentials')}}
+
+      <nav.link
+        @route='scopes.scope.credential-stores.credential-store.credentials'
+      >
+        {{t 'resources.credential.title_plural'}}
+      </nav.link>
+    {{/if}}
   {{/if}}
 </Rose::Nav::Tabs>
