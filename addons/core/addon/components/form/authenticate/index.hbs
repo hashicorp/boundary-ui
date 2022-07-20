@@ -1,8 +1,7 @@
-{{! //TODO fix the issue and delete disabling the rule }}
-{{! template-lint-disable no-passed-in-event-handlers }}
+{{!-- //TODO fix the issue and delete disabling the rule --}}
+{{!-- template-lint-disable no-passed-in-event-handlers --}}
 {{#if @model.type}}
-  {{component
-    (concat 'form/authenticate/' @model.type)
+  {{component (concat "form/authenticate/" @model.type)
     submit=@submit
     cancel=false
     disabled=@disabled
