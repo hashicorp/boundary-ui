@@ -11,7 +11,7 @@ class MockIPC {
     return this.origin;
   }
 
-  setOrigin(origin) {
+  setClusterUrl(origin) {
     this.origin = origin;
     return this.origin;
   }

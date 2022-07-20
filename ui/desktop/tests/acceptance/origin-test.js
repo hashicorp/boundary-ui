@@ -4,21 +4,13 @@ import {
   currentURL,
   fillIn,
   click,
-  find,
-  //findAll,
-  //getRootElement
-  //setupOnerror,
+  find
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-// import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
-import {
-  // currentSession,
-  // authenticateSession,
-  invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import config from '../../config/environment';
@@ -53,7 +45,7 @@ module('Acceptance | origin', function (hooks) {
 
   const urls = {
     index: '/',
-    origin: '/origin',
+    clusterUrl: '/origin',
     scopes: {
       global: null,
       org: null,
@@ -117,9 +109,9 @@ module('Acceptance | origin', function (hooks) {
 
   test('visiting index', async function (assert) {
     assert.expect(1);
-    await visit(urls.origin);
+    await visit(urls.clusterUrl);
     await a11yAudit();
-    assert.strictEqual(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('visiting index without an origin specified redirects to origin route', async function (assert) {
@@ -127,13 +119,13 @@ module('Acceptance | origin', function (hooks) {
     await visit(urls.index);
     await a11yAudit();
     assert.notOk(mockIPC.origin);
-    assert.strictEqual(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('can set origin', async function (assert) {
     assert.expect(3);
     assert.notOk(mockIPC.origin);
-    await visit(urls.origin);
+    await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
@@ -143,20 +135,20 @@ module('Acceptance | origin', function (hooks) {
   test('can reset origin before authentication', async function (assert) {
     assert.expect(4);
     assert.notOk(mockIPC.origin);
-    await visit(urls.origin);
+    await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
     assert.strictEqual(mockIPC.origin, currentOrigin);
     await click('.change-origin a');
-    assert.strictEqual(currentURL(), urls.origin);
+    assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('captures error on origin update', async function (assert) {
     assert.expect(2);
     assert.notOk(mockIPC.origin);
-    sinon.stub(this.owner.lookup('service:origin'), 'setOrigin').throws();
-    await visit(urls.origin);
+    sinon.stub(this.owner.lookup('service:origin'), 'setClusterUrl').throws();
+    await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.ok(find('.rose-notification.is-error'));
@@ -165,7 +157,7 @@ module('Acceptance | origin', function (hooks) {
   test('origin set automatically when autoOrigin is true', async function (assert) {
     assert.expect(1);
     config.autoOrigin = true;
-    await visit(urls.origin);
+    await visit(urls.clusterUrl);
     assert.strictEqual(find('[name="host"]').value, currentOrigin);
     config.autoOrigin = false;
   });
@@ -173,7 +165,7 @@ module('Acceptance | origin', function (hooks) {
   test('origin is *not* set automatically when autoOrigin is false', async function (assert) {
     assert.expect(2);
     assert.notOk(config.autoOrigin, 'autoOrigin is disabled');
-    await visit(urls.origin);
+    await visit(urls.clusterUrl);
     assert.notOk(find('[name="host"]').value, 'Origin field is empty');
   });
 

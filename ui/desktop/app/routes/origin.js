@@ -71,7 +71,7 @@ export default class OriginRoute extends Route {
   @loading
   async setOrigin(origin) {
     try {
-      await this.origin.setOrigin(origin);
+      await this.origin.setClusterUrl(origin);
       this.router.replaceWith('index');
     } catch (e) {
       // If scopes do not load, we assume this is not a Boundary API

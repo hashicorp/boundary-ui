@@ -47,31 +47,31 @@ export default class OriginService extends Service {
    */
   async updateOrigin() {
     const rendererOrigin = this.rendererOrigin;
-    if (rendererOrigin) await this.setOrigin(rendererOrigin);
+    if (rendererOrigin) await this.setClusterUrl(rendererOrigin);
   }
 
   /**
-   * Validates that the specified origin is a Boundary API.  If so, the app is
-   * updated to use the origin.  If it is not a Boundary API, or an origin
+   * Validates that the specified clusterUrl is a Boundary API.  If so, the app is
+   * updated to use the clusterUrl.  If it is not a Boundary API, or an clusterUrl
    * wasn't specified, throws an error.
-   * @param {string} origin - protocol://host:port
+   * @param {string} clusterUrl - protocol://host:port
    */
-  async setOrigin(origin) {
+  async setClusterUrl(clusterUrl) {
     const originalHost = this.adapter.host;
     assert(
-      `setOrigin expects a string, you passed ${origin}`,
-      typeof origin === 'string'
+      `setOrigin expects a string, you passed ${clusterUrl}`,
+      typeof clusterUrl === 'string'
     );
     try {
       // Trim whitespaces and silently drop trailing slashes if present.
-      // This is important since API paths that will be appended to the origin
+      // This is important since API paths that will be appended to the clusterUrl
       // will include preceeding slashes already.
-      origin = origin.trim();
-      origin = origin.replace(/\/*$/, '');
-      this.adapter.host = origin;
-      this.rendererOrigin = origin;
-      if (origin !== (await this.mainOrigin)) {
-        await this.ipc.invoke('setOrigin', origin);
+      clusterUrl = clusterUrl.trim();
+      clusterUrl = clusterUrl.replace(/\/*$/, '');
+      this.adapter.host = clusterUrl;
+      this.rendererOrigin = clusterUrl;
+      if (clusterUrl !== (await this.mainOrigin)) {
+        await this.ipc.invoke('setClusterUrl', clusterUrl);
       }
     } catch (e) {
       this.adapter.host = originalHost;

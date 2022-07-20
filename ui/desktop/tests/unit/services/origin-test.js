@@ -12,37 +12,37 @@ module('Unit | Service | origin', function (hooks) {
     ipcService = this.owner.lookup('service:ipc');
   });
 
-  test('resets origin on error', async function (assert) {
+  test('resets clusterUrl on error', async function (assert) {
     assert.expect(4);
     const ipcServiceStubbed = sinon.stub(ipcService, 'invoke');
-    await service.setOrigin(window.location.origin);
+    await service.setClusterUrl(window.location.origin);
     assert.strictEqual(service.rendererOrigin, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    ipcServiceStubbed.withArgs('setOrigin').rejects();
-    service.setOrigin('invalid-origin').catch(() => {
+    ipcServiceStubbed.withArgs('setClusterUrl').rejects();
+    service.setClusterUrl('invalid-origin').catch(() => {
       assert.notOk(service.rendererOrigin);
       assert.strictEqual(service.adapter.host, window.location.origin);
     });
   });
 
-  test('drops trailing slashes from origin on setOrigin', async function (assert) {
+  test('drops trailing slashes from clusterUrl on setClusterUrl', async function (assert) {
     assert.expect(4);
     sinon.stub(ipcService, 'invoke');
-    await service.setOrigin(`${window.location.origin}/`);
+    await service.setClusterUrl(`${window.location.origin}/`);
     assert.strictEqual(service.rendererOrigin, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    await service.setOrigin(`${window.location.origin}//////`);
+    await service.setClusterUrl(`${window.location.origin}//////`);
     assert.strictEqual(service.rendererOrigin, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
   });
 
-  test('trim spaces from origin on setOrigin', async function (assert) {
+  test('trim spaces from clusterUrl on setClusterUrl', async function (assert) {
     assert.expect(4);
     sinon.stub(ipcService, 'invoke');
-    await service.setOrigin(` ${window.location.origin}/ `);
+    await service.setClusterUrl(` ${window.location.origin}/ `);
     assert.strictEqual(service.rendererOrigin, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    await service.setOrigin(`   ${window.location.origin}   `);
+    await service.setClusterUrl(`   ${window.location.origin}   `);
     assert.strictEqual(service.rendererOrigin, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
   });
