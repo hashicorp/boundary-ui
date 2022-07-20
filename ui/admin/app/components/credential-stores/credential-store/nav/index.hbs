@@ -4,7 +4,6 @@
   </nav.link>
   {{#if @model.isVault}}
     {{#if (can 'navigate model' @model collection='credential-libraries')}}
-
       <nav.link
         @route='scopes.scope.credential-stores.credential-store.credential-libraries'
       >
@@ -12,12 +11,10 @@
       </nav.link>
     {{/if}}
   {{else}}
-
     <nav.link
       @route='scopes.scope.credential-stores.credential-store.credentials'
     >
       {{t 'resources.credential.title_plural'}}
     </nav.link>
-
   {{/if}}
 </Rose::Nav::Tabs>
