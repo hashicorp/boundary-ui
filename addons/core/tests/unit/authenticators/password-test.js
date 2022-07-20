@@ -32,10 +32,7 @@ module('Unit | Authenticator | password', function (hooks) {
       return new Response(200);
     });
     authenticator.restore(mockData);
-    assert.strictEqual(
-      applicationAdapter.headers.Authorization,
-      'Bearer token1234'
-    );
+    assert.strictEqual(applicationAdapter.headers.Authorization, 'Bearer token1234');
   });
 
   test('it adds an authorization header to application adapter on authenticate', async function (assert) {
