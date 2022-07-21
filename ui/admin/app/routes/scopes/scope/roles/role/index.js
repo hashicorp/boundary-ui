@@ -5,7 +5,7 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
    * Load the role's scope and sub scopes into a hierarchical data structure.
    * @param {Model} model
    */
-  async afterModel(/*model*/) {
+  async afterModel() {
     const currentScope = this.modelFor('scopes.scope');
     const subScopes = currentScope.isProject
       ? []
