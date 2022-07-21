@@ -69,3 +69,22 @@ export const codeValue =
     }}
   </Story>
 </Preview>
+
+<Preview>
+  <Story name="CodeEditorShellEditable">
+    {{
+      template: hbs`
+      <Rose::CodeEditor @codeValue={{codeValue}} as |C|>
+        <C.Toolbar />
+        <C.FieldEditor class='autosize' @options={{options}} />
+      </Rose::CodeEditor>`,
+      context: {
+        codeValue: 'mkdir /home/ubuntu/boundary/',
+        options: {
+          mode: 'shell',
+          readOnly: false,
+        },
+      },
+    }}
+  </Story>
+</Preview>
