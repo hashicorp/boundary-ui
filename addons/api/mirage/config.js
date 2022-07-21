@@ -590,6 +590,10 @@ export default function () {
   this.del('/credential-libraries/:id');
   this.patch('/credential-libraries/:id');
 
+  // credentials
+
+  this.get('/credentials/:id');
+
   // managed-groups
   this.get(
     '/managed-groups',
