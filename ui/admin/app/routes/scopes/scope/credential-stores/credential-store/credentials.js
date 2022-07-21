@@ -11,7 +11,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
   // =methods
 
   /**
-   * Loads all credential libraries under the current credential store.
+   * Loads all credentials under the current credential store.
    * @return {Promise{[CredentialModel]}}
    */
   model() {
