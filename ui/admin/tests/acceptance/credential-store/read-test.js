@@ -81,4 +81,14 @@ module('Acceptance | credential-stores | read', function (hooks) {
       'Error 404'
     );
   });
+
+  test('Users can link to docs page for credential store', async function (assert) {
+    assert.expect(1);
+    await visit(urls.credentialStore);
+    assert.ok(
+      find(
+        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
+      )
+    );
+  });
 });

@@ -119,4 +119,14 @@ module('Acceptance | credential-stores | create', function (hooks) {
       'Name is required.'
     );
   });
+
+  test('Users can link to docs page for new credential store', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newCredentialStore);
+    assert.ok(
+      find(
+        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
+      )
+    );
+  });
 });
