@@ -5,17 +5,19 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
    * Load the role's scope and sub scopes into a hierarchical data structure.
    * @param {Model} model
    */
-  async afterModel(model) {
-    const defaultScope = await this.store.findRecord('scope', model.scopeID);
-    const subScopes = (
-      await this.store.query('scope', { scope_id: defaultScope.id })
-    ).map((scope) => ({
-      model: scope,
-      subScopes: this.store.query('scope', { scope_id: scope.id }),
-    }));
+  async afterModel() {
+    const currentScope = this.modelFor('scopes.scope');
+    const subScopes = currentScope.isProject
+      ? []
+      : (await this.store.query('scope', { scope_id: currentScope.id })).map(
+          (scope) => ({
+            model: scope,
+            subScopes: this.store.query('scope', { scope_id: scope.id }),
+          })
+        );
     const grantScopes = [
       {
-        model: defaultScope,
+        model: currentScope,
         subScopes,
       },
     ];
