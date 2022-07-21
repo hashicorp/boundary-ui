@@ -31,7 +31,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   }
 
   redirect() {
-    if (!this.origin.rendererOrigin) this.router.replaceWith('index');
+    if (!this.origin.rendererClusterUrl) this.router.replaceWith('index');
   }
 
   /**
@@ -40,7 +40,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
-    const origin = this.origin.rendererOrigin;
+    const origin = this.origin.rendererClusterUrl;
     controller.setProperties({ origin });
   }
 }

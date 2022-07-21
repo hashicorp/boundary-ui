@@ -13,8 +13,8 @@ export default class IndexRoute extends Route {
    * If no origin is specified yet, redirects to origin, otherwise scopes.
    */
   redirect() {
-    const rendererOrigin = this.origin.rendererOrigin;
-    if (!rendererOrigin) {
+    const rendererClusterUrl = this.origin.rendererClusterUrl;
+    if (!rendererClusterUrl) {
       this.router.replaceWith('origin');
     } else {
       this.router.replaceWith('scopes');

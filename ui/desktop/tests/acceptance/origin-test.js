@@ -1,11 +1,5 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  fillIn,
-  click,
-  find
-} from '@ember/test-helpers';
+import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -114,39 +108,39 @@ module('Acceptance | origin', function (hooks) {
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
-  test('visiting index without an origin specified redirects to origin route', async function (assert) {
+  test('visiting index without a clusterUrl specified redirects to origin route', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
     await a11yAudit();
-    assert.notOk(mockIPC.origin);
+    assert.notOk(mockIPC.clusterUrl);
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
-  test('can set origin', async function (assert) {
+  test('can set clusterUrl', async function (assert) {
     assert.expect(3);
-    assert.notOk(mockIPC.origin);
+    assert.notOk(mockIPC.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
-    assert.strictEqual(mockIPC.origin, currentOrigin);
+    assert.strictEqual(mockIPC.clusterUrl, currentOrigin);
   });
 
   test('can reset origin before authentication', async function (assert) {
     assert.expect(4);
-    assert.notOk(mockIPC.origin);
+    assert.notOk(mockIPC.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
-    assert.strictEqual(mockIPC.origin, currentOrigin);
+    assert.strictEqual(mockIPC.clusterUrl, currentOrigin);
     await click('.change-origin a');
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('captures error on origin update', async function (assert) {
     assert.expect(2);
-    assert.notOk(mockIPC.origin);
+    assert.notOk(mockIPC.clusterUrl);
     sinon.stub(this.owner.lookup('service:origin'), 'setClusterUrl').throws();
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
@@ -168,5 +162,4 @@ module('Acceptance | origin', function (hooks) {
     await visit(urls.clusterUrl);
     assert.notOk(find('[name="host"]').value, 'Origin field is empty');
   });
-
 });

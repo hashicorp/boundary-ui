@@ -1,17 +1,7 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  //fillIn,
-  //click,
-  //find,
-  //findAll,
-  //getRootElement
-  //setupOnerror,
-} from '@ember/test-helpers';
+import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-//import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
@@ -43,7 +33,7 @@ module('Acceptance | projects', function (hooks) {
 
   const urls = {
     index: '/',
-    origin: '/origin',
+    clusterUrl: '/origin',
     scopes: {
       global: null,
       org: null,
@@ -60,7 +50,7 @@ module('Acceptance | projects', function (hooks) {
   const setDefaultOrigin = (test) => {
     const windowOrigin = window.location.origin;
     const origin = test.owner.lookup('service:origin');
-    origin.rendererOrigin = windowOrigin;
+    origin.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {

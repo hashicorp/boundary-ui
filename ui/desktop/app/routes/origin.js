@@ -50,7 +50,7 @@ export default class OriginRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
-    let origin = this.origin.rendererOrigin;
+    let origin = this.origin.rendererClusterUrl;
     // If origin is unset and this is a development environment,
     // autoset the origin field of the UI for better DX.
     // The controller URL is almost always the same as the current window when

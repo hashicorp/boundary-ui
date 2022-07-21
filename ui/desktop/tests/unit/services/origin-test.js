@@ -16,11 +16,11 @@ module('Unit | Service | origin', function (hooks) {
     assert.expect(4);
     const ipcServiceStubbed = sinon.stub(ipcService, 'invoke');
     await service.setClusterUrl(window.location.origin);
-    assert.strictEqual(service.rendererOrigin, window.location.origin);
+    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
     ipcServiceStubbed.withArgs('setClusterUrl').rejects();
     service.setClusterUrl('invalid-origin').catch(() => {
-      assert.notOk(service.rendererOrigin);
+      assert.notOk(service.rendererClusterUrl);
       assert.strictEqual(service.adapter.host, window.location.origin);
     });
   });
@@ -29,10 +29,10 @@ module('Unit | Service | origin', function (hooks) {
     assert.expect(4);
     sinon.stub(ipcService, 'invoke');
     await service.setClusterUrl(`${window.location.origin}/`);
-    assert.strictEqual(service.rendererOrigin, window.location.origin);
+    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
     await service.setClusterUrl(`${window.location.origin}//////`);
-    assert.strictEqual(service.rendererOrigin, window.location.origin);
+    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
   });
 
@@ -40,10 +40,10 @@ module('Unit | Service | origin', function (hooks) {
     assert.expect(4);
     sinon.stub(ipcService, 'invoke');
     await service.setClusterUrl(` ${window.location.origin}/ `);
-    assert.strictEqual(service.rendererOrigin, window.location.origin);
+    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
     await service.setClusterUrl(`   ${window.location.origin}   `);
-    assert.strictEqual(service.rendererOrigin, window.location.origin);
+    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
   });
 });

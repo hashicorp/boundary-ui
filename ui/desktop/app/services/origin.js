@@ -22,22 +22,22 @@ export default class OriginService extends Service {
   /**
    * @type {?string}
    */
-  get rendererOrigin() {
+  get rendererClusterUrl() {
     return this.storage.getItem('origin');
   }
 
   /**
-   * @param {?string} origin
+   * @param {?string} clusterUrl
    */
-  set rendererOrigin(origin) {
-    this.storage.setItem('origin', origin);
+  set rendererClusterUrl(clusterUrl) {
+    this.storage.setItem('origin', clusterUrl);
   }
 
   /**
    * @type {Promise{?string}}
    */
   get mainOrigin() {
-    return this.ipc.invoke('getOrigin');
+    return this.ipc.invoke('getClusterUrl');
   }
 
   // =methods
@@ -46,7 +46,7 @@ export default class OriginService extends Service {
    * Sets the main origin equal to the current renderer origin (if any).
    */
   async updateOrigin() {
-    const rendererOrigin = this.rendererOrigin;
+    const rendererOrigin = this.rendererClusterUrl;
     if (rendererOrigin) await this.setClusterUrl(rendererOrigin);
   }
 
@@ -69,13 +69,13 @@ export default class OriginService extends Service {
       clusterUrl = clusterUrl.trim();
       clusterUrl = clusterUrl.replace(/\/*$/, '');
       this.adapter.host = clusterUrl;
-      this.rendererOrigin = clusterUrl;
+      this.rendererClusterUrl = clusterUrl;
       if (clusterUrl !== (await this.mainOrigin)) {
         await this.ipc.invoke('setClusterUrl', clusterUrl);
       }
     } catch (e) {
       this.adapter.host = originalHost;
-      this.rendererOrigin = null;
+      this.rendererClusterUrl = null;
       throw e;
     }
   }
@@ -85,7 +85,7 @@ export default class OriginService extends Service {
    */
   @notifyError(({ message }) => message, { catch: true })
   async resetOrigin() {
-    this.rendererOrigin = null;
+    this.rendererClusterUrl = null;
     await this.ipc.invoke('resetOrigin');
   }
 }

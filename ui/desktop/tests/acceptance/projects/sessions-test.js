@@ -1,14 +1,5 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  //fillIn,
-  click,
-  find,
-  findAll,
-  //getRootElement
-  //setupOnerror,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -66,7 +57,7 @@ module('Acceptance | projects | sessions', function (hooks) {
   const setDefaultOrigin = (test) => {
     const windowOrigin = window.location.origin;
     const origin = test.owner.lookup('service:origin');
-    origin.rendererOrigin = windowOrigin;
+    origin.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -117,19 +108,19 @@ module('Acceptance | projects | sessions', function (hooks) {
     urls.sessions = `${urls.projects}/sessions`;
 
     class MockIPC {
-      origin = null;
+      clusterUrl = null;
 
       invoke(method, payload) {
         return this[method](payload);
       }
 
-      getOrigin() {
-        return this.origin;
+      getClusterUrl() {
+        return this.clusterUrl;
       }
 
-      setOrigin(origin) {
-        this.origin = origin;
-        return this.origin;
+      setClusterUrl(clusterUrl) {
+        this.clusterUrl = clusterUrl;
+        return this.clusterUrl;
       }
     }
 
