@@ -1,0 +1,26 @@
+<div class='code-editor-toolbar' data-test-code-editor-toolbar>
+  <div data-test-code-editor-toolbar-action class='code-editor-toolbar__action'>
+    {{yield to='action'}}
+  </div>
+
+  <div class='code-editor-toolbar__right-aligned'>
+    {{#if (has-block 'menu')}}
+      <div data-test-code-editor-toolbar-menu class='code-editor-toolbar__menu'>
+        {{yield to='menu'}}
+      </div>
+      <div
+        class='code-editor-toolbar__menu-divider'
+        data-test-code-editor-toolbar-menu-divider
+      ></div>
+    {{/if}}
+    <CopyButton
+      @clipboardText={{@copyText}}
+      @success={{this.copied}}
+      class='code-editor-toolbar__copy-button'
+      data-test-code-editor-toolbar-copy-button
+    >
+      <Rose::Icon @name={{this.copyIconType}} @size='medium' />
+      Copy code
+    </CopyButton>
+  </div>
+</div>
