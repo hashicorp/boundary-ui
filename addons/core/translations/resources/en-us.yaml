@@ -379,12 +379,19 @@ credential:
   title: Credential
   title_plural: Credentials
   description: Credentials are static resources like usernames and passwords.
+  actions:
+    create: New Credential
+    delete: Delete Credential
   messages:
     none:
       title: No Credentials Available
       description: No Credentials available in this credential store.
   types:
     username_password: Username & Password
+  help:
+    username_password: This host requires a username and password to connect.
+    username: The username to use when signing in with this credential store.
+    password: The password to use when signing in with this credential store.
 scope:
   title: Scope
   title_plural: Scopes
