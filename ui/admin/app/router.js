@@ -113,6 +113,14 @@ Router.map(function () {
                 function () {}
               );
             });
+            this.route('credentials', function () {
+              this.route('new');
+              this.route(
+                'credential',
+                { path: ':credential_id' },
+                function () {}
+              );
+            });
           }
         );
         this.route('new');

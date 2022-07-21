@@ -2,12 +2,19 @@
   <nav.link @route='scopes.scope.credential-stores.credential-store.index'>
     {{t 'titles.details'}}
   </nav.link>
-  {{#if (can 'navigate model' @model collection='credential-libraries')}}
-
+  {{#if @model.isVault}}
+    {{#if (can 'navigate model' @model collection='credential-libraries')}}
+      <nav.link
+        @route='scopes.scope.credential-stores.credential-store.credential-libraries'
+      >
+        {{t 'resources.credential-library.title_plural'}}
+      </nav.link>
+    {{/if}}
+  {{else}}
     <nav.link
-      @route='scopes.scope.credential-stores.credential-store.credential-libraries'
+      @route='scopes.scope.credential-stores.credential-store.credentials'
     >
-      {{t 'resources.credential-library.title_plural'}}
+      {{t 'resources.credential.title_plural'}}
     </nav.link>
   {{/if}}
 </Rose::Nav::Tabs>
