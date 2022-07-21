@@ -14,10 +14,18 @@ export default factory.extend({
       'update',
       'delete',
     ],
-  authorized_collection_actions: () => {
-    return {
-      'credential-libraries': ['create', 'list'],
-    };
+  authorized_collection_actions() {
+    switch (this.type) {
+      case 'vault':
+        return {
+          'credential-libraries': ['create', 'list'],
+        };
+      case 'static':
+      default:
+        return {
+          'credentials': ['create', 'list'],
+        };
+    }
   },
   id: () => generateId('cs_'),
   type: (i) => types[i % types.length],
@@ -40,11 +48,21 @@ export default factory.extend({
 
   withAssociations: trait({
     afterCreate(credentialStore, server) {
-      const { scope } = credentialStore;
-      server.createList('credential-library', 2, {
-        scope,
-        credentialStore,
-      });
+      const { scope, type } = credentialStore;
+      switch (type) {
+        case 'vault':
+          server.createList('credential-library', 2, {
+            scope,
+            credentialStore,
+          });
+          break;
+        case 'static':
+        default:
+          server.createList('credential', 2, {
+            scope,
+            credentialStore,
+          });
+      }
     },
   }),
 });
