@@ -35,12 +35,12 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   }
 
   /**
-   * Adds the existing origin, if any, to the controller scope.
+   * Adds the existing clusterUrl, if any, to the controller scope.
    * @param {Controller} controller
    */
   setupController(controller) {
     super.setupController(...arguments);
-    const origin = this.origin.rendererClusterUrl;
-    controller.setProperties({ origin });
+    const clusterUrl = this.origin.rendererClusterUrl;
+    controller.setProperties({ clusterUrl });
   }
 }

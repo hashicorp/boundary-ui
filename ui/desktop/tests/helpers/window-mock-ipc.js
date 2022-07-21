@@ -11,16 +11,12 @@ class MockIPC {
     return this.clusterUrl;
   }
 
-  // getOrigin() {
-  //   return this.clusterUrl;
-  // }
-
   setClusterUrl(clusterUrl) {
     this.clusterUrl = clusterUrl;
     return this.clusterUrl;
   }
 
-  resetOrigin() {}
+  resetClusterUrl() {}
   hasMacOSChrome() {}
   showWindowActions() {}
 }

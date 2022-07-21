@@ -1,24 +1,9 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  // currentURL,
-  // fillIn,
-  // click,
-  find,
-  //findAll,
-  //getRootElement
-  //setupOnerror,
-} from '@ember/test-helpers';
+import { visit, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-// import { Response } from 'miragejs';
-// import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
-import {
-  // currentSession,
-  // authenticateSession,
-  invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
 
 module('Acceptance | origin', function (hooks) {

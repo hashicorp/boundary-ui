@@ -45,33 +45,33 @@ export default class OriginRoute extends Route {
   }
 
   /**
-   * Adds the existing origin, if any, to the controller scope.
+   * Adds the existing clusterUrl, if any, to the controller scope.
    * @param {Controller} controller
    */
   setupController(controller) {
     super.setupController(...arguments);
-    let origin = this.origin.rendererClusterUrl;
-    // If origin is unset and this is a development environment,
-    // autoset the origin field of the UI for better DX.
+    let clusterUrl = this.origin.rendererClusterUrl;
+    // If clusterUrl is unset and this is a development environment,
+    // autoset the clusterUrl field of the UI for better DX.
     // The controller URL is almost always the same as the current window when
     // using mocks, and this makes development more rapid since developers
-    // do not need to fill an origin on every session.
-    if (!origin && config.autoOrigin) {
-      origin = this.window.location.origin;
+    // do not need to fill a clusterUrl on every session.
+    if (!clusterUrl && config.autoOrigin) {
+      clusterUrl = this.window.location.origin;
     }
-    controller.setProperties({ origin });
+    controller.setProperties({ origin: clusterUrl });
   }
 
   /**
-   * Points the API to the specified origin.  When the main process receives
-   * the origin, it is expected that the renderer will be restarted.
-   * @param {string} origin
+   * Points the API to the specified clusterUrl.  When the main process receives
+   * the clusterUrl, it is expected that the renderer will be restarted.
+   * @param {string} clusterUrl
    */
   @action
   @loading
-  async setOrigin(origin) {
+  async setClusterUrl(clusterUrl) {
     try {
-      await this.origin.setClusterUrl(origin);
+      await this.origin.setClusterUrl(clusterUrl);
       this.router.replaceWith('index');
     } catch (e) {
       // If scopes do not load, we assume this is not a Boundary API

@@ -43,9 +43,9 @@ class RuntimeSettings {
   }
 
   /**
-   * Sets the origin to null.
+   * Sets the clusterUrl to null.
    */
-  async resetOrigin() {
+  async resetClusterUrl() {
     this.origin = null;
   }
 

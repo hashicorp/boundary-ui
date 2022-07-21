@@ -125,7 +125,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
         return this.clusterUrl;
       }
 
-      setOrigin(clusterUrl) {
+      setClusterUrl(clusterUrl) {
         this.clusterUrl = clusterUrl;
         return this.clusterUrl;
       }

@@ -27,7 +27,7 @@ export default class ApplicationRoute extends Route {
   beforeModel() {
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
-    return this.origin.updateOrigin();
+    return this.origin.updateClusterUrl();
   }
 
   /**
@@ -57,7 +57,7 @@ export default class ApplicationRoute extends Route {
    */
   @action
   disconnect() {
-    this.origin.resetOrigin();
+    this.origin.resetClusterUrl();
     this.invalidateSession();
   }
 

@@ -36,18 +36,18 @@ export default class OriginService extends Service {
   /**
    * @type {Promise{?string}}
    */
-  get mainOrigin() {
+  get mainClusterUrl() {
     return this.ipc.invoke('getClusterUrl');
   }
 
   // =methods
 
   /**
-   * Sets the main origin equal to the current renderer origin (if any).
+   * Sets the main clusterUrl equal to the current renderer clusterUrl (if any).
    */
-  async updateOrigin() {
-    const rendererOrigin = this.rendererClusterUrl;
-    if (rendererOrigin) await this.setClusterUrl(rendererOrigin);
+  async updateClusterUrl() {
+    const rendererClusterUrl = this.rendererClusterUrl;
+    if (rendererClusterUrl) await this.setClusterUrl(rendererClusterUrl);
   }
 
   /**
@@ -59,7 +59,7 @@ export default class OriginService extends Service {
   async setClusterUrl(clusterUrl) {
     const originalHost = this.adapter.host;
     assert(
-      `setOrigin expects a string, you passed ${clusterUrl}`,
+      `setClusterUrl expects a string, you passed ${clusterUrl}`,
       typeof clusterUrl === 'string'
     );
     try {
@@ -70,7 +70,7 @@ export default class OriginService extends Service {
       clusterUrl = clusterUrl.replace(/\/*$/, '');
       this.adapter.host = clusterUrl;
       this.rendererClusterUrl = clusterUrl;
-      if (clusterUrl !== (await this.mainOrigin)) {
+      if (clusterUrl !== (await this.mainClusterUrl)) {
         await this.ipc.invoke('setClusterUrl', clusterUrl);
       }
     } catch (e) {
@@ -81,11 +81,11 @@ export default class OriginService extends Service {
   }
 
   /**
-   * Resets the origin.
+   * Resets the clusterUrl.
    */
   @notifyError(({ message }) => message, { catch: true })
-  async resetOrigin() {
+  async resetClusterUrl() {
     this.rendererClusterUrl = null;
-    await this.ipc.invoke('resetOrigin');
+    await this.ipc.invoke('resetClusterUrl');
   }
 }
