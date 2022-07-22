@@ -22,9 +22,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
     orgScope: null,
     projectScope: null,
     credentialStores: null,
-    credentialStore: null,
-    unknownCredentialStore: null,
-    newCredentialStore: null,
+    staticCredentialStore: null,
+    vaultCredentialStore: null,
   };
 
   hooks.beforeEach(function () {
@@ -38,54 +37,74 @@ module('Acceptance | credential-stores | update', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.credentialStore = this.server.create('credential-store', {
+    instances.staticCredentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
+      type: 'static',
+    });
+    instances.vaultCredentialStore = this.server.create('credential-store', {
+      scope: instances.scopes.project,
+      type: 'vault',
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
-    urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
-    urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
-    urls.newCredentialStore = `${urls.credentialStores}/new`;
+    urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
+    urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     authenticateSession({});
   });
 
-  test('can save changes to existing credential store', async function (assert) {
+  test('can save changes to existing static credential store', async function (assert) {
     assert.expect(3);
-    assert.notEqual(instances.credentialStore.name, 'random string');
-    await visit(urls.credentialStore);
+    assert.notEqual(instances.staticCredentialStore.name, 'random string');
+    await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
-    assert.strictEqual(currentURL(), urls.credentialStore);
+    assert.strictEqual(currentURL(), urls.staticCredentialStore);
     assert.strictEqual(
-      this.server.schema.credentialStores.all().models[0].name,
+      this.server.schema.credentialStores.where({ type: 'static' }).models[0]
+        .name,
       'random string'
+    );
+  });
+
+  test('can save changes to existing vault credential store', async function (assert) {
+    assert.expect(3);
+    assert.notEqual(instances.vaultCredentialStore.name, 'random string');
+    await visit(urls.vaultCredentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'vault cred. store');
+    await click('.rose-form-actions [type="submit"]');
+    assert.strictEqual(currentURL(), urls.vaultCredentialStore);
+    assert.strictEqual(
+      this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
+        .name,
+      'vault cred. store'
     );
   });
 
   test('cannot make changes to an existing credential store without proper authorization', async function (assert) {
     assert.expect(1);
-    instances.credentialStore.authorized_actions =
-      instances.credentialStore.authorized_actions.filter(
+    instances.staticCredentialStore.authorized_actions =
+      instances.staticCredentialStore.authorized_actions.filter(
         (item) => item !== 'update'
       );
-    await visit(urls.credentialStore);
+    await visit(urls.staticCredentialStore);
     assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
   });
 
   test('can cancel changes to existing credential store', async function (assert) {
     assert.expect(2);
-    await visit(urls.credentialStore);
+    await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
-    assert.notEqual(instances.credentialStore.name, 'random string');
+    assert.notEqual(instances.staticCredentialStore.name, 'random string');
     assert.strictEqual(
       find('[name="name"]').value,
-      instances.credentialStore.name
+      instances.staticCredentialStore.name
     );
   });
 
@@ -110,7 +129,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
         }
       );
     });
-    await visit(urls.credentialStore);
+    await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
@@ -128,12 +147,12 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.credentialStore.name, 'random string');
+    assert.notEqual(instances.staticCredentialStore.name, 'random string');
 
-    await visit(urls.credentialStore);
+    await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.strictEqual(currentURL(), urls.credentialStore);
+    assert.strictEqual(currentURL(), urls.staticCredentialStore);
 
     try {
       await visit(urls.credentialStores);
@@ -142,30 +161,32 @@ module('Acceptance | credential-stores | update', function (hooks) {
       await click('.rose-dialog-footer button:first-child', 'Click Discard');
       assert.strictEqual(currentURL(), urls.credentialStores);
       assert.notEqual(
-        this.server.schema.credentialStores.all().models[0].name,
+        this.server.schema.credentialStores.where({ type: 'static' }).models[0]
+          .name,
         'random string'
       );
     }
   });
 
-  test('can cancel discard unsaved credential store via dialog', async function (assert) {
+  test('can cancel discard unsaved static credential store via dialog', async function (assert) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.credentialStore.name, 'random string');
-    await visit(urls.credentialStore);
+    assert.notEqual(instances.staticCredentialStore.name, 'random string');
+    await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    assert.strictEqual(currentURL(), urls.credentialStore);
+    assert.strictEqual(currentURL(), urls.staticCredentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
       assert.ok(find('.rose-dialog'));
       await click('.rose-dialog-footer button:last-child');
-      assert.strictEqual(currentURL(), urls.credentialStore);
+      assert.strictEqual(currentURL(), urls.staticCredentialStore);
       assert.notEqual(
-        this.server.schema.credentialStores.all().models[0].name,
+        this.server.schema.credentialStores.where({ type: 'static' }).models[0]
+          .name,
         'random string'
       );
     }
