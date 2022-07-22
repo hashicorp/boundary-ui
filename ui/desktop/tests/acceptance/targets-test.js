@@ -47,10 +47,10 @@ module('Acceptance | targets', function (hooks) {
     targets: null,
   };
 
-  const setDefaultOrigin = (test) => {
+  const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:clusterUrl');
-    origin.rendererClusterUrl = windowOrigin;
+    const clusterUrl = test.owner.lookup('service:clusterUrl');
+    clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -94,7 +94,7 @@ module('Acceptance | targets', function (hooks) {
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
-    setDefaultOrigin(this);
+    setDefaultClusterUrl(this);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {

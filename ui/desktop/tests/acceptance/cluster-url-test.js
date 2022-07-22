@@ -9,7 +9,7 @@ import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import config from '../../config/environment';
 
-module('Acceptance | origin', function (hooks) {
+module('Acceptance | clusterUrl', function (hooks) {
   setupApplicationTest(hooks);
   setupBrowserFakes(hooks, { window: true });
   setupMirage(hooks);
@@ -108,7 +108,7 @@ module('Acceptance | origin', function (hooks) {
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
-  test('visiting index without a clusterUrl specified redirects to origin route', async function (assert) {
+  test('visiting index without a clusterUrl specified redirects to clusterUrl route', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
     await a11yAudit();

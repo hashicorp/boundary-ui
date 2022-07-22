@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import sinon from 'sinon';
 
-module('Unit | Service | origin', function (hooks) {
+module('Unit | Service | clusterUrl', function (hooks) {
   setupTest(hooks);
 
   let service, ipcService;

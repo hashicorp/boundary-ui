@@ -59,10 +59,10 @@ module('Acceptance | authentication', function (hooks) {
     sessions: null,
   };
 
-  const setDefaultOrigin = (test) => {
+  const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:clusterUrl');
-    origin.rendererClusterUrl = windowOrigin;
+    const clusterUrl = test.owner.lookup('service:clusterUrl');
+    clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -122,7 +122,7 @@ module('Acceptance | authentication', function (hooks) {
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
-    setDefaultOrigin(this);
+    setDefaultClusterUrl(this);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -142,7 +142,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.ok(find('.rose-message'));
   });
 
-  test('visiting authenticate route without origin redirects to origin index', async function (assert) {
+  test('visiting authenticate route without clusterUrl redirects to clusterUrl index', async function (assert) {
     assert.expect(1);
     this.owner.lookup('service:clusterUrl').rendererClusterUrl = null;
     await visit(urls.authenticate.global);
@@ -170,7 +170,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('can reset origin before authentication', async function (assert) {
+  test('can reset clusterUrl before authentication', async function (assert) {
     assert.expect(1);
     await visit(urls.authenticate.methods.global);
     await click('.change-origin a');

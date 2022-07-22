@@ -39,7 +39,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   const urls = {
     index: '/',
-    origin: '/origin',
+    clusterUrl: '/origin',
     scopes: {
       global: null,
       org: null,
@@ -54,10 +54,10 @@ module('Acceptance | projects | sessions', function (hooks) {
     sessions: null,
   };
 
-  const setDefaultOrigin = (test) => {
+  const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:clusterUrl');
-    origin.rendererClusterUrl = windowOrigin;
+    const clusterUrl = test.owner.lookup('service:clusterUrl');
+    clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -135,7 +135,7 @@ module('Acceptance | projects | sessions', function (hooks) {
     };
 
     window.addEventListener('message', messageHandler);
-    setDefaultOrigin(this);
+    setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
