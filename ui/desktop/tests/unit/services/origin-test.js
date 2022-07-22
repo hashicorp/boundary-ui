@@ -8,7 +8,7 @@ module('Unit | Service | origin', function (hooks) {
   let service, ipcService;
 
   hooks.beforeEach(function () {
-    service = this.owner.lookup('service:origin');
+    service = this.owner.lookup('service:clusterUrl');
     ipcService = this.owner.lookup('service:ipc');
   });
 

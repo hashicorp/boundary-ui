@@ -9,7 +9,7 @@ export default class OriginRoute extends Route {
   // =services
 
   @service session;
-  @service origin;
+  @service clusterUrl;
   @service intl;
   @service notify;
   @service router;
@@ -50,7 +50,7 @@ export default class OriginRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
-    let clusterUrl = this.origin.rendererClusterUrl;
+    let clusterUrl = this.clusterUrl.rendererClusterUrl;
     // If clusterUrl is unset and this is a development environment,
     // autoset the clusterUrl field of the UI for better DX.
     // The controller URL is almost always the same as the current window when
@@ -71,7 +71,7 @@ export default class OriginRoute extends Route {
   @loading
   async setClusterUrl(clusterUrl) {
     try {
-      await this.origin.setClusterUrl(clusterUrl);
+      await this.clusterUrl.setClusterUrl(clusterUrl);
       this.router.replaceWith('index');
     } catch (e) {
       // If scopes do not load, we assume this is not a Boundary API

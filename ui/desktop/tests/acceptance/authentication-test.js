@@ -61,7 +61,7 @@ module('Acceptance | authentication', function (hooks) {
 
   const setDefaultOrigin = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:origin');
+    const origin = test.owner.lookup('service:clusterUrl');
     origin.rendererClusterUrl = windowOrigin;
   };
 
@@ -144,7 +144,7 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting authenticate route without origin redirects to origin index', async function (assert) {
     assert.expect(1);
-    this.owner.lookup('service:origin').rendererClusterUrl = null;
+    this.owner.lookup('service:clusterUrl').rendererClusterUrl = null;
     await visit(urls.authenticate.global);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.clusterUrl);

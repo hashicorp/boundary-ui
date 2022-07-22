@@ -3,7 +3,7 @@ import { assert } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { notifyError } from 'core/decorators/notify';
 
-export default class OriginService extends Service {
+export default class ClusterUrlService extends Service {
   // =services
 
   @service ipc;

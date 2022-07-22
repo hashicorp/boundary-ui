@@ -9,7 +9,7 @@ export default class ApplicationRoute extends Route {
   // =services
 
   @service session;
-  @service origin;
+  @service clusterUrl;
   @service ipc;
 
   // =attributes
@@ -27,7 +27,7 @@ export default class ApplicationRoute extends Route {
   beforeModel() {
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
-    return this.origin.updateClusterUrl();
+    return this.clusterUrl.updateClusterUrl();
   }
 
   /**
@@ -57,7 +57,7 @@ export default class ApplicationRoute extends Route {
    */
   @action
   disconnect() {
-    this.origin.resetClusterUrl();
+    this.clusterUrl.resetClusterUrl();
     this.invalidateSession();
   }
 

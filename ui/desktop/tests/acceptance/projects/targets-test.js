@@ -58,7 +58,7 @@ module('Acceptance | projects | targets', function (hooks) {
 
   const setDefaultOrigin = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:origin');
+    const origin = test.owner.lookup('service:clusterUrl');
     origin.rendererClusterUrl = windowOrigin;
   };
 
