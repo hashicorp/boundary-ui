@@ -15,19 +15,22 @@ export default function initializeMockIPC(server, config) {
       return await this[method](payload);
     }
 
-    origin = null;
+    clusterUrl = null;
 
-    getOrigin() {
-      return this.origin;
+    // getOrigin() {
+    //   return this.origin;
+    // }
+    getClusterUrl() {
+      return this.clusterUrl;
     }
 
-    setOrigin(origin) {
-      this.origin = origin;
-      return this.origin;
+    setClusterUrl(clusterUrl) {
+      this.clusterUrl = clusterUrl;
+      return this.clusterUrl;
     }
 
-    resetOrigin() {
-      this.origin = null;
+    resetClusterUrl() {
+      this.clusterUrl = null;
     }
 
     openExternal(href) {

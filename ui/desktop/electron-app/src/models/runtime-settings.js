@@ -23,7 +23,7 @@ class RuntimeSettings {
   /**
    * Validates the clusterUrl is reachable and has a scopes endpoint.
    */
-  async validateOrigin(clusterUrl) {
+  async validateClusterUrl(clusterUrl) {
     // If the clusterUrl is the Electron clusterUrl, it is automatically valid.
     if (clusterUrl === 'serve://boundary') return true;
     // Otherwise, check if scopes can be loaded from the specified clusterUrl.
