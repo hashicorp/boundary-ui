@@ -592,7 +592,20 @@ export default function () {
 
   // credentials
 
+  this.get(
+    '/credentials',
+    (
+      { credentials },
+      { queryParams: { credential_store_id: credentialStoreId } }
+    ) => credentials.where({ credentialStoreId })
+  );
   this.get('/credentials/:id');
+  this.post('/credentials', function ({ credentialStores, credentials }) {
+    const attrs = this.normalizedRequestAttrs();
+    const credentialStore = credentialStores.find(attrs.credentialStoreId);
+    attrs.scopeId = credentialStore.scope.id;
+    return credentials.create(attrs);
+  });
 
   // managed-groups
   this.get(
