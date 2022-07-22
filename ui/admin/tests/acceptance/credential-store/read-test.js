@@ -40,6 +40,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     });
     instances.staticCredentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
+      type: 'static',
     });
     instances.vaultCredentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
