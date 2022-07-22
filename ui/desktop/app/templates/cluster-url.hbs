@@ -1,10 +1,8 @@
 <main>
   <BrandedCard
     @title={{t 'titles.welcome-to-boundary'}}
-    @description={{t 'descriptions.origin-initialization'}}
+    @description={{t 'descriptions.cluster-url-initialization'}}
   >
-    {{this.origin}}
-    {{this}}
     <Rose::Form
       class='full-width'
       @onSubmit={{route-action 'setClusterUrl' this.origin}}
@@ -16,8 +14,8 @@
         @name='host'
         @type='text'
         @value={{this.origin}}
-        @label={{t 'form.origin.label'}}
-        @helperText={{t 'form.origin.description'}}
+        @label={{t 'form.cluster-url.label'}}
+        @helperText={{t 'form.cluster-url.description'}}
         {{autofocus}}
       />
       <form.actions @submitText={{t 'actions.submit'}} @showCancel={{false}} />

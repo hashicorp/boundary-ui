@@ -40,7 +40,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
 
   const urls = {
     index: '/',
-    clusterUrl: '/origin',
+    clusterUrl: '/cluster-url',
     scopes: {
       global: null,
       org: null,

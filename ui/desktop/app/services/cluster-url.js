@@ -23,14 +23,14 @@ export default class ClusterUrlService extends Service {
    * @type {?string}
    */
   get rendererClusterUrl() {
-    return this.storage.getItem('origin');
+    return this.storage.getItem('cluster-url');
   }
 
   /**
    * @param {?string} clusterUrl
    */
   set rendererClusterUrl(clusterUrl) {
-    this.storage.setItem('origin', clusterUrl);
+    this.storage.setItem('cluster-url', clusterUrl);
   }
 
   /**

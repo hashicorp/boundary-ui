@@ -83,7 +83,7 @@ const createWindow = (partition, closeWindowCB) => {
 
   const browserWindow = new BrowserWindow(browserWindowOptions);
 
-  // If the user-specified origin changes, reload the page so that
+  // If the user-specified cluster URL changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
   runtimeSettings.onClusterUrlChange(() => browserWindow.loadURL(emberAppURL));
 

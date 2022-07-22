@@ -76,7 +76,7 @@ export default class ClusterUrlRoute extends Route {
     } catch (e) {
       // If scopes do not load, we assume this is not a Boundary API
       const errorMessage = this.intl.t(
-        'errors.origin-verification-failed.description'
+        'errors.cluster-url-verification-failed.description'
       );
       this.notify.error(errorMessage, { closeAfter: null });
     }

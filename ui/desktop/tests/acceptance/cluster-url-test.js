@@ -126,7 +126,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     assert.strictEqual(mockIPC.clusterUrl, currentOrigin);
   });
 
-  test.skip('can reset clusterUrl before authentication', async function (assert) {
+  test('can reset clusterUrl before authentication', async function (assert) {
     assert.expect(4);
     assert.notOk(mockIPC.clusterUrl);
     await visit(urls.clusterUrl);
@@ -138,7 +138,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
-  test.skip('captures error on clusterUrl update', async function (assert) {
+  test('captures error on clusterUrl update', async function (assert) {
     assert.expect(2);
     assert.notOk(mockIPC.clusterUrl);
     sinon.stub(this.owner.lookup('service:clusterUrl'), 'setClusterUrl').throws();
@@ -148,7 +148,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     assert.ok(find('.rose-notification.is-error'));
   });
 
-  test.skip('clusterUrl set automatically when autoOrigin is true', async function (assert) {
+  test('clusterUrl set automatically when autoOrigin is true', async function (assert) {
     assert.expect(1);
     config.autoOrigin = true;
     await visit(urls.clusterUrl);
@@ -156,7 +156,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     config.autoOrigin = false;
   });
 
-  test.skip('clusterUrl is *not* set automatically when autoOrigin is false', async function (assert) {
+  test('clusterUrl is *not* set automatically when autoOrigin is false', async function (assert) {
     assert.expect(2);
     assert.notOk(config.autoOrigin, 'autoOrigin is disabled');
     await visit(urls.clusterUrl);
