@@ -9,7 +9,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewCon
   // =attributes
 
   /**
-   * Translated new credential libraries breadcrumb
+   * Translated new credentials breadcrumb
    * @type {string}
    */
   get breadCrumb() {

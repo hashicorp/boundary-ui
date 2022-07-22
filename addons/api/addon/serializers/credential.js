@@ -3,7 +3,7 @@ import { copy } from 'ember-copy';
 
 export default class CredentialSerializer extends ApplicationSerializer {
   serialize() {
-    let serialized = super.serialize(...arguments);
+    const serialized = super.serialize(...arguments);
     delete serialized['attributes']['password_hmac'];
     return serialized;
   }
