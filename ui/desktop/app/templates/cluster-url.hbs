@@ -5,7 +5,7 @@
   >
     <Rose::Form
       class='full-width'
-      @onSubmit={{route-action 'setClusterUrl' this.origin}}
+      @onSubmit={{route-action 'setClusterUrl' this.clusterUrl}}
       @cancel={{false}}
       @disabled={{(is-loading)}}
       as |form|
@@ -13,7 +13,7 @@
       <form.input
         @name='host'
         @type='text'
-        @value={{this.origin}}
+        @value={{this.clusterUrl}}
         @label={{t 'form.cluster-url.label'}}
         @helperText={{t 'form.cluster-url.description'}}
         {{autofocus}}

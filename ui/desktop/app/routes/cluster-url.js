@@ -59,7 +59,7 @@ export default class ClusterUrlRoute extends Route {
     if (!clusterUrl && config.autoOrigin) {
       clusterUrl = this.window.location.origin;
     }
-    controller.setProperties({ origin: clusterUrl });
+    controller.setProperties({ clusterUrl: clusterUrl });
   }
 
   /**
