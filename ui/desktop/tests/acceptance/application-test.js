@@ -22,7 +22,7 @@ module('Acceptance | index', function (hooks) {
   hooks.beforeEach(function () {
     invalidateSession();
 
-    urls.clusterUrl = '/origin';
+    urls.clusterUrl = '/cluster-url';
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');

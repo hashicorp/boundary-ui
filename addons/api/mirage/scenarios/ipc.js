@@ -17,9 +17,6 @@ export default function initializeMockIPC(server, config) {
 
     clusterUrl = null;
 
-    // getOrigin() {
-    //   return this.origin;
-    // }
     getClusterUrl() {
       return this.clusterUrl;
     }

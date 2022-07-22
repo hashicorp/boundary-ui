@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import config from '../config/environment';
 
-export default class OriginRoute extends Route {
+export default class ClusterUrlRoute extends Route {
   // =services
 
   @service session;
@@ -38,7 +38,7 @@ export default class OriginRoute extends Route {
 
   /**
    * If arriving here already authenticated, redirect to index for further
-   * processing.  User must be logged out before changing the origin.
+   * processing.  User must be logged out before changing the clusterUrl.
    */
   beforeModel() {
     if (this.session.isAuthenticated) this.router.replaceWith('index');

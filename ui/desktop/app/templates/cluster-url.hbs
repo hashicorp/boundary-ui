@@ -3,6 +3,8 @@
     @title={{t 'titles.welcome-to-boundary'}}
     @description={{t 'descriptions.origin-initialization'}}
   >
+    {{this.origin}}
+    {{this}}
     <Rose::Form
       class='full-width'
       @onSubmit={{route-action 'setClusterUrl' this.origin}}

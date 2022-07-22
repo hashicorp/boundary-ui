@@ -20,9 +20,9 @@ export default class ApplicationRoute extends Route {
   routeIfUnauthenticated = 'index';
 
   /**
-   * Check that the origin specified in the renderer matches the origin
+   * Check that the clusterUrl specified in the renderer matches the clusterUrl
    * reported by the main process.  If they differ, update the main process
-   * origin so that the renderer's CSP can be rewritten to allow requests.
+   * clusterUrl so that the renderer's CSP can be rewritten to allow requests.
    */
   beforeModel() {
     const theme = this.session.get('data.theme');
@@ -52,8 +52,8 @@ export default class ApplicationRoute extends Route {
   }
 
   /**
-   * Disconnects from origin and invalidates session, thereby resetting
-   * the client and reloading to the onboarding origin screen.
+   * Disconnects from clusterUrl and invalidates session, thereby resetting
+   * the client and reloading to the onboarding clusterUrl screen.
    */
   @action
   disconnect() {

@@ -10,12 +10,12 @@ export default class IndexRoute extends Route {
   // =methods
 
   /**
-   * If no origin is specified yet, redirects to origin, otherwise scopes.
+   * If no clusterUrl is specified yet, redirects to cluster-url, otherwise scopes.
    */
   redirect() {
     const rendererClusterUrl = this.clusterUrl.rendererClusterUrl;
     if (!rendererClusterUrl) {
-      this.router.replaceWith('origin');
+      this.router.replaceWith('cluster-url');
     } else {
       this.router.replaceWith('scopes');
     }
