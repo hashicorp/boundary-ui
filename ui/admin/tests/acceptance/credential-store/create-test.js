@@ -64,7 +64,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
     const count = getStaticCredentialStoresCount();
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
-    await click('[value="static"]');
     await click('[type="submit"]');
     assert.strictEqual(getStaticCredentialStoresCount(), count + 1);
   });

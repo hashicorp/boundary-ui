@@ -75,17 +75,17 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.notEqual(instances.vaultCredentialStore.name, 'random string');
     await visit(urls.vaultCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'vault cred. store');
+    await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
     assert.strictEqual(
       this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
         .name,
-      'vault cred. store'
+      'random string'
     );
   });
 
-  test('cannot make changes to an existing credential store without proper authorization', async function (assert) {
+  test('cannot make changes to an existing static credential store without proper authorization', async function (assert) {
     assert.expect(1);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
@@ -95,7 +95,17 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
   });
 
-  test('can cancel changes to existing credential store', async function (assert) {
+  test('cannot make changes to an existing vault credential store without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.vaultCredentialStore.authorized_actions =
+      instances.vaultCredentialStore.authorized_actions.filter(
+        (item) => item !== 'update'
+      );
+    await visit(urls.vaultCredentialStore);
+    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+  });
+
+  test('can cancel changes to existing static credential store', async function (assert) {
     assert.expect(2);
     await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
@@ -108,7 +118,20 @@ module('Acceptance | credential-stores | update', function (hooks) {
     );
   });
 
-  test('saving an existing credential store with invalid fields displays error messages', async function (assert) {
+  test('can cancel changes to existing vault credential store', async function (assert) {
+    assert.expect(2);
+    await visit(urls.vaultCredentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.notEqual(instances.vaultCredentialStore.name, 'random string');
+    assert.strictEqual(
+      find('[name="name"]').value,
+      instances.vaultCredentialStore.name
+    );
+  });
+
+  test('saving an existing static credential store with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.patch('/credential-stores/:id', () => {
       return new Response(
@@ -143,7 +166,42 @@ module('Acceptance | credential-stores | update', function (hooks) {
     );
   });
 
-  test('can discard unsaved credential store changes via dialog', async function (assert) {
+  test('saving an existing vault credential store with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    this.server.patch('/credential-stores/:id', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.vaultCredentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    await click('[type="submit"]');
+    assert.ok(
+      find('[role="alert"]').textContent.trim(),
+      'The request was invalid.'
+    );
+    assert.ok(
+      find('.rose-form-error-message').textContent.trim(),
+      'Name is required.'
+    );
+  });
+
+  test('can discard unsaved static credential store changes via dialog', async function (assert) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -168,6 +226,31 @@ module('Acceptance | credential-stores | update', function (hooks) {
     }
   });
 
+  test('can discard unsaved vault credential store changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.vaultCredentialStore.name, 'random string');
+
+    await visit(urls.vaultCredentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.strictEqual(currentURL(), urls.vaultCredentialStore);
+
+    try {
+      await visit(urls.credentialStores);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:first-child', 'Click Discard');
+      assert.strictEqual(currentURL(), urls.credentialStores);
+      assert.notEqual(
+        this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
+          .name,
+        'random string'
+      );
+    }
+  });
+
   test('can cancel discard unsaved static credential store via dialog', async function (assert) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
@@ -186,6 +269,30 @@ module('Acceptance | credential-stores | update', function (hooks) {
       assert.strictEqual(currentURL(), urls.staticCredentialStore);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'static' }).models[0]
+          .name,
+        'random string'
+      );
+    }
+  });
+
+  test('can cancel discard unsaved vault credential store via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.vaultCredentialStore.name, 'random string');
+    await visit(urls.vaultCredentialStore);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'random string');
+    assert.strictEqual(currentURL(), urls.vaultCredentialStore);
+
+    try {
+      await visit(urls.credentialStores);
+    } catch (e) {
+      assert.ok(find('.rose-dialog'));
+      await click('.rose-dialog-footer button:last-child');
+      assert.strictEqual(currentURL(), urls.vaultCredentialStore);
+      assert.notEqual(
+        this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
           .name,
         'random string'
       );
