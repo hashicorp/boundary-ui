@@ -109,7 +109,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('Users can link to docs page for credential store', async function (assert) {
     assert.expect(1);
-    await visit(urls.credentialStore);
+    await visit(urls.staticCredentialStore);
     assert.ok(
       find(
         `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
