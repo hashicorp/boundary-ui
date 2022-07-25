@@ -12,6 +12,14 @@
       {{t 'resources.credential-library.actions.create'}}
     </dropdown.link>
   {{/if}}
+  {{#if (can 'create model' @model collection='credentials')}}
+    <dropdown.link
+      @route='scopes.scope.credential-stores.credential-store.credentials.new'
+      @model={{@model}}
+    >
+      {{t 'resources.credential.actions.create'}}
+    </dropdown.link>
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button

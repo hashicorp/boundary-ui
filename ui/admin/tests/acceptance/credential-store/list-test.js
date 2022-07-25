@@ -81,4 +81,14 @@ module('Acceptance | credential-stores | list', function (hooks) {
     await visit(urls.projectScope);
     assert.ok(find(`[href="${urls.credentialStores}"]`));
   });
+
+  test('Users can link to docs page for credential stores', async function (assert) {
+    assert.expect(1);
+    await visit(urls.credentialStores);
+    assert.ok(
+      find(
+        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
+      )
+    );
+  });
 });
