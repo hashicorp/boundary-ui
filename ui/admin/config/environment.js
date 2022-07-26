@@ -79,6 +79,7 @@ module.exports = function (environment) {
         'host-set.add-hosts': '/host-sets/add-hosts',
         'credential-store': '/credential-stores',
         'credential-library': '/credential-libraries',
+        credential: '/credentials',
         host: '/hosts',
         'host.new': '/hosts/new',
         role: '/roles',
