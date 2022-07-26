@@ -90,7 +90,7 @@ module.exports = function (environment) {
         'target.worker-filters': '/targets/worker-filters',
         user: '/users',
         downloads: '/downloads',
-        'getting-started.desktop': '/gettting-started/desktop',
+        'getting-started.desktop': '/getting-started/desktop',
         'api-client.cli': '/api-client/cli',
         'api-client.api': '/api-client/api',
       },
