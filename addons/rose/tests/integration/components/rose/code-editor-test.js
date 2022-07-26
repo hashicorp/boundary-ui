@@ -7,7 +7,7 @@ module('Integration | Component | rose/code-editor', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    let codeValue = 'export HCP_CLIENT_ID = {place your client_id here}';
+    const codeValue = 'export HCP_CLIENT_ID = {place your client_id here}';
     this.set('codeValue', codeValue);
 
     await render(hbs`

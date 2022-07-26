@@ -10,7 +10,7 @@ module('Integration | Component | rose/code-editor/toolbar', function (hooks) {
   const menuDividerSelector = '[data-test-code-editor-toolbar-menu-divider]';
 
   hooks.beforeEach(function () {
-    let copyText = 'copyText';
+    const copyText = 'copyText';
     this.set('copyText', copyText);
   });
 
@@ -38,7 +38,7 @@ module('Integration | Component | rose/code-editor/toolbar', function (hooks) {
   });
 
   test('it calls onCopy callback', async function (assert) {
-    let onCopy = () => {
+    const onCopy = () => {
       this.set('called', true);
     };
     this.set('onCopy', onCopy);

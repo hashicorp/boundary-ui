@@ -10,7 +10,7 @@ module(
     const editorSelector = '[data-test-code-editor-field-editor]';
 
     test('it renders', async function (assert) {
-      let codeValue = `export HCP_CLIENT_ID = {place your client_id here}`;
+      const codeValue = `export HCP_CLIENT_ID = {place your client_id here}`;
       this.set('codeValue', codeValue);
       await render(hbs`
       <Rose::CodeEditor::FieldEditor @value={{this.codeValue}} />
@@ -18,13 +18,13 @@ module(
       assert.dom(editorSelector).isVisible();
       assert.dom(editorSelector).includesText(codeValue);
 
-      let myNewCode = 'NEW CODE';
+      const myNewCode = 'NEW CODE';
       await typeIn(`${editorSelector} textarea`, myNewCode);
       assert.dom(editorSelector).includesText(myNewCode);
     });
 
     test('it renders readonly', async function (assert) {
-      let codeValue = `export HCP_CLIENT_ID = {place your client_id here}`;
+      const codeValue = `export HCP_CLIENT_ID = {place your client_id here}`;
       this.set('codeValue', codeValue);
       this.set('options', {
         readOnly: true,
@@ -35,7 +35,7 @@ module(
       assert.dom(editorSelector).isVisible();
       assert.dom(editorSelector).includesText(codeValue);
 
-      let myNewCode = 'NEW CODE';
+      const myNewCode = 'NEW CODE';
       waitUntil(async () => {
         try {
           // This should fail if the textarea is readonly
@@ -48,8 +48,8 @@ module(
     });
 
     test('it calls onInput on change', async function (assert) {
-      let codeValue = `export HCP_CLIENT_ID = {place your client_id here}`;
-      let onInput = () => {
+      const codeValue = `export HCP_CLIENT_ID = {place your client_id here}`;
+      const onInput = () => {
         this.set('called', true);
       };
       this.set('codeValue', codeValue);
@@ -60,7 +60,7 @@ module(
       assert.dom(editorSelector).isVisible();
       assert.dom(editorSelector).includesText(codeValue);
 
-      let myNewCode = 'NEW CODE';
+      const myNewCode = 'NEW CODE';
       await typeIn(`${editorSelector} textarea`, myNewCode);
       assert.dom(editorSelector).includesText(myNewCode);
       assert.true(this.called);
