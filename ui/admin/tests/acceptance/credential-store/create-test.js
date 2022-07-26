@@ -10,6 +10,8 @@ module('Acceptance | credential-stores | create', function (hooks) {
   setupMirage(hooks);
 
   let getCredentialStoresCount;
+  let getStaticCredentialStoresCount;
+  let getVaultCredentialStoresCount;
 
   const instances = {
     scopes: {
@@ -23,7 +25,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
     globalScope: null,
     projectScope: null,
     credentialStores: null,
-    credentialStore: null,
     newCredentialStore: null,
   };
 
@@ -38,29 +39,43 @@ module('Acceptance | credential-stores | create', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.credentialStore = this.server.create('credential-store', {
-      scope: instances.scopes.project,
-    });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
-    urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.newCredentialStore = `${urls.credentialStores}/new`;
     // Generate resource counter
     getCredentialStoresCount = () => {
       return this.server.schema.credentialStores.all().models.length;
     };
+    getStaticCredentialStoresCount = () => {
+      return this.server.schema.credentialStores.where({ type: 'static' })
+        .models.length;
+    };
+    getVaultCredentialStoresCount = () => {
+      return this.server.schema.credentialStores.where({ type: 'vault' }).models
+        .length;
+    };
     authenticateSession({});
   });
 
-  test('Users can create a new credential stores', async function (assert) {
+  test('Users can create a new credential store of default type static', async function (assert) {
     assert.expect(1);
-    const count = getCredentialStoresCount();
+    const count = getStaticCredentialStoresCount();
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.strictEqual(getCredentialStoresCount(), count + 1);
+    assert.strictEqual(getStaticCredentialStoresCount(), count + 1);
+  });
+
+  test('Users can create a new credential store of type vault', async function (assert) {
+    assert.expect(1);
+    const count = getVaultCredentialStoresCount();
+    await visit(urls.newCredentialStore);
+    await fillIn('[name="name"]', 'random string');
+    await click('[value="vault"]');
+    await click('[type="submit"]');
+    assert.strictEqual(getVaultCredentialStoresCount(), count + 1);
   });
 
   test('Users can cancel create new credential stores', async function (assert) {
