@@ -607,6 +607,9 @@ export default function () {
     return credentials.create(attrs);
   });
 
+  this.del('/credentials/:id');
+  this.patch('/credentials/:id');
+
   // managed-groups
   this.get(
     '/managed-groups',
