@@ -46,7 +46,7 @@ class RuntimeSettings {
    * Sets the clusterUrl to null.
    */
   async resetClusterUrl() {
-    this.#clusterUrl = null;
+    this.clusterUrl = null;
   }
 
   // Quick and dirty event handler pattern to enable the application to respond
