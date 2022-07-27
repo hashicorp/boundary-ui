@@ -6,29 +6,29 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
   // =properties
 
   /**
-   * Array of selected credential library IDs.
+   * Array of selected credential source IDs.
    * @type {EmberArray}
    */
-  selectedCredentialLibraryIDs = A();
+  selectedCredentialSourceIDs = A();
 
   /**
    * Checks for unassigned credential libraries.
-   * @param {[CredentialLibraryModel]} filteredCredentialLibraries
+   * @param {[CredentialLibraryModel]} filteredCredentialSources
    * @type {boolean}
    */
-  @computed('filteredCredentialLibraries.length')
-  get hasAvailableCredentialLibraries() {
-    return this.filteredCredentialLibraries.length > 0;
+  @computed('filteredCredentialSources.length')
+  get hasAvailableCredentialSources() {
+    return this.filteredCredentialSources.length > 0;
   }
 
   /**
-   * Filter out credential libraries not already added to the target.
+   * Filter out credential sources not already added to the target.
    * @type {[CredentialLibraryModel]}
    */
   @computed(
     'args.{credentialLibraries.[],model.application_credential_source_ids.[]}'
   )
-  get filteredCredentialLibraries() {
+  get filteredCredentialSources() {
     // Get IDs for credential libraries already added to the current target
     const currentCredentialLibraryIDs =
       this.args.model.application_credential_source_ids.map(
@@ -43,15 +43,15 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
   // =actions
 
   /**
-   * Add/Remove credential library to current selection
+   * Add/Remove credential source to current selection
    * @param CredentialLibraryModel
    */
   @action
-  toggleCredentialLibrary(credentialLibrary) {
-    if (!this.selectedCredentialLibraryIDs.includes(credentialLibrary.id)) {
-      this.selectedCredentialLibraryIDs.addObject(credentialLibrary.id);
+  toggleCredentialSource(credentialSource) {
+    if (!this.selectedCredentialSourceIDs.includes(credentialSource.id)) {
+      this.selectedCredentialSourceIDs.addObject(credentialSource.id);
     } else {
-      this.selectedCredentialLibraryIDs.removeObject(credentialLibrary.id);
+      this.selectedCredentialSourceIDs.removeObject(credentialSource.id);
     }
   }
 
@@ -60,6 +60,6 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
    */
   @action
   submit(fn) {
-    fn(this.selectedCredentialLibraryIDs);
+    fn(this.selectedCredentialSourceIDs);
   }
 }
