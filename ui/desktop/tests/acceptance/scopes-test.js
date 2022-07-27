@@ -1,14 +1,5 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  //fillIn,
-  click,
-  find,
-  findAll,
-  //getRootElement
-  //setupOnerror,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
 import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -49,7 +40,7 @@ module('Acceptance | scopes', function (hooks) {
 
   const urls = {
     index: '/',
-    origin: '/origin',
+    clusterUrl: '/cluster-url',
     scopes: {
       global: null,
       org: null,
@@ -71,10 +62,10 @@ module('Acceptance | scopes', function (hooks) {
     targetSessions: null,
   };
 
-  const setDefaultOrigin = (test) => {
+  const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:origin');
-    origin.rendererOrigin = windowOrigin;
+    const clusterUrl = test.owner.lookup('service:clusterUrl');
+    clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -137,19 +128,19 @@ module('Acceptance | scopes', function (hooks) {
     urls.targetSessions = `${urls.target}/sessions`;
 
     class MockIPC {
-      origin = null;
+      clusterUrl = null;
 
       invoke(method, payload) {
         return this[method](payload);
       }
 
-      getOrigin() {
-        return this.origin;
+      getClusterUrl() {
+        return this.clusterUrl;
       }
 
-      setOrigin(origin) {
-        this.origin = origin;
-        return this.origin;
+      setClusterUrl(clusterUrl) {
+        this.clusterUrl = clusterUrl;
+        return this.clusterUrl;
       }
     }
 
@@ -164,7 +155,7 @@ module('Acceptance | scopes', function (hooks) {
     };
 
     window.addEventListener('message', messageHandler);
-    setDefaultOrigin(this);
+    setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
@@ -234,11 +225,20 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(3);
     await later(async () => run.cancelTimers(), 750);
     await visit(urls.targets);
-    await later(async () => assert.strictEqual(currentURL(), urls.targets), 750);
+    await later(
+      async () => assert.strictEqual(currentURL(), urls.targets),
+      750
+    );
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
-    await later(async () => assert.strictEqual(currentURL(), urls.org2Targets), 750);
+    await later(
+      async () => assert.strictEqual(currentURL(), urls.org2Targets),
+      750
+    );
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
-    later(async () => assert.strictEqual(currentURL(), urls.globalTargets), 750);
+    later(
+      async () => assert.strictEqual(currentURL(), urls.globalTargets),
+      750
+    );
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
   });
 
@@ -318,8 +318,16 @@ module('Acceptance | scopes', function (hooks) {
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(
+        dialogButtons[0].textContent.trim(),
+        'Retry',
+        'Can retry'
+      );
+      assert.strictEqual(
+        dialogButtons[1].textContent.trim(),
+        'Cancel',
+        'Can cancel'
+      );
     }, 750);
     await visit(urls.scopes.global);
   });
@@ -340,8 +348,16 @@ module('Acceptance | scopes', function (hooks) {
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
       assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-      assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+      assert.strictEqual(
+        dialogButtons[0].textContent.trim(),
+        'Retry',
+        'Can retry'
+      );
+      assert.strictEqual(
+        dialogButtons[1].textContent.trim(),
+        'Cancel',
+        'Can cancel'
+      );
     }, 750);
     await visit(urls.targets);
   });

@@ -1,14 +1,5 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  //fillIn,
-  click,
-  find,
-  findAll,
-  //getRootElement
-  //setupOnerror,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -48,7 +39,7 @@ module('Acceptance | projects | targets', function (hooks) {
 
   const urls = {
     index: '/',
-    origin: '/origin',
+    clusterUrl: '/cluster-url',
     scopes: {
       global: null,
       org: null,
@@ -65,10 +56,10 @@ module('Acceptance | projects | targets', function (hooks) {
     sessions: null,
   };
 
-  const setDefaultOrigin = (test) => {
+  const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:origin');
-    origin.rendererOrigin = windowOrigin;
+    const clusterUrl = test.owner.lookup('service:clusterUrl');
+    clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -124,19 +115,19 @@ module('Acceptance | projects | targets', function (hooks) {
     urls.sessions = `${urls.target}/sessions`;
 
     class MockIPC {
-      origin = null;
+      clusterUrl = null;
 
       invoke(method, payload) {
         return this[method](payload);
       }
 
-      getOrigin() {
-        return this.origin;
+      getClusterUrl() {
+        return this.clusterUrl;
       }
 
-      setOrigin(origin) {
-        this.origin = origin;
-        return this.origin;
+      setClusterUrl(clusterUrl) {
+        this.clusterUrl = clusterUrl;
+        return this.clusterUrl;
       }
     }
 
@@ -151,7 +142,7 @@ module('Acceptance | projects | targets', function (hooks) {
     };
 
     window.addEventListener('message', messageHandler);
-    setDefaultOrigin(this);
+    setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
@@ -308,8 +299,16 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
     assert.strictEqual(dialogButtons.length, 2);
-    assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-    assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 
   test('handles connect error', async function (assert) {
@@ -326,8 +325,16 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
     assert.strictEqual(dialogButtons.length, 2);
-    assert.strictEqual(dialogButtons[0].textContent.trim(), 'Retry', 'Can retry');
-    assert.strictEqual(dialogButtons[1].textContent.trim(), 'Cancel', 'Can cancel');
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 
   test('can retry on error', async function (assert) {
