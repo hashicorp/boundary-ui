@@ -11,10 +11,10 @@ export function initialize(registry) {
       this._super(...arguments);
       const originalBeforeModel = this.beforeModel;
 
-      // Override the beforeModel hook and initialize the origin
+      // Override the beforeModel hook and initialize the clusterUrl
       this.beforeModel = async function () {
-        const origin = getOwner(this).lookup('service:origin');
-        return origin.updateOrigin().then(
+        const clusterUrl = getOwner(this).lookup('service:clusterUrl');
+        return clusterUrl.updateClusterUrl().then(
           () => originalBeforeModel.apply(this, arguments),
           () => originalBeforeModel.apply(this, arguments)
         );

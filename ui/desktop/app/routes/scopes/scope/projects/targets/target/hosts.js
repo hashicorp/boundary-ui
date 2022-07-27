@@ -7,7 +7,7 @@ export default class ScopesScopeProjectsTargetsTargetHostsRoute extends Route {
 
   @service ipc;
   @service session;
-  @service origin;
+  @service clusterUrl;
   @service notify;
   @service confirm;
 

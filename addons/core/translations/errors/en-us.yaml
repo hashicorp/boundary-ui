@@ -17,7 +17,7 @@ generic:
   title: Error
 authentication-failed:
   title: Authentication Failed
-origin-verification-failed:
-  description: Unable to connect to the specified origin. Please check the URL and try again.
+cluster-url-verification-failed:
+  description: Unable to connect to the specified cluster URL. Please check the URL and try again.
 quick-setup-failed:
   description: We're sorry, quick setup was unable to generate all resources.
