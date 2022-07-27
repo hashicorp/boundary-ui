@@ -78,4 +78,12 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     await a11yAudit();
     assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
+
+  test('Users can link to docs page for credential store', async function (assert) {
+    assert.expect(1);
+    await visit(urls.credential);
+    assert.ok(
+      find(`[href="https://boundaryproject.io/help/admin-ui/credentials"]`)
+    );
+  });
 });

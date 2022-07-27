@@ -171,5 +171,14 @@ module(
         );
       }
     });
+
+    test('password field renders in edit mode only for a credential', async function (assert) {
+      assert.expect(3);
+      await visit(urls.credential);
+      assert.notOk(find('[name="password"]'));
+      await click('form [type="button"]', 'Activate edit mode');
+      assert.strictEqual(currentURL(), urls.credential);
+      assert.ok(find('[name="password"]'));
+    });
   }
 );
