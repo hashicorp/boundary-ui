@@ -1,6 +1,6 @@
 import factory from '../generated/factories/host-set';
 import permissions from '../helpers/permissions';
-import { datatype, internet, database } from 'faker';
+import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
 
 export default factory.extend({
@@ -22,26 +22,26 @@ export default factory.extend({
   },
   preferred_endpoints() {
     if (this.type === 'plugin') {
-      const enpointsAmount = datatype.number({ min: 1, max: 5 });
+      const enpointsAmount = faker.datatype.number({ min: 1, max: 5 });
       let result = [];
       for (let i = 0; i < enpointsAmount; ++i) {
-        result.push(internet.ip());
+        result.push(faker.internet.ip());
       }
       return result;
     }
   },
   sync_interval_seconds() {
     if (this.type === 'plugin') {
-      return datatype.number();
+      return faker.datatype.number();
     }
   },
   // AWS specific
   filters() {
     if (this.plugin?.name === 'aws') {
-      const filtersAmount = datatype.number({ min: 1, max: 5 });
+      const filtersAmount = faker.datatype.number({ min: 1, max: 5 });
       let result = [];
       for (let i = 0; i < filtersAmount; ++i) {
-        result.push(`${datatype.string(3)}=${datatype.string(8)}`);
+        result.push(`${faker.datatype.string(3)}=${faker.datatype.string(8)}`);
       }
       return result;
     }
@@ -49,7 +49,7 @@ export default factory.extend({
   // Azure specific
   filter() {
     if (this.plugin?.name === 'azure') {
-      return `${database.column()}=${database.collation()}`;
+      return `${faker.database.column()}=${faker.database.collation()}`;
     }
   },
 });

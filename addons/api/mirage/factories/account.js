@@ -1,5 +1,5 @@
 import factory from '../generated/factories/account';
-import { random, internet } from 'faker';
+import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
@@ -18,13 +18,13 @@ export default factory.extend({
   attributes() {
     switch (this.type) {
       case 'password':
-        return { login_name: random.words() };
+        return { login_name: faker.random.words() };
       case 'oidc':
         return {
-          issuer: internet.ip(),
+          issuer: faker.internet.ip(),
           subject: 'sub',
-          email: internet.email(),
-          full_name: random.words(),
+          email: faker.internet.email(),
+          full_name: faker.random.words(),
         };
     }
   },
