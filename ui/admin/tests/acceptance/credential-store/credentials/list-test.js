@@ -10,7 +10,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -26,7 +25,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
 
   hooks.beforeEach(function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -38,11 +36,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     instances.staticCredentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
       type: 'static',
-    });
-    instances.credential = this.server.create('credential', {
-      scope: instances.scopes.project,
-      credentialStore: instances.staticCredentialStore,
-      type: 'username_password',
     });
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;

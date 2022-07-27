@@ -11,7 +11,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -28,7 +27,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   hooks.beforeEach(function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
