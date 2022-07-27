@@ -72,7 +72,7 @@ module(
     });
 
     test('cannot delete a credential store without proper authorization', async function (assert) {
-      assert.expect(2);
+      assert.expect(3);
       const credentialsCount = getCredentialsCount();
       instances.credential.authorized_actions =
         instances.credential.authorized_actions.filter(
