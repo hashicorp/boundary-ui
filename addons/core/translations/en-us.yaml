@@ -9,7 +9,7 @@ auth:
     authenticating-with-org: "Scope:  You are authenticating with organization \"{name}\""
     flow-success: You've successfully authenticated.  You may now close this window and return to the client.
     flow-error: Something went wrong while authenticating.  Please close this window and try again.  If the problem persists, notify your administrator.
-origin:
+cluster-url:
   connected-to: Connected to
 titles:
   home: Home
@@ -36,7 +36,7 @@ titles:
   create-resources: Create Resources
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
-  origin-initialization: To get started, please enter your origin URL
+  cluster-url-initialization: To get started, please enter your cluster URL
   create-but-not-list: You do not have permission to list {resource}, but you can create new instances.
   neither-list-nor-create: You do not have permission to list or create {resource}.
   no-results: We found no matching records.

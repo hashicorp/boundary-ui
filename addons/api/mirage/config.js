@@ -622,6 +622,17 @@ export default function () {
   this.patch('/managed-groups/:id');
   this.del('/managed-groups/:id');
 
+  // worker
+
+  this.get(
+    '/workers',
+    ({ workers }, { queryParams: { scope_id: scopeId } }) => {
+      return workers.where({ scopeId });
+    }
+  );
+  this.get('/worker/:id');
+  this.patch('/worker/:id');
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));

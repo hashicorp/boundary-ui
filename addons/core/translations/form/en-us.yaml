@@ -49,8 +49,8 @@ host_set:
 grant_scope:
   label: Grant Scope
   help: Specify the scope to which this role applies.
-origin:
-  label: Origin URL
+cluster-url:
+  label: Cluster URL
   description: The Boundary URL to which to connect (e.g. protocol://host:port)
 proxy:
   label: Proxy

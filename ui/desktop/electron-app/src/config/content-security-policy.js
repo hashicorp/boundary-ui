@@ -27,10 +27,10 @@ const enableDevCSP = () => {
 const generateCSPHeader = () => {
   const policy = Object.assign({}, csp);
 
-  // If an origin is specified, add it to the connect-src directive
-  if (runtimeSettings.origin) {
+  // If a clusterUrl is specified, add it to the connect-src directive
+  if (runtimeSettings.clusterUrl) {
     policy['connect-src'] = policy['connect-src'].slice();
-    policy['connect-src'].push(runtimeSettings.origin);
+    policy['connect-src'].push(runtimeSettings.clusterUrl);
   }
 
   return Object.keys(policy)
