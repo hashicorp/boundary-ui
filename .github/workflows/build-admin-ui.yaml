@@ -94,8 +94,8 @@ jobs:
           node-version: '16.x'
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:enterprise
-      - name: Upload artifact Admin UI Enterprise
+      - name: Upload artifact Admin UI Enterprise for HCP
         uses: actions/upload-artifact@v3
         with:
-          name: admin-ui-ent
+          name: admin-ui-hcp
           path: ./ui/admin/dist/
