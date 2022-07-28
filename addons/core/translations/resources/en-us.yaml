@@ -297,6 +297,9 @@ target:
   credential-source:
     title: Credential Source
     title_plural: Credential Sources
+    types:
+      vault: Vault
+      username_password: Username & Password
     messages:
       welcome:
         title: Welcome to Credential Sources

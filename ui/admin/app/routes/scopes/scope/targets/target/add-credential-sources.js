@@ -15,15 +15,27 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
   // =methods
 
   /**
-   * Empty out any previously loaded credential libraries.
+   * Empty out any previously loaded credential sources.
    */
   beforeModel() {
     this.store.unloadAll('credential-library');
+    this.store.unloadAll('credential');
+  }
+
+  /**
+   * Checks for unassigned credential libraries.
+   * @param {[CredentialLibraryModel]} credentialLibraries
+   * @param {[CredentialModel]} credentials
+   * @type {boolean}
+   */
+  get hasAvailableCredentialSources() {
+    console.log('entered')
+    return this.credentialLibraries.length > 0 || this.credentials.length > 0;
   }
 
   /**
    * Returns the current target and all credential libraries.
-   * @return {{target: TargetModel, credentialLibraries: [CredentialLibraryModel]}}
+   * @return {{target: TargetModel, credentialLibraries: [CredentialLibraryModel], credentials: [CredentialModel]}}
    */
   async model() {
     const target = this.modelFor('scopes.scope.targets.target');
@@ -34,16 +46,23 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
     await all(
       credentialStores.map(({ id: credential_store_id, isStatic }) => {
         //credential libraries don't have a type static so exclude them
-        if (!isStatic)
+        if (isStatic) {
+          return this.store.query('credential', {
+            credential_store_id,
+          });
+        } else {
           return this.store.query('credential-library', {
             credential_store_id,
           });
+        }
       })
     );
     const credentialLibraries = this.store.peekAll('credential-library');
+    const credentials = this.store.peekAll('credential');
     return {
       target,
       credentialLibraries,
+      credentials
     };
   }
 
