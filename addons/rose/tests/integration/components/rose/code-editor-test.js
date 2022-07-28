@@ -13,10 +13,10 @@ module('Integration | Component | rose/code-editor', function (hooks) {
     await render(hbs`
       <Rose::CodeEditor
         @codeValue={{this.codeValue}}
-        as |C|
+        as |c|
       >
-        <C.Toolbar />
-        <C.FieldEditor />
+        <c.toolbar />
+        <c.fieldEditor />
       </Rose::CodeEditor>
     `);
     assert.dom('[data-test-code-editor]').isVisible();
