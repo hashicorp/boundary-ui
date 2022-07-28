@@ -17,6 +17,7 @@
     "build:ui:admin": "cd ui/admin && yarn build",
     "build:ui:admin:oss": "cd ui/admin && yarn build:oss",
     "build:ui:admin:enterprise": "cd ui/admin && yarn build:enterprise",
+    "build:ui:admin:hcp": "cd ui/admin && yarn build:hcp",
     "build:ui:desktop": "cd ui/desktop && yarn build",
     "build:ui:desktop:win": "docker-compose -f docker-compose-embedding.yml run build-desktop-production && yarn build:ui:desktop:app",
     "build:ui:desktop:production": "cd ui/desktop && yarn build:production",
