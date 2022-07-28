@@ -16,11 +16,6 @@
 
   <page.body>
 
-    {{!
-      It's necessary to include this helper or else the resource-filter helper
-      will fail.  This is a bug.
-    }}
-
     {{#with
       (resource-filter 'scopes.scope.roles.role.add-principals' 'scope')
       as |filter|

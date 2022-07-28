@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { hash } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { resourceFilter } from 'core/decorators/resource-filter';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =services
@@ -11,14 +12,27 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   @service intl;
   @service notify;
   @service router;
+  @service store;
+  @service resourceFilterStore;
+
+  // =attributes
+
+  @resourceFilter({
+    allowed: (route) => route.store.peekAll('scope').toArray(),
+    serialize: ({ id }) => id,
+    findBySerialized: ({ id }, value) => id === value,
+  })
+  scope;
 
   // =methods
 
   /**
-   * Emtpy out any previously loaded users.
+   * Preload all scopes recursively, but allow this to fail.
    */
-  beforeModel() {
-    this.store.unloadAll('user');
+  async beforeModel() {
+    await this.store
+      .query('scope', { scope_id: 'global', recursive: true })
+      .catch(() => {});
   }
 
   /**
@@ -26,11 +40,26 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
    * @return {Promise{GroupModel, [UserModel]}}
    */
   model() {
-    return hash({
-      group: this.modelFor('scopes.scope.groups.group'),
-      // load all users from all scopes
-      users: this.store.query('user', { scope_id: 'global', recursive: true }),
-    });
+    const group = this.modelFor('scopes.scope.groups.group');
+    // filter out projects, since the user resource exists only on org and above
+    const scopes = this.store
+      .peekAll('scope')
+      .filter((scope) => !scope.isProject)
+      .toArray();
+    const scopeIDs = this.scope?.map((scope) => scope.id);
+    const users = scopeIDs?.length
+      ? this.resourceFilterStore.queryBy(
+          'user',
+          {
+            scope_id: scopeIDs,
+          },
+          {
+            scope_id: 'global',
+            recursive: true,
+          }
+        )
+      : this.store.query('user', { scope_id: 'global', recursive: true });
+    return hash({ group, users, scopes });
   }
 
   // =actions
@@ -56,5 +85,23 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   @action
   cancel() {
     this.router.replaceWith('scopes.scope.groups.group.members');
+  }
+
+  /**
+   * Sets the specified resource filter field to the specified value.
+   * @param {string} field
+   * @param value
+   */
+  @action
+  filterBy(field, value) {
+    this[field] = value;
+  }
+
+  /**
+   * Clears and filter selections.
+   */
+  @action
+  clearAllFilters() {
+    this.scope = [];
   }
 }
