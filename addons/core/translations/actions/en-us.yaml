@@ -31,7 +31,7 @@ add-hosts: Add Hosts
 set-password: Set Password
 change-password: Change Password
 edit-form: Edit Form
-change-origin: Change Origin URL
+change-cluster-url: Change Cluster URL
 change-state: Change State
 close: Close
 toggle-secret: Toggle secret visibility

@@ -25,5 +25,5 @@ Router.map(function () {
       });
     });
   });
-  this.route('origin');
+  this.route('cluster-url');
 });
