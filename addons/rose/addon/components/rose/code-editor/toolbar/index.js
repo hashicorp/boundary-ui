@@ -15,7 +15,10 @@ export default class RoseCodeEditorToolbarComponent extends Component {
     let originalIconType = this.copyIconType;
 
     this.copyIconType = COPIED_ICON_TYPE;
-    onCopy && onCopy();
+
+    if (onCopy) {
+      onCopy();
+    }
 
     later(() => (this.copyIconType = originalIconType), 1000);
   }
