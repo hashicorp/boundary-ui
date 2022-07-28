@@ -29,7 +29,6 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
    * @type {boolean}
    */
   get hasAvailableCredentialSources() {
-    console.log('entered')
     return this.credentialLibraries.length > 0 || this.credentials.length > 0;
   }
 
@@ -62,7 +61,7 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
     return {
       target,
       credentialLibraries,
-      credentials
+      credentials,
     };
   }
 

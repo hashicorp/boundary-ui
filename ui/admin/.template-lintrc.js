@@ -4,6 +4,7 @@ module.exports = {
   plugins: ['ember-template-lint-plugin-prettier'],
   extends: ['octane', 'ember-template-lint-plugin-prettier:recommended'],
   rules: {
+    'simple-unless': false,
     'no-passed-in-event-handlers': false,
     'no-bare-strings': true,
     'no-curly-component-invocation': {
