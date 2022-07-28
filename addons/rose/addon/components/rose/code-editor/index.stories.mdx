@@ -6,13 +6,13 @@ import { hbs } from 'ember-cli-htmlbars';
 # Code Editor
 
 `CodeEditor` is a component that yields two presentational components which together provide an IDE-like UX.
-CodeEditor::FieldEditor is where the provided code is displayed with syntax highlighting.
-CodeEditor::Toolbar is intended to go on top of the FieldEditor and provides a 'Copy code' button as well as other optional user-provided actions.
+CodeEditor::fieldEditor is where the provided code is displayed with syntax highlighting.
+CodeEditor::toolbar is intended to go on top of the fieldEditor and provides a 'Copy code' button as well as other optional user-provided actions.
 
 ```html
-<CodeEditor @codeValue="{{this.codeIWantToSee}}" as |C|>
-  <C.Toolbar />
-  <C.FieldEditor />
+<CodeEditor @codeValue="{{this.codeIWantToSee}}" as |c|>
+  <c.toolbar />
+  <c.fieldEditor />
 </CodeEditor>
 ```
 
@@ -36,9 +36,9 @@ export const codeValue =
   <Story name="Readonly">
     {{
       template: hbs`
-      <Rose::CodeEditor @codeValue={{codeValue}} as |C|>
-        <C.Toolbar />
-        <C.FieldEditor @options={{options}} />
+      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
+        <c.toolbar />
+        <c.fieldEditor @options={{options}} />
       </Rose::CodeEditor>`,
       context: {
         codeValue: codeValue,
@@ -55,9 +55,9 @@ export const codeValue =
   <Story name="CodeEditorShell">
     {{
       template: hbs`
-      <Rose::CodeEditor @codeValue={{codeValue}} as |C|>
-        <C.Toolbar />
-        <C.FieldEditor class='autosize' @options={{options}} />
+      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
+        <c.toolbar />
+        <c.fieldEditor class='autosize' @options={{options}} />
       </Rose::CodeEditor>`,
       context: {
         codeValue: 'mkdir /home/ubuntu/boundary/',
@@ -74,9 +74,9 @@ export const codeValue =
   <Story name="CodeEditorShellEditable">
     {{
       template: hbs`
-      <Rose::CodeEditor @codeValue={{codeValue}} as |C|>
-        <C.Toolbar />
-        <C.FieldEditor class='autosize' @options={{options}} />
+      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
+        <c.toolbar />
+        <c.fieldEditor class='autosize' @options={{options}} />
       </Rose::CodeEditor>`,
       context: {
         codeValue: 'mkdir /home/ubuntu/boundary/',
