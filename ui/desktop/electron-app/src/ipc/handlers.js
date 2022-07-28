@@ -8,25 +8,25 @@ const sanitizer = require('../utils/sanitizer.js');
 const { isMac } = require('../helpers/platform.js');
 
 /**
- * Returns the current runtime origin, which is used by the main thread to
+ * Returns the current runtime clusterUrl, which is used by the main thread to
  * rewrite the CSP to allow requests.
  */
-handle('getOrigin', () => runtimeSettings.origin);
+handle('getClusterUrl', () => runtimeSettings.clusterUrl);
 
 /**
- * Sets the origin to be used in the content security policy and triggers
+ * Sets the clusterUrl to be used in the content security policy and triggers
  * a main window reload.
  */
-handle('setOrigin', async (requestOrigin) => {
-  const origin = sanitizer.urlValidate(requestOrigin);
-  await runtimeSettings.validateOrigin(origin);
-  runtimeSettings.origin = origin;
+handle('setClusterUrl', async (requestOrigin) => {
+  const clusterUrl = sanitizer.urlValidate(requestOrigin);
+  await runtimeSettings.validateClusterUrl(clusterUrl);
+  runtimeSettings.clusterUrl = clusterUrl;
 });
 
 /**
- * Resets the origin.
+ * Resets the clusterUrl.
  */
-handle('resetOrigin', async () => runtimeSettings.resetOrigin());
+handle('resetClusterUrl', async () => runtimeSettings.resetClusterUrl());
 
 /**
  * Opens the specified URL in an external browser.  Only secure HTTPs URLs are
@@ -60,7 +60,7 @@ handle('cliExists', () => boundaryCli.exists());
  * Establishes a boundary session and returns session details.
  */
 handle('connect', ({ target_id, token, host_id }) =>
-  sessionManager.start(runtimeSettings.origin, target_id, token, host_id)
+  sessionManager.start(runtimeSettings.clusterUrl, target_id, token, host_id)
 );
 
 /**

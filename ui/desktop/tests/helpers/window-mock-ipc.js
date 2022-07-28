@@ -1,22 +1,22 @@
 import Service from '@ember/service';
 
 class MockIPC {
-  origin = null;
+  clusterUrl = null;
 
   invoke(method, payload) {
     return this[method](payload);
   }
 
-  getOrigin() {
-    return this.origin;
+  getClusterUrl() {
+    return this.clusterUrl;
   }
 
-  setOrigin(origin) {
-    this.origin = origin;
-    return this.origin;
+  setClusterUrl(clusterUrl) {
+    this.clusterUrl = clusterUrl;
+    return this.clusterUrl;
   }
 
-  resetOrigin() {}
+  resetClusterUrl() {}
   hasMacOSChrome() {}
   showWindowActions() {}
 }
@@ -57,8 +57,8 @@ export default class extends Service {
 
   // =methods
 
-  postMessage(data, origin, ports) {
-    if (origin !== window.location.origin) return;
+  postMessage(data, clusterUrl, ports) {
+    if (clusterUrl !== window.location.origin) return;
     const { method, payload } = data;
     if (method) {
       const response = this.mockIPC.invoke(method, payload);

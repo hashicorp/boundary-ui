@@ -56,16 +56,16 @@ exports.click = async (appWindow, selector) => {
 /**
  * Performs login on the app window provided with the credentials provided.
  * @param {object} appWindow The electron window to perform the action.
- * @param {string} origin URL origin to set.
+ * @param {string} clusterUrl Cluster URL to set.
  * @param {string} username Username to login.
  * @param {string} password Password to login.
  */
-exports.login = async (appWindow, origin, username, password) => {
-  // Fill the origin input
+exports.login = async (appWindow, clusterUrl, username, password) => {
+  // Fill the clusterUrl input
   await appWindow.waitForSelector('[name=host]');
-  await appWindow.fill('[name=host]', origin);
+  await appWindow.fill('[name=host]', clusterUrl);
 
-  // Click the set origin submit button
+  // Click the set clusterUrl submit button
   await appWindow.waitForSelector('button[type="submit"]');
   await this.click(appWindow, 'button[type="submit"]');
 
