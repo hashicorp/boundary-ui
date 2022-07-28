@@ -13,7 +13,7 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
 
   /**
    * Checks for unassigned credential sources.
-   * @param {[CredentialLibraryModel]} filteredCredentialSources
+   * @param {[CredentialLibraryModel, CredentialModel]} filteredCredentialSources
    * @type {boolean}
    */
   @computed('filteredCredentialSources.length')
@@ -23,7 +23,7 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
 
   /**
    * Filter out credential sources not already added to the target.
-   * @type {[CredentialLibraryModel]}
+   * @type {[CredentialLibraryModel, CredentialModel]}
    */
   @computed(
     'args.{credentialLibraries.[],model.application_credential_source_ids.[],credentials.[]}'
@@ -47,7 +47,7 @@ export default class FormTargetAddCredentialLibrariesIndexComponent extends Comp
 
   /**
    * Add/Remove credential source to current selection
-   * @param CredentialLibraryModel
+   * @param {CredentialLibraryModel, CredentialModel} credentialSource
    */
   @action
   toggleCredentialSource(credentialSource) {
