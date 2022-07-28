@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -56,10 +56,11 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   test('visiting /credentials', async function (assert) {
     assert.expect(2);
-    await visit(urls.credentials);
+    await visit(urls.staticCredentialStore);
+    await click(`[href="${urls.credentials}"]`);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentials);
-    await visit(urls.credential);
+    await click(`[href="${urls.credential}"]`);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credential);
   });
@@ -69,7 +70,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     instances.credential.authorized_actions =
       instances.credential.authorized_actions.filter((item) => item != 'read');
     await visit(urls.credentials);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    assert.notOk(find(`[href="${urls.credential}"]`));
   });
 
   test('visiting an unknown credential displays 404 message', async function (assert) {
