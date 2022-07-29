@@ -9,7 +9,7 @@ export default class ScopesScopeWorkersController extends Controller {
   // =attributes
 
   /**
-   * Translated users breadcrumb
+   * Translated workers breadcrumb
    * @type {string}
    */
   get breadCrumb() {

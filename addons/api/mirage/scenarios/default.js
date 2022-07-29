@@ -57,5 +57,5 @@ export default function (server) {
   });
 
   // Workers
-  server.createList('worker', 0, { scope: globalScope });
+  server.createList('worker', 3, { scope: globalScope });
 }
