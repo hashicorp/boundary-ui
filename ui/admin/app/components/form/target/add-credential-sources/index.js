@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
 
-export default class FormTargetAddCredentialLibrariesIndexComponent extends Component {
+export default class FormTargetAddCredentialSourcesIndexComponent extends Component {
   // =properties
 
   /**

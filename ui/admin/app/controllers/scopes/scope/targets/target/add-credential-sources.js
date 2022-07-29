@@ -8,6 +8,13 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesController exte
 
   // =attributes
 
+  get hasAvailableCredentialSources() {
+    return (
+      this.model.credentialLibraries.length > 0 ||
+      this.model.credentials.length > 0
+    );
+  }
+
   /**
    * Translated roles breadcrumb
    * @type {string}
