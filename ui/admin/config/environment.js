@@ -21,6 +21,9 @@ featureEditions.enterprise = {
   ...featureEditions.oss,
   'ssh-target': false,
 };
+featureEditions.hcp = {
+  ...featureEditions.enterprise,
+};
 
 module.exports = function (environment) {
   let ENV = {
