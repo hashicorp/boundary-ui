@@ -62,13 +62,15 @@
     }
 
     .indent-label-1 {
-      .rose-form-radio-label {
+      .rose-form-radio-label,
+      .rose-form-checkbox-label {
         padding-left: $indent;
       }
     }
 
     .indent-label-2 {
-      .rose-form-radio-label {
+      .rose-form-radio-label,
+      .rose-form-checkbox-label {
         padding-left: $indent + $icon-width;
       }
     }
