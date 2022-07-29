@@ -7,6 +7,9 @@ module.exports = function (defaults) {
     // Add options here
   });
 
+  app.import('node_modules/codemirror/lib/codemirror.css');
+  app.import('node_modules/codemirror/theme/monokai.css');
+
   /*
     This build file specifies the options for the dummy test app of this
     addon, located in `/tests/dummy`
