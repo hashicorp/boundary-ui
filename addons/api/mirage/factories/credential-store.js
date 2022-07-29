@@ -23,7 +23,7 @@ export default factory.extend({
       case 'static':
       default:
         return {
-          'credentials': ['create', 'list'],
+          credentials: ['create', 'list'],
         };
     }
   },
