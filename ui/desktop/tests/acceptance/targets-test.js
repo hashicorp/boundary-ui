@@ -1,18 +1,8 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  //fillIn,
-  //click,
-  //find,
-  //findAll,
-  //getRootElement
-  //setupOnerror,
-} from '@ember/test-helpers';
+import { visit, currentURL } from '@ember/test-helpers';
 import { run, later } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-// import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
@@ -57,10 +47,10 @@ module('Acceptance | targets', function (hooks) {
     targets: null,
   };
 
-  const setDefaultOrigin = (test) => {
+  const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
-    const origin = test.owner.lookup('service:origin');
-    origin.rendererOrigin = windowOrigin;
+    const clusterUrl = test.owner.lookup('service:clusterUrl');
+    clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
   hooks.beforeEach(function () {
@@ -104,7 +94,7 @@ module('Acceptance | targets', function (hooks) {
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
-    setDefaultOrigin(this);
+    setDefaultClusterUrl(this);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {

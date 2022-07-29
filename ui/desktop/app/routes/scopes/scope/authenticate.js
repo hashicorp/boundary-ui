@@ -6,7 +6,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   // =services
 
   @service session;
-  @service origin;
+  @service clusterUrl;
   @service router;
 
   // =methods
@@ -31,16 +31,16 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   }
 
   redirect() {
-    if (!this.origin.rendererOrigin) this.router.replaceWith('index');
+    if (!this.clusterUrl.rendererClusterUrl) this.router.replaceWith('index');
   }
 
   /**
-   * Adds the existing origin, if any, to the controller scope.
+   * Adds the existing clusterUrl, if any, to the controller scope.
    * @param {Controller} controller
    */
   setupController(controller) {
     super.setupController(...arguments);
-    const origin = this.origin.rendererOrigin;
-    controller.setProperties({ origin });
+    const clusterUrl = this.clusterUrl.rendererClusterUrl;
+    controller.setProperties({ clusterUrl });
   }
 }

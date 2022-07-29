@@ -4,18 +4,18 @@ import { inject as service } from '@ember/service';
 export default class IndexRoute extends Route {
   // =services
 
-  @service origin;
+  @service clusterUrl;
   @service router;
 
   // =methods
 
   /**
-   * If no origin is specified yet, redirects to origin, otherwise scopes.
+   * If no clusterUrl is specified yet, redirects to cluster-url, otherwise scopes.
    */
   redirect() {
-    const rendererOrigin = this.origin.rendererOrigin;
-    if (!rendererOrigin) {
-      this.router.replaceWith('origin');
+    const rendererClusterUrl = this.clusterUrl.rendererClusterUrl;
+    if (!rendererClusterUrl) {
+      this.router.replaceWith('cluster-url');
     } else {
       this.router.replaceWith('scopes');
     }

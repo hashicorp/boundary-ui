@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeAuthenticateController extends Controller {
   // =services
 
-  @service origin;
+  @service clusterUrl;
 
   // =attributes
 

@@ -48,11 +48,11 @@
         <p>{{t 'onboarding.success.descriptions.controller'}}</p>
         <div class='onboarding-quick-setup-success-controller-url'>
           <Copyable
-            @text={{this.model.origin}}
+            @text={{this.model.clusterUrl}}
             @buttonText={{t 'actions.copy-to-clipboard'}}
             @acknowledgeText={{t 'states.copied'}}
           >
-            <code>{{this.model.origin}}</code>
+            <code>{{this.model.clusterUrl}}</code>
           </Copyable>
         </div>
       </div>

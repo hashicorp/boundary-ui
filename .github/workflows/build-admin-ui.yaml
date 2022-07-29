@@ -45,7 +45,7 @@ jobs:
         with:
           name: admin-ui
           path: ./ui/admin/dist/
-      - name: Upload artifact Admin UI OSS
+      - name: Upload artifact OSS admin UI
         uses: actions/upload-artifact@v3
         with:
           name: admin-ui-oss
@@ -69,8 +69,32 @@ jobs:
           node-version: '16.x'
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:enterprise
-      - name: Upload artifact Admin UI Enterprise
+      - name: Upload artifact enterprise admin UI
         uses: actions/upload-artifact@v3
         with:
           name: admin-ui-ent
+          path: ./ui/admin/dist/
+  build-admin-ui-hcp:
+    name: Build Admin UI HCP
+    needs: [dependencies]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        id: node-modules-cache
+        with:
+          path: '**/node_modules'
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-
+      - name: Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+      - run: yarn run build:ui:admin:hcp
+      - name: Upload artifact HCP admin UI
+        uses: actions/upload-artifact@v3
+        with:
+          name: admin-ui-hcp
           path: ./ui/admin/dist/
