@@ -13,7 +13,7 @@ const executablePath = helpers.returnExecutablePath(
 );
 
 // Set login variables
-const originValue = 'http://localhost:9200';
+const clusterUrlValue = 'http://localhost:9200';
 const loginUsername = 'admin';
 const loginPassword = 'password';
 
@@ -36,15 +36,15 @@ test.describe('Targets end to end test suite', async () => {
   test('Connects to a target', async () => {
     const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
 
-    // Override local storage origin
+    // Override local storage cluster URL
     await boundaryWindow.evaluate(() =>
-      window.localStorage.setItem('desktop:origin', null)
+      window.localStorage.setItem('desktop:clusterURL', null)
     );
 
     // Perform the login
     await helpers.login(
       boundaryWindow,
-      originValue,
+      clusterUrlValue,
       loginUsername,
       loginPassword
     );

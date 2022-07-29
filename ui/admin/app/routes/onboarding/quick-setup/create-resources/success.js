@@ -23,7 +23,7 @@ export default class OnboardingQuickSetupCreateResourcesSuccessRoute extends Rou
     const model = this.modelFor('onboarding.quick-setup.create-resources');
     return {
       ...model,
-      origin: this.window.location.origin,
+      clusterUrl: this.window.location.origin,
     };
   }
 
