@@ -21,6 +21,10 @@
             <Rose::Icon @name='flight-icons/svg/org-16' @size='medium' />
             {{t 'resources.org.title_plural'}}
           </nav.link>
+          <nav.link @route='scopes.scope.workers'>
+            <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+            {{t 'resources.worker.title_plural'}}
+          </nav.link>
         </Rose::Nav::Sidebar>
       {{/if}}
 
@@ -36,6 +40,12 @@
             <Rose::Icon @name='flight-icons/svg/grid-16' @size='medium' />
             {{t 'resources.project.title_plural'}}
           </nav.link>
+          {{#if this.session.data.authenticated.isGlobal}}
+            <nav.link @route='scopes.scope.workers' @model='global'>
+              <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+              {{t 'resources.worker.title_plural'}}
+            </nav.link>
+          {{/if}}
         </Rose::Nav::Sidebar>
       {{/if}}
 
@@ -51,6 +61,12 @@
             <Rose::Icon @name='flight-icons/svg/grid-16' @size='medium' />
             {{t 'resources.project.title_plural'}}
           </nav.link>
+          {{#if this.session.data.authenticated.isGlobal}}
+            <nav.link @route='scopes.scope.workers' @model='global'>
+              <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+              {{t 'resources.worker.title_plural'}}
+            </nav.link>
+          {{/if}}
         </Rose::Nav::Sidebar>
         {{! TODO:  after scope awareness refactor, update groups and roles
                      to support project scopes }}

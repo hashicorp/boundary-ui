@@ -14,8 +14,8 @@ export default factory.extend({
       'delete',
     ],
 
-  authorized_collection_actions: () => {
-    return {
+  authorized_collection_actions() {
+    const collectionActions = {
       scopes: ['create', 'list'],
       users: ['create', 'list'],
       sessions: ['list'],
@@ -26,6 +26,13 @@ export default factory.extend({
       'auth-methods': ['create', 'list'],
       'host-catalogs': ['create', 'list'],
     };
+
+    // Worker permissions only available on the global scope
+    if (this.type === 'global') {
+      collectionActions.workers = ['create:worker-led', 'list'];
+    }
+
+    return collectionActions;
   },
 
   id: () => generateId('s_'),

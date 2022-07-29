@@ -125,6 +125,7 @@ Router.map(function () {
         );
         this.route('new');
       });
+      this.route('workers', function () {});
     });
   });
 
