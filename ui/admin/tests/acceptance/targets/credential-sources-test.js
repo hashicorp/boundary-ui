@@ -11,7 +11,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | targets | credential-libraries', function (hooks) {
+module('Acceptance | targets | credential sources', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 

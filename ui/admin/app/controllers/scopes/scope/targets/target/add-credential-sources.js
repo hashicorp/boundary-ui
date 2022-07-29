@@ -8,11 +8,12 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesController exte
 
   // =attributes
 
+  /**
+   * Checks for unassigned credential sources.
+   * @type {boolean}
+   */
   get hasAvailableCredentialSources() {
-    return (
-      this.model.credentialLibraries.length > 0 ||
-      this.model.credentials.length > 0
-    );
+    return this.model.filteredCredentialSources.length > 0;
   }
 
   /**

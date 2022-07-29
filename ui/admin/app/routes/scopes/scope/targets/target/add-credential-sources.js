@@ -23,18 +23,8 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
   }
 
   /**
-   * Checks for unassigned credential libraries.
-   * @param {[CredentialLibraryModel]} credentialLibraries
-   * @param {[CredentialModel]} credentials
-   * @type {boolean}
-   */
-  get hasAvailableCredentialSources() {
-    return this.credentialLibraries.length > 0 || this.credentials.length > 0;
-  }
-
-  /**
-   * Returns the current target and all credential libraries.
-   * @return {{target: TargetModel, credentialLibraries: [CredentialLibraryModel], credentials: [CredentialModel]}}
+   * Returns the current target and unassigned credential sources.
+   * @return {{target: TargetModel, filteredCredentialSources: [CredentialLibraryModel, CredentialModel]}}
    */
   async model() {
     const target = this.modelFor('scopes.scope.targets.target');
@@ -44,7 +34,6 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
     });
     await all(
       credentialStores.map(({ id: credential_store_id, isStatic }) => {
-        //credential libraries don't have a type static so exclude them
         if (isStatic) {
           return this.store.query('credential', {
             credential_store_id,
@@ -58,10 +47,23 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
     );
     const credentialLibraries = this.store.peekAll('credential-library');
     const credentials = this.store.peekAll('credential');
+
+    // Get IDs for credential sources already added to the current target
+    const currentCredentialSourceIDs =
+      target.application_credential_source_ids.map((source) => source.value);
+    const notAddedCredentialLibraries = credentialLibraries.filter(
+      ({ id }) => !currentCredentialSourceIDs.includes(id)
+    );
+    const notAddedCredentials = credentials.filter(
+      ({ id }) => !currentCredentialSourceIDs.includes(id)
+    );
+    const filteredCredentialSources = [
+      ...notAddedCredentialLibraries,
+      ...notAddedCredentials,
+    ];
     return {
       target,
-      credentialLibraries,
-      credentials,
+      filteredCredentialSources,
     };
   }
 

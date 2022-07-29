@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { computed, action } from '@ember/object';
+import { action } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class FormTargetAddCredentialSourcesIndexComponent extends Component {
@@ -10,38 +10,6 @@ export default class FormTargetAddCredentialSourcesIndexComponent extends Compon
    * @type {EmberArray}
    */
   selectedCredentialSourceIDs = A();
-
-  /**
-   * Checks for unassigned credential sources.
-   * @param {[CredentialLibraryModel, CredentialModel]} filteredCredentialSources
-   * @type {boolean}
-   */
-  @computed('filteredCredentialSources.length')
-  get hasAvailableCredentialSources() {
-    return this.filteredCredentialSources.length > 0;
-  }
-
-  /**
-   * Filter out credential sources not already added to the target.
-   * @type {[CredentialLibraryModel, CredentialModel]}
-   */
-  @computed(
-    'args.{credentialLibraries.[],model.application_credential_source_ids.[],credentials.[]}'
-  )
-  get filteredCredentialSources() {
-    // Get IDs for credential sources already added to the current target
-    const currentCredentialSourceIDs =
-      this.args.model.application_credential_source_ids.map(
-        (source) => source.value
-      );
-    const notAddedCredentialLibraries = this.args.credentialLibraries.filter(
-      ({ id }) => !currentCredentialSourceIDs.includes(id)
-    );
-    const notAddedCredentials = this.args.credentials.filter(
-      ({ id }) => !currentCredentialSourceIDs.includes(id)
-    );
-    return [...notAddedCredentialLibraries, ...notAddedCredentials];
-  }
 
   // =actions
 

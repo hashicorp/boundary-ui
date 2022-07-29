@@ -1,64 +1,45 @@
-{{#if this.hasAvailableCredentialSources}}
-  <Rose::Form
-    class='full-width'
-    @onSubmit={{fn this.submit @submit}}
-    @cancel={{@cancel}}
-    @disabled={{@model.isSaving}}
-    @error={{@model.errors.base}}
-    as |form|
-  >
-    <form.actions
-      @submitText={{t 'resources.target.actions.add-credential-sources'}}
-      @cancelText={{t 'actions.cancel'}}
-    />
+<Rose::Form
+  class='full-width'
+  @onSubmit={{fn this.submit @submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  as |form|
+>
+  <form.actions
+    @submitText={{t 'resources.target.actions.add-credential-sources'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
 
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each this.filteredCredentialSources as |credentialSource|}}
-          <body.row as |row|>
-            <row.headerCell>
-              <form.checkbox
-                @label={{credentialSource.id}}
-                @description={{credentialSource.description}}
-                @onChange={{fn this.toggleCredentialSource credentialSource}}
-              />
-            </row.headerCell>
-            <row.cell>{{credentialSource.name}}</row.cell>
-            <row.cell>
-              <Rose::Badge>{{t
-                  (concat
-                    'resources.target.credential-source.types.'
-                    credentialSource.type
-                  )
-                }}</Rose::Badge>
-            </row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
-  </Rose::Form>
-{{/if}}
-
-{{#unless this.hasAvailableCredentialSources}}
-  <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.target.credential-source.messages.none.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.target.credential-source.messages.none.description'}}
-      </message.description>
-      <message.link @route='scopes.scope.targets.target.credential-sources'>
-        <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-        {{t 'actions.back'}}
-      </message.link>
-    </Rose::Message>
-  </Rose::Layout::Centered>
-{{/unless}}
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @filteredCredentialSources as |credentialSource|}}
+        <body.row as |row|>
+          <row.headerCell>
+            <form.checkbox
+              @label={{credentialSource.id}}
+              @description={{credentialSource.description}}
+              @onChange={{fn this.toggleCredentialSource credentialSource}}
+            />
+          </row.headerCell>
+          <row.cell>{{credentialSource.name}}</row.cell>
+          <row.cell>
+            <Rose::Badge>{{t
+                (concat
+                  'resources.target.credential-source.types.'
+                  credentialSource.type
+                )
+              }}</Rose::Badge>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+</Rose::Form>
