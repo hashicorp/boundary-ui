@@ -57,7 +57,7 @@ export const codeValue =
       template: hbs`
       <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
         <c.toolbar />
-        <c.fieldEditor @classNames='autosize' @options={{options}} />
+        <c.fieldEditor @classNames='rose-autosize' @options={{options}} />
       </Rose::CodeEditor>`,
       context: {
         codeValue: 'mkdir /home/ubuntu/boundary/',

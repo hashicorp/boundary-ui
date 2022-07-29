@@ -1,7 +1,7 @@
 @use '../../variables/sizing';
 
 // Codemirror overrides
-.codemirror-container {
+.rose-codemirror-container {
   width: 100%;
 }
 
@@ -12,7 +12,7 @@
   font-family: ui-monospace, 'Menlo', monospace;
 }
 
-.autosize {
+.rose-autosize {
   .CodeMirror {
     height: auto;
   }
@@ -27,7 +27,7 @@
 }
 
 // Toolbar
-.code-editor-toolbar {
+.rose-code-editor-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
