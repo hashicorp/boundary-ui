@@ -17,8 +17,6 @@ export default function (server) {
     'withChildren'
   )[0];
 
-  server.create('user', { id: 'authenticateduser', scope: globalScope });
-
   // Auth
   const globalAuthMethods = server.createList(
     'auth-method',
@@ -32,6 +30,18 @@ export default function (server) {
     { scope: orgScope },
     'withAccountsAndUsersAndManagedGroups'
   );
+  // Authenticated user/account
+  const user = server.create('user', {
+    id: 'authenticateduser',
+    scope: globalScope,
+  });
+  const { id: accountID } = server.create('account', {
+    id: 'authenticatedaccount',
+    scope: globalScope,
+    authMethod: globalAuthMethods[0],
+    type: 'password',
+  });
+  user.update({ accountIds: [accountID] });
   // Assign primary auth methods per scope
   // TODO make this generic
   globalScope.update({ primaryAuthMethodId: globalAuthMethods[0].id });

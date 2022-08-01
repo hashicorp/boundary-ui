@@ -1,11 +1,12 @@
 import factory from '../generated/factories/session';
 import { trait } from 'ember-cli-mirage';
-import { random } from 'faker';
+import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
 
 const statusStrings = ['pending', 'active', 'canceling', 'terminated'];
 
-export const pickRandomStatusString = () => random.arrayElement(statusStrings);
+export const pickRandomStatusString = () =>
+  faker.helpers.arrayElement(statusStrings);
 
 export default factory.extend({
   id: () => generateId('ss_'),
