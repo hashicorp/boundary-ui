@@ -1,15 +1,15 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date, datatype, internet } from 'faker';
+import { faker } from '@faker-js/faker';
 
 /**
  * GeneratedUserModelFactory
  * User contains all fields related to a User resource
  */
 export default Factory.extend({
-  name: () => random.words(),
-  description: () => random.words(),
-  created_time: () => date.recent(),
-  updated_time: () => date.recent(),
-  disabled: () => datatype.boolean(),
-  email: () => internet.email().toLowerCase(),
+  name: () => faker.random.words(),
+  description: () => faker.random.words(),
+  created_time: () => faker.date.recent(),
+  updated_time: () => faker.date.recent(),
+  disabled: () => faker.datatype.boolean(),
+  email: () => faker.internet.email().toLowerCase(),
 });

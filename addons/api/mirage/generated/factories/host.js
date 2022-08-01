@@ -1,17 +1,17 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date, datatype, internet } from 'faker';
+import { faker } from '@faker-js/faker';
 
 /**
  * GeneratedHostModelFactory
  */
 export default Factory.extend({
   type: 'static',
-  name: () => random.words(),
-  description: () => random.words(),
-  created_time: () => date.recent(),
-  updated_time: () => date.recent(),
-  version: () => datatype.number(),
+  name: () => faker.random.words(),
+  description: () => faker.random.words(),
+  created_time: () => faker.date.recent(),
+  updated_time: () => faker.date.recent(),
+  version: () => faker.datatype.number(),
   attributes: () => {
-    return { address: internet.ipv6() };
+    return { address: faker.internet.ipv6() };
   },
 });

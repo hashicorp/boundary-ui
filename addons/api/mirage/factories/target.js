@@ -1,6 +1,6 @@
 import factory from '../generated/factories/target';
 import { trait } from 'ember-cli-mirage';
-import { random, datatype } from 'faker';
+import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
@@ -27,8 +27,9 @@ export default factory.extend({
   /**
    * -1 means "unlimited" and we want to generate these on occasion.
    */
-  session_connection_limit: () => random.arrayElement([-1, datatype.number()]),
-  worker_filter: (i) => (i % 2 === 0 ? random.words() : null),
+  session_connection_limit: () =>
+    faker.helpers.arrayElement([-1, faker.datatype.number()]),
+  worker_filter: (i) => (i % 2 === 0 ? faker.random.words() : null),
   type: (i) => types[i % types.length],
   /**
    * Generates attributes fields by type.
@@ -37,7 +38,7 @@ export default factory.extend({
     if (target.type === 'tcp' || target.type === 'ssh') {
       target.update({
         attributes: {
-          default_port: datatype.number(),
+          default_port: faker.datatype.number(),
         },
       });
     }

@@ -1,5 +1,5 @@
 import factory from '../generated/factories/credential-library';
-import { random, system } from 'faker';
+import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
@@ -22,8 +22,8 @@ export default factory.extend({
       case 'vault':
         return {
           http_method: 'GET',
-          http_request_body: random.word(),
-          path: system.directoryPath(),
+          http_request_body: faker.random.word(),
+          path: faker.system.directoryPath(),
         };
     }
   },
