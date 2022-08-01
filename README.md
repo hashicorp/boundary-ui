@@ -159,7 +159,7 @@ You will need to turn `off` mirage and run it: `$ ENABLE_MIRAGE=false yarn start
 
 In login screen, authenticate using generated admin login name and password.
 
-Enter the origin of your Boundary dev instance, by default is: `http://localhost:9200`.
+Enter the cluster URL of your Boundary dev instance, by default is: `http://localhost:9200`.
 
 ### Committing
 

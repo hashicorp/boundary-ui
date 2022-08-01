@@ -1,0 +1,90 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { hbs } from 'ember-cli-htmlbars';
+
+<Meta title="Rose|Code Editor" component="CodeEditor" />
+
+# Code Editor
+
+`CodeEditor` is a component that yields two presentational components which together provide an IDE-like UX.
+CodeEditor::fieldEditor is where the provided code is displayed with syntax highlighting.
+CodeEditor::toolbar is intended to go on top of the fieldEditor and provides a 'Copy code' button as well as other optional user-provided actions.
+
+```html
+<CodeEditor @codeValue="{{this.codeIWantToSee}}" as |c|>
+  <c.toolbar />
+  <c.fieldEditor />
+</CodeEditor>
+```
+
+<!-- mdx seems to not be able to handle template literals -->
+
+export const codeValue =
+  'hcp_boundary_cluster_id = "<cluster-id>"\n\n' +
+  'listener "tcp" {\n' +
+  '   address = "0.0.0.0:9202"\n' +
+  '   purpose = "proxy"\n' +
+  '}\n\n' +
+  'worker {\n' +
+  '   public_addr = "107.22.128.152"\n' +
+  '   auth_storage_path = "/home/ubuntu/boundary/worker1"\n' +
+  '   tags {\n' +
+  '      type = ["dev-worker", "ubuntu"]\n' +
+  '   }\n' +
+  '}';
+
+<Preview>
+  <Story name="Readonly">
+    {{
+      template: hbs`
+      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
+        <c.toolbar />
+        <c.fieldEditor @options={{options}} />
+      </Rose::CodeEditor>`,
+      context: {
+        codeValue: codeValue,
+        options: {
+          mode: 'hcl',
+          readOnly: true,
+        },
+      },
+    }}
+  </Story>
+</Preview>
+
+<Preview>
+  <Story name="CodeEditorShell">
+    {{
+      template: hbs`
+      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
+        <c.toolbar />
+        <c.fieldEditor @classNames='rose-autosize' @options={{options}} />
+      </Rose::CodeEditor>`,
+      context: {
+        codeValue: 'mkdir /home/ubuntu/boundary/',
+        options: {
+          mode: 'shell',
+          readOnly: true,
+        },
+      },
+    }}
+  </Story>
+</Preview>
+
+<Preview>
+  <Story name="CodeEditorShellEditable">
+    {{
+      template: hbs`
+      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
+        <c.toolbar />
+        <c.fieldEditor @classNames='autosize' @options={{options}} />
+      </Rose::CodeEditor>`,
+      context: {
+        codeValue: 'mkdir /home/ubuntu/boundary/',
+        options: {
+          mode: 'shell',
+          readOnly: false,
+        },
+      },
+    }}
+  </Story>
+</Preview>

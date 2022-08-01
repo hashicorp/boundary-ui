@@ -607,6 +607,9 @@ export default function () {
     return credentials.create(attrs);
   });
 
+  this.del('/credentials/:id');
+  this.patch('/credentials/:id');
+
   // managed-groups
   this.get(
     '/managed-groups',
@@ -618,6 +621,17 @@ export default function () {
   this.get('/managed-groups/:id');
   this.patch('/managed-groups/:id');
   this.del('/managed-groups/:id');
+
+  // worker
+
+  this.get(
+    '/workers',
+    ({ workers }, { queryParams: { scope_id: scopeId } }) => {
+      return workers.where({ scopeId });
+    }
+  );
+  this.get('/worker/:id');
+  this.patch('/worker/:id');
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

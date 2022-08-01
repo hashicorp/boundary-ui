@@ -21,6 +21,9 @@ featureEditions.enterprise = {
   ...featureEditions.oss,
   'ssh-target': false,
 };
+featureEditions.hcp = {
+  ...featureEditions.enterprise,
+};
 
 module.exports = function (environment) {
   let ENV = {
@@ -79,6 +82,7 @@ module.exports = function (environment) {
         'host-set.add-hosts': '/host-sets/add-hosts',
         'credential-store': '/credential-stores',
         'credential-library': '/credential-libraries',
+        credential: '/credentials',
         host: '/hosts',
         'host.new': '/hosts/new',
         role: '/roles',
@@ -90,7 +94,7 @@ module.exports = function (environment) {
         'target.worker-filters': '/targets/worker-filters',
         user: '/users',
         downloads: '/downloads',
-        'getting-started.desktop': '/gettting-started/desktop',
+        'getting-started.desktop': '/getting-started/desktop',
         'api-client.cli': '/api-client/cli',
         'api-client.api': '/api-client/api',
       },

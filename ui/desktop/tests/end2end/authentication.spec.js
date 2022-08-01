@@ -13,7 +13,7 @@ const executablePath = helpers.returnExecutablePath(
 );
 
 // Set login variables
-const originValue = 'http://localhost:9200';
+const clusterUrlValue = 'http://localhost:9200';
 const loginUsername = 'admin';
 const loginPassword = 'password';
 
@@ -37,15 +37,15 @@ test.describe('Authentication end to end test suite', async () => {
     test('Authenticates using user and password method and deauthenticates ', async () => {
       const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
 
-      // Override local storage origin
+      // Override local storage cluster URL
       await boundaryWindow.evaluate(() =>
-        window.localStorage.setItem('desktop:origin', null)
+        window.localStorage.setItem('desktop:clusterUrl', null)
       );
 
       // Perform login
       await helpers.login(
         boundaryWindow,
-        originValue,
+        clusterUrlValue,
         loginUsername,
         loginPassword
       );
@@ -115,14 +115,14 @@ test.describe('Authentication end to end test suite', async () => {
 
     test('Authenticates using user and wrong password, it can not authenticate', async () => {
       const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
-      // Override local storage origin
+      // Override local storage cluster URL
       await boundaryWindow.evaluate(() =>
-        window.localStorage.setItem('desktop:origin', null)
+        window.localStorage.setItem('desktop:clusterUrl', null)
       );
       // Perform login
       await helpers.login(
         boundaryWindow,
-        originValue,
+        clusterUrlValue,
         loginUsername,
         '123456789'
       );
@@ -158,15 +158,15 @@ test.describe('Authentication end to end test suite', async () => {
         });
       });
 
-      // Override local storage origin
+      // Override local storage cluster URL
       await boundaryWindow.evaluate(() =>
-        window.localStorage.setItem('desktop:origin', null)
+        window.localStorage.setItem('desktop:clusterUrl', null)
       );
-      const originValue = 'http://localhost:9200';
+      const clusterUrlValue = 'http://localhost:9200';
 
-      // Fill the origin input
+      // Fill the cluster URL input
       await boundaryWindow.waitForSelector('[name=host]');
-      await boundaryWindow.fill('[name=host]', originValue);
+      await boundaryWindow.fill('[name=host]', clusterUrlValue);
 
       // Click the submit button
       // Due to an error with await boundaryWindow.click('button[type="submit"]'); we are using a workaround.
