@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { hash } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { resourceFilter } from 'core/decorators/resource-filter';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
@@ -11,8 +12,28 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   @service intl;
   @service notify;
   @service router;
+  @service store;
+  @service resourceFilterStore;
+
+  // =attributes
+
+  @resourceFilter({
+    allowed: (route) => route.store.peekAll('scope').toArray(),
+    serialize: ({ id }) => id,
+    findBySerialized: ({ id }, value) => id === value,
+  })
+  scope;
 
   // =methods
+
+  /**
+   * Preload all scopes recursively, but allow this to fail.
+   */
+  async beforeModel() {
+    await this.store
+      .query('scope', { scope_id: 'global', recursive: true })
+      .catch(() => {});
+  }
 
   /**
    * Returns the current role, all users, and all groups
@@ -20,13 +41,37 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    */
   model() {
     const role = this.modelFor('scopes.scope.roles.role');
+    const scopes = this.store.peekAll('scope').toArray();
+    const scopeIDs = this.scope?.map((scope) => scope.id);
+    const users = scopeIDs?.length
+      ? this.resourceFilterStore.queryBy(
+          'user',
+          {
+            scope_id: scopeIDs,
+          },
+          {
+            scope_id: 'global',
+            recursive: true,
+          }
+        )
+      : this.store.query('user', { scope_id: 'global', recursive: true });
+    const groups = scopeIDs?.length
+      ? this.resourceFilterStore.queryBy(
+          'group',
+          {
+            scope_id: scopeIDs,
+          },
+          {
+            scope_id: 'global',
+            recursive: true,
+          }
+        )
+      : this.store.query('group', { scope_id: 'global', recursive: true });
     return hash({
       role,
-      users: this.store.query('user', { scope_id: 'global', recursive: true }),
-      groups: this.store.query('group', {
-        scope_id: 'global',
-        recursive: true,
-      }),
+      scopes,
+      users,
+      groups,
     });
   }
 
@@ -52,5 +97,23 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   @action
   cancel() {
     this.router.replaceWith('scopes.scope.roles.role.principals');
+  }
+
+  /**
+   * Sets the specified resource filter field to the specified value.
+   * @param {string} field
+   * @param value
+   */
+  @action
+  filterBy(field, value) {
+    this[field] = value;
+  }
+
+  /**
+   * Clears and filter selections.
+   */
+  @action
+  clearAllFilters() {
+    this.scope = [];
   }
 }

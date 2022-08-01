@@ -27,7 +27,9 @@ export default class RoleModel extends GeneratedRoleModel {
    * Convenience for looking up the grant scope, if loaded.
    */
   get grantScope() {
-    return this.store.peekRecord('scope', this.grant_scope_id);
+    return this.grant_scope_id
+      ? this.store.peekRecord('scope', this.grant_scope_id)
+      : null;
   }
 
   // =methods

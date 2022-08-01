@@ -1,0 +1,80 @@
+@use '../../variables/sizing';
+
+// Codemirror overrides
+.rose-codemirror-container {
+  width: 100%;
+}
+
+.CodeMirror {
+  max-width: 100%;
+  display: flex;
+  flex: 1;
+  font-family: ui-monospace, 'Menlo', monospace;
+}
+
+.rose-autosize {
+  .CodeMirror {
+    height: auto;
+  }
+}
+
+.CodeMirror-scroll {
+  width: 100%;
+}
+
+.CodeMirror-sizer {
+  border-right-width: 0px !important;
+}
+
+// Toolbar
+.rose-code-editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--ui-gray-subtler-6);
+  border-top: 1px solid var(--ui-gray-subtler-3);
+  border-bottom: 1px solid var(--ui-gray-subtler-3);
+  height: 2.75rem;
+
+  &__action {
+    margin-left: sizing.rems(s);
+  }
+
+  &__right-aligned {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  &__menu {
+    margin-right: sizing.rems(s);
+
+    .pds-dropdownTrigger {
+      box-shadow: none;
+
+      &__layoutWrapper {
+        padding-left: sizing.rems(s);
+        padding-right: sizing.rems(s);
+      }
+    }
+
+    &-divider {
+      border-right: 1px solid var(--ui-gray-subtler-3);
+      height: sizing.rems(xl);
+    }
+  }
+
+  &__copy-button {
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    color: var(--ui-gray-starker-2);
+    margin-right: sizing.rems(xs);
+    margin-left: sizing.rems(s);
+    height: sizing.rems(xl);
+
+    &-icon {
+      margin-right: sizing.rems(xs);
+    }
+  }
+}
