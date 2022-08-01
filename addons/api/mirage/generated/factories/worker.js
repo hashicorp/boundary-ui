@@ -11,7 +11,7 @@ export default Factory.extend({
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   version: () => faker.datatype.number(),
-  address: () => `${faker.internet.ipv6()}${faker.internet.port()}`,
+  address: () => `${faker.internet.ipv4()}:${faker.internet.port()}`,
   last_status_time: () => faker.date.recent(),
-  active_connection_count: () => faker.datatype.number(),
+  active_connection_count: () => faker.datatype.number({ max: 10 }),
 });
