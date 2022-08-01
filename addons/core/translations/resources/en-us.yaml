@@ -393,8 +393,6 @@ credential:
     username_password: Username & Password
   help:
     username_password: This host requires a username and password to connect.
-    username: The username to use when signing in with this credential store.
-    password: The password to use when signing in with this credential store.
 scope:
   title: Scope
   title_plural: Scopes
