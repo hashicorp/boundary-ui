@@ -1,5 +1,5 @@
 import factory from '../generated/factories/credential';
-import { random } from 'faker';
+import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generatedId from '../helpers/id';
 
@@ -15,7 +15,7 @@ export default factory.extend({
     ],
   attributes() {
     return {
-      username: random.word(),
+      username: faker.random.word(),
     };
   },
 });

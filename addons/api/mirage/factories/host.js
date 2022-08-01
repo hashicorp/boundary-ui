@@ -1,6 +1,6 @@
 import factory from '../generated/factories/host';
 import permissions from '../helpers/permissions';
-import { internet, datatype } from 'faker';
+import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
 
 export default factory.extend({
@@ -25,12 +25,12 @@ export default factory.extend({
     const addressesAmount = Math.floor(Math.random() * 6) + 1;
     let result = [];
     for (let i = 0; i < addressesAmount; ++i) {
-      result.push(internet.ip());
+      result.push(faker.internet.ip());
     }
     return result;
   },
   external_id() {
-    return datatype.uuid();
+    return faker.datatype.uuid();
   },
   // Only aws plugins have dns_names
   dns_names() {
@@ -38,7 +38,7 @@ export default factory.extend({
       const dnsNamesAmount = Math.floor(Math.random() * 6) + 1;
       let result = [];
       for (let i = 0; i < dnsNamesAmount; i++) {
-        result.push(internet.domainName());
+        result.push(faker.internet.domainName());
       }
       return result;
     }

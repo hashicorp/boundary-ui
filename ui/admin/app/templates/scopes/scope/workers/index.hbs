@@ -1,0 +1,66 @@
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.worker.title_plural'}}
+      <DocLink @doc='worker' @iconSize='large' />
+    </h2>
+  </page.header>
+
+  <page.actions>
+    {{#if (can 'create worker led worker' this.scope collection='workers')}}
+      {{#if @model}}
+        <Rose::LinkButton @route='scopes.scope.workers.new' @style='primary'>{{t
+            'titles.new'
+          }}</Rose::LinkButton>
+      {{/if}}
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+    {{#if @model}}
+      {{! TODO: List view }}
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.worker.messages.welcome.title'}}
+          as |message|
+        >
+          <message.description>
+            {{#if (can 'list worker' this.scope collection='workers')}}
+              {{! can list (at least):  show default welcome message}}
+              {{t 'resources.worker.description'}}
+            {{else if (can
+              'create worker led worker' this.scope collection='workers'
+            )}}
+              {{! can create (only):  show create-but-not-list welcome message}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.worker.title_plural')
+              }}
+            {{else}}
+              {{! can neither list nor create }}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.worker.title_plural')
+              }}
+            {{/if}}
+          </message.description>
+          {{#if
+            (can 'create worker led worker' this.scope collection='workers')
+          }}
+            <message.link @route='scopes.scope.workers.new'>
+              <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
+              {{t 'titles.new'}}
+            </message.link>
+          {{/if}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/if}}
+
+  </page.body>
+</Rose::Layout::Page>
