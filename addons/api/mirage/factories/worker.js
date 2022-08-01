@@ -1,4 +1,4 @@
-import factory from '../generated/factories/user';
+import factory from '../generated/factories/worker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 import { random } from 'faker';

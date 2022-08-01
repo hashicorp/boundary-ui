@@ -2,8 +2,8 @@ import { Factory } from 'ember-cli-mirage';
 import { random, date, datatype, internet } from 'faker';
 
 /**
- * GeneratedUserModelFactory
- * User contains all fields related to a User resource
+ * GeneratedWorkerModelFactory
+ * User contains all fields related to a Worker resource
  */
 export default Factory.extend({
   name: () => random.words(),
