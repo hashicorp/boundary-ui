@@ -22,6 +22,17 @@
             {{t 'resources.org.title_plural'}}
           </nav.link>
         </Rose::Nav::Sidebar>
+        {{#if (can 'navigate worker' @model collection='workers')}}
+          <Rose::Nav::Sidebar
+            @title={{t 'resources.worker.title_plural'}}
+            as |nav|
+          >
+            <nav.link @route='scopes.scope.workers'>
+              <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+              {{t 'resources.worker.title_plural'}}
+            </nav.link>
+          </Rose::Nav::Sidebar>
+        {{/if}}
       {{/if}}
 
       {{#if @model.isOrg}}
