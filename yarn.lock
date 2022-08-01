@@ -3869,7 +3869,7 @@
     ember-cli-babel "^7.22.1"
     ember-compatibility-helpers "^1.1.1"
 
-"@ember/render-modifiers@^2.0.4":
+"@ember/render-modifiers@^1.0.2 || ^2.0.0", "@ember/render-modifiers@^2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@ember/render-modifiers/-/render-modifiers-2.0.4.tgz#0ac7af647cb736076dbfcd54ca71e090cd329d71"
   integrity sha512-Zh/fo5VUmVzYHkHVvzWVjJ1RjFUxA2jH0zCp2+DQa80Bf3DUXauiEByxU22UkN4LFT55DBFttC0xCQSJG3WTsg==
@@ -10160,6 +10160,15 @@ cli-width@^3.0.0:
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-3.0.0.tgz#a2f48437a2caa9a22436e794bf071ec9e61cedf6"
   integrity sha512-FxqpkPPwu1HjuN93Omfm4h8uIanXofW0RxVEW3k5RKx+mJJYSthzNhp32Kzxxy3YAEZ/Dc/EWN1vZRY0+kOhbw==
 
+clipboard@^2.0.6:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.11.tgz#62180360b97dd668b6b3a84ec226975762a70be5"
+  integrity sha512-C+0bbOqkezLIsmWSvlsXS0Q0bmkugu7jcfMIACB+RDEntIzQIkdr148we28AfSloQLRdZlYL/QYyrq05j/3Faw==
+  dependencies:
+    good-listener "^1.2.2"
+    select "^1.1.2"
+    tiny-emitter "^2.0.0"
+
 clipboard@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.8.tgz#ffc6c103dd2967a83005f3f61976aa4655a4cdba"
@@ -10255,6 +10264,11 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
+
+codemirror@5.65.7:
+  version "5.65.7"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.65.7.tgz#29af41ce5f4c2b8f1c1e16f4e645ff392823716a"
+  integrity sha512-zb67cXzgugIQmb6tfD4G11ILjYoMfTjwcjn+cWsa4GewlI2adhR/h3kolkoCQTm1msD/1BuqVTKuO09ELsS++A==
 
 collapse-white-space@^1.0.2:
   version "1.0.6"
@@ -11841,6 +11855,41 @@ ember-auto-import@^1.10.1, ember-auto-import@^1.11.2, ember-auto-import@^1.2.15,
     walk-sync "^0.3.3"
     webpack "^4.43.0"
 
+ember-auto-import@^1.11.3:
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/ember-auto-import/-/ember-auto-import-1.12.2.tgz#cc7298ee5c0654b0249267de68fb27a2861c3579"
+  integrity sha512-gLqML2k77AuUiXxWNon1FSzuG1DV7PEPpCLCU5aJvf6fdL6rmFfElsZRh+8ELEB/qP9dT+LHjNEunVzd2dYc8A==
+  dependencies:
+    "@babel/core" "^7.1.6"
+    "@babel/preset-env" "^7.10.2"
+    "@babel/traverse" "^7.1.6"
+    "@babel/types" "^7.1.6"
+    "@embroider/shared-internals" "^1.0.0"
+    babel-core "^6.26.3"
+    babel-loader "^8.0.6"
+    babel-plugin-syntax-dynamic-import "^6.18.0"
+    babylon "^6.18.0"
+    broccoli-debug "^0.6.4"
+    broccoli-node-api "^1.7.0"
+    broccoli-plugin "^4.0.0"
+    broccoli-source "^3.0.0"
+    debug "^3.1.0"
+    ember-cli-babel "^7.0.0"
+    enhanced-resolve "^4.0.0"
+    fs-extra "^6.0.1"
+    fs-tree-diff "^2.0.0"
+    handlebars "^4.3.1"
+    js-string-escape "^1.0.1"
+    lodash "^4.17.19"
+    mkdirp "^0.5.1"
+    resolve-package-path "^3.1.0"
+    rimraf "^2.6.2"
+    semver "^7.3.4"
+    symlink-or-copy "^1.2.0"
+    typescript-memoize "^1.0.0-alpha.3"
+    walk-sync "^0.3.3"
+    webpack "^4.43.0"
+
 ember-auto-import@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/ember-auto-import/-/ember-auto-import-2.4.2.tgz#d4d3bc6885a11cf124f606f5c37169bdf76e37ae"
@@ -11965,6 +12014,17 @@ ember-cli-babel@^6.16.0, ember-cli-babel@^6.6.0, ember-cli-babel@^6.8.1, ember-c
     resolve-package-path "^3.1.0"
     rimraf "^3.0.1"
     semver "^5.5.0"
+
+ember-cli-clipboard@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/ember-cli-clipboard/-/ember-cli-clipboard-0.16.0.tgz#f4878cbbfbc56e0bc6d2a65ccf5a334c47b0f614"
+  integrity sha512-l9iDVjcJLkbgpdbJe+bN29q2ibZmEpEV6bXstIG9q4HPvaqbXw0PbSFhaNeQWpJKNkd5dFKSNdgEfli6heJSFw==
+  dependencies:
+    "@ember/render-modifiers" "^1.0.2 || ^2.0.0"
+    clipboard "^2.0.6"
+    ember-auto-import "^1.11.3"
+    ember-cli-babel "^7.26.6"
+    ember-cli-htmlbars "^5.7.1"
 
 ember-cli-code-coverage@^1.0.3:
   version "1.0.3"

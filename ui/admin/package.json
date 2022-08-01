@@ -15,6 +15,7 @@
     "build": "ember build --environment=production",
     "build:oss": "EDITION=oss ember build --environment=production",
     "build:enterprise": "EDITION=enterprise ember build --environment=production",
+    "build:hcp": "EDITION=hcp ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
