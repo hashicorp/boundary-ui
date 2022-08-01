@@ -23,8 +23,8 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
   }
 
   /**
-   * Returns the current target and unassigned credential sources.
-   * @return {{target: TargetModel, filteredCredentialSources: [CredentialLibraryModel, CredentialModel]}}
+   * Returns the current target and credential sources.
+   * @return {{target: TargetModel, credentialLibraries: [CredentialLibraryModel], credentials: [CredentialModel]}}
    */
   async model() {
     const target = this.modelFor('scopes.scope.targets.target');
@@ -48,22 +48,10 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
     const credentialLibraries = this.store.peekAll('credential-library');
     const credentials = this.store.peekAll('credential');
 
-    // Get IDs for credential sources already added to the current target
-    const currentCredentialSourceIDs =
-      target.application_credential_source_ids.map((source) => source.value);
-    const notAddedCredentialLibraries = credentialLibraries.filter(
-      ({ id }) => !currentCredentialSourceIDs.includes(id)
-    );
-    const notAddedCredentials = credentials.filter(
-      ({ id }) => !currentCredentialSourceIDs.includes(id)
-    );
-    const filteredCredentialSources = [
-      ...notAddedCredentialLibraries,
-      ...notAddedCredentials,
-    ];
     return {
       target,
-      filteredCredentialSources,
+      credentialLibraries,
+      credentials,
     };
   }
 
