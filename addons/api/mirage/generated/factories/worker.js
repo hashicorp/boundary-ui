@@ -1,17 +1,17 @@
 import { Factory } from 'ember-cli-mirage';
-import { random, date, datatype, internet } from 'faker';
+import { faker } from '@faker-js/faker';
 
 /**
- * GeneratedUserModelFactory
- * User contains all fields related to a User resource
+ * GeneratedWorkerModelFactory
+ * User contains all fields related to a Worker resource
  */
 export default Factory.extend({
-  name: () => random.words(),
-  description: () => random.words(),
-  created_time: () => date.recent(),
-  updated_time: () => date.recent(),
-  version: () => datatype.number(),
-  address: () => `${internet.ipv6()}${internet.port()}`,
-  last_status_time: () => date.recent(),
-  active_connection_count: () => datatype.number(),
+  name: () => faker.random.words(),
+  description: () => faker.random.words(),
+  created_time: () => faker.date.recent(),
+  updated_time: () => faker.date.recent(),
+  version: () => faker.datatype.number(),
+  address: () => `${faker.internet.ipv4()}:${faker.internet.port()}`,
+  last_status_time: () => faker.date.recent(),
+  active_connection_count: () => faker.datatype.number({ max: 10 }),
 });
