@@ -15,22 +15,14 @@ export default class FormTargetAddCredentialSourcesIndexComponent extends Compon
 
   /**
    * Add/Remove credential source to current selection
-   * @param {CredentialLibraryModel, CredentialModel} credentialSource
+   * @param {string} credentialSourceId
    */
   @action
-  toggleCredentialSource(credentialSource) {
-    if (!this.selectedCredentialSourceIDs.includes(credentialSource.id)) {
-      this.selectedCredentialSourceIDs.addObject(credentialSource.id);
+  toggleCredentialSource(credentialSourceId) {
+    if (!this.selectedCredentialSourceIDs.includes(credentialSourceId)) {
+      this.selectedCredentialSourceIDs.addObject(credentialSourceId);
     } else {
-      this.selectedCredentialSourceIDs.removeObject(credentialSource.id);
+      this.selectedCredentialSourceIDs.removeObject(credentialSourceId);
     }
-  }
-
-  /**
-   * Submit selected credential source ids
-   */
-  @action
-  submit(fn) {
-    fn(this.selectedCredentialSourceIDs);
   }
 }
