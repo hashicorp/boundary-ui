@@ -631,6 +631,7 @@ export default function () {
     }
   );
   this.get('/worker/:id');
+  this.del('/worker/:id');
   this.patch('/worker/:id');
 
   /* Uncomment the following line and the Response import above

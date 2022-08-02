@@ -23,7 +23,96 @@
 
   <page.body>
     {{#if @model}}
-      {{! TODO: List view }}
+      <Rose::Toolbar as |toolbar|>
+        <toolbar.primary>
+          <Rose::Form as |form|>
+            {{#with
+              (resource-filter 'scopes.scope.workers.index' 'tags')
+              as |filter|
+            }}
+              <Rose::Dropdown
+                @text={{t (concat 'form.' filter.name '.label')}}
+                @count={{filter.selectedValue.length}}
+                @ignoreClickInside={{true}}
+                as |dropdown|
+              >
+                <form.checkboxGroup
+                  @name={{filter.name}}
+                  @items={{filter.allowedValues}}
+                  @selectedItems={{filter.selectedValue}}
+                  @onChange={{route-action 'filterBy' filter.name}}
+                  as |group|
+                >
+                  <dropdown.item>
+                    <group.checkbox
+                      @label={{group.item}}
+                      value={{group.item}}
+                    />
+                  </dropdown.item>
+                </form.checkboxGroup>
+              </Rose::Dropdown>
+            {{/with}}
+
+            {{#if
+              (has-resource-filter-selections
+                'scopes.scope.workers.index' 'tags'
+              )
+            }}
+              <Rose::Button
+                @style='inline-link-action'
+                @iconLeft='flight-icons/svg/x-16'
+                {{on 'click' (route-action 'clearAllFilters')}}
+              >{{t 'actions.clear-all-filters'}}
+              </Rose::Button>
+            {{/if}}
+          </Rose::Form>
+        </toolbar.primary>
+
+        <toolbar.secondary>
+          <ToolbarRefresher @onClick={{route-action 'refreshWorkers'}} />
+        </toolbar.secondary>
+
+      </Rose::Toolbar>
+
+      <Rose::Table as |table|>
+        <table.header as |header|>
+          <header.row as |row|>
+            <row.headerCell>{{t 'resources.worker.title'}}</row.headerCell>
+            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+            <row.headerCell>{{t
+                'resources.worker.table.session_count'
+              }}</row.headerCell>
+            <row.headerCell>{{t
+                'resources.worker.table.ip_address'
+              }}</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          {{#each @model as |worker|}}
+            <body.row as |row|>
+              <row.cell>
+                <Copyable
+                  @text={{worker.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{worker.id}}</code>
+                </Copyable>
+                {{#if worker.config_tags.type}}
+                  <div>
+                    {{#each worker.config_tags.type as |tag|}}
+                      <Rose::Badge>{{tag}}</Rose::Badge>
+                    {{/each}}
+                  </div>
+                {{/if}}
+              </row.cell>
+              <row.cell>{{worker.type}}</row.cell>
+              <row.cell>{{worker.active_connection_count}}</row.cell>
+              <row.cell>{{worker.address}} </row.cell>
+            </body.row>
+          {{/each}}
+        </table.body>
+      </Rose::Table>
     {{else}}
       <Rose::Layout::Centered>
         <Rose::Message

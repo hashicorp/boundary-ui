@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 /**
  * GeneratedWorkerModelFactory
- * User contains all fields related to a Worker resource
+ * Worker contains all fields related to a Worker resource
  */
 export default Factory.extend({
   name: () => faker.random.words(),
