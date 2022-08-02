@@ -119,6 +119,14 @@ module('Acceptance | targets | credential sources', function (hooks) {
     assert.strictEqual(currentURL(), urls.addCredentialSources);
   });
 
+  test('displays list of all credential source types available', async function (assert) {
+    assert.expect(2);
+    instances.target.update({ credentialLibraries: [] });
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
+    assert.notOk(find('.rose-message-title'));
+  });
+
   test('displays list of credential sources with only credential libraries available', async function (assert) {
     assert.expect(2);
     instances.target.update({ credentialLibraries: [] });
