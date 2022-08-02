@@ -54,11 +54,14 @@ export default class TargetModel extends GeneratedTargetModel {
    * @type {[CredentialLibraryModel]}
    */
   @computed('application_credential_source_ids.[]', 'store')
-  get credentialLibraries() {
+  get credentialSources() {
     return this.application_credential_source_ids
-      .map((source) =>
-        this.store.peekRecord('credential-library', source.value)
-      )
+      .map((source) => {
+        if (source.value.includes('cred')) {
+          return this.store.peekRecord('credential', source.value);
+        }
+        return this.store.peekRecord('credential-library', source.value);
+      })
       .filter(Boolean);
   }
 
