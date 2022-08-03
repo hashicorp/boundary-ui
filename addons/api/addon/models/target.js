@@ -59,8 +59,9 @@ export default class TargetModel extends GeneratedTargetModel {
       .map((source) => {
         if (source.value.includes('cred')) {
           return this.store.peekRecord('credential', source.value);
+        } else {
+          return this.store.peekRecord('credential-library', source.value);
         }
-        return this.store.peekRecord('credential-library', source.value);
       })
       .filter(Boolean);
   }
