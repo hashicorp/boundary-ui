@@ -49,7 +49,9 @@ export default factory.extend({
    */
   withAssociations: trait({
     afterCreate(target, server) {
-      let randomlySelectedHostSets, randomlySelectedCredentialLibraries;
+      let randomlySelectedHostSets,
+        randomlySelectedCredentialLibraries,
+        randomlySelectedCredentials;
       randomlySelectedHostSets = server.schema.hostSets
         // BLERG:  fun fact, for no reason at all, the element passed
         // into a where function is not a full model instance, as you might
@@ -64,10 +66,13 @@ export default factory.extend({
           (credentialLibrary) => credentialLibrary.scopeId === target.scope.id
         )
         .models.filter(() => randomBoolean());
-
+      randomlySelectedCredentials = server.schema.credentials
+        .where((credential) => credential.scopeId === target.scope.id)
+        .models.filter(() => randomBoolean());
       target.update({
         hostSets: randomlySelectedHostSets,
         credentialLibraries: randomlySelectedCredentialLibraries,
+        credentials: randomlySelectedCredentials,
       });
     },
   }),

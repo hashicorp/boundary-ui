@@ -464,19 +464,31 @@ export default function () {
       // If adding credential sources, push them into the array
       if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
+        updatedAttrs.credentialIds = target.credentialIds;
         attrs.applicationCredentialSourceIds.forEach((id) => {
-          if (!updatedAttrs.credentialLibraryIds.includes(id)) {
-            updatedAttrs.credentialLibraryIds.push(id);
+          if (
+            !updatedAttrs.credentialLibraryIds.includes(id) ||
+            !updatedAttrs.credentialIds.includes(id)
+          ) {
+            if (id.includes('cred')) {
+              updatedAttrs.credentialIds.push(id);
+            } else {
+              updatedAttrs.credentialLibraryIds.push(id);
+            }
           }
         });
       }
       // If deleting credential sources, filter them out of the array
       if (method === 'remove-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
+        updatedAttrs.credentialIds = target.credentialIds;
         updatedAttrs.credentialLibraryIds =
           updatedAttrs.credentialLibraryIds.filter((id) => {
             return !attrs.applicationCredentialSourceIds.includes(id);
           });
+        updatedAttrs.credentialIds = updatedAttrs.credentialIds.filter((id) => {
+          return !attrs.applicationCredentialSourceIds.includes(id);
+        });
       }
       return target.update(updatedAttrs);
     }
