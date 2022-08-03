@@ -81,7 +81,6 @@ module('Unit | Serializer | target', function (hooks) {
       credentialSourceIDs: ['4', '5'],
     };
     const serializedRecord = serializer.serialize(snapshot);
-    console.log(serializedRecord, 'searilise');
     assert.deepEqual(serializedRecord, {
       application_credential_source_ids: ['4', '5'],
       version: 1,
