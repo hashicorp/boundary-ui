@@ -5,6 +5,14 @@ export default class WorkerModel extends GeneratedWorkerModel {
   // =attributes
 
   /**
+   * Returns if the worker is a pki worker.
+   * @type {boolean}
+   */
+  get isPki() {
+    return this.type === 'pki';
+  }
+
+  /**
    * @type {[FragmentTagModel]}
    */
   @fragment('fragment-tag', {

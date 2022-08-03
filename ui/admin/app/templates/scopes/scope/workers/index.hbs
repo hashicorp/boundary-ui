@@ -90,14 +90,27 @@
         <table.body as |body|>
           {{#each @model as |worker|}}
             <body.row as |row|>
-              <row.cell>
+              <row.headerCell>
                 <Copyable
                   @text={{worker.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{worker.id}}</code>
+
+                  {{#if (and (can 'read worker' worker) worker.isPki)}}
+                    <LinkTo
+                      @route='scopes.scope.workers.worker'
+                      @model={{worker.id}}
+                    >
+                      {{worker.id}}
+                    </LinkTo>
+                  {{else}}
+                    <code>{{worker.id}}</code>
+                  {{/if}}
                 </Copyable>
+                {{#if worker.description}}
+                  <p>{{worker.description}}</p>
+                {{/if}}
                 {{#if worker.config_tags.type}}
                   <div>
                     {{#each worker.config_tags.type as |tag|}}
@@ -105,7 +118,7 @@
                     {{/each}}
                   </div>
                 {{/if}}
-              </row.cell>
+              </row.headerCell>
               <row.cell>{{worker.type}}</row.cell>
               <row.cell>{{worker.active_connection_count}}</row.cell>
               <row.cell>{{worker.address}} </row.cell>
