@@ -19,14 +19,28 @@ export default class WorkerModel extends GeneratedWorkerModel {
   })
   config_tags;
 
-  addWorker(workerGeneratedAuthToken, options = { adapterOptions: {} }) {
+  save(options) {
+    //TODO: add conditional `&&` logic that knows if the new worker is `worker-led`
+    if (this.isNew) {
+      return this.addWorkerLed(...options);
+    } else {
+      return super.save(...options);
+    }
+  }
+
+  /**
+   * Method to modify the adpater to handle custom POST route for creating worker.
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  addWorkerLed(options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'add-worker',
-      workerGeneratedAuthToken,
+      method: 'create:worker-led',
     };
     return this.save({
       ...options,
-      adapterOpions: {
+      adapterOptions: {
         ...defaultAdapterOptions,
         ...options.adapterOptions,
       },
