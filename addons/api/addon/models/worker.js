@@ -20,8 +20,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
   config_tags;
 
   save(options) {
-    //TODO: add conditional `&&` logic that knows if the new worker is `worker-led`
-    if (this.isNew) {
+    if (this.isNew && this.isPki) {
       return this.addWorkerLed(...options);
     } else {
       return super.save(...options);
@@ -38,7 +37,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
     const defaultAdapterOptions = {
       method: 'create:worker-led',
     };
-    return this.save({
+    return super.save({
       ...options,
       adapterOptions: {
         ...defaultAdapterOptions,
