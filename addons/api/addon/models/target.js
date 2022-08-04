@@ -51,7 +51,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * An array of resolved credential library and credential instances.  Model instances
    * must already be loaded into the store (this method will not load unloaded
    * instances).  Unresolvable instances are excluded from the array.
-   * @type {[CredentialLibraryModel], [CredentialModel]}
+   * @type {[CredentialLibraryModel, CredentialModel]}
    */
   @computed('application_credential_source_ids.[]', 'store')
   get credentialSources() {
