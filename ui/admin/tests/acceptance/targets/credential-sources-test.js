@@ -30,6 +30,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     credentialLibraries: null,
     credentialLibrary: null,
     credentials: null,
+    credential: null,
   };
   const urls = {
     globalScope: null,
@@ -74,6 +75,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
       }
     );
     instances.credentialLibrary = instances.credentialLibraries[0];
+    instances.credential = instances.credentials[0];
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
       credentialLibraries: instances.credentialLibraries,
@@ -86,6 +88,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.credentialSources = `${urls.target}/credential-sources`;
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
+    urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
     urls.addCredentialSources = `${urls.target}/add-credential-sources`;
     // Generate resource counter
     getCredentialLibraryCount = () =>
@@ -104,12 +107,24 @@ module('Acceptance | targets | credential sources', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
   });
 
-  test('can navigate to a credential library', async function (assert) {
+  test('can navigate to a vault type credential library', async function (assert) {
     assert.expect(1);
     await visit(urls.credentialSources);
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialLibrary);
+  });
+
+  test('can navigate to a username & password type credential', async function (assert) {
+    assert.expect(1);
+    instances.target.update({
+      credentialLibraries: [],
+      credentials: instances.credentials,
+    });
+    await visit(urls.credentialSources);
+    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await a11yAudit();
+    assert.strictEqual(currentURL(), urls.credential);
   });
 
   test('visiting add credential sources', async function (assert) {
@@ -165,17 +180,44 @@ module('Acceptance | targets | credential sources', function (hooks) {
     assert.strictEqual(currentURL(), urls.credentialSources);
   });
 
-  test('can select and save credential sources to add', async function (assert) {
+  test('can select and save a vault type credential library to add', async function (assert) {
     assert.expect(4);
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
     await visit(urls.addCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-    await click('tbody label');
+    await click('tbody tr:first-child label');
     await click('form [type="submit"]');
     assert.strictEqual(currentURL(), urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 1);
+  });
+
+  test('can select and save a username & password type credential to add', async function (assert) {
+    assert.expect(4);
+    instances.target.update({ credentialLibraries: [] });
+    await visit(urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 0);
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
+    await click('tbody tr:last-child label');
+    await click('form [type="submit"]');
+    assert.strictEqual(currentURL(), urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 1);
+  });
+
+  test('can select and save both a credential-library and a credential to add', async function (assert) {
+    assert.expect(4);
+    instances.target.update({ credentialLibraries: [] });
+    await visit(urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 0);
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
+    await click('tbody tr:last-child label');
+    await click('tbody tr:first-child label');
+    await click('form [type="submit"]');
+    assert.strictEqual(currentURL(), urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 2);
   });
 
   test('cannot add credential sources without proper authorization', async function (assert) {
@@ -201,6 +243,20 @@ module('Acceptance | targets | credential sources', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, 0);
   });
 
+  test('can select multiple credential sources to add and cancel', async function (assert) {
+    assert.expect(4);
+    instances.target.update({ credentialLibraries: [] });
+    await visit(urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 0);
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
+    await click('tbody tr:last-child label');
+    await click('tbody tr:first-child label');
+    await click('form [type="button"]');
+    assert.strictEqual(currentURL(), urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, 0);
+  });
+
   test('adding credential sources which errors displays error message', async function (assert) {
     assert.expect(1);
     this.server.post('/targets/:idMethod', () => {
@@ -217,18 +273,38 @@ module('Acceptance | targets | credential sources', function (hooks) {
     });
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.addCredentialSources);
-    await click('tbody label');
+    await click('tbody tr:last-child label');
+    await click('tbody tr:first-child label');
     await click('form [type="submit"]');
     assert.ok(find('[role="alert"]'));
   });
 
-  test('can remove a credential library', async function (assert) {
-    assert.expect(2);
-    const count = getCredentialLibraryCount();
+  test('can remove a vault type credential library', async function (assert) {
+    assert.expect(3);
+    const credentialLibraryCount = getCredentialLibraryCount();
+    const credentialCount = getCredentialCount();
     await visit(urls.credentialSources);
-    assert.strictEqual(findAll('tbody tr').length, count);
+    assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.strictEqual(findAll('tbody tr').length, count - 1);
+    assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount - 1);
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialCount + 1);
+  });
+
+  test('can remove a username & password type credential', async function (assert) {
+    assert.expect(3);
+    instances.target.update({
+      credentialLibraries: [],
+      credentials: instances.credentials,
+    });
+    const credentialCount = getCredentialCount();
+    const credentialLibraryCount = getCredentialLibraryCount();
+    await visit(urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialCount);
+    await click('tbody tr .rose-dropdown-button-danger');
+    assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount + 1);
   });
 
   test('cannot remove credential libraries without proper authorization', async function (assert) {
@@ -256,6 +332,31 @@ module('Acceptance | targets | credential sources', function (hooks) {
       );
     });
     const count = getCredentialLibraryCount();
+    await visit(urls.credentialSources);
+    assert.strictEqual(findAll('tbody tr').length, count);
+    await click('tbody tr .rose-dropdown-button-danger');
+    assert.ok(find('[role="alert"]'));
+  });
+
+  test('removing a target credential which errors displays error messages', async function (assert) {
+    assert.expect(2);
+    instances.target.update({
+      credentialLibraries: [],
+      credentials: instances.credentials,
+    });
+    this.server.post('/targets/:idMethod', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {},
+        }
+      );
+    });
+    const count = getCredentialCount();
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
