@@ -1,6 +1,6 @@
 <Rose::Form
   class='full-width'
-  @onSubmit={{fn this.submit @submit}}
+  @onSubmit={{fn @submit this.selectedCredentialSourceIDs}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @error={{@model.errors.base}}
@@ -26,7 +26,7 @@
             <form.checkbox
               @label={{credentialSource.id}}
               @description={{credentialSource.description}}
-              @onChange={{fn this.toggleCredentialSource credentialSource}}
+              @onChange={{fn this.toggleCredentialSource credentialSource.id}}
             />
           </row.headerCell>
           <row.cell>{{credentialSource.name}}</row.cell>
