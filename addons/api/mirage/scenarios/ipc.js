@@ -1,4 +1,4 @@
-import { datatype } from 'faker';
+import { faker } from '@faker-js/faker';
 
 export default function initializeMockIPC(server, config) {
   const isTesting = config.environment === 'test';
@@ -61,7 +61,7 @@ export default function initializeMockIPC(server, config) {
       const raw = btoa(JSON.stringify(decoded));
       return {
         address: window.location.hostname,
-        port: datatype.number(),
+        port: faker.datatype.number(),
         protocol: type,
         session_id: newSession.id,
         credentials: [

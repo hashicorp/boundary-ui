@@ -1,7 +1,7 @@
 import factory from '../generated/factories/host-catalog';
 import { trait } from 'ember-cli-mirage';
 import permissions from '../helpers/permissions';
-import { datatype, address, random } from 'faker';
+import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
 
 const types = ['static', 'plugin'];
@@ -38,7 +38,7 @@ export default factory.extend({
       return {
         id: `plugin-id-${i}`,
         name: pluginTypes[pluginTypeCounter++ % pluginTypes.length],
-        description: random.words(),
+        description: faker.random.words(),
       };
     }
   },
@@ -47,15 +47,15 @@ export default factory.extend({
     switch (this.plugin?.name) {
       case 'aws':
         return {
-          disable_credential_rotation: datatype.boolean(),
-          region: address.state(),
+          disable_credential_rotation: faker.datatype.boolean(),
+          region: faker.address.state(),
         };
       case 'azure':
         return {
-          disable_credential_rotation: datatype.boolean(),
-          tenant_id: datatype.hexaDecimal(6),
-          client_id: datatype.hexaDecimal(6),
-          subscription_id: datatype.hexaDecimal(8),
+          disable_credential_rotation: faker.datatype.boolean(),
+          tenant_id: faker.datatype.hexadecimal(6),
+          client_id: faker.datatype.hexadecimal(6),
+          subscription_id: faker.datatype.hexadecimal(8),
         };
     }
   },
@@ -64,13 +64,13 @@ export default factory.extend({
     switch (this.plugin?.name) {
       case 'aws':
         return {
-          access_key_id: datatype.hexaDecimal(8),
-          secret_access_key: datatype.string(12),
+          access_key_id: faker.datatype.hexadecimal(8),
+          secret_access_key: faker.datatype.string(12),
         };
       case 'azure':
         return {
-          secret_id: datatype.hexaDecimal(6),
-          secret_value: datatype.string(12),
+          secret_id: faker.datatype.hexadecimal(6),
+          secret_value: faker.datatype.string(12),
         };
     }
   },

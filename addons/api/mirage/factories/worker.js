@@ -1,10 +1,10 @@
-import factory from '../generated/factories/user';
+import factory from '../generated/factories/worker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-import { random } from 'faker';
+import { faker } from '@faker-js/faker';
 
 const types = ['pki', 'kms'];
-const tags = ['dev', random.word(), random.word()];
+const tags = ['dev', faker.random.word(), faker.random.word()];
 
 export default factory.extend({
   id: () => generateId('w_'),

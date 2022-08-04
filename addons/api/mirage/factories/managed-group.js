@@ -1,5 +1,5 @@
 import factory from '../generated/factories/managed-group';
-import { random } from 'faker';
+import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
@@ -22,7 +22,7 @@ export default factory.extend({
     switch (this.type) {
       case 'oidc':
         return {
-          filter: random.words(),
+          filter: faker.random.words(),
         };
     }
   },
