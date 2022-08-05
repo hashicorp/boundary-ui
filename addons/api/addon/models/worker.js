@@ -19,23 +19,16 @@ export default class WorkerModel extends GeneratedWorkerModel {
   })
   config_tags;
 
-  save(options) {
-    if (this.isNew && this.isPki) {
-      return this.addWorkerLed(...options);
-    } else {
-      return super.save(...options);
-    }
-  }
-
   /**
    * Method to modify the adpater to handle custom POST route for creating worker.
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addWorkerLed(options = { adapterOptions: {} }) {
+  addWorkerLed(workerGeneratedAuthToken, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'create:worker-led',
+      workerGeneratedAuthToken
     };
     return super.save({
       ...options,
