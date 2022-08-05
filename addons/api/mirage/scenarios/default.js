@@ -65,4 +65,7 @@ export default function (server) {
     server.createList('group', 3, { scope });
     server.createList('role', 3, { scope });
   });
+
+  // Workers
+  server.createList('worker', 3, { scope: globalScope });
 }

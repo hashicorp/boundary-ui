@@ -11,11 +11,13 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | targets | credential-libraries', function (hooks) {
+module('Acceptance | targets | credential sources', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let getCredentialLibraryCount;
+  let getCredentialCount;
+  let credentialSourceCount;
 
   const instances = {
     scopes: {
@@ -23,9 +25,11 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
       org: null,
       project: null,
     },
-    credentialStore: null,
+    vaultCredentialStore: null,
+    staticCredentialStore: null,
     credentialLibraries: null,
     credentialLibrary: null,
+    credentials: null,
   };
   const urls = {
     globalScope: null,
@@ -49,16 +53,24 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.credentialStore = this.server.create('credential-store', {
+    instances.vaultCredentialStore = this.server.create('credential-store', {
       type: 'vault',
       scope: instances.scopes.project,
+    });
+    instances.staticCredentialStore = this.server.create('credential-store', {
+      type: 'static',
+      scope: instances.scopes.project,
+    });
+    instances.credentials = this.server.createList('credential', 2, {
+      scope: instances.scopes.project,
+      credentialStore: instances.staticCredentialStore,
     });
     instances.credentialLibraries = this.server.createList(
       'credential-library',
       2,
       {
         scope: instances.scopes.project,
-        credentialStore: instances.credentialStore,
+        credentialStore: instances.vaultCredentialStore,
       }
     );
     instances.credentialLibrary = instances.credentialLibraries[0];
@@ -78,6 +90,9 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
+    getCredentialCount = () =>
+      this.server.schema.credentials.all().models.length;
+    credentialSourceCount = getCredentialLibraryCount() + getCredentialCount();
     authenticateSession({});
   });
 
@@ -104,13 +119,59 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     assert.strictEqual(currentURL(), urls.addCredentialSources);
   });
 
+  test('displays list of all credential source types available', async function (assert) {
+    assert.expect(2);
+    instances.target.update({ credentialLibraries: [] });
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
+    assert.notOk(find('.rose-message-title'));
+  });
+
+  test('displays list of credential sources with only credential libraries available', async function (assert) {
+    assert.expect(2);
+    instances.target.update({ credentialLibraries: [] });
+    this.server.db.credentials.remove();
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
+    assert.notOk(find('.rose-message-title'));
+  });
+
+  test('displays list of credential sources with only credentials available', async function (assert) {
+    assert.expect(2);
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(findAll('tbody tr').length, getCredentialCount());
+    assert.notOk(find('.rose-message-title'));
+  });
+
+  test('displays no credential sources message when none available', async function (assert) {
+    assert.expect(1);
+    instances.target.update({ credentialLibraries: [] });
+    this.server.db.credentialLibraries.remove();
+    this.server.db.credentials.remove();
+    await visit(urls.addCredentialSources);
+    assert.strictEqual(
+      find('.rose-message-title').textContent.trim(),
+      'No Credential Sources Available'
+    );
+  });
+
+  test('when no credential sources available, button routes to credential sources', async function (assert) {
+    assert.expect(1);
+    instances.target.update({ credentialLibraries: [] });
+    this.server.db.credentialLibraries.remove();
+    this.server.db.credentials.remove();
+    await visit(urls.addCredentialSources);
+    await click(find('.rose-message-link'));
+    assert.strictEqual(currentURL(), urls.credentialSources);
+  });
+
   test('can select and save credential sources to add', async function (assert) {
     assert.expect(4);
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
     await visit(urls.addCredentialSources);
-    assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
+    assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     await click('tbody label');
     await click('form [type="submit"]');
     assert.strictEqual(currentURL(), urls.credentialSources);
@@ -133,7 +194,7 @@ module('Acceptance | targets | credential-libraries', function (hooks) {
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
     await visit(urls.addCredentialSources);
-    assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
+    assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     await click('tbody label');
     await click('form [type="button"]');
     assert.strictEqual(currentURL(), urls.credentialSources);

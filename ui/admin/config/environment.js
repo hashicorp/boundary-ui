@@ -97,6 +97,8 @@ module.exports = function (environment) {
         'getting-started.desktop': '/getting-started/desktop',
         'api-client.cli': '/api-client/cli',
         'api-client.api': '/api-client/api',
+        worker: '/workers',
+        'worker.new': '/workers/new',
       },
     },
 

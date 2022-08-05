@@ -1,12 +1,12 @@
 import { Factory } from 'ember-cli-mirage';
-import { date, datatype } from 'faker';
+import { faker } from '@faker-js/faker';
 
 /**
  * GeneratedSessionModelFactory
  */
 export default Factory.extend({
   type: 'tcp',
-  created_time: () => date.recent(),
-  updated_time: () => date.recent(),
-  version: () => datatype.number(),
+  created_time: () => faker.date.recent(),
+  updated_time: () => faker.date.recent(),
+  version: () => faker.datatype.number(),
 });
