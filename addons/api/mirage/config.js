@@ -470,7 +470,7 @@ export default function () {
             !updatedAttrs.credentialLibraryIds.includes(id) ||
             !updatedAttrs.credentialIds.includes(id)
           ) {
-            if (id.includes('cred')) {
+            if (id.startsWith('cred')) {
               updatedAttrs.credentialIds.push(id);
             } else {
               updatedAttrs.credentialLibraryIds.push(id);

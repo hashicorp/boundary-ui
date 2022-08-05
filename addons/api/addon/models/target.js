@@ -57,7 +57,7 @@ export default class TargetModel extends GeneratedTargetModel {
   get credentialSources() {
     return this.application_credential_source_ids
       .map((source) => {
-        if (source.value.includes('cred')) {
+        if (source.value.startsWith('cred')) {
           return this.store.peekRecord('credential', source.value);
         } else {
           return this.store.peekRecord('credential-library', source.value);
