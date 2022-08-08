@@ -66,7 +66,7 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
-  test('it serializes only credential sources and version when an `adapterOptions.credentialLibraryIDs` array is passed', function (assert) {
+  test('it serializes only credential sources and version when an `adapterOptions.credentialSourceIDs` array is passed', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -78,7 +78,7 @@ module('Unit | Serializer | target', function (hooks) {
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      credentialLibraryIDs: ['4', '5'],
+      credentialSourceIDs: ['4', '5'],
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {

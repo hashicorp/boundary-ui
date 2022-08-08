@@ -23,8 +23,11 @@ export default ApplicationSerializer.extend({
         return { id: host_set_id, host_catalog_id };
       });
     }
-    if (model.credentialLibraryIds?.length) {
-      json.application_credential_source_ids = model.credentialLibraryIds;
+    if (model.credentialLibraryIds?.length || model.credentialIds?.length) {
+      json.application_credential_source_ids = [
+        ...model.credentialLibraryIds,
+        ...model.credentialIds,
+      ];
     }
     return json;
   },

@@ -10,15 +10,19 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
 
   /**
    * Loads all credential libraries under the current target.
-   * @return {Promise{[CredentialLibraryModel]}}
+   * @return {Promise{[CredentialLibraryModel, CredentialModel]}}
    */
   beforeModel() {
     const { application_credential_source_ids: sourceIDFragments } =
       this.modelFor('scopes.scope.targets.target');
     return all(
       sourceIDFragments.map(({ value }) => {
-        const isStoreOrLibrary = !value.includes('cred');
-        if (isStoreOrLibrary) {
+        const isStatic = value.includes('cred');
+        if (isStatic) {
+          return this.store.findRecord('credential', value, {
+            reload: true,
+          });
+        } else {
           return this.store.findRecord('credential-library', value, {
             reload: true,
           });
