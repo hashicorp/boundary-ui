@@ -48,17 +48,21 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * An array of resolved credential library instances.  Model instances
+   * An array of resolved credential library and credential instances.  Model instances
    * must already be loaded into the store (this method will not load unloaded
    * instances).  Unresolvable instances are excluded from the array.
-   * @type {[CredentialLibraryModel]}
+   * @type {[CredentialLibraryModel, CredentialModel]}
    */
   @computed('application_credential_source_ids.[]', 'store')
-  get credentialLibraries() {
+  get credentialSources() {
     return this.application_credential_source_ids
-      .map((source) =>
-        this.store.peekRecord('credential-library', source.value)
-      )
+      .map((source) => {
+        if (source.value.startsWith('cred')) {
+          return this.store.peekRecord('credential', source.value);
+        } else {
+          return this.store.peekRecord('credential-library', source.value);
+        }
+      })
       .filter(Boolean);
   }
 
@@ -150,17 +154,17 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Adds credential libraries via the `add-credential-sources` method.
+   * Adds credential sources via the `add-credential-sources` method.
    * See serializer and adapter for more information.
-   * @param {[string]} credentialLibraryIDs
+   * @param {[string]} credentialSourceIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addCredentialSources(credentialLibraryIDs, options = { adapterOptions: {} }) {
+  addCredentialSources(credentialSourceIDs, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'add-credential-sources',
-      credentialLibraryIDs,
+      credentialSourceIDs,
     };
     // There is no "deep merge" in ES.
     return this.save({
@@ -173,20 +177,20 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete credential libraries via the `remove-credential-sources` method.
+   * Delete credential libraries and credentials via the `remove-credential-sources` method.
    * See serializer and adapter for more information.
-   * @param {[string]} credentialLibraryIDs
+   * @param {[string]} credentialSourceIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
   removeCredentialSources(
-    credentialLibraryIDs,
+    credentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
     const defaultAdapterOptions = {
       method: 'remove-credential-sources',
-      credentialLibraryIDs,
+      credentialSourceIDs,
     };
     // There is no "deep merge" in ES.
     return this.save({
@@ -199,13 +203,13 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
-   * Delete a single credential library set via the `remove-credential-sources` method.
-   * @param {number} credentialLibraryID
+   * Delete a single credential library/credential set via the `remove-credential-sources` method.
+   * @param {number} credentialSourceID
    * @param {object} options
    * @return {Promise}
    */
-  removeCredentialSource(credentialLibraryID, options) {
-    return this.removeCredentialSources([credentialLibraryID], options);
+  removeCredentialSource(credentialSourceID, options) {
+    return this.removeCredentialSources([credentialSourceID], options);
   }
 
   /**
