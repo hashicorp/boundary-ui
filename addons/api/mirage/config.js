@@ -630,8 +630,9 @@ export default function () {
       return workers.where({ scopeId });
     }
   );
-  this.get('/worker/:id');
-  this.patch('/worker/:id');
+  this.get('/workers/:id');
+  this.del('/workers/:id');
+  this.patch('/workers/:id');
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

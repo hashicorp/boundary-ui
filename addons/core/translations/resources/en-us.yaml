@@ -422,3 +422,6 @@ worker:
   messages:
     welcome:
       title: Welcome to Workers
+  table:
+    session_count: Session Count
+    ip_address: IP Address
