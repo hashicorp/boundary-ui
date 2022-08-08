@@ -8,21 +8,18 @@ module('Unit | Model | worker', function (hooks) {
 
   test('it has an `addWorkerLed` method that targets a specific POST API', async function (assert) {
     assert.expect(2);
-    this.server.post(
-      '/v1/workers:create:worker-led',
-      (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-        assert.deepEqual(body, {
-          worker_generated_auth_token: 'token',
-        });
-        return { id: '123abc' };
-      }
-    );
+    this.server.post('/v1/workers:create:worker-led', (schema, request) => {
+      const body = JSON.parse(request.requestBody);
+      assert.deepEqual(body, {
+        worker_generated_auth_token: 'token',
+      });
+      return { id: '123abc' };
+    });
 
     const store = this.owner.lookup('service:store');
-    const model = store.createRecord('worker', {type: 'pki'})
-    await model.addWorkerLed('token')
-    const worker = store.peekRecord('worker', '123abc')
-    assert.ok(worker)
+    const model = store.createRecord('worker', { type: 'pki' });
+    await model.addWorkerLed('token');
+    const worker = store.peekRecord('worker', '123abc');
+    assert.ok(worker);
   });
 });
