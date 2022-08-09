@@ -378,6 +378,7 @@ credential-library:
   types:
     vault: Vault
     static: Static
+    username_password: Username & Password
 credential:
   title: Credential
   title_plural: Credentials

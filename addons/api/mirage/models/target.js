@@ -5,4 +5,5 @@ export default Model.extend({
   scope: belongsTo(),
   hostSets: hasMany(),
   credentialLibraries: hasMany(),
+  credentials: hasMany(),
 });
