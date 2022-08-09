@@ -4,7 +4,7 @@ export default class WorkerSerializer extends ApplicationSerializer {
    // =methods
 
   /**
-   * If `adapterOptions.workerGenratedAuthToken` is set,
+   * If `adapterOptions.workerGeneratedAuthToken` is set,
    * then the payload is serialized via `serializedWithGeneratedToken`.
    * @override
    * @param {Snapshot} snapshot
