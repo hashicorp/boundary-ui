@@ -21,7 +21,7 @@ export default class WorkerSerializer extends ApplicationSerializer {
   /**
    * Returns a payload with `worker_generated_auth_token` serialized.
    * @param {Snapshot} snapshot
-   * @param {[string]} account_ids
+   * @param {[string]} worker_generated_auth_token
    * @return {object}
    */
   serializeWithGeneratedToken(snapshot, workerGeneratedAuthToken) {
