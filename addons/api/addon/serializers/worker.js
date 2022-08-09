@@ -1,7 +1,7 @@
 import ApplicationSerializer from './application';
 
 export default class WorkerSerializer extends ApplicationSerializer {
-   // =methods
+  // =methods
 
   /**
    * If `adapterOptions.workerGeneratedAuthToken` is set,
@@ -10,11 +10,15 @@ export default class WorkerSerializer extends ApplicationSerializer {
    * @param {Snapshot} snapshot
    * @return {object}
    */
-   serialize(snapshot) {
+  serialize(snapshot) {
     let serialized = super.serialize(...arguments);
-    const workerGeneratedAuthToken = snapshot?.adapterOptions?.workerGeneratedAuthToken;
+    const workerGeneratedAuthToken =
+      snapshot?.adapterOptions?.workerGeneratedAuthToken;
     if (workerGeneratedAuthToken)
-      serialized = this.serializeWithGeneratedToken(snapshot, workerGeneratedAuthToken);
+      serialized = this.serializeWithGeneratedToken(
+        snapshot,
+        workerGeneratedAuthToken
+      );
     return serialized;
   }
 
@@ -27,7 +31,7 @@ export default class WorkerSerializer extends ApplicationSerializer {
   serializeWithGeneratedToken(snapshot, workerGeneratedAuthToken) {
     return {
       version: snapshot.attr('version'),
-      worker_generated_auth_token: workerGeneratedAuthToken
+      worker_generated_auth_token: workerGeneratedAuthToken,
     };
   }
 }

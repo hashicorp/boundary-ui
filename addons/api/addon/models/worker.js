@@ -4,6 +4,23 @@ import { attr } from '@ember-data/model';
 export default class WorkerModel extends GeneratedWorkerModel {
   // =attributes
 
+  /**
+   * Names are optional on models in our API.  Thus we need to fallback on ID
+   * for display purposes.
+   * @type {string}
+   */
+  get displayName() {
+    return this.name || this.id;
+  }
+
+  /**
+   * Returns whether the worker is a pki worker.
+   * @type {boolean}
+   */
+  get isPki() {
+    return this.type === 'pki';
+  }
+
   @attr({
     description:
       'The deduplicated union of the tags reported by the worker ' +
@@ -28,7 +45,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
   addWorkerLed(workerGeneratedAuthToken, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'create:worker-led',
-      workerGeneratedAuthToken
+      workerGeneratedAuthToken,
     };
     return super.save({
       ...options,
