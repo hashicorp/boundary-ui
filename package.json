@@ -101,8 +101,7 @@
     "lzma-native": "^8.0.6",
     "ansi-html": "^0.0.8",
     "shell-quote": "^1.7.3",
-    "hawk": "^9.0.1",
-    "terser": "^4.8.1"
+    "hawk": "^9.0.1"
   },
   "config": {
     "commitizen": {
