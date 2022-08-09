@@ -127,7 +127,7 @@ module.exports = function (environment) {
     };
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = false;
+    ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['static-credentials'] = true;
   }
 
