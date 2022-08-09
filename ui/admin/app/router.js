@@ -127,6 +127,7 @@ Router.map(function () {
       });
       this.route('workers', function () {
         this.route('new');
+        this.route('worker', { path: ':worker_id' }, function () {});
       });
     });
   });
