@@ -645,6 +645,11 @@ export default function () {
   this.get('/workers/:id');
   this.del('/workers/:id');
   this.patch('/workers/:id');
+  this.post('/workers:create:worker-led', ({ workers }) => {
+    // This POST only takes in a token so we need to generate a random worker to return
+    const newWorker = this.create('worker');
+    return workers.create(newWorker.attrs);
+  });
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

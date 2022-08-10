@@ -26,7 +26,7 @@ auth-method:
       title: No Auth Methods
       description: No auth methods were found for this scope.
     no-primary-auth-method:
-      title: "Recommendation: Select a Primary Auth Method"
+      title: 'Recommendation: Select a Primary Auth Method'
       description: A primary auth method auto-creates users when they authenticate for the first time.  Scopes without primary auth methods may experience authentication failures.
     pending:
       title: Authentication Pending
@@ -52,7 +52,7 @@ auth-method:
   questions:
     make-primary: Make primary auth method?
     remove-as-primary: Remove primary auth method?
-    make-primary-confirm: "A primary auth method auto-creates users on their first authentication attempt if needed.  Note:  if you change the primary auth method, the previous primary will no longer auto-create users."
+    make-primary-confirm: 'A primary auth method auto-creates users on their first authentication attempt if needed.  Note:  if you change the primary auth method, the previous primary will no longer auto-create users.'
     remove-as-primary-confirm: Removing the primary auth method may lead to authentication failures for this scope.
     no-see-window: Don't see the new window?
 group:
@@ -420,9 +420,28 @@ worker:
   title: Worker
   title_plural: Workers
   description: Workers are the server components that perform the session handling.
+  actions:
+    register: Register Worker
   messages:
     welcome:
       title: Welcome to Workers
   table:
     session_count: Session Count
     ip_address: IP Address
+  form:
+    steps:
+      1:
+        title: 1. Create a config file
+        create_directory: Create a configuration file in a new directory on your server
+        create_config: 'Open the file with a text editor, such as Vi. Paste the following configuration into the worker config file:'
+        save_config: Save the configuration in your `pki-worker.hcl` file.
+      2:
+        title: 2. Install & start Boundary on your server
+        run_command: 'Run this command on your server to install Boundary:'
+        copy_registration_request: When the server starts, it will print details related to this worker. Copy the value for
+      3:
+        title: 3. Confirm the worker when they connect
+        worker_auth_registration_request:
+          label: Worker Auth Registration Request
+          help: The registration key provided by this worker when it started
+        registered: Registered

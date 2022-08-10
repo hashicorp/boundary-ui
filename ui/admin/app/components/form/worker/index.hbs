@@ -1,0 +1,105 @@
+<Rose::Form
+  @onSubmit={{fn @submit this.generatedWorkerAuthToken}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @error={{@model.errors.base}}
+  @showEditToggle={{false}}
+  as |form|
+>
+  <h3>{{t 'resources.worker.form.steps.1.title'}}</h3>
+  <div class='worker-create-section'>
+    <Rose::CodeEditor @codeValue={{this.createConfigText}} as |c|>
+      <c.toolbar>
+        <:action>
+          <span>{{t 'resources.worker.form.steps.1.create_directory'}}</span>
+        </:action>
+      </c.toolbar>
+      <c.fieldEditor
+        @classNames='rose-autosize'
+        @options={{this.shellCodeEditor}}
+      />
+    </Rose::CodeEditor>
+
+    <Rose::CodeEditor @codeValue={{this.workerConfigText}} as |c|>
+      <c.toolbar>
+        <:action>
+          <span>{{t 'resources.worker.form.steps.1.create_config'}}</span>
+        </:action>
+      </c.toolbar>
+      <c.fieldEditor
+        @classNames='rose-autosize'
+        @options={{this.hclCodeEditor}}
+      />
+    </Rose::CodeEditor>
+    <p>{{t 'resources.worker.form.steps.1.save_config'}}</p>
+  </div>
+
+  <h3>{{t 'resources.worker.form.steps.2.title'}}</h3>
+  <div class='worker-create-section'>
+    <Rose::CodeEditor @codeValue={{this.installBoundaryText}} as |c|>
+      <c.toolbar>
+        <:action>
+          <span>{{t 'resources.worker.form.steps.2.run_command'}}</span>
+        </:action>
+      </c.toolbar>
+      <c.fieldEditor
+        @classNames='rose-autosize'
+        @options={{this.shellCodeEditor}}
+      />
+    </Rose::CodeEditor>
+    <span>{{t 'resources.worker.form.steps.2.copy_registration_request'}}</span>
+    <code>{{t
+        'resources.worker.form.steps.3.worker_auth_registration_request.label'
+      }}
+    </code>
+  </div>
+
+  <h3>{{t 'resources.worker.form.steps.3.title'}}</h3>
+  <div class='worker-create-section'>
+    <div class='worker-create-section__worker-auth-token'>
+      <form.input
+        @name='worker_auth_registration_request'
+        @value={{this.generatedWorkerAuthToken}}
+        @disabled={{@model.cannotSave}}
+        @label={{t
+          'resources.worker.form.steps.3.worker_auth_registration_request.label'
+        }}
+        @helperText={{t
+          'resources.worker.form.steps.3.worker_auth_registration_request.help'
+        }}
+        {{!      TODO: How does error handling work?}}
+        @error={{@model.errors}}
+      />
+      {{#if (can 'save model' @model)}}
+        <Rose::Button
+          @submit={{true}}
+          @style='primary'
+          @classNames='nowrap'
+          @disabled={{@model.cannotSave}}
+        >
+          {{t 'resources.worker.actions.register'}}
+        </Rose::Button>
+      {{/if}}
+    </div>
+
+    {{#if @model.cannotSave}}
+      <div class='worker-create-section__worker-success'>
+        <div>
+          <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+          <p>{{this.generatedWorkerAuthToken}}</p>
+        </div>
+        <div>
+          <Rose::Icon
+            @name='flight-icons/svg/check-circle-fill-16'
+            @size='medium'
+          />
+          <p>{{t 'resources.worker.form.steps.3.registered'}}</p>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+
+  <Rose::LinkButton @route='scopes.scope.workers' @style='secondary'>
+    {{t 'actions.done'}}
+  </Rose::LinkButton>
+</Rose::Form>

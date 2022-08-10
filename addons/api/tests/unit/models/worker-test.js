@@ -6,7 +6,7 @@ module('Unit | Model | worker', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
-  test('it has an `addWorkerLed` method that targets a specific POST API', async function (assert) {
+  test('it has a `createWorkerLed` method that targets a specific POST API', async function (assert) {
     assert.expect(2);
     this.server.post('/v1/workers:create:worker-led', (schema, request) => {
       const body = JSON.parse(request.requestBody);
@@ -18,7 +18,7 @@ module('Unit | Model | worker', function (hooks) {
 
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker', { type: 'pki' });
-    await model.addWorkerLed('token');
+    await model.createWorkerLed('token');
     const worker = store.peekRecord('worker', '123abc');
     assert.ok(worker);
   });
