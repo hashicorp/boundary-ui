@@ -8,7 +8,6 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 const featureEditions = {
   oss: {
     'primary-auth-method': true,
-    oidc: true,
     'oidc-crud': true,
     'oidc-account-crud': true,
     search: false,
