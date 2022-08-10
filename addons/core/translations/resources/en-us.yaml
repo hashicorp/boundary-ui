@@ -429,6 +429,18 @@ worker:
     session_count: Session Count
     ip_address: IP Address
   form:
+    cluster_id:
+      label: Boundary Cluster ID
+      help: The cluster ID is the UUID in the HCP Boundary Controller URL
+    ip_address:
+      label: IP Address
+      help: The public IP address of the server
+    config_file_path:
+      label: Config file path
+      help: The path on your server where you will store your configuration file
+    worker_tags:
+      label: Worker Tags
+      help: Boundary can use tags to define key-value pairs which targets can use to determine where they should route connections
     steps:
       1:
         title: 1. Create a config file

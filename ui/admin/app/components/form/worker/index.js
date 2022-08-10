@@ -5,24 +5,36 @@ export default class FormWorkerIndexComponent extends Component {
   // =attributes
 
   @tracked generatedWorkerAuthToken;
+  @tracked clusterId;
+  @tracked ipAddress;
+  @tracked configFilePath;
+  @tracked workerTags;
 
   get createConfigText() {
-    return `mkdir /home/ubuntu/boundary/ ;\\
-touch /home/ubuntu/boundary/pki-worker.hcl`;
+    return `mkdir ${this.configFilePath || '<path>'}/ ;\\
+touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
   }
 
   get workerConfigText() {
-    return `hcp_boundary_cluster_id = "<config_id>"
+    return `hcp_boundary_cluster_id = "${this.clusterId || '<config_id>'}"
 
 listener "tcp" {
-  address = "127.0.0.1:9202"
+  address = "${this.ipAddress || '<ip_address>'}"
   purpose = "proxy"
 }
 
 worker {
-  auth_storage_path = "<path>/worker1"
+  auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
   tags {
-    type = ["dev-worker", "ubuntu"]
+    type = [${
+      this.workerTags
+        ? this.workerTags
+            .split(',')
+            .filter((tag) => tag.trim())
+            .map((tag) => `"${tag?.trim()}"`)
+            .join(', ')
+        : '"<tag>"'
+    }]
   }
 }`;
   }
@@ -31,7 +43,7 @@ worker {
     return `curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;\\
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\\
 sudo apt-get update && sudo apt-get install boundary ;\\
-boundary server -config="/home/apps/boundary/pki-worker.hcl"`;
+boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
   }
 
   get shellCodeEditor() {
