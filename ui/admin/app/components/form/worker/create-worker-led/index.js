@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-export default class FormWorkerIndexComponent extends Component {
+export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =attributes
 
   @tracked generatedWorkerAuthToken;
