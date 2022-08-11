@@ -67,16 +67,14 @@
     </dropdown.link>
   {{/if}}
 
-  {{#if (feature-flag 'managed-groups')}}
-    {{#if (can 'create model' @model collection='managed-groups')}}
-      {{#if @model.isOIDC}}
-        <dropdown.link
-          @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
-          @model={{@model}}
-        >
-          {{t 'resources.managed-group.actions.create'}}
-        </dropdown.link>
-      {{/if}}
+  {{#if (can 'create model' @model collection='managed-groups')}}
+    {{#if @model.isOIDC}}
+      <dropdown.link
+        @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
+        @model={{@model}}
+      >
+        {{t 'resources.managed-group.actions.create'}}
+      </dropdown.link>
     {{/if}}
   {{/if}}
 

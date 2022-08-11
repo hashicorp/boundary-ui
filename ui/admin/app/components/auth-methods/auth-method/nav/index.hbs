@@ -9,13 +9,11 @@
     </nav.link>
   {{/if}}
 
-  {{#if (feature-flag 'managed-groups')}}
-    {{#if (can 'navigate model' @model collection='managed-groups')}}
-      {{#if @model.isOIDC}}
-        <nav.link @route='scopes.scope.auth-methods.auth-method.managed-groups'>
-          {{t 'resources.managed-group.title_plural'}}
-        </nav.link>
-      {{/if}}
+  {{#if (can 'navigate model' @model collection='managed-groups')}}
+    {{#if @model.isOIDC}}
+      <nav.link @route='scopes.scope.auth-methods.auth-method.managed-groups'>
+        {{t 'resources.managed-group.title_plural'}}
+      </nav.link>
     {{/if}}
   {{/if}}
 </Rose::Nav::Tabs>
