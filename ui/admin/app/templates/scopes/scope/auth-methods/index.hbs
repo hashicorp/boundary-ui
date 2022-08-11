@@ -87,20 +87,18 @@
     {{/if}}
 
     {{#if @model}}
-      {{#if (feature-flag 'primary-auth-method')}}
-        {{#unless this.hasPrimaryAuthMethod}}
-          <Rose::Notification
-            @style='warning'
-            @heading={{t
-              'resources.auth-method.messages.no-primary-auth-method.title'
-            }}
-          >
-            {{t
-              'resources.auth-method.messages.no-primary-auth-method.description'
-            }}
-          </Rose::Notification>
-        {{/unless}}
-      {{/if}}
+      {{#unless this.hasPrimaryAuthMethod}}
+        <Rose::Notification
+          @style='warning'
+          @heading={{t
+            'resources.auth-method.messages.no-primary-auth-method.title'
+          }}
+        >
+          {{t
+            'resources.auth-method.messages.no-primary-auth-method.description'
+          }}
+        </Rose::Notification>
+      {{/unless}}
 
       <Rose::Table as |table|>
         <table.header as |header|>
@@ -108,10 +106,8 @@
             <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            {{#if (feature-flag 'primary-auth-method')}}
-              <row.cell />
-              <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-            {{/if}}
+            <row.cell />
+            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
           </header.row>
         </table.header>
 
@@ -145,43 +141,38 @@
                   <code>{{authMethod.id}}</code>
                 </Copyable>
               </row.cell>
-              {{#if (feature-flag 'primary-auth-method')}}
-                <row.cell>
+              <row.cell>
+                {{#if authMethod.isPrimary}}
+                  <Rose::Badge @style='success-outline'>
+                    {{t 'states.primary'}}
+                  </Rose::Badge>
+                {{/if}}
+              </row.cell>
+              <row.cell>
+                <Rose::Dropdown
+                  @text={{t 'actions.manage'}}
+                  @dropdownRight={{true}}
+                  @iconOnly={{true}}
+                  @showCaret={{false}}
+                  @icon='flight-icons/svg/more-horizontal-16'
+                  as |dropdown|
+                >
+                  {{#unless authMethod.isPrimary}}
+                    <dropdown.button
+                      {{on 'click' (route-action 'makePrimary' authMethod)}}
+                    >
+                      {{t 'resources.auth-method.actions.make-primary'}}
+                    </dropdown.button>
+                  {{/unless}}
                   {{#if authMethod.isPrimary}}
-                    <Rose::Badge @style='success-outline'>
-                      {{t 'states.primary'}}
-                    </Rose::Badge>
+                    <dropdown.button
+                      {{on 'click' (route-action 'removeAsPrimary' authMethod)}}
+                    >
+                      {{t 'resources.auth-method.actions.remove-as-primary'}}
+                    </dropdown.button>
                   {{/if}}
-                </row.cell>
-                <row.cell>
-                  <Rose::Dropdown
-                    @text={{t 'actions.manage'}}
-                    @dropdownRight={{true}}
-                    @iconOnly={{true}}
-                    @showCaret={{false}}
-                    @icon='flight-icons/svg/more-horizontal-16'
-                    as |dropdown|
-                  >
-                    {{#unless authMethod.isPrimary}}
-                      <dropdown.button
-                        {{on 'click' (route-action 'makePrimary' authMethod)}}
-                      >
-                        {{t 'resources.auth-method.actions.make-primary'}}
-                      </dropdown.button>
-                    {{/unless}}
-                    {{#if authMethod.isPrimary}}
-                      <dropdown.button
-                        {{on
-                          'click'
-                          (route-action 'removeAsPrimary' authMethod)
-                        }}
-                      >
-                        {{t 'resources.auth-method.actions.remove-as-primary'}}
-                      </dropdown.button>
-                    {{/if}}
-                  </Rose::Dropdown>
-                </row.cell>
-              {{/if}}
+                </Rose::Dropdown>
+              </row.cell>
             </body.row>
           {{/each}}
         </table.body>

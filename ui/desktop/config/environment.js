@@ -55,7 +55,6 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
-      oidc: true,
       search: false,
       filter: true,
       'ssh-target': false,

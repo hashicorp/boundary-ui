@@ -9,7 +9,6 @@ import {
   //   //currentSession,
   //   //invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { enableFeature } from 'ember-feature-flags/test-support';
 
 module('Acceptance | auth-methods | create ', function (hooks) {
   setupApplicationTest(hooks);
@@ -113,7 +112,6 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.'
     );
-    enableFeature('primary-auth-method');
     await visit(urls.authMethod);
     await click(
       '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
@@ -143,7 +141,6 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.'
     );
-    enableFeature('primary-auth-method');
     await visit(urls.authMethod);
     await click(
       '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
@@ -160,7 +157,6 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is set.'
     );
-    enableFeature('primary-auth-method');
     await visit(urls.authMethod);
     await click(
       '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
@@ -189,7 +185,6 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is set.'
     );
-    enableFeature('primary-auth-method');
     await visit(urls.authMethod);
     await click(
       '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
@@ -203,7 +198,6 @@ module('Acceptance | auth-methods | create ', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.'
     );
-    enableFeature('primary-auth-method');
     await visit(urls.authMethods);
     await click(
       '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
