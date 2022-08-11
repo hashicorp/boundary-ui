@@ -9,7 +9,6 @@ const featureEditions = {
   oss: {
     'primary-auth-method': true,
     oidc: true,
-    'oidc-crud': true,
     'oidc-account-crud': true,
     search: false,
     filter: true,
