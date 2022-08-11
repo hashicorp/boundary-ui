@@ -40,6 +40,9 @@ module('Integration | Component | card', function (hooks) {
     assert.ok(find('.card'));
     assert.ok(find('.card-header'));
     assert.ok(find('.card-header .rose-icon'));
-    assert.strictEqual(this.element.textContent.trim(), 'This is a heading test');
+    assert.strictEqual(
+      this.element.textContent.trim(),
+      'This is a heading test'
+    );
   });
 });
