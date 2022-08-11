@@ -55,20 +55,21 @@
   <form.input
     @name='filter'
     @type='text'
-    @value={{@model.attributes.filter}}
+    @value={{@model.filter}}
     @label={{t 'form.filter.label'}}
     @error={{@model.errors.attributes_filter}}
     @helperText={{t 'form.filter.help'}}
     as |field|
   >
-    {{#if @model.errors.filter}}
+    {{#if @model.errors.attributes_filter}}
       <field.errors as |errors|>
-        {{#each @model.errors.filter as |error|}}
+        {{#each @model.errors.attributes_filter as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
     {{/if}}
   </form.input>
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @disabled={{if @model.cannotSave @model.cannotSave}}
