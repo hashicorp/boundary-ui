@@ -425,3 +425,5 @@ worker:
   table:
     session_count: Session Count
     ip_address: IP Address
+  actions:
+    delete: Remove Worker

@@ -10,8 +10,9 @@ export default Factory.extend({
   description: () => faker.random.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
-  version: () => faker.datatype.number(),
-  address: () => `${faker.internet.ipv4()}:${faker.internet.port()}`,
-  last_status_time: () => faker.date.recent(),
+  version: () => faker.datatype.number({ max: 4 }),
+  address: () =>
+    `${faker.datatype.uuid()}.proxy.boundary.hashicorp.cloud:${faker.internet.port()}`,
+  last_status_time: () => faker.date.recent(10),
   active_connection_count: () => faker.datatype.number({ max: 10 }),
 });
