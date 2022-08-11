@@ -46,7 +46,7 @@ export default class ScopesScopeWorkersRoute extends Route {
 
   /**
    * Save an worker in current scope.
-   * @param {UserModel} worker
+   * @param {WorkerModel} worker
    * @param {Event} e
    */
   @action
