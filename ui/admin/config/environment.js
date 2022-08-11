@@ -14,6 +14,7 @@ const featureEditions = {
     search: false,
     'managed-groups': true,
     'static-credentials': false,
+    byow: false,
   },
 };
 featureEditions.enterprise = {
@@ -128,6 +129,7 @@ module.exports = function (environment) {
     // Enable features in development
     ENV.featureFlags['ssh-target'] = false;
     ENV.featureFlags['static-credentials'] = true;
+    ENV.featureFlags['byow'] = true;
   }
 
   if (environment === 'test') {
@@ -148,6 +150,7 @@ module.exports = function (environment) {
     // Enable tests for development features
     ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['static-credentials'] = true;
+    ENV.featureFlags['byow'] = true;
   }
 
   if (environment === 'production') {
