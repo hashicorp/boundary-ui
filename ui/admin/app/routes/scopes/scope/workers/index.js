@@ -10,7 +10,8 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       const configTags = route
         .modelFor('scopes.scope.workers')
         .toArray()
-        .flatMap((worker) => worker.config_tags.type);
+        .flatMap((worker) => worker.config_tags?.type)
+        .filter(Boolean);
 
       // Filter out duplicate tags
       return [...new Set(configTags)];
@@ -28,7 +29,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       // least one intersection with the filter tags
       return workers.filter(
         (worker) =>
-          worker.config_tags.type.filter(Set.prototype.has, new Set(this.tags))
+          worker.config_tags?.type.filter(Set.prototype.has, new Set(this.tags))
             .length > 0
       );
     }

@@ -33,7 +33,7 @@ worker {
             .filter((tag) => tag.trim())
             .map((tag) => `"${tag?.trim()}"`)
             .join(', ')
-        : '"<tag>"'
+        : '"<tag1>", "<tag2>"'
     }]
   }
 }`;

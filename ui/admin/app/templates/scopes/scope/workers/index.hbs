@@ -30,29 +30,30 @@
               (resource-filter 'scopes.scope.workers.index' 'tags')
               as |filter|
             }}
-              <Rose::Dropdown
-                @text={{t (concat 'form.' filter.name '.label')}}
-                @count={{filter.selectedValue.length}}
-                @ignoreClickInside={{true}}
-                as |dropdown|
-              >
-                <form.checkboxGroup
-                  @name={{filter.name}}
-                  @items={{filter.allowedValues}}
-                  @selectedItems={{filter.selectedValue}}
-                  @onChange={{route-action 'filterBy' filter.name}}
-                  as |group|
+              {{#if filter.allowedValues}}
+                <Rose::Dropdown
+                  @text={{t (concat 'form.' filter.name '.label')}}
+                  @count={{filter.selectedValue.length}}
+                  @ignoreClickInside={{true}}
+                  as |dropdown|
                 >
-                  <dropdown.item>
-                    <group.checkbox
-                      @label={{group.item}}
-                      value={{group.item}}
-                    />
-                  </dropdown.item>
-                </form.checkboxGroup>
-              </Rose::Dropdown>
+                  <form.checkboxGroup
+                    @name={{filter.name}}
+                    @items={{filter.allowedValues}}
+                    @selectedItems={{filter.selectedValue}}
+                    @onChange={{route-action 'filterBy' filter.name}}
+                    as |group|
+                  >
+                    <dropdown.item>
+                      <group.checkbox
+                        @label={{group.item}}
+                        value={{group.item}}
+                      />
+                    </dropdown.item>
+                  </form.checkboxGroup>
+                </Rose::Dropdown>
+              {{/if}}
             {{/with}}
-
             {{#if
               (has-resource-filter-selections
                 'scopes.scope.workers.index' 'tags'
