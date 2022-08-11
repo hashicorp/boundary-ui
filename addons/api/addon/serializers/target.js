@@ -7,10 +7,10 @@ export default class TargetSerializer extends ApplicationSerializer {
    * If `adapterOptions.hostSets` is set to an array of host set models,
    * the resulting target serialization should include **only host sets**
    * and the version.
-   * If `adapterOptions.credentialLibraries` is set to an array of
-   * credential library models, the resulting target serialization should
-   * include **only credential libraries** and the version.
-   * Normally, neither host sets or credential libraries are not serialized.
+   * If `adapterOptions.credentialSources` is set to an array of
+   * credential library and credential models, the resulting target serialization should
+   * include **only credential libraries and crendentials** and the version.
+   * Normally, neither host sets or credential libraries or credentials are not serialized.
    * @override
    * @param {Snapshot} snapshot
    * @return {object}
@@ -21,7 +21,7 @@ export default class TargetSerializer extends ApplicationSerializer {
     if (hostSourceIDs) {
       serialized = this.serializeWithHostSources(snapshot, hostSourceIDs);
     }
-    const credentialSourceIDs = snapshot?.adapterOptions?.credentialLibraryIDs;
+    const credentialSourceIDs = snapshot?.adapterOptions?.credentialSourceIDs;
     if (credentialSourceIDs)
       serialized = this.serializeWithCredentialSources(
         snapshot,

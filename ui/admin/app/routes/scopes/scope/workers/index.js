@@ -11,7 +11,6 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
         .modelFor('scopes.scope.workers')
         .toArray()
         .flatMap((worker) => worker.config_tags.type.toArray());
-
       // Filter out duplicate tags
       return [...new Set(configTags)];
     },

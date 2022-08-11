@@ -231,7 +231,7 @@ module('Unit | Model | target', function (hooks) {
     );
   });
 
-  test('it has a `credentialLibraries` array of resolved model instances (if those instances are already in the store)', function (assert) {
+  test('it has a `credentialSources` array of resolved model instances (if those instances are already in the store)', function (assert) {
     assert.expect(4);
     const store = this.owner.lookup('service:store');
     store.push({
@@ -250,9 +250,9 @@ module('Unit | Model | target', function (hooks) {
       'Target has two entires in application_credential_source_ids'
     );
     assert.strictEqual(
-      target.credentialLibraries.length,
+      target.credentialSources.length,
       0,
-      'Target has no resolved credentialLibraries because they are not loaded yet'
+      'Target has no resolved credentialSources because they are not loaded yet'
     );
     store.push({
       data: {
@@ -268,7 +268,7 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `credentialLibraries` is computed on `application_credential_source_ids`,
+    // Since `credentialSources` is computed on `application_credential_source_ids`,
     // not the store itself, it's necessary to do this assignment to kick-off the
     // computed update.
     /* eslint-disable no-self-assign */
@@ -281,9 +281,9 @@ module('Unit | Model | target', function (hooks) {
       'Target has two entires in application_credential_source_ids'
     );
     assert.strictEqual(
-      target.credentialLibraries.length,
+      target.credentialSources.length,
       2,
-      'Target has two resolved credentialLibraries'
+      'Target has two resolved credentialSources'
     );
   });
 
