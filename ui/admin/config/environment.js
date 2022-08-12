@@ -10,7 +10,6 @@ const featureEditions = {
     'oidc-account-crud': true,
     search: false,
     filter: true,
-    'managed-groups': true,
     'static-credentials': false,
     byow: false,
   },
