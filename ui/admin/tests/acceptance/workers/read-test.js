@@ -53,6 +53,6 @@ module('Acceptance | workers | read', function (hooks) {
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter((item) => item !== 'read');
     await visit(workersURL);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    assert.dom('main tbody .rose-table-header-cell:nth-child(1) a').isVisible();
   });
 });
