@@ -465,7 +465,7 @@ export default function () {
       if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialIds = target.credentialIds;
-        attrs.applicationCredentialSourceIds.forEach((id) => {
+        attrs.brokeredCredentialSourceIds.forEach((id) => {
           if (
             !updatedAttrs.credentialLibraryIds.includes(id) ||
             !updatedAttrs.credentialIds.includes(id)
@@ -484,10 +484,10 @@ export default function () {
         updatedAttrs.credentialIds = target.credentialIds;
         updatedAttrs.credentialLibraryIds =
           updatedAttrs.credentialLibraryIds.filter((id) => {
-            return !attrs.applicationCredentialSourceIds.includes(id);
+            return !attrs.brokeredCredentialSourceIds.includes(id);
           });
         updatedAttrs.credentialIds = updatedAttrs.credentialIds.filter((id) => {
-          return !attrs.applicationCredentialSourceIds.includes(id);
+          return !attrs.brokeredCredentialSourceIds.includes(id);
         });
       }
       return target.update(updatedAttrs);

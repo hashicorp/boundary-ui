@@ -15,7 +15,7 @@ module('Unit | Serializer | target', function (hooks) {
         { host_source_id: '1', host_catalog_id: '2' },
         { host_source_id: '3', host_catalog_id: '4' },
       ],
-      application_credential_source_ids: [{ value: '1' }, { value: '2' }],
+      brokered_credential_source_ids: [{ value: '1' }, { value: '2' }],
       scope: {
         scope_id: 'org_1',
         type: 'org',
@@ -73,7 +73,7 @@ module('Unit | Serializer | target', function (hooks) {
     const record = store.createRecord('target', {
       name: 'User',
       description: 'Description',
-      application_credential_source_ids: [{ value: '1' }, { value: '2' }],
+      brokered_credential_source_ids: [{ value: '1' }, { value: '2' }],
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -82,7 +82,7 @@ module('Unit | Serializer | target', function (hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      application_credential_source_ids: ['4', '5'],
+      brokered_credential_source_ids: ['4', '5'],
       version: 1,
     });
   });
@@ -131,7 +131,7 @@ module('Unit | Serializer | target', function (hooks) {
         { host_source_id: '1', host_catalog_id: '2' },
         { host_source_id: '3', host_catalog_id: '4' },
       ],
-      application_credential_source_ids: ['1'],
+      brokered_credential_source_ids: ['1'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -150,7 +150,7 @@ module('Unit | Serializer | target', function (hooks) {
             { host_source_id: '1', host_catalog_id: '2' },
             { host_source_id: '3', host_catalog_id: '4' },
           ],
-          application_credential_source_ids: [{ value: '1' }],
+          brokered_credential_source_ids: [{ value: '1' }],
         },
         relationships: {},
       },
@@ -180,7 +180,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
-          application_credential_source_ids: [],
+          brokered_credential_source_ids: [],
           authorized_actions: [],
           host_sources: [],
           name: 'Target 1',
@@ -191,7 +191,7 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
-  test('it normalizes missing host_sources and application_credential_source_ids to empty array', function (assert) {
+  test('it normalizes missing host_sources and brokered_credential_source_ids to empty array', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -216,7 +216,7 @@ module('Unit | Serializer | target', function (hooks) {
           name: 'Target 1',
           scope: { id: 'o_123', scope_id: 'o_123' },
           host_sources: [],
-          application_credential_source_ids: [],
+          brokered_credential_source_ids: [],
         },
         relationships: {},
       },
@@ -247,7 +247,7 @@ module('Unit | Serializer | target', function (hooks) {
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
-          application_credential_source_ids: [],
+          brokered_credential_source_ids: [],
           worker_filter: 'worker',
         },
         relationships: {},
