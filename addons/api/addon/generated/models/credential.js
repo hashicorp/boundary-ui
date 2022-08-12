@@ -46,6 +46,14 @@ export default class GeneratedCredentialModel extends BaseModel {
   })
   version;
 
+  // =attributes (username_password, ssh_private_key)
+  @attr('string', {
+    for: ['username_password', 'ssh_private_key'],
+    isNestedAttribute: true,
+    description: 'The username for credential.',
+  })
+  username;
+
   // =attributes (username_password)
   @attr('string', {
     for: 'username_password',
@@ -54,10 +62,18 @@ export default class GeneratedCredentialModel extends BaseModel {
   })
   password;
 
+  // =attributes (ssh_private_key)
   @attr('string', {
-    for: 'username_password',
+    for: 'ssh_private_key',
     isNestedAttribute: true,
-    description: 'The username for credential.',
+    description: 'The private key for credential.',
   })
-  username;
+  private_key;
+
+  @attr('string', {
+    for: 'ssh_private_key',
+    isNestedAttribute: true,
+    description: 'The passphrase for credential.',
+  })
+  passphrase;
 }
