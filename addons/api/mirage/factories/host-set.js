@@ -35,21 +35,24 @@ export default factory.extend({
       return faker.datatype.number();
     }
   },
-  // AWS specific
-  filters() {
+
+  attributes() {
+    // AWS specific
     if (this.plugin?.name === 'aws') {
       const filtersAmount = faker.datatype.number({ min: 1, max: 5 });
-      let result = [];
+      let filters = [];
       for (let i = 0; i < filtersAmount; ++i) {
-        result.push(`${faker.datatype.string(3)}=${faker.datatype.string(8)}`);
+        filters.push(`${faker.datatype.string(3)}=${faker.datatype.string(8)}`);
       }
-      return result;
+      return {
+        filters,
+      };
     }
-  },
-  // Azure specific
-  filter() {
+    // Azure specific
     if (this.plugin?.name === 'azure') {
-      return `${faker.database.column()}=${faker.database.collation()}`;
+      return {
+        filter: `${faker.database.column()}=${faker.database.collation()}`,
+      };
     }
   },
 });
