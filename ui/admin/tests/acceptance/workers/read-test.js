@@ -1,4 +1,4 @@
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -14,45 +14,44 @@ module('Acceptance | workers | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgScope;
-  let workersURL;
-
   const instances = {
     scopes: {
       global: null,
-      org: null,
     },
+  };
+
+  const urls = {
+    globalScope: null,
+    workers: null,
     worker: null,
   };
 
   hooks.beforeEach(function () {
-    orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-      },
-      'withChildren'
-    );
-
+    //Generate the resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
-      scope: orgScope,
+      scope: instances.scopes.global,
     });
-    workersURL = `/scopes/${orgScope.id}/workers`;
-    authenticateSession({});
-  });
-
-  test('visiting workers', async function (assert) {
-    assert.expect(1);
-    await visit(workersURL);
-    await a11yAudit();
-    assert.strictEqual(currentURL(), workersURL);
+    // Generate route URLs for resources
+    urls.globalScope = '/scopes/global';
+    urls.workers = `${urls.globalScope}/workers`;
+    (urls.worker = `${urls.workers}/${instances.worker.id}`),
+      authenticateSession({});
   });
 
   test('cannot navigate to an worker form without proper authorization', async function (assert) {
     assert.expect(1);
-    instances.worker.authorized_actions =
-      instances.worker.authorized_actions.filter((item) => item !== 'read');
-    await visit(workersURL);
-    assert.dom('main tbody .rose-table-header-cell:nth-child(1) a').isVisible();
+    instances.worker.authorized_actions = ['read'];
+    await visit(urls.worker);
+    await a11yAudit();
+    assert.dom('.rose-form-actions [type="button"]').isNotVisible();
+  });
+
+  test('can navigate to an worker form with proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.worker.authorized_actions = ['update'];
+    await visit(urls.worker);
+    await a11yAudit();
+    assert.dom('.rose-form-actions [type="button"]').isVisible();
   });
 });

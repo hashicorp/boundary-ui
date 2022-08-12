@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, click, find, fillIn, currentURL } from '@ember/test-helpers';
+import { visit, click, find, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -14,54 +14,50 @@ module('Acceptance | workers | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgScope;
-  let workersURL;
-  let workerURL;
-
   const instances = {
     scopes: {
       global: null,
-      org: null,
     },
+  };
+
+  const urls = {
+    globalScope: null,
+    workers: null,
     worker: null,
   };
 
   hooks.beforeEach(function () {
-    orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-      },
-      'withChildren'
-    );
-
+    //Generate the resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
-      scope: orgScope,
+      scope: instances.scopes.global,
     });
-
-    workersURL = `/scopes/${orgScope}/workers`;
-    workerURL = `${workersURL}/${instances.worker.id}`;
-
-    authenticateSession({});
+    // Generate route URLs for resources
+    urls.globalScope = '/scopes/global';
+    urls.workers = `${urls.globalScope}/workers`;
+    (urls.worker = `${urls.workers}/${instances.worker.id}`),
+      authenticateSession({});
   });
 
   test('can save changes to an existing worker', async function (assert) {
     assert.expect(2);
-    await visit(workerURL);
+    await visit(urls.worker);
     await click('form [type="button"]', 'Click edit mode');
     await fillIn('[name="name"]', 'Updated worker name');
     await click('.rose-form-actions [type="submit"]');
-    assert.strictEqual(currentURL(), workerURL);
-    assert.strictEqual(this.server.db.workers[0].name, 'Updated worker name');
+    assert.dom(`[href="${urls.worker}"]`).isVisible();
+    await assert.dom('input[name="name"]').hasValue('Updated worker name');
   });
 
   test('can cancel changes to an existing worker', async function (assert) {
     assert.expect(1);
-    await visit(workerURL);
+    await visit(urls.worker);
     await click('form [type="button"]', 'Click edit mode');
     await fillIn('[name="name"]', 'Unsaved worker name');
     await click('.rose-form-actions [type="button"]');
-    assert.notEqual(find('[name="name"]').value, 'Unsaved worker name');
+    await assert
+      .dom('input[name="name"]')
+      .doesNotContainText('Updated worker name');
   });
 
   test('saving an existing worker with invalid fields displays error messages', async function (assert) {
@@ -85,7 +81,7 @@ module('Acceptance | workers | update', function (hooks) {
         }
       );
     });
-    await visit(workerURL);
+    await visit(urls.worker);
     await click('.rose-form-actions [type="button"]', 'Click edit mode');
     await fillIn('[name="name"]', 'Worker Name');
     await click('[type="submit"]');
