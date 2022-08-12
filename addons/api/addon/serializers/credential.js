@@ -5,6 +5,10 @@ export default class CredentialSerializer extends ApplicationSerializer {
   serialize() {
     const serialized = super.serialize(...arguments);
     delete serialized['attributes']['password_hmac'];
+    if (serialized.type === 'username_password') {
+      delete serialized['attributes']['private_key'];
+      delete serialized['attributes']['passphrase'];
+    }
     return serialized;
   }
 
