@@ -425,6 +425,10 @@
     > div {
       display: flex;
       gap: sizing.rems(xs);
+      align-items: center;
+      p {
+        margin-bottom: sizing.rems(xxs);
+      }
     }
 
     > div:first-child {
