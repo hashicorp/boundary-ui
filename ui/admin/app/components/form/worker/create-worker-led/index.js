@@ -50,6 +50,9 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
     return {
       mode: 'shell',
       readOnly: true,
+      lineNumbers: false,
+      cursorBlinkRate: -1,
+      styleActiveLine: false,
     };
   }
 
@@ -57,6 +60,8 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
     return {
       mode: 'hcl',
       readOnly: true,
+      cursorBlinkRate: -1,
+      styleActiveLine: false,
     };
   }
   hclCodeTest = {

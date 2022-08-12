@@ -70,6 +70,7 @@
     margin-right: sizing.rems(xs);
     margin-left: sizing.rems(s);
     height: sizing.rems(xl);
+    white-space: nowrap;
 
     &-icon {
       margin-right: sizing.rems(xs);
