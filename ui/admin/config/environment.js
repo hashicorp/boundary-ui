@@ -7,9 +7,7 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 // Object that defines edition features.
 const featureEditions = {
   oss: {
-    'oidc-account-crud': true,
     search: false,
-    'managed-groups': true,
     'static-credentials': false,
     byow: false,
   },
