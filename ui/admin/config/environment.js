@@ -9,7 +9,6 @@ const featureEditions = {
   oss: {
     search: false,
     filter: true,
-    'managed-groups': true,
     'static-credentials': false,
     byow: false,
   },
