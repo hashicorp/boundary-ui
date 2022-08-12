@@ -2,7 +2,6 @@
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
-  @error={{@model.errors.base}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
@@ -68,7 +67,7 @@
 
     <form.input
       @name='last seen'
-      @type='datetime-local'
+      @type='datetime'
       @value={{@model.last_status_time}}
       @label={{t 'form.worker_last_seen.label'}}
       @helperText={{t 'form.worker_last_seen.help'}}
