@@ -60,7 +60,7 @@ export default class ScopesScopeWorkersRoute extends Route {
     if (this.can.can('read model', worker)) {
       await this.router.transitionTo('scopes.scope.workers.worker', worker);
     } else {
-      await this.router.transitionTo('scopes.scope.worker');
+      await this.router.transitionTo('scopes.scope.workers');
     }
     this.refresh();
   }
