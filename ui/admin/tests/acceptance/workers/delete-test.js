@@ -66,7 +66,7 @@ module('Acceptance | workers | delete', function (hooks) {
     assert.ok(confirmService.confirm.calledOnce);
   });
 
-  test('cannot cancel delete worker via dialog', async function (assert) {
+  test('can cancel delete worker via dialog', async function (assert) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;

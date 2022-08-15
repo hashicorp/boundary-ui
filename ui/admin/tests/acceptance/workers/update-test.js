@@ -51,13 +51,12 @@ module('Acceptance | workers | update', function (hooks) {
 
   test('can cancel changes to an existing worker', async function (assert) {
     assert.expect(1);
+    let name = instances.worker.name;
     await visit(urls.worker);
     await click('form [type="button"]', 'Click edit mode');
-    await fillIn('[name="name"]', 'Unsaved worker name');
+    await fillIn('[name="name"]', `${name}`);
     await click('.rose-form-actions [type="button"]');
-    await assert
-      .dom('input[name="name"]')
-      .doesNotContainText('Updated worker name');
+    await assert.dom('input[name="name"]').hasValue(`${name}`);
   });
 
   test('saving an existing worker with invalid fields displays error messages', async function (assert) {

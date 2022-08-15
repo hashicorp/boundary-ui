@@ -75,9 +75,8 @@
     />
   {{/unless}}
 
-  {{#if (can 'save model' @model)}}
+  {{#if (can 'save worker' @model)}}
     <form.actions
-      @disabled={{if @model.cannotSave @model.cannotSave}}
       @enableEditText={{t 'actions.edit-form'}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}
