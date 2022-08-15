@@ -37,7 +37,8 @@ export default class CredentialSerializer extends ApplicationSerializer {
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = copy(hash, true);
     const normalized = super.normalize(typeClass, normalizedHash, ...rest);
-    normalized['data']['attributes']['password'] = '';
+    // Remove passphrase as we don't track it after being created/updated
+    delete normalized['data']['attributes']['passphrase'];
     return normalized;
   }
 }

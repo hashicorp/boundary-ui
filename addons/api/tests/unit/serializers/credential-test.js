@@ -64,13 +64,13 @@ module('Unit | Serializer | credential', function (hooks) {
     });
   });
 
-  test('it normalizes credential record', async function (assert) {
+  test('it normalizes "username_password" type credential record', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const credentialModelClass = store.createRecord('credential').constructor;
     const payload = {
-      id: 'cred_123',
+      id: 'credup_123',
       version: 1,
       type: 'username_password',
       attributes: {
@@ -83,13 +83,43 @@ module('Unit | Serializer | credential', function (hooks) {
     assert.deepEqual(normalized, {
       data: {
         attributes: {
-          password: '',
           type: 'username_password',
           username: 'username',
           version: 1,
         },
         type: 'credential',
-        id: 'cred_123',
+        id: 'credup_123',
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes "ssh_private_key" type credential record', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential');
+    const credentialModelClass = store.createRecord('credential').constructor;
+    const payload = {
+      id: 'credspk_123',
+      version: 1,
+      type: 'ssh_private_key',
+      attributes: {
+        username: 'username',
+        passphrase: 'random',
+        private_key_hmac: 'completenonsense',
+      },
+    };
+    const normalized = serializer.normalize(credentialModelClass, payload);
+
+    assert.deepEqual(normalized, {
+      data: {
+        attributes: {
+          type: 'ssh_private_key',
+          username: 'username',
+          version: 1,
+        },
+        type: 'credential',
+        id: 'credspk_123',
         relationships: {},
       },
     });
