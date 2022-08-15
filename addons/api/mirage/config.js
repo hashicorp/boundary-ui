@@ -138,7 +138,7 @@ export default function () {
   // Authenticate + auth methods custom routes
   this.post('/auth-methods/:id_method', authHandler);
   // Deauthenticate route
-  this.post('/scopes/:id_method', deauthHandler);
+  this.delete('/auth-tokens/:id', deauthHandler);
 
   // IAM : Users
   this.get(

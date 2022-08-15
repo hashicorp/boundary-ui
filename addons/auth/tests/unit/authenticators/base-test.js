@@ -10,22 +10,24 @@ module('Unit | Authenticator | base', function (hooks) {
   test('it deauthenticates on invalidation', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.post(authenticator.buildDeauthEndpointURL(), () => {
+    const endpoint = authenticator.buildDeauthEndpointURL({ id: 'token123' });
+    this.server.delete(endpoint, () => {
       assert.ok(true, 'deauthentication occurred');
       return new Response(200);
     });
-    await authenticator.invalidate();
+    await authenticator.invalidate({ token: 'token123' });
   });
 
   test('invalidation succeeds even if the deauthentication request fails', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.post(authenticator.buildDeauthEndpointURL(), () => {
+    const endpoint = authenticator.buildDeauthEndpointURL({ id: 'token123' });
+    this.server.delete(endpoint, () => {
       assert.ok(true, 'deauthentication was requested');
       return new Response(500);
     });
     await authenticator
-      .invalidate()
+      .invalidate({ token: 'token123' })
       .then(() => assert.ok(true))
       .catch(() => assert.notOk(true, 'uh oh, this should not happen'));
   });

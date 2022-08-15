@@ -105,9 +105,13 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    * @override
    * @return {Promise}
    */
-  invalidate(options) {
+  async invalidate(options) {
+    const { token } = options;
     const deauthEndpointURL = this.buildDeauthEndpointURL(options);
-    fetch(deauthEndpointURL, { method: 'post' }).catch(() => {
+    await fetch(deauthEndpointURL, {
+      method: 'delete',
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => {
       /* no op */
     });
     return super.invalidate(...arguments);
