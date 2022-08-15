@@ -30,6 +30,10 @@ module.exports = {
         destDir: this.name,
         include: ['**/*'],
       }),
+      new Funnel(stylePath, {
+        destDir: this.name,
+        include: ['../../node_modules/codemirror/lib'],
+      }),
     ]);
 
     // Setup default sassOptions on the running application
