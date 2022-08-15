@@ -80,8 +80,8 @@ export default class HostSetSerializer extends ApplicationSerializer {
    */
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = copy(hash, true);
-    if (typeof normalizedHash?.filters === 'string') {
-      normalizedHash.filters = [normalizedHash.filters];
+    if (typeof normalizedHash?.attributes?.filters === 'string') {
+      normalizedHash.attributes.filters = [normalizedHash.attributes.filters];
     }
     const normalized = super.normalize(typeClass, normalizedHash, ...rest);
     return normalized;

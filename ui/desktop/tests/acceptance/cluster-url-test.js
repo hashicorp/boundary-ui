@@ -141,7 +141,9 @@ module('Acceptance | clusterUrl', function (hooks) {
   test('captures error on clusterUrl update', async function (assert) {
     assert.expect(2);
     assert.notOk(mockIPC.clusterUrl);
-    sinon.stub(this.owner.lookup('service:clusterUrl'), 'setClusterUrl').throws();
+    sinon
+      .stub(this.owner.lookup('service:clusterUrl'), 'setClusterUrl')
+      .throws();
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
