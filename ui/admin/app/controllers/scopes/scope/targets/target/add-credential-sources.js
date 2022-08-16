@@ -22,12 +22,12 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesController exte
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
   @computed(
-    'model.{target.application_credential_source_ids.[],credentialLibraries.[],credentials.[]}'
+    'model.{target.brokered_credential_source_ids.[],credentialLibraries.[],credentials.[]}'
   )
   get filteredCredentialSources() {
     // Get IDs for credential sources already added to the current target
     const currentCredentialSourceIDs =
-      this.model.target.application_credential_source_ids.map(
+      this.model.target.brokered_credential_source_ids.map(
         (source) => source.value
       );
     const notAddedCredentialLibraries = this.model.credentialLibraries.filter(

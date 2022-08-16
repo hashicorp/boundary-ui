@@ -13,8 +13,9 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
    * @return {Promise{[CredentialLibraryModel, CredentialModel]}}
    */
   beforeModel() {
-    const { application_credential_source_ids: sourceIDFragments } =
-      this.modelFor('scopes.scope.targets.target');
+    const { brokered_credential_source_ids: sourceIDFragments } = this.modelFor(
+      'scopes.scope.targets.target'
+    );
     return all(
       sourceIDFragments.map(({ value }) => {
         const isStatic = value.includes('cred');
