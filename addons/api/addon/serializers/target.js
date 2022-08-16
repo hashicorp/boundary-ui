@@ -23,7 +23,7 @@ export default class TargetSerializer extends ApplicationSerializer {
     }
     const credentialSourceIDs = snapshot?.adapterOptions?.credentialSourceIDs;
     if (credentialSourceIDs)
-      serialized = this.serializeWithCredentialSources(
+      serialized = this.serializeWithBrokeredCredentialSources(
         snapshot,
         credentialSourceIDs
       );
@@ -51,7 +51,21 @@ export default class TargetSerializer extends ApplicationSerializer {
    * @param {[string]} credentialSourceIDs
    * @return {object}
    */
-  serializeWithCredentialSources(snapshot, credentialSourceIDs) {
+  serializeWithBrokeredCredentialSources(snapshot, credentialSourceIDs) {
+    return {
+      version: snapshot.attr('version'),
+      brokered_credential_source_ids: credentialSourceIDs,
+    };
+  }
+
+    /**
+   * Returns a payload containing only version and an array of passed IDs,
+   * rather than existing instances on the model.
+   * @param {Snapshot} snapshot
+   * @param {[string]} credentialSourceIDs
+   * @return {object}
+   */
+  serializeWithInjectedApplicationCredentialSources(snapshot, credentialSourceIDs) {
     return {
       version: snapshot.attr('version'),
       brokered_credential_source_ids: credentialSourceIDs,

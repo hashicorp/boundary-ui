@@ -32,6 +32,16 @@ export default class TargetModel extends GeneratedTargetModel {
   brokered_credential_source_ids;
 
   /**
+   * Credential source ids are read only and can be
+   * persisted via a dedicated call to `addCredentialSources()`.
+   */
+  @fragmentArray('fragment-string', {
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  injected_application_credential_source_ids;
+
+  /**
    * An array of resolved host set and host catalog instances.  Model instances
    * must already be loaded into the store (this method will not load unloaded
    * instances).  Unresolvable instances are excluded from the array.
@@ -54,8 +64,27 @@ export default class TargetModel extends GeneratedTargetModel {
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
   @computed('brokered_credential_source_ids.[]', 'store')
-  get credentialSources() {
+  get brokeredCredentialSources() {
     return this.brokered_credential_source_ids
+      .map((source) => {
+        if (source.value.startsWith('cred')) {
+          return this.store.peekRecord('credential', source.value);
+        } else {
+          return this.store.peekRecord('credential-library', source.value);
+        }
+      })
+      .filter(Boolean);
+  }
+
+  /**
+   * An array of resolved credential library and credential instances.  Model instances
+   * must already be loaded into the store (this method will not load unloaded
+   * instances).  Unresolvable instances are excluded from the array.
+   * @type {[CredentialLibraryModel, CredentialModel]}
+   */
+  @computed('injected_application_credential_source_ids.[]', 'store')
+  get injectedApplicationCredentialSources() {
+    return this.injected_application_credential_source_ids
       .map((source) => {
         if (source.value.startsWith('cred')) {
           return this.store.peekRecord('credential', source.value);
@@ -156,7 +185,7 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * Adds credential sources via the `add-credential-sources` method.
    * See serializer and adapter for more information.
-   * @param {[string]} credentialSourceIDs
+   * @param {[string]} brokeredcredentialSourceIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
