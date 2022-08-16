@@ -2,20 +2,41 @@ import ApplicationSerializer from './application';
 import { copy } from 'ember-copy';
 
 export default class CredentialSerializer extends ApplicationSerializer {
-  serialize() {
-    const serialized = super.serialize(...arguments);
-    delete serialized['attributes']['password_hmac'];
-    if (serialized.type === 'username_password') {
-      delete serialized['attributes']['private_key'];
-      delete serialized['attributes']['passphrase'];
+  /**
+   * @override
+   * @method serialize
+   * @param {Snapshot} snapshot
+   */
+  serialize(snapshot) {
+    switch (snapshot.record.type) {
+      case 'username_password':
+        return this.serializeUsernamePassword(...arguments);
+      case 'ssh_private_key':
+      default:
+        return this.serializeSSHPrivateKey(...arguments);
     }
+  }
+
+  serializeUsernamePassword() {
+    const serialized = super.serialize(...arguments);
+    // Remove non-username_password type attributes
+    delete serialized['attributes']['private_key'];
+    delete serialized['attributes']['passphrase'];
+    return serialized;
+  }
+
+  serializeSSHPrivateKey() {
+    const serialized = super.serialize(...arguments);
+    // Remove non-ssh_private_key type attributes
+    delete serialized['attributes']['password'];
     return serialized;
   }
 
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = copy(hash, true);
     const normalized = super.normalize(typeClass, normalizedHash, ...rest);
-    normalized['data']['attributes']['password'] = '';
+    // Remove passphrase as we don't track it after being created/updated
+    delete normalized['data']['attributes']['passphrase'];
     return normalized;
   }
 }
