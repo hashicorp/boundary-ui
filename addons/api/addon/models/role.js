@@ -1,6 +1,5 @@
 import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
-import { fragmentArray } from 'ember-data-model-fragments/attributes';
 
 export default class RoleModel extends GeneratedRoleModel {
   // =attributes
@@ -12,7 +11,7 @@ export default class RoleModel extends GeneratedRoleModel {
    * see obvious.  Instead, the application layer is expected to load referenced
    * users and groups as needed.
    */
-  @fragmentArray('fragment-principal', {
+  @attr('principal-array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
