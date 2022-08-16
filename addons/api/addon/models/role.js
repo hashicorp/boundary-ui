@@ -1,5 +1,6 @@
 import GeneratedRoleModel from '../generated/models/role';
-import { fragmentArray, array } from 'ember-data-model-fragments/attributes';
+import { attr } from '@ember-data/model';
+import { fragmentArray } from 'ember-data-model-fragments/attributes';
 
 export default class RoleModel extends GeneratedRoleModel {
   // =attributes
@@ -21,7 +22,7 @@ export default class RoleModel extends GeneratedRoleModel {
    * Grant strings are read-only.  But grants can be persisted via a dedicated
    * call to `saveGrantStrings(grants)`.
    */
-  @array('string', { readOnly: true }) grant_strings;
+  @attr({ readOnly: true, emptyArrayIfMissing: true }) grant_strings;
 
   /**
    * Convenience for looking up the grant scope, if loaded.
