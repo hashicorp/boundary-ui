@@ -19,8 +19,7 @@ export default class CredentialSerializer extends ApplicationSerializer {
 
   serializeUsernamePassword() {
     const serialized = super.serialize(...arguments);
-    // Remove password_hmac and non-username_password type attributes
-    delete serialized['attributes']['password_hmac'];
+    // Remove non-username_password type attributes
     delete serialized['attributes']['private_key'];
     delete serialized['attributes']['passphrase'];
     return serialized;
@@ -28,8 +27,7 @@ export default class CredentialSerializer extends ApplicationSerializer {
 
   serializeSSHPrivateKey() {
     const serialized = super.serialize(...arguments);
-    // Remove private_key_hmac and non-ssh_private_key type attributes
-    delete serialized['attributes']['private_key_hmac'];
+    // Remove non-ssh_private_key type attributes
     delete serialized['attributes']['password'];
     return serialized;
   }
