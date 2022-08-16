@@ -24,7 +24,7 @@ export default ApplicationSerializer.extend({
       });
     }
     if (model.credentialLibraryIds?.length || model.credentialIds?.length) {
-      json.application_credential_source_ids = [
+      json.brokered_credential_source_ids = [
         ...model.credentialLibraryIds,
         ...model.credentialIds,
       ];
