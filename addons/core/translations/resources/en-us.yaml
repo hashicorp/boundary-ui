@@ -392,6 +392,7 @@ credential:
       description: No Credentials available in this credential store.
   types:
     username_password: Username & Password
+    ssh_private_key: Username & Key Pair
   help:
     username_password: This host requires a username and password to connect.
 scope:
