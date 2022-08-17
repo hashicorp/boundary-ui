@@ -54,7 +54,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
   @computed('brokered_credential_source_ids.[]', 'store')
-  get credentialSources() {
+  get brokeredCredentialSources() {
     return this.brokered_credential_source_ids
       .map((source) => {
         if (source.value.startsWith('cred')) {
@@ -184,7 +184,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeCredentialSources(
+  removeBrokeredCredentialSources(
     credentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
@@ -208,8 +208,8 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options
    * @return {Promise}
    */
-  removeCredentialSource(credentialSourceID, options) {
-    return this.removeCredentialSources([credentialSourceID], options);
+  removeBrokeredCredentialSource(credentialSourceID, options) {
+    return this.removeBrokeredCredentialSources([credentialSourceID], options);
   }
 
   /**

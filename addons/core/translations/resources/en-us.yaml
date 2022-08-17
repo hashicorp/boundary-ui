@@ -274,7 +274,7 @@ target:
     create: New Target
     delete: Delete Target
     add-host-sources: Add Host Sources
-    add-credential-sources: Add Credential Sources
+    add-brokered-credential-sources: Add Brokered Credentials
   types:
     tcp: TCP
     ssh: SSH
@@ -294,22 +294,22 @@ target:
       add:
         title: Add Host Sources
         description: Select host sources to assign to this target.
-  credential-source:
-    title: Credential Source
-    title_plural: Credential Sources
+  brokered-credential-source:
+    title: Brokered Credential
+    title_plural: Brokered Credentials
     types:
       vault: Vault
       username_password: Username & Password
     messages:
       welcome:
-        title: Welcome to Credential Sources
-        description: No credential sources in this target.
+        title: Welcome to brokered credentials
+        description: No brokered credential sources in this target.
       none:
-        title: No Credential Sources Available
-        description: No credential sources available to add to this target.
+        title: No Brokered Credential Sources Available
+        description: No brokered credential sources available to add to this target.
       add:
-        title: Add Credential Sources
-        description: Select credential sources to assign to this target.
+        title: Add Brokered Credential Sources
+        description: Select brokered credential sources to assign to this target.
 credential-store:
   title: Credential Store
   title_plural: Credential Stores

@@ -86,10 +86,10 @@ module('Acceptance | targets | credential sources', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.credentialSources = `${urls.target}/credential-sources`;
+    urls.credentialSources = `${urls.target}/brokered-credential-sources`;
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
-    urls.addCredentialSources = `${urls.target}/add-credential-sources`;
+    urls.addCredentialSources = `${urls.target}/add-brokered-credential-sources`;
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
@@ -166,7 +166,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     await visit(urls.addCredentialSources);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
-      'No Credential Sources Available'
+      'No Brokered Credential Sources Available'
     );
   });
 

@@ -231,7 +231,7 @@ module('Unit | Model | target', function (hooks) {
     );
   });
 
-  test('it has a `credentialSources` array of resolved model instances (if those instances are already in the store)', function (assert) {
+  test('it has a `brokeredCredentialSources` array of resolved model instances (if those instances are already in the store)', function (assert) {
     assert.expect(4);
     const store = this.owner.lookup('service:store');
     store.push({
@@ -250,7 +250,7 @@ module('Unit | Model | target', function (hooks) {
       'Target has two entires in brokered_credential_source_ids'
     );
     assert.strictEqual(
-      target.credentialSources.length,
+      target.brokeredCredentialSources.length,
       0,
       'Target has no resolved credentialSources because they are not loaded yet'
     );
@@ -281,7 +281,7 @@ module('Unit | Model | target', function (hooks) {
       'Target has two entires in brokered_credential_source_ids'
     );
     assert.strictEqual(
-      target.credentialSources.length,
+      target.brokeredCredentialSources.length,
       2,
       'Target has two resolved credentialSources'
     );
@@ -352,10 +352,10 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.removeCredentialSources(['1', '2']);
+    await model.removeBrokeredCredentialSources(['1', '2']);
   });
 
-  test('it has a `removeCredentialSource` method that deletes a single credential library using `removeCredentialSources` method', async function (assert) {
+  test('it has a `removeCredentialSource` method that deletes a single credential library using `removeBrokeredCredentialSources` method', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-credential-sources',
@@ -386,7 +386,7 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.removeCredentialSource('2');
+    await model.removeBrokeredCredentialSource('2');
   });
 
   test('it has isSSH property and returns the expected values', function (assert) {

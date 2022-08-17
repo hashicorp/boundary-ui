@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends Route {
+export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute extends Route {
   // =services
 
   @service intl;
@@ -68,7 +68,9 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
   @notifySuccess('notifications.add-success')
   async save(target, credentialLibraryIDs) {
     await target.addCredentialSources(credentialLibraryIDs);
-    this.router.replaceWith('scopes.scope.targets.target.credential-sources');
+    this.router.replaceWith(
+      'scopes.scope.targets.target.brokered-credential-sources'
+    );
   }
 
   /**
@@ -76,6 +78,8 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesRoute extends R
    */
   @action
   cancel() {
-    this.router.replaceWith('scopes.scope.targets.target.credential-sources');
+    this.router.replaceWith(
+      'scopes.scope.targets.target.brokered-credential-sources'
+    );
   }
 }
