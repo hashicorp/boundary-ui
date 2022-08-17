@@ -40,14 +40,14 @@ session_max_seconds:
   help: The maximum duration of a session.
 session_connection_limit:
   label: Maximum Connections
-  help: The maximum number of connections allowed per session.  For unlimited, specify "-1".dc
+  help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
 worker_version:
   label: Version
 worker_authorized_actions:
   label: Authorized Actions
 worker_last_seen:
   label: Last Seen
-  help: Description
+  help: Last time the worker reported status.
 worker_address:
   help: URL and port for this worker.
 worker_type:
