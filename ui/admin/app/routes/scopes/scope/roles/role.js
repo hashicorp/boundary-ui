@@ -20,7 +20,7 @@ export default class ScopesScopeRolesRoleRoute extends Route {
 
   // =actions
   /**
-   * Rollback changes on an role.
+   * Rollback changes on a role.
    * @param {RoleModel} role
    */
   @action
