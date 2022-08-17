@@ -52,8 +52,8 @@ export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesRoute exte
   @confirm('questions.remove-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.remove-success')
-  async removeBrokeredCredentialSource(target, credentialLibrary) {
-    await target.removeBrokeredCredentialSource(credentialLibrary.id);
+  async removeBrokeredCredentialSource(target, credentialSource) {
+    await target.removeBrokeredCredentialSource(credentialSource.id);
     this.refresh();
   }
 }
