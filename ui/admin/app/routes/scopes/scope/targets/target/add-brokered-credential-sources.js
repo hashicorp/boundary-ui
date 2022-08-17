@@ -67,7 +67,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async save(target, credentialLibraryIDs) {
-    await target.addCredentialSources(credentialLibraryIDs);
+    await target.addBrokeredCredentialSources(credentialLibraryIDs);
     this.router.replaceWith(
       'scopes.scope.targets.target.brokered-credential-sources'
     );

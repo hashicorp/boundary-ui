@@ -287,7 +287,7 @@ module('Unit | Model | target', function (hooks) {
     );
   });
 
-  test('it has an `addCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has an `addBrokeredCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:add-credential-sources',
@@ -318,10 +318,10 @@ module('Unit | Model | target', function (hooks) {
       },
     });
     const model = store.peekRecord('target', '123abc');
-    await model.addCredentialSources(['123_abc', 'foobar']);
+    await model.addBrokeredCredentialSources(['123_abc', 'foobar']);
   });
 
-  test('it has a `removeCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
+  test('it has a `removeBrokeredCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-credential-sources',
@@ -355,7 +355,7 @@ module('Unit | Model | target', function (hooks) {
     await model.removeBrokeredCredentialSources(['1', '2']);
   });
 
-  test('it has a `removeCredentialSource` method that deletes a single credential library using `removeBrokeredCredentialSources` method', async function (assert) {
+  test('it has a `removeBrokeredCredentialSource` method that deletes a single credential library using `removeBrokeredCredentialSources` method', async function (assert) {
     assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-credential-sources',
