@@ -8,6 +8,8 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewCon
 
   // =attributes
 
+  queryParams = ['type'];
+
   /**
    * Translated new credentials breadcrumb
    * @type {string}
