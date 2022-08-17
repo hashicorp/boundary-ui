@@ -13,8 +13,6 @@ export default factory.extend({
         return generatedId('credspk_');
       case 'username_password':
         return generatedId('credup_');
-      default:
-        return generatedId('cred_');
     }
   },
   authorized_actions: () =>
