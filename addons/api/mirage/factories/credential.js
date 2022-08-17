@@ -3,9 +3,18 @@ import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generatedId from '../helpers/id';
 
+const types = ['username_password', 'ssh_private_key'];
+
 export default factory.extend({
-  id: () => generatedId('cred_'),
-  type: 'username_password',
+  type: (i) => types[i % types.length],
+  id() {
+    switch (this.type) {
+      case 'ssh_private_key':
+        return generatedId('credspk_');
+      case 'username_password':
+        return generatedId('credup_');
+    }
+  },
   authorized_actions: () =>
     permissions.authorizedActionsFor('credential') || [
       'no-op',
