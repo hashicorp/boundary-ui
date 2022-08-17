@@ -4,7 +4,7 @@ export default class ScopesScopeWorkersWorkerController extends Controller {
   // =attributes
 
   /**
-   * An worker breadcrumb
+   * A worker breadcrumb
    * @type {string}
    */
   get breadCrumb() {
