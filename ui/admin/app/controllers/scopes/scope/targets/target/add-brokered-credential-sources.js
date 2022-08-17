@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
-export default class ScopesScopeTargetsTargetAddCredentialSourcesController extends Controller {
+export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesController extends Controller {
   // =services
 
   @service intl;
@@ -13,7 +13,7 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesController exte
    * Checks for unassigned credential sources.
    * @type {boolean}
    */
-  get hasAvailableCredentialSources() {
+  get hasAvailableBrokeredCredentialSources() {
     return this.filteredCredentialSources.length > 0;
   }
 
@@ -44,6 +44,8 @@ export default class ScopesScopeTargetsTargetAddCredentialSourcesController exte
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.target.actions.add-credential-sources');
+    return this.intl.t(
+      'resources.target.actions.add-brokered-credential-sources'
+    );
   }
 }

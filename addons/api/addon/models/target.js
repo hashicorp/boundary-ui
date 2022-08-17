@@ -23,7 +23,7 @@ export default class TargetModel extends GeneratedTargetModel {
 
   /**
    * Credential source ids are read only and can be
-   * persisted via a dedicated call to `addCredentialSources()`.
+   * persisted via a dedicated call to `addBrokeredCredentialSources()`.
    */
   @fragmentArray('fragment-string', {
     readOnly: true,
@@ -190,7 +190,10 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addCredentialSources(credentialSourceIDs, options = { adapterOptions: {} }) {
+  addBrokeredCredentialSources(
+    credentialSourceIDs,
+    options = { adapterOptions: {} }
+  ) {
     const defaultAdapterOptions = {
       method: 'add-credential-sources',
       credentialSourceIDs,
@@ -213,7 +216,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeCredentialSources(
+  removeBrokeredCredentialSources(
     credentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
@@ -237,8 +240,8 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options
    * @return {Promise}
    */
-  removeCredentialSource(credentialSourceID, options) {
-    return this.removeCredentialSources([credentialSourceID], options);
+  removeBrokeredCredentialSource(credentialSourceID, options) {
+    return this.removeBrokeredCredentialSources([credentialSourceID], options);
   }
 
   /**

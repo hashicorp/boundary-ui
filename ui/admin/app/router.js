@@ -75,8 +75,8 @@ Router.map(function () {
         this.route('target', { path: ':target_id' }, function () {
           this.route('host-sources', function () {});
           this.route('add-host-sources');
-          this.route('credential-sources');
-          this.route('add-credential-sources');
+          this.route('brokered-credential-sources');
+          this.route('add-brokered-credential-sources');
         });
         this.route('new');
       });
