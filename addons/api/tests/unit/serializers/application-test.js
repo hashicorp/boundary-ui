@@ -215,6 +215,7 @@ module('Unit | Serializer | application', function (hooks) {
           scope: { id: 'o_123', scope_id: 'o_123' },
           host_sources: [],
           brokered_credential_source_ids: [],
+          injected_application_credential_source_ids: [],
         },
         relationships: {},
       },

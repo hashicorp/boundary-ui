@@ -22,7 +22,7 @@ export default class TargetModel extends GeneratedTargetModel {
   host_sources;
 
   /**
-   * Credential source ids are read only and can be
+   * Brokered Credential source ids are read only and can be
    * persisted via a dedicated call to `addBrokeredCredentialSources()`.
    */
   @fragmentArray('fragment-string', {
@@ -32,8 +32,8 @@ export default class TargetModel extends GeneratedTargetModel {
   brokered_credential_source_ids;
 
   /**
-   * Credential source ids are read only and can be
-   * persisted via a dedicated call to `addCredentialSources()`.
+   * Injected Application Credential source ids are read only and can be
+   * persisted via a dedicated call to `addInjectedApplicationCredentialSources()`.
    */
   @fragmentArray('fragment-string', {
     readOnly: true,
@@ -185,18 +185,18 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * Adds credential sources via the `add-credential-sources` method.
    * See serializer and adapter for more information.
-   * @param {[string]} brokeredcredentialSourceIDs
+   * @param {[string]} brokeredCredentialSourceIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
   addBrokeredCredentialSources(
-    credentialSourceIDs,
+    brokeredCredentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
     const defaultAdapterOptions = {
       method: 'add-credential-sources',
-      credentialSourceIDs,
+      brokeredCredentialSourceIDs,
     };
     // There is no "deep merge" in ES.
     return this.save({
@@ -211,18 +211,18 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * Delete credential libraries and credentials via the `remove-credential-sources` method.
    * See serializer and adapter for more information.
-   * @param {[string]} credentialSourceIDs
+   * @param {[string]} brokeredCredentialSourceIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
   removeBrokeredCredentialSources(
-    credentialSourceIDs,
+    brokeredCredentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
     const defaultAdapterOptions = {
       method: 'remove-credential-sources',
-      credentialSourceIDs,
+      brokeredCredentialSourceIDs,
     };
     // There is no "deep merge" in ES.
     return this.save({
@@ -236,12 +236,15 @@ export default class TargetModel extends GeneratedTargetModel {
 
   /**
    * Delete a single credential library/credential set via the `remove-credential-sources` method.
-   * @param {number} credentialSourceID
+   * @param {number} brokeredCredentialSourceID
    * @param {object} options
    * @return {Promise}
    */
-  removeBrokeredCredentialSource(credentialSourceID, options) {
-    return this.removeBrokeredCredentialSources([credentialSourceID], options);
+  removeBrokeredCredentialSource(brokeredCredentialSourceID, options) {
+    return this.removeBrokeredCredentialSources(
+      [brokeredCredentialSourceID],
+      options
+    );
   }
 
   /**

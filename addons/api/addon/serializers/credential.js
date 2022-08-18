@@ -7,6 +7,12 @@ export default class CredentialSerializer extends ApplicationSerializer {
    * @method serialize
    * @param {Snapshot} snapshot
    */
+
+  /**
+   * @type {boolean}
+   */
+  serializeScopeID = false;
+
   serialize(snapshot) {
     switch (snapshot.record.type) {
       case 'username_password':
