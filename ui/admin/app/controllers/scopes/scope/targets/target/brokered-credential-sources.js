@@ -13,6 +13,8 @@ export default class ScopesScopeTargetsTargetCredentialSourcesController extends
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.target.credential-source.title_plural');
+    return this.intl.t(
+      'resources.target.brokered-credential-source.title_plural'
+    );
   }
 }

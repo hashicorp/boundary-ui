@@ -43,9 +43,9 @@ module('Unit | Abilities | Target', function (hooks) {
     const model = {
       authorized_actions: ['add-credential-sources'],
     };
-    assert.ok(service.can('addCredentialSources target', model));
+    assert.ok(service.can('addBrokeredCredentialSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('addCredentialSources target', model));
+    assert.notOk(service.can('addBrokeredCredentialSources target', model));
   });
 
   test('it reflects when a given target may remove crednetial sources', function (assert) {
@@ -54,8 +54,8 @@ module('Unit | Abilities | Target', function (hooks) {
     const model = {
       authorized_actions: ['remove-credential-sources'],
     };
-    assert.ok(service.can('removeCredentialSources target', model));
+    assert.ok(service.can('removeBrokeredCredentialSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('removeCredentialSources target', model));
+    assert.notOk(service.can('removeBrokeredCredentialSources target', model));
   });
 });
