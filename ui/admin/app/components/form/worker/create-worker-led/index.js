@@ -19,11 +19,12 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
     return `hcp_boundary_cluster_id = "${this.clusterId || '<config_id>'}"
 
 listener "tcp" {
-  address = "${this.ipAddress || '<ip_address>'}"
+  address = "0.0.0.0:9202"
   purpose = "proxy"
 }
 
 worker {
+  public_addr = "${this.ipAddress || '<public_ip_address>'}"
   auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
   tags {
     type = [${
