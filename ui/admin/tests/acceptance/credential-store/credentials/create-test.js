@@ -179,7 +179,7 @@ module(
             details: {
               request_fields: [
                 {
-                  name: 'attributes.ssh_private_key',
+                  name: 'attributes.private_key',
                   description:
                     'Field required for creating a username-key-pair credential.',
                 },
