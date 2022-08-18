@@ -8,9 +8,11 @@
       {{t 'resources.target.actions.add-host-sources'}}
     </dropdown.link>
   {{/if}}
-  {{#if (can 'addCredentialSources target' @model)}}
-    <dropdown.link @route='scopes.scope.targets.target.add-credential-sources'>
-      {{t 'resources.target.actions.add-credential-sources'}}
+  {{#if (can 'addBrokeredCredentialSources target' @model)}}
+    <dropdown.link
+      @route='scopes.scope.targets.target.add-brokered-credential-sources'
+    >
+      {{t 'resources.target.actions.add-brokered-credential-sources'}}
     </dropdown.link>
   {{/if}}
   {{#if (can 'delete model' @model)}}
