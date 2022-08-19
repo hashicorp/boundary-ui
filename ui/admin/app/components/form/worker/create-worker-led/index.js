@@ -65,7 +65,4 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
       styleActiveLine: false,
     };
   }
-  hclCodeTest = {
-    test: 'tst',
-  };
 }
