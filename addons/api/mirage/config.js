@@ -461,7 +461,7 @@ export default function () {
           return !attrs.hostSourceIds.includes(id);
         });
       }
-      // If adding credential sources, push them into the array
+      // If adding brokered credential sources, push them into the array
       if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialIds = target.credentialIds;
@@ -478,7 +478,7 @@ export default function () {
           }
         });
       }
-      // If deleting credential sources, filter them out of the array
+      // If deleting brokered credential sources, filter them out of the array
       if (method === 'remove-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialIds = target.credentialIds;

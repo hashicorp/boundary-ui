@@ -30,14 +30,14 @@ export default class TargetAbility extends ModelAbility {
   /**
    * @type {boolean}
    */
-  get canAddCredentialSources() {
+  get canAddBrokeredCredentialSources() {
     return this.hasAuthorizedAction('add-credential-sources');
   }
 
   /**
    * @type {boolean}
    */
-  get canRemoveCredentialSources() {
+  get canRemoveBrokeredCredentialSources() {
     return this.hasAuthorizedAction('remove-credential-sources');
   }
 }
