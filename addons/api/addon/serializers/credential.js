@@ -13,35 +13,13 @@ export default class CredentialSerializer extends ApplicationSerializer {
    */
   serializeScopeID = false;
 
-  serialize(snapshot) {
-    switch (snapshot.record.type) {
-      case 'username_password':
-        return this.serializeUsernamePassword(...arguments);
-      case 'ssh_private_key':
-      default:
-        return this.serializeSSHPrivateKey(...arguments);
-    }
-  }
-
-  serializeUsernamePassword() {
+  serialize() {
     const serialized = super.serialize(...arguments);
-    // Remove non-username_password type attributes
-    delete serialized['attributes']['private_key'];
-    delete serialized['attributes']['passphrase'];
-    return serialized;
-  }
-
-  serializeSSHPrivateKey() {
-    const serialized = super.serialize(...arguments);
-    // Remove non-ssh_private_key type attributes
-    delete serialized['attributes']['password'];
-    if (!serialized['attributes']['passphrase']) {
-      delete serialized['attributes']['passphrase'];
-    }
-    if (!serialized['attributes']['private_key']) {
-      delete serialized['attributes']['private_key'];
-    }
-
+    Object.keys(serialized.attributes).forEach((key) => {
+      if (!serialized.attributes[key]) {
+        delete serialized.attributes[key];
+      }
+    });
     return serialized;
   }
 
