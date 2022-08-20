@@ -39,6 +39,19 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
       description,
     });
   }
+
+  /**
+   * Set query param to default type
+   * before exiting route
+   * @param {Controller} controller
+   * @param {boolean} isExiting
+   */
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.set('type', 'username_password');
+    }
+  }
+
   /**
    * Update type of credential
    * @param {string} type
