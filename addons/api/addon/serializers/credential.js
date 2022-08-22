@@ -33,12 +33,8 @@ export default class CredentialSerializer extends ApplicationSerializer {
     const serialized = super.serialize(...arguments);
     // Remove non-ssh_private_key type attributes
     delete serialized['attributes']['password'];
-    if (!serialized['attributes']['passphrase']) {
-      delete serialized['attributes']['passphrase'];
-    }
-    if (!serialized['attributes']['private_key']) {
-      delete serialized['attributes']['private_key'];
-    }
+    if (!serialized?.attributes?.passphrase) delete serialized.attributes.passphrase;
+    if (!serialized?.attributes?.private_key) delete serialized.attributes. private_key;
     return serialized;
   }
 
