@@ -5,7 +5,7 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Route {
+export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesRoute extends Route {
   // =methods
 
   /**
@@ -13,8 +13,9 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
    * @return {Promise{[CredentialLibraryModel, CredentialModel]}}
    */
   beforeModel() {
-    const { application_credential_source_ids: sourceIDFragments } =
-      this.modelFor('scopes.scope.targets.target');
+    const { brokered_credential_source_ids: sourceIDFragments } = this.modelFor(
+      'scopes.scope.targets.target'
+    );
     return all(
       sourceIDFragments.map(({ value }) => {
         const isStatic = value.includes('cred');
@@ -51,8 +52,8 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
   @confirm('questions.remove-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.remove-success')
-  async removeCredentialSource(target, credentialLibrary) {
-    await target.removeCredentialSource(credentialLibrary.id);
+  async removeBrokeredCredentialSource(target, credentialSource) {
+    await target.removeBrokeredCredentialSource(credentialSource.id);
     this.refresh();
   }
 }

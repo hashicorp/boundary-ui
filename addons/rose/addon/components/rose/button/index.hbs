@@ -2,8 +2,7 @@
   ...attributes
   type={{if @submit 'submit' 'button'}}
   disabled={{if @disabled 'disabled'}}
-  class='{{@classNames}}
-    {{if @style (concat 'rose-button-' @style)}}
+  class='{{if @style (concat 'rose-button-' @style)}}
     {{if @iconLeft 'has-icon-left'}}
     {{if @iconRight 'has-icon-right'}}
     {{if @iconOnly 'has-icon-only'}}'

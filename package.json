@@ -104,7 +104,8 @@
     "hawk": "^9.0.1",
     "async": "^2.6.4",
     "terser": "^5.14.2",
-    "jpeg-js": "^0.4.4"
+    "jpeg-js": "^0.4.4",
+    "got": "^11.8.5"
   },
   "config": {
     "commitizen": {

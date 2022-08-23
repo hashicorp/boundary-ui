@@ -23,13 +23,13 @@ export default class TargetModel extends GeneratedTargetModel {
 
   /**
    * Credential source ids are read only and can be
-   * persisted via a dedicated call to `addCredentialSources()`.
+   * persisted via a dedicated call to `addBrokeredCredentialSources()`.
    */
   @fragmentArray('fragment-string', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
-  application_credential_source_ids;
+  brokered_credential_source_ids;
 
   /**
    * An array of resolved host set and host catalog instances.  Model instances
@@ -53,9 +53,9 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
-  @computed('application_credential_source_ids.[]', 'store')
-  get credentialSources() {
-    return this.application_credential_source_ids
+  @computed('brokered_credential_source_ids.[]', 'store')
+  get brokeredCredentialSources() {
+    return this.brokered_credential_source_ids
       .map((source) => {
         if (source.value.startsWith('cred')) {
           return this.store.peekRecord('credential', source.value);
@@ -161,7 +161,10 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addCredentialSources(credentialSourceIDs, options = { adapterOptions: {} }) {
+  addBrokeredCredentialSources(
+    credentialSourceIDs,
+    options = { adapterOptions: {} }
+  ) {
     const defaultAdapterOptions = {
       method: 'add-credential-sources',
       credentialSourceIDs,
@@ -184,7 +187,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  removeCredentialSources(
+  removeBrokeredCredentialSources(
     credentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
@@ -208,8 +211,8 @@ export default class TargetModel extends GeneratedTargetModel {
    * @param {object} options
    * @return {Promise}
    */
-  removeCredentialSource(credentialSourceID, options) {
-    return this.removeCredentialSources([credentialSourceID], options);
+  removeBrokeredCredentialSource(credentialSourceID, options) {
+    return this.removeBrokeredCredentialSources([credentialSourceID], options);
   }
 
   /**

@@ -138,7 +138,7 @@ export default function () {
   // Authenticate + auth methods custom routes
   this.post('/auth-methods/:id_method', authHandler);
   // Deauthenticate route
-  this.post('/scopes/:id_method', deauthHandler);
+  this.delete('/auth-tokens/:id', deauthHandler);
 
   // IAM : Users
   this.get(
@@ -461,11 +461,11 @@ export default function () {
           return !attrs.hostSourceIds.includes(id);
         });
       }
-      // If adding credential sources, push them into the array
+      // If adding brokered credential sources, push them into the array
       if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialIds = target.credentialIds;
-        attrs.applicationCredentialSourceIds.forEach((id) => {
+        attrs.brokeredCredentialSourceIds.forEach((id) => {
           if (
             !updatedAttrs.credentialLibraryIds.includes(id) ||
             !updatedAttrs.credentialIds.includes(id)
@@ -478,16 +478,16 @@ export default function () {
           }
         });
       }
-      // If deleting credential sources, filter them out of the array
+      // If deleting brokered credential sources, filter them out of the array
       if (method === 'remove-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialIds = target.credentialIds;
         updatedAttrs.credentialLibraryIds =
           updatedAttrs.credentialLibraryIds.filter((id) => {
-            return !attrs.applicationCredentialSourceIds.includes(id);
+            return !attrs.brokeredCredentialSourceIds.includes(id);
           });
         updatedAttrs.credentialIds = updatedAttrs.credentialIds.filter((id) => {
-          return !attrs.applicationCredentialSourceIds.includes(id);
+          return !attrs.brokeredCredentialSourceIds.includes(id);
         });
       }
       return target.update(updatedAttrs);
