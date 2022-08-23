@@ -22,19 +22,23 @@ export default class CredentialSerializer extends ApplicationSerializer {
         return this.serializeSSHPrivateKey(...arguments);
     }
   }
+
   serializeUsernamePassword() {
     const serialized = super.serialize(...arguments);
     // Remove non-username_password type attributes
-    delete serialized['attributes']['private_key'];
-    delete serialized['attributes']['passphrase'];
+    delete serialized.attributes.private_key;
+    delete serialized.attributes.passphrase;
     return serialized;
   }
+
   serializeSSHPrivateKey() {
     const serialized = super.serialize(...arguments);
     // Remove non-ssh_private_key type attributes
-    delete serialized['attributes']['password'];
-    if (!serialized?.attributes?.passphrase) delete serialized.attributes.passphrase;
-    if (!serialized?.attributes?.private_key) delete serialized.attributes.private_key;
+    delete serialized.attributes.password;
+    if (!serialized?.attributes?.passphrase)
+      delete serialized.attributes.passphrase;
+    if (!serialized?.attributes?.private_key)
+      delete serialized.attributes.private_key;
     return serialized;
   }
 
