@@ -300,6 +300,7 @@ target:
     types:
       vault: Vault
       username_password: Username & Password
+      ssh_private_key: Username & Key Pair
     messages:
       welcome:
         title: Welcome to brokered credentials
