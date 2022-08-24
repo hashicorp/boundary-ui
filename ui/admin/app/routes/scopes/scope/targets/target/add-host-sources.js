@@ -9,7 +9,7 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
+
   @service router;
 
   // =methods

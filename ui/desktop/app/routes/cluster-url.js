@@ -11,7 +11,7 @@ export default class ClusterUrlRoute extends Route {
   @service session;
   @service clusterUrl;
   @service intl;
-  @service notify;
+  @service flashMessages;
   @service router;
 
   // =attributes
@@ -78,7 +78,11 @@ export default class ClusterUrlRoute extends Route {
       const errorMessage = this.intl.t(
         'errors.cluster-url-verification-failed.description'
       );
-      this.notify.error(errorMessage, { closeAfter: null });
+      this.flashMessages.danger(errorMessage, {
+        noticationType: 'error',
+        sticky: true,
+        dismiss: (flash) => flash.destroyMessage(),
+      });
     }
   }
 }

@@ -84,17 +84,6 @@
 
 </Rose::Layout::Global>
 
-<EmberNotify @closeAfter={{this.notifyTimeout}} as |message close|>
-  <Rose::Notification
-    @style={{message.type}}
-    @heading={{t (concat 'states.' message.type)}}
-    @dismiss={{close}}
-    @dismissText={{t 'actions.dismiss'}}
-  >
-    {{message.text}}
-  </Rose::Notification>
-</EmberNotify>
-
 {{#if this.flashMessages.queue}}
   <div class='ember-notify-cn ember-notify-default'>
     {{#each this.flashMessages.queue as |flash|}}

@@ -8,7 +8,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   // =services
   @service intl;
-  @service notify;
+
   @service resourceFilterStore;
 
   // =methods
