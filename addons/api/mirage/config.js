@@ -444,6 +444,8 @@ export default function () {
       const target = targets.find(id);
       const updatedAttrs = {
         version: attrs.version,
+        brokeredCredentialSourceIds: [],
+        injectedApplicationCredentialSourceIds: [],
       };
       // If adding host sources, push them into the array
       if (method === 'add-host-sources') {
@@ -463,32 +465,89 @@ export default function () {
       }
       // If adding brokered credential sources, push them into the array
       if (method === 'add-credential-sources') {
-        updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
-        updatedAttrs.credentialIds = target.credentialIds;
-        attrs.brokeredCredentialSourceIds.forEach((id) => {
-          if (
-            !updatedAttrs.credentialLibraryIds.includes(id) ||
-            !updatedAttrs.credentialIds.includes(id)
-          ) {
-            if (id.startsWith('cred')) {
-              updatedAttrs.credentialIds.push(id);
-            } else {
-              updatedAttrs.credentialLibraryIds.push(id);
+        if (
+          target.attributes.brokeredCredentialSourceIds?.length &&
+          typeof target.attributes.brokeredCredentialSourceIds === 'object'
+        ) {
+          target.attributes.brokeredCredentialSourceIds.forEach(
+            (credSource) => {
+              updatedAttrs.brokeredCredentialSourceIds.push(credSource.id);
             }
-          }
-        });
+          );
+        } else {
+          updatedAttrs.brokeredCredentialSourceIds =
+            target.attributes.brokeredCredentialSourceIds;
+        }
+        if (
+          target.attributes.injectedApplicationCredentialSourceIds?.length &&
+          typeof target.attributes.injectedApplicationCredentialSourceIds ===
+            'object'
+        ) {
+          target.attributes.injectedApplicationCredentialSourceIds.forEach(
+            (credSource) => {
+              updatedAttrs.injectedApplicationCredentialSourceIds.push(
+                credSource.id
+              );
+            }
+          );
+        } else {
+          updatedAttrs.injectedApplicationCredentialSourceIds =
+            target.attributes.injectedApplicationCredentialSourceIds;
+        }
+
+        attrs.brokeredCredentialSourceIds &&
+          attrs.brokeredCredentialSourceIds.forEach((id) => {
+            if (!updatedAttrs.brokeredCredentialSourceIds.includes(id)) {
+              updatedAttrs.brokeredCredentialSourceIds.push(id);
+            }
+          });
+
+        attrs.injectedApplicationCredentialSourceIds &&
+          attrs.injectedApplicationCredentialSourceIds.forEach((id) => {
+            if (
+              !updatedAttrs.injectedApplicationCredentialSourceIds.includes(id)
+            ) {
+              updatedAttrs.injectedApplicationCredentialSourceIds.push(id);
+            }
+          });
       }
       // If deleting brokered credential sources, filter them out of the array
       if (method === 'remove-credential-sources') {
-        updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
-        updatedAttrs.credentialIds = target.credentialIds;
-        updatedAttrs.credentialLibraryIds =
-          updatedAttrs.credentialLibraryIds.filter((id) => {
-            return !attrs.brokeredCredentialSourceIds.includes(id);
-          });
-        updatedAttrs.credentialIds = updatedAttrs.credentialIds.filter((id) => {
-          return !attrs.brokeredCredentialSourceIds.includes(id);
-        });
+        if (
+          target.attributes.brokeredCredentialSourceIds?.length &&
+          typeof target.attributes.brokeredCredentialSourceIds === 'object'
+        ) {
+          target.attributes.brokeredCredentialSourceIds.forEach(
+            (credSource) => {
+              updatedAttrs.brokeredCredentialSourceIds.push(credSource.id);
+            }
+          );
+        } else {
+          updatedAttrs.brokeredCredentialSourceIds =
+            target.attributes.brokeredCredentialSourceIds;
+        }
+        // if (target.attributes.injectedApplicationCredentialSourceIds?.length && typeof(target.attributes.injectedApplicationCredentialSourceIds) === 'object') {
+        //   target.attributes.injectedApplicationCredentialSourceIds.forEach((credSource) => {
+        //     updatedAttrs.injectedApplicationCredentialSourceIds.push(credSource.id)
+        //   });
+        // } else {
+        //   updatedAttrs.injectedApplicationCredentialSourceIds = target.attributes.injectedApplicationCredentialSourceIds;
+        // }
+        console.log(updatedAttrs.brokeredCredentialSourceIds, 'before');
+        console.log(
+          target.attributes.brokeredCredentialSourceIds,
+          'target',
+          attrs.brokeredCredentialSourceIds
+        );
+        updatedAttrs.brokeredCredentialSourceIds =
+          updatedAttrs.brokeredCredentialSourceIds.filter(
+            (id) => !attrs.brokeredCredentialSourceIds.includes(id)
+          );
+
+        // updatedAttrs.injectedApplicationCredentialSourceIds =
+        // attrs.injectedApplicationCredentialSourceIds && updatedAttrs.injectedApplicationCredentialSourceIds.filter((id) => {
+        //   return !attrs.injectedApplicationCredentialSourceIds.includes(id);
+        // });
       }
       return target.update(updatedAttrs);
     }
