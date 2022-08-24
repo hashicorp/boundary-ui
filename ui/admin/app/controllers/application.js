@@ -6,6 +6,7 @@ export default class ApplicationController extends Controller {
   // =services
 
   @service session;
+  @service flashMessages;
 
   // =attributes
 
