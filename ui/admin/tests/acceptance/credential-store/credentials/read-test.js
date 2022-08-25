@@ -103,7 +103,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
         (item) => item != 'read'
       );
     await visit(urls.credentials);
-    assert.notOk(find(`[href="${urls.usernameKeyPairCredential}"]`));
+    assert.dom(`[href="${urls.usernameKeyPairCredential}"]`).doesNotExist();
   });
 
   test('visiting an unknown credential displays 404 message', async function (assert) {
