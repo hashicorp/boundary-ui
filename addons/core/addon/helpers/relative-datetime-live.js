@@ -60,7 +60,7 @@ export default class extends Helper {
         : Math.floor(delta / greatestMeaningfulUnit.value);
     const unit = greatestMeaningfulUnit.unit;
     return this.intl.formatRelative(scaledDelta, {
-      unit: unit,
+      unit,
       numeric: 'auto',
     });
   }
