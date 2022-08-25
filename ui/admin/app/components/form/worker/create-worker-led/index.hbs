@@ -80,7 +80,7 @@
 
   <h3>{{t 'resources.worker.form.steps.3.title'}}</h3>
   <div class='worker-create-section'>
-    <div class='worker-create-section__worker-auth-token'>
+    <div class='worker-auth-token'>
       <form.input
         @name='worker_auth_registration_request'
         @value={{this.generatedWorkerAuthToken}}
@@ -105,7 +105,7 @@
     </div>
 
     {{#if @model.cannotSave}}
-      <div class='worker-create-section__worker-success'>
+      <div class='worker-success'>
         <div>
           <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
           <p>{{this.generatedWorkerAuthToken}}</p>

@@ -411,13 +411,13 @@
     border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   }
 
-  &__worker-auth-token {
+  .worker-auth-token {
     display: flex;
     gap: sizing.rems(m);
     align-items: flex-end;
   }
 
-  &__worker-success {
+  .worker-success {
     display: flex;
     align-items: center;
     justify-content: space-between;
