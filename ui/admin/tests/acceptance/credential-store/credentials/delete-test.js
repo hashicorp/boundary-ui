@@ -3,8 +3,6 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, visit, find } from '@ember/test-helpers';
-import { resolve, reject } from 'rsvp';
-import sinon from 'sinon';
 import { Response } from 'miragejs';
 
 module(
@@ -112,9 +110,9 @@ module(
         );
       await visit(urls.usernamePasswordCredential);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-      assert.notOk(
-        find('.rose-layout-page-actions .rose-dropdown-button-danger')
-      );
+      assert
+        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+        .doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernamePasswordCredentialCount
@@ -131,9 +129,9 @@ module(
         );
       await visit(urls.usernameKeyPairCredential);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-      assert.notOk(
-        find('.rose-layout-page-actions .rose-dropdown-button-danger')
-      );
+      assert
+        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+        .doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernameKeyPairCredentialCount
@@ -144,64 +142,64 @@ module(
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      confirmService.confirm = sinon.fake.returns(resolve());
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-primary');
+      assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernamePasswordCredentialCount - 1
       );
-      assert.ok(confirmService.confirm.calledOnce);
     });
 
     test('can accept delete username & key pair credential via dialog', async function (assert) {
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      confirmService.confirm = sinon.fake.returns(resolve());
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-primary');
+      assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
         usernameKeyPairCredentialCount - 1
       );
-      assert.ok(confirmService.confirm.calledOnce);
     });
 
-    test('cannot cancel delete username & password credential via dialog', async function (assert) {
+    test('can cancel delete username & password credential via dialog', async function (assert) {
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      confirmService.confirm = sinon.fake.returns(reject());
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-secondary');
+      assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernamePasswordCredentialCount
       );
-      assert.ok(confirmService.confirm.calledOnce);
     });
 
-    test('cannot cancel delete username & key pair credential via dialog', async function (assert) {
+    test('can cancel delete username & key pair credential via dialog', async function (assert) {
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      confirmService.confirm = sinon.fake.returns(reject());
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-secondary');
+      assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
         usernameKeyPairCredentialCount
       );
-      assert.ok(confirmService.confirm.calledOnce);
     });
 
     test('deleting a username & password credential which errors displays error message', async function (assert) {
