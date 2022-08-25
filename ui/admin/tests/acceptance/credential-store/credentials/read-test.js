@@ -93,7 +93,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
         (item) => item != 'read'
       );
     await visit(urls.credentials);
-    assert.notOk(find(`[href="${urls.usernamePasswordCredential}"]`));
+    assert.dom(`[href="${urls.usernamePasswordCredential}"]`).doesNotExist();
   });
 
   test('cannot navigate to a username & key pair credential form without proper authorization', async function (assert) {
