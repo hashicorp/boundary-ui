@@ -300,6 +300,7 @@ target:
     types:
       vault: Vault
       username_password: Username & Password
+      ssh_private_key: Username & Key Pair
     messages:
       welcome:
         title: Welcome to brokered credentials
@@ -395,6 +396,20 @@ credential:
     ssh_private_key: Username & Key Pair
   help:
     username_password: This host requires a username and password to connect.
+    ssh_private_key: This host requires a username, public key, and private key to connect.
+  form:
+    username:
+      label: Username
+      help: The username to use when connecting with this credential store.
+    password:
+      label: Password
+      help: The password to use when signing in with this credential store.
+    private_key: 
+      label: SSH Private Key
+      help: The private key to use when connecting with this credential store.
+    passphrase:
+      label: Pass phrase
+      help: Optional.
 scope:
   title: Scope
   title_plural: Scopes
