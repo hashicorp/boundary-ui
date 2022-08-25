@@ -33,7 +33,7 @@ module('Unit | Serializer | credential', function (hooks) {
     });
   });
 
-  test('it serializes username_password type correctly on create no password change', function (assert) {
+  test('it serializes username_password type correctly when only the username is updated', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
@@ -92,7 +92,7 @@ module('Unit | Serializer | credential', function (hooks) {
     });
   });
 
-  test('it serializes ssh_private_key type correctly on create no private key or passphrase change', function (assert) {
+  test('it serializes ssh_private_key type correctly when only the username is updated', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
