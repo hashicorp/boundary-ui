@@ -121,11 +121,7 @@
     {{/if}}
   </div>
 
-  <Rose::LinkButton
-    @route='scopes.scope.workers'
-    @style='secondary'
-    {{on 'click' (route-action 'refreshWorkers')}}
-  >
+  <Rose::LinkButton @route='scopes.scope.workers' @style='secondary'>
     {{t 'actions.done'}}
   </Rose::LinkButton>
 </Rose::Form>
