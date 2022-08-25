@@ -230,7 +230,7 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').exists();
+        assert.dom('.rose-dialog').isVisible();
         await click('.rose-dialog-footer button:first-child', 'Click Discard');
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
@@ -253,7 +253,7 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').exists();
+        assert.dom('.rose-dialog').isVisible();
         await click('.rose-dialog-footer button:first-child', 'Click Discard');
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
@@ -277,7 +277,7 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').exists();
+        assert.dom('.rose-dialog').isVisible();
         await click('.rose-dialog-footer button:last-child', 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
         assert.strictEqual(
@@ -301,7 +301,7 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').exists();
+        assert.dom('.rose-dialog').isVisible();
         await click('.rose-dialog-footer button:last-child', 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
         assert.strictEqual(
@@ -318,7 +318,7 @@ module(
       assert.dom('[name="password"]').doesNotExist();
       await click('form [type="button"]', 'Activate edit mode');
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-      assert.dom('[name="password"]').exists();
+      assert.dom('[name="password"]').isVisible();
     });
 
     test('private_key and passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
@@ -328,8 +328,8 @@ module(
       assert.dom('[name="passphrase"]').doesNotExist();
       await click('form [type="button"]', 'Activate edit mode');
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-      assert.dom('[name="private_key"]').exists();
-      assert.dom('[name="passphrase"]').exists();
+      assert.dom('[name="private_key"]').isVisible();
+      assert.dom('[name="passphrase"]').isVisible();
     });
   }
 );
