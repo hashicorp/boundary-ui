@@ -172,7 +172,7 @@ module(
       assert.ok(confirmService.confirm.calledOnce);
     });
 
-    test('cannot cancel delete username & password credential via dialog', async function (assert) {
+    test('can cancel delete username & password credential via dialog', async function (assert) {
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
