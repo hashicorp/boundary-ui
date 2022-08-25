@@ -11,6 +11,8 @@ module(
     setupApplicationTest(hooks);
     setupMirage(hooks);
 
+    const MOCK_INPUT = 'random string';
+
     const instances = {
       scopes: {
         global: null,
@@ -68,37 +70,31 @@ module(
 
     test('can save changes to existing username & password credential', async function (assert) {
       assert.expect(3);
-      assert.notEqual(
-        instances.usernamePasswordCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       await click('.rose-form-actions [type="submit"]');
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'username_password' })
           .models[0].name,
-        'random string'
+        MOCK_INPUT
       );
     });
 
     test('can save changes to existing username & key pair credential', async function (assert) {
       assert.expect(3);
-      assert.notEqual(
-        instances.usernameKeyPairCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       await click('.rose-form-actions [type="submit"]');
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'ssh_private_key' })
           .models[0].name,
-        'random string'
+        MOCK_INPUT
       );
     });
 
@@ -109,7 +105,9 @@ module(
           (item) => item !== 'update'
         );
       await visit(urls.usernamePasswordCredential);
-      assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+      assert
+        .dom('.rose-layout-page-actions .rose-button-secondary')
+        .doesNotExist();
     });
 
     test('cannot make changes to an existing username & key pair credential without proper authorization', async function (assert) {
@@ -119,19 +117,18 @@ module(
           (item) => item !== 'update'
         );
       await visit(urls.usernameKeyPairCredential);
-      assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+      assert
+        .dom('.rose-layout-page-actions .rose-button-secondary')
+        .doesNotExist();
     });
 
     test('can cancel changes to existing username & password credential', async function (assert) {
       assert.expect(2);
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       await click('.rose-form-actions [type="button"]');
-      assert.notEqual(
-        instances.usernamePasswordCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
       assert.strictEqual(
         find('[name="name"]').value,
         instances.usernamePasswordCredential.name
@@ -142,12 +139,9 @@ module(
       assert.expect(2);
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       await click('.rose-form-actions [type="button"]');
-      assert.notEqual(
-        instances.usernameKeyPairCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
       assert.strictEqual(
         find('[name="name"]').value,
         instances.usernameKeyPairCredential.name
@@ -177,7 +171,7 @@ module(
       });
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       await click('[type="submit"]');
       assert.ok(
         find('[role="alert"]').textContent.trim(),
@@ -212,7 +206,7 @@ module(
       });
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       await click('[type="submit"]');
       assert.ok(
         find('[role="alert"]').textContent.trim(),
@@ -228,24 +222,21 @@ module(
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(
-        instances.usernamePasswordCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.ok(find('.rose-dialog'));
+        assert.dom('.rose-dialog').exists();
         await click('.rose-dialog-footer button:first-child', 'Click Discard');
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
-          'random string'
+          MOCK_INPUT
         );
       }
     });
@@ -254,24 +245,21 @@ module(
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(
-        instances.usernameKeyPairCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      await fillIn('[name="name"]', MOCK_INPUT);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.ok(find('.rose-dialog'));
+        assert.dom('.rose-dialog').exists();
         await click('.rose-dialog-footer button:first-child', 'Click Discard');
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
-          'random string'
+          MOCK_INPUT
         );
       }
     });
@@ -280,24 +268,22 @@ module(
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(
-        instances.usernamePasswordCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      const credentialName = find('[name="name"]').value;
+      await fillIn('[name="name"]', MOCK_INPUT);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.ok(find('.rose-dialog'));
+        assert.dom('.rose-dialog').exists();
         await click('.rose-dialog-footer button:last-child', 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-        assert.notEqual(
+        assert.strictEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
-          'random string'
+          credentialName
         );
       }
     });
@@ -306,24 +292,22 @@ module(
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(
-        instances.usernameKeyPairCredential.name,
-        'random string'
-      );
+      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', 'random string');
+      const credentialName = find('[name="name"]').value;
+      await fillIn('[name="name"]', MOCK_INPUT);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.ok(find('.rose-dialog'));
+        assert.dom('.rose-dialog').exists();
         await click('.rose-dialog-footer button:last-child', 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-        assert.notEqual(
+        assert.strictEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
-          'random string'
+          credentialName
         );
       }
     });
@@ -331,21 +315,21 @@ module(
     test('password field renders in edit mode only for a username & password credential', async function (assert) {
       assert.expect(3);
       await visit(urls.usernamePasswordCredential);
-      assert.notOk(find('[name="password"]'));
+      assert.dom('[name="password"]').doesNotExist();
       await click('form [type="button"]', 'Activate edit mode');
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-      assert.ok(find('[name="password"]'));
+      assert.dom('[name="password"]').exists();
     });
 
     test('private_key and passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
       assert.expect(5);
       await visit(urls.usernameKeyPairCredential);
-      assert.notOk(find('[name="private_key"]'));
-      assert.notOk(find('[name="passphrase"]'));
+      assert.dom('[name="private_key"]').doesNotExist();
+      assert.dom('[name="passphrase"]').doesNotExist();
       await click('form [type="button"]', 'Activate edit mode');
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-      assert.ok(find('[name="private_key"]'));
-      assert.ok(find('[name="passphrase"]'));
+      assert.dom('[name="private_key"]').exists();
+      assert.dom('[name="passphrase"]').exists();
     });
   }
 );
