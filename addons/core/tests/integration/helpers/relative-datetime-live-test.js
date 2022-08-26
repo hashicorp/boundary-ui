@@ -7,7 +7,7 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders relative date in "time" ago format', async function (assert) {
-    assert.expect(6);
+    assert.expect(8);
 
     const now = Date.now();
 
@@ -34,5 +34,13 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
     this.date = now - 23 * 12 * 31 * 24 * 60 * 60 * 1000;
     await render(hbs`{{relative-datetime-live this.date}}`);
     assert.dom(this.element).hasText('23 years ago');
+
+    this.date = now + 8 * 31 * 24 * 60 * 60 * 1000;
+    await render(hbs`{{relative-datetime-live this.date}}`);
+    assert.dom(this.element).hasText('in 7 months');
+
+    this.date = now + 23 * 12 * 31 * 24 * 60 * 60 * 1000;
+    await render(hbs`{{relative-datetime-live this.date}}`);
+    assert.dom(this.element).hasText('in 22 years');
   });
 });
