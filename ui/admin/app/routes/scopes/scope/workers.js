@@ -25,22 +25,10 @@ export default class ScopesScopeWorkersRoute extends Route {
   }
 
   /**
-   * Load all workers.
-   * @return {WorkerModel}
-   */
-  model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list worker', scope, { collection: 'workers' })) {
-      return this.store.query('worker', { scope_id });
-    }
-  }
-
-  /**
    * Refreshes worker data.
    */
   @action
-  refreshWorkers() {
+  refresh() {
     return super.refresh(...arguments);
   }
 

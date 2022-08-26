@@ -26,9 +26,7 @@ module('Acceptance | workers | list', function (hooks) {
 
   hooks.beforeEach(function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    instances.user = this.server.create('user', {
-      scope: instances.scopes.global,
-    });
+
     urls.globalScope = `/scopes/global/scopes`;
     urls.workers = `/scopes/global/workers`;
     authenticateSession({});
