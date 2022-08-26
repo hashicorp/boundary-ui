@@ -589,6 +589,16 @@ export default function () {
   this.get('/workers/:id');
   this.del('/workers/:id');
   this.patch('/workers/:id');
+  this.post('/workers:create:worker-led', ({ workers, scopes }) => {
+    const globalScope = scopes.find('global');
+
+    // This POST only takes in a token so we need to generate a random worker to return
+    const newWorker = this.create('worker', {
+      type: 'pki',
+      scope: globalScope,
+    });
+    return workers.create(newWorker.attrs);
+  });
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

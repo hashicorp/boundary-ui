@@ -37,12 +37,13 @@ export default class WorkerModel extends GeneratedWorkerModel {
   config_tags;
 
   /**
-   * Method to modify the adpater to handle custom POST route for creating worker.
+   * Method to modify the adapter to handle custom POST route for creating worker.
+   * @param {string} workerGeneratedAuthToken
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
-  addWorkerLed(workerGeneratedAuthToken, options = { adapterOptions: {} }) {
+  createWorkerLed(workerGeneratedAuthToken, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
       method: 'create:worker-led',
       workerGeneratedAuthToken,

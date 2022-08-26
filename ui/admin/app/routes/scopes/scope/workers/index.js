@@ -1,16 +1,19 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeWorkersIndexRoute extends Route {
   // =attributes
+  @service can;
 
   @resourceFilter({
     allowed: (route) => {
       const configTags = route
-        .modelFor('scopes.scope.workers')
+        .modelFor('scopes.scope.workers.index')
         .toArray()
-        .flatMap((worker) => worker.config_tags.type);
+        .flatMap((worker) => worker.config_tags?.type)
+        .filter(Boolean);
 
       // Filter out duplicate tags
       return [...new Set(configTags)];
@@ -21,18 +24,24 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   // =methods
 
   model() {
-    const workers = this.modelFor('scopes.scope.workers');
+    const scope = this.modelFor('scopes.scope');
+    const { id: scope_id } = scope;
+    if (this.can.can('list worker', scope, { collection: 'workers' })) {
+      const workers = this.store.query('worker', { scope_id });
 
-    if (this.tags?.length) {
-      // Return workers that have config tags that have at
-      // least one intersection with the filter tags
-      return workers.filter(
-        (worker) =>
-          worker.config_tags.type.filter(Set.prototype.has, new Set(this.tags))
-            .length > 0
-      );
+      if (this.tags?.length) {
+        // Return workers that have config tags that have at
+        // least one intersection with the filter tags
+        return workers.filter(
+          (worker) =>
+            worker.config_tags?.type.filter(
+              Set.prototype.has,
+              new Set(this.tags)
+            ).length > 0
+        );
+      }
+      return workers;
     }
-    return workers;
   }
 
   /**
