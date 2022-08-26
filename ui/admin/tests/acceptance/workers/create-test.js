@@ -17,23 +17,25 @@ module('Acceptance | workers | create', function (hooks) {
   let globalScope;
   let workersURL;
   let newWorkerURL;
+  let getWorkersCount;
 
   hooks.beforeEach(function () {
     globalScope = this.server.create('scope', { id: 'global' });
 
     workersURL = `/scopes/global/workers`;
     newWorkerURL = `${workersURL}/new`;
+    getWorkersCount = () => this.server.schema.workers.all().length;
 
     authenticateSession({});
   });
 
   test('can create new workers', async function (assert) {
     assert.expect(1);
-    const workersCount = this.server.db.workers.length;
+    const workersCount = getWorkersCount();
     await visit(newWorkerURL);
     await fillIn('[name="worker_auth_registration_request"]', 'token');
     await click('[type="submit"]');
-    assert.strictEqual(this.server.db.workers.length, workersCount + 1);
+    assert.strictEqual(getWorkersCount(), workersCount + 1);
   });
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
