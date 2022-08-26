@@ -1,5 +1,6 @@
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
+import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
@@ -435,123 +436,7 @@ export default function () {
   this.get('/targets/:id');
   this.patch('/targets/:id');
   this.del('/targets/:id');
-  this.post(
-    '/targets/:idMethod',
-    function ({ targets }, { params: { idMethod } }) {
-      const attrs = this.normalizedRequestAttrs();
-      const id = idMethod.split(':')[0];
-      const method = idMethod.split(':')[1];
-      const target = targets.find(id);
-      const updatedAttrs = {
-        version: attrs.version,
-        brokeredCredentialSourceIds: [],
-        injectedApplicationCredentialSourceIds: [],
-      };
-      // If adding host sources, push them into the array
-      if (method === 'add-host-sources') {
-        updatedAttrs.hostSetIds = target.hostSetIds;
-        attrs.hostSourceIds.forEach((id) => {
-          if (!updatedAttrs.hostSetIds.includes(id)) {
-            updatedAttrs.hostSetIds.push(id);
-          }
-        });
-      }
-      // If deleting host sources, filter them out of the array
-      if (method === 'remove-host-sources') {
-        updatedAttrs.hostSetIds = target.hostSetIds;
-        updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
-          return !attrs.hostSourceIds.includes(id);
-        });
-      }
-      // If adding brokered credential sources, push them into the array
-      if (method === 'add-credential-sources') {
-        if (
-          target.attributes.brokeredCredentialSourceIds?.length &&
-          typeof target.attributes.brokeredCredentialSourceIds === 'object'
-        ) {
-          target.attributes.brokeredCredentialSourceIds.forEach(
-            (credSource) => {
-              updatedAttrs.brokeredCredentialSourceIds.push(credSource.id);
-            }
-          );
-        } else {
-          updatedAttrs.brokeredCredentialSourceIds =
-            target.attributes.brokeredCredentialSourceIds;
-        }
-        if (
-          target.attributes.injectedApplicationCredentialSourceIds?.length &&
-          typeof target.attributes.injectedApplicationCredentialSourceIds ===
-            'object'
-        ) {
-          target.attributes.injectedApplicationCredentialSourceIds.forEach(
-            (credSource) => {
-              updatedAttrs.injectedApplicationCredentialSourceIds.push(
-                credSource.id
-              );
-            }
-          );
-        } else {
-          updatedAttrs.injectedApplicationCredentialSourceIds =
-            target.attributes.injectedApplicationCredentialSourceIds;
-        }
-
-        attrs.brokeredCredentialSourceIds &&
-          attrs.brokeredCredentialSourceIds.forEach((id) => {
-            if (!updatedAttrs.brokeredCredentialSourceIds.includes(id)) {
-              updatedAttrs.brokeredCredentialSourceIds.push(id);
-            }
-          });
-
-        attrs.injectedApplicationCredentialSourceIds &&
-          attrs.injectedApplicationCredentialSourceIds.forEach((id) => {
-            if (
-              !updatedAttrs.injectedApplicationCredentialSourceIds.includes(id)
-            ) {
-              updatedAttrs.injectedApplicationCredentialSourceIds.push(id);
-            }
-          });
-      }
-      // If deleting brokered credential sources, filter them out of the array
-      if (method === 'remove-credential-sources') {
-        if (
-          target.attributes.brokeredCredentialSourceIds?.length &&
-          typeof target.attributes.brokeredCredentialSourceIds === 'object'
-        ) {
-          target.attributes.brokeredCredentialSourceIds.forEach(
-            (credSource) => {
-              updatedAttrs.brokeredCredentialSourceIds.push(credSource.id);
-            }
-          );
-        } else {
-          updatedAttrs.brokeredCredentialSourceIds =
-            target.attributes.brokeredCredentialSourceIds;
-        }
-        // if (target.attributes.injectedApplicationCredentialSourceIds?.length && typeof(target.attributes.injectedApplicationCredentialSourceIds) === 'object') {
-        //   target.attributes.injectedApplicationCredentialSourceIds.forEach((credSource) => {
-        //     updatedAttrs.injectedApplicationCredentialSourceIds.push(credSource.id)
-        //   });
-        // } else {
-        //   updatedAttrs.injectedApplicationCredentialSourceIds = target.attributes.injectedApplicationCredentialSourceIds;
-        // }
-        console.log(updatedAttrs.brokeredCredentialSourceIds, 'before');
-        console.log(
-          target.attributes.brokeredCredentialSourceIds,
-          'target',
-          attrs.brokeredCredentialSourceIds
-        );
-        updatedAttrs.brokeredCredentialSourceIds =
-          updatedAttrs.brokeredCredentialSourceIds.filter(
-            (id) => !attrs.brokeredCredentialSourceIds.includes(id)
-          );
-
-        // updatedAttrs.injectedApplicationCredentialSourceIds =
-        // attrs.injectedApplicationCredentialSourceIds && updatedAttrs.injectedApplicationCredentialSourceIds.filter((id) => {
-        //   return !attrs.injectedApplicationCredentialSourceIds.includes(id);
-        // });
-      }
-      return target.update(updatedAttrs);
-    }
-  );
+  this.post('/targets/:idMethod', targetHandler);
 
   // session
 

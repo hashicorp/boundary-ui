@@ -31,7 +31,6 @@ export default factory.extend({
     faker.helpers.arrayElement([-1, faker.datatype.number()]),
   worker_filter: (i) => (i % 2 === 0 ? faker.random.words() : null),
   type: (i) => types[i % types.length],
-
   /**
    * Generates attributes fields by type.
    */
@@ -51,7 +50,8 @@ export default factory.extend({
   withAssociations: trait({
     afterCreate(target, server) {
       let randomlySelectedHostSets,
-        randomlySelectedCredentialLibraries;
+        randomlySelectedCredentialLibraries,
+        randomlySelectedCredentials;
       randomlySelectedHostSets = server.schema.hostSets
         // BLERG:  fun fact, for no reason at all, the element passed
         // into a where function is not a full model instance, as you might
@@ -65,13 +65,23 @@ export default factory.extend({
         .where(
           (credentialLibrary) => credentialLibrary.scopeId === target.scope.id
         )
-        .models.filter(() => randomBoolean());
+        .models.filter(() => randomBoolean())
+        .map((cred) => cred.id);
+      randomlySelectedCredentials = server.schema.credentials
+        .where((credential) => credential.scopeId === target.scope.id)
+        .models.filter(() => randomBoolean())
+        .map((cred) => cred.id);
       target.update({
         hostSets: randomlySelectedHostSets,
         attributes: {
-          brokeredCredentialSourceIds: randomlySelectedCredentialLibraries,
-          injectedApplicationCredentialSourceIds:
-            randomlySelectedCredentialLibraries,
+          brokeredCredentialSourceIds: [
+            ...randomlySelectedCredentialLibraries,
+            ...randomlySelectedCredentials,
+          ],
+          injectedApplicationCredentialSourceIds: [
+            ...randomlySelectedCredentialLibraries,
+            ...randomlySelectedCredentials,
+          ],
         },
       });
     },

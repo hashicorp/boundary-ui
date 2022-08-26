@@ -57,16 +57,16 @@ export default class TargetSerializer extends ApplicationSerializer {
    * Returns a payload containing only version and an array of passed IDs,
    * rather than existing instances on the model.
    * @param {Snapshot} snapshot
-   * @param {[string]} brokeredCredentialSourceIDs
+   * @param {[string]} brokered_credential_source_ids
    * @return {object}
    */
   serializeWithBrokeredCredentialSources(
     snapshot,
-    brokeredCredentialSourceIDs
+    brokered_credential_source_ids
   ) {
     return {
       version: snapshot.attr('version'),
-      brokered_credential_source_ids: brokeredCredentialSourceIDs,
+      brokered_credential_source_ids,
     };
   }
 
@@ -74,17 +74,16 @@ export default class TargetSerializer extends ApplicationSerializer {
    * Returns a payload containing only version and an array of passed IDs,
    * rather than existing instances on the model.
    * @param {Snapshot} snapshot
-   * @param {[string]} InjectedApplicationCredentialSourceIDs
+   * @param {[string]} injected_application_credential_source_ids
    * @return {object}
    */
   serializeWithInjectedApplicationCredentialSources(
     snapshot,
-    InjectedApplicationCredentialSourceIDs
+    injected_application_credential_source_ids
   ) {
     return {
       version: snapshot.attr('version'),
-      injected_application_credential_source_ids:
-        InjectedApplicationCredentialSourceIDs,
+      injected_application_credential_source_ids,
     };
   }
 }

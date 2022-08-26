@@ -25,7 +25,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * Brokered Credential source ids are read only and can be
    * persisted via a dedicated call to `addBrokeredCredentialSources()`.
    */
-  @fragmentArray('fragment-string', {
+  @attr('string-array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
@@ -63,7 +63,11 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
-  @computed('brokered_credential_source_ids.[]', 'store')
+  @computed(
+    'brokered_credential_source_ids',
+    'brokered_credential_source_ids.[]',
+    'store'
+  )
   get brokeredCredentialSources() {
     return this.brokered_credential_source_ids
       .map((source) => {

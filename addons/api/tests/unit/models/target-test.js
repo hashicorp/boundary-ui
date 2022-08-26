@@ -231,8 +231,8 @@ module('Unit | Model | target', function (hooks) {
     );
   });
 
-  test('it has a `brokeredCredentialSources` array of resolved model instances (if those instances are already in the store)', function (assert) {
-    assert.expect(4);
+  test('it has a `credentialSources` array of resolved model instances (if those instances are already in the store)', function (assert) {
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -248,11 +248,6 @@ module('Unit | Model | target', function (hooks) {
       target.brokered_credential_source_ids.length,
       2,
       'Target has two entires in brokered_credential_source_ids'
-    );
-    assert.strictEqual(
-      target.brokeredCredentialSources.length,
-      0,
-      'Target has no resolved credentialSources because they are not loaded yet'
     );
     store.push({
       data: {

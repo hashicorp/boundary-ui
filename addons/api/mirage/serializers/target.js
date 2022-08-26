@@ -23,35 +23,16 @@ export default ApplicationSerializer.extend({
         return { id: host_set_id, host_catalog_id };
       });
     }
-    let brokeredCredSourceIds = [];
-    let injectedCredSources = [];
-    model.attributes.brokeredCredentialSourceIds.forEach((cred) => {
-      brokeredCredSourceIds.push(cred.id);
-      brokeredCredSourceIds.filter(Boolean);
-    });
-
-    model.attributes.injectedApplicationCredentialSourceIds.forEach((cred) => {
-      injectedCredSources.push(cred.id);
-      injectedCredSources.filter(Boolean);
-    });
+    //populate brokered and injected credential sources list
+    if (model.attributes.injectedApplicationCredentialSourceIds?.length) {
+      json.injection_application_source_ids =
+        model.attributes.injectedApplicationCredentialSourceIds;
+    }
 
     if (model.attributes.brokeredCredentialSourceIds?.length) {
-      json.brokered_credential_source_ids = [...brokeredCredSourceIds];
+      json.brokered_credential_source_ids =
+        model.attributes.brokeredCredentialSourceIds;
     }
-
-    if (model.brokeredCredentialSourceIds?.length) {
-      json.brokered_credential_source_ids = model.brokeredCredentialSourceIds;
-    }
-
-    if (model.attributes.injectedApplicationCredentialSourceIds?.length) {
-      json.injection_application_source_ids = [...injectedCredSources];
-    }
-
-    if (model.injectedApplicationCredentialSourceIds?.length) {
-      json.injectedApplicationCredentialSourceIds =
-        model.injectedApplicationCredentialSourceIds;
-    }
-
     return json;
   },
 });
