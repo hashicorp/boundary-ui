@@ -63,11 +63,14 @@
       @helperText={{t 'form.worker_address.help'}}
       readonly={{true}}
     />
-
     <form.input
       @name='last seen'
       @type='datetime'
-      @value={{@model.last_status_time}}
+      @value={{concat
+        (relative-datetime-live @model.last_status_time)
+        ', '
+        (format-date @model.last_status_time format='yymmddt')
+      }}
       @label={{t 'form.worker_last_seen.label'}}
       @helperText={{t 'form.worker_last_seen.help'}}
       readonly={{true}}

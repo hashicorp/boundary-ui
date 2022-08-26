@@ -13,6 +13,6 @@ export default Factory.extend({
   version: () => faker.datatype.number({ max: 4 }),
   address: () =>
     `${faker.datatype.uuid()}.proxy.boundary.hashicorp.cloud:${faker.internet.port()}`,
-  last_status_time: () => faker.date.recent(10),
+  last_status_time: () => faker.date.recent(),
   active_connection_count: () => faker.datatype.number({ max: 10 }),
 });
