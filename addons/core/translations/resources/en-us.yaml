@@ -438,14 +438,13 @@ worker:
   description: Workers are the server components that perform the session handling.
   actions:
     register: Register Worker
+    delete: Remove Worker
   messages:
     welcome:
       title: Welcome to Workers
   table:
     session_count: Session Count
     ip_address: IP Address
-  dropdown:
-    delete: Remove Worker
   form:
     cluster_id:
       label: Boundary Cluster ID
