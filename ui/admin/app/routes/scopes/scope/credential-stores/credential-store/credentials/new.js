@@ -19,17 +19,27 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
 
   /**
    * Creates a new unsaved credential in current credential store.
+   * Also rollback/destroy any new, unsaved instances from this route before
+   * creating another, but reuse name/description if available.
    * @return {CredentialModel}
    */
   model({ type = 'username_password' }) {
     const { id: credential_store_id } = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
+    let name, description;
+    if (this.currentModel?.isNew) {
+      ({ name, description } = this.currentModel);
+      this.currentModel.rollbackAttributes();
+    }
     return this.store.createRecord('credential', {
       type,
       credential_store_id,
+      name,
+      description,
     });
   }
+
   /**
    * Update type of credential
    * @param {string} type
