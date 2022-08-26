@@ -17,6 +17,13 @@ export default class ScopesScopeWorkersRoute extends Route {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
+  // The workers model data is loaded in the index route.
+  // This is needed to have the transitions from nested worker
+  // routes automatically refresh workers data.
+  // Loading the data here means they would be considered children
+  // and not siblings which means they would not automatically refresh
+  // workers when the user navigates back to the list page.
+
   /**
    * Refreshes worker data.
    */
