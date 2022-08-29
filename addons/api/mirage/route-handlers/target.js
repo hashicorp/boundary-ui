@@ -53,30 +53,31 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
       return !selectedHostSourceIds.includes(id);
     });
   }
-
+  // If adding brokered or injected application cred sources, push them into the array
   if (method === 'add-credential-sources') {
     if (selectedBrokeredCredentials) {
-      const mergedCredentialSources = addToCredentialSourcesList(
+      const listOfBrokeredCredentialSources = addToCredentialSourcesList(
         originalBrokeredCredentials,
         selectedBrokeredCredentials
       );
-      if (mergedCredentialSources?.length) {
-        updatedAttrs.brokeredCredentialSourceIds = mergedCredentialSources;
+      if (listOfBrokeredCredentialSources?.length) {
+        updatedAttrs.brokeredCredentialSourceIds =
+          listOfBrokeredCredentialSources;
       }
     }
 
     if (selectedInjectedCredentials) {
-      const mergedCredentialSources = addToCredentialSourcesList(
+      const listOfInjectedCredentialSources = addToCredentialSourcesList(
         originalInjectedCredentials,
         selectedInjectedCredentials
       );
-      if (mergedCredentialSources?.length) {
+      if (listOfInjectedCredentialSources?.length) {
         updatedAttrs.injectedApplicationCredentialSourceIds =
-          mergedCredentialSources;
+          listOfInjectedCredentialSources;
       }
     }
   }
-
+  // If deleting brokered or injected application cred sources, filter them out of the array
   if (method === 'remove-credential-sources') {
     if (selectedBrokeredCredentials) {
       const removedCredentialSources = removeFromCredentialSourcesList(
