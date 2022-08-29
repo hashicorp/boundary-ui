@@ -23,18 +23,18 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
 
   // =methods
 
-  model() {
+  async model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     if (this.can.can('list worker', scope, { collection: 'workers' })) {
-      const workers = this.store.query('worker', { scope_id });
+      const workers = await this.store.query('worker', { scope_id });
 
       if (this.tags?.length) {
         // Return workers that have config tags that have at
         // least one intersection with the filter tags
         return workers.filter(
           (worker) =>
-            worker.config_tags?.type.filter(
+            worker.config_tags?.type?.filter(
               Set.prototype.has,
               new Set(this.tags)
             ).length > 0

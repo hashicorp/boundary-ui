@@ -104,7 +104,7 @@
       {{/if}}
     </div>
 
-    {{#if @model.cannotSave}}
+    {{#unless @model.isNew}}
       <div class='worker-success'>
         <div>
           <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
@@ -118,7 +118,7 @@
           <p>{{t 'resources.worker.form.steps.3.registered'}}</p>
         </div>
       </div>
-    {{/if}}
+    {{/unless}}
   </div>
 
   <Rose::LinkButton @route='scopes.scope.workers' @style='secondary'>
