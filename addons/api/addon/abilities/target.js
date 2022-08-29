@@ -37,7 +37,22 @@ export default class TargetAbility extends ModelAbility {
   /**
    * @type {boolean}
    */
+  get canAddInjectedApplicationCredentialSources() {
+    return (
+      !this.model.isTCP && this.hasAuthorizedAction('add-credential-sources')
+    );
+  }
+  /**
+   * @type {boolean}
+   */
   get canRemoveBrokeredCredentialSources() {
+    return this.hasAuthorizedAction('remove-credential-sources');
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get canRemoveInjectedApplicationCredentialSources() {
     return this.hasAuthorizedAction('remove-credential-sources');
   }
 }
