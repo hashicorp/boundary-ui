@@ -21,6 +21,14 @@ export default {
       minute: 'numeric',
       second: 'numeric',
     },
+    yymmddt: {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZoneName: 'short',
+    },
   },
   number: {
     compact: { notation: 'compact' },
