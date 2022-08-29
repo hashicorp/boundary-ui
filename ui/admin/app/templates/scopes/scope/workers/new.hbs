@@ -1,2 +1,23 @@
 {{page-title (t 'titles.new')}}
-{{outlet}}
+
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'titles.new'}}
+      <DocLink @doc='worker' @iconSize='large' />
+    </h2>
+  </page.header>
+
+  <page.body>
+    <Form::Worker::CreateWorkerLed
+      @model={{@model}}
+      @submit={{route-action 'createWorkerLed' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
