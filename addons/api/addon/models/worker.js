@@ -4,7 +4,7 @@ import { attr } from '@ember-data/model';
 export default class WorkerModel extends GeneratedWorkerModel {
   // =attributes
 
-  /**
+ /**
    * Names are optional on models in our API.  Thus we need to fallback on ID
    * for display purposes.
    * @type {string}

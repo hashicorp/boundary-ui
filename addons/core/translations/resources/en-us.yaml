@@ -404,7 +404,7 @@ credential:
     password:
       label: Password
       help: The password to use when signing in with this credential store.
-    private_key: 
+    private_key:
       label: SSH Private Key
       help: The private key to use when connecting with this credential store.
     passphrase:
@@ -438,6 +438,7 @@ worker:
   description: Workers are the server components that perform the session handling.
   actions:
     register: Register Worker
+    delete: Remove Worker
   messages:
     welcome:
       title: Welcome to Workers
