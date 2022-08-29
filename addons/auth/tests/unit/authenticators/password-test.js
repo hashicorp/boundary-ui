@@ -1,23 +1,28 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { Response } from 'miragejs';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import Pretender from 'pretender';
 
 module('Unit | Authenticator | password', function (hooks) {
   setupTest(hooks);
-  setupMirage(hooks);
+
+  let server;
+
+  hooks.beforeEach(() => {
+    server = new Pretender();
+  });
+
+  hooks.afterEach(() => {
+    server.shutdown();
+  });
 
   test('it authenticates to the specified authEndpoint', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(
-      authenticator.buildAuthEndpointURL(),
-      (schema, request) => {
-        const json = JSON.parse(request.requestBody);
-        assert.ok(json.type, 'Requested token cookies by default');
-        return new Response(200);
-      }
-    );
+    server.post(authenticator.buildAuthEndpointURL(), (request) => {
+      const json = JSON.parse(request.requestBody);
+      assert.ok(json.type, 'Requested token cookies by default');
+      return [200, {}, '{}'];
+    });
     await authenticator.authenticate({}).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
@@ -26,14 +31,11 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it can authenticate without requesting cookies', async function (assert) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(
-      authenticator.buildAuthEndpointURL(),
-      (schema, request) => {
-        const json = JSON.parse(request.requestBody);
-        assert.notOk(json.type, 'Did not request tokens cookies');
-        return new Response(200);
-      }
-    );
+    server.post(authenticator.buildAuthEndpointURL(), (request) => {
+      const json = JSON.parse(request.requestBody);
+      assert.notOk(json.type, 'Did not request tokens cookies');
+      return [200, {}, '{}'];
+    });
     await authenticator.authenticate({}, false).then(() => {
       assert.ok(true, 'authentication succeeded');
     });
@@ -42,21 +44,18 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it authenticates with the expected payload', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(
-      authenticator.buildAuthEndpointURL(),
-      (schema, request) => {
-        const json = JSON.parse(request.requestBody);
-        assert.deepEqual(json, {
-          command: 'login',
-          type: 'cookie',
-          attributes: {
-            login_name: 'foo',
-            password: 'bar',
-          },
-        });
-        return new Response(200);
-      }
-    );
+    server.post(authenticator.buildAuthEndpointURL(), (request) => {
+      const json = JSON.parse(request.requestBody);
+      assert.deepEqual(json, {
+        command: 'login',
+        type: 'cookie',
+        attributes: {
+          login_name: 'foo',
+          password: 'bar',
+        },
+      });
+      return [200, {}, '{}'];
+    });
     const creds = {
       identification: 'foo',
       password: 'bar',
@@ -67,8 +66,8 @@ module('Unit | Authenticator | password', function (hooks) {
   test('it rejects if the endpoint sends an error status code', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:password');
-    this.server.post(authenticator.buildAuthEndpointURL(), () => {
-      return new Response(400);
+    server.post(authenticator.buildAuthEndpointURL(), () => {
+      return [400];
     });
     await authenticator.authenticate({}).catch(() => {
       assert.ok(true, 'authentication failed');
