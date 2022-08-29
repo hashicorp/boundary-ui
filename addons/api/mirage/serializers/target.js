@@ -25,7 +25,7 @@ export default ApplicationSerializer.extend({
     }
     //populate brokered and injected credential sources list
     if (model.attributes.injectedApplicationCredentialSourceIds?.length) {
-      json.injection_application_source_ids =
+      json.injected_application_credential_source_ids =
         model.attributes.injectedApplicationCredentialSourceIds;
     }
 

@@ -90,8 +90,8 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
 
     if (selectedInjectedCredentials) {
       const removedCredentialSources = removeFromCredentialSourcesList(
-        originalBrokeredCredentials,
-        selectedBrokeredCredentials
+        originalInjectedCredentials,
+        selectedInjectedCredentials
       );
       updatedAttrs.injectedApplicationCredentialSourceIds =
         removedCredentialSources;
