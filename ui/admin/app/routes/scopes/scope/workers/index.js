@@ -1,11 +1,10 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { inject as service } from '@ember/service';
 
 export default class ScopesScopeWorkersIndexRoute extends Route {
   // =attributes
-  
+
   // This resource filter depends on the data from the list route so can't
   // live in the same model where the list is loaded as it needs to get loaded
   // first. If it's in the same file it might try to grab the model data before
