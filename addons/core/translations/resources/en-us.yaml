@@ -329,8 +329,6 @@ target:
       add:
         title: Add Injected Application Credential Sources
         description: Select injected Application credential sources to assign to this target.
-
-
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
