@@ -74,7 +74,7 @@ module('Unit | Abilities | Target', function (hooks) {
     );
   });
 
-  test('it reflects when a given target may remove injected application crednetial sources', function (assert) {
+  test('it reflects when a given target may remove injected application credential sources', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
