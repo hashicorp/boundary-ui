@@ -461,7 +461,7 @@ export default function () {
           return !attrs.hostSourceIds.includes(id);
         });
       }
-      // If adding credential sources, push them into the array
+      // If adding brokered credential sources, push them into the array
       if (method === 'add-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialIds = target.credentialIds;
@@ -478,7 +478,7 @@ export default function () {
           }
         });
       }
-      // If deleting credential sources, filter them out of the array
+      // If deleting brokered credential sources, filter them out of the array
       if (method === 'remove-credential-sources') {
         updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
         updatedAttrs.credentialIds = target.credentialIds;
@@ -645,6 +645,16 @@ export default function () {
   this.get('/workers/:id');
   this.del('/workers/:id');
   this.patch('/workers/:id');
+  this.post('/workers:create:worker-led', ({ workers, scopes }) => {
+    const globalScope = scopes.find('global');
+
+    // This POST only takes in a token so we need to generate a random worker to return
+    const newWorker = this.create('worker', {
+      type: 'pki',
+      scope: globalScope,
+    });
+    return workers.create(newWorker.attrs);
+  });
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

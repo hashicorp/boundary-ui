@@ -33,6 +33,34 @@ module('Unit | Serializer | credential', function (hooks) {
     });
   });
 
+  test('it serializes username_password type correctly when only the username is updated', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential');
+    const record = store.createRecord('credential', {
+      password: '',
+      username: 'user',
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'username_password',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      attributes: {
+        username: 'user',
+      },
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'username_password',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+  });
+
   test('it serializes ssh_private_key type correctly on create', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -54,6 +82,35 @@ module('Unit | Serializer | credential', function (hooks) {
       attributes: {
         passphrase: 'passphrasesaresosecure',
         private_key: 'superPriveKey',
+        username: 'user',
+      },
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'ssh_private_key',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+  });
+
+  test('it serializes ssh_private_key type correctly when only the username is updated', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential');
+    const record = store.createRecord('credential', {
+      passphrase: '',
+      private_key: '',
+      username: 'user',
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'ssh_private_key',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      attributes: {
         username: 'user',
       },
       credential_store_id: 'csst_i7p1eu0Nw8',
@@ -86,6 +143,9 @@ module('Unit | Serializer | credential', function (hooks) {
           type: 'username_password',
           username: 'username',
           version: 1,
+          passphrase: '',
+          private_key: '',
+          password: '',
         },
         type: 'credential',
         id: 'credup_123',
@@ -117,6 +177,9 @@ module('Unit | Serializer | credential', function (hooks) {
           type: 'ssh_private_key',
           username: 'username',
           version: 1,
+          passphrase: '',
+          private_key: '',
+          password: '',
         },
         type: 'credential',
         id: 'credspk_123',

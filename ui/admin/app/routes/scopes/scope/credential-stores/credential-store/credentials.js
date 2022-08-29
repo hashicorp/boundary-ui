@@ -58,9 +58,6 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
   async save(credential) {
-    //hardcoding the type to its subtype
-    //as the api expects the subtype `username_password`
-    credential.type = 'username_password';
     await credential.save();
     if (this.can.can('read model', credential)) {
       await this.router.transitionTo(

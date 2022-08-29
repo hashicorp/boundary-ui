@@ -12,12 +12,15 @@ module(
     setupMirage(hooks);
 
     let getCredentialsCount;
+    let getUsernamePasswordCredentialCount;
+    let getUsernameKeyPairCredentialCount;
 
     const instances = {
       scopes: {
         org: null,
         project: null,
       },
+      staticCredentialStore: null,
     };
 
     const urls = {
@@ -52,23 +55,65 @@ module(
       getCredentialsCount = () => {
         return this.server.schema.credentials.all().models.length;
       };
+      getUsernamePasswordCredentialCount = () => {
+        return this.server.schema.credentials.where({
+          type: 'username_password',
+        }).length;
+      };
+      getUsernameKeyPairCredentialCount = () => {
+        return this.server.schema.credentials.where({ type: 'ssh_private_key' })
+          .length;
+      };
       authenticateSession({});
     });
 
-    test('Users can create a new credential', async function (assert) {
-      assert.expect(1);
+    test('Users can create a new username & password credential', async function (assert) {
+      assert.expect(2);
       const credentialsCount = getCredentialsCount();
+      const usernamePasswordCredentialCount =
+        getUsernamePasswordCredentialCount();
       await visit(urls.newCredential);
       await fillIn('[name="name"]', 'random string');
       await click('[type="submit"]');
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
+      assert.strictEqual(
+        getUsernamePasswordCredentialCount(),
+        usernamePasswordCredentialCount + 1
+      );
     });
 
-    test('Users can cancel create new credential', async function (assert) {
+    test('Users can create a new username & key pair credential', async function (assert) {
+      assert.expect(2);
+      const credentialsCount = getCredentialsCount();
+      const usernameKeyPairCredentialCount =
+        getUsernameKeyPairCredentialCount();
+      await visit(urls.newCredential);
+      await fillIn('[name="name"]', 'random string');
+      await click('[value="ssh_private_key"]');
+      await click('[type="submit"]');
+      assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
+      assert.strictEqual(
+        getUsernameKeyPairCredentialCount(),
+        usernameKeyPairCredentialCount + 1
+      );
+    });
+
+    test('Users can cancel create new username & password credential', async function (assert) {
       assert.expect(2);
       const credentialsCount = getCredentialsCount();
       await visit(urls.newCredential);
       await fillIn('[name="name"]', 'random string');
+      await click('.rose-form-actions [type="button"]');
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(getCredentialsCount(), credentialsCount);
+    });
+
+    test('Users can cancel create new username & key pair credential', async function (assert) {
+      assert.expect(2);
+      const credentialsCount = getCredentialsCount();
+      await visit(urls.newCredential);
+      await fillIn('[name="name"]', 'random string');
+      await click('[value="ssh_private_key"]');
       await click('.rose-form-actions [type="button"]');
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getCredentialsCount(), credentialsCount);
@@ -87,7 +132,7 @@ module(
       assert.notOk(find(`[href="${urls.newCredential}"]`));
     });
 
-    test('saving a new credential with invalid fields displays error messages', async function (assert) {
+    test('saving a new username & password credential with invalid fields displays error messages', async function (assert) {
       assert.expect(2);
       this.server.post('/credentials', () => {
         return new Response(
@@ -118,6 +163,41 @@ module(
       assert.ok(
         find('.rose-form-error-message').textContent.trim(),
         'Field required for creating a username-password credential.'
+      );
+    });
+
+    test('saving a new username & key pair credential with invalid fields displays error messages', async function (assert) {
+      assert.expect(2);
+      this.server.post('/credentials', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'Error in provided request.',
+            details: {
+              request_fields: [
+                {
+                  name: 'attributes.private_key',
+                  description:
+                    'Field required for creating a username-key-pair credential.',
+                },
+              ],
+            },
+          }
+        );
+      });
+      await visit(urls.newCredential);
+      await click('[value="ssh_private_key"]');
+      await click('[type="submit"]');
+      assert.ok(
+        find('[role="alert"]').textContent.trim(),
+        'Error in provided request.'
+      );
+      assert.ok(
+        find('.rose-form-error-message').textContent.trim(),
+        'Field required for creating a username-key-pair credential.'
       );
     });
   }

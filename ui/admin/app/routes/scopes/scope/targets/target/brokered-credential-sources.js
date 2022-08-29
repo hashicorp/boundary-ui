@@ -5,7 +5,7 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Route {
+export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesRoute extends Route {
   // =methods
 
   /**
@@ -52,8 +52,8 @@ export default class ScopesScopeTargetsTargetCredentialSourcesRoute extends Rout
   @confirm('questions.remove-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.remove-success')
-  async removeCredentialSource(target, credentialLibrary) {
-    await target.removeCredentialSource(credentialLibrary.id);
+  async removeBrokeredCredentialSource(target, credentialSource) {
+    await target.removeBrokeredCredentialSource(credentialSource.id);
     this.refresh();
   }
 }

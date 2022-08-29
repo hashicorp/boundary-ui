@@ -40,7 +40,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     target: null,
     credentialLibraries: null,
     credentialLibrary: null,
-    addCredentialSources: null,
+    addBrokeredCredentialSources: null,
   };
 
   hooks.beforeEach(function () {
@@ -86,10 +86,10 @@ module('Acceptance | targets | credential sources', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.credentialSources = `${urls.target}/credential-sources`;
+    urls.credentialSources = `${urls.target}/brokered-credential-sources`;
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
-    urls.addCredentialSources = `${urls.target}/add-credential-sources`;
+    urls.addBrokeredCredentialSources = `${urls.target}/add-brokered-credential-sources`;
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
@@ -129,15 +129,15 @@ module('Acceptance | targets | credential sources', function (hooks) {
 
   test('visiting add credential sources', async function (assert) {
     assert.expect(1);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     await a11yAudit();
-    assert.strictEqual(currentURL(), urls.addCredentialSources);
+    assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });
 
   test('displays list of all credential source types available', async function (assert) {
     assert.expect(2);
     instances.target.update({ credentialLibraries: [] });
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     assert.notOk(find('.rose-message-title'));
   });
@@ -146,14 +146,14 @@ module('Acceptance | targets | credential sources', function (hooks) {
     assert.expect(2);
     instances.target.update({ credentialLibraries: [] });
     this.server.db.credentials.remove();
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
     assert.notOk(find('.rose-message-title'));
   });
 
   test('displays list of credential sources with only credentials available', async function (assert) {
     assert.expect(2);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, getCredentialCount());
     assert.notOk(find('.rose-message-title'));
   });
@@ -163,10 +163,10 @@ module('Acceptance | targets | credential sources', function (hooks) {
     instances.target.update({ credentialLibraries: [] });
     this.server.db.credentialLibraries.remove();
     this.server.db.credentials.remove();
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
-      'No Credential Sources Available'
+      'No Brokered Credential Sources Available'
     );
   });
 
@@ -175,7 +175,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     instances.target.update({ credentialLibraries: [] });
     this.server.db.credentialLibraries.remove();
     this.server.db.credentials.remove();
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     await click(find('.rose-message-link'));
     assert.strictEqual(currentURL(), urls.credentialSources);
   });
@@ -185,7 +185,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     await click('tbody tr:first-child label');
     await click('form [type="submit"]');
@@ -198,7 +198,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     await click('tbody tr:last-child label');
     await click('form [type="submit"]');
@@ -211,7 +211,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     await click('tbody tr:last-child label');
     await click('tbody tr:first-child label');
@@ -227,7 +227,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
         (item) => item !== 'add-credential-sources'
       );
     await visit(urls.credentialSources);
-    assert.notOk(find(`[href="${urls.addCredentialSources}"]`));
+    assert.notOk(find(`[href="${urls.addBrokeredCredentialSources}"]`));
   });
 
   test('can select and cancel credential sources to add', async function (assert) {
@@ -235,7 +235,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     await click('tbody label');
     await click('form [type="button"]');
@@ -248,7 +248,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     instances.target.update({ credentialLibraries: [] });
     await visit(urls.credentialSources);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     await click('tbody tr:last-child label');
     await click('tbody tr:first-child label');
@@ -272,7 +272,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
       );
     });
     instances.target.update({ credentialLibraries: [] });
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     await click('tbody tr:last-child label');
     await click('tbody tr:first-child label');
     await click('form [type="submit"]');
@@ -287,7 +287,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount - 1);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialCount + 1);
   });
 
@@ -303,7 +303,7 @@ module('Acceptance | targets | credential sources', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, credentialCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
-    await visit(urls.addCredentialSources);
+    await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount + 1);
   });
 
