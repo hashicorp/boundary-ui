@@ -4,12 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | targets | brokered credential sources', function (hooks) {
   setupApplicationTest(hooks);
@@ -111,7 +106,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
     urls.addBrokeredCredentialSources = `${urls.target}/add-brokered-credential-sources`;
-    // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
     getCredentialCount = () =>
@@ -157,14 +151,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });
 
-  test.skip('displays list of all brokered credential source types available', async function (assert) {
+  test('displays list of all brokered credential source types available', async function (assert) {
     assert.expect(2);
     instances.target.update({
       attributes: {
-        brokeredCredentialSourceIds: [
-          ...randomlySelectedCredentialLibraries,
-          ...randomlySelectedCredentials,
-        ],
+        brokeredCredentialSourceIds: [],
       },
     });
     await visit(urls.addBrokeredCredentialSources);
@@ -184,13 +175,8 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     assert.notOk(find('.rose-message-title'));
   });
 
-  test.skip('displays no brokered credential sources message when none available', async function (assert) {
+  test('displays no brokered credential sources message when none available', async function (assert) {
     assert.expect(1);
-    instances.target.update({
-      attributes: {
-        brokeredCredentialSourceIds: [],
-      },
-    });
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
@@ -198,13 +184,14 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     );
   });
 
-  test.skip('when no brokered credential sources available, button routes to add brokered credential sources', async function (assert) {
+  test('when no brokered credential sources available, button routes to add brokered credential sources', async function (assert) {
     assert.expect(1);
     instances.target.update({
       attributes: {
         brokeredCredentialSourceIds: [],
       },
     });
+    await visit(urls.brokeredCredentialSources);
     await click(find('.rose-message-link'));
     assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });
