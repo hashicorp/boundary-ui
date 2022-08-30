@@ -64,11 +64,6 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
         originalBrokeredCredentials,
         selectedBrokeredCredentials
       );
-      console.log(
-        listOfBrokeredCredentialSources,
-        listOfBrokeredCredentialSources.length,
-        'list of brokered'
-      );
       if (listOfBrokeredCredentialSources?.length) {
         updatedAttrs.brokeredCredentialSourceIds =
           listOfBrokeredCredentialSources;
