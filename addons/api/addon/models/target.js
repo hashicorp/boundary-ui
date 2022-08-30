@@ -1,6 +1,5 @@
 import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
-import { computed } from '@ember/object';
 
 export default class TargetModel extends GeneratedTargetModel {
   // =attributes
