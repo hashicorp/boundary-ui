@@ -44,7 +44,6 @@ module('Acceptance | workers | read', function (hooks) {
     assert.expect(1);
     await visit(urls.workers);
     await a11yAudit();
-    console.log(urls.workers);
     assert.dom(`[href="${urls.workers}"]`).isVisible();
   });
 
