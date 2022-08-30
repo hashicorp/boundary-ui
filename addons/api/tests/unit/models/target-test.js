@@ -228,7 +228,7 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has a `brokeredCredentialSources` array of resolved model instances (if those instances are already in the store)', function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
