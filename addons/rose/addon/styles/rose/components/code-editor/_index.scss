@@ -31,8 +31,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--ui-gray-subtler-6);
-  border-top: 1px solid var(--ui-gray-subtler-3);
   border-bottom: 1px solid var(--ui-gray-subtler-3);
   height: 2.75rem;
 
@@ -72,6 +70,7 @@
     margin-right: sizing.rems(xs);
     margin-left: sizing.rems(s);
     height: sizing.rems(xl);
+    white-space: nowrap;
 
     &-icon {
       margin-right: sizing.rems(xs);

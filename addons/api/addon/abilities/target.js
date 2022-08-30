@@ -37,7 +37,15 @@ export default class TargetAbility extends ModelAbility {
   /**
    * @type {boolean}
    */
-  get canRemoveBrokeredCredentialSources() {
+  get canAddInjectedApplicationCredentialSources() {
+    return (
+      this.model.isSSH && this.hasAuthorizedAction('add-credential-sources')
+    );
+  }
+  /**
+   * @type {boolean}
+   */
+  get canRemoveCredentialSources() {
     return this.hasAuthorizedAction('remove-credential-sources');
   }
 }
