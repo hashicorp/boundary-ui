@@ -46,10 +46,6 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `hostSets` is computed on `host_sources`, not the store itself,
-    // it's necessary to do this assignment to kick-off the computed update.
-    // eslint-disable-next-line no-self-assign
-    target.host_sources = target.host_sources;
     assert.strictEqual(
       target.host_sources.length,
       2,
