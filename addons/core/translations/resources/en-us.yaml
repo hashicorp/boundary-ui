@@ -275,6 +275,7 @@ target:
     delete: Delete Target
     add-host-sources: Add Host Sources
     add-brokered-credential-sources: Add Brokered Credentials
+    add-injected-application-credential-sources: Add Injected Application Credentials
   types:
     tcp: TCP
     ssh: SSH
@@ -311,6 +312,23 @@ target:
       add:
         title: Add Brokered Credential Sources
         description: Select brokered credential sources to assign to this target.
+  injected-application-credential-source:
+    title: Injected Application Credential
+    title_plural: Injected Application Credentials
+    types:
+      vault: Vault
+      username_password: Username & Password
+      ssh_private_key: Username & Key Pair
+    messages:
+      welcome:
+        title: Welcome to Injected Application credentials
+        description: No Injected application credential sources in this target.
+      none:
+        title: No Injected Application Credential Sources Available
+        description: No Injected Application credential sources available to add to this target.
+      add:
+        title: Add Injected Application Credential Sources
+        description: Select injected Application credential sources to assign to this target.
 credential-store:
   title: Credential Store
   title_plural: Credential Stores

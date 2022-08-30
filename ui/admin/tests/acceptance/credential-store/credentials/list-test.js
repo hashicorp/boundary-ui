@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, find } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -13,6 +13,9 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
       org: null,
       project: null,
     },
+    staticCredentialStore: null,
+    usernamePasswordCredential: null,
+    usernameKeyPairCredential: null,
   };
 
   const urls = {
@@ -37,6 +40,16 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
       scope: instances.scopes.project,
       type: 'static',
     });
+    instances.usernamePasswordCredential = this.server.create('credential', {
+      scope: instances.scopes.project,
+      credentialStore: instances.staticCredentialStore,
+      type: 'username_password',
+    });
+    instances.usernameKeyPairCredential = this.server.create('credential', {
+      scope: instances.scopes.project,
+      credentialStore: instances.staticCredentialStore,
+      type: 'ssh_private_key',
+    });
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
@@ -47,14 +60,19 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
   });
 
   test('Users can navigate to credentials with proper authorization', async function (assert) {
-    assert.expect(2);
+    assert.expect(4);
     await visit(urls.staticCredentialStore);
     assert.ok(
       instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
         'list'
       )
     );
-    assert.ok(find(`[href="${urls.credentials}"]`));
+    assert.dom(`[href="${urls.credentials}"]`).isVisible();
+    await click(`[href="${urls.credentials}"]`);
+    assert.strictEqual(currentURL(), urls.credentials);
+    assert
+      .dom('.rose-table-body .rose-table-row')
+      .isVisible({ count: this.server.schema.credentials.all().models.length });
   });
 
   test('User cannot navigate to index without either list or create action', async function (assert) {
@@ -72,7 +90,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.credentials}"]`));
+    assert.dom(`[href="${urls.credentials}"]`).doesNotExist();
   });
 
   test('User can navigate to index with only create action', async function (assert) {
@@ -80,7 +98,9 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       ['create'];
     await visit(urls.staticCredentialStore);
-    assert.ok(find(`[href="${urls.credentials}"]`));
-    assert.ok(find(`.rose-layout-page-actions [href="${urls.newCredential}"]`));
+    assert.dom(`[href="${urls.credentials}"]`).isVisible();
+    assert
+      .dom(`.rose-layout-page-actions [href="${urls.newCredential}"]`)
+      .isVisible();
   });
 });
