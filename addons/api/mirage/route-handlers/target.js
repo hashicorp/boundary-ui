@@ -19,48 +19,48 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     version: attrs.version,
   };
 
-  const addToCredentialSourcesList = (
-    originalCredentials,
-    selectedCredentials
-  ) => {
-    const credentialSourceList = new Set(originalCredentials);
-    for (const elem of selectedCredentials) {
-      credentialSourceList.add(elem);
+  const addToSourcesList = (originalSourcesIds, selectedSourcesIds) => {
+    const listOfSources = new Set(originalSourcesIds);
+    for (const elem of selectedSourcesIds) {
+      listOfSources.add(elem);
     }
-    return Array.from(credentialSourceList);
+    return Array.from(listOfSources);
   };
 
-  const removeFromCredentialSourcesList = (
-    originalCredentials,
-    selectedCredentials
-  ) => {
-    const credentialSourceList = new Set(originalCredentials);
-    for (const elem of selectedCredentials) {
-      credentialSourceList.delete(elem);
+  const removeFromSourcesList = (originalSourceIds, selectedSourceIds) => {
+    const listOfSources = new Set(originalSourceIds);
+    for (const elem of selectedSourceIds) {
+      listOfSources.delete(elem);
     }
-    return Array.from(credentialSourceList);
+    return Array.from(listOfSources);
   };
 
   // If adding host sources, push them into the array
   if (method === 'add-host-sources') {
-    updatedAttrs.hostSetIds = originHostSetIds;
-    selectedHostSourceIds.forEach((id) => {
-      if (!updatedAttrs.hostSetIds.includes(id)) {
-        updatedAttrs.hostSetIds.push(id);
+    if (selectedHostSourceIds) {
+      const listOfHostSources = addToSourcesList(
+        originHostSetIds,
+        selectedHostSourceIds
+      );
+      if (listOfHostSources?.length) {
+        updatedAttrs.hostSetIds = listOfHostSources;
       }
-    });
+    }
   }
   // If deleting host sources, filter them out of the array
   if (method === 'remove-host-sources') {
-    updatedAttrs.hostSetIds = originHostSetIds;
-    updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
-      return !selectedHostSourceIds.includes(id);
-    });
+    if (selectedHostSourceIds) {
+      const removedHostSources = removeFromSourcesList(
+        originHostSetIds,
+        selectedHostSourceIds
+      );
+      updatedAttrs.hostSetIds = removedHostSources;
+    }
   }
   // If adding brokered or injected application cred sources, push them into the array
   if (method === 'add-credential-sources') {
     if (selectedBrokeredCredentials) {
-      const listOfBrokeredCredentialSources = addToCredentialSourcesList(
+      const listOfBrokeredCredentialSources = addToSourcesList(
         originalBrokeredCredentials,
         selectedBrokeredCredentials
       );
@@ -73,7 +73,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     }
 
     if (selectedInjectedCredentials) {
-      const listOfInjectedCredentialSources = addToCredentialSourcesList(
+      const listOfInjectedCredentialSources = addToSourcesList(
         originalInjectedCredentials,
         selectedInjectedCredentials
       );
@@ -86,7 +86,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
   // If deleting brokered or injected application cred sources, filter them out of the array
   if (method === 'remove-credential-sources') {
     if (selectedBrokeredCredentials) {
-      const removedCredentialSources = removeFromCredentialSourcesList(
+      const removedCredentialSources = removeFromSourcesList(
         originalBrokeredCredentials,
         selectedBrokeredCredentials
       );
@@ -95,7 +95,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     }
 
     if (selectedInjectedCredentials) {
-      const removedCredentialSources = removeFromCredentialSourcesList(
+      const removedCredentialSources = removeFromSourcesList(
         originalInjectedCredentials,
         selectedInjectedCredentials
       );
