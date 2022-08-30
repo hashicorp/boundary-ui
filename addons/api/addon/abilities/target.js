@@ -39,7 +39,7 @@ export default class TargetAbility extends ModelAbility {
    */
   get canAddInjectedApplicationCredentialSources() {
     return (
-      !this.model.isTCP && this.hasAuthorizedAction('add-credential-sources')
+      this.model.isSSH && this.hasAuthorizedAction('add-credential-sources')
     );
   }
   /**
