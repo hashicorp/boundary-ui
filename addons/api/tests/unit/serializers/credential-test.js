@@ -66,7 +66,7 @@ module('Unit | Serializer | credential', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
-      passphrase: 'passphrasesaresosecure',
+      private_key_passphrase: 'passphrasesaresosecure',
       private_key: 'superPriveKey',
       username: 'user',
       credential_store_id: 'csst_i7p1eu0Nw8',
@@ -80,7 +80,7 @@ module('Unit | Serializer | credential', function (hooks) {
 
     assert.deepEqual(serializedRecord, {
       attributes: {
-        passphrase: 'passphrasesaresosecure',
+        private_key_passphrase: 'passphrasesaresosecure',
         private_key: 'superPriveKey',
         username: 'user',
       },
@@ -97,7 +97,7 @@ module('Unit | Serializer | credential', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
-      passphrase: '',
+      private_key_passphrase: '',
       private_key: '',
       username: 'user',
       credential_store_id: 'csst_i7p1eu0Nw8',
@@ -143,7 +143,7 @@ module('Unit | Serializer | credential', function (hooks) {
           type: 'username_password',
           username: 'username',
           version: 1,
-          passphrase: '',
+          private_key_passphrase: '',
           private_key: '',
           password: '',
         },
@@ -165,7 +165,7 @@ module('Unit | Serializer | credential', function (hooks) {
       type: 'ssh_private_key',
       attributes: {
         username: 'username',
-        passphrase: 'random',
+        private_key_passphrase: 'random',
         private_key_hmac: 'completenonsense',
       },
     };
@@ -177,7 +177,7 @@ module('Unit | Serializer | credential', function (hooks) {
           type: 'ssh_private_key',
           username: 'username',
           version: 1,
-          passphrase: '',
+          private_key_passphrase: '',
           private_key: '',
           password: '',
         },
