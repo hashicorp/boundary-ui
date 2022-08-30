@@ -7,7 +7,9 @@
   as |form|
 >
   <form.actions
-    @submitText={{t 'resources.target.actions.add-brokered-credential-sources'}}
+    @submitText={{t
+      'resources.target.actions.add-injected-application-credential-sources'
+    }}
     @cancelText={{t 'actions.cancel'}}
   />
 
@@ -20,20 +22,20 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each @filteredBrokeredCredentialSources as |credentialSource|}}
+      {{#each @filteredInjectionApplicationCredentialSources as |credentialSource|}}
         <body.row as |row|>
           <row.headerCell>
             <form.checkbox
               @label={{credentialSource.id}}
               @description={{credentialSource.description}}
-              @onChange={{fn this.toggleBrokeredCredentialSource credentialSource.id}}
+              @onChange={{fn this.toggleInjectedApplicationCredentialSource credentialSource.id}}
             />
           </row.headerCell>
           <row.cell>{{credentialSource.name}}</row.cell>
           <row.cell>
             <Rose::Badge>{{t
                 (concat
-                  'resources.target.brokered-credential-source.types.'
+                  'resources.target.injected-application-credential-source.types.'
                   credentialSource.type
                 )
               }}</Rose::Badge>
@@ -42,4 +44,4 @@
       {{/each}}
     </table.body>
   </Rose::Table>
-</Rose::Form>
+</Rose::Form> 

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 
-export default class FormTargetAddBrokeredCredentialSourcesIndexComponent extends Component {
+export default class FormTargetAddInjectedApplicationCredentialSourcesIndexComponent extends Component {
   // =properties
 
   /**
@@ -18,7 +18,7 @@ export default class FormTargetAddBrokeredCredentialSourcesIndexComponent extend
    * @param {string} credentialSourceId
    */
   @action
-  toggleBrokeredCredentialSource(credentialSourceId) {
+  toggleInjectedApplicationCredentialSource(credentialSourceId) {
     if (!this.selectedCredentialSourceIDs.includes(credentialSourceId)) {
       this.selectedCredentialSourceIDs.addObject(credentialSourceId);
     } else {
