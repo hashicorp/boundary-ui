@@ -53,11 +53,6 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
-  @computed(
-    'brokered_credential_source_ids',
-    'brokered_credential_source_ids.[]',
-    'store'
-  )
   get brokeredCredentialSources() {
     return this.brokered_credential_source_ids
       .map((source) => {

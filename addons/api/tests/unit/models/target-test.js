@@ -268,13 +268,6 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `credentialSources` is computed on `brokered_credential_source_ids`,
-    // not the store itself, it's necessary to do this assignment to kick-off the
-    // computed update.  And it must be a new array reference, hence the copy.
-    /* eslint-disable no-self-assign */
-    target.brokered_credential_source_ids = [
-      ...target.brokered_credential_source_ids,
-    ];
     /* eslint-enable no-self-assign */
     assert.strictEqual(
       target.brokered_credential_source_ids.length,
