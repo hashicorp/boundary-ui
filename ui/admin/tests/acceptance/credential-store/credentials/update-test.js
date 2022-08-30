@@ -11,8 +11,6 @@ module(
     setupApplicationTest(hooks);
     setupMirage(hooks);
 
-    const MOCK_INPUT = 'random string';
-
     const instances = {
       scopes: {
         global: null,
@@ -70,31 +68,33 @@ module(
 
     test('can save changes to existing username & password credential', async function (assert) {
       assert.expect(3);
-      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
+      const mockInput = 'random string';
+      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       await click('.rose-form-actions [type="submit"]');
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'username_password' })
           .models[0].name,
-        MOCK_INPUT
+        mockInput
       );
     });
 
     test('can save changes to existing username & key pair credential', async function (assert) {
       assert.expect(3);
-      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
+      const mockInput = 'random string';
+      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       await click('.rose-form-actions [type="submit"]');
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'ssh_private_key' })
           .models[0].name,
-        MOCK_INPUT
+        mockInput
       );
     });
 
@@ -124,11 +124,12 @@ module(
 
     test('can cancel changes to existing username & password credential', async function (assert) {
       assert.expect(2);
+      const mockInput = 'random string';
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       await click('.rose-form-actions [type="button"]');
-      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
+      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
       assert.strictEqual(
         find('[name="name"]').value,
         instances.usernamePasswordCredential.name
@@ -137,11 +138,12 @@ module(
 
     test('can cancel changes to existing username & key pair credential', async function (assert) {
       assert.expect(2);
+      const mockInput = 'random string';
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       await click('.rose-form-actions [type="button"]');
-      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
+      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
       assert.strictEqual(
         find('[name="name"]').value,
         instances.usernameKeyPairCredential.name
@@ -150,6 +152,7 @@ module(
 
     test('saving an existing username & password credential with invalid fields displays error message', async function (assert) {
       assert.expect(2);
+      const mockInput = 'random string';
       this.server.patch('/credentials/:id', () => {
         return new Response(
           400,
@@ -171,7 +174,7 @@ module(
       });
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
       assert.ok(
         find('[role="alert"]').textContent.trim(),
@@ -185,6 +188,7 @@ module(
 
     test('saving an existing username & key pair credential with invalid fields displays error message', async function (assert) {
       assert.expect(2);
+      const mockInput = 'random string';
       this.server.patch('/credentials/:id', () => {
         return new Response(
           400,
@@ -206,7 +210,7 @@ module(
       });
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
       assert.ok(
         find('[role="alert"]').textContent.trim(),
@@ -220,12 +224,13 @@ module(
 
     test('can discard unsaved username & password credential changes via dialog', async function (assert) {
       assert.expect(5);
+      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
+      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       try {
         await visit(urls.credentials);
@@ -236,19 +241,20 @@ module(
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
-          MOCK_INPUT
+          mockInput
         );
       }
     });
 
     test('can discard unsaved username & key pair credential changes via dialog', async function (assert) {
       assert.expect(5);
+      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
+      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       try {
         await visit(urls.credentials);
@@ -259,20 +265,21 @@ module(
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
-          MOCK_INPUT
+          mockInput
         );
       }
     });
 
     test('can cancel discard unsaved username & password credential changes via dialog', async function (assert) {
-      assert.expect(5);
+      assert.expect(6);
+      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernamePasswordCredential.name, MOCK_INPUT);
+      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
       const credentialName = find('[name="name"]').value;
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       try {
         await visit(urls.credentials);
@@ -280,6 +287,7 @@ module(
         assert.dom('.rose-dialog').isVisible();
         await click('.rose-dialog-footer button:last-child', 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
+        assert.strictEqual(find('[name="name"]').value, mockInput);
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
@@ -289,14 +297,15 @@ module(
     });
 
     test('can cancel discard unsaved username & key pair credential changes via dialog', async function (assert) {
-      assert.expect(5);
+      assert.expect(6);
+      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernameKeyPairCredential.name, MOCK_INPUT);
+      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
       const credentialName = find('[name="name"]').value;
-      await fillIn('[name="name"]', MOCK_INPUT);
+      await fillIn('[name="name"]', mockInput);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       try {
         await visit(urls.credentials);
@@ -304,6 +313,7 @@ module(
         assert.dom('.rose-dialog').isVisible();
         await click('.rose-dialog-footer button:last-child', 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
+        assert.strictEqual(find('[name="name"]').value, mockInput);
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
