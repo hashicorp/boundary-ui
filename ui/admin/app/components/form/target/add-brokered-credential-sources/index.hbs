@@ -7,7 +7,7 @@
   as |form|
 >
   <form.actions
-    @submitText={{t 'resources.target.actions.add-credential-sources'}}
+    @submitText={{t 'resources.target.actions.add-brokered-credential-sources'}}
     @cancelText={{t 'actions.cancel'}}
   />
 
@@ -33,7 +33,7 @@
           <row.cell>
             <Rose::Badge>{{t
                 (concat
-                  'resources.target.credential-source.types.'
+                  'resources.target.brokered-credential-source.types.'
                   credentialSource.type
                 )
               }}</Rose::Badge>
