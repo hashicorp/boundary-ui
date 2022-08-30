@@ -48,22 +48,23 @@ module('Unit | Abilities | Target', function (hooks) {
     assert.notOk(service.can('addBrokeredCredentialSources target', model));
   });
 
-  test('it reflects when a given target may remove brokered credential sources', function (assert) {
+  test('it reflects when a given target may remove credential sources', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['remove-credential-sources'],
     };
-    assert.ok(service.can('removeBrokeredCredentialSources target', model));
+    assert.ok(service.can('removeCredentialSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('removeBrokeredCredentialSources target', model));
+    assert.notOk(service.can('removeCredentialSources target', model));
   });
 
-  test('it reflects when a given target may add injected application credential sources', function (assert) {
+  test('it reflects when a given ssh target may add injected application credential sources', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['add-credential-sources'],
+      isSSH: true,
     };
     assert.ok(
       service.can('addInjectedApplicationCredentialSources target', model)
@@ -71,21 +72,6 @@ module('Unit | Abilities | Target', function (hooks) {
     model.authorized_actions = [];
     assert.notOk(
       service.can('addInjectedApplicationCredentialSources target', model)
-    );
-  });
-
-  test('it reflects when a given target may remove injected application credential sources', function (assert) {
-    assert.expect(2);
-    const service = this.owner.lookup('service:can');
-    const model = {
-      authorized_actions: ['remove-credential-sources'],
-    };
-    assert.ok(
-      service.can('removeInjectedApplicationCredentialSources target', model)
-    );
-    model.authorized_actions = [];
-    assert.notOk(
-      service.can('removeInjectedApplicationCredentialSources target', model)
     );
   });
 });

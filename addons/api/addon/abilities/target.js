@@ -45,14 +45,7 @@ export default class TargetAbility extends ModelAbility {
   /**
    * @type {boolean}
    */
-  get canRemoveBrokeredCredentialSources() {
-    return this.hasAuthorizedAction('remove-credential-sources');
-  }
-
-  /**
-   * @type {boolean}
-   */
-  get canRemoveInjectedApplicationCredentialSources() {
+  get canRemoveCredentialSources() {
     return this.hasAuthorizedAction('remove-credential-sources');
   }
 }
