@@ -41,6 +41,17 @@ session_max_seconds:
 session_connection_limit:
   label: Maximum Connections
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
+worker_version:
+  label: Version
+worker_authorized_actions:
+  label: Authorized Actions
+worker_last_seen:
+  label: Last Seen
+  help: Last time the worker reported status.
+worker_address:
+  help: URL and port for this worker.
+worker_type:
+  help: Type of worker
 worker_filter:
   label: Worker Filter
   help: Optional boolean expression to filter the workers that are allowed to satisfy this request.
