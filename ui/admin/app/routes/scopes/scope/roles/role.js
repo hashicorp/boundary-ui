@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
 export default class ScopesScopeRolesRoleRoute extends Route {
   // =methods
@@ -15,5 +16,16 @@ export default class ScopesScopeRolesRoleRoute extends Route {
       reload: true,
       adapterOptions: { scopeID },
     });
+  }
+
+  // =actions
+  /**
+   * Rollback changes on a role.
+   * @param {RoleModel} role
+   */
+  @action
+  cancel(role) {
+    role.rollbackAttributes();
+    this.refresh();
   }
 }

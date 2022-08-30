@@ -1,21 +1,19 @@
 import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
-import { fragmentArray } from 'ember-data-model-fragments/attributes';
-import { computed } from '@ember/object';
 
 export default class TargetModel extends GeneratedTargetModel {
   // =attributes
 
   @attr('number', {
     isNestedAttribute: true,
-    description: 'The  default port a target should use if present.',
+    description: 'The default port a target should use if present.',
   })
   default_port;
 
   /**
-   * @type {[FragmentHostSourceModel]}
+   * @type Array
    */
-  @fragmentArray('fragment-host-source', {
+  @attr('host-source-id-array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
@@ -47,7 +45,6 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[{model: HostSetModel, hostCatalog: HostCatalogModel}]}
    */
-  @computed('host_sources.[]', 'store')
   get hostSets() {
     return this.host_sources
       .map(({ host_source_id, host_catalog_id }) => ({
@@ -63,11 +60,6 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
-  @computed(
-    'brokered_credential_source_ids',
-    'brokered_credential_source_ids.[]',
-    'store'
-  )
   get brokeredCredentialSources() {
     return this.brokered_credential_source_ids
       .map((source) => {
