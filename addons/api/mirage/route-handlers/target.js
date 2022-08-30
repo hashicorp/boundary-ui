@@ -23,19 +23,23 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     originalCredentials,
     selectedCredentials
   ) => {
-    selectedCredentials.forEach((id) => {
-      if (!originalCredentials.includes(id)) {
-        originalCredentials.push(id);
-      }
-    });
-    return originalCredentials;
+    const credentialSourceList = new Set(originalCredentials);
+    for (const elem of selectedCredentials) {
+      credentialSourceList.add(elem);
+    }
+    return Array.from(credentialSourceList);
   };
 
   const removeFromCredentialSourcesList = (
     originalCredentials,
     selectedCredentials
-  ) =>
-    originalCredentials.filter((item) => !selectedCredentials.includes(item));
+  ) => {
+    const credentialSourceList = new Set(originalCredentials);
+    for (const elem of selectedCredentials) {
+      credentialSourceList.delete(elem);
+    }
+    return Array.from(credentialSourceList);
+  };
 
   // If adding host sources, push them into the array
   if (method === 'add-host-sources') {
@@ -60,8 +64,15 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
         originalBrokeredCredentials,
         selectedBrokeredCredentials
       );
+      console.log(
+        listOfBrokeredCredentialSources,
+        listOfBrokeredCredentialSources.length,
+        'list of brokered'
+      );
       if (listOfBrokeredCredentialSources?.length) {
         updatedAttrs.brokeredCredentialSourceIds =
+          listOfBrokeredCredentialSources;
+        target.attributes.brokeredCredentialSourceIds =
           listOfBrokeredCredentialSources;
       }
     }

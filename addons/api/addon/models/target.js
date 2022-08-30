@@ -35,7 +35,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * Injected Application Credential source ids are read only and can be
    * persisted via a dedicated call to `addInjectedApplicationCredentialSources()`.
    */
-  @fragmentArray('fragment-string', {
+  @attr('string-array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
@@ -86,7 +86,11 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
-  @computed('injected_application_credential_source_ids.[]', 'store')
+  @computed(
+    'injected_application_credential_source_ids',
+    'injected_application_credential_source_ids.[]',
+    'store'
+  )
   get injectedApplicationCredentialSources() {
     return this.injected_application_credential_source_ids
       .map((source) => {
