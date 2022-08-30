@@ -160,7 +160,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     });
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-    assert.notOk(find('.rose-message-title'));
+    assert.dom('.rose-message-title').doesNotExist();
   });
 
   test('displays list of brokered credential sources with only credential libraries available', async function (assert) {
@@ -172,7 +172,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     });
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
-    assert.notOk(find('.rose-message-title'));
+    assert.dom('.rose-message-title').doesNotExist();
   });
 
   test('displays no brokered credential sources message when none available', async function (assert) {
@@ -255,7 +255,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         (item) => item !== 'add-credential-sources'
       );
     await visit(urls.brokeredCredentialSources);
-    assert.notOk(find(`[href="${urls.addBrokeredCredentialSources}"]`));
+    assert.dom(`[href="${urls.addBrokeredCredentialSources}"]`).doesNotExist();
   });
 
   test('can select and cancel credential sources to add', async function (assert) {
@@ -316,7 +316,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await click('tbody tr:last-child label');
     await click('tbody tr:first-child label');
     await click('form [type="submit"]');
-    assert.ok(find('[role="alert"]'));
+    assert.dom('[role="alert"]').isVisible();
   });
 
   test('can remove a vault type credential library', async function (assert) {
@@ -358,7 +358,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         (item) => item !== 'remove-credential-sources'
       );
     await visit(urls.brokeredCredentialSources);
-    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
+    assert.dom('tbody tr .rose-dropdown-button-danger').doesNotExist();
   });
 
   test('removing a target credential library which errors displays error messages', async function (assert) {
@@ -384,7 +384,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.ok(find('[role="alert"]'));
+    assert.dom('[role="alert"]').isVisible();
   });
 
   test('removing a target credential which errors displays error messages', async function (assert) {
@@ -410,6 +410,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, count);
     await click('tbody tr .rose-dropdown-button-danger');
-    assert.ok(find('[role="alert"]'));
+    assert.dom('[role="alert"]').isVisible();
   });
 });
