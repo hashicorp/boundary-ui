@@ -7,7 +7,7 @@ module('Unit | Model | target', function (hooks) {
   setupMirage(hooks);
 
   test('it has a `hostSets` array of resolved model instances (if those instances are already in the store)', function (assert) {
-    assert.expect(3);
+    assert.expect(6);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -27,6 +27,11 @@ module('Unit | Model | target', function (hooks) {
       2,
       'Target has two entires in host_sources'
     );
+    assert.strictEqual(
+      target.hostSets.length,
+      0,
+      'Target has no resolved hostSets because they are not loaded yet'
+    );
     store.push({
       data: {
         id: '1',
@@ -41,14 +46,19 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `hostSets` is computed on `host_sources`, not the store itself,
-    // it's necessary to do this assignment to kick-off the computed update.
-    // eslint-disable-next-line no-self-assign
-    target.host_sources = target.host_sources;
     assert.strictEqual(
       target.host_sources.length,
       2,
       'Target has two entires in host_sources'
+    );
+    assert.strictEqual(
+      target.hostSets.length,
+      2,
+      'Target has two resolved hostSets'
+    );
+    assert.notOk(
+      target.hostSets[0].hostCatalog,
+      'Host catalog was not resolved because it is not loaded yet'
     );
     store.push({
       data: {
@@ -57,6 +67,8 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
+    // eslint-disable-next-line no-self-assign
+    target.host_sources = target.host_sources;
     assert.ok(target.hostSets[0].hostCatalog, 'Host catalog is resolved');
   });
 

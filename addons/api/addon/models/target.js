@@ -36,7 +36,6 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[{model: HostSetModel, hostCatalog: HostCatalogModel}]}
    */
-  @computed('host_sources', 'host_sources.[]', 'store')
   get hostSets() {
     return this.host_sources
       .map(({ host_source_id, host_catalog_id }) => ({
