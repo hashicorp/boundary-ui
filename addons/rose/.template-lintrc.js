@@ -1,7 +1,10 @@
 'use strict';
 
 module.exports = {
-  extends: ['recommended', 'stylistic'],
+  extends: ['recommended'],
+  rules: {
+    'eol-last': 'editorconfig',
+  },
   overrides: [
     {
       files: [

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  extends: ['recommended', 'stylistic'],
+  extends: ['recommended'],
   rules: {
     'no-passed-in-event-handlers': false,
     'no-bare-strings': true,
@@ -17,5 +17,6 @@ module.exports = {
         'is-loading',
       ],
     },
+    'eol-last': 'editorconfig',
   },
 };
