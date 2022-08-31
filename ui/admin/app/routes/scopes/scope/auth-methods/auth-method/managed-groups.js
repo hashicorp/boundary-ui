@@ -9,7 +9,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   // =services
 
   @service intl;
-  @service notify;
+
   @service can;
   @service router;
 

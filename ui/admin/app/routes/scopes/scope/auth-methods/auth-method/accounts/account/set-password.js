@@ -8,7 +8,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   // =services
 
   @service intl;
-  @service notify;
+
   @service router;
 
   // =actions
