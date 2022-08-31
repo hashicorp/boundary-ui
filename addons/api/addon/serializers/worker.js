@@ -30,7 +30,7 @@ export default class WorkerSerializer extends ApplicationSerializer {
    */
   serializeWithGeneratedToken(snapshot, workerGeneratedAuthToken) {
     return {
-      version: snapshot.attr('version'),
+      scope_id: snapshot.attr('scope').scope_id,
       worker_generated_auth_token: workerGeneratedAuthToken,
     };
   }

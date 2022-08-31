@@ -37,7 +37,7 @@ module('Unit | Abilities | Target', function (hooks) {
     assert.notOk(service.can('removeHostSources target', model));
   });
 
-  test('it reflects when a given target may add credential sources', function (assert) {
+  test('it reflects when a given target may add brokered credential sources', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
@@ -48,14 +48,30 @@ module('Unit | Abilities | Target', function (hooks) {
     assert.notOk(service.can('addBrokeredCredentialSources target', model));
   });
 
-  test('it reflects when a given target may remove crednetial sources', function (assert) {
+  test('it reflects when a given target may remove credential sources', function (assert) {
     assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['remove-credential-sources'],
     };
-    assert.ok(service.can('removeBrokeredCredentialSources target', model));
+    assert.ok(service.can('removeCredentialSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('removeBrokeredCredentialSources target', model));
+    assert.notOk(service.can('removeCredentialSources target', model));
+  });
+
+  test('it reflects when a given ssh target may add injected application credential sources', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:can');
+    const model = {
+      authorized_actions: ['add-credential-sources'],
+      isSSH: true,
+    };
+    assert.ok(
+      service.can('addInjectedApplicationCredentialSources target', model)
+    );
+    model.authorized_actions = [];
+    assert.notOk(
+      service.can('addInjectedApplicationCredentialSources target', model)
+    );
   });
 });

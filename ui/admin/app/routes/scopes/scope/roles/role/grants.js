@@ -20,7 +20,7 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
    */
   @action
   addGrant(role, grantString) {
-    role.grant_strings.unshiftObject(grantString);
+    role.grant_strings = [grantString].concat(role.grant_strings);
   }
 
   /**
@@ -31,11 +31,13 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
    */
   @action
   removeGrant(role, grantString) {
-    role.grant_strings.removeObject(grantString);
+    role.grant_strings = role.grant_strings.filter(
+      (str) => str !== grantString
+    );
   }
 
   /**
-   * Save an role in current scope.
+   * Save a role.
    * @param {RoleModel} role
    * @param {[string]} grantStrings
    */
