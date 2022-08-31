@@ -15,8 +15,8 @@
       {{t 'resources.target.actions.add-brokered-credential-sources'}}
     </dropdown.link>
   {{/if}}
-  
-    {{#if (can 'addInjectedApplicationCredentialSources target' @model)}}
+
+  {{#if (can 'addInjectedApplicationCredentialSources target' @model)}}
     <dropdown.link
       @route='scopes.scope.targets.target.add-injected-application-credential-sources'
     >

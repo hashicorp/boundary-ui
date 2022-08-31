@@ -15,7 +15,6 @@ export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSource
   beforeModel() {
     const { injected_application_credential_source_ids: sourceIDFragments } =
       this.modelFor('scopes.scope.targets.target');
-      console.log(sourceIDFragments, 'cred it')
     return all(
       sourceIDFragments.map(({ value }) => {
         const isStatic = value.includes('cred');

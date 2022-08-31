@@ -9,7 +9,6 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
   // =services
 
   @service intl;
-  @service notify;
   @service router;
 
   // =methods

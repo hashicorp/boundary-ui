@@ -26,7 +26,10 @@
             <form.checkbox
               @label={{credentialSource.id}}
               @description={{credentialSource.description}}
-              @onChange={{fn this.toggleBrokeredCredentialSource credentialSource.id}}
+              @onChange={{fn
+                this.toggleBrokeredCredentialSource
+                credentialSource.id
+              }}
             />
           </row.headerCell>
           <row.cell>{{credentialSource.name}}</row.cell>

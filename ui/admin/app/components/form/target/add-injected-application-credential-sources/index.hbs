@@ -22,13 +22,19 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each @filteredInjectedApplicationCredentialSources as |credentialSource|}}
+      {{#each
+        @filteredInjectedApplicationCredentialSources
+        as |credentialSource|
+      }}
         <body.row as |row|>
           <row.headerCell>
             <form.checkbox
               @label={{credentialSource.id}}
               @description={{credentialSource.description}}
-              @onChange={{fn this.toggleInjectedApplicationCredentialSource credentialSource.id}}
+              @onChange={{fn
+                this.toggleInjectedApplicationCredentialSource
+                credentialSource.id
+              }}
             />
           </row.headerCell>
           <row.cell>{{credentialSource.name}}</row.cell>
@@ -44,4 +50,4 @@
       {{/each}}
     </table.body>
   </Rose::Table>
-</Rose::Form> 
+</Rose::Form>
