@@ -123,7 +123,21 @@
                         'resources.session.credential.actions.raw-api.show'
                       }}
                     >
-                      <pre>{{raw-json credential.rawCredential}}</pre>
+                      <Rose::CodeEditor
+                        @codeValue={{raw-json credential.rawCredential}}
+                        as |c|
+                      >
+                        <c.fieldEditor
+                          class='rose-autosize'
+                          @options={{hash
+                            mode='application/json'
+                            readOnly=true
+                            lineNumbers=false
+                            cursorBlinkRate=-1
+                            styleActiveLine=false
+                          }}
+                        />
+                      </Rose::CodeEditor>
                     </Reveal>
                   </:footer>
                 </Card>
