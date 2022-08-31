@@ -425,8 +425,8 @@ credential:
     private_key:
       label: SSH Private Key
       help: The private key to use when connecting with this credential store.
-    passphrase:
-      label: Pass phrase
+    private_key_passphrase:
+      label: Passphrase
       help: Optional.
 scope:
   title: Scope
