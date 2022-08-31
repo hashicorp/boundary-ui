@@ -10,7 +10,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
+
   @service router;
   @service store;
   @service resourceFilterStore;

@@ -9,7 +9,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
   // =services
 
   @service session;
-  @service notify;
+
   @service intl;
   @service windowManager;
   @service router;
