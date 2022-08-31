@@ -20,16 +20,13 @@
       </header.row>
     </table.header>
     <table.body as |body|>
-      {{#each @filteredBrokeredCredentialSources as |credentialSource|}}
+      {{#each @filteredCredentialSources as |credentialSource|}}
         <body.row as |row|>
           <row.headerCell>
             <form.checkbox
               @label={{credentialSource.id}}
               @description={{credentialSource.description}}
-              @onChange={{fn
-                this.toggleBrokeredCredentialSource
-                credentialSource.id
-              }}
+              @onChange={{fn this.toggleCredentialSource credentialSource.id}}
             />
           </row.headerCell>
           <row.cell>{{credentialSource.name}}</row.cell>

@@ -18,7 +18,7 @@ export default class FormTargetAddBrokeredCredentialSourcesIndexComponent extend
    * @param {string} credentialSourceId
    */
   @action
-  toggleBrokeredCredentialSource(credentialSourceId) {
+  toggleCredentialSource(credentialSourceId) {
     if (!this.selectedCredentialSourceIDs.includes(credentialSourceId)) {
       this.selectedCredentialSourceIDs.addObject(credentialSourceId);
     } else {

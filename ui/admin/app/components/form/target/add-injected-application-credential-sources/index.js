@@ -18,7 +18,7 @@ export default class FormTargetAddInjectedApplicationCredentialSourcesIndexCompo
    * @param {string} credentialSourceId
    */
   @action
-  toggleInjectedApplicationCredentialSource(credentialSourceId) {
+  toggleCredentialSource(credentialSourceId) {
     if (!this.selectedCredentialSourceIDs.includes(credentialSourceId)) {
       this.selectedCredentialSourceIDs.addObject(credentialSourceId);
     } else {

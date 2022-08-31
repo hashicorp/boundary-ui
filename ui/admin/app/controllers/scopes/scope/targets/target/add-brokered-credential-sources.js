@@ -14,7 +14,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
    * @type {boolean}
    */
   get hasAvailableBrokeredCredentialSources() {
-    return this.filteredBrokeredCredentialSources.length > 0;
+    return this.filteredCredentialSources.length > 0;
   }
 
   /**
@@ -24,7 +24,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
   @computed(
     'model.{target.brokered_credential_source_ids.[],credentialLibraries.[],credentials.[]}'
   )
-  get filteredBrokeredCredentialSources() {
+  get filteredCredentialSources() {
     // Get IDs for credential sources already added to the current target
     const currentCredentialSourceIDs =
       this.model.target.brokered_credential_source_ids.map(
