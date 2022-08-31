@@ -73,16 +73,14 @@ export default factory.extend({
         .map((cred) => cred.id);
       target.update({
         hostSets: randomlySelectedHostSets,
-        attributes: {
-          brokeredCredentialSourceIds: [
-            ...randomlySelectedCredentialLibraries,
-            ...randomlySelectedCredentials,
-          ],
-          injectedApplicationCredentialSourceIds: [
-            ...randomlySelectedCredentialLibraries,
-            ...randomlySelectedCredentials,
-          ],
-        },
+        brokeredCredentialSourceIds: [
+          ...randomlySelectedCredentialLibraries,
+          ...randomlySelectedCredentials,
+        ],
+        injectedApplicationCredentialSourceIds: [
+          ...randomlySelectedCredentialLibraries,
+          ...randomlySelectedCredentials,
+        ],
       });
     },
   }),

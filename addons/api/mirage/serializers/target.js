@@ -23,16 +23,6 @@ export default ApplicationSerializer.extend({
         return { id: host_set_id, host_catalog_id };
       });
     }
-    //populate brokered and injected credential sources list
-    if (model.attributes.injectedApplicationCredentialSourceIds?.length) {
-      json.injected_application_credential_source_ids =
-        model.attributes.injectedApplicationCredentialSourceIds;
-    }
-
-    if (model.attributes.brokeredCredentialSourceIds?.length) {
-      json.brokered_credential_source_ids =
-        model.attributes.brokeredCredentialSourceIds;
-    }
     return json;
   },
 });
