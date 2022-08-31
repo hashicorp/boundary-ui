@@ -269,6 +269,32 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
+   * Delete credential libraries and credentials via the `remove-credential-sources` method.
+   * See serializer and adapter for more information.
+   * @param {[string]} injectedApplicationCredentialSourceIDs
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  removeInjectedApplicationCredentialSources(
+    injectedApplicationCredentialSourceIDs,
+    options = { adapterOptions: {} }
+  ) {
+    const defaultAdapterOptions = {
+      method: 'remove-credential-sources',
+      injectedApplicationCredentialSourceIDs,
+    };
+    // There is no "deep merge" in ES.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
    * Delete a single credential library/credential set via the `remove-credential-sources` method.
    * @param {number} injectedApplicationCredentialSourceID
    * @param {object} options
@@ -278,7 +304,7 @@ export default class TargetModel extends GeneratedTargetModel {
     injectedApplicationCredentialSourceID,
     options
   ) {
-    return this.removeBrokeredCredentialSources(
+    return this.removeInjectedApplicationCredentialSources(
       [injectedApplicationCredentialSourceID],
       options
     );
