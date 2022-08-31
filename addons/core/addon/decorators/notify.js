@@ -12,7 +12,7 @@ export function notifySuccess(notification) {
     const method = desc.value;
     desc.value = async function () {
       const owner = getOwner(this);
-      const notifyService = owner.lookup('service:notify');
+      const notifyService = owner.lookup('service:flashMessages');
       const intlService = owner.lookup('service:intl');
       const candidateKey =
         typeof notification === 'function'
@@ -25,7 +25,10 @@ export function notifySuccess(notification) {
       //   : candidateKey;
       const text = intlService.t(candidateKey);
       const value = await method.apply(this, arguments);
-      notifyService.success(text);
+      notifyService.success(text, {
+        noticationType: 'success',
+        dismiss: (flash) => flash.destroyMessage(),
+      });
       return value;
     };
   };
@@ -49,7 +52,7 @@ export function notifyError(notification, options = { catch: false }) {
     const method = desc.value;
     desc.value = async function () {
       const owner = getOwner(this);
-      const notifyService = owner.lookup('service:notify');
+      const notifyService = owner.lookup('service:flashMessages');
       const intlService = owner.lookup('service:intl');
 
       try {
@@ -64,7 +67,11 @@ export function notifyError(notification, options = { catch: false }) {
           ? intlService.t(candidateKey)
           : candidateKey;
 
-        notifyService.error(text, { closeAfter: null });
+        notifyService.danger(text, {
+          noticationType: 'error',
+          sticky: true,
+          dismiss: (flash) => flash.destroyMessage(),
+        });
 
         if (options.catch) {
           // squelch the error

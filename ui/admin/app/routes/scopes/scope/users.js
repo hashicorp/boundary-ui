@@ -9,7 +9,7 @@ export default class ScopesScopeUsersRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
+
   @service session;
   @service can;
   @service router;

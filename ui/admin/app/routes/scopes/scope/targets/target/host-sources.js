@@ -10,7 +10,6 @@ export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
 
   // =methods
 
