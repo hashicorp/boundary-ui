@@ -8,7 +8,6 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
 
   // =actions
 

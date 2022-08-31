@@ -42,7 +42,6 @@ module.exports = function (environment) {
 
     appName: APP_NAME,
 
-    notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
 
@@ -52,6 +51,10 @@ module.exports = function (environment) {
         targets: '/targets',
         sessions: '/sessions',
       },
+    },
+
+    flashMessageDefaults: {
+      timeout: 4000,
     },
 
     featureFlags: {
@@ -93,7 +96,7 @@ module.exports = function (environment) {
     ENV.APP.autoboot = false;
 
     // Notification timeout should be 0 for fast tests
-    ENV.notifyTimeout = 0;
+    ENV.flashMessageDefaults.timeout = 0;
 
     ENV.enableConfirmService = false;
 

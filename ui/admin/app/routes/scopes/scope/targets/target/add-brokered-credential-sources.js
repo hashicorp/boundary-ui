@@ -9,7 +9,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
   // =services
 
   @service intl;
-  @service notify;
+
   @service router;
 
   // =methods

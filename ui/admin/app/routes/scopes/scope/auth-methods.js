@@ -10,7 +10,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
+
   @service session;
   @service can;
   @service resourceFilterStore;

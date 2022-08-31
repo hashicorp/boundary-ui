@@ -9,7 +9,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   // =services
 
   @service intl;
-  @service notify;
+
   @service can;
   @service router;
 
