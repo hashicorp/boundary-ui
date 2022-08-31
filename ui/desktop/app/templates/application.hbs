@@ -90,16 +90,26 @@
 
 </Rose::Layout::Global>
 
-<EmberNotify @closeAfter={{this.notifyTimeout}} as |message close|>
-  <Rose::Notification
-    @style={{message.type}}
-    @heading={{t (concat 'states.' message.type)}}
-    @dismiss={{close}}
-    @dismissText={{t 'actions.dismiss'}}
-  >
-    {{message.text}}
-  </Rose::Notification>
-</EmberNotify>
+{{#if this.flashMessages.queue}}
+  <div class='ember-notify-cn ember-notify-default'>
+    {{#each this.flashMessages.queue as |flash|}}
+      <div
+        class='ember-notify-show callout
+          {{flash.noticationType}}
+          ember-view ember-notify clearfix'
+      >
+        <Rose::Notification
+          @style={{flash.noticationType}}
+          @heading={{t (concat 'states.' flash.noticationType)}}
+          @dismiss={{fn flash.dismiss flash}}
+          @dismissText={{t 'actions.dismiss'}}
+        >
+          {{flash.message}}
+        </Rose::Notification>
+      </div>
+    {{/each}}
+  </div>
+{{/if}}
 
 <PendingConfirmations as |confirmation accept deny|>
   {{#if confirmation.options.isConnectError}}

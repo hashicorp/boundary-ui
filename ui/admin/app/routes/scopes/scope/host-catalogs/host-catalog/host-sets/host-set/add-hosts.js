@@ -9,7 +9,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
   // =services
 
   @service intl;
-  @service notify;
+
   @service router;
 
   // =methods

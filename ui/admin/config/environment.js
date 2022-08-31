@@ -51,7 +51,6 @@ module.exports = function (environment) {
     appName: APP_NAME,
     companyName: 'HashiCorp',
 
-    notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
 
@@ -101,6 +100,10 @@ module.exports = function (environment) {
       directory: '../../addons/api/mirage',
     },
 
+    flashMessageDefaults: {
+      timeout: 4000,
+    },
+
     featureFlags: featureEditions[EDITION],
   };
 
@@ -139,7 +142,8 @@ module.exports = function (environment) {
     ENV.APP.autoboot = false;
 
     // Notification timeout should be 0 for fast tests
-    ENV.notifyTimeout = 0;
+    ENV.flashMessageDefaults.timeout = 0;
+
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
