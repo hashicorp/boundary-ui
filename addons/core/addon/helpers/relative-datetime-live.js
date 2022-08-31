@@ -46,7 +46,6 @@ export default class extends Helper {
 
   compute([date]) {
     const delta = date.valueOf() - this.clockTick.now;
-    console.log(delta);
     const greatestMeaningfulUnit = unitMappings.reduce(
       (currentValue, previousValue) => {
         return Math.abs(delta) >= previousValue.value

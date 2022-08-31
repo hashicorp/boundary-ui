@@ -24,10 +24,10 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     // Gather user and group IDs as separate arrays, since these
     // will be queried in separate API queries.
     const userIDs = role.principals
-      .filterBy('type', 'user')
+      .filter(({ type }) => type === 'user')
       .map(({ principal_id }) => principal_id);
     const groupIDs = role.principals
-      .filterBy('type', 'group')
+      .filter(({ type }) => type === 'group')
       .map(({ principal_id }) => principal_id);
 
     // Query for users.

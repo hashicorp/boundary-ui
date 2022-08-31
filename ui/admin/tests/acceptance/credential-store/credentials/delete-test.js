@@ -3,8 +3,6 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, visit, find } from '@ember/test-helpers';
-import { resolve, reject } from 'rsvp';
-import sinon from 'sinon';
 import { Response } from 'miragejs';
 
 module(
@@ -13,7 +11,8 @@ module(
     setupApplicationTest(hooks);
     setupMirage(hooks);
 
-    let getCredentialsCount;
+    let getUsernamePasswordCredentialCount;
+    let getUsernameKeyPairCredentialCount;
 
     const instances = {
       scopes: {
@@ -27,7 +26,8 @@ module(
       credentialStores: null,
       staticCredentialStore: null,
       credentials: null,
-      credential: null,
+      usernamePasswordCredential: null,
+      usernameKeyPairCredential: null,
     };
 
     hooks.beforeEach(function () {
@@ -44,73 +44,165 @@ module(
         scope: instances.scopes.project,
         type: 'static',
       });
-      instances.credential = this.server.create('credential', {
+      instances.usernamePasswordCredential = this.server.create('credential', {
         scope: instances.scopes.project,
         credentialStore: instances.staticCredentialStore,
         type: 'username_password',
+      });
+      instances.usernameKeyPairCredential = this.server.create('credential', {
+        scope: instances.scopes.project,
+        credentialStore: instances.staticCredentialStore,
+        type: 'ssh_private_key',
       });
       // Generate route URLs for resources
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
       urls.credentialStores = `${urls.projectScope}/credential-stores`;
       urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
       urls.credentials = `${urls.staticCredentialStore}/credentials`;
-      urls.credential = `${urls.credentials}/${instances.credential.id}`;
+      urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
+      urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
       // Generate resource counter
-      getCredentialsCount = () => {
-        return this.server.schema.credentials.all().models.length;
+      getUsernamePasswordCredentialCount = () => {
+        return this.server.schema.credentials.where({
+          type: 'username_password',
+        }).length;
+      };
+      getUsernameKeyPairCredentialCount = () => {
+        return this.server.schema.credentials.where({ type: 'ssh_private_key' })
+          .length;
       };
       authenticateSession({});
     });
 
-    test('can delete credential', async function (assert) {
+    test('can delete username & password credential', async function (assert) {
       assert.expect(2);
-      const credentialsCount = getCredentialsCount();
-      await visit(urls.credential);
+      const usernamePasswordCredentialCount =
+        getUsernamePasswordCredentialCount();
+      await visit(urls.usernamePasswordCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       assert.strictEqual(currentURL(), urls.credentials);
-      assert.strictEqual(getCredentialsCount(), credentialsCount - 1);
+      assert.strictEqual(
+        getUsernamePasswordCredentialCount(),
+        usernamePasswordCredentialCount - 1
+      );
     });
 
-    test('cannot delete a credential store without proper authorization', async function (assert) {
+    test('can delete username & key pair credential', async function (assert) {
+      assert.expect(2);
+      const usernameKeyPairCredentialCount =
+        getUsernameKeyPairCredentialCount();
+      await visit(urls.usernameKeyPairCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(
+        getUsernameKeyPairCredentialCount(),
+        usernameKeyPairCredentialCount - 1
+      );
+    });
+
+    test('cannot delete a username & password credential without proper authorization', async function (assert) {
       assert.expect(3);
-      const credentialsCount = getCredentialsCount();
-      instances.credential.authorized_actions =
-        instances.credential.authorized_actions.filter(
+      const usernamePasswordCredentialCount =
+        getUsernamePasswordCredentialCount();
+      instances.usernamePasswordCredential.authorized_actions =
+        instances.usernamePasswordCredential.authorized_actions.filter(
           (item) => item !== 'delete'
         );
-      await visit(urls.credential);
-      assert.strictEqual(currentURL(), urls.credential);
-      assert.notOk(
-        find('.rose-layout-page-actions .rose-dropdown-button-danger')
+      await visit(urls.usernamePasswordCredential);
+      assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
+      assert
+        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+        .doesNotExist();
+      assert.strictEqual(
+        getUsernamePasswordCredentialCount(),
+        usernamePasswordCredentialCount
       );
-      assert.strictEqual(getCredentialsCount(), credentialsCount);
     });
 
-    test('can accept delete credential via dialog', async function (assert) {
+    test('cannot delete a username & key pair credential without proper authorization', async function (assert) {
+      assert.expect(3);
+      const usernameKeyPairCredentialCount =
+        getUsernameKeyPairCredentialCount();
+      instances.usernameKeyPairCredential.authorized_actions =
+        instances.usernameKeyPairCredential.authorized_actions.filter(
+          (item) => item !== 'delete'
+        );
+      await visit(urls.usernameKeyPairCredential);
+      assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
+      assert
+        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+        .doesNotExist();
+      assert.strictEqual(
+        getUsernamePasswordCredentialCount(),
+        usernameKeyPairCredentialCount
+      );
+    });
+
+    test('can accept delete username & password credential via dialog', async function (assert) {
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      confirmService.confirm = sinon.fake.returns(resolve());
-      const credentialsCount = getCredentialsCount();
-      await visit(urls.credential);
+      const usernamePasswordCredentialCount =
+        getUsernamePasswordCredentialCount();
+      await visit(urls.usernamePasswordCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-      assert.strictEqual(getCredentialsCount(), credentialsCount - 1);
-      assert.ok(confirmService.confirm.calledOnce);
+      await click('.rose-dialog footer .rose-button-primary');
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(
+        getUsernamePasswordCredentialCount(),
+        usernamePasswordCredentialCount - 1
+      );
     });
 
-    test('cannot cancel delete credential via dialog', async function (assert) {
+    test('can accept delete username & key pair credential via dialog', async function (assert) {
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      confirmService.confirm = sinon.fake.returns(reject());
-      const credentialsCount = getCredentialsCount();
-      await visit(urls.credential);
+      const usernameKeyPairCredentialCount =
+        getUsernameKeyPairCredentialCount();
+      await visit(urls.usernameKeyPairCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-      assert.strictEqual(getCredentialsCount(), credentialsCount);
-      assert.ok(confirmService.confirm.calledOnce);
+      await click('.rose-dialog footer .rose-button-primary');
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(
+        getUsernameKeyPairCredentialCount(),
+        usernameKeyPairCredentialCount - 1
+      );
     });
 
-    test('deleting a credential which errors displays error message', async function (assert) {
+    test('can cancel delete username & password credential via dialog', async function (assert) {
+      assert.expect(2);
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const usernamePasswordCredentialCount =
+        getUsernamePasswordCredentialCount();
+      await visit(urls.usernamePasswordCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-secondary');
+      assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
+      assert.strictEqual(
+        getUsernamePasswordCredentialCount(),
+        usernamePasswordCredentialCount
+      );
+    });
+
+    test('can cancel delete username & key pair credential via dialog', async function (assert) {
+      assert.expect(2);
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const usernameKeyPairCredentialCount =
+        getUsernameKeyPairCredentialCount();
+      await visit(urls.usernameKeyPairCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-secondary');
+      assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
+      assert.strictEqual(
+        getUsernameKeyPairCredentialCount(),
+        usernameKeyPairCredentialCount
+      );
+    });
+
+    test('deleting a username & password credential which errors displays error message', async function (assert) {
       assert.expect(1);
       this.server.del('/credentials/:id', () => {
         return new Response(
@@ -123,7 +215,25 @@ module(
           }
         );
       });
-      await visit(urls.credential);
+      await visit(urls.usernamePasswordCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+    });
+
+    test('deleting a username & key pair credential which errors displays error message', async function (assert) {
+      assert.expect(1);
+      this.server.del('/credentials/:id', () => {
+        return new Response(
+          490,
+          {},
+          {
+            status: 490,
+            code: 'error',
+            message: 'Oops.',
+          }
+        );
+      });
+      await visit(urls.usernameKeyPairCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
     });

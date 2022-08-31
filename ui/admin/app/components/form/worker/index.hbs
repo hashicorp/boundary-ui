@@ -6,15 +6,14 @@
   as |form|
 >
 
-  {{#unless form.isEditable}}
-    <form.input
-      @name='type'
-      @value={{@model.type}}
-      @label={{t 'form.type.label'}}
-      @helperText={{t 'form.worker_type.help'}}
-      readonly={{true}}
-    />
-  {{/unless}}
+  <form.input
+    @name='type'
+    @value={{@model.type}}
+    @label={{t 'form.type.label'}}
+    @helperText={{t 'form.worker_type.help'}}
+    @disabled={{true}}
+    readonly={{true}}
+  />
 
   <form.input
     @name='name'
@@ -54,30 +53,30 @@
     {{/if}}
   </form.textarea>
 
-  {{#unless form.isEditable}}
+  <form.input
+    @name='address'
+    @type='url'
+    @value={{@model.address}}
+    @label={{t 'form.address.label'}}
+    @helperText={{t 'form.worker_address.help'}}
+    @disabled={{true}}
+    readonly={{true}}
+  />
+  {{#let
+    (relative-datetime-live @model.last_status_time)
+    (format-date @model.last_status_time format='yymmddt')
+    as |relativeDate customFormat|
+  }}
     <form.input
-      @name='address'
-      @type='url'
-      @value={{@model.address}}
-      @label={{t 'form.address.label'}}
-      @helperText={{t 'form.worker_address.help'}}
+      @name='last seen'
+      @type='datetime'
+      @value={{concat relativeDate ', ' customFormat}}
+      @label={{t 'form.worker_last_seen.label'}}
+      @helperText={{t 'form.worker_last_seen.help'}}
+      @disabled={{true}}
       readonly={{true}}
     />
-    {{#let
-      (relative-datetime-live @model.last_status_time)
-      (format-date @model.last_status_time format='yymmddt')
-      as |relativeDate customFormat|
-    }}
-      <form.input
-        @name='last seen'
-        @type='datetime'
-        @value={{concat relativeDate ', ' customFormat}}
-        @label={{t 'form.worker_last_seen.label'}}
-        @helperText={{t 'form.worker_last_seen.help'}}
-        readonly={{true}}
-      />
-    {{/let}}
-  {{/unless}}
+  {{/let}}
 
   {{#if (can 'save worker' @model)}}
     <form.actions
