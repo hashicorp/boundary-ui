@@ -23,11 +23,11 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
   };
 
   const removeFromSourcesList = (originalSourceIds, selectedSourceIds) => {
-    const listOfSources = new Set(originalSourceIds);
+    const sourceIds = new Set(originalSourceIds);
     for (const elem of selectedSourceIds) {
-      listOfSources.delete(elem);
+      sourceIds.delete(elem);
     }
-    return Array.from(listOfSources);
+    return [...sourceIds];
   };
 
   // If adding host sources, push them into the array
