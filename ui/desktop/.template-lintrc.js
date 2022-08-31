@@ -7,6 +7,5 @@ module.exports = {
     'no-bare-strings': true,
     'no-curly-component-invocation': { allow: ['app-name'] },
     'no-implicit-this': { allow: ['app-name', 'is-loading'] },
-    'eol-last': 'editorconfig',
   },
 };

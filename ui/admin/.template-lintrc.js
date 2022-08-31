@@ -17,6 +17,5 @@ module.exports = {
         'is-loading',
       ],
     },
-    'eol-last': 'editorconfig',
   },
 };

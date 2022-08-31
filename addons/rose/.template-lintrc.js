@@ -2,9 +2,6 @@
 
 module.exports = {
   extends: ['recommended'],
-  rules: {
-    'eol-last': 'editorconfig',
-  },
   overrides: [
     {
       files: [
