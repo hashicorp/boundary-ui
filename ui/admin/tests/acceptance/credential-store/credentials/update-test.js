@@ -331,15 +331,15 @@ module(
       assert.dom('[name="password"]').isVisible();
     });
 
-    test('private_key and passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
+    test('private_key and private_key_passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
       assert.expect(5);
       await visit(urls.usernameKeyPairCredential);
       assert.dom('[name="private_key"]').doesNotExist();
-      assert.dom('[name="passphrase"]').doesNotExist();
+      assert.dom('[name="private_key_passphrase"]').doesNotExist();
       await click('form [type="button"]', 'Activate edit mode');
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.dom('[name="private_key"]').isVisible();
-      assert.dom('[name="passphrase"]').isVisible();
+      assert.dom('[name="private_key_passphrase"]').isVisible();
     });
   }
 );
