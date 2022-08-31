@@ -4,10 +4,8 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
   const method = idMethod.split(':')[1];
   const target = targets.find(id);
   const {
-    attributes: {
-      brokeredCredentialSourceIds: originalBrokeredCredentials,
-      injectedApplicationCredentialSourceIds: originalInjectedCredentials,
-    },
+    brokeredCredentialSourceIds: originalBrokeredCredentials,
+    injectedApplicationCredentialSourceIds: originalInjectedCredentials,
   } = target;
   const selectedBrokeredCredentials = attrs.brokeredCredentialSourceIds;
   const selectedInjectedCredentials =
@@ -19,20 +17,17 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     version: attrs.version,
   };
 
-  const addToSourcesList = (originalSourcesIds, selectedSourcesIds) => {
-    const listOfSources = new Set(originalSourcesIds);
-    for (const elem of selectedSourcesIds) {
-      listOfSources.add(elem);
-    }
-    return Array.from(listOfSources);
+  const addToSourcesList = (originalSourceIds, selectedSourceIds) => {
+    const sourceIds = new Set([...originalSourceIds, ...selectedSourceIds]);
+    return [...sourceIds];
   };
 
   const removeFromSourcesList = (originalSourceIds, selectedSourceIds) => {
-    const listOfSources = new Set(originalSourceIds);
+    const sourceIds = new Set(originalSourceIds);
     for (const elem of selectedSourceIds) {
-      listOfSources.delete(elem);
+      sourceIds.delete(elem);
     }
-    return Array.from(listOfSources);
+    return [...sourceIds];
   };
 
   // If adding host sources, push them into the array
@@ -67,8 +62,6 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
       if (listOfBrokeredCredentialSources?.length) {
         updatedAttrs.brokeredCredentialSourceIds =
           listOfBrokeredCredentialSources;
-        target.attributes.brokeredCredentialSourceIds =
-          listOfBrokeredCredentialSources;
       }
     }
 
@@ -91,7 +84,6 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
         selectedBrokeredCredentials
       );
       updatedAttrs.brokeredCredentialSourceIds = removedCredentialSources;
-      target.attributes.brokeredCredentialSourceIds = removedCredentialSources;
     }
 
     if (selectedInjectedCredentials) {
@@ -100,8 +92,6 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
         selectedInjectedCredentials
       );
       updatedAttrs.injectedApplicationCredentialSourceIds =
-        removedCredentialSources;
-      target.attributes.injectedApplicationCredentialSourceIds =
         removedCredentialSources;
     }
   }
