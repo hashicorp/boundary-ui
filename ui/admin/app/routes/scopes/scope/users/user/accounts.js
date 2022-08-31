@@ -9,7 +9,6 @@ export default class ScopesScopeUsersUserAccountsRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
 
   // =methods
 

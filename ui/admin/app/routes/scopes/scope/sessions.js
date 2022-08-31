@@ -14,7 +14,7 @@ export default class ScopesScopeSessionsRoute extends Route {
   // =services
 
   @service intl;
-  @service notify;
+
   @service session;
   @service resourceFilterStore;
   @service router;
