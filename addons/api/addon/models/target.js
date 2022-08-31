@@ -81,6 +81,7 @@ export default class TargetModel extends GeneratedTargetModel {
   get injectedApplicationCredentialSources() {
     return this.injected_application_credential_source_ids
       .map((source) => {
+        console.log(source, 'sourceee')
         if (source.value.startsWith('cred')) {
           return this.store.peekRecord('credential', source.value);
         } else {

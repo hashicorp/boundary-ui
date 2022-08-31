@@ -14,7 +14,7 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
    * @type {boolean}
    */
   get hasAvailableInjectedApplicationCredentialSources() {
-    return this.filteredInjectionApplicationCredentialSources.length > 0;
+    return this.filteredInjectedApplicationCredentialSources.length > 0;
   }
 
   /**
@@ -24,7 +24,7 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
   @computed(
     'model.{target.injected_application_credential_source_ids.[],credentialLibraries.[],credentials.[]}'
   )
-  get filteredInjectionApplicationCredentialSources() {
+  get filteredInjectedApplicationCredentialSources() {
     // Get IDs for credential sources already added to the current target
     const currentCredentialSourceIDs =
       this.model.target.injected_application_credential_source_ids.map(
