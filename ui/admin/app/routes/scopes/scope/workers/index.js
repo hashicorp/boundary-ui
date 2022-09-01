@@ -20,6 +20,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       // Filter out duplicate tags
       return [...new Set(configTags)];
     },
+    refreshRouteOnChange: false,
   })
   tags;
 
@@ -46,6 +47,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   @action
   clearAllFilters() {
     this.tags = [];
+    this.refresh();
   }
 
   /**
@@ -56,6 +58,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   @action
   filterBy(field, value) {
     this[field] = value;
+    this.refresh();
   }
 
   setupController(controller) {
