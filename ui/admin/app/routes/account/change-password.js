@@ -11,7 +11,7 @@ export default class AccountChangePasswordRoute extends Route {
 
   @service session;
   @service intl;
-  @service notify;
+
   @service router;
 
   // =methods
