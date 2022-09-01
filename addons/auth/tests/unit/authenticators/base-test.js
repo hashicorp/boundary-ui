@@ -1,19 +1,27 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { Response } from 'miragejs';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import Pretender from 'pretender';
 
 module('Unit | Authenticator | base', function (hooks) {
   setupTest(hooks);
-  setupMirage(hooks);
+
+  let server;
+
+  hooks.beforeEach(() => {
+    server = new Pretender();
+  });
+
+  hooks.afterEach(() => {
+    server.shutdown();
+  });
 
   test('it deauthenticates on invalidation', async function (assert) {
     assert.expect(1);
     const authenticator = this.owner.lookup('authenticator:base');
     const endpoint = authenticator.buildDeauthEndpointURL({ id: 'token123' });
-    this.server.delete(endpoint, () => {
+    server.delete(endpoint, () => {
       assert.ok(true, 'deauthentication occurred');
-      return new Response(200);
+      return [200];
     });
     await authenticator.invalidate({ token: 'token123' });
   });
@@ -22,9 +30,9 @@ module('Unit | Authenticator | base', function (hooks) {
     assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:base');
     const endpoint = authenticator.buildDeauthEndpointURL({ id: 'token123' });
-    this.server.delete(endpoint, () => {
+    server.delete(endpoint, () => {
       assert.ok(true, 'deauthentication was requested');
-      return new Response(500);
+      return [500];
     });
     await authenticator
       .invalidate({ token: 'token123' })
@@ -37,9 +45,9 @@ module('Unit | Authenticator | base', function (hooks) {
     const id = 'token_123';
     const mockData = { attributes: { id } };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
+    server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
       assert.ok(true, 'token validation was requested');
-      return new Response(200);
+      return [200];
     });
     await authenticator.restore(mockData);
   });
@@ -49,9 +57,9 @@ module('Unit | Authenticator | base', function (hooks) {
     const id = 'token_123';
     const mockData = { attributes: { id } };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
+    server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
       assert.ok(true, 'token validation was requested');
-      return new Response(401);
+      return [401];
     });
     try {
       await authenticator.restore(mockData);
@@ -65,9 +73,9 @@ module('Unit | Authenticator | base', function (hooks) {
     const id = 'token_123';
     const mockData = { attributes: { id } };
     const authenticator = this.owner.lookup('authenticator:base');
-    this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
+    server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
       assert.ok(true, 'token validation was requested');
-      return new Response(404);
+      return [404];
     });
     try {
       await authenticator.restore(mockData);

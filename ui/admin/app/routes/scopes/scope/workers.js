@@ -5,11 +5,10 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-
 export default class ScopesScopeWorkersRoute extends Route {
   // =services
-  
-  @service can
+
+  @service can;
   @service session;
   @service router;
 
