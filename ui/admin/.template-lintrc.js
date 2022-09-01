@@ -19,5 +19,6 @@ module.exports = {
       ],
     },
     quotes: 'single',
+    'eol-last': 'editorconfig',
   },
 };

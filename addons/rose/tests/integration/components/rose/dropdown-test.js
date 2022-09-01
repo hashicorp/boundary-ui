@@ -20,7 +20,10 @@ module('Integration | Component | rose/dropdown', function (hooks) {
 
   test('it renders with trigger', async function (assert) {
     await render(hbs`<Rose::Dropdown @text="Click me" />`);
-    assert.strictEqual(find('.rose-dropdown-trigger').textContent.trim(), 'Click me');
+    assert.strictEqual(
+      find('.rose-dropdown-trigger').textContent.trim(),
+      'Click me'
+    );
   });
 
   test('it supports a count', async function (assert) {

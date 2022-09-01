@@ -55,7 +55,10 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     const errorMessageEl = find('.rose-form-errors');
     assert.strictEqual(errorMessageEl.id, errorsId);
     assert.strictEqual(errorMessageEl.textContent.trim(), 'An error occurred.');
-    assert.strictEqual(fieldEl.getAttribute('aria-describedby').trim(), errorsId);
+    assert.strictEqual(
+      fieldEl.getAttribute('aria-describedby').trim(),
+      errorsId
+    );
   });
 
   test('it is not checked by default', async function (assert) {
