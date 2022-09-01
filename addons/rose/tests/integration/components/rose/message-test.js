@@ -16,7 +16,10 @@ module('Integration | Component | rose/message', function (hooks) {
     `);
     assert.ok(find('.rose-message'));
     assert.strictEqual(find('.rose-message-title').textContent.trim(), 'Title');
-    assert.strictEqual(find('.rose-message-subtitle').textContent.trim(), 'Subtitle');
+    assert.strictEqual(
+      find('.rose-message-subtitle').textContent.trim(),
+      'Subtitle'
+    );
     assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
       'Description'

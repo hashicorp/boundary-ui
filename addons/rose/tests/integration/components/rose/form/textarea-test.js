@@ -20,7 +20,10 @@ module('Integration | Component | rose/form/textarea', function (hooks) {
     const helperTextEl = find('.rose-form-helper-text');
     assert.strictEqual(helperTextEl.textContent.trim(), 'Help me');
     assert.strictEqual(helperTextEl.id, helperId);
-    assert.strictEqual(fieldEl.getAttribute('aria-describedby').trim(), helperId);
+    assert.strictEqual(
+      fieldEl.getAttribute('aria-describedby').trim(),
+      helperId
+    );
   });
 
   test('it displays optional errors', async function (assert) {
