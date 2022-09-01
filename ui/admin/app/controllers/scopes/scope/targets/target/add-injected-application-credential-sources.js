@@ -21,9 +21,6 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
    * Filter out credential sources not already added to the target.
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
-  @computed(
-    'model.{target.injected_application_credential_source_ids.[],credentialLibraries.[],credentials.[]}'
-  )
   get filteredCredentialSources() {
     // Get IDs for credential sources already added to the current target
     const currentCredentialSourceIDs =
