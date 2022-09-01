@@ -112,8 +112,12 @@ class RouteResourceFilter extends EmberObject {
    * @static
    * @param {Route} routeClass
    * @param {string} name
+   * @param {boolean} refreshRouteOnChange - set to false if you plan to
+   *        transition from a sibling to this route, which is currently
+   *        buggy in Ember.  When set to false, you must manually refresh
+   *        the route as necessary.
    */
-  static setupRouteQueryParams(routeClass, name) {
+  static setupRouteQueryParams(routeClass, name, refreshRouteOnChange = true) {
     const filterKey = `filter-${name}`;
 
     // If the route has no query params specified yet, declare them.
@@ -127,7 +131,7 @@ class RouteResourceFilter extends EmberObject {
     // param changes refresh the model but do not contribute to browser history.
     // See https://guides.emberjs.com/release/routing/query-params/
     routeClass.queryParams[filterKey] = {
-      refreshModel: true,
+      refreshModel: refreshRouteOnChange,
       replace: true,
     };
   }
@@ -213,6 +217,7 @@ export function resourceFilter({
   defaultValue,
   serialize,
   findBySerialized,
+  refreshRouteOnChange,
 }) {
   /**
    * @param {object} target
@@ -221,7 +226,11 @@ export function resourceFilter({
    * @return {object{get, set}}
    */
   return function (target, name /*, descriptor*/) {
-    RouteResourceFilter.setupRouteQueryParams(target, name);
+    RouteResourceFilter.setupRouteQueryParams(
+      target,
+      name,
+      refreshRouteOnChange
+    );
 
     let instance;
 
