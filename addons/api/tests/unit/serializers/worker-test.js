@@ -23,12 +23,17 @@ module('Unit | Serializer | worker', function (hooks) {
   });
 
   test('it serializes using `adapterOptions.workerGeneratedAuthToken`', function (assert) {
+    const scopeId = 'global';
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('worker');
     const record = store.createRecord('worker', {
       name: 'worker',
       description: 'Description',
       version: 1,
+      scope: {
+        scope_id: scopeId,
+        type: 'global',
+      },
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
@@ -36,7 +41,7 @@ module('Unit | Serializer | worker', function (hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      version: 1,
+      scope_id: scopeId,
       worker_generated_auth_token: '123-abc',
     });
   });

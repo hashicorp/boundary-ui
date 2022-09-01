@@ -1,5 +1,6 @@
 import config from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
+import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
 import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
@@ -435,64 +436,7 @@ export default function () {
   this.get('/targets/:id');
   this.patch('/targets/:id');
   this.del('/targets/:id');
-  this.post(
-    '/targets/:idMethod',
-    function ({ targets }, { params: { idMethod } }) {
-      const attrs = this.normalizedRequestAttrs();
-      const id = idMethod.split(':')[0];
-      const method = idMethod.split(':')[1];
-      const target = targets.find(id);
-      const updatedAttrs = {
-        version: attrs.version,
-      };
-      // If adding host sources, push them into the array
-      if (method === 'add-host-sources') {
-        updatedAttrs.hostSetIds = target.hostSetIds;
-        attrs.hostSourceIds.forEach((id) => {
-          if (!updatedAttrs.hostSetIds.includes(id)) {
-            updatedAttrs.hostSetIds.push(id);
-          }
-        });
-      }
-      // If deleting host sources, filter them out of the array
-      if (method === 'remove-host-sources') {
-        updatedAttrs.hostSetIds = target.hostSetIds;
-        updatedAttrs.hostSetIds = updatedAttrs.hostSetIds.filter((id) => {
-          return !attrs.hostSourceIds.includes(id);
-        });
-      }
-      // If adding brokered credential sources, push them into the array
-      if (method === 'add-credential-sources') {
-        updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
-        updatedAttrs.credentialIds = target.credentialIds;
-        attrs.brokeredCredentialSourceIds.forEach((id) => {
-          if (
-            !updatedAttrs.credentialLibraryIds.includes(id) ||
-            !updatedAttrs.credentialIds.includes(id)
-          ) {
-            if (id.startsWith('cred')) {
-              updatedAttrs.credentialIds.push(id);
-            } else {
-              updatedAttrs.credentialLibraryIds.push(id);
-            }
-          }
-        });
-      }
-      // If deleting brokered credential sources, filter them out of the array
-      if (method === 'remove-credential-sources') {
-        updatedAttrs.credentialLibraryIds = target.credentialLibraryIds;
-        updatedAttrs.credentialIds = target.credentialIds;
-        updatedAttrs.credentialLibraryIds =
-          updatedAttrs.credentialLibraryIds.filter((id) => {
-            return !attrs.brokeredCredentialSourceIds.includes(id);
-          });
-        updatedAttrs.credentialIds = updatedAttrs.credentialIds.filter((id) => {
-          return !attrs.brokeredCredentialSourceIds.includes(id);
-        });
-      }
-      return target.update(updatedAttrs);
-    }
-  );
+  this.post('/targets/:idMethod', targetHandler);
 
   // session
 
@@ -645,6 +589,16 @@ export default function () {
   this.get('/workers/:id');
   this.del('/workers/:id');
   this.patch('/workers/:id');
+  this.post('/workers:create:worker-led', ({ workers, scopes }) => {
+    const globalScope = scopes.find('global');
+
+    // This POST only takes in a token so we need to generate a random worker to return
+    const newWorker = this.create('worker', {
+      type: 'pki',
+      scope: globalScope,
+    });
+    return workers.create(newWorker.attrs);
+  });
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

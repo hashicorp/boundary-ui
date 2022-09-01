@@ -76,7 +76,9 @@ Router.map(function () {
           this.route('host-sources', function () {});
           this.route('add-host-sources');
           this.route('brokered-credential-sources');
+          this.route('injected-application-credential-sources');
           this.route('add-brokered-credential-sources');
+          this.route('add-injected-application-credential-sources');
         });
         this.route('new');
       });

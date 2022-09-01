@@ -98,6 +98,7 @@ module('Unit | Serializer | role', function (hooks) {
           name: 'Role 1',
           scope: { id: 'o_123', scope_id: 'o_123' },
           principals: [],
+          grant_strings: [],
         },
         relationships: {},
       },
