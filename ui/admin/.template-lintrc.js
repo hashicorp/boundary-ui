@@ -2,6 +2,7 @@
 
 module.exports = {
   extends: ['recommended'],
+
   rules: {
     'no-passed-in-event-handlers': false,
     'no-bare-strings': true,
@@ -17,5 +18,6 @@ module.exports = {
         'is-loading',
       ],
     },
+    quotes: 'single',
   },
 };

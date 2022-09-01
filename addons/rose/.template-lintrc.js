@@ -2,6 +2,9 @@
 
 module.exports = {
   extends: ['recommended'],
+  rules: {
+    quotes: 'single',
+  },
   overrides: [
     {
       files: [
