@@ -19,6 +19,14 @@
     </Copyable>
   </page.header>
 
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.workers.worker.index'>
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
   <page.actions>
     <Rose::Dropdown
       @text='{{t 'actions.manage'}}'
@@ -38,7 +46,6 @@
   </page.actions>
 
   <page.body>
-    <Rose::Separator />
     <Form::Worker
       @model={{@model}}
       @submit={{route-action 'save' @model}}

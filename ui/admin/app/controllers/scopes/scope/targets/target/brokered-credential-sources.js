@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
-export default class ScopesScopeTargetsTargetCredentialSourcesController extends Controller {
+export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesController extends Controller {
   // =services
 
   @service intl;
