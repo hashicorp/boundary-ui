@@ -21,5 +21,6 @@ module.exports = {
     'self-closing-void-elements': false,
     'block-indentation': false,
     'no-route-action': false,
+    'no-whitespace-for-layout' : 'warn'
   },
 };

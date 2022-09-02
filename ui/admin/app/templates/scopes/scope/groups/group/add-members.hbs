@@ -16,7 +16,7 @@
 
   <page.body>
 
-    {{#with
+    {{#let
       (resource-filter 'scopes.scope.groups.group.add-members' 'scope')
       as |filter|
     }}
@@ -70,7 +70,7 @@
           </Rose::Form>
         </toolbar.primary>
       </Rose::Toolbar>
-    {{/with}}
+    {{/let}}
 
     <br />
 

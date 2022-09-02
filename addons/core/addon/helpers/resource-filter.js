@@ -11,9 +11,9 @@ import { action } from '@ember/object';
  *
  * @example
  *
- *   {{#with resource-filter 'status' as |param|}}
+ *   {{#let resource-filter 'status' as |param|}}
  *     {{param.name}} / {{param.value}} / {{param.selectedValue}}
- *   {{/with}}
+ *   {{/let}}
  */
 export default class ResourceFilterHelper extends Helper {
   // =services

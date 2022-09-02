@@ -12,7 +12,7 @@
     <Rose::Toolbar as |toolbar|>
       <toolbar.primary>
         <Rose::Form as |form|>
-          {{#with
+          {{#let
             (resource-filter 'scopes.scope.projects.sessions' 'status')
             as |filter|
           }}
@@ -37,9 +37,9 @@
                 </dropdown.item>
               </form.checkboxGroup>
             </Rose::Dropdown>
-          {{/with}}
+          {{/let}}
 
-          {{#with
+          {{#let
             (resource-filter 'scopes.scope.projects.sessions' 'project')
             as |filter|
           }}
@@ -50,7 +50,7 @@
               as |dropdown|
             >
               <ul>
-                {{#with
+                {{#let
                   (group-by filter.allowedValues 'scopeModel')
                   as |groups|
                 }}
@@ -83,10 +83,10 @@
                       </ul>
                     </li>
                   {{/each}}
-                {{/with}}
+                {{/let}}
               </ul>
             </Rose::Dropdown>
-          {{/with}}
+          {{/let}}
 
           {{#if
             (has-resource-filter-selections

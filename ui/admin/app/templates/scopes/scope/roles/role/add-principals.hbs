@@ -16,7 +16,7 @@
 
   <page.body>
 
-    {{#with
+    {{#let
       (resource-filter 'scopes.scope.roles.role.add-principals' 'scope')
       as |filter|
     }}
@@ -70,7 +70,7 @@
           </Rose::Form>
         </toolbar.primary>
       </Rose::Toolbar>
-    {{/with}}
+    {{/let}}
 
     <br />
 
