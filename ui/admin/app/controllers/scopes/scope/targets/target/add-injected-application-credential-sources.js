@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
-export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesController extends Controller {
+export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSourcesController extends Controller {
   // =services
 
   @service intl;
@@ -12,7 +12,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
    * Checks for unassigned credential sources.
    * @type {boolean}
    */
-  get hasAvailableBrokeredCredentialSources() {
+  get hasAvailableInjectedApplicationCredentialSources() {
     return this.filteredCredentialSources.length > 0;
   }
 
@@ -23,7 +23,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
   get filteredCredentialSources() {
     // Get IDs for credential sources already added to the current target
     const currentCredentialSourceIDs = new Set(
-      this.model.target.brokered_credential_source_ids.map(
+      this.model.target.injected_application_credential_source_ids.map(
         (source) => source.value
       )
     );
@@ -43,7 +43,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
    */
   get breadCrumb() {
     return this.intl.t(
-      'resources.target.actions.add-brokered-credential-sources'
+      'resources.target.actions.add-injected-application-credential-sources'
     );
   }
 }

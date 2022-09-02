@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
-export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesController extends Controller {
+export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSourcesController extends Controller {
   // =services
 
   @service intl;
@@ -14,7 +14,7 @@ export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesController
    */
   get breadCrumb() {
     return this.intl.t(
-      'resources.target.brokered-credential-source.title_plural'
+      'resources.target.injected-application-credential-source.title_plural'
     );
   }
 }

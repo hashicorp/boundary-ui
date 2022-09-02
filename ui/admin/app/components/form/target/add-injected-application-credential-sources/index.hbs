@@ -1,0 +1,46 @@
+<Rose::Form
+  class='full-width'
+  @onSubmit={{fn @submit this.selectedCredentialSourceIDs}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  as |form|
+>
+  <form.actions
+    @submitText={{t
+      'resources.target.actions.add-injected-application-credential-sources'
+    }}
+    @cancelText={{t 'actions.cancel'}}
+  />
+
+  <Rose::Table as |table|>
+    <table.header as |header|>
+      <header.row as |row|>
+        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
+      </header.row>
+    </table.header>
+    <table.body as |body|>
+      {{#each @filteredCredentialSources as |credentialSource|}}
+        <body.row as |row|>
+          <row.headerCell>
+            <form.checkbox
+              @label={{credentialSource.id}}
+              @description={{credentialSource.description}}
+              @onChange={{fn this.toggleCredentialSource credentialSource.id}}
+            />
+          </row.headerCell>
+          <row.cell>{{credentialSource.name}}</row.cell>
+          <row.cell>
+            <Rose::Badge>{{t
+                (concat
+                  'resources.target.injected-application-credential-source.types.'
+                  credentialSource.type
+                )
+              }}</Rose::Badge>
+          </row.cell>
+        </body.row>
+      {{/each}}
+    </table.body>
+  </Rose::Table>
+</Rose::Form>
