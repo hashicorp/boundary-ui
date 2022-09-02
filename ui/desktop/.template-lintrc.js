@@ -8,6 +8,6 @@ module.exports = {
     'no-curly-component-invocation': { allow: ['app-name'] },
     'no-implicit-this': { allow: ['app-name', 'is-loading'] },
     quotes: 'single',
-    'eol-last': 'editorconfig',
+    'self-closing-void-elements': false,
   },
 };
