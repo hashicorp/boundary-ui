@@ -9,7 +9,7 @@ export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSource
   // =methods
 
   /**
-   * Loads all credential libraries under the current target.
+   * Loads all credential sources under the current target.
    * @return {Promise{[CredentialLibraryModel, CredentialModel]}}
    */
   beforeModel() {
@@ -42,9 +42,15 @@ export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSource
   // =actions
 
   /**
+<<<<<<< HEAD
    * Remove a credential library from the current target.
    * @param {TargetModel} target
    * @param {CredentialLibraryModel} credentialLibrary
+=======
+   * Remove a credential source from the current target.
+   * @param {TargetModel} target
+   * @param {CredentialLibraryModel, credentialModel} credentialSource
+>>>>>>> main
    */
   @action
   @loading

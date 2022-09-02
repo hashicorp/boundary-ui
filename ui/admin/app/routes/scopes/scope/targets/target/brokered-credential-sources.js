@@ -9,7 +9,7 @@ export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesRoute exte
   // =methods
 
   /**
-   * Loads all credential libraries under the current target.
+   * Loads all credential sources under the current target.
    * @return {Promise{[CredentialLibraryModel, CredentialModel]}}
    */
   beforeModel() {
@@ -43,9 +43,9 @@ export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesRoute exte
   // =actions
 
   /**
-   * Remove a credential library from the current target.
+   * Remove a credential source from the current target.
    * @param {TargetModel} target
-   * @param {CredentialLibraryModel} credentialLibrary
+   * @param {CredentialLibraryModel, credentialModel} credentialSource
    */
   @action
   @loading
