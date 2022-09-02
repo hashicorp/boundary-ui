@@ -19,5 +19,6 @@ module.exports = {
     },
     quotes: 'single',
     'self-closing-void-elements': false,
+    'block-indentation': false,
   },
 };

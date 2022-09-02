@@ -5,5 +5,6 @@ module.exports = {
   rules: {
     quotes: 'single',
     'self-closing-void-elements': false,
+    'block-indentation': false,
   },
 };

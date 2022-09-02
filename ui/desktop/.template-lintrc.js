@@ -9,5 +9,6 @@ module.exports = {
     'no-implicit-this': { allow: ['app-name', 'is-loading'] },
     quotes: 'single',
     'self-closing-void-elements': false,
+    'block-indentation': false,
   },
 };
