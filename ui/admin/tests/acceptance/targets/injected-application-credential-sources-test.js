@@ -80,17 +80,13 @@ module(
         scope: instances.scopes.project,
         type: 'ssh',
       });
-
       randomlySelectedCredentials = this.server.schema.credentials
         .all()
-        .models.filter(Boolean)
-        .map((cred) => cred.id);
+        .models.map((cred) => cred.id);
       randomlySelectedCredentialLibraries =
         this.server.schema.credentialLibraries
           .all()
-          .models.filter(Boolean)
-          .map((cred) => cred.id);
-
+          .models.map((cred) => cred.id);
       instances.target.update({
         injectedApplicationCredentialSourceIds: [
           ...randomlySelectedCredentialLibraries,
