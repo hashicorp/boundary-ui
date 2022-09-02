@@ -42,15 +42,9 @@ export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSource
   // =actions
 
   /**
-<<<<<<< HEAD
-   * Remove a credential library from the current target.
-   * @param {TargetModel} target
-   * @param {CredentialLibraryModel} credentialLibrary
-=======
    * Remove a credential source from the current target.
    * @param {TargetModel} target
    * @param {CredentialLibraryModel, credentialModel} credentialSource
->>>>>>> main
    */
   @action
   @loading
