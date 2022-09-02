@@ -1,35 +1,43 @@
 import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
-import { fragmentArray } from 'ember-data-model-fragments/attributes';
-import { computed } from '@ember/object';
 
 export default class TargetModel extends GeneratedTargetModel {
   // =attributes
 
   @attr('number', {
     isNestedAttribute: true,
-    description: 'The  default port a target should use if present.',
+    description: 'The default port a target should use if present.',
   })
   default_port;
 
   /**
-   * @type {[FragmentHostSourceModel]}
+   * @type Array
    */
-  @fragmentArray('fragment-host-source', {
+  @attr('host-source-id-array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
   host_sources;
 
   /**
-   * Credential source ids are read only and can be
+   * Brokered Credential source ids are read only and can be
    * persisted via a dedicated call to `addBrokeredCredentialSources()`.
    */
-  @fragmentArray('fragment-string', {
+  @attr('string-array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
   brokered_credential_source_ids;
+
+  /**
+   * Injected Application Credential source ids are read only and can be
+   * persisted via a dedicated call to `addInjectedApplicationCredentialSources()`.
+   */
+  @attr('string-array', {
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  injected_application_credential_source_ids;
 
   /**
    * An array of resolved host set and host catalog instances.  Model instances
@@ -37,7 +45,6 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[{model: HostSetModel, hostCatalog: HostCatalogModel}]}
    */
-  @computed('host_sources.[]', 'store')
   get hostSets() {
     return this.host_sources
       .map(({ host_source_id, host_catalog_id }) => ({
@@ -53,9 +60,26 @@ export default class TargetModel extends GeneratedTargetModel {
    * instances).  Unresolvable instances are excluded from the array.
    * @type {[CredentialLibraryModel, CredentialModel]}
    */
-  @computed('brokered_credential_source_ids.[]', 'store')
   get brokeredCredentialSources() {
     return this.brokered_credential_source_ids
+      .map((source) => {
+        if (source.value.startsWith('cred')) {
+          return this.store.peekRecord('credential', source.value);
+        } else {
+          return this.store.peekRecord('credential-library', source.value);
+        }
+      })
+      .filter(Boolean);
+  }
+
+  /**
+   * An array of resolved credential library and credential instances.  Model instances
+   * must already be loaded into the store (this method will not load unloaded
+   * instances).  Unresolvable instances are excluded from the array.
+   * @type {[CredentialLibraryModel, CredentialModel]}
+   */
+  get injectedApplicationCredentialSources() {
+    return this.injected_application_credential_source_ids
       .map((source) => {
         if (source.value.startsWith('cred')) {
           return this.store.peekRecord('credential', source.value);
@@ -156,18 +180,44 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * Adds credential sources via the `add-credential-sources` method.
    * See serializer and adapter for more information.
-   * @param {[string]} credentialSourceIDs
+   * @param {[string]} brokeredCredentialSourceIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
   addBrokeredCredentialSources(
-    credentialSourceIDs,
+    brokeredCredentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
     const defaultAdapterOptions = {
       method: 'add-credential-sources',
-      credentialSourceIDs,
+      brokeredCredentialSourceIDs,
+    };
+    // There is no "deep merge" in ES.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
+   * Adds credential sources via the `add-credential-sources` method.
+   * See serializer and adapter for more information.
+   * @param {[string]} injectedApplicationCredentialSourceIDs
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  addInjectedApplicationCredentialSources(
+    injectedApplicationCredentialSourceIDs,
+    options = { adapterOptions: {} }
+  ) {
+    const defaultAdapterOptions = {
+      method: 'add-credential-sources',
+      injectedApplicationCredentialSourceIDs,
     };
     // There is no "deep merge" in ES.
     return this.save({
@@ -182,18 +232,18 @@ export default class TargetModel extends GeneratedTargetModel {
   /**
    * Delete credential libraries and credentials via the `remove-credential-sources` method.
    * See serializer and adapter for more information.
-   * @param {[string]} credentialSourceIDs
+   * @param {[string]} brokeredCredentialSourceIDs
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
   removeBrokeredCredentialSources(
-    credentialSourceIDs,
+    brokeredCredentialSourceIDs,
     options = { adapterOptions: {} }
   ) {
     const defaultAdapterOptions = {
       method: 'remove-credential-sources',
-      credentialSourceIDs,
+      brokeredCredentialSourceIDs,
     };
     // There is no "deep merge" in ES.
     return this.save({
@@ -207,14 +257,58 @@ export default class TargetModel extends GeneratedTargetModel {
 
   /**
    * Delete a single credential library/credential set via the `remove-credential-sources` method.
-   * @param {number} credentialSourceID
+   * @param {number} brokeredCredentialSourceID
    * @param {object} options
    * @return {Promise}
    */
-  removeBrokeredCredentialSource(credentialSourceID, options) {
-    return this.removeBrokeredCredentialSources([credentialSourceID], options);
+  removeBrokeredCredentialSource(brokeredCredentialSourceID, options) {
+    return this.removeBrokeredCredentialSources(
+      [brokeredCredentialSourceID],
+      options
+    );
   }
 
+  /**
+   * Delete credential libraries and credentials via the `remove-credential-sources` method.
+   * See serializer and adapter for more information.
+   * @param {[string]} injectedApplicationCredentialSourceIDs
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  removeInjectedApplicationCredentialSources(
+    injectedApplicationCredentialSourceIDs,
+    options = { adapterOptions: {} }
+  ) {
+    const defaultAdapterOptions = {
+      method: 'remove-credential-sources',
+      injectedApplicationCredentialSourceIDs,
+    };
+    // There is no "deep merge" in ES.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
+   * Delete a single credential library/credential set via the `remove-credential-sources` method.
+   * @param {number} injectedApplicationCredentialSourceID
+   * @param {object} options
+   * @return {Promise}
+   */
+  removeInjectedApplicationCredentialSource(
+    injectedApplicationCredentialSourceID,
+    options
+  ) {
+    return this.removeInjectedApplicationCredentialSources(
+      [injectedApplicationCredentialSourceID],
+      options
+    );
+  }
   /**
    * True if the target type is tcp.
    * @type {boolean}

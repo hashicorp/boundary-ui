@@ -21,11 +21,20 @@ export default class TargetSerializer extends ApplicationSerializer {
     if (hostSourceIDs) {
       serialized = this.serializeWithHostSources(snapshot, hostSourceIDs);
     }
-    const credentialSourceIDs = snapshot?.adapterOptions?.credentialSourceIDs;
-    if (credentialSourceIDs)
-      serialized = this.serializeWithCredentialSources(
+    const brokeredCredentialSourceIDs =
+      snapshot?.adapterOptions?.brokeredCredentialSourceIDs;
+    const injectedApplicationCredentialSourceIDs =
+      snapshot?.adapterOptions?.injectedApplicationCredentialSourceIDs;
+
+    if (brokeredCredentialSourceIDs)
+      serialized = this.serializeWithBrokeredCredentialSources(
         snapshot,
-        credentialSourceIDs
+        brokeredCredentialSourceIDs
+      );
+    if (injectedApplicationCredentialSourceIDs)
+      serialized = this.serializeWithInjectedApplicationCredentialSources(
+        snapshot,
+        injectedApplicationCredentialSourceIDs
       );
     return serialized;
   }
@@ -48,13 +57,33 @@ export default class TargetSerializer extends ApplicationSerializer {
    * Returns a payload containing only version and an array of passed IDs,
    * rather than existing instances on the model.
    * @param {Snapshot} snapshot
-   * @param {[string]} credentialSourceIDs
+   * @param {[string]} brokered_credential_source_ids
    * @return {object}
    */
-  serializeWithCredentialSources(snapshot, credentialSourceIDs) {
+  serializeWithBrokeredCredentialSources(
+    snapshot,
+    brokered_credential_source_ids
+  ) {
     return {
       version: snapshot.attr('version'),
-      brokered_credential_source_ids: credentialSourceIDs,
+      brokered_credential_source_ids,
+    };
+  }
+
+  /**
+   * Returns a payload containing only version and an array of passed IDs,
+   * rather than existing instances on the model.
+   * @param {Snapshot} snapshot
+   * @param {[string]} injected_application_credential_source_ids
+   * @return {object}
+   */
+  serializeWithInjectedApplicationCredentialSources(
+    snapshot,
+    injected_application_credential_source_ids
+  ) {
+    return {
+      version: snapshot.attr('version'),
+      injected_application_credential_source_ids,
     };
   }
 }

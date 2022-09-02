@@ -46,10 +46,6 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `hostSets` is computed on `host_sources`, not the store itself,
-    // it's necessary to do this assignment to kick-off the computed update.
-    // eslint-disable-next-line no-self-assign
-    target.host_sources = target.host_sources;
     assert.strictEqual(
       target.host_sources.length,
       2,
@@ -252,7 +248,7 @@ module('Unit | Model | target', function (hooks) {
     assert.strictEqual(
       target.brokeredCredentialSources.length,
       0,
-      'Target has no resolved credentialSources because they are not loaded yet'
+      'Target has no resolved credentialSources, because they are not yet loaded'
     );
     store.push({
       data: {
@@ -268,12 +264,6 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    // Since `credentialSources` is computed on `brokered_credential_source_ids`,
-    // not the store itself, it's necessary to do this assignment to kick-off the
-    // computed update.
-    /* eslint-disable no-self-assign */
-    target.brokered_credential_source_ids =
-      target.brokered_credential_source_ids;
     /* eslint-enable no-self-assign */
     assert.strictEqual(
       target.brokered_credential_source_ids.length,
