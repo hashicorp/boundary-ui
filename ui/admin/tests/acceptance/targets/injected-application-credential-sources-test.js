@@ -97,7 +97,6 @@ module(
           ...randomlySelectedCredentials,
         ],
       });
-      console.log(instances.target, 'TARGETTT');
       // Generate route URLs for resources
       urls.globalScope = `/scopes/global/scopes`;
       urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
