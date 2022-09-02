@@ -75,9 +75,11 @@
 
   <form.fieldset>
     <:title>{{t 'resources.credential-library.form.http_method.label'}}</:title>
-    <:description>{{t
+    <:description>
+      {{t
         'resources.credential-library.form.http_method.help'
-      }}</:description>
+      }}
+    </:description>
     <:body>
       <form.radioGroup
         @name='http_method'

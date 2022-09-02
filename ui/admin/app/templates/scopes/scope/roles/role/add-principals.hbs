@@ -38,11 +38,11 @@
                   as |group|
                 >
                   <li
-                    class='{{if
+                    class={{if
                         group.item.isOrg
                         'indent-label-1'
                         (if group.item.isProject 'indent-label-2')
-                      }}'
+                      }}
                   >
                     <dropdown.item>
                       <group.checkbox
