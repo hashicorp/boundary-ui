@@ -53,6 +53,7 @@ themes:
   light: Light
   dark: Dark
 onboarding:
+  title: Onboarding
   quick-start:
     titles:
       choose-path: Welcome to Boundary
