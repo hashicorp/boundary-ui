@@ -81,7 +81,6 @@ module.exports = function (environment) {
     ENV.autoOrigin = true;
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'test') {
