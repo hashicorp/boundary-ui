@@ -60,7 +60,7 @@ module.exports = function (environment) {
     featureFlags: {
       search: false,
       filter: true,
-      'ssh-target': false,
+      'ssh-target': true,
     },
   };
 
@@ -81,7 +81,7 @@ module.exports = function (environment) {
     ENV.autoOrigin = true;
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = false;
+    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'test') {

@@ -14,7 +14,7 @@ const featureEditions = {
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': false,
+  'ssh-target': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
