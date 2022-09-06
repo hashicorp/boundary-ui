@@ -1,16 +1,18 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { inject as service } from '@ember/service';
 
 export default class ScopesScopeWorkersIndexRoute extends Route {
   // =attributes
-  @service can;
 
+  // This resource filter depends on the data from the list route so can't
+  // live in the same model where the list is loaded as it needs to get loaded
+  // first. If it's in the same file it might try to grab the model data before
+  // it's loaded.
   @resourceFilter({
     allowed: (route) => {
       const configTags = route
-        .modelFor('scopes.scope.workers.index')
+        .modelFor('scopes.scope.workers')
         .toArray()
         .flatMap((worker) => worker.config_tags?.type)
         .filter(Boolean);
@@ -18,30 +20,25 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       // Filter out duplicate tags
       return [...new Set(configTags)];
     },
+    refreshRouteOnChange: false,
   })
   tags;
 
   // =methods
 
   model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list worker', scope, { collection: 'workers' })) {
-      const workers = this.store.query('worker', { scope_id });
+    const workers = this.modelFor('scopes.scope.workers');
 
-      if (this.tags?.length) {
-        // Return workers that have config tags that have at
-        // least one intersection with the filter tags
-        return workers.filter(
-          (worker) =>
-            worker.config_tags?.type.filter(
-              Set.prototype.has,
-              new Set(this.tags)
-            ).length > 0
-        );
-      }
-      return workers;
+    if (this.tags?.length) {
+      // Return workers that have config tags that have at
+      // least one intersection with the filter tags
+      return workers.filter(
+        (worker) =>
+          worker.config_tags.type.filter(Set.prototype.has, new Set(this.tags))
+            .length > 0
+      );
     }
+    return workers;
   }
 
   /**
@@ -50,6 +47,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   @action
   clearAllFilters() {
     this.tags = [];
+    this.refresh();
   }
 
   /**
@@ -60,6 +58,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   @action
   filterBy(field, value) {
     this[field] = value;
+    this.refresh();
   }
 
   setupController(controller) {
