@@ -154,6 +154,7 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.featureFlags['static-credentials'] = true;
   }
 
   return ENV;
