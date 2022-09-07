@@ -125,7 +125,6 @@ module.exports = function (environment) {
     };
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['byow'] = true;
   }
 
@@ -146,7 +145,6 @@ module.exports = function (environment) {
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
-    ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['byow'] = true;
   }
 
