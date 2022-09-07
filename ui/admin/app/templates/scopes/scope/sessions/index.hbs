@@ -16,7 +16,7 @@
     <Rose::Toolbar as |toolbar|>
       <toolbar.primary>
         <Rose::Form as |form|>
-          {{#with
+          {{#let
             (resource-filter 'scopes.scope.sessions' 'status')
             as |filter|
           }}
@@ -41,7 +41,7 @@
                 </dropdown.item>
               </form.checkboxGroup>
             </Rose::Dropdown>
-          {{/with}}
+          {{/let}}
 
           {{#if
             (has-resource-filter-selections 'scopes.scope.sessions' 'status')

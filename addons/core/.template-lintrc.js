@@ -1,9 +1,10 @@
 'use strict';
 
 module.exports = {
-  extends: ['recommended'],
+  extends: ['recommended', 'stylistic'],
   rules: {
     quotes: 'single',
-    'eol-last': 'editorconfig',
+    'self-closing-void-elements': false,
+    'block-indentation': false,
   },
 };
