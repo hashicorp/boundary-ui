@@ -8,7 +8,7 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 const featureEditions = {
   oss: {
     search: false,
-    'static-credentials': false,
+    'static-credentials': true,
     byow: false,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
@@ -16,7 +16,7 @@ const featureEditions = {
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': false,
+  'ssh-target': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
@@ -55,7 +55,6 @@ module.exports = function (environment) {
     appName: APP_NAME,
     companyName: 'HashiCorp',
 
-    notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
 
@@ -105,6 +104,10 @@ module.exports = function (environment) {
       directory: '../../addons/api/mirage',
     },
 
+    flashMessageDefaults: {
+      timeout: 4000,
+    },
+
     featureFlags: featureEditions[EDITION],
   };
 
@@ -126,8 +129,6 @@ module.exports = function (environment) {
     };
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
-    ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
   }
 
@@ -143,12 +144,11 @@ module.exports = function (environment) {
     ENV.APP.autoboot = false;
 
     // Notification timeout should be 0 for fast tests
-    ENV.notifyTimeout = 0;
+    ENV.flashMessageDefaults.timeout = 0;
+
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
-    ENV.featureFlags['ssh-target'] = true;
-    ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
   }
 

@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  plugins: ['ember-template-lint-plugin-prettier'],
-  extends: ['octane', 'ember-template-lint-plugin-prettier:recommended'],
+  extends: ['recommended'],
+
   rules: {
     'no-passed-in-event-handlers': false,
     'no-bare-strings': true,
@@ -18,5 +18,7 @@ module.exports = {
         'is-loading',
       ],
     },
+    quotes: 'single',
+    'eol-last': 'editorconfig',
   },
 };

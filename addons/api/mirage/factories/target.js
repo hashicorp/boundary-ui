@@ -65,14 +65,22 @@ export default factory.extend({
         .where(
           (credentialLibrary) => credentialLibrary.scopeId === target.scope.id
         )
-        .models.filter(() => randomBoolean());
+        .models.filter(() => randomBoolean())
+        .map((cred) => cred.id);
       randomlySelectedCredentials = server.schema.credentials
         .where((credential) => credential.scopeId === target.scope.id)
-        .models.filter(() => randomBoolean());
+        .models.filter(() => randomBoolean())
+        .map((cred) => cred.id);
       target.update({
         hostSets: randomlySelectedHostSets,
-        credentialLibraries: randomlySelectedCredentialLibraries,
-        credentials: randomlySelectedCredentials,
+        brokeredCredentialSourceIds: [
+          ...randomlySelectedCredentialLibraries,
+          ...randomlySelectedCredentials,
+        ],
+        injectedApplicationCredentialSourceIds: [
+          ...randomlySelectedCredentialLibraries,
+          ...randomlySelectedCredentials,
+        ],
       });
     },
   }),

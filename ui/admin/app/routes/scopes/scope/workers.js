@@ -5,11 +5,10 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-
 export default class ScopesScopeWorkersRoute extends Route {
   // =services
-  
-  @service can
+
+  @service can;
   @service session;
   @service router;
 
@@ -20,6 +19,18 @@ export default class ScopesScopeWorkersRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
+  }
+
+  /**
+   * Load all workers.
+   * @return {WorkerModel}
+   */
+  model() {
+    const scope = this.modelFor('scopes.scope');
+    const { id: scope_id } = scope;
+    if (this.can.can('list worker', scope, { collection: 'workers' })) {
+      return this.store.query('worker', { scope_id });
+    }
   }
 
   /**

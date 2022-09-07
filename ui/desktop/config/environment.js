@@ -42,7 +42,6 @@ module.exports = function (environment) {
 
     appName: APP_NAME,
 
-    notifyTimeout: 4000,
     sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
 
@@ -54,10 +53,14 @@ module.exports = function (environment) {
       },
     },
 
+    flashMessageDefaults: {
+      timeout: 4000,
+    },
+
     featureFlags: {
       search: false,
       filter: true,
-      'ssh-target': false,
+      'ssh-target': true,
     },
   };
 
@@ -78,7 +81,6 @@ module.exports = function (environment) {
     ENV.autoOrigin = true;
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = false;
   }
 
   if (environment === 'test') {
@@ -93,7 +95,7 @@ module.exports = function (environment) {
     ENV.APP.autoboot = false;
 
     // Notification timeout should be 0 for fast tests
-    ENV.notifyTimeout = 0;
+    ENV.flashMessageDefaults.timeout = 0;
 
     ENV.enableConfirmService = false;
 

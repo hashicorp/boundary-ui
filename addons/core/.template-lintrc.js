@@ -1,5 +1,9 @@
 'use strict';
 
 module.exports = {
-  extends: 'octane',
+  extends: ['recommended'],
+  rules: {
+    quotes: 'single',
+    'eol-last': 'editorconfig',
+  },
 };

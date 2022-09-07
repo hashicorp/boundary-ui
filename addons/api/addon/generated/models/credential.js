@@ -73,7 +73,7 @@ export default class GeneratedCredentialModel extends BaseModel {
   @attr('string', {
     for: 'ssh_private_key',
     isNestedAttribute: true,
-    description: 'The passphrase for credential.',
+    description: 'The private key passphrase for credential.',
   })
-  passphrase;
+  private_key_passphrase;
 }

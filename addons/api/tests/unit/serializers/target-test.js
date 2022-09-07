@@ -16,6 +16,10 @@ module('Unit | Serializer | target', function (hooks) {
         { host_source_id: '3', host_catalog_id: '4' },
       ],
       brokered_credential_source_ids: [{ value: '1' }, { value: '2' }],
+      injected_application_credential_source_ids: [
+        { value: '4' },
+        { value: '5' },
+      ],
       scope: {
         scope_id: 'org_1',
         type: 'org',
@@ -66,7 +70,7 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
-  test('it serializes only credential sources and version when an `adapterOptions.credentialSourceIDs` array is passed', function (assert) {
+  test('it serializes only credential sources and version when an `adapterOptions.brokeredCredentialSourceIDs` array is passed', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -78,15 +82,40 @@ module('Unit | Serializer | target', function (hooks) {
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {
-      credentialSourceIDs: ['4', '5'],
+      brokeredCredentialSourceIDs: ['4', '5'],
     };
     const serializedRecord = serializer.serialize(snapshot);
+
     assert.deepEqual(serializedRecord, {
       brokered_credential_source_ids: ['4', '5'],
       version: 1,
     });
   });
 
+  test('it serializes only credential sources and version when an `adapterOptions.injectedApplicationCredentialSourceIDs` array is passed', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'User',
+      description: 'Description',
+      injected_application_credential_source_ids: [
+        { value: '1' },
+        { value: '2' },
+      ],
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      injectedApplicationCredentialSourceIDs: ['4', '5'],
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      injected_application_credential_source_ids: ['4', '5'],
+      version: 1,
+    });
+  });
   test('it serializes the worker_filter attribute if present', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -132,6 +161,7 @@ module('Unit | Serializer | target', function (hooks) {
         { host_source_id: '3', host_catalog_id: '4' },
       ],
       brokered_credential_source_ids: ['1'],
+      injected_application_credential_source_ids: ['3'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -151,6 +181,7 @@ module('Unit | Serializer | target', function (hooks) {
             { host_source_id: '3', host_catalog_id: '4' },
           ],
           brokered_credential_source_ids: [{ value: '1' }],
+          injected_application_credential_source_ids: [{ value: '3' }],
         },
         relationships: {},
       },
@@ -181,6 +212,7 @@ module('Unit | Serializer | target', function (hooks) {
         type: 'target',
         attributes: {
           brokered_credential_source_ids: [],
+          injected_application_credential_source_ids: [],
           authorized_actions: [],
           host_sources: [],
           name: 'Target 1',
@@ -217,6 +249,7 @@ module('Unit | Serializer | target', function (hooks) {
           scope: { id: 'o_123', scope_id: 'o_123' },
           host_sources: [],
           brokered_credential_source_ids: [],
+          injected_application_credential_source_ids: [],
         },
         relationships: {},
       },
@@ -248,6 +281,7 @@ module('Unit | Serializer | target', function (hooks) {
           name: 'Target 1',
           host_sources: [],
           brokered_credential_source_ids: [],
+          injected_application_credential_source_ids: [],
           worker_filter: 'worker',
         },
         relationships: {},

@@ -21,7 +21,10 @@ module('Integration | Component | rose/dropdown/link', function (hooks) {
     await render(hbs`<Rose::Dropdown::Link>
       content
     </Rose::Dropdown::Link>`);
-    assert.strictEqual(find('.rose-dropdown-link').textContent.trim(), 'content');
+    assert.strictEqual(
+      find('.rose-dropdown-link').textContent.trim(),
+      'content'
+    );
   });
 
   test('it supports style', async function (assert) {

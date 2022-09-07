@@ -10,7 +10,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsRoute
   // =services
 
   @service intl;
-  @service notify;
 
   // =methods
 
