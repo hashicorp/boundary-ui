@@ -27,7 +27,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
 
   /**
    * Returns config creation text for `<Rose::CodeEditor>`. The user will see
-   * different ouptuts based on if the are using `hcp` or `oss` binaries.
+   * different outputs based on if they are using `hcp` or `oss` binaries.
    * @type {string}
    */
   get workerConfigText() {
