@@ -10,6 +10,8 @@ const featureEditions = {
     search: false,
     'static-credentials': false,
     byow: false,
+    'byow-pki-hcp-cluster-id': false,
+    'byow-pki-upstream': true,
   },
 };
 featureEditions.enterprise = {
@@ -18,6 +20,8 @@ featureEditions.enterprise = {
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
+  'byow-pki-hcp-cluster-id': true,
+  'byow-pki-upstream': false,
 };
 
 module.exports = function (environment) {

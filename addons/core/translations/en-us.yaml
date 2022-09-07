@@ -15,6 +15,7 @@ titles:
   home: Home
   iam: IAM
   new: New
+  pki: New PKI Worker
   resources: Resources
   details: Details
   general: General
@@ -88,4 +89,3 @@ onboarding:
       learn: Learn about Boundary Desktop app
       cli: Learn about Boundary command-line (CLI)
       api: Learn about Boundary API
-

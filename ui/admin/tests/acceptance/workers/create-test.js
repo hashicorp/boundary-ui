@@ -9,6 +9,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { getOwner } from '@ember/application';
 
 module('Acceptance | workers | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -36,6 +37,28 @@ module('Acceptance | workers | create', function (hooks) {
     await fillIn('[name="worker_auth_registration_request"]', 'token');
     await click('[type="submit"]');
     assert.strictEqual(getWorkersCount(), workersCount + 1);
+  });
+
+  test('cluster id input field is visible for `hcp` binary', async function (assert) {
+    assert.expect(1);
+    const config = getOwner(this).resolveRegistration('config:environment');
+    config.featureFlags['byow-pki-hcp-cluster-id'] = true;
+    config.featureFlags['byow-pki-upstream'] = false;
+    await visit(newWorkerURL);
+    assert
+      .dom('.rose-form-input:nth-child(1) label')
+      .hasText('Boundary Cluster ID');
+  });
+
+  test('initial upstreams input field is visible for `oss` binary', async function (assert) {
+    assert.expect(1);
+    const config = getOwner(this).resolveRegistration('config:environment');
+    config.featureFlags['byow-pki-hcp-cluster-id'] = false;
+    config.featureFlags['byow-pki-upstream'] = true;
+    await visit(newWorkerURL);
+    assert
+      .dom('.rose-form-input:nth-child(3) label')
+      .hasText('Initial Upstreams');
   });
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
