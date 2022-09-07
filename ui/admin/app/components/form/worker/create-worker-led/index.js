@@ -70,8 +70,8 @@ worker {
 }`;
   }
   /**
-   * Returns boundar installation command, and worker worker server config
-   * for for `<Rose::CodeEditor>`.
+   * Returns boundary installation command and start worker server command
+   * for `<Rose::CodeEditor>`.
    * @type {string}
    */
   get installBoundaryText() {
