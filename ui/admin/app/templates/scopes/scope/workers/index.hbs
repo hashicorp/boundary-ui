@@ -26,7 +26,7 @@
       <Rose::Toolbar as |toolbar|>
         <toolbar.primary>
           <Rose::Form as |form|>
-            {{#with
+            {{#let
               (resource-filter 'scopes.scope.workers.index' 'tags')
               as |filter|
             }}
@@ -53,7 +53,7 @@
                   </form.checkboxGroup>
                 </Rose::Dropdown>
               {{/if}}
-            {{/with}}
+            {{/let}}
             {{#if
               (has-resource-filter-selections
                 'scopes.scope.workers.index' 'tags'

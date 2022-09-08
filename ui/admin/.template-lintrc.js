@@ -1,8 +1,7 @@
 'use strict';
 
 module.exports = {
-  extends: ['recommended'],
-
+  extends: ['recommended', 'stylistic'],
   rules: {
     'no-passed-in-event-handlers': false,
     'no-bare-strings': true,
@@ -19,6 +18,8 @@ module.exports = {
       ],
     },
     quotes: 'single',
-    'eol-last': 'editorconfig',
+    'self-closing-void-elements': false,
+    'block-indentation': false,
+    'no-route-action': false,
   },
 };

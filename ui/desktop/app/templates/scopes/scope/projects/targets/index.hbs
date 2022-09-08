@@ -20,7 +20,7 @@
       <Rose::Toolbar as |toolbar|>
         <toolbar.primary>
           <Rose::Form as |form|>
-            {{#with
+            {{#let
               (resource-filter 'scopes.scope.projects.targets' 'project')
               as |filter|
             }}
@@ -31,7 +31,7 @@
                 as |dropdown|
               >
                 <ul>
-                  {{#with
+                  {{#let
                     (group-by filter.allowedValues 'scopeModel')
                     as |groups|
                   }}
@@ -64,10 +64,10 @@
                         </ul>
                       </li>
                     {{/each}}
-                  {{/with}}
+                  {{/let}}
                 </ul>
               </Rose::Dropdown>
-            {{/with}}
+            {{/let}}
 
             {{#if
               (has-resource-filter-selections

@@ -44,7 +44,7 @@
     }}
       <Rose::Toolbar>
         <Rose::Form as |form|>
-          {{#with
+          {{#let
             (resource-filter 'scopes.scope.auth-methods' 'type')
             as |filter|
           }}
@@ -71,7 +71,7 @@
                 </dropdown.item>
               </form.checkboxGroup>
             </Rose::Dropdown>
-          {{/with}}
+          {{/let}}
 
           {{#if
             (has-resource-filter-selections 'scopes.scope.auth-methods' 'type')
