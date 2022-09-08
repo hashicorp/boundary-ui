@@ -452,6 +452,7 @@ managed-group:
       description: No members in this managed group.
 worker:
   title: Worker
+  title_pki: New PKI Worker
   title_plural: Workers
   description: Workers are the server components that perform the session handling.
   actions:

@@ -14,6 +14,16 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked workerTags;
   @tracked initialUpstreams;
 
+  // =methods
+
+  textFilter(val) {
+    return val
+      .split(',')
+      .filter((itm) => itm.trim())
+      .map((itm) => `"${itm?.trim()}"`)
+      .join(', ');
+  }
+
   // =properties
 
   /**
@@ -31,44 +41,46 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
    * @type {string}
    */
   get workerConfigText() {
-    return `${
-      this.features.isEnabled('byow-pki-hcp-cluster-id')
-        ? `hcp_boundary_cluster_id = "${this.clusterId || '<config_id>'}"`
-        : `listener "tcp" {
+    if (this.features.isEnabled('byow-pki-hcp-cluster-id')) {
+      return `hcp_boundary_cluster_id = "${this.clusterId || '<config_id>'}"
+
+listener "tcp" {
   address = "0.0.0.0:9202"
   purpose = "proxy"
-}`
-    }
+}
 
 worker {
   public_addr = "${this.ipAddress || '<public_ip_address>'}"
   auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
   tags {
     type = [${
-      this.workerTags
-        ? this.workerTags
-            .split(',')
-            .filter((tag) => tag.trim())
-            .map((tag) => `"${tag?.trim()}"`)
-            .join(', ')
-        : '"<tag1>", "<tag2>"'
-    }],
-  },
-  ${
-    this.features.isEnabled('byow-pki-upstream')
-      ? `initial_upstreams = [${
-          this.initialUpstreams
-            ? this.initialUpstreams
-                .split(',')
-                .filter((tag) => tag.trim())
-                .map((tag) => `"${tag?.trim()}"`)
-                .join(', ')
-            : '\n\t"<upstream1>",\n\t"<upstream2>",\n\t"<upstream3>"\n'
-        }  ]`
-      : ''
+      this.workerTags ? this.textFilter(this.workerTags) : '"<tag1>", "<tag2>"'
+    }]
   }
 }`;
+    } else {
+      return `listener "tcp" {
+  address = "0.0.0.0:9202"
+  purpose = "proxy"
+}
+
+worker {
+  public_addr = "${this.ipAddress || '<public_ip_address>'}"
+  auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
+  tags {
+    type = [${
+      this.workerTags ? this.textFilter(this.workerTags) : '"<tag1>", "<tag2>"'
+    }]
+  },
+  initial_upstreams = [${
+    this.initialUpstreams
+      ? this.textFilter(this.initialUpstreams)
+      : '"<upstream1>", "</upstream2>", "<upstream3>"'
+  }]
+}`;
+    }
   }
+
   /**
    * Returns boundary installation command and start worker server command
    * for `<Rose::CodeEditor>`.

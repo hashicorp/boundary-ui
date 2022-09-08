@@ -40,22 +40,28 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('cluster id input field is visible for `hcp` binary', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     const config = getOwner(this).resolveRegistration('config:environment');
     config.featureFlags['byow-pki-hcp-cluster-id'] = true;
     config.featureFlags['byow-pki-upstream'] = false;
     await visit(newWorkerURL);
+    assert
+      .dom('.rose-form-input:nth-child(3) label')
+      .doesNotIncludeText('Initial Upstreams');
     assert
       .dom('.rose-form-input:nth-child(1) label')
       .hasText('Boundary Cluster ID');
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     const config = getOwner(this).resolveRegistration('config:environment');
     config.featureFlags['byow-pki-hcp-cluster-id'] = false;
     config.featureFlags['byow-pki-upstream'] = true;
     await visit(newWorkerURL);
+    assert
+      .dom('.rose-form-input:nth-child(1) label')
+      .doesNotIncludeText('Boundary Cluster ID');
     assert
       .dom('.rose-form-input:nth-child(3) label')
       .hasText('Initial Upstreams');
