@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, fillIn, click, find } from '@ember/test-helpers';
+import { visit, fillIn, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -45,12 +45,9 @@ module('Acceptance | workers | create', function (hooks) {
     config.featureFlags['byow-pki-hcp-cluster-id'] = true;
     config.featureFlags['byow-pki-upstream'] = false;
     await visit(newWorkerURL);
-    assert
-      .dom('.rose-form-input:nth-child(3) label')
-      .doesNotIncludeText('Initial Upstreams');
-    assert
-      .dom('.rose-form-input:nth-child(1) label')
-      .hasText('Boundary Cluster ID');
+    const labels = findAll('label.rose-form-label');
+    assert.dom(labels[0]).hasText('Boundary Cluster ID');
+    assert.dom(labels[2]).doesNotIncludeText('Initial Upstreams');
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
@@ -59,12 +56,9 @@ module('Acceptance | workers | create', function (hooks) {
     config.featureFlags['byow-pki-hcp-cluster-id'] = false;
     config.featureFlags['byow-pki-upstream'] = true;
     await visit(newWorkerURL);
-    assert
-      .dom('.rose-form-input:nth-child(1) label')
-      .doesNotIncludeText('Boundary Cluster ID');
-    assert
-      .dom('.rose-form-input:nth-child(3) label')
-      .hasText('Initial Upstreams');
+    const labels = findAll('label.rose-form-label');
+    assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');
+    assert.dom(labels[2]).hasText('Initial Upstreams');
   });
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {

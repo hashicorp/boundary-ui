@@ -31,7 +31,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
    * @type {string}
    */
   get createConfigText() {
-    return `mkdir ${this.configFilePath || '<path>'}/ ;\\
+    return `mkdir ${this.configFilePath || '<path>'}/ ;
 touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
   }
 
@@ -41,43 +41,46 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
    * @type {string}
    */
   get workerConfigText() {
-    if (this.features.isEnabled('byow-pki-hcp-cluster-id')) {
-      return `hcp_boundary_cluster_id = "${this.clusterId || '<config_id>'}"
+    const clusterText = `hcp_boundary_cluster_id = "${
+      this.clusterId || '<config_id>'
+    }"`;
 
-listener "tcp" {
-  address = "0.0.0.0:9202"
-  purpose = "proxy"
-}
-
-worker {
-  public_addr = "${this.ipAddress || '<public_ip_address>'}"
-  auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
-  tags {
+    const tagsText = `tags {
     type = [${
       this.workerTags ? this.textFilter(this.workerTags) : '"<tag1>", "<tag2>"'
     }]
-  }
-}`;
-    } else {
-      return `listener "tcp" {
-  address = "0.0.0.0:9202"
-  purpose = "proxy"
-}
-
-worker {
-  public_addr = "${this.ipAddress || '<public_ip_address>'}"
-  auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
-  tags {
-    type = [${
-      this.workerTags ? this.textFilter(this.workerTags) : '"<tag1>", "<tag2>"'
-    }]
-  },
+  }`;
+    const upstreamText = `
   initial_upstreams = [${
     this.initialUpstreams
       ? this.textFilter(this.initialUpstreams)
       : '"<upstream1>", "</upstream2>", "<upstream3>"'
-  }]
+  }]`;
+
+    const listenerText = `listener "tcp" {
+  address = "0.0.0.0:9202"
+  purpose = "proxy"
 }`;
+
+    const workerText = `
+worker {
+  public_addr = "${this.ipAddress || '<public_ip_address>'}"
+  auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
+  ${
+    this.features.isEnabled('byow-pki-upstream')
+      ? `${tagsText}, ${upstreamText}`
+      : `${tagsText}`
+  }
+}`;
+
+    if (this.features.isEnabled('byow-pki-hcp-cluster-id')) {
+      return `${clusterText}
+
+${listenerText}
+        ${workerText}`;
+    } else {
+      return `${listenerText}
+        ${workerText}`;
     }
   }
 
