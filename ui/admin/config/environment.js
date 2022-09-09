@@ -125,7 +125,10 @@ module.exports = function (environment) {
     };
 
     // Enable features in development
+    ENV.featureFlags['search'] = true;
+    ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
+    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'test') {
@@ -145,7 +148,10 @@ module.exports = function (environment) {
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
+    ENV.featureFlags['search'] = true;
+    ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
+    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'production') {
