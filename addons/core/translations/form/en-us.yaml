@@ -43,6 +43,7 @@ session_connection_limit:
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
 worker_version:
   label: Version
+  help: The version number of the worker.
 worker_authorized_actions:
   label: Authorized Actions
 worker_last_seen:

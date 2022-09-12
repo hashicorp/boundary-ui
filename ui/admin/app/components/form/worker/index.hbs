@@ -77,21 +77,16 @@
       readonly={{true}}
     />
   {{/let}}
-  <form.select
+
+  <form.input
     @name='version'
+    @type='text'
     @value={{@model.version}}
     @label={{t 'form.worker_version.label'}}
-    @helperText='Set your desired color'
-    @disabled={{false}}
-    @error={{false}}
-    as |field|
-  >
-   <field.field as |select|>
-      {{#each @model.version as |version|}}
-        <select.option @value={{version}}>{{version}}</select.option>
-      {{/each}}
-    </field.field>
-  </form.select>
+    @helperText={{t 'form.worker_version.help'}}
+    @disabled={{true}}
+    readonly={{true}}
+  />
 
   {{#if (can 'save worker' @model)}}
     <form.actions
