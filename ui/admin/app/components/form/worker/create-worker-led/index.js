@@ -16,11 +16,11 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   // =methods
 
-  textFilter(val) {
-    return val
+  convertCommaSeparatedValuesToArray(array) {
+    return array
       .split(',')
-      .filter((itm) => itm.trim())
-      .map((itm) => `"${itm?.trim()}"`)
+      .filter((value) => value.trim())
+      .map((value) => `"${value?.trim()}"`)
       .join(', ');
   }
 
@@ -47,13 +47,13 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
 
     const tagsText = `tags {
     type = [${
-      this.workerTags ? this.textFilter(this.workerTags) : '"<tag1>", "<tag2>"'
+      this.workerTags ? this.convertCommaSeparatedValuesToArray(this.workerTags) : '"<tag1>", "<tag2>"'
     }]
   }`;
     const upstreamText = `
   initial_upstreams = [${
     this.initialUpstreams
-      ? this.textFilter(this.initialUpstreams)
+      ? this.convertCommaSeparatedValuesToArray(this.initialUpstreams)
       : '"<upstream1>", "</upstream2>", "<upstream3>"'
   }]`;
 
