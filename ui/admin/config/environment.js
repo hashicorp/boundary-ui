@@ -7,7 +7,6 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 // Object that defines edition features.
 const featureEditions = {
   oss: {
-    search: false,
     'static-credentials': true,
     byow: false,
   },
@@ -125,7 +124,9 @@ module.exports = function (environment) {
     };
 
     // Enable features in development
+    ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
+    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'test') {
@@ -145,7 +146,9 @@ module.exports = function (environment) {
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
+    ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
+    ENV.featureFlags['ssh-target'] = true;
   }
 
   if (environment === 'production') {
