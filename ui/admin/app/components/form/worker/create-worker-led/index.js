@@ -68,7 +68,7 @@ worker {
   auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
   ${
     this.features.isEnabled('byow-pki-upstream')
-      ? `${tagsText}, ${upstreamText}`
+      ? `${tagsText}${upstreamText}`
       : `${tagsText}`
   }
 }`;
