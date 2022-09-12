@@ -16,8 +16,8 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   // =methods
 
-  convertCommaSeparatedValuesToArray(array) {
-    return array
+  convertCommaSeparatedValuesToArray(input) {
+    return input
       .split(',')
       .filter((value) => value.trim())
       .map((value) => `"${value?.trim()}"`)
