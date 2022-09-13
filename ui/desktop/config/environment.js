@@ -60,7 +60,7 @@ module.exports = function (environment) {
     featureFlags: {
       search: false,
       filter: true,
-      'ssh-target': true,
+      'ssh-target': false,
     },
   };
 
