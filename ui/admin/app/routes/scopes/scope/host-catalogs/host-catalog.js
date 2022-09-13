@@ -23,12 +23,6 @@ export default class ScopesScopeHostCatalogsHostCatalogRoute extends Route {
   renderTemplate(controller, model) {
     super.renderTemplate(...arguments);
 
-    this.render('scopes/scope/host-catalogs/host-catalog/-navigation', {
-      into: 'scopes/scope/host-catalogs/host-catalog',
-      outlet: 'navigation',
-      model: model,
-    });
-
     this.render('scopes/scope/host-catalogs/host-catalog/-actions', {
       into: 'scopes/scope/host-catalogs/host-catalog',
       outlet: 'actions',
