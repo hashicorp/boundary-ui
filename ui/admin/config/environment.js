@@ -96,6 +96,7 @@ module.exports = function (environment) {
         'api-client.api': '/api-client/api',
         worker: '/workers',
         'worker.manage-workers': '/workers/manage-workers-on-hcp',
+        'worker-filters': '/worker-filters',
       },
     },
 
