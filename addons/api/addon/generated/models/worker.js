@@ -47,6 +47,12 @@ export default class GeneratedWorkerModel extends BaseModel {
   })
   last_status_time;
 
+  @attr('string', {
+    description: 'The version of the Boundary binary the worker is running.',
+    readOnly: true,
+  })
+  release_version;
+
   @attr('number', {
     description:
       'The number of connections that this worker is currently handling.\nOutput only.',
