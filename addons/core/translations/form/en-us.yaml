@@ -68,7 +68,7 @@ proxy:
   label: Proxy
 issuer:
   label: Issuer
-  help:  The issuer URL. Boundary expects only the schema, host, and port and will strip off ".well-known/openid-configuration" if present. This will be used for configuration discovery as well as for validation of the "iss" claim.
+  help: The issuer URL. Boundary expects only the schema, host, and port and will strip off ".well-known/openid-configuration" if present. This will be used for configuration discovery as well as for validation of the "iss" claim.
 client_id:
   label: Client ID
   help: An OAuth 2.0 Client Identifier valid at the Authorization Server.
