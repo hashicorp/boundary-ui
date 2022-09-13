@@ -20,6 +20,7 @@ module('Unit | Serializer | credential store', function (hooks) {
       tls_server_name: 'yes',
       tls_skip_verify: false,
       token: 'foo',
+      worker_filter: '"dev" in "/tags/type"',
       version: 1,
     });
     const snapshot = record._createSnapshot();
@@ -38,6 +39,7 @@ module('Unit | Serializer | credential store', function (hooks) {
         tls_server_name: 'yes',
         tls_skip_verify: false,
         token: 'foo',
+        worker_filter: '"dev" in "/tags/type"',
       },
     });
   });
@@ -62,6 +64,7 @@ module('Unit | Serializer | credential store', function (hooks) {
           tls_server_name: 'yes',
           tls_skip_verify: false,
           token: 'foo',
+          worker_filter: null,
           version: 1,
         },
       },
@@ -82,6 +85,7 @@ module('Unit | Serializer | credential store', function (hooks) {
         tls_server_name: 'yes',
         tls_skip_verify: false,
         token: 'foo',
+        worker_filter: null,
       },
       version: 1,
     });
@@ -99,6 +103,7 @@ module('Unit | Serializer | credential store', function (hooks) {
       tls_server_name: '',
       tls_skip_verify: false,
       type: 'vault',
+      worker_filter: '',
     });
     let serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
@@ -110,6 +115,7 @@ module('Unit | Serializer | credential store', function (hooks) {
         namespace: null,
         tls_server_name: null,
         tls_skip_verify: false,
+        worker_filter: null,
       },
       description: null,
       name: null,
@@ -130,6 +136,7 @@ module('Unit | Serializer | credential store', function (hooks) {
       tls_server_name: 'yes',
       tls_skip_verify: false,
       type: 'vault',
+      worker_filter: null,
     });
     let serializedRecord = record.serialize();
     assert.deepEqual(
@@ -143,6 +150,7 @@ module('Unit | Serializer | credential store', function (hooks) {
           namespace: 'foobar',
           tls_server_name: 'yes',
           tls_skip_verify: false,
+          worker_filter: null,
         },
         description: null,
         name: null,
@@ -164,6 +172,7 @@ module('Unit | Serializer | credential store', function (hooks) {
       namespace: 'foobar',
       tls_server_name: 'yes',
       tls_skip_verify: false,
+      worker_filter: null,
       type: 'vault',
     });
     let serializedRecord = record.serialize();
@@ -178,6 +187,7 @@ module('Unit | Serializer | credential store', function (hooks) {
           namespace: 'foobar',
           tls_server_name: 'yes',
           tls_skip_verify: false,
+          worker_filter: null,
         },
         description: null,
         name: null,
@@ -200,6 +210,7 @@ module('Unit | Serializer | credential store', function (hooks) {
           namespace: 'foobar',
           tls_server_name: 'yes',
           tls_skip_verify: false,
+          worker_filter: null,
         },
         description: null,
         name: null,
