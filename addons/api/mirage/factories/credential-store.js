@@ -42,6 +42,7 @@ export default factory.extend({
           token_hmac: 'token-hmac-abcde0987654321',
           client_certificate: 'client-cert-123',
           client_certificate_key_hmac: 'client-cert-key-hmac-abcde0987654321',
+          worker_filter: faker.random.words(),
         };
     }
   },
