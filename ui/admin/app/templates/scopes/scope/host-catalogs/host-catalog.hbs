@@ -11,7 +11,7 @@
   </page.header>
 
   <page.actions>
-    {{outlet 'actions'}}
+    <HostCatalogs::HostCatalog::Actions @model={{@model}} />
   </page.actions>
 
   <page.navigation>
@@ -19,7 +19,11 @@
   </page.navigation>
 
   <page.body>
-    {{outlet}}
+    <Form::HostCatalog
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
   </page.body>
 
 </Rose::Layout::Page>

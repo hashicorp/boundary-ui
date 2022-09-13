@@ -7,7 +7,6 @@ module('Integration | Component | host-catalogs/host-catalog/header', function(h
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-
     await render(hbs`
       <HostCatalogs::HostCatalog::Header />
     `);
