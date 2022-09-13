@@ -15,4 +15,6 @@ export default Factory.extend({
     `${faker.datatype.uuid()}.proxy.boundary.hashicorp.cloud:${faker.internet.port()}`,
   last_status_time: () => faker.date.recent(),
   active_connection_count: () => faker.datatype.number({ max: 10 }),
+  release_version: () =>
+    `Boundary v${faker.datatype.number({ max: 11 })}.${faker.datatype.number({ max: 50 })}.${faker.datatype.number({ max: 12 })}`,
 });

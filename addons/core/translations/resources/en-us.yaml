@@ -464,6 +464,7 @@ worker:
   table:
     session_count: Session Count
     ip_address: IP Address
+    release_version: Release Version
   form:
     cluster_id:
       label: Boundary Cluster ID
