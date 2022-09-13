@@ -85,6 +85,9 @@
                 'resources.worker.table.session_count'
               }}</row.headerCell>
             <row.headerCell>{{t
+                'resources.worker.table.release_version'
+              }}</row.headerCell>
+            <row.headerCell>{{t
                 'resources.worker.table.ip_address'
               }}</row.headerCell>
           </header.row>
@@ -125,6 +128,7 @@
 
               <row.cell>{{worker.type}}</row.cell>
               <row.cell>{{worker.active_connection_count}}</row.cell>
+              <row.cell>{{worker.release_version}}</row.cell>
               <row.cell>{{worker.address}} </row.cell>
             </body.row>
           {{/each}}
