@@ -11,11 +11,13 @@ const featureEditions = {
     byow: false,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
+    'vault-worker-filter': false
   },
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
   'ssh-target': false,
+  'vault-worker-filter': false
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
@@ -131,6 +133,7 @@ module.exports = function (environment) {
     ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
     ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['vault-worker-filter'] = true;
   }
 
   if (environment === 'test') {
@@ -153,6 +156,7 @@ module.exports = function (environment) {
     ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
     ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['vault-worker-filter'] = true;
   }
 
   if (environment === 'production') {

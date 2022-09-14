@@ -117,4 +117,12 @@ export default class GeneratedCredentialStoreModel extends BaseModel {
     readOnly: true,
   })
   client_certificate_key_hmac;
+
+  @attr('string', {
+    for: 'vault',
+    isNestedAttribute: true,
+    description:
+      'Filters to the worker(s) who can handle Vault requests for this cred store.',
+  })
+  worker_filter;
 }
