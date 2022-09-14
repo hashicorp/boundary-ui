@@ -2,6 +2,7 @@
   <page.breadcrumbs>
     <BreadCrumbs />
   </page.breadcrumbs>
+
   <page.header>
     <HostCatalogs::HostCatalog::Header @model={{@model.hostCatalog}} />
   </page.header>
@@ -62,6 +63,7 @@
           {{/each}}
         </table.body>
       </Rose::Table>
+
     {{else}}
       <Rose::Layout::Centered>
         <Rose::Message
