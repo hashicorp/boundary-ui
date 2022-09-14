@@ -1,7 +1,27 @@
-<Form::HostSet
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-  @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
-  @addStringItem={{route-action 'addStringItem' @model}}
-/>
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <HostCatalogs::HostCatalog::HostSets::HostSet::Header @model={{@model}} />
+  </page.header>
+
+  <page.actions>
+    <HostCatalogs::HostCatalog::HostSets::HostSet::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.navigation>
+    <HostCatalogs::HostCatalog::HostSets::HostSet::Navigation @model={{@model}} />
+  </page.navigation>
+
+  <page.body>
+    <Form::HostSet
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
+      @addStringItem={{route-action 'addStringItem' @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>
