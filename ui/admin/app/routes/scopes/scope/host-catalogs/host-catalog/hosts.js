@@ -25,7 +25,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
     );
     const { id: host_catalog_id } = hostCatalog;
     let hosts;
-    let hostsSets;
 
     if (
       this.can.can('list model', hostCatalog, {
