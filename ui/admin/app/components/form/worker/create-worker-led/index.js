@@ -1,8 +1,8 @@
-/* eslint-disable no-self-assign */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
@@ -14,7 +14,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
-  @tracked workerTags = {};
+  @tracked workerTags = A([]);
   @tracked newWorkerKey;
   @tracked newWorkerValue;
 
@@ -41,8 +41,8 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
 
     const tagsText = `tags {
     ${
-      Object.keys(this.workerTags).length
-        ? Object.entries(this.workerTags)
+      this.workerTags.length
+        ? this.workerTags
             .map(([key, value]) => {
               return `${key} = [${this.convertCommaSeparatedValuesToArray(
                 value
@@ -137,18 +137,21 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
 
   @action
   addWorkerTag() {
-    this.workerTags[this.newWorkerKey] = this.newWorkerValue;
+    this.workerTags.pushObject([this.newWorkerKey, this.newWorkerValue]);
     this.newWorkerKey = '';
     this.newWorkerValue = '';
-
-    // Because this is an object, we need to trigger an update
-    // for tracking so ember can re-calculate
-    this.workerTags = this.workerTags;
   }
 
   @action
-  removeWorkerTag(key) {
-    delete this.workerTags[key];
-    this.workerTags = this.workerTags;
+  removeWorkerTag(index) {
+    this.workerTags.removeAt(index);
+  }
+
+  @action
+  updateWorkerTag(workerTagIndex, entryIndex, event) {
+    const tagEntry = this.workerTags[workerTagIndex];
+    tagEntry[entryIndex] = event.target.value;
+
+    this.workerTags.replace(workerTagIndex, 1, [tagEntry]);
   }
 }

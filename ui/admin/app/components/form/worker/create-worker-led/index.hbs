@@ -47,30 +47,40 @@
 
     <Rose::Form::Fieldset>
       <:title>{{t 'resources.worker.form.worker_tags.label'}}</:title>
-      <:description>{{t 'resources.worker.form.worker_tags.help'}}</:description>
+      <:description>{{t
+          'resources.worker.form.worker_tags.help'
+        }}</:description>
       <:body>
         <Rose::Table @style='condensed' as |table|>
           <table.body as |body|>
-            {{#each-in this.workerTags as |key value|}}
+            {{#each this.workerTags as |tags index|}}
               <body.row as |row|>
                 <row.cell>
-                  <form.input @type='text' @value={{key}} />
+                  <form.input
+                    @type='text'
+                    @value={{get tags 0}}
+                    {{on 'input' (fn this.updateWorkerTag index 0)}}
+                  />
                 </row.cell>
                 <row.cell>
-                  <form.input @type='text' @value={{value}} />
+                  <form.input
+                    @type='text'
+                    @value={{get tags 1}}
+                    {{on 'input' (fn this.updateWorkerTag index 1)}}
+                  />
                 </row.cell>
                 <row.cell @shrink={{true}}>
                   <Rose::Button
                     @style='warning'
                     @iconOnly='flight-icons/svg/trash-16'
                     title={{t 'actions.remove'}}
-                    {{on 'click' (fn this.removeWorkerTag key)}}
+                    {{on 'click' (fn this.removeWorkerTag index)}}
                   >
                     {{t 'actions.remove'}}
                   </Rose::Button>
                 </row.cell>
               </body.row>
-            {{/each-in}}
+            {{/each}}
 
             <body.row as |row|>
               <row.cell>
