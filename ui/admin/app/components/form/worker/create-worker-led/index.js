@@ -1,6 +1,8 @@
+/* eslint-disable no-self-assign */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
@@ -11,18 +13,10 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked clusterId;
   @tracked ipAddress;
   @tracked configFilePath;
-  @tracked workerTags;
   @tracked initialUpstreams;
-
-  // =methods
-
-  convertCommaSeparatedValuesToArray(input) {
-    return input
-      .split(',')
-      .filter((value) => value.trim())
-      .map((value) => `"${value?.trim()}"`)
-      .join(', ');
-  }
+  @tracked workerTags = {};
+  @tracked newWorkerKey;
+  @tracked newWorkerValue;
 
   // =properties
 
@@ -46,10 +40,19 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
     }"`;
 
     const tagsText = `tags {
-    type = [${
-      this.workerTags ? this.convertCommaSeparatedValuesToArray(this.workerTags) : '"<tag1>", "<tag2>"'
-    }]
+    ${
+      Object.keys(this.workerTags).length
+        ? Object.entries(this.workerTags)
+            .map(([key, value]) => {
+              return `${key} = [${this.convertCommaSeparatedValuesToArray(
+                value
+              )}]`;
+            })
+            .join('\n    ')
+        : 'key = ["<tag1>", "<tag2>"]'
+    }
   }`;
+
     const upstreamText = `
   initial_upstreams = [${
     this.initialUpstreams
@@ -120,5 +123,32 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
       cursorBlinkRate: -1,
       styleActiveLine: false,
     };
+  }
+
+  //=methods
+
+  convertCommaSeparatedValuesToArray(input) {
+    return input
+      .split(',')
+      .filter((value) => value.trim())
+      .map((value) => `"${value?.trim()}"`)
+      .join(', ');
+  }
+
+  @action
+  addWorkerTag() {
+    this.workerTags[this.newWorkerKey] = this.newWorkerValue;
+    this.newWorkerKey = '';
+    this.newWorkerValue = '';
+
+    // Because this is an object, we need to trigger an update
+    // for tracking so ember can re-calculate
+    this.workerTags = this.workerTags;
+  }
+
+  @action
+  removeWorkerTag(key) {
+    delete this.workerTags[key];
+    this.workerTags = this.workerTags;
   }
 }
