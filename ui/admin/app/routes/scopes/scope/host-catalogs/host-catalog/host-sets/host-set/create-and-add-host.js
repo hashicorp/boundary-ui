@@ -8,7 +8,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
   // =services
 
   @service intl;
-
   @service router;
 
   // =methods
@@ -25,33 +24,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
     return this.store.createRecord('host', {
       type: 'static',
       host_catalog_id,
-    });
-  }
-
-  /**
-   * Renders the create host-specific header template.
-   * Empties the actions and navigation outlets and renders a custom empty header.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render(
-      'scopes/scope/host-catalogs/host-catalog/host-sets/host-set/create-and-add-host/-header',
-      {
-        into: 'scopes/scope/host-catalogs/host-catalog',
-        outlet: 'header',
-      }
-    );
-
-    this.render('-empty', {
-      into: 'scopes/scope/host-catalogs/host-catalog',
-      outlet: 'navigation',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/host-catalogs/host-catalog',
-      outlet: 'actions',
     });
   }
 

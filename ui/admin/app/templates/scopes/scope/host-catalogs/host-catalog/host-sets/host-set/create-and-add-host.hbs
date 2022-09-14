@@ -1,7 +1,21 @@
 {{page-title (t 'resources.host-set.actions.create-and-add-host')}}
 
-<Form::Host
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <HostCatalogs::HostCatalog::HostSets::HostSet::CreateAndAddHost::Header @model={{@model}} />
+  </page.header>
+
+  <page.body>
+    <Form::Host
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>
+
+
