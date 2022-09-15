@@ -28,6 +28,16 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
 
   model() {
     const workers = this.modelFor('scopes.scope.workers');
+    workers.forEach((worker) => {
+      if (!worker.config_tags) {
+        return (worker.tagCount = 0);
+      }
+
+      worker.tagCount = Object.values(worker.config_tags).reduce(
+        (previousCount, currentTags) => previousCount + currentTags.length,
+        0
+      );
+    });
 
     if (this.tags?.length) {
       // Return workers that have config tags that have at

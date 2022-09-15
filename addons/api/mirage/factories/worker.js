@@ -15,10 +15,30 @@ export default factory.extend({
       'delete',
     ],
   type: (i) => types[i % types.length],
-  canonical_tags: (i) => ({
-    type: i % 2 === 0 ? ['dev', faker.random.word(), faker.random.word()] : [],
-  }),
-  config_tags: (i) => ({
-    type: i % 2 === 0 ? ['dev', faker.random.word(), faker.random.word()] : [],
-  }),
+  canonical_tags: (i) => {
+    if (i % 3 === 0) {
+      return { os: ['ubuntu'] };
+    }
+    if (i % 2 === 0) {
+      return {
+        type: [faker.random.word(), faker.random.word()],
+        os: ['ubuntu'],
+        env: ['dev', 'local'],
+      };
+    }
+    return { type: [] };
+  },
+  config_tags: (i) => {
+    if (i % 3 === 0) {
+      return { os: ['ubuntu'] };
+    }
+    if (i % 2 === 0) {
+      return {
+        type: [faker.random.word(), faker.random.word()],
+        os: ['ubuntu'],
+        env: ['dev', 'local'],
+      };
+    }
+    return { type: [] };
+  },
 });
