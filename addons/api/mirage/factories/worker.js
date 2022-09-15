@@ -26,7 +26,7 @@ export default factory.extend({
         env: ['dev', 'local'],
       };
     }
-    return { type: [] };
+    return undefined;
   },
   config_tags: (i) => {
     if (i % 3 === 0) {
@@ -39,6 +39,6 @@ export default factory.extend({
         env: ['dev', 'local'],
       };
     }
-    return { type: [] };
+    return undefined;
   },
 });
