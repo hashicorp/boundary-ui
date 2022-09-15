@@ -4,6 +4,16 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 
+class Tag {
+  @tracked key;
+  @tracked value;
+
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+  }
+}
+
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
   @service features;
@@ -43,9 +53,9 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
     ${
       this.workerTags.length
         ? this.workerTags
-            .map(([key, value]) => {
-              return `${key} = [${this.convertCommaSeparatedValuesToArray(
-                value
+            .map((tag) => {
+              return `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
+                tag.value
               )}]`;
             })
             .join('\n    ')
@@ -137,7 +147,7 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
 
   @action
   addWorkerTag() {
-    this.workerTags.pushObject([this.newWorkerKey, this.newWorkerValue]);
+    this.workerTags.pushObject(new Tag(this.newWorkerKey, this.newWorkerValue));
     this.newWorkerKey = '';
     this.newWorkerValue = '';
   }
@@ -145,13 +155,5 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
   @action
   removeWorkerTag(index) {
     this.workerTags.removeAt(index);
-  }
-
-  @action
-  updateWorkerTag(workerTagIndex, entryIndex, event) {
-    const tagEntry = this.workerTags[workerTagIndex];
-    tagEntry[entryIndex] = event.target.value;
-
-    this.workerTags.replace(workerTagIndex, 1, [tagEntry]);
   }
 }

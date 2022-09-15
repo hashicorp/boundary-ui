@@ -53,21 +53,13 @@
       <:body>
         <Rose::Table @style='condensed' as |table|>
           <table.body as |body|>
-            {{#each this.workerTags as |tags index|}}
+            {{#each this.workerTags as |tag index|}}
               <body.row as |row|>
                 <row.cell>
-                  <form.input
-                    @type='text'
-                    @value={{get tags 0}}
-                    {{on 'input' (fn this.updateWorkerTag index 0)}}
-                  />
+                  <form.input @type='text' @value={{tag.key}} />
                 </row.cell>
                 <row.cell>
-                  <form.input
-                    @type='text'
-                    @value={{get tags 1}}
-                    {{on 'input' (fn this.updateWorkerTag index 1)}}
-                  />
+                  <form.input @type='text' @value={{tag.value}} />
                 </row.cell>
                 <row.cell @shrink={{true}}>
                   <Rose::Button
