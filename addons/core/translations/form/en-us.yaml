@@ -51,9 +51,6 @@ worker_last_seen:
   help: Last time the worker reported status.
 worker_address:
   help: URL and port for this worker.
-worker_tags:
-  label: Worker tags
-  help: A list of tags to help you filter and organize your workers.
 worker_type:
   help: Type of worker
 worker_filter:
