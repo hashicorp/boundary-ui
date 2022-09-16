@@ -1,6 +1,8 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import { tracked } from '@glimmer/tracking';
+import { A } from '@ember/array';
 
 export default class ScopesScopeWorkersIndexRoute extends Route {
   // =attributes
@@ -14,29 +16,57 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       const configTags = route
         .modelFor('scopes.scope.workers')
         .toArray()
-        .flatMap((worker) => worker.config_tags?.type)
+        .flatMap((worker) => worker.getConfigTagList())
         .filter(Boolean);
 
       // Filter out duplicate tags
-      return [...new Set(configTags)];
+      return configTags.reduce((uniqueConfigTags, currentTag) => {
+        const isDuplicateTag = uniqueConfigTags.some(
+          (tag) => tag.key === currentTag.key && tag.value === currentTag.value
+        );
+
+        if (!isDuplicateTag) {
+          uniqueConfigTags.push(currentTag);
+        }
+        return uniqueConfigTags;
+      }, []);
     },
+    findBySerialized: ({ key: itemKey, value: itemValue }, { key, value }) =>
+      itemKey === key && itemValue === value,
     refreshRouteOnChange: false,
   })
   tags;
+
+  @tracked tagKeys = A([]);
 
   // =methods
 
   model() {
     const workers = this.modelFor('scopes.scope.workers');
+    const keysFromAllConfigTags = workers
+      .toArray()
+      .flatMap((worker) =>
+        worker.config_tags ? Object.keys(worker.config_tags) : null
+      )
+      .filter(Boolean);
+    this.tagKeys.setObjects([...new Set(keysFromAllConfigTags)]);
 
     if (this.tags?.length) {
       // Return workers that have config tags that have at
       // least one intersection with the filter tags
-      return workers.filter(
-        (worker) =>
-          worker.config_tags.type.filter(Set.prototype.has, new Set(this.tags))
-            .length > 0
-      );
+      return workers.filter((worker) => {
+        if (!worker.config_tags) {
+          return null;
+        }
+
+        const workerTags = worker.getConfigTagList();
+        return this.tags.some((tag) =>
+          workerTags.some(
+            (workerTag) =>
+              tag.key === workerTag.key && tag.value === workerTag.value
+          )
+        );
+      });
     }
     return workers;
   }
@@ -64,6 +94,6 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   setupController(controller) {
     const scope = this.modelFor('scopes.scope');
     super.setupController(...arguments);
-    controller.setProperties({ scope });
+    controller.setProperties({ scope, tagKeys: this.tagKeys });
   }
 }

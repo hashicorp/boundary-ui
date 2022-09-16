@@ -37,20 +37,24 @@
                   @ignoreClickInside={{true}}
                   as |dropdown|
                 >
-                  <form.checkboxGroup
-                    @name={{filter.name}}
-                    @items={{filter.allowedValues}}
-                    @selectedItems={{filter.selectedValue}}
-                    @onChange={{route-action 'filterBy' filter.name}}
-                    as |group|
-                  >
-                    <dropdown.item>
-                      <group.checkbox
-                        @label={{group.item}}
-                        value={{group.item}}
-                      />
-                    </dropdown.item>
-                  </form.checkboxGroup>
+                  {{#each this.tagKeys as |tagKey|}}
+                    <dropdown.section @title={{tagKey}} />
+                    <form.checkboxGroup
+                      @name={{tagKey}}
+                      @items={{filter-by 'key' tagKey filter.allowedValues}}
+                      @selectedItems={{filter.selectedValue}}
+                      @onChange={{route-action 'filterBy' filter.name}}
+                      as |group|
+                    >
+                      <dropdown.item>
+                        <group.checkbox
+                          @label={{group.item.value}}
+                          value={{group.item}}
+                        />
+                      </dropdown.item>
+                    </form.checkboxGroup>
+                  {{/each}}
+
                 </Rose::Dropdown>
               {{/if}}
             {{/let}}
