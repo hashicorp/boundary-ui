@@ -21,11 +21,11 @@ Renders a simple fieldset with title, description and body.
   <Story name="Basic Fieldset">
     {{
       template: hbs`
-            <Rose::Form::Fieldset @helperText={{helperText}}>
-                <:title>Title</:title>
-                <:description>Description</:description>
-                <:body>Rest of the form</:body>
-            </Rose::Form::Fieldset>`,
+        <Rose::Form::Fieldset @helperText={{helperText}}>
+          <:title>Title</:title>
+          <:description>Description</:description>
+          <:body>Rest of the form</:body>
+        </Rose::Form::Fieldset>`,
       context: {
         helperText: text('helperText', 'This is an optional help text.'),
       },
