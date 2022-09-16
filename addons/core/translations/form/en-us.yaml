@@ -160,6 +160,6 @@ ip_addresses:
   label: Latest IP Addresses
 sync-interval:
   label: Sync Interval
-  help: Optional. Number of seconds between the time Boundary syncs hosts in this set.
+  help: Number of seconds between the time Boundary syncs hosts in this set.
 tags:
   label: Tags
