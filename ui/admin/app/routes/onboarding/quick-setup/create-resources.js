@@ -40,7 +40,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
       }),
       target: this.store.createRecord('target', {
         type: 'tcp',
-        name: 'EC2 Instance',
+        name: 'EC2 Instances',
         description: 'Sample target created by quick setup',
       }),
       role: this.store.createRecord('role', {
