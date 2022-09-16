@@ -17,34 +17,34 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
       org: this.store.createRecord('scope', {
         type: 'org',
         scopeID: 'global',
-        name: 'Marketing Department',
+        name: 'SecOps',
         description: 'Sample org created by quick setup',
       }),
       project: this.store.createRecord('scope', {
         type: 'project',
-        name: 'New widget ad campaign',
+        name: 'AWS',
         description: 'Sample project created by quick setup',
       }),
       hostCatalog: this.store.createRecord('host-catalog', {
         type: 'static',
-        name: 'All Databases',
+        name: 'US-East-1',
         description: 'Sample host catalog created by quick setup',
       }),
       hostSet: this.store.createRecord('host-set', {
-        name: 'QA Databases',
+        name: 'Prod-EC2',
         description: 'Sample host set created by quick setup',
       }),
       host: this.store.createRecord('host', {
-        name: 'CRM Database',
+        name: 'Instance-1',
         description: 'Sample host created by quick setup',
       }),
       target: this.store.createRecord('target', {
         type: 'tcp',
-        name: 'CRM Database target',
+        name: 'EC2 Instances',
         description: 'Sample target created by quick setup',
       }),
       role: this.store.createRecord('role', {
-        name: 'crm_db_connect_role',
+        name: 'ec2_connect_role',
       }),
     };
   }
