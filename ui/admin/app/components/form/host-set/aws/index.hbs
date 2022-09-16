@@ -164,7 +164,7 @@
 
   <Rose::Form::Fieldset>
     <:title>{{t 'resources.host-set.form.filter.label'}}</:title>
-    <:description>{{t 'resources.host-set.form.filter.help'}}</:description>
+    <:description>{{t 'resources.host-set.form.filter.aws.help'}}</:description>
     <:body>
       {{#if @model.errors.filters}}
         <Rose::Form::Errors as |errors|>
@@ -243,6 +243,7 @@
     @label={{t 'form.sync-interval.label'}}
     @error={{@model.errors.sync_interval_seconds}}
     @helperText={{t 'form.sync-interval.help'}}
+    @link={{doc-url 'host-set.sync-interval-seconds'}}
     min='0'
     step='1'
     as |field|

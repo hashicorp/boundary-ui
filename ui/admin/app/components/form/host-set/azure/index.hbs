@@ -74,11 +74,10 @@
     </:body>
   </form.fieldset>
 
-  <Rose::Form::Fieldset>
-    <:title>{{t 'resources.host-set.form.preferred_endpoints.label'}}</:title>
-    <:description>{{t
+  <Rose::Form::Fieldset @helperText={{t
         'resources.host-set.form.preferred_endpoints.help'
-      }}</:description>
+      }} @linkText={{t 'actions.learn-more'}} @link={{doc-url 'host-set.preferred-endpoints'}}>
+    <:title>{{t 'resources.host-set.form.preferred_endpoints.label'}}</:title>
     <:body>
       {{#if @model.errors.preferred_endpoints}}
         <Rose::Form::Errors as |errors|>
@@ -167,7 +166,7 @@
     @type='filter'
     @value={{@model.filter}}
     @label={{t 'resources.host-set.form.filter.label'}}
-    @helperText={{t 'resources.host-set.form.filter.help'}}
+    @helperText={{t 'resources.host-set.form.filter.azure.help'}}
     @linkText={{t 'actions.learn-more'}}
     @error={{@model.errors.description}}
     disabled={{@model.isSaving}}
@@ -189,6 +188,7 @@
     @label={{t 'form.sync-interval.label'}}
     @error={{@model.errors.sync_interval_seconds}}
     @helperText={{t 'form.sync-interval.help'}}
+    @link={{doc-url 'host-set.sync-interval-seconds'}}
     min='0'
     step='1'
     as |field|

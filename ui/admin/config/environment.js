@@ -11,13 +11,13 @@ const featureEditions = {
     byow: false,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
-    'vault-worker-filter': false
+    'vault-worker-filter': false,
   },
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
   'ssh-target': false,
-  'vault-worker-filter': false
+  'vault-worker-filter': false,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
@@ -79,6 +79,8 @@ module.exports = function (environment) {
         'host-set': '/host-sets',
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
+        'host-set.sync-interval-seconds': '/host-set.sync-interval-seconds',
+        'host-set.preferred-endpoints': '/host-set.preferred-endpoints',
         'credential-store': '/credential-stores',
         'credential-library': '/credential-libraries',
         credential: '/credentials',
