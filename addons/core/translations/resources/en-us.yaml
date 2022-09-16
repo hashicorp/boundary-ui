@@ -465,6 +465,7 @@ worker:
     session_count: Session Count
     ip_address: IP Address
     release_version: Release Version
+    tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
   form:
     cluster_id:
       label: Boundary Cluster ID
