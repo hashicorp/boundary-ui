@@ -52,13 +52,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
     const tagsText = `tags {
     ${
       this.workerTags.length
-        ? this.workerTags
-            .map((tag) => {
-              return `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
-                tag.value
-              )}]`;
-            })
-            .join('\n    ')
+        ? this.getTagConfigString()
         : 'key = ["<tag1>", "<tag2>"]'
     }
   }`;
@@ -122,6 +116,7 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
       styleActiveLine: false,
     };
   }
+
   /**
    * Returns `hcl` configuration object for `<Rose::CodeEditor>`.
    * @type {Object}
@@ -145,6 +140,16 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
       .join(', ');
   }
 
+  getTagConfigString() {
+    return this.workerTags
+      .map((tag) => {
+        return `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
+          tag.value
+        )}]`;
+      })
+      .join('\n    ');
+  }
+
   @action
   addWorkerTag() {
     this.workerTags.pushObject(new Tag(this.newWorkerKey, this.newWorkerValue));
@@ -153,7 +158,7 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
   }
 
   @action
-  removeWorkerTag(index) {
+  removeWorkerTagByIndex(index) {
     this.workerTags.removeAt(index);
   }
 }
