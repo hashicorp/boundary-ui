@@ -36,18 +36,18 @@ module(
       );
     });
 
-    test('redirect user to targets list when done is clicked', async function (assert) {
+    test('redirect user to targets details when done is clicked', async function (assert) {
       assert.expect(1);
       await visit(urls.createResources);
       await click('[type="checkbox"]');
       await fillIn('[name="hostAddress"]', '0.0.0.0');
       await fillIn('[name="targetPort"]', '22');
       await click('[type="submit"]');
-      const projectId = this.server.schema.scopes.where({ type: 'project' })
-        .models[0].id;
+      const projectId = this.server.db.scopes.where({ type: 'project' })[0].id;
+      const targetId = this.server.db.targets[0].id;
       await visit(urls.successPath);
       await click('.onboarding-quick-setup-success-button');
-      urls.targetsPath = `/scopes/${projectId}/targets`;
+      urls.targetsPath = `/scopes/${projectId}/targets/${targetId}`;
       assert.strictEqual(currentURL(), urls.targetsPath);
     });
   }

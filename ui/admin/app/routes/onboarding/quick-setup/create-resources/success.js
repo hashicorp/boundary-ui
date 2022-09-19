@@ -31,7 +31,8 @@ export default class OnboardingQuickSetupCreateResourcesSuccessRoute extends Rou
   showTargetList(scope) {
     const {
       project: { id: scopeID },
+      target: { id: targetID },
     } = scope;
-    this.router.transitionTo('scopes.scope.targets', scopeID);
+    this.router.transitionTo('scopes.scope.targets.target', scopeID, targetID);
   }
 }
