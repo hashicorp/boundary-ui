@@ -142,11 +142,10 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
 
   getTagConfigString() {
     return this.workerTags
-      .map((tag) => {
-        return `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
-          tag.value
-        )}]`;
-      })
+      .map(
+        (tag) =>
+          `${tag.key} = [${this.convertCommaSeparatedValuesToArray(tag.value)}]`
+      )
       .join('\n    ');
   }
 
