@@ -15,16 +15,17 @@ Renders a form checkboxfield group.
   @items={{this.items}}
   @selectedItems={{this.selectedItems}}
   @onChange={{fn this.onChange}}
+  @itemEqualityFunc={{this.isEqual}}
   as |group|
 >
-  <group.checkbox
-    @label={{group.item.name}}
-    value={{group.item.id}} />
+  <group.checkbox @label={{group.item.name}} value={{group.item.id}} />
 </Rose::Form::Checkbox::Group>
 ```
+
 <Preview>
-  <Story name="Basic" height="10rem">{{
-  template: hbs`
+  <Story name="Basic" height="10rem">
+    {{
+      template: hbs`
     <Rose::Form::Checkbox::Group
       @name={{name}}
       @inline={{inline}}
@@ -32,6 +33,7 @@ Renders a form checkboxfield group.
       @items={{items}}
       @selectedItems={{selectedItems}}
       @onChange={{onChange}}
+      @itemEqualityFunc={{isEqual}}
       as |group|
     >
       <group.checkbox
@@ -39,16 +41,18 @@ Renders a form checkboxfield group.
         value={{group.item.id}} />
     </Rose::Form::Checkbox::Group>
   `,
-  context: {
-    inline: boolean('inline', true),
-    disabled: boolean('disabled', false),
-    items: object('items', [
-      { id: 1, name: 'Foo' },
-      { id: 2, name: 'Bar' },
-      { id: 3, name: 'Baz' },
-    ]),
-    selectedItems: object('selectedItems', []),
-    onChange: action('changed'),
-  }
-  }}</Story>
+      context: {
+        inline: boolean('inline', true),
+        disabled: boolean('disabled', false),
+        items: object('items', [
+          { id: 1, name: 'Foo' },
+          { id: 2, name: 'Bar' },
+          { id: 3, name: 'Baz' },
+        ]),
+        selectedItems: object('selectedItems', []),
+        onChange: action('changed'),
+        isEqual: (item1, item2) => item1 === item2,
+      },
+    }}
+  </Story>
 </Preview>
