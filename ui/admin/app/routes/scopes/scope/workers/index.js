@@ -1,8 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
 
 export default class ScopesScopeWorkersIndexRoute extends Route {
   // =attributes
@@ -37,19 +35,10 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   })
   tags;
 
-  @tracked tagKeys = A([]);
-
   // =methods
 
   model() {
     const workers = this.modelFor('scopes.scope.workers');
-    const keysFromAllConfigTags = workers
-      .toArray()
-      .flatMap((worker) =>
-        worker.config_tags ? Object.keys(worker.config_tags) : null
-      )
-      .filter(Boolean);
-    this.tagKeys.setObjects([...new Set(keysFromAllConfigTags)]);
 
     if (this.tags?.length) {
       // Return workers that have config tags that have at
@@ -91,9 +80,14 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     this.refresh();
   }
 
+  @action
+  isEqual(firstTag, secondTag) {
+    return firstTag.key === secondTag.key && firstTag.value === secondTag.value;
+  }
+
   setupController(controller) {
     const scope = this.modelFor('scopes.scope');
     super.setupController(...arguments);
-    controller.setProperties({ scope, tagKeys: this.tagKeys });
+    controller.setProperties({ scope });
   }
 }
