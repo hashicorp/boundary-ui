@@ -7,6 +7,9 @@
       id={{concat 'dropdown-section-title-' this.id}}
       class='rose-dropdown-section-title'
     >
+      {{#if @icon}}
+        <Rose::Icon @name={{@icon}} @size='medium' />
+      {{/if}}
       {{@title}}
     </h2>
   {{/if}}
