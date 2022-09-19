@@ -7,17 +7,17 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 // Object that defines edition features.
 const featureEditions = {
   oss: {
-    'static-credentials': false,
+    'static-credentials': true,
     byow: false,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
-    'vault-worker-filter': false
+    'vault-worker-filter': false,
   },
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': false,
-  'vault-worker-filter': false
+  'ssh-target': true,
+  'vault-worker-filter': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
