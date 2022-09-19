@@ -95,8 +95,8 @@ host-catalog:
     dynamic: Dynamic
   form:
     azure_client_id:
-      label: Client ID
-      help: The client ID for the client you want Boundary to use.
+      label: Client/Application ID
+      help: The client (application) ID for the client you want Boundary to use.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -465,6 +465,7 @@ worker:
     session_count: Session Count
     ip_address: IP Address
     release_version: Release Version
+    tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
   form:
     cluster_id:
       label: Boundary Cluster ID

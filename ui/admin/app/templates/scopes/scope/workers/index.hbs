@@ -109,12 +109,13 @@
                 {{#if worker.description}}
                   <p>{{worker.description}}</p>
                 {{/if}}
-                {{#if worker.config_tags.type}}
-                  <div>
-                    {{#each worker.config_tags.type as |tag|}}
-                      <Rose::Badge>{{tag}}</Rose::Badge>
-                    {{/each}}
-                  </div>
+                {{#if worker.tagCount}}
+                  <Rose::Badge @icon='flight-icons/svg/tag-16'>
+                    {{t
+                      'resources.worker.table.tag_count'
+                      tagCount=worker.tagCount
+                    }}
+                  </Rose::Badge>
                 {{/if}}
               </row.headerCell>
               <row.cell>
