@@ -41,8 +41,9 @@ session_max_seconds:
 session_connection_limit:
   label: Maximum Connections
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
-worker_version:
-  label: Version
+worker_release_version:
+  label: Release Version
+  help: The version of the Boundary binary the worker is running.
 worker_authorized_actions:
   label: Authorized Actions
 worker_last_seen:
@@ -67,7 +68,7 @@ proxy:
   label: Proxy
 issuer:
   label: Issuer
-  help:  The issuer URL. Boundary expects only the schema, host, and port and will strip off ".well-known/openid-configuration" if present. This will be used for configuration discovery as well as for validation of the "iss" claim.
+  help: The issuer URL. Boundary expects only the schema, host, and port and will strip off ".well-known/openid-configuration" if present. This will be used for configuration discovery as well as for validation of the "iss" claim.
 client_id:
   label: Client ID
   help: An OAuth 2.0 Client Identifier valid at the Authorization Server.
@@ -133,7 +134,7 @@ filter:
   label: Filter
   help: A boolean expression defining a filter run against the provided information.
 tenant_id:
-  label: Tenant ID
+  label: Tenant/Directory ID
   help: The tenant (directory) ID for your Azure Active Directory application.
 subscription_id:
   label: Subscription ID
@@ -147,8 +148,8 @@ secret_access_key:
 region:
   label: Region
 secret:
-  label: Client secret value
-  help: The client secret value for the client you want Boundary to use
+  label: Client Secret Value
+  help: The client secret value for the client you want Boundary to use.
 disable_credential_rotation:
   label: Disable credential rotation
 dns_names:

@@ -26,7 +26,7 @@
       <Rose::Toolbar as |toolbar|>
         <toolbar.primary>
           <Rose::Form as |form|>
-            {{#with
+            {{#let
               (resource-filter 'scopes.scope.workers.index' 'tags')
               as |filter|
             }}
@@ -53,7 +53,7 @@
                   </form.checkboxGroup>
                 </Rose::Dropdown>
               {{/if}}
-            {{/with}}
+            {{/let}}
             {{#if
               (has-resource-filter-selections
                 'scopes.scope.workers.index' 'tags'
@@ -85,6 +85,9 @@
                 'resources.worker.table.session_count'
               }}</row.headerCell>
             <row.headerCell>{{t
+                'resources.worker.table.release_version'
+              }}</row.headerCell>
+            <row.headerCell>{{t
                 'resources.worker.table.ip_address'
               }}</row.headerCell>
           </header.row>
@@ -106,12 +109,13 @@
                 {{#if worker.description}}
                   <p>{{worker.description}}</p>
                 {{/if}}
-                {{#if worker.config_tags.type}}
-                  <div>
-                    {{#each worker.config_tags.type as |tag|}}
-                      <Rose::Badge>{{tag}}</Rose::Badge>
-                    {{/each}}
-                  </div>
+                {{#if worker.tagCount}}
+                  <Rose::Badge @icon='flight-icons/svg/tag-16'>
+                    {{t
+                      'resources.worker.table.tag_count'
+                      tagCount=worker.tagCount
+                    }}
+                  </Rose::Badge>
                 {{/if}}
               </row.headerCell>
               <row.cell>
@@ -125,6 +129,7 @@
 
               <row.cell>{{worker.type}}</row.cell>
               <row.cell>{{worker.active_connection_count}}</row.cell>
+              <row.cell>{{worker.release_version}}</row.cell>
               <row.cell>{{worker.address}} </row.cell>
             </body.row>
           {{/each}}

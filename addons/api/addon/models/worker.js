@@ -21,6 +21,21 @@ export default class WorkerModel extends GeneratedWorkerModel {
     return this.type === 'pki';
   }
 
+  /**
+   * Returns the number of config tags present on the worker.
+   * @type {number}
+   */
+  get tagCount() {
+    if (!this.config_tags) {
+      return 0;
+    }
+
+    return Object.values(this.config_tags).reduce(
+      (previousCount, currentTags) => previousCount + currentTags.length,
+      0
+    );
+  }
+
   @attr({
     description:
       'The deduplicated union of the tags reported by the worker ' +

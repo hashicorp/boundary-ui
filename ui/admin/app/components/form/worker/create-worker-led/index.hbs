@@ -5,42 +5,54 @@
   @showEditToggle={{false}}
   as |form|
 >
-  <form.input
-    @name='cluster_id'
-    @value={{this.clusterId}}
-    @label={{t 'resources.worker.form.cluster_id.label'}}
-    @helperText={{t 'resources.worker.form.cluster_id.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'worker.manage-workers'}}
-    placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
-  />
-
-  <form.input
-    @name='ip_address'
-    @value={{this.ipAddress}}
-    @label={{t 'resources.worker.form.ip_address.label'}}
-    @helperText={{t 'resources.worker.form.ip_address.help'}}
-    placeholder='127.0.0.1:9202'
-  />
-
-  <form.input
-    @name='config_file_path'
-    @value={{this.configFilePath}}
-    @label={{t 'resources.worker.form.config_file_path.label'}}
-    @helperText={{t 'resources.worker.form.config_file_path.help'}}
-    placeholder='/home/ubuntu/boundary'
-  />
-
-  <form.input
-    @name='worker_tags'
-    @value={{this.workerTags}}
-    @label={{t 'resources.worker.form.worker_tags.label'}}
-    @helperText={{t 'resources.worker.form.worker_tags.help'}}
-    placeholder='dev-worker, ubuntu'
-  />
-
   <h3>{{t 'resources.worker.form.steps.1.title'}}</h3>
   <div class='worker-create-section'>
+    {{#if (feature-flag 'byow-pki-hcp-cluster-id')}}
+      <form.input
+        @name='cluster_id'
+        @value={{this.clusterId}}
+        @label={{t 'resources.worker.form.cluster_id.label'}}
+        @helperText={{t 'resources.worker.form.cluster_id.help'}}
+        @linkText={{t 'actions.learn-more'}}
+        @link={{doc-url 'worker.manage-workers'}}
+        placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
+      />
+    {{/if}}
+
+    <form.input
+      @name='ip_address'
+      @value={{this.ipAddress}}
+      @label={{t 'resources.worker.form.ip_address.label'}}
+      @helperText={{t 'resources.worker.form.ip_address.help'}}
+      placeholder='127.0.0.1:9202'
+    />
+
+    <form.input
+      @name='config_file_path'
+      @value={{this.configFilePath}}
+      @label={{t 'resources.worker.form.config_file_path.label'}}
+      @helperText={{t 'resources.worker.form.config_file_path.help'}}
+      placeholder='/home/ubuntu/boundary'
+    />
+
+    {{#if (feature-flag 'byow-pki-upstream')}}
+      <form.input
+        @name='initial_upstreams'
+        @value={{this.initialUpstreams}}
+        @label={{t 'resources.worker.form.initial_upstreams.label'}}
+        @helperText={{t 'resources.worker.form.initial_upstreams.help'}}
+        placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
+      />
+    {{/if}}
+
+    <form.input
+      @name='worker_tags'
+      @value={{this.workerTags}}
+      @label={{t 'resources.worker.form.worker_tags.label'}}
+      @helperText={{t 'resources.worker.form.worker_tags.help'}}
+      placeholder='dev-worker, ubuntu'
+    />
+
     <Rose::CodeEditor @codeValue={{this.createConfigText}} as |c|>
       <c.toolbar>
         <:action>

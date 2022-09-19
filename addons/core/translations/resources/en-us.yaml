@@ -95,8 +95,8 @@ host-catalog:
     dynamic: Dynamic
   form:
     azure_client_id:
-      label: Client ID
-      help: The client ID for the client you want Boundary to use.
+      label: Client/Application ID
+      help: The client (application) ID for the client you want Boundary to use.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -452,6 +452,7 @@ managed-group:
       description: No members in this managed group.
 worker:
   title: Worker
+  title_pki: New PKI Worker
   title_plural: Workers
   description: Workers are the server components that perform the session handling.
   actions:
@@ -463,6 +464,8 @@ worker:
   table:
     session_count: Session Count
     ip_address: IP Address
+    release_version: Release Version
+    tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
   form:
     cluster_id:
       label: Boundary Cluster ID
@@ -470,6 +473,9 @@ worker:
     ip_address:
       label: IP Address
       help: The public IP address of the server
+    initial_upstreams:
+      label: Initial Upstreams
+      help: A list of hosts/IP addresses and optionally ports for reaching Boundary cluster.  The port will default to :9201 if not specified.
     config_file_path:
       label: Config file path
       help: The path on your server where you will store your configuration file
@@ -478,7 +484,7 @@ worker:
       help: Boundary can use tags to define key-value pairs which targets can use to determine where they should route connections
     steps:
       1:
-        title: 1. Create a config file
+        title: 1. Configure your new worker
         create_directory: Create a configuration file in a new directory on your server
         create_config: 'Open the file with a text editor, such as Vi. Paste the following configuration into the worker config file:'
         save_config: Save the configuration in your `pki-worker.hcl` file.

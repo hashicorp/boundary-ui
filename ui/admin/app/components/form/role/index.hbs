@@ -51,9 +51,11 @@
       aria-labelledby='legend-text-grant-scope'
       aria-describedby='helper-text-grant-scope'
     >
-      <legend id='legend-text-grant-scope'>{{t
+      <legend id='legend-text-grant-scope'>
+        {{t
           'form.grant_scope.label'
-        }}</legend>
+        }}
+      </legend>
       <Rose::Form::HelperText
         @id='helper-text-grant-scope'
         @error={{@model.errors.grant_scope_id}}

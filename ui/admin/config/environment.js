@@ -7,17 +7,22 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 // Object that defines edition features.
 const featureEditions = {
   oss: {
-    search: false,
-    'static-credentials': false,
+    'static-credentials': true,
     byow: false,
+    'byow-pki-hcp-cluster-id': false,
+    'byow-pki-upstream': true,
+    'vault-worker-filter': false,
   },
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': false,
+  'ssh-target': true,
+  'vault-worker-filter': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
+  'byow-pki-hcp-cluster-id': true,
+  'byow-pki-upstream': false,
 };
 
 module.exports = function (environment) {
@@ -93,6 +98,7 @@ module.exports = function (environment) {
         'api-client.api': '/api-client/api',
         worker: '/workers',
         'worker.manage-workers': '/workers/manage-workers-on-hcp',
+        'worker-filters': '/worker-filters',
       },
     },
 
@@ -125,9 +131,10 @@ module.exports = function (environment) {
     };
 
     // Enable features in development
-    ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
+    ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['vault-worker-filter'] = true;
   }
 
   if (environment === 'test') {
@@ -147,9 +154,10 @@ module.exports = function (environment) {
     ENV.enableConfirmService = false;
 
     // Enable tests for development features
-    ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['byow'] = true;
+    ENV.featureFlags['ssh-target'] = true;
+    ENV.featureFlags['vault-worker-filter'] = true;
   }
 
   if (environment === 'production') {
