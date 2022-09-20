@@ -305,6 +305,7 @@ target:
       vault: Vault
       username_password: Username & Password
       ssh_private_key: Username & Key Pair
+      unknown: Unknown
     messages:
       welcome:
         title: Welcome to brokered credentials
@@ -322,6 +323,7 @@ target:
       vault: Vault
       username_password: Username & Password
       ssh_private_key: Username & Key Pair
+      unknown: Unknown
     messages:
       welcome:
         title: Welcome to Injected Application credentials
@@ -415,6 +417,7 @@ credential:
   types:
     username_password: Username & Password
     ssh_private_key: Username & Key Pair
+    unknown: Unknown
   help:
     username_password: This host requires a username and password to connect.
     ssh_private_key: This host requires a username, public key, and private key to connect.

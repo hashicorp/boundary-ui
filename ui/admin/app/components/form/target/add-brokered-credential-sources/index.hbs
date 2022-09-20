@@ -31,12 +31,18 @@
           </row.headerCell>
           <row.cell>{{credentialSource.name}}</row.cell>
           <row.cell>
-            <Rose::Badge>{{t
-                (concat
-                  'resources.target.brokered-credential-source.types.'
-                  credentialSource.type
-                )
-              }}</Rose::Badge>
+            {{#if credentialSource.isUnknown}}
+              <Rose::Badge>{{t
+                  'resources.target.brokered-credential-source.types.unknown'
+                }}</Rose::Badge>
+            {{/if}}
+            {{#unless credentialSource.isUnknown}}
+              <Rose::Badge>{{t
+                  (concat
+                    'resources.target.brokered-credential-source.types.'
+                    credentialSource.type
+                  )
+                }}</Rose::Badge>{{/unless}}
           </row.cell>
         </body.row>
       {{/each}}
