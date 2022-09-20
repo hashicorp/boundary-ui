@@ -94,9 +94,12 @@ host-catalog:
     azure: Azure
     dynamic: Dynamic
   form:
+    aws_region:
+      label: AWS Region
+      help: AWS region of the hosts to be added to the catalog.
     azure_client_id:
       label: Client/Application ID
-      help: The client (application) ID for the client you want Boundary to use.
+      help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -116,7 +119,7 @@ host-set:
         help: Create a filter to select resources using values such as tag name or tag value. The Azure filter format is:tagName eq ‘<tag-name>’ and tagValue eq ‘<tag-value>'. For example:tagName eq 'application' and tagValue eq 'production'
     preferred_endpoints:
       label: Preferred Endpoints
-      help: Optional. Selects addresses of hosts, in cidr:<valid IPv4/6 CIDR> or dns:<globbed name>  format
+      help: Optional. Preferred address at which the host should be accessed when multiple options are present, in cidr:<valid IPv4/6 CIDR> or dns:<globbed name> format.
   messages:
     welcome:
       title: Welcome to Host Sets
