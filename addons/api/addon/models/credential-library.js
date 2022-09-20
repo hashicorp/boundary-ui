@@ -22,4 +22,12 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
   get isUnknown() {
     return !types.includes(this.type);
   }
+
+  /**
+   * True if credential is a vault type.
+   * @type {boolean}
+   */
+  get isVault() {
+    return this.type === 'vault';
+  }
 }

@@ -395,7 +395,6 @@ credential-library:
   types:
     vault: Vault
     static: Static
-    username_password: Username & Password
 credential:
   title: Credential
   title_plural: Credentials
@@ -411,7 +410,6 @@ credential:
     username_password: Username & Password
     ssh_private_key: Username & Key Pair
     unknown: Unknown
-    vault: Vault
   help:
     username_password: This host requires a username and password to connect.
     ssh_private_key: This host requires a username, public key, and private key to connect.
