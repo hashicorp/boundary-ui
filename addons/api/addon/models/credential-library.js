@@ -7,4 +7,19 @@ export const options = {
   http_method: ['GET', 'POST'],
 };
 
-export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {}
+/**
+ * Supported Credential Library types.
+ */
+export const types = ['vault'];
+
+export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {
+  // =attributes
+
+  /**
+   * True if credential is an unknown type.
+   * @type {boolean}
+   */
+  get isUnknown() {
+    return !types.includes(this.type);
+  }
+}
