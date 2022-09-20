@@ -79,6 +79,8 @@ module.exports = function (environment) {
         'host-set': '/host-sets',
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
+        'host-set.preferred-endpoints': '/host-set.preferred-endpoints',
+        'host-set.sync-interval-seconds': '/host-set.sync-interval-seconds',
         'credential-store': '/credential-stores',
         'credential-library': '/credential-libraries',
         credential: '/credentials',
