@@ -95,6 +95,9 @@ host-catalog:
     azure: Azure
     dynamic: Dynamic
   form:
+    aws_region:
+      label: AWS Region
+      help: AWS region of the hosts to be added to the catalog.
     azure_client_id:
       label: Client/Application ID
       help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
