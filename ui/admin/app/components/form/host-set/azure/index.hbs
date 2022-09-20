@@ -74,9 +74,11 @@
     </:body>
   </form.fieldset>
 
-  <Rose::Form::Fieldset @helperText={{t
-        'resources.host-set.form.preferred_endpoints.help'
-      }} @linkText={{t 'actions.learn-more'}} @link={{doc-url 'host-set.preferred-endpoints'}}>
+  <Rose::Form::Fieldset
+    @helperText={{t 'resources.host-set.form.preferred_endpoints.help'}}
+    @linkText={{t 'actions.learn-more'}}
+    @link={{doc-url 'host-set.preferred-endpoints'}}
+  >
     <:title>{{t 'resources.host-set.form.preferred_endpoints.label'}}</:title>
     <:body>
       {{#if @model.errors.preferred_endpoints}}
