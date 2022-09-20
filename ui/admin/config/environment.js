@@ -7,17 +7,17 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 // Object that defines edition features.
 const featureEditions = {
   oss: {
-    'static-credentials': false,
+    'static-credentials': true,
     byow: false,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
-    'vault-worker-filter': false
+    'vault-worker-filter': false,
   },
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': false,
-  'vault-worker-filter': false
+  'ssh-target': true,
+  'vault-worker-filter': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
@@ -76,9 +76,12 @@ module.exports = function (environment) {
         'host-catalog.new': '/host-catalogs/new',
         'host-catalog.azure': '/dynamic-host-catalogs-on-azure',
         'host-catalog.aws': '/dynamic-host-catalogs-on-aws',
+        'host-catalog.aws.region': '/dynamic-host-catalogs-on-aws-region',
         'host-set': '/host-sets',
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
+        'host-set.preferred-endpoints': '/host-set.preferred-endpoints',
+        'host-set.sync-interval-seconds': '/host-set.sync-interval-seconds',
         'credential-store': '/credential-stores',
         'credential-library': '/credential-libraries',
         credential: '/credentials',

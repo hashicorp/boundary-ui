@@ -24,7 +24,9 @@
       @value={{this.ipAddress}}
       @label={{t 'resources.worker.form.ip_address.label'}}
       @helperText={{t 'resources.worker.form.ip_address.help'}}
-      placeholder='127.0.0.1:9202'
+      @linkText={{t 'actions.learn-more'}}
+      @link={{doc-url 'worker'}}
+      placeholder='worker1.example.com'
     />
 
     <form.input
@@ -45,13 +47,64 @@
       />
     {{/if}}
 
-    <form.input
-      @name='worker_tags'
-      @value={{this.workerTags}}
-      @label={{t 'resources.worker.form.worker_tags.label'}}
-      @helperText={{t 'resources.worker.form.worker_tags.help'}}
-      placeholder='dev-worker, ubuntu'
-    />
+    <Rose::Form::Fieldset>
+      <:title>{{t 'resources.worker.form.worker_tags.label'}}</:title>
+      <:description>{{t
+          'resources.worker.form.worker_tags.help'
+        }}</:description>
+      <:body>
+        <Rose::Table @style='condensed' as |table|>
+          <table.body as |body|>
+            {{#each this.workerTags as |tag index|}}
+              <body.row as |row|>
+                <row.cell>
+                  <form.input @type='text' @value={{tag.key}} />
+                </row.cell>
+                <row.cell>
+                  <form.input @type='text' @value={{tag.value}} />
+                </row.cell>
+                <row.cell @shrink={{true}}>
+                  <Rose::Button
+                    @style='warning'
+                    @iconOnly='flight-icons/svg/trash-16'
+                    title={{t 'actions.remove'}}
+                    {{on 'click' (fn this.removeWorkerTagByIndex index)}}
+                  >
+                    {{t 'actions.remove'}}
+                  </Rose::Button>
+                </row.cell>
+              </body.row>
+            {{/each}}
+
+            <body.row as |row|>
+              <row.cell>
+                <form.input
+                  @type='text'
+                  @value={{this.newWorkerKey}}
+                  placeholder='Key'
+                />
+              </row.cell>
+              <row.cell>
+                <form.input
+                  @type='text'
+                  @value={{this.newWorkerValue}}
+                  placeholder='Value'
+                />
+              </row.cell>
+              <row.cell @shrink={{true}}>
+                <Rose::Button
+                  @style='secondary'
+                  title={{t 'actions.add'}}
+                  {{on 'click' this.addWorkerTag}}
+                >
+                  {{t 'actions.add'}}
+                </Rose::Button>
+              </row.cell>
+            </body.row>
+          </table.body>
+        </Rose::Table>
+      </:body>
+    </Rose::Form::Fieldset>
 
     <Rose::CodeEditor @codeValue={{this.createConfigText}} as |c|>
       <c.toolbar>

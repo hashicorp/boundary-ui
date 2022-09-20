@@ -18,7 +18,7 @@ A simple dropdown component with support for links and buttons.
         <dropdown.separator />
         <dropdown.button>Button menu item</dropdown.button>
         <dropdown.separator />
-        <dropdown.section @title="Dropdown Section Title">
+        <dropdown.section @title="Dropdown Section Title" @icon="flight-icons/svg/tag-16">
           <dropdown.link @route="index">Menu item</dropdown.link>
         </dropdown.section>
       </Rose::Dropdown>
@@ -90,7 +90,7 @@ A simple dropdown component with support for links and buttons.
     <dropdown.link @route="about">Menu item</dropdown.link>
     <dropdown.button>Button menu item</dropdown.button>
     <dropdown.separator />
-    <dropdown.section @title="Dropdown Section Title">
+    <dropdown.section @title="Dropdown Section Title" @icon="flight-icons/svg/tag-16">
       <dropdown.link @route="index">Menu item</dropdown.link>
     </dropdown.section>
   </Rose::Dropdown>
@@ -159,7 +159,7 @@ form fields.
 <dropdown.item>
   <group.checkbox
     @label={{group.item.name}}
-    value={{group.item.id}} 
+    value={{group.item.id}}
     />
     </dropdown.item>
 </Rose::Form::Checkbox::Group>

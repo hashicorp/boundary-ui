@@ -52,7 +52,36 @@
       </field.errors>
     {{/if}}
   </form.textarea>
-
+  <form.fieldset>
+    <:title>{{t 'resources.worker.form.worker_tags.label'}}</:title>
+    <:description>{{t 'resources.worker.form.worker_tags.help'}}</:description>
+    <:body>
+      <Rose::Table @style='condensed' as |table|>
+        <table.body as |body|>
+          {{#each-in @model.config_tags as |key value|}}
+            <body.row as |row|>
+              <row.cell>
+                <form.input
+                  @type='text'
+                  @value={{key}}
+                  @disabled={{true}}
+                  @readOnly={{true}}
+                />
+              </row.cell>
+              <row.cell>
+                <form.input
+                  @type='text'
+                  @value={{join ', ' value}}
+                  @disabled={{true}}
+                  @readOnly={{true}}
+                />
+              </row.cell>
+            </body.row>
+          {{/each-in}}
+        </table.body>
+      </Rose::Table>
+    </:body>
+  </form.fieldset>
   <form.input
     @name='address'
     @type='url'
