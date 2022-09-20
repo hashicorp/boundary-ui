@@ -87,7 +87,6 @@ host-catalog:
   help:
     static: Provide a list of hosts and host sets with static addresses
     dynamic: Automate discovery of target hosts and services on Azure or AWS
-    AWS: AWS region of the hosts to be added to the catalog
   types:
     static: Static
     unknown: Plugin
