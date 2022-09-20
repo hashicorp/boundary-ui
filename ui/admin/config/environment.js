@@ -76,6 +76,7 @@ module.exports = function (environment) {
         'host-catalog.new': '/host-catalogs/new',
         'host-catalog.azure': '/dynamic-host-catalogs-on-azure',
         'host-catalog.aws': '/dynamic-host-catalogs-on-aws',
+        'host-catalog.aws.region': '/dynamic-host-catalogs-on-aws-region',
         'host-set': '/host-sets',
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
