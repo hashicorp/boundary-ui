@@ -24,8 +24,8 @@ export default class RoseFormCheckboxGroupComponent extends Component {
     const selectedItems = this.args.selectedItems || [];
     const currentItems = [...selectedItems];
 
-    if (this.doesItemExist(currentItems, item)) {
-      const i = this.getItemIndex(currentItems, item);
+    if (this.hasSelectedItem(item)) {
+      const i = this.getItemIndex(item);
       currentItems.splice(i, 1);
     } else {
       currentItems.push(item);
@@ -35,17 +35,15 @@ export default class RoseFormCheckboxGroupComponent extends Component {
   }
 
   /**
-   * Checks if the item is in the current items list.
+   * Checks if the item is in the current selected items list.
    * If @itemEqualityFunc is not specified, will do a simple `includes` on the list.
-   * @param currentItems
    * @param item
    * @returns {boolean}
    */
   @action
-  doesItemExist(currentItems, item) {
-    if (!currentItems) {
-      return false;
-    }
+  hasSelectedItem(item) {
+    const currentItems = this.args.selectedItems || [];
+
     if (this.args.itemEqualityFunc) {
       return currentItems.some((element) =>
         this.args.itemEqualityFunc(element, item)
@@ -56,13 +54,14 @@ export default class RoseFormCheckboxGroupComponent extends Component {
   }
 
   /**
-   * Finds the index of the item in the current items list
+   * Finds the index of the item in the current selected items list
    * If @itemEqualityFunc is not specified, will use a simple `indexOf`.
-   * @param currentItems
    * @param item
    * @returns {number}
    */
-  getItemIndex(currentItems, item) {
+  getItemIndex(item) {
+    const currentItems = this.args.selectedItems || [];
+
     if (this.args.itemEqualityFunc) {
       return currentItems.findIndex((element) =>
         this.args.itemEqualityFunc(element, item)
