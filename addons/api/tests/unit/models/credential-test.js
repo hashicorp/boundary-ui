@@ -10,16 +10,16 @@ module('Unit | Model | credential', function (hooks) {
     assert.ok(model);
   });
 
-  test('it has isStaticCredential property and returns the expected values', async function (assert) {
+  test('it has isStatic property and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('credential', { id: 'credup_123' });
     const modelB = store.createRecord('credential', { id: 'credspk_123' });
     const modelC = store.createRecord('credential', { id: 'notstatic_123' });
 
-    assert.true(modelA.isStaticCredential);
-    assert.true(modelB.isStaticCredential);
-    assert.false(modelC.isStaticCredential);
+    assert.true(modelA.isStatic);
+    assert.true(modelB.isStatic);
+    assert.false(modelC.isStatic);
   });
 
   test('it has isUnknown property and returns the expected values', async function (assert) {
