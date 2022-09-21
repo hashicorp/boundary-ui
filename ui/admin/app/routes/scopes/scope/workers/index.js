@@ -57,7 +57,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
         );
       });
     }
-    return workers;
+    return workers.sortBy('displayName');
   }
 
   /**
