@@ -94,9 +94,12 @@ host-catalog:
     azure: Azure
     dynamic: Dynamic
   form:
+    aws_region:
+      label: AWS Region
+      help: AWS region of the hosts to be added to the catalog.
     azure_client_id:
       label: Client/Application ID
-      help: The client (application) ID for the client you want Boundary to use.
+      help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -116,7 +119,7 @@ host-set:
         help: Create a filter to select resources using values such as tag name or tag value. The Azure filter format is:tagName eq ‘<tag-name>’ and tagValue eq ‘<tag-value>'. For example:tagName eq 'application' and tagValue eq 'production'
     preferred_endpoints:
       label: Preferred Endpoints
-      help: Optional. Selects addresses of hosts, in cidr:<valid IPv4/6 CIDR> or dns:<globbed name>  format
+      help: Optional. Preferred address at which the host should be accessed when multiple options are present, in cidr:<valid IPv4/6 CIDR> or dns:<globbed name> format.
   messages:
     welcome:
       title: Welcome to Host Sets
@@ -301,10 +304,6 @@ target:
   brokered-credential-source:
     title: Brokered Credential
     title_plural: Brokered Credentials
-    types:
-      vault: Vault
-      username_password: Username & Password
-      ssh_private_key: Username & Key Pair
     messages:
       welcome:
         title: Welcome to brokered credentials
@@ -318,10 +317,6 @@ target:
   injected-application-credential-source:
     title: Injected Application Credential
     title_plural: Injected Application Credentials
-    types:
-      vault: Vault
-      username_password: Username & Password
-      ssh_private_key: Username & Key Pair
     messages:
       welcome:
         title: Welcome to Injected Application credentials
@@ -400,7 +395,6 @@ credential-library:
   types:
     vault: Vault
     static: Static
-    username_password: Username & Password
 credential:
   title: Credential
   title_plural: Credentials
@@ -415,6 +409,7 @@ credential:
   types:
     username_password: Username & Password
     ssh_private_key: Username & Key Pair
+    unknown: Unknown
   help:
     username_password: This host requires a username and password to connect.
     ssh_private_key: This host requires a username, public key, and private key to connect.
@@ -472,19 +467,19 @@ worker:
   form:
     cluster_id:
       label: Boundary Cluster ID
-      help: The cluster ID is the UUID in the HCP Boundary Controller URL
+      help: The cluster ID is the UUID in the HCP Boundary Controller URL.
     ip_address:
-      label: IP Address
-      help: The public IP address of the server
+      label: Worker public address
+      help: Public IP or address.
     initial_upstreams:
       label: Initial Upstreams
       help: A list of hosts/IP addresses and optionally ports for reaching Boundary cluster.  The port will default to :9201 if not specified.
     config_file_path:
       label: Config file path
-      help: The path on your server where you will store your configuration file
+      help: The path on your server where you will store your configuration file.
     worker_tags:
       label: Worker Tags
-      help: Boundary can use tags to define key-value pairs which targets can use to determine where they should route connections
+      help: Boundary can use tags to define key-value pairs which targets can use to determine where they should route connections.
     steps:
       1:
         title: 1. Configure your new worker

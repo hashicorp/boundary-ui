@@ -1,0 +1,13 @@
+{{#if @model.isUnknown}}
+  <Rose::Badge>
+    {{t 'resources.credential.types.unknown'}}
+  </Rose::Badge>
+{{else if @model.isVault}}
+  <Rose::Badge>
+    {{t (concat 'resources.credential-library.types.' @model.type)}}
+  </Rose::Badge>
+{{else}}
+  <Rose::Badge>
+    {{t (concat 'resources.credential.types.' @model.type)}}
+  </Rose::Badge>
+{{/if}}

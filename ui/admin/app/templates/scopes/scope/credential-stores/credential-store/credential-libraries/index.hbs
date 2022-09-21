@@ -35,7 +35,7 @@
           {{#each @model as |credentialLibrary|}}
             <body.row as |row|>
               <row.headerCell>
-                {{#if (can 'read model' credentialLibrary)}}
+                {{#if (can 'read credential-library' credentialLibrary)}}
                   <LinkTo
                     @route='scopes.scope.credential-stores.credential-store.credential-libraries.credential-library'
                     @model={{credentialLibrary.id}}

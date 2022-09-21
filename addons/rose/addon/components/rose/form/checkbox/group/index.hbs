@@ -7,7 +7,7 @@
         name=@name
         disabled=@disabled
         inline=@inline
-        checked=(includes item @selectedItems)
+        checked=(call (fn this.hasSelectedItem item))
         onChange=(fn this.toggleItem item)
       )
     )

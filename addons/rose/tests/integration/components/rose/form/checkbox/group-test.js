@@ -15,6 +15,7 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
       { id: 2, name: 'Bar' },
       { id: 3, name: 'Baz' },
     ];
+    // This is the same object reference so === checks will work
     selectedItems = [items[2]];
   });
 
@@ -42,6 +43,27 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
       <Rose::Form::Checkbox::Group
         @items={{this.items}}
         @selectedItems={{this.selectedItems}}
+        as |group|
+      >
+        <group.checkbox
+          @label={{group.item.name}}
+          value={{group.item.id}} />
+      </Rose::Form::Checkbox::Group>
+    `);
+    assert.strictEqual(findAll(':checked').length, 1);
+  });
+
+  test('it checks checkboxes for objects present in a selectedItems array that are deeply equal', async function (assert) {
+    assert.expect(1);
+    this.items = items;
+    this.selectedItems = [{ id: 1, name: 'Foo' }];
+    this.isEqual = (item1, item2) =>
+      item1.id === item2.id && item1.name === item2.name;
+    await render(hbs`
+      <Rose::Form::Checkbox::Group
+        @items={{this.items}}
+        @selectedItems={{this.selectedItems}}
+        @itemEqualityFunc={{this.isEqual}}
         as |group|
       >
         <group.checkbox
