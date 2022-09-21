@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 /**
@@ -25,13 +24,50 @@ export default class RoseFormCheckboxGroupComponent extends Component {
     const selectedItems = this.args.selectedItems || [];
     const currentItems = [...selectedItems];
 
-    if (currentItems.includes(item)) {
-      const i = currentItems.indexOf(item);
+    if (this.hasSelectedItem(item)) {
+      const i = this.getItemIndex(item);
       currentItems.splice(i, 1);
     } else {
       currentItems.push(item);
     }
 
     if (this.args.onChange) this.args.onChange(currentItems);
+  }
+
+  /**
+   * Checks if the item is in the current selected items list.
+   * If @itemEqualityFunc is not specified, will do a simple `includes` on the list.
+   * @param item
+   * @returns {boolean}
+   */
+  @action
+  hasSelectedItem(item) {
+    const currentItems = this.args.selectedItems || [];
+
+    if (this.args.itemEqualityFunc) {
+      return currentItems.some((element) =>
+        this.args.itemEqualityFunc(element, item)
+      );
+    }
+
+    return currentItems.includes(item);
+  }
+
+  /**
+   * Finds the index of the item in the current selected items list
+   * If @itemEqualityFunc is not specified, will use a simple `indexOf`.
+   * @param item
+   * @returns {number}
+   */
+  getItemIndex(item) {
+    const currentItems = this.args.selectedItems || [];
+
+    if (this.args.itemEqualityFunc) {
+      return currentItems.findIndex((element) =>
+        this.args.itemEqualityFunc(element, item)
+      );
+    }
+
+    return currentItems.indexOf(item);
   }
 }
