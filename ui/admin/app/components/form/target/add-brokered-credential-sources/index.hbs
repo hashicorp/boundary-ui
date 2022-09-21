@@ -31,12 +31,7 @@
           </row.headerCell>
           <row.cell>{{credentialSource.name}}</row.cell>
           <row.cell>
-            <Rose::Badge>{{t
-                (concat
-                  'resources.target.brokered-credential-source.types.'
-                  credentialSource.type
-                )
-              }}</Rose::Badge>
+            <CredSourceTypeBadge @model={{credentialSource}} />
           </row.cell>
         </body.row>
       {{/each}}
