@@ -1,5 +1,4 @@
 import GeneratedCredentialModel from '../generated/models/credential';
-import { equal } from '@ember/object/computed';
 
 /**
  * Supported Credential types.
@@ -9,9 +8,15 @@ export const types = ['username_password', 'ssh_private_key'];
 export default class CredentialModel extends GeneratedCredentialModel {
   // =attributes
   /**
+   * All Credentials are prefixed with "cred" and are considered
+   * static due to their relation with Static Credential Stores.
+   * 
+   * True if credential starts with the "cred" prefix.
    * @type {boolean}
    */
-  @equal('type', 'username_password') isUsernamePassword;
+  get isStatic() {
+    return this.id.startsWith('cred');
+  }
 
   /**
    * True if credential is an unknown type.
