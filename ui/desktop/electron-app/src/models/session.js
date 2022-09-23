@@ -63,6 +63,8 @@ class Session {
   stop() {
     return new Promise((resolve, reject) => {
       if (this.isRunning) {
+        // We need to validate delition is actually happening and not accesible to other processes.
+        delete this.#process.env.BOUNDARY_PASS;
         this.#process.on('close', () => resolve());
         this.#process.on('error', (e) => reject(e));
         /**
@@ -91,10 +93,13 @@ class Session {
       addr: sanitizer.urlValidate(this.#addr),
     };
 
+    // Set token as env var
+    process.env['BOUNDARY_PASS'] = sanitized.token;
+
     const command = [
       'connect',
       `-target-id=${sanitized.target_id}`,
-      `-token=${sanitized.token}`,
+      `-token=env://BOUNDARY_PASS`,
       `-addr=${sanitized.addr}`,
       '-format=json',
     ];
