@@ -49,18 +49,15 @@ class Session {
   start() {
     const command = this.cliCommand();
     const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
-    return spawnAsyncJSONPromise(command, sanitizedToken)
-      .then((spawnedSession) => {
+    return spawnAsyncJSONPromise(command, sanitizedToken).then(
+      (spawnedSession) => {
         this.#process = spawnedSession.childProcess;
         this.#proxyDetails = spawnedSession.response;
         this.#process = spawnedSession.childProcess;
         this.#id = this.#proxyDetails.session_id;
         return this.#proxyDetails;
-      })
-      .finally(() => {
-        // Cleanup the ENV variable
-        delete process.env.BOUNDARY_TOKEN;
-      });
+      }
+    );
   }
 
   /**
