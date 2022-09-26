@@ -48,13 +48,19 @@ class Session {
    */
   start() {
     const command = this.cliCommand();
-    return spawnAsyncJSONPromise(command).then((spawnedSession) => {
-      this.#process = spawnedSession.childProcess;
-      this.#proxyDetails = spawnedSession.response;
-      this.#process = spawnedSession.childProcess;
-      this.#id = this.#proxyDetails.session_id;
-      return this.#proxyDetails;
-    });
+    const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+    return spawnAsyncJSONPromise(command, sanitizedToken)
+      .then((spawnedSession) => {
+        this.#process = spawnedSession.childProcess;
+        this.#proxyDetails = spawnedSession.response;
+        this.#process = spawnedSession.childProcess;
+        this.#id = this.#proxyDetails.session_id;
+        return this.#proxyDetails;
+      })
+      .finally(() => {
+        // Cleanup the ENV variable
+        delete process.env.BOUNDARY_TOKEN;
+      });
   }
 
   /**
@@ -63,8 +69,6 @@ class Session {
   stop() {
     return new Promise((resolve, reject) => {
       if (this.isRunning) {
-        // We need to validate delition is actually happening and not accesible to other processes.
-        delete this.#process.env.BOUNDARY_PASS;
         this.#process.on('close', () => resolve());
         this.#process.on('error', (e) => reject(e));
         /**
@@ -89,17 +93,13 @@ class Session {
   cliCommand() {
     const sanitized = {
       target_id: sanitizer.base62EscapeAndValidate(this.#targetId),
-      token: sanitizer.base62EscapeAndValidate(this.#token),
       addr: sanitizer.urlValidate(this.#addr),
     };
-
-    // Set token as env var
-    process.env['BOUNDARY_PASS'] = sanitized.token;
 
     const command = [
       'connect',
       `-target-id=${sanitized.target_id}`,
-      `-token=env://BOUNDARY_PASS`,
+      `-token=env://BOUNDARY_TOKEN`,
       `-addr=${sanitized.addr}`,
       '-format=json',
     ];

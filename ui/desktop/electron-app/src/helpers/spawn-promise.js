@@ -25,9 +25,13 @@ module.exports = {
    * @param {string} command
    * @return {Promise}
    */
-  spawnAsyncJSONPromise(command) {
+  spawnAsyncJSONPromise(command, token) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path(), command);
+      const childProcess = spawn(path(), command, {
+        env: {
+          BOUNDARY_TOKEN: token
+        }
+      });
       let outputStream = '';
       let errorStream = '';
 
