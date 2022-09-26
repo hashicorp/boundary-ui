@@ -21,6 +21,35 @@ export default class WorkerModel extends GeneratedWorkerModel {
     return this.type === 'pki';
   }
 
+  /**
+   * Returns the number of config tags present on the worker.
+   * @type {number}
+   */
+  get tagCount() {
+    if (!this.config_tags) {
+      return 0;
+    }
+
+    return Object.values(this.config_tags).reduce(
+      (previousCount, currentTags) => previousCount + currentTags.length,
+      0
+    );
+  }
+
+  /**
+   * Returns the config tags as an array of key/value pair objects.
+   * @type {[object]}
+   */
+  getConfigTagList() {
+    if (!this.config_tags) {
+      return null;
+    }
+
+    return Object.entries(this.config_tags).flatMap(([key, value]) =>
+      value.map((tag) => ({ key, value: tag }))
+    );
+  }
+
   @attr({
     description:
       'The deduplicated union of the tags reported by the worker ' +

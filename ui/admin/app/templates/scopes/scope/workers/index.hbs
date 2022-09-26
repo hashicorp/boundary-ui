@@ -37,20 +37,30 @@
                   @ignoreClickInside={{true}}
                   as |dropdown|
                 >
-                  <form.checkboxGroup
-                    @name={{filter.name}}
-                    @items={{filter.allowedValues}}
-                    @selectedItems={{filter.selectedValue}}
-                    @onChange={{route-action 'filterBy' filter.name}}
-                    as |group|
-                  >
-                    <dropdown.item>
-                      <group.checkbox
-                        @label={{group.item}}
-                        value={{group.item}}
-                      />
-                    </dropdown.item>
-                  </form.checkboxGroup>
+                  {{#each-in
+                    (group-by 'key' filter.allowedValues)
+                    as |key tags|
+                  }}
+                    <dropdown.section
+                      @title={{key}}
+                      @icon='flight-icons/svg/tag-16'
+                    />
+                    <form.checkboxGroup
+                      @name={{key}}
+                      @items={{tags}}
+                      @selectedItems={{filter.selectedValue}}
+                      @onChange={{route-action 'filterBy' filter.name}}
+                      @itemEqualityFunc={{route-action 'isEqual'}}
+                      as |group|
+                    >
+                      <dropdown.item class='indent-label-1'>
+                        <group.checkbox
+                          @label={{group.item.value}}
+                          value={{group.item}}
+                        />
+                      </dropdown.item>
+                    </form.checkboxGroup>
+                  {{/each-in}}
                 </Rose::Dropdown>
               {{/if}}
             {{/let}}
@@ -109,11 +119,14 @@
                 {{#if worker.description}}
                   <p>{{worker.description}}</p>
                 {{/if}}
-                {{#if worker.config_tags.type}}
+                {{#if worker.tagCount}}
                   <div>
-                    {{#each worker.config_tags.type as |tag|}}
-                      <Rose::Badge>{{tag}}</Rose::Badge>
-                    {{/each}}
+                    <Rose::Badge @icon='flight-icons/svg/tag-16'>
+                      {{t
+                        'resources.worker.table.tag_count'
+                        tagCount=worker.tagCount
+                      }}
+                    </Rose::Badge>
                   </div>
                 {{/if}}
               </row.headerCell>

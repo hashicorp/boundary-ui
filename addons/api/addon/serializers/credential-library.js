@@ -1,6 +1,13 @@
 import ApplicationSerializer from './application';
 
 export default class CredentialLibrarySerializer extends ApplicationSerializer {
+  // =properties
+
+  /**
+   * @type {boolean}
+   */
+  serializeScopeID = false;
+
   /**
    * @override
    * @method serialize

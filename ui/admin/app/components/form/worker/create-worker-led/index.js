@@ -1,6 +1,18 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { A } from '@ember/array';
+
+class Tag {
+  @tracked key;
+  @tracked value;
+
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+  }
+}
 
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
@@ -11,18 +23,10 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked clusterId;
   @tracked ipAddress;
   @tracked configFilePath;
-  @tracked workerTags;
   @tracked initialUpstreams;
-
-  // =methods
-
-  convertCommaSeparatedValuesToArray(input) {
-    return input
-      .split(',')
-      .filter((value) => value.trim())
-      .map((value) => `"${value?.trim()}"`)
-      .join(', ');
-  }
+  @tracked workerTags = A([]);
+  @tracked newWorkerKey;
+  @tracked newWorkerValue;
 
   // =properties
 
@@ -46,10 +50,13 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
     }"`;
 
     const tagsText = `tags {
-    type = [${
-      this.workerTags ? this.convertCommaSeparatedValuesToArray(this.workerTags) : '"<tag1>", "<tag2>"'
-    }]
+    ${
+      this.workerTags.length
+        ? this.getTagConfigString()
+        : 'key = ["<tag1>", "<tag2>"]'
+    }
   }`;
+
     const upstreamText = `
   initial_upstreams = [${
     this.initialUpstreams
@@ -109,6 +116,7 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
       styleActiveLine: false,
     };
   }
+
   /**
    * Returns `hcl` configuration object for `<Rose::CodeEditor>`.
    * @type {Object}
@@ -120,5 +128,36 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
       cursorBlinkRate: -1,
       styleActiveLine: false,
     };
+  }
+
+  //=methods
+
+  convertCommaSeparatedValuesToArray(input) {
+    return input
+      .split(',')
+      .filter((value) => value.trim())
+      .map((value) => `"${value?.trim()}"`)
+      .join(', ');
+  }
+
+  getTagConfigString() {
+    return this.workerTags
+      .map(
+        (tag) =>
+          `${tag.key} = [${this.convertCommaSeparatedValuesToArray(tag.value)}]`
+      )
+      .join('\n    ');
+  }
+
+  @action
+  addWorkerTag() {
+    this.workerTags.pushObject(new Tag(this.newWorkerKey, this.newWorkerValue));
+    this.newWorkerKey = '';
+    this.newWorkerValue = '';
+  }
+
+  @action
+  removeWorkerTagByIndex(index) {
+    this.workerTags.removeAt(index);
   }
 }

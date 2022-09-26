@@ -14,12 +14,23 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       const configTags = route
         .modelFor('scopes.scope.workers')
         .toArray()
-        .flatMap((worker) => worker.config_tags?.type)
+        .flatMap((worker) => worker.getConfigTagList())
         .filter(Boolean);
 
       // Filter out duplicate tags
-      return [...new Set(configTags)];
+      return configTags.reduce((uniqueConfigTags, currentTag) => {
+        const isDuplicateTag = uniqueConfigTags.some(
+          (tag) => tag.key === currentTag.key && tag.value === currentTag.value
+        );
+
+        if (!isDuplicateTag) {
+          uniqueConfigTags.push(currentTag);
+        }
+        return uniqueConfigTags;
+      }, []);
     },
+    findBySerialized: ({ key: itemKey, value: itemValue }, { key, value }) =>
+      itemKey === key && itemValue === value,
     refreshRouteOnChange: false,
   })
   tags;
@@ -32,13 +43,21 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     if (this.tags?.length) {
       // Return workers that have config tags that have at
       // least one intersection with the filter tags
-      return workers.filter(
-        (worker) =>
-          worker.config_tags.type.filter(Set.prototype.has, new Set(this.tags))
-            .length > 0
-      );
+      return workers.filter((worker) => {
+        if (!worker.config_tags) {
+          return null;
+        }
+
+        const workerTags = worker.getConfigTagList();
+        return this.tags.some((tag) =>
+          workerTags.some(
+            (workerTag) =>
+              tag.key === workerTag.key && tag.value === workerTag.value
+          )
+        );
+      });
     }
-    return workers;
+    return workers.sortBy('displayName');
   }
 
   /**
@@ -59,6 +78,11 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   filterBy(field, value) {
     this[field] = value;
     this.refresh();
+  }
+
+  @action
+  isEqual(firstTag, secondTag) {
+    return firstTag.key === secondTag.key && firstTag.value === secondTag.value;
   }
 
   setupController(controller) {
