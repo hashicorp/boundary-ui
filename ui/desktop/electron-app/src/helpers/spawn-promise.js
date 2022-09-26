@@ -29,6 +29,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       const childProcess = spawn(path(), command, {
         env: {
+          ...process.env,
           BOUNDARY_TOKEN: token
         }
       });
