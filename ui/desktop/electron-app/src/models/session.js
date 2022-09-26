@@ -48,13 +48,16 @@ class Session {
    */
   start() {
     const command = this.cliCommand();
-    return spawnAsyncJSONPromise(command).then((spawnedSession) => {
-      this.#process = spawnedSession.childProcess;
-      this.#proxyDetails = spawnedSession.response;
-      this.#process = spawnedSession.childProcess;
-      this.#id = this.#proxyDetails.session_id;
-      return this.#proxyDetails;
-    });
+    const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+    return spawnAsyncJSONPromise(command, sanitizedToken).then(
+      (spawnedSession) => {
+        this.#process = spawnedSession.childProcess;
+        this.#proxyDetails = spawnedSession.response;
+        this.#process = spawnedSession.childProcess;
+        this.#id = this.#proxyDetails.session_id;
+        return this.#proxyDetails;
+      }
+    );
   }
 
   /**
@@ -87,14 +90,13 @@ class Session {
   cliCommand() {
     const sanitized = {
       target_id: sanitizer.base62EscapeAndValidate(this.#targetId),
-      token: sanitizer.base62EscapeAndValidate(this.#token),
       addr: sanitizer.urlValidate(this.#addr),
     };
 
     const command = [
       'connect',
       `-target-id=${sanitized.target_id}`,
-      `-token=${sanitized.token}`,
+      `-token=env://BOUNDARY_TOKEN`,
       `-addr=${sanitized.addr}`,
       '-format=json',
     ];

@@ -36,6 +36,20 @@ export default class WorkerModel extends GeneratedWorkerModel {
     );
   }
 
+  /**
+   * Returns the config tags as an array of key/value pair objects.
+   * @type {[object]}
+   */
+  getConfigTagList() {
+    if (!this.config_tags) {
+      return null;
+    }
+
+    return Object.entries(this.config_tags).flatMap(([key, value]) =>
+      value.map((tag) => ({ key, value: tag }))
+    );
+  }
+
   @attr({
     description:
       'The deduplicated union of the tags reported by the worker ' +

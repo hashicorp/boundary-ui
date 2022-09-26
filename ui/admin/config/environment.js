@@ -8,7 +8,7 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 const featureEditions = {
   oss: {
     'static-credentials': true,
-    byow: false,
+    byow: true,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
     'vault-worker-filter': false,
@@ -135,7 +135,6 @@ module.exports = function (environment) {
 
     // Enable features in development
     ENV.featureFlags['static-credentials'] = true;
-    ENV.featureFlags['byow'] = true;
     ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['vault-worker-filter'] = true;
   }
@@ -158,7 +157,6 @@ module.exports = function (environment) {
 
     // Enable tests for development features
     ENV.featureFlags['static-credentials'] = true;
-    ENV.featureFlags['byow'] = true;
     ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['vault-worker-filter'] = true;
   }
