@@ -2,6 +2,12 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.5.0 [CLI 0.11.0] (2022.09.27)
+
+### New
+- Add syntax highlighting when viewing raw API output for credentials ([PR](https://github.com/hashicorp/boundary-ui/pull/1271))
+
+
 ## v1.4.5 [CLI 0.9.1] (2022.07.06)
 
 ### Bug Fixes
