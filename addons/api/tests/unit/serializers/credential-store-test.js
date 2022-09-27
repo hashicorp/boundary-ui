@@ -273,4 +273,36 @@ module('Unit | Serializer | credential store', function (hooks) {
     };
     assert.deepEqual(record.serialize(), expectedResult);
   });
+
+  test('it normalizes vault type credential store record', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential-store');
+    const credentialStoreModelClass =
+      store.createRecord('credential-store').constructor;
+    const payload = {
+      id: 'cs_123',
+      version: 1,
+      type: 'vault',
+      attributes: {
+        token: 'random',
+        token_hmac: 'completenonsense',
+      },
+    };
+    const normalized = serializer.normalize(credentialStoreModelClass, payload);
+    console.log(normalized, 'normalizedss');
+    assert.deepEqual(normalized, {
+      data: {
+        attributes: {
+          type: 'vault',
+          version: 1,
+          token: '',
+          token_hmac: 'completenonsense',
+        },
+        type: 'credential-store',
+        id: 'cs_123',
+        relationships: {},
+      },
+    });
+  });
 });
