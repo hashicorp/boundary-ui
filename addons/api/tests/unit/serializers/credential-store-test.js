@@ -281,7 +281,7 @@ module('Unit | Serializer | credential store', function (hooks) {
     const credentialStoreModelClass =
       store.createRecord('credential-store').constructor;
     const payload = {
-      id: 'cs_123',
+      id: 'csvlt_123',
       version: 1,
       type: 'vault',
       attributes: {
@@ -300,7 +300,7 @@ module('Unit | Serializer | credential store', function (hooks) {
           token_hmac: 'completenonsense',
         },
         type: 'credential-store',
-        id: 'cs_123',
+        id: 'csvlt_123',
         relationships: {},
       },
     });
