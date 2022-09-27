@@ -38,7 +38,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   // =methods
 
   model() {
-    const workers = this.modelFor('scopes.scope.workers');
+    const workers = this.modelFor('scopes.scope.workers').sortBy('displayName');
 
     if (this.tags?.length) {
       // Return workers that have config tags that have at
@@ -57,7 +57,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
         );
       });
     }
-    return workers.sortBy('displayName');
+    return workers;
   }
 
   /**
