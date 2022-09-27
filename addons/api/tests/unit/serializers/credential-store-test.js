@@ -290,7 +290,6 @@ module('Unit | Serializer | credential store', function (hooks) {
       },
     };
     const normalized = serializer.normalize(credentialStoreModelClass, payload);
-    console.log(normalized, 'normalizedss');
     assert.deepEqual(normalized, {
       data: {
         attributes: {
