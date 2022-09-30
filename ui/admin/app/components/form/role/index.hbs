@@ -52,9 +52,7 @@
       aria-describedby='helper-text-grant-scope'
     >
       <legend id='legend-text-grant-scope'>
-        {{t
-          'form.grant_scope.label'
-        }}
+        {{t 'form.grant_scope.label'}}
       </legend>
       <Rose::Form::HelperText
         @id='helper-text-grant-scope'
@@ -127,7 +125,6 @@
   {{/unless}}
   {{#if (can 'save model' @model)}}
     <form.actions
-      @disabled={{if @model.cannotSave @model.cannotSave}}
       @enableEditText={{t 'actions.edit-form'}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}
