@@ -10,11 +10,14 @@ The desktop client UI for Boundary.
 - [Installation](#installation)
 - [Yarn Commands](#yarn-commands)
 - [Running / Development](#running--development)
-    - [Environment Variables](#environment-variables)
+  - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
+  - [Environment Variables](#environment-variables)
   - [Building for Production](#building-for-production)
     - [Environment Variables](#environment-variables-1)
   - [Running Tests](#running-tests)
+  - [Running end to end Tests](#running-end-to-end-tests)
   - [Deploying](#deploying)
+- [Debug desktop client](#debug-desktop-client)
 - [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -175,6 +178,24 @@ Steps:
 ### Deploying
 
 TBD
+
+## Debug desktop client
+
+To debug the desktop client we recommend using node debugging client. 
+
+To start the electron app with the inspector adding a breakpoint before code starts:
+
+`$ yarn start:desktop --- --inspect-brk`.
+
+To avoid the breakpoint:
+
+`$ yarn start:desktop --- --inspect`.
+
+Then use chrome as inspector client, open chrome and on the url bar: `$ chrome://inspect` and click inspect on the electron instance.
+
+If you start the inspector with the `-brk` (breakpoint) code will not execute until you allow execution to continue (clicking the play button on the inspector).
+
+More information about [Node debugging guide](https://nodejs.org/en/docs/guides/debugging-getting-started/).
 
 ## Further Reading / Useful Links
 
