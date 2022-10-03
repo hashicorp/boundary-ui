@@ -63,10 +63,6 @@ module.exports = function (environment) {
     },
   };
 
-  if (process.env.ENABLE_MIRAGE) {
-    ENV['ember-cli-mirage'].enabled = JSON.parse(process.env.ENABLE_MIRAGE);
-  }
-
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
@@ -78,6 +74,10 @@ module.exports = function (environment) {
     // of the UI, which only makes sense in development where the origin is
     // usually the same as the application origin.
     ENV.autoOrigin = true;
+
+    ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
+      ? JSON.parse(process.env.ENABLE_MIRAGE)
+      : true;
 
     // Enable features in development
   }
