@@ -2,7 +2,6 @@
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
-  @error={{@model.errors.base}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
@@ -52,9 +51,7 @@
       aria-describedby='helper-text-grant-scope'
     >
       <legend id='legend-text-grant-scope'>
-        {{t
-          'form.grant_scope.label'
-        }}
+        {{t 'form.grant_scope.label'}}
       </legend>
       <Rose::Form::HelperText
         @id='helper-text-grant-scope'

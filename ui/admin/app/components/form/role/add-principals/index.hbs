@@ -1,11 +1,10 @@
-{{!-- template-lint-disable no-whitespace-for-layout  --}}
+{{! template-lint-disable no-whitespace-for-layout  }}
 {{#if this.hasAvailablePrincipals}}
   <Rose::Form
     class='full-width'
     @onSubmit={{fn this.submit @submit}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
-    @error={{@model.errors.base}}
     as |form|
   >
 
