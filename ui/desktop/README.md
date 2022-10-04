@@ -6,19 +6,22 @@ The desktop client UI for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
-- [Running / Development](#running--development)
-  - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
-  - [Environment Variables](#environment-variables)
-  - [Building for Production](#building-for-production)
-    - [Environment Variables](#environment-variables-1)
-  - [Running Tests](#running-tests)
-  - [Running end to end Tests](#running-end-to-end-tests)
-  - [Deploying](#deploying)
-- [Debug desktop client](#debug-desktop-client)
-- [Further Reading / Useful Links](#further-reading--useful-links)
+- [Desktop client UI](#desktop-client-ui)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Yarn Commands](#yarn-commands)
+  - [Running / Development](#running--development)
+    - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
+    - [Environment Variables](#environment-variables)
+    - [Building for Production](#building-for-production)
+      - [Environment Variables](#environment-variables-1)
+    - [Running Tests](#running-tests)
+    - [Running end to end Tests](#running-end-to-end-tests)
+    - [Deploying](#deploying)
+  - [Debug desktop client](#debug-desktop-client)
+    - [Debug `renderer` process](#debug-renderer-process)
+    - [Debug `main` process](#debug-main-process)
+  - [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -181,7 +184,26 @@ TBD
 
 ## Debug desktop client
 
-To debug the desktop client we recommend using node debugging client. 
+There are two processes we can debug, `renderer` process and `main process`.
+
+When I do need to debug the `main` process?
+
+To debug code that is executed in the main process, i.e to debug the `ipcMain` handler.
+
+### Debug `renderer` process
+
+To debug the renderer process, once the electron app is running, open the Chrome DevTools.
+
+You can open the Chrome DevTools programmatically by calling the API on the `webContents` instance:
+
+```javascript
+const browserWindow = new BrowserWindow(browserWindowOptions);
+browserWindow.webContents.openDevTools()
+```
+
+`browserWindow` reference in our code, [here](https://github.com/hashicorp/boundary-ui/blob/main/ui/desktop/electron-app/src/index.js#L84).
+
+### Debug `main` process 
 
 To start the electron app with the inspector adding a breakpoint before code starts:
 
@@ -191,11 +213,12 @@ To avoid the breakpoint:
 
 `$ yarn start:desktop --- --inspect`.
 
-Then use chrome as inspector client, open chrome and on the url bar: `$ chrome://inspect` and click inspect on the electron instance.
+You can use any of [these clients](https://nodejs.org/en/docs/guides/debugging-getting-started/#inspector-clients), but we will use the chrome inspector client. Open chrome and on the url bar: `$ chrome://inspect` and click inspect on the electron instance.
 
 If you start the inspector with the `-brk` (breakpoint) code will not execute until you allow execution to continue (clicking the play button on the inspector).
 
-More information about [Node debugging guide](https://nodejs.org/en/docs/guides/debugging-getting-started/).
+More information on [debugging the main process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process).
+More information on [Node debugging guide](https://nodejs.org/en/docs/guides/debugging-getting-started/).
 
 ## Further Reading / Useful Links
 
