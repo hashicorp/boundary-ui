@@ -37,33 +37,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
     });
   }
 
-  /**
-   * Renders the add-hosts-specific header template.
-   * Empties the actions and navigation outlets and renders a custom empty header.
-   * @override
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-
-    this.render(
-      'scopes/scope/host-catalogs/host-catalog/host-sets/host-set/add-hosts/-header',
-      {
-        into: 'scopes/scope/host-catalogs/host-catalog',
-        outlet: 'header',
-      }
-    );
-
-    this.render('-empty', {
-      into: 'scopes/scope/host-catalogs/host-catalog',
-      outlet: 'navigation',
-    });
-
-    this.render('-empty', {
-      into: 'scopes/scope/host-catalogs/host-catalog',
-      outlet: 'actions',
-    });
-  }
-
   // =actions
 
   /**
