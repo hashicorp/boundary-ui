@@ -184,11 +184,11 @@ TBD
 
 ## Debug desktop client
 
-There are two processes we can debug, `renderer` process and `main process`.
+There are two processes we can debug, `renderer` process and `main` process.
 
 When I do need to debug the `main` process?
 
-To debug code that is executed in the main process, i.e to debug the `ipcMain` handler.
+To debug code that is just executed in the main process, i.e to debug the `ipcMain` handler.
 
 ### Debug `renderer` process
 
