@@ -398,51 +398,53 @@
 .worker-create-section {
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
   border-radius: sizing.rems(xxs);
-  padding: sizing.rems(l);
   margin-bottom: sizing.rems(xl);
+  padding: sizing.rems(l);
 
   > div {
     margin-bottom: sizing.rems(l);
   }
 
   > code {
-    color: var(--failure);
     background-color: var(--ui-gray-subtler-5);
     border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+    color: var(--failure);
   }
 
   .worker-auth-token {
-    display: flex;
-    gap: sizing.rems(m);
     align-items: flex-end;
+    display: flex;
+    gap: sizing.rems(m); // sass-lint:disable-line no-misspelled-properties
   }
 
   .worker-success {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: space-between;
 
     > div {
-      display: flex;
-      gap: sizing.rems(xs);
       align-items: center;
+      display: flex;
+      gap: sizing.rems(xs); // sass-lint:disable-line no-misspelled-properties
+
       p {
         margin-bottom: sizing.rems(xxs);
       }
-    }
 
-    > div:first-child {
-      width: 40%;
-      p {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      &:first-child {
+        width: 40%;
+
+        p {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
-    }
 
-    > div:last-child {
-      p {
-        color: var(--success);
+      &:last-child {
+        p {
+          color: var(--success);
+        }
       }
     }
 
