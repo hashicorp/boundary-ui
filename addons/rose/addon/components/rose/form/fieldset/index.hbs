@@ -20,15 +20,15 @@
   {{/if}}
 
   {{#if @helperText}}
-      <Rose::Form::HelperText
-        @id='helper-text-{{this.id}}'
-        @error={{@error}}
-        @link={{@link}}
-        @linkText={{@linkText}}
-      >
-        {{@helperText}}
-      </Rose::Form::HelperText>
-    {{/if}}
+    <Rose::Form::HelperText
+      @id='helper-text-{{this.id}}'
+      @error={{@error}}
+      @link={{@link}}
+      @linkText={{@linkText}}
+    >
+      {{@helperText}}
+    </Rose::Form::HelperText>
+  {{/if}}
   <div class='rose-form-fieldset-body'>
     {{yield to='body'}}
   </div>

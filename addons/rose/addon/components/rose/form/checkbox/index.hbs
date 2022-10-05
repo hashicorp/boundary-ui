@@ -1,4 +1,4 @@
-<div class='rose-form-checkbox{{if @error ' error'}} {{if @inline ' inline'}}'>
+<div class='rose-form-checkbox{{if @error " error"}} {{if @inline " inline"}}'>
 
   <Input
     ...attributes
@@ -9,9 +9,9 @@
     onChange={{@onChange}}
     @type='checkbox'
     @checked={{if @checked true false}}
-    aria-describedby='{{if @helperText (concat 'helper-text-' this.id)}} {{if
+    aria-describedby='{{if @helperText (concat "helper-text-" this.id)}} {{if
       @error
-      (concat 'errors-' this.id)
+      (concat "errors-" this.id)
     }}'
   />
 
