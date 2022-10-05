@@ -10,7 +10,7 @@ export default class CredentialModel extends GeneratedCredentialModel {
   /**
    * All Credentials are prefixed with "cred" and are considered
    * static due to their relation with Static Credential Stores.
-   * 
+   *
    * True if credential starts with the "cred" prefix.
    * @type {boolean}
    */
