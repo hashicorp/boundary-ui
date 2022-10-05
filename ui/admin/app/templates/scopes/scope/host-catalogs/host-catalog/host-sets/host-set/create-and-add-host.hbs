@@ -1,12 +1,5 @@
 {{page-title (t 'resources.host-set.actions.create-and-add-host')}}
 
-<<<<<<< HEAD
-<Form::Host
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
-=======
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
     <BreadCrumbs />
@@ -24,6 +17,3 @@
     />
   </page.body>
 </Rose::Layout::Page>
-
-
->>>>>>> 8a2781540 (Refactor host-catalog/host-sets/create-and-add-host template to accomodate renderTemplate deprecation)
