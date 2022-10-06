@@ -30,8 +30,8 @@ module.exports = {
       const childProcess = spawn(path(), command, {
         env: {
           ...process.env,
-          BOUNDARY_TOKEN: token
-        }
+          BOUNDARY_TOKEN: token,
+        },
       });
       let outputStream = '';
       let errorStream = '';

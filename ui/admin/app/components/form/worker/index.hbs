@@ -108,13 +108,13 @@
   {{/let}}
 
   <form.input
-      @name='release version'
-      @value={{@model.release_version}}
-      @label={{t 'form.worker_release_version.label'}}
-      @helperText={{t 'form.worker_release_version.help'}}
-      @disabled={{true}}
-      readonly={{true}}
-    />
+    @name='release version'
+    @value={{@model.release_version}}
+    @label={{t 'form.worker_release_version.label'}}
+    @helperText={{t 'form.worker_release_version.help'}}
+    @disabled={{true}}
+    readonly={{true}}
+  />
 
   {{#if (can 'save worker' @model)}}
     <form.actions

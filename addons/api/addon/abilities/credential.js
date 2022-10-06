@@ -1,4 +1,4 @@
-import ModelAbility from "./model";
+import ModelAbility from './model';
 /**
  * Provides abilities for credential.
  */

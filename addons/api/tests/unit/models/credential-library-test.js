@@ -14,7 +14,9 @@ module('Unit | Model | credential library', function (hooks) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('credential-library', { type: 'vault' });
-    const modelB = store.createRecord('credential-library', { type: 'unknown' });
+    const modelB = store.createRecord('credential-library', {
+      type: 'unknown',
+    });
 
     assert.false(modelA.isUnknown);
     assert.true(modelB.isUnknown);
