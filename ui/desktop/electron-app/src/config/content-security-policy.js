@@ -11,6 +11,7 @@ const csp = {
   'style-src': ["'self'"],
   'media-src': ["'self'"],
   'manifest-src': ["'self'"],
+  'frame-ancestors': ["'self'"],
 };
 
 // Dev policy is necessary for Ember live reload.
