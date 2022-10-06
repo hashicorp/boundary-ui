@@ -8,6 +8,7 @@ import 'codemirror/mode/shell/shell';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/selection/active-line';
+import 'codemirror/addon/display/autorefresh';
 
 // Here we define default options for the editor.
 // These should follow the codemirror configuration types
