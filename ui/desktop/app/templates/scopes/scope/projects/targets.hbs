@@ -39,10 +39,10 @@
 
               {{#each session.credentials as |credential|}}
                 <Card
-                  @heading='{{t 'resources.session.credential.title'}}
+                  @heading='{{t "resources.session.credential.title"}}
                     {{if
                     credential.source.name
-                    (concat ' (' credential.source.name ')')
+                    (concat " (" credential.source.name ")")
                   }}'
                   @icon='flight-icons/svg/key-16'
                 >

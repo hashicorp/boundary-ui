@@ -1,15 +1,15 @@
 <details
   ...attributes
   class='rose-dropdown
-    {{if @dropdownRight 'rose-dropdown-right'}}
-    {{if @style (concat 'rose-dropdown-' @style)}}'
+    {{if @dropdownRight "rose-dropdown-right"}}
+    {{if @style (concat "rose-dropdown-" @style)}}'
   {{on-click-outside this.close}}
 >
 
   <summary
     class='rose-dropdown-trigger
-      {{if @iconOnly 'has-icon-only'}}
-      {{if this.showCaret 'show-caret'}}'
+      {{if @iconOnly "has-icon-only"}}
+      {{if this.showCaret "show-caret"}}'
     title={{@text}}
   >
 
