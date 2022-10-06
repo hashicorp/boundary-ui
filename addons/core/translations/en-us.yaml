@@ -4,7 +4,7 @@ auth:
     flow-success: Successful authentication
     flow-error: Could not authenticate
   descriptions:
-    no-scopes: No scopes were found.  To authenticate, ask your administrator to create an scope and grant you access.
+    no-scopes: No scopes were found.  To authenticate, ask your administrator to create a scope and grant you access.
     choose-org: Choose a scope to authenticate.
     authenticating-with-org: 'Scope:  You are authenticating with organization "{name}"'
     flow-success: You've successfully authenticated.  You may now close this window and return to the client.
@@ -40,7 +40,7 @@ descriptions:
   create-but-not-list: You do not have permission to list {resource}, but you can create new instances.
   neither-list-nor-create: You do not have permission to list or create {resource}.
   no-results: We found no matching records.
-  choose-a-provider: There are several built-in plugins for the most common providers. You can choose from on of the included plugins or use a custom plugin.
+  choose-a-provider: There are several built-in plugins for the most common providers. You can choose from one of the included plugins or use a custom plugin.
   choose-a-provider-azure: Boundary does not yet support rotating credentials.
   provider: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
 questions:

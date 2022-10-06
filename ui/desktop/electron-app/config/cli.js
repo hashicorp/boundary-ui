@@ -11,7 +11,7 @@ const downloadArtifact = (version) => {
   const archivePlatform = {};
   if (isMac()) {
     archivePlatform.name = 'darwin';
-    archivePlatform.arch = 'amd64';
+    archivePlatform.arch = os.arch();
   }
 
   if (isWindows()) {
