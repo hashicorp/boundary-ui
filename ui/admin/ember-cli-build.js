@@ -17,7 +17,11 @@ module.exports = function (defaults) {
     },
     sassOptions: {
       onlyIncluded: true,
+      precision: 4,
       extension: 'scss',
+      includePaths: [
+        '../../node_modules/@hashicorp/design-system-tokens/dist/products/css',
+      ],
     },
     emberNotify: {
       importCss: false,
