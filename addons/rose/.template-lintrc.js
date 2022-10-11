@@ -1,17 +1,14 @@
 'use strict';
 
 module.exports = {
-  extends: ['recommended', 'stylistic'],
-  rules: {
-    quotes: 'single',
-    'self-closing-void-elements': false,
-    'block-indentation': false,
-  },
+  plugins: ['ember-template-lint-plugin-prettier'],
+  extends: ['recommended', 'ember-template-lint-plugin-prettier:recommended'],
   overrides: [
     {
       files: [
         'addon/components/rose/anonymous/index.hbs',
         'addon/components/rose/table/row/cell/index.hbs',
+        'addon/components/rose/anonymous/index.hbs',
       ],
       rules: {
         'no-yield-only': false,
