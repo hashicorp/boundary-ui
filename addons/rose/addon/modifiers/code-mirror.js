@@ -42,14 +42,16 @@ const _PRESET_DEFAULTS = {
  */
 export default class CodeMirrorModifier extends Modifier {
   _editor;
+  didSetup = false;
 
-  didInstall() {
-    this._setup();
-  }
+  modify(element, positional, named) {
+    if (!this.didSetup) {
+      this._setup(element, named);
+      this.didSetup = true;
+    }
 
-  didUpdateArguments() {
-    if (this._editor?.getValue() !== this.args.named.value) {
-      this._editor?.setValue(this.args.named.value);
+    if (this._editor?.getValue() !== named.value) {
+      this._editor?.setValue(named.value);
     }
   }
 
@@ -58,9 +60,10 @@ export default class CodeMirrorModifier extends Modifier {
    * @method CodeMirror#_onChange
    * See documentation for the CodeMirror editor events, specifically 'change' event here https://codemirror.net/doc/manual.html#events.
    */
-  _onChange(editor) {
-    const { onInput } = this.args.named;
+  _onChange(editor, named) {
+    const { onInput } = named;
     const newVal = editor.getValue();
+
     onInput && onInput(newVal);
   }
 
@@ -69,19 +72,19 @@ export default class CodeMirrorModifier extends Modifier {
    * Also registers a 'change' event on the editor.
    * @method CodeMirror#_setup
    */
-  _setup() {
-    if (!this.element) {
+  _setup(element, named) {
+    if (!element) {
       throw new Error('CodeMirror modifier has no element');
     }
 
-    const editor = codemirror(this.element, {
+    const editor = codemirror(element, {
       ..._PRESET_DEFAULTS,
-      ...(this.args.named.options || {}),
-      value: this.args.named.value,
+      ...(named.options || {}),
+      value: named.value,
     });
 
     editor.on('change', (editor) => {
-      this._onChange(editor);
+      this._onChange(editor, named);
     });
 
     this._editor = editor;
