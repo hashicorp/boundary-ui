@@ -14,4 +14,7 @@ module.exports = {
   emberOptions: {
     polyfills: [namedBlockPolyfill],
   },
+  features: {
+    postcss: false,
+  },
 };
