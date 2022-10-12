@@ -44,7 +44,7 @@ export default class CodeMirrorModifier extends Modifier {
   _editor;
   didSetup = false;
 
-  modify(element, positional, named) {
+  modify(element, _, named) {
     if (!this.didSetup) {
       this._setup(element, named);
       this.didSetup = true;
