@@ -123,6 +123,10 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
 
+    ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
+      ? JSON.parse(process.env.ENABLE_MIRAGE)
+      : true;
+
     ENV['ember-a11y-testing'] = {
       componentOptions: {
         axeOptions: {
