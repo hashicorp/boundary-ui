@@ -5,8 +5,8 @@
     ...attributes
     role='dialog'
     class='rose-dialog
-      {{if @style (concat 'rose-dialog-' @style)}}
-      {{if @modal 'modal'}}'
+      {{if @style (concat "rose-dialog-" @style)}}
+      {{if @modal "modal"}}'
     id={{this.id}}
     aria-describedby={{concat 'dialog-header-' this.id}}
     {{focus-trap}}
@@ -48,8 +48,8 @@
     ...attributes
     role='dialog'
     class='rose-dialog
-      {{if @style (concat 'rose-dialog-' @style)}}
-      {{if @modal 'modal'}}'
+      {{if @style (concat "rose-dialog-" @style)}}
+      {{if @modal "modal"}}'
   >
 
     {{#if @heading}}

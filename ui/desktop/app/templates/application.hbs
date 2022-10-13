@@ -4,8 +4,8 @@
 
   <layout.header>
     <Rose::Header
-      class='{{if (is-loading) ' loading'}}
-        {{if this.hasMacOSChrome ' header-cushion'}}'
+      class='{{if (is-loading) " loading"}}
+        {{if this.hasMacOSChrome " header-cushion"}}'
       as |header|
     >
       <header.brand @logo='logo-app' @text={{(app-name)}} />

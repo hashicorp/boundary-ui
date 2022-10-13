@@ -11,7 +11,10 @@ const downloadArtifact = (version) => {
   const archivePlatform = {};
   if (isMac()) {
     archivePlatform.name = 'darwin';
-    archivePlatform.arch = 'amd64';
+    let arch = os.arch();
+    // Map x64 to amd64 cli artifact
+    if (arch.match(/(x64)/i)) arch = 'amd64';
+    archivePlatform.arch = arch;
   }
 
   if (isWindows()) {

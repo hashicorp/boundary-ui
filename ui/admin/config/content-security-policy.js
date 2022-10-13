@@ -15,6 +15,7 @@ module.exports = function (environment) {
     'media-src': ["'self'"],
     'manifest-src': ["'self'"],
     'style-src-attr': ["'self'"],
+    'frame-ancestors': ["'self'"],
   };
 
   // Unsafe policy is necessary in development and test environments, but should
