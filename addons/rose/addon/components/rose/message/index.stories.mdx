@@ -42,7 +42,7 @@ Title can be configured with optional icon and subtitle.
   }}</Story>
 </Preview>
 
-```html
+```handlebars
 <Rose::Message @title="Page not found" @subtitle="Error 404" @icon="flight-icons/svg/alert-circle-16" as |message|>
   <message.description>
       You must be granted permissions to view this data. Ask your administrator
@@ -74,7 +74,7 @@ Message can be configured without icons and navigation links.
   }}</Story>
 </Preview>
 
-```html
+```handlebars
 <Rose::Message @title="No logs received yet" as |message|>
   <message.description>
     Description.
