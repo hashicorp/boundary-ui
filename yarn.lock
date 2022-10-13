@@ -12829,6 +12829,21 @@ ember-qunit@^5.1.4:
     silent-error "^1.1.1"
     validate-peer-dependencies "^1.1.0"
 
+ember-qunit@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/ember-qunit/-/ember-qunit-6.0.0.tgz#cea4766c297a25d58a3e886ccd4eb726167ea47c"
+  integrity sha512-idNWh9Ap2HN9e3Xozh5Jrciu5tDhn0okM/bgwDjdks3dwuMhEox45iiRTx469FWQ9+ixjZ40AsXsRTDkfCmvmw==
+  dependencies:
+    broccoli-funnel "^3.0.8"
+    broccoli-merge-trees "^3.0.2"
+    common-tags "^1.8.0"
+    ember-auto-import "^2.4.2"
+    ember-cli-babel "^7.26.6"
+    ember-cli-test-loader "^3.0.0"
+    resolve-package-path "^4.0.3"
+    silent-error "^1.1.1"
+    validate-peer-dependencies "^2.1.0"
+
 "ember-radio-button@github:yapplabs/ember-radio-button.git#b2ab65f":
   version "0.0.0"
   resolved "https://codeload.github.com/yapplabs/ember-radio-button/tar.gz/b2ab65f81cae3b0f087cc99b8c01172b754cb181"
@@ -26137,6 +26152,14 @@ validate-peer-dependencies@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/validate-peer-dependencies/-/validate-peer-dependencies-2.0.0.tgz#a1bd33472517932d7c859e6c03eb849849207794"
   integrity sha512-i2I3vl+9yk+gI0YCruDa29mzaNykLbSbUVVNQY/mBTLLYjQxVbklqBdTdH2iTpxV9AHH1u0dKlk/zl1sjHTfug==
+  dependencies:
+    resolve-package-path "^4.0.0"
+    semver "^7.3.2"
+
+validate-peer-dependencies@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/validate-peer-dependencies/-/validate-peer-dependencies-2.1.0.tgz#1ad8218b1b168aeb500165f9de2a3f53269ece56"
+  integrity sha512-x+M+mp16g4N+jDQJO6a+AKnMHAViov9mRzYfgMYR6Bq+UTwewf8aTQsP+e1QH0oZrADqP7fuI/bEbl3CzRFhOQ==
   dependencies:
     resolve-package-path "^4.0.0"
     semver "^7.3.2"
