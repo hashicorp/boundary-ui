@@ -47,7 +47,8 @@ export default class ApplicationRoute extends Route {
     });
   }
 
-  beforeModel() {
+  async beforeModel() {
+    await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
   }
