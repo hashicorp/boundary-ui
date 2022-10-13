@@ -10,7 +10,7 @@ CodeEditor::fieldEditor is where the provided code is displayed with syntax high
 CodeEditor::toolbar is intended to go on top of the fieldEditor and provides a 'Copy code' button as well as other optional user-provided actions.
 
 ```handlebars
-<CodeEditor @codeValue="{{this.codeIWantToSee}}" as |c|>
+<CodeEditor @codeValue={{this.codeIWantToSee}} as |c|>
   <c.toolbar />
   <c.fieldEditor />
 </CodeEditor>

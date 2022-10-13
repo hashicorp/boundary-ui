@@ -15,11 +15,19 @@ For example, layout components may yield an anonymous component to configure
 various layout regions:
 
 ```handlebars
-<div ...attributes class="rose-layout-global">
-  {{yield (hash
-    header=(component "rose/anonymous" tagName="header" class="rose-layout-global-header")
-    sidebar=(component "rose/anonymous" tagName="aside" class="rose-layout-global-sidebar")
-    body=(component "rose/anonymous" tagName="main" class="rose-layout-global-body")
-  )}}
+<div ...attributes class='rose-layout-global'>
+  {{yield
+    (hash
+      header=(component
+        'rose/anonymous' tagName='header' class='rose-layout-global-header'
+      )
+      sidebar=(component
+        'rose/anonymous' tagName='aside' class='rose-layout-global-sidebar'
+      )
+      body=(component
+        'rose/anonymous' tagName='main' class='rose-layout-global-body'
+      )
+    )
+  }}
 </div>
 ```

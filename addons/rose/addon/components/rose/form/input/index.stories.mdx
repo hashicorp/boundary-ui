@@ -11,11 +11,11 @@ Renders a simple form input.
 
 ```handlebars
 <Rose::Form::Input
-  @type="email"
-  @name="email"
-  @value="info@example.com"
-  @label="Email"
-  @helperText="Enter your email"
+  @type='email'
+  @name='email'
+  @value='info@example.com'
+  @label='Email'
+  @helperText='Enter your email'
   @link='www.example.net'
   @linkText='sample link text'
   @error={{false}}
@@ -30,24 +30,23 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
 ```handlebars
 <Rose::Form::Input
   @contextual={{true}}
-  @type="email"
-  @name="email"
-  @value="info@example.com"
-  @label="Email"
-  @helperText="Enter your email"
+  @type='email'
+  @name='email'
+  @value='info@example.com'
+  @label='Email'
+  @helperText='Enter your email'
   @link='www.example.net'
   @linkText='sample link text'
   @error={{false}}
   @disabled={{false}}
   readonly={{false}}
->
-
-</Rose::Form::Input>
+/>
 ```
 
 <Preview>
-  <Story name="Basic Field">{{
-    template: hbs`
+  <Story name="Basic Field">
+    {{
+      template: hbs`
       <Rose::Form::Input
         @type={{type}}
         @name={{type}}
@@ -62,39 +61,41 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         @icon={{icon}}
         />
     `,
-    context: {
-      type: select(
-        'type',
-        {
-          text: 'text',
-          email: 'email',
-          number: 'number',
-          password: 'password',
-        },
-        'text'
-      ),
-      value: text('value', 'Value'),
-      label: text('label', 'Label'),
-      helperText: text('helperText', 'Helper text'),
-      link: text('link', 'link goes here'),
-      linkText: text('linkText', 'link text'),
-      disabled: boolean('disabled', false),
-      'read-only': boolean('readonly', false),
-      icon: select(
-        'icon',
-        {
-          'none': null,
-          'flight-icons/svg/search-16': 'flight-icons/svg/search-16',
-        },
-        'flight-icons/svg/search-16',
-      ),
-    }
-  }}</Story>
+      context: {
+        type: select(
+          'type',
+          {
+            text: 'text',
+            email: 'email',
+            number: 'number',
+            password: 'password',
+          },
+          'text'
+        ),
+        value: text('value', 'Value'),
+        label: text('label', 'Label'),
+        helperText: text('helperText', 'Helper text'),
+        link: text('link', 'link goes here'),
+        linkText: text('linkText', 'link text'),
+        disabled: boolean('disabled', false),
+        'read-only': boolean('readonly', false),
+        icon: select(
+          'icon',
+          {
+            none: null,
+            'flight-icons/svg/search-16': 'flight-icons/svg/search-16',
+          },
+          'flight-icons/svg/search-16'
+        ),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Field with Errors">{{
-    template: hbs`
+  <Story name="Field with Errors">
+    {{
+      template: hbs`
       <Rose::Form::Input
         @type={{type}}
         @name={{type}}
@@ -113,31 +114,33 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         </field.errors>
       </Rose::Form::Input>
     `,
-    context: {
-      type: select(
-        'type',
-        {
-          text: 'text',
-          email: 'email',
-          number: 'number',
-          password: 'password',
-        },
-        'text'
-      ),
-      value: text('value', 'Value'),
-      label: text('label', 'Label'),
-      helperText: text('helperText', 'Helper text'),
-      link: text('link', 'link goes here'),
-      linkText: text('linkText', 'link text'),
-      disabled: boolean('disabled', false),
-      'read-only': boolean('readonly', false),
-    }
-  }}</Story>
+      context: {
+        type: select(
+          'type',
+          {
+            text: 'text',
+            email: 'email',
+            number: 'number',
+            password: 'password',
+          },
+          'text'
+        ),
+        value: text('value', 'Value'),
+        label: text('label', 'Label'),
+        helperText: text('helperText', 'Helper text'),
+        link: text('link', 'link goes here'),
+        linkText: text('linkText', 'link text'),
+        disabled: boolean('disabled', false),
+        'read-only': boolean('readonly', false),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Fully Contextual Input">{{
-    template: hbs`
+  <Story name="Fully Contextual Input">
+    {{
+      template: hbs`
       <Rose::Form::Input @value="Text" @error={{true}} @contextual={{true}} as |field|>
         <hr />
         <field.label>Label</field.label>
@@ -152,6 +155,7 @@ Or a fully contextual component without a wrapper, for maximum flexibility.
         <hr />
       </Rose::Form::Input>
     `,
-    context: {},
-  }}</Story>
+      context: {},
+    }}
+  </Story>
 </Preview>

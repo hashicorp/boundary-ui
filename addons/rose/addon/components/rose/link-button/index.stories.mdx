@@ -12,14 +12,19 @@ Styles supported: primary, secondary, warning, and ghost.
 Disabling link button is not supported as it is an action on form components only.
 
 ```handlebars
-<Rose::LinkButton @route="index" @style="primary" @iconRight="flight-icons/svg/entry-point-16">
+<Rose::LinkButton
+  @route='index'
+  @style='primary'
+  @iconRight='flight-icons/svg/entry-point-16'
+>
   Content
 </Rose::LinkButton>
 ```
 
 <Preview>
-  <Story name="Advanced">{{
-    template: hbs`
+  <Story name="Advanced">
+    {{
+      template: hbs`
       <Rose::LinkButton
         @route="index"
         @style={{style}}
@@ -29,70 +34,82 @@ Disabling link button is not supported as it is an action on form components onl
         {{text}}
       </Rose::LinkButton>
     `,
-    context: {
-      text: text('text', 'Content'),
-      style: select(
-        'style',
-        {
-          primary: 'primary',
-          secondary: 'secondary',
-          warning: 'warning',
-          ghost: 'ghost',
-          'inline-link-action': 'inline-link-action',
-        },
-        'primary'
-      ),
-      iconLeft: select(
-        'iconLeft',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/clipboard-copy-16'
-      ),
-      iconRight: select(
-        'iconRight',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/clipboard-copy-16'
-      ),
-    },
-  }}</Story>
+      context: {
+        text: text('text', 'Content'),
+        style: select(
+          'style',
+          {
+            primary: 'primary',
+            secondary: 'secondary',
+            warning: 'warning',
+            ghost: 'ghost',
+            'inline-link-action': 'inline-link-action',
+          },
+          'primary'
+        ),
+        iconLeft: select(
+          'iconLeft',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/clipboard-copy-16'
+        ),
+        iconRight: select(
+          'iconRight',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/clipboard-copy-16'
+        ),
+      },
+    }}
+  </Story>
 </Preview>
 
 Similar to `Rose::Button`, icon only link button is supported.
 
 ```handlebars
-<Rose::LinkButton @route="index" @style="primary" @iconOnly="flight-icons/svg/help-16" />
+<Rose::LinkButton
+  @route='index'
+  @style='primary'
+  @iconOnly='flight-icons/svg/help-16'
+/>
 ```
 
 <Preview>
-  <Story name="Icon Only">{{
-    template: hbs`
+  <Story name="Icon Only">
+    {{
+      template: hbs`
     <Rose::LinkButton @route="" @style={{style}} @iconOnly={{iconOnly}} />
     `,
-    context: {
-      style: select(
-        'style',
-        {
-          primary: 'primary',
-          secondary: 'secondary',
-          warning: 'warning',
-          ghost: 'ghost',
-          'inline-link-action': 'inline-link-action',
-        },
-        'primary'
-      ),
-      iconOnly: select(
-        'iconOnly',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/help-16': 'flight-icons/svg/help-16',
-        },
-        'flight-icons/svg/help-16'
-      ),
-    },
-  }}</Story>
+      context: {
+        style: select(
+          'style',
+          {
+            primary: 'primary',
+            secondary: 'secondary',
+            warning: 'warning',
+            ghost: 'ghost',
+            'inline-link-action': 'inline-link-action',
+          },
+          'primary'
+        ),
+        iconOnly: select(
+          'iconOnly',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/help-16': 'flight-icons/svg/help-16',
+          },
+          'flight-icons/svg/help-16'
+        ),
+      },
+    }}
+  </Story>
 </Preview>

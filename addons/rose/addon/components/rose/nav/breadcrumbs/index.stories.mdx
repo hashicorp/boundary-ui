@@ -10,18 +10,20 @@ A breadcrumbs component with links as crumbs.
 
 ```handlebars
 <Rose::Nav::Breadcrumbs as |breadcrumbs|>
-  <breadcrumbs.link @route="about">Level 1</breadcrumbs.link>
-  <breadcrumbs.link @route="index">Level 2</breadcrumbs.link>
+  <breadcrumbs.link @route='about'>Level 1</breadcrumbs.link>
+  <breadcrumbs.link @route='index'>Level 2</breadcrumbs.link>
 </Rose::Nav::Breadcrumbs>
 ```
 
 <Preview>
-  <Story name="Basic Breadcrumbs">{{
-    template: hbs`
+  <Story name="Basic Breadcrumbs">
+    {{
+      template: hbs`
       <Rose::Nav::Breadcrumbs as |breadcrumbs|>
         <breadcrumbs.link @route="about">Level 1</breadcrumbs.link>
         <breadcrumbs.link @route="index">Level 2</breadcrumbs.link>
       </Rose::Nav::Breadcrumbs>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

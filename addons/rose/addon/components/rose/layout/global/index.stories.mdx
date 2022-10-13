@@ -17,13 +17,15 @@ be configured: header, body, and footer.
 ```
 
 <Preview>
-  <Story name="Global">{{
-    template: hbs`
+  <Story name="Global">
+    {{
+      template: hbs`
       <Rose::Layout::Global as |layout|>
         <layout.header style="background: var(--brand-gray-5);">Header</layout.header>
         <layout.body style="background: var(--brand-gray-7);">Body</layout.body>
         <layout.footer style="background: var(--brand-gray-5);">Footer</layout.footer>
       </Rose::Layout::Global>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

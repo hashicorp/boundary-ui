@@ -11,17 +11,18 @@ Renders a form input checkbox.
 
 ```handlebars
 <Rose::Form::Checkbox
-  @name="boolean-value"
-  @label="Yes?"
+  @name='boolean-value'
+  @label='Yes?'
   @checked={{false}}
   @error={{false}}
   @disabled={{false}}
-  />
+/>
 ```
 
 <Preview>
-  <Story name="Basic Checkbox" height="10rem">{{
-    template: hbs`
+  <Story name="Basic Checkbox" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Checkbox
         @name={{name}}
         @label={{label}}
@@ -32,21 +33,23 @@ Renders a form input checkbox.
         @disabled={{disabled}}
         />
     `,
-    context: {
-      label: text('text', 'Checkbox 🛎'),
-      description: text('description', 'Short description in label'),
-      helperText: text('helperText', 'This is an optional help text.'),
-      name: text('name', 'checkbox-1'),
-      checked: boolean('checked', false),
-      error: boolean('error', false),
-      disabled: boolean('disabled', false),
-    }
-  }}</Story>
+      context: {
+        label: text('text', 'Checkbox 🛎'),
+        description: text('description', 'Short description in label'),
+        helperText: text('helperText', 'This is an optional help text.'),
+        name: text('name', 'checkbox-1'),
+        checked: boolean('checked', false),
+        error: boolean('error', false),
+        disabled: boolean('disabled', false),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Checkbox with errors" height="10rem">{{
-    template: hbs`
+  <Story name="Checkbox with errors" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Checkbox
         @name={{name}}
         @label={{label}}
@@ -60,25 +63,25 @@ Renders a form input checkbox.
         </field.errors>
       </Rose::Form::Checkbox>
     `,
-    context: {
-      label: text('text', 'Checkbox 🛎'),
-      name: text('name', 'checkbox-1'),
-      checked: boolean('checked', false),
-      disabled: boolean('disabled', false),
-    }
-  }}</Story>
+      context: {
+        label: text('text', 'Checkbox 🛎'),
+        name: text('name', 'checkbox-1'),
+        checked: boolean('checked', false),
+        disabled: boolean('disabled', false),
+      },
+    }}
+  </Story>
 </Preview>
-
 
 ```handlebars
 <Rose::Form::Checkbox
-  @name="boolean-value"
-  @label="Yes?"
+  @name='boolean-value'
+  @label='Yes?'
   @checked={{false}}
   @error={{false}}
   @disabled={{false}}
   @inline={{false}}
-  />
+/>
 ```
 
 <Preview>

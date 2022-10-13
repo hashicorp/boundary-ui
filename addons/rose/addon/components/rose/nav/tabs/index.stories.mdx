@@ -11,21 +11,23 @@ A simple tabbed navigation component.
 
 ```handlebars
 <Rose::Nav::Tabs as |nav|>
-  <nav.link @route='index' class="active">Text</nav.link>
+  <nav.link @route='index' class='active'>Text</nav.link>
   <nav.link @route='index'>Text</nav.link>
   <nav.link @route='index'>Text</nav.link>
 </Rose::Nav::Tabs>
 ```
 
 <Preview>
-  <Story name="Basic Tabs">{{
-    template: hbs`
+  <Story name="Basic Tabs">
+    {{
+      template: hbs`
       <Rose::Nav::Tabs as |nav|>
         <nav.link @route='index' class="active">Text</nav.link>
         <nav.link @route='index'>Text</nav.link>
         <nav.link @route='index'>Text</nav.link>
       </Rose::Nav::Tabs>
     `,
-    context: {},
-  }}</Story>
+      context: {},
+    }}
+  </Story>
 </Preview>

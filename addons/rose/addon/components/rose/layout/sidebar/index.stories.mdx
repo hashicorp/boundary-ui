@@ -22,12 +22,14 @@ be configured: sidebar and body.
 ```
 
 <Preview>
-  <Story name="SidebarLayout">{{
-    template: hbs`
+  <Story name="SidebarLayout">
+    {{
+      template: hbs`
       <Rose::Layout::Sidebar as |layout|>
         <layout.sidebar style="background: var(--brand-gray-7);">Body</layout.sidebar>
         <layout.body style="background: var(--brand-gray-5);">Sidebar</layout.body>
       </Rose::Layout::Sidebar>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

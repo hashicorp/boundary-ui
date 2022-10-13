@@ -11,26 +11,27 @@ Renders a form select element.
 
 ```handlebars
 <Rose::Form::Select
-  @name="select-name"
-  @value="green"
-  @label="Color"
-  @helperText="Set your desired color"
+  @name='select-name'
+  @value='green'
+  @label='Color'
+  @helperText='Set your desired color'
   @disabled={{false}}
   @error={{false}}
   as |field|
 >
   <field.field as |select|>
     <select.option>Choose a color</select.option>
-    <select.option @value="red">Red</select.option>
-    <select.option @value="green">Green</select.option>
-    <select.option @value="blue">Blue</select.option>
+    <select.option @value='red'>Red</select.option>
+    <select.option @value='green'>Green</select.option>
+    <select.option @value='blue'>Blue</select.option>
   </field.field>
 </Rose::Form::Select>
 ```
 
 <Preview>
-  <Story name="Basic" height="10rem">{{
-    template: hbs`
+  <Story name="Basic" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Select
         @name={{name}}
         @value={{value}}
@@ -49,29 +50,31 @@ Renders a form select element.
         </field.field>
       </Rose::Form::Select>
     `,
-    context: {
-      value: select(
-        'value',
-        {
-          null: null,
-          'value-1': 'value-1',
-          'value-2': 'value-2',
-          'value-3': 'value-3',
-        },
-        null
-      ),
-      name: text('name', 'select-name'),
-      label: text('label', 'Label'),
-      helperText: text('helperText', 'Helper text'),
-      disabled: boolean('disabled', false),
-      onChange: action('changed'),
-    }
-  }}</Story>
+      context: {
+        value: select(
+          'value',
+          {
+            null: null,
+            'value-1': 'value-1',
+            'value-2': 'value-2',
+            'value-3': 'value-3',
+          },
+          null
+        ),
+        name: text('name', 'select-name'),
+        label: text('label', 'Label'),
+        helperText: text('helperText', 'Helper text'),
+        disabled: boolean('disabled', false),
+        onChange: action('changed'),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Select with Errors" height="10rem">{{
-    template: hbs`
+  <Story name="Select with Errors" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Select
         @name={{name}}
         @value={{value}}
@@ -93,29 +96,31 @@ Renders a form select element.
         </field.errors>
       </Rose::Form::Select>
     `,
-    context: {
-      value: select(
-        'value',
-        {
-          null: null,
-          'value-1': 'value-1',
-          'value-2': 'value-2',
-          'value-3': 'value-3',
-        },
-        null
-      ),
-      name: text('name', 'select-name'),
-      label: text('label', 'Label'),
-      helperText: text('helperText', 'Helper text'),
-      disabled: boolean('disabled', false),
-      onChange: action('changed'),
-    }
-  }}</Story>
+      context: {
+        value: select(
+          'value',
+          {
+            null: null,
+            'value-1': 'value-1',
+            'value-2': 'value-2',
+            'value-3': 'value-3',
+          },
+          null
+        ),
+        name: text('name', 'select-name'),
+        label: text('label', 'Label'),
+        helperText: text('helperText', 'Helper text'),
+        disabled: boolean('disabled', false),
+        onChange: action('changed'),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Fully Contextual Select">{{
-    template: hbs`
+  <Story name="Fully Contextual Select">
+    {{
+      template: hbs`
       <Rose::Form::Select @value="value-3" @error={{true}} @contextual={{true}} as |field|>
         <hr />
         <field.label>Label</field.label>
@@ -134,6 +139,7 @@ Renders a form select element.
         <hr />
       </Rose::Form::Select>
     `,
-    context: {},
-  }}</Story>
+      context: {},
+    }}
+  </Story>
 </Preview>

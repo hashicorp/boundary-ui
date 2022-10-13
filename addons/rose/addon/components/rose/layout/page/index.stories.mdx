@@ -19,8 +19,9 @@ A page layout/positioning component that allows five distinct sections to be con
 ```
 
 <Preview>
-  <Story name="Page">{{
-    template: hbs`
+  <Story name="Page">
+    {{
+      template: hbs`
     <Rose::Layout::Page as |page|>
       <page.breadcrumbs style="background: var(--brand-gray-4);">Breadcrumbs</page.breadcrumbs>
       <page.header style="background: var(--brand-gray-5);">Header</page.header>
@@ -29,5 +30,6 @@ A page layout/positioning component that allows five distinct sections to be con
       <page.body style="background: var(--brand-gray-7);">Body</page.body>
     </Rose::Layout::Page>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

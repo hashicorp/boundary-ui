@@ -14,12 +14,14 @@ Card link component wraps content with `LinkTo` component. Supports title and de
   @description='Card description'
   @id='resource_id_1234'
   @icon='flight-icons/svg/org-16'
-  @route='about'/>
+  @route='about'
+/>
 ```
 
 <Preview>
-  <Story name="Basic">{{
-    template: hbs`
+  <Story name="Basic">
+    {{
+      template: hbs`
       <Rose::Card::Link
         @title={{title}}
         @description={{description}}
@@ -27,17 +29,20 @@ Card link component wraps content with `LinkTo` component. Supports title and de
         @icon={{icon}}
       />
     `,
-    context: {
-      title: text('title', 'Card title'),
-      description: text('description', 'Card description'),
-      id: text('id', 'resource_id_1234'),
-      icon: select('icon', {
-          'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
-        },
-        'flight-icons/svg/org-16'
-      ),
-    },
-  }}</Story>
+      context: {
+        title: text('title', 'Card title'),
+        description: text('description', 'Card description'),
+        id: text('id', 'resource_id_1234'),
+        icon: select(
+          'icon',
+          {
+            'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
+          },
+          'flight-icons/svg/org-16'
+        ),
+      },
+    }}
+  </Story>
 </Preview>
 
 `@route` defaults to 'index' when not supplied.

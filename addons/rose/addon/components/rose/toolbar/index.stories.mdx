@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 
 # Toolbar
 
-Renders a toolbar.  Items may be added directly into the toolbar, or within
+Renders a toolbar. Items may be added directly into the toolbar, or within
 predefined "regions" for left and right alignment, respectively.
 
 ```handlebars
@@ -22,11 +22,13 @@ predefined "regions" for left and right alignment, respectively.
 ```
 
 <Preview>
-  <Story name="Toolbar">{{
-    template: hbs`
+  <Story name="Toolbar">
+    {{
+      template: hbs`
     <Rose::Toolbar as |toolbar|>
     toolbar
      </Rose::Toolbar>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

@@ -1,4 +1,3 @@
-
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
@@ -11,8 +10,9 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 A dialog component with optional modal capabilities.
 
 <Preview>
-  <Story name="Dialog" height="15rem">{{
-    template: hbs`
+  <Story name="Dialog" height="15rem">
+    {{
+      template: hbs`
       <Rose::Dialog
         @modal={{modal}}
         @dismiss={{dismiss}}
@@ -29,39 +29,39 @@ A dialog component with optional modal capabilities.
         </dialog.footer>
       </Rose::Dialog>
     `,
-    context: {
-      modal: boolean('modal', false),
-      heading: text('heading', 'Dialog Heading Text'),
-      dismissButtonText: text('dismissButtonText', 'Dismiss'),
-      icon: select(
-        'icon',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/check-circle-16'
-      ),
-      style: select(
-        'style',
-        {
-          'default': '',
-          'warning': 'warning'
-        }
-      ),
-      dismiss: action('dismiss')
-    }
-  }}</Story>
+      context: {
+        modal: boolean('modal', false),
+        heading: text('heading', 'Dialog Heading Text'),
+        dismissButtonText: text('dismissButtonText', 'Dismiss'),
+        icon: select(
+          'icon',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/check-circle-16'
+        ),
+        style: select('style', {
+          default: '',
+          warning: 'warning',
+        }),
+        dismiss: action('dismiss'),
+      },
+    }}
+  </Story>
 </Preview>
-
 
 ```handlebars
 <Rose::Dialog
   @modal={{true}}
   @dismiss={{@dismissFn}}
-  @icon="flight-icons/svg/check-circle-16"
-  @heading="Heading"
-  @dismissButtonText="Dismiss"
-as |dialog|>
+  @icon='flight-icons/svg/check-circle-16'
+  @heading='Heading'
+  @dismissButtonText='Dismiss'
+  as |dialog|
+>
   <dialog.body>
     Dialog Body
   </dialog.body>

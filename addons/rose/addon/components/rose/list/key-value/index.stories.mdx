@@ -9,8 +9,9 @@ import { action } from '@storybook/addon-actions';
 A simple key/value list with support for embedded form fields and buttons.
 
 <Preview>
-  <Story name="Basic Key/Value List" height="17rem">{{
-    template: hbs`
+  <Story name="Basic Key/Value List" height="17rem">
+    {{
+      template: hbs`
     <Rose::List::KeyValue as |list|>
       <list.item as |item|>
         <item.key>Key</item.key>
@@ -52,7 +53,8 @@ A simple key/value list with support for embedded form fields and buttons.
       </Rose::Form::Input>
     </Rose::List::KeyValue>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>
 
 ```handlebars
@@ -70,7 +72,7 @@ A simple key/value list with support for embedded form fields and buttons.
     <item.cell>Value</item.cell>
   </list.item>
 
-  {{!-- In actual use, form fields should be yielded from an outer form component --}}
+  {{! In actual use, form fields should be yielded from an outer form component }}
   <Rose::Form::Input @contextual={{true}} as |input|>
     <list.item as |item|>
       <item.key>
@@ -80,7 +82,7 @@ A simple key/value list with support for embedded form fields and buttons.
         <input.field />
       </item.cell>
       <item.cell>
-        <Rose::Button @style="secondary">Add</Rose::Button>
+        <Rose::Button @style='secondary'>Add</Rose::Button>
       </item.cell>
     </list.item>
   </Rose::Form::Input>
@@ -94,7 +96,11 @@ A simple key/value list with support for embedded form fields and buttons.
         <input.field />
       </item.cell>
       <item.cell>
-        <Rose::Button @style="secondary" @iconOnly="flight-icons/svg/trash-16" title="Remove">Remove</Rose::Button>
+        <Rose::Button
+          @style='secondary'
+          @iconOnly='flight-icons/svg/trash-16'
+          title='Remove'
+        >Remove</Rose::Button>
       </item.cell>
     </list.item>
   </Rose::Form::Input>

@@ -17,13 +17,15 @@ Use this component to display one or more error messages.
 ```
 
 <Preview>
-  <Story name="Basic Form Errors">{{
-    template: hbs`
+  <Story name="Basic Form Errors">
+    {{
+      template: hbs`
       <Rose::Form::Errors as |errors|>
         <errors.message>An error message goes here.</errors.message>
         <errors.message>Another message goes here.</errors.message>
       </Rose::Form::Errors>
     `,
-    context: {},
-  }}</Story>
+      context: {},
+    }}
+  </Story>
 </Preview>

@@ -14,19 +14,23 @@ Renders a simple icon.
 ```
 
 <Preview>
-  <Story name="Basic">{{
-    template: hbs`
+  <Story name="Basic">
+    {{
+      template: hbs`
       <Rose::Icon @name={{name}} @size={{size}} />
     `,
-    context: {
-      name: select(
-        'name',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/check-circle-16'
-      ),
-    }
-  }}</Story>
+      context: {
+        name: select(
+          'name',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/check-circle-16'
+        ),
+      },
+    }}
+  </Story>
 </Preview>
