@@ -11,7 +11,6 @@ module.exports = {
   copyright: config.copyright,
   asar: false,
 
-  // removePackageScripts: true,
   // afterSign: async (context) => {
   //   // Mac releases require hardening+notarization: https://developer.apple.com/documentation/xcode/notarizing_macos_software_before_distribution
   //   if (!isDebug && context.electronPlatformName === "darwin") {
@@ -33,18 +32,14 @@ module.exports = {
 
   directories: {
     // app: '.',
-    output: 'dist',
+    output: 'out',
     buildResources: './assets/app-icons',
   },
   files: ['!**/tests/*'],
 
-  // win: {
-  //   target: 'nsis',
-  // },
-  // nsis: {
-  //   deleteAppDataOnUninstall: true,
-  //   include: 'installer/win/nsis-installer.nsh',
-  // },
+  win: {
+    target: ['zip'],
+  },
 
   mac: {
     target: ['dmg', 'zip'],
@@ -52,35 +47,32 @@ module.exports = {
     identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
     entitlements: './assets/macos/entitlements.plist',
     entitlementsInherit: './assets/macos/entitlements.plist',
-    // gatekeeperAssess: true,
   },
   dmg: {
     icon: './assets/macos/disk.icns',
     background: './assets/macos/background.png',
-    "contents": [
+    title: config.productName,
+    contents: [
       {
-        "x": 200,
-        "y": 340
+        x: 200,
+        y: 340,
       },
       {
-        "x": 450,
-        "y": 340,
-        "type": "link",
-        "path": "/Applications"
-      }
-    ]
+        x: 450,
+        y: 340,
+        type: 'link',
+        path: '/Applications',
+      },
+    ],
   },
 
-  // linux: {
-  //   desktop: {
-  //     StartupNotify: 'false',
-  //     Encoding: 'UTF-8',
-  //     MimeType: 'x-scheme-handler/deeplink',
-  //   },
-  //   target: ['AppImage', 'rpm', 'deb'],
-  // },
-  // deb: {
-  //   priority: 'optional',
-  //   afterInstall: 'installer/linux/after-install.tpl',
-  // },
+  linux: {
+    target: ['deb', 'zip'],
+  },
+  deb: {
+    packageName: 'boundary-desktop',
+    icon: './assets/app-icons/icon.png',
+    description: 'Desktop Client for Boundary',
+    maintainer: 'HashiCorp',
+  },
 };
