@@ -91,7 +91,7 @@
     "ember-inline-svg": "^1.0.1",
     "ember-load-initializers": "^2.1.2",
     "ember-maybe-import-regenerator": "^1.0.0",
-    "ember-modifier": "^2.1.2",
+    "ember-modifier": "^3.2.7",
     "ember-page-title": "^7.0.0",
     "ember-pollster": "^0.0.1-beta.2",
     "ember-qunit": "^6.0.0",

@@ -147,9 +147,9 @@ export default function initializeMockIPC(server, config) {
    * main process, and routes messages to it in a way similar to our
    * preload.js script.
    *
-   * Initializes mock IPC only in a non-Electron non-testing context.
+   * Initializes mock IPC only in a non-testing context and when mirage is turned on.
    */
-  if (!config.isElectron && !isTesting) {
+  if (config['ember-cli-mirage'].enabled && !isTesting) {
     const mockIPC = new MockIPC();
     window.addEventListener('message', async function (event) {
       if (event.origin !== window.location.origin) return;
