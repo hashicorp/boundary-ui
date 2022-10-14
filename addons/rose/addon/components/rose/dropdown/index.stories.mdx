@@ -1,9 +1,9 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { number, boolean, object } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 
-<Meta title="Rose|Dropdown" component="Dropdown" />
+<Meta title="Rose/Dropdown" component="Dropdown" />
 
 # Dropdown
 
@@ -112,8 +112,8 @@ Dropdown content can be aligned to right edge of the component instead of the de
 <Rose::Dropdown
   @text='Choose One&hellip;'
   style='float: right'
-  @dropdownRight={{true}}
-  as |dropdown|
+  @dropdownRight="{{true}}
+ " as |dropdown|
 >
   <dropdown.link @route='index'>Menu item</dropdown.link>
   <dropdown.link @route='about'>Menu item</dropdown.link>
@@ -135,7 +135,8 @@ Dropdown indicator can be hidden using `showCaret` attribute.
 
 ```handlebars
 <Rose::Dropdown
-  @showCaret={{true}}
+  @showCaret="{{true}}
+ "
   @icon='flight-icons/svg/more-horizontal-16'
   as |dropdown|
 >
@@ -167,16 +168,17 @@ form fields.
 
 ```handlebars
 <Rose::Form as |form|>
-  <Rose::Dropdown @text='Items' @ignoreClickInside={{true}} as |dropdown|>
+  <Rose::Dropdown @text='Items' @ignoreClickInside="{{true}}" as |dropdown|>
     <Rose::Form::Checkbox::Group
-      @name='checkbox-group'
-      @items={{this.items}}
-      @selectedItems={{this.selectedItems}}
-      @onChange={{fn this.onChange}}
+      @name="checkbox-group"
+      @items="{{this.items}}"
+      @selectedItems="{{this.selectedItems}}"
+      @onChange="{{fn" this.onChange}}
       as |group|
     >
       <dropdown.item>
-        <group.checkbox @label={{group.item.name}} value={{group.item.id}} />
+        <group.checkbox @label="{{group.item.name}}"
+          value="{{group.item.id}}" />
       </dropdown.item>
     </Rose::Form::Checkbox::Group>
 

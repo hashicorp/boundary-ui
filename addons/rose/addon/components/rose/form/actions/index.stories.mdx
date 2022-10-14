@@ -1,9 +1,9 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Form/Actions" component="Form/Actions" />
+<Meta title="Rose/Form/Actions" component="Form/Actions" />
 
 # Form Actions
 
@@ -18,8 +18,7 @@ support actions. The cancel button supports a cancel action.
   @cancelText='Cancel'
   @showCancel={{true}}
   @submitDisabled={{false}}
-  @cancel='(fn'
-  @cancel)
+  @cancel={{@cancel}}
 />
 ```
 

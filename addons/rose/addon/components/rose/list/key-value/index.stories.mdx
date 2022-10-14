@@ -1,8 +1,8 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 
-<Meta title="Rose|List|KeyValue" component="List/KeyValue" />
+<Meta title="Rose/List/KeyValue" component="List/KeyValue" />
 
 # Key/Value List
 
@@ -72,8 +72,9 @@ A simple key/value list with support for embedded form fields and buttons.
     <item.cell>Value</item.cell>
   </list.item>
 
-  {{! In actual use, form fields should be yielded from an outer form component }}
-  <Rose::Form::Input @contextual={{true}} as |input|>
+  {{! In actual use, form fields should be yielded from an outer form
+  component }}
+  <Rose::Form::Input @contextual="{{true}}" as |input|>
     <list.item as |item|>
       <item.key>
         <input.label>Key</input.label>
@@ -87,7 +88,7 @@ A simple key/value list with support for embedded form fields and buttons.
     </list.item>
   </Rose::Form::Input>
 
-  <Rose::Form::Input @contextual={{true}} as |input|>
+  <Rose::Form::Input @contextual="{{true}}" as |input|>
     <list.item as |item|>
       <item.key>
         <input.label>Key</input.label>
@@ -104,6 +105,5 @@ A simple key/value list with support for embedded form fields and buttons.
       </item.cell>
     </list.item>
   </Rose::Form::Input>
-
 </Rose::List::KeyValue>
 ```
