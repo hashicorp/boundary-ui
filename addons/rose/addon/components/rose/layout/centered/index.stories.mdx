@@ -1,8 +1,8 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 
-<Meta title="Rose|Layout|Centered" component="Centered" />
+<Meta title="Rose/Layout/Centered" component="Centered" />
 
 # Layout|Centered
 
@@ -15,11 +15,13 @@ A left and right centered layout/positioning component.
 ```
 
 <Preview>
-  <Story name="Centered">{{
-    template: hbs`
+  <Story name="Centered">
+    {{
+      template: hbs`
     <Rose::Layout::Centered style="background: var(--brand-gray-7);">
       Centered
     </Rose::Layout::Centered>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

@@ -1,8 +1,8 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Form/Radio/Radio" component="Form/Radio/Radio" />
+<Meta title="Rose/Form/Radio/Radio" component="Form/Radio/Radio" />
 
 # Form Radiofield
 
@@ -10,18 +10,19 @@ Renders a form radiofield.
 
 ```htmlbars
 <Rose::Form::Radio::Radio
-  @label="Yes"
+  @label='Yes'
   @error={{false}}
-  @value="yes-agree"
-  @selectedValue="yes-agree"
+  @value='yes-agree'
+  @selectedValue='yes-agree'
   @disabled={{false}}
   @changed={{fn}}
-  />
+/>
 ```
 
 <Preview>
-  <Story name="Basic" height="10rem">{{
-    template: hbs`
+  <Story name="Basic" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Radio::Radio
         @label={{label}}
         @error={{error}}
@@ -32,46 +33,51 @@ Renders a form radiofield.
         @helperText={{helperText}}
         />
     `,
-    context: {
-      label: text('text', 'Radiofield'),
-      error: boolean('error', false),
-      value: text('value', 'value and selectedValue must match to select radiofield'),
-      helperText: text('helperText', 'Helper text'),
-      selectedValue: text(
-        'selectedValue',
-        'value and selectedValue must match to select radiofield'
-      ),
-      disabled: boolean('disabled', false),
-      icon: select(
-        'icon',
-        {
-          'none': null,
-          'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        null
-      ),
-    }
-  }}</Story>
+      context: {
+        label: text('text', 'Radiofield'),
+        error: boolean('error', false),
+        value: text(
+          'value',
+          'value and selectedValue must match to select radiofield'
+        ),
+        helperText: text('helperText', 'Helper text'),
+        selectedValue: text(
+          'selectedValue',
+          'value and selectedValue must match to select radiofield'
+        ),
+        disabled: boolean('disabled', false),
+        icon: select(
+          'icon',
+          {
+            none: null,
+            'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          null
+        ),
+      },
+    }}
+  </Story>
 </Preview>
-
 
 ```htmlbars
 <Rose::Form::Radio::Radio
-  @label="Yes"
+  @label='Yes'
   @error={{false}}
-  @value="yes-agree"
-  @selectedValue="yes-agree"
+  @value='yes-agree'
+  @selectedValue='yes-agree'
   @disabled={{false}}
   @changed={{fn}}
   @inline={{true}}
   @helperText={{helperText}}
-  />
+/>
 ```
 
 <Preview>
-  <Story name="Radio with inline style" height="10rem">{{
-    template: hbs`
+  <Story name="Radio with inline style" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Radio::Radio
         @label='Radiofield1'
         @error={{error}}
@@ -103,25 +109,30 @@ Renders a form radiofield.
         @helperText={{helperText}}
         />
     `,
-    context: {
-      error: boolean('error', false),
-      value: text('value', 'value and selectedValue must match to select radiofield'),
-      selectedValue: text(
-        'selectedValue',
-        'value and selectedValue must match to select radiofield'
-      ),
-      helperText: text('helperText', 'Helper text'),
-      disabled: boolean('disabled', false),
-      icon: select(
-        'icon',
-        {
-          'none': null,
-          'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        null
-      ),
-      inline: boolean('inline', false)
-    }
-  }}</Story>
+      context: {
+        error: boolean('error', false),
+        value: text(
+          'value',
+          'value and selectedValue must match to select radiofield'
+        ),
+        selectedValue: text(
+          'selectedValue',
+          'value and selectedValue must match to select radiofield'
+        ),
+        helperText: text('helperText', 'Helper text'),
+        disabled: boolean('disabled', false),
+        icon: select(
+          'icon',
+          {
+            none: null,
+            'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          null
+        ),
+        inline: boolean('inline', false),
+      },
+    }}
+  </Story>
 </Preview>

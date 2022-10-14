@@ -1,9 +1,9 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Form/Radio/Group" component="Form/Radio/Group" />
+<Meta title="Rose/Form/Radio/Group" component="Form/Radio/Group" />
 
 # Form radiofield group
 
@@ -13,28 +13,21 @@ Renders a form radiofield group.
 <Rose::Form::Radio::Group
   @disabled={{false}}
   @name={{name}}
-  @selectedValue="disagree"
+  @selectedValue='disagree'
   @changed={{fn}}
   @inline={{false}}
   as |radioGroup|
 >
-  <radioGroup.radio
-    @label="Agree"
-    @value="agree"
-  />
-  <radioGroup.radio
-    @label="disagree"
-    @value="disagree"
-  />
-  <radioGroup.radio
-    @label="maybe"
-    @value="maybe"
-  />
+  <radioGroup.radio @label='Agree' @value='agree' />
+  <radioGroup.radio @label='disagree' @value='disagree' />
+  <radioGroup.radio @label='maybe' @value='maybe' />
 </Rose::Form::Radio::Group>
 ```
+
 <Preview>
-  <Story name="Basic" height="10rem">{{
-  template: hbs`
+  <Story name="Basic" height="10rem">
+    {{
+      template: hbs`
     <Rose::Form::Radio::Group
       @disabled={{disabled}}
       @name={{name}}
@@ -58,62 +51,66 @@ Renders a form radiofield group.
       />
     </Rose::Form::Radio::Group>
   `,
-  context: {
-    name: text('name', 'mustagree'),
-    disabled: boolean('disabled', false),
-    inline: boolean('inline', true),
-    selectedValue: text('selectedValue', 'disagree'),
-    firstFieldLabel: text('first label', 'Agree'),
-    firstFieldValue: text('first value', 'agree'),
-    firstFieldIcon: select(
-      'first icon',
-      {
-        'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
-        'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
+      context: {
+        name: text('name', 'mustagree'),
+        disabled: boolean('disabled', false),
+        inline: boolean('inline', true),
+        selectedValue: text('selectedValue', 'disagree'),
+        firstFieldLabel: text('first label', 'Agree'),
+        firstFieldValue: text('first value', 'agree'),
+        firstFieldIcon: select(
+          'first icon',
+          {
+            'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/org-16'
+        ),
+        secondFieldLabel: text('second label', 'Maybe'),
+        secondFieldValue: text('second value', 'maybe'),
+        thirdFieldLabel: text('third label', 'Disagree'),
+        thirdFieldValue: text('third value', 'disagree'),
+        changed: action('changed'),
       },
-      'flight-icons/svg/org-16'
-    ),
-    secondFieldLabel: text('second label', 'Maybe'),
-    secondFieldValue: text('second value', 'maybe'),
-    thirdFieldLabel: text('third label', 'Disagree'),
-    thirdFieldValue: text('third value', 'disagree'),
-    changed: action('changed')
-  }
-  }}</Story>
+    }}
+  </Story>
 </Preview>
 
 ```htmlbars
 <Rose::Form::Radio::Group
   @disabled={{false}}
   @name={{name}}
-  @selectedValue="disagree"
+  @selectedValue='disagree'
   @changed={{fn}}
   @inline={{false}}
   as |radioGroup|
 >
   <radioGroup.Card
-    @label="Agree"
-    @value="agree"
+    @label='Agree'
+    @value='agree'
     @layout='tile'
-       @helperText="dwsd"
+    @helperText='dwsd'
   />
   <radioGroup.Card
-    @label="disagree"
-    @value="disagree"
+    @label='disagree'
+    @value='disagree'
     @layout='tile'
-       @helperText="dwsd"
+    @helperText='dwsd'
   />
   <radioGroup.Card
-    @label="maybe"
-    @value="maybe"
+    @label='maybe'
+    @value='maybe'
     @layout='tile'
-    @helperText="dwsd"
+    @helperText='dwsd'
   />
 </Rose::Form::Radio::Group>
 ```
+
 <Preview>
-  <Story name="Card:  Tile" height="10rem">{{
-  template: hbs`
+  <Story name="Card:  Tile" height="10rem">
+    {{
+      template: hbs`
     <Rose::Form::Radio::Group
       @disabled={{disabled}}
       @name={{name}}
@@ -141,69 +138,67 @@ Renders a form radiofield group.
       />
     </Rose::Form::Radio::Group>
   `,
-  context: {
-    name: text('name', 'mustagree'),
-    disabled: boolean('disabled', false),
-    selectedValue: text('selectedValue', 'disagree'),
-    firstFieldLabel: text('first label', 'Agree'),
-    firstFieldValue: text('first value', 'agree'),
-    firstFieldIcon: select(
-        'firstFieldIcon',
-        {
-          'none': null,
-          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
-        },
-        null
-      ),
-         secondFieldIcon: select(
-        'secondFieldIcon',
-        {
-          'none': null,
-          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
-        },
-        null
-      ),
-         thirdFieldIcon: select(
-        'thirdFieldIcon',
-        {
-          'none': null,
-          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
-        },
-        null
-      ),
-    secondFieldLabel: text('second label', 'Maybe'),
-    secondFieldValue: text('second value', 'maybe'),
-    thirdFieldLabel: text('third label', 'Disagree'),
-    thirdFieldValue: text('third value', 'disagree'),
-    changed: action('changed')
-  }
-  }}</Story>
+      context: {
+        name: text('name', 'mustagree'),
+        disabled: boolean('disabled', false),
+        selectedValue: text('selectedValue', 'disagree'),
+        firstFieldLabel: text('first label', 'Agree'),
+        firstFieldValue: text('first value', 'agree'),
+        firstFieldIcon: select(
+          'firstFieldIcon',
+          {
+            none: null,
+            'flight-icons/svg/azure-color-16':
+              'flight-icons/svg/azure-color-16',
+          },
+          null
+        ),
+        secondFieldIcon: select(
+          'secondFieldIcon',
+          {
+            none: null,
+            'flight-icons/svg/azure-color-16':
+              'flight-icons/svg/azure-color-16',
+          },
+          null
+        ),
+        thirdFieldIcon: select(
+          'thirdFieldIcon',
+          {
+            none: null,
+            'flight-icons/svg/azure-color-16':
+              'flight-icons/svg/azure-color-16',
+          },
+          null
+        ),
+        secondFieldLabel: text('second label', 'Maybe'),
+        secondFieldValue: text('second value', 'maybe'),
+        thirdFieldLabel: text('third label', 'Disagree'),
+        thirdFieldValue: text('third value', 'disagree'),
+        changed: action('changed'),
+      },
+    }}
+  </Story>
 </Preview>
 
 ```htmlbars
 <Rose::Form::Radio::Group
   @disabled={{false}}
   @name={{name}}
-  @selectedValue="disagree"
+  @selectedValue='disagree'
   @changed={{fn}}
   @inline={{false}}
   as |radioGroup|
 >
-  <radioGroup.Card
-    @label="Agree"
-    @value="agree"
-    @layout='wide'
-  />
-  <radioGroup.Card
-    @label="disagree"
-    @value="disagree"
-    @layout='wide'
-  />
+  <radioGroup.Card @label='Agree' @value='agree' @layout='wide' />
+  <radioGroup.Card @label='disagree' @value='disagree' @layout='wide' />
 </Rose::Form::Radio::Group>
 ```
+
 <Preview>
-  <Story name="Card:  Wide" height="10rem">{{
-  template: hbs`
+  <Story name="Card:  Wide" height="10rem">
+    {{
+      template: hbs`
     <Rose::Form::Radio::Group
       @disabled={{disabled}}
       @name={{name}}
@@ -229,25 +224,27 @@ Renders a form radiofield group.
       />
     </Rose::Form::Radio::Group>
   `,
-  context: {
-    name: text('name', 'mustagree'),
-    disabled: boolean('disabled', false),
-    selectedValue: text('selectedValue', 'disagree'),
-    firstFieldLabel: text('first label', 'Agree'),
-    firstFieldValue: text('first value', 'agree'),
-    firstFieldIcon: select(
-        'firstFieldIcon',
-        {
-          'none': null,
-          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
-        },
-        null
-      ),
-    secondFieldLabel: text('second label', 'Maybe'),
-    secondFieldValue: text('second value', 'maybe'),
-    thirdFieldLabel: text('third label', 'Disagree'),
-    thirdFieldValue: text('third value', 'disagree'),
-    changed: action('changed')
-  }
-  }}</Story>
+      context: {
+        name: text('name', 'mustagree'),
+        disabled: boolean('disabled', false),
+        selectedValue: text('selectedValue', 'disagree'),
+        firstFieldLabel: text('first label', 'Agree'),
+        firstFieldValue: text('first value', 'agree'),
+        firstFieldIcon: select(
+          'firstFieldIcon',
+          {
+            none: null,
+            'flight-icons/svg/azure-color-16':
+              'flight-icons/svg/azure-color-16',
+          },
+          null
+        ),
+        secondFieldLabel: text('second label', 'Maybe'),
+        secondFieldValue: text('second value', 'maybe'),
+        thirdFieldLabel: text('third label', 'Disagree'),
+        thirdFieldValue: text('third value', 'disagree'),
+        changed: action('changed'),
+      },
+    }}
+  </Story>
 </Preview>
