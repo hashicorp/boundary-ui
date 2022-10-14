@@ -12,14 +12,13 @@ and cancel. Form actions should always be used in the context of a form element
 where the form has a submit action handler. The submit button does not directly
 support actions. The cancel button supports a cancel action.
 
-```html
+```handlebars
 <Rose::Form::Actions
-  @submitText="Save"
-  @cancelText="Cancel"
-  @showCancel="{{true}}"
-  @submitDisabled="{{false}}"
-  @cancel="(fn"
-  @cancel)
+  @submitText='Save'
+  @cancelText='Cancel'
+  @showCancel={{true}}
+  @submitDisabled={{false}}
+  @cancel={{@cancel}}
 />
 ```
 

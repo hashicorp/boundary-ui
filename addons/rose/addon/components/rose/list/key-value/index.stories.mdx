@@ -57,7 +57,7 @@ A simple key/value list with support for embedded form fields and buttons.
   </Story>
 </Preview>
 
-```html
+```handlebars
 <Rose::List::KeyValue as |list|>
   <list.item as |item|>
     <item.key>Key</item.key>
@@ -72,9 +72,9 @@ A simple key/value list with support for embedded form fields and buttons.
     <item.cell>Value</item.cell>
   </list.item>
 
-  {{!-- In actual use, form fields should be yielded from an outer form
-  component --}}
-  <Rose::Form::Input @contextual="{{true}}" as |input|>
+  {{! In actual use, form fields should be yielded from an outer form
+  component }}
+  <Rose::Form::Input @contextual={{true}} as |input|>
     <list.item as |item|>
       <item.key>
         <input.label>Key</input.label>
@@ -83,12 +83,12 @@ A simple key/value list with support for embedded form fields and buttons.
         <input.field />
       </item.cell>
       <item.cell>
-        <Rose::Button @style="secondary">Add</Rose::Button>
+        <Rose::Button @style='secondary'>Add</Rose::Button>
       </item.cell>
     </list.item>
   </Rose::Form::Input>
 
-  <Rose::Form::Input @contextual="{{true}}" as |input|>
+  <Rose::Form::Input @contextual={{true}} as |input|>
     <list.item as |item|>
       <item.key>
         <input.label>Key</input.label>
@@ -98,11 +98,10 @@ A simple key/value list with support for embedded form fields and buttons.
       </item.cell>
       <item.cell>
         <Rose::Button
-          @style="secondary"
-          @iconOnly="flight-icons/svg/trash-16"
-          title="Remove"
-          >Remove</Rose::Button
-        >
+          @style='secondary'
+          @iconOnly='flight-icons/svg/trash-16'
+          title='Remove'
+        >Remove</Rose::Button>
       </item.cell>
     </list.item>
   </Rose::Form::Input>

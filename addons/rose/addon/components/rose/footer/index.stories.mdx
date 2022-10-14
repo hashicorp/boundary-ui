@@ -9,13 +9,13 @@ import { text } from '@storybook/addon-knobs';
 
 A footer component that allows four distinct sections to be configured: brand, nav, and text.
 
-```html
+```handlebars
 <Rose::Footer as |footer|>
-  <footer.brand @logo="logo" @text="Product Name" />
+  <footer.brand @logo='logo' @text='Product Name' />
   <footer.text>Text</footer.text>
   <footer.nav as |nav|>
-    <nav.link @route="index">Section</nav.link>
-    <nav.link @href="index">Section</nav.link>
+    <nav.link @route='index'>Section</nav.link>
+    <nav.link @href='index'>Section</nav.link>
   </footer.nav>
 </Rose::Footer>
 ```

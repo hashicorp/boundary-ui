@@ -10,11 +10,11 @@ import { text, boolean } from '@storybook/addon-knobs';
 Displays helpful messages related to a form field. This component is used
 by form fields and should not be used directly.
 
-```html
+```handlebars
 <Rose::Form::HelperText
-  @id="helper-text-{{field.id}}"
-  @link="link"
-  @linkText="link text goes here"
+  @id='helper-text-{{field.id}}'
+  @link='link'
+  @linkText='link text goes here'
 >
   Helper text
 </Rose::Form::HelperText>
