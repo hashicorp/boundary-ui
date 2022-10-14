@@ -1,8 +1,8 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 
-<Meta title="Rose|Layout|Page" component="Page" />
+<Meta title="Rose/Layout/Page" component="Page" />
 
 # Layout|Page
 
@@ -19,8 +19,9 @@ A page layout/positioning component that allows five distinct sections to be con
 ```
 
 <Preview>
-  <Story name="Page">{{
-    template: hbs`
+  <Story name="Page">
+    {{
+      template: hbs`
     <Rose::Layout::Page as |page|>
       <page.breadcrumbs style="background: var(--brand-gray-4);">Breadcrumbs</page.breadcrumbs>
       <page.header style="background: var(--brand-gray-5);">Header</page.header>
@@ -29,5 +30,6 @@ A page layout/positioning component that allows five distinct sections to be con
       <page.body style="background: var(--brand-gray-7);">Body</page.body>
     </Rose::Layout::Page>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

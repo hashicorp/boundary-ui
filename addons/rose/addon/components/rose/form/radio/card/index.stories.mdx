@@ -1,8 +1,8 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Form/Radio/Radio/Card" component="Form/Radio/Radio/Card" />
+<Meta title="Rose/Form/Radio/Radio/Card" component="Form/Radio/Radio/Card" />
 
 # Form Radiofield in a wide format
 
@@ -10,19 +10,20 @@ Renders a form radiofield in a Wide format.
 
 ```htmlbars
 <Rose::Form::Radio::Card
-  @label="Yes"
+  @label='Yes'
   @error={{false}}
-  @value="yes-agree"
-  @selectedValue="yes-agree"
+  @value='yes-agree'
+  @selectedValue='yes-agree'
   @disabled={{false}}
   @changed={{fn}}
   @layout='wide'
-  />
+/>
 ```
 
 <Preview>
-  <Story name="Wide" height="10rem">{{
-    template: hbs`
+  <Story name="Wide" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Radio::Card
         @label={{label}}
         @error={{error}}
@@ -34,38 +35,42 @@ Renders a form radiofield in a Wide format.
         @layout='wide'
         />
     `,
-    context: {
-      label: text('text', 'Azure'),
-      error: boolean('error', false),
-      value: text('value', 'value and selectedValue must match to select radiofield'),
-      selectedValue: text(
-        'selectedValue',
-        'value and selectedValue must match to select radiofield'
-      ),
-      helperText: text('helperText', 'Record financial transactions using'),
-      disabled: boolean('disabled', false),
-    }
-  }}</Story>
+      context: {
+        label: text('text', 'Azure'),
+        error: boolean('error', false),
+        value: text(
+          'value',
+          'value and selectedValue must match to select radiofield'
+        ),
+        selectedValue: text(
+          'selectedValue',
+          'value and selectedValue must match to select radiofield'
+        ),
+        helperText: text('helperText', 'Record financial transactions using'),
+        disabled: boolean('disabled', false),
+      },
+    }}
+  </Story>
 </Preview>
-
 
 Renders a form radiofield in a tile format.
 
 ```htmlbars
 <Rose::Form::Radio::Card
-  @label="Yes"
+  @label='Yes'
   @error={{false}}
-  @value="yes-agree"
-  @selectedValue="yes-agree"
+  @value='yes-agree'
+  @selectedValue='yes-agree'
   @disabled={{false}}
   @changed={{fn}}
   @layout='tile'
-  />
+/>
 ```
 
 <Preview>
-  <Story name="Tile" height="10rem">{{
-    template: hbs`
+  <Story name="Tile" height="10rem">
+    {{
+      template: hbs`
       <Rose::Form::Radio::Card
         @label={{label}}
         @error={{error}}
@@ -77,24 +82,29 @@ Renders a form radiofield in a tile format.
         @layout='tile'
         />
     `,
-    context: {
-      label: text('text', 'Azure'),
-      error: boolean('error', false),
-      value: text('value', 'value and selectedValue must match to select radiofield'),
-      selectedValue: text(
-        'selectedValue',
-        'value and selectedValue must match to select radiofield'
-      ),
-      helperText: text('helperText', 'Record financial transactions using'),
-      disabled: boolean('disabled', false),
-      icon: select(
-        'icon',
-        {
-          'none': null,
-          'flight-icons/svg/azure-color-16': 'flight-icons/svg/azure-color-16',
-        },
-        null
-      ),
-    }
-  }}</Story>
+      context: {
+        label: text('text', 'Azure'),
+        error: boolean('error', false),
+        value: text(
+          'value',
+          'value and selectedValue must match to select radiofield'
+        ),
+        selectedValue: text(
+          'selectedValue',
+          'value and selectedValue must match to select radiofield'
+        ),
+        helperText: text('helperText', 'Record financial transactions using'),
+        disabled: boolean('disabled', false),
+        icon: select(
+          'icon',
+          {
+            none: null,
+            'flight-icons/svg/azure-color-16':
+              'flight-icons/svg/azure-color-16',
+          },
+          null
+        ),
+      },
+    }}
+  </Story>
 </Preview>

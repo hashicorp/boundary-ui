@@ -1,8 +1,8 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Table" component="Table" />
+<Meta title="Rose/Table" component="Table" />
 
 # Table
 
@@ -11,32 +11,34 @@ A table component to display data in structure of rows and columns. It supports 
 Cell shrink should be applied to all the cells in a row. Otherwise the bigger cell with shrink applied will determinate the width of the row.
 
 ```html
-<Rose::Table @style={{style}} as |table|>
+<Rose::Table @style="{{style}}" as |table|>
   <table.header as |header|>
-    <header.row @hidden={{hideHeaderRow}} as |row|>
+    <header.row @hidden="{{hideHeaderRow}}" as |row|>
       <row.headerCell>Address</row.headerCell>
       <row.headerCell>Host Set</row.headerCell>
       <row.headerCell>Name</row.headerCell>
-      <row.headerCell @alignCenter={{true}}>Description</row.headerCell>
+      <row.headerCell @alignCenter="{{true}}">Description</row.headerCell>
     </header.row>
   </table.header>
   <table.body as |body|>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
       <row.cell>host-set-1, host-set-2</row.cell>
-      <row.cell @shrink={{true}}>optional name</row.cell>
-      <row.cell @alignCenter={{true}}>description</row.cell>
+      <row.cell @shrink="{{true}}">optional name</row.cell>
+      <row.cell @alignCenter="{{true}}">description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
       <row.cell>host-set-2</row.cell>
-      <row.cell @shrink={{true}} @alignCenter={{true}}>optional name</row.cell>
-      <row.cell @alignRight={{true}}>description</row.cell>
+      <row.cell @shrink="{{true}}" @alignCenter="{{true}}"
+        >optional name</row.cell
+      >
+      <row.cell @alignRight="{{true}}">description</row.cell>
     </body.row>
     <body.row as |row|>
       <row.cell>1.1.1.1</row.cell>
       <row.cell>host-set-1</row.cell>
-      <row.cell @shrink={{true}}>optional name</row.cell>
+      <row.cell @shrink="{{true}}">optional name</row.cell>
       <row.cell>description</row.cell>
     </body.row>
   </table.body>
@@ -49,8 +51,9 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
 ```
 
 <Preview>
-  <Story name="Basic">{{
-    template: hbs`
+  <Story name="Basic">
+    {{
+      template: hbs`
     <Rose::Table @style={{style}} as |table|>
       <table.header as |header|>
         <header.row @hidden={{hideHeaderRow}} as |row|>
@@ -87,25 +90,24 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
       </table.footer>
     </Rose::Table>
     `,
-    context: {
-      hideHeaderRow: boolean('hideHeaderRow', false),
-      cellShrink: boolean('cellShrink', false),
-      style: select(
-        'style',
-        {
-          'default': '',
-          'condensed': 'condensed'
-        }
-      ),
-      cellAlignmentCenter: boolean('cellAlignmentCenter', false),
-      cellAlignmentRight: boolean('cellAlignmentRight', false),
-    },
-  }}</Story>
+      context: {
+        hideHeaderRow: boolean('hideHeaderRow', false),
+        cellShrink: boolean('cellShrink', false),
+        style: select('style', {
+          default: '',
+          condensed: 'condensed',
+        }),
+        cellAlignmentCenter: boolean('cellAlignmentCenter', false),
+        cellAlignmentRight: boolean('cellAlignmentRight', false),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Basic Key/Value Table">{{
-    template: hbs`
+  <Story name="Basic Key/Value Table">
+    {{
+      template: hbs`
       <Rose::Table @style={{style}} as |table|>
         <table.header as |header|>
           <header.row  as |row|>
@@ -175,14 +177,12 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
         </table.footer>
       </Rose::Table>
     `,
-    context: {
-      style: select(
-        'style',
-        {
-          'condensed': 'condensed',
-          'default': ''
-        }
-      )
-    }
-  }}</Story>
+      context: {
+        style: select('style', {
+          condensed: 'condensed',
+          default: '',
+        }),
+      },
+    }}
+  </Story>
 </Preview>

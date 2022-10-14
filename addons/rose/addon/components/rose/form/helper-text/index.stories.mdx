@@ -1,32 +1,38 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Form/HelperText" component="Form/HelperText" />
+<Meta title="Rose/Form/HelperText" component="Form/HelperText" />
 
 # Form Helper Text
 
-Displays helpful messages related to a form field.  This component is used
+Displays helpful messages related to a form field. This component is used
 by form fields and should not be used directly.
 
 ```html
-<Rose::Form::HelperText @id="helper-text-{{field.id}}" @link='link' @linkText='link text goes here'>
+<Rose::Form::HelperText
+  @id="helper-text-{{field.id}}"
+  @link="link"
+  @linkText="link text goes here"
+>
   Helper text
 </Rose::Form::HelperText>
 ```
 
 <Preview>
-  <Story name="HelperText">{{
-    template: hbs`
+  <Story name="HelperText">
+    {{
+      template: hbs`
       <Rose::Form::HelperText @error={{this.error}} @link={{this.link}} @linkText={{this.linkText}}>
         Helper text
       </Rose::Form::HelperText>
     `,
-    context: {
-      error: boolean('error', false),
-      link: text('link', 'http://www.example.net/'),
-      linkText: text('linkText', 'sample link text')
-    },
-  }}</Story>
+      context: {
+        error: boolean('error', false),
+        link: text('link', 'http://www.example.net/'),
+        linkText: text('linkText', 'sample link text'),
+      },
+    }}
+  </Story>
 </Preview>

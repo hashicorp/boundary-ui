@@ -1,9 +1,9 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Header" component="Header" />
+<Meta title="Rose/Header" component="Header" />
 
 # Header
 
@@ -11,26 +11,27 @@ A header component that allows three distinct sections to be configured: brand, 
 
 ```htmlbars
 <Rose::Header as |header|>
-  <header.brand @logo="logo" @text="Product Name" />
+  <header.brand @logo='logo' @text='Product Name' />
 
   <header.nav as |nav|>
-    <nav.dropdown @text="org-name" as |dropdown|>
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
+    <nav.dropdown @text='org-name' as |dropdown|>
+      <dropdown.link @route='index'>Menu item</dropdown.link>
+      <dropdown.link @route='about'>Menu item</dropdown.link>
       <dropdown.button>Button menu item</dropdown.button>
     </nav.dropdown>
-    <nav.link @route="index">Section</nav.link>
-    <nav.link @route="about">Section</nav.link>
+    <nav.link @route='index'>Section</nav.link>
+    <nav.link @route='about'>Section</nav.link>
   </header.nav>
 
   <header.utilities as |utilities|>
     <utilities.dropdown
-      @text="user@example.net"
+      @text='user@example.net'
       @iconOnly={{true}}
-      @icon="flight-icons/svg/user-circle-16" as |dropdown|
+      @icon='flight-icons/svg/user-circle-16'
+      as |dropdown|
     >
-      <dropdown.link @route="index">Menu item</dropdown.link>
-      <dropdown.link @route="about">Menu item</dropdown.link>
+      <dropdown.link @route='index'>Menu item</dropdown.link>
+      <dropdown.link @route='about'>Menu item</dropdown.link>
       <dropdown.button>Button menu item</dropdown.button>
     </utilities.dropdown>
   </header.utilities>
@@ -38,8 +39,9 @@ A header component that allows three distinct sections to be configured: brand, 
 ```
 
 <Preview>
-  <Story name="Basic">{{
-    template: hbs`
+  <Story name="Basic">
+    {{
+      template: hbs`
     <Rose::Header as |header|>
       <header.brand @logo="logo" @text={{brandName}} />
       <header.nav as |nav|>
@@ -64,17 +66,21 @@ A header component that allows three distinct sections to be configured: brand, 
       </header.utilities>
     </Rose::Header>
     `,
-    context: {
-      brandName: text('brandName', 'Brand Name'),
-      dropdownIcon: select(
-        'dropdownIcon',
-        {
-          'flight-icons/svg/user-circle-16': 'flight-icons/svg/user-circle-16',
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/user-circle-16'
-      ),
-    },
-  }}</Story>
+      context: {
+        brandName: text('brandName', 'Brand Name'),
+        dropdownIcon: select(
+          'dropdownIcon',
+          {
+            'flight-icons/svg/user-circle-16':
+              'flight-icons/svg/user-circle-16',
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/user-circle-16'
+        ),
+      },
+    }}
+  </Story>
 </Preview>

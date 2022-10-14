@@ -1,9 +1,9 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Layout|Sidebar" component="SidebarLayout" />
+<Meta title="Rose/Layout/Sidebar" component="SidebarLayout" />
 
 # Layout|Sidebar
 
@@ -22,12 +22,14 @@ be configured: sidebar and body.
 ```
 
 <Preview>
-  <Story name="SidebarLayout">{{
-    template: hbs`
+  <Story name="SidebarLayout">
+    {{
+      template: hbs`
       <Rose::Layout::Sidebar as |layout|>
         <layout.sidebar style="background: var(--brand-gray-7);">Body</layout.sidebar>
         <layout.body style="background: var(--brand-gray-5);">Sidebar</layout.body>
       </Rose::Layout::Sidebar>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>
