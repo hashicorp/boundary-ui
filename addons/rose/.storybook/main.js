@@ -2,7 +2,7 @@ const namedBlockPolyfill = require('ember-named-blocks-polyfill/lib/named-blocks
 
 module.exports = {
   stories: [
-    '../addon/components/**/*.stories.(js|mdx)',
+    '../addon/components/**/*.stories.@(js|mdx)',
     '../stories/**/*.stories.mdx',
   ],
   addons: [
@@ -13,5 +13,8 @@ module.exports = {
   ],
   emberOptions: {
     polyfills: [namedBlockPolyfill],
+  },
+  features: {
+    postcss: false,
   },
 };
