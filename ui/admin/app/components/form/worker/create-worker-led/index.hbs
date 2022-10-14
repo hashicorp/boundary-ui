@@ -95,6 +95,7 @@
                 <Rose::Button
                   @style='secondary'
                   title={{t 'actions.add'}}
+                  @disabled={{not this.newWorkerKey}}
                   {{on 'click' this.addWorkerTag}}
                 >
                   {{t 'actions.add'}}

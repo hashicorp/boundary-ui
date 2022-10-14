@@ -1,7 +1,7 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 
-<Meta title="Rose|Code Editor" component="CodeEditor" />
+<Meta title="Rose/Code Editor" component="CodeEditor" />
 
 # Code Editor
 
@@ -9,8 +9,8 @@ import { hbs } from 'ember-cli-htmlbars';
 CodeEditor::fieldEditor is where the provided code is displayed with syntax highlighting.
 CodeEditor::toolbar is intended to go on top of the fieldEditor and provides a 'Copy code' button as well as other optional user-provided actions.
 
-```html
-<CodeEditor @codeValue="{{this.codeIWantToSee}}" as |c|>
+```handlebars
+<CodeEditor @codeValue={{this.codeIWantToSee}} as |c|>
   <c.toolbar />
   <c.fieldEditor />
 </CodeEditor>

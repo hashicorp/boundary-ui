@@ -18,11 +18,6 @@ export default function () {
   // delay for each request, automatically set to 0 during testing
   this.timing = 1;
 
-  // Allow any configured API host to passthrough, which is useful in
-  // development for testing against a locally running backend.
-  if (config.api.host) this.passthrough(`${config.api.host}/**`);
-  this.passthrough();
-
   // Scope resources
 
   this.get(
