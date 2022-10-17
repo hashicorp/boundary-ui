@@ -24,7 +24,8 @@ export default class ApplicationRoute extends Route {
    * reported by the main process.  If they differ, update the main process
    * clusterUrl so that the renderer's CSP can be rewritten to allow requests.
    */
-  beforeModel() {
+  async beforeModel() {
+    await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
     return this.clusterUrl.updateClusterUrl();
