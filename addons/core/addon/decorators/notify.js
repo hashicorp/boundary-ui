@@ -45,7 +45,10 @@ export function notifySuccess(notification) {
  *
  * @param {string|function} notification
  * @param {object} options
- * @param {object} options.catch - defaults to false
+ * @param {object} options.sticky - defaults to true, whether or not to persist
+ *                                  the notification until user dismissal
+ * @param {object} options.catch - defaults to false, whether ot not to catch
+ *                                 and squelch the error
  */
 export function notifyError(notification, options = { catch: false }) {
   return function (_target, _propertyKey, desc) {
@@ -67,9 +70,11 @@ export function notifyError(notification, options = { catch: false }) {
           ? intlService.t(candidateKey)
           : candidateKey;
 
+        const sticky = options.sticky === undefined ? true : options.sticky;
+
         notifyService.danger(text, {
           noticationType: 'error',
-          sticky: true,
+          sticky,
           dismiss: (flash) => flash.destroyMessage(),
         });
 
