@@ -499,3 +499,12 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     }
   }
 }
+
+// No spinning animation for refresh button when user specifies reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .is-loading {
+    .rose-icon {
+      animation: none;
+    }
+  }
+}

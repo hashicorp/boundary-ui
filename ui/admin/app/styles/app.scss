@@ -237,6 +237,15 @@
   }
 }
 
+// No spinning animation for refresh button when user specifies reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .is-loading {
+    .rose-icon {
+      animation: none;
+    }
+  }
+}
+
 //onboarding quick setup styles
 .choose-path {
   display: block;
