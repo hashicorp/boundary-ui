@@ -10,6 +10,7 @@ module.exports = {
     '@storybook/addon-actions',
     '@storybook/addon-docs',
     '@storybook/addon-a11y',
+    '@storybook/addon-controls',
   ],
   emberOptions: {
     polyfills: [namedBlockPolyfill],
