@@ -1,15 +1,15 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select, object } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Form/Checkbox/Group" component="Form/Checkbox/Group" />
+<Meta title="Rose/Form/Checkbox/Group" component="Form/Checkbox/Group" />
 
 # Form checkboxfield group
 
 Renders a form checkboxfield group.
 
-```htmlbars
+```handlebars
 <Rose::Form::Checkbox::Group
   @name='checkbox-group'
   @items={{this.items}}
@@ -54,7 +54,7 @@ Renders a form checkboxfield group.
   </Story>
 </Preview>
 
-```htmlbars
+```handlebars
 <Rose::Form::Checkbox::Group
   @name='checkbox-group'
   @items={{this.items}}

@@ -1,17 +1,18 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { number, boolean, object } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 
-<Meta title="Rose|Dropdown" component="Dropdown" />
+<Meta title="Rose/Dropdown" component="Dropdown" />
 
 # Dropdown
 
 A simple dropdown component with support for links and buttons.
 
 <Preview>
-  <Story name="Basic Dropdown" height="7rem">{{
-    template: hbs`
+  <Story name="Basic Dropdown" height="7rem">
+    {{
+      template: hbs`
       <Rose::Dropdown @text="Choose One&hellip;" @count={{count}} @icon="flight-icons/svg/org-16" @showCaret={{showCaret}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
@@ -23,16 +24,18 @@ A simple dropdown component with support for links and buttons.
         </dropdown.section>
       </Rose::Dropdown>
     `,
-    context: {
-      count: number('count', 0),
-      showCaret: boolean('showCaret', true),
-    },
-  }}</Story>
+      context: {
+        count: number('count', 0),
+        showCaret: boolean('showCaret', true),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Icon-only Dropdown" height="5rem">{{
-    template: hbs`
+  <Story name="Icon-only Dropdown" height="5rem">
+    {{
+      template: hbs`
       <Rose::Dropdown @text="Choose One&hellip;" @icon="flight-icons/svg/org-16" @iconOnly={{true}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
@@ -40,12 +43,14 @@ A simple dropdown component with support for links and buttons.
         <dropdown.button>Button menu item</dropdown.button>
       </Rose::Dropdown>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Dropdown with Radio Buttons" height="13rem">{{
-    template: hbs`
+  <Story name="Dropdown with Radio Buttons" height="13rem">
+    {{
+      template: hbs`
       <Rose::Form as |form|>
         <form.radioGroup @name="color" @selectedValue="red" as |radioGroup|>
           <Rose::Dropdown @text="Color" as |dropdown|>
@@ -62,12 +67,14 @@ A simple dropdown component with support for links and buttons.
         </form.radioGroup>
       </Rose::Form>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Dropdown with Key Value Items" height="13rem">{{
-    template: hbs`
+  <Story name="Dropdown with Key Value Items" height="13rem">
+    {{
+      template: hbs`
       <Rose::Dropdown @text="View details" @showCaret={{showCaret}} @ignoreClickInside={{true}} as |dropdown|>
         <dropdown.key-value>
           <:key>Name</:key>
@@ -80,98 +87,107 @@ A simple dropdown component with support for links and buttons.
         </dropdown.key-value>
       </Rose::Dropdown>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>
 
-
-```html
-  <Rose::Dropdown @text="Choose One&hellip;" as |dropdown|>
-    <dropdown.link @route="index">Menu item</dropdown.link>
-    <dropdown.link @route="about">Menu item</dropdown.link>
-    <dropdown.button>Button menu item</dropdown.button>
-    <dropdown.separator />
-    <dropdown.section @title="Dropdown Section Title" @icon="flight-icons/svg/tag-16">
-      <dropdown.link @route="index">Menu item</dropdown.link>
-    </dropdown.section>
-  </Rose::Dropdown>
+```handlebars
+<Rose::Dropdown @text='Choose One&hellip;' as |dropdown|>
+  <dropdown.link @route='index'>Menu item</dropdown.link>
+  <dropdown.link @route='about'>Menu item</dropdown.link>
+  <dropdown.button>Button menu item</dropdown.button>
+  <dropdown.separator />
+  <dropdown.section
+    @title='Dropdown Section Title'
+    @icon='flight-icons/svg/tag-16'
+  >
+    <dropdown.link @route='index'>Menu item</dropdown.link>
+  </dropdown.section>
+</Rose::Dropdown>
 ```
 
 Dropdown content can be aligned to right edge of the component instead of the default left edge, which is the default setting. The following example floats the component to right edge of the page inorder to provide enough space to display right aligned dropdown content.
 
-```html
-  <Rose::Dropdown @text="Choose One&hellip;" style="float: right" @dropdownRight={{true}} as |dropdown|>
-    <dropdown.link @route="index">Menu item</dropdown.link>
-    <dropdown.link @route="about">Menu item</dropdown.link>
-    <dropdown.separator />
-    <dropdown.button>Button menu item</dropdown.button>
-  </Rose::Dropdown>
+```handlebars
+<Rose::Dropdown
+  @text='Choose One&hellip;'
+  style='float: right'
+  @dropdownRight={{true}}
+  as |dropdown|
+>
+  <dropdown.link @route='index'>Menu item</dropdown.link>
+  <dropdown.link @route='about'>Menu item</dropdown.link>
+  <dropdown.separator />
+  <dropdown.button>Button menu item</dropdown.button>
+</Rose::Dropdown>
 ```
 
 Dropdown supports `danger` styling through `style` attribute.
 
-```html
-<Rose::Dropdown @text="Dropdown" as |dropdown|>
-  <dropdown.link @style="danger">Link - danger</dropdown.link>
-  <dropdown.button @style="danger">Button - danger</dropdown.button>
+```handlebars
+<Rose::Dropdown @text='Dropdown' as |dropdown|>
+  <dropdown.link @style='danger'>Link - danger</dropdown.link>
+  <dropdown.button @style='danger'>Button - danger</dropdown.button>
 </Rose::Dropdown>
 ```
 
 Dropdown indicator can be hidden using `showCaret` attribute.
 
-```html
-<Rose::Dropdown @showCaret={{true}} @icon="flight-icons/svg/more-horizontal-16" as |dropdown|>
-    <dropdown.link @route="index">Menu item</dropdown.link>
-    <dropdown.button>Button menu item</dropdown.button>
+```handlebars
+<Rose::Dropdown
+  @showCaret={{true}}
+  @icon='flight-icons/svg/more-horizontal-16'
+  as |dropdown|
+>
+  <dropdown.link @route='index'>Menu item</dropdown.link>
+  <dropdown.button>Button menu item</dropdown.button>
 </Rose::Dropdown>
 ```
 
-Dropdowns also support radio buttons and checkboxes.  Currently, radio buttons and checkboxes are the only supported
+Dropdowns also support radio buttons and checkboxes. Currently, radio buttons and checkboxes are the only supported
 form fields.
 
-```html
+```handlebars
 <Rose::Form as |form|>
-  <form.radioGroup @name="color" @selectedValue="red" as |radioGroup|>
-    <Rose::Dropdown @text="Color" as |dropdown|>
+  <form.radioGroup @name='color' @selectedValue='red' as |radioGroup|>
+    <Rose::Dropdown @text='Color' as |dropdown|>
       <dropdown.item>
-        <radioGroup.radio @label="Red" @value="red" />
+        <radioGroup.radio @label='Red' @value='red' />
       </dropdown.item>
       <dropdown.item>
-        <radioGroup.radio @label="Green" @value="green" />
+        <radioGroup.radio @label='Green' @value='green' />
       </dropdown.item>
       <dropdown.item>
-        <radioGroup.radio @label="Blue" @value="blue" />
+        <radioGroup.radio @label='Blue' @value='blue' />
       </dropdown.item>
     </Rose::Dropdown>
   </form.radioGroup>
 </Rose::Form>
 ```
 
-```html
+```handlebars
 <Rose::Form as |form|>
-  <Rose::Dropdown @text="Items" @ignoreClickInside={{true}} as |dropdown|>
-<Rose::Form::Checkbox::Group
-  @name='checkbox-group'
-  @items={{this.items}}
-  @selectedItems={{this.selectedItems}}
-  @onChange={{fn this.onChange}}
-  as |group|
->
-<dropdown.item>
-  <group.checkbox
-    @label={{group.item.name}}
-    value={{group.item.id}}
-    />
-    </dropdown.item>
-</Rose::Form::Checkbox::Group>
+  <Rose::Dropdown @text='Items' @ignoreClickInside={{true}} as |dropdown|>
+    <Rose::Form::Checkbox::Group
+      @name='checkbox-group'
+      @items={{this.items}}
+      @selectedItems={{this.selectedItems}}
+      @onChange={{fn this.onChange}}
+      as |group|
+    >
+      <dropdown.item>
+        <group.checkbox @label={{group.item.name}} value={{group.item.id}} />
+      </dropdown.item>
+    </Rose::Form::Checkbox::Group>
 
- </Rose::Dropdown>
+  </Rose::Dropdown>
 </Rose::Form>
 ```
 
-
 <Preview>
-  <Story name="Dropdown with Checkboxes" height="10rem">{{
-  template: hbs`
+  <Story name="Dropdown with Checkboxes" height="10rem">
+    {{
+      template: hbs`
   <Rose::Form as |form|>
    <Rose::Dropdown   @ignoreClickInside={{true}} @text="Items" as |dropdown|>
     <Rose::Form::Checkbox::Group
@@ -192,25 +208,29 @@ form fields.
      </Rose::Dropdown>
     </Rose::Form>
   `,
-  context: {
-    disabled: boolean('disabled', false),
-    items: object('items', [
-      { id: 1, name: 'Foo' },
-      { id: 2, name: 'Bar' },
-      { id: 3, name: 'Baz' },
-    ]),
-    selectedItems: object('selectedItems', []),
-    onChange: action('changed'),
-  }
-  }}</Story>
+      context: {
+        disabled: boolean('disabled', false),
+        items: object('items', [
+          { id: 1, name: 'Foo' },
+          { id: 2, name: 'Bar' },
+          { id: 3, name: 'Baz' },
+        ]),
+        selectedItems: object('selectedItems', []),
+        onChange: action('changed'),
+      },
+    }}
+  </Story>
 </Preview>
-
-
 
 Closing dropdown after clicking inside it's content can be ignored using `ignoreClickInside`. This is useful when dropdown contains keyvalue items that users need to select/copy/interact with.
 
-```html
-<Rose::Dropdown @text="View details" @showCaret={{true}} @ignoreClickInside={{true}} as |dropdown|>
+```handlebars
+<Rose::Dropdown
+  @text='View details'
+  @showCaret={{true}}
+  @ignoreClickInside={{true}}
+  as |dropdown|
+>
   <dropdown.key-value>
     <:key>ID</:key>
     <:value>cl_nbv9375hLHs</:value>

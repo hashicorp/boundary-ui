@@ -4,7 +4,10 @@ const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function (defaults) {
   let app = new EmberAddon(defaults, {
-    // Add options here
+    'ember-simple-auth': {
+      // https://github.com/mainmatter/ember-simple-auth/blob/master/guides/upgrade-to-v4.md#call-sessionsetup-method-in-your-applicationroute
+      useSessionSetupMethod: true,
+    },
   });
 
   /*
