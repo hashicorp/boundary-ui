@@ -1,4 +1,7 @@
 const config = require('./config.js');
+const { isMac } = require('../src/helpers/platform');
+const path = require('path');
+const fs = require('fs');
 
 /**
  * @type {import('electron-builder').Configuration}
@@ -11,24 +14,48 @@ module.exports = {
   copyright: config.copyright,
   asar: false,
 
-  // afterSign: async (context) => {
-  //   // Mac releases require hardening+notarization: https://developer.apple.com/documentation/xcode/notarizing_macos_software_before_distribution
-  //   if (!isDebug && context.electronPlatformName === "darwin") {
-  //     await notarizeMac(context)
-  //   }
-  // },
-  // artifactBuildStarted: (context) => {
-  //   identifyLinuxPackage(context)
-  // },
   // afterAllArtifactBuild: (buildResult) => {
-  //   return stampArtifacts(buildResult)
+  // console.log('buildResult', buildResult);
+  // const version = config.releaseVersion;
+  // const destination = path.join('out', 'release', version);
+  // if (!fs.existsSync(destination)) {
+  //   fs.mkdirSync(destination, { recursive: true });
+  // }
+  //
+  // // Grab only the artifacts that end with .zip, .dmg, or .deb
+  // const artifactPaths = buildResult.artifactPaths.filter((path) =>
+  //   /^.*\.(zip|dmg|deb)$/.test(path)
+  // );
+  //
+  // artifactPaths.forEach(path => {
+  //   const name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(artifact)}`;
+  //   const artifactDestination = path.join(destination, name);
+  //   console.log(`[release] Found artifact: ${artifact}`);
+  //   try {
+  //     await fs.promises.copyFile(path, artifactDestination);
+  //     console.log(`[release] Copied artifact: ${path.resolve(artifactDestination)}`);
+  //   } catch (e) {
+  //     console.warn(`[release] Could not copy ${artifact}`, e);
+  //   }
+  //
+  // })
   // },
-  // force arch build if using electron-rebuild
-  // beforeBuild: async (context) => {
-  //   const { appDir, electronVersion, arch } = context
-  //   await electronRebuild.rebuild({ buildPath: appDir, electronVersion, arch })
-  //   return false
-  // },
+  beforePack: async (context) => {
+    // console.log('beforeBuild', context);
+    console.log(`\n[package] Release commit: ${config.releaseCommit}`);
+    console.log(`[package] Release version: ${config.releaseVersion}`);
+
+    // Check for MacOS signing identity.
+    // Ignore signing identity warning for debian builds made on MacOS
+    if (
+      context.packager.platform.name === 'mac' &&
+      !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY &&
+      !process.env.BUILD_DEBIAN
+    )
+      console.warn(
+        '[package] WARNING: Could not find signing identity. Proceeding without signing.'
+      );
+  },
 
   directories: {
     // app: '.',
@@ -38,15 +65,19 @@ module.exports = {
   files: ['!**/tests/*'],
 
   win: {
-    target: ['zip'],
+    target: [{ target: 'zip', arch: 'x64' }],
   },
 
   mac: {
-    target: ['dmg', 'zip'],
+    target: [
+      { target: 'dmg', arch: 'x64' },
+      { target: 'zip', arch: 'x64' },
+    ],
     hardenedRuntime: true,
     identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
     entitlements: './assets/macos/entitlements.plist',
     entitlementsInherit: './assets/macos/entitlements.plist',
+    // mergeASARs: false,
   },
   dmg: {
     icon: './assets/macos/disk.icns',
@@ -67,10 +98,13 @@ module.exports = {
   },
 
   linux: {
-    target: ['deb', 'zip'],
+    target: [
+      { target: 'deb', arch: 'x64' },
+      { target: 'zip', arch: 'x64' },
+    ],
   },
   deb: {
-    packageName: 'boundary-desktop',
+    // packageName: 'boundary-desktop',
     icon: './assets/app-icons/icon.png',
     description: 'Desktop Client for Boundary',
     maintainer: 'HashiCorp',
