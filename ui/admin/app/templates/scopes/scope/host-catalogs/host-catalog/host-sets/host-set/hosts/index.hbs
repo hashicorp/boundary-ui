@@ -4,15 +4,21 @@
   </page.breadcrumbs>
 
   <page.header>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Header @model={{@model.hostSet}} />
+    <HostCatalogs::HostCatalog::HostSets::HostSet::Header
+      @model={{@model.hostSet}}
+    />
   </page.header>
 
   <page.actions>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Actions @model={{@model.hostSet}} />
+    <HostCatalogs::HostCatalog::HostSets::HostSet::Actions
+      @model={{@model.hostSet}}
+    />
   </page.actions>
 
   <page.navigation>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Navigation @model={{@model}} />
+    <HostCatalogs::HostCatalog::HostSets::HostSet::Navigation
+      @model={{@model}}
+    />
   </page.navigation>
 
   <page.body>
@@ -75,7 +81,10 @@
                   >
                     <dropdown.button
                       @style='danger'
-                      {{on 'click' (route-action 'removeHost' @model.hostSet host)}}
+                      {{on
+                        'click'
+                        (route-action 'removeHost' @model.hostSet host)
+                      }}
                     >
                       {{t 'actions.remove'}}
                     </dropdown.button>
