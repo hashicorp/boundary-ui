@@ -10,10 +10,10 @@ CodeEditor::fieldEditor is where the provided code is displayed with syntax high
 CodeEditor::toolbar is intended to go on top of the fieldEditor and provides a 'Copy code' button as well as other optional user-provided actions.
 
 ```handlebars
-<CodeEditor @codeValue={{this.codeIWantToSee}} as |c|>
+<Rose::CodeEditor @codeValue={{this.codeIWantToSee}} as |c|>
   <c.toolbar />
   <c.fieldEditor />
-</CodeEditor>
+</Rose::CodeEditor>
 ```
 
 <!-- mdx seems to not be able to handle template literals -->
@@ -44,6 +44,7 @@ export const Template = (args) => ({
 <Preview>
   <Story
     name="ReadOnly"
+    height="15rem"
     args={{
       codeValue: codeValue,
       options: {
@@ -59,6 +60,7 @@ export const Template = (args) => ({
 <Preview>
   <Story
     name="CodeEditorShell"
+    height="15rem"
     args={{
       codeValue: 'mkdir /home/ubuntu/boundary/',
       options: {
@@ -74,6 +76,7 @@ export const Template = (args) => ({
 <Preview>
   <Story
     name="CodeEditorShellEditable"
+    height="15rem"
     args={{
       codeValue: 'mkdir /home/ubuntu/boundary/',
       options: {
