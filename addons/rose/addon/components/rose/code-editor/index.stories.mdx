@@ -32,59 +32,56 @@ export const codeValue =
   '   }\n' +
   '}';
 
-<Preview>
-  <Story name="Readonly">
-    {{
-      template: hbs`
+export const Template = (args) => ({
+  template: hbs`
       <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
         <c.toolbar />
         <c.fieldEditor @options={{options}} />
       </Rose::CodeEditor>`,
-      context: {
-        codeValue: codeValue,
-        options: {
-          mode: 'hcl',
-          readOnly: true,
-        },
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="ReadOnly"
+    args={{
+      codeValue: codeValue,
+      options: {
+        mode: 'hcl',
+        readOnly: true,
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
 <Preview>
-  <Story name="CodeEditorShell">
-    {{
-      template: hbs`
-      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
-        <c.toolbar />
-        <c.fieldEditor class='rose-autosize' @options={{options}} />
-      </Rose::CodeEditor>`,
-      context: {
-        codeValue: 'mkdir /home/ubuntu/boundary/',
-        options: {
-          mode: 'shell',
-          readOnly: true,
-        },
+  <Story
+    name="CodeEditorShell"
+    args={{
+      codeValue: 'mkdir /home/ubuntu/boundary/',
+      options: {
+        mode: 'shell',
+        readOnly: true,
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
 <Preview>
-  <Story name="CodeEditorShellEditable">
-    {{
-      template: hbs`
-      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
-        <c.toolbar />
-        <c.fieldEditor class='autosize' @options={{options}} />
-      </Rose::CodeEditor>`,
-      context: {
-        codeValue: 'mkdir /home/ubuntu/boundary/',
-        options: {
-          mode: 'shell',
-          readOnly: false,
-        },
+  <Story
+    name="CodeEditorShellEditable"
+    args={{
+      codeValue: 'mkdir /home/ubuntu/boundary/',
+      options: {
+        mode: 'shell',
+        readOnly: false,
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
