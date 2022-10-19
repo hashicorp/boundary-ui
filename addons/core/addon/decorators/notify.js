@@ -47,7 +47,7 @@ export function notifySuccess(notification) {
  * @param {object} options
  * @param {object} options.sticky - defaults to true, whether or not to persist
  *                                  the notification until user dismissal
- * @param {object} options.catch - defaults to false, whether ot not to catch
+ * @param {object} options.catch - defaults to false, whether or not to catch
  *                                 and squelch the error
  */
 export function notifyError(notification, options = { catch: false }) {
