@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Icon" component="Icon" />
 
@@ -13,24 +11,36 @@ Renders a simple icon.
 <Rose::Icon @name={{name}} @size={{size}} />
 ```
 
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::Icon @name={{name}} @size={{size}} />`,
+  context: args,
+});
+
 <Preview>
-  <Story name="Basic">
-    {{
-      template: hbs`
-      <Rose::Icon @name={{name}} @size={{size}} />
-    `,
-      context: {
-        name: select(
-          'name',
-          {
-            'flight-icons/svg/check-circle-16':
-              'flight-icons/svg/check-circle-16',
-            'flight-icons/svg/clipboard-copy-16':
-              'flight-icons/svg/clipboard-copy-16',
-          },
-          'flight-icons/svg/check-circle-16'
-        ),
+  <Story
+    name="Basic"
+    args={{
+      name: 'flight-icons/svg/check-circle-16',
+      size: '',
+    }}
+    argTypes={{
+      name: {
+        control: 'select',
+        options: [
+          'flight-icons/svg/check-circle-16',
+          'flight-icons/svg/clipboard-copy-16',
+        ],
+      },
+      size: {
+        control: {
+          type: 'inline-radio',
+          labels: { '': 'default (none)' },
+        },
+        options: ['small', 'medium', '', 'extra-large'],
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>

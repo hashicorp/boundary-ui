@@ -47,7 +47,10 @@ export const Template = (args) => ({
         ],
       },
       style: {
-        control: 'select',
+        control: {
+          type: 'inline-radio',
+          labels: { '': 'default (none)' },
+        },
         options: ['', 'warning'],
       },
       dismiss: { action: 'dismiss' },
