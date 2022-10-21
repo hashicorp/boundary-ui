@@ -1,21 +1,18 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs';
-import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select } from '@storybook/addon-knobs';
+import { Meta } from '@storybook/addon-docs';
 
 <Meta title="Style Guide/Typography" />
 
 # Typography
 
 To specify custom typography, use the SCSS mixin.
-The <code>type</code> mixin accepts two parameters:  a font size name
+The <code>type</code> mixin accepts two parameters: a font size name
 (required) and an optional font weight name (normal, semibold, bold).
 This mixin sets both font size and line height, and optionally weight.
 
 For example...
 
 ```scss
-@import "utilities/type";
+@import 'utilities/type';
 .my-component {
   @include type.type(m, bold);
 }
@@ -94,42 +91,36 @@ For example...
 </tr>
 
 <tr>
-<th scope="row">
-<code>h1</code>
-</th>
-<td class="number-col">28</td>
-<td>
-<code>@include type.type(h1);</code>
-</td>
-<td>
-Same as xl, but different line height.
-</td>
+  <th scope="row">
+    <code>h1</code>
+  </th>
+  <td class="number-col">28</td>
+  <td>
+    <code>@include type.type(h1);</code>
+  </td>
+  <td>Same as xl, but different line height.</td>
 </tr>
 
 <tr>
-<th scope="row">
-<code>h2</code>
-</th>
-<td class="number-col">20</td>
-<td>
-<code>@include type.type(h2);</code>
-</td>
-<td>
-Same as l, but different line height.
-</td>
+  <th scope="row">
+    <code>h2</code>
+  </th>
+  <td class="number-col">20</td>
+  <td>
+    <code>@include type.type(h2);</code>
+  </td>
+  <td>Same as l, but different line height.</td>
 </tr>
 
 <tr>
-<th scope="row">
-<code>h3</code>
-</th>
-<td class="number-col">16</td>
-<td>
-<code>@include type.type(h3);</code>
-</td>
-<td>
-Same as m, but different line height.
-</td>
+  <th scope="row">
+    <code>h3</code>
+  </th>
+  <td class="number-col">16</td>
+  <td>
+    <code>@include type.type(h3);</code>
+  </td>
+  <td>Same as m, but different line height.</td>
 </tr>
 
 <tr>
