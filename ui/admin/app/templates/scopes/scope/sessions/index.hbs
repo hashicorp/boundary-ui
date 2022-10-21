@@ -114,7 +114,7 @@
                 </time>
               </row.cell>
               <row.cell>
-                <Hds::Badge @text={{sessionAggregate.session.status}} />
+                <SessionStatus @status={{sessionAggregate.session.status}} />
               </row.cell>
               <row.cell>
                 {{#if sessionAggregate.session.isCancelable}}
