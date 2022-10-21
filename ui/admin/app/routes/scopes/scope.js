@@ -68,6 +68,8 @@ export default class ScopesScopeRoute extends Route {
     // Update the scope service with the current scope(s);
     this.scope.org = selectedOrg;
     this.scope.project = selectedProject;
+    this.scope.orgsList = orgs;
+    this.scope.projectsList = projects;
     this.scopes = { orgs, projects, selectedOrg, selectedProject };
     // Update the controller (if exists), since setupController is only
     // called once the first time the route is activated.  It is not called
@@ -92,20 +94,6 @@ export default class ScopesScopeRoute extends Route {
   setControllerProperties(scopes) {
     /* eslint-disable-next-line ember/no-controller-access-in-routes */
     this.controller.setProperties({ scopes });
-  }
-
-  /**
-   * Renders the scope-specific header template.
-   * @override
-   * @param {object} controller
-   * @param {object} model
-   */
-  renderTemplate() {
-    super.renderTemplate(...arguments);
-    this.render('scopes/scope/-header-nav', {
-      into: 'application',
-      outlet: 'header-nav',
-    });
   }
 
   // =actions

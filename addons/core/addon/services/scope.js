@@ -16,5 +16,15 @@ export default class ScopeService extends Service {
   /**
    * @type {ScopeModel}
    */
+  @tracked orgsList;
+
+  /**
+   * @type {ScopeModel}
+   */
   @tracked project;
+
+  /**
+   * @type {ScopeModel}
+   */
+  @tracked projectsList;
 }
