@@ -14,8 +14,6 @@ export default class ApplicationRoute extends Route {
   @service session;
   @service confirm;
   @service router;
-  @service scope;
-  @service intl;
 
   // =attributes
 
