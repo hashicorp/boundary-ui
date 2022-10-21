@@ -9,7 +9,7 @@ const STATUS_MAPPING = {
   terminated: ['critical', 'x'],
 };
 
-export default class Status extends Component {
+export default class SessionStatus extends Component {
   get status() {
     return STATUS_MAPPING[this.args.status][0];
   }
