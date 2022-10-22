@@ -47,8 +47,6 @@ module.exports = {
    * application's `sassOptions.includePaths`.
    */
   includeHDSStyles(app) {
-    // Resolve a path to this addon's style folder `addon/styles/addon-name`,
-    // where addon-name is resolved from package.json
     const stylePath =
       '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
 
