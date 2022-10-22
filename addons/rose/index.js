@@ -10,6 +10,7 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     this.includeStyles(app);
+    this.includeHDSStyles(app);
     this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
@@ -39,6 +40,26 @@ module.exports = {
 
     // Include the addon styles
     app.options.sassOptions.includePaths.push(styleTree);
+  },
+
+  /**
+   * Finds the HDS styles folder and includes it into the running
+   * application's `sassOptions.includePaths`.
+   */
+  includeHDSStyles(app) {
+    // Resolve a path to this addon's style folder `addon/styles/addon-name`,
+    // where addon-name is resolved from package.json
+    const addonPath = require.resolve(this.name);
+    const stylePath =
+      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+
+    // Setup default sassOptions on the running application
+    app.options.sassOptions = app.options.sassOptions || {};
+    app.options.sassOptions.includePaths =
+      app.options.sassOptions.includePaths || [];
+
+    // Include the addon styles
+    app.options.sassOptions.includePaths.push(stylePath);
   },
 
   /**
