@@ -1,25 +1,26 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Button" component="Button" />
+<Meta title="Rose/Button" component="Button" />
 
 # Button
 
-A simple button component that renders an HTML `<button>` element.  May be used
-to trigger actions or to submit forms.  Avoid using buttons as simple links to
-other routes.  For accessibility, use links instead.
+A simple button component that renders an HTML `<button>` element. May be used
+to trigger actions or to submit forms. Avoid using buttons as simple links to
+other routes. For accessibility, use links instead.
 
-```htmlbars
-<Rose::Button @style="primary" @iconRight="flight-icons/svg/entry-point-16">
+```handlebars
+<Rose::Button @style='primary' @iconRight='flight-icons/svg/entry-point-16'>
   Action
 </Rose::Button>
 ```
 
 <Preview>
-  <Story name="Advanced">{{
-    template: hbs`
+  <Story name="Advanced">
+    {{
+      template: hbs`
       <Rose::Button
         @submit={{submit}}
         @disabled={{disabled}}
@@ -31,61 +32,70 @@ other routes.  For accessibility, use links instead.
         {{text}}
       </Rose::Button>
     `,
-    context: {
-      text: text('text', 'Action'),
-      submit: boolean('submit', true),
-      disabled: boolean('disabled', false),
-      style: select(
-        'style',
-        {
-          primary: 'primary',
-          secondary: 'secondary',
-          warning: 'warning',
-          ghost: 'ghost',
-          'inline-link-action': 'inline-link-action',
-        },
-        'primary'
-      ),
-      iconLeft: select(
-        'iconLeft',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/check-circle-16'
-      ),
-      iconRight: select(
-        'iconRight',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/clipboard-copy-16'
-      ),
-      onClick: action('clicked'),
-    },
-  }}</Story>
+      context: {
+        text: text('text', 'Action'),
+        submit: boolean('submit', true),
+        disabled: boolean('disabled', false),
+        style: select(
+          'style',
+          {
+            primary: 'primary',
+            secondary: 'secondary',
+            warning: 'warning',
+            ghost: 'ghost',
+            'inline-link-action': 'inline-link-action',
+          },
+          'primary'
+        ),
+        iconLeft: select(
+          'iconLeft',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/check-circle-16'
+        ),
+        iconRight: select(
+          'iconRight',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/clipboard-copy-16'
+        ),
+        onClick: action('clicked'),
+      },
+    }}
+  </Story>
 </Preview>
 
-Buttons may show only an icon.  You should still pass block content into the
+Buttons may show only an icon. You should still pass block content into the
 button in this case for accessibility.
 
 <Preview>
-  <Story name="Icon Only">{{
-    template: hbs`
+  <Story name="Icon Only">
+    {{
+      template: hbs`
       <Rose::Button @style="secondary" @iconOnly={{iconOnly}}>
         Icon Only
       </Rose::Button>
     `,
-    context: {
-      iconOnly: select(
-        'iconOnly',
-        {
-          'flight-icons/svg/check-circle-16': 'flight-icons/svg/check-circle-16',
-          'flight-icons/svg/clipboard-copy-16': 'flight-icons/svg/clipboard-copy-16',
-        },
-        'flight-icons/svg/check-circle-16'
-      ),
-    },
-  }}</Story>
+      context: {
+        iconOnly: select(
+          'iconOnly',
+          {
+            'flight-icons/svg/check-circle-16':
+              'flight-icons/svg/check-circle-16',
+            'flight-icons/svg/clipboard-copy-16':
+              'flight-icons/svg/clipboard-copy-16',
+          },
+          'flight-icons/svg/check-circle-16'
+        ),
+      },
+    }}
+  </Story>
 </Preview>

@@ -2,7 +2,6 @@
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
-  @error={{@model.errors.base}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
@@ -73,7 +72,6 @@
   </form.input>
   {{#if (can 'save model' @model)}}
     <form.actions
-      @disabled={{if @model.cannotSave @model.cannotSave}}
       @enableEditText={{t 'actions.edit-form'}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}

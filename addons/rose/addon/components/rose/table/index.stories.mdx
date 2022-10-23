@@ -1,8 +1,8 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose|Table" component="Table" />
+<Meta title="Rose/Table" component="Table" />
 
 # Table
 
@@ -10,7 +10,7 @@ A table component to display data in structure of rows and columns. It supports 
 
 Cell shrink should be applied to all the cells in a row. Otherwise the bigger cell with shrink applied will determinate the width of the row.
 
-```html
+```handlebars
 <Rose::Table @style={{style}} as |table|>
   <table.header as |header|>
     <header.row @hidden={{hideHeaderRow}} as |row|>
@@ -49,8 +49,9 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
 ```
 
 <Preview>
-  <Story name="Basic">{{
-    template: hbs`
+  <Story name="Basic">
+    {{
+      template: hbs`
     <Rose::Table @style={{style}} as |table|>
       <table.header as |header|>
         <header.row @hidden={{hideHeaderRow}} as |row|>
@@ -87,25 +88,24 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
       </table.footer>
     </Rose::Table>
     `,
-    context: {
-      hideHeaderRow: boolean('hideHeaderRow', false),
-      cellShrink: boolean('cellShrink', false),
-      style: select(
-        'style',
-        {
-          'default': '',
-          'condensed': 'condensed'
-        }
-      ),
-      cellAlignmentCenter: boolean('cellAlignmentCenter', false),
-      cellAlignmentRight: boolean('cellAlignmentRight', false),
-    },
-  }}</Story>
+      context: {
+        hideHeaderRow: boolean('hideHeaderRow', false),
+        cellShrink: boolean('cellShrink', false),
+        style: select('style', {
+          default: '',
+          condensed: 'condensed',
+        }),
+        cellAlignmentCenter: boolean('cellAlignmentCenter', false),
+        cellAlignmentRight: boolean('cellAlignmentRight', false),
+      },
+    }}
+  </Story>
 </Preview>
 
 <Preview>
-  <Story name="Basic Key/Value Table">{{
-    template: hbs`
+  <Story name="Basic Key/Value Table">
+    {{
+      template: hbs`
       <Rose::Table @style={{style}} as |table|>
         <table.header as |header|>
           <header.row  as |row|>
@@ -175,14 +175,12 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
         </table.footer>
       </Rose::Table>
     `,
-    context: {
-      style: select(
-        'style',
-        {
-          'condensed': 'condensed',
-          'default': ''
-        }
-      )
-    }
-  }}</Story>
+      context: {
+        style: select('style', {
+          condensed: 'condensed',
+          default: '',
+        }),
+      },
+    }}
+  </Story>
 </Preview>

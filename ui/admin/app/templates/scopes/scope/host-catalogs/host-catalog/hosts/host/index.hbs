@@ -1,5 +1,26 @@
-<Form::Host
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <HostCatalogs::HostCatalog::Hosts::Host::Header @model={{@model}} />
+  </page.header>
+
+  <page.actions>
+    <HostCatalogs::HostCatalog::Hosts::Host::Actions @model={{@model}} />
+  </page.actions>
+
+  <page.navigation>
+    <HostCatalogs::HostCatalog::Hosts::Host::Navigation @model={{@model}} />
+  </page.navigation>
+
+  <page.body>
+    <Form::Host
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>

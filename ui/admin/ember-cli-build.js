@@ -8,6 +8,9 @@ module.exports = function (defaults) {
     'ember-cli-babel': {
       includeExternalHelpers: true,
     },
+    'ember-simple-auth': {
+      useSessionSetupMethod: true,
+    },
     babel: {
       sourceMaps: 'inline',
     },

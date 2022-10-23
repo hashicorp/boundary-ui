@@ -1,15 +1,15 @@
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 import { action } from '@storybook/addon-actions';
 
-<Meta title="Rose|Toolbar" component="Toolbar" />
+<Meta title="Rose/Toolbar" component="Toolbar" />
 
 # Toolbar
 
-Renders a toolbar.  Items may be added directly into the toolbar, or within
+Renders a toolbar. Items may be added directly into the toolbar, or within
 predefined "regions" for left and right alignment, respectively.
 
-```htmlbars
+```handlebars
 <Rose::Toolbar as |toolbar|>
   // place items here
   <toolbar.primary>
@@ -22,11 +22,13 @@ predefined "regions" for left and right alignment, respectively.
 ```
 
 <Preview>
-  <Story name="Toolbar">{{
-    template: hbs`
+  <Story name="Toolbar">
+    {{
+      template: hbs`
     <Rose::Toolbar as |toolbar|>
     toolbar
      </Rose::Toolbar>
     `,
-  }}</Story>
+    }}
+  </Story>
 </Preview>

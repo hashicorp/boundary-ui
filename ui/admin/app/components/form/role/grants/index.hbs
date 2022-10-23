@@ -43,7 +43,6 @@
   @onSubmit={{fn @submit this.grantStrings}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
-  @error={{@model.errors.base}}
   as |form|
 >
 
@@ -94,7 +93,6 @@
 
   {{#if (can 'setGrants role' @model)}}
     <form.actions
-      @disabled={{if @model.cannotSave @model.cannotSave}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}
     />
