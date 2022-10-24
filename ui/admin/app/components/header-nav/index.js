@@ -6,5 +6,4 @@ export default class HeaderNavComponent extends Component {
 
   @service session;
   @service scope;
-  @service router;
 }
