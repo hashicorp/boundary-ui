@@ -11,9 +11,10 @@ module.exports = {
 
     this.includeStyles(app);
     this.includeHDSStyles(app);
-    this.includeFlightIcons(app);
+    //this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
+    //this.includeEmberFlightIcons(app);
   },
 
   /**
@@ -52,6 +53,7 @@ module.exports = {
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
+    app.options.sassOptions.precision = 4;
     app.options.sassOptions.includePaths =
       app.options.sassOptions.includePaths || [];
 
@@ -63,22 +65,33 @@ module.exports = {
    * Finds the structure-icons folder and includes it into the
    * ember-inline-svg addon.
    */
-  includeFlightIcons(app) {
-    const iconPackagePath = path.resolve(
-      '../../node_modules/@hashicorp/flight-icons'
-    );
-    const iconsPath = path.resolve(iconPackagePath, '..');
+  // includeFlightIcons(app) {
+  //   const iconPackagePath = path.resolve(
+  //     '../../node_modules/@hashicorp/flight-icons'
+  //   );
+  //   console.log(iconPackagePath, 'icon package path')
+  //   const iconsPath = path.resolve(iconPackagePath, '..');
+  //     console.log(app.options.svg, 'SVGG', iconsPath)
+  //   app.options.svg = app.options.svg || {};
+  //   app.options.svg.paths = app.options.svg.paths || [];
 
-    app.options.svg = app.options.svg || {};
-    app.options.svg.paths = app.options.svg.paths || [];
+  //   app.options.svg.paths.push(iconsPath);
+  //   console.log('APPPPPP',app.options.svg.paths, 'pathhhh' )
+  //   this.addons.forEach((addon) => {
+  //     console.log(addon.name, 'NAMEss')
+  //     if (addon.name === 'ember-inline-svg') addon.included(app);
+  //   });
+  // },
+  // includeEmberFlightIcons(app) {
+  //     const iconPackagePath = path.resolve(
+  //     '../../node_modules/@hashicorp/ember-flight-icons'
+  //   );
+  //   const iconsPath = path.resolve(iconPackagePath, '..');
+  //   app.options.svg = app.options.svg || {};
+  //   app.options.svg.paths = app.options.svg.paths || [];
 
-    app.options.svg.paths.push(iconsPath);
-
-    this.addons.forEach((addon) => {
-      if (addon.name === 'ember-inline-svg') addon.included(app);
-    });
-  },
-
+  //   app.options.svg.paths.push(iconsPath);
+  // },
   /**
    * Finds the public folder and includes it into the ember-inline-svg addon.
    */

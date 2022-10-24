@@ -97,8 +97,11 @@
               <row.cell>
                 <code>{{sessionAggregate.user.id}}</code>
                 {{#if sessionAggregate.user.accountName}}
-                  <br /><Rose::Badge
-                  >{{sessionAggregate.user.accountName}}</Rose::Badge>
+                  <br />
+                  <Hds::Badge
+                    @text={{sessionAggregate.user.accountName}}
+                    @icon='flight-icons/svg/check'
+                  />
                 {{/if}}
               </row.cell>
               <row.cell>{{sessionAggregate.target.displayName}}</row.cell>
@@ -114,7 +117,7 @@
                 </time>
               </row.cell>
               <row.cell>
-                <Rose::Badge>{{sessionAggregate.session.status}}</Rose::Badge>
+                {{!-- <SessionStatus @status={{sessionAggregate.session.status}} /> --}}
               </row.cell>
               <row.cell>
                 {{#if sessionAggregate.session.isCancelable}}
