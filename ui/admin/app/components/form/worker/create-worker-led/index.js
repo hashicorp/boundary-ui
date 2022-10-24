@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
+import window from 'ember-window-mock';
 
 class Tag {
   @tracked key;
@@ -20,7 +21,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   // =attributes
   @tracked generatedWorkerAuthToken;
-  @tracked clusterId;
+  @tracked clusterId = this.getClusterIdFromURL();
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
@@ -29,7 +30,6 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked newWorkerValue;
 
   // =properties
-
   /**
    * Returns directory creation text for `<Rose::CodeEditor>`.
    * @type {string}
@@ -147,6 +147,21 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
           `${tag.key} = [${this.convertCommaSeparatedValuesToArray(tag.value)}]`
       )
       .join('\n    ');
+  }
+
+  getClusterIdFromURL() {
+    const hostname = window.location.hostname;
+
+    // Match against a guid with either the prod, int, or dev hcp domain
+    const matcher =
+      /^([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\.boundary\.(hashicorp\.cloud|hcp\.to|hcp\.dev)$/;
+
+    if (matcher.test(hostname)) {
+      // Grab the captured guid
+      return matcher.exec(hostname)[1];
+    }
+
+    return undefined;
   }
 
   @action

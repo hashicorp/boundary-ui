@@ -1,6 +1,5 @@
 <Rose::Form
   @onSubmit={{fn @submit this.generatedWorkerAuthToken}}
-  @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{false}}
   as |form|
@@ -190,7 +189,7 @@
   <Rose::LinkButton
     @route='scopes.scope.workers'
     @style='secondary'
-    {{on 'click' (route-action 'refresh')}}
+    {{on 'click' @refresh}}
   >
     {{t 'actions.done'}}
   </Rose::LinkButton>
