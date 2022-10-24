@@ -15,45 +15,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
   }
 
   /**
-   * Renders the host-set specific templates for header, navigation, and action page sections.
-   * @override
-   * @param {object} controller
-   * @param {object} model
-   */
-  renderTemplate(controller, model) {
-    super.renderTemplate(...arguments);
-
-    this.render(
-      'scopes/scope/host-catalogs/host-catalog/host-sets/host-set/-header',
-      {
-        into: 'scopes/scope/host-catalogs/host-catalog',
-        outlet: 'header',
-        model: model,
-      }
-    );
-
-    this.render(
-      'scopes/scope/host-catalogs/host-catalog/host-sets/host-set/-navigation',
-      {
-        into: 'scopes/scope/host-catalogs/host-catalog',
-        outlet: 'navigation',
-        model: model,
-      }
-    );
-
-    this.render(
-      'scopes/scope/host-catalogs/host-catalog/host-sets/host-set/-actions',
-      {
-        into: 'scopes/scope/host-catalogs/host-catalog',
-        outlet: 'actions',
-        model: model,
-      }
-    );
-  }
-
-  /**
    * Adds a string item to array `property` on the passed `filter`.
-   
+
    * @param {hostSetModel} hostSet
    * @param {string} property
    * @param {string} value

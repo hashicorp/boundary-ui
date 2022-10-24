@@ -19,18 +19,24 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
    * Loads all host-sets under the current host catalog and it's parent scope.
    * @return {Promise{[HostSetModel]}}
    */
-  model() {
+  async model() {
     const hostCatalog = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog'
     );
-
     const { id: host_catalog_id } = hostCatalog;
+    let hostSets
+
     if (
       this.can.can('list model', hostCatalog, {
         collection: 'host-sets',
       })
     ) {
-      return this.store.query('host-set', { host_catalog_id });
+      hostSets = await this.store.query('host-set', { host_catalog_id });
+    }
+
+    return {
+      hostCatalog,
+      hostSets
     }
   }
 
