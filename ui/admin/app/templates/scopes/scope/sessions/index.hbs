@@ -98,10 +98,7 @@
                 <code>{{sessionAggregate.user.id}}</code>
                 {{#if sessionAggregate.user.accountName}}
                   <br />
-                  <Hds::Badge
-                    @text={{sessionAggregate.user.accountName}}
-                    @icon='flight-icons/svg/check'
-                  />
+                  <Hds::Badge @text={{sessionAggregate.user.accountName}} />
                 {{/if}}
               </row.cell>
               <row.cell>{{sessionAggregate.target.displayName}}</row.cell>
@@ -117,7 +114,7 @@
                 </time>
               </row.cell>
               <row.cell>
-                {{!-- <SessionStatus @status={{sessionAggregate.session.status}} /> --}}
+                <SessionStatus @status={{sessionAggregate.session.status}} />
               </row.cell>
               <row.cell>
                 {{#if sessionAggregate.session.isCancelable}}

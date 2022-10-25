@@ -26,7 +26,7 @@ module.exports = function (defaults) {
       importCss: false,
     },
     svg: {
-      paths: ['../../addons/core/public', '../../node_modules/@hashicorp/ember-flight-icons'],
+      paths: ['../../addons/core/public'],
     },
   });
 
