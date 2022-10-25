@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Form/Actions" component="Form/Actions" />
 
@@ -22,24 +20,30 @@ support actions. The cancel button supports a cancel action.
 />
 ```
 
-<Preview>
-  <Story name="Basic Form Actions">
-    {{
-      template: hbs`
+export const Template = (args) => ({
+  template: hbs`
       <Rose::Form::Actions
         @submitText={{submitText}}
         @cancelText={{cancelText}}
         @showCancel={{showCancel}}
         @submitDisabled={{submitDisabled}}
-        @cancel={{onCancel}} />
-    `,
-      context: {
-        submitText: text('submitText', 'Save'),
-        cancelText: text('cancelText', 'Cancel'),
-        showCancel: boolean('showCancel', true),
-        submitDisabled: boolean('submitDisabled', false),
-        onCancel: action('cancel'),
-      },
+        @cancel={{onCancel}} />`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Basic Form Actions"
+    args={{
+      submitText: 'Save',
+      cancelText: 'Cancel',
+      showCancel: true,
+      submitDisabled: false,
     }}
+    argTypes={{
+      onCancel: { action: 'cancel' },
+    }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>

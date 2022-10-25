@@ -1,14 +1,27 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose/Table" component="Table" />
+<Meta
+  title="Rose/Table"
+  component="Table"
+  argTypes={{
+    style: {
+      control: {
+        type: 'inline-radio',
+        labels: { '': 'default (none)' },
+      },
+      options: ['', 'condensed'],
+    },
+  }}
+/>
 
 # Table
 
-A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions. Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element. Rows can be visually hidden, and cells can be shrinked to its content with, and center/right cell alignment is supported.
+A table component to display data in structure of rows and columns. It supports `header`, `body` and `footer` optional definitions.
+Each definition allows for a table `row` to be defined with either a `cell` or `headerCell` table element.
+Rows can be visually hidden, and cells can be shrunk to its content width, and center/right cell alignment is supported.
 
-Cell shrink should be applied to all the cells in a row. Otherwise the bigger cell with shrink applied will determinate the width of the row.
+Cell shrink should be applied to all the cells in a row. Otherwise, the bigger cell with shrink applied will determine the width of the row.
 
 ```handlebars
 <Rose::Table @style={{style}} as |table|>
@@ -48,69 +61,94 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
 </Rose::Table>
 ```
 
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::Table @style={{style}} as |table|>
+        <table.header as |header|>
+          <header.row @hidden={{hideHeaderRow}} as |row|>
+            <row.headerCell
+              @shrink={{cellShrink}}
+              @alignCenter={{cellAlignmentCenter}}
+              @alignRight={{cellAlignmentRight}}
+            >Address</row.headerCell>
+            <row.headerCell
+              @alignCenter={{cellAlignmentCenter}}
+              @alignRight={{cellAlignmentRight}}
+            >Host Set</row.headerCell>
+            <row.headerCell
+              @shrink={{cellShrink}}
+              @alignCenter={{cellAlignmentCenter}}
+              @alignRight={{cellAlignmentRight}}
+            >Name</row.headerCell>
+            <row.headerCell
+              @alignCenter={{cellAlignmentCenter}}
+              @alignRight={{cellAlignmentRight}}
+            >Description</row.headerCell>
+          </header.row>
+        </table.header>
+        <table.body as |body|>
+          <body.row as |row|>
+            <row.cell @shrink={{cellShrink}}>1.1.1.1</row.cell>
+            <row.cell>host-set-1, host-set-2</row.cell>
+            <row.cell @shrink={{cellShrink}}>optional name</row.cell>
+            <row.cell>description</row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell
+              @shrink={{cellShrink}}
+              @alignCenter={{cellAlignmentCenter}}
+            >1.1.1.1</row.cell>
+            <row.cell @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
+            <row.cell
+              @shrink={{cellShrink}}
+              @alignCenter={{cellAlignmentCenter}}
+            >optional name</row.cell>
+            <row.cell @alignCenter={{cellAlignmentCenter}}>description</row.cell>
+          </body.row>
+          <body.row as |row|>
+            <row.cell
+              @shrink={{cellShrink}}
+              @alignRight={{cellAlignmentRight}}
+            >1.1.1.1</row.cell>
+            <row.cell @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
+            <row.cell
+              @shrink={{cellShrink}}
+              @alignRight={{cellAlignmentRight}}
+            >optional name</row.cell>
+            <row.cell @alignRight={{cellAlignmentRight}}>description</row.cell>
+          </body.row>
+        </table.body>
+        <table.footer as |footer|>
+          <footer.row as |row|>
+            <row.cell>Footer</row.cell>
+          </footer.row>
+        </table.footer>
+      </Rose::Table>`,
+  context: args,
+});
+
 <Preview>
-  <Story name="Basic">
-    {{
-      template: hbs`
-    <Rose::Table @style={{style}} as |table|>
-      <table.header as |header|>
-        <header.row @hidden={{hideHeaderRow}} as |row|>
-          <row.headerCell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Address</row.headerCell>
-          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Host Set</row.headerCell>
-          <row.headerCell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Name</row.headerCell>
-          <row.headerCell @alignCenter={{cellAlignmentCenter}} @alignRight={{cellAlignmentRight}}>Description</row.headerCell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        <body.row as |row|>
-          <row.cell @shrink={{cellShrink}}>1.1.1.1</row.cell>
-          <row.cell>host-set-1, host-set-2</row.cell>
-          <row.cell @shrink={{cellShrink}}>optional name</row.cell>
-          <row.cell>description</row.cell>
-        </body.row>
-        <body.row as |row|>
-          <row.cell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}}>1.1.1.1</row.cell>
-          <row.cell @alignCenter={{cellAlignmentCenter}}>host-set-2</row.cell>
-          <row.cell @shrink={{cellShrink}} @alignCenter={{cellAlignmentCenter}}>optional name</row.cell>
-          <row.cell @alignCenter={{cellAlignmentCenter}}>description</row.cell>
-        </body.row>
-        <body.row as |row|>
-          <row.cell @shrink={{cellShrink}} @alignRight={{cellAlignmentRight}}>1.1.1.1</row.cell>
-          <row.cell @alignRight={{cellAlignmentRight}}>host-set-1</row.cell>
-          <row.cell @shrink={{cellShrink}} @alignRight={{cellAlignmentRight}}>optional name</row.cell>
-          <row.cell @alignRight={{cellAlignmentRight}}>description</row.cell>
-        </body.row>
-      </table.body>
-      <table.footer as |footer|>
-        <footer.row as |row|>
-          <row.cell>Footer</row.cell>
-        </footer.row>
-      </table.footer>
-    </Rose::Table>
-    `,
-      context: {
-        hideHeaderRow: boolean('hideHeaderRow', false),
-        cellShrink: boolean('cellShrink', false),
-        style: select('style', {
-          default: '',
-          condensed: 'condensed',
-        }),
-        cellAlignmentCenter: boolean('cellAlignmentCenter', false),
-        cellAlignmentRight: boolean('cellAlignmentRight', false),
-      },
+  <Story
+    name="Basic"
+    args={{
+      hidehideHeaderRow: false,
+      cellShrink: false,
+      cellAlignmentCenter: false,
+      cellAlignmentRight: false,
+      style: '',
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
-<Preview>
-  <Story name="Basic Key/Value Table">
-    {{
-      template: hbs`
+export const KeyValueTemplate = (args) => ({
+  template: hbs`
       <Rose::Table @style={{style}} as |table|>
         <table.header as |header|>
-          <header.row  as |row|>
+          <header.row as |row|>
             <row.headerCell @shrink={{true}}>Key</row.headerCell>
-            <row.headerCell colspan="2">Value</row.headerCell>
+            <row.headerCell colspan='2'>Value</row.headerCell>
           </header.row>
         </table.header>
         <table.body as |body|>
@@ -122,26 +160,27 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
               </Rose::Form::Input>
             </row.cell>
             <row.cell @shrink={{true}} @alignRight={{true}}>
-              <Rose::Button @style="secondary" @iconOnly="flight-icons/svg/trash-16" title="Remove">Remove</Rose::Button>
+              <Rose::Button
+                @style='secondary'
+                @iconOnly='flight-icons/svg/trash-16'
+                title='Remove'
+              >Remove</Rose::Button>
             </row.cell>
           </body.row>
           <body.row as |row|>
             <row.cell>Key</row.cell>
             <row.cell>
-              <Rose::Form::Select
-                @name="Test select"
-                as |field|
-              >
+              <Rose::Form::Select @name='Test select' as |field|>
                 <field.field as |select|>
                   <select.option>Choose an option</select.option>
-                  <select.option @value="value-1">Value 1</select.option>
-                  <select.option @value="value-2">Value 2</select.option>
-                  <select.option @value="value-3">Value 3</select.option>
+                  <select.option @value='value-1'>Value 1</select.option>
+                  <select.option @value='value-2'>Value 2</select.option>
+                  <select.option @value='value-3'>Value 3</select.option>
                 </field.field>
               </Rose::Form::Select>
             </row.cell>
             <row.cell @shrink={{true}} @alignRight={{true}}>
-              <Rose::Button @style="secondary">Add</Rose::Button>
+              <Rose::Button @style='secondary'>Add</Rose::Button>
             </row.cell>
           </body.row>
           <body.row as |row|>
@@ -152,35 +191,28 @@ Cell shrink should be applied to all the cells in a row. Otherwise the bigger ce
               </Rose::Form::Input>
             </row.cell>
             <row.cell @alignRight={{true}}>
-              <Rose::Button @style="secondary">Add</Rose::Button>
+              <Rose::Button @style='secondary'>Add</Rose::Button>
             </row.cell>
           </body.row>
           <body.row as |row|>
             <row.cell>Key</row.cell>
             <row.cell>
-              <Rose::Form::Textarea
-                @name="field"
-                readonly={{false}}
-              />
+              <Rose::Form::Textarea @name='field' readonly={{false}} />
             </row.cell>
             <row.cell @alignRight={{true}}>
-              <Rose::Button @style="secondary">Add</Rose::Button>
+              <Rose::Button @style='secondary'>Add</Rose::Button>
             </row.cell>
           </body.row>
         </table.body>
         <table.footer @hidden={{true}} as |footer|>
           <footer.row as |row|>
-            <row.cell colspan="3">Footer</row.cell>
+            <row.cell colspan='3'>Footer</row.cell>
           </footer.row>
         </table.footer>
-      </Rose::Table>
-    `,
-      context: {
-        style: select('style', {
-          condensed: 'condensed',
-          default: '',
-        }),
-      },
-    }}
-  </Story>
+      </Rose::Table>`,
+  context: args,
+});
+
+<Preview>
+  <Story name="Basic Key/Value Table">{KeyValueTemplate.bind({})}</Story>
 </Preview>
