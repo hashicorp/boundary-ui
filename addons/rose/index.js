@@ -17,6 +17,18 @@ module.exports = {
   },
 
   /**
+   * Due to a limitation in how ember treats nested addons (see https://github.com/ember-cli/ember-cli/issues/4475)
+   * this is neeeded to reach down in to @hashicorp/ember-flight-icons' contentFor hook to run the logic
+   * that injects the sprite into the DOM
+   */
+  contentFor(type, config) {
+    return this.findOwnAddonByName('@hashicorp/ember-flight-icons').contentFor(
+      type,
+      config
+    );
+  },
+
+  /**
    * Finds this addon's styles folder and includes it into the running
    * application's `sassOptions.includePaths`, such that the application needs
    * no further configuration to import the styles.
