@@ -1,7 +1,7 @@
 <Rose::Dropdown
-  @text={{this.scopes.selectedOrg.displayName}}
+  @text={{this.scope.org.displayName}}
   @icon={{if
-    this.scopes.selectedOrg.isGlobal
+    this.scope.org.isGlobal
     'flight-icons/svg/globe-16'
     'flight-icons/svg/org-16'
   }}
@@ -13,22 +13,22 @@
     </dropdown.link>
     <dropdown.separator />
   {{/if}}
-  {{#each this.scopes.orgs as |scope|}}
-    <dropdown.link @route='scopes.scope' @model={{scope.id}}>
-      {{scope.displayName}}
+  {{#each this.scope.orgsList as |org|}}
+    <dropdown.link @route='scopes.scope' @model={{org.id}}>
+      {{org.displayName}}
     </dropdown.link>
   {{/each}}
 </Rose::Dropdown>
 
-{{#if this.scopes.selectedProject}}
+{{#if this.scope.project}}
   <Rose::Dropdown
-    @text={{this.scopes.selectedProject.displayName}}
+    @text={{this.scope.project.displayName}}
     @icon='flight-icons/svg/grid-16'
     as |dropdown|
   >
-    {{#each this.scopes.projects as |scope|}}
-      <dropdown.link @route='scopes.scope' @model={{scope.id}}>
-        {{scope.displayName}}
+    {{#each this.scope.projectsList as |project|}}
+      <dropdown.link @route='scopes.scope' @model={{project.id}}>
+        {{project.displayName}}
       </dropdown.link>
     {{/each}}
   </Rose::Dropdown>
