@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import window from 'ember-window-mock';
 
 class Tag {
   @tracked key;
@@ -18,6 +17,7 @@ class Tag {
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
   @service features;
+  @service browserObject;
 
   // =attributes
   @tracked generatedWorkerAuthToken;
@@ -150,7 +150,7 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
   }
 
   getClusterIdFromURL() {
-    const hostname = window.location.hostname;
+    const hostname = this.browserObject.window.location.hostname;
 
     // Match against a guid with either the prod, int, or dev hcp domain
     const matcher =

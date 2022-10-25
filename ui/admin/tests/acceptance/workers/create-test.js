@@ -9,7 +9,6 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { getOwner } from '@ember/application';
 
 module('Acceptance | workers | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -41,7 +40,7 @@ module('Acceptance | workers | create', function (hooks) {
 
   test('cluster id input field is visible for `hcp` binary', async function (assert) {
     assert.expect(2);
-    const config = getOwner(this).resolveRegistration('config:environment');
+    const config = this.owner.resolveRegistration('config:environment');
     config.featureFlags['byow-pki-hcp-cluster-id'] = true;
     config.featureFlags['byow-pki-upstream'] = false;
     await visit(newWorkerURL);
@@ -52,7 +51,7 @@ module('Acceptance | workers | create', function (hooks) {
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
     assert.expect(2);
-    const config = getOwner(this).resolveRegistration('config:environment');
+    const config = this.owner.resolveRegistration('config:environment');
     config.featureFlags['byow-pki-hcp-cluster-id'] = false;
     config.featureFlags['byow-pki-upstream'] = true;
     await visit(newWorkerURL);
