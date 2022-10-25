@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Form/HelperText" component="Form/HelperText" />
 
@@ -20,19 +18,23 @@ by form fields and should not be used directly.
 </Rose::Form::HelperText>
 ```
 
-<Preview>
-  <Story name="HelperText">
-    {{
-      template: hbs`
-      <Rose::Form::HelperText @error={{this.error}} @link={{this.link}} @linkText={{this.linkText}}>
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::Form::HelperText @error={{error}} @link={{link}} @linkText={{linkText}}>
         Helper text
-      </Rose::Form::HelperText>
-    `,
-      context: {
-        error: boolean('error', false),
-        link: text('link', 'http://www.example.net/'),
-        linkText: text('linkText', 'sample link text'),
-      },
+      </Rose::Form::HelperText>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="HelperText"
+    args={{
+      error: false,
+      link: 'http://www.example.net/',
+      linkText: 'sample link text',
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>

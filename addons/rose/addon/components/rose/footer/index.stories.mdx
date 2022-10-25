@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Footer" component="Footer" />
 
@@ -20,23 +18,27 @@ A footer component that allows four distinct sections to be configured: brand, n
 </Rose::Footer>
 ```
 
-<Preview>
-  <Story name="Basic">
-    {{
-      template: hbs`
+export const Template = (args) => ({
+  template: hbs`
       <Rose::Footer as |footer|>
-        <footer.brand @logo="logo" @text={{brandName}} />
+        <footer.brand @logo="logo" @text={{titleText}} />
         <footer.text>{{footerText}}</footer.text>
         <footer.nav as |nav|>
           <nav.link @route="index">Section</nav.link>
           <nav.link @href="index">Section</nav.link>
         </footer.nav>
-      </Rose::Footer>
-    `,
-      context: {
-        brandName: text('brandName', 'Brand Name'),
-        footerText: text('footerText', 'Text'),
-      },
+      </Rose::Footer>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Basic"
+    args={{
+      titleText: 'Brand Name',
+      footerText: 'Footer Text',
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>

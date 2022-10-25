@@ -10,10 +10,10 @@ CodeEditor::fieldEditor is where the provided code is displayed with syntax high
 CodeEditor::toolbar is intended to go on top of the fieldEditor and provides a 'Copy code' button as well as other optional user-provided actions.
 
 ```handlebars
-<CodeEditor @codeValue={{this.codeIWantToSee}} as |c|>
+<Rose::CodeEditor @codeValue={{this.codeIWantToSee}} as |c|>
   <c.toolbar />
   <c.fieldEditor />
-</CodeEditor>
+</Rose::CodeEditor>
 ```
 
 <!-- mdx seems to not be able to handle template literals -->
@@ -32,59 +32,59 @@ export const codeValue =
   '   }\n' +
   '}';
 
-<Preview>
-  <Story name="Readonly">
-    {{
-      template: hbs`
+export const Template = (args) => ({
+  template: hbs`
       <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
         <c.toolbar />
         <c.fieldEditor @options={{options}} />
       </Rose::CodeEditor>`,
-      context: {
-        codeValue: codeValue,
-        options: {
-          mode: 'hcl',
-          readOnly: true,
-        },
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="ReadOnly"
+    height="15rem"
+    args={{
+      codeValue: codeValue,
+      options: {
+        mode: 'hcl',
+        readOnly: true,
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
 <Preview>
-  <Story name="CodeEditorShell">
-    {{
-      template: hbs`
-      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
-        <c.toolbar />
-        <c.fieldEditor class='rose-autosize' @options={{options}} />
-      </Rose::CodeEditor>`,
-      context: {
-        codeValue: 'mkdir /home/ubuntu/boundary/',
-        options: {
-          mode: 'shell',
-          readOnly: true,
-        },
+  <Story
+    name="CodeEditorShell"
+    height="15rem"
+    args={{
+      codeValue: 'mkdir /home/ubuntu/boundary/',
+      options: {
+        mode: 'shell',
+        readOnly: true,
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
 <Preview>
-  <Story name="CodeEditorShellEditable">
-    {{
-      template: hbs`
-      <Rose::CodeEditor @codeValue={{codeValue}} as |c|>
-        <c.toolbar />
-        <c.fieldEditor class='autosize' @options={{options}} />
-      </Rose::CodeEditor>`,
-      context: {
-        codeValue: 'mkdir /home/ubuntu/boundary/',
-        options: {
-          mode: 'shell',
-          readOnly: false,
-        },
+  <Story
+    name="CodeEditorShellEditable"
+    height="15rem"
+    args={{
+      codeValue: 'mkdir /home/ubuntu/boundary/',
+      options: {
+        mode: 'shell',
+        readOnly: false,
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
