@@ -45,9 +45,15 @@ export function notifySuccess(notification) {
  *
  * @param {string|function} notification
  * @param {object} options
- * @param {object} options.catch - defaults to false
+ * @param {object} options.sticky - defaults to true, whether or not to persist
+ *                                  the notification until user dismissal
+ * @param {object} options.catch - defaults to false, whether or not to catch
+ *                                 and squelch the error
  */
-export function notifyError(notification, options = { catch: false }) {
+export function notifyError(
+  notification,
+  options = { catch: false, sticky: true }
+) {
   return function (_target, _propertyKey, desc) {
     const method = desc.value;
     desc.value = async function () {
@@ -67,9 +73,16 @@ export function notifyError(notification, options = { catch: false }) {
           ? intlService.t(candidateKey)
           : candidateKey;
 
+        // Default is `true`.  Since `options` is a new object instance
+        // when passed, the values shown in the signature aren't
+        // true defaults.  For example, if a value `{ catch: true }` were
+        // passed, `sticky` would actually be falsy, even though the intended
+        // default is `true`.  Hence this extra step.
+        const sticky = options.sticky === undefined ? true : options.sticky;
+
         notifyService.danger(text, {
           noticationType: 'error',
-          sticky: true,
+          sticky,
           dismiss: (flash) => flash.destroyMessage(),
         });
 
