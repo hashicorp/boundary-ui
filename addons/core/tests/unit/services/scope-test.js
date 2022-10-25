@@ -12,7 +12,7 @@ module('Unit | Service | scope', function (hooks) {
 
   test('it can contain orgs list scope', function (assert) {
     let service = this.owner.lookup('service:scope');
-    service.orgsList = {};
+    service.orgsList = [];
     assert.ok(service.orgsList, 'Service contains orgs list scope');
   });
 
@@ -24,7 +24,7 @@ module('Unit | Service | scope', function (hooks) {
 
   test('it can contain projects list scope', function (assert) {
     let service = this.owner.lookup('service:scope');
-    service.projectsList = {};
+    service.projectsList = [];
     assert.ok(service.projectsList, 'Service contains projects list scope');
   });
 });
