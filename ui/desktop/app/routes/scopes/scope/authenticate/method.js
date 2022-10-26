@@ -54,7 +54,10 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
    */
   @action
   @loading
-  @notifyError(() => 'errors.authentication-failed.title', { catch: true })
+  @notifyError(() => 'errors.authentication-failed.title', {
+    sticky: false,
+    catch: true,
+  })
   async authenticate(creds) {
     const scope = this.modelFor('scopes.scope');
     const authMethod = this.modelFor('scopes.scope.authenticate.method');
