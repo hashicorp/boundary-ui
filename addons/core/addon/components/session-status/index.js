@@ -3,10 +3,10 @@ import Component from '@glimmer/component';
 const STATUS_MAPPING = {
   //map session status to hds text color and icon style
   //more info - https://design-system-components-hashicorp.vercel.app/components/badge
-  active: { color: 'success', icon: 'check', type: 'filled' },
-  pending: { color: 'neutral', icon: 'delay', type: 'filled' },
-  canceling: { color: 'warning', icon: 'alert-triangle', type: 'filled' },
-  terminated: { color: 'critical', icon: 'x', type: 'filled' },
+  Active: { color: 'success', icon: 'check', type: 'filled' },
+  Pending: { color: 'neutral', icon: 'delay', type: 'filled' },
+  Canceling: { color: 'warning', icon: 'alert-triangle', type: 'filled' },
+  Terminated: { color: 'critical', icon: 'x', type: 'filled' },
 };
 
 export default class SessionStatus extends Component {
@@ -26,7 +26,7 @@ export default class SessionStatus extends Component {
 
   get statusBadgeType() {
     return STATUS_MAPPING[this.args.status]
-      ? STATUS_MAPPING[this.args.status]['badge']
+      ? STATUS_MAPPING[this.args.status]['type']
       : 'outlined';
   }
 }
