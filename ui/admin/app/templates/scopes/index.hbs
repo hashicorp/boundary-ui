@@ -17,7 +17,18 @@
           </Rose::Message>
         </Rose::Layout::Centered>
       </main>
+      <sidebarLayout.footer>
+        <Rose::Footer as |footer|>
+          <footer.text>{{company-copyright}}</footer.text>
+          <footer.text>{{app-name}}</footer.text>
+          <footer.nav as |nav|>
+            <nav.link @href={{(doc-url)}}>
+              {{t 'titles.documentation'}}
+            </nav.link>
+          </footer.nav>
+          <footer.brand @logo='logo-company' @text={{(company-name)}} />
+        </Rose::Footer>
+      </sidebarLayout.footer>
     </sidebarLayout.body>
-
   </Rose::Layout::Sidebar>
 {{/unless}}

@@ -11,12 +11,12 @@ A footer component that allows four distinct sections to be configured: brand, n
 
 ```handlebars
 <Rose::Footer as |footer|>
-  <footer.brand @logo='logo' @text='Product Name' />
-  <footer.text>Text</footer.text>
   <footer.nav as |nav|>
     <nav.link @route='index'>Section</nav.link>
     <nav.link @href='index'>Section</nav.link>
   </footer.nav>
+  <footer.brand @logo='logo' @text='Product Name' />
+  <footer.text>Text</footer.text>
 </Rose::Footer>
 ```
 
@@ -25,12 +25,12 @@ A footer component that allows four distinct sections to be configured: brand, n
     {{
       template: hbs`
       <Rose::Footer as |footer|>
-        <footer.brand @logo="logo" @text={{brandName}} />
-        <footer.text>{{footerText}}</footer.text>
         <footer.nav as |nav|>
           <nav.link @route="index">Section</nav.link>
           <nav.link @href="index">Section</nav.link>
         </footer.nav>
+        <footer.brand @logo="logo" @text={{brandName}} />
+        <footer.text>{{footerText}}</footer.text>
       </Rose::Footer>
     `,
       context: {
