@@ -13,7 +13,7 @@ module('Integration | Component | session-status', function (hooks) {
 
   test('it maps to correct text color and icon based on status', async function (assert) {
     assert.expect(2);
-    await render(hbs`<SessionStatus @text='active'/>`);
+    await render(hbs`<SessionStatus @text='Active'/>`);
     assert.ok(find('.flight-icon-check'));
     assert.ok(find('.hds-badge--color-success'));
   });
