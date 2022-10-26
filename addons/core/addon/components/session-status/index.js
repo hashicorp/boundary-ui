@@ -10,11 +10,11 @@ const STATUS_MAPPING = {
 };
 
 export default class SessionStatus extends Component {
-  get status() {
+  get statusColor() {
     return STATUS_MAPPING[this.args.status][0];
   }
 
-  get icon() {
+  get statusIcon() {
     return STATUS_MAPPING[this.args.status][1];
   }
 }
