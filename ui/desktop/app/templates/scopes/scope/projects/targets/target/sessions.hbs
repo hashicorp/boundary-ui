@@ -27,7 +27,15 @@
             >
               <code>{{session.id}}</code>
             </Copyable>
-            <SessionStatus @status={{session.status}} />
+            {{#if session.isUnknown}}
+              <SessionStatus @status={{session.status}} />
+            {{else}}
+              <SessionStatus
+                @status={{t
+                  (concat 'resources.session.status.' session.status)
+                }}
+              />
+            {{/if}}
           </row.cell>
 
           <row.cell>
