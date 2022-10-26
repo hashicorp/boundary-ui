@@ -65,13 +65,13 @@ module.exports = {
   files: ['!**/tests/*'],
 
   win: {
-    target: [{ target: 'zip', arch: 'x64' }],
+    target: [{ target: 'zip', arch: 'arm64' }],
   },
 
   mac: {
     target: [
-      { target: 'dmg', arch: 'x64' },
-      { target: 'zip', arch: 'x64' },
+      { target: 'dmg', arch: 'arm64' },
+      { target: 'zip', arch: 'arm64' },
     ],
     hardenedRuntime: true,
     identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
@@ -99,8 +99,8 @@ module.exports = {
 
   linux: {
     target: [
-      { target: 'deb', arch: 'x64' },
-      { target: 'zip', arch: 'x64' },
+      { target: 'deb', arch: 'arm64' },
+      { target: 'zip', arch: 'arm64' },
     ],
   },
   deb: {

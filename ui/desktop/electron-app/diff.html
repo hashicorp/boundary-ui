@@ -1,0 +1,554 @@
+<html>
+<head>
+<title>Colorized Diff</title>
+</head>
+<style>
+.diffdiv  { border: solid 1px black;           }
+.comment  { color: gray;                       }
+.diff     { color: #8A2BE2;                    }
+.minus3   { color: blue;                       }
+.plus3    { color: maroon;                     }
+.at2      { color: lime;                       }
+.plus     { color: green; background: #E7E7E7; }
+.minus    { color: red;   background: #D7D7D7; }
+.only     { color: purple;                     }
+</style>
+<body>
+<pre>
+<span class="comment"></span><div class='diffdiv'>
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (GPU).app/Contents/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (GPU).app/Contents/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (GPU).app/Contents/Info.plist	2022-10-26 16:08:09.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (GPU).app/Contents/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -2,12 +2,18 @@</span>
+ &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+ &lt;plist version="1.0"&gt;
+   &lt;dict&gt;
+<span class="plus">+    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper (GPU)&lt;/string&gt;</span>
+<span class="plus">+    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper (GPU)&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;com.electron.boundary.helper&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;com.electron.boundary.helper.GPU&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleName&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;Boundary Helper (GPU)&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;Electron Helper (GPU)&lt;/string&gt;</span>
+     &lt;key&gt;CFBundlePackageType&lt;/key&gt;
+     &lt;string&gt;APPL&lt;/string&gt;
+<span class="plus">+    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+     &lt;key&gt;DTCompiler&lt;/key&gt;
+     &lt;string&gt;com.apple.compilers.llvm.clang.1_0&lt;/string&gt;
+     &lt;key&gt;DTSDKBuild&lt;/key&gt;
+<span class="at2">@@ -22,13 +28,5 @@</span>
+     &lt;true/&gt;
+     &lt;key&gt;NSSupportsAutomaticGraphicsSwitching&lt;/key&gt;
+     &lt;true/&gt;
+<span class="minus">-    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper (GPU)&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper (GPU)&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleShortVersionString&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+   &lt;/dict&gt;
+ &lt;/plist&gt;
+\ No newline at end of file</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Plugin).app/Contents/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Plugin).app/Contents/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Plugin).app/Contents/Info.plist	2022-10-26 16:08:09.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Plugin).app/Contents/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -2,12 +2,18 @@</span>
+ &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+ &lt;plist version="1.0"&gt;
+   &lt;dict&gt;
+<span class="plus">+    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper (Plugin)&lt;/string&gt;</span>
+<span class="plus">+    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper (Plugin)&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;com.electron.boundary.helper&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;com.electron.boundary.helper.Plugin&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleName&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;Boundary Helper (Plugin)&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;Electron Helper (Plugin)&lt;/string&gt;</span>
+     &lt;key&gt;CFBundlePackageType&lt;/key&gt;
+     &lt;string&gt;APPL&lt;/string&gt;
+<span class="plus">+    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+     &lt;key&gt;DTCompiler&lt;/key&gt;
+     &lt;string&gt;com.apple.compilers.llvm.clang.1_0&lt;/string&gt;
+     &lt;key&gt;DTSDKBuild&lt;/key&gt;
+<span class="at2">@@ -22,13 +28,5 @@</span>
+     &lt;true/&gt;
+     &lt;key&gt;NSSupportsAutomaticGraphicsSwitching&lt;/key&gt;
+     &lt;true/&gt;
+<span class="minus">-    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper (Plugin)&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper (Plugin)&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleShortVersionString&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+   &lt;/dict&gt;
+ &lt;/plist&gt;
+\ No newline at end of file</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Renderer).app/Contents/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Renderer).app/Contents/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Renderer).app/Contents/Info.plist	2022-10-26 16:08:09.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper (Renderer).app/Contents/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -2,12 +2,18 @@</span>
+ &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+ &lt;plist version="1.0"&gt;
+   &lt;dict&gt;
+<span class="plus">+    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper (Renderer)&lt;/string&gt;</span>
+<span class="plus">+    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper (Renderer)&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;com.electron.boundary.helper&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;com.electron.boundary.helper.Renderer&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleName&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;Boundary Helper (Renderer)&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;Electron Helper (Renderer)&lt;/string&gt;</span>
+     &lt;key&gt;CFBundlePackageType&lt;/key&gt;
+     &lt;string&gt;APPL&lt;/string&gt;
+<span class="plus">+    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+     &lt;key&gt;DTCompiler&lt;/key&gt;
+     &lt;string&gt;com.apple.compilers.llvm.clang.1_0&lt;/string&gt;
+     &lt;key&gt;DTSDKBuild&lt;/key&gt;
+<span class="at2">@@ -22,13 +28,5 @@</span>
+     &lt;true/&gt;
+     &lt;key&gt;NSSupportsAutomaticGraphicsSwitching&lt;/key&gt;
+     &lt;true/&gt;
+<span class="minus">-    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper (Renderer)&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper (Renderer)&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleShortVersionString&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+   &lt;/dict&gt;
+ &lt;/plist&gt;
+\ No newline at end of file</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper.app/Contents/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper.app/Contents/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Boundary Helper.app/Contents/Info.plist	2022-10-26 16:08:09.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Boundary Helper.app/Contents/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -2,12 +2,18 @@</span>
+ &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+ &lt;plist version="1.0"&gt;
+   &lt;dict&gt;
+<span class="plus">+    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper&lt;/string&gt;</span>
+<span class="plus">+    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Boundary Helper&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+     &lt;string&gt;com.electron.boundary.helper&lt;/string&gt;
+     &lt;key&gt;CFBundleName&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;Boundary&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;Electron Helper&lt;/string&gt;</span>
+     &lt;key&gt;CFBundlePackageType&lt;/key&gt;
+     &lt;string&gt;APPL&lt;/string&gt;
+<span class="plus">+    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+     &lt;key&gt;DTCompiler&lt;/key&gt;
+     &lt;string&gt;com.apple.compilers.llvm.clang.1_0&lt;/string&gt;
+     &lt;key&gt;DTSDKBuild&lt;/key&gt;
+<span class="at2">@@ -22,13 +28,5 @@</span>
+     &lt;true/&gt;
+     &lt;key&gt;NSSupportsAutomaticGraphicsSwitching&lt;/key&gt;
+     &lt;true/&gt;
+<span class="minus">-    &lt;key&gt;CFBundleDisplayName&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleExecutable&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Boundary Helper&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleVersion&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+<span class="minus">-    &lt;key&gt;CFBundleShortVersionString&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;0.0.0&lt;/string&gt;</span>
+   &lt;/dict&gt;
+ &lt;/plist&gt;
+\ No newline at end of file</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -31,6 +31,6 @@</span>
+ 	&lt;key&gt;DTXcodeBuild&lt;/key&gt;
+ 	&lt;string&gt;12D4e&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/A/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/A/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/A/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/A/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -31,6 +31,6 @@</span>
+ 	&lt;key&gt;DTXcodeBuild&lt;/key&gt;
+ 	&lt;string&gt;12D4e&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/Current/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/Current/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/Current/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Mantle.framework/Versions/Current/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -31,6 +31,6 @@</span>
+ 	&lt;key&gt;DTXcodeBuild&lt;/key&gt;
+ 	&lt;string&gt;12D4e&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -33,6 +33,6 @@</span>
+ 	&lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;
+ 	&lt;string&gt;Copyright © 2014 GitHub. All rights reserved.&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/A/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/A/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/A/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/A/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -33,6 +33,6 @@</span>
+ 	&lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;
+ 	&lt;string&gt;Copyright © 2014 GitHub. All rights reserved.&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/Current/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/Current/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/Current/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/ReactiveObjC.framework/Versions/Current/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -33,6 +33,6 @@</span>
+ 	&lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;
+ 	&lt;string&gt;Copyright © 2014 GitHub. All rights reserved.&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -7,7 +7,7 @@</span>
+ 	&lt;key&gt;CFBundleExecutable&lt;/key&gt;
+ 	&lt;string&gt;Squirrel&lt;/string&gt;
+ 	&lt;key&gt;CFBundleIconFile&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ 	&lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+ 	&lt;string&gt;com.github.Squirrel&lt;/string&gt;
+ 	&lt;key&gt;CFBundleInfoDictionaryVersion&lt;/key&gt;
+<span class="at2">@@ -35,6 +35,6 @@</span>
+ 	&lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;
+ 	&lt;string&gt;Copyright © 2013 GitHub. All rights reserved.&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -7,7 +7,7 @@</span>
+ 	&lt;key&gt;CFBundleExecutable&lt;/key&gt;
+ 	&lt;string&gt;Squirrel&lt;/string&gt;
+ 	&lt;key&gt;CFBundleIconFile&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ 	&lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+ 	&lt;string&gt;com.github.Squirrel&lt;/string&gt;
+ 	&lt;key&gt;CFBundleInfoDictionaryVersion&lt;/key&gt;
+<span class="at2">@@ -35,6 +35,6 @@</span>
+ 	&lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;
+ 	&lt;string&gt;Copyright © 2013 GitHub. All rights reserved.&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/Current/Resources/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/Current/Resources/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/Current/Resources/Info.plist	2022-10-26 16:08:08.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Frameworks/Squirrel.framework/Versions/Current/Resources/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -7,7 +7,7 @@</span>
+ 	&lt;key&gt;CFBundleExecutable&lt;/key&gt;
+ 	&lt;string&gt;Squirrel&lt;/string&gt;
+ 	&lt;key&gt;CFBundleIconFile&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ 	&lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+ 	&lt;string&gt;com.github.Squirrel&lt;/string&gt;
+ 	&lt;key&gt;CFBundleInfoDictionaryVersion&lt;/key&gt;
+<span class="at2">@@ -35,6 +35,6 @@</span>
+ 	&lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;
+ 	&lt;string&gt;Copyright © 2013 GitHub. All rights reserved.&lt;/string&gt;
+ 	&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+<span class="minus">-	&lt;string&gt;&lt;/string&gt;</span>
+<span class="plus">+    &lt;string/&gt;</span>
+ &lt;/dict&gt;
+ &lt;/plist&gt;</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Info.plist /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Info.plist</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Info.plist	2022-10-26 16:08:09.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Info.plist	2022-10-26 16:37:11.000000000 -0400</span>
+<span class="at2">@@ -7,7 +7,7 @@</span>
+     &lt;key&gt;CFBundleExecutable&lt;/key&gt;
+     &lt;string&gt;Boundary&lt;/string&gt;
+     &lt;key&gt;CFBundleIconFile&lt;/key&gt;
+<span class="minus">-    &lt;string&gt;electron.icns&lt;/string&gt;</span>
+<span class="plus">+    &lt;string&gt;icon.icns&lt;/string&gt;</span>
+     &lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+     &lt;string&gt;com.electron.boundary&lt;/string&gt;
+     &lt;key&gt;CFBundleInfoDictionaryVersion&lt;/key&gt;
+<span class="at2">@@ -48,6 +48,37 @@</span>
+     &lt;dict&gt;
+       &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
+       &lt;true/&gt;
+<span class="plus">+      &lt;key&gt;NSAllowsLocalNetworking&lt;/key&gt;</span>
+<span class="plus">+      &lt;true/&gt;</span>
+<span class="plus">+      &lt;key&gt;NSExceptionDomains&lt;/key&gt;</span>
+<span class="plus">+      &lt;dict&gt;</span>
+<span class="plus">+        &lt;key&gt;127.0.0.1&lt;/key&gt;</span>
+<span class="plus">+        &lt;dict&gt;</span>
+<span class="plus">+          &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;</span>
+<span class="plus">+          &lt;false/&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionAllowsInsecureHTTPLoads&lt;/key&gt;</span>
+<span class="plus">+          &lt;true/&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionAllowsInsecureHTTPSLoads&lt;/key&gt;</span>
+<span class="plus">+          &lt;false/&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionMinimumTLSVersion&lt;/key&gt;</span>
+<span class="plus">+          &lt;string&gt;1.0&lt;/string&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionRequiresForwardSecrecy&lt;/key&gt;</span>
+<span class="plus">+          &lt;false/&gt;</span>
+<span class="plus">+        &lt;/dict&gt;</span>
+<span class="plus">+        &lt;key&gt;localhost&lt;/key&gt;</span>
+<span class="plus">+        &lt;dict&gt;</span>
+<span class="plus">+          &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;</span>
+<span class="plus">+          &lt;false/&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionAllowsInsecureHTTPLoads&lt;/key&gt;</span>
+<span class="plus">+          &lt;true/&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionAllowsInsecureHTTPSLoads&lt;/key&gt;</span>
+<span class="plus">+          &lt;false/&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionMinimumTLSVersion&lt;/key&gt;</span>
+<span class="plus">+          &lt;string&gt;1.0&lt;/string&gt;</span>
+<span class="plus">+          &lt;key&gt;NSTemporaryExceptionRequiresForwardSecrecy&lt;/key&gt;</span>
+<span class="plus">+          &lt;false/&gt;</span>
+<span class="plus">+        &lt;/dict&gt;</span>
+<span class="plus">+      &lt;/dict&gt;</span>
+     &lt;/dict&gt;
+     &lt;key&gt;NSBluetoothAlwaysUsageDescription&lt;/key&gt;
+     &lt;string&gt;This app needs access to Bluetooth&lt;/string&gt;
+<span class="at2">@@ -57,6 +88,8 @@</span>
+     &lt;string&gt;This app needs access to the camera&lt;/string&gt;
+     &lt;key&gt;NSHighResolutionCapable&lt;/key&gt;
+     &lt;true/&gt;
+<span class="plus">+    &lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;</span>
+<span class="plus">+    &lt;string&gt;Copyright © 2022 HashiCorp, Inc.&lt;/string&gt;</span>
+     &lt;key&gt;NSMainNibFile&lt;/key&gt;
+     &lt;string&gt;MainMenu&lt;/string&gt;
+     &lt;key&gt;NSMicrophoneUsageDescription&lt;/key&gt;
+<span class="at2">@@ -69,7 +102,5 @@</span>
+     &lt;false/&gt;
+     &lt;key&gt;NSSupportsAutomaticGraphicsSwitching&lt;/key&gt;
+     &lt;true/&gt;
+<span class="minus">-    &lt;key&gt;NSHumanReadableCopyright&lt;/key&gt;</span>
+<span class="minus">-    &lt;string&gt;Copyright © 2022 HashiCorp, Inc.&lt;/string&gt;</span>
+   &lt;/dict&gt;
+ &lt;/plist&gt;
+\ No newline at end of file</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/app/.gitignore /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/app/.gitignore</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/app/.gitignore	2022-10-26 16:08:09.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/app/.gitignore	1969-12-31 19:00:00.000000000 -0500</span>
+<span class="at2">@@ -1,102 +0,0 @@</span>
+<span class="minus">-# Logs</span>
+<span class="minus">-logs</span>
+<span class="minus">-*.log</span>
+<span class="minus">-npm-debug.log*</span>
+<span class="minus">-yarn-debug.log*</span>
+<span class="minus">-yarn-error.log*</span>
+<span class="minus">-lerna-debug.log*</span>
+<span class="minus">-</span>
+<span class="minus">-# Diagnostic reports (https://nodejs.org/api/report.html)</span>
+<span class="minus">-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json</span>
+<span class="minus">-</span>
+<span class="minus">-# Runtime data</span>
+<span class="minus">-pids</span>
+<span class="minus">-*.pid</span>
+<span class="minus">-*.seed</span>
+<span class="minus">-*.pid.lock</span>
+<span class="minus">-.DS_Store</span>
+<span class="minus">-</span>
+<span class="minus">-# Directory for instrumented libs generated by jscoverage/JSCover</span>
+<span class="minus">-lib-cov</span>
+<span class="minus">-</span>
+<span class="minus">-# Coverage directory used by tools like istanbul</span>
+<span class="minus">-coverage</span>
+<span class="minus">-*.lcov</span>
+<span class="minus">-</span>
+<span class="minus">-# nyc test coverage</span>
+<span class="minus">-.nyc_output</span>
+<span class="minus">-</span>
+<span class="minus">-# node-waf configuration</span>
+<span class="minus">-.lock-wscript</span>
+<span class="minus">-</span>
+<span class="minus">-# Compiled binary addons (https://nodejs.org/api/addons.html)</span>
+<span class="minus">-build/Release</span>
+<span class="minus">-</span>
+<span class="minus">-# Dependency directories</span>
+<span class="minus">-node_modules/</span>
+<span class="minus">-jspm_packages/</span>
+<span class="minus">-</span>
+<span class="minus">-# TypeScript v1 declaration files</span>
+<span class="minus">-typings/</span>
+<span class="minus">-</span>
+<span class="minus">-# TypeScript cache</span>
+<span class="minus">-*.tsbuildinfo</span>
+<span class="minus">-</span>
+<span class="minus">-# Optional npm cache directory</span>
+<span class="minus">-.npm</span>
+<span class="minus">-</span>
+<span class="minus">-# Optional eslint cache</span>
+<span class="minus">-.eslintcache</span>
+<span class="minus">-</span>
+<span class="minus">-# Optional REPL history</span>
+<span class="minus">-.node_repl_history</span>
+<span class="minus">-</span>
+<span class="minus">-# Output of 'npm pack'</span>
+<span class="minus">-*.tgz</span>
+<span class="minus">-</span>
+<span class="minus">-# Yarn Integrity file</span>
+<span class="minus">-.yarn-integrity</span>
+<span class="minus">-</span>
+<span class="minus">-# dotenv environment variables file</span>
+<span class="minus">-.env</span>
+<span class="minus">-.env.test</span>
+<span class="minus">-</span>
+<span class="minus">-# parcel-bundler cache (https://parceljs.org/)</span>
+<span class="minus">-.cache</span>
+<span class="minus">-</span>
+<span class="minus">-# next.js build output</span>
+<span class="minus">-.next</span>
+<span class="minus">-</span>
+<span class="minus">-# nuxt.js build output</span>
+<span class="minus">-.nuxt</span>
+<span class="minus">-</span>
+<span class="minus">-# vuepress build output</span>
+<span class="minus">-.vuepress/dist</span>
+<span class="minus">-</span>
+<span class="minus">-# Serverless directories</span>
+<span class="minus">-.serverless/</span>
+<span class="minus">-</span>
+<span class="minus">-# FuseBox cache</span>
+<span class="minus">-.fusebox/</span>
+<span class="minus">-</span>
+<span class="minus">-# DynamoDB Local files</span>
+<span class="minus">-.dynamodb/</span>
+<span class="minus">-</span>
+<span class="minus">-# Webpack</span>
+<span class="minus">-.webpack/</span>
+<span class="minus">-</span>
+<span class="minus">-# Electron-Forge</span>
+<span class="minus">-out/</span>
+<span class="minus">-</span>
+<span class="minus">-# Generated config</span>
+<span class="minus">-config/config.js</span>
+<span class="minus">-</span>
+<span class="minus">-# Ember build</span>
+<span class="minus">-ember-dist/</span>
+<span class="minus">-ember-test/</span>
+<span class="minus">-</span>
+<span class="minus">-# CLI</span>
+<span class="minus">-/cli/</span>
+<span class="minus">-</span>
+<span class="minus">-# Autoupdate</span>
+<span class="minus">-nextVersion/</span>
+Binary files /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/app/assets/app-icons/icon.icns and /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/app/assets/app-icons/icon.icns differ
+Binary files /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/app/assets/app-icons/icon.ico and /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/app/assets/app-icons/icon.ico differ
+Binary files /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/app/assets/app-icons/icon.png and /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/app/assets/app-icons/icon.png differ</div>
+<div class='diffdiv'>
+
+<span class="diff">diff -rwbNu -x node_modules /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/app/package.json /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/app/package.json</span>
+<span class="minus3">--- /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/app/package.json	2022-10-26 16:08:09.000000000 -0400</span>
+<span class="plus3">+++ /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/app/package.json	2022-10-26 16:09:54.000000000 -0400</span>
+<span class="at2">@@ -8,18 +8,9 @@</span>
+   "license": "MPL-2.0",
+   "author": "HashiCorp",
+   "main": "src/index.js",
+<span class="minus">-  "scripts": {</span>
+<span class="minus">-    "build:cli": "node -e \"require('./config/cli.js').setup()\"",</span>
+<span class="minus">-    "build:config": "node -e \"require('./config/desktop.js').setup()\"",</span>
+<span class="minus">-    "start": "electron-forge start",</span>
+<span class="minus">-    "package": "electron-forge package",</span>
+<span class="minus">-    "premake": "yarn build:cli &amp;&amp; yarn build:config",</span>
+<span class="minus">-    "make": "electron-forge make",</span>
+<span class="minus">-    "publish": "electron-forge publish",</span>
+<span class="minus">-    "lint": "echo \"No linting configured\""</span>
+<span class="plus">+  "config": {</span>
+<span class="plus">+    "forge": "config/forge.config.js"</span>
+   },
+<span class="minus">-  "keywords": [],</span>
+<span class="minus">-  "config": {},</span>
+   "dependencies": {
+     "electron-devtools-installer": "^3.2.0",
+     "electron-is-dev": "^2.0.0",
+<span class="at2">@@ -29,17 +20,6 @@</span>
+     "shell-quote": "^1.7.3",
+     "tree-kill": "^1.2.2"
+   },
+<span class="minus">-  "devDependencies": {</span>
+<span class="minus">-    "@electron-forge/cli": "6.0.0-beta.64",</span>
+<span class="minus">-    "@electron-forge/maker-deb": "6.0.0-beta.64",</span>
+<span class="minus">-    "@electron-forge/maker-dmg": "^6.0.0-beta.64",</span>
+<span class="minus">-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",</span>
+<span class="minus">-    "@electron-forge/maker-zip": "^6.0.0-beta.64",</span>
+<span class="minus">-    "decompress": "^4.2.1",</span>
+<span class="minus">-    "devtron": "^1.4.0",</span>
+<span class="minus">-    "electron": "16.2.8",</span>
+<span class="minus">-    "electron-builder": "^23.6.0"</span>
+<span class="minus">-  },</span>
+   "resolutions": {
+     "highlight.js": "^10.4.1",
+     "yargs-parser": "~20.2.7",
+Binary files /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/electron.icns and /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/electron.icns differ
+Binary files /Users/zhiheli/Desktop/out/Boundary-darwin-arm64/Boundary.app/Contents/Resources/icon.icns and /Users/zhiheli/Workspace/boundary-ui/ui/desktop/electron-app/out/mac-arm64/Boundary.app/Contents/Resources/icon.icns differ</div>
+
+</pre>
+</body>
+</html>
