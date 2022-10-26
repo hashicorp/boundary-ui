@@ -3,9 +3,7 @@
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function (defaults) {
-  let app = new EmberAddon(defaults, {
-    // Add options here
-  });
+  let app = new EmberAddon(defaults, {});
 
   app.import('node_modules/codemirror/lib/codemirror.css');
   app.import('node_modules/codemirror/theme/monokai.css');

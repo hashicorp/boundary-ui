@@ -10,9 +10,22 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     this.includeStyles(app);
+    this.includeHDSStyles(app);
     this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
+  },
+
+  /**
+   * Due to a limitation in how ember treats nested addons (see https://github.com/ember-cli/ember-cli/issues/4475)
+   * this is neeeded to reach down in to @hashicorp/ember-flight-icons' contentFor hook to run the logic
+   * that injects the sprite into the DOM
+   */
+  contentFor(type, config) {
+    return this.findOwnAddonByName('@hashicorp/ember-flight-icons').contentFor(
+      type,
+      config
+    );
   },
 
   /**
@@ -39,6 +52,23 @@ module.exports = {
 
     // Include the addon styles
     app.options.sassOptions.includePaths.push(styleTree);
+  },
+
+  /**
+   * Finds the HDS styles folder and includes it into the running
+   * application's `sassOptions.includePaths`.
+   */
+  includeHDSStyles(app) {
+    const stylePath =
+      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+
+    // Setup default sassOptions on the running application
+    app.options.sassOptions = app.options.sassOptions || {};
+    app.options.sassOptions.includePaths =
+      app.options.sassOptions.includePaths || [];
+
+    // Include the addon styles
+    app.options.sassOptions.includePaths.push(stylePath);
   },
 
   /**
