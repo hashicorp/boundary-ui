@@ -24,7 +24,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
       'scopes.scope.host-catalogs.host-catalog'
     );
     const { id: host_catalog_id } = hostCatalog;
-    let hostSets
+    let hostSets;
 
     if (
       this.can.can('list model', hostCatalog, {
@@ -36,8 +36,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
 
     return {
       hostCatalog,
-      hostSets
-    }
+      hostSets,
+    };
   }
 
   // =actions

@@ -35,8 +35,10 @@ module.exports = {
    * application's `sassOptions.includePaths`.
    */
   includeHDSStyles(app) {
-    const stylePath =
+    const tokensPath =
       '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+    const hdsPath =
+      '../../node_modules/@hashicorp/design-system-components/app/styles';
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
@@ -44,7 +46,8 @@ module.exports = {
       app.options.sassOptions.includePaths || [];
 
     // Include the addon styles
-    app.options.sassOptions.includePaths.push(stylePath);
+    app.options.sassOptions.includePaths.push(tokensPath);
+    app.options.sassOptions.includePaths.push(hdsPath);
   },
 
   /**
