@@ -18,7 +18,6 @@ module.exports = {
   },
 
   /**
-<<<<<<< HEAD
    * Due to a limitation in how ember treats nested addons (see https://github.com/ember-cli/ember-cli/issues/4475)
    * this is neeeded to reach down in to @hashicorp/ember-flight-icons' contentFor hook to run the logic
    * that injects the sprite into the DOM
