@@ -91,7 +91,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     await click(`[href="${urls.credentialStores}"]`);
 
     assert.dom(`[href="${urls.staticCredentialStore}"]`).doesNotExist();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
+    assert.dom(`[href="${urls.vaultCredentialStore}"]`).isVisible();
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
@@ -104,7 +104,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     await click(`[href="${urls.credentialStores}"]`);
 
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
+    assert.dom(`[href="${urls.staticCredentialStore}"]`).isVisible();
   });
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
@@ -125,10 +125,10 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     await click(`[href="${urls.credentialStores}"]`);
 
-    assert.ok(
-      find(
+    assert
+      .dom(
         `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
       )
-    );
+      .isVisible();
   });
 });
