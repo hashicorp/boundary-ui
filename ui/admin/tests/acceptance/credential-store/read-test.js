@@ -95,7 +95,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
-    assert.expect();
+    assert.expect(2);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
         (item) => item !== 'read'
