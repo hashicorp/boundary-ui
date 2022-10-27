@@ -15,6 +15,8 @@ module('Acceptance | credential-stores | read', function (hooks) {
       org: null,
       project: null,
     },
+    staticCredentialStore: null,
+    vaultCredentialStore: null,
   };
 
   const urls = {
@@ -54,6 +56,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
+    
     authenticateSession({});
     await visit(urls.projectScope);
   });
@@ -109,6 +112,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
     assert.expect(2);
+    await visit(urls.credentialStores);
     assert.dom(`[href="${urls.unknownCredentialStore}"]`).doesNotExist();
 
     await visit(urls.unknownCredentialStore);
