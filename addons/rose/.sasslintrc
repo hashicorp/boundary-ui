@@ -1,5 +1,5 @@
 files:
-  include: 'app/styles/**/*.s+(a|c)ss'
+  include: 'app/**/*.scss'
 rules:
   leading-zero: 0
   mixins-before-declarations: 0
