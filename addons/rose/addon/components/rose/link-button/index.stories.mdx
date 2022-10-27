@@ -1,13 +1,26 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select } from '@storybook/addon-knobs';
 
-<Meta title="Rose/LinkButton" component="LinkButton" />
+<Meta
+  title="Rose/LinkButton"
+  component="LinkButton"
+  argTypes={{
+    style: {
+      control: 'select',
+      options: [
+        'primary',
+        'secondary',
+        'warning',
+        'ghost',
+        'inline-link-action',
+      ],
+    },
+  }}
+/>
 
 # LinkButton
 
-An achor element component styled to mimic `Rose::Button` component.
+An anchor element component styled to mimic `Rose::Button` component.
 Styles supported: primary, secondary, warning, and ghost.
 Disabling link button is not supported as it is an action on form components only.
 
@@ -21,54 +34,48 @@ Disabling link button is not supported as it is an action on form components onl
 </Rose::LinkButton>
 ```
 
-<Preview>
-  <Story name="Advanced">
-    {{
-      template: hbs`
+export const Template = (args) => ({
+  template: hbs`
       <Rose::LinkButton
-        @route="index"
+        @route='index'
         @style={{style}}
         @iconLeft={{iconLeft}}
         @iconRight={{iconRight}}
+        @iconOnly={{iconOnly}}
       >
         {{text}}
       </Rose::LinkButton>
     `,
-      context: {
-        text: text('text', 'Content'),
-        style: select(
-          'style',
-          {
-            primary: 'primary',
-            secondary: 'secondary',
-            warning: 'warning',
-            ghost: 'ghost',
-            'inline-link-action': 'inline-link-action',
-          },
-          'primary'
-        ),
-        iconLeft: select(
-          'iconLeft',
-          {
-            'flight-icons/svg/check-circle-16':
-              'flight-icons/svg/check-circle-16',
-            'flight-icons/svg/clipboard-copy-16':
-              'flight-icons/svg/clipboard-copy-16',
-          },
-          'flight-icons/svg/clipboard-copy-16'
-        ),
-        iconRight: select(
-          'iconRight',
-          {
-            'flight-icons/svg/check-circle-16':
-              'flight-icons/svg/check-circle-16',
-            'flight-icons/svg/clipboard-copy-16':
-              'flight-icons/svg/clipboard-copy-16',
-          },
-          'flight-icons/svg/clipboard-copy-16'
-        ),
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Advanced"
+    args={{
+      text: 'Content',
+      style: 'primary',
+      iconLeft: 'flight-icons/svg/check-circle-16',
+      iconRight: 'flight-icons/svg/clipboard-copy-16',
+    }}
+    argTypes={{
+      iconLeft: {
+        control: 'select',
+        options: [
+          'flight-icons/svg/check-circle-16',
+          'flight-icons/svg/clipboard-copy-16',
+        ],
+      },
+      iconRight: {
+        control: 'select',
+        options: [
+          'flight-icons/svg/check-circle-16',
+          'flight-icons/svg/clipboard-copy-16',
+        ],
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
@@ -83,33 +90,23 @@ Similar to `Rose::Button`, icon only link button is supported.
 ```
 
 <Preview>
-  <Story name="Icon Only">
-    {{
-      template: hbs`
-    <Rose::LinkButton @route="" @style={{style}} @iconOnly={{iconOnly}} />
-    `,
-      context: {
-        style: select(
-          'style',
-          {
-            primary: 'primary',
-            secondary: 'secondary',
-            warning: 'warning',
-            ghost: 'ghost',
-            'inline-link-action': 'inline-link-action',
-          },
-          'primary'
-        ),
-        iconOnly: select(
-          'iconOnly',
-          {
-            'flight-icons/svg/check-circle-16':
-              'flight-icons/svg/check-circle-16',
-            'flight-icons/svg/help-16': 'flight-icons/svg/help-16',
-          },
-          'flight-icons/svg/help-16'
-        ),
+  <Story
+    name="Icon Only"
+    args={{
+      style: 'primary',
+      iconOnly: 'flight-icons/svg/check-circle-16',
+    }}
+    argTypes={{
+      iconOnly: {
+        control: 'select',
+        options: [
+          'flight-icons/svg/help-16',
+          'flight-icons/svg/check-circle-16',
+          'flight-icons/svg/clipboard-copy-16',
+        ],
       },
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>

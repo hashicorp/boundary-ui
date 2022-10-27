@@ -18,13 +18,6 @@ module.exports = function (defaults) {
       enabled: true,
       extensions: ['js'],
     },
-    sassOptions: {
-      onlyIncluded: true,
-      extension: 'scss',
-    },
-    emberNotify: {
-      importCss: false,
-    },
     svg: {
       paths: ['../../addons/core/public'],
     },
@@ -36,9 +29,6 @@ module.exports = function (defaults) {
   } else {
     app.import('node_modules/clipboard/dist/clipboard.min.js');
   }
-
-  app.import('node_modules/codemirror/lib/codemirror.css');
-  app.import('node_modules/codemirror/theme/monokai.css');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { number, boolean, object } from '@storybook/addon-knobs';
-import { action } from '@storybook/addon-actions';
 
 <Meta title="Rose/Dropdown" component="Dropdown" />
 
@@ -9,11 +7,24 @@ import { action } from '@storybook/addon-actions';
 
 A simple dropdown component with support for links and buttons.
 
-<Preview>
-  <Story name="Basic Dropdown" height="7rem">
-    {{
-      template: hbs`
-      <Rose::Dropdown @text="Choose One&hellip;" @count={{count}} @icon="flight-icons/svg/org-16" @showCaret={{showCaret}} as |dropdown|>
+```handlebars
+<Rose::Dropdown @text='Choose One' as |dropdown|>
+  <dropdown.link @route='index'>Menu item</dropdown.link>
+  <dropdown.link @route='about'>Menu item</dropdown.link>
+  <dropdown.button>Button menu item</dropdown.button>
+  <dropdown.separator />
+  <dropdown.section
+    @title='Dropdown Section Title'
+    @icon='flight-icons/svg/tag-16'
+  >
+    <dropdown.link @route='index'>Menu item</dropdown.link>
+  </dropdown.section>
+</Rose::Dropdown>
+```
+
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::Dropdown @text={{text}} @count={{count}} @icon={{icon}} @showCaret={{showCaret}} iconOnly={{iconOnly}} @dropdownRight={{dropdownRight}} @style={{style}} as |dropdown|>
         <dropdown.link @route="index">Menu item</dropdown.link>
         <dropdown.link @route="about">Menu item</dropdown.link>
         <dropdown.separator />
@@ -22,35 +33,43 @@ A simple dropdown component with support for links and buttons.
         <dropdown.section @title="Dropdown Section Title" @icon="flight-icons/svg/tag-16">
           <dropdown.link @route="index">Menu item</dropdown.link>
         </dropdown.section>
-      </Rose::Dropdown>
-    `,
-      context: {
-        count: number('count', 0),
-        showCaret: boolean('showCaret', true),
-      },
+      </Rose::Dropdown>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Basic Dropdown"
+    height="7rem"
+    args={{
+      text: 'Choose One',
+      count: 0,
+      showCaret: true,
+      icon: 'flight-icons/svg/org-16',
+      dropdownRight: false,
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
 <Preview>
-  <Story name="Icon-only Dropdown" height="5rem">
-    {{
-      template: hbs`
-      <Rose::Dropdown @text="Choose One&hellip;" @icon="flight-icons/svg/org-16" @iconOnly={{true}} as |dropdown|>
-        <dropdown.link @route="index">Menu item</dropdown.link>
-        <dropdown.link @route="about">Menu item</dropdown.link>
-        <dropdown.separator />
-        <dropdown.button>Button menu item</dropdown.button>
-      </Rose::Dropdown>
-    `,
+  <Story
+    name="Icon-only Dropdown"
+    height="5rem"
+    args={{
+      text: '',
+      showCaret: true,
+      icon: 'flight-icons/svg/org-16',
+      iconOnly: true,
     }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
-<Preview>
-  <Story name="Dropdown with Radio Buttons" height="13rem">
-    {{
-      template: hbs`
+export const RadioTemplate = (args) => ({
+  template: hbs`
       <Rose::Form as |form|>
         <form.radioGroup @name="color" @selectedValue="red" as |radioGroup|>
           <Rose::Dropdown @text="Color" as |dropdown|>
@@ -67,50 +86,112 @@ A simple dropdown component with support for links and buttons.
         </form.radioGroup>
       </Rose::Form>
     `,
-    }}
+  context: args,
+});
+
+<Preview>
+  <Story name="Dropdown with Radio Buttons" height="13rem">
+    {RadioTemplate.bind({})}
   </Story>
 </Preview>
 
-<Preview>
-  <Story name="Dropdown with Key Value Items" height="13rem">
-    {{
-      template: hbs`
-      <Rose::Dropdown @text="View details" @showCaret={{showCaret}} @ignoreClickInside={{true}} as |dropdown|>
+<!-- Webpack might not be able to handle this syntax, storybook doesn't use broccoli -->
+
+export const KeyValueTemplate = (args) => ({
+  template: hbs`
+      <Rose::Dropdown @text={{text}} @showCaret={{showCaret}} @ignoreClickInside={{ignoreClickInside}} as |dropdown|>
         <dropdown.key-value>
-          <:key>Name</:key>
-          <:value>Key/Value</:value>
+          <:key>ID</:key>
+          <:value>cl_nbv9375hLHs</:value>
         </dropdown.key-value>
         <dropdown.separator />
         <dropdown.key-value>
           <:key>Description</:key>
-          <:value>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda illo ratione libero ducimus magnam, porro sed provident repellat mollitia a, repellendus placeat. Magni consequuntur cumque, debitis obcaecati dolores quasi natus?</:value>
+          <:value>Lorem ipsum</:value>
         </dropdown.key-value>
-      </Rose::Dropdown>
-    `,
+      </Rose::Dropdown>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Dropdown with Key Value Items"
+    height="13rem"
+    args={{
+      text: 'View details',
+      showCaret: true,
+      ignoreClickInside: true,
     }}
+  >
+    {KeyValueTemplate.bind({})}
   </Story>
 </Preview>
 
 ```handlebars
-<Rose::Dropdown @text='Choose One&hellip;' as |dropdown|>
-  <dropdown.link @route='index'>Menu item</dropdown.link>
-  <dropdown.link @route='about'>Menu item</dropdown.link>
-  <dropdown.button>Button menu item</dropdown.button>
-  <dropdown.separator />
-  <dropdown.section
-    @title='Dropdown Section Title'
-    @icon='flight-icons/svg/tag-16'
-  >
-    <dropdown.link @route='index'>Menu item</dropdown.link>
-  </dropdown.section>
-</Rose::Dropdown>
+<Rose::Form as |form|>
+  <Rose::Dropdown @text='Items' @ignoreClickInside={{true}} as |dropdown|>
+    <Rose::Form::Checkbox::Group
+      @name='checkbox-group'
+      @items={{this.items}}
+      @selectedItems={{this.selectedItems}}
+      @onChange={{fn this.onChange}}
+      as |group|
+    >
+      <dropdown.item>
+        <group.checkbox @label={{group.item.name}} value={{group.item.id}} />
+      </dropdown.item>
+    </Rose::Form::Checkbox::Group>
+  </Rose::Dropdown>
+</Rose::Form>
 ```
+
+export const CheckboxTemplate = (args) => ({
+  template: hbs`
+      <Rose::Form as |form|>
+        <Rose::Dropdown @ignoreClickInside={{true}} @text={{text}} as |dropdown|>
+          <Rose::Form::Checkbox::Group
+            @name={{name}}
+            @disabled={{disabled}}
+            @items={{items}}
+            @selectedItems={{selectedItems}}
+            @onChange={{onChange}}
+            as |group|
+          >
+            <dropdown.item>
+              <group.checkbox @label={{group.item.name}} value={{group.item.id}} />
+            </dropdown.item>
+          </Rose::Form::Checkbox::Group>
+        </Rose::Dropdown>
+      </Rose::Form>
+  `,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Dropdown with Checkboxes"
+    height="10rem"
+    args={{
+      text: 'Items',
+      disabled: false,
+      items: [
+        { id: 1, name: 'Foo' },
+        { id: 2, name: 'Bar' },
+        { id: 3, name: 'Baz' },
+      ],
+      selectedItems: [],
+    }}
+    argTypes={{ onChange: { action: 'changed' } }}
+  >
+    {CheckboxTemplate.bind({})}
+  </Story>
+</Preview>
 
 Dropdown content can be aligned to right edge of the component instead of the default left edge, which is the default setting. The following example floats the component to right edge of the page inorder to provide enough space to display right aligned dropdown content.
 
 ```handlebars
 <Rose::Dropdown
-  @text='Choose One&hellip;'
+  @text='Choose One'
   style='float: right'
   @dropdownRight={{true}}
   as |dropdown|
@@ -165,64 +246,7 @@ form fields.
 </Rose::Form>
 ```
 
-```handlebars
-<Rose::Form as |form|>
-  <Rose::Dropdown @text='Items' @ignoreClickInside={{true}} as |dropdown|>
-    <Rose::Form::Checkbox::Group
-      @name='checkbox-group'
-      @items={{this.items}}
-      @selectedItems={{this.selectedItems}}
-      @onChange={{fn this.onChange}}
-      as |group|
-    >
-      <dropdown.item>
-        <group.checkbox @label={{group.item.name}} value={{group.item.id}} />
-      </dropdown.item>
-    </Rose::Form::Checkbox::Group>
-
-  </Rose::Dropdown>
-</Rose::Form>
-```
-
-<Preview>
-  <Story name="Dropdown with Checkboxes" height="10rem">
-    {{
-      template: hbs`
-  <Rose::Form as |form|>
-   <Rose::Dropdown   @ignoreClickInside={{true}} @text="Items" as |dropdown|>
-    <Rose::Form::Checkbox::Group
-      @name={{name}}
-      @disabled={{disabled}}
-      @items={{items}}
-      @selectedItems={{selectedItems}}
-      @onChange={{onChange}}
-      as |group|
-    >
-    <dropdown.item>
-      <group.checkbox
-        @label={{group.item.name}}
-        value={{group.item.id}}
-      />
-        </dropdown.item>
-    </Rose::Form::Checkbox::Group>
-     </Rose::Dropdown>
-    </Rose::Form>
-  `,
-      context: {
-        disabled: boolean('disabled', false),
-        items: object('items', [
-          { id: 1, name: 'Foo' },
-          { id: 2, name: 'Bar' },
-          { id: 3, name: 'Baz' },
-        ]),
-        selectedItems: object('selectedItems', []),
-        onChange: action('changed'),
-      },
-    }}
-  </Story>
-</Preview>
-
-Closing dropdown after clicking inside it's content can be ignored using `ignoreClickInside`. This is useful when dropdown contains keyvalue items that users need to select/copy/interact with.
+Closing dropdown after clicking inside its content can be ignored using `ignoreClickInside`. This is useful when the dropdown contains key-value items that users need to select/copy/interact with.
 
 ```handlebars
 <Rose::Dropdown

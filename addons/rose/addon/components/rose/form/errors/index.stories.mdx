@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Form/Errors" component="Form/Errors" />
 
@@ -16,16 +14,15 @@ Use this component to display one or more error messages.
 </Rose::Form::Errors>
 ```
 
-<Preview>
-  <Story name="Basic Form Errors">
-    {{
-      template: hbs`
+export const Template = (args) => ({
+  template: hbs`
       <Rose::Form::Errors as |errors|>
         <errors.message>An error message goes here.</errors.message>
         <errors.message>Another message goes here.</errors.message>
-      </Rose::Form::Errors>
-    `,
-      context: {},
-    }}
-  </Story>
+      </Rose::Form::Errors>`,
+  context: args,
+});
+
+<Preview>
+  <Story name="Basic Form Errors">{Template.bind({})}</Story>
 </Preview>

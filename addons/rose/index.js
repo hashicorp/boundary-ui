@@ -9,7 +9,9 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
-    this.includeStyles(app);
+    app.import('node_modules/codemirror/lib/codemirror.css');
+    app.import('node_modules/codemirror/theme/monokai.css');
+
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
     this.includePublic(app);
@@ -29,38 +31,14 @@ module.exports = {
   },
 
   /**
-   * Finds this addon's styles folder and includes it into the running
-   * application's `sassOptions.includePaths`, such that the application needs
-   * no further configuration to import the styles.
-   */
-  includeStyles(app) {
-    // Resolve a path to this addon's style folder `addon/styles/addon-name`,
-    // where addon-name is resolved from package.json
-    const addonPath = require.resolve(this.name);
-    const stylePath = path.resolve(addonPath, `../addon/styles/${this.name}`);
-    const styleTree = mergeTrees([
-      new Funnel(stylePath, {
-        destDir: this.name,
-        include: ['**/*'],
-      }),
-    ]);
-
-    // Setup default sassOptions on the running application
-    app.options.sassOptions = app.options.sassOptions || {};
-    app.options.sassOptions.includePaths =
-      app.options.sassOptions.includePaths || [];
-
-    // Include the addon styles
-    app.options.sassOptions.includePaths.push(styleTree);
-  },
-
-  /**
    * Finds the HDS styles folder and includes it into the running
    * application's `sassOptions.includePaths`.
    */
   includeHDSStyles(app) {
-    const stylePath =
+    const tokensPath =
       '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+    const hdsPath =
+      '../../node_modules/@hashicorp/design-system-components/app/styles';
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
@@ -68,7 +46,8 @@ module.exports = {
       app.options.sassOptions.includePaths || [];
 
     // Include the addon styles
-    app.options.sassOptions.includePaths.push(stylePath);
+    app.options.sassOptions.includePaths.push(tokensPath);
+    app.options.sassOptions.includePaths.push(hdsPath);
   },
 
   /**

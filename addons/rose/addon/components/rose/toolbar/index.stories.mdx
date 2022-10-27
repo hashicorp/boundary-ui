@@ -1,6 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
 
 <Meta title="Rose/Toolbar" component="Toolbar" />
 
@@ -21,14 +20,14 @@ predefined "regions" for left and right alignment, respectively.
 </Rose::Toolbar>
 ```
 
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::Toolbar as |toolbar|>
+        toolbar
+      </Rose::Toolbar>`,
+  context: args,
+});
+
 <Preview>
-  <Story name="Toolbar">
-    {{
-      template: hbs`
-    <Rose::Toolbar as |toolbar|>
-    toolbar
-     </Rose::Toolbar>
-    `,
-    }}
-  </Story>
+  <Story name="Toolbar">{Template.bind({})}</Story>
 </Preview>
