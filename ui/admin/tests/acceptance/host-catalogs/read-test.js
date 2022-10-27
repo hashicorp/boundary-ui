@@ -82,6 +82,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
 
   test('visiting an unknown host catalog displays 404 message', async function (assert) {
     assert.expect(2);
+    await click(`[href="${urls.hostCatalogs}"]`);
     assert.dom(`[href="${urls.unknownHostCatalog}"]`).doesNotExist();
 
     await visit(urls.unknownHostCatalog);
