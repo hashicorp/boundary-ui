@@ -12,6 +12,7 @@ module.exports = {
     app.import('node_modules/codemirror/lib/codemirror.css');
     app.import('node_modules/codemirror/theme/monokai.css');
 
+    this.includeHDSStyles(app);
     this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
@@ -27,6 +28,23 @@ module.exports = {
       type,
       config
     );
+  },
+
+  /**
+   * Finds the HDS styles folder and includes it into the running
+   * application's `sassOptions.includePaths`.
+   */
+  includeHDSStyles(app) {
+    const stylePath =
+      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+
+    // Setup default sassOptions on the running application
+    app.options.sassOptions = app.options.sassOptions || {};
+    app.options.sassOptions.includePaths =
+      app.options.sassOptions.includePaths || [];
+
+    // Include the addon styles
+    app.options.sassOptions.includePaths.push(stylePath);
   },
 
   /**
