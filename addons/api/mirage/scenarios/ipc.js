@@ -120,20 +120,6 @@ export default function initializeMockIPC(server, config) {
     }
 
     /**
-     * Check for window chrome on MacOS
-     */
-    hasMacOSChrome() {
-      return false;
-    }
-
-    /**
-     * Check for OS chrome state
-     */
-    showWindowActions() {
-      return true;
-    }
-
-    /**
      * Do nothing when attempting to minimize, toggle fullscreen,
      * and close a browser window
      */
@@ -151,6 +137,14 @@ export default function initializeMockIPC(server, config) {
    */
   if (config['ember-cli-mirage'].enabled && !isTesting) {
     const mockIPC = new MockIPC();
+
+    if (!config.isElectron) {
+      // Add these handlers for non electron environments, otherwise just
+      // pass through and use the actual electron handlers
+      mockIPC.hasMacOSChrome = () => false;
+      mockIPC.showWindowActions = () => true;
+    }
+
     window.addEventListener('message', async function (event) {
       if (event.origin !== window.location.origin) return;
       const { method, payload } = event?.data ?? {};
