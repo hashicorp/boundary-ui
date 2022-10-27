@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -20,6 +20,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
       org: null,
       project: null,
     },
+    hostCatalog: null,
   };
   const urls = {
     globalScope: null,
@@ -27,10 +28,9 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     projectScope: null,
     hostCatalogs: null,
     hostCatalog: null,
-    newHostCatalog: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -51,17 +51,20 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
-    urls.newHostCatalog = `${urls.hostCatalogs}/new`;
+
     authenticateSession({});
+    await visit(urls.projectScope);
   });
 
   test('visiting host catalogs', async function (assert) {
     assert.expect(2);
-    await visit(urls.hostCatalogs);
+    await click(`[href="${urls.hostCatalogs}"]`);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hostCatalogs);
-    await visit(urls.hostCatalog);
+
+    await click(`[href="${urls.hostCatalog}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.hostCatalog);
   });
 
@@ -71,14 +74,32 @@ module('Acceptance | host-catalogs | read', function (hooks) {
       instances.hostCatalog.authorized_actions.filter(
         (item) => item !== 'read'
       );
-    await visit(urls.hostCatalog);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+
+    await click(`[href="${urls.hostCatalogs}"]`);
+
+    assert.dom(`[href="${urls.hostCatalog}"]`).doesNotExist();
   });
 
   test('visiting an unknown host catalog displays 404 message', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
+    assert.dom(`[href="${urls.unknownHostCatalog}"]`).doesNotExist();
+
     await visit(urls.unknownHostCatalog);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+
+    assert.strictEqual(
+      find('.rose-message-subtitle').textContent.trim(),
+      'Error 404'
+    );
+  });
+
+  test('users can link to docs page for host catalog', async function (assert) {
+    assert.expect(1);
+
+    await click(`[href="${urls.hostCatalogs}"]`);
+
+    assert
+      .dom(`[href="https://boundaryproject.io/help/admin-ui/host-catalogs"]`)
+      .isVisible();
   });
 });
