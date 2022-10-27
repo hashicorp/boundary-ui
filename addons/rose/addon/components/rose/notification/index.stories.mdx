@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Notification" component="Notification" />
 
@@ -27,62 +25,81 @@ handler takes appropriate action and hides the notification.
 </Rose::Notification>
 ```
 
-<Preview>
-  <Story name="Basic Notification">
-    {{
-      template: hbs`
+export const Template = (args) => ({
+  template: hbs`
       <Rose::Notification
-        @style="info"
-        @heading="Notification without dismissal"
+        @style={{style}}
+        @heading={{heading}}
+        @dismiss={{dismiss}}
+        @dismissText={{dismissText}}
       >
-        Some useful information.
-      </Rose::Notification>
-    `,
-      context: {},
+        {{text}}
+      </Rose::Notification>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Basic Notification"
+    args={{
+      text: 'Some useful information',
+      heading: 'Notification without dismissal',
+      style: 'info',
     }}
+    argTypes={{
+      style: {
+        control: 'select',
+        options: ['info', 'success', 'warning', 'error'],
+      },
+    }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
-<Preview>
-  <Story name="Basic Notifications with Dismissal" height="30rem">
-    {{
-      template: hbs`
+export const AllNotificationsTemplate = (args) => ({
+  template: hbs`
       <Rose::Notification
-        @style="info"
-        @heading="Dismissible Notification"
+        @style='info'
+        @heading='Dismissible Notification'
         @dismiss={{dismiss}}
-        @dismissText="Dismiss"
+        @dismissText='Dismiss'
       >
         Some useful information.
       </Rose::Notification>
       <Rose::Notification
-        @style="success"
-        @heading="Success"
+        @style='success'
+        @heading='Success'
         @dismiss={{dismiss}}
-        @dismissText="Dismiss"
+        @dismissText='Dismiss'
       >
         Good job!
       </Rose::Notification>
       <Rose::Notification
-        @style="warning"
-        @heading="Warning"
+        @style='warning'
+        @heading='Warning'
         @dismiss={{dismiss}}
-        @dismissText="Dismiss"
+        @dismissText='Dismiss'
       >
         Careful now.
       </Rose::Notification>
       <Rose::Notification
-        @style="error"
-        @heading="Error"
+        @style='error'
+        @heading='Error'
         @dismiss={{dismiss}}
-        @dismissText="Dismiss"
+        @dismissText='Dismiss'
       >
         An error occurred.
-      </Rose::Notification>
-    `,
-      context: {
-        dismiss: action('dismiss'),
-      },
-    }}
+      </Rose::Notification>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Basic Notifications with Dismissal"
+    height="30rem"
+    argTypes={{ dismiss: { action: 'dismiss' } }}
+  >
+    {AllNotificationsTemplate.bind({})}
   </Story>
 </Preview>

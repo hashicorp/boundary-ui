@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select, object } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Form/Checkbox/Group" component="Form/Checkbox/Group" />
 
@@ -21,36 +19,45 @@ Renders a form checkboxfield group.
 </Rose::Form::Checkbox::Group>
 ```
 
-<Preview>
-  <Story name="Basic" height="10rem">
-    {{
-      template: hbs`
-    <Rose::Form::Checkbox::Group
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::Form::Checkbox::Group
       @name={{name}}
       @inline={{inline}}
       @disabled={{disabled}}
       @items={{items}}
       @selectedItems={{selectedItems}}
       @onChange={{onChange}}
+      @itemEqualityFunc={{itemEqualityFunc}}
       as |group|
     >
       <group.checkbox
         @label={{group.item.name}}
         value={{group.item.id}} />
-    </Rose::Form::Checkbox::Group>
-  `,
-      context: {
-        inline: boolean('inline', true),
-        disabled: boolean('disabled', false),
-        items: object('items', [
-          { id: 1, name: 'Foo' },
-          { id: 2, name: 'Bar' },
-          { id: 3, name: 'Baz' },
-        ]),
-        selectedItems: object('selectedItems', []),
-        onChange: action('changed'),
-      },
+    </Rose::Form::Checkbox::Group>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Basic"
+    height="10rem"
+    args={{
+      name: 'Name',
+      inline: true,
+      disabled: false,
+      items: [
+        { id: 1, name: 'Foo' },
+        { id: 2, name: 'Bar' },
+        { id: 3, name: 'Baz' },
+      ],
+      selectedItems: [],
     }}
+    argTypes={{
+      onChange: { action: 'changed' },
+    }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
@@ -68,36 +75,25 @@ Renders a form checkboxfield group.
 ```
 
 <Preview>
-  <Story name="WithCustomEquality" height="10rem">
-    {{
-      template: hbs`
-    <Rose::Form::Checkbox::Group
-      @name={{name}}
-      @inline={{inline}}
-      @disabled={{disabled}}
-      @items={{items}}
-      @selectedItems={{selectedItems}}
-      @onChange={{onChange}}
-      @itemEqualityFunc={{isEqual}}
-      as |group|
-    >
-      <group.checkbox
-        @label={{group.item.name}}
-        value={{group.item.id}} />
-    </Rose::Form::Checkbox::Group>
-  `,
-      context: {
-        inline: boolean('inline', true),
-        disabled: boolean('disabled', false),
-        items: object('items', [
-          { id: 1, name: 'Foo' },
-          { id: 2, name: 'Bar' },
-          { id: 3, name: 'Baz' },
-        ]),
-        selectedItems: object('selectedItems', []),
-        onChange: action('changed'),
-        isEqual: (item1, item2) => item1 === item2,
-      },
+  <Story
+    name="WithCustomEquality"
+    height="10rem"
+    args={{
+      name: 'Name',
+      inline: true,
+      disabled: false,
+      items: [
+        { id: 1, name: 'Foo' },
+        { id: 2, name: 'Bar' },
+        { id: 3, name: 'Baz' },
+      ],
+      selectedItems: [{ id: 1, name: 'Foo' }],
+      itemEqualityFunc: (item1, item2) => item1.name === item2.name,
     }}
+    argTypes={{
+      onChange: { action: 'changed' },
+    }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>

@@ -1,7 +1,5 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
-import { action } from '@storybook/addon-actions';
-import { text, boolean, select } from '@storybook/addon-knobs';
 
 <Meta title="Rose/Form/Radio/Group" component="Form/Radio/Group" />
 
@@ -24,56 +22,56 @@ Renders a form radiofield group.
 </Rose::Form::Radio::Group>
 ```
 
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::Form::Radio::Group
+        @disabled={{disabled}}
+        @name={{name}}
+        @selectedValue={{selectedValue}}
+        @changed={{changed}}
+        @inline={{inline}}
+        as |radioGroup|
+      >
+        <radioGroup.radio
+          @label={{firstFieldLabel}}
+          @value={{firstFieldValue}}
+          @icon={{firstFieldIcon}}
+        />
+        <radioGroup.radio @label={{secondFieldLabel}} @value={{secondFieldValue}} />
+        <radioGroup.radio @label={{thirdFieldLabel}} @value={{thirdFieldValue}} />
+      </Rose::Form::Radio::Group>`,
+  context: args,
+});
+
 <Preview>
-  <Story name="Basic" height="10rem">
-    {{
-      template: hbs`
-    <Rose::Form::Radio::Group
-      @disabled={{disabled}}
-      @name={{name}}
-      @selectedValue={{selectedValue}}
-      @changed={{changed}}
-      @inline={{inline}}
-      as |radioGroup|
-    >
-      <radioGroup.radio
-        @label={{firstFieldLabel}}
-        @value={{firstFieldValue}}
-        @icon={{firstFieldIcon}}
-      />
-      <radioGroup.radio
-        @label={{secondFieldLabel}}
-        @value={{secondFieldValue}}
-      />
-      <radioGroup.radio
-        @label={{thirdFieldLabel}}
-        @value={{thirdFieldValue}}
-      />
-    </Rose::Form::Radio::Group>
-  `,
-      context: {
-        name: text('name', 'mustagree'),
-        disabled: boolean('disabled', false),
-        inline: boolean('inline', true),
-        selectedValue: text('selectedValue', 'disagree'),
-        firstFieldLabel: text('first label', 'Agree'),
-        firstFieldValue: text('first value', 'agree'),
-        firstFieldIcon: select(
-          'first icon',
-          {
-            'flight-icons/svg/org-16': 'flight-icons/svg/org-16',
-            'flight-icons/svg/clipboard-copy-16':
-              'flight-icons/svg/clipboard-copy-16',
-          },
-          'flight-icons/svg/org-16'
-        ),
-        secondFieldLabel: text('second label', 'Maybe'),
-        secondFieldValue: text('second value', 'maybe'),
-        thirdFieldLabel: text('third label', 'Disagree'),
-        thirdFieldValue: text('third value', 'disagree'),
-        changed: action('changed'),
-      },
+  <Story
+    name="Basic"
+    height="10rem"
+    args={{
+      name: 'mustagree',
+      disabled: false,
+      inline: true,
+      selectedValue: 'disagree',
+      firstFieldLabel: 'Agree',
+      firstFieldValue: 'agree',
+      secondFieldLabel: 'Maybe',
+      secondFieldValue: 'maybe',
+      thirdFieldLabel: 'Disagree',
+      thirdFieldValue: 'disagree',
+      firstFieldIcon: 'flight-icons/svg/org-16',
     }}
+    argTypes={{
+      firstFieldIcon: {
+        control: 'select',
+        options: [
+          'flight-icons/svg/org-16',
+          'flight-icons/svg/clipboard-copy-16',
+        ],
+      },
+      changed: { action: 'changed' },
+    }}
+  >
+    {Template.bind({})}
   </Story>
 </Preview>
 
@@ -107,80 +105,6 @@ Renders a form radiofield group.
 </Rose::Form::Radio::Group>
 ```
 
-<Preview>
-  <Story name="Card:  Tile" height="10rem">
-    {{
-      template: hbs`
-    <Rose::Form::Radio::Group
-      @disabled={{disabled}}
-      @name={{name}}
-      @selectedValue={{selectedValue}}
-      @changed={{changed}}
-      as |radioGroup|
-    >
-      <radioGroup.card
-        @label={{firstFieldLabel}}
-        @value={{firstFieldValue}}
-        @icon={{firstFieldIcon}}
-        @layout='tile'
-      />
-      <radioGroup.card
-        @label={{secondFieldLabel}}
-        @value={{secondFieldValue}}
-        @icon={{secondFieldIcon}}
-        @layout="tile"
-      />
-      <radioGroup.card
-        @label={{thirdFieldLabel}}
-        @value={{thirdFieldValue}}
-        @icon={{thirdFieldIcon}}
-        @layout="tile"
-      />
-    </Rose::Form::Radio::Group>
-  `,
-      context: {
-        name: text('name', 'mustagree'),
-        disabled: boolean('disabled', false),
-        selectedValue: text('selectedValue', 'disagree'),
-        firstFieldLabel: text('first label', 'Agree'),
-        firstFieldValue: text('first value', 'agree'),
-        firstFieldIcon: select(
-          'firstFieldIcon',
-          {
-            none: null,
-            'flight-icons/svg/azure-color-16':
-              'flight-icons/svg/azure-color-16',
-          },
-          null
-        ),
-        secondFieldIcon: select(
-          'secondFieldIcon',
-          {
-            none: null,
-            'flight-icons/svg/azure-color-16':
-              'flight-icons/svg/azure-color-16',
-          },
-          null
-        ),
-        thirdFieldIcon: select(
-          'thirdFieldIcon',
-          {
-            none: null,
-            'flight-icons/svg/azure-color-16':
-              'flight-icons/svg/azure-color-16',
-          },
-          null
-        ),
-        secondFieldLabel: text('second label', 'Maybe'),
-        secondFieldValue: text('second value', 'maybe'),
-        thirdFieldLabel: text('third label', 'Disagree'),
-        thirdFieldValue: text('third value', 'disagree'),
-        changed: action('changed'),
-      },
-    }}
-  </Story>
-</Preview>
-
 ```handlebars
 <Rose::Form::Radio::Group
   @disabled={{false}}
@@ -195,11 +119,9 @@ Renders a form radiofield group.
 </Rose::Form::Radio::Group>
 ```
 
-<Preview>
-  <Story name="Card:  Wide" height="10rem">
-    {{
-      template: hbs`
-    <Rose::Form::Radio::Group
+export const CardTemplate = (args) => ({
+  template: hbs`
+      <Rose::Form::Radio::Group
       @disabled={{disabled}}
       @name={{name}}
       @selectedValue={{selectedValue}}
@@ -210,41 +132,73 @@ Renders a form radiofield group.
         @label={{firstFieldLabel}}
         @value={{firstFieldValue}}
         @icon={{firstFieldIcon}}
-        @layout="wide"
+        @layout={{Layout}}
       />
       <radioGroup.card
         @label={{secondFieldLabel}}
         @value={{secondFieldValue}}
-        @layout="wide"
+        @icon={{secondFieldIcon}}
+        @layout={{Layout}}
       />
       <radioGroup.card
         @label={{thirdFieldLabel}}
         @value={{thirdFieldValue}}
-        @layout="wide"
+        @icon={{thirdFieldIcon}}
+        @layout={{Layout}}
       />
-    </Rose::Form::Radio::Group>
-  `,
-      context: {
-        name: text('name', 'mustagree'),
-        disabled: boolean('disabled', false),
-        selectedValue: text('selectedValue', 'disagree'),
-        firstFieldLabel: text('first label', 'Agree'),
-        firstFieldValue: text('first value', 'agree'),
-        firstFieldIcon: select(
-          'firstFieldIcon',
-          {
-            none: null,
-            'flight-icons/svg/azure-color-16':
-              'flight-icons/svg/azure-color-16',
-          },
-          null
-        ),
-        secondFieldLabel: text('second label', 'Maybe'),
-        secondFieldValue: text('second value', 'maybe'),
-        thirdFieldLabel: text('third label', 'Disagree'),
-        thirdFieldValue: text('third value', 'disagree'),
-        changed: action('changed'),
-      },
+    </Rose::Form::Radio::Group>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Card"
+    height="10rem"
+    args={{
+      Layout: 'tile',
+      name: 'mustagree',
+      disabled: false,
+      selectedValue: 'disagree',
+      firstFieldLabel: 'Agree',
+      firstFieldValue: 'agree',
+      secondFieldLabel: 'Maybe',
+      secondFieldValue: 'maybe',
+      thirdFieldLabel: 'Disagree',
+      thirdFieldValue: 'disagree',
+      firstFieldIcon: '',
+      secondFieldIcon: '',
+      thirdFieldIcon: '',
     }}
+    argTypes={{
+      Layout: {
+        control: 'inline-radio',
+        options: ['wide', 'tile'],
+        name: 'layout',
+      },
+      firstFieldIcon: {
+        control: {
+          type: 'inline-radio',
+          labels: { '': 'none' },
+        },
+        options: ['', 'flight-icons/svg/azure-color-16'],
+      },
+      secondFieldIcon: {
+        control: {
+          type: 'inline-radio',
+          labels: { '': 'none' },
+        },
+        options: ['', 'flight-icons/svg/azure-color-16'],
+      },
+      thirdFieldIcon: {
+        control: {
+          type: 'inline-radio',
+          labels: { '': 'none' },
+        },
+        options: ['', 'flight-icons/svg/azure-color-16'],
+      },
+      changed: { action: 'changed' },
+    }}
+  >
+    {CardTemplate.bind({})}
   </Story>
 </Preview>
