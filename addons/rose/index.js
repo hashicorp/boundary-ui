@@ -9,14 +9,16 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
-    this.includeStyles(app);
-    this.includeHDSStyles(app);
+    app.import('node_modules/codemirror/lib/codemirror.css');
+    app.import('node_modules/codemirror/theme/monokai.css');
+
     this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
   },
 
   /**
+<<<<<<< HEAD
    * Due to a limitation in how ember treats nested addons (see https://github.com/ember-cli/ember-cli/issues/4475)
    * this is neeeded to reach down in to @hashicorp/ember-flight-icons' contentFor hook to run the logic
    * that injects the sprite into the DOM
@@ -26,49 +28,6 @@ module.exports = {
       type,
       config
     );
-  },
-
-  /**
-   * Finds this addon's styles folder and includes it into the running
-   * application's `sassOptions.includePaths`, such that the application needs
-   * no further configuration to import the styles.
-   */
-  includeStyles(app) {
-    // Resolve a path to this addon's style folder `addon/styles/addon-name`,
-    // where addon-name is resolved from package.json
-    const addonPath = require.resolve(this.name);
-    const stylePath = path.resolve(addonPath, `../addon/styles/${this.name}`);
-    const styleTree = mergeTrees([
-      new Funnel(stylePath, {
-        destDir: this.name,
-        include: ['**/*'],
-      }),
-    ]);
-
-    // Setup default sassOptions on the running application
-    app.options.sassOptions = app.options.sassOptions || {};
-    app.options.sassOptions.includePaths =
-      app.options.sassOptions.includePaths || [];
-
-    // Include the addon styles
-    app.options.sassOptions.includePaths.push(styleTree);
-  },
-
-  /**
-   * Finds the HDS styles folder and includes it into the running
-   * application's `sassOptions.includePaths`.
-   */
-  includeHDSStyles(app) {
-    const stylePath =
-      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
-
-    // Setup default sassOptions on the running application
-    app.options.sassOptions = app.options.sassOptions || {};
-    app.options.sassOptions.includePaths =
-      app.options.sassOptions.includePaths || [];
-
-    // Include the addon styles
-    app.options.sassOptions.includePaths.push(stylePath);
   },
 
   /**
