@@ -6,8 +6,8 @@ export default function initializeMockIPC(server, config) {
   /**
    * We strive to make this application runnable in a regular web browser, since
    * it is a convenient environment for development and testing.  But only an
-   * Electron environment has true IPC.  Outside of Electron, we mock the handling
-   * of the message-based IPC requests originating from the
+   * Electron environment has true IPC.  Outside of Electron or with mirage,
+   * we mock the handling of the message-based IPC requests originating from the
    * renderer (the Ember app).
    */
   class MockIPC {
@@ -120,12 +120,19 @@ export default function initializeMockIPC(server, config) {
     }
 
     /**
+     * Check for OS chrome state
+     */
+    showWindowActions() {
+      return true;
+    }
+
+    /**
      * Do nothing when attempting to minimize, toggle fullscreen,
      * and close a browser window
      */
     minimizeWindow() {}
     closeWindow() {}
-    toggleFullScreenWindow() {}
+    toggleFullscreenWindow() {}
   }
 
   /**
@@ -142,7 +149,6 @@ export default function initializeMockIPC(server, config) {
       // Add these handlers for non electron environments, otherwise just
       // pass through and use the actual electron handlers
       mockIPC.hasMacOSChrome = () => false;
-      mockIPC.showWindowActions = () => true;
     }
 
     window.addEventListener('message', async function (event) {
