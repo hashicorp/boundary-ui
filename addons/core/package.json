@@ -41,8 +41,7 @@
     "ember-intl": "^5.7.0",
     "ember-loading": "^2.0.0",
     "ember-route-action-helper": "^2.0.8",
-    "ember-truth-helpers": "^3.0.0",
-    "rose": "*"
+    "ember-truth-helpers": "^3.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.2",
@@ -81,6 +80,7 @@
     "prettier": "^2.7.1",
     "qunit": "^2.17.1",
     "qunit-dom": "^2.0.0",
+    "rose": "*",
     "webpack": "5"
   },
   "engines": {
