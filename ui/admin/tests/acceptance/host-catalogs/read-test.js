@@ -88,10 +88,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     await visit(urls.unknownHostCatalog);
     await a11yAudit();
 
-    assert.strictEqual(
-      find('.rose-message-subtitle').textContent.trim(),
-      'Error 404'
-    );
+    assert.dom('.rose-message-subtitle').hasText('Error 404');
   });
 
   test('users can link to docs page for host catalog', async function (assert) {
