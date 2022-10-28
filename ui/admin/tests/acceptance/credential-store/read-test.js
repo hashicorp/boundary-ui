@@ -118,9 +118,8 @@ module('Acceptance | credential-stores | read', function (hooks) {
     await visit(urls.unknownCredentialStore);
     await a11yAudit();
 
-    assert.strictEqual(
-      find('.rose-message-subtitle').textContent.trim(),
-      'Error 404'
+    assert.dom(find('.rose-message-subtitle'))
+      .hasText('Error 404');
     );
   });
 
