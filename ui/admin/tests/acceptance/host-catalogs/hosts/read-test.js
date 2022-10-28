@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -35,7 +35,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     unknownHost: null,
   };
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -64,12 +64,11 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     urls.unknownHost = `${urls.hosts}/foo`;
 
     authenticateSession({});
-    await visit(urls.hostCatalog);
   });
 
   test('visiting hosts', async function (assert) {
     assert.expect(2);
-    await click(`[href="${urls.hosts}"]`);
+    await visit(urls.hosts);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hosts);
 
@@ -81,6 +80,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
 
   test('cannot navigate to a host form without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.hostCatalog);
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'read');
 
@@ -89,9 +89,19 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     assert.dom(`[href="${urls.host}"]`).doesNotExist();
   });
 
+  test('cannot navigate to hosts tab without proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.hostCatalogs);
+    instances.hostCatalog.authorized_collection_actions['hosts'] = [];
+
+    await click(`[href="${urls.hostCatalog}"]`);
+
+    assert.dom(`[href="${urls.hosts}"]`).doesNotExist();
+  });
+
   test('visiting an unknown host displays 404 message', async function (assert) {
     assert.expect(2);
-    await click(`[href="${urls.hosts}"]`);
+    await visit(urls.hosts);
     assert.dom(`[href="${urls.unknownHost}"]`).doesNotExist();
 
     await visit(urls.unknownHost);
@@ -102,12 +112,12 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
 
   test('users can link to docs page for hosts', async function (assert) {
     assert.expect(1);
+    await visit(urls.hosts);
 
-    await click(`[href="${urls.hosts}"]`);
     await click(`[href="${urls.host}"]`);
 
     assert
       .dom(`[href="https://boundaryproject.io/help/admin-ui/hosts"]`)
-      .isVisible();
+      .exists();
   });
 });
