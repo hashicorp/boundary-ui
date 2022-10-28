@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -19,10 +19,11 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
       global: null,
       org: null,
       project: null,
-      hostCatalog: null,
-      host: null,
     },
+    hostCatalog: null,
+    hostSet: null,
   };
+
   const urls = {
     globalScope: null,
     orgScope: null,
@@ -32,7 +33,6 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
     hostSets: null,
     hostSet: null,
     unknownHostSet: null,
-    newHostSet: null,
   };
 
   hooks.beforeEach(function () {
@@ -62,8 +62,7 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
     urls.hostSets = `${urls.hostCatalog}/host-sets`;
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.unknownHostSet = `${urls.hostSets}/foo`;
-    urls.newHostSet = `${urls.hostSets}/new`;
-    // Generate resource couner
+
     authenticateSession({});
   });
 
@@ -72,23 +71,53 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
     await visit(urls.hostSets);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hostSets);
-    await visit(urls.hostSet);
+
+    await click(`[href="${urls.hostSet}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.hostSet);
   });
 
   test('cannot navigate to a host set form without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.hostCatalog);
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'read');
-    await visit(urls.hostSet);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+
+    await click(`[href="${urls.hostSets}"]`);
+
+    assert.dom(`[href="${urls.hostSet}"]`).doesNotExist();
+  });
+
+  test('cannot navigate to host sets tab without proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.hostCatalogs);
+    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
+
+    await click(`[href="${urls.hostCatalog}"]`);
+
+    assert.dom(`[href="${urls.hostSets}"]`).doesNotExist();
   });
 
   test('visiting an unknown host set displays 404 message', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
+    await visit(urls.hostSets);
+    assert.dom(`[href="${urls.unknownHostSet}"]`).doesNotExist();
+
     await visit(urls.unknownHostSet);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+
+    assert.dom('.rose-message-subtitle').hasText('Error 404');
+  });
+
+  test('users can link to docs page for host sets', async function (assert) {
+    assert.expect(1);
+    await visit(urls.hostSets);
+
+    await click(`[href="${urls.hostSet}"]`);
+
+    assert
+      .dom(`[href="https://boundaryproject.io/help/admin-ui/host-sets"]`)
+      .exists();
   });
 });
