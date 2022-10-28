@@ -58,7 +58,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
     
     authenticateSession({});
-    await visit(urls.projectScope);
+    await visit(urls.credentialStores);
   });
 
   test('visiting static credential store', async function (assert) {
