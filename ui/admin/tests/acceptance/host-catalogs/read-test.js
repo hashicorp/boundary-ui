@@ -81,6 +81,17 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     assert.dom(`[href="${urls.hostCatalog}"]`).doesNotExist();
   });
 
+  test('cannot navigate to host catalogs tab without proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.orgScope);
+    instances.scopes.project.authorized_collection_actions['host-catalogs'] =
+      [];
+
+    await click(`[href="${urls.projectScope}"]`);
+
+    assert.dom(`[href="${urls.hostCatalogs}"]`).doesNotExist();
+  });
+
   test('visiting an unknown host catalog displays 404 message', async function (assert) {
     assert.expect(2);
     await visit(urls.hostCatalogs);
@@ -100,6 +111,6 @@ module('Acceptance | host-catalogs | read', function (hooks) {
 
     assert
       .dom(`[href="https://boundaryproject.io/help/admin-ui/host-catalogs"]`)
-      .isVisible();
+      .exists();
   });
 });
