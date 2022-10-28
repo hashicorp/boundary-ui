@@ -94,7 +94,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     await click(`[href="${urls.credentialStores}"]`);
 
     assert.dom(`[href="${urls.staticCredentialStore}"]`).doesNotExist();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).isVisible();
+    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
