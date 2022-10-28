@@ -21,13 +21,28 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   // =attributes
   @tracked generatedWorkerAuthToken;
-  @tracked clusterId = this.getClusterIdFromURL();
+  @tracked clusterId = this.clusterIdFromURL;
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
   @tracked workerTags = A([]);
   @tracked newWorkerKey;
   @tracked newWorkerValue;
+
+  get clusterIdFromURL() {
+    const hostname = this.browserObject.window.location.hostname;
+
+    // Match against a guid with either the prod, int, or dev hcp domain
+    const matcher =
+      /^([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\.boundary\.(hashicorp\.cloud|hcp\.to|hcp\.dev)$/;
+
+    if (matcher.test(hostname)) {
+      // Grab the captured guid
+      return matcher.exec(hostname)[1];
+    }
+
+    return undefined;
+  }
 
   // =properties
   /**
@@ -147,21 +162,6 @@ boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
           `${tag.key} = [${this.convertCommaSeparatedValuesToArray(tag.value)}]`
       )
       .join('\n    ');
-  }
-
-  getClusterIdFromURL() {
-    const hostname = this.browserObject.window.location.hostname;
-
-    // Match against a guid with either the prod, int, or dev hcp domain
-    const matcher =
-      /^([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\.boundary\.(hashicorp\.cloud|hcp\.to|hcp\.dev)$/;
-
-    if (matcher.test(hostname)) {
-      // Grab the captured guid
-      return matcher.exec(hostname)[1];
-    }
-
-    return undefined;
   }
 
   @action
