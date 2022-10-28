@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, click, currentURL, find } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -29,7 +29,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     unknownCredentialStore: null,
   };
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -58,12 +58,11 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
 
     authenticateSession({});
-    await visit(urls.projectScope);
   });
 
   test('visiting static credential store', async function (assert) {
     assert.expect(2);
-    await click(`[href="${urls.credentialStores}"]`);
+    await visit(urls.credentialStores);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialStores);
 
@@ -75,7 +74,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('visiting vault credential store', async function (assert) {
     assert.expect(2);
-    await click(`[href="${urls.credentialStores}"]`);
+    await visit(urls.credentialStores);
     assert.strictEqual(currentURL(), urls.credentialStores);
 
     await click(`[href="${urls.vaultCredentialStore}"]`);
@@ -86,6 +85,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('cannot navigate to a static credential store form without proper authorization', async function (assert) {
     assert.expect(2);
+    await visit(urls.projectScope);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
         (item) => item !== 'read'
@@ -99,6 +99,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
     assert.expect(2);
+    await visit(urls.projectScope);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
         (item) => item !== 'read'
@@ -112,17 +113,18 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
     assert.expect(2);
-    await click(`[href="${urls.credentialStores}"]`);
+    await visit(urls.credentialStores);
     assert.dom(`[href="${urls.unknownCredentialStore}"]`).doesNotExist();
 
     await visit(urls.unknownCredentialStore);
     await a11yAudit();
 
-    assert.dom(find('.rose-message-subtitle')).hasText('Error 404');
+    assert.dom('.rose-message-subtitle').hasText('Error 404');
   });
 
   test('users can link to docs page for credential store', async function (assert) {
     assert.expect(1);
+    await visit(urls.projectScope);
 
     await click(`[href="${urls.credentialStores}"]`);
 
