@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -20,6 +20,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
       org: null,
       project: null,
     },
+    hostCatalogs: null,
     hostCatalog: null,
   };
   const urls = {
@@ -30,7 +31,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     hostCatalog: null,
   };
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -53,12 +54,11 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
 
     authenticateSession({});
-    await visit(urls.projectScope);
   });
 
   test('visiting host catalogs', async function (assert) {
     assert.expect(2);
-    await click(`[href="${urls.hostCatalogs}"]`);
+    await visit(urls.hostCatalogs);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hostCatalogs);
 
@@ -70,6 +70,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
 
   test('cannot navigate to a host catalog form without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.projectScope);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
         (item) => item !== 'read'
@@ -82,7 +83,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
 
   test('visiting an unknown host catalog displays 404 message', async function (assert) {
     assert.expect(2);
-    await click(`[href="${urls.hostCatalogs}"]`);
+    await visit(urls.hostCatalogs);
     assert.dom(`[href="${urls.unknownHostCatalog}"]`).doesNotExist();
 
     await visit(urls.unknownHostCatalog);
@@ -93,6 +94,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
 
   test('users can link to docs page for host catalog', async function (assert) {
     assert.expect(1);
+    await visit(urls.projectScope);
 
     await click(`[href="${urls.hostCatalogs}"]`);
 
