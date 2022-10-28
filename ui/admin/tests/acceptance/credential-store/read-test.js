@@ -56,9 +56,9 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
-    
+
     authenticateSession({});
-    await visit(urls.credentialStores);
+    await visit(urls.projectScope);
   });
 
   test('visiting static credential store', async function (assert) {
@@ -107,23 +107,21 @@ module('Acceptance | credential-stores | read', function (hooks) {
     await click(`[href="${urls.credentialStores}"]`);
 
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).isVisible();
+    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
   });
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
     assert.expect(2);
-    await visit(urls.credentialStores);
+    await click(`[href="${urls.credentialStores}"]`);
     assert.dom(`[href="${urls.unknownCredentialStore}"]`).doesNotExist();
 
     await visit(urls.unknownCredentialStore);
     await a11yAudit();
 
-    assert.dom(find('.rose-message-subtitle'))
-      .hasText('Error 404');
-    );
+    assert.dom(find('.rose-message-subtitle')).hasText('Error 404');
   });
 
-  test('Users can link to docs page for credential store', async function (assert) {
+  test('users can link to docs page for credential store', async function (assert) {
     assert.expect(1);
 
     await click(`[href="${urls.credentialStores}"]`);
@@ -132,6 +130,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
       .dom(
         `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
       )
-      .isVisible();
+      .exists();
   });
 });
