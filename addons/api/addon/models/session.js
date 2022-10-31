@@ -103,7 +103,7 @@ export default class SessionModel extends GeneratedSessionModel {
   }
 
   /**
-   * True if status is an unknown type.
+   * True if status is an unknown string.
    * @type {boolean}
    */
   get isUnknownStatus() {
