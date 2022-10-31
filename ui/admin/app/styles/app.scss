@@ -18,13 +18,6 @@
   }
 }
 
-//fix for sidebar wrappper around centered content
-[class*='sidebar-content-centered'] {
-  grid-template-areas:
-    'sidebar content .'
-    'sidebar footer footer';
-}
-
 .rose-nav-sidebar {
   margin-top: sizing.rems(xxl);
 

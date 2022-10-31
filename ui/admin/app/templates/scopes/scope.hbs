@@ -10,14 +10,7 @@
   {{page-title @model.displayName}}
 {{/if}}
 
-<Rose::Layout::Sidebar
-  class={{if
-    this.session.isAuthenticated
-    'rose-layout-sidebar'
-    'sidebar-content-centered'
-  }}
-  as |sidebarLayout|
->
+<Rose::Layout::Sidebar as |sidebarLayout|>
 
   {{#if this.session.isAuthenticated}}
     <sidebarLayout.sidebar>

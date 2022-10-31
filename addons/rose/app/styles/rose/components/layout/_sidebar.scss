@@ -5,11 +5,11 @@
   --sidebar-width: #{sizing.rems(m) * 16};
   flex-grow: 1;
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr var(--sidebar-width);
+  grid-template-columns: repeat(auto-fit, var(--sidebar-width) 100%);
   grid-template-rows: 1fr auto;
   grid-template-areas:
-    'sidebar content content'
-    'sidebar footer footer';
+    'sidebar content'
+    'sidebar footer';
 
   .rose-layout-sidebar-sidebar {
     grid-area: sidebar;
