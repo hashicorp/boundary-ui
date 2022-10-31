@@ -89,16 +89,6 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
     assert.dom(`[href="${urls.hostSet}"]`).doesNotExist();
   });
 
-  test('cannot navigate to host sets tab without proper authorization', async function (assert) {
-    assert.expect(1);
-    await visit(urls.hostCatalogs);
-    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
-
-    await click(`[href="${urls.hostCatalog}"]`);
-
-    assert.dom(`[href="${urls.hostSets}"]`).doesNotExist();
-  });
-
   test('visiting an unknown host set displays 404 message', async function (assert) {
     assert.expect(2);
     await visit(urls.hostSets);
