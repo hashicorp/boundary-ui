@@ -6,10 +6,10 @@ module.exports = {
     '../stories/**/*.stories.mdx',
   ],
   addons: [
-    '@storybook/addon-knobs',
-    '@storybook/addon-actions',
     '@storybook/addon-docs',
     '@storybook/addon-a11y',
+    '@storybook/addon-actions',
+    '@storybook/addon-controls',
   ],
   emberOptions: {
     polyfills: [namedBlockPolyfill],

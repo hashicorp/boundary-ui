@@ -18,13 +18,6 @@ module.exports = function (defaults) {
       enabled: true,
       extensions: ['js'],
     },
-    sassOptions: {
-      onlyIncluded: true,
-      extension: 'scss',
-    },
-    emberNotify: {
-      importCss: false,
-    },
     svg: {
       paths: ['../../addons/core/public'],
     },
@@ -42,9 +35,6 @@ module.exports = function (defaults) {
   // modules that you would like to import into your application
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
-
-  app.import('node_modules/codemirror/lib/codemirror.css');
-  app.import('node_modules/codemirror/theme/monokai.css');
 
   return app.toTree();
 };

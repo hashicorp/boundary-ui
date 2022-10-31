@@ -5,9 +5,6 @@ const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 module.exports = function (defaults) {
   let app = new EmberAddon(defaults, {});
 
-  app.import('node_modules/codemirror/lib/codemirror.css');
-  app.import('node_modules/codemirror/theme/monokai.css');
-
   /*
     This build file specifies the options for the dummy test app of this
     addon, located in `/tests/dummy`
