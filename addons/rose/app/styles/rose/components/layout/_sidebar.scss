@@ -5,7 +5,10 @@
   --sidebar-width: #{sizing.rems(m) * 16};
   flex-grow: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, var(--sidebar-width) 100%);
+  grid-template-columns: repeat(auto-fit, var(--sidebar-width)) repeat(
+      1,
+      minmax(min-content, 100%)
+    );
   grid-template-rows: 1fr auto;
   grid-template-areas:
     'sidebar content'
@@ -28,6 +31,7 @@
 @media (max-width: media.width(medium)) {
   .rose-layout-sidebar {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas:
       'sidebar'
       'content'
