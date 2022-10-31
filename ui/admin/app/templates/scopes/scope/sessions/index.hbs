@@ -114,18 +114,7 @@
                 </time>
               </row.cell>
               <row.cell>
-                {{#if sessionAggregate.session.isUnknown}}
-                  <SessionStatus @status={{sessionAggregate.session.status}} />
-                {{else}}
-                  <SessionStatus
-                    @status={{t
-                      (concat
-                        'resources.session.status.'
-                        sessionAggregate.session.status
-                      )
-                    }}
-                  />
-                {{/if}}
+                <SessionStatus @status={{sessionAggregate.session.status}} />
               </row.cell>
               <row.cell>
                 {{#if sessionAggregate.session.isCancelable}}

@@ -106,7 +106,7 @@ export default class SessionModel extends GeneratedSessionModel {
    * True if status is an unknown type.
    * @type {boolean}
    */
-  get isUnknown() {
+  get isUnknownStatus() {
     return !statusTypes.includes(this.status);
   }
   /**

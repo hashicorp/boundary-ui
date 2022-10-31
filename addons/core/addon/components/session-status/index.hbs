@@ -1,6 +1,15 @@
-<Hds::Badge
-  @text={{@status}}
-  @color={{this.statusBadgeColor}}
-  @icon={{this.statusBadgeIcon}}
-  @type={{this.statusBadgeType}}
-/>
+{{#if @model.isUnknownStatus}}
+  <Hds::Badge
+    @text={{@status}}
+    @color={{this.statusBadgeColor}}
+    @icon={{this.statusBadgeIcon}}
+    @type={{this.statusBadgeType}}
+  />
+{{else}}
+  <Hds::Badge
+    @text={{t (concat 'resources.session.status.' @status)}}
+    @color={{this.statusBadgeColor}}
+    @icon={{this.statusBadgeIcon}}
+    @type={{this.statusBadgeType}}
+  />
+{{/if}}
