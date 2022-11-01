@@ -16,6 +16,6 @@ module('Unit | Service | browser-object', function (hooks) {
 
   test('it contains a hostname', function (assert) {
     let service = this.owner.lookup('service:browser-object');
-    assert.ok(service.hostname, 'Service contains a document');
+    assert.ok(service.hostname, 'Service contains a hostname');
   });
 });
