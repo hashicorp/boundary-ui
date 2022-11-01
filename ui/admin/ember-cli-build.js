@@ -37,9 +37,6 @@ module.exports = function (defaults) {
     app.import('node_modules/clipboard/dist/clipboard.min.js');
   }
 
-  app.import('node_modules/codemirror/lib/codemirror.css');
-  app.import('node_modules/codemirror/theme/monokai.css');
-
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //
