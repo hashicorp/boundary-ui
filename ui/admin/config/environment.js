@@ -9,8 +9,8 @@ const featureEditions = {
   oss: {
     'static-credentials': true,
     byow: true,
-    'byow-pki-hcp-cluster-id': false,
-    'byow-pki-upstream': true,
+    'byow-pki-hcp-cluster-id': true,
+    'byow-pki-upstream': false,
     'vault-worker-filter': false,
   },
 };

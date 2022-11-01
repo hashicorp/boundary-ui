@@ -10,9 +10,9 @@ module(
     setupRenderingTest(hooks);
 
     hooks.beforeEach(function () {
-      const config = this.owner.resolveRegistration('config:environment');
-      config.featureFlags['byow-pki-hcp-cluster-id'] = true;
-      config.featureFlags['byow-pki-upstream'] = false;
+      const featuresService = this.owner.lookup('service:features');
+      featuresService.enable('byow-pki-hcp-cluster-id');
+      featuresService.disable('byow-pki-upstream');
     });
 
     test('it correctly populates the cluster id for an hcp dev cluster', async function (assert) {
@@ -20,11 +20,7 @@ module(
       this.model = {};
       this.submit = () => {};
       this.refresh = () => {};
-      const service = {
-        window: {
-          location: { hostname: `${guid}.boundary.hcp.dev` },
-        },
-      };
+      const service = { hostname: `${guid}.boundary.hcp.dev` };
       this.owner.register('service:browser-object', service, {
         instantiate: false,
       });
@@ -41,11 +37,7 @@ module(
       this.model = {};
       this.submit = () => {};
       this.refresh = () => {};
-      const service = {
-        window: {
-          location: { hostname: `${guid}.boundary.hcp.to` },
-        },
-      };
+      const service = { hostname: `${guid}.boundary.hcp.to` };
       this.owner.register('service:browser-object', service, {
         instantiate: false,
       });
@@ -62,11 +54,7 @@ module(
       this.model = {};
       this.submit = () => {};
       this.refresh = () => {};
-      const service = {
-        window: {
-          location: { hostname: `${guid}.boundary.hashicorp.cloud` },
-        },
-      };
+      const service = { hostname: `${guid}.boundary.hashicorp.cloud` };
       this.owner.register('service:browser-object', service, {
         instantiate: false,
       });
@@ -82,11 +70,7 @@ module(
       this.model = {};
       this.submit = () => {};
       this.refresh = () => {};
-      const service = {
-        window: {
-          location: { hostname: `personal.website.com` },
-        },
-      };
+      const service = { hostname: `personal.website.com` };
       this.owner.register('service:browser-object', service, {
         instantiate: false,
       });

@@ -18,6 +18,14 @@ export default class BrowserObjectService extends Service {
    * @returns {Document}
    */
   get document() {
-    return document;
+    return this.window?.document;
+  }
+
+  /**
+   * The hostname of the current location of the URL
+   * @returns {string}
+   */
+  get hostname() {
+    return this.window?.location?.hostname;
   }
 }
