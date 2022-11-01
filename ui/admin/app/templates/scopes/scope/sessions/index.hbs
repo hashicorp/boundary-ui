@@ -114,10 +114,7 @@
                 </time>
               </row.cell>
               <row.cell>
-                <SessionStatus
-                  @status={{sessionAggregate.session.status}}
-                  @model={{sessionAggregate.session}}
-                />
+                <SessionStatus @model={{sessionAggregate.session}} />
               </row.cell>
               <row.cell>
                 {{#if sessionAggregate.session.isCancelable}}

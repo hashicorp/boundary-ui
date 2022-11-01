@@ -12,21 +12,14 @@ const STATUS_MAPPING = {
 export default class SessionStatus extends Component {
   //any status that do not belong in the mapping above, will have a neutral style with outlined badge
   get statusBadgeColor() {
-    return STATUS_MAPPING[this.args.status]
-      ? STATUS_MAPPING[this.args.status]['color']
-      : 'neutral';
+    return STATUS_MAPPING[this.args.model.status]?.color || 'neutral';
   }
 
   get statusBadgeIcon() {
-    return (
-      STATUS_MAPPING[this.args.status] &&
-      STATUS_MAPPING[this.args.status]['icon']
-    );
+    return STATUS_MAPPING[this.args.model.status]?.icon;
   }
 
   get statusBadgeType() {
-    return STATUS_MAPPING[this.args.status]
-      ? STATUS_MAPPING[this.args.status]['type']
-      : 'outlined';
+    return STATUS_MAPPING[this.args.model.status]?.type || 'outlined';
   }
 }
