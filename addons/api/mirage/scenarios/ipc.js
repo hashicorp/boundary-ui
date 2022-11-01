@@ -120,6 +120,13 @@ export default function initializeMockIPC(server, config) {
     }
 
     /**
+     * Check for window chrome on MacOS
+     */
+    hasMacOSChrome() {
+      return true;
+    }
+
+    /**
      * Check for OS chrome state
      */
     showWindowActions() {
@@ -141,15 +148,11 @@ export default function initializeMockIPC(server, config) {
    * preload.js script.
    *
    * Initializes mock IPC only in a non-testing context and when mirage is turned on.
+   * We mock certain functions even in electron (e.g. hasMacOSChrome) when running
+   * locally which will force a certain appearance regardless of platform
    */
   if (config['ember-cli-mirage'].enabled && !isTesting) {
     const mockIPC = new MockIPC();
-
-    if (!config.isElectron) {
-      // Add these handlers for non electron environments, otherwise just
-      // pass through and use the actual electron handlers
-      mockIPC.hasMacOSChrome = () => false;
-    }
 
     window.addEventListener('message', async function (event) {
       if (event.origin !== window.location.origin) return;
