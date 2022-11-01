@@ -33,15 +33,11 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
     const hostname = this.browserObject.hostname;
 
     // Match against a guid with either the prod, int, or dev hcp domain
-    const matcher =
+    const clusterIDMatcher =
       /^(?<clusterID>[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\.boundary\.(?:hashicorp\.cloud|hcp\.to|hcp\.dev)$/;
 
-    if (matcher.test(hostname)) {
-      // Grab the captured guid
-      return matcher.exec(hostname).groups.clusterID;
-    }
-
-    return undefined;
+    // Return the cluster ID otherwise return null if it doesn't match
+    return hostname?.match(clusterIDMatcher)?.groups?.clusterID;
   }
 
   // =properties
