@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
-
+export const statusTypes = ['active', 'pending', 'canceling', 'terminated'];
 /**
  *
  */
@@ -102,6 +102,13 @@ export default class SessionModel extends GeneratedSessionModel {
     return this.isActive || this.isPending;
   }
 
+  /**
+   * True if status is an unknown string.
+   * @type {boolean}
+   */
+  get isUnknownStatus() {
+    return !statusTypes.includes(this.status);
+  }
   /**
    * The full proxy address and port if address exists, otherwise null.
    * @type {?string}
