@@ -6,8 +6,8 @@ export default function initializeMockIPC(server, config) {
   /**
    * We strive to make this application runnable in a regular web browser, since
    * it is a convenient environment for development and testing.  But only an
-   * Electron environment has true IPC.  Outside of Electron, we mock the handling
-   * of the message-based IPC requests originating from the
+   * Electron environment has true IPC.  Outside of Electron or with mirage,
+   * we mock the handling of the message-based IPC requests originating from the
    * renderer (the Ember app).
    */
   class MockIPC {
@@ -123,7 +123,7 @@ export default function initializeMockIPC(server, config) {
      * Check for window chrome on MacOS
      */
     hasMacOSChrome() {
-      return false;
+      return true;
     }
 
     /**
@@ -139,7 +139,7 @@ export default function initializeMockIPC(server, config) {
      */
     minimizeWindow() {}
     closeWindow() {}
-    toggleFullScreenWindow() {}
+    toggleFullscreenWindow() {}
   }
 
   /**
@@ -148,9 +148,12 @@ export default function initializeMockIPC(server, config) {
    * preload.js script.
    *
    * Initializes mock IPC only in a non-testing context and when mirage is turned on.
+   * We mock certain functions even in electron (e.g. hasMacOSChrome) when running
+   * locally which will force a certain appearance regardless of platform
    */
   if (config['ember-cli-mirage'].enabled && !isTesting) {
     const mockIPC = new MockIPC();
+
     window.addEventListener('message', async function (event) {
       if (event.origin !== window.location.origin) return;
       const { method, payload } = event?.data ?? {};
