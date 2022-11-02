@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -15,6 +15,8 @@ module('Acceptance | credential-stores | read', function (hooks) {
       org: null,
       project: null,
     },
+    staticCredentialStore: null,
+    vaultCredentialStore: null,
   };
 
   const urls = {
@@ -54,66 +56,94 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
+
     authenticateSession({});
   });
 
-  test('visiting static credential store in /credential-stores', async function (assert) {
+  test('visiting static credential store', async function (assert) {
     assert.expect(2);
     await visit(urls.credentialStores);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialStores);
-    await visit(urls.staticCredentialStore);
+
+    await click(`[href="${urls.staticCredentialStore}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.staticCredentialStore);
   });
 
-  test('visiting vault credential store in /credential-stores', async function (assert) {
+  test('visiting vault credential store', async function (assert) {
     assert.expect(2);
     await visit(urls.credentialStores);
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialStores);
-    await visit(urls.vaultCredentialStore);
+
+    await click(`[href="${urls.vaultCredentialStore}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
   });
 
-  test('cannot navigate to a static credential store form without proper authorization', async function (assert) {
+  test('cannot navigate to credential stores tab without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.orgScope);
+    instances.scopes.project.authorized_collection_actions[
+      'credential-stores'
+    ] = [];
+
+    await click(`[href="${urls.projectScope}"]`);
+
+    assert.dom(`[href="${urls.credentialStores}"]`).doesNotExist();
+  });
+
+  test('cannot navigate to a static credential store form without proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.projectScope);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
         (item) => item !== 'read'
       );
-    await visit(urls.staticCredentialStore);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+
+    await click(`[href="${urls.credentialStores}"]`);
+
+    assert.dom(`[href="${urls.staticCredentialStore}"]`).doesNotExist();
+    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
+    await visit(urls.projectScope);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
         (item) => item !== 'read'
       );
-    await visit(urls.vaultCredentialStore);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+
+    await click(`[href="${urls.credentialStores}"]`);
+
+    assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
+    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
   });
 
-  test('visiting an unknown credential store display 404 message', async function (assert) {
-    assert.expect(1);
+  test('visiting an unknown credential store displays 404 message', async function (assert) {
+    assert.expect(2);
+    await visit(urls.credentialStores);
+    assert.dom(`[href="${urls.unknownCredentialStore}"]`).doesNotExist();
+
     await visit(urls.unknownCredentialStore);
     await a11yAudit();
-    assert.strictEqual(
-      find('.rose-message-subtitle').textContent.trim(),
-      'Error 404'
-    );
+
+    assert.dom('.rose-message-subtitle').hasText('Error 404');
   });
 
-  test('Users can link to docs page for credential store', async function (assert) {
+  test('users can link to docs page for credential store', async function (assert) {
     assert.expect(1);
-    await visit(urls.staticCredentialStore);
-    assert.ok(
-      find(
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.credentialStores}"]`);
+
+    assert
+      .dom(
         `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
       )
-    );
+      .exists();
   });
 });

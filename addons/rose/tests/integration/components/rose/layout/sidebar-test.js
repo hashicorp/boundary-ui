@@ -7,15 +7,17 @@ module('Integration | Component | rose/layout/sidebar', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     await render(hbs`
       <Rose::Layout::Sidebar as |layout|>
         <layout.sidebar />
         <layout.body />
+        <layout.footer/>
       </Rose::Layout::Sidebar>
     `);
     assert.ok(find('.rose-layout-sidebar'));
     assert.ok(find('.rose-layout-sidebar-body'));
     assert.ok(find('aside.rose-layout-sidebar-sidebar'));
+    assert.ok(find('.rose-layout-sidebar-footer'));
   });
 });
