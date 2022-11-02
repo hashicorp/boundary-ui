@@ -169,15 +169,7 @@
                 </time>
               </row.cell>
               <row.cell>
-                {{#if model.isUnknown}}
-                  <SessionStatus @status={{model.status}} />
-                {{else}}
-                  <SessionStatus
-                    @status={{t
-                      (concat 'resources.session.status.' model.status)
-                    }}
-                  />
-                {{/if}}
+                <SessionStatus @model={{model}} />
               </row.cell>
               <row.cell>
                 {{#if model.isCancelable}}

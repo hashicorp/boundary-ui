@@ -60,14 +60,14 @@ module('Unit | Model | session', function (hooks) {
     assert.strictEqual(model.proxy, 'localhost:12345');
   });
 
-  test('it has isUnknown property and returns the expected values', async function (assert) {
+  test('it has isUnknownStatus property and returns the expected values', async function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('session', { status: 'active' });
     const modelB = store.createRecord('session', {
       status: 'any string',
     });
-    assert.false(modelA.isUnknown);
-    assert.true(modelB.isUnknown);
+    assert.false(modelA.isUnknownStatus);
+    assert.true(modelB.isUnknownStatus);
   });
 });

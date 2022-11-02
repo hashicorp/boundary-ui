@@ -153,9 +153,7 @@
                     <code>{{model.project.id}}</code>
                   </Copyable>
                 </div>
-                <Rose::Badge @style='informational'>
-                  {{model.project.name}}
-                </Rose::Badge>
+                <Hds::Badge @color='neutral' @text={{model.project.name}} />
               </row.cell>
               <row.cell>
                 {{#if (can 'connect target' model)}}

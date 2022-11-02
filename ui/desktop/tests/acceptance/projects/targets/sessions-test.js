@@ -211,7 +211,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     assert.expect(1);
     later(async () => {
       run.cancelTimers();
-      assert.ok(find('.rose-layout-page-header .rose-badge-success'));
+      assert.ok(find('.rose-layout-page-body .hds-badge--color-success'));
     }, 750);
     await visit(urls.sessions);
   });
@@ -221,17 +221,29 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     instances.session.update({ status: 'pending' });
     later(async () => {
       run.cancelTimers();
-      assert.ok(find('.rose-layout-page-header .rose-badge-success'));
+      assert.ok(find('.rose-layout-page-body .hds-badge--color-neutral'));
     }, 750);
     await visit(urls.sessions);
   });
+
+  //hds-badge hds-badge--size-medium hds-badge--type-filled hds-badge--color-neutral
 
   test('cannot identify target with terminated sessions', async function (assert) {
     assert.expect(1);
     instances.session.update({ status: 'terminated' });
     later(async () => {
       run.cancelTimers();
-      assert.notOk(find('.rose-layout-page-header .rose-badge-success'));
+      assert.notOk(find('.rose-layout-page-body .hds-badge--color-critical'));
+    }, 750);
+    await visit(urls.sessions);
+  });
+
+  test('cannot identify target with canceling sessions', async function (assert) {
+    assert.expect(1);
+    instances.session.update({ status: 'canceling' });
+    later(async () => {
+      run.cancelTimers();
+      assert.notOk(find('.rose-layout-page-body .hds-badge--color-warning'));
     }, 750);
     await visit(urls.sessions);
   });
