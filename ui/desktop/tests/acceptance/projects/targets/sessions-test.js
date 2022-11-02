@@ -226,8 +226,6 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     await visit(urls.sessions);
   });
 
-  //hds-badge hds-badge--size-medium hds-badge--type-filled hds-badge--color-neutral
-
   test('cannot identify target with terminated sessions', async function (assert) {
     assert.expect(1);
     instances.session.update({ status: 'terminated' });
