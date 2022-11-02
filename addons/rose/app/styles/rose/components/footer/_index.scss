@@ -11,7 +11,7 @@
   @include type.type(xs);
 
   display: flex;
-  justify-content: center;
+  justify-content: right;
   color: var(--ui-gray-starker-1);
   height: sizing.rems(xxl) + sizing.rems(xxs);
 }

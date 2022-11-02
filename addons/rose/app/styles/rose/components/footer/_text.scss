@@ -3,5 +3,6 @@
 .rose-footer-text {
   display: inline-flex;
   align-items: center;
-  margin: 0 sizing.rems(xs);
+  margin-left: sizing.rems(xxs);
+  margin-right: sizing.rems(m);
 }

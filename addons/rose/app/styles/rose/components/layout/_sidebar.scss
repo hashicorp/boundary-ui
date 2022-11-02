@@ -3,26 +3,38 @@
 
 .rose-layout-sidebar {
   --sidebar-width: #{sizing.rems(m) * 16};
-  display: flex;
   flex-grow: 1;
-
-  .rose-layout-sidebar-body {
-    flex: 1;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, var(--sidebar-width)) repeat(
+      1,
+      minmax(min-content, 100%)
+    );
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    'sidebar content'
+    'sidebar footer';
 
   .rose-layout-sidebar-sidebar {
-    width: var(--sidebar-width);
+    grid-area: sidebar;
     background-color: #{color(ui-gray, 950)};
     border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
   }
+  .rose-layout-sidebar-body {
+    grid-area: content;
+  }
+
+  .rose-layout-sidebar-footer {
+    grid-area: footer;
+  }
 }
 
-@media (max-width: media.width(small)) {
+@media (max-width: media.width(medium)) {
   .rose-layout-sidebar {
-    flex-direction: column;
-
-    .rose-layout-sidebar-sidebar {
-      width: auto;
-    }
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'sidebar'
+      'content'
+      'footer';
   }
 }
