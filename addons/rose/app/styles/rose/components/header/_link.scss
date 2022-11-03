@@ -7,9 +7,9 @@
 
   // target line height is 16, which is not a standard line height
   $lineHeight: math.div(16, 14);
+
   line-height: $lineHeight;
   text-decoration: none;
-
   color: var(--white);
   opacity: 0.75;
 

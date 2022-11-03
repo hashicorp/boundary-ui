@@ -13,11 +13,13 @@
   svg {
     //$logoSize: sizing.rems(xl) * 3;
     display: block;
+
     //width: $logoSize;
   }
 
   .rose-header-brand-text {
     @include type.type(m, normal);
+
     margin: 0;
     margin-left: sizing.rems(s);
     white-space: nowrap;

@@ -45,18 +45,22 @@ $radio-svg: (
 
     .rose-icon {
       --size: #{$size-xl};
+
       padding: $size-xxxs;
     }
+
     .rose-form-radio-label {
       display: flex;
       flex-direction: column;
       align-items: center;
       height: $size-m * 9;
+
       &::after {
         left: $cardTileWidth - $borderWidth;
       }
     }
   }
+
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -73,8 +77,10 @@ $radio-svg: (
     border-bottom-left-radius: $size-xxxs;
     border-bottom-right-radius: $size-xxxs;
   }
+
   .rose-form-radio-label {
     @include type.type(s, bold);
+
     width: ($size-m) * 23;
     height: 100%;
     display: block;
@@ -86,8 +92,10 @@ $radio-svg: (
     border-radius: $size-xxs;
     padding: $size-s $size-m ($size-xl + $size-m);
     box-sizing: border-box;
+
     .rose-form-helper-text {
       @include type.type(xs, normal);
+
       padding-top: $size-xs;
     }
 
@@ -105,6 +113,7 @@ $radio-svg: (
       background-image: url($data-svg-prefix + map-get($radio-svg, 'default'));
     }
   }
+
   .rose-form-radio-field {
     position: absolute;
     z-index: 1;
@@ -122,11 +131,13 @@ $radio-svg: (
           }
         }
       }
+
       &:hover {
         ~ .rose-form-radio-label {
           border: $size-xxxxs solid var(--ui-gray);
         }
       }
+
       &:checked {
         ~ .rose-form-radio-label {
           &::after {
@@ -135,18 +146,22 @@ $radio-svg: (
                 'checked'
               ));
           }
+
           .radio-card-overlay {
             background-color: var(--action-subtler-1h);
+
             .ember-application.rose-theme-light & {
               background-color: var(--action-subtler-1h);
             }
             @media (prefers-color-scheme: dark) {
               background-color: var(--action-subtler-1);
             }
+
             .ember-application.rose-theme-dark & {
               background-color: var(--action-subtler-1);
             }
           }
+
           border: $size-xxxxs solid var(--info-subtler-1);
         }
       }
@@ -157,6 +172,7 @@ $radio-svg: (
         border: $size-xxxxs solid var(--ui-border-subtler-1);
         background-color: var(--ui-gray-subtler-6);
         color: var(--ui-gray-starker-1);
+
         &::after {
           background-image: url($data-svg-prefix + map-get(
               $radio-svg,
@@ -180,8 +196,8 @@ $radio-svg: (
 
   &.error {
     .rose-form-radio-field {
-      &:not(:disabled):not(:focus) {
-        &:not(:disabled):not(:focus) {
+      &:not(:disabled, :focus) {
+        &:not(:disabled, :focus) {
           ~ .rose-form-radio-label {
             color: var(--ui-gray);
             border: $size-xxxxs solid var(--failure);
@@ -189,9 +205,11 @@ $radio-svg: (
             .radio-card-overlay {
               background-color: var(--failure-subtler-2);
             }
+
             .rose-form-helper-text.error {
               color: var(--ui-gray);
             }
+
             &::after {
               background-image: url($data-svg-prefix + map-get(
                   $radio-svg,
@@ -204,9 +222,11 @@ $radio-svg: (
             ~ .rose-form-radio-label {
               color: var(--ui-gray);
               border: $size-xxxxs solid var(--failure);
+
               .radio-card-overlay {
                 background-color: var(--failure-subtler-2);
               }
+
               &::after {
                 background-image: url($data-svg-prefix + map-get(
                     $radio-svg,

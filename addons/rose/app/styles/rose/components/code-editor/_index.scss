@@ -9,7 +9,7 @@
   max-width: 100%;
   display: flex;
   flex: 1;
-  font-family: ui-monospace, 'Menlo', monospace;
+  font-family: ui-monospace, Menlo, monospace;
 }
 
 .rose-autosize {
@@ -23,7 +23,7 @@
 }
 
 .CodeMirror-sizer {
-  border-right-width: 0px !important;
+  border-right-width: 0 !important;
 }
 
 // Toolbar

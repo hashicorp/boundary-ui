@@ -17,8 +17,10 @@ $xxxxs: sizing.rems(xxxxs); // 1
   --headerBorderColor: var(--ui-gray-subtler-3);
 
   @include type.type(s);
+
   border: $xxxxs solid var(--ui-gray-subtler-3);
   border-radius: $xxxs;
+
   //margin: $m;
   box-shadow: 0 $xxs $xxs rgba(var(--stark-components), var(--opacity-4));
   background-color: var(--background-color);

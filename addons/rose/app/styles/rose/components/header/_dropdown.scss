@@ -14,6 +14,7 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23bac1cc' xm
 
         $yPadding: sizing.rems(xxxs);
         $rightPadding: sizing.rems(xs) + sizing.rems(l);
+
         padding: $yPadding $rightPadding $yPadding sizing.rems(s);
 
         &.has-icon-only {

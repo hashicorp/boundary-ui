@@ -29,10 +29,13 @@ $xxxxs: sizing.rems(xxxxs); // 1
 
   .rose-button-inline-link-action {
     @include type.type(button, semibold);
+
     color: var(--stark);
     display: inline-block;
     vertical-align: middle;
+
     $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
+
     padding: $yPadding sizing.rems(m);
   }
 }

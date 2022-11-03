@@ -7,8 +7,7 @@
 
 .rose-form-select-field {
   @include type.type(m);
-  -webkit-appearance: none;
-  -moz-appearance: none;
+
   appearance: none;
   vertical-align: middle;
   display: inline-block;
@@ -27,7 +26,7 @@
 
   &.error {
     color: var(--failure);
-    border-color: currentColor;
+    border-color: currentcolor;
   }
 
   &:not(:disabled) {

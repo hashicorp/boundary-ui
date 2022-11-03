@@ -8,7 +8,6 @@ $xxxs: sizing.rems(xxxs); // 2
 .rose-card-link {
   --background-color-light: transparent;
   --background-color-dark: var(--ui-gray-subtler-6);
-
   --background-color: var(--background-color-light);
 
   .ember-application.rose-theme-light & {
@@ -24,6 +23,7 @@ $xxxs: sizing.rems(xxxs); // 2
   }
 
   @include type.type(s);
+
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   border-radius: sizing.rems(xxxs);
   color: var(--ui-gray);
@@ -39,6 +39,7 @@ $xxxs: sizing.rems(xxxs); // 2
     margin: 0;
     padding: 0;
     height: 100%;
+
     // TODO: Figure out better method of defining card dimensions
     min-height: sizing.rems(m) * 8; //6 rems
     width: sizing.rems(m) * 16; //12 rems
@@ -48,6 +49,7 @@ $xxxs: sizing.rems(xxxs); // 2
     $s: sizing.rems(s); // 12
     $xs: sizing.rems(xs); // 8
     $xxs: sizing.rems(xxs); // 4
+
     border-color: var(--ui-gray);
     background-color: var(--ui-gray-subtler-5);
     box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
@@ -72,6 +74,7 @@ $xxxs: sizing.rems(xxxs); // 2
   .rose-card-link-header {
     padding-top: sizing.rems(m);
   }
+
   .rose-card-link-footer {
     margin-top: sizing.rems(xs) + sizing.rems(xxs);
     padding-top: sizing.rems(xs) * 2;
@@ -84,6 +87,7 @@ $xxxs: sizing.rems(xxxs); // 2
 
   .rose-card-link-title {
     @include type.type(m, semibold);
+
     display: flex;
     color: var(--stark);
     margin: 0;
@@ -119,6 +123,7 @@ $xxxs: sizing.rems(xxxs); // 2
 
   .rose-card-link-footer-id {
     @include type.type(xs);
+
     color: var(--ui-gray);
     margin: 0;
 

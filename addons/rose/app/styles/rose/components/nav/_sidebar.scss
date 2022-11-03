@@ -17,10 +17,13 @@
   // TODO revisit the title
   .rose-nav-title {
     @include type.type(xs, semibold);
+
     display: none;
     color: #{color(ui-gray, 400)};
     text-transform: uppercase;
+
     $lineHeight: math.div(20, 12);
+
     line-height: $lineHeight;
     padding: 0 sizing.rems(m);
     margin-bottom: $threePX;
@@ -29,9 +32,12 @@
 
   .rose-nav-link {
     @include type.type(s);
+
     display: block;
     color: var(--white);
+
     $lineHeight: math.div(36, 14);
+
     line-height: $lineHeight;
     text-decoration: none;
     padding: 0 sizing.rems(m);

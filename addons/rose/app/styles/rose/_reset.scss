@@ -123,16 +123,16 @@ q {
 }
 
 blockquote {
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: '';
     content: none;
   }
 }
 
 q {
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: '';
     content: none;
   }

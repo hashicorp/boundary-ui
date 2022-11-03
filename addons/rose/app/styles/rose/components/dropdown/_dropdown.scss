@@ -10,7 +10,6 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
 .rose-dropdown {
   --background-image-light: #{$chevron};
   --background-image-dark: #{$chevronWhite};
-
   --background-image: var(--background-image-light);
 
   .ember-application.rose-theme-light & {
@@ -31,9 +30,12 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
 
   .rose-dropdown-trigger {
     @include type.type(button, semibold);
+
     cursor: default;
     overflow: hidden;
+
     $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
+
     padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
     color: var(--stark);
     border-radius: sizing.rems(xxxs);
@@ -49,8 +51,8 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
     &::-webkit-details-marker {
       display: none;
     }
+
     // Firefox
-    list-style-type: none;
     &::marker {
       display: none;
     }
@@ -94,8 +96,10 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
     &::-webkit-details-marker {
       display: none;
     }
+
     // Firefox
     list-style-type: none;
+
     &::marker {
       display: none;
     }
@@ -136,6 +140,7 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
   // Styles for condensed verion. Some are overrides
   &.rose-dropdown-condensed {
     --background-image: #{$chevronGrey};
+
     border: sizing.rems(xxxxs) solid var(--ui-border);
     border-radius: sizing.rems(xxs);
 

@@ -3,11 +3,13 @@
 
 .rose-nav-breadcrumbs {
   @include type.type(s, normal);
+
   display: flex;
   flex-wrap: wrap;
 
   .rose-nav-link {
     --color: var(--ui-gray);
+
     color: var(--color);
     text-decoration: none;
     cursor: pointer;

@@ -65,10 +65,11 @@ $xxxxs: sizing.rems(xxxxs); // 1
 
     .rose-dialog-heading {
       @include type.type(m, semibold);
+
       flex-grow: 1;
       margin: 0;
       padding: 0;
-      color: currentColor;
+      color: currentcolor;
     }
 
     .rose-dialog-dismiss {
@@ -82,7 +83,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
       width: sizing.rems(l);
 
       &:hover {
-        border-color: currentColor;
+        border-color: currentcolor;
       }
 
       .rose-icon {
@@ -119,12 +120,9 @@ $xxxxs: sizing.rems(xxxxs); // 1
   &.modal {
     display: flex;
     flex-direction: column;
-
     position: fixed;
-
     left: calc(50% - 300px);
     top: 5%;
-
     max-height: 85%;
     max-width: 80vw;
     width: 650px;
@@ -138,6 +136,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
     }
   }
 }
+
 // overlay
 .rose-dialog-modal-overlay {
   content: ' ';

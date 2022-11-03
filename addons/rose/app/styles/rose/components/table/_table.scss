@@ -4,6 +4,7 @@
 
 .rose-table {
   @include type.type(s, normal);
+
   width: 100%;
 
   .rose-table-row {
@@ -36,6 +37,7 @@
     &.align-right {
       text-align: right;
     }
+
     &.align-center {
       text-align: center;
     }
@@ -77,7 +79,9 @@
     .rose-table-cell,
     .rose-table-header-cell {
       @include type.type(s);
+
       $lineHeight: math.div(36, 14);
+
       line-height: $lineHeight;
       padding: sizing.rems(xxs) + sizing.rems(xxxxs) sizing.rems(s);
 
@@ -85,12 +89,16 @@
         padding-left: 0;
       }
     }
+
     .rose-table-header {
       border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
+
       .rose-table-header-cell {
         $lineHeight: math.div(16, 14);
+
         line-height: $lineHeight;
         padding: sizing.rems(xs) sizing.rems(s);
+
         &:first-child {
           padding-left: 0;
         }
