@@ -3,7 +3,8 @@
 .rose-header-utilities {
   grid-area: utilities;
   display: flex;
-  flex-flow: row-reverse wrap;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
   align-items: center;
   margin-right: sizing.rems(s);
 }

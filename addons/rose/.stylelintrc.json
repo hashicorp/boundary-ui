@@ -7,11 +7,8 @@
     "color-function-notation": "legacy",
     "scss/dollar-variable-pattern": null,
     "custom-property-pattern": null,
-    "declaration-block-no-redundant-longhand-properties": [
-      true,
-      {
-        "ignoreShorthands": ["grid-template"]
-      }
-    ]
+    "declaration-block-no-redundant-longhand-properties": null,
+    "function-url-quotes": null,
+    "no-descending-specificity": null
   }
 }

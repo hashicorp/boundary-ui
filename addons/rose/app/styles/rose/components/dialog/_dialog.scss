@@ -18,7 +18,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
   border-radius: $xxxs;
   background-color: var(--subtle);
   box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
-    0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
+  0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
 
   &.rose-dialog-success {
     --headerColor: var(--success-starker-1);
@@ -114,9 +114,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
       margin-bottom: 0;
     }
   }
-}
 
-.rose-dialog {
   &.modal {
     display: flex;
     flex-direction: column;

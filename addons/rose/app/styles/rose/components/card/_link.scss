@@ -54,6 +54,11 @@ $xxxs: sizing.rems(xxxs); // 2
     background-color: var(--ui-gray-subtler-5);
     box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
       0 $xxs $xxs rgba(var(--stark-components), var(--opacity-4));
+
+    .rose-card-link-description,
+    .rose-card-link-footer-id {
+      color: var(--stark);
+    }
   }
 
   &:active {
@@ -79,9 +84,6 @@ $xxxs: sizing.rems(xxxs); // 2
     margin-top: sizing.rems(xs) + sizing.rems(xxs);
     padding-top: sizing.rems(xs) * 2;
     padding-bottom: sizing.rems(xs) * 2;
-  }
-
-  .rose-card-link-footer {
     border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   }
 
@@ -131,13 +133,6 @@ $xxxs: sizing.rems(xxxs); // 2
       content: 'ID';
       color: var(--stark);
       padding-right: sizing.rems(xs);
-    }
-  }
-
-  &:hover {
-    .rose-card-link-description,
-    .rose-card-link-footer-id {
-      color: var(--stark);
     }
   }
 

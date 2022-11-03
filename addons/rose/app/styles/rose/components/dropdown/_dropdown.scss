@@ -91,18 +91,8 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
       background-size: sizing.rems(m);
     }
 
-    // Hide default twistie triangle
-    // Webkit / Chromium
-    &::-webkit-details-marker {
-      display: none;
-    }
-
     // Firefox
     list-style-type: none;
-
-    &::marker {
-      display: none;
-    }
   }
 
   &[open] > .rose-dropdown-trigger {
