@@ -194,6 +194,7 @@ org:
     settings:
       title: Org Settings
   actions:
+    create: New Org
     delete: Delete Org
 project:
   title: Project
@@ -205,6 +206,7 @@ project:
     settings:
       title: Project Settings
   actions:
+    create: New Project
     delete: Delete Project
 user:
   title: User

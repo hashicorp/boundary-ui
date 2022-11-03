@@ -59,12 +59,12 @@ module('Acceptance | scopes', function (hooks) {
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
-    urls.newOrgScope = `/scopes/global/new`;
+    urls.newOrgScope = `/scopes/global/scopes/new`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.org2Scope = `/scopes/${instances.scopes.org2.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     urls.org2ScopeEdit = `/scopes/${instances.scopes.org2.id}/edit`;
-    urls.newProjectScope = `/scopes/${instances.scopes.org.id}/new`;
+    urls.newProjectScope = `/scopes/${instances.scopes.org.id}/scopes/new`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
     urls.projectScopeEdit = `/scopes/${instances.scopes.project.id}/edit`;

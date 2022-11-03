@@ -37,7 +37,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
     return {
       hostCatalog,
       hosts,
-    }
+    };
   }
 
   // =actions
