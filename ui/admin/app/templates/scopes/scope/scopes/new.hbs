@@ -9,13 +9,13 @@
   <page.header>
     {{#if @model.isOrg}}
       <h2>
-        {{t 'resources.org.actions.create'}}
+        {{t 'resources.org.titles.new'}}
         <DocLink @doc='org.new' @iconSize='large' />
       </h2>
       <p>{{t 'resources.org.description'}}</p>
     {{else if @model.isProject}}
       <h2>
-        {{t 'resources.project.actions.create'}}
+        {{t 'resources.project.titles.new'}}
         <DocLink @doc='project.new' @iconSize='large' />
       </h2>
       <p>{{t 'resources.project.description'}}</p>

@@ -15,11 +15,11 @@ export default class ScopesScopeScopesNewController extends Controller {
   @computed('intl', 'model.{currentScope,isOrg,isProject}')
   get breadCrumb() {
     if (this.model.isOrg) {
-      return this.intl.t('resources.org.actions.create');
+      return this.intl.t('resources.org.titles.new');
     }
     /* istanbul ignore else */
     if (this.model.isProject) {
-      return this.intl.t('resources.project.actions.create');
+      return this.intl.t('resources.project.titles.new');
     }
     /* istanbul ignore next */
     return null;

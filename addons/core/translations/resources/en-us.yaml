@@ -193,8 +193,9 @@ org:
       title: Welcome to Orgs
     settings:
       title: Org Settings
+  titles:
+    new: New Org
   actions:
-    create: New Org
     delete: Delete Org
 project:
   title: Project
@@ -205,8 +206,9 @@ project:
       title: Welcome to Projects
     settings:
       title: Project Settings
+  titles:
+    new: New Project
   actions:
-    create: New Project
     delete: Delete Project
 user:
   title: User

@@ -13,8 +13,7 @@
       {{#if @model.subScopes}}
         <p>{{t 'resources.org.description'}}</p>
       {{/if}}
-    {{/if}}
-    {{#if @model.currentScope.isOrg}}
+    {{else if @model.currentScope.isOrg}}
       <h2>
         {{t 'resources.project.title_plural'}}
         <DocLink @doc='project' @iconSize='large' />
@@ -29,7 +28,11 @@
     {{#if (can 'create model' @model.currentScope collection='scopes')}}
       {{#if @model.subScopes}}
         <Rose::LinkButton @route='scopes.scope.scopes.new' @style='primary'>
-          {{t 'titles.new'}}
+          {{#if @model.currentScope.isGlobal}}
+            {{t 'resources.org.titles.new'}}
+          {{else if @model.currentScope.isOrg}}
+            {{t 'resources.project.titles.new'}}
+          {{/if}}
         </Rose::LinkButton>
       {{/if}}
     {{/if}}
