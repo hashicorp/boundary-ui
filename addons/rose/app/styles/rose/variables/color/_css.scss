@@ -1,3 +1,5 @@
+@use "sass:color";
+
 /**
  * CSS custom properties defining colors.  These are the color variables that
  * should be consumed throughout these stylesheets (rather than SCSS vars).
@@ -101,8 +103,8 @@
   --success-subtler-1: #{color(green, 800)};
   --success: #{color(green, 700)};
   --success-starker-1: #{color(green, 400)};
-  --action-subtler-2: #{darken(color(blue, 900), 10%)};
-  --action-subtler-1h: #{darken(color(blue, 900), 5%)};
+  --action-subtler-2: #{color.adjust(color(blue, 900), $lightness: -10%)};
+  --action-subtler-1h: #{color.adjust(color(blue, 900), $lightness: -5%)};
   --action-subtler-1: #{color(blue, 800)};
   --action: #{color(blue, 400)};
   --action-starker-1: #{color(blue, 200)};

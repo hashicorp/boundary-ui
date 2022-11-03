@@ -4,6 +4,7 @@
     "stylelint-config-prettier-scss"
   ],
   "rules": {
-    "color-function-notation": "legacy"
+    "color-function-notation": "legacy",
+    "scss/dollar-variable-pattern": false
   }
 }
