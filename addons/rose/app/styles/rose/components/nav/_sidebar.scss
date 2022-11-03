@@ -3,11 +3,11 @@
 @use 'sass:math';
 
 .rose-nav-sidebar {
-  $threePX: sizing.rems(xxxs) + sizing.rems(xxxxs);
-  $yPadding: sizing.rems(xs);
+  $three-px: sizing.rems(xxxs) + sizing.rems(xxxxs);
+  $y-padding: sizing.rems(xs);
 
-  padding-top: $yPadding;
-  padding-bottom: $yPadding;
+  padding-top: $y-padding;
+  padding-bottom: $y-padding;
   border-bottom: sizing.rems(xxxxs) solid #{color(ui-gray, 700)};
 
   &:last-child {
@@ -22,11 +22,11 @@
     color: #{color(ui-gray, 400)};
     text-transform: uppercase;
 
-    $lineHeight: math.div(20, 12);
+    $line-height: math.div(20, 12);
 
-    line-height: $lineHeight;
+    line-height: $line-height;
     padding: 0 sizing.rems(m);
-    margin-bottom: $threePX;
+    margin-bottom: $three-px;
     border-bottom: sizing.rems(xxxxs) solid #{color(ui-gray, 700)};
   }
 
@@ -36,12 +36,12 @@
     display: block;
     color: var(--white);
 
-    $lineHeight: math.div(36, 14);
+    $line-height: math.div(36, 14);
 
-    line-height: $lineHeight;
+    line-height: $line-height;
     text-decoration: none;
     padding: 0 sizing.rems(m);
-    border-right: $threePX solid transparent;
+    border-right: $three-px solid transparent;
 
     .rose-icon {
       opacity: 0.65;

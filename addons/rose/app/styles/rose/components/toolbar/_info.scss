@@ -13,8 +13,8 @@
     white-space: nowrap;
     overflow: hidden;
 
-    $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
+    $y-padding: sizing.rems(xxs) + sizing.rems(xxxs);
 
-    padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
+    padding: $y-padding sizing.rems(m) $y-padding sizing.rems(l);
   }
 }

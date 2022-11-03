@@ -4,12 +4,12 @@
 $xs: sizing.rems(xs); // 8
 $xxs: sizing.rems(xxs); // 4
 $chevron: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231b1f26' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
-$chevronWhite: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ffffff' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
-$chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23626873' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
+$chevron-white: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23ffffff' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
+$chevron-grey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23626873' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>");
 
 .rose-dropdown {
   --background-image-light: #{$chevron};
-  --background-image-dark: #{$chevronWhite};
+  --background-image-dark: #{$chevron-white};
   --background-image: var(--background-image-light);
 
   .ember-application.rose-theme-light & {
@@ -34,9 +34,9 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
     cursor: default;
     overflow: hidden;
 
-    $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
+    $y-padding: sizing.rems(xxs) + sizing.rems(xxxs);
 
-    padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
+    padding: $y-padding sizing.rems(m) $y-padding sizing.rems(l);
     color: var(--stark);
     border-radius: sizing.rems(xxxs);
     white-space: nowrap;
@@ -129,7 +129,7 @@ $chevronGrey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%2362
 
   // Styles for condensed verion. Some are overrides
   &.rose-dropdown-condensed {
-    --background-image: #{$chevronGrey};
+    --background-image: #{$chevron-grey};
 
     border: sizing.rems(xxxxs) solid var(--ui-border);
     border-radius: sizing.rems(xxs);

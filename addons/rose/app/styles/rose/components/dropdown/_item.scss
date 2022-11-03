@@ -9,13 +9,13 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
 
   min-width: (sizing.rems(m)) * 20;
 
-  $paddingY: math.div(
+  $y-padding: math.div(
     sizing.rems(xl) - (sizing.rems(m) + sizing.rems(xxxs)),
     2
   );
-  $paddingX: sizing.rems(s);
+  $x-padding: sizing.rems(s);
 
-  padding: $paddingY $paddingX;
+  padding: $y-padding $x-padding;
 
   --color: var(--stark);
   --background-color: transparent;
@@ -29,7 +29,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
 
     .rose-form-radio-label {
       display: block;
-      margin: -#{$paddingY} -#{$paddingX};
+      margin: -#{$y-padding} -#{$x-padding};
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-left: sizing.rems(s);
@@ -78,7 +78,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
 
     .rose-form-checkbox-label {
       display: block;
-      margin: -#{$paddingY} -#{$paddingX};
+      margin: -#{$y-padding} -#{$x-padding};
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-left: sizing.rems(s);

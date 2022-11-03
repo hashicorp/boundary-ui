@@ -7,9 +7,9 @@
   margin-left: sizing.rems(m);
 
   svg {
-    $logoSize: sizing.rems(m);
+    $logo-size: sizing.rems(m);
 
     display: inline-block;
-    width: $logoSize;
+    width: $logo-size;
   }
 }

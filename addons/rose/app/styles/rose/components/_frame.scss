@@ -11,10 +11,10 @@ $xxxs: sizing.rems(xxxs); // 2
 $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-frame {
-  --headerColor: var(--ui-gray-starker-3);
-  --headerIconColor: var(--headerColor);
-  --headerBackgroundColor: var(--ui-gray-subtler-5);
-  --headerBorderColor: var(--ui-gray-subtler-3);
+  --header-color: var(--ui-gray-starker-3);
+  --header-icon-color: var(--header-color);
+  --header-background-color: var(--ui-gray-subtler-5);
+  --header-border-color: var(--ui-gray-subtler-3);
 
   @include type.type(s);
 
@@ -26,21 +26,21 @@ $xxxxs: sizing.rems(xxxxs); // 1
   .rose-frame-header {
     padding: ($xs + $xxxs) $l;
     min-height: $l;
-    color: var(--headerColor);
-    background-color: var(--headerBackgroundColor);
-    border-bottom: $xxxxs solid var(--headerBorderColor);
+    color: var(--header-color);
+    background-color: var(--header-background-color);
+    border-bottom: $xxxxs solid var(--header-border-color);
     border-top-left-radius: $xxxs;
     border-top-right-radius: $xxxs;
   }
 
   .rose-frame-body {
-    $bodyPadding: $l;
+    $body-padding: $l;
 
-    padding: $bodyPadding;
+    padding: $body-padding;
 
     > .rose-separator {
-      margin-left: -$bodyPadding;
-      margin-right: -$bodyPadding;
+      margin-left: -$body-padding;
+      margin-right: -$body-padding;
     }
   }
 }

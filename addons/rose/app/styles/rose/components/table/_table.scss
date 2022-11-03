@@ -80,9 +80,9 @@
     .rose-table-header-cell {
       @include type.type(s);
 
-      $lineHeight: math.div(36, 14);
+      $line-height: math.div(36, 14);
 
-      line-height: $lineHeight;
+      line-height: $line-height;
       padding: sizing.rems(xxs) + sizing.rems(xxxxs) sizing.rems(s);
 
       &:first-child {
@@ -94,9 +94,9 @@
       border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
 
       .rose-table-header-cell {
-        $lineHeight: math.div(16, 14);
+        $line-height: math.div(16, 14);
 
-        line-height: $lineHeight;
+        line-height: $line-height;
         padding: sizing.rems(xs) sizing.rems(s);
 
         &:first-child {
