@@ -6,9 +6,6 @@ module.exports = {
     // This could be fixed in the future if we don't want to use the legacy format
     'color-function-notation': 'legacy',
 
-    // Many of our global variables are still using camel case
-    'custom-property-pattern': null,
-
     // We oftentimes want to have long form properties for readability
     'declaration-block-no-redundant-longhand-properties': null,
 
