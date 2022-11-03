@@ -15,17 +15,17 @@
     cursor: pointer;
     display: inline-flex;
 
+    &::after {
+      content: '\002F'; // "/"
+      margin: 0 sizing.rems(xs);
+    }
+
     &:hover {
       --color: var(--action);
 
       &::after {
         color: var(--ui-gray);
       }
-    }
-
-    &::after {
-      content: '\002F'; // "/"
-      margin: 0 sizing.rems(xs);
     }
 
     &:last-child::after {

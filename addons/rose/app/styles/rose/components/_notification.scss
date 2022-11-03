@@ -19,9 +19,11 @@
   .rose-notification-icon {
     position: relative;
     top: $xxxxs;
+    color: var(--icon-color);
   }
 
   .rose-notification-header {
+    color: var(--header-color);
     @include type.type(m, semibold);
   }
 
@@ -74,14 +76,6 @@
 
   border-color: var(--border-color);
   background-color: var(--background-color);
-
-  .rose-notification-icon {
-    color: var(--icon-color);
-  }
-
-  .rose-notification-header {
-    color: var(--header-color);
-  }
 
   &.is-error {
     --icon-color: var(--failure);

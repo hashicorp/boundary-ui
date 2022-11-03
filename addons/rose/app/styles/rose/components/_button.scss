@@ -132,6 +132,11 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
   display: inline;
 
   &:not(:disabled) {
+    &:disabled {
+      cursor: not-allowed;
+      opacity: var(--opacity-1);
+    }
+
     &:hover {
       text-decoration: underline;
     }
@@ -139,10 +144,5 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
     &:active {
       color: var(--info-starker-1);
     }
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: var(--opacity-1);
   }
 }
