@@ -222,6 +222,8 @@ user:
     no-accounts:
       title: No Accounts Available
       description: There are no accounts available to add to this user.
+  titles:
+    new: New User
   actions:
     add-accounts: Add Accounts
     delete: Delete User
