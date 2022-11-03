@@ -2,11 +2,11 @@
 @use '../../utilities/type';
 @use '../../variables/typography';
 
-$size-xxl: sizing.rems(xxl); //48
-$size-xl: sizing.rems(xl); //36
+$size-xxl: sizing.rems(xxl); // 48
+$size-xl: sizing.rems(xl); // 36
 $size-l: sizing.rems(l); // 24
 $size-m: sizing.rems(m); // 16
-$size-s: sizing.rems(s); //12
+$size-s: sizing.rems(s); // 12
 $size-xs: sizing.rems(xs); // 8
 $size-xxs: sizing.rems(xxs); // 4
 $size-xxxs: sizing.rems(xxxs); // 2

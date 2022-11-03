@@ -41,8 +41,8 @@ $xxxs: sizing.rems(xxxs); // 2
     height: 100%;
 
     // TODO: Figure out better method of defining card dimensions
-    min-height: sizing.rems(m) * 8; //6 rems
-    width: sizing.rems(m) * 16; //12 rems
+    min-height: sizing.rems(m) * 8; // 6 rems
+    width: sizing.rems(m) * 16; // 12 rems
   }
 
   &:hover {
