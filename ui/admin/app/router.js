@@ -18,9 +18,10 @@ Router.map(function () {
         });
       });
 
-      this.route('scopes', function () {});
+      this.route('scopes', function () {
+        this.route('new');
+      });
       this.route('edit');
-      this.route('new');
 
       this.route('users', function () {
         this.route('user', { path: ':user_id' }, function () {

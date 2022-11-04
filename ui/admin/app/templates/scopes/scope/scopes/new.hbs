@@ -1,0 +1,33 @@
+{{page-title (t 'titles.new')}}
+
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    {{#if @model.isOrg}}
+      <h2>
+        {{t 'resources.org.titles.new'}}
+        <DocLink @doc='org.new' @iconSize='large' />
+      </h2>
+      <p>{{t 'resources.org.description'}}</p>
+    {{else if @model.isProject}}
+      <h2>
+        {{t 'resources.project.titles.new'}}
+        <DocLink @doc='project.new' @iconSize='large' />
+      </h2>
+      <p>{{t 'resources.project.description'}}</p>
+    {{/if}}
+  </page.header>
+
+  <page.body>
+    <Form::Scope
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>

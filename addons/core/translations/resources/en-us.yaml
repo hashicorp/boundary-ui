@@ -193,6 +193,8 @@ org:
       title: Welcome to Orgs
     settings:
       title: Org Settings
+  titles:
+    new: New Org
   actions:
     delete: Delete Org
 project:
@@ -204,6 +206,8 @@ project:
       title: Welcome to Projects
     settings:
       title: Project Settings
+  titles:
+    new: New Project
   actions:
     delete: Delete Project
 user:
@@ -222,6 +226,8 @@ user:
     no-accounts:
       title: No Accounts Available
       description: There are no accounts available to add to this user.
+  titles:
+    new: New User
   actions:
     add-accounts: Add Accounts
     delete: Delete User
