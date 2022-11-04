@@ -32,6 +32,7 @@ auth-method:
       title: Authentication Pending
       description: Complete authentication in the newly-opened window.
   titles:
+    new: New Auth Method
     new-signing-algorithm: New Signing Algorithm
     new-allowed-audience: New Allowed Audience
     new-claims-scope: New Claims Scope

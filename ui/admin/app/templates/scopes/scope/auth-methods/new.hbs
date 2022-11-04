@@ -2,7 +2,11 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <h2>{{t 'titles.new'}}</h2>
+    <h2>
+      {{t 'resources.auth-method.titles.new'}}
+      <DocLink @doc='auth-method' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.auth-method.description'}}</p>
   </page.header>
 
   <page.breadcrumbs>
