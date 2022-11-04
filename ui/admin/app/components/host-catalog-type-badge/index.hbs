@@ -1,15 +1,15 @@
 {{#if @model.isStatic}}
-  <Rose::Badge>
-    {{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
-  </Rose::Badge>
+  <Hds::Badge
+    @text={{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
+  />
 {{else if @model.isUnknown}}
-  <Rose::Badge>
-    {{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
-  </Rose::Badge>
+  <Hds::Badge
+    @text={{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
+  />
+
 {{else}}
-  <Rose::Badge
-    @icon={{concat 'flight-icons/svg/' @model.compositeType '-color-16'}}
-  >
-    {{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
-  </Rose::Badge>
+  <Hds::Badge
+    @icon={{concat @model.compositeType '-color'}}
+    @text={{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
+  />
 {{/if}}

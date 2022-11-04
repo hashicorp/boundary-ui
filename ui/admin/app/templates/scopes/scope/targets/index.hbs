@@ -55,9 +55,9 @@
                 </row.headerCell>
                 <row.cell>
                   {{#if target.type}}
-                    <Rose::Badge>
-                      {{t (concat 'resources.target.types.' target.type)}}
-                    </Rose::Badge>
+                    <Hds::Badge
+                      @text={{t (concat 'resources.target.types.' target.type)}}
+                    />
                   {{/if}}
                 </row.cell>
                 <row.cell>
@@ -88,9 +88,11 @@
                   </row.headerCell>
                   <row.cell>
                     {{#if target.type}}
-                      <Rose::Badge>
-                        {{t (concat 'resources.target.types.' target.type)}}
-                      </Rose::Badge>
+                      <Hds::Badge
+                        @text={{t
+                          (concat 'resources.target.types.' target.type)
+                        }}
+                      />
                     {{/if}}
                   </row.cell>
                   <row.cell>

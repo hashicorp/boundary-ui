@@ -55,11 +55,13 @@
                 <p>{{credentialStore.description}}</p>
               </row.headerCell>
               <row.cell>
-                <Rose::Badge>{{t
+                <Hds::Badge
+                  @text={{t
                     (concat
                       'resources.credential-store.types.' credentialStore.type
                     )
-                  }}</Rose::Badge>
+                  }}
+                />
               </row.cell>
               <row.cell>
                 <Copyable
