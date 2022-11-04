@@ -238,6 +238,8 @@ role:
   messages:
     welcome:
       title: Welcome to Roles
+  titles:
+    new: New Role
   actions:
     create: Create Role
     delete: Delete Role
