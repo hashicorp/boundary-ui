@@ -104,6 +104,8 @@ host-set:
   title: Host Set
   title_plural: Host Sets
   description: A host set is a collection of hosts within a host catalog.
+  titles:
+    new: New Host Set
   actions:
     add: Add Host Set
     create: New Host Set
