@@ -72,6 +72,8 @@ group:
     no-members:
       title: No Members Available
       description: There are no members available to add to this group.
+  titles:
+    new: New Group
   actions:
     add-members: Add Members
     delete: Delete Group
