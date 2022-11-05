@@ -15,6 +15,6 @@ export default class ScopesScopeAuthMethodsNewController extends Controller {
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('titles.new');
+    return this.intl.t('resources.auth-method.titles.new');
   }
 }
