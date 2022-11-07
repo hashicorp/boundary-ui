@@ -11,6 +11,8 @@ account:
   types:
     password: Password
     oidc: OIDC
+  titles:
+    new: New Account
   actions:
     create: Create Account
     delete: Delete Account
@@ -32,6 +34,7 @@ auth-method:
       title: Authentication Pending
       description: Complete authentication in the newly-opened window.
   titles:
+    new: New Auth Method
     new-signing-algorithm: New Signing Algorithm
     new-allowed-audience: New Allowed Audience
     new-claims-scope: New Claims Scope
@@ -71,6 +74,8 @@ group:
     no-members:
       title: No Members Available
       description: There are no members available to add to this group.
+  titles:
+    new: New Group
   actions:
     add-members: Add Members
     delete: Delete Group
@@ -238,6 +243,8 @@ role:
   messages:
     welcome:
       title: Welcome to Roles
+  titles:
+    new: New Role
   actions:
     create: Create Role
     delete: Delete Role
