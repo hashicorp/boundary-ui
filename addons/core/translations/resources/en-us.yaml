@@ -289,6 +289,8 @@ target:
       title: Target Connection Details
     proxy_url:
       title: Proxy URL
+  titles:
+    new: New Target
   actions:
     create: New Target
     delete: Delete Target
