@@ -13,8 +13,8 @@ const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 export default class ScopesScopeSessionsRoute extends Route {
   // =services
 
+  @service store;
   @service intl;
-
   @service session;
   @service resourceFilterStore;
   @service router;

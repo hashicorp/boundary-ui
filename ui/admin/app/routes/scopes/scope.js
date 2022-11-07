@@ -10,6 +10,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeRoute extends Route {
   // =services
 
+  @service store;
   @service intl;
   @service session;
   @service scope;

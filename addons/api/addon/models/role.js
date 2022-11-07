@@ -1,7 +1,12 @@
 import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
+import { inject as service } from '@ember/service';
 
 export default class RoleModel extends GeneratedRoleModel {
+  // =services
+
+  @service store;
+
   // =attributes
 
   /**
