@@ -87,6 +87,8 @@ host-catalog:
   messages:
     welcome:
       title: Welcome to Host Catalogs
+  titles:
+    new: New Host Catalog
   actions:
     delete: Delete Host Catalog
   help:
