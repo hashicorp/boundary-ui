@@ -197,7 +197,27 @@ $radio-svg: (
   &.error {
     .rose-form-radio-field {
       &:not(:disabled, :focus) {
-        &:not(:disabled, :focus) {
+        ~ .rose-form-radio-label {
+          color: var(--ui-gray);
+          border: $size-xxxxs solid var(--failure);
+
+          .radio-card-overlay {
+            background-color: var(--failure-subtler-2);
+          }
+
+          .rose-form-helper-text.error {
+            color: var(--ui-gray);
+          }
+
+          &::after {
+            background-image: url($data-svg-prefix + map-get(
+                $radio-svg,
+                'error'
+              ));
+          }
+        }
+
+        &:checked {
           ~ .rose-form-radio-label {
             color: var(--ui-gray);
             border: $size-xxxxs solid var(--failure);
@@ -206,33 +226,11 @@ $radio-svg: (
               background-color: var(--failure-subtler-2);
             }
 
-            .rose-form-helper-text.error {
-              color: var(--ui-gray);
-            }
-
             &::after {
               background-image: url($data-svg-prefix + map-get(
                   $radio-svg,
-                  'error'
+                  'error-checked'
                 ));
-            }
-          }
-
-          &:checked {
-            ~ .rose-form-radio-label {
-              color: var(--ui-gray);
-              border: $size-xxxxs solid var(--failure);
-
-              .radio-card-overlay {
-                background-color: var(--failure-subtler-2);
-              }
-
-              &::after {
-                background-image: url($data-svg-prefix + map-get(
-                    $radio-svg,
-                    'error-checked'
-                  ));
-              }
             }
           }
         }
