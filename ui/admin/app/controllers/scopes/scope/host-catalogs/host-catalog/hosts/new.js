@@ -1,14 +1,10 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
-export default class ScopesScopeTargetsNewController extends Controller {
+export default class ScopesScopeHostCatalogsHostCatalogHostsNewController extends Controller {
   // =services
 
   @service intl;
-
-  // =attributes
-
-  queryParams = ['type'];
 
   // =attributes
 
@@ -17,6 +13,6 @@ export default class ScopesScopeTargetsNewController extends Controller {
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.target.titles.new');
+    return this.intl.t('resources.host.titles.new');
   }
 }
