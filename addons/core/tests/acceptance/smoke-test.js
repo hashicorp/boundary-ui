@@ -5,9 +5,9 @@ import { setupApplicationTest } from 'ember-qunit';
 module('Acceptance | smoke test', function (hooks) {
   setupApplicationTest(hooks);
 
-  test('visiting /smoke-test', async function (assert) {
-    await visit('/smoke-test');
+  test('visiting /smoke', async function (assert) {
+    await visit('/smoke');
 
-    assert.equal(currentURL(), '/smoke-test');
+    assert.deepEqual(currentURL(), '/smoke');
   });
 });
