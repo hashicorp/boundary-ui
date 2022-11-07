@@ -3,6 +3,7 @@
 
 .rose-form-helper-text {
   @include type.type(xs);
+
   display: block;
   color: var(--ui-gray);
   margin-bottom: sizing.rems(xxs);

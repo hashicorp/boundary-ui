@@ -7,6 +7,7 @@
     margin-right: sizing.rems(s);
   }
   @include type.type(m);
+
   position: relative;
   margin-bottom: sizing.rems(m);
 
@@ -17,12 +18,14 @@
 
   .rose-form-helper-text {
     padding-left: sizing.rems(l);
+    margin-top: sizing.rems(xs);
   }
 
   .rose-form-checkbox-label {
     // label styles
     @include type.type(s, semibold);
-    color: currentColor;
+
+    color: currentcolor;
 
     &,
     .rose-form-checkbox-label-description {
@@ -62,10 +65,6 @@
     }
   }
 
-  .rose-form-helper-text {
-    margin-top: sizing.rems(xs);
-  }
-
   .rose-form-checkbox-field {
     // mostly this just visually hides the native checkbox
     position: absolute;
@@ -99,6 +98,7 @@
           &::before {
             border-color: var(--action);
           }
+
           &::after {
             background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 8 8'><path fill='%231563ff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
           }
@@ -128,7 +128,7 @@
     color: var(--failure);
 
     .rose-form-checkbox-field {
-      &:not(:disabled):not(:focus) {
+      &:not(:disabled, :focus) {
         ~ .rose-form-checkbox-label {
           &::before {
             border-color: var(--failure);

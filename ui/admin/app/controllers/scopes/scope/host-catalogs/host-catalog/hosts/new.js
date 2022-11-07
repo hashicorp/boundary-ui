@@ -1,18 +1,18 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 
-export default class ScopesScopeCredentialStoresNewController extends Controller {
+export default class ScopesScopeHostCatalogsHostCatalogHostsNewController extends Controller {
   // =services
 
   @service intl;
 
   // =attributes
-  queryParams = ['type'];
+
   /**
-   * Breadcrumb for new route
+   * Translated roles breadcrumb
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('resources.credential-store.titles.new');
+    return this.intl.t('resources.host.titles.new');
   }
 }
