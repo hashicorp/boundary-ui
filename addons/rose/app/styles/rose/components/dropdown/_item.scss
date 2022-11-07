@@ -6,15 +6,16 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
 
 .rose-dropdown-item {
   @include type.type(s);
+
   min-width: (sizing.rems(m)) * 20;
-  $paddingY: math.div(
+
+  $y-padding: math.div(
     sizing.rems(xl) - (sizing.rems(m) + sizing.rems(xxxs)),
     2
   );
-  $paddingX: sizing.rems(s);
-  padding: $paddingY $paddingX;
-  //$line-height: math.div(36, 14);
-  //line-height: $line-height;
+  $x-padding: sizing.rems(s);
+
+  padding: $y-padding $x-padding;
 
   --color: var(--stark);
   --background-color: transparent;
@@ -23,12 +24,12 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
   background-color: var(--background-color);
 
   .rose-form-radio {
-    color: currentColor;
+    color: currentcolor;
     margin-bottom: 0;
 
     .rose-form-radio-label {
       display: block;
-      margin: -#{$paddingY} -#{$paddingX};
+      margin: -#{$y-padding} -#{$x-padding};
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-left: sizing.rems(s);
@@ -55,6 +56,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
           }
         }
       }
+
       &:checked {
         ~ .rose-form-radio-label {
           color: var(--action);
@@ -71,11 +73,12 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
   }
 
   .rose-form-checkbox {
-    color: currentColor;
+    color: currentcolor;
     margin-bottom: 0;
+
     .rose-form-checkbox-label {
       display: block;
-      margin: -#{$paddingY} -#{$paddingX};
+      margin: -#{$y-padding} -#{$x-padding};
       padding-top: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-bottom: sizing.rems(xs) + sizing.rems(xxxxs);
       padding-left: sizing.rems(s);
@@ -87,7 +90,6 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       }
 
       &::after {
-        //top: 0.25rem
         top: sizing.rems(xxs);
         right: sizing.rems(xs);
         left: auto;
@@ -122,6 +124,7 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
         ~ .rose-form-checkbox-label {
           color: var(--action);
           background-color: var(--action-subtler-1h);
+
           &::after {
             border-color: var(--action);
             background-size: sizing.rems(m);
@@ -132,10 +135,12 @@ $checkmark: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563
       &:disabled {
         ~ .rose-form-checkbox-label {
           opacity: 0.5;
+
           &::after {
             border-color: var(--ui-gray-subtler-2);
             background-color: var(--ui-gray-subtler-4);
           }
+
           &::before {
             background: none;
           }
