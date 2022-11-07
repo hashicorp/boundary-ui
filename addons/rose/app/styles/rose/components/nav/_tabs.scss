@@ -13,6 +13,7 @@
     --box-shadow-color: transparent;
 
     @include type.type(s, semibold);
+
     display: inline-block;
     color: var(--color);
     background-color: var(--background);
@@ -28,7 +29,7 @@
     &:active,
     &.active {
       --color: var(--action);
-      --box-shadow-color: currentColor;
+      --box-shadow-color: currentcolor;
 
       &:hover {
         --color: var(--action-starker-1);

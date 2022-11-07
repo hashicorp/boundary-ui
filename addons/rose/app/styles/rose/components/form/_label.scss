@@ -3,6 +3,7 @@
 
 .rose-form-label {
   @include type.type(s, semibold);
+
   display: block;
   margin-bottom: sizing.rems(xxs);
 
