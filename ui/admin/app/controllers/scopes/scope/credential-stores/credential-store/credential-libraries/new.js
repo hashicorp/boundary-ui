@@ -13,6 +13,6 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('titles.new');
+    return this.intl.t('resources.credential-library.titles.new');
   }
 }
