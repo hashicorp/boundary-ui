@@ -398,6 +398,8 @@ credential-library:
   title: Credential Library
   title_plural: Credential Libraries
   description: A credential library is a resource that provides credentials.
+  titles:
+    new: New Credential Library
   actions:
     create: New Credential Library
     delete: Delete Credential Library
@@ -422,6 +424,8 @@ credential:
   title: Credential
   title_plural: Credentials
   description: Credentials are static resources like usernames and passwords.
+  titles:
+    new: New Credential
   actions:
     create: New Credential
     delete: Delete Credential
