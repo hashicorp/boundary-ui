@@ -11,8 +11,10 @@
   display: flex;
   border-bottom: 1px solid var(--ui-gray-subtler-3);
   @include type.type(s);
-  $lineHeight: math.div(36, 14);
-  line-height: $lineHeight;
+
+  $line-height: math.div(36, 14);
+
+  line-height: $line-height;
   padding: math.div(sizing.rems(s), 2) 0;
 
   .rose-list-key-value-item-cell {
