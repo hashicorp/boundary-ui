@@ -9,10 +9,9 @@ import { resourceFilter } from 'core/decorators/resource-filter';
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =services
 
-  @service intl;
-
-  @service router;
   @service store;
+  @service intl;
+  @service router;
   @service resourceFilterStore;
 
   // =attributes

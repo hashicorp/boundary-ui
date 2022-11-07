@@ -10,7 +10,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
 
   @service intl;
-
   @service router;
   @service store;
   @service resourceFilterStore;
