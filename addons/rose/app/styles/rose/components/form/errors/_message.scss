@@ -3,6 +3,7 @@
 
 .rose-form-error-message {
   @include type.type(xs);
+
   color: var(--failure);
   margin-bottom: sizing.rems(xs);
 }
