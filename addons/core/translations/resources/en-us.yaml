@@ -11,6 +11,8 @@ account:
   types:
     password: Password
     oidc: OIDC
+  titles:
+    new: New Account
   actions:
     create: Create Account
     delete: Delete Account
