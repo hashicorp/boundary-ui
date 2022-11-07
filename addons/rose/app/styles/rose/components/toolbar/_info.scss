@@ -5,13 +5,16 @@
 .rose-toolbar {
   .rose-toolbar-info {
     @include type.type(button);
+
     color: var(--ui-gray);
     position: relative;
     display: inline-block;
     vertical-align: middle;
     white-space: nowrap;
     overflow: hidden;
-    $yPadding: sizing.rems(xxs) + sizing.rems(xxxs);
-    padding: $yPadding sizing.rems(m) $yPadding sizing.rems(l);
+
+    $y-padding: sizing.rems(xxs) + sizing.rems(xxxs);
+
+    padding: $y-padding sizing.rems(m) $y-padding sizing.rems(l);
   }
 }

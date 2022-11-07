@@ -20,16 +20,18 @@ $radio-svg: (
   'error-checked':
     "<svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%23c73445'/></svg>",
 );
-
 $data-svg-prefix: 'data:image/svg+xml;utf-8,';
+
 .rose-form-radio {
   &.inline {
     display: inline-block;
+
     .rose-form-radio-label {
       margin-right: sizing.rems(s);
     }
   }
   @include type.type(m);
+
   position: relative;
   margin-bottom: sizing.rems(xs);
   color: var(--ui-gray);
@@ -37,6 +39,7 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
   .rose-form-radio-label {
     display: flex;
     align-items: center;
+
     .rose-form-helper-text {
       font-weight: normal;
       margin-left: sizing.rems(xxs);
@@ -44,7 +47,8 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
     }
 
     @include type.type(s, semibold);
-    color: currentColor;
+
+    color: currentcolor;
     padding-left: sizing.rems(l);
     padding-top: sizing.rems(xxxs);
 
@@ -149,7 +153,7 @@ $data-svg-prefix: 'data:image/svg+xml;utf-8,';
     color: var(--failure);
 
     .rose-form-radio-field {
-      &:not(:disabled):not(:focus) {
+      &:not(:disabled, :focus) {
         ~ .rose-form-radio-label {
           &::after {
             background-image: url($data-svg-prefix + map-get(

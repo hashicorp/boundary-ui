@@ -4,6 +4,7 @@
 
 @mixin button {
   @include typography.type(button, semibold);
+
   display: inline-block;
   margin-bottom: sizing.rems(l);
   margin-right: sizing.rems(xs);
@@ -30,6 +31,7 @@
   &.has-icon-only {
     padding-right: sizing.rems(s);
     padding-left: sizing.rems(s);
+
     .rose-button-body {
       position: absolute;
       top: -1000px;
@@ -44,6 +46,7 @@
 @mixin button-style($name, $default, $hover: &, $active: &, $disabled: &) {
   .rose-button-#{$name} {
     @include button;
+
     border-color: map.get($default, border-color);
     color: map.get($default, color);
     background-color: map.get($default, background-color);

@@ -3,6 +3,7 @@
 
 .rose-layout-sidebar {
   --sidebar-width: #{sizing.rems(m) * 16};
+
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, var(--sidebar-width)) repeat(
@@ -19,6 +20,7 @@
     background-color: #{color(ui-gray, 950)};
     border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
   }
+
   .rose-layout-sidebar-body {
     grid-area: content;
   }
