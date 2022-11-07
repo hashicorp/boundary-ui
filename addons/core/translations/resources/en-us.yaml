@@ -355,6 +355,8 @@ credential-store:
   messages:
     welcome:
       title: Welcome to Credential Stores
+  titles:
+    new: New Credential Store
   actions:
     delete: Delete Credential Store
   types:
