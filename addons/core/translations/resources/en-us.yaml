@@ -424,6 +424,8 @@ credential:
   title: Credential
   title_plural: Credentials
   description: Credentials are static resources like usernames and passwords.
+  titles:
+    new: New Credential
   actions:
     create: New Credential
     delete: Delete Credential
