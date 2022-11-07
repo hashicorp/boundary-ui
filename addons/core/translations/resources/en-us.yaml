@@ -156,6 +156,8 @@ host:
     none-friendly:
       title: No Hosts Available
       description: No hosts available to display yet.
+  titles:
+    new: New Host
   actions:
     add: Add Host
     create: New Host
