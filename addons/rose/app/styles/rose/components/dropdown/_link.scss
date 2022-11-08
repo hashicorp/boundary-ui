@@ -4,6 +4,7 @@
 
 .rose-dropdown-link {
   @include type.type(s);
+
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -12,11 +13,14 @@
   padding: 0 sizing.rems(s);
   text-decoration: none;
   text-align: left;
+
   $line-height: math.div(36, 14);
+
   line-height: $line-height;
 
   --background-color: transparent;
   --color: var(--stark);
+
   color: var(--color);
   background-color: var(--background-color);
 

@@ -87,6 +87,8 @@ host-catalog:
   messages:
     welcome:
       title: Welcome to Host Catalogs
+  titles:
+    new: New Host Catalog
   actions:
     delete: Delete Host Catalog
   help:
@@ -109,6 +111,8 @@ host-set:
   title: Host Set
   title_plural: Host Sets
   description: A host set is a collection of hosts within a host catalog.
+  titles:
+    new: New Host Set
   actions:
     add: Add Host Set
     create: New Host Set
@@ -152,6 +156,8 @@ host:
     none-friendly:
       title: No Hosts Available
       description: No hosts available to display yet.
+  titles:
+    new: New Host
   actions:
     add: Add Host
     create: New Host
@@ -289,6 +295,8 @@ target:
       title: Target Connection Details
     proxy_url:
       title: Proxy URL
+  titles:
+    new: New Target
   actions:
     create: New Target
     delete: Delete Target
@@ -347,6 +355,8 @@ credential-store:
   messages:
     welcome:
       title: Welcome to Credential Stores
+  titles:
+    new: New Credential Store
   actions:
     delete: Delete Credential Store
   types:
@@ -388,6 +398,8 @@ credential-library:
   title: Credential Library
   title_plural: Credential Libraries
   description: A credential library is a resource that provides credentials.
+  titles:
+    new: New Credential Library
   actions:
     create: New Credential Library
     delete: Delete Credential Library
@@ -412,6 +424,8 @@ credential:
   title: Credential
   title_plural: Credentials
   description: Credentials are static resources like usernames and passwords.
+  titles:
+    new: New Credential
   actions:
     create: New Credential
     delete: Delete Credential

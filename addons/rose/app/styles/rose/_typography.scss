@@ -8,6 +8,7 @@ html {
 
 body {
   font-family: typography.$family-primary;
+
   // This is the only time we'll explicitly use pixels.  All other sizes are
   // expressed in rem units.
   font-size: typography.$base-font-size * 1px;
@@ -30,6 +31,7 @@ code {
 h1,
 .h1 {
   @include type-mixins.type(h1, bold);
+
   margin-top: sizing.rems(m);
   margin-bottom: sizing.rems(xs);
 }
@@ -37,6 +39,7 @@ h1,
 h2,
 .h2 {
   @include type-mixins.type(h2, bold);
+
   margin-top: sizing.rems(m);
   margin-bottom: sizing.rems(xs);
 }
@@ -44,6 +47,7 @@ h2,
 h3,
 .h3 {
   @include type-mixins.type(h3, bold);
+
   margin-top: sizing.rems(m);
   margin-bottom: sizing.rems(xs);
 }
