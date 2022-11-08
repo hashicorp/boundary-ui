@@ -1,10 +1,4 @@
-{{#if this.isStaticOrUnknownHostCatalogType}}
-  <Hds::Badge
-    @text={{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
-  />
-{{else}}
-  <Hds::Badge
-    @icon={{concat @model.compositeType '-color'}}
-    @text={{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
-  />
-{{/if}}
+<Hds::Badge
+  @icon={{this.icon}}
+  @text={{t (concat 'resources.host-catalog.types.' @model.compositeType)}}
+/>
