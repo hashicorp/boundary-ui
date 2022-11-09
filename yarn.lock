@@ -4557,7 +4557,7 @@
   resolved "https://registry.yarnpkg.com/@hashicorp/design-system-tokens/-/design-system-tokens-1.2.0.tgz#e83a69934c5c0c84de3c4572811e56543905bf39"
   integrity sha512-N74hb1mLImbY1NyH7Of4UDY7HBO5A4VSdXzXyLO2ZrB/WYIfX++uKjOMknca0lAAIMC7kqaYm3OIbND/sHbu8g==
 
-"@hashicorp/ember-flight-icons@^3.0.0", "@hashicorp/ember-flight-icons@^3.0.1":
+"@hashicorp/ember-flight-icons@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@hashicorp/ember-flight-icons/-/ember-flight-icons-3.0.1.tgz#38895453a7994d7089bc058ccaa11f9c7eb9584e"
   integrity sha512-1gmzv3d//YzW87vd5FsJQpgq+addDdl3xgPkT1v9uVaDh7k8AZsz9IltymhP+Q62OIGHhx7GwagIwnwf3B6bAQ==
