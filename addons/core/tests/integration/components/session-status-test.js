@@ -2,9 +2,12 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | session-status', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks);
+
   test('it maps to correct text color, icon and type if it is in active status', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');

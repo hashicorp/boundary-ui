@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Route {
+  // =services
+
+  @service store;
+
   /**
    * Load a specific credential store in current scope
    * @return {Promise[CredentialStoreModel]}
