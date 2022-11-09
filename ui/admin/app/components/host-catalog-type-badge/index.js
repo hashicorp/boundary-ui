@@ -2,7 +2,10 @@ import Component from '@glimmer/component';
 const types = ['aws', 'azure'];
 
 export default class HostCatalogTypeComponent extends Component {
-  //display icons only for plugin compositeTypes
+  /**
+   * Display icons only for plugin compositeTypes.
+   * @type {string}
+   */
   get icon() {
     return (
       types.includes(this.args.model.compositeType) &&
