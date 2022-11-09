@@ -97,7 +97,7 @@ module('Unit | Serializer | credential', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
-      private_key_passphrase: '',
+      private_key_passphrase: null,
       private_key: '',
       username: 'user',
       credential_store_id: 'csst_i7p1eu0Nw8',
