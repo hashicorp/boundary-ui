@@ -7,6 +7,7 @@ import { notifyError } from 'core/decorators/notify';
 export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   // =services
 
+  @service store;
   @service router;
   @service intl;
 

@@ -8,6 +8,7 @@ import config from '../config/environment';
 export default class ClusterUrlRoute extends Route {
   // =services
 
+  @service store;
   @service session;
   @service clusterUrl;
   @service intl;

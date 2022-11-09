@@ -9,6 +9,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class AccountChangePasswordRoute extends Route {
   // =services
 
+  @service store;
   @service session;
   @service intl;
 

@@ -12,9 +12,10 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23bac1cc' xm
         background: url($chevron) no-repeat right sizing.rems(s) center;
         background-size: sizing.rems(m);
 
-        $yPadding: sizing.rems(xxxs);
-        $rightPadding: sizing.rems(xs) + sizing.rems(l);
-        padding: $yPadding $rightPadding $yPadding sizing.rems(s);
+        $y-padding: sizing.rems(xxxs);
+        $right-padding: sizing.rems(xs) + sizing.rems(l);
+
+        padding: $y-padding $right-padding $y-padding sizing.rems(s);
 
         &.has-icon-only {
           padding-left: sizing.rems(xs);
@@ -22,9 +23,7 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23bac1cc' xm
 
         .rose-icon {
           --size: #{sizing.rems(l)};
-        }
 
-        .rose-icon {
           display: inline-block;
           height: var(--size);
 

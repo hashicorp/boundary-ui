@@ -14,6 +14,7 @@ export default class ApplicationRoute extends Route {
   @service session;
   @service confirm;
   @service router;
+  @service intl;
 
   // =attributes
 
@@ -48,6 +49,7 @@ export default class ApplicationRoute extends Route {
   }
 
   async beforeModel() {
+    this.intl.setLocale(['en-us']);
     await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);

@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsNewRoute extends Route {
+  // =services
+
+  @service store;
+
   // =methods
   model() {
     const { id: auth_method_id, type } = this.modelFor(

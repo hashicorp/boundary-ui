@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -19,10 +19,11 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
       global: null,
       org: null,
       project: null,
-      hostCatalog: null,
-      host: null,
     },
+    hostCatalog: null,
+    host: null,
   };
+
   const urls = {
     globalScope: null,
     orgScope: null,
@@ -32,7 +33,6 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     hosts: null,
     host: null,
     unknownHost: null,
-    newHost: null,
   };
 
   hooks.beforeEach(function () {
@@ -62,8 +62,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     urls.hosts = `${urls.hostCatalog}/hosts`;
     urls.host = `${urls.hosts}/${instances.host.id}`;
     urls.unknownHost = `${urls.hosts}/foo`;
-    urls.newHost = `${urls.hosts}/new`;
-    // Generate resource couner
+
     authenticateSession({});
   });
 
@@ -72,23 +71,43 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     await visit(urls.hosts);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hosts);
-    await visit(urls.host);
+
+    await click(`[href="${urls.host}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.host);
   });
 
-  test('cannot navigate to a role form without proper authorization', async function (assert) {
+  test('cannot navigate to a host form without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.hostCatalog);
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'read');
-    await visit(urls.hosts);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+
+    await click(`[href="${urls.hosts}"]`);
+
+    assert.dom(`[href="${urls.host}"]`).doesNotExist();
   });
 
   test('visiting an unknown host displays 404 message', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
+    await visit(urls.hosts);
+    assert.dom(`[href="${urls.unknownHost}"]`).doesNotExist();
+
     await visit(urls.unknownHost);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+
+    assert.dom('.rose-message-subtitle').hasText('Error 404');
+  });
+
+  test('users can link to docs page for hosts', async function (assert) {
+    assert.expect(1);
+    await visit(urls.hosts);
+
+    await click(`[href="${urls.host}"]`);
+
+    assert
+      .dom(`[href="https://boundaryproject.io/help/admin-ui/hosts"]`)
+      .exists();
   });
 });

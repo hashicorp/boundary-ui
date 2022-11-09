@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 export default class OnboardingRoute extends Route {
   // =services
 
+  @service store;
   @service session;
   @service router;
 

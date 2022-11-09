@@ -1,3 +1,5 @@
+@use "sass:color";
+
 /**
  * CSS custom properties defining colors.  These are the color variables that
  * should be consumed throughout these stylesheets (rather than SCSS vars).
@@ -34,36 +36,29 @@
   --info: #{color(blue)};
   --info-starker-1: #{color(blue, 700)};
   --info-starker-2: #{color(blue, 800)};
-
   --alert-subtler-2: #{color(orange, 010)};
   --alert-subtler-1: #{color(orange, 100)};
   --alert: #{color(orange)};
   --alert-starker-1: #{color(orange, 800)};
-
   --warning-subtler-2: #{color(yellow, 010)};
   --warning-subtler-1: #{color(yellow, 100)};
   --warning: #{color(yellow)};
   --warning-starker-1: #{color(yellow, 800)};
-
   --failure-subtler-2: #{color(red, 010)};
   --failure-subtler-1: #{color(red, 100)};
   --failure: #{color(red)};
   --failure-starker-1: #{color(red, 800)};
-
   --success-subtler-2: #{color(green, 010)};
   --success-subtler-1: #{color(green, 100)};
   --success: #{color(green)};
   --success-starker-1: #{color(green, 800)};
-
   --action-subtler-2: #{color(blue, 010)};
   --action-subtler-1h: #{color(blue, 050)};
   --action-subtler-1: #{color(blue, 100)};
   --action: #{color(blue)};
   --action-starker-1: #{color(blue, 700)};
-
   --ui-border-subtler-1: #{color(ui-gray, 200)};
   --ui-border: #{color(ui-gray, 300)};
-
   --ui-gray-subtler-6: #{color(ui-gray, 010)};
   --ui-gray-subtler-5: #{color(ui-gray, 050)};
   --ui-gray-subtler-4: #{color(ui-gray, 100)};
@@ -75,7 +70,6 @@
   --ui-gray-starker-2: #{color(ui-gray, 700)};
   --ui-gray-starker-3: #{color(ui-gray, 800)};
   --ui-gray-starker-4: #{color(ui-gray, 900)};
-
   --ui-header-subtler: #{color(ui-cool-gray, 700)};
 }
 
@@ -93,36 +87,29 @@
   --info: #{color(blue)};
   --info-starker-1: #{color(blue, 300)};
   --info-starker-2: #{color(blue, 200)};
-
   --alert-subtler-2: #{color(orange, 900)};
   --alert-subtler-1: #{color(orange, 800)};
   --alert: #{color(orange)};
   --alert-starker-1: #{color(orange, 200)};
-
   --warning-subtler-2: #{color(yellow, 900)};
   --warning-subtler-1: #{color(yellow, 800)};
   --warning: #{color(yellow)};
   --warning-starker-1: #{color(yellow, 200)};
-
   --failure-subtler-2: #{color(red, 900)};
   --failure-subtler-1: #{color(red, 800)};
   --failure: #{color(red, 300)};
   --failure-starker-1: #{color(red, 200)};
-
   --success-subtler-2: #{color(green, 900)};
   --success-subtler-1: #{color(green, 800)};
   --success: #{color(green, 700)};
   --success-starker-1: #{color(green, 400)};
-
-  --action-subtler-2: #{darken(color(blue, 900), 10%)};
-  --action-subtler-1h: #{darken(color(blue, 900), 5%)};
+  --action-subtler-2: #{color.adjust(color(blue, 900), $lightness: -10%)};
+  --action-subtler-1h: #{color.adjust(color(blue, 900), $lightness: -5%)};
   --action-subtler-1: #{color(blue, 800)};
   --action: #{color(blue, 400)};
   --action-starker-1: #{color(blue, 200)};
-
   --ui-border-subtler-1: #{color(ui-gray, 800)};
   --ui-border: #{color(ui-gray, 700)};
-
   --ui-gray-subtler-6: #{color(ui-gray, 950)};
   --ui-gray-subtler-5: #{color(ui-gray, 900)};
   --ui-gray-subtler-4: #{color(ui-gray, 800)};
@@ -134,7 +121,6 @@
   --ui-gray-starker-2: #{color(ui-gray, 100)};
   --ui-gray-starker-3: #{color(ui-gray, 050)};
   --ui-gray-starker-4: #{color(ui-gray, 010)};
-
   --ui-header-subtler: #{color(ui-cool-gray, 100)};
 
   color-scheme: dark;

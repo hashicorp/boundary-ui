@@ -17,7 +17,7 @@ export default class OnboardingQuickSetupChoosePathRoute extends Route {
         break;
       case 'manual':
       default:
-        this.router.transitionTo('scopes.scope.new', 'global');
+        this.router.transitionTo('scopes.scope.scopes.new', 'global');
         break;
     }
   }

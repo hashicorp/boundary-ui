@@ -5,8 +5,10 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeCredentialStoresNewRoute extends Route {
   // =services
 
+  @service store;
   @service router;
   @service features;
+
   // =attributes
 
   queryParams = {

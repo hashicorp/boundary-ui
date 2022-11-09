@@ -1,6 +1,11 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRolesRoleIndexRoute extends Route {
+  // =services
+
+  @service store;
+
   /**
    * Load the role's scope and sub scopes into a hierarchical data structure.
    * @param {Model} model

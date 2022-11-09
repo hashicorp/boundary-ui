@@ -8,8 +8,8 @@ import { notifyError } from 'core/decorators/notify';
 export default class ScopesScopeAuthenticateMethodRoute extends Route {
   // =services
 
+  @service store;
   @service session;
-
   @service ipc;
   @service intl;
   @service router;

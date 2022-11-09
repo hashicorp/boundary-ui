@@ -10,35 +10,35 @@ $xxxs: sizing.rems(xxxs); // 2
 $xxxxs: sizing.rems(xxxxs); // 1
 
 .rose-dialog {
-  --headerColor: var(--ui-gray-starker-3);
-  --headerIconColor: var(--headerColor);
-  --headerBackgroundColor: var(--ui-gray-subtler-5);
-  --headerBorderColor: var(--ui-gray-subtler-2);
+  --header-color: var(--ui-gray-starker-3);
+  --header-icon-color: var(--header-color);
+  --header-background-color: var(--ui-gray-subtler-5);
+  --header-border-color: var(--ui-gray-subtler-2);
 
   border-radius: $xxxs;
   background-color: var(--subtle);
   box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
-    0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
+  0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
 
   &.rose-dialog-success {
-    --headerColor: var(--success-starker-1);
-    --headerIconColor: var(--success);
-    --headerBackgroundColor: var(--success-subtler-2);
-    --headerBorderColor: var(--success);
+    --header-color: var(--success-starker-1);
+    --header-icon-color: var(--success);
+    --header-background-color: var(--success-subtler-2);
+    --header-border-color: var(--success);
   }
 
   &.rose-dialog-warning {
-    --headerColor: var(--warning-starker-1);
-    --headerIconColor: var(--warning);
-    --headerBackgroundColor: var(--warning-subtler-2);
-    --headerBorderColor: var(--warning);
+    --header-color: var(--warning-starker-1);
+    --header-icon-color: var(--warning);
+    --header-background-color: var(--warning-subtler-2);
+    --header-border-color: var(--warning);
   }
 
   &.rose-dialog-error {
-    --headerColor: var(--failure-starker-1);
-    --headerIconColor: var(--failure);
-    --headerBackgroundColor: var(--failure-subtler-2);
-    --headerBorderColor: var(--failure);
+    --header-color: var(--failure-starker-1);
+    --header-icon-color: var(--failure);
+    --header-background-color: var(--failure-subtler-2);
+    --header-border-color: var(--failure);
   }
 
   .rose-dialog-header {
@@ -46,14 +46,14 @@ $xxxxs: sizing.rems(xxxxs); // 1
     align-items: center;
     padding: ($xs + $xxxs) $m;
     min-height: sizing.rems(l);
-    color: var(--headerColor);
-    background-color: var(--headerBackgroundColor);
-    border: $xxxxs solid var(--headerBorderColor);
+    color: var(--header-color);
+    background-color: var(--header-background-color);
+    border: $xxxxs solid var(--header-border-color);
     border-top-left-radius: $xxxs;
     border-top-right-radius: $xxxs;
 
     .rose-icon {
-      color: var(--headerIconColor);
+      color: var(--header-icon-color);
       margin-right: $xxs + $xxxs;
 
       svg {
@@ -65,10 +65,11 @@ $xxxxs: sizing.rems(xxxxs); // 1
 
     .rose-dialog-heading {
       @include type.type(m, semibold);
+
       flex-grow: 1;
       margin: 0;
       padding: 0;
-      color: currentColor;
+      color: currentcolor;
     }
 
     .rose-dialog-dismiss {
@@ -82,7 +83,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
       width: sizing.rems(l);
 
       &:hover {
-        border-color: currentColor;
+        border-color: currentcolor;
       }
 
       .rose-icon {
@@ -113,18 +114,13 @@ $xxxxs: sizing.rems(xxxxs); // 1
       margin-bottom: 0;
     }
   }
-}
 
-.rose-dialog {
   &.modal {
     display: flex;
     flex-direction: column;
-
     position: fixed;
-
     left: calc(50% - 300px);
     top: 5%;
-
     max-height: 85%;
     max-width: 80vw;
     width: 650px;
@@ -138,6 +134,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
     }
   }
 }
+
 // overlay
 .rose-dialog-modal-overlay {
   content: ' ';
