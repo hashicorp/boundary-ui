@@ -13,6 +13,6 @@ export default class ScopesScopeCredentialStoresNewController extends Controller
    * @type {string}
    */
   get breadCrumb() {
-    return this.intl.t('titles.new');
+    return this.intl.t('resources.credential-store.titles.new');
   }
 }

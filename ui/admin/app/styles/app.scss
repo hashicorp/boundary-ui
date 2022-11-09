@@ -4,12 +4,6 @@
 @import 'rose';
 @import 'notify';
 
-.rose-layout-global {
-  .rose-layout-global-body {
-    justify-content: center;
-  }
-}
-
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;

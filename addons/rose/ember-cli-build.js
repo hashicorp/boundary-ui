@@ -1,14 +1,12 @@
 'use strict';
 
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
+const { maybeEmbroider } = require('@embroider/test-setup');
 
 module.exports = function (defaults) {
   let app = new EmberAddon(defaults, {
     // Add options here
   });
-
-  app.import('node_modules/codemirror/lib/codemirror.css');
-  app.import('node_modules/codemirror/theme/monokai.css');
 
   /*
     This build file specifies the options for the dummy test app of this
@@ -17,5 +15,11 @@ module.exports = function (defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
-  return app.toTree();
+  return maybeEmbroider(app, {
+    skipBabel: [
+      {
+        package: 'qunit',
+      },
+    ],
+  });
 };

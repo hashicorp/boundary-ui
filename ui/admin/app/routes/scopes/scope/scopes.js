@@ -9,6 +9,7 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeScopesRoute extends Route {
   // =services
 
+  @service store;
   @service session;
   @service router;
 

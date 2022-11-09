@@ -12,11 +12,11 @@
       <DocLink @doc='worker' @iconSize='large' />
     </h2>
   </page.header>
-
   <page.body>
     <Form::Worker::CreateWorkerLed
       @model={{@model}}
       @submit={{route-action 'createWorkerLed' @model}}
+      @refresh={{route-action 'refresh'}}
     />
   </page.body>
 

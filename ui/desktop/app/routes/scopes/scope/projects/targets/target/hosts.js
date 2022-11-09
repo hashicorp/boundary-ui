@@ -5,10 +5,10 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeProjectsTargetsTargetHostsRoute extends Route {
   // =services
 
+  @service store;
   @service ipc;
   @service session;
   @service clusterUrl;
-
   @service confirm;
 
   // =methods

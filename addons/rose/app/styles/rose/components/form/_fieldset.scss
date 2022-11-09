@@ -1,0 +1,21 @@
+@use '../../variables/sizing';
+@use '../../utilities/type';
+
+.rose-form-fieldset {
+  margin-bottom: sizing.rems(m);
+
+  .rose-form-fieldset-title {
+    @include type.type(s, semibold);
+  }
+
+  .rose-form-fieldset-body {
+    display: flex;
+  }
+
+  .rose-form-fieldset-description {
+    margin: sizing.rems(xxs) 0;
+    @include type.type(xs);
+
+    color: var(--ui-gray);
+  }
+}
