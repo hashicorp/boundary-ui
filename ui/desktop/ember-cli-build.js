@@ -18,13 +18,6 @@ module.exports = function (defaults) {
       enabled: true,
       extensions: ['js'],
     },
-    sassOptions: {
-      onlyIncluded: true,
-      extension: 'scss',
-    },
-    emberNotify: {
-      importCss: false,
-    },
     svg: {
       paths: ['../../addons/core/public'],
     },
