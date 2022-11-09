@@ -22,8 +22,10 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23bac1cc' xm
         }
 
         .rose-icon {
+          --size: #{sizing.rems(l)};
+
           display: inline-block;
-          height: sizing.rems(l);
+          height: var(--size);
 
           > svg {
             vertical-align: top;
