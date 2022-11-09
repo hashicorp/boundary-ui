@@ -90,7 +90,9 @@ module('Acceptance | targets | host-sources', function (hooks) {
   test('can navigate to a known host set type', async function (assert) {
     assert.expect(1);
     await visit(urls.targetHostSources);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await click(
+      `main tbody .rose-table-header-cell:nth-child(1) a[href="${urls.hostSet}"]`
+    );
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hostSet);
   });
@@ -102,7 +104,11 @@ module('Acceptance | targets | host-sources', function (hooks) {
     });
 
     await visit(urls.targetHostSources);
-    assert.dom(`[href="${urls.unknownHostSet}"]`).doesNotExist();
+    assert
+      .dom(
+        `main tbody .rose-table-header-cell:nth-child(1) a [href="${urls.unknownHostSet}"]`
+      )
+      .doesNotExist();
   });
 
   test('can remove a host set', async function (assert) {
