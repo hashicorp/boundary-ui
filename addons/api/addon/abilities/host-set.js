@@ -3,7 +3,7 @@ import ModelAbility from './model';
 /**
  * Provides abilities for host sets.
  */
-export default class UserAbility extends ModelAbility {
+export default class HostSetAbility extends ModelAbility {
   // =permissions
 
   /**
@@ -18,5 +18,12 @@ export default class UserAbility extends ModelAbility {
    */
   get canRemoveHosts() {
     return this.hasAuthorizedAction('remove-hosts');
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get canRead() {
+    return !this.model.isUnknown && this.hasAuthorizedAction('read');
   }
 }
