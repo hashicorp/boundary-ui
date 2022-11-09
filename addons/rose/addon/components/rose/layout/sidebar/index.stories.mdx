@@ -6,7 +6,7 @@ import { hbs } from 'ember-cli-htmlbars';
 # Layout|Sidebar
 
 A top-level layout/positioning component that allows two distinct sections to
-be configured: sidebar and body.
+be configured: sidebar, body and footer.
 
 ```handlebars
 <Rose::Layout::Sidebar as |layout|>
@@ -16,6 +16,9 @@ be configured: sidebar and body.
   <layout.body>
     body content
   </layout.body>
+  <layout.footer>
+    footer content
+  </layout.footer>
 </Rose::Layout::Sidebar>
 ```
 
@@ -26,6 +29,7 @@ be configured: sidebar and body.
       <Rose::Layout::Sidebar as |layout|>
         <layout.sidebar style="background: var(--brand-gray-7);">Body</layout.sidebar>
         <layout.body style="background: var(--brand-gray-5);">Sidebar</layout.body>
+        <layout.footer style="background: var(--brand-gray-7);">Sidebar</layout.footer>
       </Rose::Layout::Sidebar>
     `,
     }}

@@ -13,8 +13,7 @@
       {{#if @model.subScopes}}
         <p>{{t 'resources.org.description'}}</p>
       {{/if}}
-    {{/if}}
-    {{#if @model.currentScope.isOrg}}
+    {{else if @model.currentScope.isOrg}}
       <h2>
         {{t 'resources.project.title_plural'}}
         <DocLink @doc='project' @iconSize='large' />
@@ -28,8 +27,12 @@
   <page.actions>
     {{#if (can 'create model' @model.currentScope collection='scopes')}}
       {{#if @model.subScopes}}
-        <Rose::LinkButton @route='scopes.scope.new' @style='primary'>
-          {{t 'titles.new'}}
+        <Rose::LinkButton @route='scopes.scope.scopes.new' @style='primary'>
+          {{#if @model.currentScope.isGlobal}}
+            {{t 'resources.org.titles.new'}}
+          {{else if @model.currentScope.isOrg}}
+            {{t 'resources.project.titles.new'}}
+          {{/if}}
         </Rose::LinkButton>
       {{/if}}
     {{/if}}
@@ -68,7 +71,7 @@
               {{t 'resources.org.description'}}
             </message.description>
             {{#if (can 'create model' @model.currentScope collection='scopes')}}
-              <message.link @route='scopes.scope.new'>
+              <message.link @route='scopes.scope.scopes.new'>
                 <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
                 {{t 'titles.new'}}
               </message.link>
@@ -87,7 +90,7 @@
               {{t 'resources.project.description'}}
             </message.description>
             {{#if (can 'create model' @model.currentScope collection='scopes')}}
-              <message.link @route='scopes.scope.new'>
+              <message.link @route='scopes.scope.scopes.new'>
                 <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
                 {{t 'titles.new'}}
               </message.link>

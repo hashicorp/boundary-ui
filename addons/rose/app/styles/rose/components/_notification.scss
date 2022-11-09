@@ -19,14 +19,17 @@
   .rose-notification-icon {
     position: relative;
     top: $xxxxs;
+    color: var(--icon-color);
   }
 
   .rose-notification-header {
+    color: var(--header-color);
     @include type.type(m, semibold);
   }
 
   .rose-notification-body {
     @include type.type(s);
+
     // hack alert, because the icons are still hard to work with
     margin-left: sizing.rems(m) + $xxs;
     overflow-wrap: break-word;
@@ -34,13 +37,12 @@
 
   .rose-notification-dismiss {
     position: absolute;
-    color: currentColor;
+    color: currentcolor;
     background-color: transparent;
     border-radius: $xxxs;
     border: 0;
     padding: 0;
     cursor: pointer;
-
     top: sizing.rems(s);
     right: sizing.rems(s);
 
@@ -74,14 +76,6 @@
 
   border-color: var(--border-color);
   background-color: var(--background-color);
-
-  .rose-notification-icon {
-    color: var(--icon-color);
-  }
-
-  .rose-notification-header {
-    color: var(--header-color);
-  }
 
   &.is-error {
     --icon-color: var(--failure);

@@ -17,10 +17,11 @@ class Tag {
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
   @service features;
+  @service browserObject;
 
   // =attributes
   @tracked generatedWorkerAuthToken;
-  @tracked clusterId;
+  @tracked clusterID = this.clusterIDFromURL;
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
@@ -28,8 +29,18 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked newWorkerKey;
   @tracked newWorkerValue;
 
-  // =properties
+  get clusterIDFromURL() {
+    const hostname = this.browserObject.hostname;
 
+    // Match against a guid with either the prod, int, or dev hcp domain
+    const clusterIDMatcher =
+      /^(?<clusterID>[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\.boundary\.(?:hashicorp\.cloud|hcp\.to|hcp\.dev)$/;
+
+    // Return the cluster ID otherwise return null if it doesn't match
+    return hostname?.match(clusterIDMatcher)?.groups?.clusterID;
+  }
+
+  // =properties
   /**
    * Returns directory creation text for `<Rose::CodeEditor>`.
    * @type {string}
@@ -46,7 +57,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
    */
   get workerConfigText() {
     const clusterText = `hcp_boundary_cluster_id = "${
-      this.clusterId || '<config_id>'
+      this.clusterID || '<config_id>'
     }"`;
 
     const tagsText = `tags {

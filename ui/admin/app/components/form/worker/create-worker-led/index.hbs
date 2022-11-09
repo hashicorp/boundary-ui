@@ -1,6 +1,5 @@
 <Rose::Form
   @onSubmit={{fn @submit this.generatedWorkerAuthToken}}
-  @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{false}}
   as |form|
@@ -10,7 +9,7 @@
     {{#if (feature-flag 'byow-pki-hcp-cluster-id')}}
       <form.input
         @name='cluster_id'
-        @value={{this.clusterId}}
+        @value={{this.clusterID}}
         @label={{t 'resources.worker.form.cluster_id.label'}}
         @helperText={{t 'resources.worker.form.cluster_id.help'}}
         @linkText={{t 'actions.learn-more'}}
@@ -190,7 +189,7 @@
   <Rose::LinkButton
     @route='scopes.scope.workers'
     @style='secondary'
-    {{on 'click' (route-action 'refresh')}}
+    {{on 'click' @refresh}}
   >
     {{t 'actions.done'}}
   </Rose::LinkButton>

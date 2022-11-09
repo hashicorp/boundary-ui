@@ -4,11 +4,12 @@
   display: flex;
   align-items: center;
   color: var(--ui-gray-starker-1);
-  margin: sizing.rems(xs);
+  margin-left: sizing.rems(m);
 
   svg {
-    $logoSize: sizing.rems(m);
+    $logo-size: sizing.rems(m);
+
     display: inline-block;
-    width: $logoSize;
+    width: $logo-size;
   }
 }

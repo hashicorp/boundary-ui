@@ -5,6 +5,7 @@ import { hash } from 'rsvp';
 export default class ScopesScopeAuthenticateRoute extends Route {
   // =services
 
+  @service store;
   @service session;
   @service clusterUrl;
   @service router;

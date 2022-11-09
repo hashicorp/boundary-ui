@@ -5,6 +5,7 @@ import { A } from '@ember/array';
 export default class ScopesScopeRoute extends Route {
   // =services
 
+  @service store;
   @service intl;
   @service session;
   @service scope;
