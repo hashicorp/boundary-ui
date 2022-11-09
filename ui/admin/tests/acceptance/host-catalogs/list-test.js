@@ -89,7 +89,9 @@ module('Acceptance | host-catalogs | list', function (hooks) {
         'host-catalogs'
       ].includes('create')
     );
-    assert.dom(`[href="${urls.hostCatalogs}"]`).doesNotExist();
+    assert
+      .dom(`nav:nth-child(2) a[href="${urls.hostCatalogs}"]`)
+      .doesNotExist();
   });
 
   test('user can navigate to index with only create action', async function (assert) {
@@ -116,7 +118,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
 
     await click(`[href="${urls.hostCatalogs}"]`);
 
-    assert.dom(`[href="${urls.hostCatalog}"]`).doesNotExist();
+    assert.dom(`nav:nth-child(2) a[href="${urls.hostCatalog}"]`).doesNotExist();
   });
 
   test('user can navigate to index with only list action', async function (assert) {
