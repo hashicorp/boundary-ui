@@ -11,7 +11,7 @@ $colors: (
   ui-cool-gray: #7c8797,
   ui-gray: #6f7682,
   purple: #5c4ee5,
-  cyan: #00bbff,
+  cyan: #0bf,
   teal: #25ba81,
   green: #2eb039,
   yellow: #fac402,
@@ -21,7 +21,6 @@ $colors: (
   black: rgb(0, 0, 0),
   white: rgb(255, 255, 255),
 ) !default;
-
 $color-values: (
   white: (
     500: map.get($colors, white),

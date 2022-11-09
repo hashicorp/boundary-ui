@@ -2,8 +2,13 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifyError, notifySuccess } from 'core/decorators/notify';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeWorkersNewRoute extends Route {
+  // =services
+
+  @service store;
+
   // =methods
 
   /**
