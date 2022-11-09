@@ -34,7 +34,19 @@
           {{#each @model.hostSets as |hostSet|}}
             <body.row as |row|>
               <row.headerCell>
-                {{hostSet.model.displayName}}
+                {{#if (can 'read host-set' hostSet.model)}}
+                  <LinkTo
+                    @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
+                    @models={{array
+                      hostSet.model.host_catalog_id
+                      hostSet.model.id
+                    }}
+                  >
+                    {{hostSet.model.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{hostSet.model.displayName}}
+                {{/if}}
                 <p>{{hostSet.model.description}}</p>
               </row.headerCell>
               <row.cell>
