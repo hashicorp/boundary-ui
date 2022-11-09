@@ -83,18 +83,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
   });
 
-  test('cannot navigate to credential stores tab without proper authorization', async function (assert) {
-    assert.expect(1);
-    await visit(urls.orgScope);
-    instances.scopes.project.authorized_collection_actions[
-      'credential-stores'
-    ] = [];
-
-    await click(`[href="${urls.projectScope}"]`);
-
-    assert.dom(`[href="${urls.credentialStores}"]`).doesNotExist();
-  });
-
   test('cannot navigate to a static credential store form without proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.projectScope);
