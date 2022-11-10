@@ -138,7 +138,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom('.rose-dialog').isVisible();
+    assert.dom('.rose-dialog').exists();
     await click('.rose-dialog-footer button:first-child', 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.hostCatalogs);
@@ -159,7 +159,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom('.rose-dialog').isVisible();
+    assert.dom('.rose-dialog').exists();
     await click('.rose-dialog-footer button:last-child', 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.hostCatalog);
