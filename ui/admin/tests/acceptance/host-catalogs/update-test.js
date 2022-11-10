@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -20,6 +20,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
       org: null,
       project: null,
     },
+    hostCatalog: null,
   };
   const urls = {
     globalScope: null,
@@ -27,7 +28,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     projectScope: null,
     hostCatalogs: null,
     hostCatalog: null,
-    newHostCatalog: null,
   };
 
   hooks.beforeEach(function () {
@@ -50,8 +50,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
-    urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
-    urls.newHostCatalog = `${urls.hostCatalogs}/new`;
     authenticateSession({});
   });
 
@@ -59,9 +57,11 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.expect(3);
     assert.notEqual(instances.hostCatalog.name, 'random string');
     await visit(urls.hostCatalog);
+
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
+
     assert.strictEqual(currentURL(), urls.hostCatalog);
     assert.strictEqual(
       this.server.schema.hostCatalogs.all().models[0].name,
@@ -71,22 +71,29 @@ module('Acceptance | host-catalogs | update', function (hooks) {
 
   test('cannot make changes to an existing host catalog without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
         (item) => item !== 'update'
       );
-    await visit(urls.hostCatalog);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+
+    await click(`[href="${urls.hostCatalog}"]`);
+
+    assert
+      .dom('.rose-layout-page-actions .rose-button-secondary')
+      .doesNotExist();
   });
 
-  test('can cancel changes to existing host catalog', async function (assert) {
+  test('clicking cancel in edit mode does not save changes', async function (assert) {
     assert.expect(2);
     await visit(urls.hostCatalog);
+
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await click('.rose-form-actions [type="button"]', 'Click Cancel');
+
     assert.notEqual(instances.hostCatalog.name, 'random string');
-    assert.strictEqual(find('[name="name"]').value, instances.hostCatalog.name);
+    assert.dom('[name="name"]').hasValue(instances.hostCatalog.name);
   });
 
   test('saving an existing host catalog with invalid fields displays error messages', async function (assert) {
@@ -110,18 +117,14 @@ module('Acceptance | host-catalogs | update', function (hooks) {
         }
       );
     });
+
     await visit(urls.hostCatalog);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
-    );
+
+    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert.dom('.rose-form-error-message').hasText('Name is required.');
   });
 
   test('can discard unsaved host catalog changes via dialog', async function (assert) {
@@ -130,41 +133,39 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     confirmService.enabled = true;
     assert.notEqual(instances.hostCatalog.name, 'random string');
     await visit(urls.hostCatalog);
+
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
-    try {
-      await visit(urls.hostCatalogs);
-    } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child');
-      assert.strictEqual(currentURL(), urls.hostCatalogs);
-      assert.notEqual(
-        this.server.schema.hostCatalogs.all().models[0].name,
-        'random string'
-      );
-    }
+    await click(`[href="${urls.hostCatalogs}"]`);
+    assert.dom('.rose-dialog').isVisible();
+    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
+    assert.notEqual(
+      this.server.schema.hostCatalogs.all().models[0].name,
+      'random string'
+    );
   });
 
-  test('can cancel discard unsaved host catalog changes via dialog', async function (assert) {
+  test('can click cancel on discard dialog box for unsaved host catalog changes', async function (assert) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.hostCatalog.name, 'random string');
     await visit(urls.hostCatalog);
+
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
-    try {
-      await visit(urls.hostCatalogs);
-    } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:last-child');
-      assert.strictEqual(currentURL(), urls.hostCatalog);
-      assert.notEqual(
-        this.server.schema.hostCatalogs.all().models[0].name,
-        'random string'
-      );
-    }
+    await click(`[href="${urls.hostCatalogs}"]`);
+    assert.dom('.rose-dialog').isVisible();
+    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+
+    assert.strictEqual(currentURL(), urls.hostCatalog);
+    assert.notEqual(
+      this.server.schema.hostCatalogs.all().models[0].name,
+      'random string'
+    );
   });
 });
