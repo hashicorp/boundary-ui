@@ -159,7 +159,6 @@
                 <Hds::Form::Select::Field
                   @value={{algorithm.value}}
                   @isInvalid={{@model.errors.attributes_signing_algorithms}}
-                  @width='100%'
                   disabled={{form.disabled}}
                   {{on
                     'change'
@@ -207,7 +206,6 @@
 
               <Hds::Form::Select::Field
                 @value={{this.newSigningAlgorithm}}
-                @width='100%'
                 disabled={{form.disabled}}
                 {{on
                   'change'
@@ -476,7 +474,6 @@
                 <Hds::Form::Select::Field
                   @value={{claimMap.to}}
                   @isInvalid={{@model.errors.attributes_account_claim_maps}}
-                  @width='100%'
                   disabled={{form.disabled}}
                   {{on
                     'change'
@@ -529,7 +526,6 @@
 
               <Hds::Form::Select::Field
                 @value={{this.newToClaim}}
-                @width='100%'
                 disabled={{form.disabled}}
                 {{on
                   'change'
