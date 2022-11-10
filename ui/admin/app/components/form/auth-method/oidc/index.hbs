@@ -155,22 +155,31 @@
           {{#each @model.attributes.signing_algorithms as |algorithm i|}}
             <body.row as |row|>
               <row.cell>
-                <form.select
+
+                <Hds::Form::Select::Field
                   @value={{algorithm.value}}
-                  @error={{@model.errors.attributes_signing_algorithms}}
-                  @contextual={{true}}
-                  @onChange={{fn (mut algorithm.value)}}
-                  as |field|
+                  @isInvalid={{@model.errors.attributes_signing_algorithms}}
+                  @width='100%'
+                  disabled={{form.disabled}}
+                  {{on
+                    'change'
+                    (action (mut algorithm.value) value='target.value')
+                  }}
+                  as |F|
                 >
-                  <field.label>{{t 'form.algorithm.label'}}</field.label>
-                  <field.field as |select|>
-                    {{#each this.signingAlgorithms as |algorithm|}}
-                      <select.option
-                        @value={{algorithm}}
-                      >{{algorithm}}</select.option>
+                  <F.Label class='sr-only'>{{t
+                      'form.algorithm.label'
+                    }}</F.Label>
+                  <F.Options>
+                    {{#each this.signingAlgorithms as |algorithmOption|}}
+                      <option
+                        value={{algorithmOption}}
+                        selected={{eq algorithmOption algorithm.value}}
+                      >{{algorithmOption}}</option>
                     {{/each}}
-                  </field.field>
-                </form.select>
+                  </F.Options>
+                </Hds::Form::Select::Field>
+
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
@@ -195,22 +204,30 @@
 
           <body.row as |row|>
             <row.cell>
-              <form.select
+
+              <Hds::Form::Select::Field
                 @value={{this.newSigningAlgorithm}}
-                @label={{t
-                  'resources.auth-method.titles.new-signing-algorithm'
+                @width='100%'
+                disabled={{form.disabled}}
+                {{on
+                  'change'
+                  (action (mut this.newSigningAlgorithm) value='target.value')
                 }}
-                @onChange={{fn (mut this.newSigningAlgorithm)}}
-                as |field|
+                as |F|
               >
-                <field.field as |select|>
-                  {{#each this.signingAlgorithms as |algorithm|}}
-                    <select.option
-                      @value={{algorithm}}
-                    >{{algorithm}}</select.option>
+                <F.Label class='sr-only'>{{t
+                    'resources.auth-method.titles.new-signing-algorithm'
+                  }}</F.Label>
+                <F.Options>
+                  {{#each this.signingAlgorithms as |algorithmOption|}}
+                    <option
+                      value={{algorithmOption}}
+                      selected={{eq algorithmOption this.newSigningAlgorithm}}
+                    >{{algorithmOption}}</option>
                   {{/each}}
-                </field.field>
-              </form.select>
+                </F.Options>
+              </Hds::Form::Select::Field>
+
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button
@@ -455,22 +472,29 @@
                 </form.input>
               </row.cell>
               <row.cell>
-                <form.select
+
+                <Hds::Form::Select::Field
                   @value={{claimMap.to}}
-                  @error={{@model.errors.attributes_account_claim_maps}}
-                  @contextual={{true}}
-                  @onChange={{fn (mut claimMap.to)}}
-                  as |field|
+                  @isInvalid={{@model.errors.attributes_account_claim_maps}}
+                  @width='100%'
+                  disabled={{form.disabled}}
+                  {{on
+                    'change'
+                    (action (mut claimMap.to) value='target.value')
+                  }}
+                  as |F|
                 >
-                  <field.label>{{t 'form.to_claim.label'}}</field.label>
-                  <field.field as |select|>
-                    {{#each this.toClaims as |toClaim|}}
-                      <select.option
-                        @value={{toClaim}}
-                      >{{toClaim}}</select.option>
+                  <F.Label class='sr-only'>{{t 'form.to_claim.label'}}</F.Label>
+                  <F.Options>
+                    {{#each this.toClaims as |toClaimOption|}}
+                      <option
+                        value={{toClaimOption}}
+                        selected={{eq toClaimOption claimMap.to}}
+                      >{{toClaimOption}}</option>
                     {{/each}}
-                  </field.field>
-                </form.select>
+                  </F.Options>
+                </Hds::Form::Select::Field>
+
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
@@ -502,20 +526,30 @@
               />
             </row.cell>
             <row.cell>
-              <form.select
+
+              <Hds::Form::Select::Field
                 @value={{this.newToClaim}}
-                @label={{t 'resources.auth-method.titles.new-to-claim'}}
-                @onChange={{fn (mut this.newToClaim)}}
-                as |field|
+                @width='100%'
+                disabled={{form.disabled}}
+                {{on
+                  'change'
+                  (action (mut this.newToClaim) value='target.value')
+                }}
+                as |F|
               >
-                <field.field as |select|>
-                  {{#each this.toClaims as |toClaim|}}
-                    <select.option
-                      @value={{toClaim}}
-                    >{{toClaim}}</select.option>
+                <F.Label class='sr-only'>{{t
+                    'resources.auth-method.titles.new-to-claim'
+                  }}</F.Label>
+                <F.Options>
+                  {{#each this.toClaims as |toClaimOption|}}
+                    <option
+                      value={{toClaimOption}}
+                      selected={{eq toClaimOption this.newToClaim}}
+                    >{{toClaimOption}}</option>
                   {{/each}}
-                </field.field>
-              </form.select>
+                </F.Options>
+              </Hds::Form::Select::Field>
+
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button
