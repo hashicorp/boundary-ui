@@ -50,6 +50,16 @@ module('Acceptance | targets | host-sources', function (hooks) {
       },
       'withChildren'
     );
+    // creates "unknown" host-sets for target host sources
+    instances.hostCatalogPlugin = this.server.create(
+      'host-catalog',
+      {
+        type: 'plugin',
+        plugin: { name: 'shh' },
+        scope: instances.scopes.project,
+      },
+      'withChildren'
+    );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
       hostSets: instances.hostCatalog.hostSets,
@@ -62,6 +72,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetHostSources = `${urls.target}/host-sources`;
     urls.targetAddHostSources = `${urls.target}/add-host-sources`;
+    urls.hostSet = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostCatalog.hostSetIds[0]}`;
+    urls.unknownHostSet = `${urls.projectScope}/host-catalogs/${instances.hostCatalogPlugin.id}/host-sets/${instances.hostCatalogPlugin.hostSetIds[0]}`;
     authenticateSession({});
   });
 
@@ -73,6 +85,30 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.strictEqual(currentURL(), urls.targetHostSources);
     assert.ok(targetHostSetCount);
     assert.strictEqual(findAll('tbody tr').length, targetHostSetCount);
+  });
+
+  test('can navigate to a known host set type', async function (assert) {
+    assert.expect(1);
+    await visit(urls.targetHostSources);
+    await click(
+      `main tbody .rose-table-header-cell:nth-child(1) a[href="${urls.hostSet}"]`
+    );
+    await a11yAudit();
+    assert.strictEqual(currentURL(), urls.hostSet);
+  });
+
+  test('cannot navigate to an unknown host set type', async function (assert) {
+    assert.expect(1);
+    instances.target.update({
+      hostSets: instances.hostCatalogPlugin.hostSets,
+    });
+
+    await visit(urls.targetHostSources);
+    assert
+      .dom(
+        `main tbody .rose-table-header-cell:nth-child(1) a [href="${urls.unknownHostSet}"]`
+      )
+      .doesNotExist();
   });
 
   test('can remove a host set', async function (assert) {
