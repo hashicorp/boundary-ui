@@ -35,7 +35,7 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
     await render(hbs`{{relative-datetime-live this.date}}`);
     assert.dom(this.element).hasText('23 years ago');
 
-    this.date = now + 8 * 31 * 24 * 60 * 60 * 1000;
+    this.date = now + 8 * 30 * 24 * 60 * 60 * 1000;
     await render(hbs`{{relative-datetime-live this.date}}`);
     assert.dom(this.element).hasText('in 7 months');
 

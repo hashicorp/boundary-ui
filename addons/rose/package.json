@@ -46,7 +46,6 @@
     "ember-named-blocks-polyfill": "^0.2.5",
     "ember-radio-button": "github:yapplabs/ember-radio-button.git#b2ab65f",
     "ember-uuid": "^2.1.0",
-    "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774",
     "sass": "^1.55.0"
   },
   "devDependencies": {

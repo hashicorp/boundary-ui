@@ -42,14 +42,24 @@ module('Integration | Component | rose/form', function (hooks) {
       >
         <form.input @label="Input" @name="input-field" />
         <form.textarea @label="Textarea" @name="textarea-field" />
-        <form.select
-          @label="Select"
-          @name="select-field"
-          @onChange={{this.select}}
-          as |field|
+
+        <Hds::Form::Select::Field
+          @isInvalid={{false}}
+          disabled={{form.disabled}}
+          name='select-field'
+          {{on 'change' (set-from-event this 'selectedValue')}}
+          as |F|
         >
-          <field.field />
-        </form.select>
+          <F.Label>Select</F.Label>
+          <F.HelperText>Helper text</F.HelperText>
+          <F.Options>
+            <option>Choose an option</option>
+            <option value='value-1'>Value 1</option>
+            <option value='value-2'>Value 2</option>
+            <option value='value-3'>Value 3</option>
+          </F.Options>
+        </Hds::Form::Select::Field>
+
         <form.checkbox @label="Checkbox" @name="checkbox-field" />
         <form.radioGroup @name="radio-group-field" @selectedValue="green" as |radioGroup|>
           <radioGroup.radio

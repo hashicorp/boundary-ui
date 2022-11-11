@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -20,14 +20,16 @@ module('Acceptance | targets | read', function (hooks) {
       org: null,
       project: null,
     },
+    sshTarget: null,
+    tcpTarget: null,
   };
   const urls = {
     globalScope: null,
     orgScope: null,
     projectScope: null,
     targets: null,
-    target: null,
-    newTarget: null,
+    sshTarget: null,
+    tcpTarget: null,
   };
 
   hooks.beforeEach(function () {
@@ -41,7 +43,12 @@ module('Acceptance | targets | read', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.target = this.server.create('target', {
+    instances.sshTarget = this.server.create('target', {
+      type: 'ssh',
+      scope: instances.scopes.project,
+    });
+    instances.tcpTarget = this.server.create('target', {
+      type: 'tcp',
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
@@ -49,35 +56,79 @@ module('Acceptance | targets | read', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
-    urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
+    urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
-    urls.newTarget = `${urls.targets}/new`;
-    // Generate resource couner
+
     authenticateSession({});
   });
 
-  test('visiting targets', async function (assert) {
+  test('visiting ssh target', async function (assert) {
     assert.expect(2);
     await visit(urls.targets);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.targets);
-    await visit(urls.target);
+
+    await click(`[href="${urls.sshTarget}"]`);
     await a11yAudit();
-    assert.strictEqual(currentURL(), urls.target);
+
+    assert.strictEqual(currentURL(), urls.sshTarget);
   });
 
-  test('cannot navigate to target form without proper authorization', async function (assert) {
-    assert.expect(1);
-    instances.target.authorized_actions =
-      instances.target.authorized_actions.filter((item) => item !== 'read');
-    await visit(urls.target);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+  test('visiting tcp target', async function (assert) {
+    assert.expect(2);
+    await visit(urls.targets);
+    assert.strictEqual(currentURL(), urls.targets);
+
+    await click(`[href="${urls.tcpTarget}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.tcpTarget);
+  });
+
+  test('cannot navigate to a ssh target form without proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.projectScope);
+    instances.sshTarget.authorized_actions =
+      instances.sshTarget.authorized_actions.filter((item) => item !== 'read');
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.dom(`[href="${urls.sshTarget}"]`).doesNotExist();
+    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
+  });
+
+  test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.projectScope);
+    instances.tcpTarget.authorized_actions =
+      instances.tcpTarget.authorized_actions.filter((item) => item !== 'read');
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
+    assert.dom(`[href="${urls.sshTarget}"]`).exists();
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
+    await visit(urls.targets);
+    assert.dom(`[href="${urls.unknownTarget}"]`).doesNotExist();
+
     await visit(urls.unknownTarget);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+
+    assert.dom('.rose-message-subtitle').hasText('Error 404');
+  });
+
+  test('users can link to docs page for target', async function (assert) {
+    assert.expect(1);
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert
+      .dom(`[href="https://boundaryproject.io/help/admin-ui/targets"]`)
+      .exists();
   });
 });
