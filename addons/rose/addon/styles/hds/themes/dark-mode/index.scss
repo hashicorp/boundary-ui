@@ -36,8 +36,7 @@
   --token-color-palette-red-200: #c00005;
   --token-color-palette-red-100: #940004;
   --token-color-palette-red-50: #51130a;
-
-  --token-color-palette-neutral-700: #ffffff;
+  --token-color-palette-neutral-700: #fff;
   --token-color-palette-neutral-600: #fafafa;
   --token-color-palette-neutral-500: #f1f2f3;
   --token-color-palette-neutral-400: #dedfe3;
@@ -46,7 +45,6 @@
   --token-color-palette-neutral-100: #656a76;
   --token-color-palette-neutral-50: #3b3d45;
   --token-color-palette-neutral-0: #0c0c0e;
-
   --token-color-palette-alpha-300: #fafafa66;
   --token-color-palette-alpha-200: #dedfe333;
   --token-color-palette-alpha-100: #dedfe31a;
@@ -65,12 +63,22 @@
 
   // Tier 2 (HDS dark mode overrides)
   // These mappings improve contrast as needed in dark mode.
-  --token-color-foreground-highlight-on-surface: var(--token-color-palette-purple-400);
-  --token-color-foreground-success-on-surface: var(--token-color-palette-green-400);
-  --token-color-foreground-warning-on-surface: var(--token-color-palette-amber-400);
-  --token-color-foreground-critical-on-surface: var(--token-color-palette-red-400);
+  --token-color-foreground-highlight-on-surface: var(
+    --token-color-palette-purple-400
+  );
+  --token-color-foreground-success-on-surface: var(
+    --token-color-palette-green-400
+  );
+  --token-color-foreground-warning-on-surface: var(
+    --token-color-palette-amber-400
+  );
+  --token-color-foreground-critical-on-surface: var(
+    --token-color-palette-red-400
+  );
   --token-color-surface-strong: var(--token-color-palette-neutral-50);
-  --token-form-control-base-border-color-default: var(--token-color-palette-neutral-200);
+  --token-form-control-base-border-color-default: var(
+    --token-color-palette-neutral-200
+  );
 }
 
 // HDS Light Mode
