@@ -236,7 +236,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         (item) => item !== 'add-credential-sources'
       );
     await visit(urls.brokeredCredentialSources);
-    assert.dom(`[href="${urls.addBrokeredCredentialSources}"]`).doesNotExist();
+    assert
+      .dom(
+        `.rose-dropdown-content a[href="${urls.addBrokeredCredentialSources}"]`
+      )
+      .doesNotExist();
   });
 
   test('can select and cancel credential sources to add', async function (assert) {

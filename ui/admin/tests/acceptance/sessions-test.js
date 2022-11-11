@@ -94,7 +94,8 @@ module('Acceptance | sessions', function (hooks) {
         'list'
       )
     );
-    assert.dom(`[href="${urls.sessions}"]`).doesNotExist();
+
+    assert.dom(`nav:nth-child(2) a[href="${urls.sessions}"]`).doesNotExist();
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {

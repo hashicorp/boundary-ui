@@ -93,7 +93,9 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     await click(`[href="${urls.credentialStores}"]`);
 
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).doesNotExist();
+    assert
+      .dom(`.rose-table a[href="${urls.staticCredentialStore}"]`)
+      .doesNotExist();
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
   });
 
@@ -107,14 +109,18 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     await click(`[href="${urls.credentialStores}"]`);
 
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
+    assert
+      .dom(`.rose-table a[href="${urls.vaultCredentialStore}"]`)
+      .doesNotExist();
     assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
   });
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
     assert.expect(2);
     await visit(urls.credentialStores);
-    assert.dom(`[href="${urls.unknownCredentialStore}"]`).doesNotExist();
+    assert
+      .dom(`.rose-table a[href="${urls.unknownCredentialStore}"]`)
+      .doesNotExist();
 
     await visit(urls.unknownCredentialStore);
     await a11yAudit();

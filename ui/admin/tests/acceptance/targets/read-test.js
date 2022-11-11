@@ -94,7 +94,7 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom(`[href="${urls.sshTarget}"]`).doesNotExist();
+    assert.dom(`.rose-table a[href="${urls.sshTarget}"]`).doesNotExist();
     assert.dom(`[href="${urls.tcpTarget}"]`).exists();
   });
 
@@ -106,14 +106,14 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
+    assert.dom(`.rose-table a[href="${urls.tcpTarget}"]`).doesNotExist();
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
     assert.expect(2);
     await visit(urls.targets);
-    assert.dom(`[href="${urls.unknownTarget}"]`).doesNotExist();
+    assert.dom(`.rose-table a[href="${urls.unknownTarget}"]`).doesNotExist();
 
     await visit(urls.unknownTarget);
     await a11yAudit();
