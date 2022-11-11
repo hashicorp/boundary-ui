@@ -141,3 +141,11 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+// the following line is a custom addition to satisfy HDS
+// https://github.com/hashicorp/design-system/tree/main/packages/components
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
