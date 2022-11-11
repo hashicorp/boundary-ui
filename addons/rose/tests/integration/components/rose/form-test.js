@@ -47,7 +47,7 @@ module('Integration | Component | rose/form', function (hooks) {
           @isInvalid={{false}}
           disabled={{form.disabled}}
           name='select-field'
-          {{on 'change' (action (fn this.select) value='target.value')}}
+          {{on 'change' (set-from-event this 'selectedValue')}}
           as |F|
         >
           <F.Label>Select</F.Label>

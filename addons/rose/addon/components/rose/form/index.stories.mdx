@@ -23,7 +23,7 @@ export const Template = (args) => ({
           @value={{selectedValue}}
           @isInvalid={{false}}
           disabled={{form.disabled}}
-          {{on 'change' (action (fn selectChange) value='target.value')}}
+          {{on 'change' (fn selectChange)}}
           as |F|
         >
           <F.Label>Label</F.Label>
@@ -84,7 +84,7 @@ export const Template = (args) => ({
     @value={{selectedValue}}
     @isInvalid={{false}}
     disabled={{form.disabled}}
-    {{on 'change' (action (mut selectedValue) value='target.value')}}
+    {{on 'change' (set-from-event this 'selectedValue')}}
     as |F|
   >
     <F.Label>Label</F.Label>

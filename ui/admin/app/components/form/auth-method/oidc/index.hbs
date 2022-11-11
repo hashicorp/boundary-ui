@@ -160,10 +160,7 @@
                   @value={{algorithm.value}}
                   @isInvalid={{@model.errors.attributes_signing_algorithms}}
                   disabled={{form.disabled}}
-                  {{on
-                    'change'
-                    (action (mut algorithm.value) value='target.value')
-                  }}
+                  {{on 'change' (set-from-event algorithm 'value')}}
                   as |F|
                 >
                   <F.Label class='sr-only'>{{t
@@ -207,10 +204,7 @@
               <Hds::Form::Select::Field
                 @value={{this.newSigningAlgorithm}}
                 disabled={{form.disabled}}
-                {{on
-                  'change'
-                  (action (mut this.newSigningAlgorithm) value='target.value')
-                }}
+                {{on 'change' (set-from-event this 'newSigningAlgorithm')}}
                 as |F|
               >
                 <F.Label class='sr-only'>{{t
@@ -475,10 +469,7 @@
                   @value={{claimMap.to}}
                   @isInvalid={{@model.errors.attributes_account_claim_maps}}
                   disabled={{form.disabled}}
-                  {{on
-                    'change'
-                    (action (mut claimMap.to) value='target.value')
-                  }}
+                  {{on 'change' (set-from-event claimMap 'to')}}
                   as |F|
                 >
                   <F.Label class='sr-only'>{{t 'form.to_claim.label'}}</F.Label>
@@ -527,10 +518,7 @@
               <Hds::Form::Select::Field
                 @value={{this.newToClaim}}
                 disabled={{form.disabled}}
-                {{on
-                  'change'
-                  (action (mut this.newToClaim) value='target.value')
-                }}
+                {{on 'change' (set-from-event this 'newToClaim')}}
                 as |F|
               >
                 <F.Label class='sr-only'>{{t

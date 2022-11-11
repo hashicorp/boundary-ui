@@ -14,7 +14,7 @@ Rose/Form/Select has been removed in favor of
   @isInvalid={{false}}
   disabled={{false}}
   name='select_name'
-  {{on 'change' (action (mut this.selectedValue) value='target.value')}}
+  {{on 'change' (set-from-event this 'selectedValue')}}
   as |F|
 >
   <F.Label>Color</F.Label>
@@ -35,7 +35,7 @@ export const Template = (args) => ({
         @isInvalid={{error}}
         disabled={{disabled}}
         name={{name}}
-        {{on 'change' (action (mut value) value='target.value')}}
+        {{on 'change' (set-from-event this 'value')}}
         as |F|
       >
         <F.Label>{{label}}</F.Label>
