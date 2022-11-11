@@ -1,0 +1,101 @@
+@import 'color-tokens-tier-2';
+
+// HDS Dark Mode
+// This theme reverses the lightness order of shades per color for tier-1
+// color tokens.  It also provides custom tier-2 mapping overrides that
+// look better in dark mode.
+@mixin dark-mode {
+  // Tier-1 (HDS)
+  --token-color-palette-blue-500: #f2f8ff;
+  --token-color-palette-blue-400: #cce3fe;
+  --token-color-palette-blue-300: #1060ff;
+  --token-color-palette-blue-200: #0c56e9;
+  --token-color-palette-blue-100: #0046d1;
+  --token-color-palette-blue-50: #1c345f;
+  --token-color-palette-purple-500: #f9f2ff;
+  --token-color-palette-purple-400: #ead2fe;
+  --token-color-palette-purple-300: #a737ff;
+  --token-color-palette-purple-200: #911ced;
+  --token-color-palette-purple-100: #7b00db;
+  --token-color-palette-purple-50: #42215b;
+  --token-color-palette-green-500: #f2fbf6;
+  --token-color-palette-green-400: #cceeda;
+  --token-color-palette-green-300: #008a22;
+  --token-color-palette-green-200: #00781e;
+  --token-color-palette-green-100: #006619;
+  --token-color-palette-green-50: #054220;
+  --token-color-palette-amber-500: #fff9e8;
+  --token-color-palette-amber-400: #fbeabf;
+  --token-color-palette-amber-300: #bb5a00;
+  --token-color-palette-amber-200: #9e4b00;
+  --token-color-palette-amber-100: #803d00;
+  --token-color-palette-amber-50: #542800;
+  --token-color-palette-red-500: #fff5f5;
+  --token-color-palette-red-400: #fbd4d4;
+  --token-color-palette-red-300: #e52228;
+  --token-color-palette-red-200: #c00005;
+  --token-color-palette-red-100: #940004;
+  --token-color-palette-red-50: #51130a;
+
+  --token-color-palette-neutral-700: #ffffff;
+  --token-color-palette-neutral-600: #fafafa;
+  --token-color-palette-neutral-500: #f1f2f3;
+  --token-color-palette-neutral-400: #dedfe3;
+  --token-color-palette-neutral-300: #c2c5cb;
+  --token-color-palette-neutral-200: #8c909c;
+  --token-color-palette-neutral-100: #656a76;
+  --token-color-palette-neutral-50: #3b3d45;
+  --token-color-palette-neutral-0: #0c0c0e;
+
+  --token-color-palette-alpha-300: #fafafa66;
+  --token-color-palette-alpha-200: #dedfe333;
+  --token-color-palette-alpha-100: #dedfe31a;
+
+  // Tier-1 (Boundary custom)
+  // Boundary custom first-tier color tokens with alpha.
+  // In HDS, these correspond to the named color token,
+  // with the alpha identifier.  However, they do not have stand-alone tokens
+  // associated with them and appear hard-coded alongside other styles.
+  // They are pulled out here for easier theming.
+  --token-color-palette-neutral-600-alpha-200: #fafafa59;
+  --token-color-palette-neutral-600-alpha-100: #fafafa40;
+  --token-color-palette-neutral-500-alpha-200: #f1f2f340;
+  --token-color-palette-neutral-500-alpha-100: #f1f2f326;
+  --token-color-palette-neutral-500-alpha-50: #f1f2f30d;
+
+  // Tier 2 (HDS dark mode overrides)
+  // These mappings improve contrast as needed in dark mode.
+  --token-color-foreground-highlight-on-surface: var(--token-color-palette-purple-400);
+  --token-color-foreground-success-on-surface: var(--token-color-palette-green-400);
+  --token-color-foreground-warning-on-surface: var(--token-color-palette-amber-400);
+  --token-color-foreground-critical-on-surface: var(--token-color-palette-red-400);
+  --token-color-surface-strong: var(--token-color-palette-neutral-50);
+  --token-form-control-base-border-color-default: var(--token-color-palette-neutral-200);
+}
+
+// HDS Light Mode
+// This is the default HDS color theme.  Only Boundary custom tokens
+// are included here for completeness.
+@mixin light-mode {
+  // Tier-1 (Boundary custom)
+  // Boundary custom first-tier color tokens with alpha.
+  // In HDS, these correspond to the named color token,
+  // with the alpha identifier.  However, they do not have stand-alone tokens
+  // associated with them and appear hard-coded alongside other styles.
+  // They are pulled out here for easier theming.
+  --token-color-palette-neutral-600-alpha-200: #3b3d4559;
+  --token-color-palette-neutral-600-alpha-100: #3b3d4540;
+  --token-color-palette-neutral-500-alpha-200: #656a7640;
+  --token-color-palette-neutral-500-alpha-100: #656a7626;
+  --token-color-palette-neutral-500-alpha-50: #656a760d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ember-application:not(.rose-theme-light) {
+    @include dark-mode;
+  }
+}
+
+.ember-application.rose-theme-dark {
+  @include dark-mode;
+}
