@@ -5,6 +5,8 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 
+export const statusTypes = ['active', 'pending', 'canceling', 'terminated'];
+
 /**
  *
  */
@@ -98,6 +100,14 @@ export default class SessionModel extends GeneratedSessionModel {
 
   @equal('status', 'active') isActive;
   @equal('status', 'pending') isPending;
+
+  /**
+   * True if status is an unknown string.
+   * @type {boolean}
+   */
+  get isUnknownStatus() {
+    return !statusTypes.includes(this.status);
+  }
 
   /**
    * @type {boolean}
