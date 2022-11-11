@@ -62,6 +62,14 @@
   --token-color-palette-neutral-500-alpha-200: #f1f2f340;
   --token-color-palette-neutral-500-alpha-100: #f1f2f326;
   --token-color-palette-neutral-500-alpha-50: #f1f2f30d;
+
+  // Tier 2 (HDS dark mode overrides)
+  // These mappings improve contrast as needed in dark mode.
+  --token-color-foreground-highlight-on-surface: var(--token-color-palette-purple-400);
+  --token-color-foreground-success-on-surface: var(--token-color-palette-green-400);
+  --token-color-foreground-warning-on-surface: var(--token-color-palette-amber-400);
+  --token-color-foreground-critical-on-surface: var(--token-color-palette-red-400);
+  --token-color-surface-strong: var(--token-color-palette-neutral-50);
 }
 
 // HDS Light Mode
