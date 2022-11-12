@@ -2,9 +2,7 @@
   {{@model.displayName}}
   {{#if @model.isActive}}
     &nbsp;
-    <Rose::Badge @style='success'>
-      {{t 'states.active'}}
-    </Rose::Badge>
+    <Hds::Badge @color='success' @text={{t 'states.active'}} />
   {{/if}}
 </h2>
 <p>{{@model.description}}</p>
