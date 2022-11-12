@@ -3,9 +3,45 @@ import { hbs } from 'ember-cli-htmlbars';
 
 <Meta title="Rose/Badge" component="Badge" />
 
+# HDS Badge (Recommended)
+
+> **_NOTE:_** Replaces the deprecated Rose/Badge.
+
+```handlebars
+<Hds::Badge @text='Success badge' @color='neutral' />
+```
+
+Refer to the [HDS Badge documentation](https://design-system-components-hashicorp.vercel.app/components/badge) for a complete overview
+
+export const HDSTemplate = (args) => ({
+  template: hbs`<Hds::Badge @text={{text}}
+      @color={{color}}
+      />`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Hds Badge"
+    args={{
+      text: 'Badge',
+    }}
+    argTypes={{
+      color: {
+        control: 'select',
+        options: ['success', 'warning', 'critical', 'highlight'],
+      },
+    }}
+  >
+    {HDSTemplate.bind({})}
+  </Story>
+</Preview>
+
 # Rose Badge (Deprecated)
 
 Rose/Badge has been deprecated in favor of [HDS::Badge](https://design-system-components-hashicorp.vercel.app/components/badge)
+
+### <Rose::Badge> usage:
 
 A badge component that supports icons and predefined styles.
 When style definition isn't supplied, a default style will be supplied.
@@ -30,7 +66,7 @@ export const Template = (args) => ({
 
 <Preview>
   <Story
-    name="Test"
+    name="Rose Badge"
     args={{
       text: 'Badge',
       style: 'none',
@@ -62,7 +98,7 @@ export const Template = (args) => ({
 </Preview>
 
 <Preview>
-  <Story name="Style legend">
+  <Story name="Rose Badge Style legend">
     {{
       template: hbs`
     <Rose::Badge>default style</Rose::Badge>
@@ -81,37 +117,5 @@ export const Template = (args) => ({
     <Rose::Badge @style="warning-outline">warning-outline</Rose::Badge>
     `,
     }}
-  </Story>
-</Preview>
-
-# HDS Badge (Recommended)
-
-```handlebars
-<Hds::Badge @text='Success badge' @color='neutral' />
-```
-
-Refer the [HDS Badge documentation](https://design-system-components-hashicorp.vercel.app/components/badge) for a complete overview
-
-export const HDSTemplate = (args) => ({
-  template: hbs`<Hds::Badge @text={{text}}
-      @color={{color}}
-      />`,
-  context: args,
-});
-
-<Preview>
-  <Story
-    name="Hds Badge"
-    args={{
-      text: 'Badge',
-    }}
-    argTypes={{
-      color: {
-        control: 'select',
-        options: ['success', 'warning', 'critical', 'highlight'],
-      },
-    }}
-  >
-    {HDSTemplate.bind({})}
   </Story>
 </Preview>
