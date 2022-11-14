@@ -1,9 +1,8 @@
 import { registerDeprecationHandler } from '@ember/debug';
 
 export function initialize() {
-  registerDeprecationHandler((message) => {
-    console.warn(message);
-    return;
+  registerDeprecationHandler((message, options, next) => {
+    next(message, options);
   });
 }
 
