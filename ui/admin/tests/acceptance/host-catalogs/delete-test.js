@@ -1,10 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, find, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { resolve, reject } from 'rsvp';
-import sinon from 'sinon';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -24,6 +22,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
       org: null,
       project: null,
     },
+    hostCatalog: null,
   };
   const urls = {
     globalScope: null,
@@ -31,7 +30,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     projectScope: null,
     hostCatalogs: null,
     hostCatalog: null,
-    newHostCatalog: null,
   };
 
   hooks.beforeEach(function () {
@@ -54,8 +52,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
-    urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
-    urls.newHostCatalog = `${urls.hostCatalogs}/new`;
     // Generate resource couner
     gethostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
@@ -64,50 +60,64 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
 
   test('can delete host catalog', async function (assert) {
     assert.expect(1);
-    const count = gethostCatalogCount();
-    await visit(urls.hostCatalog);
+    const hostCatalogCount = gethostCatalogCount();
+
+    await visit(urls.hostCatalogs);
+    await click(`[href="${urls.hostCatalog}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(gethostCatalogCount(), count - 1);
+
+    assert.strictEqual(gethostCatalogCount(), hostCatalogCount - 1);
   });
 
   test('cannot delete host catalog without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
         (item) => item !== 'delete'
       );
-    await visit(urls.hostCatalog);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
-    );
+
+    await click(`[href="${urls.hostCatalog}"]`);
+
+    assert
+      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+      .doesNotExist();
   });
 
   test('can accept delete host catalog via dialog', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    confirmService.confirm = sinon.fake.returns(resolve());
-    const count = gethostCatalogCount();
-    await visit(urls.hostCatalog);
+    const hostCatalogCount = gethostCatalogCount();
+    await visit(urls.hostCatalogs);
+
+    await click(`[href="${urls.hostCatalog}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(gethostCatalogCount(), count - 1);
-    assert.ok(confirmService.confirm.calledOnce);
+    await click('.rose-dialog .rose-button-primary');
+
+    assert.dom('.rose-notification-body').hasText('Deleted successfully.');
+    assert.strictEqual(gethostCatalogCount(), hostCatalogCount - 1);
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
   });
 
-  test('cannot cancel delete host catalog via dialog', async function (assert) {
+  test('can cancel delete host catalog via dialog', async function (assert) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    confirmService.confirm = sinon.fake.returns(reject());
-    const count = gethostCatalogCount();
-    await visit(urls.hostCatalog);
+    const hostCatalogCount = gethostCatalogCount();
+    await visit(urls.hostCatalogs);
+
+    await click(`[href="${urls.hostCatalog}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(gethostCatalogCount(), count);
-    assert.ok(confirmService.confirm.calledOnce);
+    await click('.rose-dialog .rose-button-secondary');
+
+    assert.strictEqual(gethostCatalogCount(), hostCatalogCount);
+    assert.strictEqual(currentURL(), urls.hostCatalog);
   });
 
   test('deleting a host catalog which errors displays error messages', async function (assert) {
     assert.expect(1);
+    await visit(urls.hostCatalogs);
     this.server.del('/host-catalogs/:id', () => {
       return new Response(
         490,
@@ -119,8 +129,10 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
         }
       );
     });
-    await visit(urls.hostCatalog);
+
+    await click(`[href="${urls.hostCatalog}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+
+    assert.dom('.rose-notification-body').hasText('Oops.');
   });
 });
