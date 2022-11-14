@@ -143,7 +143,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.notEqual(
-      this.server.schema.hostCatalogs.all().models[0].name,
+      this.server.schema.hostCatalogs.first().name,
       'random string'
     );
   });
