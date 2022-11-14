@@ -6,43 +6,33 @@
   as |form|
 >
 
-  <form.input
-    @name='currentPassword'
-    @type='password'
+  <Hds::Form::TextInput::Field
+    @isOptional={{false}}
+    @isRequired={{true}}
     @value={{this.currentPassword}}
-    @label={{t 'form.current_password.label'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
+    type='password'
+    name='currentPassword'
     autocomplete='current-password'
-    as |field|
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event this 'currentPassword')}}
+    as |F|
   >
-    {{#if @model.errors.name}}
-      <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
+    <F.Label>{{t 'form.current_password.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='newPassword'
-    @type='password'
+  <Hds::Form::TextInput::Field
+    @isOptional={{false}}
+    @isRequired={{true}}
     @value={{this.newPassword}}
-    @label={{t 'form.new_password.label'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
+    type='password'
+    name='newPassword'
     autocomplete='new-password'
-    as |field|
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event this 'newPassword')}}
+    as |F|
   >
-    {{#if @model.errors.name}}
-      <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
+    <F.Label>{{t 'form.new_password.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
 
   <form.actions
     @submitDisabled={{this.cannotSave}}
