@@ -10,10 +10,10 @@ export default class RoseBadgeComponent extends Component {
       false,
       {
         id: 'rose.deprecation-badge',
-        until: '4.0.0',
+        until: '4.8.0',
         for: 'rose',
         since: {
-          enabled: '3.0.0',
+          enabled: '3.28.8',
         },
       }
     );
