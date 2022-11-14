@@ -128,9 +128,11 @@
                 <p>{{authMethod.description}}</p>
               </row.headerCell>
               <row.cell>
-                <Rose::Badge>
-                  {{t (concat 'resources.auth-method.types.' authMethod.type)}}
-                </Rose::Badge>
+                <Hds::Badge
+                  @text={{t
+                    (concat 'resources.auth-method.types.' authMethod.type)
+                  }}
+                />
               </row.cell>
               <row.cell>
                 <Copyable
@@ -143,9 +145,7 @@
               </row.cell>
               <row.cell>
                 {{#if authMethod.isPrimary}}
-                  <Rose::Badge @style='success-outline'>
-                    {{t 'states.primary'}}
-                  </Rose::Badge>
+                  <Hds::Badge @text={{t 'states.primary'}} @color='success' />
                 {{/if}}
               </row.cell>
               <row.cell>

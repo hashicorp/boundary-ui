@@ -19,19 +19,22 @@ export const Template = (args) => ({
       >
         <form.input @label='Label' @helperText='Helper text' @value='Text' />
         <form.textarea @label='Label' @helperText='Helper text' @value='Text' />
-        <form.select
-          @label='Label'
-          @helperText='Helper text'
-          @onChange={{selectChange}}
-          as |field|
+        <Hds::Form::Select::Field
+          @value={{selectedValue}}
+          @isInvalid={{false}}
+          disabled={{form.disabled}}
+          {{on 'change' (fn selectChange)}}
+          as |F|
         >
-          <field.field as |select|>
-            <select.option>Choose an option</select.option>
-            <select.option @value='value-1'>Value 1</select.option>
-            <select.option @value='value-2'>Value 2</select.option>
-            <select.option @value='value-3'>Value 3</select.option>
-          </field.field>
-        </form.select>
+          <F.Label>Label</F.Label>
+          <F.HelperText>Helper text</F.HelperText>
+          <F.Options>
+            <option>Choose an option</option>
+            <option value='value-1' selected={{eq value 'value-1'}}>Value 1</option>
+            <option value='value-2' selected={{eq value 'value-2'}}>Value 2</option>
+            <option value='value-3' selected={{eq value 'value-3'}}>Value 3</option>
+          </F.Options>
+        </Hds::Form::Select::Field>
         <form.radioGroup @name='color' @selectedValue='green' as |radioGroup|>
           <radioGroup.radio @label='Red' @value='red' />
           <radioGroup.radio @label='Green' @value='green' />
@@ -76,19 +79,24 @@ export const Template = (args) => ({
 >
   <form.input @label='Label' @helperText='Helper text' @value='Text' />
   <form.textarea @label='Label' @helperText='Helper text' @value='Text' />
-  <form.select
-    @label='Label'
-    @helperText='Helper text'
-    @onChange={{fn this.actionHandler}}
-    as |field|
+
+  <Hds::Form::Select::Field
+    @value={{selectedValue}}
+    @isInvalid={{false}}
+    disabled={{form.disabled}}
+    {{on 'change' (set-from-event this 'selectedValue')}}
+    as |F|
   >
-    <field.field as |select|>
-      <select.option>Choose an option</select.option>
-      <select.option @value='value-1'>Value 1</select.option>
-      <select.option @value='value-2'>Value 2</select.option>
-      <select.option @value='value-3'>Value 3</select.option>
-    </field.field>
-  </form.select>
+    <F.Label>Label</F.Label>
+    <F.HelperText>Helper text</F.HelperText>
+    <F.Options>
+      <option>Choose an option</option>
+      <option value='value-1' selected={{eq value 'value-1'}}>Value 1</option>
+      <option value='value-2' selected={{eq value 'value-2'}}>Value 2</option>
+      <option value='value-3' selected={{eq value 'value-3'}}>Value 3</option>
+    </F.Options>
+  </Hds::Form::Select::Field>
+
   <form.radioGroup @name='color' @selectedValue='green' as |radioGroup|>
     <radioGroup.radio @label='Red' @value='red' />
     <radioGroup.radio @label='Green' @value='green' />
