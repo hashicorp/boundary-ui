@@ -1,50 +1,52 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 
-<Meta title="Rose/Form/Select" component="Form/Select" />
+<Meta title="Rose/Form/Select (removed)" component="Form/Select" />
 
-# Form Select
+# Select (removed)
 
-Renders a form select element.
+Rose/Form/Select has been removed in favor of
+[HDS::Form::Select](https://design-system-components-hashicorp.vercel.app/components/form/select).
 
 ```handlebars
-<Rose::Form::Select
-  @name='select-name'
-  @value='green'
-  @label='Color'
-  @helperText='Set your desired color'
-  @disabled={{false}}
-  @error={{false}}
-  as |field|
+<Hds::Form::Select::Field
+  @value={{this.selectedValue}}
+  @isInvalid={{false}}
+  disabled={{false}}
+  name='select_name'
+  {{on 'change' (set-from-event this 'selectedValue')}}
+  as |F|
 >
-  <field.field as |select|>
-    <select.option>Choose a color</select.option>
-    <select.option @value='red'>Red</select.option>
-    <select.option @value='green'>Green</select.option>
-    <select.option @value='blue'>Blue</select.option>
-  </field.field>
-</Rose::Form::Select>
+  <F.Label>Color</F.Label>
+  <F.HelperText>Set your desired color</F.Label>
+  <F.Options>
+    <option>Choose a color</option>
+    <option value='red' selected={{eq this.selectedValue 'red'}}>Red</option>
+    <option value='green' selected={{eq this.selectedValue 'green'}}>Green</option>
+    <option value='blue' selected={{eq this.selectedValue 'blue'}}>Blue</option>
+  </F.Options>
+</Hds::Form::Select::Field>
 ```
 
 export const Template = (args) => ({
   template: hbs`
-      <Rose::Form::Select
-        @name={{name}}
+      <Hds::Form::Select::Field
         @value={{value}}
-        @label={{label}}
-        @helperText={{helperText}}
-        @disabled={{disabled}}
-        @error={{false}}
-        @onChange={{fn onChange}}
-        as |field|
+        @isInvalid={{error}}
+        disabled={{disabled}}
+        name={{name}}
+        {{on 'change' (set-from-event this 'value')}}
+        as |F|
       >
-        <field.field as |select|>
-          <select.option>Choose an option</select.option>
-          <select.option @value='value-1'>Value 1</select.option>
-          <select.option @value='value-2'>Value 2</select.option>
-          <select.option @value='value-3'>Value 3</select.option>
-        </field.field>
-      </Rose::Form::Select>`,
+        <F.Label>{{label}}</F.Label>
+        <F.HelperText>{{helperText}}</F.HelperText>
+        <F.Options>
+          <option>Choose an option</option>
+          <option value='value-1' selected={{eq value 'value-1'}}>Value 1</option>
+          <option value='value-2' selected={{eq value 'value-2'}}>Value 2</option>
+          <option value='value-3' selected={{eq value 'value-3'}}>Value 3</option>
+        </F.Options>
+      </Hds::Form::Select::Field>`,
   context: args,
 });
 
@@ -53,10 +55,11 @@ export const Template = (args) => ({
     name="Basic"
     height="10rem"
     args={{
-      name: 'select-name',
+      name: 'select_name',
       label: 'Label',
       helperText: 'Helper text',
       disabled: false,
+      error: false,
     }}
     argTypes={{
       value: { control: 'select', options: ['value-1', 'value-2', 'value-3'] },
@@ -65,79 +68,4 @@ export const Template = (args) => ({
   >
     {Template.bind({})}
   </Story>
-</Preview>
-
-export const ErrorTemplate = (args) => ({
-  template: hbs`
-      <Rose::Form::Select
-        @name={{name}}
-        @value={{value}}
-        @label={{label}}
-        @helperText={{helperText}}
-        @disabled={{disabled}}
-        @error={{true}}
-        @onChange={{fn onChange}}
-        as |field|
-      >
-        <field.field as |select|>
-          <select.option>Choose an option</select.option>
-          <select.option @value='value-1'>Value 1</select.option>
-          <select.option @value='value-2'>Value 2</select.option>
-          <select.option @value='value-3'>Value 3</select.option>
-        </field.field>
-        <field.errors as |errors|>
-          <errors.message>An error occurred.</errors.message>
-        </field.errors>
-      </Rose::Form::Select>`,
-  context: args,
-});
-
-<Preview>
-  <Story
-    name="Select with Errors"
-    height="10rem"
-    args={{
-      name: 'select-name',
-      label: 'Label',
-      helperText: 'Helper text',
-      disabled: false,
-    }}
-    argTypes={{
-      value: { control: 'select', options: ['value-1', 'value-2', 'value-3'] },
-      onChange: { action: 'changed' },
-    }}
-  >
-    {ErrorTemplate.bind({})}
-  </Story>
-</Preview>
-
-export const ContextualTemplate = (args) => ({
-  template: hbs`
-      <Rose::Form::Select
-        @value='value-3'
-        @error={{true}}
-        @contextual={{true}}
-        as |field|
-      >
-        <hr />
-        <field.label>Label</field.label>
-        <hr />
-        <field.helperText>Help</field.helperText>
-        <hr />
-        <field.field as |select|>
-          <select.option @value='value-1'>Value 1</select.option>
-          <select.option @value='value-2'>Value 2</select.option>
-          <select.option @value='value-3'>Value 3</select.option>
-        </field.field>
-        <hr />
-        <field.errors as |errors|>
-          <errors.message>An error occurred.</errors.message>
-        </field.errors>
-        <hr />
-      </Rose::Form::Select>`,
-  context: args,
-});
-
-<Preview>
-  <Story name="Fully Contextual Select">{ContextualTemplate.bind({})}</Story>
 </Preview>
