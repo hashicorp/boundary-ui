@@ -1,0 +1,257 @@
+// Second-tier token mappings to first-tier color tokens.  In HDS, these are
+// hard-coded in raw hex values, duplicating the first-tier colors.  In order
+// to simplify theming, these are refactored here to eliminate duplication.
+.ember-application {
+  --token-color-border-primary: var(--token-color-palette-alpha-200);
+  --token-color-border-faint: var(--token-color-palette-alpha-100);
+  --token-color-border-strong: var(--token-color-palette-alpha-300);
+  --token-color-border-action: var(--token-color-palette-blue-100);
+  --token-color-border-highlight: var(--token-color-palette-purple-100);
+  --token-color-border-success: var(--token-color-palette-green-100);
+  --token-color-border-warning: var(--token-color-palette-amber-100);
+  --token-color-border-critical: var(--token-color-palette-red-100);
+  --token-color-focus-action-internal: var(--token-color-palette-blue-300);
+
+  // --token-color-focus-action-external: #5990ff; /* this is a special color used only for the focus style, to pass color contrast for a11y purpose */
+  --token-color-focus-critical-internal: var(--token-color-palette-red-300);
+
+  // --token-color-focus-critical-external: #dd7578; /* this is a special color used only for the focus style, to pass color contrast for a11y purpose */
+  --token-color-foreground-strong: var(--token-color-palette-neutral-700);
+  --token-color-foreground-primary: var(--token-color-palette-neutral-600);
+  --token-color-foreground-faint: var(--token-color-palette-neutral-500);
+  --token-color-foreground-high-contrast: var(--token-color-palette-neutral-0);
+  --token-color-foreground-disabled: var(--token-color-palette-neutral-400);
+  --token-color-foreground-action: var(--token-color-palette-blue-200);
+  --token-color-foreground-action-hover: var(--token-color-palette-blue-300);
+  --token-color-foreground-action-active: var(--token-color-palette-blue-400);
+  --token-color-foreground-highlight: var(--token-color-palette-purple-200);
+  --token-color-foreground-highlight-on-surface: var(
+    --token-color-palette-purple-300
+  );
+  --token-color-foreground-highlight-high-contrast: var(
+    --token-color-palette-purple-500
+  );
+  --token-color-foreground-success: var(--token-color-palette-green-200);
+  --token-color-foreground-success-on-surface: var(
+    --token-color-palette-green-300
+  );
+  --token-color-foreground-success-high-contrast: var(
+    --token-color-palette-green-500
+  );
+  --token-color-foreground-warning: var(--token-color-palette-amber-200);
+  --token-color-foreground-warning-on-surface: var(
+    --token-color-palette-amber-300
+  );
+  --token-color-foreground-warning-high-contrast: var(
+    --token-color-palette-amber-500
+  );
+  --token-color-foreground-critical: var(--token-color-palette-red-200);
+  --token-color-foreground-critical-on-surface: var(
+    --token-color-palette-red-300
+  );
+  --token-color-foreground-critical-high-contrast: var(
+    --token-color-palette-red-500
+  );
+  --token-color-page-primary: var(--token-color-palette-neutral-0);
+  --token-color-page-faint: var(--token-color-palette-neutral-50);
+  --token-color-surface-primary: var(--token-color-palette-neutral-0);
+  --token-color-surface-faint: var(--token-color-palette-neutral-50);
+  --token-color-surface-strong: var(--token-color-palette-neutral-100);
+  --token-color-surface-interactive: var(--token-color-palette-neutral-0);
+  --token-color-surface-interactive-hover: var(
+    --token-color-palette-neutral-100
+  );
+  --token-color-surface-interactive-active: var(
+    --token-color-palette-neutral-200
+  );
+  --token-color-surface-interactive-disabled: var(
+    --token-color-palette-neutral-50
+  );
+  --token-color-surface-action: var(--token-color-palette-blue-50);
+  --token-color-surface-highlight: var(--token-color-palette-purple-50);
+  --token-color-surface-success: var(--token-color-palette-green-50);
+  --token-color-surface-warning: var(--token-color-palette-amber-50);
+  --token-color-surface-critical: var(--token-color-palette-red-50);
+
+  // --token-color-hashicorp-brand: #000000;
+  // --token-color-boundary-brand: #f24c53;
+  // --token-color-boundary-foreground: #cf2d32;
+  // --token-color-boundary-surface: #ffecec;
+  // --token-color-boundary-border: #fbd7d8;
+  // --token-color-boundary-gradient-primary-start: #f97076;
+  // --token-color-boundary-gradient-primary-stop: #db363b;
+  // --token-color-boundary-gradient-faint-start: #fffafa; /* this is the 'boundary-50' value at 25% opacity on white */
+  // --token-color-boundary-gradient-faint-stop: #ffecec;
+  // --token-color-consul-brand: #e03875;
+  // --token-color-consul-foreground: #d01c5b;
+  // --token-color-consul-surface: #ffe9f1;
+  // --token-color-consul-border: #ffcede;
+  // --token-color-consul-gradient-primary-start: #ff99be;
+  // --token-color-consul-gradient-primary-stop: #da306e;
+  // --token-color-consul-gradient-faint-start: #fff9fb; /* this is the 'consul-50' value at 25% opacity on white */
+  // --token-color-consul-gradient-faint-stop: #ffe9f1;
+  // --token-color-hcp-brand: #000000;
+  // --token-color-nomad-brand: #06d092;
+  // --token-color-nomad-foreground: #008661;
+  // --token-color-nomad-surface: #d3fdeb;
+  // --token-color-nomad-border: #bff3dd;
+  // --token-color-nomad-gradient-primary-start: #bff3dd;
+  // --token-color-nomad-gradient-primary-stop: #60dea9;
+  // --token-color-nomad-gradient-faint-start: #f3fff9; /* this is the 'nomad-50' value at 25% opacity on white */
+  // --token-color-nomad-gradient-faint-stop: #d3fdeb;
+  // --token-color-packer-brand: #02a8ef;
+  // --token-color-packer-foreground: #007eb4;
+  // --token-color-packer-surface: #d4f2ff;
+  // --token-color-packer-border: #b4e4ff;
+  // --token-color-packer-gradient-primary-start: #b4e4ff;
+  // --token-color-packer-gradient-primary-stop: #63d0ff;
+  // --token-color-packer-gradient-faint-start: #f3fcff; /* this is the 'packer-50' value at 25% opacity on white */
+  // --token-color-packer-gradient-faint-stop: #d4f2ff;
+  // --token-color-terraform-brand: #7b42bc;
+  // --token-color-terraform-foreground: #773cb4;
+  // --token-color-terraform-surface: #f4ecff;
+  // --token-color-terraform-border: #ebdbfc;
+  // --token-color-terraform-gradient-primary-start: #bb8deb;
+  // --token-color-terraform-gradient-primary-stop: #844fba;
+  // --token-color-terraform-gradient-faint-start: #fcfaff; /* this is the 'terraform-50' value at 25% opacity on white */
+  // --token-color-terraform-gradient-faint-stop: #f4ecff;
+  // --token-color-vagrant-brand: #1868f2;
+  // --token-color-vagrant-foreground: #1c61d8;
+  // --token-color-vagrant-surface: #d6ebff;
+  // --token-color-vagrant-border: #c7dbfc;
+  // --token-color-vagrant-gradient-primary-start: #c7dbfc;
+  // --token-color-vagrant-gradient-primary-stop: #7dadff;
+  // --token-color-vagrant-gradient-faint-start: #f4faff; /* this is the 'vagrant-50' value at 25% opacity on white */
+  // --token-color-vagrant-gradient-faint-stop: #d6ebff;
+  // --token-color-vault-brand: #ffd814;
+  // --token-color-vault-brand-alt: #000000; /* this is a special “alternative” color, used as an exception in some contexts where the normal “brand” color for Vault would not work */
+  // --token-color-vault-foreground: #9a6f00;
+  // --token-color-vault-surface: #fff9cf;
+  // --token-color-vault-border: #feec7b;
+  // --token-color-vault-gradient-primary-start: #feec7b;
+  // --token-color-vault-gradient-primary-stop: #ffe543;
+  // --token-color-vault-gradient-faint-start: #fffdf2; /* this is the 'vault-50' value at 25% opacity on white */
+  // --token-color-vault-gradient-faint-stop: #fff9cf;
+  // --token-color-waypoint-brand: #14c6cb;
+  // --token-color-waypoint-foreground: #008196;
+  // --token-color-waypoint-surface: #e0fcff;
+  // --token-color-waypoint-border: #cbf1f3;
+  // --token-color-waypoint-gradient-primary-start: #cbf1f3;
+  // --token-color-waypoint-gradient-primary-stop: #62d4dc;
+  // --token-color-waypoint-gradient-faint-start: #f6feff; /* this is the 'waypoint-50' value at 25% opacity on white */
+  // --token-color-waypoint-gradient-faint-stop: #e0fcff;
+
+  --token-elevation-inset-box-shadow: inset 0 1px 2px 1px
+    var(--token-color-palette-alpha-100);
+  --token-elevation-low-box-shadow: 0 1px 1px 0
+      var(--token-color-palette-neutral-500-alpha-50),
+    0 2px 2px 0 var(--token-color-palette-neutral-500-alpha-50);
+  --token-elevation-mid-box-shadow: 0 2px 3px 0
+      var(--token-color-palette-alpha-100),
+    0 8px 16px -10px var(--token-color-palette-alpha-200);
+  --token-elevation-high-box-shadow: 0 2px 3px 0
+      var(--token-color-palette-neutral-500-alpha-100),
+    0 16px 16px -10px var(--token-color-palette-alpha-200);
+  --token-elevation-higher-box-shadow: 0 2px 3px 0
+      var(--token-color-palette-alpha-100),
+    0 12px 28px 0 var(--token-color-palette-neutral-500-alpha-200);
+  --token-elevation-overlay-box-shadow: 0 2px 3px 0
+      var(--token-color-palette-neutral-600-alpha-100),
+    0 12px 24px 0 var(--token-color-palette-neutral-600-alpha-200);
+  --token-surface-inset-box-shadow: inset 0 0 0 1px
+      var(--token-color-palette-neutral-500-alpha-200),
+    inset 0 1px 2px 1px var(--token-color-palette-alpha-100);
+  --token-surface-base-box-shadow: 0 0 0 1px
+    var(--token-color-palette-alpha-200);
+  --token-surface-low-box-shadow: 0 0 0 1px
+      var(--token-color-palette-neutral-500-alpha-100),
+    0 1px 1px 0 var(--token-color-palette-neutral-500-alpha-50),
+    0 2px 2px 0 var(--token-color-palette-neutral-500-alpha-50);
+  --token-surface-mid-box-shadow: 0 0 0 1px
+      var(--token-color-palette-neutral-500-alpha-100),
+    0 2px 3px 0 var(--token-color-palette-alpha-100),
+    0 8px 16px -10px var(--token-color-palette-alpha-200);
+  --token-surface-high-box-shadow: 0 0 0 1px
+      var(--token-color-palette-neutral-500-alpha-200),
+    0 2px 3px 0 var(--token-color-palette-neutral-500-alpha-100),
+    0 16px 16px -10px var(--token-color-palette-alpha-200);
+  --token-surface-higher-box-shadow: 0 0 0 1px
+      var(--token-color-palette-alpha-200),
+    0 2px 3px 0 var(--token-color-palette-alpha-100),
+    0 12px 28px 0 var(--token-color-palette-neutral-500-alpha-200);
+  --token-surface-overlay-box-shadow: 0 0 0 1px
+      var(--token-color-palette-neutral-600-alpha-100),
+    0 2px 3px 0 var(--token-color-palette-neutral-600-alpha-100),
+    0 12px 24px 0 var(--token-color-palette-neutral-600-alpha-200);
+  --token-focus-ring-action-box-shadow: inset 0 0 0 1px
+      var(--token-color-palette-blue-300),
+    0 0 0 3px var(--token-color-focus-action-external);
+  --token-focus-ring-critical-box-shadow: inset 0 0 0 1px
+      var(--token-color-palette-red-300),
+    0 0 0 3px var(--token-color-focus-critical-external);
+  --token-form-label-color: var(--token-color-palette-neutral-700);
+  --token-form-legend-color: var(--token-color-palette-neutral-700);
+  --token-form-helper-text-color: var(--token-color-palette-neutral-500);
+  --token-form-indicator-optional-color: var(--token-color-palette-neutral-500);
+  --token-form-error-color: var(--token-color-palette-red-300);
+  --token-form-control-base-foreground-value-color: var(
+    --token-color-palette-neutral-700
+  );
+  --token-form-control-base-foreground-placeholder-color: var(
+    --token-color-palette-neutral-500
+  );
+  --token-form-control-base-surface-color-default: var(
+    --token-color-palette-neutral-0
+  );
+  --token-form-control-base-surface-color-hover: var(
+    --token-color-palette-neutral-100
+  );
+  --token-form-control-base-border-color-default: var(
+    --token-color-palette-neutral-400
+  );
+  --token-form-control-base-border-color-hover: var(
+    --token-color-palette-neutral-500
+  );
+  --token-form-control-checked-foreground-color: var(
+    --token-color-palette-neutral-0
+  );
+  --token-form-control-checked-surface-color-default: var(
+    --token-color-palette-blue-200
+  );
+  --token-form-control-checked-surface-color-hover: var(
+    --token-color-palette-blue-300
+  );
+  --token-form-control-checked-border-color-default: var(
+    --token-color-palette-blue-300
+  );
+  --token-form-control-checked-border-color-hover: var(
+    --token-color-palette-blue-400
+  );
+  --token-form-control-invalid-border-color-default: var(
+    --token-color-palette-red-300
+  );
+  --token-form-control-invalid-border-color-hover: var(
+    --token-color-palette-red-400
+  );
+  --token-form-control-readonly-foreground-color: var(
+    --token-color-palette-neutral-600
+  );
+  --token-form-control-readonly-surface-color: var(
+    --token-color-palette-neutral-100
+  );
+  --token-form-control-readonly-border-color: var(
+    --token-color-palette-alpha-100
+  );
+  --token-form-control-disabled-foreground-color: var(
+    --token-color-palette-neutral-400
+  );
+  --token-form-control-disabled-surface-color: var(
+    --token-color-palette-neutral-50
+  );
+  --token-form-control-disabled-border-color: var(
+    --token-color-palette-alpha-200
+  );
+  --token-form-toggle-base-surface-color-default: var(
+    --token-color-palette-neutral-100
+  ); /* the toggle has a different base surface color, compared to the other controls */
+}
