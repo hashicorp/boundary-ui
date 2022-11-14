@@ -1,6 +1,5 @@
 import GeneratedHostSetModel from '../generated/models/host-set';
 import { attr } from '@ember-data/model';
-import { fragmentArray } from 'ember-data-model-fragments/attributes';
 import { types } from './host-catalog';
 
 export default class HostSetModel extends GeneratedHostSetModel {
@@ -74,17 +73,10 @@ export default class HostSetModel extends GeneratedHostSetModel {
    */
   @attr({ readOnly: true, emptyArrayIfMissing: true }) host_ids;
 
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-  })
-  preferred_endpoints;
+  @attr('string-array') preferred_endpoints;
 
   // AWS specific
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  filters;
+  @attr('string-array', { isNestedAttribute: true }) filters;
 
   // =methods
 

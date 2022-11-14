@@ -77,6 +77,7 @@ export default class RoseFormComponent extends Component {
   @action
   enableEdit() {
     this.isEditable = true;
+    if (this.args.edit) this.args.edit();
   }
 
   /**

@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { copy } from 'ember-copy';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute extends Route {
   // =services
@@ -20,16 +21,32 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
   }
 
   /**
-   * Adds a string item to array `property` on the passed `filter`.
+   * Copies the contents of string array fields in order to force the instance
+   * into a dirty state.  This ensures that `model.rollbackAttributes()` reverts
+   * to the original expected array.
+   *
+   * The deep copy implemented here and is required to ensure that both the
+   * array itself as well as its members are all new.
+   *
+   * @param {hostSetModel} hostSet
+   */
+  @action
+  edit(hostSet) {
+    if (hostSet.preferred_endpoints)
+      hostSet.preferred_endpoints = copy(hostSet.preferred_endpoints, true);
+    if (hostSet.filters) hostSet.filters = copy(hostSet.filters, true);
+  }
 
+  /**
+   * Adds a string item `{ value }` to array `property` on passed `hostSet`.
    * @param {hostSetModel} hostSet
    * @param {string} property
    * @param {string} value
    */
   @action
   async addStringItem(hostSet, property, value) {
-    const array = hostSet.get(property);
-    array.addObject({ value });
+    const array = [...hostSet.get(property), { value }];
+    hostSet.set(property, array);
   }
 
   /**
@@ -41,7 +58,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
    */
   @action
   async removeItemByIndex(hostSet, property, index) {
-    const array = hostSet.get(property);
-    array.removeAt(index);
+    const array = hostSet.get(property).filter((item, i) => i !== index);
+    hostSet.set(property, array);
   }
 }
