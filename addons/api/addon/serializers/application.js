@@ -39,6 +39,10 @@ export default class ApplicationSerializer extends RESTSerializer {
   serializeAttribute(snapshot, json, key, attribute) {
     const { type, options } = attribute;
     let value = super.serializeAttribute(...arguments);
+    // Remove secret attributes that are null or empty
+    if (options.isSecret) {
+      if (type === 'string' && !json[key]) delete json[key];
+    }
     // Convert empty strings to null.
     if (type === 'string' && json[key] === '') json[key] = null;
     // Do not serialize read-only attributes.
