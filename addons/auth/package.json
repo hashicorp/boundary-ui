@@ -8,7 +8,7 @@
     "ember-addon"
   ],
   "scripts": {
-    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",

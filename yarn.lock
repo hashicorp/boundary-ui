@@ -13216,15 +13216,6 @@ ember-source@~3.28.8:
     semver "^7.3.4"
     silent-error "^1.1.1"
 
-<<<<<<< HEAD
-ember-style-modifier@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/ember-style-modifier/-/ember-style-modifier-0.8.0.tgz#ef46b3f288e63e3d850418ea8dc6f7b12edde721"
-  integrity sha512-I7M+oZ+poYYOP7n521rYv7kkYZbxotL8VbtHYxLQ3tasRZYQJ21qfu3vVjydSjwyE3w7EZRgKngBoMhKSAEZnw==
-  dependencies:
-    ember-cli-babel "^7.26.6"
-    ember-modifier "^3.2.7"
-=======
 ember-source@~4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/ember-source/-/ember-source-4.0.1.tgz#c36acab19bfe3d2e4b560465ccf16018865d8f91"
@@ -13255,7 +13246,14 @@ ember-source@~4.0.1:
     resolve "^1.17.0"
     semver "^7.3.4"
     silent-error "^1.1.1"
->>>>>>> c943fa628 (chore: 🤖 Upgrade Ember 4 addons/auth)
+
+ember-style-modifier@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/ember-style-modifier/-/ember-style-modifier-0.8.0.tgz#ef46b3f288e63e3d850418ea8dc6f7b12edde721"
+  integrity sha512-I7M+oZ+poYYOP7n521rYv7kkYZbxotL8VbtHYxLQ3tasRZYQJ21qfu3vVjydSjwyE3w7EZRgKngBoMhKSAEZnw==
+  dependencies:
+    ember-cli-babel "^7.26.6"
+    ember-modifier "^3.2.7"
 
 ember-template-imports@^3.1.1:
   version "3.1.1"
