@@ -123,7 +123,7 @@ module('Unit | Serializer | host set', function (hooks) {
           type: 'static',
           authorized_actions: [],
           name: 'Host Set 1',
-          host_ids: [{ value: '1' }, { value: '2' }, { value: '3' }],
+          host_ids: ['1', '2', '3'],
           preferred_endpoints: [
             { value: 'endpoint 1' },
             { value: 'endpoint 2' },

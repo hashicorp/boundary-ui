@@ -1,4 +1,5 @@
 import GeneratedHostSetModel from '../generated/models/host-set';
+import { attr } from '@ember-data/model';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
 import { types } from './host-catalog';
 
@@ -71,11 +72,7 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * Host IDs are read-only under normal circumstances.  But these can
    * be persisted via a dedicated call to `addHosts()`.
    */
-  @fragmentArray('fragment-string', {
-    readOnly: true,
-    emptyArrayIfMissing: true,
-  })
-  host_ids;
+  @attr({ readOnly: true, emptyArrayIfMissing: true }) host_ids;
 
   @fragmentArray('fragment-string', {
     emptyArrayIfMissing: true,
