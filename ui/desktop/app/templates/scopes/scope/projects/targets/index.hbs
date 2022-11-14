@@ -120,9 +120,11 @@
                   <p>{{model.target.description}}</p>
                 {{/if}}
                 {{#if model.target.isActive}}
-                  <Rose::Badge @style='success'>
-                    {{t 'states.active'}}
-                  </Rose::Badge>
+                  <Hds::Badge
+                    @text={{t 'states.active'}}
+                    @color='success'
+                    @icon='check'
+                  />
                 {{/if}}
               </row.headerCell>
               <row.cell>
@@ -136,9 +138,9 @@
               </row.cell>
               <row.cell>
                 {{#if model.type}}
-                  <Rose::Badge>
-                    {{t (concat 'resources.target.types.' model.type)}}
-                  </Rose::Badge>
+                  <Hds::Badge
+                    @text={{t (concat 'resources.target.types.' model.type)}}
+                  />
                 {{/if}}
               </row.cell>
               <row.cell>
@@ -151,9 +153,7 @@
                     <code>{{model.project.id}}</code>
                   </Copyable>
                 </div>
-                <Rose::Badge @style='informational'>
-                  {{model.project.name}}
-                </Rose::Badge>
+                <Hds::Badge @color='neutral' @text={{model.project.name}} />
               </row.cell>
               <row.cell>
                 {{#if (can 'connect target' model)}}
