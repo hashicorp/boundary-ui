@@ -18,7 +18,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
   border-radius: $xxxs;
   background-color: var(--subtle);
   box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
-  0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
+    0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
 
   &.rose-dialog-success {
     --header-color: var(--success-starker-1);

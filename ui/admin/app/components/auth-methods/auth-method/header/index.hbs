@@ -2,9 +2,7 @@
   {{t 'resources.auth-method.title'}}
   {{#if @model.isPrimary}}
     &nbsp;
-    <Rose::Badge @style='success-outline'>
-      {{t 'states.primary'}}
-    </Rose::Badge>
+    <Hds::Badge @text={{t 'states.primary'}} @color='success' />
     &nbsp;
   {{/if}}
   <DocLink @doc='auth-method' @iconSize='large' />
