@@ -12,6 +12,7 @@
     @isInvalid={{@model.errors.name}}
     name='name'
     disabled={{form.disabled}}
+    {{on 'change' (set-from-event @model 'name')}}
     as |F|
   >
     <F.Label>{{t 'form.name.label'}}</F.Label>
