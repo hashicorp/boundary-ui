@@ -3,11 +3,13 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { v1 } from 'ember-uuid';
+import { setupIntl } from 'ember-intl/test-support';
 
 module(
   'Integration | Component | form/worker/create-worker-led',
   function (hooks) {
     setupRenderingTest(hooks);
+    setupIntl(hooks);
 
     hooks.beforeEach(function () {
       const featuresService = this.owner.lookup('service:features');

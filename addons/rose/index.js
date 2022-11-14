@@ -12,9 +12,41 @@ module.exports = {
     app.import('node_modules/codemirror/lib/codemirror.css');
     app.import('node_modules/codemirror/theme/monokai.css');
 
+    this.includeHDSStyles(app);
     this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
+  },
+
+  /**
+   * Due to a limitation in how ember treats nested addons (see https://github.com/ember-cli/ember-cli/issues/4475)
+   * this is neeeded to reach down into @hashicorp/ember-flight-icons' contentFor hook to run the logic
+   * that injects the sprite into the DOM
+   */
+  contentFor(type, config) {
+    return this.findOwnAddonByName('@hashicorp/design-system-components')
+      .findOwnAddonByName('@hashicorp/ember-flight-icons')
+      .contentFor(type, config);
+  },
+
+  /**
+   * Finds the HDS styles folder and includes it into the running
+   * application's `sassOptions.includePaths`.
+   */
+  includeHDSStyles(app) {
+    const tokensPath =
+      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+    const hdsPath =
+      '../../node_modules/@hashicorp/design-system-components/app/styles';
+
+    // Setup default sassOptions on the running application
+    app.options.sassOptions = app.options.sassOptions || {};
+    app.options.sassOptions.includePaths =
+      app.options.sassOptions.includePaths || [];
+
+    // Include the addon styles
+    app.options.sassOptions.includePaths.push(tokensPath);
+    app.options.sassOptions.includePaths.push(hdsPath);
   },
 
   /**

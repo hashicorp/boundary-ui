@@ -18,7 +18,7 @@
     {{#if (can 'create model' this.scope collection='users')}}
       {{#if @model}}
         <Rose::LinkButton @route='scopes.scope.users.new' @style='primary'>{{t
-            'titles.new'
+            'resources.user.titles.new'
           }}</Rose::LinkButton>
       {{/if}}
     {{/if}}
@@ -47,7 +47,7 @@
                   {{user.displayName}}
                 {{/if}}
                 {{#if user.accountName}}
-                  <br /><Rose::Badge>{{user.accountName}}</Rose::Badge>
+                  <br /><Hds::Badge @text={{user.accountName}} />
                 {{/if}}
                 <p>{{user.description}}</p>
               </row.headerCell>

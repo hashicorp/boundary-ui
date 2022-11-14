@@ -95,7 +95,7 @@ module('Acceptance | authentication', function (hooks) {
     changePasswordURL = `/account/change-password`;
     orgsURL = `/scopes/global/scopes`;
     orgEditURL = `/scopes/${orgScopeID}/edit`;
-    newProjectURL = `/scopes/${orgScopeID}/new`;
+    newProjectURL = `/scopes/${orgScopeID}/scopes/new`;
     projectsURL = `/scopes/${orgScopeID}/scopes`;
     usersURL = `/scopes/${orgScopeID}/users`;
     groupsURL = `/scopes/${orgScopeID}/groups`;

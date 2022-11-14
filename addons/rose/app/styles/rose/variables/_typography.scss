@@ -6,11 +6,10 @@
  * SASS variables defining typography.
  */
 
-$family-primary: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+$family-primary: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI',
   'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
   'Helvetica Neue', sans-serif;
-
-$family-monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+$family-monospace: 'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier,
   monospace;
 
 // Available font weights by name

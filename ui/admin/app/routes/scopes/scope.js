@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
+import { next } from '@ember/runloop';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
@@ -9,6 +10,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeRoute extends Route {
   // =services
 
+  @service store;
   @service intl;
   @service session;
   @service scope;
@@ -105,8 +107,10 @@ export default class ScopesScopeRoute extends Route {
   @action
   cancel(scope) {
     const { isNew } = scope;
-    scope.rollbackAttributes();
-    if (isNew) this.router.transitionTo('scopes.scope');
+    next(() => {
+      scope.rollbackAttributes();
+      if (isNew) this.router.transitionTo('scopes.scope');
+    });
   }
 
   /**

@@ -16,12 +16,13 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
-    "lint:sass": "echo 'Rose SASS linting is disabled.  Please install stylelint.'",
+    "lint:sass": "stylelint 'app/styles/**/*.scss'",
+    "lint:sass:fix": "stylelint 'app/styles/**/*.scss' --fix",
     "format": "npm-run-all format:*",
     "format:hbs": "prettier --write '{addon,tests}/**/*.hbs'",
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "format:mdx": "prettier --write 'addon/**/*.mdx'",
-    "format:sass": "prettier --write app/**/*.scss",
+    "format:sass": "prettier --write '{addon,app}/**/*.scss'",
     "start": "ember serve",
     "test": "ember test",
     "test:ember-compatibility": "ember try:each",
@@ -32,9 +33,11 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "@embroider/test-setup": "^0.48.1",
+    "@hashicorp/design-system-components": "^1.3.2",
     "codemirror": "5.65.7",
     "ember-auto-import": "^2.4.2",
-    "ember-cli-babel": "^7.26.8",
+    "ember-cli-babel": "^7.26.10",
     "ember-cli-clipboard": "^0.16.0",
     "ember-cli-htmlbars": "^6.1.0",
     "ember-cli-sass": "^11.0.1",
@@ -43,7 +46,6 @@
     "ember-named-blocks-polyfill": "^0.2.5",
     "ember-radio-button": "github:yapplabs/ember-radio-button.git#b2ab65f",
     "ember-uuid": "^2.1.0",
-    "emberx-select": "github:adopted-ember-addons/emberx-select#bc5f774",
     "sass": "^1.55.0"
   },
   "devDependencies": {
@@ -54,7 +56,6 @@
     "@ember/test-helpers": "^2.8.1",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@hashicorp/flight-icons": "^2.6.0",
     "@storybook/addon-a11y": "^6.3.12",
     "@storybook/addon-actions": "^6.3.10",
     "@storybook/addon-controls": "^6.5.12",
@@ -85,7 +86,7 @@
     "ember-page-title": "^7.0.0",
     "ember-qunit": "^6.0.0",
     "ember-resolver": "^8.0.3",
-    "ember-source": "~3.28.4",
+    "ember-source": "~3.28.8",
     "ember-template-lint": "^4.14.0",
     "ember-template-lint-plugin-prettier": "^4.0.0",
     "eslint": "^8.18.0",
@@ -96,12 +97,16 @@
     "jest": "^27.4.7",
     "loader.js": "^4.7.0",
     "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.18",
     "prettier": "^2.7.1",
-    "qunit": "^2.17.1",
+    "qunit": "^2.17.2",
     "qunit-dom": "^2.0.0",
     "react": "^16",
     "react-dom": "^16",
     "react-syntax-highlighter": "^15.5.0",
+    "stylelint": "^14.14.0",
+    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-standard-scss": "^6.0.0",
     "webpack": "^5.59.1"
   },
   "engines": {
@@ -116,6 +121,7 @@
   "lint-staged": {
     "*.js": "eslint --fix",
     "*.hbs": "ember-template-lint --fix",
+    "*.scss": "stylelint --fix",
     "*.{js,scss,mdx,yaml}": "prettier --write"
   }
 }

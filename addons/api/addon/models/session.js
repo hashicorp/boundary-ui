@@ -3,6 +3,9 @@ import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
+
+export const statusTypes = ['active', 'pending', 'canceling', 'terminated'];
 
 /**
  *
@@ -80,6 +83,10 @@ class SessionCredential {
 }
 
 export default class SessionModel extends GeneratedSessionModel {
+  // =services
+
+  @service store;
+
   // =attributes
 
   // These transient attributes are used for values that come from the CLI
@@ -93,6 +100,14 @@ export default class SessionModel extends GeneratedSessionModel {
 
   @equal('status', 'active') isActive;
   @equal('status', 'pending') isPending;
+
+  /**
+   * True if status is an unknown string.
+   * @type {boolean}
+   */
+  get isUnknownStatus() {
+    return !statusTypes.includes(this.status);
+  }
 
   /**
    * @type {boolean}

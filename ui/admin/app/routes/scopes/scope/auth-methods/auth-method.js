@@ -1,8 +1,13 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
+  // =services
+
+  @service store;
+
   // =methods
 
   /**

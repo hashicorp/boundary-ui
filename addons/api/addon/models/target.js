@@ -1,7 +1,12 @@
 import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
+import { inject as service } from '@ember/service';
 
 export default class TargetModel extends GeneratedTargetModel {
+  // =services
+
+  @service store;
+
   // =attributes
 
   @attr('number', {

@@ -169,7 +169,7 @@
                 </time>
               </row.cell>
               <row.cell>
-                <Rose::Badge>{{model.status}}</Rose::Badge>
+                <SessionStatus @model={{model}} />
               </row.cell>
               <row.cell>
                 {{#if model.isCancelable}}

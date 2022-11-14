@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeHostCatalogsNewRoute extends Route {
   // =services
 
+  @service store;
   @service router;
 
   // =attributes

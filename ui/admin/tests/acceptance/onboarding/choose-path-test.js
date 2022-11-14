@@ -10,7 +10,7 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
 
   const urls = {
     choosePath: '/onboarding/quick-setup/choose-path',
-    newOrg: '/scopes/global/new',
+    newOrg: '/scopes/global/scopes/new',
     createResources: '/onboarding/quick-setup/create-resources',
   };
 

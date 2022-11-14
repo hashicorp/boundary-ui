@@ -8,8 +8,8 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route {
   // =services
 
+  @service store;
   @service intl;
-
   @service can;
   @service router;
 
@@ -37,7 +37,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
     return {
       hostCatalog,
       hosts,
-    }
+    };
   }
 
   // =actions
