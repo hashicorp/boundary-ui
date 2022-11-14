@@ -10,6 +10,7 @@
     @isOptional={{true}}
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
+    name='name'
     disabled={{form.disabled}}
     as |F|
   >
@@ -24,12 +25,11 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <br />
-
   <Hds::Form::Textarea::Field
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
+    name='description'
     disabled={{form.disabled}}
     as |F|
   >
@@ -43,8 +43,6 @@
       </F.Error>
     {{/if}}
   </Hds::Form::Textarea::Field>
-
-  <br />
 
   {{#if (can 'save model' @model)}}
     <form.actions
