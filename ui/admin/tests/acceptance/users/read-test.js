@@ -72,7 +72,7 @@ module('Acceptance | users | read', function (hooks) {
 
     await click(`[href="${urls.users}"]`);
 
-    assert.dom(`.rose-table a[href="${urls.user}"]`).doesNotExist();
+    assert.dom(`.rose-table [href="${urls.user}"]`).doesNotExist();
   });
 
   test('users can link to docs page for users', async function (assert) {
