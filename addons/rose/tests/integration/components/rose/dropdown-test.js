@@ -28,7 +28,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
 
   test('it supports a count', async function (assert) {
     await render(hbs`<Rose::Dropdown @text="Click me" @count="2" />`);
-    assert.strictEqual(find('.rose-badge').textContent.trim(), '2');
+    assert.strictEqual(find('.hds-badge-count').textContent.trim(), '2');
   });
 
   test('it supports an icon', async function (assert) {
