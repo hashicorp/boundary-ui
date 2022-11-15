@@ -11,6 +11,7 @@
     @isOptional={{true}}
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
+    @type='text'
     name='name'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}

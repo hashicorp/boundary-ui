@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, find } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import {
@@ -19,27 +19,19 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       org: null,
       project: null,
     },
-    orgScope: null,
+    hostCatalog: null,
   };
 
   const urls = {
-    scopes: {
-      org: null,
-    },
+    globalScope: null,
+    orgScope: null,
     projectScope: null,
     hostCatalogs: null,
+    hostCatalog: null,
   };
 
   hooks.beforeEach(function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    instances.orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-        scope: { id: 'global', type: 'global' },
-      },
-      'withChildren'
-    );
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -51,47 +43,108 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
-
-    urls.hostCatalogs = `/scopes/${instances.orgScope.id}/host-catalogs`;
     urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.orgScope.id}/scopes`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
-
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
+
     authenticateSession({});
   });
 
-  test('Users can navigate to host catalogs with proper authorization', async function (assert) {
-    assert.expect(2);
-    await visit(urls.projectScope);
-    assert.ok(
+  test('user can navigate to host catalogs with proper authorization', async function (assert) {
+    assert.expect(3);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.projectScope}"]`);
+
+    assert.true(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
       ].includes('list')
     );
-    assert.ok(find(`[href="${urls.hostCatalogs}"]`));
+    assert.true(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('create')
+    );
+    assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
   });
 
-  test('User cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(2);
+  test('user cannot navigate to index without either list or create actions', async function (assert) {
+    assert.expect(3);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       [];
-    await visit(urls.projectScope);
-    assert.notOk(
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.projectScope}"]`);
+
+    assert.false(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
       ].includes('list')
     );
-    assert.notOk(find(`[href="${urls.hostCatalogs}"]`));
+    assert.false(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('create')
+    );
+    assert
+      .dom(`nav:nth-child(2) a[href="${urls.hostCatalogs}"]`)
+      .doesNotExist();
   });
 
-  test('User can navigate to index with only create action', async function (assert) {
-    assert.expect(1);
-    instances.scopes.project.authorized_collection_actions['host-catalogs'] = [
-      'create',
-    ];
-    await visit(urls.projectScope);
-    assert.ok(find(`[href="${urls.hostCatalogs}"]`));
+  test('user can navigate to index with only create action', async function (assert) {
+    assert.expect(4);
+    instances.scopes.project.authorized_collection_actions['host-catalogs'] =
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].filter((item) => item !== 'list');
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.projectScope}"]`);
+
+    assert.false(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('list')
+    );
+    assert.true(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('create')
+    );
+    assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
+
+    await click(`[href="${urls.hostCatalogs}"]`);
+
+    assert.dom(`nav:nth-child(2) a[href="${urls.hostCatalog}"]`).doesNotExist();
+  });
+
+  test('user can navigate to index with only list action', async function (assert) {
+    assert.expect(4);
+    instances.scopes.project.authorized_collection_actions['host-catalogs'] =
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].filter((item) => item !== 'create');
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.projectScope}"]`);
+
+    assert.false(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('create')
+    );
+    assert.true(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('list')
+    );
+    assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
+
+    await click(`[href="${urls.hostCatalogs}"]`);
+
+    assert.dom(`[href="${urls.hostCatalog}"]`).exists();
   });
 });
