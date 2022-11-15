@@ -25,16 +25,19 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
    * into a dirty state.  This ensures that `model.rollbackAttributes()` reverts
    * to the original expected array.
    *
-   * The deep copy implemented here and is required to ensure that both the
+   * The deep copy implemented here is required to ensure that both the
    * array itself as well as its members are all new.
    *
    * @param {hostSetModel} hostSet
    */
   @action
   edit(hostSet) {
-    if (hostSet.preferred_endpoints)
+    if (hostSet.preferred_endpoints) {
       hostSet.preferred_endpoints = copy(hostSet.preferred_endpoints, true);
-    if (hostSet.filters) hostSet.filters = copy(hostSet.filters, true);
+    }
+    if (hostSet.filters) {
+      hostSet.filters = copy(hostSet.filters, true);
+    }
   }
 
   /**
