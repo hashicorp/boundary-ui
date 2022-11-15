@@ -77,7 +77,7 @@ module('Acceptance | users | list', function (hooks) {
     assert.false(
       instances.scopes.org.authorized_collection_actions.users.includes('list')
     );
-    assert.dom(`nav a[href="${urls.users}"]`).doesNotExist();
+    assert.dom(`nav [href="${urls.users}"]`).doesNotExist();
   });
 
   test('user can navigate to users tab with only create action', async function (assert) {
