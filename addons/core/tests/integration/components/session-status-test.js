@@ -8,7 +8,6 @@ module('Integration | Component | session-status', function (hooks) {
   test('it maps to correct text color, icon and type if it is in active status', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    console.log(store, 'stoeree');
     this.model = store.createRecord('session', { status: 'active' });
     await render(hbs`<SessionStatus @model={{this.model}} />`);
     assert.ok(find('.flight-icon-check'));
