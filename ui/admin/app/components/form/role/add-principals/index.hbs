@@ -39,25 +39,24 @@
                   or contextualization.  This is a one-off.
                 }}
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-                <Rose::Badge>{{principal.accountName}}</Rose::Badge>
+                <Hds::Badge @text={{principal.accountName}} />
               {{/if}}
             </row.headerCell>
             <row.cell>{{principal.id}}</row.cell>
             <row.cell>
-              <Rose::Badge
+              <Hds::Badge
                 @icon={{if
                   (eq principal.constructor.modelName 'group')
-                  'flight-icons/svg/folder-users-16'
-                  'flight-icons/svg/user-16'
+                  'folder-users'
+                  'user'
                 }}
-              >
-                {{t
+                @text={{t
                   (concat
                     'resources.role.principal.types.'
                     principal.constructor.modelName
                   )
                 }}
-              </Rose::Badge>
+              />
             </row.cell>
             <row.cell>
               <ScopeBadge @scope={{principal.scopeModel}} />
