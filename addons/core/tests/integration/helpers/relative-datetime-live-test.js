@@ -39,7 +39,7 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
     now = Date.now();
     this.date = now - 1000 - 23 * 12 * 31 * 24 * 60 * 60 * 1000;
     await render(hbs`{{relative-datetime-live this.date}}`);
-    assert.dom(this.element).hasText('22 years ago');
+    assert.dom(this.element).hasText('23 years ago');
 
     now = Date.now();
     this.date = now + 7 * 31 * 24 * 60 * 60 * 1000;
