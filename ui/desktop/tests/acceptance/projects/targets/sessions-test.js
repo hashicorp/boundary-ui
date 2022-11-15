@@ -211,7 +211,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     assert.expect(1);
     later(async () => {
       run.cancelTimers();
-      assert.ok(find('.rose-layout-page-header .rose-badge-success'));
+      assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
     }, 750);
     await visit(urls.sessions);
   });
@@ -221,7 +221,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     instances.session.update({ status: 'pending' });
     later(async () => {
       run.cancelTimers();
-      assert.ok(find('.rose-layout-page-header .rose-badge-success'));
+      assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
     }, 750);
     await visit(urls.sessions);
   });
@@ -231,7 +231,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     instances.session.update({ status: 'terminated' });
     later(async () => {
       run.cancelTimers();
-      assert.notOk(find('.rose-layout-page-header .rose-badge-success'));
+      assert.notOk(find('.rose-layout-page-header .hds-badge--color-success'));
     }, 750);
     await visit(urls.sessions);
   });
