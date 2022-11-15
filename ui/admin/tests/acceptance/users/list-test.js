@@ -102,7 +102,7 @@ module('Acceptance | users | list', function (hooks) {
 
     await click(`[href="${urls.users}"]`);
 
-    assert.dom(`.rose-table a[href="${urls.user}"]`).doesNotExist();
+    assert.dom(`.rose-table [href="${urls.user}"]`).doesNotExist();
   });
 
   test('user can navigate to users tab with only list action', async function (assert) {
