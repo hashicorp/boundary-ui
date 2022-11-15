@@ -192,6 +192,6 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.newOrgScope);
     await click('[type="submit"]');
     assert.dom('.rose-notification-body').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 });
