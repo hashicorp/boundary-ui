@@ -82,6 +82,7 @@ export default class GeneratedCredentialStoreModel extends BaseModel {
   @attr('string', {
     for: 'vault',
     isNestedAttribute: true,
+    isSecret: true,
     description: 'A token used for accessing Vault.',
   })
   token;

@@ -20,8 +20,6 @@ export default class CredentialStoreSerializer extends ApplicationSerializer {
   serializeVault() {
     const serialized = super.serialize(...arguments);
     if (serialized.attributes) {
-      // Token cannot be unset.  If it's falsy, it must be removed.
-      if (!serialized.attributes?.token) delete serialized.attributes.token;
       // Client certificate key cannot be unset when certificate is set.
       // If it's falsy, it must be removed.
       if (
