@@ -1,28 +1,19 @@
-<Rose::Form
-  @onSubmit={{fn this.submit @submit this.password}}
-  @disabled={{@model.isSaving}}
-  as |form|
->
+<Rose::Form @onSubmit={{fn this.submit @submit this.password}} as |form|>
 
-  <form.input
-    @name='password'
-    @type='password'
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @isOptional={{false}}
     @value={{this.password}}
-    @label={{t 'form.set_password.label'}}
-    @error={{@model.errors.password}}
-    @helperText={{t 'form.set_password.help'}}
-    readonly={{false}}
+    @type='password'
+    name='password'
     autocomplete='new-password'
-    as |field|
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event this 'password')}}
+    as |F|
   >
-    {{#if @model.errors.password}}
-      <field.errors as |errors|>
-        {{#each @model.errors.password as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
+    <F.Label>{{t 'form.set_password.label'}}</F.Label>
+    <F.HelperText>{{t 'form.set_password.help'}}</F.HelperText>
+  </Hds::Form::TextInput::Field>
 
   <form.actions
     @submitDisabled={{this.cannotSave}}
