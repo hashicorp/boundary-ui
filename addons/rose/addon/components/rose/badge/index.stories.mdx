@@ -1,11 +1,11 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 
-<Meta title="Rose/Badge" component="Badge" />
+<Meta title="Rose/Badge (removed)" component="Badge" />
 
-# HDS Badge (Recommended)
+# Rose Badge (Removed)
 
-> **_NOTE:_** Replaces the deprecated Rose/Badge.
+Rose/Badge has been removed in favor of [HDS::Badge](https://design-system-components-hashicorp.vercel.app/components/badge)
 
 ```handlebars
 <Hds::Badge @text='Success badge' @color='neutral' />
@@ -34,88 +34,5 @@ export const HDSTemplate = (args) => ({
     }}
   >
     {HDSTemplate.bind({})}
-  </Story>
-</Preview>
-
-# Rose Badge (Deprecated)
-
-Rose/Badge has been deprecated in favor of [HDS::Badge](https://design-system-components-hashicorp.vercel.app/components/badge)
-
-### <Rose::Badge> usage:
-
-A badge component that supports icons and predefined styles.
-When style definition isn't supplied, a default style will be supplied.
-
-Styles: outline, dark, informational, informational-outline, success, success-outline, error, error-outline, warning, warning-outline, alert, alert-outline
-
-```handlebars
-<Rose::Badge
-  @style='outline'
-  @icon='flight-icons/svg/org-16'
->Badge</Rose::Badge>
-```
-
-export const Template = (args) => ({
-  template: hbs`<Rose::Badge
-      @style={{style}}
-      @icon={{icon}}>
-      {{text}}
-      </Rose::Badge>`,
-  context: args,
-});
-
-<Preview>
-  <Story
-    name="Rose Badge"
-    args={{
-      text: 'Badge',
-      style: 'none',
-      icon: 'flight-icons/svg/org-16',
-    }}
-    argTypes={{
-      style: {
-        control: 'select',
-        options: [
-          'none',
-          'outline',
-          'dark',
-          'informational',
-          'informational-outline',
-          'success',
-          'success-outline',
-          'alert',
-          'alert-outline',
-          'error',
-          'error-outline',
-          'warning',
-          'warning-outline',
-        ],
-      },
-    }}
-  >
-    {Template.bind({})}
-  </Story>
-</Preview>
-
-<Preview>
-  <Story name="Rose Badge Style legend">
-    {{
-      template: hbs`
-    <Rose::Badge>default style</Rose::Badge>
-    <Rose::Badge @style="outline">outline</Rose::Badge>
-    <Rose::Badge @icon="flight-icons/svg/org-16">default style with icon</Rose::Badge>
-    <Rose::Badge @style="dark">dark</Rose::Badge>
-    <Rose::Badge @style="informational">informational</Rose::Badge>
-    <Rose::Badge @style="informational-outline">informational-outline</Rose::Badge>
-    <Rose::Badge @style="alert">alert</Rose::Badge>
-    <Rose::Badge @style="alert-outline">alert-outline</Rose::Badge>
-    <Rose::Badge @style="error">error</Rose::Badge>
-    <Rose::Badge @style="error-outline">error-outline</Rose::Badge>
-    <Rose::Badge @style="success">success</Rose::Badge>
-    <Rose::Badge @style="success-outline">success-outline</Rose::Badge>
-    <Rose::Badge @style="warning">warning</Rose::Badge>
-    <Rose::Badge @style="warning-outline">warning-outline</Rose::Badge>
-    `,
-    }}
   </Story>
 </Preview>
