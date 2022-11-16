@@ -48,12 +48,14 @@
                 <p>{{credentialLibrary.description}}</p>
               </row.headerCell>
               <row.cell>
-                <Rose::Badge>{{t
+                <Hds::Badge
+                  @text={{t
                     (concat
                       'resources.credential-library.types.'
                       credentialLibrary.type
                     )
-                  }}</Rose::Badge>
+                  }}
+                />
               </row.cell>
               <row.cell>
                 <Copyable
