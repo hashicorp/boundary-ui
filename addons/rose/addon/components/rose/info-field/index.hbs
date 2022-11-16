@@ -1,0 +1,10 @@
+<article class='rose-info-field' ...attributes>
+  <header class='rose-info-field-header'>
+    <p class='rose-info-field-title'>{{@title}}</p>
+    {{#if @icon}}
+      <Rose::Icon @name={{@icon}} @size='medium' />
+    {{/if}}
+    <p class='rose-info-field-subtitle'>{{@subtitle}}</p>
+  </header>
+  <p class='rose-info-field-description'>{{@description}}</p>
+</article>

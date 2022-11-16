@@ -1,0 +1,41 @@
+@use '../variables/sizing';
+
+.rose-info-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: sizing.rems(m);
+
+  .rose-info-field-header {
+    display: grid;
+    grid-template-areas:
+      'title title'
+      'icon subtitle'
+      'description description';
+    grid-auto-columns: auto 1fr;
+    font-size: var(--token-typography-body-200-font-size);
+
+    .rose-info-field-title {
+      margin-bottom: sizing.rems(xxs);
+      grid-area: title;
+      font-weight: var(--token-typography-font-weight-semibold);
+    }
+
+    .rose-icon {
+      margin-right: sizing.rems(xxs);
+      grid-area: icon;
+    }
+
+    .rose-info-field-subtitle {
+      margin-bottom: 0;
+      grid-area: subtitle;
+      font-weight: var(--token-typography-font-weight-medium);
+    }
+  }
+
+  .rose-info-field-description {
+    margin-top: sizing.rems(xs);
+    grid-area: description;
+    font-size: var(--token-typography-body-100-font-size);
+    color: var(--token-form-helper-text-color);
+  }
+}

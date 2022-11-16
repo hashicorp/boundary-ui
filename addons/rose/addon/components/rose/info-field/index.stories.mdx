@@ -1,0 +1,81 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs';
+import { hbs } from 'ember-cli-htmlbars';
+
+<Meta title="Rose/Info Field" component="InfoField" />
+
+# Info Field
+
+A information component containing a title, subtitle, description.
+Subtitle can be configured with optional icon.
+
+export const Template = (args) => ({
+  template: hbs`
+      <Rose::InfoField
+        @title={{title}}
+        @subtitle={{subtitle}}
+        @icon={{icon}}
+        @description={{description}}
+      />
+    `,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Info Field with Icon"
+    height="12rem"
+    args={{
+      title: 'Type',
+      subtitle: 'Username & Key Pair',
+      description:
+        'This host requires a username, public key, and private key to connect',
+      icon: 'flight-icons/svg/keychain-16',
+    }}
+    argTypes={{
+      icon: {
+        control: 'select',
+        options: 'flight-icons/svg/keychain-16',
+      },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Preview>
+
+```handlebars
+
+```
+
+Info Field can be configured without icons.
+
+export const BasicTemplate = (args) => ({
+  template: hbs`
+      <Rose::InfoField
+        @title={{title}}
+        @subtitle='JSON'
+        @description='Connect using a JSON blob containing the credentials'
+      />`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="Basic"
+    height="8rem"
+    args={{
+      title: 'Type',
+      subtitle: 'JSON',
+      description: 'Connect using a JSON blob containing the credentials.',
+    }}
+  >
+    {BasicTemplate.bind({})}
+  </Story>
+</Preview>
+
+```handlebars
+<Rose::Message
+  @title='Type'
+  @subtitle='JSON'
+  @description='Connect using a JSON blob containing the credentials.'
+/>
+```
