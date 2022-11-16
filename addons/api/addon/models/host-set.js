@@ -71,12 +71,23 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * Host IDs are read-only under normal circumstances.  But these can
    * be persisted via a dedicated call to `addHosts()`.
    */
-  @attr({ readOnly: true, emptyArrayIfMissing: true }) host_ids;
+  @attr({
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  host_ids;
 
-  @attr('string-array') preferred_endpoints;
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+  })
+  preferred_endpoints;
 
   // AWS specific
-  @attr('string-array', { isNestedAttribute: true }) filters;
+  @attr('string-array', {
+    isNestedAttribute: true,
+    emptyArrayIfMissing: true,
+  })
+  filters;
 
   // =methods
 

@@ -135,7 +135,7 @@ module('Unit | Serializer | host set', function (hooks) {
     });
   });
 
-  test('it normalizes missing host_ids to empty array', function (assert) {
+  test('it normalizes missing array fields to empty array', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
@@ -160,6 +160,8 @@ module('Unit | Serializer | host set', function (hooks) {
           name: 'Host Set 1',
           scope: { id: 'o_123', scope_id: 'o_123' },
           host_ids: [],
+          preferred_endpoints: [],
+          filters: [],
         },
         relationships: {},
       },
