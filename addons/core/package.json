@@ -15,7 +15,7 @@
   "scripts": {
     "build:development": "ember build",
     "build": "ember build --environment=production",
-    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
@@ -62,11 +62,10 @@
     "ember-export-application-global": "^2.0.1",
     "ember-inline-svg": "^1.0.1",
     "ember-load-initializers": "^2.1.2",
-    "ember-maybe-import-regenerator": "^1.0.0",
     "ember-page-title": "^7.0.0",
     "ember-qunit": "^6.0.0",
     "ember-resolver": "^8.0.3",
-    "ember-source": "~3.28.8",
+    "ember-source": "~4.0.1",
     "ember-template-lint": "^4.14.0",
     "ember-template-lint-plugin-prettier": "^4.0.0",
     "eslint": "^8.18.0",
@@ -81,10 +80,10 @@
     "qunit": "^2.17.2",
     "qunit-dom": "^2.0.0",
     "rose": "*",
-    "webpack": "5"
+    "webpack": "^5.65.0"
   },
   "engines": {
-    "node": "12.* || 14.* || 16.*"
+    "node": "12.* || 14.* || >= 16"
   },
   "ember": {
     "edition": "octane"
