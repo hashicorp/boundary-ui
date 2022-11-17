@@ -1,6 +1,6 @@
 import GeneratedAuthMethodModel from '../generated/models/auth-method';
 import { attr } from '@ember-data/model';
-import { fragment } from 'ember-data-model-fragments/attributes';
+import { fragmentArray } from 'ember-data-model-fragments/attributes';
 import { equal } from '@ember/object/computed';
 
 /**
@@ -28,33 +28,59 @@ export const options = {
 };
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
-  // =error attributes
-  // These attributes exist solely to capture errors on nested fields.
-  // See the application adapter's error normalization method for
-  // more information.
-
-  @attr('string', { readOnly: true }) attributes_state;
-  @attr('string', { readOnly: true }) attributes_issuer;
-  @attr('string', { readOnly: true }) attributes_client_id;
-  @attr('string', { readOnly: true }) attributes_client_secret;
-  @attr('string', { readOnly: true }) attributes_max_age;
-  @attr('string', { readOnly: true }) attributes_api_url_prefix;
-  @attr('string', { readOnly: true })
-  attributes_disable_discovered_config_validation;
-  @attr('string', { readOnly: true }) attributes_dry_run;
-  @attr('string', { readOnly: true }) attributes_account_claim_maps;
-  @attr('string', { readOnly: true }) attributes_claims_scopes;
-  @attr('string', { readOnly: true }) attributes_signing_algorithms;
-  @attr('string', { readOnly: true }) attributes_allowed_audiences;
-  @attr('string', { readOnly: true }) attributes_idp_ca_certs;
-
   // =attributes
 
-  /**
-   * Attributes of this resource, if any, represented as a JSON fragment.
-   * @type {FragmentAuthMethodAttributesModel}
-   */
-  @fragment('fragment-auth-method-attributes', { defaultValue: {} }) attributes;
+  @attr('string', { readOnly: true, isNestedAttribute: true }) state;
+
+  @attr('string', { isNestedAttribute: true }) issuer;
+
+  @attr('string', { isNestedAttribute: true }) client_id;
+
+  @attr('string', { isNestedAttribute: true }) client_secret;
+
+  @attr('string', { readOnly: true, isNestedAttribute: true })
+  client_secret_hmac;
+
+  @attr('number', { isNestedAttribute: true }) max_age;
+
+  @attr('string', { isNestedAttribute: true }) api_url_prefix;
+
+  @attr('string', { readOnly: true, isNestedAttribute: true }) callback_url;
+
+  @attr('boolean', { isNestedAttribute: true })
+  disable_discovered_config_validation;
+
+  @attr('boolean', { isNestedAttribute: true }) dry_run;
+
+  @fragmentArray('fragment-auth-method-attributes-account-claim-map', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  account_claim_maps;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  claims_scopes;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  signing_algorithms;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  allowed_audiences;
+
+  @fragmentArray('fragment-string', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  idp_ca_certs;
 
   /**
    * @type {boolean}
@@ -81,21 +107,21 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
    * @type {boolean}
    */
   get isInactive() {
-    return this.attributes.state === 'inactive';
+    return this.state === 'inactive';
   }
 
   /**
    * @type {boolean}
    */
   get isPrivate() {
-    return this.attributes.state === 'active-private';
+    return this.state === 'active-private';
   }
 
   /**
    * @type {boolean}
    */
   get isPublic() {
-    return this.attributes.state === 'active-public';
+    return this.state === 'active-public';
   }
 
   // =methods
