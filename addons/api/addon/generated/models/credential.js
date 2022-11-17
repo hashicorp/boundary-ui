@@ -79,4 +79,12 @@ export default class GeneratedCredentialModel extends BaseModel {
     description: 'The private key passphrase for credential.',
   })
   private_key_passphrase;
+
+  @attr('string', {
+    for: 'json',
+    isNestedAttribute: true,
+    isSecret: true,
+    description: 'The secret associated with the credential.',
+  })
+  json_object;
 }
