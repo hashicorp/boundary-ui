@@ -46,16 +46,16 @@
                 <p>{{member.description}}</p>
               </row.headerCell>
               <row.cell>
-                <code>{{member.attributes.issuer}}</code>
+                <code>{{member.issuer}}</code>
               </row.cell>
               <row.cell>
-                <code>{{member.attributes.subject}}</code>
+                <code>{{member.subject}}</code>
               </row.cell>
               <row.cell>
-                <code>{{member.attributes.email}}</code>
+                <code>{{member.email}}</code>
               </row.cell>
               <row.cell>
-                {{member.attributes.full_name}}
+                {{member.full_name}}
               </row.cell>
               <row.cell>
                 <Hds::Badge @text={{member.type}} />
