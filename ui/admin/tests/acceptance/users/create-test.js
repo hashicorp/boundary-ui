@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -14,23 +14,34 @@ module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgScope;
-  let usersURL;
-  let newUserURL;
+  const instances = {
+    scopes: {
+      global: null,
+      org: null,
+    },
+    user: null,
+  };
+
+  const urls = {
+    orgScope: null,
+    users: null,
+    user: null,
+    newUser: null,
+  };
 
   hooks.beforeEach(function () {
-    this.server.create('scope', { id: 'global' });
-    orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-        scope: { id: 'global', type: 'global' },
-      },
-      'withChildren'
-    );
-
-    usersURL = `/scopes/${orgScope.id}/users`;
-    newUserURL = `${usersURL}/new`;
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.org,
+    });
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
+    urls.users = `${urls.orgScope}/users`;
+    urls.user = `${urls.users}/${instances.user.id}`;
+    urls.newUser = `${urls.users}/new`;
 
     authenticateSession({});
   });
@@ -38,41 +49,63 @@ module('Acceptance | users | create', function (hooks) {
   test('can create new users', async function (assert) {
     assert.expect(1);
     const usersCount = this.server.db.users.length;
-    await visit(newUserURL);
+    await visit(urls.users);
+
+    await click(`[href="${urls.newUser}"]`);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
+
     assert.strictEqual(this.server.db.users.length, usersCount + 1);
   });
 
-  test('Users can navigate to new users route with proper authorization', async function (assert) {
+  test('users can navigate to new users route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(usersURL);
-    assert.ok(orgScope.authorized_collection_actions.users.includes('create'));
-    assert.ok(find(`[href="${newUserURL}"]`));
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.users}"]`);
+
+    assert.true(
+      instances.scopes.org.authorized_collection_actions.users.includes(
+        'create'
+      )
+    );
+    assert.dom(`[href="${urls.newUser}"]`).exists();
   });
 
-  test('Users cannot navigate to new users route without proper authorization', async function (assert) {
+  test('users cannot navigate to new users route without proper authorization', async function (assert) {
     assert.expect(2);
-    orgScope.authorized_collection_actions.users = [];
-    await visit(usersURL);
-    assert.notOk(
-      orgScope.authorized_collection_actions.users.includes('create')
+    instances.scopes.org.authorized_collection_actions.users =
+      instances.scopes.org.authorized_collection_actions.users.filter(
+        (item) => item !== 'create'
+      );
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.users}"]`);
+
+    assert.false(
+      instances.scopes.org.authorized_collection_actions.users.includes(
+        'create'
+      )
     );
-    assert.notOk(find(`[href="${newUserURL}"]`));
+    assert.dom('.rose-button-primary').doesNotExist();
   });
 
   test('can cancel creation of a new user', async function (assert) {
     assert.expect(2);
     const usersCount = this.server.db.users.length;
-    await visit(newUserURL);
+    await visit(urls.users);
+
+    await click(`[href="${urls.newUser}"]`);
     await fillIn('[name="name"]', 'User name');
     await click('.rose-form-actions [type="button"]');
-    assert.strictEqual(currentURL(), usersURL);
+
+    assert.strictEqual(currentURL(), urls.users);
     assert.strictEqual(this.server.db.users.length, usersCount);
   });
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
+    const usersCount = this.server.db.users.length;
     this.server.post('/users', () => {
       return new Response(
         400,
@@ -92,18 +125,14 @@ module('Acceptance | users | create', function (hooks) {
         }
       );
     });
-    await visit(newUserURL);
-    await fillIn('[name="name"]', 'User name');
+    await visit(urls.users);
+
+    await click(`[href="${urls.newUser}"]`);
+    await fillIn('[name="description"]', 'test');
     await click('[type="submit"]');
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
+
+    assert.strictEqual(this.server.db.users.length, usersCount);
+    assert.dom('.rose-notification-body').hasText('The request was invalid.');
+    assert.dom('.rose-form-error-message').hasText('Name is required.');
   });
 });
