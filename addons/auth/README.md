@@ -6,17 +6,11 @@ This addon contains the authentication layer for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Add to an App](#add-to-an-app)
-- [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
-- [Linting](#linting)
-- [Formatting](#formatting)
-- [Running tests](#running-tests)
-- [Running the dummy application](#running-the-dummy-application)
-- [Contributing](#contributing)
-  - [Building ToC](#building-toc)
+## Compatibility
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+* Ember.js v4 or above
+* Ember CLI v4 or above
+* Node.js v14 or above
 
 ## Add to an App
 
@@ -27,7 +21,7 @@ Add this addon to an Ember application's `devDependencies` as:
 
 See monorepo README for installation instructions.
 
-## Yarn Commands
+## Usage
 
 List of available project commands.  `yarn run <command-name>`
 

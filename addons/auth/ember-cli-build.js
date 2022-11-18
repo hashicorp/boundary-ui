@@ -1,10 +1,9 @@
 'use strict';
 
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
-const { maybeEmbroider } = require('@embroider/test-setup');
 
 module.exports = function (defaults) {
-  let app = new EmberAddon(defaults, {
+  const app = new EmberAddon(defaults, {
     'ember-simple-auth': {
       // https://github.com/mainmatter/ember-simple-auth/blob/master/guides/upgrade-to-v4.md#call-sessionsetup-method-in-your-applicationroute
       useSessionSetupMethod: true,
@@ -18,6 +17,7 @@ module.exports = function (defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
+  const { maybeEmbroider } = require('@embroider/test-setup');
   return maybeEmbroider(app, {
     skipBabel: [
       {
