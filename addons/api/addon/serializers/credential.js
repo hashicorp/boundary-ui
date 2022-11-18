@@ -13,6 +13,20 @@ export default class CredentialSerializer extends ApplicationSerializer {
    */
   serializeScopeID = false;
 
+  serialize() {
+    const serialized = super.serialize(...arguments);
+
+    if (serialized.type === 'json') {
+      delete serialized.attributes.username;
+
+      serialized.attributes.object = serialized.attributes.json_object;
+      delete serialized.attributes.json_object;
+      let parsedSecret = JSON.parse(serialized.attributes.object);
+      serialized.attributes.object = parsedSecret;
+    }
+
+    return serialized;
+  }
 
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = copy(hash, true);
@@ -21,6 +35,7 @@ export default class CredentialSerializer extends ApplicationSerializer {
     normalized.data.attributes.password = '';
     normalized.data.attributes.private_key = '';
     normalized.data.attributes.private_key_passphrase = '';
+    normalized.data.attributes.json_object = '';
     return normalized;
   }
 }
