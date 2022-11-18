@@ -18,10 +18,18 @@ This addon contains the API data access layer for Boundary.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Compatibility
+
+* Ember.js v4 or above
+* Ember CLI v4 or above
+* Node.js v14 or above
+
 ## Add API to an App
 
 Add this addon to an Ember application's `devDependencies` as:
 `"api": "*"`, for applications included in this monorepo.
+
+## Installation
 
 Since this addon also includes Mirage mocks, be sure to install
 `ember-cli-mirage` and add the following config to your UI project:

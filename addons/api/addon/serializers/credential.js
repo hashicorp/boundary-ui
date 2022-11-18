@@ -13,7 +13,6 @@ export default class CredentialSerializer extends ApplicationSerializer {
    */
   serializeScopeID = false;
 
-
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = copy(hash, true);
     const normalized = super.normalize(typeClass, normalizedHash, ...rest);
