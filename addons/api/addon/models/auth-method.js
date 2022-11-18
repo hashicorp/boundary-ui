@@ -1,5 +1,4 @@
 import GeneratedAuthMethodModel from '../generated/models/auth-method';
-import { attr } from '@ember-data/model';
 import { fragmentArray } from 'ember-data-model-fragments/attributes';
 import { equal } from '@ember/object/computed';
 
@@ -29,28 +28,6 @@ export const options = {
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
   // =attributes
-
-  @attr('string', { readOnly: true, isNestedAttribute: true }) state;
-
-  @attr('string', { isNestedAttribute: true }) issuer;
-
-  @attr('string', { isNestedAttribute: true }) client_id;
-
-  @attr('string', { isNestedAttribute: true }) client_secret;
-
-  @attr('string', { readOnly: true, isNestedAttribute: true })
-  client_secret_hmac;
-
-  @attr('number', { isNestedAttribute: true }) max_age;
-
-  @attr('string', { isNestedAttribute: true }) api_url_prefix;
-
-  @attr('string', { readOnly: true, isNestedAttribute: true }) callback_url;
-
-  @attr('boolean', { isNestedAttribute: true })
-  disable_discovered_config_validation;
-
-  @attr('boolean', { isNestedAttribute: true }) dry_run;
 
   @fragmentArray('fragment-auth-method-attributes-account-claim-map', {
     emptyArrayIfMissing: true,
