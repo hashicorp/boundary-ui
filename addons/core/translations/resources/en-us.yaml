@@ -441,7 +441,7 @@ credential:
   help:
     username_password: This host requires a username and password to connect.
     ssh_private_key: This host requires a username, public key, and private key to connect.
-    json: This host requires JSON blog to connect.
+    json: This host requires JSON blob to connect.
   form:
     username:
       label: Username
