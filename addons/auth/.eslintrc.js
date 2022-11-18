@@ -28,6 +28,16 @@ module.exports = {
     'ember/no-computed-properties-in-native-classes': 'off',
     'ember/no-assignment-of-untracked-properties-used-in-tracking-contexts':
       'off',
+    'node/no-unpublished-require': [
+      'error',
+      {
+        /**
+         *  Allow us to keep these deps as devDeps. They are just used for ember-try
+         *  More info: https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/no-unpublished-require.md
+         */
+        allowModules: ['@embroider/test-setup', 'ember-source-channel-url'],
+      },
+    ],
   },
   overrides: [
     // node files
