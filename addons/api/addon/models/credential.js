@@ -3,7 +3,7 @@ import GeneratedCredentialModel from '../generated/models/credential';
 /**
  * Supported Credential types.
  */
-export const types = ['username_password', 'ssh_private_key', 'json'];
+export const types = ['username_password', 'ssh_private_key'];
 
 export default class CredentialModel extends GeneratedCredentialModel {
   // =attributes
