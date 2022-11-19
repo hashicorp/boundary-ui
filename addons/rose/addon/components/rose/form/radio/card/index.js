@@ -18,7 +18,7 @@ export default class RoseFormRadioCardComponent extends RoseFormRadioRadioCompon
         since: {
           enabled: '3.28.8',
         },
-        url: 'https://boundary-ui-storybook.vercel.app/?path=/docs/rose-badge--hds-badge',
+        url: 'https://boundary-ui-storybook.vercel.app/?path=/docs/rose-form-radio-radio-card--card',
       }
     );
   }
