@@ -12,7 +12,7 @@ export default class RoseFormRadioCardComponent extends RoseFormRadioRadioCompon
       `Rose Form/Radio/Card component is deprecated, use HDS Form/RadioCard instead. For more info, refer to `,
       false,
       {
-        id: 'rose.form.radio.Card',
+        id: 'rose.form.radio.card',
         until: '4.8.0',
         for: 'rose',
         since: {
