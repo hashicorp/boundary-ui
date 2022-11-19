@@ -19,10 +19,12 @@ export default class CredentialSerializer extends ApplicationSerializer {
     if (serialized.type === 'json') {
       delete serialized.attributes.username;
 
-      serialized.attributes.object = serialized.attributes.json_object;
-      delete serialized.attributes.json_object;
-      let parsedSecret = JSON.parse(serialized.attributes.object);
-      serialized.attributes.object = parsedSecret;
+      if (serialized?.attributes?.json_object) {
+        serialized.attributes.object = serialized.attributes.json_object;
+        const parsedSecret = JSON.parse(serialized.attributes.object);
+        delete serialized.attributes.json_object;
+        serialized.attributes.object = parsedSecret;
+      }
     }
 
     return serialized;
