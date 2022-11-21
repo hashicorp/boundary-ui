@@ -92,6 +92,37 @@ module('Unit | Serializer | credential', function (hooks) {
     });
   });
 
+  test('it serializes json_object type correctly on create', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential');
+    const record = store.createRecord('credential', {
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      json_object:
+        '{"secret_key": "QWERTYUIOP", "secret_access_key": "QWERT.YUIOP234567890"}',
+      type: 'json',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      attributes: {
+        object: {
+          secret_key: 'QWERTYUIOP',
+          secret_access_key: 'QWERT.YUIOP234567890',
+        },
+      },
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'json',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+  });
+
   test('it serializes ssh_private_key type correctly when only the username is updated', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -146,6 +177,7 @@ module('Unit | Serializer | credential', function (hooks) {
           private_key_passphrase: '',
           private_key: '',
           password: '',
+          json_object: '',
         },
         type: 'credential',
         id: 'credup_123',
@@ -180,9 +212,39 @@ module('Unit | Serializer | credential', function (hooks) {
           private_key_passphrase: '',
           private_key: '',
           password: '',
+          json_object: '',
         },
         type: 'credential',
         id: 'credspk_123',
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes "json" type credential record', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential');
+    const credentialModelClass = store.createRecord('credential').constructor;
+    const payload = {
+      id: 'credjson_123',
+      version: 1,
+      type: 'json',
+    };
+    const normalized = serializer.normalize(credentialModelClass, payload);
+
+    assert.deepEqual(normalized, {
+      data: {
+        attributes: {
+          type: 'json',
+          version: 1,
+          private_key_passphrase: '',
+          private_key: '',
+          password: '',
+          json_object: '',
+        },
+        type: 'credential',
+        id: 'credjson_123',
         relationships: {},
       },
     });
