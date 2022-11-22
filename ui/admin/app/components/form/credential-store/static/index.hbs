@@ -45,53 +45,47 @@
   </form.textarea>
 
   {{#if (feature-flag 'static-credentials')}}
-    <form.fieldset>
-      <:title>{{t 'form.type.label'}}</:title>
-      <:body>
-        {{#if @model.isNew}}
-          <form.radioGroup
-            @name='types'
-            @selectedValue={{@model.type}}
-            @changed={{@changeType}}
-            as |radioGroup|
-          >
-            <radioGroup.card
-              @label={{t 'resources.credential-store.types.static'}}
-              @helperText={{t 'resources.credential-store.help.static'}}
-              @value='static'
-              @layout='wide'
-            />
-            <radioGroup.card
-              @label={{t 'resources.credential-store.types.vault'}}
-              @helperText={{t 'resources.credential-store.help.vault'}}
-              @value='vault'
-              @layout='wide'
-            />
-          </form.radioGroup>
-        {{else}}
-          <form.radioGroup
-            @name='types'
-            @selectedValue={{@model.type}}
-            as |radioGroup|
-          >
-            <radioGroup.card
-              @label={{t
-                (concat 'resources.credential-store.types.' @model.type)
-              }}
-              @helperText={{t
-                (concat 'resources.credential-store.help.' @model.type)
-              }}
-              @value={{@model.type}}
-              @layout='wide'
-              readonly={{true}}
-              @disabled={{true}}
-            />
-          </form.radioGroup>
-        {{/if}}
-      </:body>
-    </form.fieldset>
-  {{/if}}
+    {{#if @model.isNew}}
 
+      <Hds::Form::RadioCard::Group as |G|>
+        <G.Legend>{{t 'form.type.label'}}</G.Legend>
+        {{#each @types as |type|}}
+          <G.RadioCard
+            @name={{type}}
+            @value={{type}}
+            @checked={{eq type @model.type}}
+            {{on 'input' (fn @changeType type)}}
+            as |R|
+          >
+            <R.Label>{{t
+                (concat 'resources.credential-store.types.' type)
+              }}</R.Label>
+            <R.Description>{{t
+                (concat 'resources.credential-store.help.' type)
+              }}</R.Description>
+          </G.RadioCard>
+        {{/each}}
+      </Hds::Form::RadioCard::Group>
+    {{else}}
+      <Hds::Form::RadioCard::Group @name='types' as |G|>
+        <G.Legend>{{t
+            (concat 'resources.credential-store.types.' @model.type)
+          }}</G.Legend>
+        <G.RadioCard
+          @maxWidth='20rem'
+          @checked={{true}}
+          @disabled={{true}}
+          as |R|
+        >
+          <R.Label>{{t 'resources.credential-store.types.static'}}</R.Label>
+          <R.Description>{{t
+              (concat 'resources.credential-store.help.' @model.type)
+            }}</R.Description>
+        </G.RadioCard>
+      </Hds::Form::RadioCard::Group>
+    {{/if}}
+  {{/if}}
+  <br />
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}
