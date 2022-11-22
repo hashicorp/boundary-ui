@@ -86,13 +86,11 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
 
     await click(`[href="${urls.hosts}"]`);
 
-    assert.dom(`.rose-table a[href="${urls.host}"]`).doesNotExist();
+    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
   });
 
   test('visiting an unknown host displays 404 message', async function (assert) {
-    assert.expect(2);
-    await visit(urls.hosts);
-    assert.dom(`.rose-table a[href="${urls.unknownHost}"]`).doesNotExist();
+    assert.expect(1);
 
     await visit(urls.unknownHost);
     await a11yAudit();

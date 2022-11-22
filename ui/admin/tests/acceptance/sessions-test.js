@@ -95,7 +95,9 @@ module('Acceptance | sessions', function (hooks) {
       )
     );
 
-    assert.dom(`nav:nth-child(2) a[href="${urls.sessions}"]`).doesNotExist();
+    assert
+      .dom('[title="Resources"] a:first-of-type')
+      .doesNotIncludeText('Sessions');
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {

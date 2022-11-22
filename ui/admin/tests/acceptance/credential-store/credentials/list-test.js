@@ -90,7 +90,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
         'create'
       )
     );
-    assert.dom(`.rose-nav-tabs a[href="${urls.credentials}"]`).doesNotExist();
+    assert.dom('.rose-nav-tabs a:nth-child(2)').doesNotExist();
   });
 
   test('User can navigate to index with only create action', async function (assert) {

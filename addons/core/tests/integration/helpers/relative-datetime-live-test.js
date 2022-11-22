@@ -39,7 +39,7 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
     await render(hbs`{{relative-datetime-live this.date}}`);
     assert.dom(this.element).hasText('in 7 months');
 
-    this.date = now + 23 * 12 * 31 * 24 * 60 * 60 * 1000;
+    this.date = now + 23 * 12 * 30 * 24 * 60 * 60 * 1000;
     await render(hbs`{{relative-datetime-live this.date}}`);
     assert.dom(this.element).hasText('in 22 years');
   });

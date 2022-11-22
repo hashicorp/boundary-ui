@@ -79,9 +79,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
 
     await click(`[href="${urls.hostCatalog}"]`);
 
-    assert
-      .dom('.rose-layout-page-actions .rose-button-secondary')
-      .doesNotExist();
+    assert.dom('form [type="button"]').doesNotExist();
   });
 
   test('clicking cancel in edit mode does not save changes', async function (assert) {
