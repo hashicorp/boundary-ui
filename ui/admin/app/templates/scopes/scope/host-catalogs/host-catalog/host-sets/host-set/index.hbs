@@ -20,6 +20,7 @@
   <page.body>
     <Form::HostSet
       @model={{@model}}
+      @edit={{route-action 'edit' @model}}
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
       @removeItemByIndex={{route-action 'removeItemByIndex' @model}}

@@ -20,7 +20,8 @@
   .rose-form-input,
   .rose-form-input-field,
   .hds-form-select,
-  [class^='hds-form-field-'] .hds-form-select:not(:first-child) {
+  [class^='hds-form-field'],
+  [class^='hds-form-field']:not(:first-child) {
     margin: 0;
     width: 100%;
   }
