@@ -12,8 +12,6 @@
     "build": "ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
-    "lint:hbs": "ember-template-lint .",
-    "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "format": "yarn run format:js",
@@ -25,7 +23,6 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "ember-auto-import": "^2.4.2",
     "ember-can": "^3.1.0",
     "ember-cli-babel": "^7.26.11",
     "ember-cli-htmlbars": "^6.1.0",
@@ -35,7 +32,6 @@
     "ember-fetch": "^8.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.5",
     "@babel/eslint-parser": "^7.18.2",
     "@babel/plugin-proposal-decorators": "^7.18.6",
     "@ember/optional-features": "^2.0.0",
@@ -45,6 +41,7 @@
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
     "doctoc": "^2.2.0",
+    "ember-auto-import": "^2.4.3",
     "ember-cli": "^4.4.1",
     "ember-cli-dependency-checker": "^3.3.1",
     "ember-cli-inject-live-reload": "^2.1.0",
