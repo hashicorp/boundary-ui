@@ -49,28 +49,27 @@
     {{#if @model.isNew}}
       <Hds::Form::RadioCard::Group as |G|>
         <G.Legend>{{t 'form.type.label'}}</G.Legend>
-        {{#each @types as |type|}}
+        {{#each @types as |credentialStoreType|}}
           <G.RadioCard
-            @name={{type}}
-            @value={{type}}
-            @checked={{eq type @model.type}}
-            {{on 'input' (fn @changeType type)}}
+            @name={{credentialStoreType}}
+            @value={{credentialStoreType}}
+            @checked={{eq credentialStoreType @model.type}}
+            @maxWidth='20rem'
+            {{on 'input' (fn @changeType credentialStoreType)}}
             as |R|
           >
             <R.Label>{{t
-                (concat 'resources.credential-store.types.' type)
+                (concat 'resources.credential-store.types.' credentialStoreType)
               }}</R.Label>
             <R.Description>{{t
-                (concat 'resources.credential-store.help.' type)
+                (concat 'resources.credential-store.help.' credentialStoreType)
               }}</R.Description>
           </G.RadioCard>
         {{/each}}
       </Hds::Form::RadioCard::Group>
     {{else}}
       <Hds::Form::RadioCard::Group @name='types' as |G|>
-        <G.Legend>{{t
-            (concat 'resources.credential-store.types.' @model.type)
-          }}</G.Legend>
+        <G.Legend>{{t 'form.type.label'}}</G.Legend>
         <G.RadioCard
           @maxWidth='20rem'
           @checked={{true}}
