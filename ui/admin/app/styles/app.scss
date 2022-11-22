@@ -235,26 +235,12 @@
 .choose-path {
   display: block;
   width: sizing.rems(xl) * 15;
+  margin: 0 auto;
 }
 
 .choose-path-cards {
   display: flex;
   justify-content: space-between;
-}
-
-.create-resources {
-  display: block;
-  width: sizing.rems(xl) * 15;
-
-  .rose-form-fieldset {
-    margin-top: sizing.rems(xl);
-  }
-
-  .rose-frame-body {
-    p {
-      color: var(--ui-gray);
-    }
-  }
 }
 
 .create-resource-cards {
@@ -263,32 +249,6 @@
 
   .rose-form-input {
     width: sizing.rems(xl) * 6;
-  }
-}
-
-.onboarding-quick-setup-success {
-  display: block;
-  width: min-content;
-
-  .rose-frame-header {
-    padding: sizing.rems(l);
-  }
-
-  h2 {
-    font-weight: 700;
-    line-height: 24px;
-    margin: 0;
-  }
-
-  h4 {
-    font-weight: 700;
-    line-height: 19px;
-  }
-
-  a {
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 16px;
   }
 }
 
