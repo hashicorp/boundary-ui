@@ -73,7 +73,13 @@ export default function () {
       return resultSet.filter(makeBooleanFilter(filter));
     }
   );
-  this.post('/auth-methods');
+  this.post('/auth-methods', function ({ authMethods }) {
+    const attrs = this.normalizedRequestAttrs();
+    if (attrs.type === 'oidc') {
+      attrs.attributes.state = 'active-public';
+    }
+    return authMethods.create(attrs);
+  });
   this.get('/auth-methods/:id');
   this.patch('/auth-methods/:id');
   this.del('/auth-methods/:id', ({ authMethods }, { params: { id } }) => {
