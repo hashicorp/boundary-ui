@@ -15,6 +15,13 @@ module('Unit | Transform | string array', function (hooks) {
     ]);
   });
 
+  test('it deserializes null to an empty array', function (assert) {
+    assert.expect(1);
+    const transform = this.owner.lookup('transform:string-array');
+    const deserialized = transform.deserialize(null);
+    assert.deepEqual(deserialized, []);
+  });
+
   test('it serializes an array of `{value}` to an array of strings', function (assert) {
     assert.expect(1);
     const transform = this.owner.lookup('transform:string-array');
@@ -24,5 +31,12 @@ module('Unit | Transform | string array', function (hooks) {
       { value: 'Hello World' },
     ]);
     assert.deepEqual(serialized, ['a', 'bee', 'Hello World']);
+  });
+
+  test('it serializes null to an empty array', function (assert) {
+    assert.expect(1);
+    const transform = this.owner.lookup('transform:string-array');
+    const serialized = transform.serialize(null);
+    assert.deepEqual(serialized, []);
   });
 });
