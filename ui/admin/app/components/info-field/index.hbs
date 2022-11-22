@@ -1,0 +1,8 @@
+<div class='info-field'>
+  <Hds::Form::TextInput::Field @value={{@value}} readonly={{true}} as |F|>
+    {{#if @icon}}
+      <FlightIcon @name={{@icon}} />
+    {{/if}}
+    {{yield F}}
+  </Hds::Form::TextInput::Field>
+</div>

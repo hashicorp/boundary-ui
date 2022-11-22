@@ -447,3 +447,33 @@
     }
   }
 }
+
+.info-field {
+  > .hds-form-field--layout-vertical {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      'title title'
+      'icon label'
+      'description description';
+    .hds-form-label {
+      grid-area: title;
+    }
+
+    .hds-form-text-input:read-only {
+      background-color: transparent;
+      border: none;
+      grid-area: label;
+      margin-top: sizing.rems(xxs);
+      padding: 0;
+    }
+
+    .hds-form-helper-text {
+      grid-area: description;
+    }
+
+    .flight-icon {
+      grid-area: icon;
+      margin: sizing.rems(xxs) sizing.rems(xxs) sizing.rems(xs) 0;
+    }
+  }
+}
