@@ -21,7 +21,6 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "ember-auto-import": "^2.4.2",
     "ember-cli-babel": "^7.26.11",
     "ember-cli-htmlbars": "^6.1.0",
     "ember-fetch": "^8.1.1",
@@ -37,6 +36,7 @@
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
     "doctoc": "^2.2.0",
+    "ember-auto-import": "^2.4.3",
     "ember-cli": "^4.4.1",
     "ember-cli-dependency-checker": "^3.3.1",
     "ember-cli-inject-live-reload": "^2.1.0",
