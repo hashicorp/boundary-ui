@@ -187,10 +187,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.signing_algorithms' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'signing_algorithms' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -233,9 +230,7 @@
                 {{on
                   'click'
                   (fn
-                    @addStringItem
-                    'attributes.signing_algorithms'
-                    this.newSigningAlgorithm
+                    @addStringItem 'signing_algorithms' this.newSigningAlgorithm
                   )
                 }}
               >
@@ -292,10 +287,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.allowed_audiences' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'allowed_audiences' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -323,9 +315,7 @@
                 {{on
                   'click'
                   (fn
-                    @addStringItem
-                    'attributes.allowed_audiences'
-                    this.newAllowedAudience
+                    @addStringItem 'allowed_audiences' this.newAllowedAudience
                   )
                 }}
               >
@@ -382,10 +372,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.claims_scopes' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'claims_scopes' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -412,11 +399,7 @@
                 }}
                 {{on
                   'click'
-                  (fn
-                    @addStringItem
-                    'attributes.claims_scopes'
-                    this.newClaimsScope
-                  )
+                  (fn @addStringItem 'claims_scopes' this.newClaimsScope)
                 }}
               >
                 {{t 'actions.add'}}
@@ -494,10 +477,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.account_claim_maps' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'account_claim_maps' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -601,10 +581,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.idp_ca_certs' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'idp_ca_certs' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -630,9 +607,7 @@
                 }}
                 {{on
                   'click'
-                  (fn
-                    @addStringItem 'attributes.idp_ca_certs' this.newCertificate
-                  )
+                  (fn @addStringItem 'idp_ca_certs' this.newCertificate)
                 }}
               >
                 {{t 'actions.add'}}
