@@ -15,7 +15,6 @@ export default class FormOnboardingChoosePathComponent extends Component {
 
   @action
   toggleRadio(path) {
-    console.log(path, 'PATH');
     this.path = path;
   }
 }

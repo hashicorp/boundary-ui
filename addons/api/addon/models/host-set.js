@@ -1,5 +1,5 @@
 import GeneratedHostSetModel from '../generated/models/host-set';
-import { types } from './host-catalog';
+import { options } from './host-catalog';
 
 export default class HostSetModel extends GeneratedHostSetModel {
   // =attributes
@@ -25,7 +25,7 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isUnknown() {
-    return this.isPlugin && !types.includes(this.plugin?.name);
+    return this.isPlugin && !options.types.plugin.includes(this.plugin?.name);
   }
 
   /**

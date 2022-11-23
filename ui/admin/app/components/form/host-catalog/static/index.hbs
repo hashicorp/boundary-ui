@@ -46,60 +46,55 @@
   </form.textarea>
 
   {{#if @model.isNew}}
-    <form.fieldset>
-      <:title>{{t 'form.type.label'}}</:title>
-      <:body>
-        <form.radioGroup
-          @name='types'
-          @selectedValue={{@model.type}}
-          @changed={{@changeType}}
-          as |radioGroup|
+
+    <Hds::Form::RadioCard::Group as |G|>
+      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      {{#each @hostCatalogTypes as |hostCatalogType|}}
+        <G.RadioCard
+          @name={{hostCatalogType}}
+          @value={{hostCatalogType}}
+          @maxWidth='20rem'
+          @checked={{eq hostCatalogType @model.type}}
+          {{on 'input' (fn @changeType hostCatalogType)}}
+          as |R|
         >
-          <radioGroup.card
-            @label={{t 'resources.host-catalog.types.static'}}
-            @value='static'
-            @helperText={{t 'resources.host-catalog.help.static'}}
-            @layout='wide'
-          />
-          <radioGroup.card
-            @label={{t 'resources.host-catalog.types.dynamic'}}
-            @value='plugin'
-            @helperText={{t 'resources.host-catalog.help.dynamic'}}
-            @layout='wide'
-          />
-        </form.radioGroup>
-      </:body>
-    </form.fieldset>
+          <R.Label>{{t
+              (concat 'resources.host-catalog.types.' hostCatalogType)
+            }}</R.Label>
+          <R.Description>{{t
+              (concat 'resources.host-catalog.help.' hostCatalogType)
+            }}</R.Description>
+        </G.RadioCard>
+      {{/each}}
+    </Hds::Form::RadioCard::Group>
+    <br />
 
     {{#if @model.isPlugin}}
-      <Rose::Separator />
-      <form.fieldset>
-        <:title>{{t 'titles.provider'}}</:title>
-      </form.fieldset>
 
-      <form.fieldset>
-        <:title>{{t 'titles.choose-a-provider'}}</:title>
-        <:description>{{t 'descriptions.choose-a-provider'}}</:description>
-        <:body>
-          <form.radioGroup
-            @name='provider'
-            @selectedValue={{@model.compositeType}}
-            @changed={{@changeType}}
-            as |radioGroup|
+      <Hds::Form::RadioCard::Group as |G|>
+        <G.Legend>{{t 'titles.provider'}}</G.Legend>
+        <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
+        <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
+
+        {{#each @pluginTypes as |pluginType|}}
+          <G.RadioCard
+            @name={{pluginType}}
+            @value={{pluginType}}
+            @checked={{eq pluginType @model.type}}
+            @maxWidth='20rem'
+            {{on 'input' (fn @changeType pluginType)}}
+            as |R|
           >
-            <radioGroup.card
-              @label={{t 'resources.host-catalog.types.aws'}}
-              @value='aws'
-              @layout='tile'
-            />
-            <radioGroup.card
-              @label={{t 'resources.host-catalog.types.azure'}}
-              @value='azure'
-              @layout='tile'
-            />
-          </form.radioGroup>
-        </:body>
-      </form.fieldset>
+            <R.Label>{{t
+                (concat 'resources.host-catalog.types.' pluginType)
+              }}</R.Label>
+            <R.Description>{{t
+                (concat 'resources.host-catalog.help.' pluginType)
+              }}</R.Description>
+          </G.RadioCard>
+        {{/each}}
+      </Hds::Form::RadioCard::Group>
+      <br />
     {{/if}}
   {{/if}}
 

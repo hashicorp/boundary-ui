@@ -93,13 +93,13 @@ host-catalog:
     delete: Delete Host Catalog
   help:
     static: Provide a list of hosts and host sets with static addresses
-    dynamic: Automate discovery of target hosts and services on Azure or AWS
+    plugin: Automate discovery of target hosts and services on Azure or AWS
   types:
     static: Static
     unknown: Plugin
     aws: AWS
     azure: Azure
-    dynamic: Dynamic
+    plugin: Dynamic
   form:
     aws_region:
       label: AWS Region

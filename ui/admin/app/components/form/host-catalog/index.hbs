@@ -1,6 +1,8 @@
 {{component
   (concat 'form/host-catalog/' @model.compositeType)
   model=@model
+  pluginTypes=this.pluginTypes
+  hostCatalogTypes=this.hostCatalogTypes
   submit=@submit
   cancel=@cancel
   changeType=@changeType

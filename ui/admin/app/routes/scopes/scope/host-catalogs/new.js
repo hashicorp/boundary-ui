@@ -1,7 +1,10 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { set } from '@ember/object';
+// import { notifyError } from 'core/decorators/notify';
 
+import { setFromEvent } from 'rose/helpers/set-from-event';
 export default class ScopesScopeHostCatalogsNewRoute extends Route {
   // =services
 
@@ -50,6 +53,11 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   @action
   changeType(type) {
     if (type === 'plugin') type = 'aws';
+    // const inputValue = event?.target
+    //   ? set(context, field, event.target.value)
+    //   : null;
+
     this.router.replaceWith({ queryParams: { type } });
+    // return inputValue;
   }
 }
