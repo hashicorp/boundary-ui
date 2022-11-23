@@ -54,7 +54,10 @@ module('Acceptance | users | update', function (hooks) {
     await click('.rose-form-actions [type="submit"]');
 
     assert.strictEqual(currentURL(), urls.user);
-    assert.strictEqual(this.server.db.users[0].name, 'Updated user name');
+    assert.strictEqual(
+      this.server.schema.users.first().name,
+      'Updated user name'
+    );
   });
 
   test('cannot make changes to an existing user without proper authorization', async function (assert) {
@@ -129,7 +132,7 @@ module('Acceptance | users | update', function (hooks) {
     await click('.rose-dialog-footer button:first-child', 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.users);
-    assert.notEqual(this.server.db.users[0].name, 'Unsaved user name');
+    assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');
   });
 
   test('can click cancel on discard dialog box for unsaved user changes', async function (assert) {
@@ -147,6 +150,6 @@ module('Acceptance | users | update', function (hooks) {
     await click('.rose-dialog-footer button:last-child', 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.user);
-    assert.notEqual(this.server.db.users[0].name, 'Unsaved user name');
+    assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');
   });
 });
