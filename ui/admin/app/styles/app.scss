@@ -1,3 +1,4 @@
+// sass-lint:disable no-color-literals class-name-format
 @use 'rose/variables/sizing';
 @use 'rose/variables/media';
 
@@ -9,6 +10,7 @@
     justify-content: center;
   }
 }
+
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;
@@ -458,39 +460,40 @@
   .CodeMirror {
     height: 210px;
   }
+
   .CodeMirror-gutters {
     background: #31332b;
   }
 }
 
 .secret-editor {
-  height: 210px;
   background: #272822;
   border-radius: 4px;
+  height: 210px;
   margin-bottom: sizing.rems(l);
 }
 
 .skeleton-wrapper {
   color: var(--ui-gray);
-  position: relative;
   display: flex;
   flex-direction: row;
+  position: relative;
 }
 
 .skeleton-gutter {
-  height: 210px;
-  width: 52px;
   background: #31332b;
   border-radius: 4px 0 0 4px;
+  height: 210px;
+  width: 52px;
 }
 
 .skeleton-body {
   width: 100%;
 
   > div {
-    height: 8px;
-    border-radius: 16px;
     background: #31332b;
+    border-radius: 16px;
+    height: 8px;
     margin: 10.8px;
 
     &:first-child {
@@ -516,12 +519,12 @@
 }
 
 .details-view {
-  z-index: 1;
-  position: absolute;
-  top: 50%;
+  font-size: 14px;
   left: 50%;
   margin: -12px 0 0 -165.5px;
-  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  z-index: 1;
 
   .rose-icon {
     --size: sizing.rems(m);
@@ -529,11 +532,11 @@
 }
 
 .edit-view {
-  z-index: 1;
-  position: absolute;
-  top: 50%;
   left: 50%;
   margin: -11px 0 0 -100px;
+  position: absolute;
+  top: 50%;
+  z-index: 1;
 
   .rose-button-body {
     font-size: 14px;
@@ -542,12 +545,12 @@
 
 .rose-button-secret-editor-button {
   background: #272822;
-  border: 1px solid #6F7682;
-  box-shadow: 0px 4px 4px #00000040;
+  border: 1px solid #6f7682;
   border-radius: 2px;
-  width: 239px;
+  box-shadow: 0 4px 4px #000004;
   height: 36px;
-  top: 50%;
   left: 50%;
   margin: -6px 0 0 -28px;
+  top: 50%;
+  width: 239px;
 }
