@@ -35,7 +35,8 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
-    "ember-named-blocks-polyfill": "^0.2.5"
+    "ember-named-blocks-polyfill": "^0.2.5",
+    "jsonlint": "^1.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",

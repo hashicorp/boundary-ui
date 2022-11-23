@@ -11,6 +11,7 @@ module.exports = {
 
     app.import('node_modules/codemirror/lib/codemirror.css');
     app.import('node_modules/codemirror/theme/monokai.css');
+    app.import('node_modules/codemirror/addon/lint/lint.css');
 
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);

@@ -30,6 +30,8 @@ module.exports = function (defaults) {
     app.import('node_modules/clipboard/dist/clipboard.min.js');
   }
 
+  app.import('node_modules/jsonlint/lib/jsonlint.js');
+
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //
