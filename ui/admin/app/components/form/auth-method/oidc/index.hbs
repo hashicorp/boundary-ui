@@ -268,6 +268,7 @@
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='allowed_audiences'
                   @value={{audience.value}}
                   @error={{@model.errors.allowed_audiences}}
                   @contextual={{true}}
@@ -299,6 +300,7 @@
             <row.cell>
               <form.input
                 @type='text'
+                @name='allowed_audiences'
                 @value={{this.newAllowedAudience}}
                 @label={{t 'resources.auth-method.titles.new-allowed-audience'}}
               />
@@ -353,6 +355,7 @@
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='claims_scopes'
                   @value={{claimsScope.value}}
                   @error={{@model.errors.claims_scopes}}
                   @contextual={{true}}
@@ -384,6 +387,7 @@
             <row.cell>
               <form.input
                 @type='text'
+                @name='claims_scopes'
                 @value={{this.newClaimsScope}}
                 @label={{t 'resources.auth-method.titles.new-claims-scope'}}
               />
@@ -437,6 +441,7 @@
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='from_claim'
                   @value={{claimMap.from}}
                   @error={{@model.errors.account_claim_maps}}
                   @contextual={{true}}
@@ -489,6 +494,7 @@
             <row.cell>
               <form.input
                 @type='text'
+                @name='from_claim'
                 @value={{this.newFromClaim}}
                 @label={{t 'resources.auth-method.titles.new-from-claim'}}
               />
