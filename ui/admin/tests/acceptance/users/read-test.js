@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -14,8 +14,11 @@ module('Acceptance | users | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgScope;
-  let usersURL;
+  const urls = {
+    orgScope: null,
+    users: null,
+    user: null,
+  };
 
   const instances = {
     scopes: {
@@ -26,32 +29,60 @@ module('Acceptance | users | read', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-      },
-      'withChildren'
-    );
-    instances.user = this.server.create('user', {
-      scope: orgScope,
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
     });
-    usersURL = `/scopes/${orgScope.id}/users`;
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.org,
+    });
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
+    urls.users = `/scopes/${instances.scopes.org.id}/users`;
+    urls.user = `/scopes/${instances.scopes.org.id}/users/${instances.user.id}`;
     authenticateSession({});
   });
 
   test('visiting users', async function (assert) {
     assert.expect(1);
-    await visit(usersURL);
+    await visit(urls.orgScope);
     await a11yAudit();
-    assert.strictEqual(currentURL(), usersURL);
+
+    await click(`[href="${urls.users}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.users);
+  });
+
+  test('visiting user', async function (assert) {
+    assert.expect(1);
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.user);
   });
 
   test('cannot navigate to an account form without proper authorization', async function (assert) {
     assert.expect(1);
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'read');
-    await visit(usersURL);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.users}"]`);
+
+    assert.dom(`.rose-table [href="${urls.user}"]`).doesNotExist();
+  });
+
+  test('users can link to docs page for users', async function (assert) {
+    assert.expect(1);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.users}"]`);
+
+    assert
+      .dom(`[href="https://boundaryproject.io/help/admin-ui/users"]`)
+      .exists();
   });
 });

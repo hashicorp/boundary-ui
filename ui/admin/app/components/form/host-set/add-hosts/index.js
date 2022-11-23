@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { computed, action } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { A } from '@ember/array';
 
 export default class FormHostSetAddHostsIndexComponent extends Component {
@@ -27,8 +27,9 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
    */
   @computed('args.{model,model.host_ids,hosts}')
   get filteredHosts() {
-    const currentHostIDs = this.args.model.host_ids.map((host) => host.value);
-    return this.args.hosts.filter(({ id }) => !currentHostIDs.includes(id));
+    return this.args.hosts.filter(
+      ({ id }) => !this.args.model.host_ids.includes(id)
+    );
   }
 
   // =actions

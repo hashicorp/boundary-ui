@@ -59,16 +59,16 @@
   <form.input
     @name='issuer'
     @type='text'
-    @value={{@model.attributes.issuer}}
+    @value={{@model.issuer}}
     @label={{t 'form.issuer.label'}}
     @helperText={{t 'form.issuer.help'}}
-    @error={{@model.errors.attributes_issuer}}
+    @error={{@model.errors.issuer}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_issuer}}
+    {{#if @model.errors.issuer}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_issuer as |error|}}
+        {{#each @model.errors.issuer as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -78,26 +78,26 @@
   <form.checkbox
     @label={{t 'form.disable_discovered_config_validation.label'}}
     @helperText={{t 'form.disable_discovered_config_validation.help'}}
-    @checked={{@model.attributes.disable_discovered_config_validation}}
+    @checked={{@model.disable_discovered_config_validation}}
     @onChange={{fn
-      (mut @model.attributes.disable_discovered_config_validation)
-      (if @model.attributes.disable_discovered_config_validation false true)
+      (mut @model.disable_discovered_config_validation)
+      (if @model.disable_discovered_config_validation false true)
     }}
   />
 
   <form.input
     @name='client_id'
     @type='text'
-    @value={{@model.attributes.client_id}}
+    @value={{@model.client_id}}
     @label={{t 'form.client_id.label'}}
     @helperText={{t 'form.client_id.help'}}
-    @error={{@model.errors.attributes_client_id}}
+    @error={{@model.errors.client_id}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_client_id}}
+    {{#if @model.errors.client_id}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_client_id as |error|}}
+        {{#each @model.errors.client_id as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -107,16 +107,16 @@
   <form.input
     @name='client_secret'
     @type='password'
-    @value={{@model.attributes.client_secret}}
+    @value={{@model.client_secret}}
     @label={{t 'form.client_secret.label'}}
     @helperText={{t 'form.client_secret.help'}}
-    @error={{@model.errors.attributes_client_secret}}
+    @error={{@model.errors.client_secret}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_client_secret}}
+    {{#if @model.errors.client_secret}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_client_secret as |error|}}
+        {{#each @model.errors.client_secret as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -125,7 +125,7 @@
 
   {{#unless @model.isNew}}
     <form.input
-      @value={{@model.attributes.client_secret_hmac}}
+      @value={{@model.client_secret_hmac}}
       @label={{t 'form.client_secret_hmac.label'}}
       readonly={{true}}
       @disabled={{true}}
@@ -137,9 +137,9 @@
     <:title>{{t 'form.signing_algorithms.label'}}</:title>
     <:description>{{t 'form.signing_algorithms.help'}}</:description>
     <:body>
-      {{#if @model.errors.attributes_signing_algorithms}}
+      {{#if @model.errors.signing_algorithms}}
         <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.attributes_signing_algorithms as |error|}}
+          {{#each @model.errors.signing_algorithms as |error|}}
             <errors.message>{{error.message}}</errors.message>
           {{/each}}
         </Rose::Form::Errors>
@@ -152,25 +152,30 @@
           </header.row>
         </table.header>
         <table.body as |body|>
-          {{#each @model.attributes.signing_algorithms as |algorithm i|}}
+          {{#each @model.signing_algorithms as |algorithm i|}}
             <body.row as |row|>
               <row.cell>
-                <form.select
+
+                <Hds::Form::Select::Field
                   @value={{algorithm.value}}
-                  @error={{@model.errors.attributes_signing_algorithms}}
-                  @contextual={{true}}
-                  @onChange={{fn (mut algorithm.value)}}
-                  as |field|
+                  @isInvalid={{@model.errors.signing_algorithms}}
+                  disabled={{form.disabled}}
+                  {{on 'change' (set-from-event algorithm 'value')}}
+                  as |F|
                 >
-                  <field.label>{{t 'form.algorithm.label'}}</field.label>
-                  <field.field as |select|>
-                    {{#each this.signingAlgorithms as |algorithm|}}
-                      <select.option
-                        @value={{algorithm}}
-                      >{{algorithm}}</select.option>
+                  <F.Label class='sr-only'>{{t
+                      'form.algorithm.label'
+                    }}</F.Label>
+                  <F.Options>
+                    {{#each this.signingAlgorithms as |algorithmOption|}}
+                      <option
+                        value={{algorithmOption}}
+                        selected={{eq algorithmOption algorithm.value}}
+                      >{{algorithmOption}}</option>
                     {{/each}}
-                  </field.field>
-                </form.select>
+                  </F.Options>
+                </Hds::Form::Select::Field>
+
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
@@ -182,10 +187,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.signing_algorithms' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'signing_algorithms' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -195,22 +197,26 @@
 
           <body.row as |row|>
             <row.cell>
-              <form.select
+
+              <Hds::Form::Select::Field
                 @value={{this.newSigningAlgorithm}}
-                @label={{t
-                  'resources.auth-method.titles.new-signing-algorithm'
-                }}
-                @onChange={{fn (mut this.newSigningAlgorithm)}}
-                as |field|
+                disabled={{form.disabled}}
+                {{on 'change' (set-from-event this 'newSigningAlgorithm')}}
+                as |F|
               >
-                <field.field as |select|>
-                  {{#each this.signingAlgorithms as |algorithm|}}
-                    <select.option
-                      @value={{algorithm}}
-                    >{{algorithm}}</select.option>
+                <F.Label class='sr-only'>{{t
+                    'resources.auth-method.titles.new-signing-algorithm'
+                  }}</F.Label>
+                <F.Options>
+                  {{#each this.signingAlgorithms as |algorithmOption|}}
+                    <option
+                      value={{algorithmOption}}
+                      selected={{eq algorithmOption this.newSigningAlgorithm}}
+                    >{{algorithmOption}}</option>
                   {{/each}}
-                </field.field>
-              </form.select>
+                </F.Options>
+              </Hds::Form::Select::Field>
+
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button
@@ -224,9 +230,7 @@
                 {{on
                   'click'
                   (fn
-                    @addStringItem
-                    'attributes.signing_algorithms'
-                    this.newSigningAlgorithm
+                    @addStringItem 'signing_algorithms' this.newSigningAlgorithm
                   )
                 }}
               >
@@ -244,9 +248,9 @@
     <:title>{{t 'form.allowed_audiences.label'}}</:title>
     <:description>{{t 'form.allowed_audiences.help'}}</:description>
     <:body>
-      {{#if @model.errors.attributes_allowed_audiences}}
+      {{#if @model.errors.allowed_audiences}}
         <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.attributes_allowed_audiences as |error|}}
+          {{#each @model.errors.allowed_audiences as |error|}}
             <errors.message>{{error.message}}</errors.message>
           {{/each}}
         </Rose::Form::Errors>
@@ -259,13 +263,14 @@
           </header.row>
         </table.header>
         <table.body as |body|>
-          {{#each @model.attributes.allowed_audiences as |audience i|}}
+          {{#each @model.allowed_audiences as |audience i|}}
             <body.row as |row|>
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='allowed_audiences'
                   @value={{audience.value}}
-                  @error={{@model.errors.attributes_allowed_audiences}}
+                  @error={{@model.errors.allowed_audiences}}
                   @contextual={{true}}
                   as |field|
                 >
@@ -283,10 +288,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.allowed_audiences' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'allowed_audiences' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -298,6 +300,7 @@
             <row.cell>
               <form.input
                 @type='text'
+                @name='allowed_audiences'
                 @value={{this.newAllowedAudience}}
                 @label={{t 'resources.auth-method.titles.new-allowed-audience'}}
               />
@@ -314,9 +317,7 @@
                 {{on
                   'click'
                   (fn
-                    @addStringItem
-                    'attributes.allowed_audiences'
-                    this.newAllowedAudience
+                    @addStringItem 'allowed_audiences' this.newAllowedAudience
                   )
                 }}
               >
@@ -334,9 +335,9 @@
     <:title>{{t 'form.claims_scopes.label'}}</:title>
     <:description>{{t 'form.claims_scopes.help'}}</:description>
     <:body>
-      {{#if @model.errors.attributes_claims_scopes}}
+      {{#if @model.errors.claims_scopes}}
         <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.attributes_claims_scopes as |error|}}
+          {{#each @model.errors.claims_scopes as |error|}}
             <errors.message>{{error.message}}</errors.message>
           {{/each}}
         </Rose::Form::Errors>
@@ -349,13 +350,14 @@
           </header.row>
         </table.header>
         <table.body as |body|>
-          {{#each @model.attributes.claims_scopes as |claimsScope i|}}
+          {{#each @model.claims_scopes as |claimsScope i|}}
             <body.row as |row|>
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='claims_scopes'
                   @value={{claimsScope.value}}
-                  @error={{@model.errors.attributes_claims_scopes}}
+                  @error={{@model.errors.claims_scopes}}
                   @contextual={{true}}
                   as |field|
                 >
@@ -373,10 +375,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.claims_scopes' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'claims_scopes' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -388,6 +387,7 @@
             <row.cell>
               <form.input
                 @type='text'
+                @name='claims_scopes'
                 @value={{this.newClaimsScope}}
                 @label={{t 'resources.auth-method.titles.new-claims-scope'}}
               />
@@ -403,11 +403,7 @@
                 }}
                 {{on
                   'click'
-                  (fn
-                    @addStringItem
-                    'attributes.claims_scopes'
-                    this.newClaimsScope
-                  )
+                  (fn @addStringItem 'claims_scopes' this.newClaimsScope)
                 }}
               >
                 {{t 'actions.add'}}
@@ -424,9 +420,9 @@
     <:title>{{t 'form.account_claim_maps.label'}}</:title>
     <:description>{{t 'form.account_claim_maps.help'}}</:description>
     <:body>
-      {{#if @model.errors.attributes_account_claim_maps}}
+      {{#if @model.errors.account_claim_maps}}
         <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.attributes_account_claim_maps as |error|}}
+          {{#each @model.errors.account_claim_maps as |error|}}
             <errors.message>{{error.message}}</errors.message>
           {{/each}}
         </Rose::Form::Errors>
@@ -440,13 +436,14 @@
           </header.row>
         </table.header>
         <table.body as |body|>
-          {{#each @model.attributes.account_claim_maps as |claimMap i|}}
+          {{#each @model.account_claim_maps as |claimMap i|}}
             <body.row as |row|>
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='from_claim'
                   @value={{claimMap.from}}
-                  @error={{@model.errors.attributes_account_claim_maps}}
+                  @error={{@model.errors.account_claim_maps}}
                   @contextual={{true}}
                   as |field|
                 >
@@ -455,22 +452,25 @@
                 </form.input>
               </row.cell>
               <row.cell>
-                <form.select
+
+                <Hds::Form::Select::Field
                   @value={{claimMap.to}}
-                  @error={{@model.errors.attributes_account_claim_maps}}
-                  @contextual={{true}}
-                  @onChange={{fn (mut claimMap.to)}}
-                  as |field|
+                  @isInvalid={{@model.errors.account_claim_maps}}
+                  disabled={{form.disabled}}
+                  {{on 'change' (set-from-event claimMap 'to')}}
+                  as |F|
                 >
-                  <field.label>{{t 'form.to_claim.label'}}</field.label>
-                  <field.field as |select|>
-                    {{#each this.toClaims as |toClaim|}}
-                      <select.option
-                        @value={{toClaim}}
-                      >{{toClaim}}</select.option>
+                  <F.Label class='sr-only'>{{t 'form.to_claim.label'}}</F.Label>
+                  <F.Options>
+                    {{#each this.toClaims as |toClaimOption|}}
+                      <option
+                        value={{toClaimOption}}
+                        selected={{eq toClaimOption claimMap.to}}
+                      >{{toClaimOption}}</option>
                     {{/each}}
-                  </field.field>
-                </form.select>
+                  </F.Options>
+                </Hds::Form::Select::Field>
+
               </row.cell>
               <row.cell @shrink={{true}}>
                 <Rose::Button
@@ -482,10 +482,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.account_claim_maps' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'account_claim_maps' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -497,25 +494,32 @@
             <row.cell>
               <form.input
                 @type='text'
+                @name='from_claim'
                 @value={{this.newFromClaim}}
                 @label={{t 'resources.auth-method.titles.new-from-claim'}}
               />
             </row.cell>
             <row.cell>
-              <form.select
+
+              <Hds::Form::Select::Field
                 @value={{this.newToClaim}}
-                @label={{t 'resources.auth-method.titles.new-to-claim'}}
-                @onChange={{fn (mut this.newToClaim)}}
-                as |field|
+                disabled={{form.disabled}}
+                {{on 'change' (set-from-event this 'newToClaim')}}
+                as |F|
               >
-                <field.field as |select|>
-                  {{#each this.toClaims as |toClaim|}}
-                    <select.option
-                      @value={{toClaim}}
-                    >{{toClaim}}</select.option>
+                <F.Label class='sr-only'>{{t
+                    'resources.auth-method.titles.new-to-claim'
+                  }}</F.Label>
+                <F.Options>
+                  {{#each this.toClaims as |toClaimOption|}}
+                    <option
+                      value={{toClaimOption}}
+                      selected={{eq toClaimOption this.newToClaim}}
+                    >{{toClaimOption}}</option>
                   {{/each}}
-                </field.field>
-              </form.select>
+                </F.Options>
+              </Hds::Form::Select::Field>
+
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button
@@ -545,9 +549,9 @@
     <:title>{{t 'form.idp_ca_certs.label'}}</:title>
     <:description>{{t 'form.idp_ca_certs.help'}}</:description>
     <:body>
-      {{#if @model.errors.attributes_idp_ca_certs}}
+      {{#if @model.errors.idp_ca_certs}}
         <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.attributes_idp_ca_certs as |error|}}
+          {{#each @model.errors.idp_ca_certs as |error|}}
             <errors.message>{{error.message}}</errors.message>
           {{/each}}
         </Rose::Form::Errors>
@@ -560,12 +564,12 @@
           </header.row>
         </table.header>
         <table.body as |body|>
-          {{#each @model.attributes.idp_ca_certs as |cert i|}}
+          {{#each @model.idp_ca_certs as |cert i|}}
             <body.row as |row|>
               <row.cell>
                 <form.textarea
                   @value={{cert.value}}
-                  @error={{@model.errors.attributes_idp_ca_certs}}
+                  @error={{@model.errors.idp_ca_certs}}
                   @contextual={{true}}
                   as |field|
                 >
@@ -583,10 +587,7 @@
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on
-                    'click'
-                    (fn @removeItemByIndex 'attributes.idp_ca_certs' i)
-                  }}
+                  {{on 'click' (fn @removeItemByIndex 'idp_ca_certs' i)}}
                 >
                   {{t 'actions.remove'}}
                 </Rose::Button>
@@ -612,9 +613,7 @@
                 }}
                 {{on
                   'click'
-                  (fn
-                    @addStringItem 'attributes.idp_ca_certs' this.newCertificate
-                  )
+                  (fn @addStringItem 'idp_ca_certs' this.newCertificate)
                 }}
               >
                 {{t 'actions.add'}}
@@ -629,18 +628,18 @@
   <form.input
     @name='max_age'
     @type='number'
-    @value={{@model.attributes.max_age}}
+    @value={{@model.max_age}}
     @label={{t 'form.max_age.label'}}
     @helperText={{t 'form.max_age.help'}}
-    @error={{@model.errors.attributes_max_age}}
+    @error={{@model.errors.max_age}}
     readonly={{false}}
     step='1'
     min='0'
     as |field|
   >
-    {{#if @model.errors.attributes_max_age}}
+    {{#if @model.errors.max_age}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_max_age as |error|}}
+        {{#each @model.errors.max_age as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -650,16 +649,16 @@
   <form.input
     @name='api_url_prefix'
     @type='test'
-    @value={{@model.attributes.api_url_prefix}}
+    @value={{@model.api_url_prefix}}
     @label={{t 'form.api_url_prefix.label'}}
     @helperText={{t 'form.api_url_prefix.help'}}
-    @error={{@model.errors.attributes_api_url_prefix}}
+    @error={{@model.errors.api_url_prefix}}
     readonly={{false}}
     as |field|
   >
-    {{#if @model.errors.attributes_api_url_prefix}}
+    {{#if @model.errors.api_url_prefix}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_api_url_prefix as |error|}}
+        {{#each @model.errors.api_url_prefix as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>
@@ -668,7 +667,7 @@
 
   {{#unless @model.isNew}}
     <form.input
-      @value={{@model.attributes.callback_url}}
+      @value={{@model.callback_url}}
       @label={{t 'form.callback_url.label'}}
       @helperText={{t 'form.callback_url.help'}}
       readonly={{true}}

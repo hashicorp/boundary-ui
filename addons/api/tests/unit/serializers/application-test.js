@@ -107,6 +107,33 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
+  test('it serializes secret attributes correctly', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('credential', {
+      private_key_passphrase: undefined,
+      private_key: null,
+      password: '',
+      username: 'user',
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'username_password',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+    const serializedRecord = record.serialize();
+    assert.deepEqual(serializedRecord, {
+      attributes: {
+        username: 'user',
+      },
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'username_password',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+  });
+
   test('it normalizes array records from an `items` root key', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');

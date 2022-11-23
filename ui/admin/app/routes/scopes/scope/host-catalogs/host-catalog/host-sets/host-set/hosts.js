@@ -25,8 +25,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsRoute
     return hash({
       hostSet,
       hosts: all(
-        hostSet.host_ids.map((host) =>
-          this.store.findRecord('host', host.value, { reload: true })
+        hostSet.host_ids.map((hostID) =>
+          this.store.findRecord('host', hostID, { reload: true })
         )
       ),
     });

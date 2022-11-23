@@ -49,19 +49,19 @@
                   <p>{{account.description}}</p>
                 </row.headerCell>
                 <row.cell>
-                  <code>{{account.attributes.issuer}}</code>
+                  <code>{{account.issuer}}</code>
                 </row.cell>
                 <row.cell>
-                  <code>{{account.attributes.subject}}</code>
+                  <code>{{account.subject}}</code>
                 </row.cell>
                 <row.cell>
-                  <code>{{account.attributes.email}}</code>
+                  <code>{{account.email}}</code>
                 </row.cell>
                 <row.cell>
-                  {{account.attributes.full_name}}
+                  {{account.full_name}}
                 </row.cell>
                 <row.cell>
-                  <Rose::Badge>{{account.type}}</Rose::Badge>
+                  <Hds::Badge @text={{account.type}} />
                 </row.cell>
                 <row.cell>
                   <Copyable
@@ -103,10 +103,10 @@
                   <p>{{account.description}}</p>
                 </row.headerCell>
                 <row.cell>
-                  {{account.attributes.login_name}}
+                  {{account.login_name}}
                 </row.cell>
                 <row.cell>
-                  <Rose::Badge>{{account.type}}</Rose::Badge>
+                  <Hds::Badge @text={{account.type}} />
                 </row.cell>
                 <row.cell>
                   <Copyable

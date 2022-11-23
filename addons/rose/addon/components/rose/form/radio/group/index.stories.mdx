@@ -75,6 +75,78 @@ export const Template = (args) => ({
   </Story>
 </Preview>
 
+# HDS::Form::RadioCard::Group (Recommended)
+
+> **_NOTE:_** Replaces the deprecated Rose/Form/Radio/Group/Card.
+
+```handlebars
+<Hds::Form::RadioCard::Group
+  @name='radio-card-basic-example'
+  @alignment='center'
+  as |G|
+>
+  <G.Legend>Create connection</G.Legend>
+  <G.RadioCard @checked={{true}} {{on 'change' this.onChange}} as |R|>
+    <R.Icon @name='aws-color' />
+    <R.Label>Quick peering with Quick Links</R.Label>
+    <R.Badge @text='2-5 min' />
+    <R.Description>Quick peering with quick links will provide the fastest way
+      to connect to your providers’ network.</R.Description>
+  </G.RadioCard>
+  <G.RadioCard {{on 'change' this.onChange}} as |R|>
+    <R.Icon @name='aws-color' />
+    <R.Label>Manual peering using AWS CLI</R.Label>
+    <R.Badge @text='5-10 min' />
+    <R.Description>Provide you AWS CLI template to apply connection settings.</R.Description>
+  </G.RadioCard>
+  <G.RadioCard {{on 'change' this.onChange}} as |R|>
+    <R.Icon @name='hcp' />
+    <R.Label>Manual peering using HCP and AWS web console</R.Label>
+    <R.Badge @text='30-60 min' />
+    <R.Description>Manually follow UI instructions to complete configuring a
+      connection at provider side.</R.Description>
+  </G.RadioCard>
+</Hds::Form::RadioCard::Group>
+```
+
+export const HDSTemplate = (args) => ({
+  template: hbs`
+    <Hds::Form::RadioCard::Group @name="radio-card-basic-example" @alignment="center" as |G|>
+      <G.Legend>Create connection</G.Legend>
+      <G.RadioCard @maxWidth="20%" @checked={{true}} {{on "change" this.onChange}} as |R|>
+        <R.Label>{{firstlabel}}</R.Label>
+        <R.Badge @text={{firstbadge}} />
+        <R.Description>{{firstdescription}}</R.Description>
+      </G.RadioCard>
+      <G.RadioCard @maxWidth="20%" {{on "change" this.onChange}} as |R|>
+        <R.Label>{{secondlabel}}</R.Label>
+        <R.Badge @text={{secondbadge}} />
+        <R.Description>{{seconddescription}}</R.Description>
+      </G.RadioCard>
+    </Hds::Form::RadioCard::Group>`,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="HDS Card"
+    height="10rem"
+    args={{
+      firstlabel: 'Quick peering with Quick Links',
+      firstbadge: '6 clusters left',
+      firstdescription: 'Record financial transactions using',
+      secondlabel: 'Manual peering using AWS CLI',
+      secondbadge: '60 clusters left',
+      seconddescription:
+        'Manually follow UI instructions to complete configuring a connection at provider side.',
+    }}
+  >
+    {HDSTemplate.bind({})}
+  </Story>
+</Preview>
+
+# Rose::Form::Radio::Group::Card (Deprecated)
+
 ```handlebars
 <Rose::Form::Radio::Group
   @disabled={{false}}
@@ -105,100 +177,50 @@ export const Template = (args) => ({
 </Rose::Form::Radio::Group>
 ```
 
-```handlebars
-<Rose::Form::Radio::Group
-  @disabled={{false}}
-  @name={{name}}
-  @selectedValue='disagree'
-  @changed={{fn}}
-  @inline={{false}}
-  as |radioGroup|
->
-  <radioGroup.Card @label='Agree' @value='agree' @layout='wide' />
-  <radioGroup.Card @label='disagree' @value='disagree' @layout='wide' />
-</Rose::Form::Radio::Group>
-```
-
-export const CardTemplate = (args) => ({
+export const RoseTemplate = (args) => ({
   template: hbs`
       <Rose::Form::Radio::Group
-      @disabled={{disabled}}
-      @name={{name}}
-      @selectedValue={{selectedValue}}
-      @changed={{changed}}
-      as |radioGroup|
-    >
-      <radioGroup.card
-        @label={{firstFieldLabel}}
-        @value={{firstFieldValue}}
-        @icon={{firstFieldIcon}}
-        @layout={{Layout}}
-      />
-      <radioGroup.card
-        @label={{secondFieldLabel}}
-        @value={{secondFieldValue}}
-        @icon={{secondFieldIcon}}
-        @layout={{Layout}}
-      />
-      <radioGroup.card
-        @label={{thirdFieldLabel}}
-        @value={{thirdFieldValue}}
-        @icon={{thirdFieldIcon}}
-        @layout={{Layout}}
-      />
-    </Rose::Form::Radio::Group>`,
+        @disabled={{disabled}}
+        @name={{name}}
+        @selectedValue={{selectedValue}}
+        @changed={{changed}}
+        as |radioGroup|
+      >
+        <radioGroup.card
+          @label={{firstFieldLabel}}
+          @value={{firstFieldValue}}
+          @icon={{firstFieldIcon}}
+        />
+        <radioGroup.card @label={{secondFieldLabel}} @value={{secondFieldValue}} />
+      </Rose::Form::Radio::Group>`,
   context: args,
 });
 
 <Preview>
   <Story
-    name="Card"
+    name="Rose Basic"
     height="10rem"
     args={{
-      Layout: 'tile',
       name: 'mustagree',
       disabled: false,
       selectedValue: 'disagree',
       firstFieldLabel: 'Agree',
       firstFieldValue: 'agree',
-      secondFieldLabel: 'Maybe',
-      secondFieldValue: 'maybe',
-      thirdFieldLabel: 'Disagree',
-      thirdFieldValue: 'disagree',
-      firstFieldIcon: '',
-      secondFieldIcon: '',
-      thirdFieldIcon: '',
+      secondFieldLabel: 'Disagree',
+      secondFieldValue: 'disagree',
+      firstFieldIcon: 'flight-icons/svg/org-16',
     }}
     argTypes={{
-      Layout: {
-        control: 'inline-radio',
-        options: ['wide', 'tile'],
-        name: 'layout',
-      },
       firstFieldIcon: {
-        control: {
-          type: 'inline-radio',
-          labels: { '': 'none' },
-        },
-        options: ['', 'flight-icons/svg/azure-color-16'],
-      },
-      secondFieldIcon: {
-        control: {
-          type: 'inline-radio',
-          labels: { '': 'none' },
-        },
-        options: ['', 'flight-icons/svg/azure-color-16'],
-      },
-      thirdFieldIcon: {
-        control: {
-          type: 'inline-radio',
-          labels: { '': 'none' },
-        },
-        options: ['', 'flight-icons/svg/azure-color-16'],
+        control: 'select',
+        options: [
+          'flight-icons/svg/org-16',
+          'flight-icons/svg/clipboard-copy-16',
+        ],
       },
       changed: { action: 'changed' },
     }}
   >
-    {CardTemplate.bind({})}
+    {RoseTemplate.bind({})}
   </Story>
 </Preview>

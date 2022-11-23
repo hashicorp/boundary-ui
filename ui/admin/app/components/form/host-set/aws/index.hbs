@@ -1,4 +1,5 @@
 <Rose::Form
+  @edit={{@edit}}
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
@@ -100,6 +101,7 @@
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='preferred_endpoints'
                   @value={{endpoint.value}}
                   @error={{@model.errors.preferred_endpoints}}
                   @contextual={{true}}
@@ -131,6 +133,7 @@
             <row.cell>
               <form.input
                 @type='text'
+                @name='preferred_endpoints'
                 @value={{@model.preferred_endpoint}}
                 placeholder='cidr:2001:4860:4860::8888/32'
               />
@@ -186,6 +189,7 @@
               <row.cell>
                 <form.input
                   @type='text'
+                  @name='filters'
                   @value={{filter.value}}
                   @error={{@model.errors.filters}}
                   @contextual={{true}}
@@ -214,7 +218,11 @@
 
           <body.row as |row|>
             <row.cell>
-              <form.input @type='text' @value={{@model.filter}} />
+              <form.input
+                @type='text'
+                @name='filters'
+                @value={{@model.filter}}
+              />
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button

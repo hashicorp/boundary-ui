@@ -1,5 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  find,
+  findAll,
+  click,
+  fillIn,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -100,7 +107,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     );
   });
 
-  test('can save changes to existing host', async function (assert) {
+  test('can save changes to existing host-set', async function (assert) {
     assert.expect(3);
     assert.notEqual(instances.hostSet.name, 'random string');
     await visit(urls.hostSet);
@@ -109,9 +116,104 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await click('.rose-form-actions [type="submit"]');
     assert.strictEqual(currentURL(), urls.hostSet);
     assert.strictEqual(
-      this.server.schema.hostSets.all().models[0].name,
+      this.server.schema.hostSets.first().name,
       'random string'
     );
+  });
+
+  test('can save changes to an existing aws host-set', async function (assert) {
+    assert.expect(5);
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'aws',
+      },
+    });
+    instances.hostSet = this.server.create('host-set', {
+      scope: instances.scopes.project,
+      hostCatalog: instances.hostCatalog,
+    });
+    urls.hostSet = `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}`;
+    await visit(urls.hostSet);
+
+    await click(
+      'form .rose-form-actions [type="button"]',
+      'Activate edit mode'
+    );
+
+    const name = 'aws host set';
+    await fillIn('[name="name"]', name);
+    // Remove all the preferred endpoints
+    await Promise.all(
+      findAll('form fieldset:nth-of-type(2) [title="Remove"]').map((element) =>
+        click(element)
+      )
+    );
+    await fillIn('[name="preferred_endpoints"]', 'endpoint');
+    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    // Remove all the filters
+    await Promise.all(
+      findAll('form fieldset:nth-of-type(3) [title="Remove"]').map((element) =>
+        click(element)
+      )
+    );
+    await fillIn('[name="filters"]', 'filter');
+    await click('form fieldset:nth-of-type(3) [title="Add"]');
+    await fillIn('[name="sync_interval_seconds"]', 10);
+    await click('.rose-form-actions [type="submit"]');
+
+    assert.strictEqual(currentURL(), urls.hostSet);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.strictEqual(hostSet.name, name);
+    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
+    assert.deepEqual(hostSet.attributes.filters, ['filter']);
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
+  });
+
+  test('can save changes to an existing azure host-set', async function (assert) {
+    assert.expect(5);
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'azure',
+      },
+    });
+    instances.hostSet = this.server.create('host-set', {
+      scope: instances.scopes.project,
+      hostCatalog: instances.hostCatalog,
+    });
+    urls.hostSet = `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}`;
+    await visit(urls.hostSet);
+
+    await click(
+      'form .rose-form-actions [type="button"]',
+      'Activate edit mode'
+    );
+
+    const name = 'azure host set';
+    await fillIn('[name="name"]', name);
+    // Remove all the preferred endpoints
+    await Promise.all(
+      findAll('form fieldset:nth-of-type(2) [title="Remove"]').map((element) =>
+        click(element)
+      )
+    );
+    await fillIn('[name="preferred_endpoints"]', 'endpoint');
+    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await fillIn('[name="filter"]', 'filter');
+    await fillIn('[name="sync_interval_seconds"]', 10);
+    await click('.rose-form-actions [type="submit"]');
+
+    assert.strictEqual(currentURL(), urls.hostSet);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.strictEqual(hostSet.name, name);
+    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
+    assert.deepEqual(hostSet.attributes.filter, 'filter');
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
   test('cannot make changes to an existing host without proper authorization', async function (assert) {
@@ -122,7 +224,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
   });
 
-  test('can cancel changes to existing host', async function (assert) {
+  test('can cancel changes to existing host-set', async function (assert) {
     assert.expect(2);
     await visit(urls.hostSet);
     await click('form [type="button"]', 'Activate edit mode');
@@ -183,7 +285,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       await click('.rose-dialog-footer button:first-child');
       assert.strictEqual(currentURL(), urls.hostSets);
       assert.notEqual(
-        this.server.schema.hostSets.all().models[0].name,
+        this.server.schema.hostSets.first().name,
         'random string'
       );
     }
