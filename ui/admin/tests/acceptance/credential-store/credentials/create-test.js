@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -14,6 +14,7 @@ module(
     let getCredentialsCount;
     let getUsernamePasswordCredentialCount;
     let getUsernameKeyPairCredentialCount;
+    let getJsonCredentialCount;
 
     const instances = {
       scopes: {
@@ -50,7 +51,7 @@ module(
       urls.credentialStores = `${urls.projectScope}/credential-stores`;
       urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
       urls.credentials = `${urls.staticCredentialStore}/credentials`;
-      urls.newCredential = `${urls.staticCredentialStore}/credentials/new`;
+      urls.newCredential = `${urls.credentials}/new`;
       // Generate resource counter
       getCredentialsCount = () => {
         return this.server.schema.credentials.all().models.length;
@@ -64,17 +65,23 @@ module(
         return this.server.schema.credentials.where({ type: 'ssh_private_key' })
           .length;
       };
+      getJsonCredentialCount = () => {
+        return this.server.schema.credentials.where({ type: 'json' }).length;
+      };
       authenticateSession({});
     });
 
-    test('Users can create a new username & password credential', async function (assert) {
+    test('users can create a new username & password credential', async function (assert) {
       assert.expect(2);
       const credentialsCount = getCredentialsCount();
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
-      await visit(urls.newCredential);
+      await visit(urls.credentials);
+
+      await click(`[href="${urls.newCredential}"]`);
       await fillIn('[name="name"]', 'random string');
       await click('[type="submit"]');
+
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
@@ -82,15 +89,18 @@ module(
       );
     });
 
-    test('Users can create a new username & key pair credential', async function (assert) {
+    test('users can create a new username & key pair credential', async function (assert) {
       assert.expect(2);
       const credentialsCount = getCredentialsCount();
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
-      await visit(urls.newCredential);
+      await visit(urls.credentials);
+
+      await click(`[href="${urls.newCredential}"]`);
       await fillIn('[name="name"]', 'random string');
       await click('[value="ssh_private_key"]');
       await click('[type="submit"]');
+
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
@@ -98,42 +108,85 @@ module(
       );
     });
 
-    test('Users can cancel create new username & password credential', async function (assert) {
+    test('users can create a new json credential', async function (assert) {
       assert.expect(2);
       const credentialsCount = getCredentialsCount();
-      await visit(urls.newCredential);
+      const jsonCredentialCount = getJsonCredentialCount();
+      await visit(urls.credentials);
+
+      await click(`[href="${urls.newCredential}"]`);
+      await fillIn('[name="name"]', 'random string');
+      await click('[value="json"]');
+      await click('[type="submit"]');
+
+      assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
+      assert.strictEqual(getJsonCredentialCount(), jsonCredentialCount + 1);
+    });
+
+    test('users can cancel create new username & password credential', async function (assert) {
+      assert.expect(2);
+      const credentialsCount = getCredentialsCount();
+      await visit(urls.credentials);
+
+      await click(`[href="${urls.newCredential}"]`);
       await fillIn('[name="name"]', 'random string');
       await click('.rose-form-actions [type="button"]');
+
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getCredentialsCount(), credentialsCount);
     });
 
-    test('Users can cancel create new username & key pair credential', async function (assert) {
+    test('users can cancel create new username & key pair credential', async function (assert) {
       assert.expect(2);
       const credentialsCount = getCredentialsCount();
-      await visit(urls.newCredential);
+      await visit(urls.credentials);
+
+      await click(`[href="${urls.newCredential}"]`);
       await fillIn('[name="name"]', 'random string');
       await click('[value="ssh_private_key"]');
       await click('.rose-form-actions [type="button"]');
+
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getCredentialsCount(), credentialsCount);
     });
 
-    test('Users cannot navigate to new credential route without proper authorization', async function (assert) {
+    test('users can cancel create new json credential', async function (assert) {
+      assert.expect(2);
+      const credentialsCount = getCredentialsCount();
+      await visit(urls.credentials);
+
+      await click(`[href="${urls.newCredential}"]`);
+      await fillIn('[name="name"]', 'random string');
+      await click('[value="json"]');
+      await click('.rose-form-actions [type="button"]');
+
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(getCredentialsCount(), credentialsCount);
+    });
+
+    test('users cannot navigate to new credential route without proper authorization', async function (assert) {
       assert.expect(2);
       instances.staticCredentialStore.authorized_collection_actions.credentials =
-        [];
-      await visit(urls.staticCredentialStore);
-      assert.notOk(
+        instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
+          (item) => {
+            item !== 'create';
+          }
+        );
+      await visit(urls.credentialStores);
+
+      await click(`[href="${urls.staticCredentialStore}"]`);
+
+      assert.false(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
           'create'
         )
       );
-      assert.notOk(find(`[href="${urls.newCredential}"]`));
+      assert.dom('.rose-layout-page-actions a').doesNotExist();
     });
 
     test('saving a new username & password credential with invalid fields displays error messages', async function (assert) {
       assert.expect(2);
+      await visit(urls.credentials);
       this.server.post('/credentials', () => {
         return new Response(
           400,
@@ -154,20 +207,21 @@ module(
           }
         );
       });
-      await visit(urls.newCredential);
+
+      await click(`[href="${urls.newCredential}"]`);
       await click('[type="submit"]');
-      assert.ok(
-        find('[role="alert"]').textContent.trim(),
-        'Error in provided request.'
-      );
-      assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
-        'Field required for creating a username-password credential.'
-      );
+
+      assert
+        .dom('.rose-notification-body')
+        .hasText('Error in provided request.');
+      assert
+        .dom('.rose-form-error-message')
+        .hasText('Field required for creating a username-password credential.');
     });
 
     test('saving a new username & key pair credential with invalid fields displays error messages', async function (assert) {
       assert.expect(2);
+      await visit(urls.credentials);
       this.server.post('/credentials', () => {
         return new Response(
           400,
@@ -188,17 +242,52 @@ module(
           }
         );
       });
-      await visit(urls.newCredential);
+
+      await click(`[href="${urls.newCredential}"]`);
       await click('[value="ssh_private_key"]');
       await click('[type="submit"]');
-      assert.ok(
-        find('[role="alert"]').textContent.trim(),
-        'Error in provided request.'
-      );
-      assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
-        'Field required for creating a username-key-pair credential.'
-      );
+
+      assert
+        .dom('.rose-notification-body')
+        .hasText('Error in provided request.');
+      assert
+        .dom('.rose-form-error-message')
+        .hasText('Field required for creating a username-key-pair credential.');
+    });
+
+    test('saving a new json credential with invalid fields displays error messages', async function (assert) {
+      assert.expect(2);
+      await visit(urls.credentials);
+      this.server.post('/credentials', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'Error in provided request.',
+            details: {
+              request_fields: [
+                {
+                  name: 'attributes.json_object',
+                  description: 'Field required for creating a json credential.',
+                },
+              ],
+            },
+          }
+        );
+      });
+
+      await click(`[href="${urls.newCredential}"]`);
+      await click('[value="json"]');
+      await click('[type="submit"]');
+
+      assert
+        .dom('.rose-notification-body')
+        .hasText('Error in provided request.');
+      assert
+        .dom('.rose-form-error-message')
+        .hasText('Field required for creating a json credential.');
     });
   }
 );
