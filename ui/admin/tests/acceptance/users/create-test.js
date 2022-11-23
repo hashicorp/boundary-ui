@@ -14,6 +14,8 @@ module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let getUsersCount;
+
   const instances = {
     scopes: {
       global: null,
@@ -42,20 +44,22 @@ module('Acceptance | users | create', function (hooks) {
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
     urls.newUser = `${urls.users}/new`;
-
+    getUsersCount = () => {
+      return this.server.schema.users.all().models.length;
+    };
     authenticateSession({});
   });
 
   test('can create new users', async function (assert) {
     assert.expect(1);
-    const usersCount = this.server.db.users.length;
+    const usersCount = getUsersCount();
     await visit(urls.users);
 
     await click(`[href="${urls.newUser}"]`);
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
 
-    assert.strictEqual(this.server.db.users.length, usersCount + 1);
+    assert.strictEqual(getUsersCount(), usersCount + 1);
   });
 
   test('users can navigate to new users route with proper authorization', async function (assert) {
@@ -87,12 +91,13 @@ module('Acceptance | users | create', function (hooks) {
         'create'
       )
     );
+
     assert.dom('.rose-button-primary').doesNotExist();
   });
 
   test('can cancel creation of a new user', async function (assert) {
     assert.expect(2);
-    const usersCount = this.server.db.users.length;
+    const usersCount = getUsersCount();
     await visit(urls.users);
 
     await click(`[href="${urls.newUser}"]`);
@@ -100,12 +105,13 @@ module('Acceptance | users | create', function (hooks) {
     await click('.rose-form-actions [type="button"]');
 
     assert.strictEqual(currentURL(), urls.users);
-    assert.strictEqual(this.server.db.users.length, usersCount);
+    assert.strictEqual(getUsersCount(), usersCount);
   });
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
     assert.expect(3);
-    const usersCount = this.server.db.users.length;
+    const usersCount = getUsersCount();
+    await visit(urls.users);
     this.server.post('/users', () => {
       return new Response(
         400,
@@ -125,13 +131,12 @@ module('Acceptance | users | create', function (hooks) {
         }
       );
     });
-    await visit(urls.users);
 
     await click(`[href="${urls.newUser}"]`);
     await fillIn('[name="description"]', 'test');
     await click('[type="submit"]');
 
-    assert.strictEqual(this.server.db.users.length, usersCount);
+    assert.strictEqual(getUsersCount(), usersCount);
     assert.dom('.rose-notification-body').hasText('The request was invalid.');
     assert.dom('.rose-form-error-message').hasText('Name is required.');
   });
