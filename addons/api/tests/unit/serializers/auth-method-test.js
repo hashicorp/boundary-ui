@@ -33,27 +33,25 @@ module('Unit | Serializer | auth method', function (hooks) {
     let record = store.createRecord('auth-method', {
       type: 'oidc',
       name: 'OIDC Auth Method',
-      attributes: {
-        state: 'foo',
-        account_claim_maps: [{ from: 'foo', to: 'bar' }],
-        claims_scopes: [{ value: 'profile' }, { value: 'email' }],
-        signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
-        allowed_audiences: [
-          { value: 'www.alice.com' },
-          { value: 'www.alice.com/admin' },
-        ],
-        idp_ca_certs: [
-          { value: 'certificate-1234' },
-          { value: 'certificate-5678' },
-        ],
-        api_url_prefix: 'protocol://host:port/foo',
-        client_id: 'id123',
-        client_secret: 'secret456',
-        disable_discovered_config_validation: true,
-        dry_run: true,
-        issuer: 'http://www.example.net',
-        max_age: 500,
-      },
+      state: 'foo',
+      account_claim_maps: [{ from: 'foo', to: 'bar' }],
+      claims_scopes: [{ value: 'profile' }, { value: 'email' }],
+      signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
+      allowed_audiences: [
+        { value: 'www.alice.com' },
+        { value: 'www.alice.com/admin' },
+      ],
+      idp_ca_certs: [
+        { value: 'certificate-1234' },
+        { value: 'certificate-5678' },
+      ],
+      api_url_prefix: 'protocol://host:port/foo',
+      client_id: 'id123',
+      client_secret: 'secret456',
+      disable_discovered_config_validation: true,
+      dry_run: true,
+      issuer: 'http://www.example.net',
+      max_age: 500,
     });
 
     let serializedRecord = record.serialize();
@@ -148,19 +146,56 @@ module('Unit | Serializer | auth method', function (hooks) {
 
   test('it normalizes OIDC records', async function (assert) {
     const store = this.owner.lookup('service:store');
+
+    const apiUrlPrefix = 'protocol://host:port/foo';
+    const clientId = 'id123';
+    const clientSecret = 'secret456';
+    const disableDiscoveredConfigValidation = true;
+    const dryRun = true;
+    const issuer = 'http://www.example.net';
+    const maxAge = 500;
     this.server.get('/v1/auth-methods/oidc123', () => ({
       attributes: {
         account_claim_maps: ['from=to', 'foo=bar'],
+        claims_scopes: [{ value: 'profile' }, { value: 'email' }],
+        signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
+        allowed_audiences: [
+          { value: 'www.alice.com' },
+          { value: 'www.alice.com/admin' },
+        ],
+        idp_ca_certs: [
+          { value: 'certificate-1234' },
+          { value: 'certificate-5678' },
+        ],
+        api_url_prefix: apiUrlPrefix,
+        client_id: clientId,
+        client_secret: clientSecret,
+        disable_discovered_config_validation: disableDiscoveredConfigValidation,
+        dry_run: dryRun,
+        issuer: issuer,
+        max_age: maxAge,
       },
       version: 1,
       type: 'oidc',
       id: 'oidc123',
     }));
+
     const record = await store.findRecord('auth-method', 'oidc123');
-    const { account_claim_maps } = record.attributes;
+    const { account_claim_maps } = record;
+
     assert.strictEqual(account_claim_maps.firstObject.from, 'from');
     assert.strictEqual(account_claim_maps.firstObject.to, 'to');
     assert.strictEqual(account_claim_maps.lastObject.from, 'foo');
     assert.strictEqual(account_claim_maps.lastObject.to, 'bar');
+    assert.strictEqual(record.api_url_prefix, apiUrlPrefix);
+    assert.strictEqual(record.client_id, clientId);
+    assert.strictEqual(record.client_secret, clientSecret);
+    assert.strictEqual(
+      record.disable_discovered_config_validation,
+      disableDiscoveredConfigValidation
+    );
+    assert.strictEqual(record.dry_run, dryRun);
+    assert.strictEqual(record.issuer, issuer);
+    assert.strictEqual(record.max_age, maxAge);
   });
 });

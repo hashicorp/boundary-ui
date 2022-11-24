@@ -23,8 +23,10 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "ember-can": "^3.1.0",
-    "ember-cli-babel": "^7.26.11",
+    "@embroider/test-setup": "^0.48.1",
+    "ember-auto-import": "^2.4.2",
+    "ember-can": "^4.2.0",
+    "ember-cli-babel": "^7.26.10",
     "ember-cli-htmlbars": "^6.1.0",
     "ember-cli-mirage": "^2.2.0",
     "ember-data": "^3.20.0",

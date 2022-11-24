@@ -15,7 +15,7 @@ export default ApplicationSerializer.extend({
     delete json.attributes?.password;
     delete json.attributes?.private_key;
     delete json.attributes?.private_key_passphrase;
-
+    delete json.attributes?.json_object;
     return json;
   },
 });
