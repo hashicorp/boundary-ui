@@ -1,6 +1,6 @@
 {{#if @model.isOIDC}}
   <Rose::Dropdown
-    @text={{t (concat 'states.' @model.attributes.state)}}
+    @text={{t (concat 'states.' @model.state)}}
     @icon={{if
       @model.isInactive
       'flight-icons/svg/x-circle-16'
@@ -17,7 +17,7 @@
       <Rose::Form as |form|>
         <form.radioGroup
           @name='theme'
-          @selectedValue={{@model.attributes.state}}
+          @selectedValue={{@model.state}}
           @changed={{route-action 'changeState'}}
           as |radioGroup|
         >

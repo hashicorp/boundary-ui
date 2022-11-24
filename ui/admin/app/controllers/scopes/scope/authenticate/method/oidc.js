@@ -9,7 +9,7 @@ export default class ScopesScopeAuthenticateMethodOidcController extends Control
   // =attributes
 
   /**
-   * Authetnication URL for the pending OIDC flow, if any.
+   * Authentication URL for the pending OIDC flow, if any.
    * @type {?string}
    */
   get authURL() {
