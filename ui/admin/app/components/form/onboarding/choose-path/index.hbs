@@ -5,15 +5,8 @@
   @onSubmit={{fn @submit this.path}}
   as |form|
 >
-  {{!-- <form.radioGroup
-    @name='paths'
-    @selectedValue={{this.path}}
-    @changed={{this.toggleRadio}}
-    as |radioGroup|
-  > --}}
-  {{! <div class='choose-path-cards'> }}
-  {{this.path}}pahhh
-  <Hds::Form::RadioCard::Group @name='onboarding' as |G|>
+
+  <Hds::Form::RadioCard::Group @name='paths' as |G|>
     <G.RadioCard
       @maxWidth='20rem'
       @checked={{eq this.path 'guided'}}
@@ -40,7 +33,5 @@
     </G.RadioCard>
   </Hds::Form::RadioCard::Group>
   <br />
-  {{! </div> }}
-  {{! </form.radioGroup> }}
   <form.actions @submitText={{t 'actions.next'}} @showCancel={{false}} />
 </Rose::Form>

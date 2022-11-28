@@ -44,11 +44,7 @@
   </form.textarea>
 
   {{#if @model.isNew}}
-    <Hds::Form::RadioCard::Group
-      @name='selectedValue'
-      @alignment='center'
-      as |G|
-    >
+    <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each @hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
@@ -69,14 +65,15 @@
       {{/each}}
     </Hds::Form::RadioCard::Group>
     <br />
-    <Hds::Form::RadioCard::Group
-      @alignment='center'
-      @name='selectedValue'
-      as |G|
-    >
+    <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
       <G.Legend>{{t 'titles.provider'}}</G.Legend>
       <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
-      <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
+      <G.HelperText>{{concat
+          (t 'descriptions.choose-a-provider')
+          ' '
+          (t 'descriptions.choose-a-provider-azure')
+        }}</G.HelperText>
+
       {{#each @pluginTypes as |pluginType|}}
         <G.RadioCard
           @name={{pluginType}}

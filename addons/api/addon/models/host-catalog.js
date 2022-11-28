@@ -1,6 +1,4 @@
 import GeneratedHostCatalogModel from '../generated/models/host-catalog';
-// export const hostCatalogTypes = ['static', 'plugin'];
-// export const pluginTypes = ['aws', 'azure'];
 
 export const options = {
   types: {

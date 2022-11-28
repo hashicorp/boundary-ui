@@ -47,7 +47,7 @@
 
   {{#if @model.isNew}}
 
-    <Hds::Form::RadioCard::Group as |G|>
+    <Hds::Form::RadioCard::Group @name='types' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each @hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
@@ -71,7 +71,7 @@
 
     {{#if @model.isPlugin}}
 
-      <Hds::Form::RadioCard::Group as |G|>
+      <Hds::Form::RadioCard::Group @name='types' as |G|>
         <G.Legend>{{t 'titles.provider'}}</G.Legend>
         <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
         <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>

@@ -51,26 +51,23 @@
       </field.errors>
     {{/if}}
   </form.textarea>
+  <Hds::Form::RadioCard::Group @alignment='center' as |G|>
+    <G.Legend>{{t 'titles.provider'}}</G.Legend>
 
-  <form.fieldset>
-    <:title>{{t 'titles.provider'}}</:title>
-    <:body>
-      <form.radioGroup
-        @name='provider'
-        @selectedValue={{@model.compositeType}}
-        @disabled={{true}}
-        as |radioGroup|
-      >
-        <radioGroup.card
-          @label={{t 'resources.host-catalog.types.aws'}}
-          @value={{@model.compositeType}}
-          @layout='tile'
-          @icon={{concat 'flight-icons/svg/' @model.compositeType '-color-16'}}
-        />
-      </form.radioGroup>
-    </:body>
-  </form.fieldset>
+    <G.RadioCard
+      @name='provider'
+      @value='aws'
+      @maxWidth='20rem'
+      @checked={{true}}
+      @disabled={{true}}
+      as |R|
+    >
+      <R.Label>{{t 'resources.host-catalog.types.aws'}}</R.Label>
+      <R.Icon @name='aws-color' />
+    </G.RadioCard>
 
+  </Hds::Form::RadioCard::Group>
+  <br />
   <form.fieldset>
     <:title>{{t 'form.ip_addresses.label'}}</:title>
     <:body>

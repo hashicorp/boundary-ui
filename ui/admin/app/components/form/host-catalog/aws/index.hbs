@@ -45,7 +45,7 @@
 
   {{#if @model.isNew}}
 
-    <Hds::Form::RadioCard::Group @alignment='center' as |G|>
+    <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each @hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
@@ -66,11 +66,7 @@
       {{/each}}
     </Hds::Form::RadioCard::Group>
     <br />
-    <Hds::Form::RadioCard::Group
-      @alignment='center'
-      @name='selectedValue'
-      as |G|
-    >
+    <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
       <G.Legend>{{t 'titles.provider'}}</G.Legend>
       <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
       <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>

@@ -52,25 +52,23 @@
     {{/if}}
   </form.textarea>
 
-  <form.fieldset>
-    <:title>{{t 'titles.provider'}}</:title>
-    <:body>
-      <form.radioGroup
-        @name='provider'
-        @selectedValue={{@model.compositeType}}
-        @disabled={{true}}
-        as |radioGroup|
-      >
-        <radioGroup.card
-          @label={{t 'resources.host-catalog.types.azure'}}
-          @value={{@model.compositeType}}
-          @layout='tile'
-          @icon={{concat 'flight-icons/svg/' @model.compositeType '-color-16'}}
-        />
-      </form.radioGroup>
-    </:body>
-  </form.fieldset>
+  <Hds::Form::RadioCard::Group @alignment='center' as |G|>
+    <G.Legend>{{t 'titles.provider'}}</G.Legend>
 
+    <G.RadioCard
+      @name='provider'
+      @value='azure'
+      @maxWidth='20rem'
+      @checked={{true}}
+      @disabled={{true}}
+      as |R|
+    >
+      <R.Label>{{t 'resources.host-catalog.types.azure'}}</R.Label>
+      <R.Icon @name='azure-color' />
+    </G.RadioCard>
+
+  </Hds::Form::RadioCard::Group>
+  <br />
   <form.fieldset>
     <:title>{{t 'form.ip_addresses.label'}}</:title>
     <:body>

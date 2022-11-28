@@ -53,26 +53,24 @@
     @disabled={{true}}
   />
 
-  <form.fieldset>
-    <:title>{{t 'titles.provider'}}</:title>
-    <:description>{{t 'descriptions.provider'}}</:description>
+  <Hds::Form::RadioCard::Group @alignment='center' as |G|>
+    <G.Legend>{{t 'titles.provider'}}</G.Legend>
+    <G.HelperText>{{t 'descriptions.provider'}}</G.HelperText>
 
-    <:body>
-      <form.radioGroup
-        @name='provider'
-        @selectedValue={{@model.compositeType}}
-        @disabled={{true}}
-        as |radioGroup|
-      >
-        <radioGroup.card
-          @label={{t 'resources.host-catalog.types.aws'}}
-          @value={{@model.compositeType}}
-          @layout='tile'
-          @icon='flight-icons/svg/aws-color-16'
-        />
-      </form.radioGroup>
-    </:body>
-  </form.fieldset>
+    <G.RadioCard
+      @name='provider'
+      @value='aws'
+      @maxWidth='20rem'
+      @checked={{true}}
+      @disabled={{true}}
+      as |R|
+    >
+      <R.Label>{{t 'resources.host-catalog.types.aws'}}</R.Label>
+      <R.Icon @name='aws-color' />
+    </G.RadioCard>
+
+  </Hds::Form::RadioCard::Group>
+  <br />
 
   <Rose::Form::Fieldset
     @helperText={{t 'resources.host-set.form.preferred_endpoints.help'}}
