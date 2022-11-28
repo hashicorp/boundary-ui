@@ -1,25 +1,55 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 
-<Meta
-  title="Rose/Form/Radio/Radio/Card"
-  component="Form/Radio/Radio/Card"
-  args={{
-    label: 'Azure',
-    error: false,
-    value: 'value and selectedValue must match to select radiofield',
-    selectedValue: 'value and selectedValue must match to select radiofield',
-    helperText: 'Record financial transactions using',
-    disabled: false,
-  }}
-  argTypes={{
-    Layout: {
-      control: 'inline-radio',
-      options: ['wide', 'tile'],
-      name: 'layout',
-    },
-  }}
-/>
+<Meta title="Rose/Form/Radio/Card" component="RadioCard" />
+
+# HDS::Form::RadioCard (Recommended)
+
+> **_NOTE:_** Replaces the deprecated Rose/Form/Radio/Card.
+
+Refer to the [HDS Form::RadioCard
+documentation](https://design-system-components-hashicorp.vercel.app/components/form/radio-card)
+for a complete overview
+
+```handlebars
+<Hds::Form::RadioCard @checked={{true}} as |R|>
+  <R.Label>HDS Radio Card</R.Label>
+  <R.Badge @text='6 clusters left' />
+  <R.Description>Quick peering with quick links will provide the fastest way to
+    connect to your providers’ network.</R.Description>
+</Hds::Form::RadioCard>
+```
+
+export const HDSTemplate = (args) => ({
+  template: hbs`
+      <Hds::Form::RadioCard @checked={{true}} @layout='fixed' @maxWidth='300px' @alignment='center' as |R|>
+       <R.Label>{{label}}</R.Label>
+       <R.Badge @text={{badge}} />
+       <R.Description>{{description}}</R.Description>
+      </Hds::Form::RadioCard>
+      `,
+  context: args,
+});
+
+<Preview>
+  <Story
+    name="HDS Card"
+    height="10rem"
+    args={{
+      label: 'Quick peering with Quick Links',
+      badge: '6 clusters left',
+      description: 'Record financial transactions using',
+    }}
+  >
+    {HDSTemplate.bind({})}
+  </Story>
+</Preview>
+
+# Rose/Form/Radio/Card (Deprecated)
+
+Rose/Form/Radio/Card has been deprecated in favor of [HDS::Form::RadioCard](https://design-system-components-hashicorp.vercel.app/components/form/radio-card)
+
+### <Rose::Form::Radio::Card> usage:
 
 # Form Radiofield in a wide format
 
@@ -68,10 +98,22 @@ export const Template = (args) => ({
 
 <Preview>
   <Story
-    name="Card"
+    name="Rose Card"
     height="10rem"
     args={{
-      Layout: 'wide',
+      label: 'Azure',
+      error: false,
+      value: 'value and selectedValue must match to select radiofield',
+      selectedValue: 'value and selectedValue must match to select radiofield',
+      helperText: 'Record financial transactions using',
+      disabled: false,
+    }}
+    argTypes={{
+      Layout: {
+        control: 'inline-radio',
+        options: ['wide', 'tile'],
+        name: 'layout',
+      },
     }}
   >
     {Template.bind({})}

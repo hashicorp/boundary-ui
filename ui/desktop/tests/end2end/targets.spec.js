@@ -110,7 +110,7 @@ test.describe('Targets end to end test suite', async () => {
       'div.rose-layout-page-body >> table >> tbody >> tr >> nth=0 >> td >> nth=1 >> .copyable-content'
     );
     const currentStatus = await boundaryWindow.innerText(
-      'div.rose-layout-page-body >> table >> tbody >> tr >> nth=0 >> td >> nth=3 >> .rose-badge-body'
+      'div.rose-layout-page-body >> table >> tbody >> tr >> nth=0 >> td >> nth=3 >> .hds-badge'
     );
 
     expect(await persistedProxy).toEqual(await currentProxy);

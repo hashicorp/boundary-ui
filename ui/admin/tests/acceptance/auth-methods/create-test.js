@@ -1,5 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  find,
+  fillIn,
+  select,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -14,6 +21,7 @@ module('Acceptance | auth-methods | create ', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let getAuthMethodsCount;
   const instances = {
     scopes: {
       global: null,
@@ -56,16 +64,65 @@ module('Acceptance | auth-methods | create ', function (hooks) {
     urls.authMethods = `${urls.orgScope}/auth-methods`;
     urls.newAuthMethod = `${urls.authMethods}/new?type=password`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
+    getAuthMethodsCount = () =>
+      this.server.schema.authMethods.all().models.length;
   });
 
   test('Users can create new auth method', async function (assert) {
     assert.expect(1);
-    const authMethodsCount = this.server.db.authMethods.length;
+    const count = getAuthMethodsCount();
+
     await visit(urls.newAuthMethod);
     await fillIn('[name="name"]', 'AuthMethod name');
     await fillIn('[name="description"]', 'description');
     await click('form [type="submit"]:not(:disabled)');
-    assert.strictEqual(this.server.db.authMethods.length, authMethodsCount + 1);
+    assert.strictEqual(getAuthMethodsCount(), count + 1);
+  });
+
+  test('Users can create new oidc auth method', async function (assert) {
+    assert.expect(13);
+    const count = getAuthMethodsCount();
+
+    await visit(`${urls.authMethods}/new?type=oidc`);
+    const name = 'oidc name';
+    await fillIn('[name="name"]', name);
+    await fillIn('[name="description"]', 'description');
+    await fillIn('[name="issuer"]', 'issuer');
+    await fillIn('[name="client_id"]', 'client_id');
+    await fillIn('[name="client_secret"]', 'client_secret');
+    await select('form fieldset:nth-of-type(1) select', 'RS384');
+    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    await fillIn('[name="allowed_audiences"]', 'allowed_audiences');
+    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await fillIn('[name="claims_scopes"]', 'claims_scopes');
+    await click('form fieldset:nth-of-type(3) [title="Add"]');
+    await fillIn('[name="from_claim"]', 'from_claim');
+    await select('form fieldset:nth-of-type(4) select', 'email');
+    await click('form fieldset:nth-of-type(4) [title="Add"]');
+    await fillIn('form fieldset:nth-of-type(5) textarea', 'certificates');
+    await click('form fieldset:nth-of-type(5) [title="Add"]');
+    await fillIn('[name="max_age"]', '5');
+    await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
+    await click('form [type="submit"]:not(:disabled)');
+
+    assert.strictEqual(getAuthMethodsCount(), count + 1);
+    const authMethod = this.server.schema.authMethods.findBy({ name });
+    assert.strictEqual(authMethod.name, name);
+    assert.strictEqual(authMethod.description, 'description');
+    assert.strictEqual(authMethod.attributes.issuer, 'issuer');
+    assert.strictEqual(authMethod.attributes.client_id, 'client_id');
+    assert.strictEqual(authMethod.attributes.client_secret, 'client_secret');
+    assert.deepEqual(authMethod.attributes.signing_algorithms, ['RS384']);
+    assert.deepEqual(authMethod.attributes.allowed_audiences, [
+      'allowed_audiences',
+    ]);
+    assert.deepEqual(authMethod.attributes.claims_scopes, ['claims_scopes']);
+    assert.deepEqual(authMethod.attributes.account_claim_maps, [
+      'from_claim=email',
+    ]);
+    assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
+    assert.strictEqual(authMethod.attributes.max_age, 5);
+    assert.strictEqual(authMethod.attributes.api_url_prefix, 'api_url_prefix');
   });
 
   test('Users can navigate to new auth-methods route with proper authorization', async function (assert) {
@@ -97,12 +154,12 @@ module('Acceptance | auth-methods | create ', function (hooks) {
 
   test('can cancel new auth method creation', async function (assert) {
     assert.expect(2);
-    const authMethodsCount = this.server.db.authMethods.length;
+    const count = getAuthMethodsCount();
     await visit(urls.newAuthMethod);
     await fillIn('[name="name"]', 'AuthMethod name');
     await fillIn('[name="description"]', 'description');
     await click('form button:not([type="submit"])');
-    assert.strictEqual(this.server.db.authMethods.length, authMethodsCount);
+    assert.strictEqual(getAuthMethodsCount(), count);
     assert.strictEqual(currentURL(), urls.authMethods);
   });
 

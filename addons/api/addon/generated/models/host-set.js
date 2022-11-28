@@ -63,6 +63,28 @@ export default class GeneratedHostSetModel extends BaseModel {
   })
   sync_interval_seconds;
 
+  /**
+   * Host IDs are read-only under normal circumstances.  But these can
+   * be persisted via a dedicated call to `addHosts()`.
+   */
+  @attr({
+    readOnly: true,
+    emptyArrayIfMissing: true,
+  })
+  host_ids;
+
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+  })
+  preferred_endpoints;
+
+  // AWS specific
+  @attr('string-array', {
+    isNestedAttribute: true,
+    emptyArrayIfMissing: true,
+  })
+  filters;
+
   // Azure specific
   @attr('string', {
     description: '',
