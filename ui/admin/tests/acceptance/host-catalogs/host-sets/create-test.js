@@ -79,6 +79,67 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     assert.strictEqual(getHostSetCount(), count + 1);
   });
 
+  test('can create new aws host set', async function (assert) {
+    assert.expect(4);
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'aws',
+      },
+    });
+
+    const count = getHostSetCount();
+    await visit(
+      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`
+    );
+    const name = 'aws host set';
+    await fillIn('[name="name"]', name);
+    await fillIn('[name="preferred_endpoints"]', 'endpoint');
+    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await fillIn('[name="filters"]', 'filter');
+    await click('form fieldset:nth-of-type(3) [title="Add"]');
+    await fillIn('[name="sync_interval_seconds"]', 10);
+    await click('[type="submit"]');
+
+    assert.strictEqual(getHostSetCount(), count + 1);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
+    assert.deepEqual(hostSet.attributes.filters, ['filter']);
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
+  });
+
+  test('can create new azure host set', async function (assert) {
+    assert.expect(4);
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'azure',
+      },
+    });
+
+    const count = getHostSetCount();
+    await visit(
+      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`
+    );
+    const name = 'azure host set';
+    await fillIn('[name="name"]', name);
+    await fillIn('[name="preferred_endpoints"]', 'endpoint');
+    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await fillIn('[name="filter"]', 'filter');
+    await fillIn('[name="sync_interval_seconds"]', 10);
+    await click('[type="submit"]');
+
+    assert.strictEqual(getHostSetCount(), count + 1);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
+    assert.deepEqual(hostSet.attributes.filter, 'filter');
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
+  });
+
   test('Users cannot create a new host set without proper authorization', async function (assert) {
     assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
