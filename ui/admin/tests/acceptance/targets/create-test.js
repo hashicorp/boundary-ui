@@ -74,7 +74,7 @@ module('Acceptance | targets | create', function (hooks) {
   test('defaults to a new TCP target when no query param provided', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
-    assert.strictEqual(find('input[name=types]:checked').value, 'tcp');
+    assert.strictEqual(find('input[name=tcp]:checked').value, 'tcp');
   });
 
   test('can create new targets of type TCP', async function (assert) {

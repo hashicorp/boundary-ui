@@ -41,50 +41,46 @@
     {{/if}}
   </form.textarea>
 
-  <form.fieldset>
-    <:title>{{t 'form.type.label'}}</:title>
-    <:body>
-      {{#if @model.isNew}}
-        <form.radioGroup
-          @name='types'
-          @selectedValue={{@model.type}}
-          @changed={{@changeType}}
-          as |radioGroup|
+  {{#if @model.isNew}}
+    <Hds::Form::RadioCard::Group @name='types' as |G|>
+      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      {{#each this.targetTypes as |targetType|}}
+        <G.RadioCard
+          @name={{targetType}}
+          @value={{targetType}}
+          @maxWidth='20rem'
+          @checked={{eq targetType @model.type}}
+          {{on 'input' (fn @changeType targetType)}}
+          as |R|
         >
-          <radioGroup.card
-            @label={{t 'resources.target.types.tcp'}}
-            @helperText={{t 'resources.target.help.tcp'}}
-            @value='tcp'
-            @layout='wide'
-          />
-          {{#if (feature-flag 'ssh-target')}}
-            <radioGroup.card
-              @label={{t 'resources.target.types.ssh'}}
-              @helperText={{t 'resources.target.help.ssh'}}
-              @value='ssh'
-              @layout='wide'
-            />
-          {{/if}}
-        </form.radioGroup>
-      {{else}}
-        <form.radioGroup
-          @name='types'
-          @selectedValue={{@model.type}}
-          as |radioGroup|
-        >
-          <radioGroup.card
-            @label={{t (concat 'resources.target.types.' @model.type)}}
-            @helperText={{t (concat 'resources.target.help.' @model.type)}}
-            @value={{@model.type}}
-            @layout='wide'
-            readonly={{true}}
-            @disabled={{true}}
-          />
+          <R.Label>{{t (concat 'resources.target.types.' targetType)}}</R.Label>
+          <R.Description>{{t
+              (concat 'resources.target.help.' targetType)
+            }}</R.Description>
+        </G.RadioCard>
 
-        </form.radioGroup>
-      {{/if}}
-    </:body>
-  </form.fieldset>
+      {{/each}}
+    </Hds::Form::RadioCard::Group>
+    <br />
+  {{else}}
+    <Hds::Form::RadioCard::Group @name='types' as |G|>
+      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      <G.RadioCard
+        @name={{@model.type}}
+        @value={{@model.type}}
+        @maxWidth='20rem'
+        @checked={{true}}
+        @disabled={{true}}
+        as |R|
+      >
+        <R.Label>{{t (concat 'resources.target.types.' @model.type)}}</R.Label>
+        <R.Description>{{t
+            (concat 'resources.target.help.' @model.type)
+          }}</R.Description>
+      </G.RadioCard>
+    </Hds::Form::RadioCard::Group>
+    <br />
+  {{/if}}
 
   <form.input
     @name='session_max_seconds'
