@@ -527,7 +527,7 @@
   z-index: 1;
 
   .rose-icon {
-    --size: sizing.rems(m);
+    #{--size}: sizing.rems(m);
   }
 }
 
