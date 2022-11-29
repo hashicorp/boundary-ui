@@ -93,7 +93,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
         (item) => item != 'read'
       );
     await visit(urls.credentials);
-    assert.dom(`[href="${urls.usernamePasswordCredential}"]`).doesNotExist();
+    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
   });
 
   test('cannot navigate to a username & key pair credential form without proper authorization', async function (assert) {
@@ -103,7 +103,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
         (item) => item != 'read'
       );
     await visit(urls.credentials);
-    assert.dom(`[href="${urls.usernameKeyPairCredential}"]`).doesNotExist();
+    assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
   });
 
   test('visiting an unknown credential displays 404 message', async function (assert) {

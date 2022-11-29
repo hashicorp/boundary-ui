@@ -32,8 +32,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
    */
   @action
   async addStringItem(hostSet, property, value) {
-    const array = hostSet.get(property);
-    array.addObject({ value });
+    const array = [...(hostSet.get(property) ?? []), { value }];
+    hostSet.set(property, array);
   }
   /**
    * Removes an item from array `property` at `index` on the
@@ -44,7 +44,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
    */
   @action
   async removeItemByIndex(hostSet, property, index) {
-    const array = hostSet.get(property);
-    array.removeAt(index);
+    const array = hostSet.get(property).filter((item, i) => i !== index);
+    hostSet.set(property, array);
   }
 }
