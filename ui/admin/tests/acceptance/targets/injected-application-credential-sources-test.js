@@ -264,9 +264,8 @@ module(
           (item) => item !== 'add-credential-sources'
         );
       await visit(urls.injectedApplicationCredentialSources);
-      assert
-        .dom(`[href="${urls.addInjectedApplicationCredentialSources}"]`)
-        .doesNotExist();
+
+      assert.dom('.rose-dropdown-content a:nth-child(2)').doesNotExist();
     });
 
     test('can select and cancel credential sources to add', async function (assert) {
