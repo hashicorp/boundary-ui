@@ -1,5 +1,5 @@
 import factory from '../generated/factories/role';
-import { trait } from 'ember-cli-mirage';
+import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
