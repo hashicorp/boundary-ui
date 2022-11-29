@@ -476,7 +476,6 @@
 .skeleton-wrapper {
   color: var(--ui-gray);
   display: flex;
-  flex-direction: row;
   position: relative;
 }
 
@@ -522,6 +521,7 @@
 .details-view {
   font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
   left: 50%;
+  // centers message with editor body and gutter
   margin: -12px 0 0 -165.5px;
   position: absolute;
   top: 50%;
@@ -530,7 +530,8 @@
 
 .edit-view {
   left: 50%;
-  margin: -11px 0 0 -100px;
+  // centers button with editor body and gutter
+  margin: -17px 0 0 -128px;
   position: absolute;
   top: 50%;
   z-index: 1;
@@ -542,12 +543,9 @@
 
 .rose-button-secret-editor-button {
   background: #272822;
-  border: 1px solid #6f7682;
+  border: sizing.rems(xxxxs) solid #6f7682;
   border-radius: sizing.rems(xxxs);
   box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) #000004;
   height: sizing.rems(xl);
-  left: 50%;
-  margin: -6px 0 0 -28px;
-  top: 50%;
   width: 239px;
 }
