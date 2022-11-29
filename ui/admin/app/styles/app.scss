@@ -525,10 +525,6 @@
   position: absolute;
   top: 50%;
   z-index: 1;
-
-  .rose-icon {
-    #{--size}: sizing.rems(m);
-  }
 }
 
 .edit-view {
