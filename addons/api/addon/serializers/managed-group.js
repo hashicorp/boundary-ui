@@ -12,10 +12,8 @@ export default class ManagedGroupSerializer extends ApplicationSerializer {
   serialize() {
     const serialized = super.serialize(...arguments);
 
-    if (serialized.attributes.filter_string) {
+    if (serialized.attributes.filter_string !== undefined) {
       serialized.attributes.filter = serialized.attributes.filter_string;
-    } else {
-      serialized.attributes.filter = null;
     }
     delete serialized.attributes.filter_string;
 

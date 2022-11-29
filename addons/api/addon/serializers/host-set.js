@@ -71,7 +71,7 @@ export default class HostSetSerializer extends ApplicationSerializer {
     }
 
     if (key === 'filter_string') {
-      const { filter_string } = snapshot.record;
+      const { filter_string } = json.attributes;
       if (filter_string) {
         json.attributes.filter = json.attributes.filter_string;
       }
