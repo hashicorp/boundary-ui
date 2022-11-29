@@ -468,7 +468,7 @@
 
 .secret-editor {
   background: #272822;
-  border-radius: 4px;
+  border-radius: sizing.rems(xxs);
   height: 210px;
   margin-bottom: sizing.rems(l);
 }
@@ -482,9 +482,9 @@
 
 .skeleton-gutter {
   background: #31332b;
-  border-radius: 4px 0 0 4px;
+  border-radius: sizing.rems(xxs) 0 0 sizing.rems(xxs);
   height: 210px;
-  width: 52px;
+  width: sizing.rems(xxl) + sizing.rems(xxs); // 52
 }
 
 .skeleton-body {
@@ -492,12 +492,13 @@
 
   > div {
     background: #31332b;
-    border-radius: 16px;
-    height: 8px;
+    border-radius: sizing.rems(m);
+    height: sizing.rems(xs);
+    // spacing for skeleton rows
     margin: 10.8px;
 
     &:first-child {
-      margin-top: 16px;
+      margin-top: sizing.rems(m);
     }
 
     &.s {
@@ -519,7 +520,7 @@
 }
 
 .details-view {
-  font-size: 14px;
+  font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
   left: 50%;
   margin: -12px 0 0 -165.5px;
   position: absolute;
@@ -535,16 +536,16 @@
   z-index: 1;
 
   .rose-button-body {
-    font-size: 14px;
+    font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
   }
 }
 
 .rose-button-secret-editor-button {
   background: #272822;
   border: 1px solid #6f7682;
-  border-radius: 2px;
-  box-shadow: 0 4px 4px #000004;
-  height: 36px;
+  border-radius: sizing.rems(xxxs);
+  box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) #000004;
+  height: sizing.rems(xl);
   left: 50%;
   margin: -6px 0 0 -28px;
   top: 50%;
