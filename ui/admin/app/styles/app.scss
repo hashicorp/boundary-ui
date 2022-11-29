@@ -5,6 +5,9 @@
 @import 'rose';
 @import 'notify';
 
+$secret-editor-body: #272822; // body and button background
+$secret-editor-gutter: #31332b; // gutter background
+
 .rose-layout-global {
   .rose-layout-global-body {
     justify-content: center;
@@ -458,16 +461,17 @@
 // secret editor
 .json-secret-editor {
   .CodeMirror {
+    border-radius: sizing.rems(xxs);
     height: 210px;
   }
 
   .CodeMirror-gutters {
-    background: #31332b;
+    background: $secret-editor-gutter;
   }
 }
 
 .secret-editor {
-  background: #272822;
+  background: $secret-editor-body;
   border-radius: sizing.rems(xxs);
   height: 210px;
   margin-bottom: sizing.rems(l);
@@ -476,13 +480,13 @@
 .skeleton-wrapper {
   color: var(--ui-gray);
   display: flex;
+  height: 100%;
   position: relative;
 }
 
 .skeleton-gutter {
-  background: #31332b;
+  background: $secret-editor-gutter;
   border-radius: sizing.rems(xxs) 0 0 sizing.rems(xxs);
-  height: 210px;
   width: sizing.rems(xxl) + sizing.rems(xxs); // 52
 }
 
@@ -490,7 +494,7 @@
   width: 100%;
 
   > div {
-    background: #31332b;
+    background: $secret-editor-gutter;
     border-radius: sizing.rems(m);
     height: sizing.rems(xs);
     // spacing for skeleton rows
@@ -522,7 +526,7 @@
   font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
   left: 50%;
   // centers message with editor body and gutter
-  margin: -12px 0 0 -165.5px;
+  transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
   z-index: 1;
@@ -531,7 +535,7 @@
 .edit-view {
   left: 50%;
   // centers button with editor body and gutter
-  margin: -17px 0 0 -128px;
+  transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
   z-index: 1;
@@ -542,10 +546,11 @@
 }
 
 .rose-button-secret-editor-button {
-  background: #272822;
-  border: sizing.rems(xxxxs) solid #6f7682;
+  background: $secret-editor-body;
+  border: sizing.rems(xxxxs) solid var(--ui-gray);
   border-radius: sizing.rems(xxxs);
   box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) #000004;
+  color: var(--ui-gray-subtler-5);
   height: sizing.rems(xl);
-  width: 239px;
+  padding: 0 sizing.rems(l);
 }
