@@ -22,6 +22,8 @@ module('Acceptance | targets | create', function (hooks) {
   setupMirage(hooks);
 
   let getTargetCount;
+  let getTCPTargetCount;
+  let getSSHTargetCount;
   let featuresService;
 
   const instances = {
@@ -68,6 +70,10 @@ module('Acceptance | targets | create', function (hooks) {
     urls.newSSHTarget = `${urls.targets}/new?type=ssh`;
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
+    getSSHTargetCount = () =>
+      this.server.schema.targets.where({ type: 'ssh' }).models.length;
+    getTCPTargetCount = () =>
+      this.server.schema.targets.where({ type: 'tcp' }).models.length;
     authenticateSession({});
   });
 
@@ -78,15 +84,18 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create new targets of type TCP', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     const targetCount = getTargetCount();
+    const tcpTargetCount = getTCPTargetCount();
+    await visit(urls.targets);
 
-    await visit(urls.newTCPTarget);
+    await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
+    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string'
@@ -99,15 +108,19 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create new targets of type SSH', async function (assert) {
-    assert.expect(3);
-    const count = getTargetCount();
+    assert.expect(4);
+    const targetCount = getTargetCount();
+    const sshTargetCount = getSSHTargetCount();
+    await visit(urls.targets);
 
-    await visit(urls.newSSHTarget);
+    await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
+    await click('[value="ssh"]');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
 
-    assert.strictEqual(getTargetCount(), count + 1);
+    assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
+    assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string'
@@ -168,8 +181,9 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can cancel create new TCP target', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const targetCount = getTargetCount();
+    const tcpTargetCount = getTCPTargetCount();
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
@@ -178,11 +192,13 @@ module('Acceptance | targets | create', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targets);
     assert.strictEqual(getTargetCount(), targetCount);
+    assert.strictEqual(getTCPTargetCount(), tcpTargetCount);
   });
 
   test('can cancel create new SSH target', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const targetCount = getTargetCount();
+    const sshTargetCount = getSSHTargetCount();
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
@@ -192,6 +208,7 @@ module('Acceptance | targets | create', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targets);
     assert.strictEqual(getTargetCount(), targetCount);
+    assert.strictEqual(getSSHTargetCount(), sshTargetCount);
   });
 
   test('saving a new TCP target with invalid fields displays error messages', async function (assert) {
