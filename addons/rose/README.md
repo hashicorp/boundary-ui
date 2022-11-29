@@ -7,17 +7,18 @@ Boundary UIs.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Add Styles to an App](#add-styles-to-an-app)
-- [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
-- [Linting](#linting)
-- [Formatting](#formatting)
-- [Building Components](#building-components)
-- [Using Components](#using-components)
-- [Running tests](#running-tests)
-- [Running the dummy application](#running-the-dummy-application)
-- [Contributing](#contributing)
-  - [Building ToC](#building-toc)
+- [Rose - Style \& Component Ember Addon for Boundary](#rose---style--component-ember-addon-for-boundary)
+  - [Add Styles to an App](#add-styles-to-an-app)
+  - [Installation](#installation)
+  - [Yarn Commands](#yarn-commands)
+  - [Linting](#linting)
+  - [Formatting](#formatting)
+  - [Building Components](#building-components)
+  - [Using Components](#using-components)
+  - [Running tests](#running-tests)
+  - [Running the dummy application](#running-the-dummy-application)
+  - [Contributing](#contributing)
+    - [Building ToC](#building-toc)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
