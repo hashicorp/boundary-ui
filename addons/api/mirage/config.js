@@ -12,7 +12,7 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
-// More info about seerver configuration https://www.ember-cli-mirage.com/docs/advanced/server-configuration
+// More info about server configuration https://www.ember-cli-mirage.com/docs/advanced/server-configuration
 export default function(mirageConfig) {
   let finalConfig = {
     ...mirageConfig,
