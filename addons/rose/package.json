@@ -125,7 +125,7 @@
   },
   "overrides": {
     "@storybook/ember": {
-      "ember-source": "^3.16.0"
+      "ember-source": "^3.28.0"
     }
   }
 }
