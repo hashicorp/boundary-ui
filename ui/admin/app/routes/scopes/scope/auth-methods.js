@@ -165,8 +165,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   async removeItemByIndex(authMethod, property, index) {
-    const array = authMethod.get(property);
-    array.removeAt(index);
+    const array = authMethod.get(property).filter((item, i) => i !== index);
+    authMethod.set(property, array);
   }
 
   /**
@@ -179,8 +179,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   async addStringItem(authMethod, property, value) {
-    const array = authMethod.get(property);
-    array.addObject({ value });
+    const array = [...(authMethod.get(property) ?? []), { value }];
+    authMethod.set(property, array);
   }
 
   /**

@@ -35,30 +35,6 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
   })
   account_claim_maps;
 
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  claims_scopes;
-
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  signing_algorithms;
-
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  allowed_audiences;
-
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  idp_ca_certs;
-
   /**
    * @type {boolean}
    */

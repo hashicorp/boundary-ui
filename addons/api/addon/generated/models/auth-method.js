@@ -71,4 +71,28 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   disable_discovered_config_validation;
 
   @attr('boolean', { isNestedAttribute: true }) dry_run;
+
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  claims_scopes;
+
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  signing_algorithms;
+
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  allowed_audiences;
+
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  idp_ca_certs;
 }
