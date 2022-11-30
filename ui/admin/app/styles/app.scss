@@ -469,7 +469,6 @@
       grid-area: helper-text;
       font-size: sizing.rems(m);
       color: var(--token-form-label-color);
-
     }
 
     .hds-form-text-input {
@@ -480,8 +479,6 @@
       line-height: sizing.rems(m) + sizing.rems(xxs);
       padding: 0;
     }
-
-
   }
 
   &.has-icon {
