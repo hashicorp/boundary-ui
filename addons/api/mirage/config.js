@@ -1,10 +1,9 @@
-import { discoverEmberDataModels, applyEmberDataSerializers } from "ember-cli-mirage";
-import { createServer } from 'miragejs';
+import { discoverEmberDataModels, applyEmberDataSerializers } from 'ember-cli-mirage';
+import { createServer, Response } from 'miragejs';
 import environmentConfig from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
-import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 
