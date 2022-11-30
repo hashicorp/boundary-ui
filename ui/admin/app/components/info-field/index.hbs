@@ -1,10 +1,13 @@
-<div class='info-field'>
-  <Hds::Form::TextInput::Field @value={{@value}} readonly={{true}} as |F|>
-    {{#if @icon}}
-      <F.HelperText>
-        <FlightIcon @name={{@icon}} />
-      </F.HelperText>
-    {{/if}}
+<div class='info-field{{if @icon " has-icon"}}'>
+  {{#if @icon}}
+    <FlightIcon @name={{@icon}} @size='24' />
+  {{/if}}
+  <Hds::Form::TextInput::Field
+    @value={{@value}}
+    readonly={{true}}
+    ...attributes
+    as |F|
+  >
     {{yield F}}
   </Hds::Form::TextInput::Field>
 </div>

@@ -10,6 +10,7 @@
     justify-content: center;
   }
 }
+
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;
@@ -456,36 +457,40 @@
 
 .info-field {
   .hds-form-field--layout-vertical {
-    align-items: center;
-    grid-template-columns: auto 1fr;
-    grid-template-areas:
-      'label label'
-      'icon title'
-      'description description';
+    display: grid;
+    grid-template-areas: 'label' 'text-input' 'helper-text';
 
     .hds-form-label {
+      font-size: sizing.rems(m);
       grid-area: label;
+      line-height: sizing.rems(m) + sizing.rems(xxs);
+    }
+
+    .hds-form-text-input {
+      background-color: transparent;
+      border: 0;
+      color: var(--token-form-label-color);
+      font-size: sizing.rems(m);
+      grid-area: text-input;
+      line-height: sizing.rems(m) + sizing.rems(xxs);
+      margin-top: sizing.rems(xs);
+      padding: 0;
     }
 
     .hds-form-helper-text {
-      color: var(--token-form-label-color);
+      grid-area: helper-text;
+    }
+  }
 
-      &:first-of-type {
-        grid-area: icon;
-        margin-right: sizing.rems(xxs);
-      }
-      &:last-of-type {
-        grid-area: title;
-      }
+  &.has-icon {
+    .flight-icon {
+      position: absolute;
+      transform: translatey(sizing.rems(l) + sizing.rems(xxxs));
     }
 
-    .hds-form-text-input:read-only {
-      grid-area: description;
-      background-color: transparent;
-      @include type.type(xs);
-      border: none;
-      margin-top: sizing.rems(xxs);
-      padding: 0;
+    .hds-form-helper-text,
+    .hds-form-text-input {
+      margin-left: sizing.rems(l) + sizing.rems(xs);
     }
   }
 }
