@@ -457,7 +457,6 @@
 
 .info-field {
   .hds-form-field--layout-vertical {
-    display: grid;
     grid-template-areas: 'label' 'helper-text' 'text-input';
 
     .hds-form-label {
