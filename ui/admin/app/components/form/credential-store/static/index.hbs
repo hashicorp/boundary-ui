@@ -68,20 +68,16 @@
         {{/each}}
       </Hds::Form::RadioCard::Group>
     {{else}}
-      <Hds::Form::RadioCard::Group @name='types' as |G|>
-        <G.Legend>{{t 'form.type.label'}}</G.Legend>
-        <G.RadioCard
-          @maxWidth='20rem'
-          @checked={{true}}
-          @disabled={{true}}
-          as |R|
-        >
-          <R.Label>{{t 'resources.credential-store.types.static'}}</R.Label>
-          <R.Description>{{t
-              (concat 'resources.credential-store.help.' @model.type)
-            }}</R.Description>
-        </G.RadioCard>
-      </Hds::Form::RadioCard::Group>
+      <InfoField
+        @value={{t (concat 'resources.credential-store.help.' @model.type)}}
+        as |F|
+      >
+        <F.Label>{{t 'form.type.label'}}</F.Label>
+        <F.HelperText>{{t
+            (concat 'resources.credential-store.types.' @model.type)
+          }}
+        </F.HelperText>
+      </InfoField>
     {{/if}}
   {{/if}}
   <br />
