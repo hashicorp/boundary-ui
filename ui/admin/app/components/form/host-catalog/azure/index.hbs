@@ -107,13 +107,13 @@
     </form.fieldset>
   {{else}}
     <InfoField
-      @value={{t (concat 'resources.host-catalog.types.azure')}}
+      @value={{t 'resources.host-catalog.types.azure'}}
       @icon='azure'
       disabled={{form.disabled}}
       as |F|
     >
       <F.Label>{{t 'titles.provider'}}</F.Label>
-      <F.HelperText>{{t (concat 'descriptions.provider')}}
+      <F.HelperText>{{t 'descriptions.provider'}}
       </F.HelperText>
     </InfoField>
   {{/if}}
