@@ -506,7 +506,6 @@ $button-shadow: #000004;
     background: $secret-editor-gutter;
     border-radius: sizing.rems(m);
     height: sizing.rems(xs);
-    margin: 11px;
     margin: sizing.rems(s) - sizing.rems(xxxxs); // 11
 
     &:first-child {
