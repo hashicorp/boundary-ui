@@ -1,5 +1,6 @@
 @use 'rose/variables/sizing';
 @use 'rose/variables/media';
+@use 'rose/utilities/type';
 
 @import 'rose';
 @import 'notify';
@@ -454,31 +455,37 @@
 }
 
 .info-field {
-  > .hds-form-field--layout-vertical {
+  .hds-form-field--layout-vertical {
+    align-items: center;
     grid-template-columns: auto 1fr;
     grid-template-areas:
-      'title title'
-      'icon label'
+      'label label'
+      'icon title'
       'description description';
-    .hds-form-label {
-      grid-area: title;
-    }
 
-    .hds-form-text-input:read-only {
-      background-color: transparent;
-      border: none;
+    .hds-form-label {
       grid-area: label;
-      margin-top: sizing.rems(xxs);
-      padding: 0;
     }
 
     .hds-form-helper-text {
-      grid-area: description;
+      color: var(--token-form-label-color);
+
+      &:first-of-type {
+        grid-area: icon;
+        margin-right: sizing.rems(xxs);
+      }
+      &:last-of-type {
+        grid-area: title;
+      }
     }
 
-    .flight-icon {
-      grid-area: icon;
-      margin: sizing.rems(xxs) sizing.rems(xxs) sizing.rems(xs) 0;
+    .hds-form-text-input:read-only {
+      grid-area: description;
+      background-color: transparent;
+      @include type.type(xs);
+      border: none;
+      margin-top: sizing.rems(xxs);
+      padding: 0;
     }
   }
 }
