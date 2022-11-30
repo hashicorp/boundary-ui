@@ -1,10 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, find, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { resolve, reject } from 'rsvp';
-import sinon from 'sinon';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -24,9 +22,9 @@ module('Acceptance | targets | delete', function (hooks) {
       org: null,
       project: null,
     },
+    target: null,
   };
   const urls = {
-    globalScope: null,
     orgScope: null,
     projectScope: null,
     targets: null,
@@ -49,62 +47,74 @@ module('Acceptance | targets | delete', function (hooks) {
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.unknownTarget = `${urls.targets}/foo`;
     urls.newTarget = `${urls.targets}/new`;
-    // Generate resource couner
+    // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
     authenticateSession({});
   });
 
   test('can delete target', async function (assert) {
     assert.expect(1);
-    const count = getTargetCount();
-    await visit(urls.target);
+    const targetCount = getTargetCount();
+    await visit(urls.targets);
+
+    await click(`[href="${urls.target}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(getTargetCount(), count - 1);
+
+    assert.strictEqual(getTargetCount(), targetCount - 1);
   });
 
   test('can accept delete target via dialog', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    confirmService.confirm = sinon.fake.returns(resolve());
-    const count = getTargetCount();
-    await visit(urls.target);
+    const targetCount = getTargetCount();
+    await visit(urls.targets);
+
+    await click(`[href="${urls.target}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(getTargetCount(), count - 1);
-    assert.ok(confirmService.confirm.calledOnce);
+    await click('.rose-dialog .rose-button-primary');
+
+    assert.dom('.rose-notification-body').hasText('Deleted successfully.');
+    assert.strictEqual(getTargetCount(), targetCount - 1);
+    assert.strictEqual(currentURL(), urls.targets);
   });
 
   test('cannot cancel delete target via dialog', async function (assert) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    confirmService.confirm = sinon.fake.returns(reject());
-    const count = getTargetCount();
-    await visit(urls.target);
+    const targetCount = getTargetCount();
+    await visit(urls.targets);
+
+    await click(`[href="${urls.target}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(getTargetCount(), count);
-    assert.ok(confirmService.confirm.calledOnce);
+    await click('.rose-dialog .rose-button-secondary');
+
+    assert.strictEqual(getTargetCount(), targetCount);
+    assert.strictEqual(currentURL(), urls.target);
   });
 
   test('cannot delete target without proper authorization', async function (assert) {
     assert.expect(1);
+    await visit(urls.targets);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'delete');
-    await visit(urls.target);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
-    );
+
+    await click(`[href="${urls.target}"]`);
+
+    assert
+      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+      .doesNotExist();
   });
 
   test('deleting a target which errors displays error messages', async function (assert) {
     assert.expect(1);
+    await visit(urls.targets);
     this.server.del('/targets/:id', () => {
       return new Response(
         490,
@@ -116,8 +126,10 @@ module('Acceptance | targets | delete', function (hooks) {
         }
       );
     });
-    await visit(urls.target);
+
+    await click(`[href="${urls.target}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+
+    assert.dom('.rose-notification-body').hasText('Oops.');
   });
 });
