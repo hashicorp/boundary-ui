@@ -47,6 +47,9 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
     if (authMethod.idp_ca_certs) {
       authMethod.idp_ca_certs = copy(authMethod.idp_ca_certs, true);
     }
+    if (authMethod.account_claim_maps) {
+      authMethod.account_claim_maps = copy(authMethod.account_claim_maps, true);
+    }
   }
 
   /**

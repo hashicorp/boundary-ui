@@ -95,4 +95,10 @@ export default class GeneratedAuthMethodModel extends BaseModel {
     isNestedAttribute: true,
   })
   idp_ca_certs;
+
+  @attr('account-claim-map-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  account_claim_maps;
 }
