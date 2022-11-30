@@ -480,9 +480,9 @@
     }
 
     .hds-form-text-input:read-only {
+      font-size: sizing.rems(s);
       grid-area: description;
       background-color: transparent;
-      @include type.type(xs);
       border: none;
       margin-top: sizing.rems(xxs);
       padding: 0;
