@@ -7,6 +7,8 @@
 
 $secret-editor-body: #272822; // body and button background
 $secret-editor-gutter: #31332b; // gutter background
+$secret-editor-height: 210px;
+$button-shadow: #000004;
 
 .rose-layout-global {
   .rose-layout-global-body {
@@ -458,11 +460,18 @@ $secret-editor-gutter: #31332b; // gutter background
   }
 }
 
-// secret editor
+// json secret editor
 .json-secret-editor {
+  background: $secret-editor-body;
+  border-radius: sizing.rems(xxs);
+  height: $secret-editor-height;
+  margin-bottom: sizing.rems(l);
+}
+
+.secret-editor {
   .CodeMirror {
     border-radius: sizing.rems(xxs);
-    height: 210px;
+    height: $secret-editor-height;
   }
 
   .CodeMirror-gutters {
@@ -470,15 +479,11 @@ $secret-editor-gutter: #31332b; // gutter background
   }
 }
 
-.secret-editor {
-  background: $secret-editor-body;
-  border-radius: sizing.rems(xxs);
-  height: 210px;
-  margin-bottom: sizing.rems(l);
-}
-
 .skeleton-wrapper {
-  color: var(--ui-gray);
+  // using ui-gray directly so it does not change when
+  // user is in dark mode since the secret editor
+  // does not change theme colors between light and dark
+  color: #{color(ui-gray)};
   display: flex;
   height: 100%;
   position: relative;
@@ -493,12 +498,16 @@ $secret-editor-gutter: #31332b; // gutter background
 .skeleton-body {
   width: 100%;
 
+  // skeleton text rows for detail and edit views
+  // applies general styles to child div of skeleton-body
+  // then adds dynamic width to each child
+  // depending on the class (e.g., s, m, l)
   > div {
     background: $secret-editor-gutter;
     border-radius: sizing.rems(m);
     height: sizing.rems(xs);
-    // spacing for skeleton rows
-    margin: 10.8px;
+    margin: 11px;
+    margin: sizing.rems(s) - sizing.rems(xxxxs); // 11
 
     &:first-child {
       margin-top: sizing.rems(m);
@@ -522,7 +531,7 @@ $secret-editor-gutter: #31332b; // gutter background
   }
 }
 
-.details-view {
+.skeleton-details-view {
   font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
   left: 50%;
   // centers message with editor body and gutter
@@ -532,7 +541,7 @@ $secret-editor-gutter: #31332b; // gutter background
   z-index: 1;
 }
 
-.edit-view {
+.skeleton-edit-view {
   left: 50%;
   // centers button with editor body and gutter
   transform: translate(-50%, -50%);
@@ -545,12 +554,15 @@ $secret-editor-gutter: #31332b; // gutter background
   }
 }
 
-.rose-button-secret-editor-button {
+.rose-button-skeleton-edit-view-button {
   background: $secret-editor-body;
   border: sizing.rems(xxxxs) solid var(--ui-gray);
   border-radius: sizing.rems(xxxs);
-  box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) #000004;
-  color: var(--ui-gray-subtler-5);
+  box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) $button-shadow;
+  // using ui-gray directly so it does not change when
+  // user is in dark mode since the secret editor
+  // does not change theme colors between light and dark
+  color: #{color(ui-gray, 050)};
   height: sizing.rems(xl);
   padding: 0 sizing.rems(l);
 }
