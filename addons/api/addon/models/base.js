@@ -92,7 +92,6 @@ export default class BaseModel extends Model {
   /**
    * @type {boolean}
    */
-  @computed('hasDirtyAttributes', 'isSaving')
   get canSave() {
     return this.hasDirtyAttributes && !this.isSaving;
   }
@@ -100,7 +99,6 @@ export default class BaseModel extends Model {
   /**
    * @type {boolean}
    */
-  @computed('canSave')
   get cannotSave() {
     return !this.canSave;
   }
