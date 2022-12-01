@@ -5,11 +5,6 @@
 @import 'rose';
 @import 'notify';
 
-$secret-editor-body: #272822; // body and button background
-$secret-editor-gutter: #31332b; // gutter background
-$secret-editor-height: 210px;
-$button-shadow: #000004;
-
 .rose-layout-global {
   .rose-layout-global-body {
     justify-content: center;
@@ -461,107 +456,102 @@ $button-shadow: #000004;
 }
 
 // json secret editor
-.json-secret-editor {
-  background: $secret-editor-body;
-  border-radius: sizing.rems(xxs);
-  height: $secret-editor-height;
-  margin-bottom: sizing.rems(l);
-}
-
 .secret-editor {
-  .CodeMirror {
-    border-radius: sizing.rems(xxs);
-    height: $secret-editor-height;
-  }
+  // Secret Editor body and gutter colors are based on the Monokai color template
+  // and are used for both the Editor and the Skeleton views
+  --secret-editor-body: #272822; // body and button background
+  --secret-editor-gutter: #31332b; // gutter background
+  --secret-editor-height: 210px;
+  --button-shadow: #000004;
 
-  .CodeMirror-gutters {
-    background: $secret-editor-gutter;
-  }
-}
+  background: var(--secret-editor-body);
+  border-radius: sizing.rems(xxs);
+  height: var(--secret-editor-height);
+  margin-bottom: sizing.rems(l);
 
-.skeleton-wrapper {
-  // using ui-gray directly so it does not change when
-  // user is in dark mode since the secret editor
-  // does not change theme colors between light and dark
-  color: #{color(ui-gray)};
-  display: flex;
-  height: 100%;
-  position: relative;
-}
-
-.skeleton-gutter {
-  background: $secret-editor-gutter;
-  border-radius: sizing.rems(xxs) 0 0 sizing.rems(xxs);
-  width: sizing.rems(xxl) + sizing.rems(xxs); // 52
-}
-
-.skeleton-body {
-  width: 100%;
-
-  // skeleton text rows for detail and edit views
-  // applies general styles to child div of skeleton-body
-  // then adds dynamic width to each child
-  // depending on the class (e.g., s, m, l)
-  > div {
-    background: $secret-editor-gutter;
-    border-radius: sizing.rems(m);
-    height: sizing.rems(xs);
-    margin: sizing.rems(s) - sizing.rems(xxxxs); // 11
-
-    &:first-child {
-      margin-top: sizing.rems(m);
+  .secret-editor-json {
+    .CodeMirror {
+      border-radius: sizing.rems(xxs);
+      height: var(--secret-editor-height);
     }
 
-    &.s {
-      width: 5%;
-    }
-
-    &.m {
-      width: 10%;
-    }
-
-    &.l {
-      width: 15%;
-    }
-
-    &.xl {
-      width: 20%;
+    .CodeMirror-gutters {
+      background: var(--secret-editor-gutter);
     }
   }
-}
 
-.skeleton-details-view {
-  font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
-  left: 50%;
-  // centers message with editor body and gutter
-  transform: translate(-50%, -50%);
-  position: absolute;
-  top: 50%;
-  z-index: 1;
-}
+  .secret-editor-skeleton-wrapper {
+    // using ui-gray directly so it does not change when
+    // user is in dark mode since the secret editor
+    // does not change theme colors between light and dark
+    color: #{color(ui-gray)};
+    display: flex;
+    height: 100%;
+    position: relative;
+  }
 
-.skeleton-edit-view {
-  left: 50%;
-  // centers button with editor body and gutter
-  transform: translate(-50%, -50%);
-  position: absolute;
-  top: 50%;
-  z-index: 1;
+  .secret-editor-skeleton-gutter {
+    background: var(--secret-editor-gutter);
+    border-radius: sizing.rems(xxs) 0 0 sizing.rems(xxs);
+    width: sizing.rems(xxl) + sizing.rems(xxs); // 52
+  }
 
-  .rose-button-body {
+  .secret-editor-skeleton-body {
+    width: 100%;
+
+    // skeleton text rows for detail and edit views
+    // applies general styles to child div of skeleton-body
+    // then adds dynamic width to each child
+    // depending on the class (e.g., s, m, l)
+    > div {
+      background: var(--secret-editor-gutter);
+      border-radius: sizing.rems(m);
+      height: sizing.rems(xs);
+      margin: sizing.rems(s) - sizing.rems(xxxxs); // 11
+
+      &:first-child {
+        margin-top: sizing.rems(m);
+      }
+
+      &.s {
+        width: 5%;
+      }
+
+      &.m {
+        width: 10%;
+      }
+
+      &.l {
+        width: 15%;
+      }
+
+      &.xl {
+        width: 20%;
+      }
+    }
+  }
+
+  .secret-editor-skeleton-message {
     font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
+    left: 50%;
+    // centers message with editor body and gutter
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    z-index: 1;
   }
-}
 
-.rose-button-skeleton-edit-view-button {
-  background: $secret-editor-body;
-  border: sizing.rems(xxxxs) solid var(--ui-gray);
-  border-radius: sizing.rems(xxxs);
-  box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) $button-shadow;
-  // using ui-gray directly so it does not change when
-  // user is in dark mode since the secret editor
-  // does not change theme colors between light and dark
-  color: #{color(ui-gray, 050)};
-  height: sizing.rems(xl);
-  padding: 0 sizing.rems(l);
+  .rose-button-secret-editor-skeleton-button {
+    background: var(--secret-editor-body);
+    border: sizing.rems(xxxxs) solid var(--ui-gray);
+    border-radius: sizing.rems(xxxs);
+    box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) var(--button-shadow);
+    // using ui-gray directly so it does not change when
+    // user is in dark mode since the secret editor
+    // does not change theme colors between light and dark
+    color: #{color(ui-gray, 050)};
+    font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
+    height: sizing.rems(xl);
+    padding: 0 sizing.rems(l);
+  }
 }
