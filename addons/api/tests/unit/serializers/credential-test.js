@@ -4,6 +4,11 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Serializer | credential', function (hooks) {
   setupTest(hooks);
 
+  hooks.beforeEach(function () {
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.enable('json-credentials');
+  });
+
   test('it serializes username_password type correctly on create', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');

@@ -1,19 +1,16 @@
 import GeneratedCredentialModel from '../generated/models/credential';
-// import { inject as service } from '@ember/service';
-
-/**
- * Supported Credential types.
- */
-export const types = ['username_password', 'ssh_private_key'];
-
+import { inject as service } from '@ember/service';
 export default class CredentialModel extends GeneratedCredentialModel {
   // =services
-  // @service features;
+  @service features;
 
   // =attributes
-  // types = this.features.isEnabled('json-credentials')
-  //   ? ['username_password', 'ssh_private_key', 'json']
-  //   : ['username_password', 'ssh_private_key'];
+  /**
+   * Supported Credential types.
+   */
+  types = this.features.isEnabled('json-credentials')
+    ? ['username_password', 'ssh_private_key', 'json']
+    : ['username_password', 'ssh_private_key'];
 
   /**
    * All Credentials are prefixed with "cred" and are considered
@@ -31,6 +28,6 @@ export default class CredentialModel extends GeneratedCredentialModel {
    * @type {boolean}
    */
   get isUnknown() {
-    return !types.includes(this.type);
+    return !this.types.includes(this.type);
   }
 }
