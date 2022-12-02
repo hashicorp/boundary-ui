@@ -467,17 +467,17 @@
     }
 
     .hds-form-helper-text {
-      grid-area: helper-text;
-      font-size: sizing.rems(m);
       color: var(--token-form-label-color);
+      font-size: sizing.rems(m);
+      grid-area: helper-text;
     }
 
     .hds-form-text-input {
       background-color: transparent;
       border: 0;
       grid-area: text-input;
-      margin-top: sizing.rems(xs);
       line-height: sizing.rems(m) + sizing.rems(xxs);
+      margin-top: sizing.rems(xs);
       padding: 0;
     }
   }
@@ -499,10 +499,10 @@
 .secret-editor {
   // Secret Editor body and gutter colors are based on the Monokai color template
   // and are used for both the Editor and the Skeleton views
+  --button-shadow: #000004;
   --secret-editor-body: #272822; // body and button background
   --secret-editor-gutter: #31332b; // gutter background
   --secret-editor-height: 210px;
-  --button-shadow: #000004;
 
   background: var(--secret-editor-body);
   border-radius: sizing.rems(xxs);
@@ -579,10 +579,10 @@
   .secret-editor-skeleton-message {
     font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
     left: 50%;
-    // centers message with editor body and gutter
-    transform: translate(-50%, -50%);
     position: absolute;
     top: 50%;
+    // centers message with editor body and gutter
+    transform: translate(-50%, -50%);
     z-index: 1;
   }
 
