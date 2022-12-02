@@ -179,7 +179,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   async addStringItem(authMethod, property, value) {
-    const array = [...(authMethod.get(property) ?? []), { value }];
+    const existingArray = authMethod[property] ?? [];
+    const array = [...existingArray, { value }];
     authMethod.set(property, array);
   }
 
@@ -191,7 +192,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   async addAccountClaimMapItem(authMethod, from, to) {
-    const array = [...(authMethod.account_claim_maps ?? []), { from, to }];
+    const existingArray = authMethod.account_claim_maps ?? [];
+    const array = [...existingArray, { from, to }];
     authMethod.set('account_claim_maps', array);
   }
 
