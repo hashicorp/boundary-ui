@@ -50,7 +50,7 @@ export default class GeneratedManagedGroupModel extends BaseModel {
   @attr('string', {
     isNestedAttribute: true,
     description:
-      'The boolean expression filter to use to determine membership.',
+      'The boolean expression filter to use to determine membership. Comes in from API as "filter".',
   })
-  filter;
+  filter_string;
 }
