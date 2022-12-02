@@ -1,5 +1,4 @@
 import GeneratedAuthMethodModel from '../generated/models/auth-method';
-import { fragmentArray } from 'ember-data-model-fragments/attributes';
 import { equal } from '@ember/object/computed';
 
 /**
@@ -28,36 +27,6 @@ export const options = {
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
   // =attributes
-
-  @fragmentArray('fragment-auth-method-attributes-account-claim-map', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  account_claim_maps;
-
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  claims_scopes;
-
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  signing_algorithms;
-
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  allowed_audiences;
-
-  @fragmentArray('fragment-string', {
-    emptyArrayIfMissing: true,
-    isNestedAttribute: true,
-  })
-  idp_ca_certs;
 
   /**
    * @type {boolean}

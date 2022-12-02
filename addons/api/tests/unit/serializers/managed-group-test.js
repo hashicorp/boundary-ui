@@ -41,7 +41,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
       version: 1,
       auth_method_id: '1234',
       type: 'oidc',
-      filter: 'key=value',
+      filter_string: 'key=value',
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -73,7 +73,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
           version: undefined,
           auth_method_id: '1234',
           type: 'oidc',
-          filter: 'key=value',
+          filter_string: 'key=value',
         },
       },
     });
@@ -134,7 +134,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
           version: 1,
           auth_method_id: '1234',
           type: 'oidc',
-          filter: 'key=value',
+          filter_string: 'key=value',
         },
       },
     });
@@ -149,6 +149,47 @@ module('Unit | Serializer | Managed group', function (hooks) {
       type: 'oidc',
       attributes: {
         filter: 'key=value',
+      },
+    });
+  });
+
+  test('it normalizes correctly', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('managed-group');
+    const hostSetModelClass = store.createRecord('managed-group').constructor;
+    const payload = {
+      id: '1',
+      description: 'Description for the test',
+      version: 1,
+      auth_method_id: '1234',
+      type: 'oidc',
+      attributes: {
+        filter: 'key=value',
+      },
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostSetModelClass,
+      payload
+    );
+
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+
+        attributes: {
+          type: 'oidc',
+          version: 1,
+          authorized_actions: [],
+          member_ids: [],
+          description: 'Description for the test',
+          auth_method_id: '1234',
+          filter_string: 'key=value',
+        },
+        type: 'managed-group',
+        relationships: {},
       },
     });
   });
