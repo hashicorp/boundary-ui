@@ -41,7 +41,7 @@
     {{/if}}
   </form.textarea>
 
-  {{#if @model.isNew}}
+  {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
     <Hds::Form::RadioCard::Group @name='types' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each this.targetTypes as |targetType|}}
@@ -58,28 +58,19 @@
               (concat 'resources.target.help.' targetType)
             }}</R.Description>
         </G.RadioCard>
-
       {{/each}}
     </Hds::Form::RadioCard::Group>
+
     <br />
   {{else}}
-    <Hds::Form::RadioCard::Group @name='types' as |G|>
-      <G.Legend>{{t 'form.type.label'}}</G.Legend>
-      <G.RadioCard
-        @name={{@model.type}}
-        @value={{@model.type}}
-        @maxWidth='20rem'
-        @checked={{true}}
-        @disabled={{true}}
-        as |R|
-      >
-        <R.Label>{{t (concat 'resources.target.types.' @model.type)}}</R.Label>
-        <R.Description>{{t
-            (concat 'resources.target.help.' @model.type)
-          }}</R.Description>
-      </G.RadioCard>
-    </Hds::Form::RadioCard::Group>
-    <br />
+    <InfoField
+      @value={{t (concat 'resources.target.help.' @model.type)}}
+      as |F|
+    >
+      <F.Label>{{t 'form.type.label'}}</F.Label>
+      <F.HelperText>{{t (concat 'resources.target.types.' @model.type)}}
+      </F.HelperText>
+    </InfoField>
   {{/if}}
 
   <form.input

@@ -86,13 +86,11 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
 
     await click(`[href="${urls.hostSets}"]`);
 
-    assert.dom(`[href="${urls.hostSet}"]`).doesNotExist();
+    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
   });
 
   test('visiting an unknown host set displays 404 message', async function (assert) {
-    assert.expect(2);
-    await visit(urls.hostSets);
-    assert.dom(`[href="${urls.unknownHostSet}"]`).doesNotExist();
+    assert.expect(1);
 
     await visit(urls.unknownHostSet);
     await a11yAudit();

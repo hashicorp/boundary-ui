@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -14,10 +14,6 @@ module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgScope;
-  let usersURL;
-  let userURL;
-
   const instances = {
     scopes: {
       global: null,
@@ -25,30 +21,38 @@ module('Acceptance | users | delete', function (hooks) {
     },
     user: null,
   };
-  hooks.beforeEach(function () {
-    orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-      },
-      'withChildren'
-    );
 
-    instances.user = this.server.create('user', {
-      scope: orgScope,
+  const urls = {
+    orgScope: null,
+    users: null,
+    user: null,
+  };
+
+  hooks.beforeEach(function () {
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
     });
-    //instances.user = this.server.schema.users.all().models[0];
-    usersURL = `/scopes/${orgScope.id}/users`;
-    userURL = `${usersURL}/${instances.user.id}`;
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.org,
+    });
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
+    urls.users = `${urls.orgScope}/users`;
+    urls.user = `${urls.users}/${instances.user.id}`;
 
     authenticateSession({});
   });
 
-  test('can delete an user', async function (assert) {
+  test('can delete a user', async function (assert) {
     assert.expect(1);
     const usersCount = this.server.db.users.length;
-    await visit(userURL);
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
+
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+
     assert.strictEqual(this.server.db.users.length, usersCount - 1);
   });
 
@@ -56,14 +60,49 @@ module('Acceptance | users | delete', function (hooks) {
     assert.expect(1);
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'delete');
-    await visit(userURL);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
-    );
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
+
+    assert
+      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+      .doesNotExist();
+  });
+
+  test('can accept delete user via dialog', async function (assert) {
+    assert.expect(3);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    const usersCount = this.server.db.users.length;
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click('.rose-dialog .rose-button-primary');
+
+    assert.dom('.rose-notification-body').hasText('Deleted successfully.');
+    assert.strictEqual(this.server.db.users.length, usersCount - 1);
+    assert.strictEqual(currentURL(), urls.users);
+  });
+
+  test('can cancel delete user via dialog', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    const usersCount = this.server.db.users.length;
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
+    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click('.rose-dialog .rose-button-secondary');
+
+    assert.strictEqual(this.server.db.users.length, usersCount);
+    assert.strictEqual(currentURL(), urls.user);
   });
 
   test('errors are displayed when user deletion fails', async function (assert) {
     assert.expect(1);
+    await visit(urls.users);
     this.server.del('/users/:id', () => {
       return new Response(
         490,
@@ -75,12 +114,10 @@ module('Acceptance | users | delete', function (hooks) {
         }
       );
     });
-    await visit(userURL);
+
+    await click(`[href="${urls.user}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.'
-    );
+
+    assert.dom('.rose-notification-body').hasText('Oops.');
   });
 });

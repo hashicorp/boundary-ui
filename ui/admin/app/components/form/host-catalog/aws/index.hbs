@@ -101,25 +101,16 @@
       </:body>
     </form.fieldset>
   {{else}}
-    <form.fieldset>
-      <:title>{{t 'titles.provider'}}</:title>
-      <:description>{{t 'descriptions.provider'}}</:description>
-      <:body>
-        <form.radioGroup
-          @name='provider'
-          @selectedValue={{@model.compositeType}}
-          @disabled={{true}}
-          as |radioGroup|
-        >
-          <radioGroup.card
-            @label={{t 'resources.host-catalog.types.aws'}}
-            @value='aws'
-            @layout='tile'
-            @icon='flight-icons/svg/aws-color-16'
-          />
-        </form.radioGroup>
-      </:body>
-    </form.fieldset>
+    <InfoField
+      @value={{t 'resources.host-catalog.types.aws'}}
+      @icon='aws-color'
+      disabled={{form.disabled}}
+      as |F|
+    >
+      <F.Label>{{t 'titles.provider'}}</F.Label>
+      <F.HelperText>{{t 'descriptions.provider'}}
+      </F.HelperText>
+    </InfoField>
   {{/if}}
 
   <form.input

@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -14,9 +14,11 @@ module('Acceptance | users | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let orgScope;
-  let usersURL;
-  let userURL;
+  const urls = {
+    orgScope: null,
+    users: null,
+    user: null,
+  };
 
   const instances = {
     scopes: {
@@ -27,52 +29,65 @@ module('Acceptance | users | update', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    orgScope = this.server.create(
-      'scope',
-      {
-        type: 'org',
-      },
-      'withChildren'
-    );
-
-    instances.user = this.server.create('user', {
-      scope: orgScope,
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
     });
-
-    usersURL = `/scopes/${orgScope.id}/users`;
-    userURL = `${usersURL}/${instances.user.id}`;
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.org,
+    });
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
+    urls.users = `${urls.orgScope}/users`;
+    urls.user = `${urls.users}/${instances.user.id}`;
 
     authenticateSession({});
   });
+
   test('can save changes to an existing user', async function (assert) {
     assert.expect(2);
-    await visit(userURL);
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated user name');
     await click('.rose-form-actions [type="submit"]');
-    assert.strictEqual(currentURL(), userURL);
-    assert.strictEqual(this.server.db.users[0].name, 'Updated user name');
+
+    assert.strictEqual(currentURL(), urls.user);
+    assert.strictEqual(
+      this.server.schema.users.first().name,
+      'Updated user name'
+    );
   });
 
   test('cannot make changes to an existing user without proper authorization', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'update');
-    await visit(userURL);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
+
+    assert.false(instances.user.authorized_actions.includes('update'));
+    assert.dom('form [type="button"]').doesNotExist();
   });
 
   test('can cancel changes to an existing user', async function (assert) {
-    assert.expect(1);
-    await visit(userURL);
+    assert.expect(2);
+    await visit(urls.users);
+
+    await click(`[href="${urls.user}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Unsaved user name');
     await click('.rose-form-actions [type="button"]');
-    assert.notEqual(find('[name="name"]').value, 'Unsaved user name');
+
+    assert.notEqual(instances.user.name, 'Unsaved user name');
+    assert.dom('[name="name"]').hasValue(instances.user.name);
   });
 
   test('saving an existing user with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
+    await visit(urls.users);
     this.server.patch('/users/:id', () => {
       return new Response(
         400,
@@ -92,19 +107,49 @@ module('Acceptance | users | update', function (hooks) {
         }
       );
     });
-    await visit(userURL);
+
+    await click(`[href="${urls.user}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
+
+    assert.dom('.rose-notification-body').hasText('The request was invalid.');
+    assert.dom('.rose-form-error-message').hasText('Name is required.');
+  });
+
+  test('can discard unsaved user changes via dialog', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.user.name, 'Unsaved user name');
+    await visit(urls.user);
+
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Unsaved user name');
+    assert.strictEqual(currentURL(), urls.user);
+    await click(`[href="${urls.users}"]`);
+    assert.dom('.rose-dialog').exists();
+    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+
+    assert.strictEqual(currentURL(), urls.users);
+    assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');
+  });
+
+  test('can click cancel on discard dialog box for unsaved user changes', async function (assert) {
+    assert.expect(5);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    assert.notEqual(instances.user.name, 'Unsaved user name');
+    await visit(urls.user);
+
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'Unsaved user name');
+    assert.strictEqual(currentURL(), urls.user);
+    await click(`[href="${urls.users}"]`);
+    assert.dom('.rose-dialog').exists();
+    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+
+    assert.strictEqual(currentURL(), urls.user);
+    assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');
   });
 });
