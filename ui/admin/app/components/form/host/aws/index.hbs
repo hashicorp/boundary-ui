@@ -51,23 +51,19 @@
       </field.errors>
     {{/if}}
   </form.textarea>
-  <Hds::Form::RadioCard::Group @alignment='center' as |G|>
-    <G.Legend>{{t 'titles.provider'}}</G.Legend>
 
-    <G.RadioCard
-      @name='provider'
-      @value='aws'
-      @maxWidth='20rem'
-      @checked={{true}}
-      @disabled={{true}}
-      as |R|
-    >
-      <R.Label>{{t 'resources.host-catalog.types.aws'}}</R.Label>
-      <R.Icon @name='aws-color' />
-    </G.RadioCard>
+  <InfoField
+    @value={{t 'descriptions.provider'}}
+    @icon='aws-color'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'titles.provider'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.host-catalog.types.aws'}}
+    </F.HelperText>
+  </InfoField>
 
-  </Hds::Form::RadioCard::Group>
-  <br />
   <form.fieldset>
     <:title>{{t 'form.ip_addresses.label'}}</:title>
     <:body>

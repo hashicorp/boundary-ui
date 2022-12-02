@@ -52,23 +52,17 @@
     {{/if}}
   </form.textarea>
 
-  <Hds::Form::RadioCard::Group @alignment='center' as |G|>
-    <G.Legend>{{t 'titles.provider'}}</G.Legend>
-
-    <G.RadioCard
-      @name='provider'
-      @value='azure'
-      @maxWidth='20rem'
-      @checked={{true}}
-      @disabled={{true}}
-      as |R|
-    >
-      <R.Label>{{t 'resources.host-catalog.types.azure'}}</R.Label>
-      <R.Icon @name='azure-color' />
-    </G.RadioCard>
-
-  </Hds::Form::RadioCard::Group>
-  <br />
+  <InfoField
+    @value={{t 'descriptions.provider'}}
+    @icon='azure-color'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'titles.provider'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.host-catalog.types.azure'}}
+    </F.HelperText>
+  </InfoField>
   <form.fieldset>
     <:title>{{t 'form.ip_addresses.label'}}</:title>
     <:body>
