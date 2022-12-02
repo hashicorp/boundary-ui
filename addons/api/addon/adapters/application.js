@@ -263,36 +263,17 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       source: { pointer: '/data' },
     };
     // Normalize field-specific errors, if any.
-    const errors = fieldErrors.flatMap((error) => {
-      const newValue = [
-        {
-          detail: error.description,
-          // Ember Data cannot handle errors on nested attributes, so these are
-          // flattened (e.g. `attributes.foobar` becomes `attributes_foobar`).
-          // To capture these errors, add read-only fields on the model
-          // corresponding to the underscored field name.
-          source: {
-            pointer: `/data/attributes/${error.name.replace('.', '_')}`,
-          },
-        },
-      ];
-      if (error.name.includes('attributes.')) {
-        newValue.push({
-          detail: error.description,
-          // Going forward, nested attributes will be hoisted.  Thus "attributes."
-          // must be stripped from the error name key.  Until all models are
-          // transitioned away from model fragments, however, both this and the
-          // prior error key mappings are necessary.
-          source: {
-            pointer: `/data/attributes/${error.name.replace(
-              'attributes.',
-              ''
-            )}`,
-          },
-        });
-      }
-      return newValue;
-    });
+    const errors = fieldErrors.map((error) => ({
+      detail: error.description,
+      // Going forward, nested attributes will be hoisted.  Thus "attributes."
+      // must be stripped from the error name key.  Until all models are
+      // transitioned away from model fragments, however, both this and the
+      // prior error key mappings are necessary.
+      source: {
+        pointer: `/data/attributes/${error.name.replace('attributes.', '')}`,
+      },
+    }));
+
     // Return a list of JSON API errors rooted under the `errors` key.
     return {
       errors: [baseError, ...errors],

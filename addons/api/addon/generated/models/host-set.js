@@ -85,10 +85,10 @@ export default class GeneratedHostSetModel extends BaseModel {
   })
   filters;
 
-  // Azure specific
+  // Azure specific, comes in from API as "filter". This is to avoid collisions with filter
   @attr('string', {
     description: '',
     isNestedAttribute: true,
   })
-  filter;
+  filter_string;
 }
