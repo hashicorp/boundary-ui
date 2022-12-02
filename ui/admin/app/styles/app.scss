@@ -1,6 +1,7 @@
 // sass-lint:disable no-color-literals class-name-format
 @use 'rose/variables/sizing';
 @use 'rose/variables/media';
+@use 'rose/utilities/type';
 
 @import 'rose';
 @import 'notify';
@@ -451,6 +452,45 @@
 
     .rose-icon {
       color: var(--success);
+    }
+  }
+}
+
+.info-field {
+  .hds-form-field--layout-vertical {
+    grid-template-areas: 'label' 'helper-text' 'text-input';
+
+    .hds-form-label {
+      font-size: sizing.rems(m);
+      grid-area: label;
+      line-height: sizing.rems(m) + sizing.rems(xxs);
+    }
+
+    .hds-form-helper-text {
+      grid-area: helper-text;
+      font-size: sizing.rems(m);
+      color: var(--token-form-label-color);
+    }
+
+    .hds-form-text-input {
+      background-color: transparent;
+      border: 0;
+      grid-area: text-input;
+      margin-top: sizing.rems(xs);
+      line-height: sizing.rems(m) + sizing.rems(xxs);
+      padding: 0;
+    }
+  }
+
+  &.has-icon {
+    .flight-icon {
+      position: absolute;
+      transform: translatey(sizing.rems(xl) - sizing.rems(s));
+    }
+
+    .hds-form-helper-text,
+    .hds-form-text-input {
+      margin-left: sizing.rems(l) + sizing.rems(xs);
     }
   }
 }

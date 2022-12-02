@@ -90,8 +90,8 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       ].includes('create')
     );
     assert
-      .dom(`nav:nth-child(2) a[href="${urls.hostCatalogs}"]`)
-      .doesNotExist();
+      .dom('[title="Resources"] a:nth-of-type(3)')
+      .doesNotIncludeText('Host Catalogs');
   });
 
   test('user can navigate to index with only create action', async function (assert) {
@@ -118,7 +118,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
 
     await click(`[href="${urls.hostCatalogs}"]`);
 
-    assert.dom(`nav:nth-child(2) a[href="${urls.hostCatalog}"]`).doesNotExist();
+    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
   });
 
   test('user can navigate to index with only list action', async function (assert) {
