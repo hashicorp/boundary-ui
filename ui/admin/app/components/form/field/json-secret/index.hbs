@@ -1,11 +1,11 @@
 <div class='secret-editor'>
   {{#if this.isDisabled}}
-    <SecretEditorSkeleton>
+    <Form::Field::JsonSecret::Skeleton>
       <Rose::Icon @name='flight-icons/svg/eye-off-16' @size='medium' />
       {{t 'form.secret-editor.details'}}
-    </SecretEditorSkeleton>
+    </Form::Field::JsonSecret::Skeleton>
   {{else if this.isActionable}}
-    <SecretEditorSkeleton>
+    <Form::Field::JsonSecret::Skeleton>
       <Rose::Button
         @iconLeft='flight-icons/svg/pencil-tool-16'
         @style='secret-editor-skeleton-button'
@@ -13,7 +13,7 @@
       >
         {{t 'form.secret-editor.edit'}}
       </Rose::Button>
-    </SecretEditorSkeleton>
+    </Form::Field::JsonSecret::Skeleton>
   {{else}}
     <Rose::CodeEditor as |c|>
       <c.fieldEditor
