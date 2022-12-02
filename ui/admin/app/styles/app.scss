@@ -518,6 +518,11 @@
     .CodeMirror-gutters {
       background: var(--secret-editor-gutter);
     }
+
+    // override CodeMirror padding to add padding to left of line numbers
+    .CodeMirror-linenumber {
+      padding: 0;
+    }
   }
 
   .secret-editor-skeleton-wrapper {
