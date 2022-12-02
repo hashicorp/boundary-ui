@@ -37,9 +37,9 @@ module('Acceptance | users | read', function (hooks) {
     instances.user = this.server.create('user', {
       scope: instances.scopes.org,
     });
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-    urls.users = `/scopes/${instances.scopes.org.id}/users`;
-    urls.user = `/scopes/${instances.scopes.org.id}/users/${instances.user.id}`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
+    urls.users = `${urls.orgScope}/users`;
+    urls.user = `${urls.users}/${instances.user.id}`;
     authenticateSession({});
   });
 

@@ -39,8 +39,8 @@ module('Acceptance | users | list', function (hooks) {
     });
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.users = `/scopes/${instances.scopes.org.id}/users`;
-    urls.user = `/scopes/${instances.scopes.org.id}/users/${instances.user.id}`;
+    urls.users = `${urls.orgScope}/users`;
+    urls.user = `${urls.users}/${instances.user.id}`;
     authenticateSession({});
   });
 
