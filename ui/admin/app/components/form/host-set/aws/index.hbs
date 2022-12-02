@@ -221,7 +221,7 @@
               <form.input
                 @type='text'
                 @name='filters'
-                @value={{@model.filter}}
+                @value={{@model.filter_string}}
               />
             </row.cell>
             <row.cell @shrink={{true}}>
@@ -233,7 +233,10 @@
                   false
                   (if form.isEditable false true)
                 }}
-                {{on 'click' (fn @addStringItem 'filters' @model.filter)}}
+                {{on
+                  'click'
+                  (fn @addStringItem 'filters' @model.filter_string)
+                }}
               >
                 {{t 'actions.add'}}
               </Rose::Button>
