@@ -279,7 +279,7 @@ module(
       });
 
       await click(`[href="${urls.newCredential}"]`);
-      await click('[value="ssh_private_key"]');
+      await click('[value="json"]');
       await click('[type="submit"]');
 
       assert
