@@ -29,15 +29,19 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
       'scopes.scope.credential-stores.credential-store'
     );
     let name, description;
+    const json_object = '';
+
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
       this.currentModel.rollbackAttributes();
     }
+
     return this.store.createRecord('credential', {
       type,
       credential_store_id,
       name,
       description,
+      json_object,
     });
   }
 

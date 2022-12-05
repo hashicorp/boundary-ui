@@ -508,6 +508,7 @@
   border-radius: sizing.rems(xxs);
   height: var(--secret-editor-height);
   margin-bottom: sizing.rems(l);
+  width: 100%;
 
   .secret-editor-json {
     .CodeMirror {

@@ -256,7 +256,7 @@ module(
     });
 
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {
-      assert.expect(2);
+      assert.expect(1);
       await visit(urls.credentials);
       this.server.post('/credentials', () => {
         return new Response(
@@ -279,15 +279,12 @@ module(
       });
 
       await click(`[href="${urls.newCredential}"]`);
-      await click('[value="json"]');
+      await click('[value="ssh_private_key"]');
       await click('[type="submit"]');
 
       assert
         .dom('.rose-notification-body')
         .hasText('Error in provided request.');
-      assert
-        .dom('.rose-form-error-message')
-        .hasText('Field required for creating a json credential.');
     });
   }
 );
