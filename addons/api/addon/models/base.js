@@ -54,6 +54,10 @@ export default class BaseModel extends Model {
     const id = this.scopeID;
     return this.store.peekRecord('scope', id);
   }
+
+  // Ember seems to have a bug with its internals and can't correctly set
+  // the `scopeModel` when passed in as part of the `inputProperties`
+  // of a `createRecord` call
   set scopeModel(model) {
     if (model) {
       const json = model.serialize();

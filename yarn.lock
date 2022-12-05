@@ -13118,7 +13118,7 @@ ember-copy@^2.0.1:
   dependencies:
     ember-cli-babel "^7.22.1"
 
-ember-data@^3.20.0:
+ember-data@^3.28.12:
   version "3.28.12"
   resolved "https://registry.yarnpkg.com/ember-data/-/ember-data-3.28.12.tgz#8d63fcd18982323887c637f78bafbf6e8715da93"
   integrity sha512-eVVhYf45WjLpq2j9jIFxlrh3DG8um2tuzVMlhCGz1l6mIocT6TOW2NTcS5Ue2Dz7VDd3DeBtgfzvV6DIdouHug==
