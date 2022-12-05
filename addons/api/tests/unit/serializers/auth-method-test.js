@@ -157,16 +157,10 @@ module('Unit | Serializer | auth method', function (hooks) {
     this.server.get('/v1/auth-methods/oidc123', () => ({
       attributes: {
         account_claim_maps: ['from=to', 'foo=bar'],
-        claims_scopes: [{ value: 'profile' }, { value: 'email' }],
-        signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
-        allowed_audiences: [
-          { value: 'www.alice.com' },
-          { value: 'www.alice.com/admin' },
-        ],
-        idp_ca_certs: [
-          { value: 'certificate-1234' },
-          { value: 'certificate-5678' },
-        ],
+        claims_scopes: ['profile', 'email'],
+        signing_algorithms: ['RS256', 'RS384'],
+        allowed_audiences: ['www.alice.com', 'www.alice.com/admin'],
+        idp_ca_certs: ['certificate-1234', 'certificate-5678'],
         api_url_prefix: apiUrlPrefix,
         client_id: clientId,
         client_secret: clientSecret,
@@ -181,12 +175,31 @@ module('Unit | Serializer | auth method', function (hooks) {
     }));
 
     const record = await store.findRecord('auth-method', 'oidc123');
-    const { account_claim_maps } = record;
-
-    assert.strictEqual(account_claim_maps.firstObject.from, 'from');
-    assert.strictEqual(account_claim_maps.firstObject.to, 'to');
-    assert.strictEqual(account_claim_maps.lastObject.from, 'foo');
-    assert.strictEqual(account_claim_maps.lastObject.to, 'bar');
+    const {
+      account_claim_maps,
+      claims_scopes,
+      allowed_audiences,
+      signing_algorithms,
+      idp_ca_certs,
+    } = record;
+    console.log(record);
+    assert.deepEqual(account_claim_maps, [
+      { from: 'from', to: 'to' },
+      { from: 'foo', to: 'bar' },
+    ]);
+    assert.deepEqual(claims_scopes, [{ value: 'profile' }, { value: 'email' }]);
+    assert.deepEqual(allowed_audiences, [
+      { value: 'www.alice.com' },
+      { value: 'www.alice.com/admin' },
+    ]);
+    assert.deepEqual(signing_algorithms, [
+      { value: 'RS256' },
+      { value: 'RS384' },
+    ]);
+    assert.deepEqual(idp_ca_certs, [
+      { value: 'certificate-1234' },
+      { value: 'certificate-5678' },
+    ]);
     assert.strictEqual(record.api_url_prefix, apiUrlPrefix);
     assert.strictEqual(record.client_id, clientId);
     assert.strictEqual(record.client_secret, clientSecret);
