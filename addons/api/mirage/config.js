@@ -96,7 +96,17 @@ function routes () {
     return authMethods.create(attrs);
   });
   this.get('/auth-methods/:id');
-  this.patch('/auth-methods/:id');
+  this.patch(
+    '/auth-methods/:id',
+    function ({ authMethods }, { params: { id } }) {
+      const attrs = this.normalizedRequestAttrs();
+      if (attrs.type === 'oidc') {
+        attrs.attributes.state = 'active-public';
+      }
+
+      return authMethods.find(id).update(attrs);
+    }
+  );
   this.del('/auth-methods/:id', ({ authMethods }, { params: { id } }) => {
     const authMethod = authMethods.find(id);
     const scope = authMethod.scope;

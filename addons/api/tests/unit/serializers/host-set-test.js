@@ -80,7 +80,7 @@ module('Unit | Serializer | host set', function (hooks) {
       version: 1,
       preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
       sync_interval_seconds: 1,
-      filter: 'filter 1 && filter 2',
+      filter_string: 'filter 1 && filter 2',
     });
     assert.deepEqual(record.serialize(), {
       name: 'Host Set 1',
@@ -162,6 +162,49 @@ module('Unit | Serializer | host set', function (hooks) {
           host_ids: [],
           preferred_endpoints: [],
           filters: [],
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes filter correctly', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-set');
+    const hostSetModelClass = store.createRecord('host-set').constructor;
+    const payload = {
+      id: '1',
+      name: 'Host Set 1',
+      type: 'plugin',
+      host_ids: ['1', '2', '3'],
+      preferred_endpoints: ['endpoint 1', 'endpoint 2'],
+      attributes: {
+        filter: 'filter',
+      },
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostSetModelClass,
+      payload
+    );
+
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'host-set',
+        attributes: {
+          type: 'plugin',
+          authorized_actions: [],
+          name: 'Host Set 1',
+          host_ids: ['1', '2', '3'],
+          preferred_endpoints: [
+            { value: 'endpoint 1' },
+            { value: 'endpoint 2' },
+          ],
+          filters: [],
+          filter_string: 'filter',
         },
         relationships: {},
       },
