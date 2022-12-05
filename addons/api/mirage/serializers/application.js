@@ -1,4 +1,4 @@
-import { RestSerializer } from 'ember-cli-mirage';
+import { RestSerializer } from 'miragejs';
 import { underscore } from '@ember/string';
 import { isArray } from '@ember/array';
 
