@@ -161,3 +161,6 @@ sync-interval:
   help: Optional. Number of seconds between the time Boundary syncs hosts in this set.
 tags:
   label: Tags
+secret-editor:
+  details: This secret is saved but won't be displayed
+  edit: Click to replace this secret
