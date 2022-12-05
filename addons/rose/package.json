@@ -46,6 +46,7 @@
     "ember-named-blocks-polyfill": "^0.2.5",
     "ember-radio-button": "github:yapplabs/ember-radio-button.git#b2ab65f",
     "ember-uuid": "^2.1.0",
+    "jsonlint": "^1.6.3",
     "sass": "^1.55.0"
   },
   "devDependencies": {
