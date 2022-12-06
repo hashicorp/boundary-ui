@@ -9,6 +9,8 @@ import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/display/autorefresh';
+import 'codemirror/addon/lint/lint';
+import 'codemirror/addon/lint/json-lint';
 
 // Here we define default options for the editor.
 // These should follow the codemirror configuration types

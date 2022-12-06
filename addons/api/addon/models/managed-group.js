@@ -5,8 +5,6 @@ import { A } from '@ember/array';
 export default class ManagedGroupModel extends GeneratedManagedGroupModel {
   // =attributes
 
-  @attr('string', { readOnly: true }) attributes_filter;
-
   /**
    * Members is read-only under normal circumstances.  But members can
    * be persisted via calls to `addMembers()` or `removeMembers()`.
