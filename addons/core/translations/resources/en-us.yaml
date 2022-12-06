@@ -289,6 +289,8 @@ target:
     none:
       title: No Targets Available
       description: No Targets to display yet. Contact your Boundary admin if you don't see a Target you expect access to.
+    connection-instructions:
+      title: 'Connect to the target by opening a shell and running:'
     connection-success:
       title: Successfully Connected
     connection-details:

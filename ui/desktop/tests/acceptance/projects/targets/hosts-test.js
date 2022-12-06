@@ -216,8 +216,8 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
         'Cannot retry'
       );
       assert.strictEqual(
-        find('.rose-dialog-body .copyable-content').textContent.trim(),
-        'a_123:p_123'
+        find('.CodeMirror-line').textContent.trim(),
+        'ssh a_123 -p p_123'
       );
     }, 750);
     await visit(urls.hosts);
