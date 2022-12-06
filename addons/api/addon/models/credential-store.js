@@ -3,7 +3,7 @@ import { equal } from '@ember/object/computed';
 
 export const options = {
   static: {
-    icon: '',
+    icon: 'keychain',
   },
   vault: {
     icon: 'vault',
