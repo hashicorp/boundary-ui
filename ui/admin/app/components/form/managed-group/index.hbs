@@ -54,15 +54,15 @@
   <form.input
     @name='filter'
     @type='text'
-    @value={{@model.filter}}
+    @value={{@model.filter_string}}
     @label={{t 'form.filter.label'}}
-    @error={{@model.errors.attributes_filter}}
+    @error={{@model.errors.filter_string}}
     @helperText={{t 'form.filter.help'}}
     as |field|
   >
-    {{#if @model.errors.attributes_filter}}
+    {{#if @model.errors.filter_string}}
       <field.errors as |errors|>
-        {{#each @model.errors.attributes_filter as |error|}}
+        {{#each @model.errors.filter_string as |error|}}
           <errors.message>{{error.message}}</errors.message>
         {{/each}}
       </field.errors>

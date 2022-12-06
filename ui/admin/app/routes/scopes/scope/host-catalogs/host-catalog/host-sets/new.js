@@ -32,7 +32,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
    */
   @action
   async addStringItem(hostSet, property, value) {
-    const array = [...(hostSet.get(property) ?? []), { value }];
+    const existingArray = hostSet[property] ?? [];
+    const array = [...existingArray, { value }];
     hostSet.set(property, array);
   }
   /**
