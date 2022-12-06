@@ -42,9 +42,9 @@
   </form.textarea>
 
   {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
-    <Hds::Form::RadioCard::Group @name='types' as |G|>
+    <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
-      {{#each this.targetTypes as |targetType|}}
+      {{#each-in this.targetTypes as |targetType type|}}
         <G.RadioCard
           @name={{targetType}}
           @value={{targetType}}
@@ -57,14 +57,18 @@
           <R.Description>{{t
               (concat 'resources.target.help.' targetType)
             }}</R.Description>
+          {{#each type as |icon|}}
+            <R.Icon @name={{icon}} />
+          {{/each}}
         </G.RadioCard>
-      {{/each}}
+      {{/each-in}}
     </Hds::Form::RadioCard::Group>
 
     <br />
   {{else}}
     <InfoField
       @value={{t (concat 'resources.target.help.' @model.type)}}
+      @icon={{this.icon}}
       as |F|
     >
       <F.Label>{{t 'form.type.label'}}</F.Label>
