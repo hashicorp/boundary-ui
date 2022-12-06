@@ -6,5 +6,6 @@ export default class FormCredentialStoreIndexComponent extends Component {
   /**
    * @type {object}
    */
-  types = options.types;
+  types = options;
+  icon = options[this.args.model.type].icon;
 }

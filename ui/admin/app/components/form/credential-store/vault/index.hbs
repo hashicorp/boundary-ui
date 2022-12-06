@@ -49,7 +49,7 @@
     {{#if @model.isNew}}
       <Hds::Form::RadioCard::Group as |G|>
         <G.Legend>{{t 'form.type.label'}}</G.Legend>
-        {{#each @types as |credentialStoreType|}}
+        {{#each-in @types as |credentialStoreType type|}}
           <G.RadioCard
             @name={{credentialStoreType}}
             @value={{credentialStoreType}}
@@ -64,13 +64,18 @@
             <R.Description>{{t
                 (concat 'resources.credential-store.help.' credentialStoreType)
               }}</R.Description>
+            {{#each-in type as |icon name|}}
+              {{#if name}}
+                <R.Icon @name={{name}} />
+              {{/if}}
+            {{/each-in}}
           </G.RadioCard>
-        {{/each}}
+        {{/each-in}}
       </Hds::Form::RadioCard::Group>
     {{else}}
       <InfoField
         @value={{t (concat 'resources.credential-store.help.' @model.type)}}
-        disabled={{form.disabled}}
+        @icon={{@icon}}
         as |F|
       >
         <F.Label>{{t 'form.type.label'}}</F.Label>
