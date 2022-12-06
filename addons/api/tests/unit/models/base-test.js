@@ -91,14 +91,19 @@ module('Unit | Model | base', function (hooks) {
     assert.true(model.hasDirtyAttributes);
     assert.true(model.canSave);
     assert.false(model.cannotSave);
+
     // Should not be able to save while currently saving
-    model.save().then(() => {
-      assert.false(model.isSaving);
-      assert.false(model.canSave);
-    });
+    const savePromise = model.save();
+
+    // Verify conditions before save completes
     assert.true(model.isSaving);
     assert.false(model.canSave);
     assert.true(model.cannotSave);
+
+    // Verify conditions after save completes
+    await savePromise;
+    assert.false(model.isSaving);
+    assert.false(model.canSave);
   });
 
   test('it saves records to a scoped URL', async function (assert) {
