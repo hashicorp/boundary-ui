@@ -8,9 +8,14 @@ export default class FormCredentialComponent extends Component {
 
   // =attributes
   /**
+   * Returns an array of available credential types the user can create
    * @type {object}
    */
-  credentialTypes = this.features.isEnabled('json-credentials')
-    ? [...types, 'json']
-    : types;
+  get credentialTypes() {
+    if (this.features.isEnabled('json-credentials')) {
+      return types;
+    } else {
+      return types.filter((type) => type !== 'json');
+    }
+  }
 }

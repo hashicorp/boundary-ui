@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 /**
  * Supported Credential types.
  */
-export let types = ['username_password', 'ssh_private_key'];
+export let types = ['username_password', 'ssh_private_key', 'json'];
 
 export default class CredentialModel extends GeneratedCredentialModel {
   // =services
@@ -27,8 +27,8 @@ export default class CredentialModel extends GeneratedCredentialModel {
    */
   get isUnknown() {
     types = this.features.isEnabled('json-credentials')
-      ? [...types, 'json']
-      : types;
+      ? types
+      : types.filter((type) => type !== 'json');
     return !types.includes(this.type);
   }
 }
