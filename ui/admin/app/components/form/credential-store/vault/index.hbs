@@ -47,9 +47,9 @@
 
   {{#if (feature-flag 'static-credentials')}}
     {{#if @model.isNew}}
-      <Hds::Form::RadioCard::Group as |G|>
+      <Hds::Form::RadioCard::Group @alignment='center' as |G|>
         <G.Legend>{{t 'form.type.label'}}</G.Legend>
-        {{#each-in @types as |credentialStoreType type|}}
+        {{#each-in this.types as |credentialStoreType type|}}
           <G.RadioCard
             @name={{credentialStoreType}}
             @value={{credentialStoreType}}
@@ -75,7 +75,7 @@
     {{else}}
       <InfoField
         @value={{t (concat 'resources.credential-store.help.' @model.type)}}
-        @icon={{@icon}}
+        @icon={{this.icon}}
         as |F|
       >
         <F.Label>{{t 'form.type.label'}}</F.Label>
@@ -86,7 +86,6 @@
       </InfoField>
     {{/if}}
   {{/if}}
-  <br />
   <form.input
     @name='address'
     @type='text'
