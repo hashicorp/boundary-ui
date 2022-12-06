@@ -15,6 +15,7 @@ module(
     let getUsernamePasswordCredentialCount;
     let getUsernameKeyPairCredentialCount;
     let getJsonCredentialCount;
+    let featuresService;
 
     const instances = {
       scopes: {
@@ -34,6 +35,7 @@ module(
 
     hooks.beforeEach(function () {
       // Generate resources
+      featuresService = this.owner.lookup('service:features');
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -285,6 +287,27 @@ module(
       assert
         .dom('.rose-notification-body')
         .hasText('Error in provided request.');
+    });
+
+    test('cannot navigate to json credential when feature is disabled', async function (assert) {
+      featuresService.disable('json-credentials');
+      assert.expect(4);
+      await visit(urls.credentials);
+
+      await click(`[href="${urls.newCredential}"]`);
+
+      assert.true(
+        instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
+          'create'
+        )
+      );
+      assert.dom('.rose-form-radio-card').exists({ count: 2 });
+      assert
+        .dom('.rose-form-fieldset-body div:first-child label')
+        .includesText('Username & Password');
+      assert
+        .dom('.rose-form-fieldset-body div:nth-child(2) label')
+        .includesText('Username & Key Pair');
     });
   }
 );
