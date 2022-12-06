@@ -31,7 +31,7 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
       ({ id }) => !currentCredentialSourceIDs.has(id)
     );
     const notAddedCredentials = this.model.credentials.filter(
-      ({ id, type }) => !currentCredentialSourceIDs.has(id) && type != 'json'
+      ({ id, type }) => !currentCredentialSourceIDs.has(id) && type !== 'json'
     );
     return [...notAddedCredentialLibraries, ...notAddedCredentials];
   }
