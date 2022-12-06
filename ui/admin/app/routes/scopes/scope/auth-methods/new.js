@@ -22,9 +22,10 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
    */
   model(params) {
     const scopeModel = this.modelFor('scopes.scope');
-    return this.store.createRecord('auth-method', {
-      scopeModel,
+    const record = this.store.createRecord('auth-method', {
       type: params.type,
     });
+    record.scopeModel = scopeModel;
+    return record;
   }
 }
