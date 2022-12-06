@@ -7,5 +7,5 @@ export default class FormStaticCredentialStoreIndexComponent extends Component {
    * @type {object}
    */
   types = options;
-  icon = options[this.args.model.type].icon;
+  icon = options.static.icon;
 }
