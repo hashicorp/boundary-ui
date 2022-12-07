@@ -123,10 +123,5 @@
     "*.hbs": "ember-template-lint --fix",
     "*.scss": "stylelint --fix",
     "*.{js,scss,mdx,yaml}": "prettier --write"
-  },
-  "overrides": {
-    "@storybook/ember": {
-      "ember-source": "^3.28.0"
-    }
   }
 }
