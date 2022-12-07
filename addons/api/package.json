@@ -33,7 +33,6 @@
     "ember-cli-mirage": "^2.2.0",
     "ember-copy": "^2.0.1",
     "ember-data": "^3.28.12",
-    "ember-feature-flags": "^6.0.0",
     "ember-fetch": "^8.1.1"
   },
   "devDependencies": {
