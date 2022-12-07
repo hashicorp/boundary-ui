@@ -2,13 +2,15 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Helper | relative-datetime-live', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks);
 
   let now;
 
-  test.skip('it renders relative date in "time" ago format', async function (assert) {
+  test('it renders relative date in "time" ago format', async function (assert) {
     assert.expect(8);
 
     now = Date.now();
