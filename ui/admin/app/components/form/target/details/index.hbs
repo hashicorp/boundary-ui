@@ -44,7 +44,7 @@
   {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
     <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
-      {{#each-in this.targetTypes as |targetType type|}}
+      {{#each-in this.targetOptions as |targetType target|}}
         <G.RadioCard
           @name={{targetType}}
           @value={{targetType}}
@@ -57,9 +57,9 @@
           <R.Description>{{t
               (concat 'resources.target.help.' targetType)
             }}</R.Description>
-          {{#each type as |icon|}}
-            <R.Icon @name={{icon}} />
-          {{/each}}
+          {{#each-in target as |icon name|}}
+            <R.Icon @name={{name}} />
+          {{/each-in}}
         </G.RadioCard>
       {{/each-in}}
     </Hds::Form::RadioCard::Group>

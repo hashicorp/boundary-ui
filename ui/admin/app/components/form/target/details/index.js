@@ -1,15 +1,18 @@
 import Component from '@glimmer/component';
-import { types } from 'api/models/target';
+import { options } from 'api/models/target';
 
 export default class FormTargetComponent extends Component {
   // =properties
-  targetTypes = types;
+  /**
+   * @type {object}
+   */
+  targetOptions = options;
 
   get icon() {
     if (this.args.model.type === 'tcp') {
-      return types.tcp[0];
+      return options.tcp.icon;
     } else {
-      return types.ssh[0];
+      return options.ssh.icon;
     }
   }
 }
