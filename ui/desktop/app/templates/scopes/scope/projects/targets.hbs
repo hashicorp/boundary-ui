@@ -22,32 +22,45 @@
               {{t 'resources.target.messages.proxy_url.title'}}
               ({{t (concat 'resources.target.types.' target.type)}})
             </h3>
-            <Rose::CodeEditor
-              @codeValue={{concat
-                'ssh '
-                session.proxy_address
-                ' -p '
-                session.proxy_port
-              }}
-              as |c|
-            >
-              <c.toolbar>
-                <:action>
-                  <span>{{t
-                      'resources.target.messages.connection-instructions.title'
-                    }}</span>
-                </:action>
-              </c.toolbar>
-              <c.fieldEditor
-                class='rose-autosize'
-                @options={{hash
-                  readOnly=true
-                  lineNumbers=false
-                  cursorBlinkRate=-1
-                  styleActiveLine=false
+            {{#if (eq target.type 'ssh')}}
+              <Rose::CodeEditor
+                @codeValue={{concat
+                  'ssh '
+                  session.proxy_address
+                  ' -p '
+                  session.proxy_port
                 }}
-              />
-            </Rose::CodeEditor>
+                as |c|
+              >
+                <c.toolbar>
+                  <:action>
+                    <span>{{t
+                        'resources.target.messages.connection-instructions.title'
+                      }}</span>
+                  </:action>
+                </c.toolbar>
+                <c.fieldEditor
+                  class='rose-autosize'
+                  @options={{hash
+                    readOnly=true
+                    lineNumbers=false
+                    cursorBlinkRate=-1
+                    styleActiveLine=false
+                  }}
+                />
+              </Rose::CodeEditor>
+            {{else}}
+              <p>
+                <Copyable
+                  @text={{session.proxy}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{session.proxy}}</code>
+                </Copyable>
+              </p>
+            {{/if}}
+
             {{#if session.credentials}}
               <Rose::Separator />
 
