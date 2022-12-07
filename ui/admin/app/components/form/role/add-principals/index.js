@@ -14,7 +14,7 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
   /**
    * Checks for unassigned principals.
    * True if there are users or groups not yet added to this role.
-   * @param {[UserModel, GroupModel]} filteredPrincipals
+   * @param {[UserModel, GroupModel, ManagedGroupModel]} filteredPrincipals
    * @type {boolean}
    */
   @computed('filteredPrincipals.length')
@@ -24,9 +24,9 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
 
   /**
    * Principals not currently assigned to a role.
-   * @type {[UserModel, GroupModel]}
+   * @type {[UserModel, GroupModel, ManagedGroupModel]}
    */
-  @computed('args.{model,model.principals.[],users,groups}')
+  @computed('args.{model,model.principals.[],users,groups,managedGroups}')
   get filteredPrincipals() {
     // Retrieve principal IDs assigned to current role
     const currentPrincipalIDs = this.args.model.principals.map(
@@ -39,7 +39,14 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
     const unassignedGroups = this.args.groups.filter(
       ({ id }) => !currentPrincipalIDs.includes(id)
     );
-    return [...unassignedUsers, ...unassignedGroups];
+    const unassignedManagedGroups = this.args.managedGroups.filter(
+      ({ id }) => !currentPrincipalIDs.includes(id)
+    );
+    return [
+      ...unassignedUsers,
+      ...unassignedGroups,
+      ...unassignedManagedGroups,
+    ];
   }
 
   // =actions

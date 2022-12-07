@@ -10,11 +10,11 @@ export default class RoleModel extends GeneratedRoleModel {
   // =attributes
 
   /**
-   * Principals are users and groups assigned to a role.  They are represented
-   * as references to User and Group instances.  Since Ember Data relationships
+   * Principals are users, groups and managed groups assigned to a role.  They are represented
+   * as references to User, Group and Managed Group instances.  Since Ember Data relationships
    * are wanting, we do not model these as a polymorphic relationship as might
    * see obvious.  Instead, the application layer is expected to load referenced
-   * users and groups as needed.
+   * users, groups and managed groups as needed.
    */
   @attr('principal-array', {
     readOnly: true,

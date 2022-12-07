@@ -257,31 +257,40 @@ export default function () {
   this.del('/roles/:id');
   this.post(
     '/roles/:idMethod',
-    function ({ roles, users, groups }, { params: { idMethod } }) {
+    function (
+      { roles, users, groups, managedGroups },
+      { params: { idMethod } }
+    ) {
       const attrs = this.normalizedRequestAttrs();
       const id = idMethod.split(':')[0];
       const method = idMethod.split(':')[1];
       const role = roles.find(id);
       let updatedAttrs = {};
 
-      // Principals is a combined list of users and groups, but in Mirage we've
+      // Principals is a combined list of users, groups and managed groups, but in Mirage we've
       // internally modelled them as separate lists.  Therefore we must check
-      // the type by looking up the user or group first, then determine which
+      // the type by looking up the user or group or managed group first, then determine which
       // list to add the principal to.
       if (method === 'add-principals') {
         updatedAttrs = {
           version: attrs.version,
           userIds: role.userIds,
           groupIds: role.groupIds,
+          managedGroupIds: role.managedGroupIds,
         };
         attrs.principalIds.forEach((id) => {
           const isUser = users.find(id);
           const isGroup = groups.find(id);
+          const isManagedGroup = managedGroups.find(id);
           if (isUser && !updatedAttrs.userIds.includes(id)) {
             updatedAttrs.userIds.push(id);
           }
           if (isGroup && !updatedAttrs.groupIds.includes(id)) {
             updatedAttrs.groupIds.push(id);
+          }
+
+          if (isManagedGroup && !updatedAttrs.managedGroupIds.includes(id)) {
+            updatedAttrs.managedGroupIds.push(id);
           }
         });
       }
@@ -292,6 +301,7 @@ export default function () {
           version: attrs.version,
           userIds: role.userIds,
           groupIds: role.groupIds,
+          managedGroupIds: role.managedGroupIds,
         };
         updatedAttrs.userIds = updatedAttrs.userIds.filter((id) => {
           return !attrs.principalIds.includes(id);
@@ -299,6 +309,12 @@ export default function () {
         updatedAttrs.groupIds = updatedAttrs.groupIds.filter((id) => {
           return !attrs.principalIds.includes(id);
         });
+
+        updatedAttrs.managedGroupIds = updatedAttrs.managedGroupIds.filter(
+          (id) => {
+            return !attrs.managedGroupIds.includes(id);
+          }
+        );
       }
 
       if (method === 'set-grants') {
@@ -307,7 +323,7 @@ export default function () {
           grantStrings: attrs.grantStrings,
         };
       }
-
+      console.log(role, 'confgggg');
       return role.update(updatedAttrs);
     }
   );

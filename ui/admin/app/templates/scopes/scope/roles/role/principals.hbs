@@ -31,7 +31,7 @@
 
   <page.body>
     {{#if @model.principals}}
-
+      {{{log @model.principals 'frefe'}}}
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
@@ -44,6 +44,8 @@
         </table.header>
         <table.body as |body|>
           {{#each @model.principals as |principal|}}
+            {{principal}}fwfew
+            {{principal.accountName}}fwefwfwefew
             <body.row as |row|>
               <row.headerCell>
                 {{principal.displayName}}

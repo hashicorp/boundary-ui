@@ -21,7 +21,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   async model() {
     const role = this.modelFor('scopes.scope.roles.role');
 
-    // Gather user and group IDs as separate arrays, since these
+    // Gather user, group, managedGroup IDs as separate arrays, since these
     // will be queried in separate API queries.
     const userIDs = role.principals
       .filter(({ type }) => type === 'user')
@@ -29,7 +29,10 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     const groupIDs = role.principals
       .filter(({ type }) => type === 'group')
       .map(({ principal_id }) => principal_id);
-
+    const managedGroupIDs = role.principals
+      .filter(({ type }) => type === 'managed-group')
+      .map(({ principal_id }) => principal_id);
+    console.log(managedGroupIDs, 'route');
     // Query for users.
     const users = userIDs?.length
       ? (
@@ -50,10 +53,29 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
           )
         ).map((model) => model)
       : [];
+    // Query for managed Groups.
 
+    const managedGroups = managedGroupIDs?.length
+      ? (
+          await this.resourceFilterStore.queryBy(
+            'managed-group',
+            { id: managedGroupIDs },
+            { scope_id: 'global', recursive: true }
+          )
+        ).map((model) => model)
+      : [];
+
+    // const managedGroups = await this.store.query('managed-group', {
+    //   scope_id: 'global',
+    //   recursive: true,
+    // });
+
+    console.log(managedGroups, 'mm');
+
+    console.log(managedGroups, 'managedGroupsmanagedGroupsmanagedGroups');
     return {
       role,
-      principals: users.concat(groups),
+      principals: [...users, ...groups, ...managedGroups],
     };
   }
 
@@ -61,7 +83,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
 
   /**
    * Remove a principal from the current role and redirect to principals index.
-   * @param {UserModel, GroupModel} principal
+   * @param {UserModel, GroupModel, ManagedGroup} principal
    */
   @action
   @loading

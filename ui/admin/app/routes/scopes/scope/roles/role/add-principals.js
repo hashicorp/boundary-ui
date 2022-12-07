@@ -66,11 +66,28 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
           }
         )
       : this.store.query('group', { scope_id: 'global', recursive: true });
+    const managedGroups = scopeIDs?.length
+      ? this.resourceFilterStore.queryBy(
+          'managed-group',
+          {
+            scope_id: scopeIDs,
+          },
+          {
+            scope_id: 'global',
+            recursive: true,
+          }
+        )
+      : this.store.query('managed-group', {
+          scope_id: 'global',
+          recursive: true,
+        });
+
     return hash({
       role,
       scopes,
       users,
       groups,
+      managedGroups,
     });
   }
 

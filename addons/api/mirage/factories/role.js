@@ -30,7 +30,10 @@ export default factory.extend({
       const { scope } = role;
       const users = server.createList('user', 2, { scope });
       const groups = server.createList('group', 2, { scope });
-      role.update({ users, groups });
+      console.log(server, 'SERVERRR');
+      const managedGroups = server.createList('managed-group', 2, { scope });
+      console.log(managedGroups, 'managedddd');
+      role.update({ users, groups, managedGroups });
     },
   }),
 
