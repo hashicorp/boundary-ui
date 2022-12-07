@@ -1,5 +1,5 @@
 import factory from '../generated/factories/host-catalog';
-import { trait } from 'ember-cli-mirage';
+import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
