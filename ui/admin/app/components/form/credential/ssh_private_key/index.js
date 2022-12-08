@@ -4,7 +4,7 @@ import { types } from 'api/models/credential';
 export default class FormSSHPrivateKeyCredentialComponent extends Component {
   // =attributes
   /**
-   * @type {object}
+   * @type {Array}
    */
   credentialTypes = types;
 }
