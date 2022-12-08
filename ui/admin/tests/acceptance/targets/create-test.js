@@ -80,7 +80,7 @@ module('Acceptance | targets | create', function (hooks) {
   test('defaults to a new TCP target when no query param provided', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
-    assert.strictEqual(find('input[name=types]:checked').value, 'tcp');
+    assert.strictEqual(find('input[name=tcp]:checked').value, 'tcp');
   });
 
   test('can create new targets of type TCP', async function (assert) {
@@ -176,8 +176,8 @@ module('Acceptance | targets | create', function (hooks) {
         'create'
       )
     );
-    assert.dom('.rose-form-radio-card').exists({ count: 1 });
-    assert.dom('.rose-form-radio-card label').includesText('TCP');
+    assert.dom('.info-field').exists({ count: 1 });
+    assert.dom('.hds-form-helper-text').includesText('TCP');
   });
 
   test('can cancel create new TCP target', async function (assert) {
