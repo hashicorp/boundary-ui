@@ -49,7 +49,7 @@
 
       <Hds::Form::RadioCard::Group @alignment='center' as |G|>
         <G.Legend>{{t 'form.type.label'}}</G.Legend>
-        {{#each-in this.mapResourceTypewithIcon as |credentialStoreType icon|}}
+        {{#each-in this.mapResourceTypeWithIcon as |credentialStoreType icon|}}
           <G.RadioCard
             @name={{credentialStoreType}}
             @value={{credentialStoreType}}
