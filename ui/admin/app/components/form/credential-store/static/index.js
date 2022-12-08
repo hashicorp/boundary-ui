@@ -10,7 +10,7 @@ export default class FormStaticCredentialStoreIndexComponent extends Component {
    * maps resource type with icon
    * @type {object}
    */
-  get mapResourceTypewithIcon() {
+  get mapResourceTypeWithIcon() {
     return types.reduce((obj, type, i) => ({ ...obj, [type]: icons[i] }), {});
   }
 }
