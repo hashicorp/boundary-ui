@@ -1,5 +1,4 @@
 import GeneratedCredentialModel from '../generated/models/credential';
-import { inject as service } from '@ember/service';
 
 /**
  * Supported Credential types.
@@ -7,9 +6,6 @@ import { inject as service } from '@ember/service';
 export let types = ['username_password', 'ssh_private_key', 'json'];
 
 export default class CredentialModel extends GeneratedCredentialModel {
-  // =services
-  @service features;
-
   /**
    * All Credentials are prefixed with "cred" and are considered
    * static due to their relation with Static Credential Stores.
@@ -26,9 +22,6 @@ export default class CredentialModel extends GeneratedCredentialModel {
    * @type {boolean}
    */
   get isUnknown() {
-    types = this.features.isEnabled('json-credentials')
-      ? types
-      : types.filter((type) => type !== 'json');
     return !types.includes(this.type);
   }
 }

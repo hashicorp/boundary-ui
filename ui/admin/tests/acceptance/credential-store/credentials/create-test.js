@@ -295,15 +295,19 @@ module(
       await visit(urls.credentials);
 
       await click(`[href="${urls.newCredential}"]`);
-      
+
       assert.true(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
           'create'
         )
       );
-      assert.dom('.rose-form-radio-card').exists({ count: 2 });
-      assert.dom('.rose-form-fieldset-body [value="ssh_private_key"]').exists();
-      assert.dom('.rose-form-fieldset-body [value="username_password"]').exists();
+      assert.dom('.hds-form-radio-card').exists({ count: 2 });
+      assert
+        .dom('.hds-form-radio-card:first-child input')
+        .hasAttribute('value', 'username_password');
+      assert
+        .dom('.hds-form-radio-card:nth-child(2) input')
+        .hasAttribute('value', 'ssh_private_key');
     });
   }
 );
