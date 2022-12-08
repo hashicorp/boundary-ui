@@ -10,7 +10,7 @@ export default class FormTargetComponent extends Component {
    * maps resource type with icon
    * @type {object}
    */
-  get mapResourceTypewithIcon() {
+  get mapResourceTypeWithIcon() {
     return types.reduce((obj, type, i) => ({ ...obj, [type]: icons[i] }), {});
   }
 
