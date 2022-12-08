@@ -1,11 +1,8 @@
 import GeneratedHostCatalogModel from '../generated/models/host-catalog';
 
-export const options = {
-  types: {
-    host_catalog: ['static', 'plugin'],
-    plugin: ['aws', 'azure'],
-  },
-};
+export const types = ['static', 'plugin'];
+export const pluginTypes = ['aws', 'azure'];
+
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   // =attributes
 
@@ -30,7 +27,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isUnknown() {
-    return this.isPlugin && !options.types.plugin.includes(this.plugin?.name);
+    return this.isPlugin && !pluginTypes.includes(this.plugin?.name);
   }
 
   /**

@@ -45,9 +45,9 @@
 
   {{#if @model.isNew}}
 
-    <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
+    <Hds::Form::RadioCard::Group @name='types' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
-      {{#each @hostCatalogTypes as |hostCatalogType|}}
+      {{#each this.hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
           @name={{hostCatalogType}}
           @value={{hostCatalogType}}
@@ -65,13 +65,12 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-    <br />
     <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
       <G.Legend>{{t 'titles.provider'}}</G.Legend>
       <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
       <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
 
-      {{#each @pluginTypes as |pluginType|}}
+      {{#each-in this.mapResourceTypewithIcon as |pluginType icon|}}
         <G.RadioCard
           @name={{pluginType}}
           @value={{pluginType}}
@@ -83,12 +82,11 @@
           <R.Label>{{t
               (concat 'resources.host-catalog.types.' pluginType)
             }}</R.Label>
-          <R.Icon @name={{concat pluginType '-color'}} />
+          <R.Icon @name={{icon}} />
 
         </G.RadioCard>
-      {{/each}}
+      {{/each-in}}
     </Hds::Form::RadioCard::Group>
-    <br />
   {{else}}
     <InfoField
       @value={{t 'resources.host-catalog.types.aws'}}

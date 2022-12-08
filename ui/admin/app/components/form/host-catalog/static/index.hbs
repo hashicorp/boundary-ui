@@ -49,7 +49,7 @@
 
     <Hds::Form::RadioCard::Group @name='types' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
-      {{#each @hostCatalogTypes as |hostCatalogType|}}
+      {{#each this.hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
           @name={{hostCatalogType}}
           @value={{hostCatalogType}}
@@ -67,7 +67,6 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-    <br />
 
     {{#if @model.isPlugin}}
 
@@ -76,7 +75,7 @@
         <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
         <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
 
-        {{#each @pluginTypes as |pluginType|}}
+        {{#each-in this.mapResourceTypewithIcon as |pluginType|}}
           <G.RadioCard
             @name={{pluginType}}
             @value={{pluginType}}
@@ -92,9 +91,8 @@
                 (concat 'resources.host-catalog.help.' pluginType)
               }}</R.Description>
           </G.RadioCard>
-        {{/each}}
+        {{/each-in}}
       </Hds::Form::RadioCard::Group>
-      <br />
     {{/if}}
   {{/if}}
 
