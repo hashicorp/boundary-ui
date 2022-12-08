@@ -2,14 +2,7 @@ import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 
-export const options = {
-  tcp: {
-    icon: 'network',
-  },
-  ssh: {
-    icon: 'terminal',
-  },
-};
+export const types = ['tcp', 'ssh'];
 
 export default class TargetModel extends GeneratedTargetModel {
   // =services
