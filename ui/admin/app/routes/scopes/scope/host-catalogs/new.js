@@ -33,13 +33,14 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
     if (compositeType === 'azure') {
       disable_credential_rotation = true;
     }
-    return this.store.createRecord('host-catalog', {
-      scopeModel,
+    const record = this.store.createRecord('host-catalog', {
       compositeType,
       name,
       description,
       disable_credential_rotation,
     });
+    record.scopeModel = scopeModel;
+    return record;
   }
 
   /**

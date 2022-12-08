@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -18,21 +18,14 @@ module('Acceptance | scopes | update', function (hooks) {
     scopes: {
       global: null,
       org: null,
-      org2: null,
       project: null,
-      project2: null,
     },
   };
   const urls = {
     globalScope: null,
     orgScope: null,
-    org2Scope: null,
     orgScopeEdit: null,
-    org2ScopeEdit: null,
     projectScope: null,
-    project2Scope: null,
-    projectScopeEdit: null,
-    project2ScopeEdit: null,
   };
 
   hooks.beforeEach(function () {
@@ -50,32 +43,24 @@ module('Acceptance | scopes | update', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    instances.scopes.project2 = this.server.create('scope', {
-      type: 'project',
-      scope: { id: instances.scopes.org.id, type: 'org' },
-    });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
-    urls.newOrgScope = `/scopes/global/new`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-    urls.org2Scope = `/scopes/${instances.scopes.org2.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
-    urls.org2ScopeEdit = `/scopes/${instances.scopes.org2.id}/edit`;
-    urls.newProjectScope = `/scopes/${instances.scopes.org.id}/new`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
-    urls.projectScopeEdit = `/scopes/${instances.scopes.project.id}/edit`;
-    urls.project2ScopeEdit = `/scopes/${instances.scopes.project2.id}/edit`;
-    authenticateSession({});
+    authenticateSession({ isGlobal: true });
   });
 
   test('can save changes to existing scope', async function (assert) {
     assert.expect(3);
     assert.notEqual(instances.scopes.org.name, 'random string');
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="submit"]');
+
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.strictEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
@@ -84,24 +69,36 @@ module('Acceptance | scopes | update', function (hooks) {
   });
 
   test('cannot save changes to without proper authorization', async function (assert) {
-    assert.expect(1);
-    instances.scopes.org.update({ authorized_actions: [] });
-    await visit(urls.orgScopeEdit);
-    assert.notOk(find('form [type="button"]'));
+    assert.expect(2);
+    instances.scopes.org.update({
+      authorized_actions: instances.scopes.org.authorized_actions.filter(
+        (item) => item !== 'update'
+      ),
+    });
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
+
+    assert.false(instances.scopes.org.authorized_actions.includes('update'));
+    assert.dom('form [type="button"]').doesNotExist();
   });
 
   test('can cancel changes to existing scope', async function (assert) {
     assert.expect(2);
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
+
     assert.notEqual(instances.scopes.org.name, 'random string');
-    assert.strictEqual(find('[name="name"]').value, instances.scopes.org.name);
+    assert.dom('[name="name"]').hasValue(instances.scopes.org.name);
   });
 
   test('saving an existing scope with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
+    await visit(urls.orgScope);
     this.server.patch('/scopes/:id', () => {
       return new Response(
         400,
@@ -121,18 +118,14 @@ module('Acceptance | scopes | update', function (hooks) {
         }
       );
     });
-    await visit(urls.orgScopeEdit);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
-    );
-    assert.ok(
-      find('.hds-form-error__message').textContent.trim(),
-      'Name is required.'
-    );
+
+    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 
   test('can discard unsaved scope changes via dialog', async function (assert) {
@@ -140,42 +133,42 @@ module('Acceptance | scopes | update', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.scopes.org.name, 'random string');
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    try {
-      await visit(urls.globalScope);
-    } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child');
-      assert.strictEqual(currentURL(), urls.globalScope);
-      assert.notEqual(
-        this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-        'random string'
-      );
-    }
+    await click(`[href="${urls.globalScope}"]`);
+    assert.dom('.rose-dialog').exists();
+    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+
+    assert.strictEqual(currentURL(), urls.globalScope);
+    assert.notEqual(
+      this.server.schema.scopes.where({ type: 'org' }).models[0].name,
+      'random string'
+    );
   });
 
-  test('can cancel discard unsaved scope changes via dialog', async function (assert) {
+  test('can click cancel on discard dialog box for unsaved scope changes', async function (assert) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.scopes.org.name, 'random string');
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    try {
-      await visit(urls.globalScope);
-    } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:last-child');
-      assert.strictEqual(currentURL(), urls.orgScopeEdit);
-      assert.notEqual(
-        this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-        'random string'
-      );
-    }
+    await click(`[href="${urls.globalScope}"]`);
+    assert.dom('.rose-dialog').exists();
+    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+
+    assert.strictEqual(currentURL(), urls.orgScopeEdit);
+    assert.notEqual(
+      this.server.schema.scopes.where({ type: 'org' }).models[0].name,
+      'random string'
+    );
   });
 });

@@ -1,10 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, find, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { resolve, reject } from 'rsvp';
-import sinon from 'sinon';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -22,21 +20,15 @@ module('Acceptance | scopes | delete', function (hooks) {
     scopes: {
       global: null,
       org: null,
-      org2: null,
       project: null,
-      project2: null,
     },
   };
   const urls = {
     globalScope: null,
     orgScope: null,
-    org2Scope: null,
     orgScopeEdit: null,
-    org2ScopeEdit: null,
     projectScope: null,
-    project2Scope: null,
     projectScopeEdit: null,
-    project2ScopeEdit: null,
   };
 
   hooks.beforeEach(function () {
@@ -46,78 +38,81 @@ module('Acceptance | scopes | delete', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    instances.scopes.org2 = this.server.create('scope', {
-      type: 'org',
-      scope: { id: 'global', type: 'global' },
-    });
     instances.scopes.project = this.server.create('scope', {
-      type: 'project',
-      scope: { id: instances.scopes.org.id, type: 'org' },
-    });
-    instances.scopes.project2 = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
-    urls.newOrgScope = `/scopes/global/new`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-    urls.org2Scope = `/scopes/${instances.scopes.org2.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
-    urls.org2ScopeEdit = `/scopes/${instances.scopes.org2.id}/edit`;
-    urls.newProjectScope = `/scopes/${instances.scopes.org.id}/new`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
-    urls.projectScopeEdit = `/scopes/${instances.scopes.project.id}/edit`;
-    urls.project2ScopeEdit = `/scopes/${instances.scopes.project2.id}/edit`;
-    // Generate resource couner
+    // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
-    authenticateSession({});
+    authenticateSession({ isGlobal: true });
   });
 
   test('can delete scope', async function (assert) {
     assert.expect(1);
     const orgScopeCount = getScopeCount('org');
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
   });
 
   test('cannot delete scope without proper authorization', async function (assert) {
-    assert.expect(1);
-    instances.scopes.org.update({ authorized_actions: [] });
-    await visit(urls.orgScopeEdit);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
-    );
+    assert.expect(2);
+    instances.scopes.org.update({
+      authorized_actions: instances.scopes.org.authorized_actions.filter(
+        (item) => item !== 'delete'
+      ),
+    });
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
+
+    assert.false(instances.scopes.org.authorized_actions.includes('delete'));
+    assert
+      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+      .doesNotExist();
   });
 
   test('can accept delete scope via dialog', async function (assert) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    confirmService.confirm = sinon.fake.returns(resolve());
     const orgScopeCount = getScopeCount('org');
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click('.rose-dialog .rose-button-primary');
+
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
-    assert.ok(confirmService.confirm.calledOnce);
+    assert.strictEqual(currentURL(), urls.globalScope);
   });
 
-  test('cannot cancel delete scope via dialog', async function (assert) {
+  test('can cancel delete scope via dialog', async function (assert) {
     assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    confirmService.confirm = sinon.fake.returns(reject());
     const orgScopeCount = getScopeCount('org');
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click('.rose-dialog .rose-button-secondary');
+
     assert.strictEqual(getScopeCount('org'), orgScopeCount);
-    assert.ok(confirmService.confirm.calledOnce);
+    assert.strictEqual(currentURL(), urls.orgScopeEdit);
   });
 
   test('deleting a scope which errors displays error messages', async function (assert) {
     assert.expect(1);
+    await visit(urls.orgScope);
     this.server.del('/scopes/:id', () => {
       return new Response(
         490,
@@ -129,8 +124,10 @@ module('Acceptance | scopes | delete', function (hooks) {
         }
       );
     });
-    await visit(urls.orgScopeEdit);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+
+    assert.dom('.rose-notification-body').hasText('Oops.');
   });
 });

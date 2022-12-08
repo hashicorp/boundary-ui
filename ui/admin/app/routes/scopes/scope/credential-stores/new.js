@@ -34,12 +34,13 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
     if (!this.features.isEnabled('static-credentials')) {
       type = 'vault';
     }
-    return this.store.createRecord('credential-store', {
+    const record = this.store.createRecord('credential-store', {
       type,
-      scopeModel,
       name,
       description,
     });
+    record.scopeModel = scopeModel;
+    return record;
   }
 
   /**
