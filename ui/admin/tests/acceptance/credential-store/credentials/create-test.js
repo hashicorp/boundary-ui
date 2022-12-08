@@ -295,19 +295,15 @@ module(
       await visit(urls.credentials);
 
       await click(`[href="${urls.newCredential}"]`);
-
+      
       assert.true(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
           'create'
         )
       );
       assert.dom('.rose-form-radio-card').exists({ count: 2 });
-      assert
-        .dom('.rose-form-fieldset-body div:first-child label')
-        .includesText('Username & Password');
-      assert
-        .dom('.rose-form-fieldset-body div:nth-child(2) label')
-        .includesText('Username & Key Pair');
+      assert.dom('.rose-form-fieldset-body [value="ssh_private_key"]').exists();
+      assert.dom('.rose-form-fieldset-body [value="username_password"]').exists();
     });
   }
 );
