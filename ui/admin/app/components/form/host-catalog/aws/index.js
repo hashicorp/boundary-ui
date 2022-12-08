@@ -8,7 +8,6 @@ const icons = ['aws-color', 'azure-color'];
 export default class FormHostCatalogAwsComponent extends Component {
   // =properties
   hostCatalogTypes = types;
-  //hostCatalogPluginTypes = pluginTypes;
   /**
    * maps resource type with icon
    * @type {object}
