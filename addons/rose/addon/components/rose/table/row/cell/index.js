@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/require-computed-property-dependencies, ember/require-return-from-computed */
 import Component from '@ember/component';
 import layout from './index';
 import { computed } from '@ember/object';

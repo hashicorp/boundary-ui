@@ -17,6 +17,7 @@ main.js
 !.*
 .*/
 .eslintcache
+.stylelintrc.js
 
 # ember-try
 /.node_modules.ember-try/
