@@ -514,15 +514,11 @@
     .CodeMirror {
       border-radius: sizing.rems(xxs);
       height: var(--secret-editor-height);
+      display: block;
     }
 
     .CodeMirror-gutters {
       background: var(--secret-editor-gutter);
-    }
-
-    // override CodeMirror padding to add padding to left of line numbers
-    .CodeMirror-linenumber {
-      padding: 0;
     }
   }
 
