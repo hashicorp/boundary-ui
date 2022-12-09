@@ -165,8 +165,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   async removeItemByIndex(authMethod, property, index) {
-    const array = authMethod.get(property);
-    array.removeAt(index);
+    const array = authMethod.get(property).filter((item, i) => i !== index);
+    authMethod.set(property, array);
   }
 
   /**
@@ -179,21 +179,22 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    */
   @action
   async addStringItem(authMethod, property, value) {
-    const array = authMethod.get(property);
-    array.addObject({ value });
+    const existingArray = authMethod[property] ?? [];
+    const array = [...existingArray, { value }];
+    authMethod.set(property, array);
   }
 
   /**
    * Adds an account claim map fragment to the passed OIDC `authMethod`.
    * @param {AuthMethodModel} authMethod
-   * @param {string} property
-   * @param {string} value
+   * @param {string} from
+   * @param {string} to
    */
   @action
   async addAccountClaimMapItem(authMethod, from, to) {
-    const array = authMethod.account_claim_maps;
-    const value = { from, to };
-    array.addObject(value);
+    const existingArray = authMethod.account_claim_maps ?? [];
+    const array = [...existingArray, { from, to }];
+    authMethod.set('account_claim_maps', array);
   }
 
   /**

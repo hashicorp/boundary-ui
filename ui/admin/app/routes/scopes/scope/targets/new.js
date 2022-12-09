@@ -31,12 +31,13 @@ export default class ScopesScopeTargetsNewRoute extends Route {
       this.currentModel.rollbackAttributes();
     }
 
-    return this.store.createRecord('target', {
-      scopeModel,
+    const record = this.store.createRecord('target', {
       type,
       name,
       description,
     });
+    record.scopeModel = scopeModel;
+    return record;
   }
 
   /**

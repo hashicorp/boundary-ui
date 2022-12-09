@@ -68,8 +68,8 @@ module('Unit | Model | base', function (hooks) {
     assert.strictEqual(model.displayName, 'Test');
   });
 
-  test('it has canSave and cannotSave attributes', function (assert) {
-    assert.expect(8);
+  test('it has canSave and cannotSave attributes', async function (assert) {
+    assert.expect(11);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -78,20 +78,32 @@ module('Unit | Model | base', function (hooks) {
         attributes: {},
       },
     });
+    this.server.patch('/v1/users/1', () => {
+      assert.ok(true, 'Correctly scoped update record URL was requested.');
+      return {};
+    });
     const model = store.peekRecord('user', '1');
     assert.false(model.canSave);
     assert.true(model.cannotSave);
     // Should be able to save if dirty
     model.name = 'User';
+
     assert.true(model.hasDirtyAttributes);
     assert.true(model.canSave);
     assert.false(model.cannotSave);
+
     // Should not be able to save while currently saving
-    model.transitionTo('updated.inFlight');
+    const savePromise = model.save();
+
+    // Verify conditions before save completes
     assert.true(model.isSaving);
     assert.false(model.canSave);
     assert.true(model.cannotSave);
-    model.transitionTo('loaded');
+
+    // Verify conditions after save completes
+    await savePromise;
+    assert.false(model.isSaving);
+    assert.false(model.canSave);
   });
 
   test('it saves records to a scoped URL', async function (assert) {
