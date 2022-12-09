@@ -101,14 +101,9 @@
       </:body>
     </form.fieldset>
   {{else}}
-    <InfoField
-      @value={{t 'resources.host-catalog.types.aws'}}
-      @icon='aws-color'
-      disabled={{form.disabled}}
-      as |F|
-    >
+    <InfoField @value={{t 'descriptions.provider'}} @icon='aws-color' as |F|>
       <F.Label>{{t 'titles.provider'}}</F.Label>
-      <F.HelperText>{{t 'descriptions.provider'}}
+      <F.HelperText>{{t 'resources.host-catalog.types.aws'}}
       </F.HelperText>
     </InfoField>
   {{/if}}

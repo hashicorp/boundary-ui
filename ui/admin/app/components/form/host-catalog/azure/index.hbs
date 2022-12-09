@@ -106,14 +106,9 @@
       </:body>
     </form.fieldset>
   {{else}}
-    <InfoField
-      @value={{t 'resources.host-catalog.types.azure'}}
-      @icon='azure-color'
-      disabled={{form.disabled}}
-      as |F|
-    >
+    <InfoField @value={{t 'descriptions.provider'}} @icon='azure-color' as |F|>
       <F.Label>{{t 'titles.provider'}}</F.Label>
-      <F.HelperText>{{t 'descriptions.provider'}}
+      <F.HelperText>{{t 'resources.host-catalog.types.azure'}}
       </F.HelperText>
     </InfoField>
   {{/if}}
