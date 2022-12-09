@@ -19,7 +19,7 @@ export default class RoseFormComponent extends Component {
    * in which case the value is dependent on `@disabled` and `this.isEditable`.
    * @type {boolean}
    */
-  @computed('args.disabled', 'args.showEditToggle', 'isEditable')
+  @computed('args.{disabled,showEditToggle}', 'isEditable')
   get disabled() {
     if (this.args.showEditToggle) return this.args.disabled || !this.isEditable;
     return this.args.disabled;
