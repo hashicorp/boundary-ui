@@ -15,6 +15,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   let credentialSourceCount;
   let randomlySelectedCredentialLibraries;
   let randomlySelectedCredentials;
+  let featuresService;
 
   const instances = {
     scopes: {
@@ -37,11 +38,14 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     target: null,
     credentialLibraries: null,
     credentialLibrary: null,
+    credential: null,
+    jsonCredential: null,
     addBrokeredCredentialSources: null,
     brokeredCredentialSources: null,
   };
 
   hooks.beforeEach(function () {
+    featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -60,7 +64,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       type: 'static',
       scope: instances.scopes.project,
     });
-    instances.credentials = this.server.createList('credential', 2, {
+    instances.credentials = this.server.createList('credential', 3, {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
     });
@@ -100,6 +104,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     urls.brokeredCredentialSources = `${urls.target}/brokered-credential-sources`;
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
+    urls.jsonCredential = `${urls.projectScope}/credential-stores/${instances.credentials[2].credentialStoreId}/credentials/${instances.credentials[2].id}`;
     urls.addBrokeredCredentialSources = `${urls.target}/add-brokered-credential-sources`;
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
@@ -135,6 +140,19 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await click('main tbody .rose-table-header-cell:nth-child(1) a');
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credential);
+  });
+
+  test('cannot navigate to a json type credential when feature is disabled', async function (assert) {
+    featuresService.disable('json-credentials');
+    assert.expect(2);
+    const jsonCredential = instances.credentials[2];
+    instances.target.update({
+      brokeredCredentialSourceIds: [...randomlySelectedCredentials],
+    });
+    await visit(urls.brokeredCredentialSources);
+
+    assert.dom('.rose-table-row:nth-child(3)').includesText(jsonCredential.name);
+    assert.dom(`[href="${urls.jsonCredential}"]`).doesNotExist();
   });
 
   test('visiting add brokered credential sources', async function (assert) {
