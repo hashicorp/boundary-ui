@@ -175,7 +175,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   test('displays list of brokered credential sources with only credential libraries available', async function (assert) {
     assert.expect(2);
     instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
+      brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
@@ -318,12 +318,13 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
     });
     const credentialLibraryCount = getCredentialLibraryCount();
+    const availableCredentialsCount = getCredentialCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount - 1);
     await visit(urls.addBrokeredCredentialSources);
-    assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount + 1);
+    assert.strictEqual(findAll('tbody tr').length, availableCredentialsCount + 1);
   });
 
   test('can remove a username & password type credential', async function (assert) {
@@ -332,12 +333,13 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
     const credentialCount = getCredentialCount();
+    const availableCredentialsCount = getCredentialLibraryCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialCount);
     await click('tbody tr .rose-dropdown-button-danger');
     assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
     await visit(urls.addBrokeredCredentialSources);
-    assert.strictEqual(findAll('tbody tr').length, credentialCount + 1);
+    assert.strictEqual(findAll('tbody tr').length, availableCredentialsCount + 1);
   });
 
   test('cannot remove credential libraries without proper authorization', async function (assert) {
