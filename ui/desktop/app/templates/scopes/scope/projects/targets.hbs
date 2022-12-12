@@ -22,7 +22,7 @@
               {{t 'resources.target.messages.proxy_url.title'}}
               ({{t (concat 'resources.target.types.' target.type)}})
             </h3>
-            {{#if (eq target.type 'ssh')}}
+            {{#if target.isSSH}}
               <Rose::CodeEditor
                 @codeValue={{concat
                   'ssh '
