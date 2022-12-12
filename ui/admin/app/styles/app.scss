@@ -194,11 +194,11 @@
   }
 
   mark {
-    animation: fadeBackground 0.75s linear;
+    animation: fade-background 0.75s linear;
     background-color: transparent;
     color: inherit;
 
-    @keyframes fadeBackground {
+    @keyframes fade-background {
       0% {
         background-color: var(--action-subtler-1);
       }
@@ -222,7 +222,7 @@
   white-space: nowrap;
 }
 
-// Spinning animation for refresh button icon
+//  Spinning animation for refresh button icon
 @media (prefers-reduced-motion: no-preference) {
   .is-loading {
     .rose-icon {
@@ -239,7 +239,7 @@
   }
 }
 
-//onboarding quick setup styles
+//  onboarding quick setup styles
 .choose-path {
   display: block;
   width: sizing.rems(xl) * 15;
@@ -457,6 +457,7 @@
 }
 
 .info-field {
+  /* stylelint-disable-next-line selector-class-pattern */
   .hds-form-field--layout-vertical {
     grid-template-areas: 'label' 'helper-text' 'text-input';
 
@@ -485,7 +486,7 @@
   &.has-icon {
     .flight-icon {
       position: absolute;
-      transform: translatey(sizing.rems(xl) - sizing.rems(s));
+      transform: translateY(sizing.rems(xl) - sizing.rems(s));
     }
 
     .hds-form-helper-text,
@@ -509,6 +510,7 @@
   height: var(--secret-editor-height);
   margin-bottom: sizing.rems(l);
 
+  /* stylelint-disable selector-class-pattern */
   .secret-editor-json {
     .CodeMirror {
       border-radius: sizing.rems(xxs);
@@ -524,6 +526,8 @@
       padding: 0;
     }
   }
+
+  /* stylint-enable selector-class-pattern */
 
   .secret-editor-skeleton-wrapper {
     // using ui-gray directly so it does not change when
@@ -581,6 +585,7 @@
     left: 50%;
     position: absolute;
     top: 50%;
+
     // centers message with editor body and gutter
     transform: translate(-50%, -50%);
     z-index: 1;
@@ -591,6 +596,7 @@
     border: sizing.rems(xxxxs) solid var(--ui-gray);
     border-radius: sizing.rems(xxxs);
     box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) var(--button-shadow);
+
     // using ui-gray directly so it does not change when
     // user is in dark mode since the secret editor
     // does not change theme colors between light and dark
