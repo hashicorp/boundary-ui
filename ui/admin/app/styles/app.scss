@@ -526,7 +526,7 @@
     // using ui-gray directly so it does not change when
     // user is in dark mode since the secret editor
     // does not change theme colors between light and dark
-    color: #{color(ui-gray)};
+    color: #{color(ui-gray, 300)};
     display: flex;
     height: 100%;
     position: relative;
