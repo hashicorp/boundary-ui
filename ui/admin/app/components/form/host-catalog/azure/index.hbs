@@ -44,11 +44,10 @@
   </form.textarea>
 
   {{#if @model.isNew}}
-    <Hds::Form::RadioCard::Group @name='types' as |G|>
+    <Hds::Form::RadioCard::Group @name='type' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each this.hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
-          @name={{hostCatalogType}}
           @value={{hostCatalogType}}
           @maxWidth='20rem'
           @checked={{eq hostCatalogType @model.type}}
