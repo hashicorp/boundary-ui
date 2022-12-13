@@ -455,6 +455,9 @@ credential:
     private_key_passphrase:
       label: Passphrase
       help: Optional.
+    json:
+      label: JSON
+      help: This is the JSON blob that provides credentials to the host. After this data is saved, you will not be able to edit it again without replacing it.
 scope:
   title: Scope
   title_plural: Scopes

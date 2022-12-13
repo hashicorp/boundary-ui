@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -21,6 +21,7 @@ module('Acceptance | scopes | read', function (hooks) {
     },
   };
   const urls = {
+    orgScope: null,
     orgScopeEdit: null,
   };
 
@@ -32,24 +33,34 @@ module('Acceptance | scopes | read', function (hooks) {
       scope: { id: 'global', type: 'global' },
     });
     // Generate route URLs for resources
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
-    // Generate resource couner
-    authenticateSession({});
+    authenticateSession({ isGlobal: true });
   });
 
   test('visiting org scope edit', async function (assert) {
     assert.expect(2);
-    await visit(urls.orgScopeEdit);
+    await visit(urls.orgScope);
     await a11yAudit();
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
+    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.ok(find('main .rose-form'));
+    assert.dom('main .rose-form').exists();
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
     assert.expect(2);
-    instances.scopes.org.update({ authorized_actions: [] });
-    await visit(urls.orgScopeEdit);
+    instances.scopes.org.update({
+      authorized_actions: instances.scopes.org.authorized_actions.filter(
+        (item) => item !== 'read'
+      ),
+    });
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgScopeEdit}"]`);
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.notOk(find('main .rose-form'));
+    assert.dom('main .rose-form').doesNotExist();
   });
 });
