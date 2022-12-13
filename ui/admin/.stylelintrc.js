@@ -20,6 +20,12 @@ module.exports = {
 
     // The few overrides for CodeMirror and HDS CSS aren't worth creating full regex expressions to match those
     // style characteristics.
-    'selector-class-pattern': null,
+    'selector-class-pattern': [
+      '(^([a-z][a-z0-9]*)(-[a-z0-9]*)*(--[a-z0-9]+)*$)|(^CodeMirror)',
+      {
+        message: (selector) =>
+          `Expected class selector "${selector}" to be kebab-case`,
+      },
+    ],
   },
 };
