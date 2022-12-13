@@ -76,7 +76,6 @@
 
         {{#each-in this.mapResourceTypeWithIcon as |pluginType|}}
           <G.RadioCard
-            @name={{pluginType}}
             @value={{pluginType}}
             @checked={{eq pluginType @model.type}}
             @maxWidth='20rem'
