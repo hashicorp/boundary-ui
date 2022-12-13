@@ -64,12 +64,12 @@
 
   {{else}}
     <InfoField
-      @value={{t (concat 'resources.target.help.' @model.type)}}
+      @value={{t (concat 'resources.target.types.' @model.type)}}
       @icon={{this.icon}}
       as |F|
     >
       <F.Label>{{t 'form.type.label'}}</F.Label>
-      <F.HelperText>{{t (concat 'resources.target.types.' @model.type)}}
+      <F.HelperText>{{t (concat 'resources.target.help.' @model.type)}}
       </F.HelperText>
     </InfoField>
   {{/if}}
