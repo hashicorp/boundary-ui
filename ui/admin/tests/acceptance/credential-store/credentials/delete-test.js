@@ -29,7 +29,7 @@ module(
       credentials: null,
       usernamePasswordCredential: null,
       usernameKeyPairCredential: null,
-      JSONCredential: null,
+      jsonCredential: null,
     };
 
     hooks.beforeEach(function () {
@@ -56,7 +56,7 @@ module(
         credentialStore: instances.staticCredentialStore,
         type: 'ssh_private_key',
       });
-      instances.JSONCredential = this.server.create('credential', {
+      instances.jsonCredential = this.server.create('credential', {
         scope: instances.scopes.project,
         credentialStore: instances.staticCredentialStore,
         type: 'json',
@@ -68,7 +68,7 @@ module(
       urls.credentials = `${urls.staticCredentialStore}/credentials`;
       urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
       urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
-      urls.JSONCredential = `${urls.credentials}/${instances.JSONCredential.id}`;
+      urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
       // Generate resource counter
       getUsernamePasswordCredentialCount = () => {
         return this.server.schema.credentials.where({
@@ -114,14 +114,14 @@ module(
 
     test('can delete JSON credential', async function (assert) {
       assert.expect(2);
-      const JSONCredentialCount =
+      const jsonCredentialCount =
         getJSONCredentialCount();
-      await visit(urls.JSONCredential);
+      await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getJSONCredentialCount(),
-        JSONCredentialCount - 1
+        jsonCredentialCount - 1
       );
     });
 
@@ -165,20 +165,20 @@ module(
 
     test('cannot delete a JSON credential without proper authorization', async function (assert) {
       assert.expect(3);
-      const JSONCredentialCount =
+      const jsonCredentialCount =
         getJSONCredentialCount();
-      instances.JSONCredential.authorized_actions =
-        instances.JSONCredential.authorized_actions.filter(
+      instances.jsonCredential.authorized_actions =
+        instances.jsonCredential.authorized_actions.filter(
           (item) => item !== 'delete'
         );
-      await visit(urls.JSONCredential);
-      assert.strictEqual(currentURL(), urls.JSONCredential);
+      await visit(urls.jsonCredential);
+      assert.strictEqual(currentURL(), urls.jsonCredential);
       assert
         .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
         .doesNotExist();
       assert.strictEqual(
         getJSONCredentialCount(),
-        JSONCredentialCount
+        jsonCredentialCount
       );
     });
 
@@ -218,15 +218,15 @@ module(
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      const JSONCredentialCount =
+      const jsonCredentialCount =
         getJSONCredentialCount();
-      await visit(urls.JSONCredential);
+      await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       await click('.rose-dialog footer .rose-button-primary');
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getJSONCredentialCount(),
-        JSONCredentialCount - 1
+        jsonCredentialCount - 1
       );
     });
 
@@ -266,15 +266,15 @@ module(
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      const JSONCredentialCount =
+      const jsonCredentialCount =
         getJSONCredentialCount();
-      await visit(urls.JSONCredential);
+      await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       await click('.rose-dialog footer .rose-button-secondary');
-      assert.strictEqual(currentURL(), urls.JSONCredential);
+      assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.strictEqual(
         getJSONCredentialCount(),
-        JSONCredentialCount
+        jsonCredentialCount
       );
     });
 
@@ -327,7 +327,7 @@ module(
           }
         );
       });
-      await visit(urls.JSONCredential);
+      await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
     });
