@@ -6,7 +6,8 @@ export default class OverrideCredentialAbility extends CredentialAbility {
   @service features;
 
   get canRead() {
-    return (this.features.isEnabled('json-credentials') || this.model.type !== 'json')
+    return this.features.isEnabled('json-credentials') ||
+      this.model.type !== 'json'
       ? super.canRead
       : false;
   }

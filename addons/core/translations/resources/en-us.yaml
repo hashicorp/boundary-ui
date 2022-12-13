@@ -304,11 +304,11 @@ target:
     add-brokered-credential-sources: Add Brokered Credentials
     add-injected-application-credential-sources: Add Injected Application Credentials
   types:
-    tcp: TCP
+    tcp: Generic TCP
     ssh: SSH
   help:
-    tcp: Connections are made over TCP to support a broad range of protocols, including SSH, RDP, databases, and more.  This is the most general-purpose type.
-    ssh: Protocol-aware connections are made over SSH.  Use when requiring SSH connections to remote hosts.
+    tcp: Generic TCP supports a broad range of connection types.
+    ssh: Protocol-aware SSH with support for credential injection.
   host-source:
     title: Host Source
     title_plural: Host Sources

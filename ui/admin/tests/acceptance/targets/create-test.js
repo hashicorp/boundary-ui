@@ -77,25 +77,26 @@ module('Acceptance | targets | create', function (hooks) {
     authenticateSession({});
   });
 
-  test('defaults to a new TCP target when no query param provided', async function (assert) {
+  test('defaults to type `ssh` when no query param provided', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
-    assert.strictEqual(find('input[name=tcp]:checked').value, 'tcp');
+    assert.strictEqual(find('[name="type"]:checked').value, 'ssh');
   });
 
-  test('can create new targets of type TCP', async function (assert) {
+  test('can create type `ssh`', async function (assert) {
     assert.expect(4);
     const targetCount = getTargetCount();
-    const tcpTargetCount = getTCPTargetCount();
+    const sshTargetCount = getSSHTargetCount();
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
+    await click('[value="ssh"]');
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
 
+    assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
     assert.strictEqual(getTargetCount(), targetCount + 1);
-    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string'
@@ -107,20 +108,20 @@ module('Acceptance | targets | create', function (hooks) {
     );
   });
 
-  test('can create new targets of type SSH', async function (assert) {
+  test('can create type `tcp`', async function (assert) {
     assert.expect(4);
     const targetCount = getTargetCount();
-    const sshTargetCount = getSSHTargetCount();
+    const tcpTargetCount = getTCPTargetCount();
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
+    await click('[value="tcp"]');
     await fillIn('[name="name"]', 'random string');
-    await click('[value="ssh"]');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('[type="submit"]');
 
-    assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
     assert.strictEqual(getTargetCount(), targetCount + 1);
+    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string'
