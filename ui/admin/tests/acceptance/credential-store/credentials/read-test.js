@@ -17,7 +17,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     staticCredentialStore: null,
     usernamePasswordCredential: null,
     usernameKeyPairCredential: null,
-    JSONCredential: null,
+    jsonCredential: null,
   };
 
   const urls = {
@@ -27,7 +27,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     credentials: null,
     usernamePasswordCredential: null,
     usernameKeyPairCredential: null,
-    JSONCredential: null,
+    jsonCredential: null,
     unknownCredential: null,
   };
 
@@ -55,7 +55,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       credentialStore: instances.staticCredentialStore,
       type: 'ssh_private_key',
     });
-    instances.JSONCredential = this.server.create('credential', {
+    instances.jsonCredential = this.server.create('credential', {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
       type: 'json',
@@ -67,7 +67,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.credentials = `${urls.staticCredentialStore}/credentials`;
     urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
     urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
-    urls.JSONCredential = `${urls.credentials}/${instances.JSONCredential.id}`;
+    urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
     authenticateSession({});
   });
@@ -100,9 +100,9 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     await click(`[href="${urls.credentials}"]`);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentials);
-    await click(`[href="${urls.JSONCredential}"]`);
+    await click(`[href="${urls.jsonCredential}"]`);
     await a11yAudit();
-    assert.strictEqual(currentURL(), urls.JSONCredential);
+    assert.strictEqual(currentURL(), urls.jsonCredential);
   });
 
   test('cannot navigate to a username & password credential form without proper authorization', async function (assert) {
@@ -127,8 +127,8 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   test('cannot navigate to a JSON credential form without proper authorization', async function (assert) {
     assert.expect(1);
-    instances.JSONCredential.authorized_actions =
-      instances.JSONCredential.authorized_actions.filter(
+    instances.jsonCredential.authorized_actions =
+      instances.jsonCredential.authorized_actions.filter(
         (item) => item != 'read'
       );
     await visit(urls.credentials);
