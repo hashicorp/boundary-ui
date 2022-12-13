@@ -458,7 +458,7 @@
 
 .info-field {
   .hds-form-field--layout-vertical {
-    grid-template-areas: 'label' 'helper-text' 'text-input';
+    grid-template-areas: 'label' 'text-input' 'helper-text';
 
     .hds-form-label {
       font-size: sizing.rems(m);
@@ -466,26 +466,25 @@
       line-height: sizing.rems(m) + sizing.rems(xxs);
     }
 
-    .hds-form-helper-text {
-      color: var(--token-form-label-color);
-      font-size: sizing.rems(m);
-      grid-area: helper-text;
-    }
-
     .hds-form-text-input {
       background-color: transparent;
       border: 0;
+      color: var(--token-form-label-color);
       grid-area: text-input;
-      line-height: sizing.rems(m) + sizing.rems(xxs);
-      margin-top: sizing.rems(xs);
+      font-size: sizing.rems(m);
       padding: 0;
+    }
+
+    .hds-form-helper-text {
+      color: var(--token-form-label-color);
+      grid-area: helper-text;
     }
   }
 
   &.has-icon {
     .flight-icon {
       position: absolute;
-      transform: translatey(sizing.rems(xl) - sizing.rems(s));
+      transform: translatey(sizing.rems(xl) - sizing.rems(xs));
     }
 
     .hds-form-helper-text,
