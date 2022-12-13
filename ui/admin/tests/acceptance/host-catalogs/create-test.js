@@ -83,7 +83,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await visit(urls.newStaticHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="description"]', 'random string');
-    await fillIn('[name="static"]', 'static');
+    await fillIn('[name="type"]', 'static');
     await click('[type="submit"]');
     assert.strictEqual(gethostCatalogCount(), count + 1);
   });
@@ -94,7 +94,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await visit(urls.newAWSDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="description"]', 'random string');
-    await fillIn('[name="aws"]', 'aws');
+    await fillIn('[name="type"]', 'aws');
     await click('[type="submit"]');
     assert.strictEqual(gethostCatalogCount(), count + 1);
   });
@@ -105,7 +105,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await visit(urls.newAzureDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="description"]', 'random string');
-    await fillIn('[name="azure"]', 'azure');
+    await fillIn('[name="type"]', 'azure');
     await click('[type="submit"]');
     assert.strictEqual(gethostCatalogCount(), count + 1);
   });
