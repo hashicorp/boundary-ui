@@ -6,15 +6,16 @@ The admin UI for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
-- [Running / Development](#running--development)
-  - [Building for Production](#building-for-production)
-    - [Environment Variables](#environment-variables)
-  - [Running Tests](#running-tests)
-  - [Deploying](#deploying)
-- [Further Reading / Useful Links](#further-reading--useful-links)
+- [Admin UI](#admin-ui)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Yarn Commands](#yarn-commands)
+  - [Running / Development](#running--development)
+    - [Building for Production](#building-for-production)
+      - [Environment Variables](#environment-variables)
+    - [Running Tests](#running-tests)
+    - [Deploying](#deploying)
+  - [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -103,7 +104,7 @@ Specify what it takes to deploy your app.
 ## Further Reading / Useful Links
 
 * [ember.js](https://emberjs.com/)
-* [ember-cli](https://ember-cli.com/)
+* [ember-cli](https://cli.emberjs.com/release/)
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
