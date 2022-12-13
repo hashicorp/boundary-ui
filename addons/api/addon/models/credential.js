@@ -6,6 +6,7 @@ import GeneratedCredentialModel from '../generated/models/credential';
 export const types = ['username_password', 'ssh_private_key', 'json'];
 
 export default class CredentialModel extends GeneratedCredentialModel {
+  // =attributes
   /**
    * All Credentials are prefixed with "cred" and are considered
    * static due to their relation with Static Credential Stores.
