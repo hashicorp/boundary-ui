@@ -16,7 +16,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     staticCredentialStore: null,
     usernamePasswordCredential: null,
     usernameKeyPairCredential: null,
-    JSONCredential: null,
+    jsonCredential: null,
   };
 
   const urls = {
@@ -51,7 +51,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
       credentialStore: instances.staticCredentialStore,
       type: 'ssh_private_key',
     });
-    instances.JSONCredential = this.server.create('credential', {
+    instances.jsonCredential = this.server.create('credential', {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
       type: 'json',
