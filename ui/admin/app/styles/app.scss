@@ -483,7 +483,7 @@
   &.has-icon {
     .flight-icon {
       position: absolute;
-      transform: translatey(sizing.rems(xl) - sizing.rems(xs));
+      transform: translateY(sizing.rems(xl) - sizing.rems(xs));
     }
 
     .hds-form-helper-text,
