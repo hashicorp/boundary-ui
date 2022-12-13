@@ -469,6 +469,7 @@
     .hds-form-text-input {
       background-color: transparent;
       border: 0;
+      color: var(--token-form-label-color);
       grid-area: text-input;
       font-size: sizing.rems(m);
       padding: 0;
@@ -476,7 +477,6 @@
 
     .hds-form-helper-text {
       color: var(--token-form-label-color);
-      line-height: sizing.rems(m) + sizing.rems(xxs);
       grid-area: helper-text;
     }
   }
