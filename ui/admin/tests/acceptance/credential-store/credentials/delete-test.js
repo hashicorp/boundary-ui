@@ -13,6 +13,7 @@ module(
 
     let getUsernamePasswordCredentialCount;
     let getUsernameKeyPairCredentialCount;
+    let getJSONCredentialCount;
 
     const instances = {
       scopes: {
@@ -28,6 +29,7 @@ module(
       credentials: null,
       usernamePasswordCredential: null,
       usernameKeyPairCredential: null,
+      JSONCredential: null,
     };
 
     hooks.beforeEach(function () {
@@ -54,6 +56,11 @@ module(
         credentialStore: instances.staticCredentialStore,
         type: 'ssh_private_key',
       });
+      instances.JSONCredential = this.server.create('credential', {
+        scope: instances.scopes.project,
+        credentialStore: instances.staticCredentialStore,
+        type: 'json',
+      });
       // Generate route URLs for resources
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
       urls.credentialStores = `${urls.projectScope}/credential-stores`;
@@ -61,6 +68,7 @@ module(
       urls.credentials = `${urls.staticCredentialStore}/credentials`;
       urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
       urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
+      urls.JSONCredential = `${urls.credentials}/${instances.JSONCredential.id}`;
       // Generate resource counter
       getUsernamePasswordCredentialCount = () => {
         return this.server.schema.credentials.where({
@@ -69,6 +77,10 @@ module(
       };
       getUsernameKeyPairCredentialCount = () => {
         return this.server.schema.credentials.where({ type: 'ssh_private_key' })
+          .length;
+      };
+      getJSONCredentialCount = () => {
+        return this.server.schema.credentials.where({ type: 'json' })
           .length;
       };
       authenticateSession({});
@@ -97,6 +109,19 @@ module(
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
         usernameKeyPairCredentialCount - 1
+      );
+    });
+
+    test('can delete JSON credential', async function (assert) {
+      assert.expect(2);
+      const JSONCredentialCount =
+        getJSONCredentialCount();
+      await visit(urls.JSONCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(
+        getJSONCredentialCount(),
+        JSONCredentialCount - 1
       );
     });
 
@@ -138,6 +163,25 @@ module(
       );
     });
 
+    test('cannot delete a JSON credential without proper authorization', async function (assert) {
+      assert.expect(3);
+      const JSONCredentialCount =
+        getJSONCredentialCount();
+      instances.JSONCredential.authorized_actions =
+        instances.JSONCredential.authorized_actions.filter(
+          (item) => item !== 'delete'
+        );
+      await visit(urls.JSONCredential);
+      assert.strictEqual(currentURL(), urls.JSONCredential);
+      assert
+        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+        .doesNotExist();
+      assert.strictEqual(
+        getJSONCredentialCount(),
+        JSONCredentialCount
+      );
+    });
+
     test('can accept delete username & password credential via dialog', async function (assert) {
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
@@ -167,6 +211,22 @@ module(
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
         usernameKeyPairCredentialCount - 1
+      );
+    });
+
+    test('can accept delete JSON credential via dialog', async function (assert) {
+      assert.expect(2);
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const JSONCredentialCount =
+        getJSONCredentialCount();
+      await visit(urls.JSONCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-primary');
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(
+        getJSONCredentialCount(),
+        JSONCredentialCount - 1
       );
     });
 
@@ -202,6 +262,22 @@ module(
       );
     });
 
+    test('can cancel delete JSON credential via dialog', async function (assert) {
+      assert.expect(2);
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const JSONCredentialCount =
+        getJSONCredentialCount();
+      await visit(urls.JSONCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click('.rose-dialog footer .rose-button-secondary');
+      assert.strictEqual(currentURL(), urls.JSONCredential);
+      assert.strictEqual(
+        getJSONCredentialCount(),
+        JSONCredentialCount
+      );
+    });
+
     test('deleting a username & password credential which errors displays error message', async function (assert) {
       assert.expect(1);
       this.server.del('/credentials/:id', () => {
@@ -234,6 +310,24 @@ module(
         );
       });
       await visit(urls.usernameKeyPairCredential);
+      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+    });
+
+    test('deleting a JSON credential which errors displays error message', async function (assert) {
+      assert.expect(1);
+      this.server.del('/credentials/:id', () => {
+        return new Response(
+          490,
+          {},
+          {
+            status: 490,
+            code: 'error',
+            message: 'Oops.',
+          }
+        );
+      });
+      await visit(urls.JSONCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
     });
