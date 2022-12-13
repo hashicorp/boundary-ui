@@ -3,9 +3,6 @@
 module.exports = {
   extends: ['stylelint-config-standard-scss', 'stylelint-config-prettier-scss'],
   rules: {
-    // This could be fixed in the future if we don't want to use the legacy format
-    'color-function-notation': 'legacy',
-
     // We oftentimes want to have long form properties for readability
     'declaration-block-no-redundant-longhand-properties': null,
 
@@ -20,5 +17,9 @@ module.exports = {
     // favor of normal CSS
     'property-no-vendor-prefix': null,
     'at-rule-no-vendor-prefix': null,
+
+    // The few overrides for CodeMirror and HDS CSS aren't worth creating full regex expressions to match those
+    // style characteristics.
+    'selector-class-pattern': null,
   },
 };

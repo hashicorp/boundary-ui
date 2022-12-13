@@ -1,4 +1,3 @@
-// sass-lint:disable no-color-literals class-name-format
 @use 'rose/variables/sizing';
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
@@ -416,7 +415,7 @@
   .worker-auth-token {
     align-items: flex-end;
     display: flex;
-    gap: sizing.rems(m); // sass-lint:disable-line no-misspelled-properties
+    gap: sizing.rems(m);
   }
 
   .worker-success {
@@ -427,7 +426,7 @@
     > div {
       align-items: center;
       display: flex;
-      gap: sizing.rems(xs); // sass-lint:disable-line no-misspelled-properties
+      gap: sizing.rems(xs);
 
       p {
         margin-bottom: sizing.rems(xxs);
@@ -457,7 +456,6 @@
 }
 
 .info-field {
-  /* stylelint-disable-next-line selector-class-pattern */
   .hds-form-field--layout-vertical {
     grid-template-areas: 'label' 'helper-text' 'text-input';
 
@@ -510,7 +508,6 @@
   height: var(--secret-editor-height);
   margin-bottom: sizing.rems(l);
 
-  /* stylelint-disable selector-class-pattern */
   .secret-editor-json {
     .CodeMirror {
       border-radius: sizing.rems(xxs);
@@ -526,8 +523,6 @@
       padding: 0;
     }
   }
-
-  /* stylint-enable selector-class-pattern */
 
   .secret-editor-skeleton-wrapper {
     // using ui-gray directly so it does not change when
