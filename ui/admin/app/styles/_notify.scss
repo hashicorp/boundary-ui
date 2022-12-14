@@ -1,7 +1,6 @@
 // This file is essentially a rip of the default ember notify styles with some minor tweaks for positioning.
 
-// sass-lint:disable no-vendor-prefixes
-@-webkit-keyframes 'ember-notify-show' {
+@-webkit-keyframes ember-notify-show {
   from {
     left: -310px;
   }
@@ -10,7 +9,7 @@
     left: 0;
   }
 }
-@keyframes 'ember-notify-show' {
+@keyframes ember-notify-show {
   from {
     left: -310px;
   }
@@ -19,7 +18,7 @@
     left: 0;
   }
 }
-@-webkit-keyframes 'ember-notify-hide' {
+@-webkit-keyframes ember-notify-hide {
   from {
     left: 0;
   }
@@ -28,7 +27,7 @@
     left: -310px;
   }
 }
-@keyframes 'ember-notify-hide' {
+@keyframes ember-notify-hide {
   from {
     left: 0;
   }
