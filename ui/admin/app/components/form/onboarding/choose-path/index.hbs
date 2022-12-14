@@ -5,26 +5,33 @@
   @onSubmit={{fn @submit this.path}}
   as |form|
 >
-  <form.radioGroup
-    @name='paths'
-    @selectedValue={{this.path}}
-    @changed={{this.toggleRadio}}
-    as |radioGroup|
-  >
-    <div class='choose-path-cards'>
-      <radioGroup.card
-        @label={{t 'onboarding.quick-start.titles.quick-setup'}}
-        @value='guided'
-        @helperText={{t 'onboarding.quick-start.descriptions.quick-setup'}}
-        @layout='tile'
-      />
-      <radioGroup.card
-        @label={{t 'onboarding.quick-start.titles.manual'}}
-        @value='manual'
-        @helperText={{t 'onboarding.quick-start.descriptions.manual'}}
-        @layout='tile'
-      />
-    </div>
-  </form.radioGroup>
+
+  <Hds::Form::RadioCard::Group @name='path' as |G|>
+    <G.RadioCard
+      @maxWidth='20rem'
+      @checked={{eq this.path 'guided'}}
+      @value='guided'
+      {{on 'input' (fn this.toggleRadio 'guided')}}
+      as |R|
+    >
+      <R.Label>{{t 'onboarding.quick-start.titles.quick-setup'}}</R.Label>
+      <R.Description>{{t
+          'onboarding.quick-start.descriptions.quick-setup'
+        }}</R.Description>
+    </G.RadioCard>
+    <G.RadioCard
+      @maxWidth='20rem'
+      @checked={{eq this.path 'manual'}}
+      @value='manual'
+      {{on 'input' (fn this.toggleRadio 'manual')}}
+      as |R|
+    >
+      <R.Label>{{t 'onboarding.quick-start.titles.manual'}}</R.Label>
+      <R.Description>{{t
+          'onboarding.quick-start.descriptions.manual'
+        }}</R.Description>
+    </G.RadioCard>
+  </Hds::Form::RadioCard::Group>
+
   <form.actions @submitText={{t 'actions.next'}} @showCancel={{false}} />
 </Rose::Form>

@@ -17,6 +17,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     staticCredentialStore: null,
     usernamePasswordCredential: null,
     usernameKeyPairCredential: null,
+    jsonCredential: null,
   };
 
   const urls = {
@@ -26,6 +27,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     credentials: null,
     usernamePasswordCredential: null,
     usernameKeyPairCredential: null,
+    jsonCredential: null,
     unknownCredential: null,
   };
 
@@ -53,6 +55,11 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       credentialStore: instances.staticCredentialStore,
       type: 'ssh_private_key',
     });
+    instances.jsonCredential = this.server.create('credential', {
+      scope: instances.scopes.project,
+      credentialStore: instances.staticCredentialStore,
+      type: 'json',
+    });
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
@@ -60,6 +67,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.credentials = `${urls.staticCredentialStore}/credentials`;
     urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
     urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
+    urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
     authenticateSession({});
   });
@@ -86,6 +94,17 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
   });
 
+  test('visiting JSON credential', async function (assert) {
+    assert.expect(2);
+    await visit(urls.staticCredentialStore);
+    await click(`[href="${urls.credentials}"]`);
+    await a11yAudit();
+    assert.strictEqual(currentURL(), urls.credentials);
+    await click(`[href="${urls.jsonCredential}"]`);
+    await a11yAudit();
+    assert.strictEqual(currentURL(), urls.jsonCredential);
+  });
+
   test('cannot navigate to a username & password credential form without proper authorization', async function (assert) {
     assert.expect(1);
     instances.usernamePasswordCredential.authorized_actions =
@@ -104,6 +123,24 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       );
     await visit(urls.credentials);
     assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
+  });
+
+  test('cannot navigate to a JSON credential form without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.jsonCredential.authorized_actions =
+      instances.jsonCredential.authorized_actions.filter(
+        (item) => item != 'read'
+      );
+    await visit(urls.credentials);
+    assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
+  });
+
+  test('cannot navigate to a JSON credential form when feature not enabled', async function (assert) {
+    assert.expect(1);
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.disable('json-credentials');
+    await visit(urls.credentials);
+    assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
   });
 
   test('visiting an unknown credential displays 404 message', async function (assert) {
