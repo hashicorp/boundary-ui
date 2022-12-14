@@ -52,24 +52,17 @@
     {{/if}}
   </form.textarea>
 
-  <form.fieldset>
-    <:title>{{t 'titles.provider'}}</:title>
-    <:body>
-      <form.radioGroup
-        @name='provider'
-        @selectedValue={{@model.compositeType}}
-        @disabled={{true}}
-        as |radioGroup|
-      >
-        <radioGroup.card
-          @label={{t 'resources.host-catalog.types.aws'}}
-          @value={{@model.compositeType}}
-          @layout='tile'
-          @icon={{concat 'flight-icons/svg/' @model.compositeType '-color-16'}}
-        />
-      </form.radioGroup>
-    </:body>
-  </form.fieldset>
+  <InfoField
+    @value={{t 'descriptions.provider'}}
+    @icon='aws-color'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'titles.provider'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.host-catalog.types.aws'}}
+    </F.HelperText>
+  </InfoField>
 
   <form.fieldset>
     <:title>{{t 'form.ip_addresses.label'}}</:title>
