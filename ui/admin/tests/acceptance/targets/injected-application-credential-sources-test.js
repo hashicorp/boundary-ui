@@ -195,7 +195,8 @@ module(
         injectedApplicationCredentialSourceIds: [],
       });
       await visit(urls.injectedApplicationCredentialSources);
-      await click(find('.rose-message-link'));
+      // Click on the rose message link
+      await click(find('.rose-message > .rose-message-body > a'));
       assert.strictEqual(
         currentURL(),
         urls.addInjectedApplicationCredentialSources
