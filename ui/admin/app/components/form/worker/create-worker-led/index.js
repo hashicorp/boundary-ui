@@ -109,12 +109,11 @@ ${listenerText}
    */
   get installBoundaryText() {
     if (this.features.isEnabled('byow-pki-hcp-cluster-id')) {
+      const configPath = this.configFilePath || '<path>';
       return `wget -q https://releases.hashicorp.com/boundary-worker/0.11.2+hcp/boundary-worker_0.11.2+hcp_linux_amd64.zip ;\\
 sudo apt-get update && sudo apt-get install unzip ;\\
 unzip *.zip ;\\
-./boundary-worker server -config="${
-        this.configFilePath || '<path>'
-      }/pki-worker.hcl"`;
+./boundary-worker server -config="${configPath}/pki-worker.hcl"`;
     }
     return `curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;\\
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\\

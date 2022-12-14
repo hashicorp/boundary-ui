@@ -20,7 +20,9 @@ export default class CredentialSerializer extends ApplicationSerializer {
       delete serialized.attributes.username;
 
       if (serialized?.attributes?.json_object) {
-        serialized.attributes.object = JSON.parse(serialized.attributes.json_object);
+        serialized.attributes.object = JSON.parse(
+          serialized.attributes.json_object
+        );
         delete serialized.attributes.json_object;
       }
     }
