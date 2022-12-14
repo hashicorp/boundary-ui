@@ -93,13 +93,13 @@ host-catalog:
     delete: Delete Host Catalog
   help:
     static: Provide a list of hosts and host sets with static addresses
-    dynamic: Automate discovery of target hosts and services on Azure or AWS
+    plugin: Automate discovery of target hosts and services on Azure or AWS
   types:
     static: Static
     unknown: Plugin
     aws: AWS
     azure: Azure
-    dynamic: Dynamic
+    plugin: Dynamic
   form:
     aws_region:
       label: AWS Region
@@ -455,6 +455,9 @@ credential:
     private_key_passphrase:
       label: Passphrase
       help: Optional.
+    json:
+      label: JSON
+      help: This is the JSON blob that provides credentials to the host. After this data is saved, you will not be able to edit it again without replacing it.
 scope:
   title: Scope
   title_plural: Scopes
