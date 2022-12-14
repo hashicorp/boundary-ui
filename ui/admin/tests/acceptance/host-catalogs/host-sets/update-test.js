@@ -147,20 +147,20 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await fillIn('[name="name"]', name);
     // Remove all the preferred endpoints
     await Promise.all(
-      findAll('form fieldset:nth-of-type(2) [title="Remove"]').map((element) =>
+      findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
         click(element)
       )
     );
     await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await click('form fieldset:nth-of-type(1) [title="Add"]');
     // Remove all the filters
     await Promise.all(
-      findAll('form fieldset:nth-of-type(3) [title="Remove"]').map((element) =>
+      findAll('form fieldset:nth-of-type(2) [title="Remove"]').map((element) =>
         click(element)
       )
     );
     await fillIn('[name="filters"]', 'filter');
-    await click('form fieldset:nth-of-type(3) [title="Add"]');
+    await click('form fieldset:nth-of-type(2) [title="Add"]');
     await fillIn('[name="sync_interval_seconds"]', 10);
     await click('.rose-form-actions [type="submit"]');
 
@@ -198,12 +198,12 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await fillIn('[name="name"]', name);
     // Remove all the preferred endpoints
     await Promise.all(
-      findAll('form fieldset:nth-of-type(2) [title="Remove"]').map((element) =>
+      findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
         click(element)
       )
     );
     await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await click('form fieldset:nth-of-type(1) [title="Add"]');
     await fillIn('[name="filter"]', 'filter');
     await fillIn('[name="sync_interval_seconds"]', 10);
     await click('.rose-form-actions [type="submit"]');
