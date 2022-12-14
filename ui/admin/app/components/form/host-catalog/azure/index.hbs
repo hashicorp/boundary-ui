@@ -44,67 +44,47 @@
   </form.textarea>
 
   {{#if @model.isNew}}
-    <form.fieldset>
-      <:title>{{t 'form.type.label'}}</:title>
-      <:body>
-        <form.radioGroup
-          @name='types'
-          @selectedValue={{@model.type}}
-          @changed={{@changeType}}
-          as |radioGroup|
+    <Hds::Form::RadioCard::Group @name='type' as |G|>
+      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      {{#each this.hostCatalogTypes as |hostCatalogType|}}
+        <G.RadioCard
+          @value={{hostCatalogType}}
+          @maxWidth='20rem'
+          @checked={{eq hostCatalogType @model.type}}
+          {{on 'input' (fn @changeType hostCatalogType)}}
+          as |R|
         >
-          <radioGroup.card
-            @label={{t 'resources.host-catalog.types.static'}}
-            @value='static'
-            @helperText={{t 'resources.host-catalog.help.static'}}
-            @layout='wide'
-          />
-          <radioGroup.card
-            @label={{t 'resources.host-catalog.types.dynamic'}}
-            @value='plugin'
-            @helperText={{t 'resources.host-catalog.help.dynamic'}}
-            @layout='wide'
-          />
-        </form.radioGroup>
-      </:body>
-    </form.fieldset>
-    <Rose::Separator />
-
-    <form.fieldset>
-      <:title>{{t 'titles.provider'}}</:title>
-    </form.fieldset>
-    <form.fieldset>
-      <:title>{{t 'titles.choose-a-provider'}}</:title>
-      <:description>
-        {{concat
+          <R.Label>{{t
+              (concat 'resources.host-catalog.types.' hostCatalogType)
+            }}</R.Label>
+          <R.Description>{{t
+              (concat 'resources.host-catalog.help.' hostCatalogType)
+            }}</R.Description>
+        </G.RadioCard>
+      {{/each}}
+    </Hds::Form::RadioCard::Group>
+    <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
+      <G.Legend>{{t 'titles.provider'}}</G.Legend>
+      <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
+      <G.HelperText>{{concat
           (t 'descriptions.choose-a-provider')
-          ' '
-          (t 'descriptions.choose-a-provider-azure')
-        }}
-      </:description>
+        }}</G.HelperText>
 
-      <:body>
-        <form.radioGroup
-          @name='provider'
-          @selectedValue={{@model.compositeType}}
-          @changed={{@changeType}}
-          as |radioGroup|
+      {{#each-in this.mapResourceTypeWithIcon as |pluginType icon|}}
+        <G.RadioCard
+          @value={{pluginType}}
+          @maxWidth='20rem'
+          @checked={{eq pluginType @model.compositeType}}
+          {{on 'input' (fn @changeType pluginType)}}
+          as |R|
         >
-          <radioGroup.card
-            @label={{t 'resources.host-catalog.types.aws'}}
-            @value='aws'
-            @layout='tile'
-            @icon='flight-icons/svg/aws-color-16'
-          />
-          <radioGroup.card
-            @label={{t 'resources.host-catalog.types.azure'}}
-            @value='azure'
-            @layout='tile'
-            @icon='flight-icons/svg/azure-color-16'
-          />
-        </form.radioGroup>
-      </:body>
-    </form.fieldset>
+          <R.Label>{{t
+              (concat 'resources.host-catalog.types.' pluginType)
+            }}</R.Label>
+          <R.Icon @name={{icon}} />
+        </G.RadioCard>
+      {{/each-in}}
+    </Hds::Form::RadioCard::Group>
   {{else}}
     <InfoField
       @value={{t 'resources.host-catalog.types.azure'}}
@@ -160,6 +140,14 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.azure'}}
     readonly={{false}}
+  />
+
+  <form.checkbox
+    @name='disable_credential_rotation'
+    @checked={{@model.disable_credential_rotation}}
+    @helperText={{t 'form.disable_credential_rotation.help'}}
+    @label={{t 'form.disable_credential_rotation.label'}}
+    @disabled={{true}}
   />
 
   {{#if (can 'save model' @model)}}
