@@ -1,5 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  find,
+  click,
+  fillIn,
+  waitUntil,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -20,6 +27,7 @@ module(
       staticCredentialStore: null,
       usernamePasswordCredential: null,
       usernameKeyPairCredential: null,
+      jsonCredential: null,
     };
 
     const urls = {
@@ -29,6 +37,7 @@ module(
       credentials: null,
       usernamePasswordCredential: null,
       usernameKeyPairCredential: null,
+      jsonCredential: null,
     };
 
     hooks.beforeEach(function () {
@@ -56,6 +65,11 @@ module(
         credentialStore: instances.staticCredentialStore,
         type: 'ssh_private_key',
       });
+      instances.jsonCredential = this.server.create('credential', {
+        scope: instances.scopes.project,
+        credentialStore: instances.staticCredentialStore,
+        type: 'json',
+      });
       // Generate route URLs for resources
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
       urls.credentialStores = `${urls.projectScope}/credential-stores`;
@@ -63,6 +77,7 @@ module(
       urls.credentials = `${urls.staticCredentialStore}/credentials`;
       urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
       urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
+      urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
       authenticateSession({});
     });
 
@@ -98,6 +113,21 @@ module(
       );
     });
 
+    test('can save changes to existing JSON credential', async function (assert) {
+      assert.expect(3);
+      const mockInput = 'random string';
+      assert.notEqual(instances.jsonCredential.name, mockInput);
+      await visit(urls.jsonCredential);
+      await click('form [type="button"]', 'Activate edit mode');
+      await fillIn('[name="name"]', mockInput);
+      await click('.rose-form-actions [type="submit"]');
+      assert.strictEqual(currentURL(), urls.jsonCredential);
+      assert.strictEqual(
+        this.server.schema.credentials.where({ type: 'json' }).models[0].name,
+        mockInput
+      );
+    });
+
     test('cannot make changes to an existing username & password credential without proper authorization', async function (assert) {
       assert.expect(1);
       instances.usernamePasswordCredential.authorized_actions =
@@ -117,6 +147,18 @@ module(
           (item) => item !== 'update'
         );
       await visit(urls.usernameKeyPairCredential);
+      assert
+        .dom('.rose-layout-page-actions .rose-button-secondary')
+        .doesNotExist();
+    });
+
+    test('cannot make changes to an existing JSON credential without proper authorization', async function (assert) {
+      assert.expect(1);
+      instances.jsonCredential.authorized_actions =
+        instances.jsonCredential.authorized_actions.filter(
+          (item) => item !== 'update'
+        );
+      await visit(urls.jsonCredential);
       assert
         .dom('.rose-layout-page-actions .rose-button-secondary')
         .doesNotExist();
@@ -147,6 +189,20 @@ module(
       assert.strictEqual(
         find('[name="name"]').value,
         instances.usernameKeyPairCredential.name
+      );
+    });
+
+    test('can cancel changes to existing JSON credential', async function (assert) {
+      assert.expect(2);
+      const mockInput = 'random string';
+      await visit(urls.jsonCredential);
+      await click('form [type="button"]', 'Activate edit mode');
+      await fillIn('[name="name"]', mockInput);
+      await click('.rose-form-actions [type="button"]');
+      assert.notEqual(instances.jsonCredential.name, mockInput);
+      assert.strictEqual(
+        find('[name="name"]').value,
+        instances.jsonCredential.name
       );
     });
 
@@ -222,6 +278,42 @@ module(
       );
     });
 
+    test('saving an existing JSON credential with invalid fields displays error message', async function (assert) {
+      assert.expect(2);
+      const mockInput = 'random string';
+      this.server.patch('/credentials/:id', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'Error in provided request.',
+            details: {
+              request_fields: [
+                {
+                  name: 'name',
+                  description: 'Name is required.',
+                },
+              ],
+            },
+          }
+        );
+      });
+      await visit(urls.jsonCredential);
+      await click('form [type="button"]', 'Activate edit mode');
+      await fillIn('[name="name"]', mockInput);
+      await click('[type="submit"]');
+      assert.ok(
+        find('[role="alert"]').textContent.trim(),
+        'Error in provided request.'
+      );
+      assert.ok(
+        find('.rose-form-error-message').textContent.trim(),
+        'Name is required.'
+      );
+    });
+
     test('can discard unsaved username & password credential changes via dialog', async function (assert) {
       assert.expect(5);
       const mockInput = 'random string';
@@ -265,6 +357,29 @@ module(
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
+          mockInput
+        );
+      }
+    });
+
+    test('can discard unsaved JSON credential changes via dialog', async function (assert) {
+      assert.expect(5);
+      const mockInput = 'random string';
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      assert.notEqual(instances.jsonCredential.name, mockInput);
+      await visit(urls.jsonCredential);
+      await click('form [type="button"]', 'Activate edit mode');
+      await fillIn('[name="name"]', mockInput);
+      assert.strictEqual(currentURL(), urls.jsonCredential);
+      try {
+        await visit(urls.credentials);
+      } catch (e) {
+        assert.dom('.rose-dialog').isVisible();
+        await click('.rose-dialog-footer button:first-child', 'Click Discard');
+        assert.strictEqual(currentURL(), urls.credentials);
+        assert.notEqual(
+          this.server.schema.credentials.where({ type: 'json' }).models[0].name,
           mockInput
         );
       }
@@ -322,6 +437,31 @@ module(
       }
     });
 
+    test('can cancel discard unsaved JSON credential changes via dialog', async function (assert) {
+      assert.expect(6);
+      const mockInput = 'random string';
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      assert.notEqual(instances.jsonCredential.name, mockInput);
+      await visit(urls.jsonCredential);
+      await click('form [type="button"]', 'Activate edit mode');
+      const credentialName = find('[name="name"]').value;
+      await fillIn('[name="name"]', mockInput);
+      assert.strictEqual(currentURL(), urls.jsonCredential);
+      try {
+        await visit(urls.credentials);
+      } catch (e) {
+        assert.dom('.rose-dialog').isVisible();
+        await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+        assert.strictEqual(currentURL(), urls.jsonCredential);
+        assert.strictEqual(find('[name="name"]').value, mockInput);
+        assert.strictEqual(
+          this.server.schema.credentials.where({ type: 'json' }).models[0].name,
+          credentialName
+        );
+      }
+    });
+
     test('password field renders in edit mode only for a username & password credential', async function (assert) {
       assert.expect(3);
       await visit(urls.usernamePasswordCredential);
@@ -340,6 +480,29 @@ module(
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.dom('[name="private_key"]').isVisible();
       assert.dom('[name="private_key_passphrase"]').isVisible();
+    });
+
+    test('secret editor is in actionable state when entering edit mode of a JSON credential', async function (assert) {
+      assert.expect(3);
+      await visit(urls.jsonCredential);
+      assert.dom('.secret-editor-skeleton-message button').doesNotExist();
+      await click('form [type="button"]', 'Activate edit mode');
+      assert.strictEqual(currentURL(), urls.jsonCredential);
+      assert.dom('.secret-editor-skeleton-message button').isVisible();
+    });
+
+    test('secret editor enters editing state when clicking edit button in the secret editor of a JSON credential', async function (assert) {
+      assert.expect(4);
+      await visit(urls.jsonCredential);
+      await click('form [type="button"]', 'Activate edit mode');
+      assert.strictEqual(currentURL(), urls.jsonCredential);
+      assert.dom('.secret-editor-skeleton-message button').isVisible();
+      await click(
+        '.secret-editor-skeleton-message button',
+        'Enter editing mode'
+      );
+      assert.dom('.secret-editor-skeleton-message button').doesNotExist();
+      await waitUntil(() => assert.dom('.CodeMirror').isVisible());
     });
   }
 );
