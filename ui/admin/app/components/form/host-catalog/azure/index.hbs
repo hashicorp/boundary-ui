@@ -44,11 +44,10 @@
   </form.textarea>
 
   {{#if @model.isNew}}
-    <Hds::Form::RadioCard::Group @name='types' as |G|>
+    <Hds::Form::RadioCard::Group @name='type' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each this.hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
-          @name={{hostCatalogType}}
           @value={{hostCatalogType}}
           @maxWidth='20rem'
           @checked={{eq hostCatalogType @model.type}}
@@ -64,7 +63,7 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-    <Hds::Form::RadioCard::Group @name='types' @alignment='center' as |G|>
+    <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
       <G.Legend>{{t 'titles.provider'}}</G.Legend>
       <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
       <G.HelperText>{{concat
@@ -73,7 +72,6 @@
 
       {{#each-in this.mapResourceTypeWithIcon as |pluginType icon|}}
         <G.RadioCard
-          @name={{pluginType}}
           @value={{pluginType}}
           @maxWidth='20rem'
           @checked={{eq pluginType @model.compositeType}}
@@ -152,7 +150,6 @@
     @disabled={{true}}
   />
 
-  &nbsp;
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}
