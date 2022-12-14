@@ -18,10 +18,12 @@ module.exports = {
     'property-no-vendor-prefix': null,
     'at-rule-no-vendor-prefix': null,
 
-    // The few overrides for CodeMirror and HDS CSS aren't worth creating full regex expressions to match those
-    // style characteristics.
+    // As a team we want to stick to using kebab-case as our selector class pattern, but there are a couple
+    // of exceptions in which we overrride CSS from addons like CodeMirror and HDS, in which they use
+    // pascale-case and a double-kebabe-case. This regex checks for all of those 3 patterns and won't fail
+    // lint check, but will fail if its any other pattern.
     'selector-class-pattern': [
-      '(^([a-z][a-z0-9]*)(-[a-z0-9]*)*(--[a-z0-9]+)*$)|(^CodeMirror)',
+      '(^([a-z][a-z0-9]*)(-{1,2}[a-z0-9]+)*$)|(^CodeMirror)',
       {
         message: (selector) =>
           `Expected class selector "${selector}" to be kebab-case`,
