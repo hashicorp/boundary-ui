@@ -97,9 +97,9 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     const name = 'aws host set';
     await fillIn('[name="name"]', name);
     await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await click('form fieldset:nth-of-type(1) [title="Add"]');
     await fillIn('[name="filters"]', 'filter');
-    await click('form fieldset:nth-of-type(3) [title="Add"]');
+    await click('form fieldset:nth-of-type(2) [title="Add"]');
     await fillIn('[name="sync_interval_seconds"]', 10);
     await click('[type="submit"]');
 
@@ -128,7 +128,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     const name = 'azure host set';
     await fillIn('[name="name"]', name);
     await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await click('form fieldset:nth-of-type(1) [title="Add"]');
     await fillIn('[name="filter"]', 'filter');
     await fillIn('[name="sync_interval_seconds"]', 10);
     await click('[type="submit"]');
