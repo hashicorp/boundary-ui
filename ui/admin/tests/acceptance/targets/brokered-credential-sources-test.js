@@ -151,7 +151,9 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     });
     await visit(urls.brokeredCredentialSources);
 
-    assert.dom('.rose-table-row:nth-child(3)').includesText(jsonCredential.name);
+    assert
+      .dom('.rose-table-row:nth-child(3)')
+      .includesText(jsonCredential.name);
     assert.dom(`[href="${urls.jsonCredential}"]`).doesNotExist();
   });
 
@@ -324,7 +326,10 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await click('tbody tr .rose-dropdown-button-danger');
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount - 1);
     await visit(urls.addBrokeredCredentialSources);
-    assert.strictEqual(findAll('tbody tr').length, availableCredentialsCount + 1);
+    assert.strictEqual(
+      findAll('tbody tr').length,
+      availableCredentialsCount + 1
+    );
   });
 
   test('can remove a username & password type credential', async function (assert) {
@@ -339,7 +344,10 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await click('tbody tr .rose-dropdown-button-danger');
     assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
     await visit(urls.addBrokeredCredentialSources);
-    assert.strictEqual(findAll('tbody tr').length, availableCredentialsCount + 1);
+    assert.strictEqual(
+      findAll('tbody tr').length,
+      availableCredentialsCount + 1
+    );
   });
 
   test('cannot remove credential libraries without proper authorization', async function (assert) {

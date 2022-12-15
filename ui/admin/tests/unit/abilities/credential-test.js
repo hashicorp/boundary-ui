@@ -9,19 +9,13 @@ module('Unit | Abilities | credential', function (hooks) {
     const service = this.owner.lookup('service:can');
     const credential = {
       authorized_actions: ['read'],
-      type: 'json'
+      type: 'json',
     };
-    assert.ok(
-      service.can('read credential', credential)
-    );
-    credential.type = 'username_password'
-    assert.ok(
-      service.can('read credential', credential)
-    );
-    credential.type = 'ssh_private_key'
-    assert.ok(
-      service.can('read credential', credential)
-    );
+    assert.ok(service.can('read credential', credential));
+    credential.type = 'username_password';
+    assert.ok(service.can('read credential', credential));
+    credential.type = 'ssh_private_key';
+    assert.ok(service.can('read credential', credential));
   });
 
   test('cannot read without proper authorized actions', function (assert) {
@@ -29,19 +23,13 @@ module('Unit | Abilities | credential', function (hooks) {
     const service = this.owner.lookup('service:can');
     const credential = {
       authorized_actions: [],
-      type: 'json'
+      type: 'json',
     };
-    assert.notOk(
-      service.can('read credential', credential)
-    );
-    credential.type = 'username_password'
-    assert.notOk(
-      service.can('read credential', credential)
-    );
-    credential.type = 'ssh_private_key'
-    assert.notOk(
-      service.can('read credential', credential)
-    );
+    assert.notOk(service.can('read credential', credential));
+    credential.type = 'username_password';
+    assert.notOk(service.can('read credential', credential));
+    credential.type = 'ssh_private_key';
+    assert.notOk(service.can('read credential', credential));
   });
 
   test('cannot read without proper authorized actions and json-credentials disabled', function (assert) {
@@ -51,19 +39,13 @@ module('Unit | Abilities | credential', function (hooks) {
     featuresService.disable('json-credentials');
     const credential = {
       authorized_actions: [],
-      type: 'json'
+      type: 'json',
     };
-    assert.notOk(
-      service.can('read credential', credential)
-    );
-    credential.type = 'username_password'
-    assert.notOk(
-      service.can('read credential', credential)
-    );
-    credential.type = 'ssh_private_key'
-    assert.notOk(
-      service.can('read credential', credential)
-    );
+    assert.notOk(service.can('read credential', credential));
+    credential.type = 'username_password';
+    assert.notOk(service.can('read credential', credential));
+    credential.type = 'ssh_private_key';
+    assert.notOk(service.can('read credential', credential));
   });
 
   test('cannot read when json-credentials is disabled', function (assert) {
@@ -73,18 +55,12 @@ module('Unit | Abilities | credential', function (hooks) {
     featuresService.disable('json-credentials');
     const credential = {
       authorized_actions: ['read'],
-      type: 'json'
+      type: 'json',
     };
-    assert.notOk(
-      service.can('read credential', credential)
-    );
-    credential.type = 'username_password'
-    assert.ok(
-      service.can('read credential', credential)
-    );
-    credential.type = 'ssh_private_key'
-    assert.ok(
-      service.can('read credential', credential)
-    );
+    assert.notOk(service.can('read credential', credential));
+    credential.type = 'username_password';
+    assert.ok(service.can('read credential', credential));
+    credential.type = 'ssh_private_key';
+    assert.ok(service.can('read credential', credential));
   });
 });
