@@ -97,11 +97,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
           }
         )
       : this.store.query('group', { scope_id: 'global', recursive: true });
-    //this single works..
-    // const managedGroups = this.store.query('managed-group', {
-    //   auth_method_id: 'amoidc_4bdkWHtzs8',
-    // });
-
     return hash({
       role,
       scopes,
