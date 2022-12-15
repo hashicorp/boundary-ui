@@ -30,6 +30,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    * Preload all scopes recursively, but allow this to fail.
    */
   async beforeModel() {
+    //unload managed groups to help with filtering based on scope
     await this.store.unloadAll('managed-group');
     await this.store
       .query('scope', { scope_id: 'global', recursive: true })
