@@ -36,6 +36,7 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
     const unassignedUsers = this.args.users.filter(
       ({ id }) => !currentPrincipalIDs.includes(id)
     );
+
     const unassignedGroups = this.args.groups.filter(
       ({ id }) => !currentPrincipalIDs.includes(id)
     );

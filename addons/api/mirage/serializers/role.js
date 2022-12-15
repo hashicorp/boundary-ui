@@ -23,7 +23,7 @@ export default ApplicationSerializer.extend({
       (managedGroup) => ({
         scope_id: model.scope.id,
         id: managedGroup.id,
-        type: 'managed-group',
+        type: 'managed group',
       })
     );
     json.principals = [
@@ -31,7 +31,6 @@ export default ApplicationSerializer.extend({
       ...serializedGroups,
       ...serializedManagedGroups,
     ];
-    console.log(json.principals, 'JSON');
     if (!json.principals.length) delete json.principals;
 
     // default grant scope

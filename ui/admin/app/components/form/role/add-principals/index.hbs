@@ -39,11 +39,14 @@
                   or contextualization.  This is a one-off.
                 }}
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+
                 <Hds::Badge @text={{principal.accountName}} />
               {{/if}}
             </row.headerCell>
             <row.cell>{{principal.id}}</row.cell>
             <row.cell>
+              <PrincipalTypeBadge @model={{principal}} />
+              {{!-- 
               <Hds::Badge
                 @icon={{if
                   (eq principal.constructor.modelName 'group')
@@ -56,7 +59,7 @@
                     principal.constructor.modelName
                   )
                 }}
-              />
+              /> --}}
             </row.cell>
             <row.cell>
               <ScopeBadge @scope={{principal.scopeModel}} />

@@ -322,7 +322,7 @@ export default function () {
 
         updatedAttrs.managedGroupIds = updatedAttrs.managedGroupIds.filter(
           (id) => {
-            return !attrs.managedGroupIds.includes(id);
+            return !attrs.principalIds.includes(id);
           }
         );
       }
@@ -333,7 +333,6 @@ export default function () {
           grantStrings: attrs.grantStrings,
         };
       }
-      console.log(role, 'confgggg');
       return role.update(updatedAttrs);
     }
   );

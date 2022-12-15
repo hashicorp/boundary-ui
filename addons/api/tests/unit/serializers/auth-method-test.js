@@ -182,7 +182,6 @@ module('Unit | Serializer | auth method', function (hooks) {
       signing_algorithms,
       idp_ca_certs,
     } = record;
-    console.log(record);
     assert.deepEqual(account_claim_maps, [
       { from: 'from', to: 'to' },
       { from: 'foo', to: 'bar' },

@@ -271,6 +271,7 @@ role:
     types:
       user: User
       group: Group
+      managed-group: Managed Group
     actions:
       add-principals: Add Principals
   grant:

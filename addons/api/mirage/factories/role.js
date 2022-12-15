@@ -30,9 +30,15 @@ export default factory.extend({
       const { scope } = role;
       const users = server.createList('user', 2, { scope });
       const groups = server.createList('group', 2, { scope });
-      console.log(server, 'SERVERRR');
-      const managedGroups = server.createList('managed-group', 2, { scope });
-      console.log(managedGroups, 'managedddd');
+      const { id: authMethodId } = server.create('auth-method', 1, {
+        scope,
+        type: 'oidc',
+      });
+
+      const managedGroups = server.createList('managed-group', 1, {
+        scope,
+        authMethodId,
+      });
       role.update({ users, groups, managedGroups });
     },
   }),
