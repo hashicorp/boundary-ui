@@ -328,7 +328,10 @@ module(
         await visit(urls.credentials);
       } catch (e) {
         assert.dom('.rose-dialog').isVisible();
-        await click('.rose-dialog-footer button:first-child', 'Click Discard');
+        await click(
+          '.rose-dialog-footer button:first-of-type',
+          'Click Discard'
+        );
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
@@ -352,7 +355,10 @@ module(
         await visit(urls.credentials);
       } catch (e) {
         assert.dom('.rose-dialog').isVisible();
-        await click('.rose-dialog-footer button:first-child', 'Click Discard');
+        await click(
+          '.rose-dialog-footer button:first-of-type',
+          'Click Discard'
+        );
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
@@ -376,7 +382,10 @@ module(
         await visit(urls.credentials);
       } catch (e) {
         assert.dom('.rose-dialog').isVisible();
-        await click('.rose-dialog-footer button:first-child', 'Click Discard');
+        await click(
+          '.rose-dialog-footer button:first-of-type',
+          'Click Discard'
+        );
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'json' }).models[0].name,
