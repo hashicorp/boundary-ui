@@ -6,16 +6,15 @@ The admin UI for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Admin UI](#admin-ui)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Yarn Commands](#yarn-commands)
-  - [Running / Development](#running--development)
-    - [Building for Production](#building-for-production)
-      - [Environment Variables](#environment-variables)
-    - [Running Tests](#running-tests)
-    - [Deploying](#deploying)
-  - [Further Reading / Useful Links](#further-reading--useful-links)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
+- [Running / Development](#running--development)
+  - [Building for Production](#building-for-production)
+    - [Environment Variables](#environment-variables)
+  - [Running Tests](#running-tests)
+  - [Deploying](#deploying)
+- [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
