@@ -8,7 +8,6 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   // =services
   @service intl;
-
   @service resourceFilterStore;
 
   // =methods
@@ -16,45 +15,17 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   /**
    * Returns users and groups associated with this role.
    * @param {object} params
-   * @return {Promise{RoleModel}}
+   * @return {Promise{role, principals}}
    */
   async model() {
     const role = this.modelFor('scopes.scope.roles.role');
+    // Fetch user and group principals.
+    const users = await role.users;
+    const groups = await role.groups;
+    // Merge polymorphic principals.
+    const principals = [...users, ...groups];
 
-    // Gather user and group IDs as separate arrays, since these
-    // will be queried in separate API queries.
-    const userIDs = role.principals
-      .filter(({ type }) => type === 'user')
-      .map(({ principal_id }) => principal_id);
-    const groupIDs = role.principals
-      .filter(({ type }) => type === 'group')
-      .map(({ principal_id }) => principal_id);
-
-    // Query for users.
-    const users = userIDs?.length
-      ? (
-          await this.resourceFilterStore.queryBy(
-            'user',
-            { id: userIDs },
-            { scope_id: 'global', recursive: true }
-          )
-        ).map((model) => model)
-      : [];
-    // Query for groups.
-    const groups = groupIDs?.length
-      ? (
-          await this.resourceFilterStore.queryBy(
-            'group',
-            { id: groupIDs },
-            { scope_id: 'global', recursive: true }
-          )
-        ).map((model) => model)
-      : [];
-
-    return {
-      role,
-      principals: users.concat(groups),
-    };
+    return { role, principals };
   }
 
   // =actions
