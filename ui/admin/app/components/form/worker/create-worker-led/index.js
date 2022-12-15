@@ -118,7 +118,7 @@ unzip *.zip ;\\
     return `curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;\\
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\\
 sudo apt-get update && sudo apt-get install boundary ;\\
-boundary server -config="${this.configFilePath || '<path>'}/pki-worker.hcl"`;
+boundary server -config="${configPath}/pki-worker.hcl"`;
   }
 
   /**
