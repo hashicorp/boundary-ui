@@ -43,7 +43,8 @@
 
   {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
     <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
-      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      <G.Legend>{{t 'resources.target.form.type.label'}}</G.Legend>
+      <G.HelperText>{{t 'resources.target.form.type.help'}}</G.HelperText>
       {{#each this.typeMetas as |type|}}
         <G.RadioCard
           @value={{type.type}}
@@ -60,6 +61,7 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
+    <br />
   {{else}}
     <InfoField
       @value={{t (concat 'resources.target.types.' @model.type)}}
