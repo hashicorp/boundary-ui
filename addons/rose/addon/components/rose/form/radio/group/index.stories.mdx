@@ -75,9 +75,9 @@ export const Template = (args) => ({
   </Story>
 </Preview>
 
-# HDS::Form::RadioCard::Group (Recommended)
+# HDS::Form::RadioCard::Group
 
-> **_NOTE:_** Replaces the deprecated Rose/Form/Radio/Group/Card.
+> **_NOTE:_** Replaces the removed Rose/Form/Radio/Group/Card.
 
 ```handlebars
 <Hds::Form::RadioCard::Group
@@ -142,85 +142,5 @@ export const HDSTemplate = (args) => ({
     }}
   >
     {HDSTemplate.bind({})}
-  </Story>
-</Preview>
-
-# Rose::Form::Radio::Group::Card (Deprecated)
-
-```handlebars
-<Rose::Form::Radio::Group
-  @disabled={{false}}
-  @name={{name}}
-  @selectedValue='disagree'
-  @changed={{fn}}
-  @inline={{false}}
-  as |radioGroup|
->
-  <radioGroup.Card
-    @label='Agree'
-    @value='agree'
-    @layout='tile'
-    @helperText='dwsd'
-  />
-  <radioGroup.Card
-    @label='disagree'
-    @value='disagree'
-    @layout='tile'
-    @helperText='dwsd'
-  />
-  <radioGroup.Card
-    @label='maybe'
-    @value='maybe'
-    @layout='tile'
-    @helperText='dwsd'
-  />
-</Rose::Form::Radio::Group>
-```
-
-export const RoseTemplate = (args) => ({
-  template: hbs`
-      <Rose::Form::Radio::Group
-        @disabled={{disabled}}
-        @name={{name}}
-        @selectedValue={{selectedValue}}
-        @changed={{changed}}
-        as |radioGroup|
-      >
-        <radioGroup.card
-          @label={{firstFieldLabel}}
-          @value={{firstFieldValue}}
-          @icon={{firstFieldIcon}}
-        />
-        <radioGroup.card @label={{secondFieldLabel}} @value={{secondFieldValue}} />
-      </Rose::Form::Radio::Group>`,
-  context: args,
-});
-
-<Preview>
-  <Story
-    name="Rose Basic"
-    height="10rem"
-    args={{
-      name: 'mustagree',
-      disabled: false,
-      selectedValue: 'disagree',
-      firstFieldLabel: 'Agree',
-      firstFieldValue: 'agree',
-      secondFieldLabel: 'Disagree',
-      secondFieldValue: 'disagree',
-      firstFieldIcon: 'flight-icons/svg/org-16',
-    }}
-    argTypes={{
-      firstFieldIcon: {
-        control: 'select',
-        options: [
-          'flight-icons/svg/org-16',
-          'flight-icons/svg/clipboard-copy-16',
-        ],
-      },
-      changed: { action: 'changed' },
-    }}
-  >
-    {RoseTemplate.bind({})}
   </Story>
 </Preview>
