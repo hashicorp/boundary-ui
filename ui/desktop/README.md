@@ -6,22 +6,21 @@ The desktop client UI for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Desktop client UI](#desktop-client-ui)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Yarn Commands](#yarn-commands)
-  - [Running / Development](#running--development)
-    - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
-    - [Environment Variables](#environment-variables)
-    - [Building for Production](#building-for-production)
-      - [Environment Variables](#environment-variables-1)
-    - [Running Tests](#running-tests)
-    - [Running end to end Tests](#running-end-to-end-tests)
-    - [Deploying](#deploying)
-  - [Debug desktop client](#debug-desktop-client)
-    - [Debug `renderer` process](#debug-renderer-process)
-    - [Debug `main` process](#debug-main-process)
-  - [Further Reading / Useful Links](#further-reading--useful-links)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
+- [Running / Development](#running--development)
+  - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
+  - [Environment Variables](#environment-variables)
+  - [Building for Production](#building-for-production)
+    - [Environment Variables](#environment-variables-1)
+  - [Running Tests](#running-tests)
+  - [Running end to end Tests](#running-end-to-end-tests)
+  - [Deploying](#deploying)
+- [Debug desktop client](#debug-desktop-client)
+  - [Debug `renderer` process](#debug-renderer-process)
+  - [Debug `main` process ](#debug-main-process)
+- [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
