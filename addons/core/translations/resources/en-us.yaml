@@ -309,6 +309,10 @@ target:
   help:
     tcp: Generic TCP supports a broad range of connection types.
     ssh: Protocol-aware SSH with support for credential injection.
+  form:
+    type:
+      label: Type
+      help: Target type is the protocol with which end users should connect to this target.  Choose Generic TCP for broad support of common protocols including RDP, K8s, many databases, and more.
   host-source:
     title: Host Source
     title_plural: Host Sources
