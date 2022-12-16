@@ -22,6 +22,22 @@ module('Unit | Model | credential', function (hooks) {
     assert.false(modelC.isStatic);
   });
 
+  test('it has isJSON property and returns the expected values', async function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const modelA = store.createRecord('credential', { type: 'json' });
+    const modelB = store.createRecord('credential', {
+      type: 'username_password',
+    });
+    const modelC = store.createRecord('credential', {
+      type: 'ssh_private_key',
+    });
+
+    assert.true(modelA.isJSON);
+    assert.false(modelB.isJSON);
+    assert.false(modelC.isJSON);
+  });
+
   test('it has isUnknown property and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
