@@ -98,6 +98,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
           }
         )
       : this.store.query('group', { scope_id: 'global', recursive: true });
+
     return hash({
       role,
       scopes,
