@@ -53,26 +53,17 @@
     @disabled={{true}}
   />
 
-  <form.fieldset>
-    <:title>{{t 'titles.provider'}}</:title>
-    <:description>{{t 'descriptions.provider'}}</:description>
-
-    <:body>
-      <form.radioGroup
-        @name='provider'
-        @selectedValue={{@model.compositeType}}
-        @disabled={{true}}
-        as |radioGroup|
-      >
-        <radioGroup.card
-          @label={{t 'resources.host-catalog.types.azure'}}
-          @value={{@model.compositeType}}
-          @layout='tile'
-          @icon='flight-icons/svg/azure-color-16'
-        />
-      </form.radioGroup>
-    </:body>
-  </form.fieldset>
+  <InfoField
+    @value={{t 'descriptions.provider'}}
+    @icon='azure-color'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'titles.provider'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.host-catalog.types.azure'}}
+    </F.HelperText>
+  </InfoField>
 
   <Rose::Form::Fieldset
     @helperText={{t 'resources.host-set.form.preferred_endpoints.help'}}
