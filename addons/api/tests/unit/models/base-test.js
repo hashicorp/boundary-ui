@@ -120,10 +120,11 @@ module('Unit | Model | base', function (hooks) {
       return {};
     });
     await model.save();
-    this.server.delete('/v1/users', () => {
+    this.server.delete('/v1/users/u_123', () => {
       assert.ok(true, 'Correctly scoped delete record URL was requested.');
       return {};
     });
+    model.id = 'u_123';
     await model.destroyRecord();
   });
 
@@ -143,10 +144,11 @@ module('Unit | Model | base', function (hooks) {
       return {};
     });
     await model.save({ adapterOptions: { scopeID: customScopeID } });
-    this.server.delete('/v1/users', () => {
+    this.server.delete('/v1/users/u_123', () => {
       assert.ok(true, 'Correctly scoped delete record URL was requested.');
       return {};
     });
+    model.id = 'u_123';
     await model.destroyRecord({ adapterOptions: { scopeID: customScopeID } });
   });
 
