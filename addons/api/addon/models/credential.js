@@ -19,6 +19,14 @@ export default class CredentialModel extends GeneratedCredentialModel {
   }
 
   /**
+   * True if type is `json`.
+   * @type {boolean}
+   */
+  get isJSON() {
+    return this.type === 'json';
+  }
+
+  /**
    * True if credential is an unknown type.
    * @type {boolean}
    */
