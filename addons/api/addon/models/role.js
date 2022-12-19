@@ -111,7 +111,7 @@ export default class RoleModel extends GeneratedRoleModel {
     return resolve([]);
   }
   /**
-   * A promise that resolves to an array of Group instances.
+   * A promise that resolves to an array of ManagedGroup instances.
    * When calling this getter, be sure to await resolution
    * before interacting with the results.
    * @type {Promise[GroupModel]}
