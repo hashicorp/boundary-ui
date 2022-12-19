@@ -207,14 +207,10 @@ export default class RoleModel extends GeneratedRoleModel {
     if (filteredAuthMethodIDs?.length) {
       managedGroupsByAuthMethod = all(
         filteredAuthMethodIDs.map((auth_method_id) =>
-          this.resourceFilterStore
-            .queryBy(
-              'managed-group',
-              {},
-              {
-                auth_method_id,
-              }
-            )
+          this.store
+            .query('managed-group', {
+              auth_method_id,
+            })
             .then((models) => models.map((model) => model))
         )
       );
@@ -223,14 +219,10 @@ export default class RoleModel extends GeneratedRoleModel {
         (authIds) =>
           all(
             authIds.map(({ id: auth_method_id }) => {
-              return this.resourceFilterStore
-                .queryBy(
-                  'managed-group',
-                  {},
-                  {
-                    auth_method_id,
-                  }
-                )
+              return this.store
+                .query('managed-group', {
+                  auth_method_id,
+                })
                 .then((models) => models.map((model) => model));
             })
           )
