@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
+import { later, _cancelTimers } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -174,7 +174,7 @@ module('Acceptance | scopes', function (hooks) {
     // runloop timers exist indefinitely.  We thus schedule a cancelation before
     // proceeding with our tests.
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await a11yAudit();
       assert.strictEqual(currentURL(), urls.targets);
       assert.strictEqual(findAll('tbody tr').length, targetsCount);
@@ -185,7 +185,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting global scope', async function (assert) {
     assert.expect(1);
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await a11yAudit();
       assert.strictEqual(currentURL(), urls.globalTargets);
     }, 750);
@@ -204,7 +204,7 @@ module('Acceptance | scopes', function (hooks) {
       return response;
     });
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await a11yAudit();
       assert.strictEqual(currentURL(), urls.globalTargets);
     }, 750);
@@ -214,7 +214,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting org scope', async function (assert) {
     assert.expect(1);
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await a11yAudit();
       assert.strictEqual(currentURL(), urls.targets);
     }, 750);
@@ -223,7 +223,7 @@ module('Acceptance | scopes', function (hooks) {
 
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
-    await later(async () => run.cancelTimers(), 750);
+    await later(async () => _cancelTimers(), 750);
     await visit(urls.targets);
     await later(
       async () => assert.strictEqual(currentURL(), urls.targets),
@@ -254,7 +254,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting a target', async function (assert) {
     assert.expect(1);
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('tbody tr th a');
       assert.strictEqual(currentURL(), urls.targetSessions);
     }, 750);
@@ -265,7 +265,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       assert.ok(
         find('.rose-message-title').textContent.trim(),
         'No Targets Available'
@@ -287,7 +287,7 @@ module('Acceptance | scopes', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
@@ -310,7 +310,7 @@ module('Acceptance | scopes', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
@@ -340,7 +340,7 @@ module('Acceptance | scopes', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
