@@ -1,2 +1,14 @@
-<h2 id='title'>Welcome to Ember</h2>
-<p>{{relative-datetime-live this.now}}</p>
+<h1 class='hds-typography-display-500'>Core Addon</h1>
+<br />
+
+<h2 class='hds-typography-display-400'>{{resource-name 'target'}}</h2>
+<p class='hds-typography-body-100'>{{resource-description 'target'}}</p>
+<br />
+{{#each (resource-types 'target') as |type|}}
+  <p class='hds-typography-body-300'>
+    <Hds::Badge @text={{type.name}} @icon={{type.icon}} />
+    <br />
+    {{type.description}}
+  </p>
+  <br />
+{{/each}}

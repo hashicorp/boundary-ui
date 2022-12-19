@@ -2,7 +2,9 @@ import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 
-export const types = ['tcp', 'ssh'];
+export const TYPE_TCP = 'tcp';
+export const TYPE_SSH = 'ssh';
+export const types = [TYPE_TCP, TYPE_SSH];
 
 export default class TargetModel extends GeneratedTargetModel {
   // =services
@@ -329,6 +331,6 @@ export default class TargetModel extends GeneratedTargetModel {
    * @type {boolean}
    */
   get isSSH() {
-    return this.type === 'ssh';
+    return this.type === TYPE_SSH;
   }
 }

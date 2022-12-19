@@ -42,10 +42,11 @@
   </form.textarea>
 
   {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
+
     <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
       <G.Legend>{{t 'resources.target.form.type.label'}}</G.Legend>
       <G.HelperText>{{t 'resources.target.form.type.help'}}</G.HelperText>
-      {{#each this.typeMetas as |type|}}
+      {{#each (resource-types 'target') as |type|}}
         <G.RadioCard
           @value={{type.type}}
           @maxWidth='20rem'
@@ -53,15 +54,14 @@
           {{on 'input' (fn @changeType type.type)}}
           as |R|
         >
-          <R.Label>{{t (concat 'resources.target.types.' type.type)}}</R.Label>
-          <R.Description>{{t
-              (concat 'resources.target.help.' type.type)
-            }}</R.Description>
+          <R.Label>{{type.name}}</R.Label>
+          <R.Description>{{type.description}}</R.Description>
           <R.Icon @name={{type.icon}} />
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
     <br />
+
   {{else}}
     <InfoField
       @value={{t (concat 'resources.target.types.' @model.type)}}
