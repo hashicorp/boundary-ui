@@ -199,7 +199,8 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       brokeredCredentialSourceIds: [],
     });
     await visit(urls.brokeredCredentialSources);
-    await click(find('.rose-message-link'));
+    // Click on the rose message link
+    await click(find('.rose-message > .rose-message-body > a'));
     assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });
 
