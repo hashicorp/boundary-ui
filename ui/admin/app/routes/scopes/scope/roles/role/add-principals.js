@@ -1,11 +1,9 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { hash } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { all } from 'rsvp';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
@@ -30,8 +28,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    * Preload all scopes recursively, but allow this to fail.
    */
   async beforeModel() {
-    //unload managed groups to help with filtering based on scope
-    await this.store.unloadAll('managed-group');
     await this.store
       .query('scope', { scope_id: 'global', recursive: true })
       .catch(() => {});
@@ -45,66 +41,33 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     const role = this.modelFor('scopes.scope.roles.role');
     const scopes = this.store.peekAll('scope').toArray();
     const scopeIDs = this.scope?.map((scope) => scope.id);
-    const authMethods = scopeIDs?.length
-      ? await this.resourceFilterStore.queryBy(
-          'auth-method',
-          {
-            type: 'oidc',
-            scope_id: scopeIDs,
-          },
-          {
-            scope_id: 'global',
-            recursive: true,
-          }
-        )
-      : await this.resourceFilterStore.queryBy(
-          'auth-method',
-          {
-            type: 'oidc',
-          },
-          {
-            scope_id: 'global',
-            recursive: true,
-          }
-        );
 
-    await all(
-      authMethods.map(({ id: auth_method_id }) => {
-        return this.store.query('managed-group', { auth_method_id });
-      })
-    );
-    const managedGroups = this.store.peekAll('managed-group');
-    const users = scopeIDs?.length
-      ? this.resourceFilterStore.queryBy(
-          'user',
-          {
-            scope_id: scopeIDs,
-          },
-          {
-            scope_id: 'global',
-            recursive: true,
-          }
-        )
-      : this.store.query('user', { scope_id: 'global', recursive: true });
-    const groups = scopeIDs?.length
-      ? this.resourceFilterStore.queryBy(
-          'group',
-          {
-            scope_id: scopeIDs,
-          },
-          {
-            scope_id: 'global',
-            recursive: true,
-          }
-        )
-      : this.store.query('group', { scope_id: 'global', recursive: true });
-    return hash({
+    let users = await role.usersFromAllScopes;
+    let groups = await role.groupsFromAllScopes;
+    let authMethods = await role.authMethodModelsFromAllScopes;
+    let managedGroups = await role.managedGroupsByScopes();
+
+    //filter out the resources based on scopes
+    if (scopeIDs?.length) {
+      users = users.filter((i) => scopeIDs.includes(i.scopeID));
+      groups = groups.filter((i) => scopeIDs.includes(i.scopeID));
+      const filteredAuthIDs = authMethods
+        .filter((i) => scopeIDs.includes(i.scopeID))
+        .map((authRecord) => authRecord.id);
+      if (filteredAuthIDs?.length) {
+        managedGroups = await role.managedGroupsByScopes(filteredAuthIDs);
+      } else {
+        managedGroups = [];
+      }
+    }
+
+    return {
       role,
       scopes,
       users,
       groups,
       managedGroups,
-    });
+    };
   }
 
   // =actions

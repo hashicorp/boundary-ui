@@ -262,6 +262,7 @@ export default function () {
     return roles.where({ scopeId });
   });
   this.post('/roles');
+
   this.get('/roles/:id');
   this.patch('/roles/:id');
   this.del('/roles/:id');
@@ -595,8 +596,17 @@ export default function () {
   // managed-groups
   this.get(
     '/managed-groups',
-    ({ managedGroups }, { queryParams: { auth_method_id: authMethodId } }) => {
-      return managedGroups.where({ authMethodId });
+    (
+      { managedGroups },
+      { queryParams: { auth_method_id: authMethodId, filter } }
+    ) => {
+      let resultSet;
+      if (authMethodId) {
+        resultSet = managedGroups.where({ authMethodId });
+      } else {
+        resultSet = managedGroups.all();
+      }
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.post('/managed-groups');

@@ -28,18 +28,21 @@ export default factory.extend({
   withPrincipals: trait({
     afterCreate(role, server) {
       const { scope } = role;
-      const users = server.createList('user', 2, { scope });
-      const groups = server.createList('group', 2, { scope });
-      const { id: authMethodId } = server.create('auth-method', 1, {
+      const users = server.createList('user', 1, { scope });
+      const groups = server.createList('group', 1, { scope });
+      const auth = server.createList('auth-method', 1, {
         scope,
         type: 'oidc',
       });
 
-      const managedGroups = server.createList('managed-group', 1, {
-        scope,
-        authMethodId,
+      auth.map(({ id: authMethodId }) => {
+        const managedGroups = server.createList('managed-group', 1, {
+          scope,
+          authMethodId,
+        });
+        role.update({ managedGroups });
       });
-      role.update({ users, groups, managedGroups });
+      role.update({ users, groups });
     },
   }),
 
@@ -50,6 +53,7 @@ export default factory.extend({
     const {
       scope: { id },
     } = role;
+
     role.update({ grant_scope_id: id });
   },
 });

@@ -80,8 +80,7 @@ module(
           .length;
       };
       getJSONCredentialCount = () => {
-        return this.server.schema.credentials.where({ type: 'json' })
-          .length;
+        return this.server.schema.credentials.where({ type: 'json' }).length;
       };
       authenticateSession({});
     });
@@ -114,15 +113,11 @@ module(
 
     test('can delete JSON credential', async function (assert) {
       assert.expect(2);
-      const jsonCredentialCount =
-        getJSONCredentialCount();
+      const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       assert.strictEqual(currentURL(), urls.credentials);
-      assert.strictEqual(
-        getJSONCredentialCount(),
-        jsonCredentialCount - 1
-      );
+      assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
     });
 
     test('cannot delete a username & password credential without proper authorization', async function (assert) {
@@ -165,8 +160,7 @@ module(
 
     test('cannot delete a JSON credential without proper authorization', async function (assert) {
       assert.expect(3);
-      const jsonCredentialCount =
-        getJSONCredentialCount();
+      const jsonCredentialCount = getJSONCredentialCount();
       instances.jsonCredential.authorized_actions =
         instances.jsonCredential.authorized_actions.filter(
           (item) => item !== 'delete'
@@ -176,10 +170,7 @@ module(
       assert
         .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
         .doesNotExist();
-      assert.strictEqual(
-        getJSONCredentialCount(),
-        jsonCredentialCount
-      );
+      assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
     });
 
     test('can accept delete username & password credential via dialog', async function (assert) {
@@ -218,16 +209,12 @@ module(
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      const jsonCredentialCount =
-        getJSONCredentialCount();
+      const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       await click('.rose-dialog footer .rose-button-primary');
       assert.strictEqual(currentURL(), urls.credentials);
-      assert.strictEqual(
-        getJSONCredentialCount(),
-        jsonCredentialCount - 1
-      );
+      assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
     });
 
     test('can cancel delete username & password credential via dialog', async function (assert) {
@@ -266,16 +253,12 @@ module(
       assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      const jsonCredentialCount =
-        getJSONCredentialCount();
+      const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       await click('.rose-dialog footer .rose-button-secondary');
       assert.strictEqual(currentURL(), urls.jsonCredential);
-      assert.strictEqual(
-        getJSONCredentialCount(),
-        jsonCredentialCount
-      );
+      assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
     });
 
     test('deleting a username & password credential which errors displays error message', async function (assert) {
