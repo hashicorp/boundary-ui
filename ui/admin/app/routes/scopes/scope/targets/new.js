@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 export default class ScopesScopeTargetsNewRoute extends Route {
   // =services
@@ -29,7 +30,10 @@ export default class ScopesScopeTargetsNewRoute extends Route {
     const scopeModel = this.modelFor('scopes.scope');
 
     // default type is SSH if the feature is enabled, otherwise TCP
-    if (!type) type = this.features.isEnabled('ssh-target') ? 'ssh' : 'tcp';
+    if (!type)
+      type = this.features.isEnabled('ssh-target')
+        ? TYPE_TARGET_SSH
+        : TYPE_TARGET_TCP;
 
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
