@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 
 export const TYPE_TARGET_TCP = 'tcp';
 export const TYPE_TARGET_SSH = 'ssh';
-export const types = [TYPE_TARGET_TCP, TYPE_TARGET_SSH];
+export const TYPES_TARGET = Object.freeze([TYPE_TARGET_TCP, TYPE_TARGET_SSH]);
 
 export default class TargetModel extends GeneratedTargetModel {
   // =services
