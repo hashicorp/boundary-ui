@@ -9,6 +9,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -44,11 +45,11 @@ module('Acceptance | targets | read', function (hooks) {
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
     instances.sshTarget = this.server.create('target', {
-      type: 'ssh',
+      type: TYPE_TARGET_SSH,
       scope: instances.scopes.project,
     });
     instances.tcpTarget = this.server.create('target', {
-      type: 'tcp',
+      type: TYPE_TARGET_TCP,
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
