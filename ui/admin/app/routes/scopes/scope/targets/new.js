@@ -7,6 +7,7 @@ export default class ScopesScopeTargetsNewRoute extends Route {
 
   @service store;
   @service router;
+  @service features;
 
   // =methods
 
@@ -23,9 +24,13 @@ export default class ScopesScopeTargetsNewRoute extends Route {
    * @return {TargetModel}
    */
 
-  model({ type = 'tcp' }) {
-    const scopeModel = this.modelFor('scopes.scope');
+  model({ type }) {
     let name, description;
+    const scopeModel = this.modelFor('scopes.scope');
+
+    // default type is SSH if the feature is enabled, otherwise TCP
+    if (!type) type = this.features.isEnabled('ssh-target') ? 'ssh' : 'tcp';
+
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
       this.currentModel.rollbackAttributes();
