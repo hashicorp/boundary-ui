@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
+import { TYPE_TARGET_TCP } from 'api/models/target';
 
 export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   // =services
@@ -40,7 +41,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
         description: 'Sample host created by quick setup',
       }),
       target: this.store.createRecord('target', {
-        type: 'tcp',
+        type: TYPE_TARGET_TCP,
         name: 'EC2 Instances',
         description: 'Sample target created by quick setup',
       }),

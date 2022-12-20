@@ -10,6 +10,7 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | projects | targets', function (hooks) {
   setupApplicationTest(hooks);
@@ -247,7 +248,7 @@ module('Acceptance | projects | targets', function (hooks) {
   test('displays the correct target type (SSH) in the success dialog body', async function (assert) {
     assert.expect(1);
     instances.target.update({
-      type: 'ssh',
+      type: TYPE_TARGET_SSH,
     });
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
