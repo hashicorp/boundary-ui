@@ -3,10 +3,11 @@ import { trait } from 'ember-cli-mirage';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
+import { TYPES_TARGET } from 'api/models/target';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
-const types = ['tcp', 'ssh'];
+const types = [...TYPES_TARGET];
 
 export default factory.extend({
   authorized_actions: () =>
@@ -35,13 +36,11 @@ export default factory.extend({
    * Generates attributes fields by type.
    */
   afterCreate(target) {
-    if (target.type === 'tcp' || target.type === 'ssh') {
-      target.update({
-        attributes: {
-          default_port: faker.datatype.number(),
-        },
-      });
-    }
+    target.update({
+      attributes: {
+        default_port: faker.datatype.number(),
+      },
+    });
   },
 
   /**

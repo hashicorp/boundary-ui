@@ -16,6 +16,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -71,16 +72,16 @@ module('Acceptance | targets | create', function (hooks) {
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
     getSSHTargetCount = () =>
-      this.server.schema.targets.where({ type: 'ssh' }).models.length;
+      this.server.schema.targets.where({ type: TYPE_TARGET_SSH }).models.length;
     getTCPTargetCount = () =>
-      this.server.schema.targets.where({ type: 'tcp' }).models.length;
+      this.server.schema.targets.where({ type: TYPE_TARGET_TCP }).models.length;
     authenticateSession({});
   });
 
   test('defaults to type `ssh` when no query param provided', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
-    assert.strictEqual(find('[name="type"]:checked').value, 'ssh');
+    assert.strictEqual(find('[name="type"]:checked').value, TYPE_TARGET_SSH);
   });
 
   test('can create type `ssh`', async function (assert) {
