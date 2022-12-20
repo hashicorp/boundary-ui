@@ -2,7 +2,10 @@ import Component from '@glimmer/component';
 import { types } from 'api/models/target';
 
 //Note: this is a temporary solution till we have resource type helper in place
-const icons = ['network', 'terminal'];
+const icons = {
+  ssh: 'terminal-screen',
+  tcp: 'network',
+};
 
 export default class FormTargetComponent extends Component {
   // =properties
@@ -10,8 +13,12 @@ export default class FormTargetComponent extends Component {
    * maps resource type with icon
    * @type {object}
    */
-  get mapResourceTypeWithIcon() {
-    return types.reduce((obj, type, i) => ({ ...obj, [type]: icons[i] }), {});
+  get typeMetas() {
+    const reversedTypes = [...types].reverse();
+    return reversedTypes.map((type) => ({
+      type,
+      icon: icons[type],
+    }));
   }
 
   /**
@@ -20,10 +27,6 @@ export default class FormTargetComponent extends Component {
    * @type {string}
    */
   get icon() {
-    if (this.args.model.type === 'tcp') {
-      return icons[0];
-    } else {
-      return icons[1];
-    }
+    return icons[this.args.model.type];
   }
 }
