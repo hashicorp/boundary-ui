@@ -5,4 +5,5 @@ export default Model.extend({
   scope: belongsTo(),
   users: hasMany(),
   groups: hasMany(),
+  managedGroups: hasMany(),
 });

@@ -274,7 +274,7 @@ export default function () {
       const role = roles.find(id);
       let updatedAttrs = {};
 
-      // Principals is a combined list of users and groups, but in Mirage we've
+      // Principals is a combined list of users, groups and managed groups, but in Mirage we've
       // internally modelled them as separate lists.  Therefore we must check
       // the type by looking up the user or group first, then determine which
       // list to add the principal to.
@@ -295,7 +295,7 @@ export default function () {
           }
         });
       }
-      // If deleting principals, filter them out of both users and groups,
+      // If deleting principals, filter the ids out of users, groups and managed group lists,
       // and in this case don't care about the type
       if (method === 'remove-principals') {
         updatedAttrs = {
@@ -580,8 +580,17 @@ export default function () {
   // managed-groups
   this.get(
     '/managed-groups',
-    ({ managedGroups }, { queryParams: { auth_method_id: authMethodId } }) => {
-      return managedGroups.where({ authMethodId });
+    (
+      { managedGroups },
+      { queryParams: { auth_method_id: authMethodId, filter } }
+    ) => {
+      let resultSet;
+      if (authMethodId) {
+        resultSet = managedGroups.where({ authMethodId });
+      } else {
+        resultSet = managedGroups.all();
+      }
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.post('/managed-groups');
