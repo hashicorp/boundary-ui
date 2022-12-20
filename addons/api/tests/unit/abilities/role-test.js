@@ -10,9 +10,9 @@ module('Unit | Abilities | Role', function (hooks) {
     const model = {
       authorized_actions: ['set-grants'],
     };
-    assert.ok(service.can('setGrants role', model));
+    assert.true(service.can('setGrants role', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('setGrants role', model));
+    assert.false(service.can('setGrants role', model));
   });
 
   test('it reflects when a given role may add principals based on authorized_actions', function (assert) {
@@ -21,9 +21,9 @@ module('Unit | Abilities | Role', function (hooks) {
     const model = {
       authorized_actions: ['add-principals'],
     };
-    assert.ok(service.can('addPrincipals role', model));
+    assert.true(service.can('addPrincipals role', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('addPrincipals role', model));
+    assert.false(service.can('addPrincipals role', model));
   });
 
   test('it reflects when a given role may remove principals based on authorized_actions', function (assert) {
@@ -32,8 +32,47 @@ module('Unit | Abilities | Role', function (hooks) {
     const model = {
       authorized_actions: ['remove-principals'],
     };
-    assert.ok(service.can('removePrincipals role', model));
+    assert.true(service.can('removePrincipals role', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('removePrincipals role', model));
+    assert.false(service.can('removePrincipals role', model));
+  });
+
+  test('it proxies role principal read ability to the appropriate ability type', function (assert) {
+    assert.expect(6);
+    const service = this.owner.lookup('service:can');
+    const user = {
+      constructor: { modelName: 'user' },
+      authorized_actions: [],
+    };
+    const group = {
+      constructor: { modelName: 'group' },
+      authorized_actions: [],
+    };
+    const managedGroup = {
+      constructor: { modelName: 'managed-group' },
+      authorized_actions: [],
+    };
+    assert.false(service.can('readPrincipal role', user));
+    assert.false(service.can('readPrincipal role', group));
+    assert.false(service.can('readPrincipal role', managedGroup));
+    user.authorized_actions.push('read');
+    group.authorized_actions.push('read');
+    managedGroup.authorized_actions.push('read');
+    assert.true(service.can('readPrincipal role', user));
+    assert.true(service.can('readPrincipal role', group));
+    assert.true(service.can('readPrincipal role', managedGroup));
+  });
+
+  test('it throws an error for unknown principal types on principal read check', function (assert) {
+    assert.expect(2);
+    const service = this.owner.lookup('service:can');
+    const account = {
+      constructor: { modelName: 'account' },
+      authorized_actions: ['read'],
+    };
+    assert.throws(() => {
+      service.can('readPrincipal role', account);
+    });
+    assert.true(service.can('read account', account));
   });
 });
