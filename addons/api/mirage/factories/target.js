@@ -3,11 +3,11 @@ import { trait } from 'ember-cli-mirage';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-import * as targetTypes from 'api/models/target';
+import { types as targetTypes } from 'api/models/target';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
-const types = Object.values(targetTypes);
+const types = [...targetTypes];
 
 export default factory.extend({
   authorized_actions: () =>
