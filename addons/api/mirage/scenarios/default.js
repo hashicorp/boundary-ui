@@ -20,7 +20,7 @@ export default function (server) {
   // Auth
   const globalAuthMethods = server.createList(
     'auth-method',
-    1,
+    5,
     { scope: globalScope },
     'withAccountsAndUsersAndManagedGroups'
   );
@@ -51,8 +51,43 @@ export default function (server) {
   server.createList('group', 1, { scope: globalScope }, 'withMembers');
   server.createList('group', 5, { scope: orgScope }, 'withMembers');
   // Role
-  server.createList('role', 1, { scope: globalScope }, 'withPrincipals');
-  server.createList('role', 5, { scope: orgScope }, 'withPrincipals');
+  const globalScopeRoles = server.createList(
+    'role',
+    1,
+    { scope: globalScope },
+    'withPrincipals'
+  );
+  //create managed groups for role/principals in globalScope
+  globalScopeRoles.forEach((role) => {
+    const { scope } = role;
+    const oidcAuthMethod = globalAuthMethods.filter(
+      (auth) => auth.type === 'oidc'
+    );
+    const managedGroups = server.createList('managed-group', 2, {
+      scope,
+      authMethodId: oidcAuthMethod[0].id,
+    });
+    role.update({ managedGroups });
+  });
+
+  const OrgScopeRoles = server.createList(
+    'role',
+    5,
+    { scope: orgScope },
+    'withPrincipals'
+  );
+  //create managed groups for role/principals in orgScope
+  OrgScopeRoles.forEach((role) => {
+    const { scope } = role;
+    const oidcAuthMethod = orgAuthMethods.filter(
+      (auth) => auth.type === 'oidc'
+    );
+    const managedGroups = server.createList('managed-group', 2, {
+      scope,
+      authMethodId: oidcAuthMethod[0].id,
+    });
+    role.update({ managedGroups });
+  });
 
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
