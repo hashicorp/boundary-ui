@@ -1,0 +1,12 @@
+{{#if this.isManagedGroup}}
+  <LinkTo
+    @route={{this.link}}
+    @models={{array @model.auth_method_id @model.id}}
+  >
+    {{@model.displayName}}
+  </LinkTo>
+{{else}}
+  <LinkTo @route={{this.link}} @model={{@model.id}}>
+    {{@model.displayName}}
+  </LinkTo>
+{{/if}}

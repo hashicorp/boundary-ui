@@ -46,7 +46,11 @@
           {{#each @model.principals as |principal|}}
             <body.row as |row|>
               <row.headerCell>
-                {{principal.displayName}}
+                {{#if (can 'readPrincipal role' principal)}}
+                  <LinkToPrincipal @model={{principal}} />
+                {{else}}
+                  {{principal.displayName}}
+                {{/if}}
                 {{#if principal.accountName}}
                   <br /><Hds::Badge @text={{principal.accountName}} />
                 {{/if}}
@@ -61,19 +65,7 @@
                 </Copyable>
               </row.cell>
               <row.cell>
-                <Hds::Badge
-                  @icon={{if
-                    (eq principal.constructor.modelName 'group')
-                    'folder-users'
-                    'user'
-                  }}
-                  @text={{t
-                    (concat
-                      'resources.role.principal.types.'
-                      principal.constructor.modelName
-                    )
-                  }}
-                />
+                <PrincipalTypeBadge @model={{principal}} />
               </row.cell>
               <row.cell>
                 <ScopeBadge @scope={{principal.scopeModel}} />
