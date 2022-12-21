@@ -126,6 +126,6 @@ module('Acceptance | roles | create', function (hooks) {
     await click('form [type="submit"]');
     await a11yAudit();
     assert.ok(find('[role="alert"]'));
-    assert.ok(find('.rose-form-error-message'));
+    assert.ok(find('.hds-form-error__message'));
   });
 });
