@@ -1,7 +1,7 @@
 import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { resolve } from 'rsvp';
+import { all, resolve } from 'rsvp';
 
 export default class RoleModel extends GeneratedRoleModel {
   // =services
@@ -60,6 +60,16 @@ export default class RoleModel extends GeneratedRoleModel {
   }
 
   /**
+   * A list of IDs for principals of type `managed group`.
+   * @type {string[]}
+   */
+  get managedGroupIDs() {
+    return this.principals
+      .filter(({ type }) => type === 'managed group')
+      .map(({ principal_id }) => principal_id);
+  }
+
+  /**
    * A promise that resolves to an array of User instances.
    * When calling this getter, be sure to await resolution
    * before interacting with the results.
@@ -103,6 +113,50 @@ export default class RoleModel extends GeneratedRoleModel {
     return resolve([]);
   }
 
+  /**
+   * A promise that resolves to an array of ManagedGroup instances.
+   * When calling this getter, be sure to await resolution
+   * before interacting with the results.
+   * @type {Promise[ManagedGroupModel]}
+   */
+  get managedGroups() {
+    const ids = this.managedGroupIDs;
+    // Role has prinicipal IDs
+    // return a promise which resolves model instances for those IDs
+    if (ids?.length) {
+      const authMethodIDs = this.resourceFilterStore
+        .queryBy(
+          'auth-method',
+          { type: 'oidc' },
+          { scope_id: 'global', recursive: true }
+        )
+        .then((models) => models.map(({ id }) => id));
+
+      const managedGroupsByAuthMethod = authMethodIDs.then((authIds) =>
+        all(
+          authIds.map((auth_method_id) =>
+            this.resourceFilterStore
+              .queryBy(
+                'managed-group',
+                { id: ids },
+                {
+                  auth_method_id,
+                }
+              )
+              .then((models) => models.map((model) => model))
+          )
+        )
+      );
+      const managedGroups = managedGroupsByAuthMethod.then((managedGroups) =>
+        managedGroups.flat()
+      );
+      return managedGroups;
+    }
+
+    // No principal IDs,
+    // return a promise resolving to an empty array
+    return resolve([]);
+  }
   // =methods
 
   /**

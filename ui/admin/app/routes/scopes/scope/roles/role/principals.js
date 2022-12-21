@@ -13,7 +13,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   // =methods
 
   /**
-   * Returns users and groups associated with this role.
+   * Returns users, groups and managed-groups associated with this role.
    * @param {object} params
    * @return {Promise{role, principals}}
    */
@@ -22,8 +22,9 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     // Fetch user and group principals.
     const users = await role.users;
     const groups = await role.groups;
+    const managedGroups = await role.managedGroups;
     // Merge polymorphic principals.
-    const principals = [...users, ...groups];
+    const principals = [...users, ...groups, ...managedGroups];
 
     return { role, principals };
   }
@@ -32,7 +33,7 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
 
   /**
    * Remove a principal from the current role and redirect to principals index.
-   * @param {UserModel, GroupModel} principal
+   * @param {UserModel, GroupModel, ManagedGroupModel} principal
    */
   @action
   @loading
