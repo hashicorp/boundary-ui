@@ -62,7 +62,7 @@ export default function (server) {
     const { scope } = role;
     const oidcAuthMethod = globalAuthMethods.filter(
       (auth) => auth.type === 'oidc'
-    );
+    )[0];
     const managedGroups = server.createList('managed-group', 2, {
       scope,
       authMethodId: oidcAuthMethod[0].id,
