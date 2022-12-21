@@ -65,7 +65,7 @@ export default function (server) {
     )[0];
     const managedGroups = server.createList('managed-group', 2, {
       scope,
-      authMethodId: oidcAuthMethod[0].id,
+      authMethodId: oidcAuthMethod.id,
     });
     role.update({ managedGroups });
   });
