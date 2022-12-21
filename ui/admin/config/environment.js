@@ -13,7 +13,7 @@ const featureEditions = {
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
     'vault-worker-filter': false,
-    'target-multi-hop': false,
+    'target-dual-worker': false,
     'target-dual-worker-filters': false,
     'target-dual-worker-filters-hcp': false,
   },
@@ -146,7 +146,7 @@ module.exports = function (environment) {
     ENV.featureFlags['json-credentials'] = true;
     ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['vault-worker-filter'] = true;
-    ENV.featureFlags['target-multi-hop'] = true;
+    ENV.featureFlags['target-dual-worker'] = true;
   }
 
   if (environment === 'test') {
@@ -170,7 +170,7 @@ module.exports = function (environment) {
     ENV.featureFlags['static-credentials'] = true;
     ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['vault-worker-filter'] = true;
-    ENV.featureFlags['target-multi-hop'] = true;
+    ENV.featureFlags['target-dual-worker'] = true;
   }
 
   if (environment === 'production') {
