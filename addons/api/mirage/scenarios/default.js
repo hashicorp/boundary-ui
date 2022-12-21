@@ -78,10 +78,12 @@ export default function (server) {
   );
   //create managed groups for role/principals in orgScope
   orgScopeRoles.forEach((role) => {
+    const { scope } = role;
     const oidcAuthMethod = orgAuthMethods.filter(
       (auth) => auth.type === 'oidc'
     )[0];
     const managedGroups = server.createList('managed-group', 2, {
+      scope,
       authMethodId: oidcAuthMethod.id,
     });
     role.update({ managedGroups });
