@@ -15,21 +15,20 @@ subproject, e.g. running or testing.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Boundary UI Monorepo](#boundary-ui-monorepo)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Yarn Commands](#yarn-commands)
-  - [Contributing](#contributing)
-    - [Branching](#branching)
-    - [Building ToC](#building-toc)
-    - [Building Admin UI for Production](#building-admin-ui-for-production)
-      - [Building with a Container](#building-with-a-container)
-    - [Building Desktop UI for Production](#building-desktop-ui-for-production)
-    - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
-      - [For admin](#for-admin)
-      - [For desktop](#for-desktop)
-    - [Committing](#committing)
-      - [License Checking](#license-checking)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
+- [Contributing](#contributing)
+  - [Branching](#branching)
+  - [Building ToC](#building-toc)
+  - [Building Admin UI for Production](#building-admin-ui-for-production)
+    - [Building with a Container](#building-with-a-container)
+  - [Building Desktop UI for Production](#building-desktop-ui-for-production)
+  - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
+    - [For admin](#for-admin)
+    - [For desktop](#for-desktop)
+  - [Committing](#committing)
+    - [License Checking](#license-checking)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
