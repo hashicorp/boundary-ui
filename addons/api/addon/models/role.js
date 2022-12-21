@@ -121,35 +121,33 @@ export default class RoleModel extends GeneratedRoleModel {
    */
   get managedGroups() {
     const ids = this.managedGroupIDs;
+
     // Role has prinicipal IDs
     // return a promise which resolves model instances for those IDs
     if (ids?.length) {
-      const authMethodIDs = this.resourceFilterStore
-        .queryBy(
-          'auth-method',
-          { type: 'oidc' },
-          { scope_id: 'global', recursive: true }
-        )
-        .then((models) => models.map(({ id }) => id));
+      // Collect all auth methods.
+      const authMethods = this.resourceFilterStore.queryBy(
+        'auth-method',
+        { type: 'oidc' },
+        { scope_id: 'global', recursive: true }
+      );
 
-      const managedGroupsByAuthMethod = authMethodIDs.then((authIds) =>
-        all(
-          authIds.map((auth_method_id) =>
-            this.resourceFilterStore
-              .queryBy(
-                'managed-group',
-                { id: ids },
-                {
-                  auth_method_id,
-                }
-              )
-              .then((models) => models.map((model) => model))
+      // For each auth method, query all managed groups with IDs
+      // that match the role's manage group principal IDs.
+      const managedGroups = authMethods
+        .then((methods) =>
+          all(
+            methods.map(({ id: auth_method_id }) =>
+              this.resourceFilterStore
+                .queryBy('managed-group', { id: ids }, { auth_method_id })
+                .then((models) => models.map((model) => model))
+            )
           )
         )
-      );
-      const managedGroups = managedGroupsByAuthMethod.then((managedGroups) =>
-        managedGroups.flat()
-      );
+        // The result is an array of arrays of model instances (grouped by
+        // auth methods), so these must be flattened.
+        .then((grouped) => grouped.flat());
+
       return managedGroups;
     }
 
@@ -157,6 +155,7 @@ export default class RoleModel extends GeneratedRoleModel {
     // return a promise resolving to an empty array
     return resolve([]);
   }
+
   // =methods
 
   /**
