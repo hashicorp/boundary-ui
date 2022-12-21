@@ -53,7 +53,7 @@ export default function (server) {
   // Role
   const globalScopeRoles = server.createList(
     'role',
-    5,
+    1,
     { scope: globalScope },
     'withPrincipals'
   );
