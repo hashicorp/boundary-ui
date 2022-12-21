@@ -9,13 +9,17 @@ const principalTypeRoutes = {
 
 export default class LinkToPrincipalComponent extends Component {
   /**
-   * Display icons only for plugin compositeTypes.
-   * @type {string}
+   * return true if its a managed group model
+   * @type {boolean}
    */
   get isManagedGroup() {
     return this.args.model.constructor.modelName === 'managed-group';
   }
 
+ /**
+   * return route based on principal type
+   * @type {string}
+   */
   get link() {
     return principalTypeRoutes[this.args.model.constructor.modelName];
   }
