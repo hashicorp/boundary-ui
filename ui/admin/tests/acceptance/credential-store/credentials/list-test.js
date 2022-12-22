@@ -16,6 +16,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     staticCredentialStore: null,
     usernamePasswordCredential: null,
     usernameKeyPairCredential: null,
+    jsonCredential: null,
   };
 
   const urls = {
@@ -50,6 +51,11 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
       credentialStore: instances.staticCredentialStore,
       type: 'ssh_private_key',
     });
+    instances.jsonCredential = this.server.create('credential', {
+      scope: instances.scopes.project,
+      credentialStore: instances.staticCredentialStore,
+      type: 'json',
+    });
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
@@ -75,7 +81,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
       .isVisible({ count: this.server.schema.credentials.all().models.length });
   });
 
-  test('User cannot navigate to index without either list or create action', async function (assert) {
+  test('User cannot navigate to Credentials tab without either list or create action', async function (assert) {
     assert.expect(3);
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       [];
@@ -93,7 +99,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     assert.dom('.rose-nav-tabs a:nth-child(2)').doesNotExist();
   });
 
-  test('User can navigate to index with only create action', async function (assert) {
+  test('User can navigate to new credential screen with only create action', async function (assert) {
     assert.expect(2);
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       ['create'];

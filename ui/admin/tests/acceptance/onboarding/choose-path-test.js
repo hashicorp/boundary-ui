@@ -21,15 +21,15 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
   test('defaults to the guided path', async function (assert) {
     assert.expect(2);
     await visit(urls.choosePath);
-    assert.strictEqual(find('input[name=paths]:checked').value, 'guided');
+    assert.strictEqual(find('input[name=path]:checked').value, 'guided');
     assert.false(find('input[value=manual]').checked);
   });
 
   test('updates to the manual path when manual card clicked', async function (assert) {
     assert.expect(2);
     await visit(urls.choosePath);
-    await click('[name="paths"][value="manual"]');
-    assert.strictEqual(find('input[name=paths]:checked').value, 'manual');
+    await click('[name="path"][value="manual"]');
+    assert.strictEqual(find('input[name=path]:checked').value, 'manual');
     assert.false(find('input[value=guided]').checked);
   });
 
@@ -43,7 +43,7 @@ module('Acceptance | onboarding | choose-path', function (hooks) {
   test('guided path directs user to /global/new route', async function (assert) {
     assert.expect(1);
     await visit(urls.choosePath);
-    await click('[name="paths"][value="manual"]');
+    await click('[name="path"][value="manual"]');
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.newOrg);
   });

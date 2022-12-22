@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Unit | Model | target', function (hooks) {
   setupTest(hooks);
@@ -383,7 +384,7 @@ module('Unit | Model | target', function (hooks) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelSSH = store.createRecord('target', {
-      type: 'ssh',
+      type: TYPE_TARGET_SSH,
     });
     assert.true(modelSSH.isSSH);
     assert.false(modelSSH.isTCP);
@@ -393,7 +394,7 @@ module('Unit | Model | target', function (hooks) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelTCP = store.createRecord('target', {
-      type: 'tcp',
+      type: TYPE_TARGET_TCP,
     });
     assert.true(modelTCP.isTCP);
     assert.false(modelTCP.isSSH);

@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Unit | Serializer | target', function (hooks) {
   setupTest(hooks);
@@ -26,7 +27,7 @@ module('Unit | Serializer | target', function (hooks) {
       },
       default_port: 1234,
       version: 1,
-      type: 'tcp',
+      type: TYPE_TARGET_TCP,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -35,7 +36,7 @@ module('Unit | Serializer | target', function (hooks) {
       name: 'User',
       description: 'Description',
       version: 1,
-      type: 'tcp',
+      type: TYPE_TARGET_TCP,
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,
@@ -124,7 +125,7 @@ module('Unit | Serializer | target', function (hooks) {
       name: 'User',
       description: 'Description',
       version: 1,
-      type: 'ssh',
+      type: TYPE_TARGET_SSH,
       worker_filter: 'worker',
       default_port: 1234,
       scope: {
@@ -137,7 +138,7 @@ module('Unit | Serializer | target', function (hooks) {
       name: 'User',
       description: 'Description',
       version: 1,
-      type: 'ssh',
+      type: TYPE_TARGET_SSH,
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,

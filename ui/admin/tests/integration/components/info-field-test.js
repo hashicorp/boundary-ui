@@ -11,15 +11,15 @@ module('Integration | Component | info-field', function (hooks) {
 
     await render(
       hbs`
-        <InfoField @value="Description" as |F|>
+        <InfoField @value="JSON" as |F|>
           <F.Label>Type</F.Label>
-          <F.HelperText>JSON</F.HelperText>
+          <F.HelperText>Description</F.HelperText>
         </InfoField>
       `
     );
     assert.dom('.info-field').isVisible();
     assert.dom('.info-field .hds-form-label').hasText('Type');
-    assert.dom('.info-field .hds-form-helper-text').hasText('JSON');
+    assert.dom('.info-field .hds-form-helper-text').hasText('Description');
     assert.dom('.info-field .hds-form-text-input').isVisible();
   });
 
@@ -28,9 +28,9 @@ module('Integration | Component | info-field', function (hooks) {
 
     await render(
       hbs`
-        <InfoField @value="Description" @icon='apple' as |F|>
+        <InfoField @value="JSON" @icon='apple' as |F|>
           <F.Label>Type</F.Label>
-          <F.HelperText>JSON</F.HelperText>
+          <F.HelperText>Description</F.HelperText>
         </InfoField>
       `
     );
@@ -38,7 +38,7 @@ module('Integration | Component | info-field', function (hooks) {
     assert.dom('.info-field .hds-form-label').hasText('Type');
     assert
       .dom('.info-field .hds-form-helper-text:last-of-type')
-      .hasText('JSON');
+      .hasText('Description');
     assert.dom('[data-test-icon="apple"]').isVisible();
     assert.dom('.info-field .hds-form-text-input').isVisible();
   });

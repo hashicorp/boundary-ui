@@ -32,7 +32,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     hostCatalog: null,
     newHostCatalog: null,
     newStaticHostCatalog: null,
-    newDynamicHostCatalog: null,
+    newAWSDynamicHostCatalog: null,
+    newAzureDynamicHostCatalog: null,
   };
 
   hooks.beforeEach(function () {
@@ -67,7 +68,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.newHostCatalog = `${urls.hostCatalogs}/new`;
     urls.newStaticHostCatalog = `${urls.newHostCatalog}?type=static`;
-    urls.newDynamicHostCatalog = `${urls.newHostCatalog}?type=aws`;
+    urls.newAWSDynamicHostCatalog = `${urls.newHostCatalog}?type=aws`;
+    urls.newAzureDynamicHostCatalog = `${urls.newHostCatalog}?type=azure`;
     // Generate resource couner
     gethostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
@@ -81,18 +83,29 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await visit(urls.newStaticHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="description"]', 'random string');
-    await fillIn('[name="types"]', 'static');
+    await fillIn('[name="type"]', 'static');
     await click('[type="submit"]');
     assert.strictEqual(gethostCatalogCount(), count + 1);
   });
 
-  test('Users can create new dynamic host catalogs', async function (assert) {
+  test('Users can create new dynamic aws host catalogs with aws provider', async function (assert) {
     assert.expect(1);
     const count = gethostCatalogCount();
-    await visit(urls.newDynamicHostCatalog);
+    await visit(urls.newAWSDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="description"]', 'random string');
-    await fillIn('[name="types"]', 'aws');
+    await fillIn('[name="type"]', 'aws');
+    await click('[type="submit"]');
+    assert.strictEqual(gethostCatalogCount(), count + 1);
+  });
+
+  test('Users can create new dynamic aws host catalogs with azure provider', async function (assert) {
+    assert.expect(1);
+    const count = gethostCatalogCount();
+    await visit(urls.newAzureDynamicHostCatalog);
+    await fillIn('[name="name"]', 'random string');
+    await fillIn('[name="description"]', 'random string');
+    await fillIn('[name="type"]', 'azure');
     await click('[type="submit"]');
     assert.strictEqual(gethostCatalogCount(), count + 1);
   });
@@ -107,10 +120,20 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.strictEqual(gethostCatalogCount(), count);
   });
 
-  test('Users can cancel creation of new dynamic host catalogs', async function (assert) {
+  test('Users can cancel creation of new dynamic host catalogs with AWS provider', async function (assert) {
     assert.expect(2);
     const count = gethostCatalogCount();
-    await visit(urls.newDynamicHostCatalog);
+    await visit(urls.newAWSDynamicHostCatalog);
+    await fillIn('[name="name"]', 'random string');
+    await click('.rose-form-actions [type="button"]');
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
+    assert.strictEqual(gethostCatalogCount(), count);
+  });
+
+  test('Users can cancel creation of new dynamic host catalogs with Azure provider', async function (assert) {
+    assert.expect(2);
+    const count = gethostCatalogCount();
+    await visit(urls.newAzureDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.hostCatalogs);

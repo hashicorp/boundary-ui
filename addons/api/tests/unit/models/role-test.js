@@ -64,6 +64,7 @@ module('Unit | Model | role', function (hooks) {
           principals: [
             { id: '1', type: 'user' },
             { id: '3', type: 'group' },
+            { id: '5', type: 'managed group' },
           ],
           version: 1,
           scope: {
@@ -84,7 +85,7 @@ module('Unit | Model | role', function (hooks) {
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
-          principal_ids: ['1', '3'],
+          principal_ids: ['1', '3', '5'],
           version: 1,
         });
         return { id: '123abc' };
@@ -101,6 +102,7 @@ module('Unit | Model | role', function (hooks) {
           principals: [
             { id: '1', type: 'user' },
             { id: '3', type: 'group' },
+            { id: '5', type: 'managed group' },
           ],
           version: 1,
           scope: {
@@ -111,7 +113,7 @@ module('Unit | Model | role', function (hooks) {
       },
     });
     const model = store.peekRecord('role', '123abc');
-    await model.removePrincipals(['1', '3']);
+    await model.removePrincipals(['1', '3', '5']);
   });
 
   test('it has a `removePrincipal` method that deletes a single principal using `removePrincipals` method', async function (assert) {
@@ -138,6 +140,7 @@ module('Unit | Model | role', function (hooks) {
           principals: [
             { id: '1', type: 'user' },
             { id: '3', type: 'group' },
+            { id: '5', type: 'managed group' },
           ],
           version: 1,
           scope: {

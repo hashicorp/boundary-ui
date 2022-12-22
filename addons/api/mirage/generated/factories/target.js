@@ -1,11 +1,12 @@
 import { Factory } from 'ember-cli-mirage';
 import { faker } from '@faker-js/faker';
+import { TYPE_TARGET_TCP } from 'api/models/target';
 
 /**
  * GeneratedTargetModelFactory
  */
 export default Factory.extend({
-  type: 'tcp',
+  type: TYPE_TARGET_TCP,
   name: () => faker.random.words(),
   session_max_seconds: () => faker.datatype.number(),
   session_connection_limit: () => faker.datatype.number(),
