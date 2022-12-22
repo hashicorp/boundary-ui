@@ -62,29 +62,29 @@ export default function (server) {
     const { scope } = role;
     const oidcAuthMethod = globalAuthMethods.filter(
       (auth) => auth.type === 'oidc'
-    );
+    )[0];
     const managedGroups = server.createList('managed-group', 2, {
       scope,
-      authMethodId: oidcAuthMethod[0].id,
+      authMethodId: oidcAuthMethod.id,
     });
     role.update({ managedGroups });
   });
 
-  const OrgScopeRoles = server.createList(
+  const orgScopeRoles = server.createList(
     'role',
     5,
     { scope: orgScope },
     'withPrincipals'
   );
   //create managed groups for role/principals in orgScope
-  OrgScopeRoles.forEach((role) => {
+  orgScopeRoles.forEach((role) => {
     const { scope } = role;
     const oidcAuthMethod = orgAuthMethods.filter(
       (auth) => auth.type === 'oidc'
-    );
+    )[0];
     const managedGroups = server.createList('managed-group', 2, {
       scope,
-      authMethodId: oidcAuthMethod[0].id,
+      authMethodId: oidcAuthMethod.id,
     });
     role.update({ managedGroups });
   });

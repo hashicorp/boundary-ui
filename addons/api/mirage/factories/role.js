@@ -31,9 +31,9 @@ export default factory.extend({
       const { id: scopeId } = scope;
       const users = server.createList('user', 2, { scope });
       const groups = server.createList('group', 2, { scope });
-      const managedGroups = server.schema.managedGroups
-        .where({ scopeId })
-        .models.map((model) => model);
+      const managedGroups = server.schema.managedGroups.where({
+        scopeId,
+      }).models;
       role.update({ users, groups, managedGroups });
     },
   }),
