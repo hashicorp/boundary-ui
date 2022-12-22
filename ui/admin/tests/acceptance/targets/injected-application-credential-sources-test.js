@@ -5,6 +5,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { TYPE_TARGET_SSH } from 'api/models/target';
 
 module(
   'Acceptance | targets | injected application credential sources',
@@ -78,7 +79,7 @@ module(
       instances.credential = instances.credentials[0];
       instances.target = this.server.create('target', {
         scope: instances.scopes.project,
-        type: 'ssh',
+        type: TYPE_TARGET_SSH,
       });
       randomlySelectedCredentials = this.server.schema.credentials
         .all()

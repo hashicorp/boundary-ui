@@ -1,4 +1,3 @@
-// sass-lint:disable no-color-literals class-name-format
 @use 'rose/variables/sizing';
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
@@ -194,11 +193,11 @@
   }
 
   mark {
-    animation: fadeBackground 0.75s linear;
+    animation: fade-background 0.75s linear;
     background-color: transparent;
     color: inherit;
 
-    @keyframes fadeBackground {
+    @keyframes fade-background {
       0% {
         background-color: var(--action-subtler-1);
       }
@@ -222,7 +221,7 @@
   white-space: nowrap;
 }
 
-// Spinning animation for refresh button icon
+//  Spinning animation for refresh button icon
 @media (prefers-reduced-motion: no-preference) {
   .is-loading {
     .rose-icon {
@@ -239,7 +238,7 @@
   }
 }
 
-//onboarding quick setup styles
+//  onboarding quick setup styles
 .choose-path {
   display: block;
   width: sizing.rems(xl) * 15;
@@ -416,7 +415,7 @@
   .worker-auth-token {
     align-items: flex-end;
     display: flex;
-    gap: sizing.rems(m); // sass-lint:disable-line no-misspelled-properties
+    gap: sizing.rems(m);
   }
 
   .worker-success {
@@ -427,7 +426,7 @@
     > div {
       align-items: center;
       display: flex;
-      gap: sizing.rems(xs); // sass-lint:disable-line no-misspelled-properties
+      gap: sizing.rems(xs);
 
       p {
         margin-bottom: sizing.rems(xxs);
@@ -458,7 +457,7 @@
 
 .info-field {
   .hds-form-field--layout-vertical {
-    grid-template-areas: 'label' 'helper-text' 'text-input';
+    grid-template-areas: 'label' 'text-input' 'helper-text';
 
     .hds-form-label {
       font-size: sizing.rems(m);
@@ -466,26 +465,25 @@
       line-height: sizing.rems(m) + sizing.rems(xxs);
     }
 
-    .hds-form-helper-text {
-      color: var(--token-form-label-color);
-      font-size: sizing.rems(m);
-      grid-area: helper-text;
-    }
-
     .hds-form-text-input {
       background-color: transparent;
       border: 0;
+      color: var(--token-form-label-color);
       grid-area: text-input;
-      line-height: sizing.rems(m) + sizing.rems(xxs);
-      margin-top: sizing.rems(xs);
+      font-size: sizing.rems(m);
       padding: 0;
+    }
+
+    .hds-form-helper-text {
+      color: var(--token-form-label-color);
+      grid-area: helper-text;
     }
   }
 
   &.has-icon {
     .flight-icon {
       position: absolute;
-      transform: translatey(sizing.rems(xl) - sizing.rems(s));
+      transform: translateY(sizing.rems(xl) - sizing.rems(xs));
     }
 
     .hds-form-helper-text,
@@ -508,20 +506,17 @@
   border-radius: sizing.rems(xxs);
   height: var(--secret-editor-height);
   margin-bottom: sizing.rems(l);
+  width: 100%;
 
   .secret-editor-json {
     .CodeMirror {
       border-radius: sizing.rems(xxs);
       height: var(--secret-editor-height);
+      display: block;
     }
 
     .CodeMirror-gutters {
       background: var(--secret-editor-gutter);
-    }
-
-    // override CodeMirror padding to add padding to left of line numbers
-    .CodeMirror-linenumber {
-      padding: 0;
     }
   }
 
@@ -529,7 +524,7 @@
     // using ui-gray directly so it does not change when
     // user is in dark mode since the secret editor
     // does not change theme colors between light and dark
-    color: #{color(ui-gray)};
+    color: var(--token-color-palette-neutral-300);
     display: flex;
     height: 100%;
     position: relative;
@@ -581,6 +576,7 @@
     left: 50%;
     position: absolute;
     top: 50%;
+
     // centers message with editor body and gutter
     transform: translate(-50%, -50%);
     z-index: 1;
@@ -591,6 +587,7 @@
     border: sizing.rems(xxxxs) solid var(--ui-gray);
     border-radius: sizing.rems(xxxs);
     box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) var(--button-shadow);
+
     // using ui-gray directly so it does not change when
     // user is in dark mode since the secret editor
     // does not change theme colors between light and dark

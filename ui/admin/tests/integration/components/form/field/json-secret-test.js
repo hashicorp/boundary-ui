@@ -26,7 +26,9 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
 
     assert.dom('.secret-editor').isVisible();
     assert.dom('.secret-editor-json').isVisible();
-    assert.dom('.secret-editor-json .CodeMirror-line').hasText(this.model.json_object);
+    assert
+      .dom('.secret-editor-json .CodeMirror-line')
+      .hasText(this.model.json_object);
   });
 
   test('it renders the disabled editor', async function (assert) {
@@ -42,7 +44,9 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
 
     assert.dom('.secret-editor').isVisible();
     assert.dom('.secret-editor-json').doesNotExist();
-    assert.dom('.secret-editor-skeleton-wrapper').hasText('This secret is saved but won\'t be displayed');
+    assert
+      .dom('.secret-editor-skeleton-wrapper')
+      .hasText("This secret is saved but won't be displayed");
   });
 
   test('it renders the actionable editor', async function (assert) {
@@ -58,7 +62,9 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
 
     assert.dom('.secret-editor').isVisible();
     assert.dom('.secret-editor-json').doesNotExist();
-    assert.dom('.secret-editor-skeleton-wrapper').hasText('Click to replace this secret');
+    assert
+      .dom('.secret-editor-skeleton-wrapper')
+      .hasText('Click to replace this secret');
   });
 
   test('it renders the active editor from the actionable view', async function (assert) {
@@ -74,9 +80,11 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
 
     assert.dom('.secret-editor').isVisible();
     assert.dom('.secret-editor-json').doesNotExist();
-    assert.dom('.secret-editor-skeleton-wrapper').hasText('Click to replace this secret');
+    assert
+      .dom('.secret-editor-skeleton-wrapper')
+      .hasText('Click to replace this secret');
 
-    await click('button')
+    await click('button');
     assert.dom('.secret-editor-json').isVisible();
   });
 });

@@ -60,6 +60,26 @@ module('Acceptance | workers | create', function (hooks) {
     assert.dom(labels[2]).hasText('Initial Upstreams');
   });
 
+  test('download and install step shows correct oss instructions', async function (assert) {
+    assert.expect(2);
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.disable('byow-pki-hcp-cluster-id');
+    await visit(newWorkerURL);
+    const createSection = findAll('.worker-create-section');
+    assert.dom(createSection[1]).includesText('curl -fsSL');
+    assert.dom(createSection[1]).doesNotIncludeText('wget -q');
+  });
+
+  test('download and install step shows correct hcp instructions', async function (assert) {
+    assert.expect(2);
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.enable('byow-pki-hcp-cluster-id');
+    await visit(newWorkerURL);
+    const createSection = findAll('.worker-create-section');
+    assert.dom(createSection[1]).includesText('wget -q');
+    assert.dom(createSection[1]).doesNotIncludeText('curl -fsSL');
+  });
+
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(newWorkerURL);
