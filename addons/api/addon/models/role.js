@@ -155,7 +155,6 @@ export default class RoleModel extends GeneratedRoleModel {
     // return a promise resolving to an empty array
     return resolve([]);
   }
-
   // =methods
 
   /**
