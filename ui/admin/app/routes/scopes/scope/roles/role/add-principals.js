@@ -67,7 +67,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
         )
       : this.store.query('group', { scope_id: 'global', recursive: true });
     //query authmethods from all the scopes
-    const authMethodIDs = scopeIDs?.length
+    const oidcAuthMethods = scopeIDs?.length
       ? await this.resourceFilterStore.queryBy(
           'auth-method',
           { scope_id: scopeIDs, type: 'oidc' },
@@ -79,23 +79,22 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
           { scope_id: 'global', recursive: true }
         );
     //extract oidc authMethod IDs
-    const oidcAuthMethodIDs = authMethodIDs.map(({ id }) => id);
-    //map through oidcAuthMethodIDs to
-    //get managed group within that method
+    const authMethodIDs = oidcAuthMethods.map(({ id }) => id);
+    //query all the managed groups for each auth method id
     const managedGroups = await all(
-      oidcAuthMethodIDs.map((auth_method_id) =>
+      authMethodIDs.map((auth_method_id) =>
         this.store.query('managed-group', { auth_method_id })
       )
     );
-    const managedGroupModels = managedGroups.map((models) =>
-      models.map((model) => model)
-    );
+    const managedGroupModels = managedGroups
+      .map((models) => models.map((model) => model))
+      .flat();
     return hash({
       role,
       scopes,
       users,
       groups,
-      managedGroups: managedGroupModels.flat(),
+      managedGroups: managedGroupModels,
     });
   }
 
