@@ -10,8 +10,20 @@ module('Integration | Component | hidden-secret', function (hooks) {
 
   test('it renders with a secret', async function (assert) {
     assert.expect(2);
+
+    this.secret = {
+      secret_key: 'QWERTYUIOP',
+      secret_access_key: 'QWERT.YUIOP234567890',
+      nested_secret: {
+        session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
+        complex_nest: {
+          hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
+        },
+      },
+    };
+
     await render(hbs`
-      <HiddenSecret @secret='AAaaBBccDDeeOTXzSMT1234BB_Z8JzG7JkSVxI' />
+      <HiddenSecret @secret={{secret}} />
     `);
 
     assert.ok(find('.hidden-secret'));
