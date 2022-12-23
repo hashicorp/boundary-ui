@@ -7,6 +7,14 @@ export default class HiddenSecretComponent extends Component {
 
   @tracked isHidden = false;
 
+  get displaySecretValue() {
+    if (typeof this.args.secret === 'object') {
+      return JSON.stringify(this.args.secret, null, 2);
+    } else {
+      return this.args.secret;
+    }
+  }
+
   @action
   toggleSecretVisibility() {
     this.isHidden = !this.isHidden;
