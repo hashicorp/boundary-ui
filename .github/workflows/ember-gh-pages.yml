@@ -41,7 +41,9 @@ jobs:
         with:
           node-version: '16.x'
       - run: yarn install
-      - run: yarn build
+      - run:
+        - cd ./ui/admin
+        - yarn build:development
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
