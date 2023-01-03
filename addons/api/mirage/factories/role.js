@@ -28,9 +28,13 @@ export default factory.extend({
   withPrincipals: trait({
     afterCreate(role, server) {
       const { scope } = role;
+      const { id: scopeId } = scope;
       const users = server.createList('user', 2, { scope });
       const groups = server.createList('group', 2, { scope });
-      role.update({ users, groups });
+      const managedGroups = server.schema.managedGroups.where({
+        scopeId,
+      }).models;
+      role.update({ users, groups, managedGroups });
     },
   }),
 
