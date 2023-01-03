@@ -46,7 +46,8 @@ module('Acceptance | roles | principals', function (hooks) {
     );
     principalsCount =
       this.server.db.roles[0].userIds.length +
-      this.server.db.roles[0].groupIds.length;
+      this.server.db.roles[0].groupIds.length +
+      this.server.db.roles[0].managedGroupIds.length;
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.rolePrincipals = `${urls.role}/principals`;
@@ -111,7 +112,7 @@ module('Acceptance | roles | principals', function (hooks) {
 
   test('select and save principals to add', async function (assert) {
     assert.expect(3);
-    instances.role.update({ userIds: [], groupIds: [] });
+    instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, 0);
     await click('.rose-layout-page-actions a');
@@ -154,7 +155,7 @@ module('Acceptance | roles | principals', function (hooks) {
         }
       );
     });
-    instances.role.update({ userIds: [], groupIds: [] });
+    instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.addPrincipals);
     await click('tbody label');
     await click('form [type="submit"]');
