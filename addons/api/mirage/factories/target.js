@@ -3,7 +3,7 @@ import { trait } from 'ember-cli-mirage';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-import { TYPES_TARGET } from 'api/models/target';
+import { TYPES_TARGET, TYPE_TARGET_TCP } from 'api/models/target';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
@@ -23,22 +23,28 @@ export default factory.extend({
       'remove-credential-sources',
     ],
 
-  id: () => generateId('t_'),
-
   /**
    * -1 means "unlimited" and we want to generate these on occasion.
    */
   session_connection_limit: () =>
     faker.helpers.arrayElement([-1, faker.datatype.number()]),
   worker_filter: (i) => (i % 2 === 0 ? faker.random.words() : null),
+  egress_worker_filter: (i) => (i % 2 === 0 ? faker.random.words() : null),
+  ingress_worker_filter: (i) => (i % 3 === 0 ? faker.random.words() : null),
   type: (i) => types[i % types.length],
   /**
    * Generates attributes fields by type.
    */
   afterCreate(target) {
+    const id =
+      target.type === TYPE_TARGET_TCP
+        ? generateId('ttcp_')
+        : generateId('tssh_');
+    const default_port = target.type === TYPE_TARGET_TCP ? 443 : 22;
     target.update({
+      id,
       attributes: {
-        default_port: faker.datatype.number(),
+        default_port,
       },
     });
   },
