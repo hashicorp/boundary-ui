@@ -267,14 +267,17 @@ export default function () {
   this.del('/roles/:id');
   this.post(
     '/roles/:idMethod',
-    function ({ roles, users, groups }, { params: { idMethod } }) {
+    function (
+      { roles, users, groups, managedGroups },
+      { params: { idMethod } }
+    ) {
       const attrs = this.normalizedRequestAttrs();
       const id = idMethod.split(':')[0];
       const method = idMethod.split(':')[1];
       const role = roles.find(id);
       let updatedAttrs = {};
 
-      // Principals is a combined list of users and groups, but in Mirage we've
+      // Principals is a combined list of users, groups and managed groups, but in Mirage we've
       // internally modelled them as separate lists.  Therefore we must check
       // the type by looking up the user or group first, then determine which
       // list to add the principal to.
@@ -283,25 +286,31 @@ export default function () {
           version: attrs.version,
           userIds: role.userIds,
           groupIds: role.groupIds,
+          managedGroupIds: role.managedGroupIds,
         };
         attrs.principalIds.forEach((id) => {
           const isUser = users.find(id);
           const isGroup = groups.find(id);
+          const isManagedGroup = managedGroups.find(id);
           if (isUser && !updatedAttrs.userIds.includes(id)) {
             updatedAttrs.userIds.push(id);
           }
           if (isGroup && !updatedAttrs.groupIds.includes(id)) {
             updatedAttrs.groupIds.push(id);
           }
+          if (isManagedGroup && !updatedAttrs.managedGroupIds.includes(id)) {
+            updatedAttrs.managedGroupIds.push(id);
+          }
         });
       }
-      // If deleting principals, filter them out of both users and groups,
+      // If deleting principals, filter the ids out of users, groups and managed group lists,
       // and in this case don't care about the type
       if (method === 'remove-principals') {
         updatedAttrs = {
           version: attrs.version,
           userIds: role.userIds,
           groupIds: role.groupIds,
+          managedGroupIds: role.managedGroupIds,
         };
         updatedAttrs.userIds = updatedAttrs.userIds.filter((id) => {
           return !attrs.principalIds.includes(id);
@@ -309,6 +318,11 @@ export default function () {
         updatedAttrs.groupIds = updatedAttrs.groupIds.filter((id) => {
           return !attrs.principalIds.includes(id);
         });
+        updatedAttrs.managedGroupIds = updatedAttrs.managedGroupIds.filter(
+          (id) => {
+            return !attrs.principalIds.includes(id);
+          }
+        );
       }
 
       if (method === 'set-grants') {
@@ -580,8 +594,17 @@ export default function () {
   // managed-groups
   this.get(
     '/managed-groups',
-    ({ managedGroups }, { queryParams: { auth_method_id: authMethodId } }) => {
-      return managedGroups.where({ authMethodId });
+    (
+      { managedGroups },
+      { queryParams: { auth_method_id: authMethodId, filter } }
+    ) => {
+      let resultSet;
+      if (authMethodId) {
+        resultSet = managedGroups.where({ authMethodId });
+      } else {
+        resultSet = managedGroups.all();
+      }
+      return resultSet.filter(makeBooleanFilter(filter));
     }
   );
   this.post('/managed-groups');
