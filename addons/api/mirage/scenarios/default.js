@@ -93,7 +93,7 @@ export default function (server) {
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 8, { scope }, 'withChildren');
     server.createList('credential-store', 3, { scope }, 'withAssociations');
-    server.createList('target', 3, { scope }, 'withAssociations');
+    server.createList('target', 2, { scope }, 'withAssociations');
     // Sessions have target data. Create it after targets.
     server.createList('session', 4, { scope }, 'withAssociations');
     // Create IAM resources for project

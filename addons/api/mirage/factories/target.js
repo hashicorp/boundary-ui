@@ -29,8 +29,8 @@ export default factory.extend({
   session_connection_limit: () =>
     faker.helpers.arrayElement([-1, faker.datatype.number()]),
   worker_filter: (i) => (i % 2 === 0 ? faker.random.words() : null),
-  egress_worker_filter: (i) => (i % 2 === 0 ? faker.random.words() : null),
-  ingress_worker_filter: (i) => (i % 3 === 0 ? faker.random.words() : null),
+  egress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
+  ingress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
   type: (i) => types[i % types.length],
   /**
    * Generates attributes fields by type.
