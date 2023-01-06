@@ -3,4 +3,3 @@
 
 yarn compliance:licenses
 npx lint-staged
-yarn test
