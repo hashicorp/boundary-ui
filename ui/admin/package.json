@@ -32,7 +32,7 @@
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
     "test": "npm-run-all test:*",
-    "test:ember": "COVERAGE=true ember exam --split=2 --parallel=1 --random",
+    "test:ember": "COVERAGE=true ember exam --split=4 --parallel=1 --random",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
