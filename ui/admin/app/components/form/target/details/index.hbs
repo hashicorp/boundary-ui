@@ -5,41 +5,47 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <form.input
-    @name='name'
-    @type='text'
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @isOptional={{false}}
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    as |field|
-  >
-    {{#if @model.errors.name}}
-      <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
-
-  <form.textarea
-    @name='description'
+    @isInvalid={{@model.errors.name}}
     @type='text'
-    @value={{@model.description}}
-    @label={{t 'form.description.label'}}
-    @helperText={{t 'form.description.help'}}
-    @error={{@model.errors.description}}
-    as |field|
+    name='name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
-    {{#if @model.errors.description}}
-      <field.errors as |errors|>
-        {{#each @model.errors.description as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    {{#if @model.errors.name}}
+      <F.Error as |E|>
+        {{#each @model.errors.name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.textarea>
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @isRequired={{false}}
+    @isOptional={{true}}
+    @value={{@model.description}}
+    @isInvalid={{@model.errors.description}}
+    name='description'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
 
   {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
     <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
@@ -75,86 +81,93 @@
     </InfoField>
   {{/if}}
 
-  <form.input
-    @name='session_max_seconds'
-    @type='number'
+  <Hds::Form::TextInput::Field
+    @isRequired={{false}}
+    @isOptional={{true}}
     @value={{@model.session_max_seconds}}
-    @label={{t 'form.session_max_seconds.label'}}
-    @error={{@model.errors.session_max_seconds}}
-    @helperText={{t 'form.session_max_seconds.help'}}
-    min='0'
-    step='1'
-    as |field|
-  >
-    {{#if @model.errors.session_max_seconds}}
-      <field.errors as |errors|>
-        {{#each @model.errors.session_max_seconds as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
-
-  <form.input
-    @name='session_connection_limit'
-    @type='number'
-    @value={{@model.session_connection_limit}}
-    @label={{t 'form.session_connection_limit.label'}}
-    @error={{@model.errors.session_connection_limit}}
-    @helperText={{t 'form.session_connection_limit.help'}}
-    min='-1'
-    step='1'
-    as |field|
-  >
-    {{#if @model.errors.session_connection_limit}}
-      <field.errors as |errors|>
-        {{#each @model.errors.session_connection_limit as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
-
-  <form.input
-    @name='default_port'
-    @type='number'
-    @value={{@model.default_port}}
-    @label={{t 'form.default_port.label'}}
-    @error={{@model.errors.default_port}}
-    @helperText={{t 'form.default_port.help'}}
-    placeholder={{@defaultPort}}
-    min='0'
-    step='1'
-    as |field|
-  >
-    {{#if @model.errors.default_port}}
-      <field.errors as |errors|>
-        {{#each @model.errors.default_port as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
-
-  <form.input
-    @name='worker_filter'
+    @isInvalid={{@model.errors.session_max_seconds}}
     @type='text'
-    @value={{@model.worker_filter}}
-    @label={{t 'form.worker_filter.label'}}
-    @error={{@model.errors.worker_filter}}
-    @helperText={{t 'form.worker_filter.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'target.worker-filters'}}
-    as |field|
+    name='session_max_seconds'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'session_max_seconds')}}
+    as |F|
   >
-    {{#if @model.errors.worker_filter}}
-      <field.errors as |errors|>
-        {{#each @model.errors.worker_filter as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+    <F.Label>{{t 'form.session_max_seconds.label'}}</F.Label>
+    <F.HelperText>{{t 'form.session_max_seconds.help'}}</F.HelperText>
+    {{#if @model.errors.session_max_seconds}}
+      <F.Error as |E|>
+        {{#each @model.errors.session_max_seconds as |error|}}
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{false}}
+    @isOptional={{true}}
+    @value={{@model.session_connection_limit}}
+    @isInvalid={{@model.errors.session_connection_limit}}
+    @type='text'
+    name='session_connection_limit'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'session_connection_limit')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.session_connection_limit.label'}}</F.Label>
+    <F.HelperText>{{t 'form.session_connection_limit.help'}}</F.HelperText>
+    {{#if @model.errors.session_connection_limit}}
+      <F.Error as |E|>
+        {{#each @model.errors.session_connection_limit as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{false}}
+    @isOptional={{true}}
+    @value={{@model.default_port}}
+    @isInvalid={{@model.errors.default_port}}
+    @type='text'
+    name='default_port'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'default_port')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.default_port.label'}}</F.Label>
+    <F.HelperText>{{t 'form.default_port.help'}}</F.HelperText>
+    {{#if @model.errors.default_port}}
+      <F.Error as |E|>
+        {{#each @model.errors.default_port as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{false}}
+    @isOptional={{true}}
+    @value={{@model.worker_filter}}
+    @isInvalid={{@model.errors.worker_filter}}
+    @type='text'
+    name='worker_filter'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'worker_filter')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+    <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
+    {{#if @model.errors.worker_filter}}
+      <F.Error as |E|>
+        {{#each @model.errors.worker_filter as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
 
   {{#if (can 'save model' @model)}}
     <form.actions

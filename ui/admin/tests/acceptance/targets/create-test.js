@@ -179,7 +179,7 @@ module('Acceptance | targets | create', function (hooks) {
       )
     );
     assert.dom('.info-field').exists({ count: 1 });
-    assert.dom('.hds-form-helper-text').includesText('TCP');
+    assert.dom('.info-field .hds-form-helper-text').includesText('TCP');
   });
 
   test('can cancel create new TCP target', async function (assert) {
@@ -239,7 +239,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[type="submit"]');
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 
   test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
@@ -267,6 +267,6 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[type="submit"]');
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 });
