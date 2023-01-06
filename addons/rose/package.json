@@ -24,7 +24,7 @@
     "format:mdx": "prettier --write 'addon/**/*.mdx'",
     "format:sass": "prettier --write '{addon,app}/**/*.scss'",
     "start": "ember serve",
-    "test": "ember exam --split=4 --parallel=1 --random",
+    "test": "ember exam --split=2 --parallel=1 --random",
     "test:ember-compatibility": "ember try:each",
     "prestorybook": "yarn build && yarn storybook:build",
     "storybook": "start-storybook -p 6006 -s dist",

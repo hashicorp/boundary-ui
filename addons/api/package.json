@@ -19,7 +19,7 @@
     "format": "yarn run format:js",
     "format:js": "prettier --write '{addon,app,config,stories,tests,mirage}/**/*.js' *.js",
     "start": "ember serve",
-    "test": "ember exam --split=4 --parallel=1 --random",
+    "test": "ember exam --split=2 --parallel=1 --random",
     "test:ember-compatibility": "ember try:each",
     "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
