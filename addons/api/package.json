@@ -19,7 +19,7 @@
     "format": "yarn run format:js",
     "format:js": "prettier --write '{addon,app,config,stories,tests,mirage}/**/*.js' *.js",
     "start": "ember serve",
-    "test": "ember test",
+    "test": "ember exam --split=4 --parallel=1 --random",
     "test:ember-compatibility": "ember try:each",
     "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
@@ -51,6 +51,7 @@
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
     "ember-disable-prototype-extensions": "^1.1.3",
+    "ember-exam": "^8.0.0",
     "ember-export-application-global": "^2.0.1",
     "ember-load-initializers": "^2.1.2",
     "ember-maybe-import-regenerator": "^1.0.0",

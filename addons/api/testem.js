@@ -22,4 +22,5 @@ module.exports = {
     },
     Firefox: ['-headless', '--window-size=1440,900'],
   },
+  parallel: process.env.EMBER_EXAM_SPLIT_COUNT || 1,
 };
