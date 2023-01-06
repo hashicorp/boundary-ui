@@ -22,6 +22,11 @@ export default factory.extend({
       'add-credential-sources',
       'remove-credential-sources',
     ],
+  id() {
+    return this.type === TYPE_TARGET_TCP
+      ? generateId('ttcp_')
+      : generateId('tssh_');
+  },
 
   /**
    * -1 means "unlimited" and we want to generate these on occasion.
@@ -32,21 +37,8 @@ export default factory.extend({
   egress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
   ingress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
   type: (i) => types[i % types.length],
-  /**
-   * Generates attributes fields by type.
-   */
-  afterCreate(target) {
-    const id =
-      target.type === TYPE_TARGET_TCP
-        ? generateId('ttcp_')
-        : generateId('tssh_');
-    const default_port = target.type === TYPE_TARGET_TCP ? 443 : 22;
-    target.update({
-      id,
-      attributes: {
-        default_port,
-      },
-    });
+  default_port() {
+    return this.type === TYPE_TARGET_TCP ? 443 : 22;
   },
 
   /**

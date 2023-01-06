@@ -67,10 +67,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
+      hostSets: instances.hostCatalog.hostSets,
     });
-    // add hostSets to target after target has been created
-    // due to the target Id being generated after creation
-    instances.target.update({ hostSets: instances.hostCatalog.hostSets });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;

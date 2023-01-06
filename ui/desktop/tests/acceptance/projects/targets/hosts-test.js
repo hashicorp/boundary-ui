@@ -94,10 +94,8 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
+      hostSets: instances.hostCatalog.hostSets,
     });
-    // add hostSets to target after target has been created
-    // due to the target Id being generated after creation
-    instances.target.update({ hostSets: instances.hostCatalog.hostSets });
     instances.session = this.server.create(
       'session',
       {
