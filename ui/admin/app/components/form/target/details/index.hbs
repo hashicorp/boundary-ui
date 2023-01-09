@@ -147,27 +147,74 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::TextInput::Field
-    @isRequired={{false}}
-    @isOptional={{true}}
-    @value={{@model.worker_filter}}
-    @isInvalid={{@model.errors.worker_filter}}
-    @type='text'
-    name='worker_filter'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'worker_filter')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
-    <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
-    {{#if @model.errors.worker_filter}}
-      <F.Error as |E|>
-        {{#each @model.errors.worker_filter as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
+  {{#if (feature-flag 'target-worker-filters-v2')}}
+    <div class='target-workers'>
+      <Hds::Form::Legend class='legend'>{{t
+          'resources.target.workers.title'
+        }}</Hds::Form::Legend>
+      <Hds::Form::HelperText class='description'>{{t
+          'resources.target.workers.description'
+        }}</Hds::Form::HelperText>
+      {{#if this.showDeprecationMessage}}
+        <Hds::Alert
+          class='deprecation-message'
+          @type='inline'
+          @icon='info'
+          as |A|
+        >
+          <A.Title>{{t
+              'resources.target.workers.deprecation_message.title'
+            }}</A.Title>
+          <A.Description>{{t
+              'resources.target.workers.deprecation_message.description'
+            }}</A.Description>
+        </Hds::Alert>
+      {{/if}}
+      <Hds::Form::TextInput::Field
+        @isRequired={{false}}
+        @isOptional={{true}}
+        @value={{@model.worker_filter}}
+        @isInvalid={{@model.errors.worker_filter}}
+        @type='text'
+        name='worker_filter'
+        disabled={{true}}
+        {{on 'input' (set-from-event @model 'worker_filter')}}
+        as |F|
+      >
+        <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+        <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
+        {{#if @model.errors.worker_filter}}
+          <F.Error as |E|>
+            {{#each @model.errors.worker_filter as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+    </div>
+  {{else}}
+    <Hds::Form::TextInput::Field
+      @isRequired={{false}}
+      @isOptional={{true}}
+      @value={{@model.worker_filter}}
+      @isInvalid={{@model.errors.worker_filter}}
+      @type='text'
+      name='worker_filter'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'worker_filter')}}
+      as |F|
+    >
+      <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+      <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
+      {{#if @model.errors.worker_filter}}
+        <F.Error as |E|>
+          {{#each @model.errors.worker_filter as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
 
   {{#if (can 'save model' @model)}}
     <form.actions

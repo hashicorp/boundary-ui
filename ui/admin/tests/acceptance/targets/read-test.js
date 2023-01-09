@@ -15,6 +15,8 @@ module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let featuresService;
+
   const instances = {
     scopes: {
       global: null,
@@ -34,6 +36,7 @@ module('Acceptance | targets | read', function (hooks) {
   };
 
   hooks.beforeEach(function () {
+    featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -85,6 +88,58 @@ module('Acceptance | targets | read', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tcpTarget);
+  });
+
+  test('visiting a tcp target shows the worker_filter deprecation message when worker_filter has value and "target-worker-filters-v2" is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(1);
+    instances.tcpTarget.worker_filter = 'worker filter present';
+    await visit(urls.tcpTarget);
+
+    assert.dom('.deprecation-message').isVisible();
+  });
+
+  test('visiting an ssh target shows the worker_filter deprecation message when worker_filter has value and "target-worker-filters-v2" is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(1);
+    instances.sshTarget.worker_filter = 'worker filter present';
+    await visit(urls.sshTarget);
+
+    assert.dom('.deprecation-message').isVisible();
+  });
+
+  test('visiting a tcp target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(1);
+    instances.tcpTarget.worker_filter = null;
+    await visit(urls.tcpTarget);
+
+    assert.dom('.deprecation-message').doesNotExist();
+  });
+
+  test('visiting an ssh target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(1);
+    instances.sshTarget.worker_filter = null;
+    await visit(urls.sshTarget);
+
+    assert.dom('.deprecation-message').doesNotExist();
+  });
+
+  test('visiting a tcp target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
+    featuresService.disable('target-worker-filters-v2');
+    assert.expect(1);
+    await visit(urls.tcpTarget);
+
+    assert.dom('.deprecation-message').doesNotExist();
+  });
+
+  test('visiting an ssh target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
+    featuresService.disable('target-worker-filters-v2');
+    assert.expect(1);
+    await visit(urls.sshTarget);
+
+    assert.dom('.deprecation-message').doesNotExist();
   });
 
   test('cannot navigate to a ssh target form without proper authorization', async function (assert) {

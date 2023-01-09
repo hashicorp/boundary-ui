@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
+import { computed } from '@ember/object';
 
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
@@ -28,5 +29,14 @@ export default class FormTargetComponent extends Component {
    */
   get icon() {
     return icons[this.args.model.type];
+  }
+
+  /**
+   * determines when the worker filter deprecation message should be shown
+   * @type {boolean}
+   */
+  @computed('args.model.{isNew,worker_filter}')
+  get showDeprecationMessage() {
+    return !this.args.model.isNew && this.args.model.worker_filter;
   }
 }

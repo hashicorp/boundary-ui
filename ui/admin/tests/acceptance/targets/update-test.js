@@ -14,6 +14,8 @@ module('Acceptance | targets | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let featuresService;
+
   const instances = {
     scopes: {
       global: null,
@@ -31,6 +33,8 @@ module('Acceptance | targets | update', function (hooks) {
   };
 
   hooks.beforeEach(function () {
+    featuresService = this.owner.lookup('service:features');
+    featuresService.disable('target-worker-filters-v2');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -76,6 +80,30 @@ module('Acceptance | targets | update', function (hooks) {
       this.server.schema.targets.first().workerFilter,
       'random filter'
     );
+  });
+
+  test('updating a target shows the worker_filter deprecation message when "target-worker-filters-v2" is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(1);
+    await visit(urls.target);
+
+    assert.dom('.deprecation-message').isVisible();
+  });
+
+  test('updating a target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
+    featuresService.disable('target-worker-filters-v2');
+    assert.expect(1);
+    await visit(urls.target);
+
+    assert.dom('.deprecation-message').doesNotExist();
+  });
+
+  test('cannot edit worker_filter when "target-worker-filters-v2" is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(1);
+    await visit(urls.target);
+
+    assert.dom('[name=worker_filter]').isDisabled();
   });
 
   test('can cancel changes to existing target', async function (assert) {

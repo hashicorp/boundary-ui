@@ -597,3 +597,35 @@
     padding: 0 sizing.rems(l);
   }
 }
+
+.target-workers {
+  .legend {
+    font-size: sizing.rems(l) - sizing.rems(xxs); //20
+    font-weight: 700;
+  }
+
+  .legend,
+  .description {
+    margin-bottom: sizing.rems(xs);
+  }
+
+  .deprecation-message {
+    background: var(--info-subtler-3);
+    border: sizing.rems(xxxxs) solid var(--info-subtler-2);
+    margin-bottom: sizing.rems(l);
+
+    .hds-alert__description {
+      font-size: sizing.rems(l);
+    }
+
+    .hds-alert__title {
+      color: var(--info-starker-1);
+      font-weight: 700;
+      font-size: sizing.rems(l);
+    }
+  }
+
+  .flight-icon-info {
+    color: var(--info);
+  }
+}
