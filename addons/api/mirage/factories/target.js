@@ -3,7 +3,7 @@ import { trait } from 'ember-cli-mirage';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-import { TYPES_TARGET, TYPE_TARGET_TCP } from 'api/models/target';
+import { TYPES_TARGET } from 'api/models/target';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
@@ -22,11 +22,7 @@ export default factory.extend({
       'add-credential-sources',
       'remove-credential-sources',
     ],
-  id() {
-    return this.type === TYPE_TARGET_TCP
-      ? generateId('ttcp_')
-      : generateId('tssh_');
-  },
+  id: () => generateId('t_'),
 
   /**
    * -1 means "unlimited" and we want to generate these on occasion.
@@ -37,9 +33,6 @@ export default factory.extend({
   egress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
   ingress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
   type: (i) => types[i % types.length],
-  default_port() {
-    return this.type === TYPE_TARGET_TCP ? 443 : 22;
-  },
 
   /**
    * Randomly selects existing host sets and credential libraries to assign to target.
