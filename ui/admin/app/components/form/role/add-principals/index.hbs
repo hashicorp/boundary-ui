@@ -44,19 +44,7 @@
             </row.headerCell>
             <row.cell>{{principal.id}}</row.cell>
             <row.cell>
-              <Hds::Badge
-                @icon={{if
-                  (eq principal.constructor.modelName 'group')
-                  'folder-users'
-                  'user'
-                }}
-                @text={{t
-                  (concat
-                    'resources.role.principal.types.'
-                    principal.constructor.modelName
-                  )
-                }}
-              />
+              <PrincipalTypeBadge @model={{principal}} />
             </row.cell>
             <row.cell>
               <ScopeBadge @scope={{principal.scopeModel}} />
