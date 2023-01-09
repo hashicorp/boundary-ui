@@ -1,4 +1,4 @@
-import { belongsTo, hasMany } from 'ember-cli-mirage';
+import { belongsTo, hasMany } from 'miragejs';
 import Model from './base';
 
 export default Model.extend({
