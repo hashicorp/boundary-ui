@@ -79,10 +79,10 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
           { scope_id: 'global', recursive: true }
         );
     //extract oidc authMethod IDs
-    const authMethodIDs = oidcAuthMethods.map(({ id }) => id);
+    const oidcAuthMethodIDs = oidcAuthMethods.map(({ id }) => id);
     //query all the managed groups for each auth method id
     const managedGroups = await all(
-      authMethodIDs.map((auth_method_id) =>
+      oidcAuthMethodIDs.map((auth_method_id) =>
         this.store.query('managed-group', { auth_method_id })
       )
     );
