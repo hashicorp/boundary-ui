@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
+import { later, _cancelTimers } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -114,7 +114,7 @@ module('Acceptance | targets', function (hooks) {
     // runloop timers exist indefinitely.  We thus schedule a cancellation before
     // proceeding with our tests.
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await a11yAudit();
       assert.strictEqual(currentURL(), urls.targets);
     }, 750);
