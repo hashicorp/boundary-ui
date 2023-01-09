@@ -72,4 +72,10 @@ export default class GeneratedTargetModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
+
+  @attr('string', {
+    description:
+      'An IP address or DNS name for the session to connect to. Cannot be used in conjunction with host sources.',
+  })
+  address;
 }

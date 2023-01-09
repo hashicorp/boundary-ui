@@ -28,6 +28,7 @@ module('Unit | Serializer | target', function (hooks) {
       default_port: 1234,
       version: 1,
       type: TYPE_TARGET_TCP,
+      address: '0.0.0.0',
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -46,6 +47,7 @@ module('Unit | Serializer | target', function (hooks) {
       attributes: {
         default_port: 1234,
       },
+      address: '0.0.0.0',
     });
   });
 
@@ -219,6 +221,7 @@ module('Unit | Serializer | target', function (hooks) {
       attributes: {
         default_port: 1234,
       },
+      address: null,
     });
   });
 

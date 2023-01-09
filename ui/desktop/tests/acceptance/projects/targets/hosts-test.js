@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
+import { later, _cancelTimers } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -170,7 +170,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     // runloop timers exist indefinitely.  We thus schedule a cancelation before
     // proceeding with our tests.
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       // await a11yAudit();
       assert.strictEqual(currentURL(), urls.hosts);
       assert.strictEqual(findAll('tbody tr').length, hostsCount);
@@ -182,7 +182,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     assert.expect(1);
     instances.target.update({ hostSets: [] });
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       assert.ok(
         find('.rose-message-title').textContent.trim(),
         'No Hosts Available'
@@ -204,7 +204,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
@@ -230,7 +230,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
@@ -260,7 +260,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
@@ -289,7 +289,7 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click(
         'tbody tr:first-child td:last-child button',
         'Activate connect mode'
