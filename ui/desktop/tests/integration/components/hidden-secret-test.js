@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, find, click } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
@@ -30,20 +30,17 @@ module('Integration | Component | hidden-secret', function (hooks) {
   }
 
   test('it renders with a secret', async function (assert) {
+    assert.expect(1);
     await renderComponent();
-    assert.ok(find('.hidden-secret'));
-    assert.strictEqual(
-      find('.hidden-secret > span > span').textContent.trim(),
-      '■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■'
-    );
+    assert
+      .dom('.hidden-secret > span > span')
+      .hasText('■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
   });
 
   test('it reveals secret when button is clicked', async function (assert) {
+    assert.expect(1);
     await renderComponent();
     await click('.hidden-secret > button');
-    assert.strictEqual(
-      find('.hidden-secret > span > span').textContent.trim(),
-      this.secret
-    );
+    assert.dom('.hidden-secret > span > span').hasText(this.secret);
   });
 });

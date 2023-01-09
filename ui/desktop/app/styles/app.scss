@@ -467,8 +467,14 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     width: 100%;
     justify-content: space-between;
 
-    .copyable-content > pre {
-      line-height: normal;
+    .copyable-content {
+      display: flex;
+      align-items: center;
+
+      pre {
+        white-space: pre-wrap;
+        line-height: normal;
+      }
     }
 
     .secret-mask {
