@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { hash } from 'rsvp';
+import { hash, all } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
@@ -38,7 +38,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    * Returns the current role, all users, and all groups
    * @return {{role: RoleModel, users: [UserModel], groups: [GroupModel]}}
    */
-  model() {
+  async model() {
     const role = this.modelFor('scopes.scope.roles.role');
     const scopes = this.store.peekAll('scope').toArray();
     const scopeIDs = this.scope?.map((scope) => scope.id);
@@ -66,11 +66,35 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
           }
         )
       : this.store.query('group', { scope_id: 'global', recursive: true });
+    //query authmethods from all the scopes
+    const oidcAuthMethods = scopeIDs?.length
+      ? await this.resourceFilterStore.queryBy(
+          'auth-method',
+          { scope_id: scopeIDs, type: 'oidc' },
+          { scope_id: 'global', recursive: true }
+        )
+      : await this.resourceFilterStore.queryBy(
+          'auth-method',
+          { type: 'oidc' },
+          { scope_id: 'global', recursive: true }
+        );
+    //extract oidc authMethod IDs
+    const oidcAuthMethodIDs = oidcAuthMethods.map(({ id }) => id);
+    //query all the managed groups for each auth method id
+    const managedGroups = await all(
+      oidcAuthMethodIDs.map((auth_method_id) =>
+        this.store.query('managed-group', { auth_method_id })
+      )
+    );
+    const managedGroupModels = managedGroups
+      .map((models) => models.map((model) => model))
+      .flat();
     return hash({
       role,
       scopes,
       users,
       groups,
+      managedGroups: managedGroupModels,
     });
   }
 
