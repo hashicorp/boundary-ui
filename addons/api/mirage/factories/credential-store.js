@@ -1,6 +1,6 @@
 import factory from '../generated/factories/credential-store';
 import { faker } from '@faker-js/faker';
-import { trait } from 'ember-cli-mirage';
+import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 

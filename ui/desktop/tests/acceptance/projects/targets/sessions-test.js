@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
-import { run, later } from '@ember/runloop';
+import { later, _cancelTimers } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -176,7 +176,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     // runloop timers exist indefinitely.  We thus schedule a cancelation before
     // proceeding with our tests.
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       // await a11yAudit();
       assert.strictEqual(currentURL(), urls.sessions);
       assert.strictEqual(findAll('tbody tr').length, sessionsCount);
@@ -187,7 +187,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   test('visiting index redirects to sessions', async function (assert) {
     assert.expect(1);
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       // await a11yAudit();
       assert.strictEqual(currentURL(), urls.sessions);
     }, 750);
@@ -198,7 +198,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     assert.expect(1);
     this.server.get('/sessions', () => new Response(200));
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       assert.ok(
         find('.rose-message-title').textContent.trim(),
         'No Sessions Available'
@@ -210,7 +210,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   test('can identify target with active sessions', async function (assert) {
     assert.expect(1);
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
     }, 750);
     await visit(urls.sessions);
@@ -220,7 +220,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     assert.expect(1);
     instances.session.update({ status: 'pending' });
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
     }, 750);
     await visit(urls.sessions);
@@ -230,7 +230,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     assert.expect(1);
     instances.session.update({ status: 'terminated' });
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       assert.notOk(find('.rose-layout-page-header .hds-badge--color-success'));
     }, 750);
     await visit(urls.sessions);
@@ -241,7 +241,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const sessionsCount = this.server.schema.sessions.all().models.length;
     stubs.ipcService.withArgs('cancel');
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('tbody tr:first-child td:last-child button');
       assert.ok(find('[role="alert"].is-success'));
       assert.strictEqual(findAll('tbody tr').length, sessionsCount - 1);
@@ -253,7 +253,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     assert.expect(1);
     this.server.post('/sessions/:id_method', () => new Response(400));
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('tbody tr:first-child td:last-child button');
       assert.ok(find('[role="alert"].is-error'));
     }, 750);
@@ -264,7 +264,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop').throws();
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('tbody tr:first-child td:last-child button');
       assert.ok(find('[role="alert"].is-error'));
     }, 750);
@@ -284,7 +284,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.dialog-detail'), 'Success dialog');
       assert.strictEqual(
@@ -313,7 +313,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       instances.session.update('status', 'active');
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.dialog-detail'), 'Success dialog');
@@ -335,7 +335,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
@@ -362,7 +362,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       assert.ok(find('.rose-dialog-error'), 'Error dialog');
       const dialogButtons = findAll('.rose-dialog-footer button');
@@ -388,7 +388,7 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     confirmService.enabled = true;
 
     later(async () => {
-      run.cancelTimers();
+      _cancelTimers();
       await click('.rose-layout-page-actions button', 'Activate connect mode');
       const firstErrorDialog = find('.rose-dialog');
       await click('.rose-dialog footer .rose-button-primary', 'Retry');
