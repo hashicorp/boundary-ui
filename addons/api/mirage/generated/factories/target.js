@@ -1,4 +1,4 @@
-import { Factory } from 'ember-cli-mirage';
+import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import { TYPE_TARGET_TCP } from 'api/models/target';
 
