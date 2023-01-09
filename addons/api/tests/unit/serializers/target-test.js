@@ -153,6 +153,7 @@ module('Unit | Serializer | target', function (hooks) {
       attributes: {
         default_port: 1234,
       },
+      address: null,
     });
   });
 
@@ -187,6 +188,7 @@ module('Unit | Serializer | target', function (hooks) {
       attributes: {
         default_port: 1234,
       },
+      address: null,
     });
   });
 
