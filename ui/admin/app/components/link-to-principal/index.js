@@ -16,7 +16,7 @@ export default class LinkToPrincipalComponent extends Component {
     return this.args.model.constructor.modelName === 'managed-group';
   }
 
- /**
+  /**
    * return route based on principal type
    * @type {string}
    */

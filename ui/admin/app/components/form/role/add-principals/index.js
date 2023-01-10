@@ -24,14 +24,15 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
 
   /**
    * Principals not currently assigned to a role.
-   * @type {[UserModel, GroupModel]}
+   * @type {[UserModel, GroupModel, ManagedGroupModel]}
    */
-  @computed('args.{model,model.principals.[],users,groups}')
+  @computed('args.{model,model.principals.[],users,groups,managedGroups}')
   get filteredPrincipals() {
     // Retrieve principal IDs assigned to current role
     const currentPrincipalIDs = this.args.model.principals.map(
       (principal) => principal.principal_id
     );
+
     // Retrieve principal IDs not assigned to current role
     const unassignedUsers = this.args.users.filter(
       ({ id }) => !currentPrincipalIDs.includes(id)
@@ -39,7 +40,15 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
     const unassignedGroups = this.args.groups.filter(
       ({ id }) => !currentPrincipalIDs.includes(id)
     );
-    return [...unassignedUsers, ...unassignedGroups];
+    const unassignedManagedGroups = this.args.managedGroups.filter(
+      ({ id }) => !currentPrincipalIDs.includes(id)
+    );
+
+    return [
+      ...unassignedUsers,
+      ...unassignedGroups,
+      ...unassignedManagedGroups,
+    ];
   }
 
   // =actions

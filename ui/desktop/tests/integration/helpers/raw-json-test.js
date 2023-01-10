@@ -8,7 +8,7 @@ module('Integration | Helper | raw-json', function (hooks) {
 
   test('it renders', async function (assert) {
     this.set('inputValue', {});
-    await render(hbs`{{raw-json inputValue}}`);
+    await render(hbs`{{raw-json this.inputValue}}`);
     assert.strictEqual(this.element.textContent.trim(), '{}');
     this.set('inputValue', { key: 'value', nestedKey: { key: 'value' } });
     assert.strictEqual(
