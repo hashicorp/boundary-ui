@@ -11,7 +11,7 @@ import { copy } from 'ember-copy';
  * Within a Mirage factory, pass the actions into the mock:
  *
  * @example
- *   import { Factory } from 'ember-cli-mirage';
+ *   import { Factory } from 'miragejs';
  *   import permissions from '../helpers/permissions';
  *
  *   export default Factory.extend({
