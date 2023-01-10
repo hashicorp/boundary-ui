@@ -11,12 +11,12 @@
     {{t 'actions.toggle-secret'}}
   </Rose::Button>
   <Copyable
-    @text={{@secret}}
+    @text={{this.displaySecretValue}}
     @buttonText={{t 'actions.copy-to-clipboard'}}
     @acknowledgeText={{t 'states.copied'}}
   >
     {{#if this.isHidden}}
-      {{@secret}}
+      <pre>{{this.displaySecretValue}}</pre>
     {{else}}
       <span class='secret-mask'>{{this.textMask}}</span>
     {{/if}}
