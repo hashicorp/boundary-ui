@@ -79,6 +79,37 @@ export default function initializeMockIPC(server, config) {
           },
           {
             credential_source: {
+              id: 'credjson_7cKBbBEkC3',
+              credential_store_id: 'csst_yzlsot2pum',
+              type: 'static',
+              credential_type: 'json',
+            },
+            secret: {
+              raw: 'eyJhcnJheSI6WyJvbmUiLCJ0d28iLCJ0aHJlZSIsIm9uZSIsInR3byIsInRocmVlIiwib25lIiwidHdvIiwidGhyZWUiLCJvbmUiLCJ0d28iLCJ0aHJlZSJdLCJuZXN0ZWQiOnsiYm9vbCI6dHJ1ZSwibG9uZyI6IjEyMjM1MzQ1NmFzZWRmYTQzd3J0ZjIzNGYyM2FzZGdmYXNkZnJnYXdzZWZhd3NlZnNkZjQiLCJzZWNlcmV0Ijoic28gbmVzdGVkIn0sInRlc3QiOiJwaHJhc2UifQ==',
+              decoded: {
+                secret_key: 'QWERTYUIOP',
+                secret_access_key: 'QWERT.YUIOP234567890',
+                nested_secret: {
+                  session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
+                  complex_nest: {
+                    hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
+                  },
+                },
+              },
+            },
+            credential: {
+              secret_key: 'QWERTYUIOP',
+              secret_access_key: 'QWERT.YUIOP234567890',
+              nested_secret: {
+                session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
+                complex_nest: {
+                  hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
+                },
+              },
+            },
+          },
+          {
+            credential_source: {
               id: 'clvlt_4cvscMTl0N',
               name: 'Source Name',
               description: 'Source Description',
