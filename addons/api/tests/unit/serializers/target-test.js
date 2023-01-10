@@ -28,6 +28,7 @@ module('Unit | Serializer | target', function (hooks) {
       default_port: 1234,
       version: 1,
       type: TYPE_TARGET_TCP,
+      address: '0.0.0.0',
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -41,9 +42,12 @@ module('Unit | Serializer | target', function (hooks) {
       session_max_seconds: 28800,
       session_connection_limit: null,
       worker_filter: null,
+      egress_worker_filter: null,
+      ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
       },
+      address: '0.0.0.0',
     });
   });
 
@@ -117,6 +121,7 @@ module('Unit | Serializer | target', function (hooks) {
       version: 1,
     });
   });
+
   test('it serializes the worker_filter attribute if present', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -143,9 +148,82 @@ module('Unit | Serializer | target', function (hooks) {
       session_max_seconds: 28800,
       session_connection_limit: null,
       worker_filter: 'worker',
+      egress_worker_filter: null,
+      ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
       },
+      address: null,
+    });
+  });
+
+  test('it serializes the egress_worker_filter attribute if present', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'User',
+      description: 'Description',
+      version: 1,
+      type: TYPE_TARGET_SSH,
+      egress_worker_filter: 'egress worker',
+      default_port: 1234,
+      scope: {
+        scope_id: 'org_1',
+      },
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description',
+      version: 1,
+      type: TYPE_TARGET_SSH,
+      scope_id: 'org_1',
+      session_max_seconds: 28800,
+      session_connection_limit: null,
+      worker_filter: null,
+      egress_worker_filter: 'egress worker',
+      ingress_worker_filter: null,
+      attributes: {
+        default_port: 1234,
+      },
+      address: null,
+    });
+  });
+
+  test('it serializes the ingress_worker_filter attribute if present', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'User',
+      description: 'Description',
+      version: 1,
+      type: TYPE_TARGET_SSH,
+      ingress_worker_filter: 'ingress worker',
+      default_port: 1234,
+      scope: {
+        scope_id: 'org_1',
+      },
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description',
+      version: 1,
+      type: TYPE_TARGET_SSH,
+      scope_id: 'org_1',
+      session_max_seconds: 28800,
+      session_connection_limit: null,
+      worker_filter: null,
+      egress_worker_filter: null,
+      ingress_worker_filter: 'ingress worker',
+      attributes: {
+        default_port: 1234,
+      },
+      address: null,
     });
   });
 
@@ -284,6 +362,72 @@ module('Unit | Serializer | target', function (hooks) {
           brokered_credential_source_ids: [],
           injected_application_credential_source_ids: [],
           worker_filter: 'worker',
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes the egress_worker_filter attribute if present', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const target = store.createRecord('target').constructor;
+    const payload = {
+      id: '1',
+      name: 'Target 1',
+      egress_worker_filter: 'egress worker',
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      target,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'target',
+        attributes: {
+          authorized_actions: [],
+          name: 'Target 1',
+          host_sources: [],
+          brokered_credential_source_ids: [],
+          injected_application_credential_source_ids: [],
+          egress_worker_filter: 'egress worker',
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes the ingress_worker_filter attribute if present', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const target = store.createRecord('target').constructor;
+    const payload = {
+      id: '1',
+      name: 'Target 1',
+      ingress_worker_filter: 'ingress worker',
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      target,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'target',
+        attributes: {
+          authorized_actions: [],
+          name: 'Target 1',
+          host_sources: [],
+          brokered_credential_source_ids: [],
+          injected_application_credential_source_ids: [],
+          ingress_worker_filter: 'ingress worker',
         },
         relationships: {},
       },

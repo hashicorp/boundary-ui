@@ -1,20 +1,37 @@
-import config from '../config/environment';
+import {
+  discoverEmberDataModels,
+  applyEmberDataSerializers,
+} from 'ember-cli-mirage';
+import { createServer, Response } from 'miragejs';
+import environmentConfig from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
-import { Response } from 'miragejs';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 
-const isTesting = config.environment === 'test';
+const isTesting = environmentConfig.environment === 'test';
 
-export default function () {
-  initializeMockIPC(this, config);
+// Main function
+// More info about server configuration https://www.ember-cli-mirage.com/docs/advanced/server-configuration
+export default function (mirageConfig) {
+  let finalConfig = {
+    ...mirageConfig,
+    models: { ...discoverEmberDataModels(), ...mirageConfig.models },
+    serializers: applyEmberDataSerializers(mirageConfig.serializers),
+    routes,
+  };
+  return createServer(finalConfig);
+}
+
+// Only routes are defined here
+function routes() {
+  initializeMockIPC(this, environmentConfig);
 
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
   // make this `/api`, for example, if your API is namespaced
-  this.namespace = config.api.namespace;
+  this.namespace = environmentConfig.api.namespace;
   // delay for each request, automatically set to 0 during testing
   this.timing = 1;
 
