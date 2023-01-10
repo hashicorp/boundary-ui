@@ -134,6 +134,20 @@ module('Acceptance | targets | create', function (hooks) {
     );
   });
 
+  test('defualt port is not marked required for SSH targets', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newTarget);
+    assert.dom('[data-test-default-port-label]').includesText('Optional');
+  });
+
+  test('defualt port is marked required for TCP targets', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newTarget);
+    await click('[value="tcp"]');
+
+    assert.dom('[data-test-default-port-label]').includesText('Required');
+  });
+
   test('can navigate to new targets route with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.projectScope);

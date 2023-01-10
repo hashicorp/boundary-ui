@@ -148,8 +148,8 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
-    @isRequired={{true}}
-    @isOptional={{false}}
+    @isRequired={{@model.isTCP}}
+    @isOptional={{not @model.isTCP}}
     @value={{@model.default_port}}
     @isInvalid={{@model.errors.default_port}}
     @type='text'
@@ -159,7 +159,9 @@
     {{on 'input' (set-from-event @model 'default_port')}}
     as |F|
   >
-    <F.Label>{{t 'form.default_port.label'}}</F.Label>
+    <F.Label data-test-default-port-label>{{t
+        'form.default_port.label'
+      }}</F.Label>
     <F.HelperText>{{t 'form.default_port.help'}}</F.HelperText>
     {{#if @model.errors.default_port}}
       <F.Error as |E|>
