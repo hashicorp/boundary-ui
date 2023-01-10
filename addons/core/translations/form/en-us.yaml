@@ -36,8 +36,8 @@ started:
 status:
   label: Status
 session_max_seconds:
-  label: Maximum Duration (in seconds)
-  help: The maximum duration of a session.
+  label: Maximum Duration
+  help: The maximum duration of a session, in seconds.
 session_connection_limit:
   label: Maximum Connections
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
@@ -55,7 +55,7 @@ worker_type:
   help: Type of worker
 worker_filter:
   label: Worker Filter
-  help: Optional boolean expression to filter the workers that are allowed to satisfy this request.
+  help: Deprecated. Optional boolean expression to filter the workers that are allowed to satisfy this request.
 host_set:
   label: Host Set
 grant_scope:
