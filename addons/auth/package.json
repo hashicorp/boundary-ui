@@ -15,7 +15,7 @@
     "format": "yarn run format:js",
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "start": "ember serve",
-    "test": "ember test",
+    "test": "ember test --test-port 0",
     "test:ember-compatibility": "ember try:each",
     "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
