@@ -126,13 +126,14 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
-    @isRequired={{false}}
-    @isOptional={{true}}
+    @isRequired={{true}}
+    @isOptional={{false}}
     @value={{@model.default_port}}
     @isInvalid={{@model.errors.default_port}}
     @type='text'
     name='default_port'
     disabled={{form.disabled}}
+    placeholder={{@defaultPort}}
     {{on 'input' (set-from-event @model 'default_port')}}
     as |F|
   >
