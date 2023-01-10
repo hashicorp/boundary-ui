@@ -39,6 +39,18 @@ export default class GeneratedTargetModel extends BaseModel {
   })
   worker_filter;
 
+  @attr('string', {
+    description:
+      'Optional boolean expressions to filter the egress workers that are allowed to satisfy this request.',
+  })
+  egress_worker_filter;
+
+  @attr('string', {
+    description:
+      'Optional boolean expressions to filter the ingress workers that are allowed to satisfy this request.',
+  })
+  ingress_worker_filter;
+
   @attr('date', {
     description: 'The time this resource was created\nOutput only.',
     readOnly: true,
