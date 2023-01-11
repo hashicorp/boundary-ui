@@ -59,8 +59,13 @@ export default class ScopesScopeTargetsRoute extends Route {
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
-  async save(target) {
-    await target.save();
+  async save(target, options = { adapterOptions: {} }) {
+    await target.save({
+      ...options,
+      adapterOptions: {
+        ...options.adapterOptions,
+      },
+    });
     if (this.can.can('read model', target)) {
       await this.router.transitionTo('scopes.scope.targets.target', target);
     } else {

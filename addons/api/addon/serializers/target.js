@@ -18,6 +18,10 @@ export default class TargetSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
     const hostSourceIDs = snapshot?.adapterOptions?.hostSetIDs;
+    const useHostSources = snapshot?.adapterOptions?.useHostSources;
+    if (useHostSources) {
+      serialized.address = null;
+    }
     if (hostSourceIDs) {
       serialized = this.serializeWithHostSources(snapshot, hostSourceIDs);
     }
