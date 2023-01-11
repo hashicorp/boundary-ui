@@ -25,9 +25,10 @@ module.exports = function (environment) {
     if (API_HOST) policy['connect-src'].push(API_HOST);
   }
 
+  //enable csp meta tag only in dev env
   return {
     delivery: ['meta'],
-    enabled: environment !== 'test',
+    enabled: environment === 'development',
     policy,
     reportOnly: false,
   };

@@ -134,6 +134,20 @@ module('Acceptance | targets | create', function (hooks) {
     );
   });
 
+  test('defualt port is not marked required for SSH targets', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newTarget);
+    assert.dom('[data-test-default-port-label]').includesText('Optional');
+  });
+
+  test('defualt port is marked required for TCP targets', async function (assert) {
+    assert.expect(1);
+    await visit(urls.newTarget);
+    await click('[value="tcp"]');
+
+    assert.dom('[data-test-default-port-label]').includesText('Required');
+  });
+
   test('can navigate to new targets route with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.projectScope);
@@ -179,7 +193,7 @@ module('Acceptance | targets | create', function (hooks) {
       )
     );
     assert.dom('.info-field').exists({ count: 1 });
-    assert.dom('.hds-form-helper-text').includesText('TCP');
+    assert.dom('.info-field .hds-form-helper-text').includesText('TCP');
   });
 
   test('can cancel create new TCP target', async function (assert) {
@@ -239,7 +253,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[type="submit"]');
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 
   test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
@@ -267,6 +281,6 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[type="submit"]');
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 });
