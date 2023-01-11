@@ -165,3 +165,6 @@ tags:
 secret-editor:
   details: This secret is saved but won't be displayed
   edit: Click to replace this secret
+host-source-toggle:
+  label: Use host sources
+  help: Enable this option to attach a host source instead of using a static address.
