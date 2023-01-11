@@ -85,6 +85,7 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `ssh`', async function (assert) {
+    featuresService.disable('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
@@ -110,6 +111,7 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `tcp`', async function (assert) {
+    featuresService.disable('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
