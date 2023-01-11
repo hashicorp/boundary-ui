@@ -597,3 +597,62 @@
     padding: 0 sizing.rems(l);
   }
 }
+
+.ordered-series-diagram {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  .ordered-series-diagram-item {
+    margin-right: sizing.rems(m);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 100px);
+    grid-template-rows: repeat(2, 1fr);
+    gap: sizing.rems(xs) 0;
+    grid-template-areas:
+      'icon arrow'
+      'description ...';
+
+    .hds-icon-tile {
+      grid-area: icon;
+      justify-self: center;
+    }
+    > span {
+      text-align: center;
+      grid-area: description;
+    }
+    .flight-icon-arrow-right {
+      grid-area: arrow;
+      place-self: center;
+    }
+  }
+
+  .ordered-series-diagram-group {
+    border-radius: sizing.rems(xs);
+    display: grid;
+    grid-template-areas:
+      'title title'
+      'primary secondary';
+    > span {
+      font-size: sizing.rems(s);
+      color: var(--token-color-foreground-highlight);
+      padding-bottom: sizing.rems(s);
+      padding-top: sizing.rems(xxs);
+      grid-area: title;
+      place-self: center;
+    }
+    .ordered-series-diagram-item:first-child {
+      grid-area: primary;
+    }
+    .ordered-series-diagram-item:last-child {
+      grid-area: secondary;
+    }
+  }
+}
+
+.highlight {
+  background-color: var(--token-color-palette-purple-100);
+  .flight-icon-arrow-right {
+    color: var(--token-color-palette-neutral-400);
+  }
+}
