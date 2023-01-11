@@ -96,7 +96,7 @@ module('Acceptance | targets | read', function (hooks) {
     instances.sshTarget.worker_filter = 'worker filter present';
     await visit(urls.sshTarget);
 
-    assert.dom('.deprecation-message').isVisible();
+    assert.dom('.hds-alert').isVisible();
   });
 
   test('visiting a tcp target shows the worker_filter deprecation message when worker_filter has value and "target-worker-filters-v2" is enabled', async function (assert) {
@@ -105,7 +105,7 @@ module('Acceptance | targets | read', function (hooks) {
     instances.tcpTarget.worker_filter = 'worker filter present';
     await visit(urls.tcpTarget);
 
-    assert.dom('.deprecation-message').isVisible();
+    assert.dom('.hds-alert').isVisible();
   });
 
   test('visiting an ssh target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
@@ -114,7 +114,7 @@ module('Acceptance | targets | read', function (hooks) {
     instances.sshTarget.worker_filter = null;
     await visit(urls.sshTarget);
 
-    assert.dom('.deprecation-message').doesNotExist();
+    assert.dom('.hds-alert').doesNotExist();
   });
 
   test('visiting a tcp target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
@@ -123,7 +123,7 @@ module('Acceptance | targets | read', function (hooks) {
     instances.tcpTarget.worker_filter = null;
     await visit(urls.tcpTarget);
 
-    assert.dom('.deprecation-message').doesNotExist();
+    assert.dom('.hds-alert').doesNotExist();
   });
 
   test('visiting an ssh target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
@@ -131,7 +131,7 @@ module('Acceptance | targets | read', function (hooks) {
     assert.expect(1);
     await visit(urls.sshTarget);
 
-    assert.dom('.deprecation-message').doesNotExist();
+    assert.dom('.hds-alert').doesNotExist();
   });
 
   test('visiting a tcp target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
@@ -139,7 +139,7 @@ module('Acceptance | targets | read', function (hooks) {
     assert.expect(1);
     await visit(urls.tcpTarget);
 
-    assert.dom('.deprecation-message').doesNotExist();
+    assert.dom('.hds-alert').doesNotExist();
   });
 
   test('cannot navigate to a ssh target form without proper authorization', async function (assert) {

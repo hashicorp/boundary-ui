@@ -597,3 +597,15 @@
     padding: 0 sizing.rems(l);
   }
 }
+
+.target-workers {
+  margin-top: sizing.rems(xxl);
+
+  .hds-form-legend {
+    font-size: sizing.rems(l) - sizing.rems(xxs); // 20
+  }
+
+  .hds-alert {
+    margin-bottom: sizing.rems(l);
+  }
+}

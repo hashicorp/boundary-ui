@@ -87,7 +87,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.expect(1);
     await visit(urls.target);
 
-    assert.dom('.deprecation-message').isVisible();
+    assert.dom('.hds-alert').isVisible();
   });
 
   test('updating a target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
@@ -95,7 +95,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.expect(1);
     await visit(urls.target);
 
-    assert.dom('.deprecation-message').doesNotExist();
+    assert.dom('.hds-alert').doesNotExist();
   });
 
   test('cannot edit worker_filter when "target-worker-filters-v2" is enabled', async function (assert) {

@@ -151,18 +151,25 @@
   </Hds::Form::TextInput::Field>
 
   {{#if (feature-flag 'target-worker-filters-v2')}}
-    <Hds::Form::Fieldset @layout='horizontal' @isRequired={{false}} as |F|>
+    <Hds::Form::Fieldset
+      class='target-workers'
+      @layout='horizontal'
+      @isRequired={{false}}
+      as |F|
+    >
       <F.Legend>{{t 'resources.target.workers.title'}}</F.Legend>
       <F.HelperText>{{t 'resources.target.workers.description'}}</F.HelperText>
       {{#if this.showDeprecationMessage}}
-        <Hds::Alert @color='highlight' @type='inline' as |A|>
-          <A.Title>{{t
-              'resources.target.workers.deprecation_message.title'
-            }}</A.Title>
-          <A.Description>{{t
-              'resources.target.workers.deprecation_message.description'
-            }}</A.Description>
-        </Hds::Alert>
+        <F.Control>
+          <Hds::Alert @color='highlight' @type='inline' as |A|>
+            <A.Title>{{t
+                'resources.target.workers.deprecation_message.title'
+              }}</A.Title>
+            <A.Description>{{t
+                'resources.target.workers.deprecation_message.description'
+              }}</A.Description>
+          </Hds::Alert>
+        </F.Control>
       {{/if}}
       <F.Control>
         <Hds::Form::TextInput::Field
