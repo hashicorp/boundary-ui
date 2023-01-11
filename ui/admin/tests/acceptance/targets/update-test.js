@@ -120,7 +120,7 @@ module('Acceptance | targets | update', function (hooks) {
     await click('[type="submit"]');
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 
   test('can discard unsaved target changes via dialog', async function (assert) {
