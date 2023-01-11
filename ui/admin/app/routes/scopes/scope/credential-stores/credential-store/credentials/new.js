@@ -28,12 +28,16 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
     const { id: credential_store_id } = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
-    let name, description;
+    let name, description, json_object;
     /**
      * this sets the credential attribute json_object to a string that
      * replicates an empty json blob as CodeMirror expects a string
      */
-    const json_object = '{}';
+    if (type === 'json') {
+      json_object = '{}';
+    } else {
+      json_object = null;
+    }
 
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
