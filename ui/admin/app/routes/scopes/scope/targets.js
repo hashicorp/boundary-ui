@@ -51,11 +51,11 @@ export default class ScopesScopeTargetsRoute extends Route {
   /**
    * Handle save.
    * @param {TargetModel} target
-   * @param {Event} e
+   * @param {object} options
    */
   @action
   @loading
-  @notifyError(({ message }) => message)
+  @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
