@@ -29,4 +29,12 @@ export default class FormTargetComponent extends Component {
   get icon() {
     return icons[this.args.model.type];
   }
+
+  /**
+   * determines when the worker filter deprecation message should be shown
+   * @type {boolean}
+   */
+  get showDeprecationMessage() {
+    return !this.args.model.isNew && this.args.model.worker_filter;
+  }
 }
