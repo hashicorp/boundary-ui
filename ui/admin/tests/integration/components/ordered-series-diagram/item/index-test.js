@@ -12,10 +12,10 @@ module(
       assert.expect(2);
 
       await render(hbs`
-      <OrderedSeriesDiagram::Item @icon='user'>
-        Client
-      </OrderedSeriesDiagram::Item>
-    `);
+        <OrderedSeriesDiagram::Item @icon='user'>
+          Client
+        </OrderedSeriesDiagram::Item>
+      `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
       assert.dom('.ordered-series-diagram-item > span').hasText('Client');
@@ -25,10 +25,10 @@ module(
       assert.expect(3);
 
       await render(hbs`
-      <OrderedSeriesDiagram::Item @icon='user' @arrow={{true}}>
-        Client
-      </OrderedSeriesDiagram::Item>
-    `);
+        <OrderedSeriesDiagram::Item @icon='user' @arrow={{true}}>
+          Client
+        </OrderedSeriesDiagram::Item>
+      `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
       assert.dom('.ordered-series-diagram-item > span').hasText('Client');

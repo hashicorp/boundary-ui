@@ -11,15 +11,11 @@ module(
     test('it renders two icon series', async function (assert) {
       assert.expect(4);
       await render(hbs`
-      <OrderedSeriesDiagram as |d|>
-        <d.item @icon='user' @arrow={{true}}>
-          Client
-        </d.item>
-        <d.item @icon='settings' >
-          Egress Worker
-        </d.item>
-      </OrderedSeriesDiagram>
-    `);
+        <OrderedSeriesDiagram as |d|>
+          <d.item @icon='user' @arrow={{true}}>Client</d.item>
+          <d.item @icon='settings'>Egress Worker</d.item>
+        </OrderedSeriesDiagram>
+      `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
       assert
@@ -38,20 +34,14 @@ module(
     test('it renders icon and group series', async function (assert) {
       assert.expect(8);
       await render(hbs`
-      <OrderedSeriesDiagram as |d|>
-        <d.item @icon='user' @arrow={{true}}>
-          Client
-        </d.item>
-        <d.group @title='Private Network' @highlight={{true}}>
-          <d.item @icon='settings' @arrow={{true}}>
-            Egress Worker
-          </d.item>
-          <d.item @icon='server' >
-            Host
-          </d.item>
-        </d.group>
-      </OrderedSeriesDiagram>
-    `);
+        <OrderedSeriesDiagram as |d|>
+          <d.item @icon='user' @arrow={{true}}>Client</d.item>
+          <d.group @title='Private Network' @highlight={{true}}>
+            <d.item @icon='settings' @arrow={{true}}>Egress Worker</d.item>
+            <d.item @icon='server'>Host</d.item>
+          </d.group>
+        </OrderedSeriesDiagram>
+      `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
       assert

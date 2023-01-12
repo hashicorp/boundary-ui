@@ -12,15 +12,15 @@ module(
       assert.expect(6);
 
       await render(hbs`
-      <OrderedSeriesDiagram::Group @title='Private Network' @highlight={{true}}>
-        <OrderedSeriesDiagram::Item @icon='user' @arrow={{true}}>
-          Client
-        </OrderedSeriesDiagram::Item>
-        <OrderedSeriesDiagram::Item @icon='settings'>
-          Egress Worker
-        </OrderedSeriesDiagram::Item>
-      </OrderedSeriesDiagram::Group>
-    `);
+        <OrderedSeriesDiagram::Group @title='Private Network' @highlight={{true}}>
+          <OrderedSeriesDiagram::Item @icon='user' @arrow={{true}}>
+            Client
+          </OrderedSeriesDiagram::Item>
+          <OrderedSeriesDiagram::Item @icon='settings'>
+            Egress Worker
+          </OrderedSeriesDiagram::Item>
+        </OrderedSeriesDiagram::Group>
+      `);
 
       assert.dom('.ordered-series-diagram-group').hasClass('highlight');
       assert

@@ -1,7 +1,7 @@
 <div class='ordered-series-diagram-item'>
   <Hds::IconTile @icon={{@icon}} @size='large' />
-  <span>{{yield}}</span>
   {{#if @arrow}}
     <FlightIcon @name='arrow-right' @size='24' />
   {{/if}}
+  <span>{{yield}}</span>
 </div>

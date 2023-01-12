@@ -604,9 +604,8 @@
   align-items: flex-end;
 
   .ordered-series-diagram-item {
-    margin-right: sizing.rems(m);
     display: grid;
-    grid-template-columns: repeat(auto-fit, 100px);
+    grid-template-columns: repeat(auto-fit, 75px);
     grid-template-rows: repeat(2, 1fr);
     gap: sizing.rems(xs) 0;
     grid-template-areas:
@@ -638,30 +637,27 @@
 
     > span {
       font-size: sizing.rems(s);
-      color: var(--token-color-foreground-highlight);
+      color: var(--token-color-foreground-highlight-on-surface);
       padding-bottom: sizing.rems(s);
       padding-top: sizing.rems(xxs);
       grid-area: title;
       place-self: center;
     }
 
-    .ordered-series-diagram-item:first-child {
+    .ordered-series-diagram-item {
       grid-area: primary;
-    }
 
-    .ordered-series-diagram-item:last-child {
-      grid-area: secondary;
+      &:last-child {
+        grid-area: secondary;
+      }
     }
   }
 }
 
 .highlight {
-  background-color: var(--token-color-palette-purple-100);
-
-  .flight-icon-arrow-right {
-    color: var(--token-color-palette-neutral-400);
+  background-color: var(--token-color-surface-highlight);
 }
-    
+
 .target-workers {
   margin-top: sizing.rems(xxl);
 
