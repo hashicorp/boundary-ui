@@ -152,6 +152,67 @@ module('Unit | Serializer | credential', function (hooks) {
     });
   });
 
+  test('it serializes username_password type correctly by removing "json_object" attribute', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential');
+    const record = store.createRecord('credential', {
+      password: '',
+      username: 'user',
+      json_object: '{"secret_key": "QWERTYUIOP"}',
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'username_password',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      attributes: {
+        username: 'user',
+      },
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'username_password',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+  });
+
+  test('it serializes ssh_private_key type correctly by removing "json_object" attribute', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential');
+    const record = store.createRecord('credential', {
+      private_key_passphrase: 'passphrasesaresosecure',
+      private_key: 'superPriveKey',
+      json_object: '{"secret_key": "QWERTYUIOP"}',
+      username: 'user',
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'ssh_private_key',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      attributes: {
+        private_key_passphrase: 'passphrasesaresosecure',
+        private_key: 'superPriveKey',
+        username: 'user',
+      },
+      credential_store_id: 'csst_i7p1eu0Nw8',
+      type: 'ssh_private_key',
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+    });
+  });
+
   test('it normalizes "username_password" type credential record', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
