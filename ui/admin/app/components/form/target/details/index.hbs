@@ -1,6 +1,6 @@
 <Rose::Form
-  @onSubmit={{this.submit}}
-  @cancel={{this.cancel}}
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
@@ -217,41 +217,6 @@
         </F.Error>
       {{/if}}
     </Hds::Form::TextInput::Field>
-  {{/if}}
-
-  {{#if (feature-flag 'target-network-address')}}
-    <Hds::Form::Toggle::Field
-      disabled={{form.disabled}}
-      checked={{this.useHostSources}}
-      {{on 'change' this.toggleUseHostSources}}
-      as |F|
-    >
-      <F.Label>{{t 'form.host-source-toggle.label'}}</F.Label>
-      <F.HelperText>{{t 'form.host-source-toggle.help'}}</F.HelperText>
-    </Hds::Form::Toggle::Field>
-    {{#unless this.useHostSources}}
-      <Hds::Form::TextInput::Field
-        @isRequired={{true}}
-        @isOptional={{false}}
-        @value={{@model.address}}
-        @isInvalid={{@model.errors.address}}
-        @type='text'
-        name='address'
-        disabled={{form.disabled}}
-        {{on 'input' (set-from-event @model 'address')}}
-        as |F|
-      >
-        <F.Label>{{t 'form.address.label'}}</F.Label>
-        <F.HelperText>{{t 'form.address.help'}}</F.HelperText>
-        {{#if @model.errors.address}}
-          <F.Error as |E|>
-            {{#each @model.errors.address as |error|}}
-              <E.Message>{{error.message}}</E.Message>
-            {{/each}}
-          </F.Error>
-        {{/if}}
-      </Hds::Form::TextInput::Field>
-    {{/unless}}
   {{/if}}
 
   {{#if (can 'save model' @model)}}
