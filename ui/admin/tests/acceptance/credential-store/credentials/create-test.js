@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, typeIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -175,7 +175,7 @@ module(
       await click(`[href="${urls.newCredential}"]`);
       await click('[value="json"]');
 
-      await typeIn(`${editorSelector} textarea`, newSecret);
+      await fillIn(`${editorSelector} textarea`, newSecret);
       assert.dom(editorSelector).includesText(newSecret);
 
       await click('[value="username_password"]');
