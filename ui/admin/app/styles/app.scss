@@ -599,58 +599,67 @@
 }
 
 .ordered-series-diagram {
+  --group-title-line-height: 2.25rem;
+
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+  margin-bottom: 1rem;
 
-  .ordered-series-diagram-item {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 75px);
-    grid-template-rows: repeat(2, 1fr);
-    gap: sizing.rems(xs) 0;
-    grid-template-areas:
-      'icon arrow'
-      'description ...';
+  &-item {
+    display: flex;
+    margin-top: var(--group-title-line-height);
 
-    .hds-icon-tile {
-      grid-area: icon;
-      justify-self: center;
-    }
-
-    > span {
+    &-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
-      grid-area: description;
     }
 
-    .flight-icon-arrow-right {
-      grid-area: arrow;
-      place-self: center;
+    &-title {
+      font-weight: var(--token-typography-font-weight-semibold);
+      margin-top: 0.5rem;
+      width: 4rem;
+    }
+
+    &:last-child {
+      > .ordered-series-diagram-separator-icon {
+        display: none;
+      }
     }
   }
 
-  .ordered-series-diagram-group {
-    border-radius: sizing.rems(xs);
-    display: grid;
-    grid-template-areas:
-      'title title'
-      'primary secondary';
+  &-group {
+    display: flex;
 
-    > span {
-      font-size: sizing.rems(s);
-      color: var(--token-color-foreground-highlight-on-surface);
-      padding-bottom: sizing.rems(s);
-      padding-top: sizing.rems(xxs);
-      grid-area: title;
-      place-self: center;
+    &-content {
+      border-radius: 0.5rem;
+      padding: 0 0.75rem 0.75rem;
     }
 
-    .ordered-series-diagram-item {
-      grid-area: primary;
+    &-items {
+      display: flex;
 
-      &:last-child {
-        grid-area: secondary;
+      & .ordered-series-diagram-item {
+        margin-top: 0;
       }
     }
+
+    &-title {
+      font-size: var(--token-typography-display-100-font-size);
+      line-height: var(--group-title-line-height);
+      text-align: center;
+    }
+
+    &:last-child {
+      > .ordered-series-diagram-separator-icon {
+        display: none;
+      }
+    }
+  }
+
+  &-separator-icon {
+    color: var(--token-color-foreground-faint);
+    margin: 0.75rem 0.5rem;
   }
 }
 
