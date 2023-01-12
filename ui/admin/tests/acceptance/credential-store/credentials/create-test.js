@@ -166,6 +166,24 @@ module(
       assert.strictEqual(getCredentialsCount(), credentialsCount);
     });
 
+    test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
+      assert.expect(2);
+      const editorSelector = '[data-test-code-editor-field-editor]';
+      const newSecret = '{"test": "value"}';
+
+      await visit(urls.credentials);
+      await click(`[href="${urls.newCredential}"]`);
+      await click('[value="json"]');
+
+      await fillIn(`${editorSelector} textarea`, newSecret);
+      assert.dom(editorSelector).includesText(newSecret);
+
+      await click('[value="username_password"]');
+
+      await click('[value="json"]');
+      assert.dom(editorSelector).includesText('{}');
+    });
+
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
       assert.expect(2);
       instances.staticCredentialStore.authorized_collection_actions.credentials =
