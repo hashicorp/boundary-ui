@@ -18,16 +18,10 @@ module(
       `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
-      assert
-        .dom(
-          '.ordered-series-diagram .orderd-series-diagram-item:first-child > span '
-        )
-        .hasText('Client');
+      assert.dom('.ordered-series-diagram-item > span ').hasText('Client');
       assert.dom('[data-test-icon="settings"]').isVisible();
       assert
-        .dom(
-          '.ordered-series-diagram .orderd-series-diagram-item:last-child > span '
-        )
+        .dom('.ordered-series-diagram-item:last-child > span ')
         .hasText('Egress Worker');
     });
 
@@ -44,9 +38,7 @@ module(
       `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
-      assert
-        .dom('.ordered-series-diagram .ordered-series-diagram-item > span ')
-        .hasText('Client');
+      assert.dom('.ordered-series-diagram-item > span ').hasText('Client');
       assert.dom('.ordered-series-diagram-group').hasClass('highlight');
       assert
         .dom('.ordered-series-diagram-group > span')
