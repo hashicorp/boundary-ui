@@ -136,13 +136,13 @@ module('Acceptance | targets | create', function (hooks) {
     );
   });
 
-  test('default port is not marked required for SSH targets', async function (assert) {
+  test('defualt port is not marked required for SSH targets', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
     assert.dom('[data-test-default-port-label]').includesText('Optional');
   });
 
-  test('default port is marked required for TCP targets', async function (assert) {
+  test('defualt port is marked required for TCP targets', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
     await click('[value="tcp"]');
@@ -284,43 +284,5 @@ module('Acceptance | targets | create', function (hooks) {
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
-  });
-
-  test('can save address', async function (assert) {
-    assert.expect(2);
-    const targetCount = getTargetCount();
-    await visit(urls.targets);
-
-    await click(`[href="${urls.newTarget}"]`);
-    await fillIn('[name="name"]', 'random string');
-    await fillIn('[name="address"]', '0.0.0.0');
-    await click('[type="submit"]');
-
-    assert.strictEqual(getTargetCount(), targetCount + 1);
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1].address,
-      '0.0.0.0'
-    );
-  });
-
-  test('having useHostSources toggle on removes address field', async function (assert) {
-    assert.expect(1);
-    await visit(urls.targets);
-
-    await click(`[href="${urls.newTarget}"]`);
-    await click('[name="use_host_sources"]');
-
-    assert.dom('[name="address"]').doesNotExist();
-  });
-
-  test('toggle and address field do not exist when target address feature is disabled', async function (assert) {
-    assert.expect(2);
-    featuresService.disable('target-network-address');
-    await visit(urls.targets);
-
-    await click(`[href="${urls.newTarget}"]`);
-
-    assert.dom('[name="address"]').doesNotExist();
-    assert.dom('[name="use_host_sources"]').doesNotExist();
   });
 });

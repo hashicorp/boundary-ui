@@ -199,28 +199,4 @@ module('Acceptance | targets | update', function (hooks) {
 
     assert.dom('form [type="button"]').doesNotExist();
   });
-
-  test('setting useHostSources toggle on sets address to null', async function (assert) {
-    assert.expect(2);
-    const target = this.server.create('target', {
-      scope: instances.scopes.project,
-      address: '1.2.3.4.5',
-    });
-    assert.strictEqual(
-      this.server.schema.targets.find(target.id).address,
-      '1.2.3.4.5'
-    );
-    const url = `${urls.targets}/${target.id}`;
-    await visit(urls.targets);
-    await click(`[href="${url}"]`);
-
-    await click('form [type="button"]', 'Activate edit mode');
-    await click('[name="use_host_sources"]');
-    await click('[type="submit"]');
-
-    assert.strictEqual(
-      this.server.schema.targets.find(target.id).address,
-      null
-    );
-  });
 });
