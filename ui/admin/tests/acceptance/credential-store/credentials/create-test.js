@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, typeIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -167,18 +167,21 @@ module(
     });
 
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
-      assert.expect(1);
-      await visit(urls.credentials);
+      assert.expect(2);
+      const editorSelector = '[data-test-code-editor-field-editor]';
+      const newSecret = '{"test": "value"}';
 
+      await visit(urls.credentials);
       await click(`[href="${urls.newCredential}"]`);
-      await fillIn('[name="name"]', 'random string');
       await click('[value="json"]');
 
-      await click('[value="username_password"]');
-      await click('[type="submit"]');
+      await typeIn(`${editorSelector} textarea`, newSecret);
+      assert.dom(editorSelector).includesText(newSecret);
 
-      const credential = this.server.schema.credentials.first();
-      assert.strictEqual(credential.json_object, undefined);
+      await click('[value="username_password"]');
+
+      await click('[value="json"]');
+      assert.dom(editorSelector).includesText('{}');
     });
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
