@@ -321,7 +321,7 @@ target:
   questions:
     delete-host-sources:
       title: Remove associated host sources?
-      message: You have {numHostSources, number} host sources associated with this target. Adding an address will remove these host sources when you save your changes.
+      message: You have {numHostSources, plural, one {# host source} other {# host sources}} associated with this target. Adding an address will remove these host sources when you save your changes.
   host-source:
     title: Host Source
     title_plural: Host Sources
