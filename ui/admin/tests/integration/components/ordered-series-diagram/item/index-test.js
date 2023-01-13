@@ -18,21 +18,7 @@ module(
       `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
-      assert.dom('.ordered-series-diagram-item > span').hasText('Client');
-    });
-
-    test('it renders with icon and text and arrow right', async function (assert) {
-      assert.expect(3);
-
-      await render(hbs`
-        <OrderedSeriesDiagram::Item @icon='user' @arrow={{true}}>
-          Client
-        </OrderedSeriesDiagram::Item>
-      `);
-
-      assert.dom('[data-test-icon="user"]').isVisible();
-      assert.dom('.ordered-series-diagram-item > span').hasText('Client');
-      assert.dom('[data-test-icon="arrow-right"]').isVisible();
+      assert.dom('.ordered-series-diagram-item-title').hasText('Client');
     });
   }
 );

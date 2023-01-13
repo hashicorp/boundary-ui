@@ -9,52 +9,23 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders two icon series', async function (assert) {
-      assert.expect(4);
+      assert.expect(5);
       await render(hbs`
-        <OrderedSeriesDiagram as |d|>
-          <d.item @icon='user' @arrow={{true}}>Client</d.item>
-          <d.item @icon='settings'>Egress Worker</d.item>
+        <OrderedSeriesDiagram as |D|>
+          <D.Item @icon='user'>Client</D.Item>
+          <D.Item @icon='settings'>Egress Worker</D.Item>
         </OrderedSeriesDiagram>
       `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
-      assert.dom('.ordered-series-diagram-item > span ').hasText('Client');
-      assert.dom('[data-test-icon="settings"]').isVisible();
-      assert
-        .dom('.ordered-series-diagram-item:last-child > span ')
-        .hasText('Egress Worker');
-    });
-
-    test('it renders icon and group series', async function (assert) {
-      assert.expect(8);
-      await render(hbs`
-        <OrderedSeriesDiagram as |d|>
-          <d.item @icon='user' @arrow={{true}}>Client</d.item>
-          <d.group @title='Private Network' @highlight={{true}}>
-            <d.item @icon='settings' @arrow={{true}}>Egress Worker</d.item>
-            <d.item @icon='server'>Host</d.item>
-          </d.group>
-        </OrderedSeriesDiagram>
-      `);
-
-      assert.dom('[data-test-icon="user"]').isVisible();
-      assert.dom('.ordered-series-diagram-item > span ').hasText('Client');
-      assert.dom('.ordered-series-diagram-group').hasClass('highlight');
-      assert
-        .dom('.ordered-series-diagram-group > span')
-        .hasText('Private Network');
+      assert.dom('.ordered-series-diagram-item-title').hasText('Client');
+      assert.dom('[data-test-icon="arrow-right"]').isVisible();
       assert.dom('[data-test-icon="settings"]').isVisible();
       assert
         .dom(
-          '.ordered-series-diagram-group .ordered-series-diagram-item > span'
+          '.ordered-series-diagram-item:last-child .ordered-series-diagram-item-title'
         )
         .hasText('Egress Worker');
-      assert.dom('[data-test-icon="server"]').isVisible();
-      assert
-        .dom(
-          '.ordered-series-diagram-group .ordered-series-diagram-item:last-child > span '
-        )
-        .hasText('Host');
     });
   }
 );
