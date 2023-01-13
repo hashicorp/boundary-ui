@@ -1,5 +1,9 @@
 import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
+import { loading } from 'ember-loading';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { notifyError } from 'core/decorators/notify';
 
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
@@ -9,6 +13,11 @@ const icons = {
 };
 
 export default class FormTargetComponent extends Component {
+  // =services
+
+  @service confirm;
+  @service intl;
+
   // =properties
   /**
    * maps resource type with icon
@@ -36,5 +45,36 @@ export default class FormTargetComponent extends Component {
    */
   get showDeprecationMessage() {
     return !this.args.model.isNew && this.args.model.worker_filter;
+  }
+
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  async submit() {
+    const target = this.args.model;
+    const numHostSources = target.host_sources?.length;
+    if (target.address && numHostSources) {
+      try {
+        await this.confirm.confirm(
+          this.intl.t(
+            'resources.target.questions.delete-host-sources.message',
+            { numHostSources }
+          ),
+          {
+            title: 'resources.target.questions.delete-host-sources.title',
+            confirm: 'actions.remove-resources',
+          }
+        );
+      } catch (e) {
+        // if the user denies, do nothing and return
+        return;
+      }
+
+      await target.removeHostSources(
+        target.host_sources.map((hs) => hs.host_source_id)
+      );
+    }
+
+    await this.args.submit();
   }
 }
