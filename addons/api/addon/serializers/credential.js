@@ -25,6 +25,8 @@ export default class CredentialSerializer extends ApplicationSerializer {
         );
         delete serialized.attributes.json_object;
       }
+    } else {
+      delete serialized.attributes.json_object;
     }
 
     return serialized;
