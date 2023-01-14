@@ -109,12 +109,12 @@ ${listenerText}
    */
   get installBoundaryText() {
     const configPath = this.configFilePath || '<path>';
-    const ossContent = `curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;\\
+    const ossContent = `curl -sS https://api.releases.hashicorp.com/v1/releases/boundary/latest | jq '.version';\\
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\\
 sudo apt-get update && sudo apt-get install boundary ;\\
 boundary server -config="${configPath}/pki-worker.hcl"`;
-    const hcpContent = `wget -q https://releases.hashicorp.com/boundary-worker/0.11.2+hcp/boundary-worker_0.11.2+hcp_linux_amd64.zip ;\\
-sudo apt-get update && sudo apt-get install unzip ;\\
+    const hcpContent = `curl -sS https://api.releases.hashicorp.com/v1/releases/boundary-worker/latest?license_class=hcp | jq '.version';\\
+sudo apt-get update && sudo apt-get install unzip;\\
 unzip *.zip ;\\
 ./boundary-worker server -config="${configPath}/pki-worker.hcl"`;
 
