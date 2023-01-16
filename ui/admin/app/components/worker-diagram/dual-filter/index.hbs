@@ -25,7 +25,11 @@
         {{t 'resources.target.workers.diagram.client'}}
       </D.Item>
       <D.Item @icon='settings'>
-        {{t 'resources.target.workers.diagram.front-line-worker'}}
+        {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
+          {{t 'resources.target.workers.diagram.ingress-worker'}}
+        {{else}}
+          {{t 'resources.target.workers.diagram.front-line-worker'}}
+        {{/if}}
       </D.Item>
       <D.Item @icon='server'>
         {{t 'resources.target.workers.diagram.host'}}
@@ -37,7 +41,11 @@
         {{t 'resources.target.workers.diagram.client'}}
       </D.Item>
       <D.Item @icon='settings'>
-        {{t 'resources.target.workers.diagram.front-line-worker'}}
+        {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
+          {{t 'resources.target.workers.diagram.hcp-worker'}}
+        {{else}}
+          {{t 'resources.target.workers.diagram.front-line-worker'}}
+        {{/if}}
       </D.Item>
       <D.Group
         @title={{t 'resources.target.workers.diagram.network'}}
@@ -57,7 +65,11 @@
         {{t 'resources.target.workers.diagram.client'}}
       </D.Item>
       <D.Item @icon='settings'>
-        {{t 'resources.target.workers.diagram.front-line-worker'}}
+        {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
+          {{t 'resources.target.workers.diagram.hcp-worker'}}
+        {{else}}
+          {{t 'resources.target.workers.diagram.front-line-worker'}}
+        {{/if}}
       </D.Item>
       <D.Item @icon='server'>
         {{t 'resources.target.workers.diagram.host'}}
