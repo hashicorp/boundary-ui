@@ -60,8 +60,8 @@ onboarding:
       manual: Manual
       create-resource: Creating your first target
       resource-setup-info: We’ll set up scopes & a host catalog for you
-      host-address: Host Address
-      target-port: Target Port
+      target-address: Target Address
+      target-port: Default Port
       toggle-resource-info: I have an IP address and port for my first host
     descriptions:
       choose-path: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
@@ -69,7 +69,7 @@ onboarding:
       manual: I want to set up my first scopes and targets myself, starting with my first org.
       create-resource: In Boundary, a “target” defines a server that your users will connect to.
       resource-setup-info: Hosts are organized in host catalogs, which live in projects, which live in orgs. We will create these for you, and they can be edited or deleted later.
-      host-address: 'Example: “192.168.0.1” or IPv6'
+      target-address: 'Example: “192.168.0.1” or IPv6'
       target-port: 'Example: “22”'
   success:
     titles:

@@ -2,7 +2,7 @@
   class='full-width'
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
-  @onSubmit={{fn @submit this.hostAddress this.targetPort}}
+  @onSubmit={{fn @submit this.targetAddress this.targetPort}}
   as |form|
 >
 
@@ -13,11 +13,11 @@
   {{#if this.showHostInfo}}
     <div class='create-resource-cards'>
       <form.input
-        @name='hostAddress'
+        @name='targetAddress'
         @type='text'
-        @value={{this.hostAddress}}
-        @label={{t 'onboarding.quick-start.titles.host-address'}}
-        @helperText={{t 'onboarding.quick-start.descriptions.host-address'}}
+        @value={{this.targetAddress}}
+        @label={{t 'onboarding.quick-start.titles.target-address'}}
+        @helperText={{t 'onboarding.quick-start.descriptions.target-address'}}
       />
 
       <form.input

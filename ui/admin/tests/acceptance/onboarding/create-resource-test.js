@@ -18,11 +18,11 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
     authenticateSession({});
   });
 
-  test('show hostAddress and targetPort fields when the checkbox is checked', async function (assert) {
+  test('show targetAddress and targetPort fields when the checkbox is checked', async function (assert) {
     assert.expect(2);
     await visit(urls.createResources);
     await click('[type="checkbox"]');
-    assert.ok(find('[name="hostAddress"]'));
+    assert.ok(find('[name="targetAddress"]'));
     assert.ok(find('[name="targetPort"]'));
   });
 
@@ -30,7 +30,7 @@ module('Acceptance | onboarding | create-resources', function (hooks) {
     assert.expect(1);
     await visit(urls.createResources);
     await click('[type="checkbox"]');
-    await fillIn('[name="hostAddress"]', '0.0.0.0');
+    await fillIn('[name="targetAddress"]', '0.0.0.0');
     await fillIn('[name="targetPort"]', '22');
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.successPath);

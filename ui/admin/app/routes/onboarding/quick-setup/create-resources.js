@@ -58,16 +58,19 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   @notifyError(function () {
     return this.intl.t('errors.quick-setup-failed.description');
   })
-  async createResources(hostAddress, targetPort) {
+  async createResources(targetAddress, targetPort) {
     try {
-      await this.createOnboardingResourcesAndRedirect(hostAddress, targetPort);
+      await this.createOnboardingResourcesAndRedirect(
+        targetAddress,
+        targetPort
+      );
     } catch (e) {
       this.router.replaceWith('scopes.scope', 'global');
       throw new Error();
     }
   }
 
-  async createOnboardingResourcesAndRedirect(hostAddress, targetPort) {
+  async createOnboardingResourcesAndRedirect(targetAddress, targetPort) {
     const { org, project, hostCatalog, hostSet, host, target, role } =
       this.currentModel;
     // The Procedure
@@ -79,8 +82,8 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
     hostSet.host_catalog_id = hostCatalog.id;
     await hostSet.save();
     host.host_catalog_id = hostCatalog.id;
-    if (hostAddress) {
-      host.address = hostAddress;
+    if (targetAddress) {
+      host.address = targetAddress;
       await host.save();
       await hostSet.addHosts([host.id]);
       target.scopeID = project.id;

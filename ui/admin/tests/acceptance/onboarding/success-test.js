@@ -40,7 +40,7 @@ module(
       assert.expect(1);
       await visit(urls.createResources);
       await click('[type="checkbox"]');
-      await fillIn('[name="hostAddress"]', '0.0.0.0');
+      await fillIn('[name="targetAddress"]', '0.0.0.0');
       await fillIn('[name="targetPort"]', '22');
       await click('[type="submit"]');
       const projectId = this.server.db.scopes.where({ type: 'project' })[0].id;
