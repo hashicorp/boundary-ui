@@ -362,7 +362,9 @@ target:
     diagram:
       client: Client
       any-worker: Any worker
+      front-line-worker: Front line worker
       egress-worker: Egress worker
+      ingress-worker: Ingress worker
       host: Host
       network: Private network
 credential-store:

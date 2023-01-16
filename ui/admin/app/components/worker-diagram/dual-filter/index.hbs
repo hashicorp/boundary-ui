@@ -1,0 +1,67 @@
+<div data-test-dual-filters>
+  {{#if (and @egressFilter @ingressFilter)}}
+    <OrderedSeriesDiagram data-test-egress-ingress-on as |D|>
+      <D.Item @icon='user'>
+        {{t 'resources.target.workers.diagram.client'}}
+      </D.Item>
+      <D.Item @icon='settings'>
+        {{t 'resources.target.workers.diagram.ingress-worker'}}
+      </D.Item>
+      <D.Group
+        @title={{t 'resources.target.workers.diagram.network'}}
+        @color='highlight'
+      >
+        <D.Item @icon='settings'>
+          {{t 'resources.target.workers.diagram.egress-worker'}}
+        </D.Item>
+        <D.Item @icon='server'>
+          {{t 'resources.target.workers.diagram.host'}}
+        </D.Item>
+      </D.Group>
+    </OrderedSeriesDiagram>
+  {{else if @ingressFilter}}
+    <OrderedSeriesDiagram data-test-ingress-on as |D|>
+      <D.Item @icon='user'>
+        {{t 'resources.target.workers.diagram.client'}}
+      </D.Item>
+      <D.Item @icon='settings'>
+        {{t 'resources.target.workers.diagram.front-line-worker'}}
+      </D.Item>
+      <D.Item @icon='server'>
+        {{t 'resources.target.workers.diagram.host'}}
+      </D.Item>
+    </OrderedSeriesDiagram>
+  {{else if @egressFilter}}
+    <OrderedSeriesDiagram data-test-egress-on as |D|>
+      <D.Item @icon='user'>
+        {{t 'resources.target.workers.diagram.client'}}
+      </D.Item>
+      <D.Item @icon='settings'>
+        {{t 'resources.target.workers.diagram.front-line-worker'}}
+      </D.Item>
+      <D.Group
+        @title={{t 'resources.target.workers.diagram.network'}}
+        @color='highlight'
+      >
+        <D.Item @icon='settings'>
+          {{t 'resources.target.workers.diagram.egress-worker'}}
+        </D.Item>
+        <D.Item @icon='server'>
+          {{t 'resources.target.workers.diagram.host'}}
+        </D.Item>
+      </D.Group>
+    </OrderedSeriesDiagram>
+  {{else}}
+    <OrderedSeriesDiagram data-test-egress-ingress-off as |D|>
+      <D.Item @icon='user'>
+        {{t 'resources.target.workers.diagram.client'}}
+      </D.Item>
+      <D.Item @icon='settings'>
+        {{t 'resources.target.workers.diagram.front-line-worker'}}
+      </D.Item>
+      <D.Item @icon='server'>
+        {{t 'resources.target.workers.diagram.host'}}
+      </D.Item>
+    </OrderedSeriesDiagram>
+  {{/if}}
+</div>

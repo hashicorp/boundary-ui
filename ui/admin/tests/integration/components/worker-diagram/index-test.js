@@ -21,4 +21,14 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
 
     assert.dom('[data-test-single-filter]').isVisible();
   });
+
+  test('it renders a dual filter diagram', async function (assert) {
+    featuresService = this.owner.lookup('service:features');
+    featuresService.enable(targetWorkerFilterIngress);
+    featuresService.disable(targetWorkerFilterHCP);
+    assert.expect(1);
+    await render(hbs`<WorkerDiagram />`);
+
+    assert.dom('[data-test-dual-filters]').isVisible();
+  });
 });

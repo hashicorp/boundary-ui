@@ -1,3 +1,10 @@
 <div data-test-worker-diagram>
-  <WorkerDiagram::SingleFilter @egressFilter={{@egressFilter}} />
+  {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
+    <WorkerDiagram::DualFilter
+      @egressFilter={{@egressFilter}}
+      @ingressFilter={{@ingressFilter}}
+    />
+  {{else}}
+    <WorkerDiagram::SingleFilter @egressFilter={{@egressFilter}} />
+  {{/if}}
 </div>
