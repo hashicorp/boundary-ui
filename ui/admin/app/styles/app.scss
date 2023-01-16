@@ -613,6 +613,10 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
+
+      .hds-icon-tile--color-hcp {
+        background-color: var(--subtle);
+      }
     }
 
     &-title {
