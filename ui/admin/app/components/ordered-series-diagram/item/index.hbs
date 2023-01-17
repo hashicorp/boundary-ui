@@ -1,0 +1,17 @@
+<li class='ordered-series-diagram-item'>
+
+  <div class='ordered-series-diagram-item-content'>
+    <Hds::IconTile @icon={{@icon}} @size='large' @color='hcp' />
+    <span class='ordered-series-diagram-item-title'>
+      {{yield}}
+    </span>
+  </div>
+
+  <div class='ordered-series-diagram-separator-icon'>
+    {{!
+      Separator icon is not configurable, but potentially could be.
+    }}
+    <FlightIcon @name='arrow-right' @size='24' />
+  </div>
+
+</li>
