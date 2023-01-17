@@ -1,5 +1,9 @@
 <Rose::Form
-  @onSubmit={{fn @submit this.egressToggle}}
+  @onSubmit={{fn
+    @submit
+    this.egressWorkerFilterEnabled
+    this.updateDeprecatedWorkerFilter
+  }}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
@@ -67,7 +71,6 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-    <br />
   {{else}}
     <InfoField
       @value={{t (concat 'resources.target.types.' @model.type)}}
@@ -221,18 +224,20 @@
     </Hds::Form::TextInput::Field>
   {{/if}}
 
-  {{#if this.showUpdateWorkFilterButton}}
-    <Hds::Button
-      @text={{t 'resources.target.egress-worker-filter.filter.update_filter'}}
-      @color='secondary'
-      disabled={{form.disabled}}
-      {{on 'click' this.updateFilter}}
-    />
+  {{#if this.showUpdateWorkerFilterButton}}
+    {{#if form.isEditable}}
+      <Hds::Button
+        @text={{t 'resources.target.egress-worker-filter.filter.update_filter'}}
+        @color='secondary'
+        disabled={{form.disabled}}
+        {{on 'click' this.updateDeprecatedFilter}}
+      />
+    {{/if}}
   {{else}}
     <Hds::Form::Toggle::Field
       name='toggle_egress_worker_filter'
       disabled={{form.disabled}}
-      checked={{@model.egress_worker_filter}}
+      checked={{this.egressWorkerFilterEnabled}}
       {{on 'change' this.toggleEgressWorkerFilter}}
       as |F|
     >
@@ -241,12 +246,13 @@
           'resources.target.egress-worker-filter.description'
         }}</F.HelperText>
     </Hds::Form::Toggle::Field>
-    {{#if this.egressToggle}}
+
+    {{#if this.egressWorkerFilterEnabled}}
       <Hds::Form::TextInput::Field
         @isRequired={{false}}
         @isOptional={{true}}
         disabled={{form.disabled}}
-        @value={{@model.egress_worker_filter}}
+        @value={{this.egressWorkerFilterValue}}
         @isInvalid={{@model.errors.worker_filter}}
         @type='text'
         name='egress_worker_filter'

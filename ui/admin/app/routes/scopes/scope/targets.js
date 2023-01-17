@@ -59,7 +59,17 @@ export default class ScopesScopeTargetsRoute extends Route {
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
-  async save(target, egressEnabled) {
+  async save(target, egressEnabled, updateDeprecatedWorkerFilter) {
+    //by default, when worker_filter field is available,
+    //copy the filter value into egress filter field if egress filter is enabled
+    if (
+      updateDeprecatedWorkerFilter &&
+      egressEnabled &&
+      !target.egress_worker_filter
+    ) {
+      target.egress_worker_filter = target.worker_filter;
+    }
+    //when egress filter is enabled, call saveWithToggles to process the toggle and new filters
     if (target.egress_worker_filter) {
       await target.saveWithToggles(target, egressEnabled);
     } else {

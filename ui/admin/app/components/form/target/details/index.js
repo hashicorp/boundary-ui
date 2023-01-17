@@ -12,8 +12,9 @@ const icons = {
 
 export default class FormTargetComponent extends Component {
   // =properties
-  @tracked egressToggle = this.args.model.egress_worker_filter?.length;
-  @tracked updateOldWorkerFilter = false;
+  @tracked egressWorkerFilterEnabled =
+    this.args.model.egress_worker_filter?.length;
+  @tracked updateDeprecatedWorkerFilter = false;
   /**
    * maps resource type with icon
    * @type {object}
@@ -46,21 +47,31 @@ export default class FormTargetComponent extends Component {
    * determines when the update worker filter button should be shown
    * @type {boolean}
    */
-  get showUpdateWorkFilterButton() {
+  get showUpdateWorkerFilterButton() {
     return (
       !this.args.model.isNew &&
       this.args.model.worker_filter &&
-      !this.updateOldWorkerFilter
+      !this.updateDeprecatedWorkerFilter
     );
+  }
+  /**
+   * returns egress_worker_filter value from the model,
+   * but in case of updating the deprecated worker filter, value from worker_filter field is returned
+   * @type {boolean}
+   */
+  get egressWorkerFilterValue() {
+    return this.args.model.egress_worker_filter?.length
+      ? this.args.model.egress_worker_filter
+      : this.args.model.worker_filter;
   }
   // =actions
   @action
   toggleEgressWorkerFilter() {
-    this.egressToggle = !this.egressToggle;
+    this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
   }
   // =actions
   @action
-  updateFilter() {
-    this.updateOldWorkerFilter = true;
+  updateDeprecatedFilter() {
+    this.updateDeprecatedWorkerFilter = true;
   }
 }
