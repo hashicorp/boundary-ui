@@ -17,8 +17,8 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     featuresService.disable(targetWorkerFilterIngress);
     featuresService.disable(targetWorkerFilterHCP);
     assert.expect(1);
-    await render(hbs`<WorkerDiagram />`);
+    await render(hbs`<WorkerDiagram::SingleFilter />`);
 
-    assert.dom('[data-test-single-filter]').isVisible();
+    assert.dom('[data-test-single-filter-egress-off]').isVisible();
   });
 });

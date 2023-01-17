@@ -16,16 +16,16 @@ module(
         hbs`<WorkerDiagram::SingleFilter @egressFilter={{false}} />`
       );
 
-      assert.dom('[data-test-egress-off]').isVisible();
-      assert.dom('[data-test-egress-on]').doesNotExist();
+      assert.dom('[data-test-single-filter-egress-off]').isVisible();
+      assert.dom('[data-test-single-filter-egress-on]').doesNotExist();
     });
 
     test('it renders the correct diagram when egressFilter is true', async function (assert) {
       assert.expect(2);
       await render(hbs`<WorkerDiagram::SingleFilter @egressFilter={{true}} />`);
 
-      assert.dom('[data-test-egress-on]').isVisible();
-      assert.dom('[data-test-egress-off]').doesNotExist();
+      assert.dom('[data-test-single-filter-egress-on]').isVisible();
+      assert.dom('[data-test-single-filter-egress-off]').doesNotExist();
     });
   }
 );
