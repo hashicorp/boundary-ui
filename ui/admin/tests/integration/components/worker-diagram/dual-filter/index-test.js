@@ -16,10 +16,14 @@ module(
         hbs`<WorkerDiagram::DualFilter @egressFilter={{false}} @ingressFilter={{false}} />`
       );
 
-      assert.dom('[data-test-egress-ingress-off]').isVisible();
-      assert.dom('[data-test-egress-on]').doesNotExist();
-      assert.dom('[data-test-ingress-on]').doesNotExist();
-      assert.dom('[data-test-egress-ingress-on]').doesNotExist();
+      assert.dom('[data-test-dual-filter-egress-off-ingress-off]').isVisible();
+      assert
+        .dom('[data-test-dual-filter-egress-on-ingress-off]')
+        .doesNotExist();
+      assert
+        .dom('[data-test-dual-filter-egress-off-ingress-on]')
+        .doesNotExist();
+      assert.dom('[data-test-dual-filter-egress-on-ingress-on]').doesNotExist();
     });
 
     test('it renders the correct diagram when egressFilter is true and ingress is false', async function (assert) {
@@ -28,10 +32,14 @@ module(
         hbs`<WorkerDiagram::DualFilter @egressFilter={{true}} @ingressFilter={{false}} />`
       );
 
-      assert.dom('[data-test-egress-on]').isVisible();
-      assert.dom('[data-test-ingress-on]').doesNotExist();
-      assert.dom('[data-test-egress-ingress-on]').doesNotExist();
-      assert.dom('[data-test-egress-ingress-off]').doesNotExist();
+      assert.dom('[data-test-dual-filter-egress-on-ingress-off]').isVisible();
+      assert
+        .dom('[data-test-dual-filter-egress-off-ingress-on]')
+        .doesNotExist();
+      assert.dom('[data-test-dual-filter-egress-on-ingress-on]').doesNotExist();
+      assert
+        .dom('[data-test-dual-filter-egress-off-ingress-off]')
+        .doesNotExist();
     });
 
     test('it renders the correct diagram when egressFilter is false and ingress is true', async function (assert) {
@@ -40,10 +48,14 @@ module(
         hbs`<WorkerDiagram::DualFilter @egressFilter={{false}} @ingressFilter={{true}} />`
       );
 
-      assert.dom('[data-test-ingress-on]').isVisible();
-      assert.dom('[data-test-egress-on]').doesNotExist();
-      assert.dom('[data-test-egress-ingress-on]').doesNotExist();
-      assert.dom('[data-test-egress-ingress-off]').doesNotExist();
+      assert.dom('[data-test-dual-filter-egress-off-ingress-on]').isVisible();
+      assert
+        .dom('[data-test-dual-filter-egress-on-ingress-off]')
+        .doesNotExist();
+      assert.dom('[data-test-dual-filter-egress-on-ingress-on]').doesNotExist();
+      assert
+        .dom('[data-test-dual-filter-egress-off-ingress-off]')
+        .doesNotExist();
     });
 
     test('it renders the correct diagram when egressFilter is true and ingress is true', async function (assert) {
@@ -52,10 +64,16 @@ module(
         hbs`<WorkerDiagram::DualFilter @egressFilter={{true}} @ingressFilter={{true}} />`
       );
 
-      assert.dom('[data-test-egress-ingress-on]').isVisible();
-      assert.dom('[data-test-ingress-on]').doesNotExist();
-      assert.dom('[data-test-egress-on]').doesNotExist();
-      assert.dom('[data-test-egress-ingress-off]').doesNotExist();
+      assert.dom('[data-test-dual-filter-egress-on-ingress-on]').isVisible();
+      assert
+        .dom('[data-test-dual-filter-egress-off-ingress-on]')
+        .doesNotExist();
+      assert
+        .dom('[data-test-dual-filter-egress-on-ingress-off]')
+        .doesNotExist();
+      assert
+        .dom('[data-test-dual-filter-egress-off-ingress-off]')
+        .doesNotExist();
     });
   }
 );

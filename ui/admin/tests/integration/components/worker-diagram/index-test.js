@@ -27,8 +27,8 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     featuresService.enable(targetWorkerFilterIngress);
     featuresService.disable(targetWorkerFilterHCP);
     assert.expect(1);
-    await render(hbs`<WorkerDiagram />`);
+    await render(hbs`<WorkerDiagram::DualFilter />`);
 
-    assert.dom('[data-test-dual-filters]').isVisible();
+    assert.dom('[data-test-dual-filter-egress-off-ingress-off]').isVisible();
   });
 });
