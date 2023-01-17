@@ -1,5 +1,5 @@
 <Rose::Form
-  @onSubmit={{@submit}}
+  @onSubmit={{this.submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
@@ -81,6 +81,57 @@
     </InfoField>
   {{/if}}
 
+  {{#if (feature-flag 'target-network-address')}}
+    <Hds::Form::TextInput::Field
+      @isRequired={{false}}
+      @isOptional={{true}}
+      @value={{@model.address}}
+      @isInvalid={{@model.errors.address}}
+      @type='text'
+      name='address'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'address')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.target.form.target-address.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.target.form.target-address.help'
+        }}</F.HelperText>
+      {{#if @model.errors.address}}
+        <F.Error as |E|>
+          {{#each @model.errors.address as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{@model.isTCP}}
+    @isOptional={{not @model.isTCP}}
+    @value={{@model.default_port}}
+    @isInvalid={{@model.errors.default_port}}
+    @type='text'
+    name='default_port'
+    disabled={{form.disabled}}
+    placeholder={{@defaultPort}}
+    {{on 'input' (set-from-event @model 'default_port')}}
+    as |F|
+  >
+    <F.Label data-test-default-port-label>{{t
+        'form.default_port.label'
+      }}</F.Label>
+    <F.HelperText>{{t 'form.default_port.help'}}</F.HelperText>
+    {{#if @model.errors.default_port}}
+      <F.Error as |E|>
+        {{#each @model.errors.default_port as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
   <Hds::Form::TextInput::Field
     @isRequired={{false}}
     @isOptional={{true}}
@@ -119,31 +170,6 @@
     {{#if @model.errors.session_connection_limit}}
       <F.Error as |E|>
         {{#each @model.errors.session_connection_limit as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
-
-  <Hds::Form::TextInput::Field
-    @isRequired={{@model.isTCP}}
-    @isOptional={{not @model.isTCP}}
-    @value={{@model.default_port}}
-    @isInvalid={{@model.errors.default_port}}
-    @type='text'
-    name='default_port'
-    disabled={{form.disabled}}
-    placeholder={{@defaultPort}}
-    {{on 'input' (set-from-event @model 'default_port')}}
-    as |F|
-  >
-    <F.Label data-test-default-port-label>{{t
-        'form.default_port.label'
-      }}</F.Label>
-    <F.HelperText>{{t 'form.default_port.help'}}</F.HelperText>
-    {{#if @model.errors.default_port}}
-      <F.Error as |E|>
-        {{#each @model.errors.default_port as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
