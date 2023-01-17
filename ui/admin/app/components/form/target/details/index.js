@@ -53,7 +53,8 @@ export default class FormTargetComponent extends Component {
   async submit() {
     const target = this.args.model;
     const numHostSources = target.host_sources?.length;
-    if (target.address && numHostSources) {
+    const address = target.address;
+    if (address && numHostSources) {
       try {
         await this.confirm.confirm(
           this.intl.t(
@@ -73,6 +74,9 @@ export default class FormTargetComponent extends Component {
       await target.removeHostSources(
         target.host_sources.map((hs) => hs.host_source_id)
       );
+      // After saving the host sources, the model gets reset to an empty address,
+      // so we need to update the address with the previous value before saving
+      target.address = address;
     }
 
     await this.args.submit();
