@@ -91,7 +91,7 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
       await role.save();
       await role.saveGrantStrings([
         `type=target;actions=list`,
-          `id=${target.id};actions=authorize-session`,
+        `id=${target.id};actions=authorize-session`,
       ]);
       // Redirect
       this.router.transitionTo(
