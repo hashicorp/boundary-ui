@@ -319,7 +319,7 @@ export default class TargetModel extends GeneratedTargetModel {
     );
   }
   /**
-   * saves target with toggle and filter information
+   * save target with filters based on egress/ingress toggle
    * @param {object} target
    * @param {object} egress_worker_filter
    * @return {Promise}
@@ -330,6 +330,8 @@ export default class TargetModel extends GeneratedTargetModel {
     if (!egressEnabled) {
       target.egress_worker_filter = '';
     }
+    //this field becomes empty as they are deprecated
+    //and target is updated to new filters above
     target.worker_filter = '';
 
     try {

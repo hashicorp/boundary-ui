@@ -265,9 +265,6 @@
         <F.HelperText>{{t
             'resources.target.egress-worker-filter.filter.description'
           }}
-          <Hds::Link::Inline @href={{doc-url 'host-catalog.azure'}}>
-            {{t 'actions.learn-more'}}
-          </Hds::Link::Inline>
         </F.HelperText>
         {{#if @model.errors.egress_filter}}
           <F.Error as |E|>

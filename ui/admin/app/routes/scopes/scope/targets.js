@@ -60,7 +60,7 @@ export default class ScopesScopeTargetsRoute extends Route {
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
   async save(target, egressEnabled, updateDeprecatedWorkerFilter) {
-    //by default, when worker_filter field is available,
+    //by default, when the deprecated worker_filter field is available,
     //copy the filter value into egress filter field if egress filter is enabled
     if (
       updateDeprecatedWorkerFilter &&
