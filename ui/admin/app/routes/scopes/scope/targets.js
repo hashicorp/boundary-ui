@@ -55,7 +55,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
-  @notifyError(({ message }) => message)
+  @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )

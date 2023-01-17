@@ -199,4 +199,89 @@ module('Acceptance | targets | update', function (hooks) {
 
     assert.dom('form [type="button"]').doesNotExist();
   });
+
+  test('saving address with existing host sources brings up confirmation modal and removes host sources', async function (assert) {
+    assert.expect(4);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    this.server.createList(
+      'host-catalog',
+      8,
+      { scope: instances.scopes.project },
+      'withChildren'
+    );
+    this.server.createList(
+      'credential-store',
+      3,
+      { scope: instances.scopes.project },
+      'withAssociations'
+    );
+    const target = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withAssociations'
+    );
+    assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
+
+    const url = `${urls.targets}/${target.id}`;
+    await visit(urls.targets);
+    await click(`[href="${url}"]`);
+
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="address"]', '0.0.0.0');
+    await click('[type="submit"]');
+
+    assert.dom('.rose-dialog').isVisible();
+    await click('.rose-dialog-footer .rose-button-primary', 'Remove resources');
+
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).address,
+      '0.0.0.0'
+    );
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).hostSets.length,
+      0
+    );
+  });
+
+  test('saving address with existing host sources brings up confirmation modal and can cancel', async function (assert) {
+    assert.expect(4);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    this.server.createList(
+      'host-catalog',
+      8,
+      { scope: instances.scopes.project },
+      'withChildren'
+    );
+    this.server.createList(
+      'credential-store',
+      3,
+      { scope: instances.scopes.project },
+      'withAssociations'
+    );
+    const target = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withAssociations'
+    );
+    assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
+
+    const url = `${urls.targets}/${target.id}`;
+    await visit(urls.targets);
+    await click(`[href="${url}"]`);
+
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="address"]', '0.0.0.0');
+    await click('[type="submit"]');
+
+    assert.dom('.rose-dialog').isVisible();
+    await click('.rose-dialog-footer .rose-button-secondary', 'Cancel');
+
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).address,
+      undefined
+    );
+    assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
+  });
 });
