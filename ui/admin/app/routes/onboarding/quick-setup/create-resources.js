@@ -73,34 +73,38 @@ export default class OnboardingQuickSetupCreateResourcesRoute extends Route {
   async createOnboardingResourcesAndRedirect(targetAddress, targetPort) {
     const { org, project, hostCatalog, hostSet, host, target, role } =
       this.currentModel;
-    // The Procedure
+
+    // Persist org and project
     await org.save();
     project.scopeID = org.id;
     await project.save();
-    hostCatalog.scopeID = project.id;
-    await hostCatalog.save();
-    hostSet.host_catalog_id = hostCatalog.id;
-    await hostSet.save();
-    host.host_catalog_id = hostCatalog.id;
+
     if (targetAddress) {
-      host.address = targetAddress;
-      await host.save();
-      await hostSet.addHosts([host.id]);
+      // Format target object and persist it
       target.scopeID = project.id;
+      target.address = targetAddress;
       target.default_port = targetPort;
       await target.save();
-      await target.addHostSources([hostSet.id]);
+      // Format role and role grants objects and persist them
       role.scopeID = org.id;
       role.grant_scope_id = project.id;
       await role.save();
       await role.saveGrantStrings([
         `type=target;actions=list`,
-        `id=${target.id};actions=authorize-session`,
+          `id=${target.id};actions=authorize-session`,
       ]);
+      // Redirect
       this.router.transitionTo(
         'onboarding.quick-setup.create-resources.success'
       );
     } else {
+      // Create and persist host catalog, host set and host.
+      hostCatalog.scopeID = project.id;
+      await hostCatalog.save();
+      hostSet.host_catalog_id = hostCatalog.id;
+      await hostSet.save();
+      host.host_catalog_id = hostCatalog.id;
+      // Redirect
       this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.hosts',
         project.id,
