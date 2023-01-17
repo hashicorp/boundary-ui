@@ -1,8 +1,16 @@
 import Component from '@glimmer/component';
 import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
+import { loading } from 'ember-loading';
+import { notifyError } from 'core/decorators/notify';
 
 export default class FormTargetAddHostSetsComponent extends Component {
+  // =services
+
+  @service confirm;
+  @service intl;
+
   // =properties
 
   /**
@@ -49,7 +57,32 @@ export default class FormTargetAddHostSetsComponent extends Component {
   }
 
   @action
-  submit(fn) {
-    fn(this.selectedHostSetIDs);
+  @loading
+  @notifyError(({ message }) => message)
+  async submit() {
+    const target = this.args.model;
+
+    if (target.address && this.selectedHostSetIDs.length) {
+      try {
+        await this.confirm.confirm(
+          this.intl.t(
+            'resources.target.host-source.questions.delete-address.message'
+          ),
+          {
+            title:
+              'resources.target.host-source.questions.delete-address.title',
+            confirm: 'resources.target.actions.remove-address',
+          }
+        );
+      } catch (e) {
+        // if the user denies, do nothing and return
+        return;
+      }
+
+      target.address = null;
+      await target.save();
+    }
+
+    await this.args.submit(this.selectedHostSetIDs);
   }
 }
