@@ -25,11 +25,7 @@
         {{t 'resources.target.workers.diagram.client'}}
       </D.Item>
       <D.Item @icon='settings'>
-        {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
-          {{t 'resources.target.workers.diagram.ingress-worker'}}
-        {{else}}
-          {{t 'resources.target.workers.diagram.ingress-worker'}}
-        {{/if}}
+        {{t 'resources.target.workers.diagram.ingress-worker'}}
       </D.Item>
       <D.Item @icon='server'>
         {{t 'resources.target.workers.diagram.host'}}
