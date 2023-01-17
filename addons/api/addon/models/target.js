@@ -325,6 +325,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @return {Promise}
    */
   async saveWithToggles(target, egressEnabled = true) {
+    // retain filter values in case of save failure
     const { egress_worker_filter, worker_filter } = target;
     // if the filter toggles are off, clear the filter fields
     if (!egressEnabled) {
