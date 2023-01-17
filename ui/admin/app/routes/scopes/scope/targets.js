@@ -51,7 +51,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   /**
    * Handle save.
    * @param {TargetModel} target
-   * @param {Event} e
+   * @param {TargetModel} egressEnabled
    */
   @action
   @loading
@@ -59,8 +59,12 @@ export default class ScopesScopeTargetsRoute extends Route {
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
-  async save(target) {
-    await target.save();
+  async save(target, egressEnabled) {
+    if (target.egress_worker_filter) {
+      await target.saveWithToggles(target, egressEnabled);
+    } else {
+      await target.save();
+    }
     if (this.can.can('read model', target)) {
       await this.router.transitionTo('scopes.scope.targets.target', target);
     } else {

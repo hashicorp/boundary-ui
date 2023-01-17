@@ -319,6 +319,33 @@ export default class TargetModel extends GeneratedTargetModel {
     );
   }
   /**
+   * saves target with toggle information 
+   * @param {object} target
+   * @param {object} egress_worker_filter
+   * @return {Promise}
+    
+   */
+
+  async saveWithToggles(target, egressEnabled = true) {
+    const { egress_worker_filter, worker_filter } = target;
+    // if filters are disabled, clear the filter fields
+    if (!egressEnabled) {
+      target.egress_worker_filter = '';
+    }
+    target.worker_filter = '';
+
+    try {
+      await this.save(target);
+    } catch (e) {
+      // replace values on error
+      target.egress_worker_filter = egress_worker_filter;
+      target.worker_filter = worker_filter;
+      // rethrow the error in order to notify the user
+      throw e;
+    }
+  }
+
+  /**
    * True if the target type is tcp.
    * @type {boolean}
    */
@@ -332,5 +359,13 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   get isSSH() {
     return this.type === TYPE_TARGET_SSH;
+  }
+
+  /**
+   * True if egress worker filter toggle is on.
+   * @type {boolean}
+   */
+  get egressEnabled() {
+    return this.egress_worker_filter?.length !== 0;
   }
 }

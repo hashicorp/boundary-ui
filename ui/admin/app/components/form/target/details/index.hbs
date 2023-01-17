@@ -1,5 +1,5 @@
 <Rose::Form
-  @onSubmit={{@submit}}
+  @onSubmit={{fn @submit this.egressToggle}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
@@ -171,29 +171,31 @@
           </Hds::Alert>
         </F.Control>
       {{/if}}
-      <F.Control>
-        <Hds::Form::TextInput::Field
-          @isRequired={{false}}
-          @isOptional={{true}}
-          @value={{@model.worker_filter}}
-          @isInvalid={{@model.errors.worker_filter}}
-          @type='text'
-          name='worker_filter'
-          disabled={{true}}
-          {{on 'input' (set-from-event @model 'worker_filter')}}
-          as |F|
-        >
-          <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
-          <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
-          {{#if @model.errors.worker_filter}}
-            <F.Error as |E|>
-              {{#each @model.errors.worker_filter as |error|}}
-                <E.Message>{{error.message}}</E.Message>
-              {{/each}}
-            </F.Error>
-          {{/if}}
-        </Hds::Form::TextInput::Field>
-      </F.Control>
+      {{#if @model.worker_filter}}
+        <F.Control>
+          <Hds::Form::TextInput::Field
+            @isRequired={{false}}
+            @isOptional={{true}}
+            @value={{@model.worker_filter}}
+            @isInvalid={{@model.errors.worker_filter}}
+            @type='text'
+            name='worker_filter'
+            disabled={{true}}
+            {{on 'input' (set-from-event @model 'worker_filter')}}
+            as |F|
+          >
+            <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+            <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
+            {{#if @model.errors.worker_filter}}
+              <F.Error as |E|>
+                {{#each @model.errors.worker_filter as |error|}}
+                  <E.Message>{{error.message}}</E.Message>
+                {{/each}}
+              </F.Error>
+            {{/if}}
+          </Hds::Form::TextInput::Field>
+        </F.Control>
+      {{/if}}
     </Hds::Form::Fieldset>
   {{else}}
     <Hds::Form::TextInput::Field
@@ -217,6 +219,59 @@
         </F.Error>
       {{/if}}
     </Hds::Form::TextInput::Field>
+  {{/if}}
+
+  {{#if this.showUpdateWorkFilterButton}}
+    <Hds::Button
+      @text={{t 'resources.target.egress-worker-filter.filter.update_filter'}}
+      @color='secondary'
+      disabled={{form.disabled}}
+      {{on 'click' this.updateFilter}}
+    />
+  {{else}}
+    <Hds::Form::Toggle::Field
+      name='toggle_egress_worker_filter'
+      disabled={{form.disabled}}
+      checked={{@model.egress_worker_filter}}
+      {{on 'change' this.toggleEgressWorkerFilter}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.target.egress-worker-filter.title'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.target.egress-worker-filter.description'
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+    {{#if this.egressToggle}}
+      <Hds::Form::TextInput::Field
+        @isRequired={{false}}
+        @isOptional={{true}}
+        disabled={{form.disabled}}
+        @value={{@model.egress_worker_filter}}
+        @isInvalid={{@model.errors.worker_filter}}
+        @type='text'
+        name='egress_worker_filter'
+        {{on 'input' (set-from-event @model 'egress_worker_filter')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.target.egress-worker-filter.filter.title'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.target.egress-worker-filter.filter.description'
+          }}
+          <Hds::Link::Inline @href={{doc-url 'host-catalog.azure'}}>
+            {{t 'actions.learn-more'}}
+          </Hds::Link::Inline>
+        </F.HelperText>
+        {{#if @model.errors.egress_filter}}
+          <F.Error as |E|>
+            {{#each @model.errors.egress_filter as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+    {{/if}}
   {{/if}}
 
   {{#if (can 'save model' @model)}}

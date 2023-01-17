@@ -1,5 +1,7 @@
 import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
@@ -10,6 +12,8 @@ const icons = {
 
 export default class FormTargetComponent extends Component {
   // =properties
+  @tracked egressToggle = this.args.model.egress_worker_filter?.length;
+  @tracked updateOldWorkerFilter = false;
   /**
    * maps resource type with icon
    * @type {object}
@@ -36,5 +40,27 @@ export default class FormTargetComponent extends Component {
    */
   get showDeprecationMessage() {
     return !this.args.model.isNew && this.args.model.worker_filter;
+  }
+
+  /**
+   * determines when the update worker filter button should be shown
+   * @type {boolean}
+   */
+  get showUpdateWorkFilterButton() {
+    return (
+      !this.args.model.isNew &&
+      this.args.model.worker_filter &&
+      !this.updateOldWorkerFilter
+    );
+  }
+  // =actions
+  @action
+  toggleEgressWorkerFilter() {
+    this.egressToggle = !this.egressToggle;
+  }
+  // =actions
+  @action
+  updateFilter() {
+    this.updateOldWorkerFilter = true;
   }
 }

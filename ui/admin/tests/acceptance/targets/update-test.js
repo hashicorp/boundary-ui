@@ -66,7 +66,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.notEqual(instances.target.worker_filter, 'random filter');
 
     await click(`[href="${urls.target}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="submit"]');
@@ -111,7 +111,7 @@ module('Acceptance | targets | update', function (hooks) {
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
 
@@ -143,7 +143,7 @@ module('Acceptance | targets | update', function (hooks) {
     });
 
     await click(`[href="${urls.target}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
 
@@ -159,7 +159,7 @@ module('Acceptance | targets | update', function (hooks) {
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.target);
     await click(`[href="${urls.targets}"]`);
@@ -178,7 +178,7 @@ module('Acceptance | targets | update', function (hooks) {
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.target);
     await click(`[href="${urls.targets}"]`);
@@ -197,6 +197,6 @@ module('Acceptance | targets | update', function (hooks) {
 
     await click(`[href="${urls.target}"]`);
 
-    assert.dom('form [type="button"]').doesNotExist();
+    assert.dom('.rose-form-actions [type="button"]').doesNotExist();
   });
 });
