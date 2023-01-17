@@ -304,6 +304,7 @@ target:
     add-host-sources: Add Host Sources
     add-brokered-credential-sources: Add Brokered Credentials
     add-injected-application-credential-sources: Add Injected Application Credentials
+    remove-address: Remove address and save
   types:
     tcp: Generic TCP
     ssh: SSH
@@ -314,6 +315,13 @@ target:
     type:
       label: Type
       help: Target type is the protocol with which end users should connect to this target.  Choose Generic TCP for broad support of common protocols including RDP, K8s, many databases, and more.
+    target-address:
+      label: Target Address
+      help: Must be a valid IP address or DNS name. We recommend leaving this blank and using host catalogs and host sets instead if you want to use this target on multiple hosts.
+  questions:
+    delete-host-sources:
+      title: Remove associated host sources?
+      message: You have {numHostSources, plural, one {# host source} other {# host sources}} associated with this target. Adding an address will remove these host sources when you save your changes.
   host-source:
     title: Host Source
     title_plural: Host Sources
@@ -327,6 +335,10 @@ target:
       add:
         title: Add Host Sources
         description: Select host sources to assign to this target.
+    questions:
+      delete-address:
+        title: Remove target address?
+        message: This target has an assigned address. Adding a host source will remove the assigned address from the target when you save your changes.
   brokered-credential-source:
     title: Brokered Credential
     title_plural: Brokered Credentials
