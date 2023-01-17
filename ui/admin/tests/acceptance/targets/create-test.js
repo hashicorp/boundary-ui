@@ -110,7 +110,7 @@ module('Acceptance | targets | create', function (hooks) {
     );
   });
 
-  test('can create type `tcp`', async function (assert) {
+  test('can create type `tcp` when `target-worker-filters-v2` is disabled', async function (assert) {
     featuresService.disable('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
