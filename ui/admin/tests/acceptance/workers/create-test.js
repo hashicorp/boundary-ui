@@ -66,8 +66,16 @@ module('Acceptance | workers | create', function (hooks) {
     featuresService.disable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
     const createSection = findAll('.worker-create-section');
-    assert.dom(createSection[1]).includesText('curl -fsSL');
-    assert.dom(createSection[1]).doesNotIncludeText('wget -q');
+    assert
+      .dom(createSection[1])
+      .includesText(
+        'curl -sS https://api.releases.hashicorp.com/v1/releases/boundary/'
+      );
+    assert
+      .dom(createSection[1])
+      .doesNotIncludeText(
+        'curl -sS https://api.releases.hashicorp.com/v1/releases/boundary-worker/'
+      );
   });
 
   test('download and install step shows correct hcp instructions', async function (assert) {
@@ -76,8 +84,16 @@ module('Acceptance | workers | create', function (hooks) {
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
     const createSection = findAll('.worker-create-section');
-    assert.dom(createSection[1]).includesText('wget -q');
-    assert.dom(createSection[1]).doesNotIncludeText('curl -fsSL');
+    assert
+      .dom(createSection[1])
+      .includesText(
+        'curl -sS https://api.releases.hashicorp.com/v1/releases/boundary-worker/'
+      );
+    assert
+      .dom(createSection[1])
+      .doesNotIncludeText(
+        'curl -sS https://api.releases.hashicorp.com/v1/releases/boundary/'
+      );
   });
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
