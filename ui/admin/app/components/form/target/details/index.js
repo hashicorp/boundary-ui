@@ -73,5 +73,6 @@ export default class FormTargetComponent extends Component {
   @action
   updateDeprecatedFilter() {
     this.updateDeprecatedWorkerFilter = true;
+    this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
   }
 }
