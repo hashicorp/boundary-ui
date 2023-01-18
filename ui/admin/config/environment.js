@@ -8,7 +8,7 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 const featureEditions = {
   oss: {
     'static-credentials': true,
-    'json-credentials': false,
+    'json-credentials': true,
     byow: true,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
@@ -150,6 +150,7 @@ module.exports = function (environment) {
     ENV.featureFlags['ssh-target'] = true;
     ENV.featureFlags['vault-worker-filter'] = true;
     ENV.featureFlags['target-worker-filters-v2'] = true;
+    ENV.featureFlags['target-worker-filters-v2-ingress'] = true;
     ENV.featureFlags['target-network-address'] = true;
     ENV.featureFlags['credential-library-vault-ssh-cert'] = true;
   }

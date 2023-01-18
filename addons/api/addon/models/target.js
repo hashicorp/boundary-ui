@@ -319,34 +319,6 @@ export default class TargetModel extends GeneratedTargetModel {
     );
   }
   /**
-   * save target with filters based on egress/ingress toggle
-   * @param {object} target
-   * @param {object} egress_worker_filter
-   * @return {Promise}
-   */
-  async saveWithToggles(target, egressEnabled = true) {
-    // retain filter values in case of save failure
-    const { egress_worker_filter, worker_filter } = target;
-    // if the filter toggles are off, clear the filter fields
-    if (!egressEnabled) {
-      target.egress_worker_filter = '';
-    }
-    //this field becomes empty as they are deprecated
-    //and target is updated to new filters above
-    target.worker_filter = '';
-
-    try {
-      await this.save(target);
-    } catch (e) {
-      // replace values on error
-      target.egress_worker_filter = egress_worker_filter;
-      target.worker_filter = worker_filter;
-      // rethrow the error in order to notify the user
-      throw e;
-    }
-  }
-
-  /**
    * True if the target type is tcp.
    * @type {boolean}
    */

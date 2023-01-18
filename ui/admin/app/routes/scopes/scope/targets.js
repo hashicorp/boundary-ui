@@ -51,30 +51,17 @@ export default class ScopesScopeTargetsRoute extends Route {
   /**
    * Handle save.
    * @param {TargetModel} target
-   * @param {TargetModel} egressEnabled
+   * @param {Event} e
    */
   @action
   @loading
-  @notifyError(({ message }) => message)
+  @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
-  async save(target, egressEnabled, updateDeprecatedWorkerFilter) {
-    //by default, when the deprecated worker_filter field is available,
-    //copy the filter value into egress filter field if egress filter is enabled
-    if (
-      updateDeprecatedWorkerFilter &&
-      egressEnabled &&
-      !target.egress_worker_filter
-    ) {
-      target.egress_worker_filter = target.worker_filter;
-    }
-    //when egress filter is enabled, call saveWithToggles to process the toggle and new filters
-    if (target.egress_worker_filter) {
-      await target.saveWithToggles(target, egressEnabled);
-    } else {
-      await target.save();
-    }
+  async save(target) {
+    console.log(target, 'in targetttt');
+    await target.save();
     if (this.can.can('read model', target)) {
       await this.router.transitionTo('scopes.scope.targets.target', target);
     } else {
@@ -83,6 +70,43 @@ export default class ScopesScopeTargetsRoute extends Route {
     this.refresh();
   }
 
+  /**
+   * save target with filters based on egress/ingress toggle
+   * @param {object} target
+   * @param {boolean} egressEnabled
+   * @return {Promise}
+   */
+  @action
+  @loading
+  async saveWithToggles(target, egressEnabled = true) {
+    // retain filter values in case of save failure
+    console.log(egressEnabled, 'enabledddd');
+    const { egress_worker_filter, worker_filter } = target;
+    console.log(
+      egress_worker_filter,
+      'enabledddd',
+      worker_filter,
+      egressEnabled
+    );
+
+    // if the filter toggles are off, clear the filter fields
+    if (!egressEnabled) {
+      target.egress_worker_filter = '';
+    }
+    //this field becomes empty as they are deprecated
+    //and target is updated to new filters above
+    target.worker_filter = '';
+
+    try {
+      await this.save(target);
+    } catch (e) {
+      // replace values on error
+      target.egress_worker_filter = egress_worker_filter;
+      target.worker_filter = worker_filter;
+      // rethrow the error in order to notify the user
+      throw e;
+    }
+  }
   /**
    * Deletes a target and redirects to targets index.
    * @param {TargetModel} target

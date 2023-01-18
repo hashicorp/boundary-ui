@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
+import { loading } from 'ember-loading';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { notifyError } from 'core/decorators/notify';
 import { tracked } from '@glimmer/tracking';
-
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
 const icons = {
@@ -11,10 +13,19 @@ const icons = {
 };
 
 export default class FormTargetComponent extends Component {
+  // =services
+
+  @service confirm;
+  @service intl;
+
   // =properties
   @tracked egressWorkerFilterEnabled =
     this.args.model.egress_worker_filter?.length;
+
   @tracked updateDeprecatedWorkerFilter = false;
+  // =services
+
+  // =properties
   /**
    * maps resource type with icon
    * @type {object}
@@ -54,25 +65,53 @@ export default class FormTargetComponent extends Component {
       !this.updateDeprecatedWorkerFilter
     );
   }
-  /**
-   * returns egress_worker_filter value from the model,
-   * but in case of updating the deprecated worker filter, value from worker_filter field is returned
-   * @type {boolean}
-   */
-  get egressWorkerFilterValue() {
-    return this.args.model.egress_worker_filter?.length
-      ? this.args.model.egress_worker_filter
-      : this.args.model.worker_filter;
-  }
-  // =actions
+
+  //actions
   @action
   toggleEgressWorkerFilter() {
     this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
+    console.log(this.egressWorkerFilterEnabled, 'egress fileddd');
   }
   // =actions
   @action
   updateDeprecatedFilter() {
     this.updateDeprecatedWorkerFilter = true;
-    this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
+    this.egressWorkerFilterEnabled = true;
+    //when update is clicked, copy worker filter value into egress filter
+    this.args.model.egress_worker_filter = this.args.model.worker_filter;
+  }
+
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  async submit() {
+    const target = this.args.model;
+    const numHostSources = target.host_sources?.length;
+    const address = target.address;
+    if (address && numHostSources) {
+      try {
+        await this.confirm.confirm(
+          this.intl.t(
+            'resources.target.questions.delete-host-sources.message',
+            { numHostSources }
+          ),
+          {
+            title: 'resources.target.questions.delete-host-sources.title',
+            confirm: 'actions.remove-resources',
+          }
+        );
+      } catch (e) {
+        // if the user denies, do nothing and return
+        return;
+      }
+
+      await target.removeHostSources(
+        target.host_sources.map((hs) => hs.host_source_id)
+      );
+      // After saving the host sources, the model gets reset to an empty address,
+      // so we need to update the address with the previous value before saving
+      target.address = address;
+    }
+    await this.args.submitWithFilters(target, this.egressWorkerFilterEnabled);
   }
 }
