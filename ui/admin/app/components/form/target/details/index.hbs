@@ -197,30 +197,23 @@
                 }}</A.Description>
             </Hds::Alert>
           </F.Control>
+          <F.Control>
+            <Hds::Form::TextInput::Field
+              @isRequired={{false}}
+              @isOptional={{true}}
+              @value={{@model.worker_filter}}
+              @isInvalid={{@model.errors.worker_filter}}
+              @type='text'
+              name='worker_filter'
+              disabled={{true}}
+              {{on 'input' (set-from-event @model 'worker_filter')}}
+              as |F|
+            >
+              <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+              <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
+            </Hds::Form::TextInput::Field>
+          </F.Control>
         {{/if}}
-        <F.Control>
-          <Hds::Form::TextInput::Field
-            @isRequired={{false}}
-            @isOptional={{true}}
-            @value={{@model.worker_filter}}
-            @isInvalid={{@model.errors.worker_filter}}
-            @type='text'
-            name='worker_filter'
-            disabled={{true}}
-            {{on 'input' (set-from-event @model 'worker_filter')}}
-            as |F|
-          >
-            <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
-            <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
-            {{#if @model.errors.worker_filter}}
-              <F.Error as |E|>
-                {{#each @model.errors.worker_filter as |error|}}
-                  <E.Message>{{error.message}}</E.Message>
-                {{/each}}
-              </F.Error>
-            {{/if}}
-          </Hds::Form::TextInput::Field>
-        </F.Control>
       {{/unless}}
     </Hds::Form::Fieldset>
   {{else}}
