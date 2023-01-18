@@ -1,7 +1,7 @@
 {{#if this.hasAvailableHostSets}}
   <Rose::Form
     class='full-width'
-    @onSubmit={{fn this.submit @submit}}
+    @onSubmit={{this.submit}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
     as |form|
