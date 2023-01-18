@@ -26,7 +26,9 @@ module(
         hbs`<WorkerDiagram::DualFilter @egressFilter={{false}} @ingressFilter={{false}} />`
       );
 
-      assert.dom('.ordered-series-diagram-item:nth-child(2)').hasText({});
+      assert
+        .dom('.ordered-series-diagram-item:nth-child(2)')
+        .hasText('Any worker');
       assert
         .dom('.ordered-series-diagram-item:nth-child(2)')
         .doesNotIncludeText('HCP worker');
