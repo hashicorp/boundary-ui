@@ -258,12 +258,9 @@
       />
     {{/if}}
   {{else}}
-    {{#unless this.egressWorkerFilterEnabled}}
-      <WorkerDiagram::SingleFilter />
-    {{/unless}}
-    {{#if this.egressWorkerFilterEnabled}}
-      <WorkerDiagram::SingleFilter @egressFilter='true' />
-    {{/if}}
+    <WorkerDiagram::SingleFilter
+      @egressFilter={{this.egressWorkerFilterEnabled}}
+    />
     <TargetWorkerFilters
       @name='egress_worker_filter'
       @value={{@model.egress_worker_filter}}
