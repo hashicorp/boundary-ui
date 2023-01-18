@@ -252,4 +252,79 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount);
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
   });
+
+  test('saving host source with address brings up confirmation modal and removes address', async function (assert) {
+    assert.expect(4);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    const target = this.server.create('target', {
+      scope: instances.scopes.project,
+      address: '0.0.0.0',
+    });
+    const targetHostSetCount = this.server.schema.targets.find(target.id)
+      .hostSets.models.length;
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).address,
+      '0.0.0.0'
+    );
+
+    const targetUrl = `${urls.targets}/${target.id}`;
+    await visit(targetUrl);
+    await click(`[href="${targetUrl}/host-sources"]`);
+    await click('.rose-layout-page-actions a', 'Click add host set');
+
+    await click('tbody label');
+    await click('form [type="submit"]');
+
+    assert.dom('.rose-dialog').isVisible();
+    await click('.rose-dialog-footer .rose-button-primary', 'Remove resources');
+
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).address,
+      null
+    );
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).hostSets.models.length,
+      targetHostSetCount + 1
+    );
+  });
+
+  test('saving host source with address brings up confirmation modal and can cancel', async function (assert) {
+    assert.expect(4);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    const target = this.server.create('target', {
+      scope: instances.scopes.project,
+      address: '0.0.0.0',
+    });
+    const targetHostSetCount = this.server.schema.targets.find(target.id)
+      .hostSets.models.length;
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).address,
+      '0.0.0.0'
+    );
+
+    const targetUrl = `${urls.targets}/${target.id}`;
+    await visit(targetUrl);
+    await click(`[href="${targetUrl}/host-sources"]`);
+    await click('.rose-layout-page-actions a', 'Click add host set');
+
+    await click('tbody label');
+    await click('form [type="submit"]');
+
+    assert.dom('.rose-dialog').isVisible();
+    await click(
+      '.rose-dialog-footer .rose-button-secondary',
+      'Remove resources'
+    );
+
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).address,
+      '0.0.0.0'
+    );
+    assert.strictEqual(
+      this.server.schema.targets.find(target.id).hostSets.models.length,
+      targetHostSetCount
+    );
+  });
 });
