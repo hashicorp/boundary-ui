@@ -100,6 +100,7 @@ module.exports = function (environment) {
         'target.new': '/targets/new',
         'target.add-host-sources': '/targets/add-host-sets',
         'target.worker-filters': '/targets/worker-filters',
+        'target.boolean-expression': '/targets/boolean-expression',
         user: '/users',
         downloads: '/downloads',
         'getting-started.desktop': '/getting-started/desktop',

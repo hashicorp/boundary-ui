@@ -67,7 +67,7 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-    <br />
+
   {{else}}
     <InfoField
       @value={{t (concat 'resources.target.types.' @model.type)}}
@@ -185,41 +185,43 @@
     >
       <F.Legend>{{t 'resources.target.workers.title'}}</F.Legend>
       <F.HelperText>{{t 'resources.target.workers.description'}}</F.HelperText>
-      {{#if this.showDeprecationMessage}}
+      {{#unless this.updateDeprecatedWorkerFilter}}
+        {{#if this.showDeprecationMessage}}
+          <F.Control>
+            <Hds::Alert @color='highlight' @type='inline' as |A|>
+              <A.Title>{{t
+                  'resources.target.workers.deprecation_message.title'
+                }}</A.Title>
+              <A.Description>{{t
+                  'resources.target.workers.deprecation_message.description'
+                }}</A.Description>
+            </Hds::Alert>
+          </F.Control>
+        {{/if}}
         <F.Control>
-          <Hds::Alert @color='highlight' @type='inline' as |A|>
-            <A.Title>{{t
-                'resources.target.workers.deprecation_message.title'
-              }}</A.Title>
-            <A.Description>{{t
-                'resources.target.workers.deprecation_message.description'
-              }}</A.Description>
-          </Hds::Alert>
+          <Hds::Form::TextInput::Field
+            @isRequired={{false}}
+            @isOptional={{true}}
+            @value={{@model.worker_filter}}
+            @isInvalid={{@model.errors.worker_filter}}
+            @type='text'
+            name='worker_filter'
+            disabled={{true}}
+            {{on 'input' (set-from-event @model 'worker_filter')}}
+            as |F|
+          >
+            <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+            <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
+            {{#if @model.errors.worker_filter}}
+              <F.Error as |E|>
+                {{#each @model.errors.worker_filter as |error|}}
+                  <E.Message>{{error.message}}</E.Message>
+                {{/each}}
+              </F.Error>
+            {{/if}}
+          </Hds::Form::TextInput::Field>
         </F.Control>
-      {{/if}}
-      <F.Control>
-        <Hds::Form::TextInput::Field
-          @isRequired={{false}}
-          @isOptional={{true}}
-          @value={{@model.worker_filter}}
-          @isInvalid={{@model.errors.worker_filter}}
-          @type='text'
-          name='worker_filter'
-          disabled={{true}}
-          {{on 'input' (set-from-event @model 'worker_filter')}}
-          as |F|
-        >
-          <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
-          <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
-          {{#if @model.errors.worker_filter}}
-            <F.Error as |E|>
-              {{#each @model.errors.worker_filter as |error|}}
-                <E.Message>{{error.message}}</E.Message>
-              {{/each}}
-            </F.Error>
-          {{/if}}
-        </Hds::Form::TextInput::Field>
-      </F.Control>
+      {{/unless}}
     </Hds::Form::Fieldset>
   {{else}}
     <Hds::Form::TextInput::Field
@@ -244,7 +246,35 @@
       {{/if}}
     </Hds::Form::TextInput::Field>
   {{/if}}
-
+  {{#if this.showUpdateWorkerFilterButton}}
+    {{#if form.isEditable}}
+      <Hds::Button
+        @text={{t
+          'resources.target.workers.egress_worker_filter.filter.update_filter'
+        }}
+        @color='secondary'
+        disabled={{form.disabled}}
+        {{on 'click' this.updateDeprecatedFilter}}
+      />
+    {{/if}}
+  {{else}}
+    {{#unless this.egressWorkerFilterEnabled}}
+      <WorkerDiagram::SingleFilter />
+    {{/unless}}
+    {{#if this.egressWorkerFilterEnabled}}
+      <WorkerDiagram::SingleFilter @egressFilter='true' />
+    {{/if}}
+    <TargetWorkerFilters
+      @name='egress_worker_filter'
+      @value={{@model.egress_worker_filter}}
+      @model={{@model}}
+      @disabled={{form.disabled}}
+      @toggleAction={{this.toggleEgressWorkerFilter}}
+      @checked={{this.egressWorkerFilterEnabled}}
+      @toggleEnabled={{this.egressWorkerFilterEnabled}}
+      @errors={{@model.errors.egress_worker_filter}}
+    />
+  {{/if}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

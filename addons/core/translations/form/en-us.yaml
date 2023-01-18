@@ -56,6 +56,9 @@ worker_type:
 worker_filter:
   label: Worker Filter
   help: Deprecated. Optional boolean expression to filter the workers that are allowed to satisfy this request.
+egress_filter:
+  label: Egress worker filter
+  help: Optional. Specify workers that have access to the target (such as within a private network).
 host_set:
   label: Host Set
 grant_scope:
