@@ -73,8 +73,9 @@ export default class FormTargetComponent extends Component {
   updateDeprecatedFilter() {
     this.updateDeprecatedWorkerFilter = true;
     this.egressWorkerFilterEnabled = true;
-    //when update is clicked, copy worker filter value into egress filter
+    // When update is clicked, copy worker filter value into egress filter.
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.worker_filter = '';
   }
 
   @action
