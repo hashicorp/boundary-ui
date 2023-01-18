@@ -1,6 +1,6 @@
 {{#if @model.isUnknown}}
   <Hds::Badge @text={{t 'resources.credential.types.unknown'}} />
-{{else if @model.isVault}}
+{{else if (or @model.isVault @model.isVaultSSHCert)}}
   <Hds::Badge
     @text={{t (concat 'resources.credential-library.types.' @model.type)}}
   />

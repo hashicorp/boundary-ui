@@ -458,7 +458,8 @@ credential-library:
       help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
   types:
     vault: Vault
-    static: Static
+    vault-generic: Generic Secrets
+    vault-ssh-cert: SSH Certificate Credentials
 credential:
   title: Credential
   title_plural: Credentials

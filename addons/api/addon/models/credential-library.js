@@ -7,10 +7,14 @@ export const options = {
   http_method: ['GET', 'POST'],
 };
 
+export const VAULT = 'vault';
+export const VAULT_GENERIC = 'vault-generic';
+export const VAULT_SSH_CERT = 'vault-ssh-cert';
+
 /**
  * Supported Credential Library types.
  */
-export const types = ['vault'];
+export const types = [VAULT_GENERIC, VAULT_SSH_CERT];
 
 export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {
   // =attributes
@@ -28,6 +32,14 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    * @type {boolean}
    */
   get isVault() {
-    return this.type === 'vault';
+    return this.type === VAULT_GENERIC || this.type === VAULT;
+  }
+
+  /**
+   * True if credential is a vault ssh cert type.
+   * @type {boolean}
+   */
+  get isVaultSSHCert() {
+    return this.type === VAULT_SSH_CERT;
   }
 }
