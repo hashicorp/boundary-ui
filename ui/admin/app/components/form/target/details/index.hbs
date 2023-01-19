@@ -180,6 +180,7 @@
       class='target-workers'
       @layout='horizontal'
       @isRequired={{false}}
+      @isOptional={{true}}
       as |F|
     >
       <F.Legend>{{t 'resources.target.workers.title'}}</F.Legend>
@@ -198,8 +199,6 @@
         </F.Control>
         <F.Control>
           <Hds::Form::TextInput::Field
-            @isRequired={{false}}
-            @isOptional={{true}}
             @value={{@model.worker_filter}}
             @isInvalid={{@model.errors.worker_filter}}
             @type='text'

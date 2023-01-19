@@ -16,7 +16,6 @@ export default class FormTargetComponent extends Component {
   // =properties
   @tracked egressWorkerFilterEnabled =
     this.args.model.egress_worker_filter?.length;
-  @tracked showUpdateFiltersButton = !this.args.model.worker_filter;
   // =services
 
   @service confirm;
@@ -58,22 +57,23 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get showUpdateWorkerFilterButton() {
-    return this.args.model.worker_filter && !this.showUpdateFiltersButton;
+    return this.args.model.worker_filter?.length;
   }
 
   get showEgressFilter() {
     return !this.args.model.worker_filter?.length && !this.args.model.isNew;
   }
+
   //actions
   @action
   toggleEgressWorkerFilter() {
     this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
   }
+
   // =actions
   @action
   migrateWorkerFilters() {
     this.egressWorkerFilterEnabled = true;
-    this.showUpdateFiltersButton = false;
     // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
     this.args.model.worker_filter = '';
