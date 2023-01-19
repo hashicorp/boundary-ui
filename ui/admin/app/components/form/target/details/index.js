@@ -21,8 +21,6 @@ export default class FormTargetComponent extends Component {
   @service confirm;
   @service intl;
 
-  // =services
-
   // =properties
   /**
    * maps resource type with icon
