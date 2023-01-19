@@ -38,7 +38,10 @@ export default class ApplicationRoute extends Route {
       if (fromName !== toName && maybeModel?.hasDirtyAttributes) {
         transition.abort();
         try {
-          await this.confirm.confirm('abandon', { isAbandonConfirm: true });
+          await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
+            title: 'titles.abandon-confirm',
+            confirm: 'actions.discard',
+          });
           maybeModel?.rollbackAttributes();
           transition.retry();
         } catch (e) {

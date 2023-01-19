@@ -8,7 +8,7 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 const featureEditions = {
   oss: {
     'static-credentials': true,
-    'json-credentials': false,
+    'json-credentials': true,
     byow: true,
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,

@@ -4,7 +4,7 @@ import { loading } from 'ember-loading';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { notifyError } from 'core/decorators/notify';
-
+import { tracked } from '@glimmer/tracking';
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
 const icons = {
@@ -13,6 +13,11 @@ const icons = {
 };
 
 export default class FormTargetComponent extends Component {
+  // =properties
+  @tracked egressWorkerFilterEnabled =
+    this.args.model.egress_worker_filter?.length;
+
+  @tracked migrateWorkerFilter = false;
   // =services
 
   @service confirm;
@@ -45,6 +50,33 @@ export default class FormTargetComponent extends Component {
    */
   get showDeprecationMessage() {
     return !this.args.model.isNew && this.args.model.worker_filter;
+  }
+
+  /**
+   * determines when the update worker filter button should be shown
+   * @type {boolean}
+   */
+  get showUpdateWorkerFilterButton() {
+    return (
+      !this.args.model.isNew &&
+      this.args.model.worker_filter &&
+      !this.migrateWorkerFilter
+    );
+  }
+
+  //actions
+  @action
+  toggleEgressWorkerFilter() {
+    this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
+  }
+  // =actions
+  @action
+  migrateWorkerFilters() {
+    this.migrateWorkerFilter = true;
+    this.egressWorkerFilterEnabled = true;
+    // When update is clicked, copy worker filter value into egress filter.
+    this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.worker_filter = '';
   }
 
   @action
