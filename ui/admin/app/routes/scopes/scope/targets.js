@@ -60,7 +60,6 @@ export default class ScopesScopeTargetsRoute extends Route {
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
   async save(target) {
-    console.log(target, 'in targetttt');
     await target.save();
     if (this.can.can('read model', target)) {
       await this.router.transitionTo('scopes.scope.targets.target', target);
@@ -80,23 +79,12 @@ export default class ScopesScopeTargetsRoute extends Route {
   @loading
   async saveWithToggles(target, egressEnabled = true) {
     // retain filter values in case of save failure
-    console.log(egressEnabled, 'enabledddd');
     const { egress_worker_filter, worker_filter } = target;
-    console.log(
-      egress_worker_filter,
-      'enabledddd',
-      worker_filter,
-      egressEnabled
-    );
 
     // if the filter toggles are off, clear the filter fields
     if (!egressEnabled) {
       target.egress_worker_filter = '';
     }
-    //this field becomes empty as they are deprecated
-    //and target is updated to new filters above
-    target.worker_filter = '';
-
     try {
       await this.save(target);
     } catch (e) {
