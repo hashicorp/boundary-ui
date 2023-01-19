@@ -375,6 +375,7 @@ target:
       client: Client
       any-worker: Any worker
       front-line-worker: Front line worker
+      hcp-worker: HCP worker
       egress-worker: Egress worker
       ingress-worker: Ingress worker
       host: Host
