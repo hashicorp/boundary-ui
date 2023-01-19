@@ -17,7 +17,6 @@ export default class FormTargetComponent extends Component {
   @tracked egressWorkerFilterEnabled =
     this.args.model.egress_worker_filter?.length;
   @tracked showUpdateFiltersButton = !this.args.model.worker_filter;
-  // @tracked showtheFilters = this.args.model.egress_worker_filter?.length;
   // =services
 
   @service confirm;
@@ -75,6 +74,7 @@ export default class FormTargetComponent extends Component {
   migrateWorkerFilters() {
     this.egressWorkerFilterEnabled = true;
     this.showUpdateFiltersButton = false;
+    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
     this.args.model.worker_filter = '';
   }
@@ -110,6 +110,6 @@ export default class FormTargetComponent extends Component {
       // so we need to update the address with the previous value before saving
       target.address = address;
     }
-    await this.args.submitWithFilters(target, this.egressWorkerFilterEnabled);
+    await this.args.submit(target, this.egressWorkerFilterEnabled);
   }
 }
