@@ -60,7 +60,7 @@ export default class FormTargetComponent extends Component {
     return (
       !this.args.model.isNew &&
       this.args.model.worker_filter &&
-      !this.updateDeprecatedWorkerFilter
+      !this.migrateWorkerFilter
     );
   }
 
