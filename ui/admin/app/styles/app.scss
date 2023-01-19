@@ -667,6 +667,7 @@
 .target-workers {
   margin-top: sizing.rems(xxl);
   margin-bottom: sizing.rems(xxl) + sizing.rems(l);
+
   .hds-form-legend {
     font-size: sizing.rems(l) - sizing.rems(xxs); // 20
   }
@@ -689,6 +690,7 @@
       margin-left: 2.5rem;
       width: 50%;
     }
+
     .hds-form-field--layout-flag {
       margin-bottom: 1rem;
     }
