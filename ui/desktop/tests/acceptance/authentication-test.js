@@ -242,8 +242,11 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.ok(getRootElement().classList.contains('rose-theme-dark'));
     // toggle system default
-    await click('[name="theme"][value=""]');
-    assert.notOk(currentSession().get('data.theme'));
+    await click('[name="theme"][value="system-default-theme"]');
+    assert.strictEqual(
+      currentSession().get('data.theme'),
+      'system-default-theme'
+    );
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
