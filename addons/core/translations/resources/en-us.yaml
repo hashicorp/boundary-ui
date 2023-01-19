@@ -379,6 +379,13 @@ target:
       ingress-worker: Ingress worker
       host: Host
       network: Private network
+    egress_worker_filter:
+      title: Egress worker filter
+      description: Optional. Specify workers that have access to the target (such as within a private network).
+      filter:
+        title: Filter
+        description: Boolean expression.
+        update_filter: Update Filter
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
