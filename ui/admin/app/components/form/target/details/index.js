@@ -14,9 +14,10 @@ const icons = {
 
 export default class FormTargetComponent extends Component {
   // =properties
-  @tracked egressWorkerFilterEnabled = false;
+  @tracked egressWorkerFilterEnabled =
+    this.args.model.egress_worker_filter?.length;
 
-  @tracked updateDeprecatedWorkerFilter = false;
+  @tracked migrateWorkerFilter = false;
   // =services
 
   @service confirm;
@@ -70,8 +71,8 @@ export default class FormTargetComponent extends Component {
   }
   // =actions
   @action
-  updateDeprecatedFilter() {
-    this.updateDeprecatedWorkerFilter = true;
+  migrateWorkerFilters() {
+    this.migrateWorkerFilter = true;
     this.egressWorkerFilterEnabled = true;
     // When update is clicked, copy worker filter value into egress filter.
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
