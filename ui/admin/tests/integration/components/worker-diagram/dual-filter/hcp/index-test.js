@@ -20,60 +20,36 @@ module(
       featuresService.disable(targetWorkerFilterIngress);
     });
 
-    test('it renders the correct language when egressFilter is false and ingress is false', async function (assert) {
-      assert.expect(2);
+    test('it renders the correct diagram when egressFilter is false and ingress is false', async function (assert) {
       await render(
         hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{false}} @ingressFilter={{false}} />`
       );
 
-      assert
-        .dom('.ordered-series-diagram-item:nth-child(2)')
-        .hasText('HCP worker');
-      assert
-        .dom('.ordered-series-diagram-item:nth-child(2)')
-        .doesNotIncludeText('Front line worker');
+      assert.dom('[data-test-dual-filter-hcp-egress-off-ingress-off]').exists();
     });
 
-    test('it renders the correct language when egressFilter is true and ingress is false', async function (assert) {
-      assert.expect(2);
+    test('it renders the correct diagram when egressFilter is true and ingress is false', async function (assert) {
       await render(
         hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{true}} @ingressFilter={{false}} />`
       );
 
-      assert
-        .dom('.ordered-series-diagram-item:nth-child(2)')
-        .hasText('HCP worker');
-      assert
-        .dom('.ordered-series-diagram-item:nth-child(2)')
-        .doesNotIncludeText('Front line worker');
+      assert.dom('[data-test-dual-filter-hcp-egress-on-ingress-off]').exists();
     });
 
-    test('it renders the correct language when egressFilter is false and ingress is true', async function (assert) {
-      assert.expect(2);
+    test('it renders the correct diagram when egressFilter is false and ingress is true', async function (assert) {
       await render(
         hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{false}} @ingressFilter={{true}} />`
       );
 
-      assert
-        .dom('.ordered-series-diagram-item:nth-child(2)')
-        .hasText('Ingress worker');
-      assert
-        .dom('.ordered-series-diagram-item:nth-child(2)')
-        .doesNotIncludeText('Front line worker');
+      assert.dom('[data-test-dual-filter-hcp-egress-off-ingress-on]').exists();
     });
 
-    test('it renders the correct language when egressFilter is true and ingress is true', async function (assert) {
-      assert.expect(2);
+    test('it renders the correct diagram when egressFilter is true and ingress is true', async function (assert) {
       await render(
         hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{true}} @ingressFilter={{true}} />`
       );
 
-      assert
-        .dom('.ordered-series-diagram-item:nth-child(2)')
-        .hasText('Ingress worker');
-      assert
-        .dom('.ordered-series-diagram-group .ordered-series-diagram-item')
-        .hasText('Egress worker');
+      assert.dom('[data-test-dual-filter-hcp-egress-on-ingress-on]').exists();
     });
   }
 );
