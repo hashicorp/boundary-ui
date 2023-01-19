@@ -1,12 +1,12 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Transform | object array', function (hooks) {
+module('Unit | Transform | object as array', function (hooks) {
   setupTest(hooks);
 
   test('it deserializes an object to an array of key value objects', function (assert) {
     assert.expect(1);
-    let transform = this.owner.lookup('transform:object-array');
+    let transform = this.owner.lookup('transform:object-as-array');
     const deserialized = transform.deserialize({
       first: 'Hey',
       second: 'There',
@@ -21,7 +21,7 @@ module('Unit | Transform | object array', function (hooks) {
 
   test('it serializes an array of key value objects to an object', function (assert) {
     assert.expect(1);
-    let transform = this.owner.lookup('transform:object-array');
+    let transform = this.owner.lookup('transform:object-as-array');
     const serialized = transform.serialize([
       { key: 'first', value: 'Hey' },
       { key: 'second', value: 'There' },

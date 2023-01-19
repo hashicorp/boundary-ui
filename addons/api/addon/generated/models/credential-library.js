@@ -100,15 +100,14 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   })
   key_id;
 
-  @attr('object-array', {
+  @attr('object-as-array', {
     isNestedAttribute: true,
-    defaultValue: () => {},
     description:
       'Specifies a map of the critical options that the certificate should be signed for.',
   })
   critical_options;
 
-  @attr('object-array', {
+  @attr('object-as-array', {
     isNestedAttribute: true,
     description:
       'Specifies a map of the extensions that the certificate should be signed for.',

@@ -1,6 +1,6 @@
 import Transform from '@ember-data/serializer/transform';
 
-export default class ObjectArrayTransform extends Transform {
+export default class ObjectAsArrayTransform extends Transform {
   deserialize(serialized) {
     const obj = serialized || {};
     return Object.entries(obj).map(([key, value]) => ({ key, value }));

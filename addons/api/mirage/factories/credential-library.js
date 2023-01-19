@@ -3,14 +3,14 @@ import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 import {
-  VAULT_GENERIC,
-  VAULT_SSH_CERT,
-  types,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+  TYPES_CREDENTIAL_LIBRARY,
 } from 'api/models/credential-library';
 
 export default factory.extend({
   id: () => generateId('cl_'),
-  type: (i) => types[i % types.length],
+  type: (i) => TYPES_CREDENTIAL_LIBRARY[i % TYPES_CREDENTIAL_LIBRARY.length],
 
   authorized_actions: () =>
     permissions.authorizedActionsFor('credential-library') || [
@@ -22,13 +22,13 @@ export default factory.extend({
 
   attributes() {
     switch (this.type) {
-      case VAULT_GENERIC:
+      case TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC:
         return {
           http_method: 'GET',
           http_request_body: faker.random.word(),
           path: faker.system.directoryPath(),
         };
-      case VAULT_SSH_CERT:
+      case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT:
         return {
           username: faker.random.word(),
           key_type: faker.random.word(),

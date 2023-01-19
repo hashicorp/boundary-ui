@@ -7,14 +7,19 @@ export const options = {
   http_method: ['GET', 'POST'],
 };
 
-export const VAULT = 'vault';
-export const VAULT_GENERIC = 'vault-generic';
-export const VAULT_SSH_CERT = 'vault-ssh-cert';
+// TODO: Remove `vault` type once we enable the feature
+export const TYPE_CREDENTIAL_LIBRARY_VAULT = 'vault';
+export const TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC = 'vault-generic';
+export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT = 'vault-ssh-cert';
 
 /**
  * Supported Credential Library types.
  */
-export const types = [VAULT_GENERIC, VAULT_SSH_CERT];
+export const TYPES_CREDENTIAL_LIBRARY = Object.freeze([
+  TYPE_CREDENTIAL_LIBRARY_VAULT,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+]);
 
 export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {
   // =attributes
@@ -24,7 +29,7 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    * @type {boolean}
    */
   get isUnknown() {
-    return !types.includes(this.type);
+    return !TYPES_CREDENTIAL_LIBRARY.includes(this.type);
   }
 
   /**
@@ -32,7 +37,19 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    * @type {boolean}
    */
   get isVault() {
-    return this.type === VAULT_GENERIC || this.type === VAULT;
+    return (
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT ||
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC ||
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT
+    );
+  }
+
+  /**
+   * True if credential is a generic vault type.
+   * @type {boolean}
+   */
+  get isVaultGeneric() {
+    return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
   }
 
   /**
@@ -40,6 +57,6 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    * @type {boolean}
    */
   get isVaultSSHCert() {
-    return this.type === VAULT_SSH_CERT;
+    return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT;
   }
 }
