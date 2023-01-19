@@ -95,6 +95,7 @@ export default class ScopesScopeTargetsRoute extends Route {
       throw e;
     }
   }
+
   /**
    * Deletes a target and redirects to targets index.
    * @param {TargetModel} target

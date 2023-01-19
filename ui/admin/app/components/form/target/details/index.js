@@ -16,18 +16,13 @@ export default class FormTargetComponent extends Component {
   // =properties
   @tracked egressWorkerFilterEnabled =
     this.args.model.egress_worker_filter?.length;
-
-  @tracked migrateWorkerFilter = false;
+  @tracked showUpdateFiltersButton = !this.args.model.worker_filter;
+  // @tracked showtheFilters = this.args.model.egress_worker_filter?.length;
   // =services
 
   @service confirm;
   @service intl;
 
-  // =properties
-  @tracked egressWorkerFilterEnabled =
-    this.args.model.egress_worker_filter?.length;
-
-  @tracked updateDeprecatedWorkerFilter = false;
   // =services
 
   // =properties
@@ -64,13 +59,12 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get showUpdateWorkerFilterButton() {
-    return (
-      !this.args.model.isNew &&
-      this.args.model.worker_filter &&
-      !this.migrateWorkerFilter
-    );
+    return this.args.model.worker_filter && !this.showUpdateFiltersButton;
   }
 
+  get showEgressFilter() {
+    return !this.args.model.worker_filter?.length && !this.args.model.isNew;
+  }
   //actions
   @action
   toggleEgressWorkerFilter() {
@@ -79,9 +73,8 @@ export default class FormTargetComponent extends Component {
   // =actions
   @action
   migrateWorkerFilters() {
-    this.migrateWorkerFilter = true;
     this.egressWorkerFilterEnabled = true;
-    // When update is clicked, copy worker filter value into egress filter.
+    this.showUpdateFiltersButton = false;
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
     this.args.model.worker_filter = '';
   }
