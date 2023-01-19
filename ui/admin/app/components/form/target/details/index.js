@@ -13,6 +13,11 @@ const icons = {
 };
 
 export default class FormTargetComponent extends Component {
+  // =properties
+  @tracked egressWorkerFilterEnabled =
+    this.args.model.egress_worker_filter?.length;
+
+  @tracked migrateWorkerFilter = false;
   // =services
 
   @service confirm;
@@ -62,7 +67,7 @@ export default class FormTargetComponent extends Component {
     return (
       !this.args.model.isNew &&
       this.args.model.worker_filter &&
-      !this.updateDeprecatedWorkerFilter
+      !this.migrateWorkerFilter
     );
   }
 
@@ -70,15 +75,15 @@ export default class FormTargetComponent extends Component {
   @action
   toggleEgressWorkerFilter() {
     this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
-    console.log(this.egressWorkerFilterEnabled, 'egress fileddd');
   }
   // =actions
   @action
-  updateDeprecatedFilter() {
-    this.updateDeprecatedWorkerFilter = true;
+  migrateWorkerFilters() {
+    this.migrateWorkerFilter = true;
     this.egressWorkerFilterEnabled = true;
-    //when update is clicked, copy worker filter value into egress filter
+    // When update is clicked, copy worker filter value into egress filter.
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.worker_filter = '';
   }
 
   @action

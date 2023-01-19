@@ -494,7 +494,14 @@
 }
 
 // target worker filters
-.target-worker-filters {
+// note re Button margin: this is a temp solution,
+// when we migrate buttons to HDS, we will analyze the spacing
+// issue in all scenarios to come up with an efficient solution
+.update-filter-button {
+  margin-bottom: 1.5rem;
+}
+
+.target-worker-filter {
   .hds-form-field--layout-vertical {
     margin-left: 2.5rem;
   }
