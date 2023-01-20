@@ -7,8 +7,6 @@ export const options = {
   http_method: ['GET', 'POST'],
 };
 
-// TODO: Remove `vault` type once we enable the feature
-export const TYPE_CREDENTIAL_LIBRARY_VAULT = 'vault';
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC = 'vault-generic';
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT = 'vault-ssh-cert';
 
@@ -16,7 +14,6 @@ export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT = 'vault-ssh-cert';
  * Supported Credential Library types.
  */
 export const TYPES_CREDENTIAL_LIBRARY = Object.freeze([
-  TYPE_CREDENTIAL_LIBRARY_VAULT,
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
 ]);
@@ -38,7 +35,6 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    */
   get isVault() {
     return (
-      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT ||
       this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC ||
       this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT
     );
