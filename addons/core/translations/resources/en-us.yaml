@@ -380,6 +380,14 @@ target:
       ingress-worker: Ingress worker
       host: Host
       network: Private network
+    filter-explainer:
+      any-worker: In this configuration, the client will attemt to connect through any client-accessible worker.
+      egress-worker: In this configuration, the client will attemt to connect through any filtered egress worker.
+      ingress-worker: In this configuration, the client will attempt to conect through any filtered ingress worker.
+      hcp-worker: In this configuration, the client will attempt to connect through any HCP-managed worker.
+      ent-dual-egress-on: In this configuration, the client will attempt to  connect through any client-accessible "frontline" worker and reach the host through any filtered egress worker.
+      hcp-dual-egress-on: In this configuration, the client will attempt to connect through any HC-managed worker and reach the host through any filtered egress worker.
+      dual-egress-on-ingress-on: In this configuration, the client will attempt to connect through any filtered ingress worker and reach the house through any filtered egress worker.
     egress_worker_filter:
       title: Egress worker filter
       description: Optional. Specify workers that have access to the target (such as within a private network).

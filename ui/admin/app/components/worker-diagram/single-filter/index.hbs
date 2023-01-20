@@ -15,6 +15,11 @@
       </D.Item>
     </D.Group>
   </OrderedSeriesDiagram>
+  <div class='target-worker-filter-explainer'>
+    <Hds::Form::HelperText>
+      {{t 'resources.target.workers.filter-explainer.egress-worker'}}
+    </Hds::Form::HelperText>
+  </div>
 {{else}}
   <OrderedSeriesDiagram data-test-single-filter-egress-off as |D|>
     <D.Item @icon='user'>
@@ -27,4 +32,9 @@
       {{t 'resources.target.workers.diagram.host'}}
     </D.Item>
   </OrderedSeriesDiagram>
+  <div class='target-worker-filter-explainer'>
+    <Hds::Form::HelperText>
+      {{t 'resources.target.workers.filter-explainer.any-worker'}}
+    </Hds::Form::HelperText>
+  </div>
 {{/if}}
