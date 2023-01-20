@@ -19,6 +19,11 @@
         </D.Item>
       </D.Group>
     </OrderedSeriesDiagram>
+    <div class='target-worker-filter-explainer'>
+      <Hds::Form::HelperText>
+        {{t 'resources.target.workers.filter-explainer.hcp-dual-egress-on'}}
+      </Hds::Form::HelperText>
+    </div>
   {{else if @ingressFilter}}
     <OrderedSeriesDiagram
       data-test-dual-filter-hcp-egress-off-ingress-on
@@ -34,6 +39,11 @@
         {{t 'resources.target.workers.diagram.host'}}
       </D.Item>
     </OrderedSeriesDiagram>
+    <div class='target-worker-filter-explainer'>
+      <Hds::Form::HelperText>
+        {{t 'resources.target.workers.filter-explainer.ingress-worker'}}
+      </Hds::Form::HelperText>
+    </div>
   {{else if @egressFilter}}
     <OrderedSeriesDiagram
       data-test-dual-filter-hcp-egress-on-ingress-off
@@ -61,6 +71,11 @@
         </D.Item>
       </D.Group>
     </OrderedSeriesDiagram>
+    <div class='target-worker-filter-explainer'>
+      <Hds::Form::HelperText>
+        {{t 'resources.target.workers.filter-explainer.egress-on'}}
+      </Hds::Form::HelperText>
+    </div>
   {{else}}
     <OrderedSeriesDiagram
       data-test-dual-filter-hcp-egress-off-ingress-off
@@ -76,5 +91,10 @@
         {{t 'resources.target.workers.diagram.host'}}
       </D.Item>
     </OrderedSeriesDiagram>
+    <div class='target-worker-filter-explainer'>
+      <Hds::Form::HelperText>
+        {{t 'resources.target.workers.filter-explainer.hcp-worker'}}
+      </Hds::Form::HelperText>
+    </div>
   {{/if}}
 </div>
