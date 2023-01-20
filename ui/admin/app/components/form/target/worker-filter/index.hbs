@@ -17,12 +17,13 @@
 
   {{#if @toggleEnabled}}
     <Hds::Form::TextInput::Field
-      @value={{@value}}
-      disabled={{@disabled}}
       @isRequired={{false}}
       @isOptional={{true}}
+      @value={{@value}}
+      @isInvalid={{@isInvalid}}
       @type={{@type}}
       name={{@name}}
+      disabled={{@disabled}}
       {{on 'input' @onChange}}
       as |F|
     >

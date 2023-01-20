@@ -3,7 +3,6 @@ import { TYPES_TARGET } from 'api/models/target';
 import { loading } from 'ember-loading';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { notifyError } from 'core/decorators/notify';
 import { tracked } from '@glimmer/tracking';
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
@@ -79,7 +78,6 @@ export default class FormTargetComponent extends Component {
 
   @action
   @loading
-  @notifyError(({ message }) => message)
   async submit() {
     const target = this.args.model;
     const numHostSources = target.host_sources?.length;

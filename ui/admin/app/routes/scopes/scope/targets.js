@@ -55,7 +55,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
-  @notifyError(({ message }) => message, { catch: true })
+  @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
@@ -92,6 +92,7 @@ export default class ScopesScopeTargetsRoute extends Route {
       target.egress_worker_filter = egress_worker_filter;
       target.worker_filter = worker_filter;
       // rethrow the error in order to notify the user
+      console.log('in hhhehehehheh');
       throw e;
     }
   }
