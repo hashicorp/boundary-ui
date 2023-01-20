@@ -67,4 +67,50 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
     description: 'The path in Vault to request credentials from.',
   })
   path;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The username to use when making an SSH connection.',
+  })
+  user_name;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The desired key type to use when generating a private key.',
+  })
+  key_type;
+
+  @attr('number', {
+    isNestedAttribute: true,
+    description:
+      'Specifies the number of bits used when generating the private key. Not used if key type is ed25519',
+  })
+  key_bits;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'Specifies the requested time to live for the certificate.',
+  })
+  ttl;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description:
+      'Specifies the key id that the created certificate should have.',
+  })
+  key_id;
+
+  @attr('object-as-array', {
+    isNestedAttribute: true,
+    description:
+      'Specifies a map of the critical options that the certificate should be signed for.',
+  })
+  critical_options;
+
+  @attr('object-as-array', {
+    isNestedAttribute: true,
+    description:
+      'Specifies a map of the extensions that the certificate should be signed for.',
+  })
+  extensions;
 }
