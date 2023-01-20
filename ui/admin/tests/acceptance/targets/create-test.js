@@ -84,7 +84,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(find('[name="type"]:checked').value, TYPE_TARGET_SSH);
   });
 
-  test('can create type `ssh`', async function (assert) {
+  test('can create type `ssh` when `target-worker-filters-v2` is disabled', async function (assert) {
     featuresService.disable('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
@@ -110,6 +110,32 @@ module('Acceptance | targets | create', function (hooks) {
     );
   });
 
+  test('can create type `ssh` when `target-worker-filters-v2` is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(4);
+    const targetCount = getTargetCount();
+    const sshTargetCount = getSSHTargetCount();
+    await visit(urls.targets);
+
+    await click(`[href="${urls.newTarget}"]`);
+    await click('[value="ssh"]');
+    await fillIn('[name="name"]', 'random string');
+    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await fillIn('[name="egress_worker_filter"]', 'random filter');
+    await click('[type="submit"]');
+
+    assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
+    assert.strictEqual(getTargetCount(), targetCount + 1);
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1].name,
+      'random string'
+    );
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1]
+        .egressWorkerFilter,
+      'random filter'
+    );
+  });
   test('can create type `tcp` when `target-worker-filters-v2` is disabled', async function (assert) {
     featuresService.disable('target-worker-filters-v2');
     assert.expect(4);
@@ -135,7 +161,33 @@ module('Acceptance | targets | create', function (hooks) {
       'random filter'
     );
   });
+  test('can create type `tcp` when `target-worker-filters-v2` is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(4);
+    const targetCount = getTargetCount();
+    const tcpTargetCount = getTCPTargetCount();
+    await visit(urls.targets);
 
+    await click(`[href="${urls.newTarget}"]`);
+    await click('[value="tcp"]');
+    await fillIn('[name="name"]', 'random string');
+    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await fillIn('[name="egress_worker_filter"]', 'random filter');
+
+    await click('[type="submit"]');
+
+    assert.strictEqual(getTargetCount(), targetCount + 1);
+    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1].name,
+      'random string'
+    );
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1]
+        .egressWorkerFilter,
+      'random filter'
+    );
+  });
   test('default port is not marked required for SSH targets', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
@@ -206,6 +258,8 @@ module('Acceptance | targets | create', function (hooks) {
 
     await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
+    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
 
     assert.strictEqual(currentURL(), urls.targets);
@@ -218,10 +272,11 @@ module('Acceptance | targets | create', function (hooks) {
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
     await visit(urls.targets);
-
     await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
     await click('[value="ssh"]');
+    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
 
     assert.strictEqual(currentURL(), urls.targets);

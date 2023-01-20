@@ -111,7 +111,22 @@ module('Acceptance | targets | update', function (hooks) {
     assert.expect(2);
     await visit(urls.target);
     assert.dom('[name=worker_filter]').isVisible();
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     assert.dom('.hds-button').hasText('Update Filter');
+  });
+
+  test('onClick update filter should select the egress toggle and the worker_filter value is copied into egress_worker_filter', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(2);
+    await visit(urls.target);
+    assert.dom('[name=worker_filter]').isVisible();
+    const worker_filter_value = this.server.schema.targets.first().workerFilter;
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
+    await click('.hds-button[type="button"]', 'Update Filter');
+    assert.strictEqual(
+      this.server.schema.targets.first().egressWorkerFilter,
+      worker_filter_value
+    );
   });
 
   test('update old worker_filter with `egress_worker_filter` when it is selected and a value is entered', async function (assert) {
@@ -121,42 +136,40 @@ module('Acceptance | targets | update', function (hooks) {
 
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
-    await fillIn('[name="egress_worker_filter"]', 'random filter string');
+    //await click('.hds-form-toggle__control', 'Egress worker filter');
+    await fillIn('[name=egress_worker_filter]', 'random filter string');
     await click('.rose-form-actions [type="submit"]');
     assert.dom('[name=worker_filter]').doesNotExist();
     assert.dom('[name=egress_worker_filter]').hasValue('random filter string');
   });
 
-  test('show filter field when the `egress_worker_filter` toggled is enabled', async function (assert) {
+  test('show filter field when the `egress_worker_filter` toggle is on', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(1);
+    await visit(urls.target);
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
+    await click('.hds-button[type="button"]', 'Update Filter');
+    assert.dom('[name=egress_worker_filter]').isVisible();
+  });
+
+  test('hide filter field when the `egress_worker_filter` toggled is off', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     assert.expect(1);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
     await click('.hds-form-toggle__control', 'Egress worker filter');
-    assert.dom('[name=egress_worker_filter]').isVisible();
-  });
-
-  test('hide filter field when the `egress_worker_filter` toggled is disabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
-    await visit(urls.target);
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await click('.hds-button[type="button"]', 'Update Filter');
     assert.dom('[name=egress_worker_filter]').isNotVisible();
   });
 
-  test('clear `egress_worker_field` value from a target when the toggle is disabled and form is saved', async function (assert) {
+  test('clear `egress_worker_field` value from a target when the toggle is off and form is saved', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     assert.expect(5);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
-    await fillIn('[name="egress_worker_filter"]', 'random filter string');
+    await fillIn('[name=egress_worker_filter]', 'random filter string');
     await click('.rose-form-actions [type="submit"]');
-
     assert.strictEqual(currentURL(), urls.target);
     assert.strictEqual(
       this.server.schema.targets.first().egressWorkerFilter,
@@ -177,7 +190,6 @@ module('Acceptance | targets | update', function (hooks) {
   test('can cancel changes to existing target', async function (assert) {
     assert.expect(2);
     await visit(urls.targets);
-
     await click(`[href="${urls.target}"]`);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
