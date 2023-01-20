@@ -7,7 +7,15 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   // =services
 
   @service store;
-  @service features;
+  @service router;
+
+  // =attributes
+
+  queryParams = {
+    type: {
+      refreshModel: true,
+    },
+  };
 
   // =methods
 
@@ -15,13 +23,13 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    * Creates a new unsaved credential library in current credential store.
    * @return {CredentialLibraryModel}
    */
-  model() {
+  model({ type = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC }) {
     const { id: credential_store_id } = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
 
     return this.store.createRecord('credential-library', {
-      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+      type,
       credential_store_id,
     });
   }
