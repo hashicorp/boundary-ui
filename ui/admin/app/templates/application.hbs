@@ -32,12 +32,18 @@
               <Rose::Form as |form|>
                 <form.radioGroup
                   @name='theme'
-                  @selectedValue={{this.session.data.theme}}
+                  @selectedValue={{or
+                    this.session.data.theme
+                    'system-default-theme'
+                  }}
                   @changed={{route-action 'toggleTheme'}}
                   as |radioGroup|
                 >
                   <dropdown.item>
-                    <radioGroup.radio @label={{t 'themes.system'}} />
+                    <radioGroup.radio
+                      @label={{t 'themes.system'}}
+                      @value='system-default-theme'
+                    />
                   </dropdown.item>
                   <dropdown.item>
                     <radioGroup.radio
