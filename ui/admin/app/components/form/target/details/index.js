@@ -108,4 +108,16 @@ export default class FormTargetComponent extends Component {
     }
     await this.args.submit(target, this.egressWorkerFilterEnabled);
   }
+
+  /**
+   * Call passed cancel function.
+   * Unset selected filters.
+   */
+  @action
+  cancel() {
+    this.args.cancel();
+    // Reset the tracked variable for toggles after rollback
+    this.egressWorkerFilterEnabled =
+      this.args.model.egress_worker_filter?.length;
+  }
 }
