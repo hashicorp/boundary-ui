@@ -233,15 +233,6 @@
       <WorkerDiagram::SingleFilter
         @egressFilter={{this.egressWorkerFilterEnabled}}
       />
-      <div class='target-worker-filter-explainer'>
-        <Hds::Form::HelperText>
-          {{#if this.egressWorkerFilterEnabled}}
-            {{t 'resources.target.workers.filter-explainer.egress-worker'}}
-          {{else}}
-            {{t 'resources.target.workers.filter-explainer.any-worker'}}
-          {{/if}}
-        </Hds::Form::HelperText>
-      </div>
       <Form::Target::WorkerFilter
         @name='egress_worker_filter'
         @type='text'
@@ -263,7 +254,6 @@
           </F.Error>
         {{/if}}
       </Form::Target::WorkerFilter>
-
     {{/if}}
   {{else}}
     <Hds::Form::TextInput::Field
