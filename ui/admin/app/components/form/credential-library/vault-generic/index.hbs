@@ -1,0 +1,168 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <Hds::Form::TextInput::Field
+    @isRequired={{false}}
+    @isOptional={{true}}
+    @value={{@model.name}}
+    @isInvalid={{@model.errors.name}}
+    @type='text'
+    name='name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    {{#if @model.errors.name}}
+      <F.Error as |E|>
+        {{#each @model.errors.name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @isRequired={{false}}
+    @isOptional={{true}}
+    @value={{@model.description}}
+    @isInvalid={{@model.errors.description}}
+    name='description'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
+
+  {{#if (and @model.isNew (feature-flag 'credential-library-vault-ssh-cert'))}}
+    <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
+      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      {{#each this.types as |type|}}
+        <G.RadioCard
+          @value={{type}}
+          @maxWidth='20rem'
+          @checked={{eq type @model.type}}
+          {{on 'input' (fn @changeType type)}}
+          as |R|
+        >
+          <R.Label>{{t
+              (concat 'resources.credential-library.types.' type)
+            }}</R.Label>
+          <R.Description>{{t
+              (concat 'resources.credential-library.help.' type)
+            }}</R.Description>
+        </G.RadioCard>
+      {{/each}}
+    </Hds::Form::RadioCard::Group>
+  {{else}}
+    <InfoField
+      @value={{t (concat 'resources.credential-library.types.' @model.type)}}
+      as |F|
+    >
+      <F.Label>{{t 'form.type.label'}}</F.Label>
+      <F.HelperText>
+        {{t (concat 'resources.credential-library.help.' @model.type)}}
+      </F.HelperText>
+    </InfoField>
+  {{/if}}
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @isOptional={{false}}
+    @value={{@model.path}}
+    @isInvalid={{@model.errors.path}}
+    @type='text'
+    name='vault_path'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'path')}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.credential-library.form.vault_path.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.credential-library.form.vault_path.help'
+      }}</F.HelperText>
+    {{#if @model.errors.path}}
+      <F.Error as |E|>
+        {{#each @model.errors.path as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <form.fieldset>
+    <:title>{{t 'resources.credential-library.form.http_method.label'}}</:title>
+    <:description>
+      {{t 'resources.credential-library.form.http_method.help'}}
+    </:description>
+    <:body>
+      <Hds::Form::Radio::Group
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event @model 'http_method')}}
+        @layout='horizontal'
+        @name='http_method'
+        as |G|
+      >
+        {{#each this.httpMethodOptions as |httpMethod|}}
+          <G.Radio::Field
+            checked={{eq @model.http_method httpMethod}}
+            @value={{httpMethod}}
+            as |F|
+          >
+            <F.Label>{{httpMethod}}</F.Label>
+          </G.Radio::Field>
+        {{/each}}
+      </Hds::Form::Radio::Group>
+    </:body>
+  </form.fieldset>
+
+  {{#if this.isHttpRequestBodyAllowed}}
+    <Hds::Form::Textarea::Field
+      @isRequired={{true}}
+      @isOptional={{false}}
+      @value={{@model.http_request_body}}
+      @isInvalid={{@model.errors.http_request_body}}
+      name='http_request_body'
+      disabled={{form.disabled}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.credential-library.form.http_request_body.label'
+        }}</F.Label>
+      <F.HelperText>{{t
+          'resources.credential-library.form.http_request_body.help'
+        }}</F.HelperText>
+      {{#if @model.errors.http_request_body}}
+        <F.Error as |E|>
+          {{#each @model.errors.http_request_body as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::Textarea::Field>
+  {{/if}}
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+
+</Rose::Form>

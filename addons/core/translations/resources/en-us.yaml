@@ -459,6 +459,9 @@ credential-library:
   types:
     vault-generic: Generic Secrets
     vault-ssh-cert: SSH Certificate Credentials
+  help:
+    vault-generic: Authorize sessions using credentials brokered by Vault
+    vault-ssh-cert: Authorize sessions using the SSH Secrets Engine in Vault
 credential:
   title: Credential
   title_plural: Credentials

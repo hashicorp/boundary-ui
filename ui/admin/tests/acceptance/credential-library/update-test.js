@@ -130,7 +130,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       'The request was invalid.'
     );
     assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
+      find('.hds-form-error__message').textContent.trim(),
       'Name is required.'
     );
   });
