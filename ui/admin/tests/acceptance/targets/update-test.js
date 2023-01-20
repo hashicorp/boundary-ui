@@ -129,21 +129,7 @@ module('Acceptance | targets | update', function (hooks) {
     );
   });
 
-  test('update old worker_filter with `egress_worker_filter` when it is selected and a value is entered', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    assert.expect(2);
-    await visit(urls.target);
-
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await click('.hds-button[type="button"]', 'Update Filter');
-    //await click('.hds-form-toggle__control', 'Egress worker filter');
-    await fillIn('[name=egress_worker_filter]', 'random filter string');
-    await click('.rose-form-actions [type="submit"]');
-    assert.dom('[name=worker_filter]').doesNotExist();
-    assert.dom('[name=egress_worker_filter]').hasValue('random filter string');
-  });
-
-  test('show filter field when the `egress_worker_filter` toggle is on', async function (assert) {
+  test('show filter input field when the `egress_worker_filter` toggle is on', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     assert.expect(1);
     await visit(urls.target);
@@ -152,7 +138,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.dom('[name=egress_worker_filter]').isVisible();
   });
 
-  test('hide filter field when the `egress_worker_filter` toggled is off', async function (assert) {
+  test('hide filter input field when the `egress_worker_filter` toggled is off', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     assert.expect(1);
     await visit(urls.target);
@@ -191,6 +177,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.expect(2);
     await visit(urls.targets);
     await click(`[href="${urls.target}"]`);
+
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
@@ -232,15 +219,22 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can discard unsaved target changes via dialog', async function (assert) {
-    assert.expect(5);
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(7);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, 'random string');
+    assert.notEqual(
+      instances.target.egressWorkerFilter,
+      'random worker string'
+    );
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
+    await click('.hds-button[type="button"]', 'Update Filter');
+    await fillIn('[name="egress_worker_filter"]', 'random worker string');
     assert.strictEqual(currentURL(), urls.target);
     await click(`[href="${urls.targets}"]`);
     assert.dom('.rose-dialog').exists();
@@ -248,10 +242,15 @@ module('Acceptance | targets | update', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targets);
     assert.notEqual(this.server.schema.targets.first().name, 'random string');
+    assert.notEqual(
+      this.server.schema.targets.first().egressWorkerFilter,
+      'random worker string'
+    );
   });
 
   test('can click cancel on discard dialog box for unsaved target changes', async function (assert) {
-    assert.expect(5);
+    featuresService.enable('target-worker-filters-v2');
+    assert.expect(6);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, 'random string');
@@ -260,6 +259,9 @@ module('Acceptance | targets | update', function (hooks) {
     await click(`[href="${urls.target}"]`);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
+
+    await click('.hds-button[type="button"]', 'Update Filter');
+    await fillIn('[name="egress_worker_filter"]', 'random filter');
     assert.strictEqual(currentURL(), urls.target);
     await click(`[href="${urls.targets}"]`);
     assert.dom('.rose-dialog').exists();
@@ -267,6 +269,10 @@ module('Acceptance | targets | update', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.target);
     assert.notEqual(this.server.schema.targets.first().name, 'random string');
+    assert.notEqual(
+      this.server.schema.targets.first().egressWorkerFilter,
+      'random string'
+    );
   });
 
   test('cannot make changes to an existing target without proper authorization', async function (assert) {
