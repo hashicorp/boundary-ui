@@ -56,7 +56,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
-  @notifyError(({ message }) => message)
+  @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
@@ -102,33 +102,6 @@ export default class ScopesScopeTargetsRoute extends Route {
     }
 
     await this.save(target);
-  }
-
-  /**
-   * save target with filters based on egress/ingress toggle
-   * @param {object} target
-   * @param {boolean} egressEnabled
-   * @return {Promise}
-   */
-  @action
-  @loading
-  async saveWithToggles(target, egressEnabled = true) {
-    // retain filter values in case of save failure
-    const { egress_worker_filter, worker_filter } = target;
-
-    // if the filter toggles are off, clear the filter fields
-    if (!egressEnabled) {
-      target.egress_worker_filter = '';
-    }
-    try {
-      await this.save(target);
-    } catch (e) {
-      // replace values on error
-      target.egress_worker_filter = egress_worker_filter;
-      target.worker_filter = worker_filter;
-      // rethrow the error in order to notify the user
-      throw e;
-    }
   }
 
   /**
