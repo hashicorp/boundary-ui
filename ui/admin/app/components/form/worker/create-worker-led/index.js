@@ -113,7 +113,7 @@ ${listenerText}
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\\
 sudo apt-get update && sudo apt-get install boundary ;\\
 boundary server -config="${configPath}/pki-worker.hcl"`;
-    const hcpContent = `wget -q https://releases.hashicorp.com/boundary-worker/0.11.2+hcp/boundary-worker_0.11.2+hcp_linux_amd64.zip ;\\
+    const hcpContent = `wget -q https://releases.hashicorp.com/boundary-worker/0.11.2+hcp/boundary-worker_0.12.0+hcp_linux_amd64.zip ;\\
 sudo apt-get update && sudo apt-get install unzip ;\\
 unzip *.zip ;\\
 ./boundary-worker server -config="${configPath}/pki-worker.hcl"`;
