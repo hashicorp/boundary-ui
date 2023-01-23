@@ -21,12 +21,8 @@
       {{on 'input' @onChange}}
       as |F|
     >
-      <F.Label>{{t
-          (concat 'resources.target.workers.' @name '.filter.title')
-        }}</F.Label>
-      <F.HelperText>{{t
-          (concat 'resources.target.workers.' @name '.filter.description')
-        }}
+      <F.Label>{{t (concat 'resources.target.workers.filter.title')}}</F.Label>
+      <F.HelperText>{{t (concat 'resources.target.workers.filter.description')}}
         <Hds::Link::Inline @href={{doc-url 'target.worker-filters'}}>
           {{t 'actions.learn-more'}}
         </Hds::Link::Inline>

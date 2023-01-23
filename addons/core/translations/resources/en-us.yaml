@@ -388,13 +388,17 @@ target:
       ent-dual-egress-on: In this configuration, the client will attempt to  connect through any client-accessible "frontline" worker and reach the host through any filtered egress worker.
       hcp-dual-egress-on: In this configuration, the client will attempt to connect through any HC-managed worker and reach the host through any filtered egress worker.
       dual-egress-on-ingress-on: In this configuration, the client will attempt to connect through any filtered ingress worker and reach the house through any filtered egress worker.
+    filter:
+      title: Filter
+      description: Boolean expression.
+      update_filter: Update Filter
     egress_worker_filter:
       title: Egress worker filter
       description: Optional. Specify workers that have access to the target (such as within a private network).
-      filter:
-        title: Filter
-        description: Boolean expression.
-        update_filter: Update Filter
+
+    ingress_worker_filter:
+      title: Ingress worker filter
+      description: Optional. Specify workers Boundary should use to start the route to this target.
 credential-store:
   title: Credential Store
   title_plural: Credential Stores

@@ -16,7 +16,8 @@ export default class FormTargetComponent extends Component {
   // =properties
   @tracked egressWorkerFilterEnabled =
     this.args.model.egress_worker_filter?.length;
-
+  @tracked igressWorkerFilterEnabled =
+    this.args.model.ingress_worker_filter?.length;
   @tracked migrateWorkerFilter = false;
   // =services
 
@@ -69,13 +70,24 @@ export default class FormTargetComponent extends Component {
   toggleEgressWorkerFilter() {
     this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
   }
+
+  //actions
+  @action
+  toggleIngressWorkerFilter() {
+    this.igressWorkerFilterEnabled = !this.igressWorkerFilterEnabled;
+  }
   // =actions
   @action
   migrateWorkerFilters() {
     this.migrateWorkerFilter = true;
     this.egressWorkerFilterEnabled = true;
+    this.ingressWorkerFilterEnabled = true;
+    //if flag is eabled do this...
+
     // When update is clicked, copy worker filter value into egress filter.
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.ingress_worker_filter = this.args.model.worker_filter;
+
     this.args.model.worker_filter = '';
   }
 
