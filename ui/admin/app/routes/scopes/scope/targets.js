@@ -13,6 +13,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   @service session;
   @service can;
   @service router;
+  @service confirm;
 
   // =methods
 
@@ -67,6 +68,40 @@ export default class ScopesScopeTargetsRoute extends Route {
       await this.router.transitionTo('scopes.scope.targets');
     }
     this.refresh();
+  }
+
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  async saveWithAddress(target) {
+    const numHostSources = target.host_sources?.length;
+    const address = target.address;
+    if (address && numHostSources) {
+      try {
+        await this.confirm.confirm(
+          this.intl.t(
+            'resources.target.questions.delete-host-sources.message',
+            { numHostSources }
+          ),
+          {
+            title: 'resources.target.questions.delete-host-sources.title',
+            confirm: 'actions.remove-resources',
+          }
+        );
+      } catch (e) {
+        // if the user denies, do nothing and return
+        return;
+      }
+
+      await target.removeHostSources(
+        target.host_sources.map((hs) => hs.host_source_id)
+      );
+      // After saving the host sources, the model gets reset to an empty address,
+      // so we need to update the address with the previous value before saving
+      target.address = address;
+    }
+
+    await this.save(target);
   }
 
   /**

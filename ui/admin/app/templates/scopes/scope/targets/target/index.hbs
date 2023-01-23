@@ -19,7 +19,7 @@
   <page.body>
     <Form::Target
       @model={{@model}}
-      @submit={{route-action 'saveWithToggles'}}
+      @submit={{route-action 'saveWithAddress' @model}}
       @cancel={{route-action 'cancel' @model}}
     />
   </page.body>

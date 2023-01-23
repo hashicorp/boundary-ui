@@ -177,7 +177,6 @@ module('Acceptance | targets | update', function (hooks) {
     assert.expect(2);
     await visit(urls.targets);
     await click(`[href="${urls.target}"]`);
-
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
