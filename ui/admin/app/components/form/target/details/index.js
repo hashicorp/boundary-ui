@@ -1,12 +1,11 @@
 import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
-import { loading } from 'ember-loading';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { notifyError } from 'core/decorators/notify';
 import { tracked } from '@glimmer/tracking';
+
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
+const filterTypes = ['egress_worker_filter', 'ingress_worker_filter'];
 const icons = {
   ssh: 'terminal-screen',
   tcp: 'network',
@@ -16,15 +15,11 @@ export default class FormTargetComponent extends Component {
   // =properties
   @tracked egressWorkerFilterEnabled =
     this.args.model.egress_worker_filter?.length;
-  @tracked igressWorkerFilterEnabled =
+  @tracked ingressWorkerFilterEnabled =
     this.args.model.ingress_worker_filter?.length;
-  @tracked migrateWorkerFilter = false;
+
   // =services
-
-  @service confirm;
-  @service intl;
-
-  // =properties
+  @service features;
   /**
    * maps resource type with icon
    * @type {object}
@@ -58,17 +53,25 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get showUpdateWorkerFilterButton() {
-    return (
-      !this.args.model.isNew &&
-      this.args.model.worker_filter &&
-      !this.migrateWorkerFilter
-    );
+    return this.args.model.worker_filter?.length;
+  }
+
+  get targetFilterTypes() {
+    if (!this.args.model.worker_filter?.length && !this.args.model.isNew) {
+      return this.features.isEnabled('target-worker-filters-v2-ingress')
+        ? filterTypes
+        : filterTypes.filter((type) => type !== 'ingress_worker_filter');
+    }
   }
 
   //actions
   @action
   toggleEgressWorkerFilter() {
     this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
+    this.ingressWorkerFilterEnabled = !this.ingressWorkerFilterEnabled;
+    if (!this.egressWorkerFilterEnabled || !this.ingressWorkerFilterEnabled) {
+      this.args.model.egress_worker_filter = '';
+    }
   }
 
   //actions
@@ -79,50 +82,27 @@ export default class FormTargetComponent extends Component {
   // =actions
   @action
   migrateWorkerFilters() {
-    this.migrateWorkerFilter = true;
     this.egressWorkerFilterEnabled = true;
     this.ingressWorkerFilterEnabled = true;
-    //if flag is eabled do this...
-
-    // When update is clicked, copy worker filter value into egress filter.
+    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
     this.args.model.ingress_worker_filter = this.args.model.worker_filter;
 
     this.args.model.worker_filter = '';
   }
 
+  /**
+   * Call passed cancel function.
+   * Unset selected filters.
+   */
   @action
-  @loading
-  @notifyError(({ message }) => message)
-  async submit() {
-    const target = this.args.model;
-    const numHostSources = target.host_sources?.length;
-    const address = target.address;
-    if (address && numHostSources) {
-      try {
-        await this.confirm.confirm(
-          this.intl.t(
-            'resources.target.questions.delete-host-sources.message',
-            { numHostSources }
-          ),
-          {
-            title: 'resources.target.questions.delete-host-sources.title',
-            confirm: 'actions.remove-resources',
-          }
-        );
-      } catch (e) {
-        // if the user denies, do nothing and return
-        return;
-      }
+  cancel() {
+    this.args.cancel();
+    // Reset the tracked variable for toggles after rollback
+    this.egressWorkerFilterEnabled =
+      this.args.model.egress_worker_filter?.length;
 
-      await target.removeHostSources(
-        target.host_sources.map((hs) => hs.host_source_id)
-      );
-      // After saving the host sources, the model gets reset to an empty address,
-      // so we need to update the address with the previous value before saving
-      target.address = address;
-    }
-
-    await this.args.submit();
+    this.ingressWorkerFilterEnabled =
+      this.args.model.egress_worker_filter?.length;
   }
 }
