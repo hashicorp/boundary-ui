@@ -15,8 +15,6 @@ export default class FormTargetComponent extends Component {
   @tracked egressWorkerFilterEnabled =
     this.args.model.egress_worker_filter?.length;
 
-  @tracked migrateWorkerFilter = false;
-
   // =properties
   /**
    * maps resource type with icon
@@ -51,25 +49,40 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get showUpdateWorkerFilterButton() {
-    return (
-      !this.args.model.isNew &&
-      this.args.model.worker_filter &&
-      !this.migrateWorkerFilter
-    );
+    return this.args.model.worker_filter?.length;
+  }
+
+  get showEgressFilter() {
+    return !this.args.model.worker_filter?.length && !this.args.model.isNew;
   }
 
   //actions
   @action
   toggleEgressWorkerFilter() {
     this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
+    if (!this.egressWorkerFilterEnabled) {
+      this.args.model.egress_worker_filter = '';
+    }
   }
+
   // =actions
   @action
   migrateWorkerFilters() {
-    this.migrateWorkerFilter = true;
     this.egressWorkerFilterEnabled = true;
-    // When update is clicked, copy worker filter value into egress filter.
+    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
     this.args.model.worker_filter = '';
+  }
+
+  /**
+   * Call passed cancel function.
+   * Unset selected filters.
+   */
+  @action
+  cancel() {
+    this.args.cancel();
+    // Reset the tracked variable for toggles after rollback
+    this.egressWorkerFilterEnabled =
+      this.args.model.egress_worker_filter?.length;
   }
 }

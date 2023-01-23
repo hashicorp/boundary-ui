@@ -1,8 +1,11 @@
 <div class='target-worker-filter'>
+
   <Hds::Form::Toggle::Field
     name='target-worker-filter-toggle'
     checked={{@checked}}
     disabled={{@disabled}}
+    @isRequired={{false}}
+    @isOptional={{true}}
     {{on 'change' @toggleAction}}
     as |F|
   >
@@ -14,10 +17,13 @@
 
   {{#if @toggleEnabled}}
     <Hds::Form::TextInput::Field
+      @isRequired={{false}}
+      @isOptional={{true}}
       @value={{@value}}
-      disabled={{@disabled}}
+      @isInvalid={{@isInvalid}}
       @type={{@type}}
       name={{@name}}
+      disabled={{@disabled}}
       {{on 'input' @onChange}}
       as |F|
     >
