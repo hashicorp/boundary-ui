@@ -367,7 +367,7 @@ target:
         description: Select injected Application credential sources to assign to this target.
   workers:
     title: Workers
-    description: Optional. You can customize how your workers route traffic to this target by setting up a filter that matches specific worker tags. If your target is in a private network, we recommend setting up an egress filter to specify a worker inside the network so that Boundary can access the host. Ingress and egress filters are allowed to select the same worker.
+    description: You can customize how your workers route traffic to this target by setting up a filter that matches specific worker tags. If your target is in a private network, we recommend setting up an egress filter to specify a worker inside the network so that Boundary can access the host. Ingress and egress filters are allowed to select the same worker.
     deprecation_message:
       title: Worker filters have been updated
       description: This target is configured using an older version of worker filters. You can update to the new filters but this will also update this field in the Boundary API. We will continue to use this filter until you update.
@@ -390,7 +390,7 @@ target:
       dual-egress-on-ingress-on: In this configuration, the client will attempt to connect through any filtered ingress worker and reach the house through any filtered egress worker.
     egress_worker_filter:
       title: Egress worker filter
-      description: Optional. Specify workers that have access to the target (such as within a private network).
+      description: Specify workers that have access to the target (such as within a private network).
       filter:
         title: Filter
         description: Boolean expression.

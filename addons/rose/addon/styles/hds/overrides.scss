@@ -3,3 +3,11 @@
 [class^='hds-form-group'] {
   margin-bottom: 1.5rem;
 }
+/* stylelint-disable selector-class-pattern */
+.hds-form-group__control-fields-wrapper {
+  .hds-form-group__legend ~ & {
+    .hds-form-label {
+      font-weight: var(--token-typography-font-weight-semibold);
+    }
+  }
+}
