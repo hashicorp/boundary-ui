@@ -139,7 +139,5 @@ Router.map(function () {
     this.route('change-password');
   });
 
-  this.route('onboarding', function () {
-    this.route('quick-setup', function () {});
-  });
+  this.route('onboarding', function () {});
 });
