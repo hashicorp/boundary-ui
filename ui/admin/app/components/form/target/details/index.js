@@ -1,11 +1,11 @@
 import Component from '@glimmer/component';
-import { TYPES_TARGET } from 'api/models/target';
+import { TYPES_TARGET, FILTER_TYPES_TARGET } from 'api/models/target';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
-const filterTypes = ['egress_worker_filter', 'ingress_worker_filter'];
 const icons = {
   ssh: 'terminal-screen',
   tcp: 'network',
@@ -17,7 +17,10 @@ export default class FormTargetComponent extends Component {
     this.args.model.egress_worker_filter?.length;
   @tracked ingressWorkerFilterEnabled =
     this.args.model.ingress_worker_filter?.length;
-
+  @tracked isEnterprise = this.features.isEnabled(
+    'target-worker-filters-v2-ingress'
+  );
+  @tracked isHCP = this.features.isEnabled('target-worker-filters-v2-hcp');
   // =services
   @service features;
   /**
@@ -31,6 +34,9 @@ export default class FormTargetComponent extends Component {
     }));
   }
 
+  get filters() {
+    return FILTER_TYPES_TARGET;
+  }
   /**
    * returns icons based on the model type
    * unlike other resources, this is needed as we use generic details component for both tcp and ssh
@@ -56,21 +62,47 @@ export default class FormTargetComponent extends Component {
     return this.args.model.worker_filter?.length;
   }
 
-  get targetFilterTypes() {
-    if (!this.args.model.worker_filter?.length && !this.args.model.isNew) {
-      return this.features.isEnabled('target-worker-filters-v2-ingress')
-        ? filterTypes
-        : filterTypes.filter((type) => type !== 'ingress_worker_filter');
-    }
+  /**
+   * determines when the filters should be shown
+   * @type {boolean}
+   */
+  get showTargetFilters() {
+    return !this.args.model.worker_filter?.length;
+  }
+
+  /**
+   * determines when the dual filters should be shown
+   * @type {boolean}
+   */
+  get showDualTargetWorkerFilters() {
+    return this.isHCP || this.isEnterprise;
+  }
+
+  /**
+   * determines when the single filter should be shown
+   * @type {boolean}
+   */
+  get showOSSTargetWorkerFilters() {
+    return (
+      this.features.isEnabled('target-worker-filters-v2') &&
+      FILTER_TYPES_TARGET.filter((type) => type !== 'ingress_worker_filter')
+    );
   }
 
   //actions
   @action
-  toggleEgressWorkerFilter() {
-    this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
-    this.ingressWorkerFilterEnabled = !this.ingressWorkerFilterEnabled;
-    if (!this.egressWorkerFilterEnabled || !this.ingressWorkerFilterEnabled) {
+  toggleFilter(type) {
+    if (type === 'egress_worker_filter') {
+      this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
+    } else {
+      this.ingressWorkerFilterEnabled = !this.ingressWorkerFilterEnabled;
+    }
+
+    if (!this.egressWorkerFilterEnabled) {
       this.args.model.egress_worker_filter = '';
+    }
+    if (!this.ingressWorkerFilterEnabled) {
+      this.args.model.ingress_worker_filter = '';
     }
   }
 
@@ -87,7 +119,6 @@ export default class FormTargetComponent extends Component {
     // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
     this.args.model.ingress_worker_filter = this.args.model.worker_filter;
-
     this.args.model.worker_filter = '';
   }
 
@@ -99,10 +130,11 @@ export default class FormTargetComponent extends Component {
   cancel() {
     this.args.cancel();
     // Reset the tracked variable for toggles after rollback
+
     this.egressWorkerFilterEnabled =
       this.args.model.egress_worker_filter?.length;
 
     this.ingressWorkerFilterEnabled =
-      this.args.model.egress_worker_filter?.length;
+      this.args.model.ingress_worker_filter?.length;
   }
 }

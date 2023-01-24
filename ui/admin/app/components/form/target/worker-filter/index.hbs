@@ -6,7 +6,7 @@
     disabled={{@disabled}}
     @isRequired={{false}}
     @isOptional={{true}}
-    {{on 'change' @toggleAction}}
+    {{on 'change' (fn @toggleAction @name)}}
     as |F|
   >
     <F.Label>{{t (concat 'resources.target.workers.' @name '.title')}}</F.Label>
