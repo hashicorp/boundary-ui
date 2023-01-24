@@ -136,6 +136,7 @@ module('Acceptance | targets | create', function (hooks) {
       'random filter'
     );
   });
+
   test('can create type `tcp` when `target-worker-filters-v2` is disabled', async function (assert) {
     featuresService.disable('target-worker-filters-v2');
     assert.expect(4);
@@ -161,6 +162,7 @@ module('Acceptance | targets | create', function (hooks) {
       'random filter'
     );
   });
+
   test('can create type `tcp` when `target-worker-filters-v2` is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     assert.expect(4);
@@ -188,6 +190,75 @@ module('Acceptance | targets | create', function (hooks) {
       'random filter'
     );
   });
+
+  test('can create type `tcp` when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    featuresService.enable('target-worker-filters-v2-ingress');
+    assert.expect(4);
+    const targetCount = getTargetCount();
+    const tcpTargetCount = getTCPTargetCount();
+    await visit(urls.targets);
+
+    await click(`[href="${urls.newTarget}"]`);
+    await click('[value="tcp"]');
+    await fillIn('[name="name"]', 'random string');
+    await click(
+      '[data-test-filter="egress_worker_filter"] .hds-form-toggle__control'
+    );
+    await fillIn('[name="egress_worker_filter"]', 'random filter');
+    await click(
+      '[data-test-filter="ingress_worker_filter"] .hds-form-toggle__control'
+    );
+    await fillIn('[name="ingress_worker_filter"]', 'random filter');
+
+    await click('[type="submit"]');
+
+    assert.strictEqual(getTargetCount(), targetCount + 1);
+    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1].name,
+      'random string'
+    );
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1]
+        .egressWorkerFilter,
+      'random filter'
+    );
+  });
+
+  test('shows the correct worker diagram when `target-worker-filters-v2` is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    featuresService.disable('target-worker-filters-v2-ingress');
+    featuresService.disable('target-worker-filters-v2-hcp');
+    assert.expect(1);
+    await visit(urls.targets);
+    await click(`[href="${urls.newTarget}"]`);
+
+    assert.dom('[data-test-single-filter-egress-off]').isVisible();
+  });
+
+  test('shows the correct worker diagram when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    featuresService.enable('target-worker-filters-v2-ingress');
+    featuresService.disable('target-worker-filters-v2-hcp');
+    assert.expect(1);
+    await visit(urls.targets);
+    await click(`[href="${urls.newTarget}"]`);
+
+    assert.dom('[data-test-dual-filters]').isVisible();
+  });
+
+  test('shows the correct worker diagram when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` and `target-worker-filters-v2-hcp` is enabled', async function (assert) {
+    featuresService.enable('target-worker-filters-v2');
+    featuresService.enable('target-worker-filters-v2-ingress');
+    featuresService.enable('target-worker-filters-v2-hcp');
+    assert.expect(1);
+    await visit(urls.targets);
+    await click(`[href="${urls.newTarget}"]`);
+
+    assert.dom('[data-test-dual-filters-hcp]').isVisible();
+  });
+
   test('default port is not marked required for SSH targets', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
