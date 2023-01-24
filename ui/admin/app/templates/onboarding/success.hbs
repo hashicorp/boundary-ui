@@ -5,7 +5,7 @@
       <h2>{{t 'onboarding.success.titles.connect'}}</h2>
     </:header>
     <:body>
-      {{! We have created }}
+      {{!-- We have created --}}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
           <Rose::Icon @name='flight-icons/svg/check-circle-16' />
@@ -14,7 +14,7 @@
         <p>{{t 'onboarding.success.descriptions.role'}}</p>
       </div>
 
-      {{! Donwload Desktop client }}
+      {{!-- Donwload Desktop client --}}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
           <Rose::Icon @name='logo-app-background' @size='extra-large' />
@@ -24,15 +24,15 @@
 
         <Hds::Link::Standalone
           @icon='download'
-          @text='{{t "onboarding.success.links.install"}}'
-          @href='{{doc-url "downloads"}}'
+          @text='{{t 'onboarding.success.links.install'}}'
+          @href='{{doc-url 'downloads'}}'
           isHrefExternal={{true}}
         />
 
         <Hds::Link::Standalone
           @icon='docs-link'
-          @text='{{t "onboarding.success.links.learn"}}'
-          @href='{{doc-url "getting-started.desktop"}}'
+          @text='{{t 'onboarding.success.links.learn'}}'
+          @href='{{doc-url 'getting-started.desktop'}}'
           isHrefExternal={{true}}
         />
 
@@ -51,7 +51,7 @@
         <Image @name='targets' />
       </div>
 
-      {{! Developers }}
+      {{!-- Developers --}}
       <div class='create-resources-item'>
         <h4 class='hds-typography-display-200 hds-font-weight-semibold'>
           {{t 'onboarding.success.titles.developers'}}
@@ -60,21 +60,21 @@
 
         <Hds::Link::Standalone
           @icon='docs-link'
-          @text='{{t "onboarding.success.links.cli"}}'
-          @href='{{doc-url "api-client.cli"}}'
+          @text='{{t 'onboarding.success.links.cli'}}'
+          @href='{{doc-url 'api-client.cli'}}'
           isHrefExternal={{true}}
         />
 
         <Hds::Link::Standalone
           @icon='docs-link'
-          @text='{{t "onboarding.success.links.api"}}'
-          @href='{{doc-url "api-client.api"}}'
+          @text='{{t 'onboarding.success.links.api'}}'
+          @href='{{doc-url 'api-client.api'}}'
           isHrefExternal={{true}}
         />
       </div>
 
       <Hds::Button
-        @text='{{t "actions.done"}}'
+        @text='{{t 'actions.done'}}'
         {{on 'click' (route-action 'showTargetList' @model)}}
       />
     </:body>

@@ -1,0 +1,65 @@
+<Rose::Form
+  class='full-width'
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @onSubmit={{fn @submit this.targetAddress this.targetPort}}
+  as |form|
+>
+  <div class='create-resources-form'>
+    <Hds::Form::TextInput::Field
+      name='targetAddress'
+      @type='text'
+      @value={{this.targetAddress}}
+      @isRequired={{true}}
+      @isInvalid={{this.targetAddress}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event this 'targetAddress')}}
+      as |F|
+    >
+      <F.Label>{{t 'onboarding.add-target.titles.target-address'}}</F.Label>
+      <F.HelperText>{{t 'onboarding.add-target.descriptions.target-address'}}</F.HelperText>
+      {{#if @model.errors.targetAddress}}
+        <F.Error as |E|>
+          {{#each @model.errors.targetAddress as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
+    <Hds::Form::TextInput::Field
+      name='targetPort'
+      @type='text'
+      @value={{this.targetPort}}
+      @isRequired={{false}}
+      @isOptional={{true}}
+      {{on 'input' (set-from-event this 'targetPort')}}
+      as |F|
+    >
+      <F.Label>{{t 'onboarding.add-target.titles.target-port'}}</F.Label>
+      <F.HelperText>{{t 'onboarding.add-target.descriptions.target-port'}}</F.HelperText>
+    </Hds::Form::TextInput::Field>
+  </div>
+
+  <form.fieldset>
+    <:title>{{t 'onboarding.add-target.titles.target-setup-info'}}</:title>
+    <:description>
+      {{t 'onboarding.add-target.descriptions.target-setup-info'}}
+    </:description>
+    <:body>
+      <Image @name='ssh-target-creation' />
+    </:body>
+  </form.fieldset>
+
+    <Hds::ButtonSet>
+      <Hds::Button
+        @text='{{t 'actions.connect-to-your-target'}}'
+        type='submit'
+      />
+      <Hds::Button
+        @text='{{t 'actions.do-this-later'}}'
+        @color="secondary" {{on "click" @cancel}}
+      />
+    </Hds::ButtonSet>
+
+</Rose::Form>

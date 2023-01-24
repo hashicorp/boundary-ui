@@ -53,24 +53,18 @@ themes:
   dark: Dark
 onboarding:
   title: Onboarding
-  quick-start:
+  add-target:
     titles:
-      choose-path: Welcome to Boundary
-      quick-setup: Quick setup
-      manual: Manual
-      create-resource: Creating your first target
-      resource-setup-info: We’ll set up scopes for you
+      have-a-target: Have an SSH target to test?
       target-address: Target Address
       target-port: Default Port
-      toggle-resource-info: I have an IP address and port for my first host
+      target-setup-info: We’ll set up scopes for you
     descriptions:
-      choose-path: You’ve taken the first step towards making your infrastructure more secure. How do you want to get started?
-      quick-setup: I want to see how Boundary works, help me set up my first scopes and targets.
-      manual: I want to set up my first scopes and targets myself, starting with my first org.
-      create-resource: In Boundary, a “target” defines a server that your users will connect to.
-      resource-setup-info: Targets live in projects, and projects live in orgs. We will create these scopes for you but they can be edited or deleted later.
+      target-info: A target defines a server your users would connect to.
+      setup-first-target: We can help you set up your first target for proof-of-concept testing. You can skip this step if your target does not use SSH or you don’t want to test right now.
       target-address: 'Example: “192.168.0.1” or IPv6'
-      target-port: 'Example: “22”'
+      target-port: 'We will use `22` if no port is set'
+      target-setup-info: Targets live in projects, and projects live in orgs. We will create these example scopes for you but they can be edited or deleted later.
   success:
     titles:
       connect: Connect to your target
