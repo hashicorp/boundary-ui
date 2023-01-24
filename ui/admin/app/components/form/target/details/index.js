@@ -13,10 +13,8 @@ const icons = {
 const workerFilters = ['egress_worker_filter', 'ingress_worker_filter'];
 export default class FormTargetComponent extends Component {
   // =properties
-  @tracked egressWorkerFilterEnabled =
-    this.args.model.egress_worker_filter?.length;
-  @tracked ingressWorkerFilterEnabled =
-    this.args.model.ingress_worker_filter?.length;
+  @tracked egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
+  @tracked ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
 
   // =services
   @service features;
@@ -53,7 +51,7 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get showUpdateWorkerFilterButton() {
-    return this.args.model.worker_filter?.length;
+    return this.args.model.worker_filter;
   }
 
   /**
@@ -61,7 +59,7 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get showTargetFilters() {
-    return !this.args.model.worker_filter?.length;
+    return !this.args.model.worker_filter;
   }
 
   /**
@@ -134,10 +132,8 @@ export default class FormTargetComponent extends Component {
     this.args.cancel();
     // Reset the tracked variable for toggles after rollback
 
-    this.egressWorkerFilterEnabled =
-      this.args.model.egress_worker_filter?.length;
+    this.egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
 
-    this.ingressWorkerFilterEnabled =
-      this.args.model.ingress_worker_filter?.length;
+    this.ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
   }
 }
