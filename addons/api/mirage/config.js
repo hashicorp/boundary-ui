@@ -476,25 +476,7 @@ function routes() {
     return targets.create(attrs);
   });
   this.get('/targets/:id');
-  this.patch('/targets/:id', () => {
-    return new Response(
-      400,
-      {},
-      {
-        kind: 'InvalidArgument',
-        message: 'Error in provided request.',
-        details: {
-          request_fields: [
-            {
-              name: 'egress_worker_filter',
-              description:
-                'Unable to successfully parse egress filter expression.',
-            },
-          ],
-        },
-      }
-    );
-  });
+  this.patch('/targets/:id');
   this.del('/targets/:id');
   this.post('/targets/:idMethod', targetHandler);
 
