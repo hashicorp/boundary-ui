@@ -111,6 +111,7 @@ export default class FormTargetComponent extends Component {
   toggleIngressWorkerFilter() {
     this.igressWorkerFilterEnabled = !this.igressWorkerFilterEnabled;
   }
+
   // =actions
   @action
   migrateWorkerFilters() {
