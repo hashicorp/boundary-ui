@@ -229,13 +229,13 @@
       {{/if}}
       <F.Control>
         {{#if this.showTargetFilters}}
-          {{#if this.isEnterprise}}
-            <WorkerDiagram::DualFilter
+          {{#if this.isHCP}}
+            <WorkerDiagram::DualFilter::Hcp
               @egressFilter={{this.egressWorkerFilterEnabled}}
               @ingressFilter={{this.ingressWorkerFilterEnabled}}
             />
-          {{else if this.isHCP}}
-            <WorkerDiagram::DualFilter::Hcp
+          {{else if this.isEnterprise}}
+            <WorkerDiagram::DualFilter
               @egressFilter={{this.egressWorkerFilterEnabled}}
               @ingressFilter={{this.ingressWorkerFilterEnabled}}
             />
