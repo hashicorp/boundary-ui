@@ -34,9 +34,6 @@ export default class FormTargetComponent extends Component {
     }));
   }
 
-  get filters() {
-    return FILTER_TYPES_TARGET;
-  }
   /**
    * returns icons based on the model type
    * unlike other resources, this is needed as we use generic details component for both tcp and ssh
