@@ -226,39 +226,6 @@ module('Acceptance | targets | create', function (hooks) {
     );
   });
 
-  test('shows the correct worker diagram when `target-worker-filters-v2` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    featuresService.disable('target-worker-filters-v2-ingress');
-    featuresService.disable('target-worker-filters-v2-hcp');
-    assert.expect(1);
-    await visit(urls.targets);
-    await click(`[href="${urls.newTarget}"]`);
-
-    assert.dom('[data-test-single-filter-egress-off]').isVisible();
-  });
-
-  test('shows the correct worker diagram when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    featuresService.enable('target-worker-filters-v2-ingress');
-    featuresService.disable('target-worker-filters-v2-hcp');
-    assert.expect(1);
-    await visit(urls.targets);
-    await click(`[href="${urls.newTarget}"]`);
-
-    assert.dom('[data-test-dual-filters]').isVisible();
-  });
-
-  test('shows the correct worker diagram when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` and `target-worker-filters-v2-hcp` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    featuresService.enable('target-worker-filters-v2-ingress');
-    featuresService.enable('target-worker-filters-v2-hcp');
-    assert.expect(1);
-    await visit(urls.targets);
-    await click(`[href="${urls.newTarget}"]`);
-
-    assert.dom('[data-test-dual-filters-hcp]').isVisible();
-  });
-
   test('default port is not marked required for SSH targets', async function (assert) {
     assert.expect(1);
     await visit(urls.newTarget);
