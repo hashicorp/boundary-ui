@@ -32,12 +32,18 @@
               <Rose::Form as |form|>
                 <form.radioGroup
                   @name='theme'
-                  @selectedValue={{this.session.data.theme}}
+                  @selectedValue={{or
+                    this.session.data.theme
+                    'system-default-theme'
+                  }}
                   @changed={{route-action 'toggleTheme'}}
                   as |radioGroup|
                 >
                   <dropdown.item>
-                    <radioGroup.radio @label={{t 'themes.system'}} />
+                    <radioGroup.radio
+                      @label={{t 'themes.system'}}
+                      @value='system-default-theme'
+                    />
                   </dropdown.item>
                   <dropdown.item>
                     <radioGroup.radio
@@ -91,57 +97,33 @@
 {{/if}}
 
 <PendingConfirmations as |confirmation accept deny|>
-  {{#if confirmation.options.isAbandonConfirm}}
-    <Rose::Dialog
-      @heading={{t 'titles.abandon-confirm'}}
-      @dismissButtonText={{t 'actions.cancel'}}
-      @icon='flight-icons/svg/alert-triangle-16'
-      @style='warning'
-      @modal={{true}}
-      @dismiss={{deny}}
-      as |dialog|
-    >
-      <dialog.body>
-        <p>{{t 'questions.abandon-confirm'}}</p>
-      </dialog.body>
-      <dialog.footer>
-        <Rose::Button @style='primary' {{on 'click' accept}}>
-          {{t 'actions.discard'}}
-        </Rose::Button>
-        <Rose::Button @style='secondary' {{on 'click' deny}}>
-          {{t 'actions.cancel'}}
-        </Rose::Button>
-      </dialog.footer>
-    </Rose::Dialog>
-  {{else}}
-    <Rose::Dialog
-      @heading={{if
-        confirmation.options.title
-        (t confirmation.options.title)
-        (t 'actions.confirm')
-      }}
-      @dismissButtonText={{t 'actions.cancel'}}
-      @icon='flight-icons/svg/alert-triangle-16'
-      @style='warning'
-      @modal={{true}}
-      @dismiss={{deny}}
-      as |dialog|
-    >
-      <dialog.body>
-        <p>{{confirmation.text}}</p>
-      </dialog.body>
-      <dialog.footer>
-        <Rose::Button @style='primary' {{on 'click' accept}}>
-          {{if
-            confirmation.options.confirm
-            (t confirmation.options.confirm)
-            (t 'actions.ok')
-          }}
-        </Rose::Button>
-        <Rose::Button @style='secondary' {{on 'click' deny}}>
-          {{t 'actions.cancel'}}
-        </Rose::Button>
-      </dialog.footer>
-    </Rose::Dialog>
-  {{/if}}
+  <Rose::Dialog
+    @heading={{if
+      confirmation.options.title
+      (t confirmation.options.title)
+      (t 'actions.confirm')
+    }}
+    @dismissButtonText={{t 'actions.cancel'}}
+    @icon='flight-icons/svg/alert-triangle-16'
+    @style='warning'
+    @modal={{true}}
+    @dismiss={{deny}}
+    as |dialog|
+  >
+    <dialog.body>
+      <p>{{confirmation.text}}</p>
+    </dialog.body>
+    <dialog.footer>
+      <Rose::Button @style='primary' {{on 'click' accept}}>
+        {{if
+          confirmation.options.confirm
+          (t confirmation.options.confirm)
+          (t 'actions.ok')
+        }}
+      </Rose::Button>
+      <Rose::Button @style='secondary' {{on 'click' deny}}>
+        {{t 'actions.cancel'}}
+      </Rose::Button>
+    </dialog.footer>
+  </Rose::Dialog>
 </PendingConfirmations>

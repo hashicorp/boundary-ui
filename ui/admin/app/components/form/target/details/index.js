@@ -1,9 +1,7 @@
 import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
-import { loading } from 'ember-loading';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { notifyError } from 'core/decorators/notify';
+import { tracked } from '@glimmer/tracking';
 
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
@@ -13,10 +11,9 @@ const icons = {
 };
 
 export default class FormTargetComponent extends Component {
-  // =services
-
-  @service confirm;
-  @service intl;
+  // =properties
+  @tracked egressWorkerFilterEnabled =
+    this.args.model.egress_worker_filter?.length;
 
   // =properties
   /**
@@ -47,38 +44,45 @@ export default class FormTargetComponent extends Component {
     return !this.args.model.isNew && this.args.model.worker_filter;
   }
 
+  /**
+   * determines when the update worker filter button should be shown
+   * @type {boolean}
+   */
+  get showUpdateWorkerFilterButton() {
+    return this.args.model.worker_filter?.length;
+  }
+
+  get showEgressFilter() {
+    return !this.args.model.worker_filter?.length && !this.args.model.isNew;
+  }
+
+  //actions
   @action
-  @loading
-  @notifyError(({ message }) => message)
-  async submit() {
-    const target = this.args.model;
-    const numHostSources = target.host_sources?.length;
-    const address = target.address;
-    if (address && numHostSources) {
-      try {
-        await this.confirm.confirm(
-          this.intl.t(
-            'resources.target.questions.delete-host-sources.message',
-            { numHostSources }
-          ),
-          {
-            title: 'resources.target.questions.delete-host-sources.title',
-            confirm: 'actions.remove-resources',
-          }
-        );
-      } catch (e) {
-        // if the user denies, do nothing and return
-        return;
-      }
-
-      await target.removeHostSources(
-        target.host_sources.map((hs) => hs.host_source_id)
-      );
-      // After saving the host sources, the model gets reset to an empty address,
-      // so we need to update the address with the previous value before saving
-      target.address = address;
+  toggleEgressWorkerFilter() {
+    this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
+    if (!this.egressWorkerFilterEnabled) {
+      this.args.model.egress_worker_filter = '';
     }
+  }
 
-    await this.args.submit();
+  // =actions
+  @action
+  migrateWorkerFilters() {
+    this.egressWorkerFilterEnabled = true;
+    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
+    this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.worker_filter = '';
+  }
+
+  /**
+   * Call passed cancel function.
+   * Unset selected filters.
+   */
+  @action
+  cancel() {
+    this.args.cancel();
+    // Reset the tracked variable for toggles after rollback
+    this.egressWorkerFilterEnabled =
+      this.args.model.egress_worker_filter?.length;
   }
 }

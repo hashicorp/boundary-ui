@@ -1,6 +1,6 @@
 <Rose::Form
-  @onSubmit={{this.submit}}
-  @cancel={{@cancel}}
+  @onSubmit={{@submit}}
+  @cancel={{this.cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
@@ -67,7 +67,6 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-    <br />
   {{else}}
     <InfoField
       @value={{t (concat 'resources.target.types.' @model.type)}}
@@ -181,10 +180,12 @@
       class='target-workers'
       @layout='horizontal'
       @isRequired={{false}}
+      @isOptional={{true}}
       as |F|
     >
       <F.Legend>{{t 'resources.target.workers.title'}}</F.Legend>
       <F.HelperText>{{t 'resources.target.workers.description'}}</F.HelperText>
+
       {{#if this.showDeprecationMessage}}
         <F.Control>
           <Hds::Alert @color='highlight' @type='inline' as |A|>
@@ -196,31 +197,104 @@
               }}</A.Description>
           </Hds::Alert>
         </F.Control>
+        <F.Control>
+          <Hds::Form::TextInput::Field
+            @value={{@model.worker_filter}}
+            @isInvalid={{@model.errors.worker_filter}}
+            @type='text'
+            name='worker_filter'
+            disabled={{true}}
+            {{on 'input' (set-from-event @model 'worker_filter')}}
+            as |F|
+          >
+            <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+            <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
+          </Hds::Form::TextInput::Field>
+        </F.Control>
       {{/if}}
-      <F.Control>
-        <Hds::Form::TextInput::Field
-          @isRequired={{false}}
-          @isOptional={{true}}
-          @value={{@model.worker_filter}}
-          @isInvalid={{@model.errors.worker_filter}}
-          @type='text'
-          name='worker_filter'
-          disabled={{true}}
-          {{on 'input' (set-from-event @model 'worker_filter')}}
-          as |F|
-        >
-          <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
-          <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
-          {{#if @model.errors.worker_filter}}
-            <F.Error as |E|>
-              {{#each @model.errors.worker_filter as |error|}}
-                <E.Message>{{error.message}}</E.Message>
-              {{/each}}
-            </F.Error>
-          {{/if}}
-        </Hds::Form::TextInput::Field>
-      </F.Control>
+
+      {{#if form.isEditable}}
+        {{#if this.showUpdateWorkerFilterButton}}
+          <F.Control>
+            <Hds::Button
+              class='update-filter-button'
+              @text={{t
+                'resources.target.workers.egress_worker_filter.filter.update_filter'
+              }}
+              @color='secondary'
+              disabled={{form.disabled}}
+              {{on 'click' this.migrateWorkerFilters}}
+            />
+          </F.Control>
+        {{/if}}
+      {{/if}}
+
+      {{#if this.showEgressFilter}}
+        <F.Control>
+          <WorkerDiagram::SingleFilter
+            @egressFilter={{this.egressWorkerFilterEnabled}}
+          />
+
+        </F.Control>
+        <F.Control>
+          <Form::Target::WorkerFilter
+            @name='egress_worker_filter'
+            @type='text'
+            @disabled={{form.disabled}}
+            @value={{@model.egress_worker_filter}}
+            @toggleAction={{this.toggleEgressWorkerFilter}}
+            @checked={{this.egressWorkerFilterEnabled}}
+            @toggleEnabled={{this.egressWorkerFilterEnabled}}
+            @errors={{@model.errors.egress_worker_filter}}
+            @onChange={{set-from-event @model 'egress_worker_filter'}}
+            @isInvalid={{@model.errors.egress_worker_filter}}
+            as |F|
+          >
+            {{#if @model.errors.egress_worker_filter}}
+              <F.Error as |E|>
+                {{#each @model.errors.egress_worker_filter as |error|}}
+                  <E.Message>{{error.message}}</E.Message>
+                {{/each}}
+              </F.Error>
+            {{/if}}
+          </Form::Target::WorkerFilter>
+
+        </F.Control>
+      {{/if}}
+
+      {{#if @model.isNew}}
+        <F.Control>
+          <WorkerDiagram::SingleFilter
+            @egressFilter={{this.egressWorkerFilterEnabled}}
+          />
+        </F.Control>
+        <F.Control>
+          <Form::Target::WorkerFilter
+            @name='egress_worker_filter'
+            @type='text'
+            @disabled={{form.disabled}}
+            @value={{@model.egress_worker_filter}}
+            @toggleAction={{this.toggleEgressWorkerFilter}}
+            @checked={{this.egressWorkerFilterEnabled}}
+            @toggleEnabled={{this.egressWorkerFilterEnabled}}
+            @errors={{@model.errors.egress_worker_filter}}
+            @onChange={{set-from-event @model 'egress_worker_filter'}}
+            @isInvalid={{@model.errors.egress_worker_filter}}
+            as |F|
+          >
+            {{#if @model.errors.egress_worker_filter}}
+              <F.Error as |E|>
+                {{#each @model.errors.egress_worker_filter as |error|}}
+                  <E.Message>{{error.message}}</E.Message>
+                {{/each}}
+              </F.Error>
+            {{/if}}
+          </Form::Target::WorkerFilter>
+        </F.Control>
+      {{/if}}
+
     </Hds::Form::Fieldset>
+
   {{else}}
     <Hds::Form::TextInput::Field
       @isRequired={{false}}
