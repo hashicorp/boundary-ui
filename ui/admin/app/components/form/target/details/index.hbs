@@ -229,12 +229,12 @@
       {{/if}}
       <F.Control>
         {{#if this.showTargetFilters}}
-          {{#if this.isHCP}}
+          {{#if this.workerDiagramHCPDualFilter}}
             <WorkerDiagram::DualFilter::Hcp
               @egressFilter={{this.egressWorkerFilterEnabled}}
               @ingressFilter={{this.ingressWorkerFilterEnabled}}
             />
-          {{else if this.isEnterprise}}
+          {{else if this.workerDiagramDualFilter}}
             <WorkerDiagram::DualFilter
               @egressFilter={{this.egressWorkerFilterEnabled}}
               @ingressFilter={{this.ingressWorkerFilterEnabled}}
@@ -248,7 +248,6 @@
           {{#if this.showOSSTargetWorkerFilters}}
             <Form::Target::WorkerFilter
               @name='egress_worker_filter'
-              @egressFilter={{this.egressWorkerFilterEnabled}}
               @disabled={{form.disabled}}
               @value={{@model.egress_worker_filter}}
               @toggleAction={{this.toggleFilter}}
@@ -271,7 +270,6 @@
           {{#if this.showDualTargetWorkerFilters}}
             <Form::Target::WorkerFilter
               @name='ingress_worker_filter'
-              @egressFilter={{this.ingressWorkerFilterEnabled}}
               @disabled={{form.disabled}}
               @value={{@model.ingress_worker_filter}}
               @toggleAction={{this.toggleFilter}}

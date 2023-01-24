@@ -4,14 +4,7 @@ import { inject as service } from '@ember/service';
 
 export const TYPE_TARGET_TCP = 'tcp';
 export const TYPE_TARGET_SSH = 'ssh';
-export const FILTER_TYPE_TARGET_EGRESS = 'egress_worker_filter';
-export const FILTER_TYPE_TARGET_INGRESS = 'ingress_worker_filter';
 export const TYPES_TARGET = Object.freeze([TYPE_TARGET_TCP, TYPE_TARGET_SSH]);
-
-export const FILTER_TYPES_TARGET = Object.freeze([
-  FILTER_TYPE_TARGET_EGRESS,
-  FILTER_TYPE_TARGET_INGRESS,
-]);
 
 export default class TargetModel extends GeneratedTargetModel {
   // =services
