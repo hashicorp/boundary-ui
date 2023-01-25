@@ -5,6 +5,7 @@ import GeneratedCredentialLibraryModel from '../generated/models/credential-libr
  */
 export const options = {
   http_method: ['GET', 'POST'],
+  key_type: ['ed25519', 'ecdsa', 'rsa'],
 };
 
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC = 'vault-generic';

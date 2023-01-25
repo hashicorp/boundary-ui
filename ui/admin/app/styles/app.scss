@@ -708,3 +708,23 @@
     margin-top: sizing.rems(xs) - sizing.rems(xxxxs); // 10
   }
 }
+
+.mapping-list {
+  width: 100%;
+
+  li {
+    padding: sizing.rems(xs) 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 5%;
+    align-items: center;
+    gap: sizing.rems(l);
+
+    > div {
+      margin: 0;
+    }
+  }
+
+  :not(:last-child) {
+    border-bottom: 1px solid var(--token-color-border-primary);
+  }
+}

@@ -1,0 +1,64 @@
+<Hds::Form::Fieldset
+  @layout={{@layout}}
+  @isRequired={{@isRequired}}
+  @isOptional={{@isOptional}}
+  as |F|
+>
+  {{yield F}}
+  <F.Control>
+    <ul class='mapping-list'>
+      {{#each @options as |option index|}}
+        <li>
+          <Hds::Form::TextInput::Field
+            @value={{option.key}}
+            @type='text'
+            disabled={{@disabled}}
+            {{on 'input' (set-from-event option 'key')}}
+          />
+          <Hds::Form::TextInput::Field
+            @value={{option.value}}
+            @type='text'
+            disabled={{@disabled}}
+            {{on 'input' (set-from-event option 'value')}}
+          />
+          <div>
+            <Hds::Button
+              @text={{t 'actions.remove'}}
+              @color='critical'
+              @icon='trash'
+              @isIconOnly={{true}}
+              disabled={{@disabled}}
+              {{on 'click' (fn this.removeOptionByIndex index)}}
+            />
+          </div>
+        </li>
+      {{/each}}
+
+      <li>
+        <Hds::Form::TextInput::Field
+          @value={{this.newOptionKey}}
+          @type='text'
+          disabled={{@disabled}}
+          placeholder='Value'
+          {{on 'input' (set-from-event this 'newOptionKey')}}
+        />
+        <Hds::Form::TextInput::Field
+          @value={{this.newOptionValue}}
+          @type='text'
+          disabled={{@disabled}}
+          placeholder='Value'
+          {{on 'input' (set-from-event this 'newOptionValue')}}
+        />
+        <div>
+          <Hds::Button
+            @text={{t 'actions.add'}}
+            @color='secondary'
+            type='button'
+            disabled={{@disabled}}
+            {{on 'click' this.addOption}}
+          />
+        </div>
+      </li>
+    </ul>
+  </F.Control>
+</Hds::Form::Fieldset>

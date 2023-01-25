@@ -468,6 +468,27 @@ credential-library:
     http_request_body:
       label: HTTP Method POST Request Body
       help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
+    username:
+      label: Username
+      help: This is the username that will be used to connect to Vault.
+    key_type:
+      label: Key Type
+      help: Specifies the desired key type to use when generating a private key.
+    key_bits:
+      label: Key Bits
+      help: Specifies the number of bits used generating the private key.
+    ttl:
+      label: TTL
+      help: Specifies the Requested Time to Live for the certificate.
+    key_id:
+      label: Key ID
+      help: Specifies the key id that the created certificate should have.
+    critical_options:
+      label: Critical Options
+      help: Specifies a map of the critical options that the certificate should be signed for.
+    extensions:
+      label: Extensions
+      help: Specifies a map of the extensions that the certificate should be signed for.
   types:
     vault-generic: Generic Secrets
     vault-ssh-cert: SSH Certificate Credentials
