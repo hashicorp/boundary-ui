@@ -1,8 +1,10 @@
-<ol ...attributes class='ordered-series-diagram'>
-  {{yield
-    (hash
-      Item=(component 'ordered-series-diagram/item')
-      Group=(component 'ordered-series-diagram/group')
-    )
-  }}
-</ol>
+<div class='ordered-series-diagram-wrapper'>
+  <ol ...attributes class='ordered-series-diagram'>
+    {{yield
+      (hash
+        Item=(component 'ordered-series-diagram/item')
+        Group=(component 'ordered-series-diagram/group')
+      )
+    }}
+  </ol>
+</div>
