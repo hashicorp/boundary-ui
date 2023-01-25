@@ -493,20 +493,6 @@
   }
 }
 
-// target worker filters
-// note re Button margin: this is a temp solution,
-// when we migrate buttons to HDS, we will analyze the spacing
-// issue in all scenarios to come up with an efficient solution
-.update-filter-button {
-  margin-bottom: 1.5rem;
-}
-
-.target-worker-filter {
-  .hds-form-field--layout-vertical {
-    margin-left: 2.5rem;
-  }
-}
-
 // json secret editor
 .secret-editor {
   // Secret Editor body and gutter colors are based on the Monokai color template
@@ -617,7 +603,7 @@
 
   .ordered-series-diagram {
     --group-title-line-height: 2.25rem;
-
+    
     display: flex;
 
     &-item {
@@ -680,8 +666,10 @@
   }
 }
 
+// target worker filters
 .target-workers {
   margin-top: sizing.rems(xxl);
+  margin-bottom: sizing.rems(xxl) + sizing.rems(l);
 
   .hds-form-legend {
     font-size: sizing.rems(l) - sizing.rems(xxs); // 20
@@ -689,6 +677,22 @@
 
   .hds-alert {
     margin-bottom: sizing.rems(l);
+  }
+
+  // note re Button margin: this is a temp solution,
+  // when we migrate buttons to HDS, we will analyze the spacing
+  // issue in all scenarios to come up with an efficient solution
+  .target-worker-filter {
+    width: 100%;
+
+    .hds-form-field--layout-vertical {
+      margin-left: 2.5rem;
+      width: 50%;
+    }
+
+    .hds-form-field--layout-flag {
+      margin-bottom: 1rem;
+    }
   }
 }
 
