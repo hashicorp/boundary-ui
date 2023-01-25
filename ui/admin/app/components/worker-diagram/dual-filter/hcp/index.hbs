@@ -21,7 +21,9 @@
     </OrderedSeriesDiagram>
     <div class='target-worker-filter-explainer'>
       <Hds::Form::HelperText>
-        {{t 'resources.target.workers.filter-explainer.hcp-dual-egress-on'}}
+        {{t
+          'resources.target.workers.filter-explainer.dual-egress-on-ingress-on'
+        }}
       </Hds::Form::HelperText>
     </div>
   {{else if @ingressFilter}}
@@ -56,7 +58,7 @@
         {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
           {{t 'resources.target.workers.diagram.hcp-worker'}}
         {{else}}
-          {{t 'resources.target.workers.diagram.front-line-worker'}}
+          {{t 'resources.target.workers.diagram.frontline-worker'}}
         {{/if}}
       </D.Item>
       <D.Group
@@ -73,7 +75,7 @@
     </OrderedSeriesDiagram>
     <div class='target-worker-filter-explainer'>
       <Hds::Form::HelperText>
-        {{t 'resources.target.workers.filter-explainer.egress-on'}}
+        {{t 'resources.target.workers.filter-explainer.hcp-dual-egress-on'}}
       </Hds::Form::HelperText>
     </div>
   {{else}}
