@@ -115,7 +115,9 @@ export default class ScopesScopeTargetsRoute extends Route {
     const hostSourceCount = target.host_sources?.length;
 
     if (hostSourceCount) {
-      const ids = target.host_sources.map(({ host_source_id: id }) => id);
+      const hostSourceIDs = target.host_sources.map(
+        ({ host_source_id }) => host_source_id
+      );
       const confirmMessage = this.intl.t(
         'resources.target.questions.delete-host-sources.message',
         { hostSourceCount }
@@ -127,7 +129,7 @@ export default class ScopesScopeTargetsRoute extends Route {
         confirm: 'actions.remove-resources',
       });
       // Remove host sources.  This step is reached only if the user accepts.
-      await target.removeHostSources(ids);
+      await target.removeHostSources(hostSourceIDs);
     }
   }
 
