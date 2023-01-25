@@ -620,7 +620,7 @@
       &-title {
         font-weight: var(--token-typography-font-weight-semibold);
         margin-top: sizing.rems(xs);
-        width: 4rem;
+        width: sizing.rems(xxl) + sizing.rems(m);
       }
 
       &:last-child {
