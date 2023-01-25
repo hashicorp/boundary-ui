@@ -82,6 +82,7 @@
 
       <Hds::Button
         @text='{{t "actions.done"}}'
+        data-test-onboarding-done-button
         {{on 'click' (route-action 'showTargetList' @model)}}
       />
     </:body>
