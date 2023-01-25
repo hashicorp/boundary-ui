@@ -601,8 +601,6 @@
 .ordered-series-diagram-wrapper {
   min-height: 9.375rem;
   margin-top: sizing.rems(s);
-  display: flex;
-  align-items: center;
 
   .ordered-series-diagram {
     --group-title-line-height: 2.25rem;
