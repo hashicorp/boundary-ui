@@ -18,21 +18,20 @@
     >
       <F.Label>{{t 'onboarding.add-target.titles.target-address'}}</F.Label>
       <F.HelperText>{{t 'onboarding.add-target.descriptions.target-address'}}</F.HelperText>
-      {{#if @model.errors.targetAddress}}
+      {{!-- {{#if @model.errors.targetAddress}}
         <F.Error as |E|>
           {{#each @model.errors.targetAddress as |error|}}
             <E.Message>{{error.message}}</E.Message>
           {{/each}}
         </F.Error>
-      {{/if}}
+      {{/if}} --}}
     </Hds::Form::TextInput::Field>
 
     <Hds::Form::TextInput::Field
       name='targetPort'
       @type='text'
       @value={{this.targetPort}}
-      @isRequired={{false}}
-      @isOptional={{true}}
+      @isRequired={{true}}
       {{on 'input' (set-from-event this 'targetPort')}}
       as |F|
     >
@@ -53,7 +52,7 @@
 
     <Hds::ButtonSet>
       <Hds::Button
-        @text='{{t 'actions.connect-to-your-target'}}'
+        @text='{{t 'actions.save'}}'
         type='submit'
       />
       <Hds::Button

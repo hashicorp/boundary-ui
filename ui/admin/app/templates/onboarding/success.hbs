@@ -36,19 +36,24 @@
           isHrefExternal={{true}}
         />
 
-        <h4 class='hds-typography-display-200 hds-font-weight-semibold'>
-          {{t 'onboarding.success.titles.controller'}}
-        </h4>
-        <p>{{t 'onboarding.success.descriptions.controller'}}</p>
-        <Copyable
-          @text={{this.model.clusterUrl}}
-          @buttonText={{t 'actions.copy-to-clipboard'}}
-          @acknowledgeText={{t 'states.copied'}}
-        >
-          <code>{{this.model.clusterUrl}}</code>
-        </Copyable>
+        {{!-- Controller --}}
+        <div class='create-resources-item-controller'>
+          <h4 class='hds-typography-display-200 hds-font-weight-semibold'>
+            {{t 'onboarding.success.titles.controller'}}
+          </h4>
+          <span class='create-resources-item-controller-label'>{{t 'onboarding.success.descriptions.controller'}}</span>
+          <div class='create-resources-item-controller-copyable'>
+            <Copyable
+              @text={{this.model.clusterUrl}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{this.model.clusterUrl}}</code>
+            </Copyable>
+          </div>
 
-        <Image @name='targets' />
+          <Image @name='targets' />
+        </div>
       </div>
 
       {{!-- Developers --}}

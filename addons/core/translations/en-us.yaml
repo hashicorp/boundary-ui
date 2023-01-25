@@ -55,15 +55,14 @@ onboarding:
   title: Onboarding
   add-target:
     titles:
-      have-a-target: Have an SSH target to test?
+      have-a-target: Have a target to test?
       target-address: Target Address
       target-port: Default Port
       target-setup-info: We’ll set up scopes for you
     descriptions:
-      target-info: A target defines a server your users would connect to.
-      setup-first-target: We can help you set up your first target for proof-of-concept testing. You can skip this step if your target does not use SSH or you don’t want to test right now.
-      target-address: 'Example: “192.168.0.1” or IPv6'
-      target-port: 'We will use `22` if no port is set'
+      setup-first-target: In Boundary, a “target” defines a server that your users will connect to. We can help you set up your first target for proof-of-concept testing, or you can skip this step if you don’t want to do it right now.
+      target-address: Host name or IP address.
+      target-port: The default port on which to connect.
       target-setup-info: Targets live in projects, and projects live in orgs. We will create these example scopes for you but they can be edited or deleted later.
   success:
     titles:
