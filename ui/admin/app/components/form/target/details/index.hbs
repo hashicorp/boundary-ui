@@ -245,35 +245,13 @@
             />
           {{/if}}
 
-          {{#if this.showOSSTargetWorkerFilters}}
-            <Form::Target::WorkerFilter
-              @name='egress_worker_filter'
-              @disabled={{form.disabled}}
-              @value={{@model.egress_worker_filter}}
-              @toggleAction={{this.toggleFilter}}
-              @toggleEnabled={{this.egressWorkerFilterEnabled}}
-              @onChange={{set-from-event @model 'egress_worker_filter'}}
-              @isInvalid={{@model.errors.egress_worker_filter}}
-              as |F|
-            >
-              {{#if @model.errors.egress_worker_filter}}
-                <F.Error as |E|>
-                  {{#each @model.errors.egress_worker_filter as |error|}}
-                    <E.Message>{{error.message}}</E.Message>
-                  {{/each}}
-                </F.Error>
-              {{/if}}
-            </Form::Target::WorkerFilter>
-          {{/if}}
           {{#if this.showDualTargetWorkerFilters}}
             <Form::Target::WorkerFilter
               @name='ingress_worker_filter'
               @disabled={{form.disabled}}
               @value={{@model.ingress_worker_filter}}
               @toggleAction={{this.toggleFilter}}
-              @checked={{this.ingressWorkerFilterEnabled}}
               @toggleEnabled={{this.ingressWorkerFilterEnabled}}
-              @errors={{@model.errors.ingress_worker_filter}}
               @onChange={{set-from-event @model 'ingress_worker_filter'}}
               @isInvalid={{@model.errors.ingress_worker_filter}}
               as |F|
@@ -287,6 +265,28 @@
               {{/if}}
             </Form::Target::WorkerFilter>
           {{/if}}
+
+          {{#if this.showOSSTargetWorkerFilters}}
+            <Form::Target::WorkerFilter
+              @name='egress_worker_filter'
+              @disabled={{form.disabled}}
+              @value={{@model.egress_worker_filter}}
+              @toggleAction={{this.toggleFilter}}
+              @toggleEnabled={{this.egressWorkerFilterEnabled}}
+              @onChange={{set-from-event @model 'egress_worker_filter'}}
+              @isInvalid={{@model.errors.ingress_worker_filter}}
+              as |F|
+            >
+              {{#if @model.errors.egress_worker_filter}}
+                <F.Error as |E|>
+                  {{#each @model.errors.egress_worker_filter as |error|}}
+                    <E.Message>{{error.message}}</E.Message>
+                  {{/each}}
+                </F.Error>
+              {{/if}}
+            </Form::Target::WorkerFilter>
+          {{/if}}
+
         {{/if}}
       </F.Control>
     </Hds::Form::Fieldset>
