@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
-import { options } from 'api/models/credential-library';
-import { computed } from '@ember/object';
+import {
+  options,
+  TYPES_CREDENTIAL_LIBRARY,
+} from 'api/models/credential-library';
 
-export default class FormCredentialLibraryIndexComponent extends Component {
+export default class FormCredentialLibraryVaultGenericComponent extends Component {
   // =properties
   /**
    * @type {object}
@@ -10,10 +12,15 @@ export default class FormCredentialLibraryIndexComponent extends Component {
   httpMethodOptions = options.http_method;
 
   /**
+   *
+   * @type {Array.<string>}
+   */
+  types = TYPES_CREDENTIAL_LIBRARY;
+
+  /**
    * Only allow HTTP request body field if http_method is set to POST.
    * @type {boolean}
    */
-  @computed('args.model.http_method')
   get isHttpRequestBodyAllowed() {
     return this.args.model.http_method?.match(/post/i);
   }

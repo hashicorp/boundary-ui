@@ -7,6 +7,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @service intl;
 
   // =attributes
+  queryParams = ['type'];
 
   /**
    * Translated new credential libraries breadcrumb

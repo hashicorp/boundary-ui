@@ -107,7 +107,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.strictEqual(getCredentialLibraryCount(), count);
   });
 
-  test('saving a new credential library with invalid fields displays error messasges', async function (assert) {
+  test('saving a new credential library with invalid fields displays error messages', async function (assert) {
     assert.expect(2);
     this.server.post('/credential-libraries', () => {
       return new Response(
@@ -135,7 +135,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       'The request was invalid.'
     );
     assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
+      find('.hds-form-error__message').textContent.trim(),
       'Name is required.'
     );
   });
