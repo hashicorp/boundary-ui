@@ -50,13 +50,12 @@ export default class ScopesScopeTargetsRoute extends Route {
   }
 
   /**
-   * Handle save.
+   * Saves the target and refreshes the list.
    * @param {TargetModel} target
-   * @param {Event} e
    */
   @action
   @loading
-  @notifyError(({ message }) => message, { catch: true })
+  @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success'
   )
@@ -70,38 +69,66 @@ export default class ScopesScopeTargetsRoute extends Route {
     this.refresh();
   }
 
+  /**
+   * Targets may have either an `address` _or_ host sources, but not both.
+   *
+   * In order to save a target with an `address`, any existing host sources
+   * must first be removed.  Once host sources are removed, the target with
+   * `address` may be saved via the standard `save` action.
+   *
+   * If `address` and host sources are both present, the user is asked to
+   * confirm that they wish to remove all host sources.  If the user declines,
+   * no changes are persisted; the form remains editable and unsaved.
+   *
+   * If `address` is set and the target has no host sources, the save proceeds
+   * as normal.
+   *
+   * If neither `address` nor host sources are set, the save proceeds as normal.
+   *
+   * @param {TargetModel} target
+   */
   @action
-  @loading
-  @notifyError(({ message }) => message)
   async saveWithAddress(target) {
-    const numHostSources = target.host_sources?.length;
-    const address = target.address;
-    if (address && numHostSources) {
-      try {
-        await this.confirm.confirm(
-          this.intl.t(
-            'resources.target.questions.delete-host-sources.message',
-            { numHostSources }
-          ),
-          {
-            title: 'resources.target.questions.delete-host-sources.title',
-            confirm: 'actions.remove-resources',
-          }
-        );
-      } catch (e) {
-        // if the user denies, do nothing and return
-        return;
-      }
-
-      await target.removeHostSources(
-        target.host_sources.map((hs) => hs.host_source_id)
-      );
-      // After saving the host sources, the model gets reset to an empty address,
-      // so we need to update the address with the previous value before saving
+    if (target.address) {
+      const { address } = target;
+      // Remove host sources if necessary.  This is cancelable by the user.
+      await this.removeHostSources(target);
+      // After removing host sources, the model is reset to an empty address,
+      // so we need to update the address with the previous value.
       target.address = address;
     }
 
+    // Proceed with standard save.
     await this.save(target);
+  }
+
+  /**
+   * If the passed target has host sources:
+   *   - Request confirmation from the user for host source removal.
+   *   - Persist removal of all host sources.
+   * @param {TargetModel} target
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  async removeHostSources(target) {
+    const hostSourceCount = target.host_sources?.length;
+
+    if (hostSourceCount) {
+      const ids = target.host_sources.map(({ host_source_id: id }) => id);
+      const confirmMessage = this.intl.t(
+        'resources.target.questions.delete-host-sources.message',
+        { hostSourceCount }
+      );
+
+      // Ask for confirmation
+      await this.confirm.confirm(confirmMessage, {
+        title: 'resources.target.questions.delete-host-sources.title',
+        confirm: 'actions.remove-resources',
+      });
+      // Remove host sources.  This step is reached only if the user accepts.
+      await target.removeHostSources(ids);
+    }
   }
 
   /**
@@ -111,7 +138,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   @action
   @loading
   @confirm('questions.delete-confirm')
-  @notifyError(({ message }) => message, { catch: true })
+  @notifyError(({ message }) => message)
   @notifySuccess('notifications.delete-success')
   async delete(target) {
     await target.destroyRecord();
