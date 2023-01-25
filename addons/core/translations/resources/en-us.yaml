@@ -391,13 +391,14 @@ target:
     filter:
       title: Filter
       description: Boolean expression.
-      update_filter: Update Filter
     egress_worker_filter:
       title: Egress worker filter
       description: Specify workers that have access to the target (such as within a private network).
     ingress_worker_filter:
       title: Ingress worker filter
       description: Specify workers Boundary should use to start the route to this target.
+    actions:
+      update-filter: Update Filter
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
