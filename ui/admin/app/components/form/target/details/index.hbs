@@ -245,7 +245,7 @@
             />
           {{/if}}
 
-          {{#if this.showDualTargetWorkerFilters}}
+          {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
             <Form::Target::WorkerFilter
               @name='ingress_worker_filter'
               @disabled={{form.disabled}}
@@ -266,26 +266,24 @@
             </Form::Target::WorkerFilter>
           {{/if}}
 
-          {{#if this.showOSSTargetWorkerFilters}}
-            <Form::Target::WorkerFilter
-              @name='egress_worker_filter'
-              @disabled={{form.disabled}}
-              @value={{@model.egress_worker_filter}}
-              @toggleAction={{this.toggleFilter}}
-              @toggleEnabled={{this.egressWorkerFilterEnabled}}
-              @onChange={{set-from-event @model 'egress_worker_filter'}}
-              @isInvalid={{@model.errors.ingress_worker_filter}}
-              as |F|
-            >
-              {{#if @model.errors.egress_worker_filter}}
-                <F.Error as |E|>
-                  {{#each @model.errors.egress_worker_filter as |error|}}
-                    <E.Message>{{error.message}}</E.Message>
-                  {{/each}}
-                </F.Error>
-              {{/if}}
-            </Form::Target::WorkerFilter>
-          {{/if}}
+          <Form::Target::WorkerFilter
+            @name='egress_worker_filter'
+            @disabled={{form.disabled}}
+            @value={{@model.egress_worker_filter}}
+            @toggleAction={{this.toggleFilter}}
+            @toggleEnabled={{this.egressWorkerFilterEnabled}}
+            @onChange={{set-from-event @model 'egress_worker_filter'}}
+            @isInvalid={{@model.errors.ingress_worker_filter}}
+            as |F|
+          >
+            {{#if @model.errors.egress_worker_filter}}
+              <F.Error as |E|>
+                {{#each @model.errors.egress_worker_filter as |error|}}
+                  <E.Message>{{error.message}}</E.Message>
+                {{/each}}
+              </F.Error>
+            {{/if}}
+          </Form::Target::WorkerFilter>
 
         {{/if}}
       </F.Control>

@@ -10,7 +10,6 @@ const icons = {
   ssh: 'terminal-screen',
   tcp: 'network',
 };
-const workerFilters = ['egress_worker_filter', 'ingress_worker_filter'];
 export default class FormTargetComponent extends Component {
   // =properties
   @tracked egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
@@ -62,6 +61,7 @@ export default class FormTargetComponent extends Component {
     return !this.args.model.worker_filter;
   }
 
+  //note: these getters will go away when we refactor worker diagram
   /**
    * determines when the enterprise dual filter diagrams should be shown
    * @type {boolean}
@@ -75,25 +75,6 @@ export default class FormTargetComponent extends Component {
    */
   get workerDiagramHCPDualFilter() {
     return this.features.isEnabled('target-worker-filters-v2-hcp');
-  }
-
-  /**
-   * determines when the dual filter fields should be shown
-   * @type {boolean}
-   */
-  get showDualTargetWorkerFilters() {
-    return this.workerDiagramHCPDualFilter || this.workerDiagramDualFilter;
-  }
-
-  /**
-   * determines when the single filter should be shown
-   * @type {boolean}
-   */
-  get showOSSTargetWorkerFilters() {
-    return (
-      this.features.isEnabled('target-worker-filters-v2') &&
-      workerFilters.filter((type) => type !== 'ingress_worker_filter')
-    );
   }
 
   //actions
