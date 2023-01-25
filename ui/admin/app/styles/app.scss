@@ -697,6 +697,6 @@
 }
 
 .target-worker-filter-explainer {
-  min-height: 1rem;
+  min-height: sizing.rems(m);
   margin: (sizing.rems(m) + sizing.rems(xxxs)) 0 sizing.rems(l); // 18 0 24
 }
