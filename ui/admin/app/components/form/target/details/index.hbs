@@ -250,7 +250,7 @@
               @name='ingress_worker_filter'
               @disabled={{form.disabled}}
               @value={{@model.ingress_worker_filter}}
-              @toggleAction={{this.toggleFilter}}
+              @toggleAction={{this.toggleIngressFilter}}
               @toggleEnabled={{this.ingressWorkerFilterEnabled}}
               @onChange={{set-from-event @model 'ingress_worker_filter'}}
               @isInvalid={{@model.errors.ingress_worker_filter}}
@@ -270,7 +270,7 @@
             @name='egress_worker_filter'
             @disabled={{form.disabled}}
             @value={{@model.egress_worker_filter}}
-            @toggleAction={{this.toggleFilter}}
+            @toggleAction={{this.toggleEgressFilter}}
             @toggleEnabled={{this.egressWorkerFilterEnabled}}
             @onChange={{set-from-event @model 'egress_worker_filter'}}
             @isInvalid={{@model.errors.ingress_worker_filter}}

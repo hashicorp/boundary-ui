@@ -79,21 +79,20 @@ export default class FormTargetComponent extends Component {
 
   //actions
   @action
-  toggleFilter(filter) {
-    if (filter === 'egress_worker_filter') {
-      this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
-    } else {
-      this.ingressWorkerFilterEnabled = !this.ingressWorkerFilterEnabled;
-    }
-
+  toggleEgressFilter() {
+    this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
     if (!this.egressWorkerFilterEnabled) {
       this.args.model.egress_worker_filter = '';
     }
+  }
+
+  @action
+  toggleIngressFilter() {
+    this.ingressWorkerFilterEnabled = !this.ingressWorkerFilterEnabled;
     if (!this.ingressWorkerFilterEnabled) {
       this.args.model.ingress_worker_filter = '';
     }
   }
-
   @action
   migrateWorkerFilters() {
     this.egressWorkerFilterEnabled = true;
