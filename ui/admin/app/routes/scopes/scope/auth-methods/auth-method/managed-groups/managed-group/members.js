@@ -20,11 +20,13 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupMe
 
     return {
       managedGroup,
-      members: await this.resourceFilterStore.queryBy(
-        'account',
-        { id: member_ids },
-        { auth_method_id }
-      ),
+      members: member_ids?.length
+        ? await this.resourceFilterStore.queryBy(
+            'account',
+            { id: member_ids },
+            { auth_method_id }
+          )
+        : [],
     };
   }
 }
