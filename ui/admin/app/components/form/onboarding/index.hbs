@@ -17,7 +17,9 @@
       as |F|
     >
       <F.Label>{{t 'onboarding.add-target.titles.target-address'}}</F.Label>
-      <F.HelperText>{{t 'onboarding.add-target.descriptions.target-address'}}</F.HelperText>
+      <F.HelperText>{{t
+          'onboarding.add-target.descriptions.target-address'
+        }}</F.HelperText>
       {{!-- {{#if @model.errors.targetAddress}}
         <F.Error as |E|>
           {{#each @model.errors.targetAddress as |error|}}
@@ -36,7 +38,9 @@
       as |F|
     >
       <F.Label>{{t 'onboarding.add-target.titles.target-port'}}</F.Label>
-      <F.HelperText>{{t 'onboarding.add-target.descriptions.target-port'}}</F.HelperText>
+      <F.HelperText>{{t
+          'onboarding.add-target.descriptions.target-port'
+        }}</F.HelperText>
     </Hds::Form::TextInput::Field>
   </div>
 
@@ -50,15 +54,13 @@
     </:body>
   </form.fieldset>
 
-    <Hds::ButtonSet>
-      <Hds::Button
-        @text='{{t 'actions.save'}}'
-        type='submit'
-      />
-      <Hds::Button
-        @text='{{t 'actions.do-this-later'}}'
-        @color="secondary" {{on "click" @cancel}}
-      />
-    </Hds::ButtonSet>
+  <Hds::ButtonSet>
+    <Hds::Button @text='{{t "actions.save"}}' type='submit' />
+    <Hds::Button
+      @text='{{t "actions.do-this-later"}}'
+      @color='secondary'
+      {{on 'click' @cancel}}
+    />
+  </Hds::ButtonSet>
 
 </Rose::Form>
