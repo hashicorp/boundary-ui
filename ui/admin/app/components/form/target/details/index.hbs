@@ -176,6 +176,7 @@
   </Hds::Form::TextInput::Field>
 
   {{#if (feature-flag 'target-worker-filters-v2')}}
+
     <Hds::Form::Fieldset
       class='target-workers'
       @layout='horizontal'
@@ -218,9 +219,7 @@
           <F.Control>
             <Hds::Button
               class='update-filter-button'
-              @text={{t
-                'resources.target.workers.egress_worker_filter.filter.update_filter'
-              }}
+              @text={{t 'resources.target.workers.actions.update-filter'}}
               @color='secondary'
               disabled={{form.disabled}}
               {{on 'click' this.migrateWorkerFilters}}
@@ -228,24 +227,51 @@
           </F.Control>
         {{/if}}
       {{/if}}
+      <F.Control>
+        {{#if this.showTargetFilters}}
+          {{#if this.workerDiagramHCPDualFilter}}
+            <WorkerDiagram::DualFilter::Hcp
+              @egressFilter={{this.egressWorkerFilterEnabled}}
+              @ingressFilter={{this.ingressWorkerFilterEnabled}}
+            />
+          {{else if this.workerDiagramDualFilter}}
+            <WorkerDiagram::DualFilter
+              @egressFilter={{this.egressWorkerFilterEnabled}}
+              @ingressFilter={{this.ingressWorkerFilterEnabled}}
+            />
+          {{else}}
+            <WorkerDiagram::SingleFilter
+              @egressFilter={{this.egressWorkerFilterEnabled}}
+            />
+          {{/if}}
 
-      {{#if this.showEgressFilter}}
-        <F.Control>
-          <WorkerDiagram::SingleFilter
-            @egressFilter={{this.egressWorkerFilterEnabled}}
-          />
+          {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
+            <Form::Target::WorkerFilter
+              @name='ingress_worker_filter'
+              @disabled={{form.disabled}}
+              @value={{@model.ingress_worker_filter}}
+              @toggleAction={{this.toggleIngressFilter}}
+              @toggleEnabled={{this.ingressWorkerFilterEnabled}}
+              @onChange={{set-from-event @model 'ingress_worker_filter'}}
+              @isInvalid={{@model.errors.ingress_worker_filter}}
+              as |F|
+            >
+              {{#if @model.errors.ingress_worker_filter}}
+                <F.Error as |E|>
+                  {{#each @model.errors.ingress_worker_filter as |error|}}
+                    <E.Message>{{error.message}}</E.Message>
+                  {{/each}}
+                </F.Error>
+              {{/if}}
+            </Form::Target::WorkerFilter>
+          {{/if}}
 
-        </F.Control>
-        <F.Control>
           <Form::Target::WorkerFilter
             @name='egress_worker_filter'
-            @type='text'
             @disabled={{form.disabled}}
             @value={{@model.egress_worker_filter}}
-            @toggleAction={{this.toggleEgressWorkerFilter}}
-            @checked={{this.egressWorkerFilterEnabled}}
+            @toggleAction={{this.toggleEgressFilter}}
             @toggleEnabled={{this.egressWorkerFilterEnabled}}
-            @errors={{@model.errors.egress_worker_filter}}
             @onChange={{set-from-event @model 'egress_worker_filter'}}
             @isInvalid={{@model.errors.egress_worker_filter}}
             as |F|
@@ -259,40 +285,8 @@
             {{/if}}
           </Form::Target::WorkerFilter>
 
-        </F.Control>
-      {{/if}}
-
-      {{#if @model.isNew}}
-        <F.Control>
-          <WorkerDiagram::SingleFilter
-            @egressFilter={{this.egressWorkerFilterEnabled}}
-          />
-        </F.Control>
-        <F.Control>
-          <Form::Target::WorkerFilter
-            @name='egress_worker_filter'
-            @type='text'
-            @disabled={{form.disabled}}
-            @value={{@model.egress_worker_filter}}
-            @toggleAction={{this.toggleEgressWorkerFilter}}
-            @checked={{this.egressWorkerFilterEnabled}}
-            @toggleEnabled={{this.egressWorkerFilterEnabled}}
-            @errors={{@model.errors.egress_worker_filter}}
-            @onChange={{set-from-event @model 'egress_worker_filter'}}
-            @isInvalid={{@model.errors.egress_worker_filter}}
-            as |F|
-          >
-            {{#if @model.errors.egress_worker_filter}}
-              <F.Error as |E|>
-                {{#each @model.errors.egress_worker_filter as |error|}}
-                  <E.Message>{{error.message}}</E.Message>
-                {{/each}}
-              </F.Error>
-            {{/if}}
-          </Form::Target::WorkerFilter>
-        </F.Control>
-      {{/if}}
-
+        {{/if}}
+      </F.Control>
     </Hds::Form::Fieldset>
 
   {{else}}
@@ -326,4 +320,5 @@
       @cancelText={{t 'actions.cancel'}}
     />
   {{/if}}
+
 </Rose::Form>
