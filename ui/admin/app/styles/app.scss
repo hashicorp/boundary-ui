@@ -602,7 +602,7 @@
   min-height: 150px;
 
   .ordered-series-diagram {
-    --group-title-line-height: 2.25rem;
+    --group-title-line-height: sizing.rems(xl);
     
     display: flex;
 
