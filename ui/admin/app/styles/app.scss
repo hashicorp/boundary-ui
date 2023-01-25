@@ -619,7 +619,7 @@
 
       &-title {
         font-weight: var(--token-typography-font-weight-semibold);
-        margin-top: 0.5rem;
+        margin-top: sizing.rems(xs);
         width: 4rem;
       }
 
@@ -634,8 +634,8 @@
       display: flex;
 
       &-content {
-        border-radius: 0.5rem;
-        padding: 0 0.75rem 0.75rem;
+        border-radius: sizing.rems(xs);
+        padding: 0 sizing.rems(s) sizing.rems(s);
       }
 
       &-items {
@@ -661,7 +661,7 @@
 
     &-separator-icon {
       color: var(--token-color-foreground-faint);
-      margin: 0.75rem 0.5rem;
+      margin: sizing.rems(s) sizing.rems(xs);
     }
   }
 }
@@ -698,5 +698,5 @@
 
 .target-worker-filter-explainer {
   min-height: 1rem;
-  margin: 1.125rem 0 1.5rem;
+  margin: 1.125rem 0 sizing.rems(l);
 }
