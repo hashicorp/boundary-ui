@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
-import { TYPE_TARGET_SSH } from 'api/models/target';
+import { TYPE_TARGET_TCP } from 'api/models/target';
 export default class OnboardingRoute extends Route {
   // =services
 
@@ -21,7 +21,8 @@ export default class OnboardingRoute extends Route {
     const orgs = await this.store.query('scope', {
       scope_id: 'global',
     });
-    if (!this.session.isAuthenticated || orgs.length) this.router.transitionTo('index');
+    if (!this.session.isAuthenticated || orgs.length)
+      this.router.transitionTo('index');
   }
 
   /**
@@ -42,14 +43,14 @@ export default class OnboardingRoute extends Route {
         description: 'Sample project created by quick setup',
       }),
       target: this.store.createRecord('target', {
-        type: TYPE_TARGET_SSH,
-        name: 'Test SSH target',
+        type: TYPE_TARGET_TCP,
+        name: 'Test target',
         description: 'Sample target created by quick setup',
       }),
       role: this.store.createRecord('role', {
-        name: 'test_ssh_target_role',
+        name: 'test_target_role',
       }),
-    }
+    };
   }
 
   // =actions
@@ -66,7 +67,6 @@ export default class OnboardingRoute extends Route {
       throw new Error();
     }
   }
-
 
   async createSshTargetAndRedirect(targetAddress, targetPort) {
     const { org, project, target, role } = this.currentModel;
@@ -88,13 +88,11 @@ export default class OnboardingRoute extends Route {
     await role.save();
     await role.saveGrantStrings([
       `type=target;actions=list`,
-        `id=${target.id};actions=authorize-session`,
+      `id=${target.id};actions=authorize-session`,
     ]);
 
     // Redirect
-    this.router.transitionTo(
-      'onboarding.success'
-    );
+    this.router.transitionTo('onboarding.success');
   }
 
   @action
@@ -103,5 +101,3 @@ export default class OnboardingRoute extends Route {
     this.router.transitionTo('index');
   }
 }
-
-

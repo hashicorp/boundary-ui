@@ -20,4 +20,4 @@ authentication-failed:
 cluster-url-verification-failed:
   description: Unable to connect to the specified cluster URL. Please check the URL and try again.
 onboarding-failed:
-  description: We're sorry, onboarding was unable to generate SSH target.
+  description: We're sorry, onboarding was unable to generate a TCP target.
