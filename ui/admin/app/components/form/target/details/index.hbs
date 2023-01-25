@@ -273,7 +273,7 @@
             @toggleAction={{this.toggleEgressFilter}}
             @toggleEnabled={{this.egressWorkerFilterEnabled}}
             @onChange={{set-from-event @model 'egress_worker_filter'}}
-            @isInvalid={{@model.errors.ingress_worker_filter}}
+            @isInvalid={{@model.errors.egress_worker_filter}}
             as |F|
           >
             {{#if @model.errors.egress_worker_filter}}
