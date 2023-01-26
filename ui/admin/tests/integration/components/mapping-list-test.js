@@ -19,7 +19,7 @@ module('Integration | Component | mapping-list', function (hooks) {
         </MappingList>
     `);
 
-    assert.dom('ul li').exists({ count: 1 });
+    assert.dom('tbody tr').exists({ count: 1 });
     assert.dom('legend').exists().hasText('Label');
     assert.dom('.hds-form-helper-text').exists().hasText('Help');
     assert.dom('.hds-form-error__message').exists().hasText('Error!');
@@ -39,6 +39,6 @@ module('Integration | Component | mapping-list', function (hooks) {
         />
     `);
 
-    assert.dom('ul li').exists({ count: 3 });
+    assert.dom('tbody tr').exists({ count: 3 });
   });
 });

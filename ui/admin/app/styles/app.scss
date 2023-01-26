@@ -710,6 +710,7 @@
 }
 
 .mapping-table {
+  /* stylelint-disable selector-class-pattern */
   label {
     display: none;
   }
@@ -733,4 +734,5 @@
   }
 
   border: 0;
+  /* stylelint-enable selector-class-pattern */
 }
