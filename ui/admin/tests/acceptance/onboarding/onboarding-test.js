@@ -1,4 +1,4 @@
-import { assert, module, test } from 'qunit';
+import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -11,7 +11,7 @@ module('Acceptance | onboarding', function (hooks) {
   const urls = {
     onboarding: '/onboarding',
     success: '/onboarding/success',
-    orgs: '/scopes/global/scopes'
+    orgs: '/scopes/global/scopes',
   };
 
   hooks.beforeEach(() => {
@@ -34,7 +34,7 @@ module('Acceptance | onboarding', function (hooks) {
     assert.strictEqual(currentURL(), urls.success);
   });
 
-  test('redirect user to ors screen when click do this later', async function () {
+  test('redirect user to orgs screen when click do this later', async function (assert) {
     assert.expect(1);
     await visit(urls.onboarding);
     await click('[name="cancel"]');
