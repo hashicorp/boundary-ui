@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action, set } from '@ember/object';
 import {
   options,
@@ -8,13 +7,6 @@ import {
 
 export default class FormCredentialLibraryVaultSshCertComponent extends Component {
   // =properties
-
-  @tracked
-  showKeyBits = false;
-  @tracked
-  newCriticalOptionKey;
-  @tracked
-  newCriticalOptionValue;
 
   /**
    * @type {object}
@@ -27,22 +19,16 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
   types = TYPES_CREDENTIAL_LIBRARY;
 
   /**
-   * Action to determine whether the key bits field should be displayed on the form.
-   * @param value {string}
+   * Boolean to determine if the key bits field should be displayed on the form
+   * @returns {boolean}
    */
-  @action
-  shouldDisplayKeyBits({ target: { value } }) {
-    if (value === 'ed25519') {
-      this.showKeyBits = false;
-      this.args.model.key_type = null;
-    } else {
-      this.showKeyBits = true;
-      this.args.mode.key_type = value;
-    }
+  get showKeyBits() {
+    const keyType = this.args.model.key_type;
+    return keyType === 'rsa' || keyType === 'ecdsa';
   }
 
   /**
-   * Curried function to add the option. We recreate a new array after adding
+   * Adds a key/value option object. We recreate a new array after adding
    * so that ember is aware that the array has been modified.
    * @param field {string}
    * @param key {string}
@@ -56,7 +42,7 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
   }
 
   /**
-   * Curried function to remove the option by index. We recreate a new array after
+   * Removes an option by index. We recreate a new array after
    * splicing out the item so that ember is aware that the array has been modified.
    * @param field {string}
    * @param index {number}

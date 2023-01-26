@@ -8,7 +8,7 @@
   <F.Control>
     <ul class='mapping-list'>
       {{#each @options as |option index|}}
-        <li>
+        <li class='mapping-list-item'>
           <Hds::Form::TextInput::Field
             @value={{option.key}}
             @type='text'
@@ -34,7 +34,7 @@
         </li>
       {{/each}}
 
-      <li>
+      <li class='mapping-list-item'>
         <Hds::Form::TextInput::Field
           @value={{this.newOptionKey}}
           @type='text'

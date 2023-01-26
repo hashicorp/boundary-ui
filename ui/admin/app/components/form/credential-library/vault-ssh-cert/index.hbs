@@ -130,7 +130,7 @@
     @isRequired={{true}}
     @width='100%'
     disabled={{form.disabled}}
-    {{on 'input' this.shouldDisplayKeyBits}}
+    {{on 'input' (set-from-event @model 'key_type')}}
     as |F|
   >
     <F.Label>{{t 'resources.credential-library.form.key_type.label'}}</F.Label>
@@ -138,6 +138,7 @@
         'resources.credential-library.form.key_type.help'
       }}</F.HelperText>
     <F.Options>
+      <option value=''></option>
       {{#each this.keyTypes as |keyType|}}
         <option value={{keyType}}>{{keyType}}</option>
       {{/each}}
