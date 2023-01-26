@@ -189,14 +189,16 @@
 
       {{#if this.showDeprecationMessage}}
         <F.Control>
-          <Hds::Alert @color='highlight' @type='inline' as |A|>
-            <A.Title>{{t
-                'resources.target.workers.deprecation_message.title'
-              }}</A.Title>
-            <A.Description>{{t
-                'resources.target.workers.deprecation_message.description'
-              }}</A.Description>
-          </Hds::Alert>
+          <div class='target-workers-deprecation-message-wrapper'>
+            <Hds::Alert @color='highlight' @type='inline' as |A|>
+              <A.Title>{{t
+                  'resources.target.workers.deprecation_message.title'
+                }}</A.Title>
+              <A.Description>{{t
+                  'resources.target.workers.deprecation_message.description'
+                }}</A.Description>
+            </Hds::Alert>
+          </div>
         </F.Control>
         <F.Control>
           <Hds::Form::TextInput::Field
@@ -229,21 +231,26 @@
       {{/if}}
       <F.Control>
         {{#if this.showTargetFilters}}
-          {{#if this.workerDiagramHCPDualFilter}}
-            <WorkerDiagram::DualFilter::Hcp
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-              @ingressFilter={{this.ingressWorkerFilterEnabled}}
-            />
-          {{else if this.workerDiagramDualFilter}}
-            <WorkerDiagram::DualFilter
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-              @ingressFilter={{this.ingressWorkerFilterEnabled}}
-            />
-          {{else}}
-            <WorkerDiagram::SingleFilter
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-            />
-          {{/if}}
+          <div
+            class='worker-diagram-wrapper
+              {{if this.egressWorkerFilterEnabled "group-title-line-height"}}'
+          >
+            {{#if this.workerDiagramHCPDualFilter}}
+              <WorkerDiagram::DualFilter::Hcp
+                @egressFilter={{this.egressWorkerFilterEnabled}}
+                @ingressFilter={{this.ingressWorkerFilterEnabled}}
+              />
+            {{else if this.workerDiagramDualFilter}}
+              <WorkerDiagram::DualFilter
+                @egressFilter={{this.egressWorkerFilterEnabled}}
+                @ingressFilter={{this.ingressWorkerFilterEnabled}}
+              />
+            {{else}}
+              <WorkerDiagram::SingleFilter
+                @egressFilter={{this.egressWorkerFilterEnabled}}
+              />
+            {{/if}}
+          </div>
 
           {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
             <Form::Target::WorkerFilter
