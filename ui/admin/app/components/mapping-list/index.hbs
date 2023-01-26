@@ -6,59 +6,85 @@
 >
   {{yield F}}
   <F.Control>
-    <ul class='mapping-list'>
-      {{#each @options as |option index|}}
-        <li class='mapping-list-item'>
-          <Hds::Form::TextInput::Field
-            @value={{option.key}}
-            @type='text'
-            disabled={{@disabled}}
-            {{on 'input' (set-from-event option 'key')}}
-          />
-          <Hds::Form::TextInput::Field
-            @value={{option.value}}
-            @type='text'
-            disabled={{@disabled}}
-            {{on 'input' (set-from-event option 'value')}}
-          />
-          <div>
-            <Hds::Button
-              @text={{t 'actions.remove'}}
-              @color='critical'
-              @icon='trash'
-              @isIconOnly={{true}}
-              disabled={{@disabled}}
-              {{on 'click' (fn this.removeOptionByIndex index)}}
-            />
-          </div>
-        </li>
-      {{/each}}
+    <Hds::Table class='mapping-table'>
+      <:head as |H|>
+        <H.Tr>
+          <H.Th>{{t 'form.key.label'}}</H.Th>
+          <H.Th>{{t 'form.value.label'}}</H.Th>
+          <H.Th>{{t 'titles.actions'}}</H.Th>
+        </H.Tr>
+      </:head>
+      <:body as |B|>
+        {{#each @options as |option index|}}
+          <B.Tr>
+            <B.Td>
+              <Hds::Form::TextInput::Field
+                @value={{option.key}}
+                @type='text'
+                disabled={{@disabled}}
+                {{on 'input' (set-from-event option 'key')}}
+                as |F|
+              >
+                <F.Label>{{t 'form.key.label'}}</F.Label>
+              </Hds::Form::TextInput::Field>
+            </B.Td>
+            <B.Td>
+              <Hds::Form::TextInput::Field
+                @value={{option.value}}
+                @type='text'
+                disabled={{@disabled}}
+                {{on 'input' (set-from-event option 'value')}}
+                as |F|
+              >
+                <F.Label>{{t 'form.value.label'}}</F.Label>
+              </Hds::Form::TextInput::Field>
+            </B.Td>
+            <B.Td>
+              <Hds::Button
+                @text={{t 'actions.remove'}}
+                @color='critical'
+                @icon='trash'
+                @isIconOnly={{true}}
+                disabled={{@disabled}}
+                {{on 'click' (fn this.removeOptionByIndex index)}}
+              />
 
-      <li class='mapping-list-item'>
-        <Hds::Form::TextInput::Field
-          @value={{this.newOptionKey}}
-          @type='text'
-          disabled={{@disabled}}
-          placeholder='Value'
-          {{on 'input' (set-from-event this 'newOptionKey')}}
-        />
-        <Hds::Form::TextInput::Field
-          @value={{this.newOptionValue}}
-          @type='text'
-          disabled={{@disabled}}
-          placeholder='Value'
-          {{on 'input' (set-from-event this 'newOptionValue')}}
-        />
-        <div>
-          <Hds::Button
-            @text={{t 'actions.add'}}
-            @color='secondary'
-            type='button'
-            disabled={{@disabled}}
-            {{on 'click' this.addOption}}
-          />
-        </div>
-      </li>
-    </ul>
+            </B.Td>
+          </B.Tr>
+        {{/each}}
+        <B.Tr>
+          <B.Td>
+            <Hds::Form::TextInput::Field
+              @value={{this.newOptionKey}}
+              @type='text'
+              disabled={{@disabled}}
+              {{on 'input' (set-from-event this 'newOptionKey')}}
+              as |F|
+            >
+              <F.Label>{{t 'form.key.label'}}</F.Label>
+            </Hds::Form::TextInput::Field></B.Td>
+          <B.Td>
+            <Hds::Form::TextInput::Field
+              @value={{this.newOptionValue}}
+              @type='text'
+              disabled={{@disabled}}
+              {{on 'input' (set-from-event this 'newOptionValue')}}
+              as |F|
+            >
+              <F.Label>{{t 'form.value.label'}}</F.Label>
+            </Hds::Form::TextInput::Field>
+          </B.Td>
+          <B.Td>
+            <Hds::Button
+              @text={{t 'actions.add'}}
+              @color='secondary'
+              type='button'
+              disabled={{@disabled}}
+              {{on 'click' this.addOption}}
+            />
+          </B.Td>
+        </B.Tr>
+      </:body>
+    </Hds::Table>
   </F.Control>
 </Hds::Form::Fieldset>
