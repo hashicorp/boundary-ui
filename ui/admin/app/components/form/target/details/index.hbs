@@ -231,10 +231,11 @@
 
       {{#if this.showEgressFilter}}
         <F.Control>
-          <WorkerDiagram::SingleFilter
-            @egressFilter={{this.egressWorkerFilterEnabled}}
-          />
-
+          <div class='worker-diagram-wrapper'>
+            <WorkerDiagram::SingleFilter
+              @egressFilter={{this.egressWorkerFilterEnabled}}
+            />
+          </div>
         </F.Control>
         <F.Control>
           <Form::Target::WorkerFilter
@@ -264,9 +265,11 @@
 
       {{#if @model.isNew}}
         <F.Control>
-          <WorkerDiagram::SingleFilter
-            @egressFilter={{this.egressWorkerFilterEnabled}}
-          />
+          <div class='worker-diagram-wrapper'>
+            <WorkerDiagram::SingleFilter
+              @egressFilter={{this.egressWorkerFilterEnabled}}
+            />
+          </div>
         </F.Control>
         <F.Control>
           <Form::Target::WorkerFilter
