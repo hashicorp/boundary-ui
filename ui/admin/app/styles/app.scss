@@ -613,6 +613,7 @@
 
     &-item {
       display: flex;
+
       &-content {
         display: flex;
         flex-direction: column;
@@ -673,6 +674,7 @@
 .group-title-line-height {
   .ordered-series-diagram {
     --group-title-line-height: 2.25rem;
+
     &-item {
       margin-top: var(--group-title-line-height);
     }
