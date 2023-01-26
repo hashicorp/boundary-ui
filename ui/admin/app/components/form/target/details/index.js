@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
@@ -9,13 +10,13 @@ const icons = {
   ssh: 'terminal-screen',
   tcp: 'network',
 };
-
 export default class FormTargetComponent extends Component {
   // =properties
-  @tracked egressWorkerFilterEnabled =
-    this.args.model.egress_worker_filter?.length;
+  @tracked egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
+  @tracked ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
 
-  // =properties
+  // =services
+  @service features;
   /**
    * maps resource type with icon
    * @type {object}
@@ -49,28 +50,56 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get showUpdateWorkerFilterButton() {
-    return this.args.model.worker_filter?.length;
+    return this.args.model.worker_filter;
   }
 
-  get showEgressFilter() {
-    return !this.args.model.worker_filter?.length && !this.args.model.isNew;
+  /**
+   * determines when the filters should be shown
+   * @type {boolean}
+   */
+  get showTargetFilters() {
+    return !this.args.model.worker_filter;
+  }
+
+  //note: these getters will go away when we refactor worker diagram
+  /**
+   * determines when the enterprise dual filter diagrams should be shown
+   * @type {boolean}
+   */
+  get workerDiagramDualFilter() {
+    return this.features.isEnabled('target-worker-filters-v2-ingress');
+  }
+  /**
+   * determines when the hcp dual filter diagrams should be shown
+   * @type {boolean}
+   */
+  get workerDiagramHCPDualFilter() {
+    return this.features.isEnabled('target-worker-filters-v2-hcp');
   }
 
   //actions
   @action
-  toggleEgressWorkerFilter() {
+  toggleEgressFilter() {
     this.egressWorkerFilterEnabled = !this.egressWorkerFilterEnabled;
     if (!this.egressWorkerFilterEnabled) {
       this.args.model.egress_worker_filter = '';
     }
   }
 
-  // =actions
+  @action
+  toggleIngressFilter() {
+    this.ingressWorkerFilterEnabled = !this.ingressWorkerFilterEnabled;
+    if (!this.ingressWorkerFilterEnabled) {
+      this.args.model.ingress_worker_filter = '';
+    }
+  }
   @action
   migrateWorkerFilters() {
     this.egressWorkerFilterEnabled = true;
+    this.ingressWorkerFilterEnabled = true;
     // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.ingress_worker_filter = this.args.model.worker_filter;
     this.args.model.worker_filter = '';
   }
 
@@ -82,7 +111,9 @@ export default class FormTargetComponent extends Component {
   cancel() {
     this.args.cancel();
     // Reset the tracked variable for toggles after rollback
-    this.egressWorkerFilterEnabled =
-      this.args.model.egress_worker_filter?.length;
+
+    this.egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
+
+    this.ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
   }
 }
