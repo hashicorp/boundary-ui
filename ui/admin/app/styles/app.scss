@@ -250,9 +250,15 @@
     gap: sizing.rems(s);
   }
 
-  .rose-form-fieldset-body {
+  .hds-form-group {
     margin-top: sizing.rems(l);
     justify-content: center;
+
+    .image-container {
+      display: flex;
+      justify-content: center;
+      margin-top: sizing.rems(l);
+    }
   }
 
   .create-resources-item {

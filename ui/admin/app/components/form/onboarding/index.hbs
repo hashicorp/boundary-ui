@@ -3,7 +3,6 @@
   @cancel={{@cancel}}
   @disabled={{@model.target.isSaving}}
   @onSubmit={{fn @submit this.targetAddress this.targetPort}}
-  as |form|
 >
   <div class='create-resources-form'>
     <Hds::Form::TextInput::Field
@@ -11,8 +10,6 @@
       @type='text'
       @value={{this.targetAddress}}
       @isRequired={{true}}
-      @isInvalid={{this.targetAddress}}
-      disabled={{form.disabled}}
       {{on 'input' (set-from-event this 'targetAddress')}}
       as |F|
     >
@@ -37,15 +34,13 @@
     </Hds::Form::TextInput::Field>
   </div>
 
-  <form.fieldset>
-    <:title>{{t 'onboarding.add-target.titles.target-setup-info'}}</:title>
-    <:description>
-      {{t 'onboarding.add-target.descriptions.target-setup-info'}}
-    </:description>
-    <:body>
-      <Image @name='ssh-target-creation' />
-    </:body>
-  </form.fieldset>
+  <Hds::Form::Fieldset as |F|>
+    <F.Legend>{{t 'onboarding.add-target.titles.target-setup-info'}}</F.Legend>
+    <F.Control>{{t
+        'onboarding.add-target.descriptions.target-setup-info'
+      }}</F.Control>
+    <F.Control><Image @name='ssh-target-creation' /></F.Control>
+  </Hds::Form::Fieldset>
 
   <Hds::ButtonSet>
     <Hds::Button @text='{{t "actions.save"}}' type='submit' />
