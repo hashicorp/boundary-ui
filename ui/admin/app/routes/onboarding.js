@@ -60,21 +60,43 @@ export default class OnboardingRoute extends Route {
     return this.intl.t('errors.onboarding-failed.description');
   })
   async createTarget(targetAddress, targetPort) {
+    // Create org and Project
     try {
-      await this.createSshTargetAndRedirect(targetAddress, targetPort);
-    } catch (e) {
+      await this.createOrgAndProject();
+    } catch (error) {
+      throw new Error();
+    }
+
+    // Create target
+    try {
+      await this.createSampleTarget(targetAddress, targetPort);
+      // Redirect to success
+      this.router.transitionTo('onboarding.success');
+    } catch (error) {
+      // Redirect to orgs
       this.router.replaceWith('scopes.scope', 'global');
       throw new Error();
     }
   }
 
-  async createSshTargetAndRedirect(targetAddress, targetPort) {
-    const { org, project, target, role } = this.currentModel;
+  /**
+   * Persist org and project previosly created in model()
+   */
+  async createOrgAndProject() {
+    const { org, project } = this.currentModel;
 
-    // Persist org and project
     await org.save();
     project.scopeID = org.id;
     await project.save();
+  }
+
+  /**
+   * Creates a Target with provided address and port
+   * @param {string} targetAddress
+   * @param {string} targetPort
+   */
+  async createSampleTarget(targetAddress, targetPort) {
+    const { target, role, project, org } = this.currentModel;
 
     // Format target and persist it
     target.scopeID = project.id;
@@ -90,9 +112,6 @@ export default class OnboardingRoute extends Route {
       `type=target;actions=list`,
       `id=${target.id};actions=authorize-session`,
     ]);
-
-    // Redirect
-    this.router.transitionTo('onboarding.success');
   }
 
   @action

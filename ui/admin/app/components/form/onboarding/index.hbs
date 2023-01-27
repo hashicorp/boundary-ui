@@ -1,7 +1,7 @@
 <Rose::Form
   class='full-width'
   @cancel={{@cancel}}
-  @disabled={{@model.isSaving}}
+  @disabled={{@model.target.isSaving}}
   @onSubmit={{fn @submit this.targetAddress this.targetPort}}
   as |form|
 >
@@ -20,13 +20,6 @@
       <F.HelperText>{{t
           'onboarding.add-target.descriptions.target-address'
         }}</F.HelperText>
-      {{!-- {{#if @model.errors.targetAddress}}
-        <F.Error as |E|>
-          {{#each @model.errors.targetAddress as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}} --}}
     </Hds::Form::TextInput::Field>
 
     <Hds::Form::TextInput::Field
