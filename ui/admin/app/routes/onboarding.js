@@ -115,7 +115,6 @@ export default class OnboardingRoute extends Route {
   }
 
   @action
-  @loading
   async doLater() {
     this.router.transitionTo('index');
   }
