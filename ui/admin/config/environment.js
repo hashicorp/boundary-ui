@@ -13,10 +13,8 @@ const featureEditions = {
     'byow-pki-hcp-cluster-id': false,
     'byow-pki-upstream': true,
     'vault-worker-filter': false,
-    'target-worker-filters-v2': false,
-    'target-worker-filters-v2-ingress': false,
-    'target-worker-filters-v2-hcp': false,
-    'target-network-address': false,
+    'target-worker-filters-v2': true,
+    'target-network-address': true,
     'credential-library-vault-ssh-cert': false,
   },
 };
@@ -24,11 +22,13 @@ featureEditions.enterprise = {
   ...featureEditions.oss,
   'ssh-target': true,
   'vault-worker-filter': true,
+  'target-worker-filters-v2-ingress': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
   'byow-pki-hcp-cluster-id': true,
   'byow-pki-upstream': false,
+  'target-worker-filters-v2-hcp': true,
 };
 
 module.exports = function (environment) {
