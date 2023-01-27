@@ -6,6 +6,7 @@
     <:body>
       <p>{{t 'onboarding.add-target.descriptions.setup-first-target'}}</p>
       <Form::Onboarding
+        @model={{@model}}
         @submit={{route-action 'createTarget'}}
         @cancel={{route-action 'doLater'}}
       />
