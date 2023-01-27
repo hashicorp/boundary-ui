@@ -667,14 +667,18 @@
 // target worker filters
 .target-workers {
   margin-top: sizing.rems(xxl);
-  margin-bottom: sizing.rems(xxl) + sizing.rems(l);
+  margin-bottom: sizing.rems(xl);
 
   .hds-form-legend {
     font-size: sizing.rems(l) - sizing.rems(xxs); // 20
   }
 
   .hds-alert {
-    margin-bottom: sizing.rems(l);
+    margin-bottom: sizing.rems(l); // 16
+  }
+
+  .migration-wrapper {
+    margin: sizing.rems(m) 0 sizing.rems(m) 0;
   }
 
   // note re Button margin: this is a temp solution,
@@ -692,9 +696,15 @@
       margin-bottom: 1rem;
     }
   }
-}
 
-.target-worker-filter-explainer {
-  min-height: 1rem;
-  margin: 1.125rem 0 1.5rem;
+  .target-worker-filter-explainer {
+    min-height: 4rem; // 1
+  }
+
+  .worker-wrapper {
+    display: flex;
+    align-items: center;
+    min-height: 11rem;
+    margin-top: sizing.rems(xs) - sizing.rems(xxxxs); // 10
+  }
 }
