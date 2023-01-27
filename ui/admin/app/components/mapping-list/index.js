@@ -9,9 +9,6 @@ export default class MappingListComponent extends Component {
   newOptionValue;
 
   @action
-  updateArray() {}
-
-  @action
   addOption() {
     if (this.args.addOption) {
       this.args.addOption({
