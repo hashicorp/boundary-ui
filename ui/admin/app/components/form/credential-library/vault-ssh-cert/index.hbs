@@ -129,6 +129,7 @@
   <Hds::Form::Select::Field
     @isRequired={{true}}
     @width='100%'
+    name='key_type'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'key_type')}}
     as |F|
@@ -227,8 +228,8 @@
 
   <MappingList
     @layout='horizontal'
-    @isRequired={{false}}
     @isOptional={{true}}
+    @name='critical_options'
     @options={{@model.critical_options}}
     @addOption={{fn this.addOption 'critical_options'}}
     @removeOptionByIndex={{fn this.removeOptionByIndex 'critical_options'}}
@@ -253,6 +254,7 @@
   <MappingList
     @layout='horizontal'
     @isOptional={{true}}
+    @name='extensions'
     @options={{@model.extensions}}
     @addOption={{fn this.addOption 'extensions'}}
     @removeOptionByIndex={{fn this.removeOptionByIndex 'extensions'}}

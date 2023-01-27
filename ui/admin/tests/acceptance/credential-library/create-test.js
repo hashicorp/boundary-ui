@@ -1,10 +1,18 @@
 import { module, test } from 'qunit';
-import { visit, click, fillIn, currentURL, find } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  fillIn,
+  currentURL,
+  find,
+  select,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -81,6 +89,76 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert.strictEqual(getCredentialLibraryCount(), count + 1);
+  });
+
+  test('can create a new credential library of type vault ssh cert', async function (assert) {
+    assert.expect(12);
+    const count = getCredentialLibraryCount();
+    await visit(urls.newCredentialLibrary);
+    await click('[value="vault-ssh-cert"]');
+    await fillIn('[name="name"]', 'name');
+    await fillIn('[name="description"]', 'description');
+    await fillIn('[name="vault_path"]', 'path');
+    await fillIn('[name="username"]', 'username');
+    await select('[name="key_type"]', 'rsa');
+    await fillIn('[name="key_bits"]', 100);
+    await fillIn('[name="ttl"]', 'ttl');
+    await fillIn('[name="key_id"]', 'key_id');
+    await fillIn(
+      '[name="critical_options"] tbody td:nth-of-type(1) input',
+      'co_key'
+    );
+    await fillIn(
+      '[name="critical_options"] tbody td:nth-of-type(2) input',
+      'co_value'
+    );
+    await click('[name="critical_options"] button');
+    await fillIn(
+      '[name="extensions"] tbody td:nth-of-type(1) input',
+      'ext_key'
+    );
+    await fillIn(
+      '[name="extensions"] tbody td:nth-of-type(2) input',
+      'ext_value'
+    );
+    await click('[name="extensions"] button');
+    await click('[type="submit"]');
+    assert.strictEqual(getCredentialLibraryCount(), count + 1);
+    assert.strictEqual(
+      this.server.schema.credentialLibraries.where({
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+      }).length,
+      1
+    );
+    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+    });
+    assert.strictEqual(credentialLibrary.name, 'name');
+    assert.strictEqual(credentialLibrary.description, 'description');
+    assert.strictEqual(credentialLibrary.attributes.path, 'path');
+    assert.strictEqual(credentialLibrary.attributes.username, 'username');
+    assert.strictEqual(credentialLibrary.attributes.key_type, 'rsa');
+    assert.strictEqual(credentialLibrary.attributes.key_bits, 100);
+    assert.strictEqual(credentialLibrary.attributes.ttl, 'ttl');
+    assert.strictEqual(credentialLibrary.attributes.key_id, 'key_id');
+    assert.deepEqual(credentialLibrary.attributes.critical_options, {
+      co_key: 'co_value',
+    });
+    assert.deepEqual(credentialLibrary.attributes.extensions, {
+      ext_key: 'ext_value',
+    });
+  });
+
+  test('ecdsa and rsa key types bring up a key bits field', async function (assert) {
+    assert.expect(3);
+    await visit(urls.newCredentialLibrary);
+    await click('[value="vault-ssh-cert"]');
+    await select('[name="key_type"]', 'ed25519');
+    assert.dom('[name="key_bits"]').doesNotExist();
+    await select('[name="key_type"]', 'ecdsa');
+    assert.dom('[name="key_bits"]').isVisible();
+    await select('[name="key_type"]', 'rsa');
+    assert.dom('[name="key_bits"]').isVisible();
   });
 
   test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {

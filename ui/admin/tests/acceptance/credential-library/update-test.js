@@ -1,9 +1,17 @@
 import { module, test } from 'qunit';
-import { visit, click, fillIn, currentURL, find } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  fillIn,
+  currentURL,
+  find,
+  select,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -180,5 +188,62 @@ module('Acceptance | credential-libraries | update', function (hooks) {
         'random string'
       );
     }
+  });
+
+  test('can update a vault ssh cert credential library and save changes', async function (assert) {
+    assert.expect(10);
+    instances.credentialLibrary = this.server.create('credential-library', {
+      scope: instances.scopes.project,
+      credentialStore: instances.credentialStore,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+    });
+    await visit(
+      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
+    );
+    await click('form [type="button"]:not(:disabled)', 'Activate edit mode');
+    await fillIn('[name="name"]', 'name');
+    await fillIn('[name="description"]', 'description');
+    await fillIn('[name="vault_path"]', 'path');
+    await fillIn('[name="username"]', 'username');
+    await select('[name="key_type"]', 'rsa');
+    await fillIn('[name="key_bits"]', 100);
+    await fillIn('[name="ttl"]', 'ttl');
+    await fillIn('[name="key_id"]', 'key_id');
+    await fillIn(
+      '[name="critical_options"] tbody td:nth-of-type(1) input',
+      'co_key'
+    );
+    await fillIn(
+      '[name="critical_options"] tbody td:nth-of-type(2) input',
+      'co_value'
+    );
+    await click('[name="critical_options"] button');
+    await fillIn(
+      '[name="extensions"] tbody td:nth-of-type(1) input',
+      'ext_key'
+    );
+    await fillIn(
+      '[name="extensions"] tbody td:nth-of-type(2) input',
+      'ext_value'
+    );
+    await click('[name="extensions"] button');
+    await click('[type="submit"]');
+    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+    });
+    assert.strictEqual(credentialLibrary.name, 'name');
+    assert.strictEqual(credentialLibrary.description, 'description');
+    assert.strictEqual(credentialLibrary.attributes.path, 'path');
+    assert.strictEqual(credentialLibrary.attributes.username, 'username');
+    assert.strictEqual(credentialLibrary.attributes.key_type, 'rsa');
+    assert.strictEqual(credentialLibrary.attributes.key_bits, 100);
+    assert.strictEqual(credentialLibrary.attributes.ttl, 'ttl');
+    assert.strictEqual(credentialLibrary.attributes.key_id, 'key_id');
+    assert.deepEqual(credentialLibrary.attributes.critical_options, {
+      co_key: 'co_value',
+    });
+    assert.deepEqual(credentialLibrary.attributes.extensions, {
+      ext_key: 'ext_value',
+    });
   });
 });
