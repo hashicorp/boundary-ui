@@ -80,7 +80,7 @@ export default class OnboardingRoute extends Route {
   }
 
   /**
-   * Persist org and project previosly created in model()
+   * Persist org and project previously created in the model
    */
   async createOrgAndProject() {
     const { org, project } = this.currentModel;
