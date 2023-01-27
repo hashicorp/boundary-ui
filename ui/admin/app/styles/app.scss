@@ -711,10 +711,6 @@
 
 .mapping-table {
   /* stylelint-disable selector-class-pattern */
-  label {
-    display: none;
-  }
-
   td > div,
   .hds-form-field__control:not(:first-child) {
     margin: 0;
@@ -732,7 +728,15 @@
   .hds-table__thead .hds-table__tr {
     background-color: transparent;
   }
+  /* stylelint-enable selector-class-pattern */
+
+  label {
+    display: none;
+  }
 
   border: 0;
-  /* stylelint-enable selector-class-pattern */
+
+  tbody td:last-of-type {
+    width: 5%;
+  }
 }
