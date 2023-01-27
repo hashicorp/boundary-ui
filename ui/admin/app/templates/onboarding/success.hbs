@@ -24,15 +24,15 @@
 
         <Hds::Link::Standalone
           @icon='download'
-          @text='{{t "onboarding.success.links.install"}}'
-          @href='{{doc-url "downloads"}}'
+          @text={{t 'onboarding.success.links.install'}}
+          @href={{doc-url 'downloads'}}
           isHrefExternal={{true}}
         />
 
         <Hds::Link::Standalone
           @icon='docs-link'
-          @text='{{t "onboarding.success.links.learn"}}'
-          @href='{{doc-url "getting-started.desktop"}}'
+          @text={{t 'onboarding.success.links.learn'}}
+          @href={{doc-url 'getting-started.desktop'}}
           isHrefExternal={{true}}
         />
 
@@ -67,21 +67,21 @@
 
         <Hds::Link::Standalone
           @icon='docs-link'
-          @text='{{t "onboarding.success.links.cli"}}'
-          @href='{{doc-url "api-client.cli"}}'
+          @text={{t 'onboarding.success.links.cli'}}
+          @href={{doc-url 'api-client.cli'}}
           isHrefExternal={{true}}
         />
 
         <Hds::Link::Standalone
           @icon='docs-link'
-          @text='{{t "onboarding.success.links.api"}}'
-          @href='{{doc-url "api-client.api"}}'
+          @text={{t 'onboarding.success.links.api'}}
+          @href={{doc-url 'api-client.api'}}
           isHrefExternal={{true}}
         />
       </div>
 
       <Hds::Button
-        @text='{{t "actions.done"}}'
+        @text={{t 'actions.done'}}
         data-test-onboarding-done-button
         {{on 'click' (route-action 'showTargetList' @model)}}
       />
