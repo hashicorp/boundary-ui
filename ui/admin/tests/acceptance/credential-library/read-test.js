@@ -4,6 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -76,6 +77,23 @@ module('Acceptance | credential-libraries | read', function (hooks) {
       );
     await visit(urls.credentialLibraries);
     assert.notOk(find('main tbody .rose-table-header-cell a'));
+  });
+
+  test('cannot navigate to vault ssh cert form when feature is not enabled', async function (assert) {
+    assert.expect(1);
+    instances.credentialLibrary = this.server.create('credential-library', {
+      scope: instances.scopes.project,
+      credentialStore: instances.credentialStore,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+    });
+    await visit(
+      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
+    );
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.disable('credential-library-vault-ssh-cert');
+    await visit(urls.credentialLibraries);
+
+    assert.dom('.rose-table-body tr:nth-of-type(2) a').doesNotExist();
   });
 
   test('visiting an unknown credential library displays 404 message', async function (assert) {

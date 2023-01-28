@@ -217,4 +217,13 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       'Name is required.'
     );
   });
+
+  test('cannot select vault ssh cert when feature is disabled', async function (assert) {
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.disable('credential-library-vault-ssh-cert');
+    assert.expect(1);
+    await visit(urls.newCredentialLibrary);
+
+    assert.dom('[value="vault-ssh-cert"]').doesNotExist();
+  });
 });

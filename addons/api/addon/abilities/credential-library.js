@@ -2,11 +2,11 @@ import ModelAbility from './model';
 /**
  * Provides abilities for credential.
  */
-export default class CredentialLibaryAbility extends ModelAbility {
+export default class CredentialLibraryAbility extends ModelAbility {
   // =permissions
 
   /**
-   * Only "known" credential libary types may be read.
+   * Only "known" credential library types may be read.
    * @type {boolean}
    */
   get canRead() {

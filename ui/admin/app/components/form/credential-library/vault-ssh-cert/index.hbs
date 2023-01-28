@@ -46,7 +46,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  {{#if (and @model.isNew (feature-flag 'credential-library-vault-ssh-cert'))}}
+  {{#if @model.isNew}}
     <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each this.types as |type|}}
