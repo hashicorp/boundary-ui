@@ -470,7 +470,7 @@ credential-library:
       help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
     username:
       label: Username
-      help: This is the username that will be used to connect to Vault.
+      help: The username to use when making an SSH connection. This can be templated to use the requesting user's name. This will be included in the valid_principles when making the request to Vault.
     key_type:
       label: Key Type
       help: Specifies the desired key type to use when generating a private key.
@@ -491,7 +491,7 @@ credential-library:
       help: Specifies a map of the extensions that the certificate should be signed for.
   types:
     vault-generic: Generic Secrets
-    vault-ssh-cert: SSH Certificate Credentials
+    vault-ssh-cert: SSH Certificates
   help:
     vault-generic: Authorize sessions using credentials brokered by Vault
     vault-ssh-cert: Authorize sessions using the SSH Secrets Engine in Vault
