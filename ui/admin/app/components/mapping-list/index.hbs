@@ -11,7 +11,9 @@
         <H.Tr>
           <H.Th>{{t 'form.key.label'}}</H.Th>
           <H.Th>{{t 'form.value.label'}}</H.Th>
-          <H.Th>{{t 'titles.actions'}}</H.Th>
+          {{#if @removeOptionByIndex}}
+            <H.Th>{{t 'titles.actions'}}</H.Th>
+          {{/if}}
         </H.Tr>
       </:head>
       <:body as |B|>
@@ -25,7 +27,7 @@
                 {{on 'input' (set-from-event option 'key')}}
                 as |F|
               >
-                <F.Label>{{t 'form.key.label'}}</F.Label>
+                <F.Label class='sr-only'>{{t 'form.key.label'}}</F.Label>
               </Hds::Form::TextInput::Field>
             </B.Td>
             <B.Td>
@@ -36,20 +38,21 @@
                 {{on 'input' (set-from-event option 'value')}}
                 as |F|
               >
-                <F.Label>{{t 'form.value.label'}}</F.Label>
+                <F.Label classes='sr-only'>{{t 'form.value.label'}}</F.Label>
               </Hds::Form::TextInput::Field>
             </B.Td>
-            <B.Td>
-              <Hds::Button
-                @text={{t 'actions.remove'}}
-                @color='critical'
-                @icon='trash'
-                @isIconOnly={{true}}
-                disabled={{@disabled}}
-                {{on 'click' (fn this.removeOptionByIndex index)}}
-              />
-
-            </B.Td>
+            {{#if @removeOptionByIndex}}
+              <B.Td>
+                <Hds::Button
+                  @text={{t 'actions.remove'}}
+                  @color='critical'
+                  @icon='trash'
+                  @isIconOnly={{true}}
+                  disabled={{@disabled}}
+                  {{on 'click' (fn @removeOptionByIndex index)}}
+                />
+              </B.Td>
+            {{/if}}
           </B.Tr>
         {{/each}}
         <B.Tr>
