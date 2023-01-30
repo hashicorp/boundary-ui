@@ -11,10 +11,15 @@
         <H.Tr>
           <H.Th>{{t 'form.key.label'}}</H.Th>
           <H.Th>{{t 'form.value.label'}}</H.Th>
-          <H.Th>{{t 'titles.actions'}}</H.Th>
+          <H.Th>
+            {{#if @removeOptionByIndex}}
+              {{t 'titles.actions'}}
+            {{/if}}
+          </H.Th>
         </H.Tr>
       </:head>
       <:body as |B|>
+
         {{#each @options as |option index|}}
           <B.Tr>
             <B.Td>
@@ -25,7 +30,7 @@
                 {{on 'input' (set-from-event option 'key')}}
                 as |F|
               >
-                <F.Label>{{t 'form.key.label'}}</F.Label>
+                <F.Label class='sr-only'>{{t 'form.key.label'}}</F.Label>
               </Hds::Form::TextInput::Field>
             </B.Td>
             <B.Td>
@@ -36,22 +41,24 @@
                 {{on 'input' (set-from-event option 'value')}}
                 as |F|
               >
-                <F.Label>{{t 'form.value.label'}}</F.Label>
+                <F.Label class='sr-only'>{{t 'form.value.label'}}</F.Label>
               </Hds::Form::TextInput::Field>
             </B.Td>
             <B.Td>
-              <Hds::Button
-                @text={{t 'actions.remove'}}
-                @color='critical'
-                @icon='trash'
-                @isIconOnly={{true}}
-                disabled={{@disabled}}
-                {{on 'click' (fn this.removeOptionByIndex index)}}
-              />
-
+              {{#if @removeOptionByIndex}}
+                <Hds::Button
+                  @text={{t 'actions.remove'}}
+                  @color='critical'
+                  @icon='trash'
+                  @isIconOnly={{true}}
+                  disabled={{@disabled}}
+                  {{on 'click' (fn @removeOptionByIndex index)}}
+                />
+              {{/if}}
             </B.Td>
           </B.Tr>
         {{/each}}
+
         <B.Tr>
           <B.Td>
             <Hds::Form::TextInput::Field
@@ -79,11 +86,12 @@
               @text={{t 'actions.add'}}
               @color='secondary'
               type='button'
-              disabled={{@disabled}}
+              disabled={{or @disabled (not this.newOptionKey)}}
               {{on 'click' this.addOption}}
             />
           </B.Td>
         </B.Tr>
+
       </:body>
     </Hds::Table>
   </F.Control>
