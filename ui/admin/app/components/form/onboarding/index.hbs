@@ -9,13 +9,21 @@
       @type='text'
       @value={{this.targetAddress}}
       @isRequired={{true}}
+      @isInvalid={{this.targetAddressInValid}}
       {{on 'input' (set-from-event this 'targetAddress')}}
+      {{on 'focusout' this.isTargetAddressInValid}}
       as |F|
     >
       <F.Label>{{t 'onboarding.add-target.titles.target-address'}}</F.Label>
-      <F.HelperText>{{t
-          'onboarding.add-target.descriptions.target-address'
-        }}</F.HelperText>
+      <F.HelperText>
+        {{t 'onboarding.add-target.descriptions.target-address'}}
+      </F.HelperText>
+
+      {{#if this.targetAddressInValid}}
+        <F.Error as |E|>
+          <E.Message>{{t 'errors.required-field'}}</E.Message>
+        </F.Error>
+      {{/if}}
     </Hds::Form::TextInput::Field>
 
     <Hds::Form::TextInput::Field
@@ -23,13 +31,20 @@
       @type='text'
       @value={{this.targetPort}}
       @isRequired={{true}}
+      @isInvalid={{this.targetPortInValid}}
       {{on 'input' (set-from-event this 'targetPort')}}
+      {{on 'focusout' this.isTargetPortInValid}}
       as |F|
     >
       <F.Label>{{t 'onboarding.add-target.titles.target-port'}}</F.Label>
-      <F.HelperText>{{t
-          'onboarding.add-target.descriptions.target-port'
-        }}</F.HelperText>
+      <F.HelperText>
+        {{t 'onboarding.add-target.descriptions.target-port'}}
+      </F.HelperText>
+      {{#if this.targetPortInValid}}
+        <F.Error as |E|>
+          <E.Message>{{t 'errors.required-field'}}</E.Message>
+        </F.Error>
+      {{/if}}
     </Hds::Form::TextInput::Field>
   </div>
 
@@ -42,7 +57,11 @@
   </Hds::Form::Fieldset>
 
   <Hds::ButtonSet>
-    <Hds::Button @text='{{t "actions.save"}}' type='submit' />
+    <Hds::Button
+      @text='{{t "actions.save"}}'
+      type='submit'
+      disabled={{this.submitDisabled}}
+    />
     <Hds::Button
       @text='{{t "actions.do-this-later"}}'
       @color='secondary'

@@ -64,7 +64,7 @@ export default class OnboardingRoute extends Route {
     try {
       await this.createOrgAndProject();
     } catch (error) {
-      throw new Error();
+      throw new Error(error);
     }
 
     // Create target
@@ -75,7 +75,7 @@ export default class OnboardingRoute extends Route {
     } catch (error) {
       // Redirect to orgs
       this.router.replaceWith('scopes.scope', 'global');
-      throw new Error();
+      throw new Error(error);
     }
   }
 
@@ -97,6 +97,10 @@ export default class OnboardingRoute extends Route {
    */
   async createSampleTarget(targetAddress, targetPort) {
     const { target, role, project, org } = this.currentModel;
+
+    console.log('Create sample target con: ');
+    console.log('targetAddress: ', targetAddress);
+    console.log('targetPort', targetPort);
 
     // Format target and persist it
     target.scopeID = project.id;

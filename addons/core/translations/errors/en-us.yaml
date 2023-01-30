@@ -21,3 +21,4 @@ cluster-url-verification-failed:
   description: Unable to connect to the specified cluster URL. Please check the URL and try again.
 onboarding-failed:
   description: We're sorry, onboarding was unable to generate a TCP target.
+required-field: This is a required field.
