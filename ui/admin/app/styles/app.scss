@@ -710,33 +710,61 @@
 }
 
 .mapping-table {
+  border: 0;
+
   /* stylelint-disable selector-class-pattern */
-  td > div,
-  .hds-form-field__control:not(:first-child) {
-    margin: 0;
+  .hds-table__thead {
+    .hds-table__th {
+      height: auto;
+      line-height: 1;
+    }
   }
 
-  .hds-table__tbody td {
-    padding-left: 0;
-  }
+  .hds-table__thead,
+  .hds-table__tbody {
+    .hds-table__tr {
+      // Remove background color on all cells (especially header cells)
+      background-color: transparent;
+    }
 
-  .hds-table__th {
-    padding: sizing.rems(xs) 0;
-    height: sizing.rems(l) + sizing.rems(xs);
-  }
+    .hds-table__th,
+    .hds-table__td {
+      padding: 0.75rem 1rem;
 
-  .hds-table__thead .hds-table__tr {
-    background-color: transparent;
+      // Rely on right padding for cell spacing...
+      padding-left: 0;
+
+      &:last-child {
+        // ...except in the last cell, which doesn't need right padding
+        padding-right: 0;
+
+        // Shrink last cell to minimum possible width
+        width: 1%;
+        white-space: nowrap;
+      }
+
+      // Reset field margins to rely instead on cell paddings
+      .hds-form-field--layout-vertical,
+      .hds-form-text-input {
+        margin: 0;
+      }
+    }
   }
   /* stylelint-enable selector-class-pattern */
 
-  label {
-    display: none;
-  }
-
-  border: 0;
-
-  tbody td:last-of-type {
-    width: 5%;
+  // Visually hide form labels within this table (duplicates HDS `.sr-only`).
+  // This is temporary since `class='sr-only'` does not correctly apply classes
+  // to input labels (like it does for select labels and other components).
+  .hds-form-label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    clip-path: inset(50%) !important;
   }
 }
