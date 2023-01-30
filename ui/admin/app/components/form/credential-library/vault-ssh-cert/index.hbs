@@ -226,7 +226,7 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <MappingList
+  <Form::Field::KeyValueList
     @layout='horizontal'
     @isOptional={{true}}
     @name='critical_options'
@@ -249,9 +249,9 @@
         {{/each}}
       </M.Error>
     {{/if}}
-  </MappingList>
+  </Form::Field::KeyValueList>
 
-  <MappingList
+  <Form::Field::KeyValueList
     @layout='horizontal'
     @isOptional={{true}}
     @name='extensions'
@@ -274,7 +274,7 @@
         {{/each}}
       </M.Error>
     {{/if}}
-  </MappingList>
+  </Form::Field::KeyValueList>
 
   {{#if (can 'save model' @model)}}
     <form.actions
