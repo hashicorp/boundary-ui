@@ -98,10 +98,6 @@ export default class OnboardingRoute extends Route {
   async createSampleTarget(targetAddress, targetPort) {
     const { target, role, project, org } = this.currentModel;
 
-    console.log('Create sample target con: ');
-    console.log('targetAddress: ', targetAddress);
-    console.log('targetPort', targetPort);
-
     // Format target and persist it
     target.scopeID = project.id;
     target.address = targetAddress;
