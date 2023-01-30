@@ -8,7 +8,6 @@ export default class OnboardingSuccessRoute extends Route {
   @service session;
   @service browserObject;
 
-
   // =methods
   model() {
     const model = this.modelFor('onboarding');
