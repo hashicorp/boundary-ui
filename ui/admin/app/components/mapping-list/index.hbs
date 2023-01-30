@@ -11,12 +11,15 @@
         <H.Tr>
           <H.Th>{{t 'form.key.label'}}</H.Th>
           <H.Th>{{t 'form.value.label'}}</H.Th>
-          {{#if @removeOptionByIndex}}
-            <H.Th>{{t 'titles.actions'}}</H.Th>
-          {{/if}}
+          <H.Th>
+            {{#if @removeOptionByIndex}}
+              {{t 'titles.actions'}}
+            {{/if}}
+          </H.Th>
         </H.Tr>
       </:head>
       <:body as |B|>
+
         {{#each @options as |option index|}}
           <B.Tr>
             <B.Td>
@@ -41,8 +44,8 @@
                 <F.Label classes='sr-only'>{{t 'form.value.label'}}</F.Label>
               </Hds::Form::TextInput::Field>
             </B.Td>
-            {{#if @removeOptionByIndex}}
-              <B.Td>
+            <B.Td>
+              {{#if @removeOptionByIndex}}
                 <Hds::Button
                   @text={{t 'actions.remove'}}
                   @color='critical'
@@ -51,10 +54,11 @@
                   disabled={{@disabled}}
                   {{on 'click' (fn @removeOptionByIndex index)}}
                 />
-              </B.Td>
-            {{/if}}
+              {{/if}}
+            </B.Td>
           </B.Tr>
         {{/each}}
+
         <B.Tr>
           <B.Td>
             <Hds::Form::TextInput::Field
@@ -82,11 +86,12 @@
               @text={{t 'actions.add'}}
               @color='secondary'
               type='button'
-              disabled={{@disabled}}
+              disabled={{or @disabled (not this.newOptionKey)}}
               {{on 'click' this.addOption}}
             />
           </B.Td>
         </B.Tr>
+
       </:body>
     </Hds::Table>
   </F.Control>
