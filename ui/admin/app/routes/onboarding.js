@@ -73,8 +73,8 @@ export default class OnboardingRoute extends Route {
       // Redirect to success
       this.router.transitionTo('onboarding.success');
     } catch (error) {
-      // Redirect to orgs
-      this.router.replaceWith('scopes.scope', 'global');
+      // Redirect to targets
+      this.router.replaceWith('scopes.scope.targets', 'global');
       throw new Error(error);
     }
   }
