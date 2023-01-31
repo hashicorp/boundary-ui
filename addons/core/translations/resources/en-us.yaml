@@ -474,7 +474,6 @@ credential-library:
     key_type:
       label: Key Type
       help: Specifies the desired key type to use when generating a private key.
-      initial_option: Choose a type
     key_bits:
       label: Key Bits
       help: Specifies the number of bits used generating the private key.

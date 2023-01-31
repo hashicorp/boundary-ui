@@ -33,15 +33,8 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    */
   @action
   edit(credentialLibrary) {
-    if (credentialLibrary.critical_options) {
-      credentialLibrary.critical_options = structuredClone(
-        credentialLibrary.critical_options
-      );
-    }
-    if (credentialLibrary.extensions) {
-      credentialLibrary.extensions = structuredClone(
-        credentialLibrary.extensions
-      );
-    }
+    const { critical_options, extensions } = credentialLibrary;
+    credentialLibrary.critical_options = structuredClone(critical_options);
+    credentialLibrary.extensions = structuredClone(extensions);
   }
 }
