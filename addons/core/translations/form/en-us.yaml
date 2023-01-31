@@ -165,4 +165,3 @@ tags:
 secret-editor:
   details: This secret is saved but won't be displayed
   edit: Click to replace this secret
-initial-option: Choose a type
