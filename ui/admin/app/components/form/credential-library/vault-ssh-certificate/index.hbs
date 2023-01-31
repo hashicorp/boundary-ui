@@ -139,9 +139,14 @@
         'resources.credential-library.form.key_type.help'
       }}</F.HelperText>
     <F.Options>
-      <option value=''>{{t 'titles.choose-an-option'}}</option>
+      <option disabled hidden selected value=''>{{t
+          'titles.choose-an-option'
+        }}</option>
       {{#each this.keyTypes as |keyType|}}
-        <option value={{keyType}}>{{keyType}}</option>
+        <option
+          value={{keyType}}
+          selected={{eq keyType @model.key_type}}
+        >{{keyType}}</option>
       {{/each}}
     </F.Options>
     {{#if @model.errors.key_type}}
