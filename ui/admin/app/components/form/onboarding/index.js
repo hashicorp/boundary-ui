@@ -9,40 +9,26 @@ export default class FormOnboardingComponent extends Component {
   @tracked targetPort;
   @tracked targetPortInValid = false;
 
-  /**
-   * Return true (form disabled) if address and port have no value
-   */
-  get submitDisabled() {
-    if (this.targetAddress && this.targetPort) {
+  // =actions
+  @action
+  atSubmit() {
+    // Check targetAddress and targetPort are valid before submit
+    this.targetAddressInValid = this.requiredFieldInvalid(this.targetAddress);
+    this.targetPortInValid = this.requiredFieldInvalid(this.targetPort);
+
+    if (
+      this.targetAddressInValid === false &&
+      this.targetPortInValid === false
+    ) {
+      this.args.submit(this.targetAddress, this.targetPort);
+    }
+  }
+
+  // =methods
+  requiredFieldInvalid(requiredField) {
+    if (requiredField) {
       return false;
     }
     return true;
-  }
-
-  // =actions
-  /**
-   * Returns boolean to determinate if address field is invalid
-   * false = is valid
-   */
-  @action
-  isTargetAddressInValid() {
-    if (this.targetAddress) {
-      this.targetAddressInValid = false;
-    } else {
-      this.targetAddressInValid = true;
-    }
-  }
-
-  /**
-   * Returns boolean to determinate if port field is invalid
-   * false = is valid
-   */
-  @action
-  isTargetPortInValid() {
-    if (this.targetAddress) {
-      this.targetPortInValid = false;
-    } else {
-      this.targetPortInValid = true;
-    }
   }
 }

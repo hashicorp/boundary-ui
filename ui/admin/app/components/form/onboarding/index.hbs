@@ -1,8 +1,4 @@
-<Rose::Form
-  class='full-width'
-  @cancel={{@cancel}}
-  @onSubmit={{fn @submit this.targetAddress this.targetPort}}
->
+<Rose::Form class='full-width' @cancel={{@cancel}} @onSubmit={{this.atSubmit}}>
   <div class='create-resources-form'>
     <Hds::Form::TextInput::Field
       name='targetAddress'
@@ -11,7 +7,6 @@
       @isRequired={{true}}
       @isInvalid={{this.targetAddressInValid}}
       {{on 'input' (set-from-event this 'targetAddress')}}
-      {{on 'focusout' this.isTargetAddressInValid}}
       as |F|
     >
       <F.Label>{{t 'onboarding.add-target.titles.target-address'}}</F.Label>
@@ -33,7 +28,6 @@
       @isRequired={{true}}
       @isInvalid={{this.targetPortInValid}}
       {{on 'input' (set-from-event this 'targetPort')}}
-      {{on 'focusout' this.isTargetPortInValid}}
       as |F|
     >
       <F.Label>{{t 'onboarding.add-target.titles.target-port'}}</F.Label>
@@ -57,11 +51,7 @@
   </Hds::Form::Fieldset>
 
   <Hds::ButtonSet>
-    <Hds::Button
-      @text='{{t "actions.save"}}'
-      type='submit'
-      disabled={{this.submitDisabled}}
-    />
+    <Hds::Button @text='{{t "actions.save"}}' type='submit' />
     <Hds::Button
       @text='{{t "actions.do-this-later"}}'
       @color='secondary'

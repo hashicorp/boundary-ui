@@ -59,59 +59,84 @@ export default class OnboardingRoute extends Route {
   @notifyError(function () {
     return this.intl.t('errors.onboarding-failed.description');
   })
-  async createTarget(targetAddress, targetPort) {
-    // Create org and Project
+  async createResources(targetAddress, targetPort) {
+    const { org, project, target, role } = this.currentModel;
+
+    await this.createOrg(org);
+    await this.createProject(org, project);
+    await this.createTarget(project, target, targetAddress, targetPort);
+    await this.createGrants(org, project, target, role);
+
+    // Redirect to success
+    this.router.transitionTo('onboarding.success');
+  }
+
+  /**
+   * Creates Org, if fails, redirects to Orgs empty list
+   * @param {Object} org
+   */
+  async createOrg(org) {
     try {
-      await this.createOrgAndProject();
+      await org.save();
     } catch (error) {
+      // Redirects to Orgs screen
+      this.router.transitionTo('scopes.scope', 'global');
       throw new Error(error);
     }
+  }
 
-    // Create target
+  /**
+   * Creates Project, if fails redirects to Projects from Org empty list.
+   * @param {Object} org
+   * @param {Object} project
+   */
+  async createProject(org, project) {
+    project.scopeID = org.id;
+
     try {
-      await this.createSampleTarget(targetAddress, targetPort);
-      // Redirect to success
-      this.router.transitionTo('onboarding.success');
+      await project.save();
     } catch (error) {
-      // Redirect to targets
+      // Redirects to Project screen
+      this.router.transitionTo('scopes.scope.scopes', project.scopeID);
+      throw new Error(error);
+    }
+  }
+
+  /**
+   * Creates a Target, if fails redirects to Targets empyt list.
+   * @param {Object} project
+   * @param {Object} target
+   * @param {Object} targetAddress
+   * @param {Object} targetPort
+   */
+  async createTarget(project, target, targetAddress, targetPort) {
+    target.scopeID = project.id;
+    target.address = targetAddress;
+    target.default_port = targetPort;
+
+    try {
+      await target.save();
+    } catch (error) {
+      // Redirect to targets global
       this.router.replaceWith('scopes.scope.targets', 'global');
       throw new Error(error);
     }
   }
 
-  /**
-   * Persist org and project previously created in the model
-   */
-  async createOrgAndProject() {
-    const { org, project } = this.currentModel;
-
-    await org.save();
-    project.scopeID = org.id;
-    await project.save();
-  }
-
-  /**
-   * Creates a Target with provided address and port
-   * @param {string} targetAddress
-   * @param {string} targetPort
-   */
-  async createSampleTarget(targetAddress, targetPort) {
-    const { target, role, project, org } = this.currentModel;
-
-    // Format target and persist it
-    target.scopeID = project.id;
-    target.address = targetAddress;
-    target.default_port = targetPort;
-    await target.save();
-
-    // Format role and role grants and persist them
+  async createGrants(org, project, target, role) {
     role.scopeID = org.id;
     role.grant_scope_id = project.id;
-    await role.save();
-    await role.saveGrantStrings([
-      `type=target;actions=list`,
-      `id=${target.id};actions=authorize-session`,
-    ]);
+    try {
+      await role.save();
+      await role.saveGrantStrings([
+        `type=target;actions=list`,
+        `id=${target.id};actions=authorize-session`,
+      ]);
+    } catch (error) {
+      // Redirect to targets that belong to scope
+      this.router.replaceWith('scopes.scope.targets', project.scopeID);
+      throw new Error(error);
+    }
   }
 
   @action
