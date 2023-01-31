@@ -5,13 +5,12 @@ import { tracked } from '@glimmer/tracking';
 export default class FormOnboardingComponent extends Component {
   // =properties
   @tracked targetAddress;
-  @tracked targetAddressInvalid = false; // change to method
+  @tracked targetAddressInvalid = false;
   @tracked targetPort;
-  @tracked targetPortInvalid = false; // change to method name
+  @tracked targetPortInvalid = false;
 
   // =actions
   @action
-  // change name to formSubmit
   submit() {
     // Check targetAddress and targetPort are valid before submit
     this.targetAddressInvalid = this.requiredFieldInvalid(this.targetAddress);
