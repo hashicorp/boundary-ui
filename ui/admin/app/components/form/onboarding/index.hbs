@@ -1,11 +1,11 @@
-<Rose::Form class='full-width' @cancel={{@cancel}} @onSubmit={{this.atSubmit}}>
+<Rose::Form class='full-width' @cancel={{@cancel}} @onSubmit={{this.submit}}>
   <div class='create-resources-form'>
     <Hds::Form::TextInput::Field
       name='targetAddress'
       @type='text'
       @value={{this.targetAddress}}
       @isRequired={{true}}
-      @isInvalid={{this.targetAddressInValid}}
+      @isInvalid={{this.targetAddressInvalid}}
       {{on 'input' (set-from-event this 'targetAddress')}}
       as |F|
     >
@@ -14,7 +14,7 @@
         {{t 'onboarding.add-target.descriptions.target-address'}}
       </F.HelperText>
 
-      {{#if this.targetAddressInValid}}
+      {{#if this.targetAddressInvalid}}
         <F.Error as |E|>
           <E.Message>{{t 'errors.required-field'}}</E.Message>
         </F.Error>
@@ -26,7 +26,7 @@
       @type='text'
       @value={{this.targetPort}}
       @isRequired={{true}}
-      @isInvalid={{this.targetPortInValid}}
+      @isInvalid={{this.targetPortInvalid}}
       {{on 'input' (set-from-event this 'targetPort')}}
       as |F|
     >
@@ -34,7 +34,7 @@
       <F.HelperText>
         {{t 'onboarding.add-target.descriptions.target-port'}}
       </F.HelperText>
-      {{#if this.targetPortInValid}}
+      {{#if this.targetPortInvalid}}
         <F.Error as |E|>
           <E.Message>{{t 'errors.required-field'}}</E.Message>
         </F.Error>
