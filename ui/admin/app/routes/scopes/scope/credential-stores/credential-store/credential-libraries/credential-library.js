@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { copy } from 'ember-copy';
 
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrariesCredentialLibraryRoute extends Route {
   // =services
@@ -35,13 +34,14 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @action
   edit(credentialLibrary) {
     if (credentialLibrary.critical_options) {
-      credentialLibrary.critical_options = copy(
-        credentialLibrary.critical_options,
-        true
+      credentialLibrary.critical_options = structuredClone(
+        credentialLibrary.critical_options
       );
     }
     if (credentialLibrary.extensions) {
-      credentialLibrary.extensions = copy(credentialLibrary.extensions, true);
+      credentialLibrary.extensions = structuredClone(
+        credentialLibrary.extensions
+      );
     }
   }
 }
