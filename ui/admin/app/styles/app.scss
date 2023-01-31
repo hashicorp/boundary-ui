@@ -751,20 +751,4 @@
     }
   }
   /* stylelint-enable selector-class-pattern */
-
-  // Visually hide form labels within this table (duplicates HDS `.sr-only`).
-  // This is temporary since `class='sr-only'` does not correctly apply classes
-  // to input labels (like it does for select labels and other components).
-  .hds-form-label {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    margin: -1px !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-    clip: rect(1px, 1px, 1px, 1px) !important;
-    clip-path: inset(50%) !important;
-  }
 }

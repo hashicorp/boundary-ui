@@ -68,7 +68,7 @@
               {{on 'input' (set-from-event this 'newOptionKey')}}
               as |F|
             >
-              <F.Label>{{t 'form.key.label'}}</F.Label>
+              <F.Label class='sr-only'>{{t 'form.key.label'}}</F.Label>
             </Hds::Form::TextInput::Field></B.Td>
           <B.Td>
             <Hds::Form::TextInput::Field
@@ -78,7 +78,7 @@
               {{on 'input' (set-from-event this 'newOptionValue')}}
               as |F|
             >
-              <F.Label>{{t 'form.value.label'}}</F.Label>
+              <F.Label class='sr-only'>{{t 'form.value.label'}}</F.Label>
             </Hds::Form::TextInput::Field>
           </B.Td>
           <B.Td>
