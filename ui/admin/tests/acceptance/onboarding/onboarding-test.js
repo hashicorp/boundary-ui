@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { visit, find, fillIn, click, currentURL } from '@ember/test-helpers';
+import { visit, fillIn, click, currentURL } from '@ember/test-helpers';
 
 module('Acceptance | onboarding', function (hooks) {
   setupApplicationTest(hooks);
@@ -21,8 +21,8 @@ module('Acceptance | onboarding', function (hooks) {
   test('show targetAddress and targetPort fields', async function (assert) {
     assert.expect(2);
     await visit(urls.onboarding);
-    assert.ok('[name="targetAddress"]');
-    assert.ok(find('[name="targetPort"]'));
+    assert.dom('[name="targetAddress"]').isVisible();
+    assert.dom('[name="targetPort"]').isVisible();
   });
 
   test('redirect user to success when fill targetAddress, targetPort and click Save', async function (assert) {
