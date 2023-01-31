@@ -4,7 +4,7 @@ import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
-  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
   TYPES_CREDENTIAL_LIBRARY,
 } from 'api/models/credential-library';
 
@@ -28,7 +28,7 @@ export default factory.extend({
           http_request_body: faker.random.word(),
           path: faker.system.directoryPath(),
         };
-      case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT:
+      case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE:
         return {
           username: faker.random.word(),
           key_type: faker.random.word(),

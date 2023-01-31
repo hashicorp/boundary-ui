@@ -9,14 +9,15 @@ export const options = {
 };
 
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC = 'vault-generic';
-export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT = 'vault-ssh-cert';
+export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE =
+  'vault-ssh-certificate';
 
 /**
  * Supported Credential Library types.
  */
 export const TYPES_CREDENTIAL_LIBRARY = Object.freeze([
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
-  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
 ]);
 
 export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {
@@ -37,7 +38,7 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
   get isVault() {
     return (
       this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC ||
-      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE
     );
   }
 
@@ -54,6 +55,6 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    * @type {boolean}
    */
   get isVaultSSHCert() {
-    return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT;
+    return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE;
   }
 }

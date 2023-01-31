@@ -491,10 +491,10 @@ credential-library:
       help: Specifies a map of the extensions that the certificate should be signed for.
   types:
     vault-generic: Generic Secrets
-    vault-ssh-cert: SSH Certificates
+    vault-ssh-certificate: SSH Certificates
   help:
     vault-generic: Authorize sessions using credentials brokered by Vault
-    vault-ssh-cert: Authorize sessions using the SSH Secrets Engine in Vault
+    vault-ssh-certificate: Authorize sessions using the SSH Secrets Engine in Vault
 credential:
   title: Credential
   title_plural: Credentials

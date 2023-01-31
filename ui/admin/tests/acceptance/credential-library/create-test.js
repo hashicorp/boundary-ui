@@ -12,7 +12,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT } from 'api/models/credential-library';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -95,7 +95,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.expect(12);
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
-    await click('[value="vault-ssh-cert"]');
+    await click('[value="vault-ssh-certificate"]');
     await fillIn('[name="name"]', 'name');
     await fillIn('[name="description"]', 'description');
     await fillIn('[name="vault_path"]', 'path');
@@ -126,12 +126,12 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.strictEqual(getCredentialLibraryCount(), count + 1);
     assert.strictEqual(
       this.server.schema.credentialLibraries.where({
-        type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
       }).length,
       1
     );
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
     assert.strictEqual(credentialLibrary.name, 'name');
     assert.strictEqual(credentialLibrary.description, 'description');
@@ -152,7 +152,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   test('ecdsa and rsa key types bring up a key bits field', async function (assert) {
     assert.expect(3);
     await visit(urls.newCredentialLibrary);
-    await click('[value="vault-ssh-cert"]');
+    await click('[value="vault-ssh-certificate"]');
     await select('[name="key_type"]', 'ed25519');
     assert.dom('[name="key_bits"]').doesNotExist();
     await select('[name="key_type"]', 'ecdsa');
@@ -220,10 +220,10 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-cert');
+    featuresService.disable('credential-library-vault-ssh-certificate');
     assert.expect(1);
     await visit(urls.newCredentialLibrary);
 
-    assert.dom('[value="vault-ssh-cert"]').doesNotExist();
+    assert.dom('[value="vault-ssh-certificate"]').doesNotExist();
   });
 });

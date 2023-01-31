@@ -11,7 +11,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT } from 'api/models/credential-library';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -195,7 +195,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
-      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
     await visit(
       `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
@@ -229,7 +229,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await click('[name="extensions"] button');
     await click('[type="submit"]');
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERT,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
     assert.strictEqual(credentialLibrary.name, 'name');
     assert.strictEqual(credentialLibrary.description, 'description');
