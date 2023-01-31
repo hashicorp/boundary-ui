@@ -118,7 +118,7 @@ export default class OnboardingRoute extends Route {
       await target.save();
     } catch (error) {
       // Redirect to targets global
-      this.router.replaceWith('scopes.scope.targets', 'global');
+      this.router.replaceWith('scopes.scope.targets', project.scopeID);
       throw new Error(error);
     }
   }
