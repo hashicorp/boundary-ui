@@ -1,0 +1,292 @@
+<Rose::Form
+  @edit={{@edit}}
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.name}}
+    @isInvalid={{@model.errors.name}}
+    @type='text'
+    name='name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    {{#if @model.errors.name}}
+      <F.Error as |E|>
+        {{#each @model.errors.name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @isOptional={{true}}
+    @value={{@model.description}}
+    @isInvalid={{@model.errors.description}}
+    name='description'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
+
+  {{#if @model.isNew}}
+    <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
+      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      {{#each this.types as |type|}}
+        <G.RadioCard
+          @value={{type}}
+          @maxWidth='20rem'
+          @checked={{eq type @model.type}}
+          {{on 'input' (fn @changeType type)}}
+          as |R|
+        >
+          <R.Label>{{t
+              (concat 'resources.credential-library.types.' type)
+            }}</R.Label>
+          <R.Description>{{t
+              (concat 'resources.credential-library.help.' type)
+            }}</R.Description>
+        </G.RadioCard>
+      {{/each}}
+    </Hds::Form::RadioCard::Group>
+  {{else}}
+    <InfoField
+      @value={{t (concat 'resources.credential-library.types.' @model.type)}}
+      as |F|
+    >
+      <F.Label>{{t 'form.type.label'}}</F.Label>
+      <F.HelperText>
+        {{t (concat 'resources.credential-library.help.' @model.type)}}
+      </F.HelperText>
+    </InfoField>
+  {{/if}}
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.path}}
+    @isInvalid={{@model.errors.path}}
+    @type='text'
+    name='vault_path'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'path')}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.credential-library.form.vault_path.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.credential-library.form.vault_path.help'
+      }}</F.HelperText>
+    {{#if @model.errors.path}}
+      <F.Error as |E|>
+        {{#each @model.errors.path as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.username}}
+    @isInvalid={{@model.errors.username}}
+    @type='text'
+    name='username'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'username')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.credential-library.form.username.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.credential-library.form.username.help'
+      }}</F.HelperText>
+    {{#if @model.errors.username}}
+      <F.Error as |E|>
+        {{#each @model.errors.username as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Select::Field
+    @isRequired={{true}}
+    @width='100%'
+    name='key_type'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'key_type')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.credential-library.form.key_type.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.credential-library.form.key_type.help'
+      }}</F.HelperText>
+    <F.Options>
+      <option disabled hidden selected value=''>{{t
+          'titles.choose-an-option'
+        }}</option>
+      {{#each this.keyTypes as |keyType|}}
+        <option
+          value={{keyType}}
+          selected={{eq keyType @model.key_type}}
+        >{{keyType}}</option>
+      {{/each}}
+    </F.Options>
+    {{#if @model.errors.key_type}}
+      <F.Error as |E|>
+        {{#each @model.errors.key_type as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Select::Field>
+
+  {{#if this.showKeyBits}}
+    <Hds::Form::TextInput::Field
+      @isRequired={{true}}
+      @value={{@model.key_bits}}
+      @isInvalid={{@model.errors.key_bits}}
+      @type='text'
+      name='key_bits'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'key_bits')}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.credential-library.form.key_bits.label'
+        }}</F.Label>
+      <F.HelperText>{{t
+          'resources.credential-library.form.key_bits.help'
+        }}</F.HelperText>
+      {{#if @model.errors.key_bits}}
+        <F.Error as |E|>
+          {{#each @model.errors.key_bits as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.ttl}}
+    @isInvalid={{@model.errors.ttl}}
+    @type='text'
+    name='ttl'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'ttl')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.credential-library.form.ttl.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.credential-library.form.ttl.help'
+      }}</F.HelperText>
+    {{#if @model.errors.ttl}}
+      <F.Error as |E|>
+        {{#each @model.errors.ttl as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.key_id}}
+    @isInvalid={{@model.errors.key_id}}
+    @type='text'
+    name='key_id'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'key_id')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.credential-library.form.key_id.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.credential-library.form.key_id.help'
+      }}</F.HelperText>
+    {{#if @model.errors.key_id}}
+      <F.Error as |E|>
+        {{#each @model.errors.key_id as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Form::Field::KeyValueList
+    @layout='horizontal'
+    @isOptional={{true}}
+    @name='critical_options'
+    @options={{@model.critical_options}}
+    @addOption={{fn this.addOption 'critical_options'}}
+    @removeOptionByIndex={{fn this.removeOptionByIndex 'critical_options'}}
+    @disabled={{form.disabled}}
+    as |M|
+  >
+    <M.Legend>{{t
+        'resources.credential-library.form.critical_options.label'
+      }}</M.Legend>
+    <M.HelperText>{{t
+        'resources.credential-library.form.critical_options.help'
+      }}</M.HelperText>
+    {{#if @model.errors.critical_options}}
+      <M.Error as |E|>
+        {{#each @model.errors.critical_options as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </M.Error>
+    {{/if}}
+  </Form::Field::KeyValueList>
+
+  <Form::Field::KeyValueList
+    @layout='horizontal'
+    @isOptional={{true}}
+    @name='extensions'
+    @options={{@model.extensions}}
+    @addOption={{fn this.addOption 'extensions'}}
+    @removeOptionByIndex={{fn this.removeOptionByIndex 'extensions'}}
+    @disabled={{form.disabled}}
+    as |M|
+  >
+    <M.Legend>{{t
+        'resources.credential-library.form.extensions.label'
+      }}</M.Legend>
+    <M.HelperText>{{t
+        'resources.credential-library.form.extensions.help'
+      }}</M.HelperText>
+    {{#if @model.errors.extensions}}
+      <M.Error as |E|>
+        {{#each @model.errors.extensions as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </M.Error>
+    {{/if}}
+  </Form::Field::KeyValueList>
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+
+</Rose::Form>

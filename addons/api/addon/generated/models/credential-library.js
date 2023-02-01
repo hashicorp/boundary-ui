@@ -72,7 +72,7 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
     isNestedAttribute: true,
     description: 'The username to use when making an SSH connection.',
   })
-  user_name;
+  username;
 
   @attr('string', {
     isNestedAttribute: true,

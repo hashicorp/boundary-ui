@@ -19,6 +19,13 @@ module('Unit | Transform | object as array', function (hooks) {
     ]);
   });
 
+  test('it deserializes undefined to an empty object', function (assert) {
+    assert.expect(1);
+    let transform = this.owner.lookup('transform:object-as-array');
+    const deserialized = transform.deserialize(undefined);
+    assert.deepEqual(deserialized, []);
+  });
+
   test('it serializes an array of key value objects to an object', function (assert) {
     assert.expect(1);
     let transform = this.owner.lookup('transform:object-as-array');
@@ -33,5 +40,13 @@ module('Unit | Transform | object as array', function (hooks) {
       second: 'There',
       third: 'Everyone',
     });
+  });
+
+  test('it serializes an empty array of key value objects to null', function (assert) {
+    assert.expect(1);
+    let transform = this.owner.lookup('transform:object-as-array');
+    const serialized = transform.serialize([]);
+
+    assert.deepEqual(serialized, null);
   });
 });
