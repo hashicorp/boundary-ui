@@ -1,0 +1,94 @@
+{{page-title (t 'titles.success')}}
+<Rose::Layout::Centered class='create-resources'>
+  <Rose::Frame>
+    <:header>
+      <h2>{{t 'onboarding.success.titles.connect'}}</h2>
+    </:header>
+    <:body>
+      {{! We have created }}
+      <div class='create-resources-item'>
+        <span class='create-resources-item-header'>
+          <FlightIcon
+            @name='check-circle'
+            @color='var(--token-color-foreground-success)'
+            @size='24'
+          />
+          <h3>{{t 'onboarding.success.titles.creation-success'}}</h3>
+        </span>
+        <p>{{t 'onboarding.success.descriptions.role'}}</p>
+      </div>
+
+      {{! Download Desktop client }}
+      <div class='create-resources-item'>
+        <span class='create-resources-item-header'>
+          <FlightIcon @name='boundary-color' @size='24' />
+          <h3>{{t 'onboarding.success.titles.desktop'}}</h3>
+        </span>
+        <p>{{t 'onboarding.success.descriptions.download'}}</p>
+
+        <Hds::Link::Standalone
+          @icon='download'
+          @text={{t 'onboarding.success.links.install'}}
+          @href={{doc-url 'downloads'}}
+          isHrefExternal={{true}}
+        />
+
+        <Hds::Link::Standalone
+          @icon='docs-link'
+          @text={{t 'onboarding.success.links.learn'}}
+          @href={{doc-url 'getting-started.desktop'}}
+          isHrefExternal={{true}}
+        />
+
+        {{! Controller }}
+        <div class='create-resources-item-controller'>
+          <h4 class='hds-typography-display-200 hds-font-weight-semibold'>
+            {{t 'onboarding.success.titles.controller'}}
+          </h4>
+          <span class='create-resources-item-controller-label'>{{t
+              'onboarding.success.descriptions.controller'
+            }}</span>
+          <div class='create-resources-item-controller-copyable'>
+            <Copyable
+              @text={{this.model.clusterUrl}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <code>{{this.model.clusterUrl}}</code>
+            </Copyable>
+          </div>
+
+          <Image @name='targets' />
+        </div>
+      </div>
+
+      {{! Developers }}
+      <div class='create-resources-item'>
+        <h4 class='hds-typography-display-200 hds-font-weight-semibold'>
+          {{t 'onboarding.success.titles.developers'}}
+        </h4>
+        <p>{{t 'onboarding.success.descriptions.developers'}}</p>
+
+        <Hds::Link::Standalone
+          @icon='docs-link'
+          @text={{t 'onboarding.success.links.cli'}}
+          @href={{doc-url 'api-client.cli'}}
+          isHrefExternal={{true}}
+        />
+
+        <Hds::Link::Standalone
+          @icon='docs-link'
+          @text={{t 'onboarding.success.links.api'}}
+          @href={{doc-url 'api-client.api'}}
+          isHrefExternal={{true}}
+        />
+      </div>
+
+      <Hds::Button
+        @text={{t 'actions.done'}}
+        data-test-onboarding-done-button
+        {{on 'click' (route-action 'showTargetList' @model)}}
+      />
+    </:body>
+  </Rose::Frame>
+</Rose::Layout::Centered>

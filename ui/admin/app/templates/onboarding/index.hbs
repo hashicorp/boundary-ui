@@ -1,0 +1,15 @@
+<Rose::Layout::Centered class='create-resources'>
+  <Rose::Frame>
+    <:header>
+      <h2>{{t 'onboarding.add-target.titles.have-a-target'}}</h2>
+    </:header>
+    <:body>
+      <p>{{t 'onboarding.add-target.descriptions.setup-first-target'}}</p>
+      <Form::Onboarding
+        @model={{@model}}
+        @submit={{route-action 'createResources'}}
+        @cancel={{route-action 'doLater'}}
+      />
+    </:body>
+  </Rose::Frame>
+</Rose::Layout::Centered>

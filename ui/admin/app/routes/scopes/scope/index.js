@@ -27,7 +27,7 @@ export default class ScopesScopeIndexRoute extends Route {
 
     // If authenticated but no orgs exist yet, redirect to onboarding
     if (this.session.isAuthenticated && !hasOrgs) {
-      return this.router.transitionTo('onboarding.quick-setup.choose-path');
+      return this.router.transitionTo('onboarding');
     }
 
     // If this a project scope, there are no further sub scopes, so show edit
