@@ -54,7 +54,7 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    * True if credential is a vault ssh cert type.
    * @type {boolean}
    */
-  get isVaultSSHCert() {
+  get isVaultSSHCertificate() {
     return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE;
   }
 }
