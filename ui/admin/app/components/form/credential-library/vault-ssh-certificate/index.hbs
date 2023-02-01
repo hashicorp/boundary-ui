@@ -127,7 +127,7 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Select::Field
-    @isRequired={{true}}
+    @isOptional={{true}}
     @width='100%'
     name='key_type'
     disabled={{form.disabled}}
@@ -160,7 +160,7 @@
 
   {{#if this.showKeyBits}}
     <Hds::Form::TextInput::Field
-      @isRequired={{true}}
+      @isOptional={{true}}
       @value={{@model.key_bits}}
       @isInvalid={{@model.errors.key_bits}}
       @type='text'
