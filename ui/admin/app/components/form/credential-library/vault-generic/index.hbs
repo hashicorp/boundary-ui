@@ -107,31 +107,30 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <form.fieldset>
-    <:title>{{t 'resources.credential-library.form.http_method.label'}}</:title>
-    <:description>
+  <Hds::Form::Radio::Group
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'http_method')}}
+    @isRequired={{true}}
+    @layout='horizontal'
+    @name='http_method'
+    as |G|
+  >
+    <G.Legend>
+      {{t 'resources.credential-library.form.http_method.label'}}
+    </G.Legend>
+    <G.HelperText>
       {{t 'resources.credential-library.form.http_method.help'}}
-    </:description>
-    <:body>
-      <Hds::Form::Radio::Group
-        disabled={{form.disabled}}
-        {{on 'input' (set-from-event @model 'http_method')}}
-        @layout='horizontal'
-        @name='http_method'
-        as |G|
+    </G.HelperText>
+    {{#each this.httpMethodOptions as |httpMethod|}}
+      <G.Radio::Field
+        checked={{eq @model.http_method httpMethod}}
+        @value={{httpMethod}}
+        as |F|
       >
-        {{#each this.httpMethodOptions as |httpMethod|}}
-          <G.Radio::Field
-            checked={{eq @model.http_method httpMethod}}
-            @value={{httpMethod}}
-            as |F|
-          >
-            <F.Label>{{httpMethod}}</F.Label>
-          </G.Radio::Field>
-        {{/each}}
-      </Hds::Form::Radio::Group>
-    </:body>
-  </form.fieldset>
+        <F.Label>{{httpMethod}}</F.Label>
+      </G.Radio::Field>
+    {{/each}}
+  </Hds::Form::Radio::Group>
 
   {{#if this.isHttpRequestBodyAllowed}}
     <Hds::Form::Textarea::Field
