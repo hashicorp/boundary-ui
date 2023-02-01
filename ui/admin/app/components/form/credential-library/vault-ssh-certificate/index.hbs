@@ -241,12 +241,12 @@
     @disabled={{form.disabled}}
     as |M|
   >
-    <M.Legend>{{t
-        'resources.credential-library.form.critical_options.label'
-      }}</M.Legend>
-    <M.HelperText>{{t
-        'resources.credential-library.form.critical_options.help'
-      }}</M.HelperText>
+    <M.Legend>
+      {{t 'resources.credential-library.form.critical_options.label'}}
+    </M.Legend>
+    <M.HelperText>
+      {{t 'resources.credential-library.form.critical_options.help'}}
+    </M.HelperText>
     {{#if @model.errors.critical_options}}
       <M.Error as |E|>
         {{#each @model.errors.critical_options as |error|}}
@@ -266,12 +266,12 @@
     @disabled={{form.disabled}}
     as |M|
   >
-    <M.Legend>{{t
-        'resources.credential-library.form.extensions.label'
-      }}</M.Legend>
-    <M.HelperText>{{t
-        'resources.credential-library.form.extensions.help'
-      }}</M.HelperText>
+    <M.Legend>
+      {{t 'resources.credential-library.form.extensions.label'}}
+    </M.Legend>
+    <M.HelperText>
+      {{t 'resources.credential-library.form.extensions.help'}}
+    </M.HelperText>
     {{#if @model.errors.extensions}}
       <M.Error as |E|>
         {{#each @model.errors.extensions as |error|}}
