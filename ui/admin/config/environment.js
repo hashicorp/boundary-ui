@@ -23,7 +23,7 @@ featureEditions.enterprise = {
   'ssh-target': true,
   'vault-worker-filter': true,
   'target-worker-filters-v2-ingress': true,
-  'credential-library-vault-ssh-certificate': false,
+  'credential-library-vault-ssh-certificate': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
