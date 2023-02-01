@@ -50,6 +50,7 @@
   <page.body>
     <Form::CredentialLibrary
       @model={{@model}}
+      @edit={{route-action 'edit' @model}}
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
     />

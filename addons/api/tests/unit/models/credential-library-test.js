@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 
 module('Unit | Model | credential library', function (hooks) {
   setupTest(hooks);
@@ -13,7 +14,9 @@ module('Unit | Model | credential library', function (hooks) {
   test('it has isUnknown property and returns the expected values', async function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
-    const modelA = store.createRecord('credential-library', { type: 'vault' });
+    const modelA = store.createRecord('credential-library', {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+    });
     const modelB = store.createRecord('credential-library', {
       type: 'unknown',
     });
