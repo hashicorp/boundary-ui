@@ -8,6 +8,10 @@ export default class ObjectAsArrayTransform extends Transform {
   serialize(deserialized) {
     const array = deserialized || [];
 
+    if (!array.length) {
+      return null;
+    }
+
     return array.reduce((result, currentValue) => {
       const { key, value } = currentValue;
       result[key] = value;

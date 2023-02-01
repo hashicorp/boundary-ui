@@ -27,8 +27,8 @@ module('Unit | Serializer | credential library', function (hooks) {
       attributes: {
         path: '/vault/path',
         http_method: 'GET',
-        critical_options: {},
-        extensions: {},
+        critical_options: null,
+        extensions: null,
         key_bits: null,
         key_id: null,
         key_type: null,
@@ -67,8 +67,8 @@ module('Unit | Serializer | credential library', function (hooks) {
       attributes: {
         path: '/vault/path',
         http_method: 'GET',
-        critical_options: {},
-        extensions: {},
+        critical_options: null,
+        extensions: null,
         key_bits: null,
         key_id: null,
         key_type: null,
@@ -89,10 +89,9 @@ module('Unit | Serializer | credential library', function (hooks) {
     let serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
       attributes: {
-        http_method: null,
         path: null,
-        critical_options: {},
-        extensions: {},
+        critical_options: null,
+        extensions: null,
         key_bits: null,
         key_id: null,
         key_type: null,
@@ -110,6 +109,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-library', {
+      type: 'vault-generic',
       http_method: 'GET',
       http_request_body: 'body',
     });
@@ -120,8 +120,8 @@ module('Unit | Serializer | credential library', function (hooks) {
         attributes: {
           http_method: 'GET',
           path: null,
-          critical_options: {},
-          extensions: {},
+          critical_options: null,
+          extensions: null,
           key_bits: null,
           key_id: null,
           key_type: null,
@@ -131,7 +131,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         credential_store_id: null,
         description: null,
         name: null,
-        type: null,
+        type: 'vault-generic',
       },
       'http_request_body attribute is not expected'
     );
@@ -145,8 +145,8 @@ module('Unit | Serializer | credential library', function (hooks) {
           http_method: 'POST',
           http_request_body: 'body',
           path: null,
-          critical_options: {},
-          extensions: {},
+          critical_options: null,
+          extensions: null,
           key_bits: null,
           key_id: null,
           key_type: null,
@@ -156,9 +156,55 @@ module('Unit | Serializer | credential library', function (hooks) {
         credential_store_id: null,
         description: null,
         name: null,
-        type: null,
+        type: 'vault-generic',
       },
       'http_request_body attribute is expected'
     );
+  });
+
+  test('it serializes vault_ssh_certificate correctly', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential-library');
+    store.push({
+      data: {
+        id: '1',
+        type: 'credential-library',
+        attributes: {
+          type: 'vault-ssh-certificate',
+          version: 1,
+          name: 'Name',
+          description: 'Description',
+          path: '/vault/path',
+          username: 'user',
+          key_type: 'rsa',
+          key_bits: 100,
+          ttl: '100',
+          key_id: 'id',
+          extensions: [{ key: 'key', value: 'value' }],
+          critical_options: [{ key: 'key', value: 'value' }],
+        },
+      },
+    });
+    const record = store.peekRecord('credential-library', '1');
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      type: 'vault-ssh-certificate',
+      credential_store_id: null,
+      name: 'Name',
+      description: 'Description',
+      attributes: {
+        path: '/vault/path',
+        username: 'user',
+        key_type: 'rsa',
+        key_bits: 100,
+        ttl: '100',
+        key_id: 'id',
+        extensions: { key: 'value' },
+        critical_options: { key: 'value' },
+      },
+      version: 1,
+    });
   });
 });

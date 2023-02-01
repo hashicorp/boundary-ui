@@ -9,12 +9,12 @@ export default class MappingListComponent extends Component {
   /**
    * @type {string}
    */
-  @tracked newOptionKey;
+  @tracked newOptionKey = '';
 
   /**
    * @type {string}
    */
-  @tracked newOptionValue;
+  @tracked newOptionValue = '';
 
   // =actions
 

@@ -16,6 +16,10 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
   serialize() {
     const serialized = super.serialize(...arguments);
     if (serialized.attributes) {
+      if (serialized.type !== 'vault-generic') {
+        delete serialized.attributes.http_method;
+      }
+
       // Serialize `http_request_body` only if `http_method` is POST
       if (!serialized.attributes?.http_method?.match(/post/i))
         delete serialized.attributes.http_request_body;
