@@ -13,7 +13,7 @@ export default class OverrideCredentialLibraryAbility extends CredentialLibraryA
   get canRead() {
     return this.features.isEnabled(
       'credential-library-vault-ssh-certificate'
-    ) || !this.model.isVaultSSHCert
+    ) || !this.model.isVaultSSHCertificate
       ? super.canRead
       : false;
   }

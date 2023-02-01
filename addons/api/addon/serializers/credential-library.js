@@ -1,4 +1,5 @@
 import ApplicationSerializer from './application';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from '../models/credential-library';
 
 export default class CredentialLibrarySerializer extends ApplicationSerializer {
   // =properties
@@ -16,7 +17,7 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
   serialize() {
     const serialized = super.serialize(...arguments);
     if (serialized.attributes) {
-      if (serialized.type !== 'vault-generic') {
+      if (serialized.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC) {
         delete serialized.attributes.http_method;
       }
 

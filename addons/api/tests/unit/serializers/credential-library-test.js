@@ -1,5 +1,9 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+} from 'api/models/credential-library';
 
 module('Unit | Serializer | credential library', function (hooks) {
   setupTest(hooks);
@@ -9,7 +13,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-library');
     const record = store.createRecord('credential-library', {
-      type: 'vault-generic',
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       name: 'Name',
       description: 'Description',
       path: '/vault/path',
@@ -19,7 +23,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: 'vault-generic',
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       credential_store_id: null,
       name: 'Name',
       description: 'Description',
@@ -47,7 +51,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         id: '1',
         type: 'credential-library',
         attributes: {
-          type: 'vault-generic',
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
           name: 'Name',
           description: 'Description',
           path: '/vault/path',
@@ -60,7 +64,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: 'vault-generic',
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       credential_store_id: null,
       name: 'Name',
       description: 'Description',
@@ -109,7 +113,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-library', {
-      type: 'vault-generic',
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       http_method: 'GET',
       http_request_body: 'body',
     });
@@ -131,7 +135,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         credential_store_id: null,
         description: null,
         name: null,
-        type: 'vault-generic',
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       },
       'http_request_body attribute is not expected'
     );
@@ -156,7 +160,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         credential_store_id: null,
         description: null,
         name: null,
-        type: 'vault-generic',
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       },
       'http_request_body attribute is expected'
     );
@@ -171,7 +175,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         id: '1',
         type: 'credential-library',
         attributes: {
-          type: 'vault-ssh-certificate',
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
           version: 1,
           name: 'Name',
           description: 'Description',
@@ -190,7 +194,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: 'vault-ssh-certificate',
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
       credential_store_id: null,
       name: 'Name',
       description: 'Description',
