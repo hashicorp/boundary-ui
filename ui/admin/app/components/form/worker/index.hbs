@@ -99,7 +99,10 @@
     <form.input
       @name='last seen'
       @type='datetime'
-      @value={{concat relativeDate ', ' customFormat}}
+      @value={{if
+        @model.last_status_time
+        (concat relativeDate ', ' customFormat)
+      }}
       @label={{t 'form.worker_last_seen.label'}}
       @helperText={{t 'form.worker_last_seen.help'}}
       @disabled={{true}}

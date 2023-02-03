@@ -53,4 +53,12 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
     await render(hbs`{{relative-datetime-live this.date}}`);
     assert.dom(this.element).hasText('in 22 years');
   });
+
+  test('it renders nothing when there is no date', async function (assert) {
+    assert.expect(1);
+
+    this.date = null;
+    await render(hbs`{{relative-datetime-live this.date}}`);
+    assert.dom(this.element).hasText('');
+  });
 });
