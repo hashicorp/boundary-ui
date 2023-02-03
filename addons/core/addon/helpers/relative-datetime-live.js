@@ -45,9 +45,7 @@ export default class extends Helper {
   // =methods
 
   compute([date]) {
-    if (!date) {
-      return;
-    }
+    if (!date) return;
 
     const delta = date.valueOf() - this.clockTick.now;
     const greatestMeaningfulUnit = unitMappings.reduce(
