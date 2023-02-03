@@ -61,7 +61,9 @@ export class ResourceFilter {
    * @return {string}
    */
   equals(key, value) {
-    return value !== null ? `"/item/${key}" == "${value}"` : null;
+    return value !== null && value !== undefined
+      ? `"/item/${key}" == "${value}"`
+      : null;
   }
 
   /**
