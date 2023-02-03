@@ -66,7 +66,10 @@ class RouteResourceFilter extends EmberObject {
           )
         )
       : null;
-    return deserializedValue;
+
+    // Filter out any possible undefined values that come from not finding the decoded value
+    // e.g. the query parameter filter was persisted after a resource was removed from the model
+    return deserializedValue?.filter((value) => value !== undefined);
   }
   set value(value) {
     const queryParams = {};
