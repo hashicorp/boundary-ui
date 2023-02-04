@@ -6,7 +6,6 @@
   as |form|
 >
   <Hds::Form::TextInput::Field
-    @isRequired={{false}}
     @isOptional={{true}}
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
@@ -28,7 +27,6 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isRequired={{false}}
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
