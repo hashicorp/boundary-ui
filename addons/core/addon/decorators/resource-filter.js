@@ -60,12 +60,15 @@ class RouteResourceFilter extends EmberObject {
       JSON.stringify(this.defaultValue);
     const value = decodedValue ? JSON.parse(decodedValue) : null;
     const deserializedValue = value
-      ? value.map((serializedValue) =>
-          this.allowedValues.find((item) =>
-            this.deserializeValue(item, serializedValue)
+      ? value
+          .map((serializedValue) =>
+            this.allowedValues.find((item) =>
+              this.deserializeValue(item, serializedValue)
+            )
           )
-        )
+          .filter((value) => value !== undefined)
       : null;
+
     return deserializedValue;
   }
   set value(value) {
