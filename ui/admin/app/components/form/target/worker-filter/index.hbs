@@ -4,7 +4,6 @@
     name='target-worker-filter-toggle'
     checked={{@toggleEnabled}}
     disabled={{@disabled}}
-    @isRequired={{false}}
     @isOptional={{true}}
     {{on 'change' @toggleAction}}
     as |F|
@@ -17,7 +16,6 @@
 
   {{#if @toggleEnabled}}
     <Hds::Form::TextInput::Field
-      @isRequired={{false}}
       @isOptional={{true}}
       @value={{@value}}
       @isInvalid={{@isInvalid}}
