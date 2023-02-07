@@ -211,12 +211,7 @@
               <F.HelperText>{{t 'form.worker_filter.help'}}</F.HelperText>
             </Hds::Form::TextInput::Field>
           </div>
-        </F.Control>
-      {{/if}}
-
-      {{#if form.isEditable}}
-        {{#if this.showUpdateWorkerFilterButton}}
-          <F.Control>
+          {{#if form.isEditable}}
             <Hds::Button
               class='update-filter-button'
               @text={{t 'resources.target.workers.actions.update-filter'}}
@@ -224,11 +219,10 @@
               disabled={{form.disabled}}
               {{on 'click' this.migrateWorkerFilters}}
             />
-          </F.Control>
-        {{/if}}
-      {{/if}}
-      <F.Control>
-        {{#if this.showTargetFilters}}
+          {{/if}}
+        </F.Control>
+      {{else}}
+        <F.Control>
           {{#if this.workerDiagramHCPDualFilter}}
             <WorkerDiagram::DualFilter::Hcp
               @egressFilter={{this.egressWorkerFilterEnabled}}
@@ -285,8 +279,9 @@
             {{/if}}
           </Form::Target::WorkerFilter>
 
-        {{/if}}
-      </F.Control>
+        </F.Control>
+      {{/if}}
+
     </Hds::Form::Fieldset>
 
   {{else}}

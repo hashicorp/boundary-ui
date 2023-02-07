@@ -45,22 +45,6 @@ export default class FormTargetComponent extends Component {
     return !this.args.model.isNew && this.args.model.worker_filter;
   }
 
-  /**
-   * determines when the update worker filter button should be shown
-   * @type {boolean}
-   */
-  get showUpdateWorkerFilterButton() {
-    return this.args.model.worker_filter;
-  }
-
-  /**
-   * determines when the filters should be shown
-   * @type {boolean}
-   */
-  get showTargetFilters() {
-    return !this.args.model.worker_filter;
-  }
-
   //note: these getters will go away when we refactor worker diagram
   /**
    * determines when the enterprise dual filter diagrams should be shown
