@@ -17,18 +17,30 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     featuresService.disable(targetWorkerFilterIngress);
     featuresService.disable(targetWorkerFilterHCP);
     assert.expect(1);
-    await render(hbs`<WorkerDiagram::SingleFilter />`);
+    await render(hbs`<WorkerDiagram />`);
 
     assert.dom('[data-test-single-filter-egress-off]').isVisible();
   });
 
-  test('it renders a dual filter diagram', async function (assert) {
+  test('it renders a dual filter diagram when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable(targetWorkerFilterIngress);
     featuresService.disable(targetWorkerFilterHCP);
     assert.expect(1);
-    await render(hbs`<WorkerDiagram::DualFilter />`);
+    await render(hbs`<WorkerDiagram />`);
 
     assert.dom('[data-test-dual-filter-egress-off-ingress-off]').isVisible();
+  });
+
+  test('it renders a HCP dual filter diagram when `target-worker-filters-v2-hcp` is enabled', async function (assert) {
+    featuresService = this.owner.lookup('service:features');
+    featuresService.enable(targetWorkerFilterIngress);
+    featuresService.enable(targetWorkerFilterHCP);
+    assert.expect(1);
+    await render(hbs`<WorkerDiagram />`);
+
+    assert
+      .dom('[data-test-dual-filter-hcp-egress-off-ingress-off]')
+      .isVisible();
   });
 });
