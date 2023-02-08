@@ -10,19 +10,21 @@ module(
     setupRenderingTest(hooks);
     setupIntl(hooks);
 
-    test('it renders the correct diagram when egressFilter is false', async function (assert) {
+    test('it renders the correct diagram when egress filter is false', async function (assert) {
       assert.expect(2);
       await render(
-        hbs`<WorkerDiagram::SingleFilter @egressFilter={{false}} />`
+        hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{false}} />`
       );
 
       assert.dom('[data-test-single-filter-egress-off]').isVisible();
       assert.dom('[data-test-single-filter-egress-on]').doesNotExist();
     });
 
-    test('it renders the correct diagram when egressFilter is true', async function (assert) {
+    test('it renders the correct diagram when egress filter is true', async function (assert) {
       assert.expect(2);
-      await render(hbs`<WorkerDiagram::SingleFilter @egressFilter={{true}} />`);
+      await render(
+        hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{true}} />`
+      );
 
       assert.dom('[data-test-single-filter-egress-on]').isVisible();
       assert.dom('[data-test-single-filter-egress-off]').doesNotExist();

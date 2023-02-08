@@ -225,8 +225,8 @@
       <F.Control>
         {{#if this.showTargetFilters}}
           <WorkerDiagram
-            @egressFilter={{this.egressWorkerFilterEnabled}}
-            @ingressFilter={{this.ingressWorkerFilterEnabled}}
+            @egressWorkerFilterEnabled={{this.egressWorkerFilterEnabled}}
+            @ingressWorkerFilterEnabled={{this.ingressWorkerFilterEnabled}}
           />
 
           {{#if (feature-flag 'target-worker-filters-v2-ingress')}}

@@ -1,4 +1,4 @@
-{{#if (and @egressFilter @ingressFilter)}}
+{{#if (and @egressWorkerFilterEnabled @ingressWorkerFilterEnabled)}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-on-ingress-on as |D|>
     <D.Item @icon='user'>
       {{t 'resources.target.workers.diagram.client'}}
@@ -25,7 +25,7 @@
       }}
     </Hds::Form::HelperText>
   </div>
-{{else if @ingressFilter}}
+{{else if @ingressWorkerFilterEnabled}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-off-ingress-on as |D|>
     <D.Item @icon='user'>
       {{t 'resources.target.workers.diagram.client'}}
@@ -42,7 +42,7 @@
       {{t 'resources.target.workers.filter-explainer.ingress-worker'}}
     </Hds::Form::HelperText>
   </div>
-{{else if @egressFilter}}
+{{else if @egressWorkerFilterEnabled}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-on-ingress-off as |D|>
     <D.Item @icon='user'>
       {{t 'resources.target.workers.diagram.client'}}
