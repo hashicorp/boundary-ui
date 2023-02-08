@@ -37,14 +37,6 @@ export default class FormTargetComponent extends Component {
     return icons[this.args.model.type];
   }
 
-  /**
-   * determines when the worker filter deprecation message should be shown
-   * @type {boolean}
-   */
-  get showDeprecationMessage() {
-    return !this.args.model.isNew && this.args.model.worker_filter;
-  }
-
   //note: these getters will go away when we refactor worker diagram
   /**
    * determines when the enterprise dual filter diagrams should be shown
@@ -77,15 +69,6 @@ export default class FormTargetComponent extends Component {
       this.args.model.ingress_worker_filter = '';
     }
   }
-  @action
-  migrateWorkerFilters() {
-    this.egressWorkerFilterEnabled = true;
-    this.ingressWorkerFilterEnabled = true;
-    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
-    this.args.model.egress_worker_filter = this.args.model.worker_filter;
-    this.args.model.ingress_worker_filter = this.args.model.worker_filter;
-    this.args.model.worker_filter = '';
-  }
 
   /**
    * Call passed cancel function.
@@ -99,5 +82,23 @@ export default class FormTargetComponent extends Component {
     this.egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
 
     this.ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
+  }
+
+  //this part is deprecated and will eventually be retired
+  /**
+   * determines when the worker filter deprecation message should be shown
+   * @type {boolean}
+   */
+  get showDeprecationMessage() {
+    return !this.args.model.isNew && this.args.model.worker_filter;
+  }
+  @action
+  migrateWorkerFilters() {
+    this.egressWorkerFilterEnabled = true;
+    this.ingressWorkerFilterEnabled = true;
+    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
+    this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.ingress_worker_filter = this.args.model.worker_filter;
+    this.args.model.worker_filter = '';
   }
 }
