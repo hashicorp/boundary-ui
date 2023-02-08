@@ -1,4 +1,4 @@
-<div data-test-worker-diagram>
+<div class='worker-wrapper'>
   {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
     <WorkerDiagram::DualFilter::Hcp
       @egressFilter={{@egressFilter}}
