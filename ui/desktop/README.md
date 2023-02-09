@@ -225,7 +225,7 @@ More information on [Node debugging guide](https://nodejs.org/en/docs/guides/deb
 
 The desktop client binary is the end artifact we deliver to customers. More information on how to build the binary in [Building for Production](#building-for-production).
 
-We use [Debugtron](https://github.com/pd4d10/debugtron) for debug the production binary. Debugtron let you inspect the Electron app as if you were on a dev environment. Also provides debug options for the node process running Electron.
+We use [Debugtron](https://github.com/pd4d10/debugtron) to debug the production binary. Debugtron let's you inspect the Electron app as if you were in a dev environment. It also provides debug options for the node process running Electron.
 
 
 ## Further Reading / Useful Links
