@@ -14,6 +14,8 @@ const featureEditions = {
     'byow-pki-upstream': true,
     'vault-worker-filter': false,
     'target-worker-filters-v2': true,
+    'target-worker-filters-v2-ingress': false,
+    'target-worker-filters-v2-hcp': false,
     'target-network-address': true,
     'credential-library-vault-ssh-certificate': false,
   },
