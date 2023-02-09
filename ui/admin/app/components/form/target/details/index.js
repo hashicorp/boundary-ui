@@ -68,14 +68,20 @@ export default class FormTargetComponent extends Component {
     this.ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
   }
 
-  //this part is deprecated and will eventually be retired
+  // These methods may be removed after the `worker_filter` field is removed from the API.
   /**
-   * determines when the worker filter deprecation message should be shown
+   * Evaluates to `true` if the worker filter deprecation message should be shown.
    * @type {boolean}
    */
   get showDeprecationMessage() {
     return !this.args.model.isNew && this.args.model.worker_filter;
   }
+
+  /**
+   * Copies the value from `worker_filter` into `egress_worker_filter` and `ingress_worker_filter`
+   * and unsets `worker_filter`.
+   */
+
   @action
   migrateWorkerFilters() {
     this.egressWorkerFilterEnabled = true;
