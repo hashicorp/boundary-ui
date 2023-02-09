@@ -37,22 +37,6 @@ export default class FormTargetComponent extends Component {
     return icons[this.args.model.type];
   }
 
-  //note: these getters will go away when we refactor worker diagram
-  /**
-   * determines when the enterprise dual filter diagrams should be shown
-   * @type {boolean}
-   */
-  get workerDiagramDualFilter() {
-    return this.features.isEnabled('target-worker-filters-v2-ingress');
-  }
-  /**
-   * determines when the hcp dual filter diagrams should be shown
-   * @type {boolean}
-   */
-  get workerDiagramHCPDualFilter() {
-    return this.features.isEnabled('target-worker-filters-v2-hcp');
-  }
-
   //actions
   @action
   toggleEgressFilter() {

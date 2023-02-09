@@ -28,7 +28,6 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isRequired={{false}}
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
@@ -82,7 +81,6 @@
 
   {{#if (feature-flag 'target-network-address')}}
     <Hds::Form::TextInput::Field
-      @isRequired={{false}}
       @isOptional={{true}}
       @value={{@model.address}}
       @isInvalid={{@model.errors.address}}
@@ -132,7 +130,6 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
-    @isRequired={{false}}
     @isOptional={{true}}
     @value={{@model.session_max_seconds}}
     @isInvalid={{@model.errors.session_max_seconds}}
@@ -154,7 +151,6 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
-    @isRequired={{false}}
     @isOptional={{true}}
     @value={{@model.session_connection_limit}}
     @isInvalid={{@model.errors.session_connection_limit}}
@@ -180,7 +176,6 @@
     <Hds::Form::Fieldset
       class='target-workers'
       @layout='horizontal'
-      @isRequired={{false}}
       @isOptional={{true}}
       as |F|
     >
@@ -223,22 +218,10 @@
         </F.Control>
       {{else}}
         <F.Control>
-          {{#if this.workerDiagramHCPDualFilter}}
-            <WorkerDiagram::DualFilter::Hcp
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-              @ingressFilter={{this.ingressWorkerFilterEnabled}}
-            />
-          {{else if this.workerDiagramDualFilter}}
-            <WorkerDiagram::DualFilter
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-              @ingressFilter={{this.ingressWorkerFilterEnabled}}
-            />
-          {{else}}
-            <WorkerDiagram::SingleFilter
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-            />
-          {{/if}}
-
+          <WorkerDiagram
+            @egressWorkerFilterEnabled={{this.egressWorkerFilterEnabled}}
+            @ingressWorkerFilterEnabled={{this.ingressWorkerFilterEnabled}}
+          />
           {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
             <Form::Target::WorkerFilter
               @name='ingress_worker_filter'
@@ -286,7 +269,6 @@
 
   {{else}}
     <Hds::Form::TextInput::Field
-      @isRequired={{false}}
       @isOptional={{true}}
       @value={{@model.worker_filter}}
       @isInvalid={{@model.errors.worker_filter}}
