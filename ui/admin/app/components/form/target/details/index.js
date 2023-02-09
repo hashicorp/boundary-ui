@@ -84,7 +84,7 @@ export default class FormTargetComponent extends Component {
   migrateWorkerFilters() {
     this.egressWorkerFilterEnabled = true;
     this.ingressWorkerFilterEnabled = true;
-    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
+    // When update is clicked, copy worker filter value into egress and ingress filter and clear the worker_filter
     this.args.model.egress_worker_filter = this.args.model.worker_filter;
     this.args.model.ingress_worker_filter = this.args.model.worker_filter;
     this.args.model.worker_filter = '';
