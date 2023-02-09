@@ -20,33 +20,33 @@ module(
       featuresService.disable(targetWorkerFilterIngress);
     });
 
-    test('it renders the correct diagram when egressFilter is false and ingress is false', async function (assert) {
+    test('it renders the correct diagram when egress and ingress filter is false', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{false}} @ingressFilter={{false}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{false}} @ingressWorkerFilterEnabled={{false}} />`
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-off-ingress-off]').exists();
     });
 
-    test('it renders the correct diagram when egressFilter is true and ingress is false', async function (assert) {
+    test('it renders the correct diagram when egress filter is true and ingress filter is false', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{true}} @ingressFilter={{false}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{true}} @ingressWorkerFilterEnabled={{false}} />`
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-on-ingress-off]').exists();
     });
 
-    test('it renders the correct diagram when egressFilter is false and ingress is true', async function (assert) {
+    test('it renders the correct diagram when egress filter is false and ingress filter is true', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{false}} @ingressFilter={{true}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{false}} @ingressWorkerFilterEnabled={{true}} />`
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-off-ingress-on]').exists();
     });
 
-    test('it renders the correct diagram when egressFilter is true and ingress is true', async function (assert) {
+    test('it renders the correct diagram when egress and ingress filter is true', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressFilter={{true}} @ingressFilter={{true}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{true}} @ingressWorkerFilterEnabled={{true}} />`
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-on-ingress-on]').exists();

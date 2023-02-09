@@ -224,21 +224,10 @@
       {{/if}}
       <F.Control>
         {{#if this.showTargetFilters}}
-          {{#if this.workerDiagramHCPDualFilter}}
-            <WorkerDiagram::DualFilter::Hcp
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-              @ingressFilter={{this.ingressWorkerFilterEnabled}}
-            />
-          {{else if this.workerDiagramDualFilter}}
-            <WorkerDiagram::DualFilter
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-              @ingressFilter={{this.ingressWorkerFilterEnabled}}
-            />
-          {{else}}
-            <WorkerDiagram::SingleFilter
-              @egressFilter={{this.egressWorkerFilterEnabled}}
-            />
-          {{/if}}
+          <WorkerDiagram
+            @egressWorkerFilterEnabled={{this.egressWorkerFilterEnabled}}
+            @ingressWorkerFilterEnabled={{this.ingressWorkerFilterEnabled}}
+          />
 
           {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
             <Form::Target::WorkerFilter
