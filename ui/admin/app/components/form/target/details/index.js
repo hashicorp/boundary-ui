@@ -62,13 +62,12 @@ export default class FormTargetComponent extends Component {
   cancel() {
     this.args.cancel();
     // Reset the tracked variable for toggles after rollback
-
     this.egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
-
     this.ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
   }
 
   // These methods may be removed after the `worker_filter` field is removed from the API.
+
   /**
    * Evaluates to `true` if the worker filter deprecation message should be shown.
    * @type {boolean}
@@ -81,7 +80,6 @@ export default class FormTargetComponent extends Component {
    * Copies the value from `worker_filter` into `egress_worker_filter` and `ingress_worker_filter`
    * and unsets `worker_filter`.
    */
-
   @action
   migrateWorkerFilters() {
     this.egressWorkerFilterEnabled = true;
