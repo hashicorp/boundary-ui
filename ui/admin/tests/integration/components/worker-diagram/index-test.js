@@ -12,14 +12,10 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
 
-  // let featuresService;
   const targetWorkerFilterIngress = 'target-worker-filters-v2-ingress';
   const targetWorkerFilterHCP = 'target-worker-filters-v2-hcp';
 
   test('it renders a single filter diagram', async function (assert) {
-    // featuresService = this.owner.lookup('service:features');
-    // featuresService.disable(targetWorkerFilterIngress);
-    // featuresService.disable(targetWorkerFilterHCP);
     disableFeature(targetWorkerFilterIngress);
     disableFeature(targetWorkerFilterHCP);
     assert.expect(1);
@@ -29,9 +25,6 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
   });
 
   test('it renders a dual filter diagram when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    // featuresService = this.owner.lookup('service:features');
-    // featuresService.enable(targetWorkerFilterIngress);
-    // featuresService.disable(targetWorkerFilterHCP);
     enableFeature(targetWorkerFilterIngress);
     disableFeature(targetWorkerFilterHCP);
     assert.expect(1);
@@ -41,9 +34,6 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
   });
 
   test('it renders a HCP dual filter diagram when `target-worker-filters-v2-hcp` is enabled', async function (assert) {
-    // featuresService = this.owner.lookup('service:features');
-    // featuresService.enable(targetWorkerFilterIngress);
-    // featuresService.enable(targetWorkerFilterHCP);
     enableFeature(targetWorkerFilterIngress);
     enableFeature(targetWorkerFilterHCP);
     assert.expect(1);
