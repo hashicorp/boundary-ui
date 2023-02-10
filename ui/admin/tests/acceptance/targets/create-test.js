@@ -1,12 +1,5 @@
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  find,
-  click,
-  fillIn,
-  getContext,
-} from '@ember/test-helpers';
+import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -17,6 +10,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import { disableFeature, enableFeature } from '../../helpers/features-service';
 
 module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -25,7 +19,6 @@ module('Acceptance | targets | create', function (hooks) {
   let getTargetCount;
   let getTCPTargetCount;
   let getSSHTargetCount;
-  let featuresService;
 
   const instances = {
     scopes: {
@@ -46,8 +39,6 @@ module('Acceptance | targets | create', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    const { owner } = getContext();
-    featuresService = owner.lookup('service:features');
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -85,7 +76,7 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `ssh` when `target-worker-filters-v2` is disabled', async function (assert) {
-    featuresService.disable('target-worker-filters-v2');
+    disableFeature('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
@@ -111,7 +102,7 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `ssh` when `target-worker-filters-v2` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
+    enableFeature('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
@@ -138,7 +129,7 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `tcp` when `target-worker-filters-v2` is disabled', async function (assert) {
-    featuresService.disable('target-worker-filters-v2');
+    disableFeature('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
@@ -164,7 +155,7 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `tcp` when `target-worker-filters-v2` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
+    enableFeature('target-worker-filters-v2');
     assert.expect(4);
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
@@ -192,8 +183,8 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `tcp` when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    featuresService.enable('target-worker-filters-v2-ingress');
+    enableFeature('target-worker-filters-v2');
+    enableFeature('target-worker-filters-v2-ingress');
     assert.expect(4);
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
@@ -274,7 +265,7 @@ module('Acceptance | targets | create', function (hooks) {
 
   test('cannot navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
     assert.expect(3);
-    featuresService.disable('ssh-target');
+    disableFeature('ssh-target');
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
@@ -398,7 +389,7 @@ module('Acceptance | targets | create', function (hooks) {
 
   test('address field does not exist when target network address feature is disabled', async function (assert) {
     assert.expect(1);
-    featuresService.disable('target-network-address');
+    disableFeature('target-network-address');
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);

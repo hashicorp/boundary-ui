@@ -13,6 +13,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import { disableFeature } from '../../helpers/features-service';
 
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -219,8 +220,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
-    const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-certificate');
+    disableFeature('credential-library-vault-ssh-certificate');
     assert.expect(1);
     await visit(urls.newCredentialLibrary);
 
