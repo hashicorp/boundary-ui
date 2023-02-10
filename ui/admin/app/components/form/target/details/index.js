@@ -37,30 +37,6 @@ export default class FormTargetComponent extends Component {
     return icons[this.args.model.type];
   }
 
-  /**
-   * determines when the worker filter deprecation message should be shown
-   * @type {boolean}
-   */
-  get showDeprecationMessage() {
-    return !this.args.model.isNew && this.args.model.worker_filter;
-  }
-
-  /**
-   * determines when the update worker filter button should be shown
-   * @type {boolean}
-   */
-  get showUpdateWorkerFilterButton() {
-    return this.args.model.worker_filter;
-  }
-
-  /**
-   * determines when the filters should be shown
-   * @type {boolean}
-   */
-  get showTargetFilters() {
-    return !this.args.model.worker_filter;
-  }
-
   //actions
   @action
   toggleEgressFilter() {
@@ -77,15 +53,6 @@ export default class FormTargetComponent extends Component {
       this.args.model.ingress_worker_filter = '';
     }
   }
-  @action
-  migrateWorkerFilters() {
-    this.egressWorkerFilterEnabled = true;
-    this.ingressWorkerFilterEnabled = true;
-    // When update is clicked, copy worker filter value into egress filter and clear the worker_filter
-    this.args.model.egress_worker_filter = this.args.model.worker_filter;
-    this.args.model.ingress_worker_filter = this.args.model.worker_filter;
-    this.args.model.worker_filter = '';
-  }
 
   /**
    * Call passed cancel function.
@@ -95,9 +62,31 @@ export default class FormTargetComponent extends Component {
   cancel() {
     this.args.cancel();
     // Reset the tracked variable for toggles after rollback
-
     this.egressWorkerFilterEnabled = this.args.model.egress_worker_filter;
-
     this.ingressWorkerFilterEnabled = this.args.model.ingress_worker_filter;
+  }
+
+  // These methods may be removed after the `worker_filter` field is removed from the API.
+
+  /**
+   * Evaluates to `true` if the worker filter deprecation message should be shown.
+   * @type {boolean}
+   */
+  get showDeprecationMessage() {
+    return !this.args.model.isNew && this.args.model.worker_filter;
+  }
+
+  /**
+   * Copies the value from `worker_filter` into `egress_worker_filter` and `ingress_worker_filter`
+   * and unsets `worker_filter`.
+   */
+  @action
+  migrateWorkerFilters() {
+    this.egressWorkerFilterEnabled = true;
+    this.ingressWorkerFilterEnabled = true;
+    // When update is clicked, copy worker filter value into egress and ingress filter and clear the worker_filter
+    this.args.model.egress_worker_filter = this.args.model.worker_filter;
+    this.args.model.ingress_worker_filter = this.args.model.worker_filter;
+    this.args.model.worker_filter = '';
   }
 }
