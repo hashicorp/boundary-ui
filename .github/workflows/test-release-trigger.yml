@@ -18,8 +18,8 @@ jobs:
       - name: Trigger Release workflow in boundary-ui-releases
         uses: benc-uk/workflow-dispatch@798e70c97009500150087d30d9f11c5444830385
         with:
-          workflow: main.yaml
+          workflow: release.yml
           repo: hashicorp/boundary-ui-releases
           token: "${{ secrets.ELEVATED_GITHUB_TOKEN }}"
-          inputs: '{ "TAG": "'${{ github.event.inputs.branch }}'" }'
+          inputs: '{ "TAG": "${{ github.event.inputs.branch }}" }'
 
