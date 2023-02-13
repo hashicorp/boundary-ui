@@ -1,6 +1,5 @@
 name: "Trigger Test Boundary UI release"
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -12,12 +11,15 @@ jobs:
   trigger-circleci-release:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Trigger Release job
+      - name: Release description
         if: github.event_name == 'workflow_dispatch'
         run: |
           echo "Triggering Test release using BRANCH and TEST_TAG ${{ github.event.inputs.branch }}"
+      - name: Trigger Release workflow in boundary-ui-releases
+        uses: benc-uk/workflow-dispatch@798e70c97009500150087d30d9f11c5444830385
+        with:
+          workflow: main.yaml
+          repo: hashicorp/boundary-ui-releases
+          token: "${{ secrets.ELEVATED_GITHUB_TOKEN }}"
+          inputs: '{ "TAG": "'${{ github.event.inputs.branch }}'" }'
 
-          curl -u ${{ secrets.CIRCLE_TOKEN }}: -X POST --header "Content-Type: application/json" \
-          -d '{ "branch": "main", "parameters": {"TAG": "'${{ github.event.inputs.branch }}'" }}' \
-          https://circleci.com/api/v2/project/github/hashicorp/boundary-ui-releases/pipeline

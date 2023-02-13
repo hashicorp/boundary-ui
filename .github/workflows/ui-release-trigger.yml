@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Trigger Release job
+      - name: Release description
         run: |
           echo "Triggering release with a TAG ${GITHUB_REF#refs/tags/}"
-
-          curl -u ${{ secrets.CIRCLE_TOKEN }}: -X POST --header "Content-Type: application/json" \
-          -d '{ "branch": "main", "parameters": {"TAG": "'${GITHUB_REF#refs/tags/}'" }}' \
-          https://circleci.com/api/v2/project/github/hashicorp/boundary-ui-releases/pipeline
+      - name: Trigger Release workflow in boundary-ui-releases
+        uses: benc-uk/workflow-dispatch@798e70c97009500150087d30d9f11c5444830385
+        with:
+          workflow: main.yaml
+          repo: hashicorp/boundary-ui-releases
+          token: "${{ secrets.ELEVATED_GITHUB_TOKEN }}"
+          inputs: '{ "TAG": "'${GITHUB_REF#refs/tags/}'" }'
