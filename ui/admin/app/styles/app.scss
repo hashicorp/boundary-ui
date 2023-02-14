@@ -527,13 +527,6 @@
   }
 }
 
-.ordered-series-spacer {
-  display: flex;
-  align-items: center;
-  min-height: 11.5rem;
-  width: 100%;
-}
-
 .ordered-series-diagram {
   --group-title-line-height: 2.25rem;
 
@@ -566,8 +559,6 @@
   }
 
   &-group {
-    display: flex;
-
     &-content {
       border-radius: 0.5rem;
       padding: 0 0.75rem 0.75rem;
@@ -607,6 +598,10 @@
 
   .hds-form-legend {
     font-size: sizing.rems(l) - sizing.rems(xxs); // 20
+
+    + .hds-form-helper-text {
+      margin-bottom: 1rem;
+    }
   }
 
   .hds-alert {
@@ -633,8 +628,12 @@
     }
   }
 
-  .worker-diagram-explainer {
-    min-height: 4rem; // 1
+  .worker-diagram {
+    min-height: 15rem;
+
+    .ordered-series-diagram {
+      min-height: 10rem;
+    }
   }
 }
 
