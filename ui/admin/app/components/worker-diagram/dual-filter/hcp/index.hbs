@@ -18,13 +18,11 @@
       </D.Item>
     </D.Group>
   </OrderedSeriesDiagram>
-  <div class='worker-diagram-explainer'>
-    <Hds::Form::HelperText>
-      {{t
-        'resources.target.workers.filter-explainer.dual-egress-on-ingress-on'
-      }}
-    </Hds::Form::HelperText>
-  </div>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.dual-egress-on-ingress-on'}}
+  </p>
 {{else if @ingressWorkerFilterEnabled}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-off-ingress-on as |D|>
     <D.Item @icon='user'>
@@ -37,11 +35,11 @@
       {{t 'resources.target.workers.diagram.host'}}
     </D.Item>
   </OrderedSeriesDiagram>
-  <div class='worker-diagram-explainer'>
-    <Hds::Form::HelperText>
-      {{t 'resources.target.workers.filter-explainer.ingress-worker'}}
-    </Hds::Form::HelperText>
-  </div>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.ingress-worker'}}
+  </p>
 {{else if @egressWorkerFilterEnabled}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-on-ingress-off as |D|>
     <D.Item @icon='user'>
@@ -66,11 +64,11 @@
       </D.Item>
     </D.Group>
   </OrderedSeriesDiagram>
-  <div class='worker-diagram-explainer'>
-    <Hds::Form::HelperText>
-      {{t 'resources.target.workers.filter-explainer.hcp-dual-egress-on'}}
-    </Hds::Form::HelperText>
-  </div>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.hcp-dual-egress-on'}}
+  </p>
 {{else}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-off-ingress-off as |D|>
     <D.Item @icon='user'>
@@ -83,9 +81,9 @@
       {{t 'resources.target.workers.diagram.host'}}
     </D.Item>
   </OrderedSeriesDiagram>
-  <div class='worker-diagram-explainer'>
-    <Hds::Form::HelperText>
-      {{t 'resources.target.workers.filter-explainer.hcp-worker'}}
-    </Hds::Form::HelperText>
-  </div>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.hcp-worker'}}
+  </p>
 {{/if}}
