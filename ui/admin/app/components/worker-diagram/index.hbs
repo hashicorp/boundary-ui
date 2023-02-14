@@ -1,17 +1,19 @@
-{{#if (feature-flag 'target-worker-filters-v2-ingress')}}
-  {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
-    <WorkerDiagram::DualFilter::Hcp
-      @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
-      @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}}
-    />
+<div class='worker-diagram'>
+  {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
+    {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
+      <WorkerDiagram::DualFilter::Hcp
+        @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
+        @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}}
+      />
+    {{else}}
+      <WorkerDiagram::DualFilter
+        @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
+        @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}}
+      />
+    {{/if}}
   {{else}}
-    <WorkerDiagram::DualFilter
+    <WorkerDiagram::SingleFilter
       @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
-      @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}}
     />
   {{/if}}
-{{else}}
-  <WorkerDiagram::SingleFilter
-    @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
-  />
-{{/if}}
+</div>
