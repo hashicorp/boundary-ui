@@ -527,6 +527,14 @@
   }
 }
 
+.ordered-series-spacer {
+  display: flex;
+  align-items: center;
+  min-height: 11rem;
+  margin-top: 0.4375rem;
+  width: 100%;
+}
+
 .ordered-series-diagram {
   --group-title-line-height: 2.25rem;
 
@@ -628,14 +636,6 @@
 
   .worker-diagram-explainer {
     min-height: 4rem; // 1
-  }
-
-  .worker-wrapper {
-    display: flex;
-    align-items: center;
-    min-height: 11rem;
-    margin-top: sizing.rems(xs) - sizing.rems(xxxxs); // 10
-    width: 100%;
   }
 }
 
