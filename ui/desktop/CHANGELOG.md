@@ -2,6 +2,16 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.5.1 [CLI 0.12.0] (2023.02.13)
+
+### New
+- Upgrade CLI to v0.12.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/1625))
+
+### Bug Fixes
+- Fix raw API output not displaying until clicked ([PR](https://github.com/hashicorp/boundary-ui/pull/1354))
+- Fix complex secrets not displaying correctly ([PR](https://github.com/hashicorp/boundary-ui/pull/1551))
+
+
 ## v1.5.0 [CLI 0.11.0] (2022.09.27)
 
 ### New
