@@ -1,7 +1,6 @@
 import RESTSerializer from '@ember-data/serializer/rest';
 import { underscore } from '@ember/string';
 import { get } from '@ember/object';
-import { copy } from 'ember-copy';
 
 /**
  * Manages serialization/normalization of data to/from the API.
@@ -129,7 +128,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     );
     // Copy the data rooted under `items` in the existing payload into the new
     // payload under the expected root key name.
-    transformedPayload[payloadKey] = copy(payload.items, true);
+    transformedPayload[payloadKey] = structuredClone(payload.items);
     // Return the result of normalizing the transformed payload.
     return super.normalizeArrayResponse(
       store,
@@ -156,7 +155,7 @@ export default class ApplicationSerializer extends RESTSerializer {
    */
   normalizeSingleResponse(store, primaryModelClass, payload, id, requestType) {
     // Copy payload (mostly to prevent mocking issues)
-    payload = copy(payload, true);
+    payload = structuredClone(payload);
     // Check for and normalize missing arrays
     payload = this.normalizeMissingArrays(store, primaryModelClass, payload);
     // Setup a new payload data structure.
@@ -211,7 +210,7 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {Object}
    */
   normalize(typeClass, hash) {
-    let normalizedHash = copy(hash, true);
+    let normalizedHash = structuredClone(hash);
     const scopeID = get(normalizedHash, 'scope.id');
     const scopeType = get(normalizedHash, 'scope.type');
     if (scopeID) normalizedHash.scope.scope_id = scopeID;
@@ -300,7 +299,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     id,
     requestType
   ) {
-    const newPayload = copy(payload, true);
+    const newPayload = structuredClone(payload);
 
     primaryModelClass.attributes.forEach((attribute) => {
       const {

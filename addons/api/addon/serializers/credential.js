@@ -1,6 +1,4 @@
 import ApplicationSerializer from './application';
-import { copy } from 'ember-copy';
-
 export default class CredentialSerializer extends ApplicationSerializer {
   /**
    * @override
@@ -33,7 +31,7 @@ export default class CredentialSerializer extends ApplicationSerializer {
   }
 
   normalize(typeClass, hash, ...rest) {
-    const normalizedHash = copy(hash, true);
+    const normalizedHash = structuredClone(hash);
     const normalized = super.normalize(typeClass, normalizedHash, ...rest);
     // Remove secret fields as we don't track them after being created/updated
     normalized.data.attributes.password = '';

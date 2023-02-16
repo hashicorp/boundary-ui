@@ -1,5 +1,4 @@
 import ApplicationSerializer from './application';
-import { copy } from 'ember-copy';
 
 const fieldByType = {
   aws: ['preferred_endpoints', 'filters', 'sync_interval_seconds'],
@@ -88,7 +87,7 @@ export default class HostSetSerializer extends ApplicationSerializer {
    * TODO:  remove once API consistently returns arrays.
    */
   normalize(typeClass, hash, ...rest) {
-    const normalizedHash = copy(hash, true);
+    const normalizedHash = structuredClone(hash);
 
     if (typeof normalizedHash?.attributes?.filters === 'string') {
       normalizedHash.attributes.filters = [normalizedHash.attributes.filters];
