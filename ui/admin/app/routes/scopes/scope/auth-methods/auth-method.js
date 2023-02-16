@@ -2,8 +2,6 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { inject as service } from '@ember/service';
-import { copy } from 'ember-copy';
-
 export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
   // =services
 
@@ -36,19 +34,25 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
   @action
   edit(authMethod) {
     if (authMethod.claims_scopes) {
-      authMethod.claims_scopes = copy(authMethod.claims_scopes, true);
+      authMethod.claims_scopes = structuredClone(authMethod.claims_scopes);
     }
     if (authMethod.signing_algorithms) {
-      authMethod.signing_algorithms = copy(authMethod.signing_algorithms, true);
+      authMethod.signing_algorithms = structuredClone(
+        authMethod.signing_algorithms
+      );
     }
     if (authMethod.allowed_audiences) {
-      authMethod.allowed_audiences = copy(authMethod.allowed_audiences, true);
+      authMethod.allowed_audiences = structuredClone(
+        authMethod.allowed_audiences
+      );
     }
     if (authMethod.idp_ca_certs) {
-      authMethod.idp_ca_certs = copy(authMethod.idp_ca_certs, true);
+      authMethod.idp_ca_certs = structuredClone(authMethod.idp_ca_certs);
     }
     if (authMethod.account_claim_maps) {
-      authMethod.account_claim_maps = copy(authMethod.account_claim_maps, true);
+      authMethod.account_claim_maps = structuredClone(
+        authMethod.account_claim_maps
+      );
     }
   }
 
