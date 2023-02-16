@@ -1,6 +1,4 @@
 import ApplicationSerializer from './application';
-import { copy } from 'ember-copy';
-
 export default class ManagedGroupSerializer extends ApplicationSerializer {
   // =properties
 
@@ -21,7 +19,7 @@ export default class ManagedGroupSerializer extends ApplicationSerializer {
   }
 
   normalize(typeClass, hash, ...rest) {
-    const normalizedHash = copy(hash, true);
+    const normalizedHash = structuredClone(hash);
 
     if (normalizedHash?.attributes?.filter) {
       normalizedHash.attributes.filter_string =
