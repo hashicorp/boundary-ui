@@ -14,8 +14,10 @@ const featureEditions = {
     'byow-pki-upstream': true,
     'vault-worker-filter': false,
     'target-worker-filters-v2': true,
+    'target-worker-filters-v2-ingress': false,
+    'target-worker-filters-v2-hcp': false,
     'target-network-address': true,
-    'credential-library-vault-ssh-cert': false,
+    'credential-library-vault-ssh-certificate': false,
   },
 };
 featureEditions.enterprise = {
@@ -23,6 +25,7 @@ featureEditions.enterprise = {
   'ssh-target': true,
   'vault-worker-filter': true,
   'target-worker-filters-v2-ingress': true,
+  'credential-library-vault-ssh-certificate': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
@@ -86,8 +89,8 @@ module.exports = function (environment) {
         'host-set': '/host-sets',
         'host-set.new': '/host-sets/new',
         'host-set.add-hosts': '/host-sets/add-hosts',
-        'host-set.preferred-endpoints': '/host-set.preferred-endpoints',
-        'host-set.sync-interval-seconds': '/host-set.sync-interval-seconds',
+        'host-set.preferred-endpoints': '/host-sets/preferred-endpoints',
+        'host-set.sync-interval-seconds': '/host-sets/sync-interval-seconds',
         'credential-store': '/credential-stores',
         'credential-library': '/credential-libraries',
         credential: '/credentials',
@@ -152,7 +155,7 @@ module.exports = function (environment) {
     ENV.featureFlags['target-worker-filters-v2-ingress'] = true;
     ENV.featureFlags['target-worker-filters-v2-hcp'] = true;
     ENV.featureFlags['target-network-address'] = true;
-    ENV.featureFlags['credential-library-vault-ssh-cert'] = true;
+    ENV.featureFlags['credential-library-vault-ssh-certificate'] = true;
   }
 
   if (environment === 'test') {
@@ -178,7 +181,7 @@ module.exports = function (environment) {
     ENV.featureFlags['vault-worker-filter'] = true;
     ENV.featureFlags['target-worker-filters-v2'] = true;
     ENV.featureFlags['target-network-address'] = true;
-    ENV.featureFlags['credential-library-vault-ssh-cert'] = true;
+    ENV.featureFlags['credential-library-vault-ssh-certificate'] = true;
   }
 
   if (environment === 'production') {

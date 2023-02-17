@@ -238,161 +238,90 @@
   }
 }
 
-//  onboarding quick setup styles
-.choose-path {
-  display: block;
-  width: sizing.rems(xl) * 15;
-}
-
-.choose-path-cards {
-  display: flex;
-  justify-content: space-between;
-}
-
+// Onboarding styles
 .create-resources {
-  display: block;
+  display: flex;
+  align-items: flex-start;
   width: sizing.rems(xl) * 15;
 
-  .rose-form-fieldset {
-    margin-top: sizing.rems(xl);
-  }
-
-  .rose-frame-body {
-    p {
-      color: var(--ui-gray);
-    }
-  }
-}
-
-.create-resource-cards {
-  display: flex;
-  justify-content: space-between;
-
-  .rose-form-input {
-    width: sizing.rems(xl) * 6;
-  }
-}
-
-.onboarding-quick-setup-success {
-  display: block;
-  width: min-content;
-
-  .rose-frame-header {
-    padding: sizing.rems(l);
-  }
-
-  h2 {
-    font-weight: 700;
-    line-height: 24px;
-    margin: 0;
-  }
-
-  h4 {
-    font-weight: 700;
-    line-height: 19px;
-  }
-
-  a {
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 16px;
-  }
-}
-
-.onboarding-quick-setup-success-role {
-  span {
-    display: flex;
-  }
-
-  h3 {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    line-height: 24px;
-    margin-left: sizing.rems(xs);
-    margin-top: 0;
-  }
-
-  .rose-icon {
-    color: var(--success);
-  }
-}
-
-.onboarding-quick-setup-success-sub-title {
-  display: inline-flex;
-
-  h3 {
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    line-height: 24px;
-    margin-left: sizing.rems(xs);
-    margin-top: sizing.rems(xxs);
-  }
-
-  .rose-icon {
-    margin-bottom: sizing.rems(xs);
-  }
-}
-
-.onboarding-quick-setup-success-link {
-  display: block;
-  margin-top: sizing.rems(xs);
-  text-decoration: none;
-}
-
-.onboarding-quick-setup-success-image {
-  margin-bottom: sizing.rems(xl);
-  margin-top: sizing.rems(l);
-}
-
-.onboarding-quick-setup-success-button {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0;
-  margin-top: sizing.rems(xl);
-  width: 100%;
-}
-
-.onboarding-quick-setup-success-controller {
-  margin-top: sizing.rems(l);
-
-  h4 {
-    font-weight: 600;
-    line-height: 18px;
-    margin-bottom: sizing.rems(xxs);
-  }
-
-  p {
-    color: var(--ui-gray);
-    margin-bottom: sizing.rems(xxs);
-  }
-}
-
-.onboarding-quick-setup-success-controller-url {
-  border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-  border-radius: sizing.rems(xxxs);
-  color: var(--action);
-  height: (sizing.rems(xs) * 5);
-
-  .copyable {
+  .create-resources-form {
     display: flex;
     justify-content: space-between;
-    padding: sizing.rems(s);
+    gap: sizing.rems(s);
   }
 
-  .rose-icon {
-    margin: 0;
+  .hds-form-group {
+    margin-top: sizing.rems(l);
+    justify-content: center;
+
+    .image-container {
+      display: flex;
+      justify-content: center;
+      margin-top: sizing.rems(l);
+    }
   }
 
-  .copyable-button {
-    top: -4px;
-  }
-}
+  .create-resources-item {
+    margin-bottom: sizing.rems(xxl);
 
-.onboarding-quick-setup-success-developers {
-  p {
-    margin-bottom: sizing.rems(s);
-    margin-top: sizing.rems(xs);
+    .create-resources-item-header {
+      display: flex;
+      align-items: center;
+      align-self: center;
+      gap: 8px;
+      margin-bottom: sizing.rems(s);
+
+      h3 {
+        margin: 0;
+      }
+
+      .hds-icon-tile {
+        color: var(--token-color-foreground-success);
+      }
+    }
+
+    .hds-link-standalone {
+      margin-bottom: sizing.rems(xs);
+    }
+
+    .create-resources-item-controller {
+      margin-top: sizing.rems(xl);
+
+      .create-resources-item-controller-label {
+        color: var(--ui-gray);
+      }
+
+      .create-resources-item-controller-copyable {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
+        border-radius: sizing.rems(xxxs);
+        color: var(--action);
+        height: (sizing.rems(xs) * 5);
+        margin: sizing.rems(xxs) 0 sizing.rems(l) 0;
+
+        .copyable {
+          display: flex;
+          justify-content: space-between;
+          padding: sizing.rems(s);
+
+          span {
+            display: flex;
+          }
+        }
+
+        .copyable-button {
+          top: 0; // This is to override a negative top declared above
+        }
+      }
+
+      .image-container > svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 
@@ -630,8 +559,6 @@
   }
 
   &-group {
-    display: flex;
-
     &-content {
       border-radius: 0.5rem;
       padding: 0 0.75rem 0.75rem;
@@ -671,6 +598,10 @@
 
   .hds-form-legend {
     font-size: sizing.rems(l) - sizing.rems(xxs); // 20
+
+    + .hds-form-helper-text {
+      margin-bottom: 1rem;
+    }
   }
 
   .hds-alert {
@@ -697,14 +628,55 @@
     }
   }
 
-  .target-worker-filter-explainer {
-    min-height: 4rem; // 1
+  .worker-diagram {
+    min-height: 15rem;
+
+    .ordered-series-diagram {
+      min-height: 10rem;
+    }
+  }
+}
+
+.key-value-list {
+  border: 0;
+
+  /* stylelint-disable selector-class-pattern */
+  .hds-table__thead {
+    .hds-table__th {
+      height: auto;
+      line-height: 1;
+    }
   }
 
-  .worker-wrapper {
-    display: flex;
-    align-items: center;
-    min-height: 11rem;
-    margin-top: sizing.rems(xs) - sizing.rems(xxxxs); // 10
+  .hds-table__thead,
+  .hds-table__tbody {
+    .hds-table__tr {
+      // Remove background color on all cells (especially header cells)
+      background-color: transparent;
+    }
+
+    .hds-table__th,
+    .hds-table__td {
+      padding: 0.75rem 1rem;
+
+      // Rely on right padding for cell spacing...
+      padding-left: 0;
+
+      &:last-child {
+        // ...except in the last cell, which doesn't need right padding
+        padding-right: 0;
+
+        // Shrink last cell to minimum possible width
+        width: 1%;
+        white-space: nowrap;
+      }
+
+      // Reset field margins to rely instead on cell paddings
+      .hds-form-field--layout-vertical,
+      .hds-form-text-input {
+        margin: 0;
+      }
+    }
   }
+  /* stylelint-enable selector-class-pattern */
 }

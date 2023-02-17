@@ -1,89 +1,85 @@
-<div data-test-dual-filters>
-  {{#if (and @egressFilter @ingressFilter)}}
-    <OrderedSeriesDiagram data-test-dual-filter-egress-on-ingress-on as |D|>
-      <D.Item @icon='user'>
-        {{t 'resources.target.workers.diagram.client'}}
-      </D.Item>
+{{#if (and @egressWorkerFilterEnabled @ingressWorkerFilterEnabled)}}
+  <OrderedSeriesDiagram data-test-dual-filter-egress-on-ingress-on as |D|>
+    <D.Item @icon='user'>
+      {{t 'resources.target.workers.diagram.client'}}
+    </D.Item>
+    <D.Item @icon='settings'>
+      {{t 'resources.target.workers.diagram.ingress-worker'}}
+    </D.Item>
+    <D.Group
+      @title={{t 'resources.target.workers.diagram.network'}}
+      @color='highlight'
+    >
       <D.Item @icon='settings'>
-        {{t 'resources.target.workers.diagram.ingress-worker'}}
-      </D.Item>
-      <D.Group
-        @title={{t 'resources.target.workers.diagram.network'}}
-        @color='highlight'
-      >
-        <D.Item @icon='settings'>
-          {{t 'resources.target.workers.diagram.egress-worker'}}
-        </D.Item>
-        <D.Item @icon='server'>
-          {{t 'resources.target.workers.diagram.host'}}
-        </D.Item>
-      </D.Group>
-    </OrderedSeriesDiagram>
-    <div class='target-worker-filter-explainer'>
-      <Hds::Form::HelperText>
-        {{t
-          'resources.target.workers.filter-explainer.dual-egress-on-ingress-on'
-        }}
-      </Hds::Form::HelperText>
-    </div>
-  {{else if @ingressFilter}}
-    <OrderedSeriesDiagram data-test-dual-filter-egress-off-ingress-on as |D|>
-      <D.Item @icon='user'>
-        {{t 'resources.target.workers.diagram.client'}}
-      </D.Item>
-      <D.Item @icon='settings'>
-        {{t 'resources.target.workers.diagram.ingress-worker'}}
+        {{t 'resources.target.workers.diagram.egress-worker'}}
       </D.Item>
       <D.Item @icon='server'>
         {{t 'resources.target.workers.diagram.host'}}
       </D.Item>
-    </OrderedSeriesDiagram>
-    <div class='target-worker-filter-explainer'>
-      <Hds::Form::HelperText>
-        {{t 'resources.target.workers.filter-explainer.ingress-worker'}}
-      </Hds::Form::HelperText>
-    </div>
-  {{else if @egressFilter}}
-    <OrderedSeriesDiagram data-test-dual-filter-egress-on-ingress-off as |D|>
-      <D.Item @icon='user'>
-        {{t 'resources.target.workers.diagram.client'}}
-      </D.Item>
+    </D.Group>
+  </OrderedSeriesDiagram>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.dual-egress-on-ingress-on'}}
+  </p>
+{{else if @ingressWorkerFilterEnabled}}
+  <OrderedSeriesDiagram data-test-dual-filter-egress-off-ingress-on as |D|>
+    <D.Item @icon='user'>
+      {{t 'resources.target.workers.diagram.client'}}
+    </D.Item>
+    <D.Item @icon='settings'>
+      {{t 'resources.target.workers.diagram.ingress-worker'}}
+    </D.Item>
+    <D.Item @icon='server'>
+      {{t 'resources.target.workers.diagram.host'}}
+    </D.Item>
+  </OrderedSeriesDiagram>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.ingress-worker'}}
+  </p>
+{{else if @egressWorkerFilterEnabled}}
+  <OrderedSeriesDiagram data-test-dual-filter-egress-on-ingress-off as |D|>
+    <D.Item @icon='user'>
+      {{t 'resources.target.workers.diagram.client'}}
+    </D.Item>
+    <D.Item @icon='settings'>
+      {{t 'resources.target.workers.diagram.frontline-worker'}}
+    </D.Item>
+    <D.Group
+      @title={{t 'resources.target.workers.diagram.network'}}
+      @color='highlight'
+    >
       <D.Item @icon='settings'>
-        {{t 'resources.target.workers.diagram.frontline-worker'}}
-      </D.Item>
-      <D.Group
-        @title={{t 'resources.target.workers.diagram.network'}}
-        @color='highlight'
-      >
-        <D.Item @icon='settings'>
-          {{t 'resources.target.workers.diagram.egress-worker'}}
-        </D.Item>
-        <D.Item @icon='server'>
-          {{t 'resources.target.workers.diagram.host'}}
-        </D.Item>
-      </D.Group>
-    </OrderedSeriesDiagram>
-    <div class='target-worker-filter-explainer'>
-      <Hds::Form::HelperText>
-        {{t 'resources.target.workers.filter-explainer.dual-egress-on'}}
-      </Hds::Form::HelperText>
-    </div>
-  {{else}}
-    <OrderedSeriesDiagram data-test-dual-filter-egress-off-ingress-off as |D|>
-      <D.Item @icon='user'>
-        {{t 'resources.target.workers.diagram.client'}}
-      </D.Item>
-      <D.Item @icon='settings'>
-        {{t 'resources.target.workers.diagram.any-worker'}}
+        {{t 'resources.target.workers.diagram.egress-worker'}}
       </D.Item>
       <D.Item @icon='server'>
         {{t 'resources.target.workers.diagram.host'}}
       </D.Item>
-    </OrderedSeriesDiagram>
-    <div class='target-worker-filter-explainer'>
-      <Hds::Form::HelperText>
-        {{t 'resources.target.workers.filter-explainer.any-worker'}}
-      </Hds::Form::HelperText>
-    </div>
-  {{/if}}
-</div>
+    </D.Group>
+  </OrderedSeriesDiagram>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.dual-egress-on'}}
+  </p>
+{{else}}
+  <OrderedSeriesDiagram data-test-dual-filter-egress-off-ingress-off as |D|>
+    <D.Item @icon='user'>
+      {{t 'resources.target.workers.diagram.client'}}
+    </D.Item>
+    <D.Item @icon='settings'>
+      {{t 'resources.target.workers.diagram.any-worker'}}
+    </D.Item>
+    <D.Item @icon='server'>
+      {{t 'resources.target.workers.diagram.host'}}
+    </D.Item>
+  </OrderedSeriesDiagram>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.any-worker'}}
+  </p>
+{{/if}}

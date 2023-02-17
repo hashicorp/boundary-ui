@@ -1,5 +1,3 @@
-import { copy } from 'ember-copy';
-
 /**
  * Allows development-time toggling of resource permissions via the window
  * querystring.  Pass a JSON object into the query to toggle permissions.
@@ -50,7 +48,7 @@ class ToggledCapabilities {
    */
   authorizedActionsFor(field) {
     if (this.#authorizedActions[field]) {
-      return copy(this.#authorizedActions[field], true);
+      return structuredClone(this.#authorizedActions[field]);
     }
   }
 }

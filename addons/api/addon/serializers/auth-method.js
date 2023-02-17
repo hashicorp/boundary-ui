@@ -1,6 +1,4 @@
 import ApplicationSerializer from './application';
-import { copy } from 'ember-copy';
-
 export default class AuthMethodSerializer extends ApplicationSerializer {
   // =methods
 
@@ -86,7 +84,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @return {Object}
    */
   normalize(typeClass, hash, ...rest) {
-    let normalizedHash = copy(hash, true);
+    let normalizedHash = structuredClone(hash);
     // switch (normalizedHash.type) {
     //   case 'oidc':
     //     normalizedHash = this.normalizeOIDC(normalizedHash);

@@ -1,4 +1,4 @@
-{{#if @egressFilter}}
+{{#if @egressWorkerFilterEnabled}}
   <OrderedSeriesDiagram data-test-single-filter-egress-on as |D|>
     <D.Item @icon='user'>
       {{t 'resources.target.workers.diagram.client'}}
@@ -15,11 +15,11 @@
       </D.Item>
     </D.Group>
   </OrderedSeriesDiagram>
-  <div class='target-worker-filter-explainer'>
-    <Hds::Form::HelperText>
-      {{t 'resources.target.workers.filter-explainer.egress-worker'}}
-    </Hds::Form::HelperText>
-  </div>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.egress-worker'}}
+  </p>
 {{else}}
   <OrderedSeriesDiagram data-test-single-filter-egress-off as |D|>
     <D.Item @icon='user'>
@@ -32,9 +32,9 @@
       {{t 'resources.target.workers.diagram.host'}}
     </D.Item>
   </OrderedSeriesDiagram>
-  <div class='target-worker-filter-explainer'>
-    <Hds::Form::HelperText>
-      {{t 'resources.target.workers.filter-explainer.any-worker'}}
-    </Hds::Form::HelperText>
-  </div>
+  <p
+    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
+  >
+    {{t 'resources.target.workers.filter-explainer.any-worker'}}
+  </p>
 {{/if}}
