@@ -13,6 +13,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}

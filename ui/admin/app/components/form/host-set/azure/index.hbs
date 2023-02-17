@@ -15,6 +15,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}
@@ -33,7 +34,7 @@
     @label={{t 'form.description.label'}}
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -50,7 +51,7 @@
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
     readonly={{true}}
-    @disabled={{true}}
+    disabled={{@disabled}}
   />
 
   <InfoField
@@ -96,6 +97,7 @@
                   @value={{endpoint.value}}
                   @error={{@model.errors.preferred_endpoints}}
                   @contextual={{true}}
+                  disabled={{@disabled}}
                   placeholder='cidr:2001:4860:4860::8888/32'
                   as |field|
                 >
@@ -126,6 +128,7 @@
                 @type='text'
                 @name='preferred_endpoints'
                 @value={{@model.preferred_endpoint}}
+                disabled={{@disabled}}
                 placeholder='cidr:2001:4860:4860::8888/32'
               />
             </row.cell>
@@ -164,7 +167,7 @@
     @helperText={{t 'resources.host-set.form.filter.azure.help'}}
     @linkText={{t 'actions.learn-more'}}
     @error={{@model.errors.filter_string}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -185,6 +188,7 @@
     @helperText={{t 'form.sync-interval.help'}}
     @link={{doc-url 'host-set.sync-interval-seconds'}}
     @linkText={{t 'actions.learn-more'}}
+    disabled={{@disabled}}
     min='0'
     step='1'
     as |field|

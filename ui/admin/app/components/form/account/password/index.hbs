@@ -9,7 +9,7 @@
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
     readonly={{true}}
-    @disabled={{true}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -19,6 +19,7 @@
     @label={{t 'form.name.label'}}
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -38,7 +39,7 @@
     @label={{t 'form.description.label'}}
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -57,6 +58,7 @@
     @value={{@model.login_name}}
     @label={{t 'form.login_name.label'}}
     @error={{@model.errors.login_name}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -77,6 +79,7 @@
       @label={{t 'form.password.label'}}
       @error={{@model.errors.password}}
       readonly={{false}}
+      disabled={{@disabled}}
       autocomplete='new-password'
       as |field|
     >

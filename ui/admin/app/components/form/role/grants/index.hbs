@@ -45,17 +45,6 @@
   @disabled={{@model.isSaving}}
   as |form|
 >
-
-  {{!--
-  {{#if @model.errors.grants}}
-    <input.errors as |errors|>
-      {{#each @model.errors.grants as |error|}}
-        <errors.message>{{error.message}}</errors.message>
-      {{/each}}
-    </input.errors>
-  {{/if}}
-  --}}
-
   <Rose::List::KeyValue as |list|>
     {{#each this.grants as |grant|}}
       <list.item as |item|>

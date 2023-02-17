@@ -9,7 +9,7 @@
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
     readonly={{true}}
-    @disabled={{true}}
+    disabled={{@disabled}}
   />
 
   {{#unless @model.isNew}}
@@ -17,25 +17,25 @@
       @value={{@model.issuer}}
       @label={{t 'form.issuer.label'}}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
     <form.input
       @value={{@model.subject}}
       @label={{t 'form.subject.label'}}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
     <form.input
       @value={{@model.email}}
       @label={{t 'form.email.label'}}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
     <form.input
       @value={{@model.full_name}}
       @label={{t 'form.full_name.label'}}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
   {{/unless}}
 
@@ -65,7 +65,7 @@
     @label={{t 'form.description.label'}}
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -85,6 +85,7 @@
       @value={{@model.issuer}}
       @label={{t 'form.issuer.label'}}
       @error={{@model.errors.issuer}}
+      disabled={{@disabled}}
       readonly={{false}}
       as |field|
     >
@@ -103,6 +104,7 @@
       @value={{@model.subject}}
       @label={{t 'form.subject.label'}}
       @error={{@model.errors.subject}}
+      disabled={{@disabled}}
       readonly={{false}}
       as |field|
     >

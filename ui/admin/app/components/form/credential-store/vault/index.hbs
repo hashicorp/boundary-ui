@@ -14,6 +14,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}
@@ -88,7 +89,7 @@
     @label={{t 'resources.credential-store.form.address.label'}}
     @error={{@model.errors.address}}
     @helperText={{t 'resources.credential-store.form.address.help'}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -110,7 +111,7 @@
       @helperText={{t 'form.worker_filter.help'}}
       @linkText={{t 'actions.learn-more'}}
       @link={{doc-url 'worker-filters'}}
-      disabled={{@model.isSaving}}
+      disabled={{@disabled}}
       readonly={{false}}
       as |field|
     >
@@ -132,7 +133,7 @@
       @label={{t 'resources.credential-store.form.token.label'}}
       @error={{@model.errors.token}}
       @helperText={{t 'resources.credential-store.form.token.help'}}
-      disabled={{@model.isSaving}}
+      disabled={{@disabled}}
       readonly={{false}}
       as |field|
     >
@@ -151,7 +152,7 @@
       @value={{@model.token_hmac}}
       @label={{t 'resources.credential-store.form.token_hmac.label'}}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
   {{/unless}}
 
@@ -162,7 +163,7 @@
     @label={{t 'resources.credential-store.form.namespace.label'}}
     @error={{@model.errors.namespace}}
     @helperText={{t 'resources.credential-store.form.namespace.help'}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -182,7 +183,7 @@
     @label={{t 'resources.credential-store.form.tls_server_name.label'}}
     @error={{@model.errors.tls_server_name}}
     @helperText={{t 'resources.credential-store.form.tls_server_name.help'}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -222,7 +223,7 @@
     @label={{t 'resources.credential-store.form.client_certificate.label'}}
     @error={{@model.errors.client_certificate}}
     @helperText={{t 'resources.credential-store.form.client_certificate.help'}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -244,7 +245,7 @@
     @helperText={{t
       'resources.credential-store.form.client_certificate_key.help'
     }}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -264,7 +265,7 @@
         'resources.credential-store.form.client_certificate_key_hmac.label'
       }}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
   {{/unless}}
 
@@ -275,7 +276,7 @@
     @label={{t 'resources.credential-store.form.ca_cert.label'}}
     @error={{@model.errors.ca_cert}}
     @helperText={{t 'resources.credential-store.form.ca_cert.help'}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >

@@ -13,6 +13,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}
@@ -32,6 +33,7 @@
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.description}}
@@ -107,6 +109,7 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.azure'}}
     readonly={{false}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -118,6 +121,7 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.azure'}}
     readonly={{false}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -129,6 +133,7 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.azure'}}
     readonly={{false}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -140,6 +145,7 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.azure'}}
     readonly={{false}}
+    disabled={{@disabled}}
   />
 
   <form.checkbox
@@ -147,7 +153,7 @@
     @checked={{@model.disable_credential_rotation}}
     @helperText={{t 'form.disable_credential_rotation.help'}}
     @label={{t 'form.disable_credential_rotation.label'}}
-    @disabled={{true}}
+    disabled={{@disabled}}
   />
 
   {{#if (can 'save model' @model)}}

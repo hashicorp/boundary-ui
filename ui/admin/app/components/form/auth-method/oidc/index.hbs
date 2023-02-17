@@ -16,7 +16,7 @@
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
     readonly={{true}}
-    @disabled={{true}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -27,6 +27,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}
@@ -46,6 +47,7 @@
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.description}}
@@ -65,6 +67,7 @@
     @helperText={{t 'form.issuer.help'}}
     @error={{@model.errors.issuer}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.issuer}}
@@ -94,6 +97,7 @@
     @helperText={{t 'form.client_id.help'}}
     @error={{@model.errors.client_id}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.client_id}}
@@ -113,6 +117,7 @@
     @helperText={{t 'form.client_secret.help'}}
     @error={{@model.errors.client_secret}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.client_secret}}
@@ -129,7 +134,7 @@
       @value={{@model.client_secret_hmac}}
       @label={{t 'form.client_secret_hmac.label'}}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
   {{/unless}}
 
@@ -273,6 +278,7 @@
                   @value={{audience.value}}
                   @error={{@model.errors.allowed_audiences}}
                   @contextual={{true}}
+                  disabled={{@disabled}}
                   as |field|
                 >
                   <field.label>{{t 'form.claim.label'}}</field.label>
@@ -304,6 +310,7 @@
                 @name='allowed_audiences'
                 @value={{this.newAllowedAudience}}
                 @label={{t 'resources.auth-method.titles.new-allowed-audience'}}
+                disabled={{@disabled}}
               />
             </row.cell>
             <row.cell @shrink={{true}}>
@@ -360,6 +367,7 @@
                   @value={{claimsScope.value}}
                   @error={{@model.errors.claims_scopes}}
                   @contextual={{true}}
+                  disabled={{@disabled}}
                   as |field|
                 >
                   <field.label>{{t 'form.claims_scope.label'}}</field.label>
@@ -391,6 +399,7 @@
                 @name='claims_scopes'
                 @value={{this.newClaimsScope}}
                 @label={{t 'resources.auth-method.titles.new-claims-scope'}}
+                disabled={{@disabled}}
               />
             </row.cell>
             <row.cell @shrink={{true}}>
@@ -446,6 +455,7 @@
                   @value={{claimMap.from}}
                   @error={{@model.errors.account_claim_maps}}
                   @contextual={{true}}
+                  disabled={{@disabled}}
                   as |field|
                 >
                   <field.label>{{t 'form.from_claim.label'}}</field.label>
@@ -498,6 +508,7 @@
                 @name='from_claim'
                 @value={{this.newFromClaim}}
                 @label={{t 'resources.auth-method.titles.new-from-claim'}}
+                disabled={{@disabled}}
               />
             </row.cell>
             <row.cell>
@@ -572,6 +583,7 @@
                   @value={{cert.value}}
                   @error={{@model.errors.idp_ca_certs}}
                   @contextual={{true}}
+                  disabled={{@disabled}}
                   as |field|
                 >
                   <field.label>{{t 'form.certificate.label'}}</field.label>
@@ -634,6 +646,7 @@
     @helperText={{t 'form.max_age.help'}}
     @error={{@model.errors.max_age}}
     readonly={{false}}
+    disabled={{@disabled}}
     step='1'
     min='0'
     as |field|
@@ -655,6 +668,7 @@
     @helperText={{t 'form.api_url_prefix.help'}}
     @error={{@model.errors.api_url_prefix}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.api_url_prefix}}
@@ -672,7 +686,7 @@
       @label={{t 'form.callback_url.label'}}
       @helperText={{t 'form.callback_url.help'}}
       readonly={{true}}
-      @disabled={{true}}
+      disabled={{@disabled}}
     />
   {{/unless}}
   {{#if (can 'save model' @model)}}

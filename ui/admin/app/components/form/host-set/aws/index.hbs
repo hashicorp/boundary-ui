@@ -15,6 +15,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}
@@ -33,7 +34,7 @@
     @label={{t 'form.description.label'}}
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -50,7 +51,7 @@
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
     readonly={{true}}
-    @disabled={{true}}
+    disabled={{@disabled}}
   />
 
   <InfoField
@@ -184,6 +185,7 @@
                   @value={{filter.value}}
                   @error={{@model.errors.filters}}
                   @contextual={{true}}
+                  disabled={{@disabled}}
                   as |field|
                 >
                   <field.field />
@@ -213,6 +215,7 @@
                 @type='text'
                 @name='filters'
                 @value={{@model.filter_string}}
+                disabled={{@disabled}}
               />
             </row.cell>
             <row.cell @shrink={{true}}>
@@ -247,6 +250,7 @@
     @helperText={{t 'form.sync-interval.help'}}
     @link={{doc-url 'host-set.sync-interval-seconds'}}
     @linkText={{t 'actions.learn-more'}}
+    disabled={{@disabled}}
     min='0'
     step='1'
     as |field|

@@ -11,7 +11,7 @@
     @value={{@model.type}}
     @label={{t 'form.type.label'}}
     @helperText={{t 'form.worker_type.help'}}
-    @disabled={{true}}
+    disabled={{@disabled}}
     readonly={{true}}
   />
 
@@ -23,6 +23,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}
@@ -40,7 +41,7 @@
     @label={{t 'form.description.label'}}
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
-    disabled={{@model.isSaving}}
+    disabled={{@disabled}}
     readonly={{false}}
     as |field|
   >
@@ -64,7 +65,7 @@
                 <form.input
                   @type='text'
                   @value={{key}}
-                  @disabled={{true}}
+                  disabled={{@disabled}}
                   @readOnly={{true}}
                 />
               </row.cell>
@@ -72,7 +73,7 @@
                 <form.input
                   @type='text'
                   @value={{join ', ' value}}
-                  @disabled={{true}}
+                  disabled={{@disabled}}
                   @readOnly={{true}}
                 />
               </row.cell>
@@ -88,7 +89,7 @@
     @value={{@model.address}}
     @label={{t 'form.address.label'}}
     @helperText={{t 'form.worker_address.help'}}
-    @disabled={{true}}
+    disabled={{@disabled}}
     readonly={{true}}
   />
   {{#let
@@ -105,7 +106,7 @@
       }}
       @label={{t 'form.worker_last_seen.label'}}
       @helperText={{t 'form.worker_last_seen.help'}}
-      @disabled={{true}}
+      disabled={{@disabled}}
       readonly={{true}}
     />
   {{/let}}
@@ -115,7 +116,7 @@
     @value={{@model.release_version}}
     @label={{t 'form.worker_release_version.label'}}
     @helperText={{t 'form.worker_release_version.help'}}
-    @disabled={{true}}
+    disabled={{@disabled}}
     readonly={{true}}
   />
 

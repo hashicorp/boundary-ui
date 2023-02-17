@@ -13,6 +13,7 @@
     @helperText={{t 'form.name.help'}}
     @error={{@model.errors.name}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.name}}
@@ -32,6 +33,7 @@
     @helperText={{t 'form.description.help'}}
     @error={{@model.errors.description}}
     readonly={{false}}
+    disabled={{@disabled}}
     as |field|
   >
     {{#if @model.errors.description}}
@@ -107,6 +109,7 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.aws.region'}}
     readonly={{false}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -118,6 +121,7 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.aws'}}
     readonly={{false}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -129,6 +133,7 @@
     @linkText={{t 'actions.learn-more'}}
     @link={{doc-url 'host-catalog.aws'}}
     readonly={{false}}
+    disabled={{@disabled}}
   />
 
   <form.checkbox

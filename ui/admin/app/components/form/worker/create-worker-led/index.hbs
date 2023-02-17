@@ -14,6 +14,7 @@
         @helperText={{t 'resources.worker.form.cluster_id.help'}}
         @linkText={{t 'actions.learn-more'}}
         @link={{doc-url 'worker.manage-workers'}}
+        disabled={{@disabled}}
         placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
       />
     {{/if}}
@@ -25,6 +26,7 @@
       @helperText={{t 'resources.worker.form.ip_address.help'}}
       @linkText={{t 'actions.learn-more'}}
       @link={{doc-url 'worker'}}
+      disabled={{@disabled}}
       placeholder='worker1.example.com'
     />
 
@@ -33,6 +35,7 @@
       @value={{this.configFilePath}}
       @label={{t 'resources.worker.form.config_file_path.label'}}
       @helperText={{t 'resources.worker.form.config_file_path.help'}}
+      disabled={{@disabled}}
       placeholder='/home/ubuntu/boundary'
     />
 
@@ -42,6 +45,7 @@
         @value={{this.initialUpstreams}}
         @label={{t 'resources.worker.form.initial_upstreams.label'}}
         @helperText={{t 'resources.worker.form.initial_upstreams.help'}}
+        disabled={{@disabled}}
         placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
       />
     {{/if}}
@@ -80,6 +84,7 @@
                 <form.input
                   @type='text'
                   @value={{this.newWorkerKey}}
+                  disabled={{@disabled}}
                   placeholder='Key'
                 />
               </row.cell>
@@ -87,6 +92,7 @@
                 <form.input
                   @type='text'
                   @value={{this.newWorkerValue}}
+                  disabled={{@disabled}}
                   placeholder='Value'
                 />
               </row.cell>
@@ -149,7 +155,7 @@
       <form.input
         @name='worker_auth_registration_request'
         @value={{this.generatedWorkerAuthToken}}
-        @disabled={{@model.cannotSave}}
+        disabled={{@disabled}}
         @label={{t
           'resources.worker.form.steps.3.worker_auth_registration_request.label'
         }}
@@ -162,7 +168,7 @@
           @submit={{true}}
           @style='primary'
           class='nowrap'
-          @disabled={{@model.cannotSave}}
+          disabled={{@disabled}}
         >
           {{t 'resources.worker.actions.register'}}
         </Rose::Button>

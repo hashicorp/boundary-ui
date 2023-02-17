@@ -15,6 +15,7 @@
     @type='text'
     @value={{this.identification}}
     @label={{t 'form.login_name.label'}}
+    disabled={{@disabled}}
   />
 
   <form.input
@@ -22,6 +23,7 @@
     @type='password'
     @value={{this.password}}
     @label={{t 'form.password.label'}}
+    disabled={{@disabled}}
   />
 
   <form.actions
