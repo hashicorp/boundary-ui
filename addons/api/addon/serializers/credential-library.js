@@ -1,5 +1,8 @@
 import ApplicationSerializer from './application';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from '../models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+} from '../models/credential-library';
 
 export default class CredentialLibrarySerializer extends ApplicationSerializer {
   // =properties
@@ -14,16 +17,41 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
    * @method serialize
    * @param {Snapshot} snapshot
    */
-  serialize() {
+  serialize(snapshot) {
+    switch (snapshot.record.type) {
+      case TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC:
+        return this.serializeVaultGeneric(...arguments);
+      case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE:
+      default:
+        return super.serialize(...arguments);
+    }
+  }
+
+  serializeAttribute(snapshot, json, key, attribute) {
+    let value = super.serializeAttribute(...arguments);
+    const { options } = attribute;
+    const { type } = snapshot.record;
+
+    // For any attribute that doesn't match its `for`
+    // or isn't undefined, we delete it from the json
+    if (
+      options.isNestedAttribute &&
+      options.for !== type &&
+      options.for !== undefined
+    ) {
+      delete json.attributes[key];
+    }
+
+    return value;
+  }
+
+  serializeVaultGeneric() {
     const serialized = super.serialize(...arguments);
     if (serialized.attributes) {
-      if (serialized.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC) {
-        delete serialized.attributes.http_method;
-      }
-
       // Serialize `http_request_body` only if `http_method` is POST
-      if (!serialized.attributes?.http_method?.match(/post/i))
-        delete serialized.attributes.http_request_body;
+      if (!serialized.attributes?.http_method?.match(/post/i)) {
+        serialized.attributes.http_request_body = null;
+      }
     }
     return serialized;
   }
