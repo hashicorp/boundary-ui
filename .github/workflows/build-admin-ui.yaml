@@ -38,7 +38,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:oss
       - name: Upload artifact admin-ui
         uses: actions/upload-artifact@v3
@@ -67,7 +66,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:enterprise
       - name: Upload artifact enterprise admin UI
         uses: actions/upload-artifact@v3
@@ -91,7 +89,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:hcp
       - name: Upload artifact HCP admin UI
         uses: actions/upload-artifact@v3
