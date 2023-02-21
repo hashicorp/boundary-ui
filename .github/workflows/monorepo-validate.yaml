@@ -35,7 +35,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run compliance:licenses
 
   lint:
@@ -55,7 +54,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn lint
 
   test:
@@ -73,5 +71,4 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn test
