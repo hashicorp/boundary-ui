@@ -19,7 +19,7 @@ jobs:
             node-modules-
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 16
       - run: yarn install
   build-admin-ui-oss:
     name: Build Admin UI OSS
@@ -37,7 +37,7 @@ jobs:
       - name: Build
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 16
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:oss
       - name: Upload artifact admin-ui
@@ -66,7 +66,7 @@ jobs:
       - name: Build
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 16
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:enterprise
       - name: Upload artifact enterprise admin UI
@@ -90,7 +90,7 @@ jobs:
       - name: Build
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 16
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
       - run: yarn run build:ui:admin:hcp
       - name: Upload artifact HCP admin UI
