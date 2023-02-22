@@ -29,7 +29,7 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
-test('Cancel a session', async ({ page }) => {
+test('Verify session created then cancel the session', async ({ page }) => {
   await page.goto('/');
 
   var connect;
