@@ -3,8 +3,7 @@
 This test suite tests the Boundary Admin UI in an end-to-end setting. It was designed to be run in a
 variety of environments as long as the appropriate environment variables are set. You can choose to
 spin up your own infrastructure or use [Enos](https://github.com/hashicorp/boundary/tree/main/enos)
-to generate it for you. There is an enos scenario in the `boundary` repository that runs these
-tests.
+to generate it for you.
 
 The test suite uses the [Playwright](https://playwright.dev/) framework.
 
@@ -13,7 +12,13 @@ Setup...
 ```bash
 cd boundary-ui/ui/admin
 yarn install
-npx playwright install
+npx playwright install # this installs the browsers used by Playwright
+```
+
+Ensure the `boundary` CLI is available on the path. You can validate this by making sure this
+command returns something.
+```bash
+which boundary
 ```
 
 Run tests...
