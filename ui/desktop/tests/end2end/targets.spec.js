@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
-const { _electron: electron } = require('playwright');
+const { _electron: electron } = require('@playwright/test');
 const helpers = require('./test-helpers');
 
 let electronApp = null;
