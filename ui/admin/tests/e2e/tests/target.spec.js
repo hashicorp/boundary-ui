@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { exec, execSync } = require('child_process');
-const { checkEnv } = require('../helpers/general');
+const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -16,7 +16,7 @@ const {
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
 
-test.use({ storageState: './tests/e2e/artifacts/authenticated-state.json' });
+test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await checkEnv([

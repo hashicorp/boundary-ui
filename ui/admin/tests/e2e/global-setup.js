@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const { chromium } = require('@playwright/test');
-const { checkEnv } = require('./helpers/general');
+const { checkEnv, authenticatedState } = require('./helpers/general');
 
 module.exports = async () => {
   await checkEnv([
@@ -23,8 +23,6 @@ module.exports = async () => {
   await page.getByRole('button', { name: 'Sign In' }).click();
   await page.getByRole('navigation', { name: 'General' }).waitFor();
   await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).waitFor();
-  await page
-    .context()
-    .storageState({ path: './tests/e2e/artifacts/authenticated-state.json' });
+  await page.context().storageState({ path: authenticatedState });
   await browser.close();
 };

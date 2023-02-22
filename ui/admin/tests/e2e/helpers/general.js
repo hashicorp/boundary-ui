@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+exports.authenticatedState = './tests/e2e/artifacts/authenticated-state.json';
+
 /**
  * Checks that the provided environment variables are set
  * @param {string[]} envs List of environment variables
