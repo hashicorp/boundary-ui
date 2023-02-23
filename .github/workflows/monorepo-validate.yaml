@@ -16,7 +16,7 @@ jobs:
             node-modules-
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 16
       - run: yarn install
 
   compliance:
@@ -34,8 +34,7 @@ jobs:
             node-modules-
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+          node-version: 16
       - run: yarn run compliance:licenses
 
   lint:
@@ -54,8 +53,7 @@ jobs:
             node-modules-
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+          node-version: 16
       - run: yarn lint
 
   test:
@@ -72,6 +70,5 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+          node-version: 16
       - run: yarn test
