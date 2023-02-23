@@ -33,6 +33,10 @@
     "pretest": "yarn clean:coverage",
     "test": "npm-run-all test:*",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
+    "e2e": "yarn playwright test --config ./tests/e2e/playwright.config.js",
+    "e2e:dev:chrome": "yarn run e2e --project=chromium --headed",
+    "e2e:dev:firefox": "yarn run e2e --project=firefox --headed",
+    "e2e:dev:safari": "yarn run e2e --project=webkit --headed",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
@@ -48,6 +52,7 @@
     "@faker-js/faker": "^7.3.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@playwright/test": "^1.30.0",
     "babel-loader": "^8.2.5",
     "broccoli-asset-rev": "^3.0.0",
     "clipboard": "^2.0.8",
@@ -91,10 +96,10 @@
     "qunit": "^2.19.1",
     "qunit-dom": "^2.0.0",
     "rose": "*",
+    "sinon": "^14.0.0",
     "stylelint": "^14.14.0",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^6.0.0",
-    "sinon": "^14.0.0",
     "webpack": "^5.72.1"
   },
   "engines": {
