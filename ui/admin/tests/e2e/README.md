@@ -25,7 +25,7 @@ Run tests...
 ```bash
 export BOUNDARY_ADDR=
 export E2E_PASSWORD_ADMIN_LOGIN_NAME=
-export E2E_PASSWORD_ADMIN_LOGIN_PASSWORD=
+export E2E_PASSWORD_ADMIN_PASSWORD=
 export E2E_PASSWORD_AUTH_METHOD_ID=
 ... # Tests may have additional variables that it needs
 cd boundary-ui/ui/admin
