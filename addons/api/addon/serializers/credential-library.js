@@ -28,7 +28,7 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
   }
 
   serializeAttribute(snapshot, json, key, attribute) {
-    const value = super.serializeAttribute(...arguments);
+    super.serializeAttribute(...arguments);
     const { options } = attribute;
     const { type } = snapshot.record;
 
@@ -41,8 +41,6 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
     ) {
       delete json.attributes[key];
     }
-
-    return value;
   }
 
   serializeVaultGeneric() {
