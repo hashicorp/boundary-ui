@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 const { readFile } = require('fs/promises');
 const { nanoid } = require('nanoid');
-const { checkEnv } = require('../helpers/general');
+const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -18,10 +18,15 @@ const {
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
 
-test.use({ storageState: 'loggedInState.json' });
+test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv(['E2E_TARGET_IP', 'E2E_SSH_USER', 'E2E_SSH_KEY_PATH']);
+  await checkEnv([
+    'E2E_TARGET_IP',
+    'E2E_SSH_USER',
+    'E2E_SSH_KEY_PATH',
+    'E2E_SSH_PORT',
+  ]);
 
   await checkBoundaryCli();
 });
@@ -118,10 +123,21 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   );
   const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-  JSON.parse(
+  const session = JSON.parse(
     execSync(`boundary targets authorize-session -id ${target.id} -format json`)
   );
-  // const session = JSON.parse(execSync(`boundary targets authorize-session -id ${target.id} -format json`))
-  // console.log(session.item.credentials[0].credential.username)
-  // console.log(session.item.credentials[0].credential.private_key)
+  const retrievedUser = session.item.credentials[0].credential.username;
+  const retrievedKey = session.item.credentials[0].credential.private_key;
+
+  if (process.env.E2E_SSH_USER != retrievedUser) {
+    throw new Error(
+      'Stored User does not match. EXPECTED: ' +
+        process.env.E2E_SSH_USER +
+        ', ACTUAL: ' +
+        retrievedUser
+    );
+  }
+  if (keyData != retrievedKey) {
+    throw new Error('Stored Key does not match');
+  }
 });

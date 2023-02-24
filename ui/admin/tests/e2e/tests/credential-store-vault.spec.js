@@ -160,11 +160,22 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   );
   const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-  JSON.parse(
+  const session = JSON.parse(
     execSync(`boundary targets authorize-session -id ${target.id} -format json`)
   );
-  // const session = JSON.parse(execSync(`boundary targets authorize-session -id ${target.id} -format json`))
-  // console.log(org.id);
-  // console.log(session.item.credentials[0].secret.decoded.data.username);
-  // console.log(session.item.credentials[0].secret.decoded.data.private_key);
+  const retrievedUser =
+    session.item.credentials[0].secret.decoded.data.username;
+  const retrievedKey =
+    session.item.credentials[0].secret.decoded.data.private_key;
+  if (process.env.E2E_SSH_USER != retrievedUser) {
+    throw new Error(
+      'Stored User does not match. EXPECTED: ' +
+        process.env.E2E_SSH_USER +
+        ', ACTUAL: ' +
+        retrievedUser
+    );
+  }
+  if (keyData != retrievedKey) {
+    throw new Error('Stored Key does not match');
+  }
 });
