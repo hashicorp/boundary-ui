@@ -48,6 +48,7 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   //= attributes (vault)
 
   @attr('string', {
+    for: 'vault-generic',
     isNestedAttribute: true,
     description:
       'The HTTP method the library uses when requesting credentials from Vault.',
@@ -56,6 +57,7 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   http_method;
 
   @attr('string', {
+    for: 'vault-generic',
     isNestedAttribute: true,
     description:
       'The body of the HTTP request the library sends to Vault when requesting credentials. Only valid if `http_method` is set to `POST`.',
@@ -69,18 +71,21 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   path;
 
   @attr('string', {
+    for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description: 'The username to use when making an SSH connection.',
   })
   username;
 
   @attr('string', {
+    for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description: 'The desired key type to use when generating a private key.',
   })
   key_type;
 
   @attr('number', {
+    for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description:
       'Specifies the number of bits used when generating the private key. Not used if key type is ed25519',
@@ -88,12 +93,14 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   key_bits;
 
   @attr('string', {
+    for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description: 'Specifies the requested time to live for the certificate.',
   })
   ttl;
 
   @attr('string', {
+    for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description:
       'Specifies the key id that the created certificate should have.',
@@ -101,6 +108,7 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   key_id;
 
   @attr('object-as-array', {
+    for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description:
       'Specifies a map of the critical options that the certificate should be signed for.',
@@ -108,6 +116,7 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   critical_options;
 
   @attr('object-as-array', {
+    for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description:
       'Specifies a map of the extensions that the certificate should be signed for.',
