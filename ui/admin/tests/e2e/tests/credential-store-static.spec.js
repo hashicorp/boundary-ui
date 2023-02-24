@@ -96,7 +96,7 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   await page
     .getByRole('article')
     .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
-    .click(); // have to go through manage? !!
+    .click();
   await page
     .getByRole('cell', { name: credentialName })
     .locator('..')
