@@ -34,19 +34,20 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
 
     // For any attribute that doesn't match its `for`
     // or isn't undefined, we delete it from the json
-    if (
-      options.isNestedAttribute &&
-      options.for !== type &&
-      options.for !== undefined
-    ) {
-      delete json.attributes[key];
+    if (options?.for && options.for !== type) {
+      if (options.isNestedAttribute) {
+        delete json.attributes[key];
+      } else {
+        delete json[key];
+      }
     }
   }
 
   serializeVaultGeneric() {
     const serialized = super.serialize(...arguments);
     if (serialized.attributes) {
-      // Serialize `http_request_body` only if `http_method` is POST
+      // Set `http_request_body` only if `http_method` is POST
+      // otherwise set to null to have the field removed
       if (!serialized.attributes?.http_method?.match(/post/i)) {
         serialized.attributes.http_request_body = null;
       }
