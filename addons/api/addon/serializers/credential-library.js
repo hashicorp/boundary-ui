@@ -32,8 +32,9 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
     const { options } = attribute;
     const { type } = snapshot.record;
 
-    // For any attribute that doesn't match its `for`
-    // or isn't undefined, we delete it from the json
+    // If an attribute has a `for` option, it must match the
+    // record's `type`, else the attribute is excluded
+    // from serialization.
     if (options?.for && options.for !== type) {
       if (options.isNestedAttribute) {
         delete json.attributes[key];
