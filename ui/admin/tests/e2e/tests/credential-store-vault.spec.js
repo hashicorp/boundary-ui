@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 const { nanoid } = require('nanoid');
-const { checkEnv } = require('../helpers/general');
+const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -23,7 +23,7 @@ const secretName = 'cred';
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
 
-test.use({ storageState: './tests/e2e/artifacts/authenticated-state.json' });
+test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await checkEnv([
