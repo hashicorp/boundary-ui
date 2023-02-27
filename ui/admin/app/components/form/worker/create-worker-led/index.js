@@ -31,7 +31,6 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   get clusterIDFromURL() {
     const hostname = this.window?.location?.hostname;
-    console.log(this.window?.location?.origin);
 
     // Match against a guid with either the prod, int, or dev hcp domain
     const clusterIDMatcher =
