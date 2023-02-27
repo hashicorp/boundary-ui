@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import factory from '../generated/factories/worker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';

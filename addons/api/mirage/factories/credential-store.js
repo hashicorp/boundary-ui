@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import factory from '../generated/factories/credential-store';
 import { faker } from '@faker-js/faker';
 import { trait } from 'miragejs';

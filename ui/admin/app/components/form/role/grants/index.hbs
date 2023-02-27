@@ -1,3 +1,8 @@
+{{!--
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+--}}
+
 {{#if (can 'setGrants role' @model)}}
   <Rose::Form
     @onSubmit={{fn this.createGrant @addGrant}}

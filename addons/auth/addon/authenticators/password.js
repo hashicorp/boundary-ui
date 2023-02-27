@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import BaseAuthenticator from './base';
 import { resolve, reject } from 'rsvp';
 import fetch from 'fetch';

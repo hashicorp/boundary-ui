@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { RestSerializer } from 'miragejs';
 import { underscore } from '@ember/string';
 import { isArray } from '@ember/array';
