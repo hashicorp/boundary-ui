@@ -63,6 +63,7 @@ test.describe('AWS', async () => {
         .getByRole('link', { name: hostCatalogName })
     ).toBeVisible();
 
+    // Create first host set
     const hostSetName1 = 'Host Set ' + nanoid();
     await page.getByRole('link', { name: 'Host Sets' }).click();
     await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -94,6 +95,7 @@ test.describe('AWS', async () => {
         .getByRole('link', { name: 'Hosts' })
     ).toBeVisible();
 
+    // Check number of hosts in host set
     let i = 0;
     let rowCount = 0;
     let hostsAreVisible = false;
@@ -127,6 +129,31 @@ test.describe('AWS', async () => {
       );
     }
 
+    // Navigate to each host in the host set
+    for (let i = 0; i < expectedHosts.length; i++) {
+      const host = await page
+        .getByRole('table')
+        .getByRole('rowgroup')
+        .nth(1)
+        .getByRole('row')
+        .nth(i)
+        .getByRole('link');
+
+      let hostName = await host.innerText();
+      await host.click();
+      await expect(
+        page
+          .getByRole('navigation', { name: 'breadcrumbs' })
+          .getByRole('link', { name: hostName })
+      ).toBeVisible();
+
+      await page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByRole('link', { name: hostSetName1 })
+        .click();
+    }
+
+    // Create second host set
     const hostSetName2 = 'Host Set ' + nanoid();
     await page
       .getByRole('navigation', { name: 'breadcrumbs' })
@@ -155,6 +182,7 @@ test.describe('AWS', async () => {
         .getByRole('link', { name: hostSetName2 })
     ).toBeVisible();
 
+    // Check number of hosts in host set
     await page.getByRole('link', { name: 'Hosts' }).click();
     i = 0;
     rowCount = 0;
