@@ -132,6 +132,7 @@ Router.map(function () {
         this.route('new');
         this.route('worker', { path: ':worker_id' }, function () {});
       });
+      this.route('session-recordings', function () {});
     });
   });
 

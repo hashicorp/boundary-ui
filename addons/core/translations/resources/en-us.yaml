@@ -208,6 +208,9 @@ org:
     new: New Org
   actions:
     delete: Delete Org
+session-recordings:
+  title: Session Recording
+  title_plural: Session Recordings
 project:
   title: Project
   title_plural: Projects
