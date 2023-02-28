@@ -1,9 +1,10 @@
-{{!--
+{{!
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
---}}
+}}
 
 <div class='rose-form-actions' ...attributes>
+  {{! template-lint-disable no-passed-in-event-handlers }}
   <Rose::Button @disabled={{@submitDisabled}} @submit={{true}} @style='primary'>
     {{@submitText}}
   </Rose::Button>

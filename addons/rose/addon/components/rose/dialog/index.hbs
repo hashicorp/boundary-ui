@@ -1,7 +1,7 @@
-{{!--
+{{!
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
---}}
+}}
 
 {{#if @modal}}
   <div class='rose-dialog-modal-overlay'></div>
@@ -58,6 +58,7 @@
   >
 
     {{#if @heading}}
+      {{! template-lint-disable no-duplicate-landmark-elements }}
       <header class='rose-dialog-header'>
 
         {{#if @icon}}
