@@ -56,18 +56,18 @@ test('Verify session created then cancel the session', async ({ page }) => {
 
     connect = exec(
       'boundary connect' +
-      ' -target-id=' +
-      target.id +
-      ' -exec /usr/bin/ssh --' +
-      ' -l ' +
-      process.env.E2E_SSH_USER +
-      ' -i ' +
-      process.env.E2E_SSH_KEY_PATH +
-      ' -o UserKnownHostsFile=/dev/null' +
-      ' -o StrictHostKeyChecking=no' +
-      ' -o IdentitiesOnly=yes' + // forces the use of the provided key
-      ' -p {{boundary.port}}' +
-      ' {{boundary.ip}}'
+        ' -target-id=' +
+        target.id +
+        ' -exec /usr/bin/ssh --' +
+        ' -l ' +
+        process.env.E2E_SSH_USER +
+        ' -i ' +
+        process.env.E2E_SSH_KEY_PATH +
+        ' -o UserKnownHostsFile=/dev/null' +
+        ' -o StrictHostKeyChecking=no' +
+        ' -o IdentitiesOnly=yes' + // forces the use of the provided key
+        ' -p {{boundary.port}}' +
+        ' {{boundary.ip}}'
     );
 
     await page

@@ -1,12 +1,13 @@
 import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
+import * as fakeData from '../../helpers/fake-data';
 
 /**
  * GeneratedAuthMethodModelFactory
  */
 export default Factory.extend({
   type: 'password',
-  name: () => faker.random.words(),
+  name: () => fakeData.name(),
   description: () => faker.random.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),

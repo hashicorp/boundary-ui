@@ -45,7 +45,7 @@
       <Rose::Cards as |cards|>
         {{#each @model.subScopes as |scope|}}
           <cards.link
-            @title={{scope.name}}
+            @title={{scope.displayName}}
             @description={{scope.description}}
             @id={{scope.id}}
             @icon={{if
