@@ -132,9 +132,9 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   if (process.env.E2E_SSH_USER != retrievedUser) {
     throw new Error(
       'Stored User does not match. EXPECTED: ' +
-        process.env.E2E_SSH_USER +
-        ', ACTUAL: ' +
-        retrievedUser
+      process.env.E2E_SSH_USER +
+      ', ACTUAL: ' +
+      retrievedUser
     );
   }
   if (keyData != retrievedKey) {
