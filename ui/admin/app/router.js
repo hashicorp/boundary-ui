@@ -138,6 +138,7 @@ Router.map(function () {
           { path: ':session_recording_id' },
           function () {}
         );
+        this.route('storage-buckets', function() {});
       });
     });
   });

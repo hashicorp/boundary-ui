@@ -214,6 +214,9 @@ session-recordings:
   recorded-sessions:
     title: Recorded Session
     title_plural: Recorded Sessions
+  storage-bucket:
+    title: Storage Bucket
+    title_plural: Storage Buckets
 project:
   title: Project
   title_plural: Projects
