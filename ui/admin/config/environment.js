@@ -18,6 +18,7 @@ const featureEditions = {
     'target-worker-filters-v2-hcp': false,
     'target-network-address': true,
     'credential-library-vault-ssh-certificate': false,
+    'session-recording': false,
   },
 };
 featureEditions.enterprise = {
@@ -156,6 +157,7 @@ module.exports = function (environment) {
     ENV.featureFlags['target-worker-filters-v2-hcp'] = true;
     ENV.featureFlags['target-network-address'] = true;
     ENV.featureFlags['credential-library-vault-ssh-certificate'] = true;
+    ENV.featureFlags['session-recording'] = true;
   }
 
   if (environment === 'test') {
