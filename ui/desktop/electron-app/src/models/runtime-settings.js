@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 const netRequestPromise = require('../helpers/net-request-promise.js');
 
 // Runtime settings are any configuration, especially user-specified,

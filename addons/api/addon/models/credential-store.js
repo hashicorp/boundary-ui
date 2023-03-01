@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedCredentialStoreModel from '../generated/models/credential-store';
 import { equal } from '@ember/object/computed';
 
