@@ -141,9 +141,13 @@ Router.map(function () {
         this.route(
           'session-recording',
           { path: ':session_recording_id' },
-          function () {}
+          function () {
+            this.route('channels-by-connection', function () {
+              this.route('channel', { path: ':channel_id' }, function () {});
+            });
+          }
         );
-        this.route('storage-buckets', function() {});
+        this.route('storage-buckets', function () {});
       });
     });
   });
