@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import HostCatalogAbility from 'api/abilities/host-catalog';
 
 export default class OverrideHostCatalogAbility extends HostCatalogAbility {

@@ -1,4 +1,9 @@
 /**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
+/**
  * Allows development-time toggling of resource permissions via the window
  * querystring.  Pass a JSON object into the query to toggle permissions.
  * Note that the value must be a valid JSON object in order to be parsed.

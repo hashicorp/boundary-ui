@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import WorkerAbility from 'api/abilities/worker';
 
 export default class OverrideWorkerAbility extends WorkerAbility {

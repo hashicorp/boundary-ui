@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedHostSetModel from '../generated/models/host-set';
 import { pluginTypes } from './host-catalog';
 

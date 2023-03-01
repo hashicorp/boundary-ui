@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import Transform from '@ember-data/serializer/transform';
 
 export default class AccountClaimMapArrayTransform extends Transform {

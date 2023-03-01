@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 # Note: this will change the permissions of the files in this directory after
 # running to allow for easy deletion, so this should only be run as part of
 # boundary's build task.
