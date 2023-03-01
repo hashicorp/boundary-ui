@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 const runtimeSettings = require('../services/runtime-settings.js');
 const isDev = require('electron-is-dev');
 

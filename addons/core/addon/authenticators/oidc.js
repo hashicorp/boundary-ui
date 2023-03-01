@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import BaseOIDCAuthenticator from 'auth/authenticators/oidc';
 import { inject as service } from '@ember/service';
 

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import LocalStorageSessionStore from 'ember-simple-auth/session-stores/local-storage';
 
 /**

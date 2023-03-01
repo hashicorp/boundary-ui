@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';

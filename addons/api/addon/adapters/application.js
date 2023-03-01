@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import RESTAdapter from '@ember-data/adapter/rest';
 import { serializeIntoHash } from '@ember-data/adapter/-private';
 /* eslint-disable-next-line ember/no-mixins */

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { exec, execSync } = require('child_process');

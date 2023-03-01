@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 export function targetHandler({ targets }, { params: { idMethod } }) {
   const attrs = this.normalizedRequestAttrs();
   const id = idMethod.split(':')[0];
