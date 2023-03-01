@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 const { default: installExtension, EMBER_INSPECTOR } = require('electron-devtools-installer');
 const path = require('path');
 const { app } = require('electron');

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 const { path } = require('../cli/path.js');
 const { spawn, spawnSync } = require('child_process');
 const jsonify = require('../utils/jsonify.js');

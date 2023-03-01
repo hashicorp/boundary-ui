@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedSessionModel from '../generated/models/session';
 import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
