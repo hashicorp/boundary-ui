@@ -52,6 +52,7 @@
     "@faker-js/faker": "^7.3.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git",
     "@playwright/test": "^1.30.0",
     "babel-loader": "^8.2.5",
     "broccoli-asset-rev": "^3.0.0",
