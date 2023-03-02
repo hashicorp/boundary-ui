@@ -211,18 +211,15 @@ org:
     new: New Org
   actions:
     delete: Delete Org
-session-recordings:
-  title: Session Recording
-  title_plural: Session Recordings
-  recorded-sessions:
-    title: Recorded Session
-    title_plural: Recorded Sessions
-  storage-bucket:
-    title: Storage Bucket
-    title_plural: Storage Buckets
+session-recording:
+  title: Recorded Session
+  title_plural: Recorded Sessions
   channel:
     title: Channel
     title_plural: Channels
+storage-bucket:
+  title: Storage Bucket
+  title_plural: Storage Buckets
 project:
   title: Project
   title_plural: Projects

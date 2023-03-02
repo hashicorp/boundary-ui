@@ -147,8 +147,8 @@ Router.map(function () {
             });
           }
         );
-        this.route('storage-buckets', function () {});
       });
+      this.route('storage-buckets', function () {});
     });
   });
 
