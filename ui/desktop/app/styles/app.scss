@@ -309,6 +309,7 @@
 
 .change-origin {
   @include type.type(s);
+
   color: var(--ui-border-starker-1);
   margin: sizing.rems(l) 0 0 0;
   text-align: center;
@@ -378,6 +379,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     // Hide default twistie triangle
     // Firefox
     list-style-type: none;
+
     // Webkit / Chromium
     &::-webkit-details-marker {
       display: none;
@@ -436,6 +438,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
     h2 {
       @include type.type(s, normal);
+
       color: var(--ui-gray-starker-1);
       margin: 0;
       padding: sizing.rems(xxs) + sizing.rems(xxxs) 0;
