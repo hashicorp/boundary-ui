@@ -26,23 +26,28 @@
             <Rose::Icon @name='flight-icons/svg/org-16' @size='medium' />
             {{t 'resources.org.title_plural'}}
           </nav.link>
-        </Rose::Nav::Sidebar>
-        {{#if
-          (and
-            (can 'navigate worker' @model collection='workers')
-            (feature-flag 'byow')
-          )
-        }}
-          <Rose::Nav::Sidebar
-            @title={{t 'resources.worker.title_plural'}}
-            as |nav|
-          >
+          {{! TODO: Check can abilities }}
+          {{#if (feature-flag 'session-recording')}}
+            <nav.link @route='scopes.scope.storage-buckets'>
+              <Rose::Icon
+                @name='flight-icons/svg/cloud-upload-16'
+                @size='medium'
+              />
+              {{t 'resources.storage-bucket.title_plural'}}
+            </nav.link>
+          {{/if}}
+          {{#if
+            (and
+              (can 'navigate worker' @model collection='workers')
+              (feature-flag 'byow')
+            )
+          }}
             <nav.link @route='scopes.scope.workers'>
               <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
               {{t 'resources.worker.title_plural'}}
             </nav.link>
-          </Rose::Nav::Sidebar>
-        {{/if}}
+          {{/if}}
+        </Rose::Nav::Sidebar>
       {{/if}}
 
       {{#if @model.isOrg}}
