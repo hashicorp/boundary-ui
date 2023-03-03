@@ -220,6 +220,8 @@ session-recording:
 storage-bucket:
   title: Storage Bucket
   title_plural: Storage Buckets
+  titles:
+    new: New Storage Bucket
 project:
   title: Project
   title_plural: Projects

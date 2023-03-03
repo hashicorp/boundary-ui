@@ -148,7 +148,14 @@ Router.map(function () {
           }
         );
       });
-      this.route('storage-buckets', function () {});
+      this.route('storage-buckets', function () {
+        this.route('new');
+        this.route(
+          'storage-bucket',
+          { path: ':storage_bucket_id' },
+          function () {}
+        );
+      });
     });
   });
 

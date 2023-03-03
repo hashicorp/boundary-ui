@@ -6,11 +6,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'admin/tests/helpers';
 
-module('Unit | Route | scopes/scope/storage-buckets', function (hooks) {
+module('Unit | Route | scopes/scope/storage-buckets/new', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let route = this.owner.lookup('route:scopes/scope/storage-buckets');
+    let route = this.owner.lookup('route:scopes/scope/storage-buckets/new');
     assert.ok(route);
   });
 });
