@@ -109,4 +109,8 @@ export default function (server) {
 
   // Workers
   server.createList('worker', 3, { scope: globalScope });
+
+  // Session Recordings and Storage Buckets
+  server.createList('storage-bucket', 3, { scope: globalScope });
+  server.createList('storage-bucket', 2, { scope: orgScope });
 }

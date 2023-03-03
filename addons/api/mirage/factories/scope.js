@@ -30,6 +30,7 @@ export default factory.extend({
       'credential-stores': ['create', 'list'],
       'auth-methods': ['create', 'list'],
       'host-catalogs': ['create', 'list'],
+      'storage-buckets': ['create', 'list'],
     };
 
     // Worker permissions only available on the global scope

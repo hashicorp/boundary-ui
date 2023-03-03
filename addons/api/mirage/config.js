@@ -634,8 +634,7 @@ function routes() {
   this.patch('/managed-groups/:id');
   this.del('/managed-groups/:id');
 
-  // worker
-
+  // workers
   this.get(
     '/workers',
     ({ workers }, { queryParams: { scope_id: scopeId } }) => {
@@ -655,6 +654,30 @@ function routes() {
     });
     return workers.create(newWorker.attrs);
   });
+
+  // storage-buckets
+  this.get(
+    '/storage-buckets',
+    ({ storageBuckets }, { queryParams: { scope_id: scopeId } }) => {
+      return storageBuckets.where({ scopeId });
+    }
+  );
+  this.get('/storage-buckets/:id');
+  this.del('/storage-buckets/:id');
+  this.patch('/storage-buckets/:id');
+  this.post(
+    '/storage-buckets',
+    ({ storageBuckets }, { queryParams: { plugin_name } }) => {
+      const attrs = this.normalizedRequestAttrs();
+      if (plugin_name) {
+        attrs.type = 'plugin';
+        attrs.plugin = {
+          name: plugin_name,
+        };
+      }
+      return storageBuckets.create(attrs);
+    }
+  );
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
