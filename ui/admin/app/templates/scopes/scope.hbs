@@ -28,6 +28,10 @@
           </nav.link>
           {{! TODO: Check can abilities }}
           {{#if (feature-flag 'session-recording')}}
+            <nav.link @route='scopes.scope.session-recordings'>
+              <Rose::Icon @name='flight-icons/svg/film-16' @size='medium' />
+              {{t 'resources.session-recording.title_plural'}}
+            </nav.link>
             <nav.link @route='scopes.scope.storage-buckets'>
               <Rose::Icon
                 @name='flight-icons/svg/cloud-upload-16'
