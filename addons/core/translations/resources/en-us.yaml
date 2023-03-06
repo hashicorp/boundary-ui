@@ -212,8 +212,8 @@ org:
   actions:
     delete: Delete Org
 session-recording:
-  title: Recorded Session
-  title_plural: Recorded Sessions
+  title: Session Recording
+  title_plural: Session Recordings
   channel:
     title: Channel
     title_plural: Channels
