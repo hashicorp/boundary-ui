@@ -1,7 +1,5 @@
-{{page-title (t 'resources.session-recordings.channel.title')}}
+{{page-title (t 'resources.session-recording.channel.title')}}
 
 <p>{{@model.scope_id}}</p>
-<div>
-  <Heap::Player @data={{@model.asciicast}} />
-</div>
+<SessionRecording::Player @asciiCast={{@model.asciicast}} />
 {{outlet}}
