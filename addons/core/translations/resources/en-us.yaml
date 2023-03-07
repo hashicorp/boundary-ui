@@ -217,6 +217,8 @@ session-recording:
   channel:
     title: Channel
     title_plural: Channels
+  session:
+    title: Session Playback
 storage-bucket:
   title: Storage Bucket
   title_plural: Storage Buckets

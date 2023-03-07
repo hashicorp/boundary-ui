@@ -1,0 +1,19 @@
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <h2>{{t 'resources.session-recording.session.title'}}</h2>
+  </page.header>
+
+  <page.body>
+    <p>{{t 'resources.session-recording.title'}}
+      {{@model.session_recording_id}}</p>
+    <p>{{t 'resources.session-recording.channel.title'}}
+      {{@model.channel_connection_id}}</p>
+
+    <LinkTo
+      @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+      @model={{@model.channel_connection_id}}
+    >
+      {{@model.channel_connection_id}}
+    </LinkTo>
+  </page.body>
+</Rose::Layout::Page>

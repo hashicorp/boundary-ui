@@ -5,7 +5,8 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
   // =methods
   model() {
     return {
-      scope_id: 'sr_1234567890',
+      session_recording_id: 'sr_1234567890',
+      channel_connection_id: 'srcc_1234567890',
     };
   }
 }

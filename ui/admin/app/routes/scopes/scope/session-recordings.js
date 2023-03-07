@@ -29,6 +29,9 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
     // if (this.can.can('list session-recording', scope, { collection: 'session-recordings' })) {
     //   return this.store.query('session-recording', { scope_id });
     // }
+    return {
+      session_recording_id: 'sr_1234567890',
+    };
   }
 
   // =actions
