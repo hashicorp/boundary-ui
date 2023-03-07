@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import config from '../config/environment';
@@ -19,6 +18,7 @@ export default class ClusterUrlRoute extends Route {
   @service intl;
   @service flashMessages;
   @service router;
+  @service('browser/window') window;
 
   // =attributes
 
@@ -27,17 +27,6 @@ export default class ClusterUrlRoute extends Route {
    */
   get adapter() {
     return this.store.adapterFor('application');
-  }
-
-  /**
-   * Looks up the window object indirectly.
-   * @type {Window}
-   */
-  get window() {
-    // The Ember way of accessing globals...
-    const document = getOwner(this).lookup('service:-document').documentElement;
-    // defaultView === window, but without using globals directly
-    return document.parentNode.defaultView;
   }
 
   // =methods
