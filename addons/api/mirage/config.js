@@ -33,6 +33,7 @@ export default function (mirageConfig) {
 function routes() {
   initializeMockIPC(this, environmentConfig);
 
+  this.passthrough();
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
   // make this `/api`, for example, if your API is namespaced
