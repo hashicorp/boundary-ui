@@ -58,6 +58,10 @@ module('Acceptance | clusterUrl', function (hooks) {
     projects: null,
     targets: null,
   };
+  const setupMockIpc = (test) => {
+    test.owner.register('service:browser/window', WindowMockIPC);
+    mockIPC = test.owner.lookup('service:browser/window').mockIPC;
+  };
 
   hooks.beforeEach(function () {
     invalidateSession();
@@ -111,8 +115,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('visiting index without a clusterUrl specified redirects to clusterUrl route', async function (assert) {
     assert.expect(2);
-    this.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = this.owner.lookup('service:browser/window').mockIPC;
+    setupMockIpc(this);
     await visit(urls.index);
     await a11yAudit();
     assert.notOk(mockIPC.clusterUrl);
@@ -121,8 +124,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('can set clusterUrl', async function (assert) {
     assert.expect(3);
-    this.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = this.owner.lookup('service:browser/window').mockIPC;
+    setupMockIpc(this);
     assert.notOk(mockIPC.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
@@ -133,8 +135,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('can reset clusterUrl before authentication', async function (assert) {
     assert.expect(4);
-    this.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = this.owner.lookup('service:browser/window').mockIPC;
+    setupMockIpc(this);
     assert.notOk(mockIPC.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
@@ -147,8 +148,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('captures error on clusterUrl update', async function (assert) {
     assert.expect(2);
-    this.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = this.owner.lookup('service:browser/window').mockIPC;
+    setupMockIpc(this);
     assert.notOk(mockIPC.clusterUrl);
     sinon
       .stub(this.owner.lookup('service:clusterUrl'), 'setClusterUrl')
