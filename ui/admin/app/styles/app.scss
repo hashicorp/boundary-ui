@@ -686,3 +686,18 @@
   }
   /* stylelint-enable selector-class-pattern */
 }
+
+.layout-sidebar {
+  display: grid;
+  grid-template-areas: 'body body sidebar';
+
+  .layout-sidebar-body {
+    grid-area: body;
+  }
+
+  .layout-sidebar-sidebar {
+    display: flex;
+    flex-direction: column;
+    grid-area: sidebar;
+  }
+}
