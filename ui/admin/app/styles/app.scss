@@ -715,6 +715,7 @@
     a:hover {
       color: var(--link-color);
 
+      /* stylelint-disable selector-class-pattern */
       .hds-link-standalone__text {
         text-decoration-color: var(--link-color);
       }
@@ -738,11 +739,11 @@
 
     .asciinema-player-wrapper {
       &.hud .control-bar {
-        bottom: 0rem;
+        bottom: 0;
       }
 
       .control-bar {
-        bottom: 0rem;
+        bottom: 0;
         background: var(--player-background-color);
         border-top: var(--player-divider) 0.125rem solid;
       }
