@@ -692,7 +692,7 @@
   grid-template-areas: 'body body sidebar';
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto 1fr;
-  gap: 1em;
+  gap: 2rem;
 
   .layout-sidebar-body {
     grid-area: body;
