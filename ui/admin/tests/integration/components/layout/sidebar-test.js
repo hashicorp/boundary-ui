@@ -9,8 +9,8 @@ module('Integration | Component | layout/sidebar', function (hooks) {
   test('it renders', async function (assert) {
     await render(hbs`
       <Layout::Sidebar as |sb|>
-        <sb.body>Body content</sb.body>
-        <sb.sidebar>Sidebar content</sb.sidebar>
+        <sb.Body>Body content</sb.Body>
+        <sb.Sidebar>Sidebar content</sb.Sidebar>
       </Layout::Sidebar>
     `);
 

@@ -5,7 +5,7 @@
 
   <page.body>
     <Layout::Sidebar as |sb|>
-      <sb.body>
+      <sb.Body>
         <p>
           {{t 'resources.session-recording.title'}}
           {{@model.session_recording_id}}
@@ -22,11 +22,11 @@
         >
           {{@model.channel_connection_id}}
         </LinkTo>
-      </sb.body>
+      </sb.Body>
 
-      <sb.sidebar>
+      <sb.Sidebar>
         <p>{{t 'actions.help'}}</p>
-      </sb.sidebar>
+      </sb.Sidebar>
     </Layout::Sidebar>
   </page.body>
 </Rose::Layout::Page>
