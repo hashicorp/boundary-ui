@@ -2,3 +2,31 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
 }}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    {{! TODO: Add valid doc link and description}}
+    <h2>
+      {{t 'resources.storage-bucket.title_plural'}}
+      <DocLink @doc='storage-bucket' @iconSize='large' />
+    </h2>
+  </page.header>
+
+  <page.actions>
+    {{! TODO: Check can create ability using correct file }}
+    {{#if (can 'create model' this.scope collection='storage-buckets')}}
+      {{#if @model}}
+        <Hds::Button
+          @route='scopes.scope.storage-buckets.new'
+          @text={{t 'resources.storage-bucket.titles.new'}}
+        />
+      {{/if}}
+    {{/if}}
+  </page.actions>
+
+  <page.body />
+</Rose::Layout::Page>

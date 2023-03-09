@@ -5,4 +5,9 @@
 
 import Route from '@ember/routing/route';
 
-export default class ScopesScopeStorageBucketsRoute extends Route {}
+export default class ScopesScopeStorageBucketsRoute extends Route {
+  model() {
+    // Temporary placeholder
+    return [{ scope_id: 'sb_123456' }];
+  }
+}
