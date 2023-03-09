@@ -4,16 +4,29 @@
   </page.header>
 
   <page.body>
-    <p>{{t 'resources.session-recording.title'}}
-      {{@model.session_recording_id}}</p>
-    <p>{{t 'resources.session-recording.channel.title'}}
-      {{@model.channel_connection_id}}</p>
+    <Layout::Sidebar as |sb|>
+      <sb.Body>
+        <p>
+          {{t 'resources.session-recording.title'}}
+          {{@model.session_recording_id}}
+        </p>
 
-    <LinkTo
-      @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
-      @model={{@model.channel_connection_id}}
-    >
-      {{@model.channel_connection_id}}
-    </LinkTo>
+        <p>
+          {{t 'resources.session-recording.channel.title'}}
+          {{@model.channel_connection_id}}
+        </p>
+
+        <LinkTo
+          @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+          @model={{@model.channel_connection_id}}
+        >
+          {{@model.channel_connection_id}}
+        </LinkTo>
+      </sb.Body>
+
+      <sb.Sidebar>
+        <p>{{t 'actions.help'}}</p>
+      </sb.Sidebar>
+    </Layout::Sidebar>
   </page.body>
 </Rose::Layout::Page>

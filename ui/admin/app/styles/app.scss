@@ -750,3 +750,28 @@
     }
   }
 }
+// Layout - Sidebar
+.layout-sidebar {
+  display: grid;
+  grid-template-areas: 'body body sidebar';
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+
+  .layout-sidebar-body {
+    grid-area: body;
+  }
+
+  .layout-sidebar-sidebar {
+    grid-area: sidebar;
+  }
+}
+
+@media (max-width: media.width(large)) {
+  .layout-sidebar {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'body'
+      'sidebar';
+  }
+}

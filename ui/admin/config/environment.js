@@ -117,6 +117,7 @@ module.exports = function (environment) {
         worker: '/workers',
         'worker.manage-workers': '/workers/manage-workers-on-hcp',
         'worker-filters': '/worker-filters',
+        'storage-bucket': '/storage-buckets',
       },
     },
 

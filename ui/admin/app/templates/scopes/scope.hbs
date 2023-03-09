@@ -32,13 +32,15 @@
               <Rose::Icon @name='flight-icons/svg/film-16' @size='medium' />
               {{t 'resources.session-recording.title_plural'}}
             </nav.link>
-            <nav.link @route='scopes.scope.storage-buckets'>
-              <Rose::Icon
-                @name='flight-icons/svg/cloud-upload-16'
-                @size='medium'
-              />
-              {{t 'resources.storage-bucket.title_plural'}}
-            </nav.link>
+            {{#if (can 'navigate model' @model collection='storage-buckets')}}
+              <nav.link @route='scopes.scope.storage-buckets'>
+                <Rose::Icon
+                  @name='flight-icons/svg/cloud-upload-16'
+                  @size='medium'
+                />
+                {{t 'resources.storage-bucket.title_plural'}}
+              </nav.link>
+            {{/if}}
           {{/if}}
           {{#if
             (and
