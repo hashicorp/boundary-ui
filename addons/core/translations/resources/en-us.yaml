@@ -222,6 +222,11 @@ session-recording:
 storage-bucket:
   title: Storage Bucket
   title_plural: Storage Buckets
+  messages:
+    none:
+      title: No storage buckets yet
+      description: To start using session recording, you need to have an Amazon S3 bucket.
+      link: Add a new storage bucket
   titles:
     new: New Storage Bucket
     aws: AWS
