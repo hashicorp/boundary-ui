@@ -113,4 +113,24 @@ export default function (server) {
   // Session Recordings and Storage Buckets
   server.createList('storage-bucket', 3, { scope: globalScope });
   server.createList('storage-bucket', 2, { scope: orgScope });
+  server.createList(
+    'recording',
+    3,
+    { scope: globalScope },
+    'withConnectionAndChannels',
+    'withExistingUserAndTarget'
+  );
+  server.create(
+    'recording',
+    { scope: globalScope },
+    'withConnectionAndChannels',
+    'withNonExistingUserAndTarget'
+  );
+  server.createList(
+    'recording',
+    2,
+    { scope: orgScope },
+    'withConnectionAndChannels',
+    'withExistingUserAndTarget'
+  );
 }

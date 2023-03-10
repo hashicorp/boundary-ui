@@ -680,6 +680,15 @@ function routes() {
     }
   );
 
+  // session recordings
+  this.get(
+    '/recordings',
+    ({ recordings }, { queryParams: { scope_id: scopeId } }) => {
+      return recordings.where({ scopeId });
+    }
+  );
+  this.get('/recordings/:id');
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));

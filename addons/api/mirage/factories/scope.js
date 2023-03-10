@@ -30,12 +30,15 @@ export default factory.extend({
       'credential-stores': ['create', 'list'],
       'auth-methods': ['create', 'list'],
       'host-catalogs': ['create', 'list'],
-      'storage-buckets': ['create', 'list'],
     };
 
     // Worker permissions only available on the global scope
     if (this.type === 'global') {
       collectionActions.workers = ['create:worker-led', 'list'];
+    }
+
+    if (this.type === 'global' || this.type === 'org') {
+      collectionActions['storage-buckets'] = ['create', 'list'];
     }
 
     return collectionActions;

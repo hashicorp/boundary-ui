@@ -4,6 +4,7 @@
  */
 
 import ApplicationSerializer from './application';
+
 export default ApplicationSerializer.extend({
-  modelName: 'storage-bucket',
+  modelName: 'channel',
 });
