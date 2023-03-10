@@ -224,6 +224,14 @@ storage-bucket:
   title_plural: Storage Buckets
   titles:
     new: New Storage Bucket
+    aws: AWS
+    global: Global
+    orgs: Orgs
+  actions:
+    delete: Delete Storage Bucket
+  form:
+    scope: Scope
+    provider: Provider
 project:
   title: Project
   title_plural: Projects

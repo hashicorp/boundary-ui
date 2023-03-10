@@ -28,5 +28,77 @@
     {{/if}}
   </page.actions>
 
-  <page.body />
+  <page.body>
+    {{#if @model}}
+      <Hds::Table
+        class='storage-bucket-list'
+        @valign='middle'
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'resources.storage-bucket.form.provider'))
+          (hash label=(t 'resources.storage-bucket.form.scope'))
+          (hash label='')
+        }}
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'read storage-bucket' B.data)}}
+                <LinkTo
+                  @route='scopes.scope.storage-buckets.storage-bucket'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+              {{#if B.data.description}}
+                <p>{{B.data.description}}</p>
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{B.data.id}}</code>
+              </Copyable>
+            </B.Td>
+            <B.Td>
+              {{#if B.data.isAWS}}
+                <Hds::Badge
+                  @text={{t 'resources.storage-bucket.titles.aws'}}
+                  @icon='aws-color'
+                />
+              {{else}}
+                {{B.data.plugin.name}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.scopeModel.isGlobal}}
+                <Hds::Badge
+                  @text={{t 'resources.storage-bucket.titles.global'}}
+                  @icon='globe'
+                />
+              {{else}}
+                <Hds::Badge
+                  @text={{t 'resources.storage-bucket.titles.orgs'}}
+                  @icon='org'
+                />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{!TODO: add dropdown for delete and edit actions}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{else}}
+      {{!TODO: Render new landing page }}
+    {{/if}}
+  </page.body>
 </Rose::Layout::Page>

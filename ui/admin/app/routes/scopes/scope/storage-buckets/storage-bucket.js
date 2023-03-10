@@ -4,11 +4,22 @@
  */
 
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
-  model() {
-    return {
-      scope_id: 'sb_1234567890',
-    };
+  // =services
+
+  @service store;
+
+  // =methods
+
+  /**
+   * Load a user in current scope.
+   * @param {object} params
+   * @param {string} params.storage_bucket_id
+   * @return {StorageBucketModel}
+   */
+  async model({ storage_bucket_id }) {
+    return this.store.findRecord('storage-bucket', storage_bucket_id);
   }
 }
