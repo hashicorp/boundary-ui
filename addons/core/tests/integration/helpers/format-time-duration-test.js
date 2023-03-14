@@ -16,15 +16,15 @@ module('Integration | Helper | format-time-duration', function (hooks) {
     this.set('inputDurationDays', 177800000);
 
     await render(hbs`{{format-time-duration this.inputDurationSeconds}}`);
-    assert.dom(this.element).hasText('3 sec');
+    assert.dom(this.element).hasText('3s');
 
     await render(hbs`{{format-time-duration this.inputDurationMinutes}}`);
-    assert.dom(this.element).hasText('45 min');
+    assert.dom(this.element).hasText('45m');
 
     await render(hbs`{{format-time-duration this.inputDurationHours}}`);
-    assert.dom(this.element).hasText('1 hr 23 min 20 sec');
+    assert.dom(this.element).hasText('1h 23m 20s');
 
     await render(hbs`{{format-time-duration this.inputDurationDays}}`);
-    assert.dom(this.element).hasText('2 days 1 hr 23 min 20 sec');
+    assert.dom(this.element).hasText('2d 1h 23m 20s');
   });
 });
