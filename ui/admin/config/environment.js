@@ -22,7 +22,7 @@ const featureEditions = {
     'target-worker-filters-v2-ingress': false,
     'target-worker-filters-v2-hcp': false,
     'target-network-address': true,
-    'credential-library-vault-ssh-certificate': false,
+    'ssh-target': false,
   },
 };
 featureEditions.enterprise = {
@@ -30,7 +30,6 @@ featureEditions.enterprise = {
   'ssh-target': true,
   'vault-worker-filter': true,
   'target-worker-filters-v2-ingress': true,
-  'credential-library-vault-ssh-certificate': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
@@ -160,7 +159,6 @@ module.exports = function (environment) {
     ENV.featureFlags['target-worker-filters-v2-ingress'] = true;
     ENV.featureFlags['target-worker-filters-v2-hcp'] = true;
     ENV.featureFlags['target-network-address'] = true;
-    ENV.featureFlags['credential-library-vault-ssh-certificate'] = true;
   }
 
   if (environment === 'test') {
@@ -186,7 +184,6 @@ module.exports = function (environment) {
     ENV.featureFlags['vault-worker-filter'] = true;
     ENV.featureFlags['target-worker-filters-v2'] = true;
     ENV.featureFlags['target-network-address'] = true;
-    ENV.featureFlags['credential-library-vault-ssh-certificate'] = true;
   }
 
   if (environment === 'production') {
