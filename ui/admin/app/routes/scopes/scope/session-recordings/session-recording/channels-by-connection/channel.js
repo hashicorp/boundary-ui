@@ -1,12 +1,17 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionChannelRoute extends Route {
-  async model() {
+  // =services
+  @service store;
+
+  // =methods
+  async model({ channel_id }) {
     const response = await fetch('/session.cast');
     const asciicast = await response.text();
 
     return {
-      scope_id: 'srcc_1234567890',
+      channel_id: channel_id,
       asciicast: asciicast,
     };
   }
