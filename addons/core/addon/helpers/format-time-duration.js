@@ -15,7 +15,7 @@ export default class extends Helper {
   compute([durationInMs]) {
     const durationInSeconds = durationInMs / 1000;
     const durationFormat = new DurationUnitFormat(this.intl.primaryLocale, {
-      style: 'short',
+      style: 'narrow',
       format: '{days} {hours} {minutes} {seconds}',
       round: true,
     });
