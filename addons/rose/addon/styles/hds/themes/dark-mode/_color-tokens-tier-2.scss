@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 // Second-tier token mappings to first-tier color tokens.  In HDS, these are
 // hard-coded in raw hex values, duplicating the first-tier colors.  In order
 // to simplify theming, these are refactored here to eliminate duplication.

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import Application from 'admin/app';
 import config from 'admin/config/environment';
 import * as QUnit from 'qunit';

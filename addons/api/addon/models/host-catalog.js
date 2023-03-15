@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedHostCatalogModel from '../generated/models/host-catalog';
 
 export const types = ['static', 'plugin'];

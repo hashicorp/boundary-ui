@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedAccountModel from '../generated/models/account';
 import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';

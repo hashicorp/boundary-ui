@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
@@ -17,7 +22,7 @@ class Tag {
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
   @service features;
-  @service browserObject;
+  @service('browser/window') window;
 
   // =attributes
   @tracked generatedWorkerAuthToken;
@@ -30,7 +35,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked newWorkerValue;
 
   get clusterIDFromURL() {
-    const hostname = this.browserObject.hostname;
+    const hostname = this.window?.location?.hostname;
 
     // Match against a guid with either the prod, int, or dev hcp domain
     const clusterIDMatcher =

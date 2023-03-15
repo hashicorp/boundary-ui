@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedManagedGroupModel from '../generated/models/managed-group';
 import { attr } from '@ember-data/model';
 import { A } from '@ember/array';

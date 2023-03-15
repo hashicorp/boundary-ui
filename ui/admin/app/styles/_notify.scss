@@ -1,5 +1,9 @@
-// This file is essentially a rip of the default ember notify styles with some minor tweaks for positioning.
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
 
+// This file is essentially a rip of the default ember notify styles with some minor tweaks for positioning.
 @-webkit-keyframes ember-notify-show {
   from {
     left: -310px;

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { makeEvaluator } from 'js-bexpr';
 import { underscore } from '@ember/string';
 

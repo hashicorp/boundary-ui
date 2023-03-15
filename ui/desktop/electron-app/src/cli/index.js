@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 const { spawnSync } = require('../helpers/spawn-promise.js');
 const { path } = require('./path.js');
 

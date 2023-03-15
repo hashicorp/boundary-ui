@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
@@ -132,9 +137,9 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   if (process.env.E2E_SSH_USER != retrievedUser) {
     throw new Error(
       'Stored User does not match. EXPECTED: ' +
-        process.env.E2E_SSH_USER +
-        ', ACTUAL: ' +
-        retrievedUser
+      process.env.E2E_SSH_USER +
+      ', ACTUAL: ' +
+      retrievedUser
     );
   }
   if (keyData != retrievedKey) {
