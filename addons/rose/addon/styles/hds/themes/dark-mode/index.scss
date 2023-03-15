@@ -104,6 +104,11 @@
   --token-color-palette-neutral-500-alpha-50: #656a760d;
 }
 
+.ember-application,
+.ember-application.rose-theme-light {
+  @include light-mode;
+}
+
 @media (prefers-color-scheme: dark) {
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
