@@ -72,7 +72,7 @@ export default class GeneratedStorageBucketModel extends BaseModel {
     readOnly: true,
     isNestedAttribute: true,
   })
-  client_secret_hmac;
+  secrets_hmac;
 
   @attr('string', {
     isNestedSecret: true,
