@@ -8,20 +8,23 @@
       <sb.Body>
         <p>
           {{t 'resources.session-recording.title'}}
-          {{@model.session_recording_id}}
+          {{@model.id}}
         </p>
 
-        <p>
-          {{t 'resources.session-recording.channel.title'}}
-          {{@model.channel_connection_id}}
-        </p>
-
-        <LinkTo
-          @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
-          @model={{@model.channel_connection_id}}
-        >
-          {{@model.channel_connection_id}}
-        </LinkTo>
+        {{#each @model.connections as |connection|}}
+          <p>{{t 'resources.session-recording.connection.title'}}
+            {{connection.id}}</p>
+          {{#each connection.channels as |channel|}}
+            <p>
+              <LinkTo
+                @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+                @model={{channel.id}}
+              >
+                {{channel.id}}
+              </LinkTo>
+            </p>
+          {{/each}}
+        {{/each}}
       </sb.Body>
 
       <sb.Sidebar>

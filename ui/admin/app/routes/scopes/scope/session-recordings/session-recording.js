@@ -1,12 +1,22 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends Route {
   // =services
+  @service store;
+  @service session;
+  @service router;
+
   // =methods
-  model() {
-    return {
-      session_recording_id: 'sr_1234567890',
-      channel_connection_id: 'srcc_1234567890',
-    };
+
+  /**
+   * If arriving here unauthenticated, redirect to index for further processing.
+   */
+  beforeModel() {
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
+  }
+
+  async model({ session_recording_id }) {
+    return this.store.findRecord('recording', session_recording_id);
   }
 }
