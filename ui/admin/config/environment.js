@@ -10,23 +10,23 @@ const API_HOST = process.env.API_HOST || '';
 const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 
 // Base edition declares available features, disabled by default.
-const featureEditions = {
-  base: {
-    byow: false,
-    'byow-pki-hcp-cluster-id': false,
-    'byow-pki-upstream': false,
-    'json-credentials': false,
-    'ssh-target': false,
-    'static-credentials': false,
-    'target-worker-filters-v2': false,
-    'target-worker-filters-v2-ingress': false,
-    'target-worker-filters-v2-hcp': false,
-    'target-network-address': false,
-    'vault-worker-filter': false,
-  },
+const baseEdition = {
+  byow: false,
+  'byow-pki-hcp-cluster-id': false,
+  'byow-pki-upstream': false,
+  'json-credentials': false,
+  'ssh-target': false,
+  'static-credentials': false,
+  'target-worker-filters-v2': false,
+  'target-worker-filters-v2-ingress': false,
+  'target-worker-filters-v2-hcp': false,
+  'target-network-address': false,
+  'vault-worker-filter': false,
 };
+// Editions maps edition keys to their associated featuresets.
+const featureEditions = {};
 featureEditions.oss = {
-  ...featureEditions.base,
+  ...baseEdition,
   byow: true,
   'byow-pki-upstream': true,
   'json-credentials': true,
@@ -135,7 +135,20 @@ module.exports = function (environment) {
       timeout: 4000,
     },
 
-    featureFlags: featureEditions[EDITION],
+    selectedEdition: EDITION,
+    featureEditions,
+    featureFlags: {},
+  };
+
+  /**
+   * Takes a set of features and enables them in all editions.
+   * For use in development and testing only.
+   */
+  const enableFeaturesInAllEditions = (features = {}) => {
+    Object.entries(featureEditions).forEach(
+      ([key, edition]) =>
+        (ENV.featureEditions[key] = { ...features, ...edition })
+    );
   };
 
   if (environment === 'development') {
@@ -158,6 +171,13 @@ module.exports = function (environment) {
         },
       },
     };
+
+    // Default edition in development
+    ENV.selectedEdition = 'enterprise';
+    enableFeaturesInAllEditions({
+      // Show edition toggle in UI in development
+      'dev-edition-toggle': true,
+    });
   }
 
   if (environment === 'test') {
@@ -176,13 +196,15 @@ module.exports = function (environment) {
 
     ENV.enableConfirmService = false;
 
-    // Enable tests for development features
-    ENV.featureFlags['json-credentials'] = true;
-    ENV.featureFlags['ssh-target'] = true;
-    ENV.featureFlags['static-credentials'] = true;
-    ENV.featureFlags['target-worker-filters-v2'] = true;
-    ENV.featureFlags['target-network-address'] = true;
-    ENV.featureFlags['vault-worker-filter'] = true;
+    /**
+     * Enable additional features for testing purposes.
+     * [TODO] Tests should be refactored such that each test case
+     * explicitly enables the features and/or edition that it needs.
+     * By default, tests should have no features enabled.  This explicit
+     * approach ensures that test cases are easy to read and understand,
+     * since their feature requirements are embedded.
+     */
+    ENV.selectedEdition = 'enterprise';
   }
 
   if (environment === 'production') {
