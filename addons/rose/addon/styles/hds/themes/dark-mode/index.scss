@@ -5,6 +5,23 @@
 
 @import 'color-tokens-tier-2';
 
+// HDS Light Mode
+// This is the default HDS color theme.  Only Boundary custom tokens
+// are included here for completeness.
+:root {
+  // Tier-1 (Boundary custom)
+  // Boundary custom first-tier color tokens with alpha.
+  // In HDS, these correspond to the named color token,
+  // with the alpha identifier.  However, they do not have stand-alone tokens
+  // associated with them and appear hard-coded alongside other styles.
+  // They are pulled out here for easier theming.
+  --token-color-palette-neutral-600-alpha-200: #3b3d4559;
+  --token-color-palette-neutral-600-alpha-100: #3b3d4540;
+  --token-color-palette-neutral-500-alpha-200: #656a7640;
+  --token-color-palette-neutral-500-alpha-100: #656a7626;
+  --token-color-palette-neutral-500-alpha-50: #656a760d;
+}
+
 // HDS Dark Mode
 // This theme reverses the lightness order of shades per color for tier-1
 // color tokens.  It also provides custom tier-2 mapping overrides that
@@ -85,23 +102,6 @@
     --token-color-palette-neutral-200
   );
   --token-form-indicator-optional-color: var(--token-color-palette-neutral-200);
-}
-
-// HDS Light Mode
-// This is the default HDS color theme.  Only Boundary custom tokens
-// are included here for completeness.
-@mixin light-mode {
-  // Tier-1 (Boundary custom)
-  // Boundary custom first-tier color tokens with alpha.
-  // In HDS, these correspond to the named color token,
-  // with the alpha identifier.  However, they do not have stand-alone tokens
-  // associated with them and appear hard-coded alongside other styles.
-  // They are pulled out here for easier theming.
-  --token-color-palette-neutral-600-alpha-200: #3b3d4559;
-  --token-color-palette-neutral-600-alpha-100: #3b3d4540;
-  --token-color-palette-neutral-500-alpha-200: #656a7640;
-  --token-color-palette-neutral-500-alpha-100: #656a7626;
-  --token-color-palette-neutral-500-alpha-50: #656a760d;
 }
 
 @media (prefers-color-scheme: dark) {
