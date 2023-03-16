@@ -11,10 +11,10 @@
           {{@model.id}}
         </p>
 
-        {{#each @model.connections as |connection|}}
+        {{#each @model.connection_recordings as |connection|}}
           <p>{{t 'resources.session-recording.connection.title'}}
             {{connection.id}}</p>
-          {{#each connection.channels as |channel|}}
+          {{#each connection.channel_recordings as |channel|}}
             <p>
               <LinkTo
                 @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'

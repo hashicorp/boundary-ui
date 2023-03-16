@@ -17,6 +17,6 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
   }
 
   async model({ session_recording_id }) {
-    return this.store.findRecord('recording', session_recording_id);
+    return this.store.findRecord('session-recording', session_recording_id);
   }
 }
