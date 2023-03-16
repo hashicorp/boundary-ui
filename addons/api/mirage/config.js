@@ -14,6 +14,7 @@ import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
+import { faker } from '@faker-js/faker';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -668,7 +669,7 @@ function routes() {
   this.patch('/storage-buckets/:id');
   this.post(
     '/storage-buckets',
-    ({ storageBuckets }, { queryParams: { plugin_name } }) => {
+    function ({ storageBuckets }, { queryParams: { plugin_name } }) {
       const attrs = this.normalizedRequestAttrs();
       if (plugin_name) {
         attrs.type = 'plugin';
@@ -676,6 +677,11 @@ function routes() {
           name: plugin_name,
         };
       }
+
+      // Remove the secrets and add the hmac in the response
+      delete attrs.secrets;
+      attrs.secrets_hmac = faker.git.commitSha();
+
       return storageBuckets.create(attrs);
     }
   );

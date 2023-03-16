@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import StorageBucketAbility from 'api/abilities/storage-bucket';
+import RecordingAbility from 'api/abilities/recording';
 import { inject as service } from '@ember/service';
 
-export default class OverrideStorageBucketAbility extends StorageBucketAbility {
+export default class OverrideRecordingAbility extends RecordingAbility {
   // =service
   @service features;
 
   /**
-   * This override ensures that storage buckets may be read only if the
+   * This override ensures that session recordings may be read only if the
    * session-recording feature flag is enabled.
    */
   get canRead() {
@@ -19,9 +19,8 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
   }
 
   /**
-   * This override ensures that storage buckets can only be presented in the global scope
-   * and if the session-recording feature flag is enabled.
-   */
+   * This override ensures that session recordings can only be presented in the global scope
+   * and if the session-recording feature flag is enabled.   */
   get canList() {
     return this.features.isEnabled('session-recording')
       ? this.hasAuthorizedCollectionAction('list') && this.model.isGlobal
@@ -29,6 +28,6 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
   }
 
   get canNavigate() {
-    return this.canCreate || this.canList;
+    return this.canList;
   }
 }

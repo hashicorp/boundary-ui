@@ -18,7 +18,11 @@ export default factory.extend({
   type: (i) => types[i % types.length],
 
   authorized_actions: () =>
-    permissions.authorizedActionsFor('recording') || ['no-op', 'read', 'list'],
+    permissions.authorizedActionsFor('recording') || [
+      'no-op',
+      'read',
+      'download',
+    ],
 
   withNonExistingUserAndTarget: trait({
     afterCreate(recording, server) {

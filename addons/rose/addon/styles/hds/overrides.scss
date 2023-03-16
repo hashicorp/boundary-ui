@@ -16,3 +16,13 @@
     }
   }
 }
+
+.hds-table {
+  border-collapse: revert;
+}
+
+.hds-dropdown {
+  .hds-dropdown-toggle-icon {
+    color: inherit;
+  }
+}

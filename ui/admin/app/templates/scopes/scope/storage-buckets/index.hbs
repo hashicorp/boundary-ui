@@ -32,7 +32,6 @@
   <page.body>
     {{#if @model}}
       <Hds::Table
-        class='storage-bucket-list'
         @valign='middle'
         @model={{@model}}
         @columns={{array
@@ -93,7 +92,20 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              {{!TODO: add dropdown for delete and edit actions}}
+              {{!TODO: add dropdown for delete actions}}
+              <Hds::Dropdown as |dd|>
+                <dd.ToggleIcon
+                  @icon='more-horizontal'
+                  @text='Overflow Options'
+                  @hasChevron={{false}}
+                  @size='small'
+                />
+                <dd.Interactive
+                  @route='scopes.scope.storage-buckets.storage-bucket'
+                  @model={{B.data.id}}
+                  @text={{t 'actions.edit'}}
+                />
+              </Hds::Dropdown>
             </B.Td>
           </B.Tr>
         </:body>

@@ -10551,9 +10551,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001157, caniuse-lite@^1.0.30001449:
-  version "1.0.30001458"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001458.tgz#871e35866b4654a7d25eccca86864f411825540c"
-  integrity sha512-lQ1VlUUq5q9ro9X+5gOEyH7i3vm+AYVT1WDCVB69XOZ17KZRhnZ9J0Sqz7wTHQaLBJccNCHq8/Ww5LlOIZbB0w==
+  version "1.0.30001466"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001466.tgz#c1e6197c540392e09709ecaa9e3e403428c53375"
+  integrity sha512-ewtFBSfWjEmxUgNBSZItFSmVtvk9zkwkl1OfRZlKA8slltRN+/C/tuGVrF9styXkN36Yu3+SeJ1qkXxDEyNZ5w==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -17268,6 +17268,11 @@ intl-messageformat@10.2.1, intl-messageformat@^10.1.0:
     "@formatjs/fast-memoize" "1.2.6"
     "@formatjs/icu-messageformat-parser" "2.1.10"
     tslib "2.4.0"
+
+intl-unofficial-duration-unit-format@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/intl-unofficial-duration-unit-format/-/intl-unofficial-duration-unit-format-3.1.0.tgz#994feefc8d903d9e5044dc7e4e1d38ebad59394b"
+  integrity sha512-yjvUDwV63zSGkbeUqpDRJmOgMQoJA8OFhNeo+1KY20q+lFCtcvRWszJNsq/ssrUJRy8g+Mt3BYNfwFvRRSAkow==
 
 invariant@^2.2.2, invariant@^2.2.3, invariant@^2.2.4:
   version "2.2.4"
@@ -25706,9 +25711,9 @@ terser-webpack-plugin@^5.1.3:
     terser "^5.7.2"
 
 terser@^4.1.2, terser@^4.6.3, terser@^5.14.2, terser@^5.3.0, terser@^5.3.4, terser@^5.7.2:
-  version "5.16.5"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-5.16.5.tgz#1c285ca0655f467f92af1bbab46ab72d1cb08e5a"
-  integrity sha512-qcwfg4+RZa3YvlFh0qjifnzBHjKGNbtDo9yivMqMFDy9Q6FSaQWSB/j1xKhsoUFJIqDOM3TsN6D5xbrMrFcHbg==
+  version "5.16.6"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.16.6.tgz#f6c7a14a378ee0630fbe3ac8d1f41b4681109533"
+  integrity sha512-IBZ+ZQIA9sMaXmRZCUMDjNH0D5AQQfdn4WUjHL0+1lF4TP1IHRJbrhb6fNaXWikrYQTSkb7SLxkeXAiy1p7mbg==
   dependencies:
     "@jridgewell/source-map" "^0.3.2"
     acorn "^8.5.0"
