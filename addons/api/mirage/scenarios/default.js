@@ -114,20 +114,20 @@ export default function (server) {
   server.createList('storage-bucket', 3, { scope: globalScope });
   server.createList('storage-bucket', 2, { scope: orgScope });
   server.createList(
-    'recording',
+    'session-recording',
     3,
     { scope: globalScope },
     'withConnectionAndChannels',
     'withExistingUserAndTarget'
   );
   server.create(
-    'recording',
+    'session-recording',
     { scope: globalScope },
     'withConnectionAndChannels',
     'withNonExistingUserAndTarget'
   );
   server.createList(
-    'recording',
+    'session-recording',
     2,
     { scope: orgScope },
     'withConnectionAndChannels',

@@ -40,7 +40,7 @@ export default factory.extend({
     // Session recording resources are only available on global or org scope
     if (this.type === 'global' || this.type === 'org') {
       collectionActions['storage-buckets'] = ['create', 'list'];
-      collectionActions.recordings = ['list'];
+      collectionActions['session-recordings'] = ['list'];
     }
 
     return collectionActions;

@@ -688,12 +688,12 @@ function routes() {
 
   // session recordings
   this.get(
-    '/recordings',
-    ({ recordings }, { queryParams: { scope_id: scopeId } }) => {
-      return recordings.where({ scopeId });
+    '/session-recordings',
+    ({ sessionRecordings }, { queryParams: { scope_id: scopeId } }) => {
+      return sessionRecordings.where({ scopeId });
     }
   );
-  this.get('/recordings/:id');
+  this.get('/session-recordings/:id');
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
