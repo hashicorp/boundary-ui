@@ -4,16 +4,15 @@
   </page.header>
 
   <page.body>
-    <LinkTo
-      @route='scopes.scope.session-recordings.session-recording'
-      @model={{@model.session_recording_id}}
-    >
-      {{@model.session_recording_id}}
-    </LinkTo>
-    <br /><br />
-    <p>{{format-time-duration 3000}}</p>
-    <p>{{format-time-duration 2700000}}</p>
-    <p>{{format-time-duration 5000000}}</p>
-    <p>{{format-time-duration 177800000}}</p>
+    {{#each @model as |recording|}}
+      <p>
+        <LinkTo
+          @route='scopes.scope.session-recordings.session-recording'
+          @model={{recording.id}}
+        >
+          {{recording.id}}
+        </LinkTo>
+      </p>
+    {{/each}}
   </page.body>
 </Rose::Layout::Page>

@@ -27,7 +27,7 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     // if (this.can.can('list session-recording', scope, { collection: 'session-recordings' })) {
-    return this.store.query('recording', { scope_id });
+    return this.store.query('session-recording', { scope_id });
     // }
   }
 
