@@ -11,4 +11,5 @@ export default class ApplicationController extends Controller {
 
   @service session;
   @service flashMessages;
+  @service featureEdition;
 }

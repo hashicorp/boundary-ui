@@ -12,13 +12,12 @@ export default class OverrideCredentialLibraryAbility extends CredentialLibraryA
 
   /**
    * This override ensures that vault ssh cert may be read only if the
-   * credential-library-vault-ssh-certificate feature flag is enabled.
+   * ssh-target feature flag is enabled.
    * All other types are subject to the standard logic found in the api addon.
    */
   get canRead() {
-    return this.features.isEnabled(
-      'credential-library-vault-ssh-certificate'
-    ) || !this.model.isVaultSSHCertificate
+    return this.features.isEnabled('ssh-target') ||
+      !this.model.isVaultSSHCertificate
       ? super.canRead
       : false;
   }
