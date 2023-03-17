@@ -17,7 +17,7 @@ module('Unit | Abilities | credential-library', function (hooks) {
 
   hooks.beforeEach(function () {
     features = this.owner.lookup('service:features');
-    features.enable('credential-library-vault-ssh-certificate');
+    features.enable('ssh-target');
   });
 
   test('can read credential library type when authorized and feature is enabled', function (assert) {
@@ -51,7 +51,7 @@ module('Unit | Abilities | credential-library', function (hooks) {
     const canService = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-certificate');
+    featuresService.disable('ssh-target');
     const credentialLibrary = store.createRecord('credential-library', {
       authorized_actions: [],
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
@@ -66,7 +66,7 @@ module('Unit | Abilities | credential-library', function (hooks) {
     const canService = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-certificate');
+    featuresService.disable('ssh-target');
     const credentialLibrary = store.createRecord('credential-library', {
       authorized_actions: ['read'],
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
