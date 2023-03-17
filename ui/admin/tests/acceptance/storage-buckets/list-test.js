@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -14,18 +14,26 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   setupMirage(hooks);
 
   let features;
-  const STORAGE_BUCKET_LINK = 'Storage Buckets';
+  let intl;
+
+  const STORAGE_BUCKET_TITLE = 'Storage Buckets';
+  const MESSAGE_DESCRIPTION_SELECTOR = '.rose-message-description';
+  const MESSAGE_LINK_SELECTOR = '.rose-message-body .hds-link-standalone';
+  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
 
   const instances = {
     scopes: {
       global: null,
       org: null,
     },
+    storageBucket: null,
   };
 
   const urls = {
     globalScope: null,
     storageBuckets: null,
+    storageBucket: null,
   };
 
   hooks.beforeEach(function () {
@@ -37,13 +45,14 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     urls.globalScope = `/scopes/global`;
     urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
 
+    intl = this.owner.lookup('service:intl');
     features = this.owner.lookup('service:features');
     features.enable('session-recording');
     authenticateSession({});
   });
 
   test('users can navigate to storage-buckets with proper authorization', async function (assert) {
-    assert.expect(3);
+    assert.expect(5);
 
     await visit(urls.globalScope);
 
@@ -58,10 +67,18 @@ module('Acceptance | storage-buckets | list', function (hooks) {
       ].includes('create')
     );
     assert.dom(`[href="${urls.storageBuckets}"]`).exists();
+
+    // Tests that correct message is displayed when no buckets exist
+    await click(`[href="${urls.storageBuckets}"]`);
+
+    assert
+      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .hasText(intl.t('resources.storage-bucket.messages.none.description'));
+    assert.dom(MESSAGE_LINK_SELECTOR).exists();
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(3);
+    assert.expect(5);
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       [];
 
@@ -79,11 +96,21 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     );
     assert
       .dom('[title="General"] a:nth-of-type(3)')
-      .doesNotIncludeText(STORAGE_BUCKET_LINK);
+      .doesNotIncludeText(STORAGE_BUCKET_TITLE);
+
+    // Tests that correct message is displayed when no buckets exist
+    await visit(urls.storageBuckets);
+
+    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+      intl.t('descriptions.neither-list-nor-create', {
+        resource: STORAGE_BUCKET_TITLE,
+      })
+    );
+    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
   });
 
   test('user can navigate to index with only create action', async function (assert) {
-    assert.expect(3);
+    assert.expect(5);
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
@@ -102,10 +129,20 @@ module('Acceptance | storage-buckets | list', function (hooks) {
       ].includes('create')
     );
     assert.dom(`[href="${urls.storageBuckets}"]`).exists();
+
+    // Tests that correct message is displayed when no buckets exist
+    await click(`[href="${urls.storageBuckets}"]`);
+
+    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+      intl.t('descriptions.create-but-not-list', {
+        resource: STORAGE_BUCKET_TITLE,
+      })
+    );
+    assert.dom(MESSAGE_LINK_SELECTOR).exists();
   });
 
   test('user can navigate to index with only list action', async function (assert) {
-    assert.expect(3);
+    assert.expect(5);
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
@@ -124,6 +161,14 @@ module('Acceptance | storage-buckets | list', function (hooks) {
       ].includes('create')
     );
     assert.dom(`[href="${urls.storageBuckets}"]`).exists();
+
+    // Tests that correct message is displayed when no buckets exist
+    await click(`[href="${urls.storageBuckets}"]`);
+
+    assert
+      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .hasText(intl.t('resources.storage-bucket.messages.none.description'));
+    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
   });
 
   test('user cannot navigate to index when feature is disabled', async function (assert) {
@@ -134,6 +179,23 @@ module('Acceptance | storage-buckets | list', function (hooks) {
 
     assert
       .dom('[title="General"] a:nth-of-type(2)')
-      .doesNotIncludeText(STORAGE_BUCKET_LINK);
+      .doesNotIncludeText(STORAGE_BUCKET_TITLE);
+  });
+
+  test('edit action in table directs user to appropriate page', async function (assert) {
+    assert.expect(3);
+    await visit(urls.globalScope);
+    instances.storageBucket = this.server.create('storage-bucket', {
+      scope: instances.scopes.global,
+    });
+    urls.storageBucket = `${urls.storageBuckets}/${instances.storageBucket.id}`;
+
+    await click(`[href="${urls.storageBuckets}"]`);
+    await click(DROPDOWN_BUTTON_SELECTOR);
+
+    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
+    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Edit');
+    await click(DROPDOWN_ITEM_SELECTOR);
+    assert.strictEqual(currentURL(), urls.storageBucket);
   });
 });

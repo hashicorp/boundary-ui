@@ -21,6 +21,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
       global: null,
       org: null,
     },
+    storageBucket: null,
   };
 
   const urls = {
