@@ -59,8 +59,8 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
   execSync(
     `vault kv put -mount ${secretsPath} ${secretName} ` +
-    ` username=${process.env.E2E_SSH_USER}` +
-    ` private_key=@${process.env.E2E_SSH_KEY_PATH}`
+      ` username=${process.env.E2E_SSH_USER}` +
+      ` private_key=@${process.env.E2E_SSH_KEY_PATH}`
   );
   execSync(
     `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`
@@ -68,13 +68,13 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   const vaultToken = JSON.parse(
     execSync(
       `vault token create` +
-      ` -no-default-policy=true` +
-      ` -policy=${boundaryPolicyName}` +
-      ` -policy=${secretPolicyName}` +
-      ` -orphan=true` +
-      ` -period=20m` +
-      ` -renewable=true` +
-      ` -format=json`
+        ` -no-default-policy=true` +
+        ` -policy=${boundaryPolicyName}` +
+        ` -policy=${secretPolicyName}` +
+        ` -orphan=true` +
+        ` -period=20m` +
+        ` -renewable=true` +
+        ` -format=json`
     )
   );
   const clientToken = vaultToken.auth.client_token;
@@ -175,9 +175,9 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   if (process.env.E2E_SSH_USER != retrievedUser) {
     throw new Error(
       'Stored User does not match. EXPECTED: ' +
-      process.env.E2E_SSH_USER +
-      ', ACTUAL: ' +
-      retrievedUser
+        process.env.E2E_SSH_USER +
+        ', ACTUAL: ' +
+        retrievedUser
     );
   }
   if (keyData != retrievedKey) {

@@ -128,9 +128,9 @@ test.describe('AWS', async () => {
     if (!hostsAreVisible) {
       throw new Error(
         'Hosts are not visible. EXPECTED: ' +
-        expectedHosts.length +
-        ', ACTUAL: ' +
-        rowCount
+          expectedHosts.length +
+          ', ACTUAL: ' +
+          rowCount
       );
     }
 
@@ -216,9 +216,9 @@ test.describe('AWS', async () => {
     if (!hostsAreVisible) {
       throw new Error(
         'Hosts are not visible. EXPECTED: ' +
-        expectedHosts.length +
-        ', ACTUAL: ' +
-        rowCount
+          expectedHosts.length +
+          ', ACTUAL: ' +
+          rowCount
       );
     }
   });
