@@ -95,7 +95,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
       `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
     );
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-certificate');
+    featuresService.disable('ssh-target');
     await visit(urls.credentialLibraries);
 
     assert.dom('.rose-table-body tr:nth-of-type(2) a').doesNotExist();

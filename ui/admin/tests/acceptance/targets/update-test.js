@@ -164,16 +164,21 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('hide filter input field when the `egress_worker_filter` toggled is off', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
+    featuresService.enable('target-worker-filters-v2-ingress');
     assert.expect(1);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     assert.dom('[name=egress_worker_filter]').isNotVisible();
   });
 
   test('clear `egress_worker_field` value from a target when the toggle is off and form is saved', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
+    featuresService.enable('target-worker-filters-v2-ingress');
     assert.expect(5);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
@@ -186,7 +191,10 @@ module('Acceptance | targets | update', function (hooks) {
       'random filter string'
     );
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     await click('.rose-form-actions [type="submit"]');
     //clear egress_worker_filter when the toggle is off
     assert.strictEqual(currentURL(), urls.target);

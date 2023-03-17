@@ -20,6 +20,7 @@ export default class ApplicationRoute extends Route {
   @service confirm;
   @service router;
   @service intl;
+  @service featureEdition;
 
   // =attributes
 
@@ -125,5 +126,10 @@ export default class ApplicationRoute extends Route {
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
     }
+  }
+
+  @action
+  toggleEdition(edition) {
+    this.featureEdition.setEdition(edition);
   }
 }

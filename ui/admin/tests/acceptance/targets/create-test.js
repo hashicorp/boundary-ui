@@ -125,7 +125,10 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="ssh"]');
     await fillIn('[name="name"]', 'random string');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('[type="submit"]');
 
@@ -178,7 +181,10 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="tcp"]');
     await fillIn('[name="name"]', 'random string');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
 
     await click('[type="submit"]');
@@ -301,7 +307,10 @@ module('Acceptance | targets | create', function (hooks) {
 
     await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
 
@@ -318,7 +327,10 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
     await click('[value="ssh"]');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
 
