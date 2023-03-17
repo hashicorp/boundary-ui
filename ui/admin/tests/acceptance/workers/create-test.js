@@ -47,7 +47,6 @@ module('Acceptance | workers | create', function (hooks) {
     assert.expect(2);
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
-    featuresService.disable('byow-pki-upstream');
     await visit(newWorkerURL);
     const labels = findAll('label.rose-form-label');
     assert.dom(labels[0]).hasText('Boundary Cluster ID');
@@ -58,7 +57,6 @@ module('Acceptance | workers | create', function (hooks) {
     assert.expect(2);
     const featuresService = this.owner.lookup('service:features');
     featuresService.disable('byow-pki-hcp-cluster-id');
-    featuresService.enable('byow-pki-upstream');
     await visit(newWorkerURL);
     const labels = findAll('label.rose-form-label');
     assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');

@@ -13,7 +13,6 @@ const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 const baseEdition = {
   byow: false,
   'byow-pki-hcp-cluster-id': false,
-  'byow-pki-upstream': false,
   'json-credentials': false,
   'ssh-target': false,
   'static-credentials': false,
@@ -28,7 +27,6 @@ const featureEditions = {};
 featureEditions.oss = {
   ...baseEdition,
   byow: true,
-  'byow-pki-upstream': true,
   'json-credentials': true,
   'static-credentials': true,
   'target-worker-filters-v2': true,
@@ -43,7 +41,6 @@ featureEditions.enterprise = {
 featureEditions.hcp = {
   ...featureEditions.enterprise,
   'byow-pki-hcp-cluster-id': true,
-  'byow-pki-upstream': false,
   'target-worker-filters-v2-hcp': true,
 };
 
