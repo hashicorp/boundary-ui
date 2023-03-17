@@ -1,0 +1,249 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.name}}
+    @isInvalid={{@model.errors.name}}
+    @type='text'
+    name='name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    {{#if @model.errors.name}}
+      <F.Error as |E|>
+        {{#each @model.errors.name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @isOptional={{true}}
+    @value={{@model.description}}
+    @isInvalid={{@model.errors.description}}
+    name='description'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
+
+  {{#if (or @model.isNew form.isEditable)}}
+    <Hds::Form::Select::Field
+      @isRequired={{true}}
+      @width='100%'
+      disabled={{form.disabled}}
+      name='scope'
+      {{on 'change' this.updateScope}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.storage-bucket.form.scope.help'
+        }}</F.HelperText>
+      <F.Options>
+        {{#each @scopes as |scope|}}
+          <option value={{scope.model.id}}>{{scope.model.displayName}}</option>
+        {{/each}}
+      </F.Options>
+    </Hds::Form::Select::Field>
+  {{else if @model.scope}}
+    <InfoField
+      @value={{@model.scopeModel.displayName}}
+      @icon={{if @model.scopeModel.isGlobal 'globe' 'org'}}
+      disabled={{form.disabled}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.storage-bucket.form.scope.help'
+        }}</F.HelperText>
+    </InfoField>
+  {{/if}}
+
+  <InfoField
+    @value={{t 'resources.storage-bucket.titles.aws'}}
+    @icon='aws-color'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'titles.provider'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.storage-bucket.form.provider.help'
+      }}</F.HelperText>
+  </InfoField>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.bucket_name}}
+    @isInvalid={{@model.errors.bucket_name}}
+    @type='text'
+    name='bucket_name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'bucket_name')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.storage-bucket.form.bucket_name.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.storage-bucket.form.bucket_name.help'
+      }}</F.HelperText>
+    {{#if @model.errors.bucket_name}}
+      <F.Error as |E|>
+        {{#each @model.errors.bucket_name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.bucket_prefix}}
+    @isInvalid={{@model.errors.bucket_prefix}}
+    @type='text'
+    name='bucket_prefix'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'bucket_prefix')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.storage-bucket.form.bucket_prefix.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.storage-bucket.form.bucket_prefix.help'
+      }}</F.HelperText>
+    {{#if @model.errors.bucket_prefix}}
+      <F.Error as |E|>
+        {{#each @model.errors.bucket_prefix as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.region}}
+    @isInvalid={{@model.errors.region}}
+    @type='text'
+    name='region'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'region')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.storage-bucket.form.region.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.storage-bucket.form.region.help'
+      }}</F.HelperText>
+    {{#if @model.errors.region}}
+      <F.Error as |E|>
+        {{#each @model.errors.region as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.access_key_id}}
+    @isInvalid={{@model.errors.access_key_id}}
+    @type='text'
+    name='access_key_id'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'access_key_id')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.storage-bucket.form.access_key_id.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.storage-bucket.form.access_key_id.help'
+      }}</F.HelperText>
+    {{#if @model.errors.access_key_id}}
+      <F.Error as |E|>
+        {{#each @model.errors.access_key_id as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.secret_access_key}}
+    @isInvalid={{@model.errors.secret_access_key}}
+    @type='text'
+    name='secret_access_key'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'secret_access_key')}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.storage-bucket.form.secret_access_key.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.storage-bucket.form.secret_access_key.help'
+      }}</F.HelperText>
+    {{#if @model.errors.secret_access_key}}
+      <F.Error as |E|>
+        {{#each @model.errors.secret_access_key as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.worker_filter}}
+    @isInvalid={{@model.errors.worker_filter}}
+    @type='text'
+    name='worker_filter'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'worker_filter')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.storage-bucket.form.worker_filter.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.storage-bucket.form.worker_filter.help'}}
+      {{! TODO: Link to the correct url for worker-filters }}
+      <Hds::Link::Inline @href={{doc-url 'worker-filters'}}>{{t
+          'actions.learn-more'
+        }}</Hds::Link::Inline>
+    </F.HelperText>
+    {{#if @model.errors.worker_filter}}
+      <F.Error as |E|>
+        {{#each @model.errors.worker_filter as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+</Rose::Form>

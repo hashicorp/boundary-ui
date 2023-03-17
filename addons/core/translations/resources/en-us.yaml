@@ -238,8 +238,30 @@ storage-bucket:
   actions:
     delete: Delete Storage Bucket
   form:
-    scope: Scope
-    provider: Provider
+    scope:
+      label: Scope
+      help: You will be able to associate this storage bucket with any target.
+    provider:
+      label: Provider
+      help: Boundary currently only supports Amazon S3 storage.
+    bucket_name:
+      label: Bucket name
+      help: The name of this bucket in AWS
+    bucket_prefix:
+      label: Bucket prefix
+      help: The base path where session recordings will be stored.
+    region:
+      label: Region
+      help: The AWS region to use
+    access_key_id:
+      label: Access key ID
+      help: The AWS access key ID to use.
+    secret_access_key:
+      label: Secret access key
+      help: The secret access key to use.
+    worker_filter:
+      label: Worker filter
+      help: Filter for Boundary workers that have network access to your storage. Boolean expression.
 project:
   title: Project
   title_plural: Projects

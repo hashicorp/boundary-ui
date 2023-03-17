@@ -5,12 +5,14 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { loading } from 'ember-loading';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeStorageBucketsRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
   @service session;
   @service can;
   @service router;
@@ -31,10 +33,42 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
   async model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
-    if (this.can.can('list storage-bucket', scope, { collection: 'storage-buckets' })) {
+    if (
+      this.can.can('list storage-bucket', scope, {
+        collection: 'storage-buckets',
+      })
+    ) {
       return this.store.query('storage-bucket', { scope_id });
     }
   }
 
   // =actions
+
+  /**
+   * Handle save
+   * @param {StorageBucketModel} storageBucket
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess('notifications.save-success')
+  async save(storageBucket) {
+    await storageBucket.save();
+    await this.router.transitionTo(
+      'scopes.scope.storage-buckets.storage-bucket',
+      storageBucket
+    );
+    this.refresh();
+  }
+
+  /**
+   * Rollback changes on storage buckets.
+   * @param {StorageBucketModel} storageBucket
+   */
+  @action
+  cancel(storageBucket) {
+    const { isNew } = storageBucket;
+    storageBucket.rollbackAttributes();
+    if (isNew) this.router.transitionTo('scopes.scope.storage-buckets');
+  }
 }
