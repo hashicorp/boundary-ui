@@ -695,6 +695,7 @@
 
   .hds-form-text-input {
     width: 99%;
+
     &::placeholder {
       content: '';
       width: 80%;
@@ -704,11 +705,13 @@
       vertical-align: middle;
     }
   }
+
   .hds-button {
     margin-top: 4.25rem;
     width: 6rem;
   }
 }
+
 // session recording player
 .session-recording-player {
   --player-background-color: #252937;
