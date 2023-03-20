@@ -1,0 +1,36 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<div class='secret-input'>
+  <Hds::Form::TextInput::Field
+    @isRequired={{@isRequired}}
+    @isInvalid={{@isInvalid}}
+    @value={{this.secret}}
+    @type={{@type}}
+    name={{@name}}
+    disabled={{not this.editing}}
+    placeholder=' '
+    ...attributes
+    as |F|
+  >
+    {{yield F}}
+  </Hds::Form::TextInput::Field>
+
+  {{#if this.isDisabled}}
+    <Hds::Button
+      @text={{t 'actions.edit'}}
+      @icon='edit'
+      disabled={{@disabled}}
+    />
+  {{else if this.isActionable}}
+    <Hds::Button
+      @text={{t 'actions.edit'}}
+      @icon='edit'
+      {{on 'click' this.enableEdit}}
+    />
+  {{else}}
+    <Hds::Button @text={{t 'actions.cancel'}} {{on 'click' this.clearEdit}} />
+  {{/if}}
+</div>
