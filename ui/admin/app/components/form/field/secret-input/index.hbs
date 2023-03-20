@@ -28,9 +28,14 @@
     <Hds::Button
       @text={{t 'actions.edit'}}
       @icon='edit'
+      @color='secondary'
       {{on 'click' this.enableEdit}}
     />
   {{else}}
-    <Hds::Button @text={{t 'actions.cancel'}} {{on 'click' this.clearEdit}} />
+    <Hds::Button
+      @text={{t 'actions.cancel'}}
+      @color='secondary'
+      {{on 'click' this.cancelEdit}}
+    />
   {{/if}}
 </div>

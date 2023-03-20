@@ -52,7 +52,7 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    * Sets the secret field back to disabled mode
    */
   @action
-  clearEdit() {
+  cancelEdit() {
     this.secret = null;
     this.editing = false;
   }
