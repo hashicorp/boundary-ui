@@ -222,6 +222,15 @@ session-recording:
     title_plural: Channels
   session:
     title: Session Playback
+  form:
+    time:
+      label: Time
+    user:
+      label: User
+    target:
+      label: Target
+    duration:
+      label: Duration
 storage-bucket:
   title: Storage Bucket
   title_plural: Storage Buckets

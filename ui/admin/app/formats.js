@@ -34,6 +34,13 @@ export default {
       minute: 'numeric',
       timeZoneName: 'short',
     },
+    mmddyyhhmm: {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: 'numeric',
+      minute: 'numeric',
+    },
   },
   number: {
     compact: { notation: 'compact' },
