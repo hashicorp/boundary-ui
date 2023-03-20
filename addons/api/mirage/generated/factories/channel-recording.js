@@ -17,4 +17,6 @@ export default Factory.extend({
     return faker.date.recent(3, this.finished_time);
   },
   finished_time: () => faker.date.recent(),
+  duration: () => `${faker.datatype.number()}s`,
+  mime_types: () => ['application/x-asciicast'],
 });

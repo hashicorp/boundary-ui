@@ -80,4 +80,16 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
     readOnly: true,
   })
   delete_on;
+
+  @attr({
+    description: 'The array of mime types that this recording will support.',
+    readOnly: true,
+  })
+  mime_types;
+
+  @attr('duration', {
+    description: 'The duration of this session recording in ms.',
+    readOnly: true,
+  })
+  duration;
 }

@@ -21,4 +21,5 @@ export default Factory.extend({
   },
   updated_time: () => faker.date.recent(),
   deleted_on: () => faker.date.soon(),
+  duration: () => `${faker.datatype.number()}s`,
 });

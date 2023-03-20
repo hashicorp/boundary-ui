@@ -50,4 +50,16 @@ export default class GeneratedChannelRecordingModel extends BaseModel {
     readOnly: true,
   })
   finished_time;
+
+  @attr({
+    description: 'The array of mime types that this recording will support.',
+    readOnly: true,
+  })
+  mime_types;
+
+  @attr('duration', {
+    description: 'The duration of this channel recording in ms.',
+    readOnly: true,
+  })
+  duration;
 }

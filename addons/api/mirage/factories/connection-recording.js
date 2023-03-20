@@ -7,5 +7,6 @@ import factory from '../generated/factories/connection-recording';
 import generateId from '../helpers/id';
 
 export default factory.extend({
-  id: () => generateId('src_'),
+  id: () => generateId('cr_'),
+  connection_id: () => generateId('sc_'),
 });

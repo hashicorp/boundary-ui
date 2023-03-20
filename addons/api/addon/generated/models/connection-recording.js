@@ -12,6 +12,13 @@ import { attr } from '@ember-data/model';
 export default class GeneratedConnectionRecordingModel extends BaseModel {
   // =attributes
 
+  @attr('string', {
+    description:
+      'The ID of the Connection which this Connection Recording recorded.',
+    readOnly: true,
+  })
+  connection_id;
+
   @attr('number', {
     description:
       'The total number of bytes uploaded from the client in this Connection.',
@@ -44,4 +51,16 @@ export default class GeneratedConnectionRecordingModel extends BaseModel {
     readOnly: true,
   })
   finished_time;
+
+  @attr({
+    description: 'The array of mime types that this recording will support.',
+    readOnly: true,
+  })
+  mime_types;
+
+  @attr('duration', {
+    description: 'The duration of this connection recording in ms.',
+    readOnly: true,
+  })
+  duration;
 }
