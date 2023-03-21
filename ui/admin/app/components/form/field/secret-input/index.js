@@ -15,7 +15,6 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    */
   @tracked editing = false;
   @tracked secret;
-  // =actions
 
   /**
    * Returns true if the resource form is in read only mode

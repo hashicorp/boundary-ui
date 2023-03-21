@@ -690,24 +690,22 @@
 // secret input field
 .secret-input {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: flex-end;
+  column-gap: 0.5rem;
 
   .hds-form-text-input {
-    width: 99%;
-
     &::placeholder {
       content: '';
       width: 80%;
       height: 0.65rem;
-      background-color: var(--ui-gray-subtler-3);
+      background-color: var(--token-color-palette-neutral-200);
       border-radius: 0.25rem;
       vertical-align: middle;
     }
   }
 
   .hds-button {
-    margin-top: 4.25rem;
+    margin-bottom: 1.5rem;
     width: 6rem;
   }
 }
