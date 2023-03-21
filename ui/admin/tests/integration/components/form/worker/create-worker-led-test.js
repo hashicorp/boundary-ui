@@ -21,7 +21,6 @@ module(
     hooks.beforeEach(function () {
       const featuresService = this.owner.lookup('service:features');
       featuresService.enable('byow-pki-hcp-cluster-id');
-      featuresService.disable('byow-pki-upstream');
     });
 
     test('it correctly populates the cluster id for an hcp dev cluster', async function (assert) {
