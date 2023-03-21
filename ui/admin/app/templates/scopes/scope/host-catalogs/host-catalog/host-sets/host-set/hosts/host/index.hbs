@@ -3,12 +3,30 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Form::Host @model={{@model}} />
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
 
-{{!--
-<Form::Host
-  @model={{@model}}
-  @submit={{route-action 'save' @model}}
-  @cancel={{route-action 'cancel' @model}}
-/>
---}}
+  <page.header>
+    <HostCatalogs::HostCatalog::Hosts::Host::Header @model={{@model}} />
+  </page.header>
+
+  <page.navigation>
+    <HostCatalogs::HostCatalog::Hosts::Host::Navigation
+      @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host.index'
+    />
+  </page.navigation>
+
+  <page.body>
+    <Form::Host @model={{@model}} />
+
+    {{!--
+    <Form::Host
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+    --}}
+  </page.body>
+</Rose::Layout::Page>
