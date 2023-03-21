@@ -658,12 +658,7 @@ function routes() {
   });
 
   // storage-buckets
-  this.get(
-    '/storage-buckets',
-    ({ storageBuckets }, { queryParams: { scope_id: scopeId } }) => {
-      return storageBuckets.where({ scopeId });
-    }
-  );
+  this.get('/storage-buckets');
   this.get('/storage-buckets/:id');
   this.del('/storage-buckets/:id');
   this.patch('/storage-buckets/:id');
