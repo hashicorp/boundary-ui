@@ -15,6 +15,7 @@ import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
+import { asciiCasts } from './data/asciicasts';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -688,7 +689,19 @@ function routes() {
       return sessionRecordings.where({ scopeId });
     }
   );
-  this.get('/session-recordings/:id');
+  this.get(
+    '/session-recordings/:idMethod',
+    async ({ sessionRecordings }, { params: { idMethod } }) => {
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+
+      if (method === 'download') {
+        return faker.helpers.arrayElement(asciiCasts);
+      } else {
+        return sessionRecordings.find(id);
+      }
+    }
+  );
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

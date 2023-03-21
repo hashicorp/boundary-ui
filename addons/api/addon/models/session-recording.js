@@ -27,26 +27,4 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
   get isUnknown() {
     return !TYPES_SESSION_RECORDING.includes(this.type);
   }
-
-  /**
-   * Download the recording for either session, connection, or channels.
-   * id can be the session ID, session recording ID, connection recording ID,
-   * or the channel recording ID.
-   * @param {string} id
-   * @param {string} mimeType
-   * @returns {Promise}
-   */
-  getAsciiCast(id) {
-    const adapter = this.store.adapterFor('application');
-    const options = { adapterOptions: { method: 'download' } };
-    const url = adapter.buildURL(
-      'session-recording',
-      id,
-      options,
-      'findRecord'
-    );
-    return adapter.ajax(url, 'GET', {
-      data: { mimeType: 'application/x-asciicast' },
-    });
-  }
 }

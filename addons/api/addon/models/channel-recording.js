@@ -24,4 +24,13 @@ export default class ChannelRecordingModel extends GeneratedChannelRecordingMode
   get isUnknown() {
     return !TYPES_CHANNEL_RECORDING.includes(this.type);
   }
+
+  /**
+   * Download the ascii cast recording for this channel.
+   * @returns {Promise<string>}
+   */
+  getAsciicast() {
+    const adapter = this.store.adapterFor('session-recording');
+    return adapter.getAsciicast(this.id);
+  }
 }
