@@ -42,7 +42,7 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   // TODO: When we add abilities to session-recordings this test will be refactor to account for it.
-  test('users can to session-recordings', async function (assert) {
+  test('users can navigate to session-recordings', async function (assert) {
     assert.expect(1);
     // Visit session recordings
     await visit(urls.sessionRecordings);
