@@ -776,3 +776,14 @@
       'sidebar';
   }
 }
+
+// Session recording - List
+.session-recording-list-cell-item {
+  display: flex;
+  gap: sizing.rems(xs);
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+}

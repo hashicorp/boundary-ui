@@ -1,18 +1,71 @@
 <Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
   <page.header>
     <h2>{{t 'resources.session-recording.title_plural'}}</h2>
   </page.header>
 
   <page.body>
-    {{#each @model as |recording|}}
-      <p>
-        <LinkTo
-          @route='scopes.scope.session-recordings.session-recording'
-          @model={{recording.id}}
-        >
-          {{recording.id}}
-        </LinkTo>
-      </p>
-    {{/each}}
+    {{#if @model}}
+      <Hds::Table
+        @model={{@model}}
+        @density='tall'
+        @columns={{array
+          (hash label=(t 'resources.session-recording.form.time.label'))
+          (hash label=(t 'resources.session-recording.form.user.label'))
+          (hash label=(t 'resources.session-recording.form.target.label'))
+          (hash label=(t 'resources.session-recording.form.duration.label'))
+          (hash label='' align='right')
+        }}
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <span class='hds-foreground-faint'>
+                {{format-date B.data.started_time format='mmddyyhhmm'}}
+              </span>
+            </B.Td>
+            <B.Td>
+              <div
+                class='session-recording-list-cell-item hds-font-weight-semibold'
+              >
+                <span><FlightIcon @name='user' /></span>
+                <span>{{B.data.user.name}}</span>
+              </div>
+            </B.Td>
+            <B.Td>
+              <div
+                class='session-recording-list-cell-item hds-font-weight-semibold'
+              >
+                <span><FlightIcon @name='target' /></span>
+                <span>{{B.data.target.name}}</span>
+              </div>
+            </B.Td>
+            <B.Td>
+              <div
+                class='session-recording-list-cell-item hds-foreground-faint'
+              >
+                <span><FlightIcon @name='clock' /></span>
+                <span>
+                  {{format-time-duration B.data.duration}}
+                </span>
+              </div>
+            </B.Td>
+            <B.Td align='right'>
+              <Hds::Link::Standalone
+                @icon='arrow-right'
+                @iconPosition='trailing'
+                @color='secondary'
+                @text=''
+                @route='scopes.scope.session-recordings.session-recording'
+                @model={{B.data.id}}
+              />
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{/if}}
   </page.body>
 </Rose::Layout::Page>
