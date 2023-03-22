@@ -697,19 +697,13 @@
   border-radius: 0.75rem;
 
   &-header {
-    padding-left: 1rem;
-    height: 3rem;
-    width: 100%;
     border-bottom: var(--player-divider) 0.125rem solid;
 
     // override of standalone link styles to allow for
     // static colors in light and dark mode
-    .hds-link-standalone {
-      height: inherit;
-    }
-
     a {
       color: var(--link-color);
+      padding: 1rem;
     }
 
     a:hover {
