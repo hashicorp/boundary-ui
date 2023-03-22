@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'admin/tests/helpers';
 
 module(
-  'Unit | Controller | scopes/scope/session-recordings/session-recording',
+  'Unit | Controller | session-recordings | session-recording',
   function (hooks) {
     setupTest(hooks);
 
