@@ -20,7 +20,6 @@ export default class FormStorageBucketComponent extends Component {
 
   /**
    * Call passed cancel function.
-   * Unset updated secrets
    */
   @action
   cancel() {

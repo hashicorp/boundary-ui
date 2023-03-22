@@ -217,60 +217,7 @@
       {{/if}}
     </Form::Field::SecretInput>
   {{/if}}
-  {{#if @model.isNew}}
-    <Hds::Form::TextInput::Field
-      @isRequired={{true}}
-      @value={{@model.access_key_id}}
-      @isInvalid={{@model.errors.access_key_id}}
-      @type='text'
-      name='access_key_id'
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'access_key_id')}}
-      as |F|
-    >
-      <F.Label>{{t
-          'resources.storage-bucket.form.access_key_id.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.access_key_id.help'
-        }}</F.HelperText>
-      {{#if @model.errors.access_key_id}}
-        <F.Error as |E|>
-          {{#each @model.errors.access_key_id as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </Hds::Form::TextInput::Field>
 
-  {{else}}
-    <Form::Field::SecretInput
-      @isRequired={{true}}
-      @isInvalid={{@model.errors.access_key_id}}
-      @type='text'
-      @name='access_key_id'
-      @disabled={{form.disabled}}
-      @showEditButton={{true}}
-      @accessKeyId={{@model.access_key_id}}
-      {{on 'input' (set-from-event @model 'access_key_id')}}
-      as |F|
-    >
-      <F.Label>{{t
-          'resources.storage-bucket.form.access_key_id.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.access_key_id.help'
-        }}</F.HelperText>
-      {{#if @model.errors.access_key_id}}
-        <F.Error as |E|>
-          {{#each @model.errors.access_key_id as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </Form::Field::SecretInput>
-
-  {{/if}}
   <Hds::Form::TextInput::Field
     @isRequired={{true}}
     @value={{@model.secret_access_key}}
