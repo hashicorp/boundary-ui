@@ -14,7 +14,6 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    * @type {boolean}
    */
   @tracked editing = false;
-  @tracked secret;
 
   /**
    * Returns true if the resource form is in read only mode
@@ -52,7 +51,7 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    */
   @action
   cancelEdit() {
-    this.secret = null;
     this.editing = false;
+    this.args.cancel();
   }
 }

@@ -4,14 +4,16 @@
 }}
 
 <div class='secret-input'>
+  {{#if (or this.isDisabled this.isActionable)}}
+    <span class='overlay'></span>
+  {{/if}}
   <Hds::Form::TextInput::Field
     @isRequired={{@isRequired}}
     @isInvalid={{@isInvalid}}
-    @value={{this.secret}}
+    @value={{@value}}
     @type={{@type}}
     name={{@name}}
-    disabled={{not this.editing}}
-    placeholder=' '
+    disabled={{or @disabled (not this.editing)}}
     ...attributes
     as |F|
   >

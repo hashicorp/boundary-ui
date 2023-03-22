@@ -692,21 +692,21 @@
   display: flex;
   align-items: flex-end;
   column-gap: 0.5rem;
+  position: relative;
 
-  .hds-form-text-input {
-    &::placeholder {
-      content: '';
-      width: 80%;
-      height: 0.65rem;
-      background-color: var(--token-color-palette-neutral-200);
-      border-radius: 0.25rem;
-      vertical-align: middle;
-    }
+  .overlay {
+    width: 60%;
+    height: 1rem;
+    position: absolute;
+    bottom: 2.15rem;
+    left: 0.25rem;
+    border-radius: 0.25rem;
+    background-color: var(--token-color-palette-neutral-200);
   }
 
   .hds-button {
     margin-bottom: 1.5rem;
-    width: 6rem;
+    flex-basis: 6rem;
   }
 }
 
