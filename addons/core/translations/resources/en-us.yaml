@@ -368,6 +368,7 @@ target:
     add-brokered-credential-sources: Add Brokered Credentials
     add-injected-application-credential-sources: Add Injected Application Credentials
     remove-address: Remove address and save
+    enable-session-recording: Enable Session Recording
   types:
     tcp: Generic TCP
     ssh: SSH
