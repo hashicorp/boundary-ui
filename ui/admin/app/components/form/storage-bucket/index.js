@@ -17,12 +17,4 @@ export default class FormStorageBucketComponent extends Component {
     ).model;
     this.args.model.scopeModel = selectedScopeModel;
   }
-
-  /**
-   * Call passed cancel function.
-   */
-  @action
-  cancel() {
-    this.args.cancel();
-  }
 }
