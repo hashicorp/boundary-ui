@@ -49,6 +49,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
+      storage_bucket_id: null,
       attributes: {
         default_port: 1234,
       },
@@ -127,6 +128,49 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
+  test('it serializes only storage_bucket_id and version when an `adapterOptions.method` is passed for set storage bucket', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'User',
+      description: 'Description',
+      storage_bucket_id: 'bucketID',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      method: 'set-storage-bucket',
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      storage_bucket_id: 'bucketID',
+      version: 1,
+    });
+  });
+
+  test('it serializes only version when an `adapterOptions.method` is passed for remove storage bucket', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'User',
+      description: 'Description',
+      storage_bucket_id: 'bucketID',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      method: 'remove-storage-bucket',
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      version: 1,
+    });
+  });
+
   test('it serializes the worker_filter attribute if present', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -155,6 +199,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: 'worker',
       egress_worker_filter: null,
       ingress_worker_filter: null,
+      storage_bucket_id: null,
       attributes: {
         default_port: 1234,
       },
@@ -190,6 +235,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: 'egress worker',
       ingress_worker_filter: null,
+      storage_bucket_id: null,
       attributes: {
         default_port: 1234,
       },
@@ -225,6 +271,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: 'ingress worker',
+      storage_bucket_id: null,
       attributes: {
         default_port: 1234,
       },
@@ -433,6 +480,39 @@ module('Unit | Serializer | target', function (hooks) {
           brokered_credential_source_ids: [],
           injected_application_credential_source_ids: [],
           ingress_worker_filter: 'ingress worker',
+        },
+        relationships: {},
+      },
+    });
+  });
+
+  test('it normalizes the storage_bucket_id attribute if present', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const target = store.createRecord('target').constructor;
+    const payload = {
+      id: '1',
+      name: 'Target 1',
+      storage_bucket_id: 'bucketID',
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      target,
+      payload
+    );
+    assert.deepEqual(normalized, {
+      included: [],
+      data: {
+        id: '1',
+        type: 'target',
+        attributes: {
+          authorized_actions: [],
+          name: 'Target 1',
+          host_sources: [],
+          brokered_credential_source_ids: [],
+          injected_application_credential_source_ids: [],
+          storage_bucket_id: 'bucketID',
         },
         relationships: {},
       },

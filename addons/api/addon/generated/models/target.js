@@ -83,4 +83,9 @@ export default class GeneratedTargetModel extends BaseModel {
       'An IP address or DNS name for the session to connect to. Cannot be used in conjunction with host sources.',
   })
   address;
+
+  @attr('string', {
+    description: 'The storage bucket associated with this target.',
+  })
+  storage_bucket_id;
 }

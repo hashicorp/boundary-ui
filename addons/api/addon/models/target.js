@@ -323,6 +323,45 @@ export default class TargetModel extends GeneratedTargetModel {
       options
     );
   }
+
+  /**
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @returns {Promise}
+   */
+  setStorageBucket(options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'set-storage-bucket',
+    };
+
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @returns {Promise}
+   */
+  removeStorageBucket(options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'remove-storage-bucket',
+    };
+
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
   /**
    * True if the target type is tcp.
    * @type {boolean}

@@ -41,6 +41,16 @@ export default class TargetSerializer extends ApplicationSerializer {
         snapshot,
         injectedApplicationCredentialSourceIDs
       );
+
+    if (snapshot?.adapterOptions?.method === 'set-storage-bucket') {
+      serialized = this.serializeWithStorageBucket(snapshot);
+    }
+    if (snapshot?.adapterOptions?.method === 'remove-storage-bucket') {
+      return {
+        version: snapshot.attr('version'),
+      };
+    }
+
     return serialized;
   }
 
@@ -89,6 +99,19 @@ export default class TargetSerializer extends ApplicationSerializer {
     return {
       version: snapshot.attr('version'),
       injected_application_credential_source_ids,
+    };
+  }
+
+  /**
+   * Returns a payload containing only version and storage bucket id,
+   * rather than existing instances on the model.
+   * @param {Snapshot} snapshot
+   * @returns {object}
+   */
+  serializeWithStorageBucket(snapshot) {
+    return {
+      version: snapshot.attr('version'),
+      storage_bucket_id: snapshot?.attr('storage_bucket_id'),
     };
   }
 }
