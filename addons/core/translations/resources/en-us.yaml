@@ -217,6 +217,8 @@ session-recording:
   connection:
     title: Connection
     title_plural: Connections
+  channels-by-connection:
+    title: Channels by connection
   channel:
     title: Channel
     title_plural: Channels

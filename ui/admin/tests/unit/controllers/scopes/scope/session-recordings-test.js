@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'admin/tests/helpers';
 
-module('Unit | Controller | scopes/scope/session-recordings', function (hooks) {
+module('Unit | Controller | session-recordings', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
