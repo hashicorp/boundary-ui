@@ -659,7 +659,15 @@ function routes() {
   });
 
   // storage-buckets
-  this.get('/storage-buckets');
+  this.get(
+    '/storage-buckets',
+    ({ storageBuckets }, { queryParams: { scope_id: scopeId, recursive } }) => {
+      if (recursive && scopeId === 'global') {
+        return storageBuckets.all();
+      }
+      return storageBuckets.where({ scopeId });
+    }
+  );
   this.get('/storage-buckets/:id');
   this.del('/storage-buckets/:id');
   this.patch('/storage-buckets/:id');
@@ -683,12 +691,7 @@ function routes() {
   );
 
   // session recordings
-  this.get(
-    '/session-recordings',
-    ({ sessionRecordings }, { queryParams: { scope_id: scopeId } }) => {
-      return sessionRecordings.where({ scopeId });
-    }
-  );
+  this.get('/session-recordings');
   this.get(
     '/session-recordings/:idMethod',
     async ({ sessionRecordings }, { params: { idMethod } }) => {
