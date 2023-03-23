@@ -35,6 +35,15 @@ function routes() {
 
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
+
+  this.get('/controller-metadata.json', () => {
+    return {
+      license: {
+        edition: 'ent',
+      },
+    };
+  });
+
   // make this `/api`, for example, if your API is namespaced
   this.namespace = environmentConfig.api.namespace;
   // delay for each request, automatically set to 0 during testing

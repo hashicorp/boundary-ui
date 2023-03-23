@@ -1,6 +1,6 @@
 const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 
-const selectedEdition = EDITION;
+const defaultEdition = EDITION;
 
 // Base edition declares available features, disabled by default.
 const baseEdition = {
@@ -25,14 +25,14 @@ featureEditions.oss = {
   'target-worker-filters-v2': true,
   'target-network-address': true,
 };
-featureEditions.enterprise = {
+featureEditions.ent = {
   ...featureEditions.oss,
   'ssh-target': true,
   'target-worker-filters-v2-ingress': true,
   'vault-worker-filter': true,
 };
 featureEditions.hcp = {
-  ...featureEditions.enterprise,
+  ...featureEditions.ent,
   'byow-pki-hcp-cluster-id': true,
   'target-worker-filters-v2-hcp': true,
 };
@@ -49,6 +49,6 @@ const enableFeaturesInAllEditions = (features = {}, ENV) => {
 
 module.exports = {
   featureEditions,
-  selectedEdition,
+  defaultEdition,
   enableFeaturesInAllEditions,
 };

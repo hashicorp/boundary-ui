@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import config from 'admin/config/environment';
 
-const { selectedEdition, featureEditions } = config;
+const { defaultEdition, featureEditions } = config;
 
 export default class FeatureEditionService extends Service {
   // =services
@@ -24,8 +24,8 @@ export default class FeatureEditionService extends Service {
   /**
    * Initializes the selected edition from the config.
    */
-  initialize() {
-    this.setEdition(selectedEdition);
+  initialize(edition) {
+    this.setEdition(edition || defaultEdition);
   }
 
   setEdition(edition) {

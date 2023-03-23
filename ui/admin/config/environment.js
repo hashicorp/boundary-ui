@@ -98,7 +98,7 @@ module.exports = function (environment) {
       timeout: 4000,
     },
 
-    selectedEdition: features.selectedEdition,
+    defaultEdition: features.defaultEdition,
     featureEditions: features.featureEditions,
     featureFlags: {},
   };
@@ -125,7 +125,7 @@ module.exports = function (environment) {
     };
 
     // Default edition in development
-    ENV.selectedEdition = 'enterprise';
+    ENV.defaultEdition = 'ent';
     features.enableFeaturesInAllEditions(
       {
         // Show edition toggle in UI in development
@@ -159,7 +159,7 @@ module.exports = function (environment) {
      * approach ensures that test cases are easy to read and understand,
      * since their feature requirements are embedded.
      */
-    ENV.selectedEdition = 'enterprise';
+    ENV.defaultEdition = 'ent';
   }
 
   if (environment === 'production') {
