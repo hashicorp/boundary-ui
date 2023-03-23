@@ -14,6 +14,7 @@ const baseEdition = {
   'target-worker-filters-v2-hcp': false,
   'target-network-address': false,
   'vault-worker-filter': false,
+  'session-recording': false,
 };
 // Editions maps edition keys to their associated featuresets.
 const featureEditions = {};
@@ -30,6 +31,7 @@ featureEditions.enterprise = {
   'ssh-target': true,
   'target-worker-filters-v2-ingress': true,
   'vault-worker-filter': true,
+  'session-recording': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
