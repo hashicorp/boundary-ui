@@ -8,9 +8,9 @@
   </page.header>
 
   <page.body>
-    {{#if @model}}
+    {{#if this.hasSessionRecordings}}
       <Hds::Table
-        @model={{@model}}
+        @model={{@model.sessionRecordings}}
         @density='tall'
         @columns={{array
           (hash label=(t 'resources.session-recording.form.time.label'))
@@ -66,6 +66,33 @@
           </B.Tr>
         </:body>
       </Hds::Table>
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.session-recording.messages.none.title'}}
+          as |message|
+        >
+          <message.description>
+            {{#if this.hasSessionRecordingsConfigured}}
+              {{! storage buckets exist but no recordings }}
+              {{t 'resources.session-recording.messages.none.description'}}
+            {{else}}
+              {{! No storage buckets exist }}
+              {{t
+                'resources.session-recording.messages.none.no-storage-bucket-description'
+              }}
+            {{/if}}
+          </message.description>
+          {{#unless this.hasSessionRecordingsConfigured}}
+            <Hds::Link::Standalone
+              @icon='plus-circle'
+              @iconPosition='leading'
+              @route='scopes.scope.storage-buckets.new'
+              @text={{t 'resources.storage-bucket.messages.none.link'}}
+            />
+          {{/unless}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
     {{/if}}
   </page.body>
 </Rose::Layout::Page>

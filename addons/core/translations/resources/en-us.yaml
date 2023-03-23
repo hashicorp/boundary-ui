@@ -233,6 +233,11 @@ session-recording:
       label: Target
     duration:
       label: Duration
+  messages:
+    none:
+      title: Welcome to session recording
+      description: Review, playback, and download recorded sessions.  To get started, configure recording on a target and start a session.
+      no-storage-bucket-description: To start using session recordings, create a storage bucket and configure recording on a target.
 storage-bucket:
   title: Storage Bucket
   title_plural: Storage Buckets

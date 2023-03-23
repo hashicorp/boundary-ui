@@ -20,14 +20,21 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
 
   /**
    * Load all session recordings.
-   * @return {SessionRecordingModel}
+   * @return {{sessionRecordings: Array, storageBuckets: Array}}
    */
-  model() {
-    // TODO: awaiting modeled data
+  async model() {
     const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
     // if (this.can.can('list session-recording', scope, { collection: 'session-recordings' })) {
-    return this.store.query('session-recording', { scope_id });
+    const { id: scope_id } = scope;
+    const sessionRecordings = await this.store.findAll('session-recording');
+    const storageBuckets = await this.store.query('storage-bucket', {
+      scope_id,
+      recursive: true,
+    });
+    return {
+      sessionRecordings,
+      storageBuckets,
+    };
     // }
   }
 
