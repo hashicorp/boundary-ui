@@ -687,6 +687,29 @@
   /* stylelint-enable selector-class-pattern */
 }
 
+// secret input field
+.secret-input {
+  display: flex;
+  align-items: flex-end;
+  column-gap: 0.5rem;
+  position: relative;
+
+  .overlay {
+    width: 60%;
+    height: 1rem;
+    position: absolute;
+    bottom: 2.15rem;
+    left: 0.25rem;
+    border-radius: 0.25rem;
+    background-color: var(--token-color-palette-neutral-200);
+  }
+
+  .hds-button {
+    margin-bottom: 1.5rem;
+    flex-basis: 6rem;
+  }
+}
+
 // session recording player
 .session-recording-player {
   --player-background-color: #252937;
