@@ -13,14 +13,14 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    * Tracks when secret can be updated
    * @type {boolean}
    */
-  @tracked editing = false;
+  @tracked isEditing = false;
 
   /**
    * Returns true if the resource form is in read only mode
    * @type {boolean}
    */
   get isDisabled() {
-    return this.args.disabled;
+    return this.args.isDisabled;
   }
 
   /**
@@ -30,7 +30,7 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    * @type {boolean}
    */
   get isActionable() {
-    return this.args.showEditButton && !this.editing;
+    return this.args.showEditButton && !this.isEditing;
   }
 
   // =actions
@@ -41,7 +41,7 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    */
   @action
   enableEdit() {
-    if (!this.args.disabled) this.editing = true;
+    if (!this.args.isDisabled) this.isEditing = true;
   }
 
   /**
@@ -51,7 +51,7 @@ export default class FormFieldSecretInputIndexComponent extends Component {
    */
   @action
   cancelEdit() {
-    this.editing = false;
+    this.isEditing = false;
     this.args.cancel();
   }
 }

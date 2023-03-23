@@ -13,7 +13,7 @@
     @value={{@value}}
     @type={{@type}}
     name={{@name}}
-    disabled={{or @disabled (not this.editing)}}
+    disabled={{or @isDisabled (not this.isEditing)}}
     ...attributes
     as |F|
   >
@@ -24,7 +24,7 @@
     <Hds::Button
       @text={{t 'actions.edit'}}
       @icon='edit'
-      disabled={{@disabled}}
+      disabled={{@isDisabled}}
     />
   {{else if this.isActionable}}
     <Hds::Button
