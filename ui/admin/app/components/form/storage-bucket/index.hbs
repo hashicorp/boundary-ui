@@ -60,9 +60,9 @@
       as |F|
     >
       <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.scope.help'
-        }}</F.HelperText>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.scope.help'}}
+      </F.HelperText>
       <F.Options>
         {{#each @scopes as |scope|}}
           <option value={{scope.model.id}}>{{scope.model.displayName}}</option>
@@ -187,30 +187,32 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::TextInput::Field
-    @isRequired={{true}}
-    @value={{@model.secret_access_key}}
-    @isInvalid={{@model.errors.secret_access_key}}
-    @type='text'
-    name='secret_access_key'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'secret_access_key')}}
-    as |F|
-  >
-    <F.Label>{{t
-        'resources.storage-bucket.form.secret_access_key.label'
-      }}</F.Label>
-    <F.HelperText>{{t
-        'resources.storage-bucket.form.secret_access_key.help'
-      }}</F.HelperText>
-    {{#if @model.errors.secret_access_key}}
-      <F.Error as |E|>
-        {{#each @model.errors.secret_access_key as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
+  {{#if @model.isNew}}
+    <Hds::Form::TextInput::Field
+      @isRequired={{true}}
+      @value={{@model.secret_access_key}}
+      @isInvalid={{@model.errors.secret_access_key}}
+      @type='text'
+      name='secret_access_key'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'secret_access_key')}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.storage-bucket.form.secret_access_key.label'
+        }}</F.Label>
+      <F.HelperText>{{t
+          'resources.storage-bucket.form.secret_access_key.help'
+        }}</F.HelperText>
+      {{#if @model.errors.secret_access_key}}
+        <F.Error as |E|>
+          {{#each @model.errors.secret_access_key as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
 
   <Hds::Form::TextInput::Field
     @isRequired={{true}}
