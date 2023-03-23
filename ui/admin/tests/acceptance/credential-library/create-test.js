@@ -225,7 +225,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-certificate');
+    featuresService.disable('ssh-target');
     assert.expect(1);
     await visit(urls.newCredentialLibrary);
 

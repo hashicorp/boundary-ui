@@ -41,7 +41,7 @@
       placeholder='/home/ubuntu/boundary'
     />
 
-    {{#if (feature-flag 'byow-pki-upstream')}}
+    {{#if (not (feature-flag 'byow-pki-hcp-cluster-id'))}}
       <form.input
         @name='initial_upstreams'
         @value={{this.initialUpstreams}}

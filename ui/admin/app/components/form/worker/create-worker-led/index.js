@@ -90,9 +90,9 @@ worker {
   public_addr = "${this.ipAddress || '<public_ip_address>'}"
   auth_storage_path = "${this.configFilePath || '<path>'}/worker1"
   ${
-    this.features.isEnabled('byow-pki-upstream')
-      ? `${tagsText}${upstreamText}`
-      : `${tagsText}`
+    this.features.isEnabled('byow-pki-hcp-cluster-id')
+      ? `${tagsText}`
+      : `${tagsText}${upstreamText}`
   }
 }`;
 

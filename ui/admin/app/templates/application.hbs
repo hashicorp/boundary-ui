@@ -33,7 +33,7 @@
 
             <dropdown.separator />
 
-            <dropdown.section @title={{t 'titles.toggle-color-theme'}}>
+            <dropdown.section @title={{t 'actions.toggle-color-theme'}}>
               <Rose::Form as |form|>
                 <form.radioGroup
                   @name='theme'
@@ -67,6 +67,39 @@
             </dropdown.section>
 
           </utilities.dropdown>
+
+          {{#if (feature-flag 'dev-edition-toggle')}}
+            <utilities.dropdown
+              data-test-dev-edition-toggle
+              @text={{t
+                'titles.feature-edition'
+                edition=(t (concat 'editions.' this.featureEdition.edition))
+              }}
+              @icon='flight-icons/svg/layers-16'
+              as |dropdown|
+            >
+              <dropdown.section @title={{t 'actions.toggle-feature-edition'}}>
+                <Rose::Form as |form|>
+                  <form.radioGroup
+                    @name='edition'
+                    @selectedValue={{this.featureEdition.edition}}
+                    @changed={{route-action 'toggleEdition'}}
+                    as |radioGroup|
+                  >
+                    {{#each this.featureEdition.editions as |edition|}}
+                      <dropdown.item>
+                        <radioGroup.radio
+                          @label={{t (concat 'editions.' edition)}}
+                          @value={{edition}}
+                        />
+                      </dropdown.item>
+                    {{/each}}
+                  </form.radioGroup>
+                </Rose::Form>
+              </dropdown.section>
+            </utilities.dropdown>
+          {{/if}}
+
         </header.utilities>
 
       {{/if}}
