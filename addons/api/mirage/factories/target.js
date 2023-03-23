@@ -26,6 +26,8 @@ export default factory.extend({
       'remove-host-sources',
       'add-credential-sources',
       'remove-credential-sources',
+      'set-storage-bucket',
+      'remove-storage-bucket',
     ],
   id: () => generateId('t_'),
 
@@ -66,6 +68,14 @@ export default factory.extend({
         .where((credential) => credential.scopeId === target.scope.id)
         .models.filter(() => randomBoolean())
         .map((cred) => cred.id);
+
+      const randomlySelectedStorageBucket = faker.helpers.arrayElement(
+        server.schema.storageBuckets.all().models
+      );
+      if (randomlySelectedStorageBucket && randomBoolean()) {
+        target.update({ storage_bucket_id: randomlySelectedStorageBucket.id });
+      }
+
       target.update({
         hostSets: randomlySelectedHostSets,
         brokeredCredentialSourceIds: [
