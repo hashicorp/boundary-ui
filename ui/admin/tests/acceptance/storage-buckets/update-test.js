@@ -45,20 +45,18 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   test('can save changes to an existing storage-bucket', async function (assert) {
     assert.expect(2);
     await visit(urls.storageBucket);
-    await click('form [type="button"]', 'Click edit mode');
+    await click('.rose-form-actions [type="button"]', 'Click edit mode');
     await fillIn('[name="name"]', 'Updated storage-bucket name');
     await click('.rose-form-actions [type="submit"]');
     assert.dom(`[href="${urls.storageBucket}"]`).isVisible();
-    assert
-      .dom('input[name="name"]')
-      .hasValue('Updated storage-bucket name');
+    assert.dom('input[name="name"]').hasValue('Updated storage-bucket name');
   });
 
   test('can cancel changes to an existing storage-bucket', async function (assert) {
     assert.expect(1);
     const name = instances.storageBucket.name;
     await visit(urls.storageBucket);
-    await click('form [type="button"]', 'Click edit mode');
+    await click('.rose-form-actions [type="button"]', 'Click edit mode');
     await fillIn('[name="name"]', 'Updated storage-bucket name');
     await click('.rose-form-actions [type="button"]');
     await assert.dom('input[name="name"]').hasValue(`${name}`);
