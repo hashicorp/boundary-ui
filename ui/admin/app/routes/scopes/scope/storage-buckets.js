@@ -28,7 +28,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
 
   /**
    * Load all storage buckets under current scope.
-   * @return {Promise{[StorageBucketModel]}}
+   * @return {Promise<[StorageBucketModel]>}
    */
   async model() {
     const scope = this.modelFor('scopes.scope');
@@ -38,7 +38,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
         collection: 'storage-buckets',
       })
     ) {
-      return this.store.query('storage-bucket', { scope_id });
+      return this.store.query('storage-bucket', { scope_id, recursive: true });
     }
   }
 
