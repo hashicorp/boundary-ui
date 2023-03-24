@@ -44,13 +44,13 @@ export default class GeneratedConnectionRecordingModel extends BaseModel {
     description: 'The time the Connection started.',
     readOnly: true,
   })
-  started_time;
+  start_time;
 
   @attr('date', {
     description: 'The time the Connection finished.',
     readOnly: true,
   })
-  finished_time;
+  end_time;
 
   @attr({
     description: 'The array of mime types that this recording will support.',

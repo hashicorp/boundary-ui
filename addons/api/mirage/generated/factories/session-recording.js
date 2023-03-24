@@ -13,10 +13,10 @@ export default Factory.extend({
   bytes_up: () => faker.datatype.number(),
   bytes_down: () => faker.datatype.number(),
   errors: () => faker.datatype.number({ max: 10 }),
-  started_time() {
-    return faker.date.recent(3, this.finished_time);
+  start_time() {
+    return faker.date.recent(3, this.end_time);
   },
-  finished_time() {
+  end_time() {
     return faker.date.recent(1, this.updated_time);
   },
   updated_time: () => faker.date.recent(),

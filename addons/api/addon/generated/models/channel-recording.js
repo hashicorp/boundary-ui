@@ -43,13 +43,13 @@ export default class GeneratedChannelRecordingModel extends BaseModel {
     description: 'The time the Channel started.',
     readOnly: true,
   })
-  started_time;
+  start_time;
 
   @attr('date', {
     description: 'The time the Channel finished.',
     readOnly: true,
   })
-  finished_time;
+  end_time;
 
   @attr({
     description: 'The array of mime types that this recording will support.',

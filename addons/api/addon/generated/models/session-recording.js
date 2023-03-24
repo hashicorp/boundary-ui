@@ -61,13 +61,13 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
     description: 'The time the Session started.',
     readOnly: true,
   })
-  started_time;
+  start_time;
 
   @attr('date', {
     description: 'The time the Session finished.',
     readOnly: true,
   })
-  finished_time;
+  end_time;
 
   @attr('date', {
     description: 'The time the Session recording was last updated.',
