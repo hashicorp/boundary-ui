@@ -10,6 +10,6 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
    * Session recording channel breadcrumb
    */
   get breadCrumb() {
-    return this.model.channel_id;
+    return this.model.channelRecording.id;
   }
 }
