@@ -222,6 +222,7 @@ session-recording:
   channel:
     title: Channel
     title_plural: Channels
+    details: Channel details
   session:
     title: Session Playback
   form:

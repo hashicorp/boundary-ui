@@ -6,7 +6,8 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t 'resources.session-recording.channel.title'}}</h2>
+    <h2>{{t 'resources.session-recording.channel.title'}}
+      {{@model.channelRecording.id}}</h2>
   </page.header>
 
   <page.body>
@@ -16,7 +17,50 @@
       </sb.Body>
 
       <sb.Sidebar>
-        <p>{{@model.channel_id}}</p>
+        <div>
+          <h3>{{t 'resources.session-recording.channel.details'}}</h3>
+          {{! Started time }}
+          <p>
+            <FlightIcon @name='calendar' />
+            {{@model.channelRecording.started_time}}
+          </p>
+
+          {{! Created By }}
+          <p>
+            <FlightIcon @name='corner-down-right' />
+            {{@model.sessionRecording.user.name}}
+          </p>
+
+          {{! Type }}
+          <p>
+            <FlightIcon @name='terminal-screen' />
+            {{@model.sessionRecording.type}}
+          </p>
+
+          {{! Duration }}
+          <p>
+            <FlightIcon @name='clock' />
+            {{@model.channelRecording.duration}}
+          </p>
+
+          {{! Bytes up }}
+          <p>
+            <FlightIcon @name='arrow-up' />
+            {{@model.channelRecording.bytes_up}}
+          </p>
+
+          {{! Bytes down }}
+          <p>
+            <FlightIcon @name='arrow-down' />
+            {{@model.channelRecording.bytes_down}}
+          </p>
+
+          {{! Errors }}
+          <p>
+            <FlightIcon @name='alert-triangle' />
+            {{@model.channelRecording.errors}}
+          </p>
+        </div>
       </sb.Sidebar>
     </Layout::Sidebar>
   </page.body>
