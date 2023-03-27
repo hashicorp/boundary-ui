@@ -22,11 +22,41 @@
   </page.actions>
 
   <page.body>
-    <Form::Target
-      @model={{@model}}
-      @submit={{route-action 'saveWithAddress' @model}}
-      @cancel={{route-action 'cancel' @model}}
-    />
+    <Layout::Sidebar as |sb|>
+      <sb.Body>
+        <Form::Target
+          @model={{@model}}
+          @submit={{route-action 'saveWithAddress' @model}}
+          @cancel={{route-action 'cancel' @model}}
+        />
+      </sb.Body>
+
+      {{#if (can 'setStorageBucket target' @model)}}
+        <sb.Sidebar>
+          <div class='target-sidebar'>
+            <div class='title-wrapper'>
+              <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
+              <Hds::Button
+                @color='secondary'
+                @text='settings'
+                @isIconOnly={{true}}
+                @icon='settings'
+                @route='scopes.scope.targets.target.enable-session-recording'
+              />
+            </div>
+            <p class='description'>
+              {{t 'resources.target.form.sidebar.help'}}
+            </p>
+            <Hds::Button
+              @text={{t 'resources.target.actions.enable-recording'}}
+              @color='secondary'
+              @route='scopes.scope.targets.target.enable-session-recording'
+            />
+          </div>
+        </sb.Sidebar>
+      {{/if}}
+    </Layout::Sidebar>
+
   </page.body>
 
 </Rose::Layout::Page>

@@ -643,6 +643,27 @@
   }
 }
 
+// target sidebar
+.target-sidebar {
+  .title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    .hds-button {
+      box-shadow: none;
+      border: none;
+      background-color: transparent;
+    }
+  }
+
+  .description {
+    color: var(--token-form-helper-text-color);
+    font-weight: var(--token-typography-font-weight-normal);
+    font-size: var(--token-typography-body-200-font-size);
+  }
+}
+
 .key-value-list {
   border: 0;
 

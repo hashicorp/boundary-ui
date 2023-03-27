@@ -384,6 +384,7 @@ target:
     add-injected-application-credential-sources: Add Injected Application Credentials
     remove-address: Remove address and save
     enable-session-recording: Enable Session Recording
+    enable-recording: Enable recording
   types:
     tcp: Generic TCP
     ssh: SSH
@@ -400,6 +401,9 @@ target:
     worker_filter:
       label: Worker Filter
       help: Deprecated. Boolean expression to filter the workers that are allowed to satisfy this request.
+    sidebar:
+      label: Session Recording
+      help: Record SSH sessions on this target and save them to an Amazon S3 bucket.
   questions:
     delete-host-sources:
       title: Remove associated host sources?
