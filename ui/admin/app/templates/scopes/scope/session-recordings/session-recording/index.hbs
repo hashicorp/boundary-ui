@@ -8,32 +8,78 @@
   </page.header>
 
   <page.body>
-    <Layout::Sidebar as |sb|>
-      <sb.Body>
-        <p>
-          {{t 'resources.session-recording.title'}}
-          {{@model.id}}
-        </p>
-
-        {{#each @model.connection_recordings as |connection|}}
-          <p>{{t 'resources.session-recording.connection.title'}}
-            {{connection.id}}</p>
-          {{#each connection.channel_recordings as |channel|}}
-            <p>
-              <LinkTo
-                @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
-                @model={{channel.id}}
-              >
-                {{channel.id}}
-              </LinkTo>
-            </p>
+    <div class='channels-by-connection'>
+      <Layout::Sidebar as |sb|>
+        <sb.Body>
+          {{#each @model.connection_recordings as |connection|}}
+            <div class='channels-by-connection-connection-header'>
+              <p class='hds-typography-display-300 hds-font-weight-semibold'>
+                {{t 'resources.session-recording.connection.title'}}
+                {{connection.id}}
+              </p>
+            </div>
+            <Hds::Table
+              @model={{connection.channel_recordings}}
+              @density='tall'
+              @columns={{array
+                (hash
+                  label=(t
+                    'resources.session-recording.connection.form.channel.label'
+                  )
+                )
+                (hash
+                  label=(t
+                    'resources.session-recording.connection.form.type.label'
+                  )
+                )
+                (hash
+                  label=(t
+                    'resources.session-recording.connection.form.summary.label'
+                  )
+                )
+                (hash label='' align='right')
+              }}
+            >
+              <:body as |B|>
+                <B.Tr>
+                  <B.Td>
+                    <span>{{B.data.id}}</span>
+                  </B.Td>
+                  <B.Td>
+                    <span>{{B.data.type}}</span>
+                  </B.Td>
+                  <B.Td>
+                    <span><FlightIcon @name='arrow-up' /></span>
+                    <span>{{B.data.bytes_up}}</span>
+                    <span><FlightIcon @name='arrow-down' /></span>
+                    <span>{{B.data.bytes_down}}</span>
+                    <span
+                      class='session-recording-list-cell-item hds-foreground-faint'
+                    >
+                      <span><FlightIcon @name='clock' /></span>
+                      <span>
+                        {{format-time-duration B.data.duration}}
+                      </span>
+                    </span>
+                  </B.Td>
+                  <B.Td align='right'>
+                    <Hds::Button
+                      @icon='play'
+                      @color='secondary'
+                      @text='Play'
+                      @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+                      @model={{B.data.id}}
+                    />
+                  </B.Td>
+                </B.Tr>
+              </:body>
+            </Hds::Table>
           {{/each}}
-        {{/each}}
-      </sb.Body>
-
-      <sb.Sidebar>
-        <p>{{t 'actions.help'}}</p>
-      </sb.Sidebar>
-    </Layout::Sidebar>
+        </sb.Body>
+        <sb.Sidebar>
+          <p>{{t 'actions.help'}}</p>
+        </sb.Sidebar>
+      </Layout::Sidebar>
+    </div>
   </page.body>
 </Rose::Layout::Page>

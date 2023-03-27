@@ -804,3 +804,10 @@
     align-items: center;
   }
 }
+
+// Channels by Connection
+.channels-by-connection {
+  &-connection-header {
+    padding: 0.875rem 1rem;
+  }
+}

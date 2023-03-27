@@ -217,6 +217,13 @@ session-recording:
   connection:
     title: Connection
     title_plural: Connections
+    form:
+      channel:
+        label: Channel
+      type:
+        label: Type
+      summary:
+        label: Summary
   channels-by-connection:
     title: Channels by connection
   channel:
