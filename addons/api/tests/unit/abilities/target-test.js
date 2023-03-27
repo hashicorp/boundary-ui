@@ -9,74 +9,132 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Abilities | Target', function (hooks) {
   setupTest(hooks);
 
+  let canService;
+
+  hooks.beforeEach(function () {
+    canService = this.owner.lookup('service:can');
+  });
+
   test('it reflects when a given target may connect based on authorized_actions', function (assert) {
     assert.expect(2);
-    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['authorize-session'],
     };
-    assert.ok(service.can('connect target', model));
+    assert.true(canService.can('connect target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('connect target', model));
+    assert.false(canService.can('connect target', model));
   });
 
   test('it reflects when a given target may add host sources', function (assert) {
     assert.expect(2);
-    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['add-host-sources'],
     };
-    assert.ok(service.can('addHostSources target', model));
+    assert.true(canService.can('addHostSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('addHostSources target', model));
+    assert.false(canService.can('addHostSources target', model));
   });
 
   test('it reflects when a given target may remove host sources', function (assert) {
     assert.expect(2);
-    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['remove-host-sources'],
     };
-    assert.ok(service.can('removeHostSources target', model));
+    assert.true(canService.can('removeHostSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('removeHostSources target', model));
+    assert.false(canService.can('removeHostSources target', model));
   });
 
   test('it reflects when a given target may add brokered credential sources', function (assert) {
     assert.expect(2);
-    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['add-credential-sources'],
     };
-    assert.ok(service.can('addBrokeredCredentialSources target', model));
+    assert.true(canService.can('addBrokeredCredentialSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('addBrokeredCredentialSources target', model));
+    assert.false(canService.can('addBrokeredCredentialSources target', model));
   });
 
   test('it reflects when a given target may remove credential sources', function (assert) {
     assert.expect(2);
-    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['remove-credential-sources'],
     };
-    assert.ok(service.can('removeCredentialSources target', model));
+    assert.true(canService.can('removeCredentialSources target', model));
     model.authorized_actions = [];
-    assert.notOk(service.can('removeCredentialSources target', model));
+    assert.false(canService.can('removeCredentialSources target', model));
   });
 
   test('it reflects when a given ssh target may add injected application credential sources', function (assert) {
-    assert.expect(2);
-    const service = this.owner.lookup('service:can');
+    assert.expect(3);
     const model = {
       authorized_actions: ['add-credential-sources'],
       isSSH: true,
     };
-    assert.ok(
-      service.can('addInjectedApplicationCredentialSources target', model)
+    const modelWithoutAuthorizedActions = {
+      authorized_actions: [],
+      isSSH: true,
+    };
+    const modelWithoutSSHType = {
+      authorized_actions: ['add-credential-sources'],
+    };
+
+    assert.true(
+      canService.can('addInjectedApplicationCredentialSources target', model)
     );
-    model.authorized_actions = [];
-    assert.notOk(
-      service.can('addInjectedApplicationCredentialSources target', model)
+    assert.false(
+      canService.can(
+        'addInjectedApplicationCredentialSources target',
+        modelWithoutAuthorizedActions
+      )
+    );
+    assert.false(
+      canService.can(
+        'addInjectedApplicationCredentialSources target',
+        modelWithoutSSHType
+      )
+    );
+  });
+
+  test('it reflects when a given ssh target may set a storage bucket', function (assert) {
+    assert.expect(3);
+    const model = {
+      authorized_actions: ['set-storage-bucket'],
+      isSSH: true,
+    };
+    const modelWithoutAuthorizedActions = {
+      authorized_actions: [],
+      isSSH: true,
+    };
+    const modelWithoutSSHType = {
+      authorized_actions: ['set-storage-bucket'],
+    };
+
+    assert.true(canService.can('setStorageBucket target', model));
+    assert.false(
+      canService.can('setStorageBucket target', modelWithoutAuthorizedActions)
+    );
+    assert.false(
+      canService.can('setStorageBucket target', modelWithoutSSHType)
+    );
+  });
+
+  test('it reflects when a given target may remove a storage bucket', function (assert) {
+    assert.expect(2);
+    const model = {
+      authorized_actions: ['remove-storage-bucket'],
+    };
+    const modelWithoutAuthorizedActions = {
+      authorized_actions: [],
+      isSSH: true,
+    };
+
+    assert.true(canService.can('removeStorageBucket target', model));
+    assert.false(
+      canService.can(
+        'removeStorageBucket target',
+        modelWithoutAuthorizedActions
+      )
     );
   });
 });
