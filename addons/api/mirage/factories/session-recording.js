@@ -33,6 +33,11 @@ export default factory.extend({
       const target = session.target;
       target.id = 'deleted_target';
 
+      const storageBucket = pickRandomElement(
+        server.schema.storageBuckets.all().models
+      );
+      target.storage_bucket_id = storageBucket.id;
+
       sessionRecording.update({
         user,
         target,
@@ -46,6 +51,11 @@ export default factory.extend({
       const user = pickRandomElement(server.schema.users.all().models);
       const session = pickRandomElement(server.schema.sessions.all().models);
       const target = session.target;
+
+      const storageBucket = pickRandomElement(
+        server.schema.storageBuckets.all().models
+      );
+      target.storage_bucket_id = storageBucket.id;
 
       sessionRecording.update({
         user,

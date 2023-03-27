@@ -36,6 +36,8 @@ export default ApplicationSerializer.extend({
       json.target = TargetSerializer.prototype._hashForModel.apply(this, [
         target,
       ]);
+      json.target.scope.name = model.target.scope.name;
+      json.target.scope.description = model.target.scope.description;
     }
 
     json.session_id = model.sessionId;
