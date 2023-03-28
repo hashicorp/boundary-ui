@@ -19,14 +19,14 @@ export default class GeneratedConnectionRecordingModel extends BaseModel {
   })
   connection_id;
 
-  @attr('number', {
+  @attr('string', {
     description:
       'The total number of bytes uploaded from the client in this Connection.',
     readOnly: true,
   })
   bytes_up;
 
-  @attr('number', {
+  @attr('string', {
     description:
       'The total number of bytes downloaded to the client in this Connection.',
     readOnly: true,

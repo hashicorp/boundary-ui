@@ -12,14 +12,14 @@ import { attr } from '@ember-data/model';
 export default class GeneratedChannelRecordingModel extends BaseModel {
   // =attributes
 
-  @attr('number', {
+  @attr('string', {
     description:
       'The total number of bytes uploaded from the client in this Channel.',
     readOnly: true,
   })
   bytes_up;
 
-  @attr('number', {
+  @attr('string', {
     description:
       'The total number of bytes downloaded to the client in this Channel.',
     readOnly: true,
