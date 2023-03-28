@@ -12,12 +12,6 @@ import { attr } from '@ember-data/model';
 export default class GeneratedChannelRecordingModel extends BaseModel {
   // =attributes
 
-  @attr('string', {
-    description: 'The type of the resource, to help differentiate schemas',
-    readOnly: true,
-  })
-  type;
-
   @attr('number', {
     description:
       'The total number of bytes uploaded from the client in this Channel.',
