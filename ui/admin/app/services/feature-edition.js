@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import config from 'admin/config/environment';
 
-console.log(config.features.licensedFeatures);
 
 export default class FeatureEditionService extends Service {
   // =services
