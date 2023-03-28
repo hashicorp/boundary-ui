@@ -10,7 +10,7 @@ export async function initialize(owner) {
   try {
     const response = await fetch(url);
     const json = await response.json();
-    edition = edition || json?.license?.edition;
+    const edition = json?.license?.edition;
     features = json?.license?.features;
   } catch (e) {
     // if the request fails, the service will initialize the default edition
