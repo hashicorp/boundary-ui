@@ -121,7 +121,10 @@
             {{! Bucket name }}
             <p>
               <FlightIcon @name='cloud-check' />
-              {{@model.storageBucket.name}}
+              {{or
+                @model.storageBucket.name
+                (t 'resources.storage-bucket.title')
+              }}
             </p>
           </div>
         </sb.Sidebar>
