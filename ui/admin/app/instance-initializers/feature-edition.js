@@ -1,19 +1,24 @@
 import fetch from 'fetch';
 
 export async function initialize(owner) {
+  const service = owner.lookup('service:feature-edition');
+  const url = '/metadata.json';
   let edition;
-  const url = '/controller-metadata.json';
+  let features;
+
   // Attempt to load edition for the metadata JSON
   try {
     const response = await fetch(url);
     const json = await response.json();
     edition = edition || json?.license?.edition;
+    features = json?.license?.features;
   } catch (e) {
-    // no op
+    // if the request fails, the service will initialize the default edition
+    // as specified in the config
   }
-  // Initialize the feature edition service with the specified edition
-  const service = owner.lookup('service:feature-edition');
-  service.initialize(edition);
+
+  // Initialize the feature edition and its associated features
+  service.initialize(edition, features);
 }
 
 export default {

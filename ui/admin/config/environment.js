@@ -98,8 +98,7 @@ module.exports = function (environment) {
       timeout: 4000,
     },
 
-    defaultEdition: features.defaultEdition,
-    featureEditions: features.featureEditions,
+    features: features,
     featureFlags: {},
   };
 
@@ -125,14 +124,10 @@ module.exports = function (environment) {
     };
 
     // Default edition in development
-    ENV.defaultEdition = 'ent';
-    features.enableFeaturesInAllEditions(
-      {
-        // Show edition toggle in UI in development
-        'dev-edition-toggle': true,
-      },
-      ENV
-    );
+    ENV.defaultEdition = 'enterprise';
+    features.featureEditions.oss['dev-edition-toggle'] = true;
+    features.featureEditions.enterprise['dev-edition-toggle'] = true;
+    features.featureEditions.hcp['dev-edition-toggle'] = true;
   }
 
   if (environment === 'test') {
@@ -152,14 +147,14 @@ module.exports = function (environment) {
     ENV.enableConfirmService = false;
 
     /**
-     * Enable additional features for testing purposes.
+     * Enable enterprise for testing purposes.
      * [TODO] Tests should be refactored such that each test case
      * explicitly enables the features and/or edition that it needs.
      * By default, tests should have no features enabled.  This explicit
      * approach ensures that test cases are easy to read and understand,
      * since their feature requirements are embedded.
      */
-    ENV.defaultEdition = 'ent';
+    ENV.defaultEdition = 'enterprise';
   }
 
   if (environment === 'production') {

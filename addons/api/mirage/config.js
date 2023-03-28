@@ -15,6 +15,7 @@ import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 
+const { licensedFeatures } = environmentConfig.features;
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
@@ -36,10 +37,11 @@ function routes() {
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
 
-  this.get('/controller-metadata.json', () => {
+  this.get('/metadata.json', () => {
     return {
       license: {
-        edition: 'ent',
+        edition: 'enterprise',
+        features: Object.keys(licensedFeatures),
       },
     };
   });
