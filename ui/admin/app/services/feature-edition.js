@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import config from 'admin/config/environment';
 
-const { defaultEdition, featureEditions } = config.features;
+console.log(config.features.licensedFeatures);
 
 export default class FeatureEditionService extends Service {
   // =services
@@ -12,11 +12,13 @@ export default class FeatureEditionService extends Service {
 
   // =attributes
 
+  licensedFeatures = Object.keys(config.features.licensedFeatures);
+
   @tracked edition;
 
   // array of edition strings
   get editions() {
-    return Object.keys(featureEditions);
+    return Object.keys(config.features.featureEditions);
   }
 
   // =methods
@@ -27,7 +29,7 @@ export default class FeatureEditionService extends Service {
    * @param {?string[]} enabledFeatures - list of extra features to enable
    */
   initialize(edition, enabledFeatures) {
-    this.setEdition(edition || defaultEdition, enabledFeatures);
+    this.setEdition(edition || config.features.defaultEdition, enabledFeatures);
   }
 
   /**
@@ -37,7 +39,7 @@ export default class FeatureEditionService extends Service {
    */
   setEdition(edition, enabledFeatures) {
     this.edition = edition;
-    const editionFlags = featureEditions[edition];
+    const editionFlags = config.features.featureEditions[edition];
     Object.keys(editionFlags).forEach((flag) => {
       if (editionFlags[flag]) {
         this.features.enable(flag);

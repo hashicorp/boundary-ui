@@ -125,9 +125,15 @@ module.exports = function (environment) {
 
     // Default edition in development
     ENV.defaultEdition = 'enterprise';
+    // Enable development-only features
     features.featureEditions.oss['dev-edition-toggle'] = true;
     features.featureEditions.enterprise['dev-edition-toggle'] = true;
     features.featureEditions.hcp['dev-edition-toggle'] = true;
+    // Enable licensed features by default in enterprise and hcp
+    Object.keys(features.licensedFeatures).forEach((feature) => {
+      features.featureEditions.enterprise[feature] = true;
+      features.featureEditions.hcp[feature] = true;
+    });
   }
 
   if (environment === 'test') {
@@ -155,6 +161,11 @@ module.exports = function (environment) {
      * since their feature requirements are embedded.
      */
     ENV.defaultEdition = 'enterprise';
+    // Enable licensed features by default in enterprise and hcp
+    Object.keys(features.licensedFeatures).forEach((feature) => {
+      features.featureEditions.enterprise[feature] = true;
+      features.featureEditions.hcp[feature] = true;
+    });
   }
 
   if (environment === 'production') {
