@@ -8,7 +8,7 @@ import { trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-import { TYPES_TARGET } from 'api/models/target';
+import { TYPES_TARGET, TYPE_TARGET_SSH } from 'api/models/target';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
@@ -72,7 +72,8 @@ export default factory.extend({
       const randomlySelectedStorageBucket = faker.helpers.arrayElement(
         server.schema.storageBuckets.all().models
       );
-      if (randomlySelectedStorageBucket && randomBoolean()) {
+
+      if (randomlySelectedStorageBucket && target.type === TYPE_TARGET_SSH) {
         target.update({ storage_bucket_id: randomlySelectedStorageBucket.id });
       }
 
