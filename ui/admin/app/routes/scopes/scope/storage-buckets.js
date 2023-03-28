@@ -27,7 +27,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
   }
 
   /**
-   * Load all storage buckets under current scope.
+   * Load all storage buckets under global and org scopes.
    * @return {Promise<[StorageBucketModel]>}
    */
   async model() {

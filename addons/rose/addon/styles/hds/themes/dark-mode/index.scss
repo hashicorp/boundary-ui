@@ -102,6 +102,9 @@
     --token-color-palette-neutral-200
   );
   --token-form-indicator-optional-color: var(--token-color-palette-neutral-200);
+  --token-color-foreground-high-contrast: var(
+    --token-color-palette-neutral-700
+  );
 }
 
 @media (prefers-color-scheme: dark) {

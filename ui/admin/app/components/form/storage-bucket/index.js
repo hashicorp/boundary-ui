@@ -5,6 +5,7 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { set } from '@ember/object';
 
 export default class FormStorageBucketComponent extends Component {
   // =actions
@@ -16,5 +17,14 @@ export default class FormStorageBucketComponent extends Component {
       (element) => element.model.id === selectedScopeId
     ).model;
     this.args.model.scopeModel = selectedScopeModel;
+  }
+
+  @action
+  rollbackSecretAttrs(currentAttr) {
+    const changedAttrs = this.args.model.changedAttributes();
+    if (currentAttr in changedAttrs) {
+      const [oldVal] = changedAttrs[currentAttr];
+      set(this.args.model, currentAttr, oldVal);
+    }
   }
 }

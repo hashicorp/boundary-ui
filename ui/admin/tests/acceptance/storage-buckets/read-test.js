@@ -16,6 +16,9 @@ module('Acceptance | storage-buckets | read', function (hooks) {
 
   let features;
 
+  const MESSAGE_SELECTOR = '.rose-message-subtitle';
+  const TABLE_LINK_SELECTOR = '.hds-table__tbody tr:first-child a';
+
   const instances = {
     scopes: {
       global: null,
@@ -27,6 +30,8 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   const urls = {
     globalScope: null,
     storageBuckets: null,
+    storageBucket: null,
+    unknownStorageBucket: null,
   };
 
   hooks.beforeEach(function () {
@@ -40,19 +45,46 @@ module('Acceptance | storage-buckets | read', function (hooks) {
     });
     urls.globalScope = `/scopes/global`;
     urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
+    urls.storageBucket = `${urls.storageBuckets}/${instances.storageBucket.id}`;
+    urls.unknownStorageBucket = `${urls.storageBuckets}/foo`;
 
     features = this.owner.lookup('service:features');
     features.enable('session-recording');
     authenticateSession({});
   });
 
-  test('visiting storage buckets', async function (assert) {
+  test('visiting a storage bucket', async function (assert) {
     assert.expect(1);
     await visit(urls.globalScope);
     await a11yAudit();
 
     await click(`[href="${urls.storageBuckets}"]`);
+    await a11yAudit();
+    await click(`[href="${urls.storageBucket}"]`);
+    await a11yAudit();
 
-    assert.strictEqual(currentURL(), urls.storageBuckets);
+    assert.strictEqual(currentURL(), urls.storageBucket);
+  });
+
+  test('cannot navigate to a storage bucket without proper authorization', async function (assert) {
+    assert.expect(1);
+    await visit(urls.globalScope);
+    instances.storageBucket.authorized_actions =
+      instances.storageBucket.authorized_actions.filter(
+        (item) => item !== 'read'
+      );
+
+    await click(`[href="${urls.storageBuckets}"]`);
+
+    assert.dom(TABLE_LINK_SELECTOR).doesNotExist();
+  });
+
+  test('visiting an unknown storage bucket displays 404 message', async function (assert) {
+    assert.expect(1);
+
+    await visit(urls.unknownStorageBucket);
+    await a11yAudit();
+
+    assert.dom(MESSAGE_SELECTOR).hasText('Error 404');
   });
 });
