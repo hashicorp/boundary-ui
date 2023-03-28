@@ -22,11 +22,13 @@
       >
         <:body as |B|>
           <B.Tr>
+            {{! Time }}
             <B.Td>
               <span class='hds-foreground-faint'>
                 {{format-date B.data.start_time format='mmddyyhhmm'}}
               </span>
             </B.Td>
+            {{! User }}
             <B.Td>
               <div
                 class='session-recording-list-cell-item hds-font-weight-semibold'
@@ -35,14 +37,19 @@
                 <span>{{B.data.user.name}}</span>
               </div>
             </B.Td>
+            {{! Target }}
             <B.Td>
               <div
                 class='session-recording-list-cell-item hds-font-weight-semibold'
               >
+                <span><FlightIcon @name='grid' /></span>
+                <span>{{B.data.targetScopeDisplayName}}</span>
+                <span class='hds-foreground-faint'>/</span>
                 <span><FlightIcon @name='target' /></span>
                 <span>{{B.data.target.name}}</span>
               </div>
             </B.Td>
+            {{! Duration }}
             <B.Td>
               <div
                 class='session-recording-list-cell-item hds-foreground-faint'

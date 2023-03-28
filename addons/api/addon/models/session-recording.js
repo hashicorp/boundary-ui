@@ -27,4 +27,8 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
   get isUnknown() {
     return !TYPES_SESSION_RECORDING.includes(this.type);
   }
+
+  get targetScopeDisplayName() {
+    return this.target?.scope?.name || this.target?.scope?.id;
+  }
 }

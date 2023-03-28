@@ -34,8 +34,11 @@ module('Acceptance | session recordings | list', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    instances.sessionRecording = this.server.create('session-recording', {
+    instances.scopes.targetModel = this.server.create('target', {
       scope: instances.scopes.global,
+    });
+    instances.sessionRecording = this.server.create('session-recording', {
+      target: instances.scopes.targetModel,
     });
     urls.globalScope = `/scopes/global`;
     urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
