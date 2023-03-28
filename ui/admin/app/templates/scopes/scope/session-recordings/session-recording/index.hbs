@@ -11,7 +11,10 @@
     <div class='channels-by-connection'>
       <Layout::Sidebar as |sb|>
         <sb.Body>
-          {{#each @model.connection_recordings as |connection|}}
+          {{#each
+            @model.sessionRecording.connection_recordings
+            as |connection|
+          }}
             <div class='channels-by-connection-connection-header'>
               <p class='hds-typography-display-300 hds-font-weight-semibold'>
                 {{t 'resources.session-recording.connection.title'}}
@@ -77,7 +80,50 @@
           {{/each}}
         </sb.Body>
         <sb.Sidebar>
-          <p>{{t 'actions.help'}}</p>
+          <div>
+            <h3>{{t 'resources.session-recording.details'}}</h3>
+            {{! Start time }}
+            <p>
+              <FlightIcon @name='calendar' />
+              {{@model.sessionRecording.start_time}}
+            </p>
+            {{! Duration }}
+            <p>
+              <FlightIcon @name='clock' />
+              {{@model.sessionRecording.duration}}
+            </p>
+
+            {{! Bytes up }}
+            <p>
+              <FlightIcon @name='arrow-up' />
+              {{@model.sessionRecording.bytes_up}}
+            </p>
+
+            {{! Bytes down }}
+            <p>
+              <FlightIcon @name='arrow-down' />
+              {{@model.sessionRecording.bytes_down}}
+            </p>
+          </div>
+          {{! Related }}
+          <div>
+            <h3>{{t 'resources.session-recording.related'}}</h3>
+            {{! User name }}
+            <p>
+              <FlightIcon @name='user' />
+              {{@model.sessionRecording.user.name}}
+            </p>
+            {{! Target name }}
+            <p>
+              <FlightIcon @name='target' />
+              {{@model.sessionRecording.target.name}}
+            </p>
+            {{! Bucket name }}
+            <p>
+              <FlightIcon @name='cloud-check' />
+              {{@model.storageBucket.name}}
+            </p>
+          </div>
         </sb.Sidebar>
       </Layout::Sidebar>
     </div>

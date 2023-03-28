@@ -16,7 +16,27 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
+  /**
+   * Load session recording and related storage bucket if present
+   * @return {SessionRecordingModel, ?StorageBucketModel}
+   */
   async model({ session_recording_id }) {
-    return this.store.findRecord('session-recording', session_recording_id);
+    let storageBucket = null;
+    const sessionRecording = await this.store.findRecord(
+      'session-recording',
+      session_recording_id
+    );
+    if (sessionRecording.target?.storage_bucket_id) {
+      const { storage_bucket_id } = sessionRecording.target;
+      storageBucket = await this.store.findRecord(
+        'storage-bucket',
+        storage_bucket_id
+      );
+    }
+
+    return {
+      sessionRecording,
+      storageBucket,
+    };
   }
 }

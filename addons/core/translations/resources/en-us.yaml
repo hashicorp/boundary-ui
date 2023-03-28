@@ -214,6 +214,8 @@ org:
 session-recording:
   title: Session Recording
   title_plural: Session Recordings
+  details: Session details
+  related: Related
   connection:
     title: Connection
     title_plural: Connections
