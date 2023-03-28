@@ -5,12 +5,27 @@
 
 'use strict';
 
-const features = require('./features');
+const v8 = require('v8');
+const {
+  defaultEdition,
+  featureEditions,
+  licensedFeatures,
+} = require('./features');
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
 
+const clone = (obj) => v8.deserialize(v8.serialize(obj));
+
 module.exports = function (environment) {
+  // Start with a fresh copy of the features config every run, since it
+  // could be modified by an environment.
+  const features = {
+    defaultEdition,
+    featureEditions: clone(featureEditions),
+    licensedFeatures: clone(licensedFeatures),
+  };
+
   let ENV = {
     modulePrefix: 'admin',
     environment,
@@ -124,15 +139,15 @@ module.exports = function (environment) {
     };
 
     // Default edition in development
-    ENV.defaultEdition = 'enterprise';
+    ENV.features.defaultEdition = 'enterprise';
     // Enable development-only features
-    features.featureEditions.oss['dev-edition-toggle'] = true;
-    features.featureEditions.enterprise['dev-edition-toggle'] = true;
-    features.featureEditions.hcp['dev-edition-toggle'] = true;
+    ENV.features.featureEditions.oss['dev-edition-toggle'] = true;
+    ENV.features.featureEditions.enterprise['dev-edition-toggle'] = true;
+    ENV.features.featureEditions.hcp['dev-edition-toggle'] = true;
     // Enable licensed features by default in enterprise and hcp
-    Object.keys(features.licensedFeatures).forEach((feature) => {
-      features.featureEditions.enterprise[feature] = true;
-      features.featureEditions.hcp[feature] = true;
+    Object.keys(ENV.features.licensedFeatures).forEach((feature) => {
+      ENV.features.featureEditions.enterprise[feature] = true;
+      ENV.features.featureEditions.hcp[feature] = true;
     });
   }
 
@@ -160,11 +175,11 @@ module.exports = function (environment) {
      * approach ensures that test cases are easy to read and understand,
      * since their feature requirements are embedded.
      */
-    ENV.defaultEdition = 'enterprise';
+    ENV.features.defaultEdition = 'enterprise';
     // Enable licensed features by default in enterprise and hcp
-    Object.keys(features.licensedFeatures).forEach((feature) => {
-      features.featureEditions.enterprise[feature] = true;
-      features.featureEditions.hcp[feature] = true;
+    Object.keys(ENV.features.licensedFeatures).forEach((feature) => {
+      ENV.features.featureEditions.enterprise[feature] = true;
+      ENV.features.featureEditions.hcp[feature] = true;
     });
   }
 
