@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 
 const defaultEdition = EDITION;
