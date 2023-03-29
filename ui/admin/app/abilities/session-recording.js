@@ -20,7 +20,8 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
 
   /**
    * This override ensures that session recordings can only be presented in the global scope
-   * and if the session-recording feature flag is enabled.   */
+   * and if the session-recording feature flag is enabled.
+   */
   get canList() {
     return this.features.isEnabled('session-recording')
       ? this.hasAuthorizedCollectionAction('list') && this.model.isGlobal
