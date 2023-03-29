@@ -1,0 +1,68 @@
+<Rose::Form @onSubmit={{@submit}} @cancel={{@cancel}} as |form|>
+  <div class='enable-session-recording-toggle'>
+
+    <Hds::Form::Toggle::Field
+      name='target-enable-session-recording'
+      checked={{this.toggleEnabled}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.target.enable-session-recording.form.filter.label'
+        }}</F.Label>
+    </Hds::Form::Toggle::Field>
+
+    {{#if this.toggleEnabled}}
+      <Hds::Form::Select::Field
+        @isRequired={{true}}
+        @value={{@model.name}}
+        @isInvalid={{@model.errors.name}}
+        @type='text'
+        @width='100%'
+        @name='target-enable-session-recording'
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.target.enable-session-recording.form.select.label'
+          }}</F.Label>
+
+        {{!TODO: add correct description for form-select}}
+        <F.HelperText>
+          {{t
+            'resources.target.enable-session-recording.form.select.description'
+          }}
+        </F.HelperText>
+
+        {{!TODO: replace dummy data with storage-bucket name and remove uneeded translations}}
+        <F.Options>
+          <option>{{t
+              'resources.target.enable-session-recording.options.1'
+            }}</option>
+          <option>{{t
+              'resources.target.enable-session-recording.options.2'
+            }}</option>
+        </F.Options>
+
+        {{#if @model.errors.name}}
+          <F.Error as |E|>
+            {{#each @model.errors.name as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::Select::Field>
+    {{/if}}
+
+    <Hds::Link::Standalone
+      @color='primary'
+      @icon='plus'
+      @text='Add a new storage bucket'
+      @route='scopes.scope.storage-buckets.new'
+    />
+
+    <form.actions
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  </div>
+</Rose::Form>

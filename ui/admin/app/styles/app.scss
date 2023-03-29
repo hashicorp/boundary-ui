@@ -643,6 +643,21 @@
   }
 }
 
+.enable-session-recording-toggle {
+  width: 50%;
+  margin-top: 1.5rem;
+
+  .hds-form-field--layout-vertical,
+  .hds-link-standalone {
+    margin-left: 2.5rem;
+  }
+
+  .hds-link-standalone {
+    margin-top: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
 // target sidebar
 .target-sidebar {
   .title-wrapper {

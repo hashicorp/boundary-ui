@@ -427,6 +427,20 @@ target:
       delete-address:
         title: Remove target address?
         message: This target has an assigned address. Adding a host source will remove the assigned address from the target when you save your changes.
+  enable-session-recording:
+    title: Enable Session Recording
+    messages:
+      add:
+        title: Enable session recording for target
+    options:
+      1: Storage Bucket 1
+      2: Storage Bucket 2
+    form:
+      filter:
+        label: Record sessions for this target
+      select:
+        label: AWS storage buckets
+        description: Description for storage buckets
   brokered-credential-source:
     title: Brokered Credential
     title_plural: Brokered Credentials

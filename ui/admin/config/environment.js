@@ -78,6 +78,7 @@ module.exports = function (environment) {
         target: '/targets',
         'target.new': '/targets/new',
         'target.add-host-sources': '/targets/add-host-sets',
+        'target.enable-session-recording': '/targets/enable-session-recording',
         'target.worker-filters': '/targets/worker-filters',
         user: '/users',
         downloads: '/downloads',
