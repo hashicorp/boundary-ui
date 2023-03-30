@@ -10,8 +10,6 @@ module('Acceptance | session recordings | list', function (hooks) {
   setupMirage(hooks);
 
   // Selectors
-  const LIST_SESSION_RECORDING_BUTTON =
-    'table > tbody > tr > td:last-child > a';
   const SESSION_RECORDING_TITLE = 'Session Recordings';
 
   // Instances
@@ -82,16 +80,5 @@ module('Acceptance | session recordings | list', function (hooks) {
     );
     assert.dom('[title="General"]').doesNotIncludeText(SESSION_RECORDING_TITLE);
     assert.dom(`[href="${urls.sessionRecordings}"]`).doesNotExist();
-  });
-
-  // TODO: When we add abilities to session-recordings this test will be refactor to account for it.
-  test('user can navigate to a session recording', async function (assert) {
-    assert.expect(2);
-    // Visit session recordings
-    await visit(urls.sessionRecordings);
-    assert.dom('table').hasClass('hds-table');
-    // Click a session recording and check it navigates properly
-    await click(LIST_SESSION_RECORDING_BUTTON);
-    assert.strictEqual(currentURL(), urls.sessionRecording);
   });
 });

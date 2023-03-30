@@ -61,14 +61,19 @@
               </div>
             </B.Td>
             <B.Td align='right'>
-              <Hds::Link::Standalone
-                @icon='arrow-right'
-                @iconPosition='trailing'
-                @color='secondary'
-                @text=''
-                @route='scopes.scope.session-recordings.session-recording'
-                @model={{B.data.id}}
-              />
+              {{#if (can 'read session-recording' B.data)}}
+                <Hds::Button
+                  @icon='arrow-right'
+                  @isIconOnly={{true}}
+                  @color='secondary'
+                  @text={{t
+                    'resources.session-recording.button-aria-label'
+                    id=B.data.id
+                  }}
+                  @route='scopes.scope.session-recordings.session-recording'
+                  @model={{B.data.id}}
+                />
+              {{/if}}
             </B.Td>
           </B.Tr>
         </:body>

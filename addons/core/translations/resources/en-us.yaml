@@ -216,6 +216,7 @@ session-recording:
   title_plural: Session Recordings
   details: Session details
   related: Related
+  button-aria-label: Go to session recording {id}
   connection:
     title: Connection
     title_plural: Connections

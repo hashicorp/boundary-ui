@@ -2,13 +2,16 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | session recordings | session recording', function (hooks) {
+module('Acceptance | session recordings | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   // Selectors
+  const LIST_SESSION_RECORDING_BUTTON =
+    'table > tbody > tr > td:last-child > a';
   const LIST_CHANNEL_RECORDING_BUTTON =
     'table > tbody > tr > td:last-child > a';
 
@@ -50,12 +53,41 @@ module('Acceptance | session recordings | session recording', function (hooks) {
     authenticateSession({});
   });
 
-  test('user can navigate to a session recording', async function (assert) {
+  test('visiting a session recording', async function (assert) {
     assert.expect(1);
+    // Visit session recordings
+    await visit(urls.sessionRecordings);
+    await a11yAudit();
 
-    // Visit session recording
-    await visit(urls.sessionRecording);
+    // Click a session recording and check it navigates properly
+    await click(LIST_SESSION_RECORDING_BUTTON);
+    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.sessionRecording);
+  });
+
+  test('user can navigate to a session recording with proper authorization', async function (assert) {
+    assert.expect(3);
+    // Visit session recordings
+    await visit(urls.sessionRecordings);
+
+    assert.true(instances.sessionRecording.authorized_actions.includes('read'));
+    assert.dom(`[href="${urls.sessionRecording}"]`).exists();
+    // Click a session recording and check it navigates properly
+    await click(LIST_SESSION_RECORDING_BUTTON);
+    assert.strictEqual(currentURL(), urls.sessionRecording);
+  });
+
+  test('user cannot navigate to a session recording without the read action', async function (assert) {
+    assert.expect(1);
+    instances.sessionRecording.authorized_actions =
+      instances.sessionRecording.authorized_actions.filter(
+        (item) => item !== 'read'
+      );
+
+    // Visit session recordings
+    await visit(urls.sessionRecordings);
+    assert.dom(LIST_SESSION_RECORDING_BUTTON).doesNotExist();
   });
 
   test('user can navigate to a channel recording', async function (assert) {
