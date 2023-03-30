@@ -64,12 +64,9 @@
               {{#if (can 'read session-recording' B.data)}}
                 <Hds::Button
                   @icon='arrow-right'
-                  @isIconOnly={{true}}
+                  @iconPosition='trailing'
                   @color='secondary'
-                  @text={{t
-                    'resources.session-recording.button-aria-label'
-                    id=B.data.id
-                  }}
+                  @text={{t 'actions.view'}}
                   @route='scopes.scope.session-recordings.session-recording'
                   @model={{B.data.id}}
                 />

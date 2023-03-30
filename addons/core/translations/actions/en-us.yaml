@@ -19,6 +19,7 @@ deny: Deny
 help: Need help?
 next: Next
 back: Back
+view: View
 retry: Retry
 get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
