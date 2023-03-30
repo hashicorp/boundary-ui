@@ -38,6 +38,7 @@ module('Acceptance | targets | read', function (hooks) {
     targets: null,
     sshTarget: null,
     tcpTarget: null,
+    enableSessionRecording: null,
   };
 
   hooks.beforeEach(function () {
@@ -68,6 +69,7 @@ module('Acceptance | targets | read', function (hooks) {
     urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
+    urls.enableSessionRecording = `${urls.sshTarget}/enable-session-recording`;
 
     authenticateSession({});
   });
@@ -189,5 +191,23 @@ module('Acceptance | targets | read', function (hooks) {
     assert
       .dom(`[href="https://boundaryproject.io/help/admin-ui/targets"]`)
       .exists();
+  });
+
+  test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
+    assert.expect(1);
+
+    await visit(urls.sshTarget);
+
+    await click('.target-sidebar a');
+    assert.strictEqual(currentURL(), urls.enableSessionRecording);
+  });
+
+  test('users can click on settings icon in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
+    assert.expect(1);
+
+    await visit(urls.sshTarget);
+
+    await click('.target-sidebar .title-wrapper a');
+    assert.strictEqual(currentURL(), urls.enableSessionRecording);
   });
 });
