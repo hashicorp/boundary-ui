@@ -39,7 +39,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   hooks.beforeEach(function () {
     featuresService = this.owner.lookup('service:features');
-    featuresService.disable('target-worker-filters-v2');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -366,6 +365,8 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('saving address with existing host sources brings up confirmation modal and removes host sources', async function (assert) {
     assert.expect(4);
+    featuresService.enable('ssh-target');
+    featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     this.server.createList(
@@ -410,6 +411,8 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('saving address with existing host sources brings up confirmation modal and can cancel', async function (assert) {
     assert.expect(4);
+    featuresService.enable('ssh-target');
+    featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     this.server.createList(

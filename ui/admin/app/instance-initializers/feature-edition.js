@@ -5,7 +5,7 @@
 
 import fetch from 'fetch';
 
-export async function initialize(owner) {
+async function autoInitializeFeatureEdition(owner) {
   const service = owner.lookup('service:feature-edition');
   const url = '/metadata.json';
   let edition;
@@ -24,6 +24,16 @@ export async function initialize(owner) {
 
   // Initialize the feature edition and its associated features
   service.initialize(edition, features);
+}
+
+export async function initialize(owner) {
+  const config = owner.resolveRegistration('config:environment');
+  const isTesting = config.environment === 'test';
+  // Do not auto-init in a test environment.
+  // Tests should explicitly enable editions and features as needed.
+  if (!isTesting) {
+    await autoInitializeFeatureEdition(owner);
+  }
 }
 
 export default {

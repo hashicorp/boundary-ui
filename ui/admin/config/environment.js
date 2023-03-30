@@ -166,21 +166,6 @@ module.exports = function (environment) {
     ENV.flashMessageDefaults.timeout = 0;
 
     ENV.enableConfirmService = false;
-
-    /**
-     * Enable enterprise for testing purposes.
-     * [TODO] Tests should be refactored such that each test case
-     * explicitly enables the features and/or edition that it needs.
-     * By default, tests should have no features enabled.  This explicit
-     * approach ensures that test cases are easy to read and understand,
-     * since their feature requirements are embedded.
-     */
-    ENV.features.defaultEdition = 'enterprise';
-    // Enable licensed features by default in enterprise and hcp
-    Object.keys(ENV.features.licensedFeatures).forEach((feature) => {
-      ENV.features.featureEditions.enterprise[feature] = true;
-      ENV.features.featureEditions.hcp[feature] = true;
-    });
   }
 
   if (environment === 'production') {

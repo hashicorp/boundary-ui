@@ -117,6 +117,7 @@ module(
 
     test('users can create a new json credential', async function (assert) {
       assert.expect(2);
+      featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       const jsonCredentialCount = getJsonCredentialCount();
       await visit(urls.credentials);
@@ -159,6 +160,7 @@ module(
 
     test('users can cancel create new json credential', async function (assert) {
       assert.expect(2);
+      featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -173,6 +175,7 @@ module(
 
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
       assert.expect(2);
+      featuresService.enable('json-credentials');
       const editorSelector = '[data-test-code-editor-field-editor]';
       const newSecret = '{"test": "value"}';
 
@@ -191,6 +194,7 @@ module(
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
       assert.expect(2);
+      featuresService.enable('static-credentials');
       instances.staticCredentialStore.authorized_collection_actions.credentials =
         instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
           (item) => {
@@ -282,6 +286,7 @@ module(
 
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {
       assert.expect(1);
+      featuresService.enable('json-credentials');
       await visit(urls.credentials);
       this.server.post('/credentials', () => {
         return new Response(

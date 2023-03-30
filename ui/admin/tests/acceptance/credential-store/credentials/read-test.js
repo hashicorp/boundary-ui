@@ -14,6 +14,8 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let featuresService;
+
   const instances = {
     scopes: {
       org: null,
@@ -75,6 +77,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
     authenticateSession({});
+    featuresService = this.owner.lookup('service:features');
   });
 
   test('visiting username & password credential', async function (assert) {
@@ -101,6 +104,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   test('visiting JSON credential', async function (assert) {
     assert.expect(2);
+    featuresService.enable('json-credentials');
     await visit(urls.staticCredentialStore);
     await click(`[href="${urls.credentials}"]`);
     await a11yAudit();
@@ -142,7 +146,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   test('cannot navigate to a JSON credential form when feature not enabled', async function (assert) {
     assert.expect(1);
-    const featuresService = this.owner.lookup('service:features');
     featuresService.disable('json-credentials');
     await visit(urls.credentials);
     assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
