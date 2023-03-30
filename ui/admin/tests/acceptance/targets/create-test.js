@@ -298,12 +298,11 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('cannot navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
-    assert.expect(3);
-    featuresService.disable('ssh-target');
+    assert.expect(4);
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
-
+    assert.false(featuresService.isEnabled('ssh-target'));
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
         'create'
@@ -438,12 +437,10 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('address field does not exist when target network address feature is disabled', async function (assert) {
-    assert.expect(1);
-    featuresService.disable('target-network-address');
+    assert.expect(2);
     await visit(urls.targets);
-
     await click(`[href="${urls.newTarget}"]`);
-
+    assert.false(featuresService.isEnabled('target-network-address'));
     assert.dom('[name="address"]').doesNotExist();
   });
 });

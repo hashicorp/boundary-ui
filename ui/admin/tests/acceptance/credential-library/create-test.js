@@ -228,10 +228,9 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
-    featuresService.disable('ssh-target');
-    assert.expect(1);
+    assert.expect(2);
     await visit(urls.newCredentialLibrary);
-
+    assert.false(featuresService.isEnabled('ssh-target'));
     assert.dom('[value="vault-ssh-certificate"]').doesNotExist();
   });
 });

@@ -145,9 +145,9 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('cannot navigate to a JSON credential form when feature not enabled', async function (assert) {
-    assert.expect(1);
-    featuresService.disable('json-credentials');
+    assert.expect(2);
     await visit(urls.credentials);
+    assert.false(featuresService.isEnabled('json-credentials'));
     assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
   });
 

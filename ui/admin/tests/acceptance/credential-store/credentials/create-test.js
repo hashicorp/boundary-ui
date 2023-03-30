@@ -318,12 +318,11 @@ module(
     });
 
     test('cannot navigate to json credential when feature is disabled', async function (assert) {
-      featuresService.disable('json-credentials');
-      assert.expect(4);
+      assert.expect(5);
       await visit(urls.credentials);
 
       await click(`[href="${urls.newCredential}"]`);
-
+      assert.false(featuresService.isEnabled('json-credentials'));
       assert.true(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
           'create'

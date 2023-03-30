@@ -19,19 +19,19 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
 
   test('it renders a single filter diagram', async function (assert) {
     featuresService = this.owner.lookup('service:features');
-    featuresService.disable(targetWorkerFilterIngress);
-    featuresService.disable(targetWorkerFilterHCP);
-    assert.expect(1);
+    assert.expect(3);
     await render(hbs`<WorkerDiagram />`);
-
+    assert.false(featuresService.isEnabled(targetWorkerFilterIngress));
+    assert.false(featuresService.isEnabled(targetWorkerFilterHCP));
     assert.dom('[data-test-single-filter-egress-off]').isVisible();
   });
 
   test('it renders a dual filter diagram when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable(targetWorkerFilterIngress);
-    featuresService.disable(targetWorkerFilterHCP);
-    assert.expect(1);
+    assert.expect(3);
+    assert.true(featuresService.isEnabled(targetWorkerFilterIngress));
+    assert.false(featuresService.isEnabled(targetWorkerFilterHCP));
     await render(hbs`<WorkerDiagram />`);
 
     assert.dom('[data-test-dual-filter-egress-off-ingress-off]').isVisible();
@@ -43,7 +43,8 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     featuresService.enable(targetWorkerFilterHCP);
     assert.expect(1);
     await render(hbs`<WorkerDiagram />`);
-
+    assert.true(featuresService.isEnabled(targetWorkerFilterIngress));
+    assert.true(featuresService.isEnabled(targetWorkerFilterHCP));
     assert
       .dom('[data-test-dual-filter-hcp-egress-off-ingress-off]')
       .isVisible();

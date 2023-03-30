@@ -47,30 +47,30 @@ module('Unit | Abilities | credential-library', function (hooks) {
   });
 
   test('cannot read credential library type when unauthorized and feature is disabled', function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const canService = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('ssh-target');
     const credentialLibrary = store.createRecord('credential-library', {
       authorized_actions: [],
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
+    assert.false(featuresService.isEnabled('ssh-target'));
     assert.false(canService.can('read credential-library', credentialLibrary));
     credentialLibrary.type = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
     assert.false(canService.can('read credential-library', credentialLibrary));
   });
 
   test('can read vault-generic but not vault-ssh-certificate when authorized and feature is disabled', function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const canService = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('ssh-target');
     const credentialLibrary = store.createRecord('credential-library', {
       authorized_actions: ['read'],
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
+    assert.false(featuresService.isEnabled('ssh-target'));
     assert.false(canService.can('read credential-library', credentialLibrary));
     credentialLibrary.type = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
     assert.true(canService.can('read credential-library', credentialLibrary));

@@ -48,15 +48,15 @@ module('Unit | Abilities | credential', function (hooks) {
   });
 
   test('cannot read credentials, including JSON credentials, when unauthorized and json-credentials feature is disabled', function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     const service = this.owner.lookup('service:can');
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('json-credentials');
     const store = this.owner.lookup('service:store');
     const credential = store.createRecord('credential', {
       authorized_actions: [],
       type: 'json',
     });
+    assert.false(featuresService.isEnabled('json-credentials'));
     assert.false(service.can('read credential', credential));
     credential.type = 'username_password';
     assert.false(service.can('read credential', credential));

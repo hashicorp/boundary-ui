@@ -22,7 +22,6 @@ module('Acceptance | develop', function (hooks) {
   test('edition toggle is hidden when `dev-edition-toggle` is false', async function (assert) {
     assert.expect(2);
     await visit('/');
-    // featuresService.disable('dev-edition-toggle');
     assert.false(featuresService.isEnabled('dev-edition-toggle'));
     assert.dom('data-dev-edition-toggle').doesNotExist();
   });
