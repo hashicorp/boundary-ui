@@ -15,7 +15,6 @@ import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 
-const { licensedFeatures } = environmentConfig.features;
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
@@ -38,12 +37,17 @@ function routes() {
   // this.urlPrefix = '';
 
   this.get('/metadata.json', () => {
-    return {
+    // this configuration is optional
+    const licensedFeatures = environmentConfig?.features?.licensedFeatures;
+    const edition = licensedFeatures ? 'enterprise' : 'oss';
+    const features = licensedFeatures ? Object.keys(licensedFeatures) : [];
+    const metadata = {
       license: {
-        edition: 'enterprise',
-        features: Object.keys(licensedFeatures),
+        edition,
+        features,
       },
     };
+    return metadata;
   });
 
   // make this `/api`, for example, if your API is namespaced
