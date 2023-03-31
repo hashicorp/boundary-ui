@@ -17,11 +17,11 @@ module('Unit | Abilities | credential-library', function (hooks) {
 
   hooks.beforeEach(function () {
     features = this.owner.lookup('service:features');
-    features.enable('ssh-target');
   });
 
   test('can read credential library type when authorized and feature is enabled', function (assert) {
     assert.expect(2);
+    features.enable('ssh-target');
     const canService = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const credentialLibrary = store.createRecord('credential-library', {
@@ -35,6 +35,7 @@ module('Unit | Abilities | credential-library', function (hooks) {
 
   test('cannot read credential library type when unauthorized and feature is enabled', function (assert) {
     assert.expect(2);
+    features.enable('ssh-target');
     const canService = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const credentialLibrary = store.createRecord('credential-library', {

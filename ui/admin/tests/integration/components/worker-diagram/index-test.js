@@ -37,11 +37,11 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     assert.dom('[data-test-dual-filter-egress-off-ingress-off]').isVisible();
   });
 
-  test('it renders a HCP dual filter diagram when `target-worker-filters-v2-hcp` is enabled', async function (assert) {
+  test('it renders an HCP dual filter diagram when `target-worker-filters-v2-hcp` is enabled', async function (assert) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable(targetWorkerFilterIngress);
     featuresService.enable(targetWorkerFilterHCP);
-    assert.expect(1);
+    assert.expect(3);
     await render(hbs`<WorkerDiagram />`);
     assert.true(featuresService.isEnabled(targetWorkerFilterIngress));
     assert.true(featuresService.isEnabled(targetWorkerFilterHCP));
