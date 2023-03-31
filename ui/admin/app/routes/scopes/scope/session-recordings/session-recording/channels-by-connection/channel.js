@@ -14,15 +14,13 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       'channel-recording',
       channel_id
     );
-
-    const response = await fetch('/session.cast');
-    const asciicast = await response.text();
+    const asciicast = await channelRecording.getAsciicast();
 
     return {
       channelRecording,
       sessionRecording,
       storageBucket,
-      asciicast: asciicast,
+      asciicast,
     };
   }
 }
