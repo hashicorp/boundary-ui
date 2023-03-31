@@ -26,7 +26,7 @@ module('Integration | Component | session-recording/player', function (hooks) {
 [3.63678, "o", "t"]`;
 
     await render(hbs`
-      <SessionRecording::Player @asciiCast={{this.cast}} />
+      <SessionRecording::Player @asciiCast={{this.cast}} @route='test.route' @model='t_123' />
     `);
 
     assert.dom(this.element).hasText('Back to channels --:----:--');

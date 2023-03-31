@@ -13,7 +13,11 @@
   <page.body>
     <Layout::Sidebar as |sb|>
       <sb.Body>
-        <SessionRecording::Player @asciiCast={{@model.asciicast}} />
+        <SessionRecording::Player
+          @asciiCast={{@model.asciicast}}
+          @route='scopes.scope.session-recordings.session-recording'
+          @model={{@model.sessionRecording.id}}
+        />
       </sb.Body>
 
       <sb.Sidebar>

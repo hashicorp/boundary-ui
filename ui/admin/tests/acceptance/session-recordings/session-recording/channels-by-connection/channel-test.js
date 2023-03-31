@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -58,6 +58,16 @@ module(
       // Visit channel
       await visit(urls.connectionRecording);
       assert.strictEqual(currentURL(), urls.connectionRecording);
+    });
+
+    test('user can navigate back to session recording screen', async function (assert) {
+      assert.expect(1);
+      // Visit channel
+      await visit(urls.connectionRecording);
+      // click "Back to channels" link in player header
+      await click('.session-recording-player-header > a');
+
+      assert.strictEqual(currentURL(), urls.sessionRecording);
     });
   }
 );
