@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-export { default } from 'api/abilities/session-recording';
+export { default } from 'api/abilities/channel-recording';

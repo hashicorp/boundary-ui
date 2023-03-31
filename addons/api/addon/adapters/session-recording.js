@@ -1,4 +1,5 @@
 import ApplicationAdapter from './application';
+import { MIME_TYPE_ASCIICAST } from 'api/models/channel-recording';
 
 export default class SessionRecordingAdapter extends ApplicationAdapter {
   /**
@@ -49,7 +50,7 @@ export default class SessionRecordingAdapter extends ApplicationAdapter {
   getAsciicast(id) {
     return this.getRecordingDownload({
       id,
-      mimeType: 'application/x-asciicast',
+      mimeType: MIME_TYPE_ASCIICAST,
     });
   }
 }

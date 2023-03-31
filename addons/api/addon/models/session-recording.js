@@ -8,7 +8,7 @@ export const TYPES_SESSION_RECORDING = Object.freeze([
 ]);
 
 export default class SessionRecordingModel extends GeneratedSessionRecordingModel {
-  @hasMany('connection-recording') connection_recordings;
+  @hasMany('connection-recording', { async: false }) connection_recordings;
 
   @service store;
 

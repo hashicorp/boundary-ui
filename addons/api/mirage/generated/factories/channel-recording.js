@@ -5,6 +5,7 @@
 
 import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
+import { MIME_TYPE_ASCIICAST } from 'api/models/channel-recording';
 
 /**
  * GeneratedChannelRecordingModelFactory
@@ -20,5 +21,5 @@ export default Factory.extend({
   },
   end_time: () => faker.date.recent(),
   duration: () => `${faker.datatype.number()}s`,
-  mime_types: () => ['application/x-asciicast'],
+  mime_types: () => [MIME_TYPE_ASCIICAST],
 });

@@ -28,7 +28,7 @@ export default class SessionRecordingAbility extends ModelAbility {
     );
   }
 
-  get canDownloadAsciiCast() {
+  get canDownload() {
     return this.model.isSSH && this.hasAuthorizedAction('download');
   }
 }
