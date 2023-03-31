@@ -41,6 +41,7 @@
     "ember-intl": "^6.0.0-beta.4",
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^3.0.0",
+    "file-size": "^1.0.0",
     "intl-unofficial-duration-unit-format": "^3.1.0"
   },
   "devDependencies": {

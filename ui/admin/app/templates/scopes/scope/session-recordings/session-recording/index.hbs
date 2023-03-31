@@ -53,9 +53,9 @@
                   </B.Td>
                   <B.Td>
                     <span><FlightIcon @name='arrow-up' /></span>
-                    <span>{{B.data.bytes_up}}</span>
+                    <span>{{format-bytes-size B.data.bytes_up}}</span>
                     <span><FlightIcon @name='arrow-down' /></span>
-                    <span>{{B.data.bytes_down}}</span>
+                    <span>{{format-bytes-size B.data.bytes_down}}</span>
                     <span
                       class='session-recording-list-cell-item hds-foreground-faint'
                     >
@@ -96,13 +96,13 @@
             {{! Bytes up }}
             <p>
               <FlightIcon @name='arrow-up' />
-              {{@model.sessionRecording.bytes_up}}
+              {{format-bytes-size @model.sessionRecording.bytes_up}}
             </p>
 
             {{! Bytes down }}
             <p>
               <FlightIcon @name='arrow-down' />
-              {{@model.sessionRecording.bytes_down}}
+              {{format-bytes-size @model.sessionRecording.bytes_down}}
             </p>
           </div>
           {{! Related }}

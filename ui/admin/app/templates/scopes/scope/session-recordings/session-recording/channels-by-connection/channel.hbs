@@ -46,13 +46,13 @@
           {{! Bytes up }}
           <p>
             <FlightIcon @name='arrow-up' />
-            {{@model.channelRecording.bytes_up}}
+            {{format-bytes-size @model.channelRecording.bytes_up}}
           </p>
 
           {{! Bytes down }}
           <p>
             <FlightIcon @name='arrow-down' />
-            {{@model.channelRecording.bytes_down}}
+            {{format-bytes-size @model.channelRecording.bytes_down}}
           </p>
 
           {{! Errors }}
