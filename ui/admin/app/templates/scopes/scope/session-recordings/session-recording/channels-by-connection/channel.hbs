@@ -17,18 +17,13 @@
       </sb.Body>
 
       <sb.Sidebar>
+        {{! Channel details information }}
         <div>
           <h3>{{t 'resources.session-recording.channel.details'}}</h3>
           {{! Start time }}
           <p>
             <FlightIcon @name='calendar' />
             {{@model.channelRecording.start_time}}
-          </p>
-
-          {{! Created By }}
-          <p>
-            <FlightIcon @name='corner-down-right' />
-            {{@model.sessionRecording.user.name}}
           </p>
 
           {{! Type }}
@@ -54,11 +49,27 @@
             <FlightIcon @name='arrow-down' />
             {{format-bytes-size @model.channelRecording.bytes_down}}
           </p>
+        </div>
 
-          {{! Errors }}
+        {{! Channel related information }}
+        <div>
+          <h3>{{t 'resources.session-recording.related'}}</h3>
+          {{! User name }}
           <p>
-            <FlightIcon @name='alert-triangle' />
-            {{@model.channelRecording.errors}}
+            <FlightIcon @name='user' />
+            {{#if @model.sessionRecording.user}}
+              {{@model.sessionRecording.userDisplayName}}
+            {{/if}}
+          </p>
+          {{! Target name }}
+          <p>
+            <FlightIcon @name='target' />
+            {{@model.sessionRecording.target.name}}
+          </p>
+          {{! Bucket name }}
+          <p>
+            <FlightIcon @name='cloud-check' />
+            {{@model.storageBucket.name}}
           </p>
         </div>
       </sb.Sidebar>

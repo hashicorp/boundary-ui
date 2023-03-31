@@ -7,7 +7,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
 
   // =methods
   async model({ channel_id }) {
-    const sessionRecording = await this.modelFor(
+    const { sessionRecording, storageBucket } = await this.modelFor(
       'scopes.scope.session-recordings.session-recording'
     );
     const channelRecording = await this.store.peekRecord(
@@ -21,6 +21,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
     return {
       channelRecording,
       sessionRecording,
+      storageBucket,
       asciicast: asciicast,
     };
   }

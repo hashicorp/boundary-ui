@@ -56,32 +56,37 @@ module('Unit | Model | session-recording', function (hooks) {
     const store = this.owner.lookup('service:store');
     const fakeName = 'Scope name';
     const fakeId = 's_123456789';
-    // Scope models: A has just name, B has just id.
-    const scopeModelA = await store.createRecord('scope', {
-      type: 'global',
-      name: fakeName,
-      id: 's_1234567890',
-    });
-    const scopeModelB = await store.createRecord('scope', {
-      type: 'org',
-      id: fakeId,
-    });
-
-    const targetModelA = await store.createRecord('target', {
-      scope: scopeModelA,
-    });
-    const targetModelB = await store.createRecord('target', {
-      scope: scopeModelB,
-    });
 
     const modelA = store.createRecord('session-recording', {
-      target: targetModelA,
+      target: {
+        scope: { name: fakeName, id: fakeId },
+      },
     });
     const modelB = store.createRecord('session-recording', {
-      target: targetModelB,
+      target: {
+        scope: { id: fakeId },
+      },
     });
 
     assert.strictEqual(modelA.targetScopeDisplayName, fakeName);
     assert.strictEqual(modelB.targetScopeDisplayName, fakeId);
+  });
+
+  test('it has userDisplayName and returns the expected values', async function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const fakeUserName = 'User name';
+    const fakeUserId = 'userid';
+
+    const userModelA = store.createRecord('session-recording', {
+      user: { name: fakeUserName, id: fakeUserId },
+    });
+
+    const userModelB = store.createRecord('session-recording', {
+      user: { id: fakeUserId },
+    });
+
+    assert.strictEqual(userModelA.userDisplayName, fakeUserName);
+    assert.strictEqual(userModelB.userDisplayName, fakeUserId);
   });
 });

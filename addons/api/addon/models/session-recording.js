@@ -28,7 +28,19 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
     return !TYPES_SESSION_RECORDING.includes(this.type);
   }
 
+  /**
+   * Returns scope name or scope id from the target that belongs to the session recording.
+   * @type {string}
+   */
   get targetScopeDisplayName() {
     return this.target?.scope?.name || this.target?.scope?.id;
+  }
+
+  /**
+   * Returns the user name or user id that belongs to the session recording.
+   * @type {string}
+   */
+  get userDisplayName() {
+    return this.user?.name || this.user?.id;
   }
 }
