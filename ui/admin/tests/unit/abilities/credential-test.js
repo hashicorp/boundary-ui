@@ -9,16 +9,16 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Abilities | credential', function (hooks) {
   setupTest(hooks);
 
-  let features;
+  let featuresService;
 
   hooks.beforeEach(function () {
     // Enable json-credentials feature by default
-    features = this.owner.lookup('service:features');
-    features.enable('json-credentials');
+    featuresService = this.owner.lookup('service:features');
   });
 
   test('can read credentials, including JSON credentials, when authorized and json-credentials feature is enabled', function (assert) {
     assert.expect(3);
+    featuresService.enable('json-credentials');
     const service = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const credential = store.createRecord('credential', {
@@ -34,6 +34,7 @@ module('Unit | Abilities | credential', function (hooks) {
 
   test('cannot read credentials, including JSON credentials, when unauthorized and json-credentials feature is enabled', function (assert) {
     assert.expect(3);
+    featuresService.enable('json-credentials');
     const service = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const credential = store.createRecord('credential', {
@@ -50,7 +51,6 @@ module('Unit | Abilities | credential', function (hooks) {
   test('cannot read credentials, including JSON credentials, when unauthorized and json-credentials feature is disabled', function (assert) {
     assert.expect(4);
     const service = this.owner.lookup('service:can');
-    const featuresService = this.owner.lookup('service:features');
     const store = this.owner.lookup('service:store');
     const credential = store.createRecord('credential', {
       authorized_actions: [],
@@ -65,14 +65,14 @@ module('Unit | Abilities | credential', function (hooks) {
   });
 
   test('can read credentials, excepting JSON credentials, when authorized and json-credentials feature is disabled', function (assert) {
-    assert.expect(3);
-    features.disable('json-credentials');
+    assert.expect(4);
     const service = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const credential = store.createRecord('credential', {
       authorized_actions: ['read'],
       type: 'json',
     });
+    assert.false(featuresService.isEnabled('json-credentials'));
     assert.false(service.can('read credential', credential));
     credential.type = 'username_password';
     assert.true(service.can('read credential', credential));
