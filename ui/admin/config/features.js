@@ -5,14 +5,22 @@
 
 const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 
-const selectedEdition = EDITION;
+const defaultEdition = EDITION;
 
+const devFeatures = {
+  'dev-edition-toggle': false,
+};
+const licensedFeatures = {
+  'multi-hop-sessions': false,
+  'ssh-target': false,
+};
 // Base edition declares available features, disabled by default.
 const baseEdition = {
+  ...devFeatures,
+  ...licensedFeatures,
   byow: false,
   'byow-pki-hcp-cluster-id': false,
   'json-credentials': false,
-  'ssh-target': false,
   'static-credentials': false,
   'target-worker-filters-v2': false,
   'target-worker-filters-v2-ingress': false,
@@ -32,7 +40,6 @@ featureEditions.oss = {
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'ssh-target': true,
   'target-worker-filters-v2-ingress': true,
   'vault-worker-filter': true,
 };
@@ -42,18 +49,8 @@ featureEditions.hcp = {
   'target-worker-filters-v2-hcp': true,
 };
 
-/**
- * Takes a set of features and enables them in all editions.
- * For use in development and testing only.
- */
-const enableFeaturesInAllEditions = (features = {}, ENV) => {
-  Object.entries(featureEditions).forEach(
-    ([key, edition]) => (ENV.featureEditions[key] = { ...features, ...edition })
-  );
-};
-
 module.exports = {
   featureEditions,
-  selectedEdition,
-  enableFeaturesInAllEditions,
+  defaultEdition,
+  licensedFeatures,
 };

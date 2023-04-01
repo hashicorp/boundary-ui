@@ -14,6 +14,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let featuresService;
   let getCredentialStoresCount;
   let getStaticCredentialStoresCount;
   let getVaultCredentialStoresCount;
@@ -62,10 +63,12 @@ module('Acceptance | credential-stores | create', function (hooks) {
         .length;
     };
     authenticateSession({});
+    featuresService = this.owner.lookup('service:features');
   });
 
   test('Users can create a new credential store of default type static', async function (assert) {
     assert.expect(1);
+    featuresService.enable('static-credentials');
     const count = getStaticCredentialStoresCount();
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
@@ -75,6 +78,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
   test('Users can create a new credential store of type vault', async function (assert) {
     assert.expect(1);
+    featuresService.enable('static-credentials');
     const count = getVaultCredentialStoresCount();
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
