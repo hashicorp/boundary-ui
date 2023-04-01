@@ -1,9 +1,12 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import config from 'admin/config/environment';
-
-const { selectedEdition, featureEditions } = config;
 
 export default class FeatureEditionService extends Service {
   // =services
@@ -12,24 +15,34 @@ export default class FeatureEditionService extends Service {
 
   // =attributes
 
+  licensedFeatures = Object.keys(config.features.licensedFeatures);
+
   @tracked edition;
 
   // array of edition strings
   get editions() {
-    return Object.keys(featureEditions);
+    return Object.keys(config.features.featureEditions);
   }
 
   // =methods
 
   /**
    * Initializes the selected edition from the config.
+   * @param {string} edition
+   * @param {?string[]} enabledFeatures - list of extra features to enable
    */
-  initialize() {
-    this.setEdition(selectedEdition);
+  initialize(edition, enabledFeatures) {
+    this.setEdition(edition || config.features.defaultEdition, enabledFeatures);
   }
 
-  setEdition(edition) {
-    const editionFlags = featureEditions[edition];
+  /**
+   * Enables the specified edition.
+   * @param {string} edition
+   * @param {?string[]} enabledFeatures - list of extra features to enable
+   */
+  setEdition(edition, enabledFeatures) {
+    this.edition = edition;
+    const editionFlags = config.features.featureEditions[edition];
     Object.keys(editionFlags).forEach((flag) => {
       if (editionFlags[flag]) {
         this.features.enable(flag);
@@ -37,6 +50,8 @@ export default class FeatureEditionService extends Service {
         this.features.disable(flag);
       }
     });
-    this.edition = edition;
+    if (enabledFeatures) {
+      enabledFeatures.forEach((flag) => this.features.enable(flag));
+    }
   }
 }
