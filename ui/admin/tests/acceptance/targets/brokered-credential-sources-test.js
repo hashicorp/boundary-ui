@@ -148,14 +148,13 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('cannot navigate to a json type credential when feature is disabled', async function (assert) {
-    featuresService.disable('json-credentials');
-    assert.expect(2);
+    assert.expect(3);
     const jsonCredential = instances.credentials[2];
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
     await visit(urls.brokeredCredentialSources);
-
+    assert.false(featuresService.isEnabled('json-credentials'));
     assert
       .dom('.rose-table-row:nth-child(3)')
       .includesText(jsonCredential.name);

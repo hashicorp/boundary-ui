@@ -20,6 +20,7 @@ export default class ApplicationRoute extends Route {
   @service confirm;
   @service router;
   @service intl;
+  @service features;
   @service featureEdition;
 
   // =attributes
@@ -131,5 +132,14 @@ export default class ApplicationRoute extends Route {
   @action
   toggleEdition(edition) {
     this.featureEdition.setEdition(edition);
+  }
+
+  @action
+  toggleFeature(feature) {
+    if (this.features.isEnabled(feature)) {
+      this.features.disable(feature);
+    } else {
+      this.features.enable(feature);
+    }
   }
 }
