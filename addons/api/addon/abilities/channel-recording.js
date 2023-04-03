@@ -14,7 +14,7 @@ export default class ChannelRecordingAbility extends ModelAbility {
   @service abilities;
 
   // =permissions
-  get canDownloadAsciicast() {
+  get canGetAsciicast() {
     const sessionRecording = this.model.connection_recording.session_recording;
     const sessionRecordingAbility = this.abilities.abilityFor(
       'session-recording',

@@ -38,10 +38,7 @@ module('Unit | Ability | channel-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can(
-        'downloadAsciicast channel-recording',
-        channelRecordingModel
-      )
+      canService.can('getAsciicast channel-recording', channelRecordingModel)
     );
   });
 
@@ -64,10 +61,7 @@ module('Unit | Ability | channel-recording', function (hooks) {
     });
 
     assert.false(
-      canService.can(
-        'downloadAsciicast channel-recording',
-        channelRecordingModel
-      )
+      canService.can('getAsciicast channel-recording', channelRecordingModel)
     );
   });
 });
