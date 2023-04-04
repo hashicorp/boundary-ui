@@ -261,6 +261,8 @@ storage-bucket:
     aws: AWS
     global: Global
     orgs: Orgs
+  types:
+    aws_s3: AWS S3
   actions:
     delete: Delete Storage Bucket
   form:

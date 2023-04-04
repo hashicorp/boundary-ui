@@ -47,11 +47,28 @@
             <p class='description'>
               {{t 'resources.target.form.sidebar.help'}}
             </p>
-            <Hds::Button
-              @text={{t 'resources.target.actions.enable-recording'}}
-              @color='secondary'
-              @route='scopes.scope.targets.target.enable-session-recording'
-            />
+            {{#if @model.storage_bucket_id}}
+              <LinkListPanel as |P|>
+                <P.Item
+                  @icon='cloud-upload'
+                  @color='boundary'
+                  @text={{@model.storage_bucket_id}}
+                  @route='scopes.scope.storage-buckets.storage-bucket'
+                  @model={{@model.storage_bucket_id}}
+                >
+                  <Hds::Badge
+                    @text={{t 'resources.storage-bucket.types.aws_s3'}}
+                    @icon='aws-color'
+                  />
+                </P.Item>
+              </LinkListPanel>
+            {{else}}
+              <Hds::Button
+                @text={{t 'resources.target.actions.enable-recording'}}
+                @color='secondary'
+                @route='scopes.scope.targets.target.enable-session-recording'
+              />
+            {{/if}}
           </div>
         </sb.Sidebar>
       {{/if}}

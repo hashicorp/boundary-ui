@@ -679,6 +679,36 @@
   }
 }
 
+.link-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  text-decoration: none;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 0.25rem;
+  }
+
+  &__text {
+    color: var(--token-color-foreground-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .flight-icon-chevron-right {
+    color: var(--token-color-foreground-faint);
+  }
+
+  .hds-button {
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+  }
+}
+
 .key-value-list {
   border: 0;
 
