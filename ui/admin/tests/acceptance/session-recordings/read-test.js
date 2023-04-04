@@ -9,6 +9,8 @@ module('Acceptance | session recordings | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let featuresService;
+
   // Selectors
   const LIST_SESSION_RECORDING_BUTTON =
     'table > tbody > tr > td:last-child > a';
@@ -51,26 +53,26 @@ module('Acceptance | session recordings | read', function (hooks) {
     urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}`;
     urls.channelRecording = `${urls.sessionRecording}/channels-by-connection/${instances.channelRecording.id}`;
     authenticateSession({});
+    featuresService = this.owner.lookup('service:features');
   });
 
   test('visiting a session recording', async function (assert) {
     assert.expect(1);
+    featuresService.enable('session-recording');
     // Visit session recordings
     await visit(urls.sessionRecordings);
     await a11yAudit();
-
     // Click a session recording and check it navigates properly
     await click(LIST_SESSION_RECORDING_BUTTON);
     await a11yAudit();
-
     assert.strictEqual(currentURL(), urls.sessionRecording);
   });
 
   test('user can navigate to a session recording with proper authorization', async function (assert) {
     assert.expect(3);
+    featuresService.enable('session-recording');
     // Visit session recordings
     await visit(urls.sessionRecordings);
-
     assert.true(instances.sessionRecording.authorized_actions.includes('read'));
     assert.dom(`[href="${urls.sessionRecording}"]`).exists();
     // Click a session recording and check it navigates properly
@@ -80,11 +82,11 @@ module('Acceptance | session recordings | read', function (hooks) {
 
   test('user cannot navigate to a session recording without the read action', async function (assert) {
     assert.expect(1);
+    featuresService.enable('session-recording');
     instances.sessionRecording.authorized_actions =
       instances.sessionRecording.authorized_actions.filter(
         (item) => item !== 'read'
       );
-
     // Visit session recordings
     await visit(urls.sessionRecordings);
     assert.dom(LIST_SESSION_RECORDING_BUTTON).doesNotExist();
@@ -92,7 +94,7 @@ module('Acceptance | session recordings | read', function (hooks) {
 
   test('user can navigate to a channel recording', async function (assert) {
     assert.expect(2);
-
+    featuresService.enable('session-recording');
     // Visit session recording
     await visit(urls.sessionRecording);
     assert.dom('table').hasClass('hds-table');

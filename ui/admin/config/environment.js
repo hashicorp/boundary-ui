@@ -5,12 +5,27 @@
 
 'use strict';
 
-const features = require('./features');
+const v8 = require('v8');
+const {
+  defaultEdition,
+  featureEditions,
+  licensedFeatures,
+} = require('./features');
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
 
+const clone = (obj) => v8.deserialize(v8.serialize(obj));
+
 module.exports = function (environment) {
+  // Start with a fresh copy of the features config every run, since it
+  // could be modified by an environment.
+  const features = {
+    defaultEdition,
+    featureEditions: clone(featureEditions),
+    licensedFeatures: clone(licensedFeatures),
+  };
+
   let ENV = {
     modulePrefix: 'admin',
     environment,
@@ -100,8 +115,7 @@ module.exports = function (environment) {
       timeout: 4000,
     },
 
-    selectedEdition: features.selectedEdition,
-    featureEditions: features.featureEditions,
+    features: features,
     featureFlags: {},
   };
 
@@ -127,14 +141,16 @@ module.exports = function (environment) {
     };
 
     // Default edition in development
-    ENV.selectedEdition = 'enterprise';
-    features.enableFeaturesInAllEditions(
-      {
-        // Show edition toggle in UI in development
-        'dev-edition-toggle': true,
-      },
-      ENV
-    );
+    ENV.features.defaultEdition = 'enterprise';
+    // Enable development-only features
+    ENV.features.featureEditions.oss['dev-edition-toggle'] = true;
+    ENV.features.featureEditions.enterprise['dev-edition-toggle'] = true;
+    ENV.features.featureEditions.hcp['dev-edition-toggle'] = true;
+    // Enable licensed features by default in enterprise and hcp
+    Object.keys(ENV.features.licensedFeatures).forEach((feature) => {
+      ENV.features.featureEditions.enterprise[feature] = true;
+      ENV.features.featureEditions.hcp[feature] = true;
+    });
   }
 
   if (environment === 'test') {
@@ -152,16 +168,6 @@ module.exports = function (environment) {
     ENV.flashMessageDefaults.timeout = 0;
 
     ENV.enableConfirmService = false;
-
-    /**
-     * Enable additional features for testing purposes.
-     * [TODO] Tests should be refactored such that each test case
-     * explicitly enables the features and/or edition that it needs.
-     * By default, tests should have no features enabled.  This explicit
-     * approach ensures that test cases are easy to read and understand,
-     * since their feature requirements are embedded.
-     */
-    ENV.selectedEdition = 'enterprise';
   }
 
   if (environment === 'production') {

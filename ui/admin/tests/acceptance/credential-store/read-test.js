@@ -14,6 +14,8 @@ module('Acceptance | credential-stores | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let featuresService;
+
   const instances = {
     scopes: {
       global: null,
@@ -63,10 +65,12 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
 
     authenticateSession({});
+    featuresService = this.owner.lookup('service:features');
   });
 
   test('visiting static credential store', async function (assert) {
     assert.expect(2);
+    featuresService.enable('static-credentials');
     await visit(urls.credentialStores);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialStores);
@@ -104,6 +108,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
     assert.expect(2);
+    featuresService.enable('static-credentials');
     await visit(urls.projectScope);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
