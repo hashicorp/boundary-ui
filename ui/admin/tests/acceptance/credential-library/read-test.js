@@ -85,7 +85,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('cannot navigate to vault ssh cert form when feature is not enabled', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
@@ -94,10 +94,9 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     await visit(
       `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
     );
-    const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('ssh-target');
     await visit(urls.credentialLibraries);
-
+    const featuresService = this.owner.lookup('service:features');
+    assert.false(featuresService.isEnabled('ssh-target'));
     assert.dom('.rose-table-body tr:nth-of-type(2) a').doesNotExist();
   });
 

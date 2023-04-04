@@ -20,12 +20,14 @@ module('Acceptance | develop', function (hooks) {
   });
 
   test('edition toggle is hidden when `dev-edition-toggle` is false', async function (assert) {
+    assert.expect(2);
     await visit('/');
     assert.false(featuresService.isEnabled('dev-edition-toggle'));
     assert.dom('data-dev-edition-toggle').doesNotExist();
   });
 
   test('edition toggle is visible when `dev-edition-toggle` is true', async function (assert) {
+    assert.expect(2);
     assert.false(featuresService.isEnabled('dev-edition-toggle'));
     featuresService.enable('dev-edition-toggle');
     await visit('/');

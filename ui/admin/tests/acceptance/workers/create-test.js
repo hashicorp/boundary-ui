@@ -54,21 +54,21 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
     const labels = findAll('label.rose-form-label');
+    assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');
     assert.dom(labels[2]).hasText('Initial Upstreams');
   });
 
   test('download and install step shows correct oss instructions', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
     const createSection = findAll('.worker-create-section');
+    assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert.dom(createSection[1]).includesText('curl -fsSL');
     assert.dom(createSection[1]).doesNotIncludeText('wget -q');
   });

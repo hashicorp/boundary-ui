@@ -16,13 +16,11 @@ module(
     setupIntl(hooks);
 
     let featuresService;
-    const targetWorkerFilterIngress = 'target-worker-filters-v2-ingress';
     const targetWorkerFilterHCP = 'target-worker-filters-v2-hcp';
 
     hooks.beforeEach(function () {
       featuresService = this.owner.lookup('service:features');
       featuresService.enable(targetWorkerFilterHCP);
-      featuresService.disable(targetWorkerFilterIngress);
     });
 
     test('it renders the correct diagram when egress and ingress filter is false', async function (assert) {
