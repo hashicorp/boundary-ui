@@ -195,7 +195,17 @@ module('Acceptance | targets | read', function (hooks) {
       .exists();
   });
 
+  test('cannot enable session recording for a target without proper authorization', async function (assert) {
+    assert.expect(2);
+    assert.false(featuresService.isEnabled('session-recording'));
+
+    await visit(urls.sshTarget);
+
+    assert.dom('.target-sidebar a').doesNotExist();
+  });
+
   test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
+    featuresService.enable('session-recording');
     assert.expect(1);
 
     await visit(urls.sshTarget);
@@ -205,6 +215,7 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('users can click on settings icon in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
+    featuresService.enable('session-recording');
     assert.expect(1);
 
     await visit(urls.sshTarget);

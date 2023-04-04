@@ -30,8 +30,12 @@
           @cancel={{route-action 'cancel' @model}}
         />
       </sb.Body>
-
-      {{#if (can 'setStorageBucket target' @model)}}
+      {{#if
+        (and
+          (can 'setStorageBucket target' @model)
+          (feature-flag 'session-recording')
+        )
+      }}
         <sb.Sidebar>
           <div class='target-sidebar'>
             <div class='title-wrapper'>
