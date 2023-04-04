@@ -29,6 +29,7 @@ module('Integration | Component | session-recording/player', function (hooks) {
       <SessionRecording::Player @asciiCast={{this.cast}} @route='test.route' @model='t_123' />
     `);
 
-    assert.dom(this.element).hasText('Back to channels --:----:--');
+    assert.dom('.session-recording-player-header').hasText('Back to channels');
+    assert.dom('.control-bar .timer').hasText('--:----:--');
   });
 });
