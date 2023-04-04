@@ -9,21 +9,22 @@
     <h2>{{t 'resources.target.enable-session-recording.messages.add.title'}}
       <DocLink @doc='target.enable-session-recording' @iconSize='large' />
     </h2>
-    {{!TODO: add description for enabling session recording}}
+
     <Copyable
-      @text={{@model.id}}
+      @text={{@model.target.id}}
       @buttonText={{t 'actions.copy-to-clipboard'}}
       @acknowledgeText={{t 'states.copied'}}
     >
-      <code>{{@model.id}}</code>
+      <code>{{@model.target.id}}</code>
     </Copyable>
   </page.header>
 
   <page.body>
-    <Form::EnableSessionRecording
-      @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel'}}
+    <Form::Target::EnableSessionRecording
+      @model={{@model.target}}
+      @storageBucketList={{@model.storageBucketList}}
+      @submit={{route-action 'save' @model.target}}
+      @cancel={{route-action 'cancel' @model.target}}
     />
   </page.body>
 

@@ -1,50 +1,54 @@
-<Rose::Form @onSubmit={{@submit}} @cancel={{@cancel}} as |form|>
+<Rose::Form
+  @onSubmit={{fn @submit this.toggleEnabled}}
+  @cancel={{@cancel}}
+  as |form|
+>
   <div class='enable-session-recording-toggle'>
-
     <Hds::Form::Toggle::Field
       name='target-enable-session-recording'
       checked={{this.toggleEnabled}}
+      {{on 'change' this.toggleSessionRecording}}
       as |F|
     >
       <F.Label>{{t
           'resources.target.enable-session-recording.form.filter.label'
         }}</F.Label>
     </Hds::Form::Toggle::Field>
-
     {{#if this.toggleEnabled}}
       <Hds::Form::Select::Field
         @isRequired={{true}}
-        @value={{@model.name}}
-        @isInvalid={{@model.errors.name}}
+        @isInvalid={{@model.errors.storage_bucket_id}}
+        @value={{@model.storage_bucket_id}}
         @type='text'
         @width='100%'
-        @name='target-enable-session-recording'
+        @name='storage_bucket_id'
+        {{on 'change' this.selectStorageBucket}}
         as |F|
       >
         <F.Label>{{t
             'resources.target.enable-session-recording.form.select.label'
           }}</F.Label>
-
-        {{!TODO: add correct description for form-select}}
         <F.HelperText>
           {{t
             'resources.target.enable-session-recording.form.select.description'
           }}
         </F.HelperText>
-
-        {{!TODO: replace dummy data with storage-bucket name and remove uneeded translations}}
         <F.Options>
-          <option>{{t
-              'resources.target.enable-session-recording.options.1'
+          <option disabled hidden selected value=''>{{t
+              'titles.choose-an-option'
             }}</option>
-          <option>{{t
-              'resources.target.enable-session-recording.options.2'
-            }}</option>
+          {{#each @storageBucketList as |bucket|}}
+            <option
+              value={{bucket.id}}
+              selected={{eq @model.storage_bucket_id bucket.id}}
+            >
+              {{bucket.displayName}}
+            </option>
+          {{/each}}
         </F.Options>
-
-        {{#if @model.errors.name}}
+        {{#if @model.errors.storage_bucket_id}}
           <F.Error as |E|>
-            {{#each @model.errors.name as |error|}}
+            {{#each @model.errors.storage_bucket_id as |error|}}
               <E.Message>{{error.message}}</E.Message>
             {{/each}}
           </F.Error>
@@ -55,14 +59,14 @@
     <Hds::Link::Standalone
       @color='primary'
       @icon='plus'
-      @text='Add a new storage bucket'
+      @text={{t 'resources.storage-bucket.messages.none.link'}}
       @route='scopes.scope.storage-buckets.new'
     />
-
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}
     />
+
   </div>
 </Rose::Form>
