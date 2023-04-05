@@ -13,6 +13,7 @@ const devFeatures = {
 const licensedFeatures = {
   'multi-hop-sessions': false,
   'ssh-target': false,
+  'session-recording': false,
 };
 // Base edition declares available features, disabled by default.
 const baseEdition = {
@@ -27,7 +28,6 @@ const baseEdition = {
   'target-worker-filters-v2-hcp': false,
   'target-network-address': false,
   'vault-worker-filter': false,
-  'session-recording': false,
 };
 // Editions maps edition keys to their associated featuresets.
 const featureEditions = {};
@@ -43,7 +43,6 @@ featureEditions.enterprise = {
   ...featureEditions.oss,
   'target-worker-filters-v2-ingress': true,
   'vault-worker-filter': true,
-  'session-recording': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
