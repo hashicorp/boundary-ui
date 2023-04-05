@@ -21,7 +21,7 @@ module('Acceptance | targets | read', function (hooks) {
   setupMirage(hooks);
 
   let featuresService;
-
+  const LINK_LIST_SELECTOR = '.link-list-item';
   const instances = {
     scopes: {
       global: null,
@@ -30,6 +30,7 @@ module('Acceptance | targets | read', function (hooks) {
     },
     sshTarget: null,
     tcpTarget: null,
+    storageBucket: null,
   };
   const urls = {
     globalScope: null,
@@ -39,6 +40,7 @@ module('Acceptance | targets | read', function (hooks) {
     sshTarget: null,
     tcpTarget: null,
     enableSessionRecording: null,
+    storageBucket: null,
   };
 
   hooks.beforeEach(function () {
@@ -61,6 +63,9 @@ module('Acceptance | targets | read', function (hooks) {
       type: TYPE_TARGET_TCP,
       scope: instances.scopes.project,
     });
+    instances.storageBucket = this.server.create('storage-bucket', {
+      scope: instances.scopes.global,
+    });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
@@ -70,6 +75,7 @@ module('Acceptance | targets | read', function (hooks) {
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
     urls.enableSessionRecording = `${urls.sshTarget}/enable-session-recording`;
+    urls.storageBucket = `${urls.projectScope}/storage-buckets/${instances.storageBucket.id}`;
 
     authenticateSession({});
   });
@@ -212,6 +218,19 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click('.target-sidebar a');
     assert.strictEqual(currentURL(), urls.enableSessionRecording);
+  });
+
+  test('users can click on associated storage bucket card on an ssh target', async function (assert) {
+    assert.expect(1);
+    featuresService.enable('ssh-target');
+    featuresService.enable('session-recording');
+    instances.sshTarget.update({ storageBucketId: instances.storageBucket.id });
+    await visit(urls.targets);
+
+    await click(`[href="${urls.sshTarget}"]`);
+    await click(LINK_LIST_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.storageBucket);
   });
 
   test('users can click on settings icon in target session-recording sidebar and it takes them to enable session recording', async function (assert) {

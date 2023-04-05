@@ -80,13 +80,10 @@
             </B.Td>
             <B.Td>
               {{#if B.data.scopeModel.isGlobal}}
-                <Hds::Badge
-                  @text={{t 'resources.storage-bucket.titles.global'}}
-                  @icon='globe'
-                />
+                <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
               {{else}}
                 <Hds::Badge
-                  @text={{t 'resources.storage-bucket.titles.orgs'}}
+                  @text={{t 'resources.org.title_plural'}}
                   @icon='org'
                 />
               {{/if}}

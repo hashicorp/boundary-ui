@@ -261,12 +261,10 @@ storage-bucket:
   titles:
     new: New Storage Bucket
     aws: AWS
-    global: Global
-    orgs: Orgs
-  types:
-    aws_s3: AWS S3
   actions:
     delete: Delete Storage Bucket
+  types:
+    aws_s3: AWS S3
   form:
     scope:
       label: Scope
