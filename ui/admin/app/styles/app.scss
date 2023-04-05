@@ -788,20 +788,18 @@
   &-header {
     border-bottom: var(--player-divider) 0.125rem solid;
 
-    // override of standalone link styles to allow for
+    // override of button styles to allow for
     // static colors in light and dark mode
     a {
       color: var(--link-color);
       padding: 1rem;
     }
 
-    a:hover {
+    .hds-button--color-tertiary:hover,
+    .hds-button--color-tertiary:active {
       color: var(--link-color);
-
-      /* stylelint-disable selector-class-pattern */
-      .hds-link-standalone__text {
-        text-decoration-color: var(--link-color);
-      }
+      background-color: transparent;
+      border-color: transparent;
     }
   }
 

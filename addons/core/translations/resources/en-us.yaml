@@ -232,6 +232,8 @@ session-recording:
     title: Channel
     title_plural: Channels
     details: Channel details
+    player:
+      back-navigation: Back to channels
   session:
     title: Session Playback
   form:

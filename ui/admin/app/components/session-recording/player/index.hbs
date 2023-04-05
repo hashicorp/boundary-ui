@@ -1,8 +1,9 @@
 <div class='session-recording-player'>
   <div class='session-recording-player-header'>
-    <Hds::Link::Standalone
+    <Hds::Button
       @icon='arrow-left'
-      @text='Back to channels'
+      @text={{t 'resources.session-recording.channel.player.back-navigation'}}
+      @color='tertiary'
       @route={{@route}}
       @model={{@model}}
     />
