@@ -31,10 +31,14 @@
       <Rose::Table as |table|>
         <table.header as |header|>
           <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            {{#if @model.hostSet.isStatic}}
+              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
+            {{else}}
+              <row.headerCell>{{t 'form.external_name.label'}}</row.headerCell>
+            {{/if}}
             <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            {{#if @model.isStatic}}
+            {{#if @model.hostSet.isStatic}}
               <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
             {{/if}}
           </header.row>
