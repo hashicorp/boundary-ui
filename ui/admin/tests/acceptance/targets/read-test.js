@@ -21,7 +21,10 @@ module('Acceptance | targets | read', function (hooks) {
   setupMirage(hooks);
 
   let featuresService;
+  const SETTINGS_LINK_SELECTOR = '.target-sidebar .hds-link-standalone';
+  const ENABLE_BUTTON_SELECTOR = '.target-sidebar .hds-button';
   const LINK_LIST_SELECTOR = '.link-list-item';
+
   const instances = {
     scopes: {
       global: null,
@@ -207,16 +210,17 @@ module('Acceptance | targets | read', function (hooks) {
 
     await visit(urls.sshTarget);
 
-    assert.dom('.target-sidebar a').doesNotExist();
+    assert.dom(ENABLE_BUTTON_SELECTOR).doesNotExist();
   });
 
   test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
     featuresService.enable('session-recording');
-    assert.expect(1);
-
+    assert.expect(2);
     await visit(urls.sshTarget);
 
-    await click('.target-sidebar a');
+    assert.dom(SETTINGS_LINK_SELECTOR).doesNotExist();
+    await click(ENABLE_BUTTON_SELECTOR);
+
     assert.strictEqual(currentURL(), urls.enableSessionRecording);
   });
 
@@ -233,13 +237,17 @@ module('Acceptance | targets | read', function (hooks) {
     assert.strictEqual(currentURL(), urls.storageBucket);
   });
 
-  test('users can click on settings icon in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
+  test('users can click on settings link in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
     featuresService.enable('session-recording');
     assert.expect(1);
+    featuresService.enable('ssh-target');
+    featuresService.enable('session-recording');
+    instances.sshTarget.update({ storageBucketId: instances.storageBucket.id });
+    await visit(urls.targets);
 
-    await visit(urls.sshTarget);
+    await click(`[href="${urls.sshTarget}"]`);
+    await click(SETTINGS_LINK_SELECTOR);
 
-    await click('.target-sidebar .title-wrapper a');
     assert.strictEqual(currentURL(), urls.enableSessionRecording);
   });
 });

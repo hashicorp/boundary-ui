@@ -22,7 +22,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
    * @return {StorageBucket}
    */
   model() {
-    const scopeModel = this.modelFor('scopes.scope');
+    const scopeModel = this.store.peekRecord('scope', 'global');
     const record = this.store.createRecord('storage-bucket', {
       type: TYPE_STORAGE_BUCKET_PLUGIN,
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,

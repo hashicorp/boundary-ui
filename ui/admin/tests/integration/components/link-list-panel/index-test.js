@@ -20,7 +20,7 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
     `);
 
     assert.dom('[data-test-icon="cloud-upload"]').isVisible();
-    assert.dom('[data-test-icon="chevron-right"]').isVisible();
+    assert.dom('[data-test-icon="arrow-right"]').isVisible();
     assert.dom('[data-test-icon="aws-color"]').isVisible();
     assert.dom('.hds-badge__text').hasText('AWS S3');
     assert.dom('.link-list-item__text').hasText('Storage Bucket');

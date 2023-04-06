@@ -660,22 +660,14 @@
 
 // target sidebar
 .target-sidebar {
-  .title-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-
-    .hds-button {
-      box-shadow: none;
-      border: none;
-      background-color: transparent;
-    }
-  }
-
   .description {
     color: var(--token-form-helper-text-color);
     font-weight: var(--token-typography-font-weight-normal);
     font-size: var(--token-typography-body-200-font-size);
+  }
+
+  .hds-link-standalone {
+    margin-top: 1rem;
   }
 }
 
@@ -698,14 +690,8 @@
     margin-bottom: 0.25rem;
   }
 
-  .flight-icon-chevron-right {
+  .flight-icon-arrow-right {
     color: var(--token-color-foreground-faint);
-  }
-
-  .hds-button {
-    box-shadow: none;
-    border: none;
-    background-color: transparent;
   }
 }
 

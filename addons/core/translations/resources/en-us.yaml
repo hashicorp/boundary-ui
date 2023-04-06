@@ -408,6 +408,7 @@ target:
     sidebar:
       label: Session Recording
       help: Record SSH sessions on this target and save them to an Amazon S3 bucket.
+      link: Session Recording settings
   questions:
     delete-host-sources:
       title: Remove associated host sources?
