@@ -102,6 +102,14 @@
                   @model={{B.data.id}}
                   @text={{t 'actions.edit'}}
                 />
+                {{#if (can 'delete model' B.data)}}
+                  <dd.Separator />
+                  <dd.Interactive
+                    @text={{t 'resources.storage-bucket.actions.delete'}}
+                    @color='critical'
+                    {{on 'click' (route-action 'delete' B.data)}}
+                  />
+                {{/if}}
               </Hds::Dropdown>
             </B.Td>
           </B.Tr>

@@ -290,6 +290,10 @@ storage-bucket:
     worker_filter:
       label: Worker filter
       help: Filter for Boundary workers that have network access to your storage. Boolean expression.
+  questions:
+    delete-storage-bucket:
+      title: Delete associated recordings?
+      message: This storage bucket may have session recordings associated with it. Deleting this storage bucket will delete these recordings when you save your changes.
 project:
   title: Project
   title_plural: Projects

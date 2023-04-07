@@ -7,6 +7,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
+import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeStorageBucketsRoute extends Route {
@@ -70,5 +71,21 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
     const { isNew } = storageBucket;
     storageBucket.rollbackAttributes();
     if (isNew) this.router.transitionTo('scopes.scope.storage-buckets');
+  }
+
+  /**
+   * Deletes the storage bucket.
+   * @param {StorageBucketModel} storageBucket
+   */
+  @action
+  @loading
+  @confirm('resources.storage-bucket.questions.delete-storage-bucket.message', {
+    title: 'resources.storage-bucket.questions.delete-storage-bucket.title',
+    confirm: 'resources.storage-bucket.actions.delete',
+  })
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(storageBucket) {
+    await storageBucket.destroyRecord();
   }
 }
