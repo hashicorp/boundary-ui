@@ -21,9 +21,6 @@ module('Acceptance | targets | read', function (hooks) {
   setupMirage(hooks);
 
   let featuresService;
-  const SETTINGS_LINK_SELECTOR = '.target-sidebar .hds-link-standalone';
-  const ENABLE_BUTTON_SELECTOR = '.target-sidebar .hds-button';
-  const LINK_LIST_SELECTOR = '.link-list-item';
 
   const instances = {
     scopes: {
@@ -33,7 +30,6 @@ module('Acceptance | targets | read', function (hooks) {
     },
     sshTarget: null,
     tcpTarget: null,
-    storageBucket: null,
   };
   const urls = {
     globalScope: null,
@@ -42,8 +38,6 @@ module('Acceptance | targets | read', function (hooks) {
     targets: null,
     sshTarget: null,
     tcpTarget: null,
-    enableSessionRecording: null,
-    storageBucket: null,
   };
 
   hooks.beforeEach(function () {
@@ -66,9 +60,7 @@ module('Acceptance | targets | read', function (hooks) {
       type: TYPE_TARGET_TCP,
       scope: instances.scopes.project,
     });
-    instances.storageBucket = this.server.create('storage-bucket', {
-      scope: instances.scopes.global,
-    });
+
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
@@ -77,8 +69,6 @@ module('Acceptance | targets | read', function (hooks) {
     urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
-    urls.enableSessionRecording = `${urls.sshTarget}/enable-session-recording`;
-    urls.storageBucket = `${urls.projectScope}/storage-buckets/${instances.storageBucket.id}`;
 
     authenticateSession({});
   });
@@ -202,52 +192,5 @@ module('Acceptance | targets | read', function (hooks) {
     assert
       .dom(`[href="https://boundaryproject.io/help/admin-ui/targets"]`)
       .exists();
-  });
-
-  test('cannot enable session recording for a target without proper authorization', async function (assert) {
-    assert.expect(2);
-    assert.false(featuresService.isEnabled('session-recording'));
-
-    await visit(urls.sshTarget);
-
-    assert.dom(ENABLE_BUTTON_SELECTOR).doesNotExist();
-  });
-
-  test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
-    featuresService.enable('session-recording');
-    assert.expect(2);
-    await visit(urls.sshTarget);
-
-    assert.dom(SETTINGS_LINK_SELECTOR).doesNotExist();
-    await click(ENABLE_BUTTON_SELECTOR);
-
-    assert.strictEqual(currentURL(), urls.enableSessionRecording);
-  });
-
-  test('users can click on associated storage bucket card on an ssh target', async function (assert) {
-    assert.expect(1);
-    featuresService.enable('ssh-target');
-    featuresService.enable('session-recording');
-    instances.sshTarget.update({ storageBucketId: instances.storageBucket.id });
-    await visit(urls.targets);
-
-    await click(`[href="${urls.sshTarget}"]`);
-    await click(LINK_LIST_SELECTOR);
-
-    assert.strictEqual(currentURL(), urls.storageBucket);
-  });
-
-  test('users can click on settings link in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
-    featuresService.enable('session-recording');
-    assert.expect(1);
-    featuresService.enable('ssh-target');
-    featuresService.enable('session-recording');
-    instances.sshTarget.update({ storageBucketId: instances.storageBucket.id });
-    await visit(urls.targets);
-
-    await click(`[href="${urls.sshTarget}"]`);
-    await click(SETTINGS_LINK_SELECTOR);
-
-    assert.strictEqual(currentURL(), urls.enableSessionRecording);
   });
 });
