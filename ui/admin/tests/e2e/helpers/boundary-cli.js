@@ -4,7 +4,7 @@
  */
 
 /* eslint-disable no-undef */
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 
 /**
  * Checks that the boundary cli is available
@@ -36,3 +36,37 @@ exports.authenticateBoundaryCli = async () => {
     console.log(`${e.stderr}`);
   }
 };
+
+exports.connectToTarget = async (target) => {
+  let connect;
+  try {
+    connect = exec(
+      'boundary connect' +
+      ' -target-id=' +
+      target.id +
+      ' -exec /usr/bin/ssh --' +
+      ' -l ' +
+      process.env.E2E_SSH_USER +
+      ' -i ' +
+      process.env.E2E_SSH_KEY_PATH +
+      ' -o UserKnownHostsFile=/dev/null' +
+      ' -o StrictHostKeyChecking=no' +
+      ' -o IdentitiesOnly=yes' + // forces the use of the provided key
+      ' -p {{boundary.port}}' +
+      ' {{boundary.ip}}'
+    )
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+  return connect
+}
+
+exports.deleteOrg = async (orgId) => {
+  try {
+    exec(
+      'boundary scopes delete -id=' + orgId
+    )
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+}
