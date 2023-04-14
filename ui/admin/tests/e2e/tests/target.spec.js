@@ -40,7 +40,6 @@ test.beforeAll(async () => {
 });
 
 test.afterEach(async () => {
-  console.log("inside afterEach(): deleting " + org)
   await deleteOrg(org.id);
 })
 
