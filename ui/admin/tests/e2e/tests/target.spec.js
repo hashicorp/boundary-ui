@@ -24,7 +24,6 @@ const {
   waitForSessionToBeVisible,
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
-let org
 
 test.use({storageState: authenticatedState});
 
@@ -39,43 +38,40 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
-test.afterEach(async () => {
-  await deleteOrg(org.id);
-})
-
 test('Verify session created to target with host, then cancel the session', async ({ page }) => {
   await page.goto('/');
-
-  const orgName = await createNewOrg(page);
-  const projectName = await createNewProject(page);
-  await createNewHostCatalog(page);
-  const hostSetName = await createNewHostSet(page);
-  await createNewHostInHostSet(page);
-  const targetName = await createNewTarget(page);
-  await addHostSourceToTarget(page, hostSetName);
-
-  await authenticateBoundaryCli();
-  const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-  org = orgs.items.filter((obj) => obj.name == orgName)[0];
-  const projects = JSON.parse(
-    execSync('boundary scopes list -format json -scope-id ' + org.id)
-  );
-  const project = projects.items.filter((obj) => obj.name == projectName)[0];
-  const targets = JSON.parse(
-    execSync('boundary targets list -format json -scope-id ' + project.id)
-  );
-  const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
-  let connect = await connectToTarget(target)
+  let org
+  let connect
   try {
-    await waitForSessionToBeVisible(page, targetName)
+    const orgName = await createNewOrg(page);
+    const projectName = await createNewProject(page);
+    await createNewHostCatalog(page);
+    const hostSetName = await createNewHostSet(page);
+    await createNewHostInHostSet(page);
+    const targetName = await createNewTarget(page);
+    await addHostSourceToTarget(page, hostSetName);
 
+    await authenticateBoundaryCli();
+    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+    org = orgs.items.filter((obj) => obj.name == orgName)[0];
+    const projects = JSON.parse(
+      execSync('boundary scopes list -format json -scope-id ' + org.id)
+    );
+    const project = projects.items.filter((obj) => obj.name == projectName)[0];
+    const targets = JSON.parse(
+      execSync('boundary targets list -format json -scope-id ' + project.id)
+    );
+    const target = targets.items.filter((obj) => obj.name == targetName)[0];
+
+    connect = await connectToTarget(target)
+    await waitForSessionToBeVisible(page, targetName)
     await page
       .getByRole('cell', { name: targetName })
       .locator('..')
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
+    await deleteOrg(org.id);
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
@@ -85,25 +81,26 @@ test('Verify session created to target with host, then cancel the session', asyn
 
 test('Verify session created to target with address, then cancel the session', async ({page}) => {
   await page.goto('/');
-
-  const orgName = await createNewOrg(page);
-  const projectName = await createNewProject(page);
-  const targetName = await createNewTargetWithAddress(page);
-
-  await authenticateBoundaryCli();
-  const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-  org = orgs.items.filter((obj) => obj.name == orgName)[0];
-  const projects = JSON.parse(
-    execSync('boundary scopes list -format json -scope-id ' + org.id)
-  );
-  const project = projects.items.filter((obj) => obj.name == projectName)[0];
-  const targets = JSON.parse(
-    execSync('boundary targets list -format json -scope-id ' + project.id)
-  );
-  const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
-  let connect = await connectToTarget(target)
+  let org
+  let connect
   try {
+    const orgName = await createNewOrg(page);
+    const projectName = await createNewProject(page);
+    const targetName = await createNewTargetWithAddress(page);
+
+    await authenticateBoundaryCli();
+    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+    org = orgs.items.filter((obj) => obj.name == orgName)[0];
+    const projects = JSON.parse(
+      execSync('boundary scopes list -format json -scope-id ' + org.id)
+    );
+    const project = projects.items.filter((obj) => obj.name == projectName)[0];
+    const targets = JSON.parse(
+      execSync('boundary targets list -format json -scope-id ' + project.id)
+    );
+    const target = targets.items.filter((obj) => obj.name == targetName)[0];
+
+    connect = await connectToTarget(target)
     await waitForSessionToBeVisible(page, targetName)
     await page
       .getByRole('cell', { name: targetName })
@@ -111,6 +108,7 @@ test('Verify session created to target with address, then cancel the session', a
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
+    await deleteOrg(org.id);
     // End `boundary connect` process
     if (connect) {
       connect.kill();
