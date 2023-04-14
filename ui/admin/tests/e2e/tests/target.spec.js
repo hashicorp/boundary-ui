@@ -43,7 +43,7 @@ test.afterEach(async () => {
   await deleteOrg(org.id);
 })
 
-test('Verify session created then cancel the session', async ({ page }) => {
+test('Verify session created to target with host, then cancel the session', async ({ page }) => {
   await page.goto('/');
 
   const orgName = await createNewOrg(page);
@@ -83,7 +83,7 @@ test('Verify session created then cancel the session', async ({ page }) => {
   }
 });
 
-test('Verify session created to target with address then cancel the session', async ({page}) => {
+test('Verify session created to target with address, then cancel the session', async ({page}) => {
   await page.goto('/');
 
   const orgName = await createNewOrg(page);
