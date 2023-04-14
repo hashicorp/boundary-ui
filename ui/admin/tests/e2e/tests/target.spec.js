@@ -4,8 +4,8 @@
  */
 
 /* eslint-disable no-undef */
-const {test, expect} = require('@playwright/test');
-const {exec, execSync} = require('child_process');
+const {test} = require('@playwright/test');
+const {execSync} = require('child_process');
 const {checkEnv, authenticatedState} = require('../helpers/general');
 const {
   authenticateBoundaryCli,
