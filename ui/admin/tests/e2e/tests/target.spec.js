@@ -4,9 +4,9 @@
  */
 
 /* eslint-disable no-undef */
-const {test} = require('@playwright/test');
-const {execSync} = require('child_process');
-const {checkEnv, authenticatedState} = require('../helpers/general');
+const { test } = require('@playwright/test');
+const { execSync } = require('child_process');
+const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -25,7 +25,7 @@ const {
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
 
-test.use({storageState: authenticatedState});
+test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await checkEnv([
@@ -38,10 +38,12 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
-test('Verify session created to target with host, then cancel the session', async ({ page }) => {
+test('Verify session created to target with host, then cancel the session', async ({
+  page,
+}) => {
   await page.goto('/');
-  let org
-  let connect
+  let org;
+  let connect;
   try {
     const orgName = await createNewOrg(page);
     const projectName = await createNewProject(page);
@@ -63,8 +65,8 @@ test('Verify session created to target with host, then cancel the session', asyn
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target)
-    await waitForSessionToBeVisible(page, targetName)
+    connect = await connectToTarget(target);
+    await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
       .locator('..')
@@ -79,10 +81,12 @@ test('Verify session created to target with host, then cancel the session', asyn
   }
 });
 
-test('Verify session created to target with address, then cancel the session', async ({page}) => {
+test('Verify session created to target with address, then cancel the session', async ({
+  page,
+}) => {
   await page.goto('/');
-  let org
-  let connect
+  let org;
+  let connect;
   try {
     const orgName = await createNewOrg(page);
     const projectName = await createNewProject(page);
@@ -100,8 +104,8 @@ test('Verify session created to target with address, then cancel the session', a
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target)
-    await waitForSessionToBeVisible(page, targetName)
+    connect = await connectToTarget(target);
+    await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
       .locator('..')

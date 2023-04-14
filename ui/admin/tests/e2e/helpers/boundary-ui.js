@@ -176,7 +176,7 @@ exports.createNewTargetWithAddress = async (page) => {
   await page.getByRole('link', { name: 'New' }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_IP)
+  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_IP);
   await page.getByLabel('Default Port').fill(process.env.E2E_SSH_PORT);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
@@ -218,24 +218,24 @@ exports.addHostSourceToTarget = async (page, hostSourceName) => {
 
 exports.waitForSessionToBeVisible = async (page, targetName) => {
   await page
-    .getByRole('navigation', {name: 'Resources'})
-    .getByRole('link', {name: 'Sessions'})
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Sessions' })
     .click();
   let i = 0;
   let sessionIsVisible = false;
   do {
     i = i + 1;
     sessionIsVisible = await page
-      .getByRole('cell', {name: targetName})
+      .getByRole('cell', { name: targetName })
       .isVisible();
     if (sessionIsVisible) {
       break;
     }
-    await page.getByRole('button', {name: 'Refresh'}).click();
-    await expect(page.getByRole('button', {name: 'Refresh'})).toBeEnabled();
+    await page.getByRole('button', { name: 'Refresh' }).click();
+    await expect(page.getByRole('button', { name: 'Refresh' })).toBeEnabled();
   } while (i < 5);
 
   if (!sessionIsVisible) {
     throw new Error('Session is not visible');
   }
-}
+};
