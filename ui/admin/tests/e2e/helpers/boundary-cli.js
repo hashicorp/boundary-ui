@@ -40,6 +40,7 @@ exports.authenticateBoundaryCli = async () => {
 /**
  * Uses the boundary CLI to connect to the specified target
  * @param {string} targetId ID of the target to be connected to
+ * @returns ChildProcess representing the result of the command execution
  */
 exports.connectToTarget = async (targetId) => {
   let connect;
