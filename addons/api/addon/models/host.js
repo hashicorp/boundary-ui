@@ -29,6 +29,12 @@ export default class HostModel extends GeneratedHostModel {
   })
   external_id;
 
+  @attr('string', {
+    description: 'The external facing name for the plugin based host.',
+    readOnly: true,
+  })
+  external_name;
+
   // Aws specific
   @attr({
     readOnly: true,
@@ -88,5 +94,10 @@ export default class HostModel extends GeneratedHostModel {
       this.type = 'plugin';
       this.plugin = { name: type };
     }
+  }
+
+  // Plugin hosts can support an external name
+  get displayName() {
+    return this.name || this.external_name || this.id;
   }
 }
