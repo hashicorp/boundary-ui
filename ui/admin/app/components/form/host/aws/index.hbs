@@ -11,51 +11,70 @@
   as |form|
 >
 
-  <form.input
+  <Hds::Form::TextInput::Field
     @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
-
-  <form.input
-    @name='name'
-    @type='name'
-    @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @error={{@model.errors.name}}
-    @helperText={{t 'form.name.help'}}
-    readonly={{false}}
-    as |field|
+    name='type'
+    disabled={{true}}
+    as |F|
   >
-    {{#if @model.errors.name}}
-      <field.errors as |errors|>
-        {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
 
-  <form.textarea
-    @name='description'
-    @type='description'
+  {{#if @model.external_name}}
+    <Hds::Form::TextInput::Field
+      @value={{@model.external_name}}
+      @isInvalid={{@model.errors.external_name}}
+      name='external_name'
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>{{t 'form.external_name.label'}}</F.Label>
+      <F.HelperText>{{t 'form.external_name.help'}}</F.HelperText>
+      {{#if @model.errors.external_name}}
+        <F.Error as |E|>
+          {{#each @model.errors.external_name as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
+
+  <Hds::Form::TextInput::Field
+    @value={{@model.external_id}}
+    @isInvalid={{@model.errors.external_id}}
+    name='external_id'
+    disabled={{true}}
+    as |F|
+  >
+    <F.Label>{{t 'form.external_id.label'}}</F.Label>
+    <F.HelperText>{{t 'form.external_id.help'}}</F.HelperText>
+    {{#if @model.errors.external_id}}
+      <F.Error as |E|>
+        {{#each @model.errors.external_id as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
     @value={{@model.description}}
-    @label={{t 'form.description.label'}}
-    @error={{@model.errors.description}}
-    @helperText={{t 'form.description.help'}}
-    disabled={{@model.isSaving}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.description}}
+    name='description'
+    disabled={{true}}
+    as |F|
   >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
     {{#if @model.errors.description}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.description as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.textarea>
+  </Hds::Form::Textarea::Field>
 
   <InfoField
     @value={{t 'descriptions.provider'}}
@@ -69,27 +88,33 @@
     </F.HelperText>
   </InfoField>
 
-  <form.fieldset>
-    <:title>{{t 'form.ip_addresses.label'}}</:title>
-    <:body>
-      {{#each @model.ip_addresses as |ip_address|}}
-        <form.input
+  <Hds::Form::Fieldset as |F|>
+    <F.Legend>{{t 'form.ip_addresses.label'}}</F.Legend>
+    <F.HelperText>{{t 'form.ip_addresses.help'}} </F.HelperText>
+    {{#each @model.ip_addresses as |ip_address|}}
+      <F.Control>
+        <Hds::Form::TextInput::Base
           @value={{ip_address}}
-          readonly={{true}}
-          @disabled={{true}}
+          disabled={{true}}
+          @width='unset'
         />
-      {{/each}}
-    </:body>
-  </form.fieldset>
+      </F.Control>
+    {{/each}}
+  </Hds::Form::Fieldset>
 
-  <form.fieldset>
-    <:title>{{t 'form.dns_names.label'}}</:title>
-    <:body>
-      {{#each @model.dns_names as |dns_name|}}
-        <form.input @value={{dns_name}} readonly={{true}} @disabled={{true}} />
-      {{/each}}
-    </:body>
-  </form.fieldset>
+  <Hds::Form::Fieldset as |F|>
+    <F.Legend>{{t 'form.dns_names.label'}}</F.Legend>
+    <F.HelperText>{{t 'form.dns_names.help'}} </F.HelperText>
+    {{#each @model.dns_names as |dns_name|}}
+      <F.Control>
+        <Hds::Form::TextInput::Base
+          @value={{dns_name}}
+          disabled={{true}}
+          @width='unset'
+        />
+      </F.Control>
+    {{/each}}
+  </Hds::Form::Fieldset>
 
   {{#if (can 'save model' @model)}}
     <form.actions
