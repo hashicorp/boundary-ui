@@ -52,18 +52,22 @@
                     <span>{{B.data.type}}</span>
                   </B.Td>
                   <B.Td>
-                    <span><FlightIcon @name='arrow-up' /></span>
-                    <span>{{format-bytes-size B.data.bytes_up}}</span>
-                    <span><FlightIcon @name='arrow-down' /></span>
-                    <span>{{format-bytes-size B.data.bytes_down}}</span>
-                    <span
-                      class='session-recording-list-cell-item hds-foreground-faint'
-                    >
-                      <span><FlightIcon @name='clock' /></span>
-                      <span>
-                        {{format-time-duration B.data.duration}}
-                      </span>
-                    </span>
+                    <MetadataList as |list|>
+                      {{! Bytes up }}
+                      <list.Item @icon='arrow-up' @color='success'>
+                        {{format-bytes-size @model.sessionRecording.bytes_up}}
+                      </list.Item>
+                      {{! Bytes down }}
+                      <list.Item @icon='arrow-down' @color='action'>
+                        {{format-bytes-size @model.sessionRecording.bytes_down}}
+                      </list.Item>
+                      {{! Duration }}
+                      <list.Item @icon='clock' @color='faint'>
+                        {{format-time-duration
+                          @model.sessionRecording.duration
+                        }}
+                      </list.Item>
+                    </MetadataList>
                   </B.Td>
                   <B.Td align='right'>
                     <Hds::Button
@@ -82,28 +86,25 @@
         <sb.Sidebar>
           <div>
             <h3>{{t 'resources.session-recording.details'}}</h3>
-            {{! Start time }}
-            <p>
-              <FlightIcon @name='calendar' />
-              {{@model.sessionRecording.start_time}}
-            </p>
-            {{! Duration }}
-            <p>
-              <FlightIcon @name='clock' />
-              {{@model.sessionRecording.duration}}
-            </p>
 
-            {{! Bytes up }}
-            <p>
-              <FlightIcon @name='arrow-up' />
-              {{format-bytes-size @model.sessionRecording.bytes_up}}
-            </p>
-
-            {{! Bytes down }}
-            <p>
-              <FlightIcon @name='arrow-down' />
-              {{format-bytes-size @model.sessionRecording.bytes_down}}
-            </p>
+            <MetadataList @orientation='vertical' as |list|>
+              {{! Start time }}
+              <list.Item @icon='calendar' @color='faint'>
+                {{@model.sessionRecording.start_time}}
+              </list.Item>
+              {{! Duration }}
+              <list.Item @icon='clock' @color='faint'>
+                {{format-time-duration @model.sessionRecording.duration}}
+              </list.Item>
+              {{! Bytes up }}
+              <list.Item @icon='arrow-up' @color='success'>
+                {{format-bytes-size @model.sessionRecording.bytes_up}}
+              </list.Item>
+              {{! Bytes down }}
+              <list.Item @icon='arrow-down' @color='action'>
+                {{format-bytes-size @model.sessionRecording.bytes_down}}
+              </list.Item>
+            </MetadataList>
           </div>
           {{! Related }}
           <div>

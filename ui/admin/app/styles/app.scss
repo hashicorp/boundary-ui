@@ -861,3 +861,21 @@
     padding: 0.875rem 1rem;
   }
 }
+
+// Metadata List
+.metadata-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &.vertical {
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
+  .metadata-list-item {
+    display: flex;
+    column-gap: 0.3rem;
+  }
+}
