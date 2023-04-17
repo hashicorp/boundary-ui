@@ -65,7 +65,7 @@ test('Verify session created to target with host, then cancel the session', asyn
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target);
+    connect = await connectToTarget(target.id);
     await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
@@ -104,7 +104,7 @@ test('Verify session created to target with address, then cancel the session', a
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target);
+    connect = await connectToTarget(target.id);
     await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
@@ -115,7 +115,7 @@ test('Verify session created to target with address, then cancel the session', a
     await deleteOrg(org.id);
     // End `boundary connect` process
     if (connect) {
-      connect.kill();
+      connect.kill('SIGTERM');
     }
   }
 });

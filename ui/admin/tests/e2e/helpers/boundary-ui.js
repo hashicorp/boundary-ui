@@ -216,6 +216,11 @@ exports.addHostSourceToTarget = async (page, hostSourceName) => {
   await expect(page.getByRole('link', { name: hostSourceName })).toBeVisible();
 };
 
+/**
+ * Uses the UI to navigate to Sessions and waits for the session to appear.
+ * @param {Page} page Playwright page object
+ * @param {string} targetName Name of the target associated with the session
+ */
 exports.waitForSessionToBeVisible = async (page, targetName) => {
   await page
     .getByRole('navigation', { name: 'Resources' })
