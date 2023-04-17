@@ -167,6 +167,11 @@ exports.createNewTarget = async (page) => {
   return targetName;
 };
 
+/**
+ * Uses the UI to create a new target with address. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the target
+ */
 exports.createNewTargetWithAddress = async (page) => {
   const targetName = 'Target ' + nanoid();
   await page
