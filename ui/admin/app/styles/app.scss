@@ -766,7 +766,10 @@
 .session-recording-player {
   --player-background-color: #252937;
   --player-divider: #656a761a;
-  --link-color: #fff;
+  --player-white: #fff;
+  --player-control-bar-buffer: #656a76;
+  --player-play-button: #1060ff;
+  --player-play-button-border: #0c56e9;
 
   background-color: var(--player-background-color);
   border-radius: 0.75rem;
@@ -777,13 +780,13 @@
     // override of button styles to allow for
     // static colors in light and dark mode
     a {
-      color: var(--link-color);
+      color: var(--player-white);
       padding: 1rem;
     }
 
     .hds-button--color-tertiary:hover,
     .hds-button--color-tertiary:active {
-      color: var(--link-color);
+      color: var(--player-white);
       background-color: transparent;
       border-color: transparent;
     }
@@ -802,6 +805,11 @@
 
     .asciinema-player {
       border-radius: 0.75rem;
+
+      // hides large play icon overlay
+      .start-prompt {
+        z-index: -10;
+      }
     }
 
     .asciinema-player-wrapper {
@@ -810,9 +818,51 @@
       }
 
       .control-bar {
-        bottom: 0;
+        bottom: -3.625rem;
         background: var(--player-background-color);
         border-top: var(--player-divider) 0.125rem solid;
+        height: 3.625rem;
+
+        .playback-button {
+          background: var(--player-play-button);
+          border: var(--player-play-button-border) 0.063rem solid;
+          border-radius: 0.313rem;
+          margin: 0.75rem;
+          padding: 0.625rem 1rem;
+
+          .icon path {
+            fill: var(--player-white);
+          }
+        }
+      }
+
+      .timer {
+        font-family: var(--token-typography-body-base-font-family);
+        font-size: var(--token-typography-body-base-font-size);
+        line-height: var(--token-typography-body-base-line-height);
+        color: var(--player-white);
+        position: relative;
+        top: 40%;
+      }
+
+      .progressbar {
+        padding-top: 0.875rem;
+
+        .bar .gutter {
+          background-color: var(--player-control-bar-buffer);
+
+          span {
+            background-color: var(--player-white);
+          }
+        }
+      }
+
+      .fullscreen-button {
+        padding-top: 1.5rem;
+
+        .icon path {
+          fill: var(--player-white);
+        }
       }
     }
   }
