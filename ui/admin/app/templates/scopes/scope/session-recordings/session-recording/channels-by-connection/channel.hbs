@@ -27,19 +27,19 @@
           <MetadataList @orientation='vertical' as |list|>
             {{! Start time }}
             <list.Item @icon='calendar' @color='faint'>
-              {{@model.sessionRecording.start_time}}
+              {{@model.channelRecording.start_time}}
             </list.Item>
             {{! Duration }}
             <list.Item @icon='clock' @color='faint'>
-              {{format-time-duration @model.sessionRecording.duration}}
+              {{format-time-duration @model.channelRecording.duration}}
             </list.Item>
             {{! Bytes up }}
             <list.Item @icon='arrow-up' @color='success'>
-              {{format-bytes-size @model.sessionRecording.bytes_up}}
+              {{format-bytes-size @model.channelRecording.bytes_up}}
             </list.Item>
             {{! Bytes down }}
             <list.Item @icon='arrow-down' @color='action'>
-              {{format-bytes-size @model.sessionRecording.bytes_down}}
+              {{format-bytes-size @model.channelRecording.bytes_down}}
             </list.Item>
           </MetadataList>
         </div>
