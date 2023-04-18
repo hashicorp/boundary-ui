@@ -29,10 +29,6 @@
             <list.Item @icon='calendar' @color='faint'>
               {{@model.sessionRecording.start_time}}
             </list.Item>
-            {{! Type }}
-            <list.Item @icon='terminal-screen' @color='faint'>
-              {{@model.sessionRecording.type}}
-            </list.Item>
             {{! Duration }}
             <list.Item @icon='clock' @color='faint'>
               {{format-time-duration @model.sessionRecording.duration}}
