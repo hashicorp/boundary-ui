@@ -23,7 +23,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   const SETTINGS_LINK_SELECTOR = '.target-sidebar .hds-link-standalone';
   const ENABLE_BUTTON_SELECTOR = '.target-sidebar .hds-button';
   const DROPDOWN_SELECTOR = '[name=storage_bucket_id]';
-  const LINK_LIST_SELECTOR = '.link-list-item';
+  const LINK_LIST_SELECTOR = '.link-list-item > a';
   const LINK_LIST_SELECTOR_ITEM_TEXT = '.link-list-item__text';
   const TOGGLE_SELECTOR = '[name=target-enable-session-recording]';
   const LINK_TO_NEW_STORAGE_BUCKET =

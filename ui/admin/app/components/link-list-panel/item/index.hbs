@@ -1,16 +1,29 @@
-<li>
-  <LinkTo @route={{@route}} @model={{@model}} class='link-list-item'>
+<li class='link-list-item'>
+  {{#if @route}}
+    <LinkTo @route={{@route}} @model={{@model}}>
+      <div class='link-list-item__info'>
+        {{#if @icon}}
+          <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
+        {{/if}}
+
+        <div>
+          <p class='link-list-item__text'>{{@text}}</p>
+          {{yield}}
+        </div>
+      </div>
+
+      <FlightIcon @name='arrow-right' />
+    </LinkTo>
+  {{else}}
     <div class='link-list-item__info'>
       {{#if @icon}}
         <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
       {{/if}}
+
       <div>
         <p class='link-list-item__text'>{{@text}}</p>
         {{yield}}
       </div>
     </div>
-    {{#if @route}}
-      <FlightIcon @name='arrow-right' />
-    {{/if}}
-  </LinkTo>
+  {{/if}}
 </li>
