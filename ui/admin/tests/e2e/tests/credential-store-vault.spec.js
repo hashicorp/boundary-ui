@@ -22,6 +22,7 @@ const {
   createNewTarget,
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
+const { readFile } = require('fs/promises');
 
 const secretsPath = 'e2e_secrets';
 const secretName = 'cred';
@@ -180,6 +181,9 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
         retrievedUser
     );
   }
+  const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
+    encoding: 'utf-8',
+  });
   if (keyData != retrievedKey) {
     throw new Error('Stored Key does not match');
   }
