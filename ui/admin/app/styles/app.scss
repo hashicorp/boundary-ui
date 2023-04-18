@@ -808,7 +808,7 @@
 
       // hides large play icon overlay
       .start-prompt {
-        z-index: -10;
+        display: none;
       }
     }
 
