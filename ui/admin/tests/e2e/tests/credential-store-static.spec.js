@@ -179,8 +179,6 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
   await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name', { exact: true }).fill(credentialName);
   await page.getByLabel('Description').fill('This is an automated test');
-
-  // adds username & password
   await page
     .getByRole('group', { name: 'Type' })
     .getByLabel('Username & Password')
@@ -188,9 +186,6 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
   await page
     .getByLabel('Username', { exact: true })
     .fill(process.env.E2E_SSH_USER);
-  // const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
-  //   encoding: 'utf-8',
-  // });
   const testPassword = 'password';
   await page.getByLabel('Password', { exact: true }).fill(testPassword);
   await page.getByRole('button', { name: 'Save' }).click();
