@@ -33,6 +33,10 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
         storage_bucket_id
       );
     }
+    const sortedConnections = sessionRecording.connection_recordings
+      .sortBy('start_time')
+      .reverse();
+    sessionRecording.connection_recordings = sortedConnections;
 
     return {
       sessionRecording,
