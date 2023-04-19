@@ -36,8 +36,38 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
+let orgName;
+let projectName;
+let targetName;
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
+
+  orgName = await createNewOrg(page);
+  projectName = await createNewProject(page);
+  await createNewHostCatalog(page);
+  const hostSetName = await createNewHostSet(page);
+  await createNewHostInHostSet(page);
+  targetName = await createNewTarget(page);
+  await addHostSourceToTarget(page, hostSetName);
+
+  const credentialStoreName = 'Credential Store ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Credential Stores' })
+    .click();
+  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('link', { name: credentialStoreName })
+  ).toBeVisible();
 });
 
 test('Static Credential Store (User & Key Pair)', async ({ page }) => {
@@ -148,32 +178,6 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
 });
 
 test('Static Credential Store (Username & Password)', async ({ page }) => {
-  const orgName = await createNewOrg(page);
-  const projectName = await createNewProject(page);
-  await createNewHostCatalog(page);
-  const hostSetName = await createNewHostSet(page);
-  await createNewHostInHostSet(page);
-  const targetName = await createNewTarget(page);
-  await addHostSourceToTarget(page, hostSetName);
-
-  const credentialStoreName = 'Credential Store ' + nanoid();
-  await page
-    .getByRole('navigation', { name: 'Resources' })
-    .getByRole('link', { name: 'Credential Stores' })
-    .click();
-  await page.getByRole('link', { name: 'New' }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
-  await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
-  await page.getByRole('button', { name: 'Save' }).click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(
-    page.getByRole('link', { name: credentialStoreName })
-  ).toBeVisible();
-
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -253,32 +257,6 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
 });
 
 test('Static Credential Store (JSON)', async ({ page }) => {
-  const orgName = await createNewOrg(page);
-  const projectName = await createNewProject(page);
-  await createNewHostCatalog(page);
-  const hostSetName = await createNewHostSet(page);
-  await createNewHostInHostSet(page);
-  const targetName = await createNewTarget(page);
-  await addHostSourceToTarget(page, hostSetName);
-
-  const credentialStoreName = 'Credential Store ' + nanoid();
-  await page
-    .getByRole('navigation', { name: 'Resources' })
-    .getByRole('link', { name: 'Credential Stores' })
-    .click();
-  await page.getByRole('link', { name: 'New' }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
-  await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
-  await page.getByRole('button', { name: 'Save' }).click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(
-    page.getByRole('link', { name: credentialStoreName })
-  ).toBeVisible();
-
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
