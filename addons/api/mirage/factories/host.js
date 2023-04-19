@@ -10,7 +10,9 @@ import generateId from '../helpers/id';
 
 export default factory.extend({
   id: () => generateId('h_'),
-
+  name() {
+    if (this.type === 'static') return faker.random.words();
+  },
   type() {
     return this.hostCatalog?.type || factory.attrs.type;
   },
@@ -34,8 +36,16 @@ export default factory.extend({
     }
     return result;
   },
+  // Return external fields only for plugins
   external_id() {
-    return faker.datatype.uuid();
+    if (this.type === 'plugin') {
+      return faker.datatype.uuid();
+    }
+  },
+  external_name(i) {
+    if (this.type === 'plugin') {
+      return `${this.plugin.name} provided name ${i}`;
+    }
   },
   // Only aws plugins have dns_names
   dns_names() {

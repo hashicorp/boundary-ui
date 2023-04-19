@@ -4,7 +4,7 @@
  */
 
 /* eslint-disable no-undef */
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 
 /**
  * Checks that the boundary cli is available
@@ -32,6 +32,47 @@ exports.authenticateBoundaryCli = async () => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
         ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD'
     );
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+};
+
+/**
+ * Uses the boundary CLI to connect to the specified target
+ * @param {string} targetId ID of the target to be connected to
+ * @returns ChildProcess representing the result of the command execution
+ */
+exports.connectToTarget = async (targetId) => {
+  let connect;
+  try {
+    connect = exec(
+      'boundary connect' +
+        ' -target-id=' +
+        targetId +
+        ' -exec /usr/bin/ssh --' +
+        ' -l ' +
+        process.env.E2E_SSH_USER +
+        ' -i ' +
+        process.env.E2E_SSH_KEY_PATH +
+        ' -o UserKnownHostsFile=/dev/null' +
+        ' -o StrictHostKeyChecking=no' +
+        ' -o IdentitiesOnly=yes' + // forces the use of the provided key
+        ' -p {{boundary.port}}' +
+        ' {{boundary.ip}}'
+    );
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+  return connect;
+};
+
+/**
+ * Uses the boundary CLI to delete the specified organization
+ * @param {string} orgId ID of the organization to be deleted
+ */
+exports.deleteOrg = async (orgId) => {
+  try {
+    exec('boundary scopes delete -id=' + orgId);
   } catch (e) {
     console.log(`${e.stderr}`);
   }

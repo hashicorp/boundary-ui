@@ -11,7 +11,6 @@ import { faker } from '@faker-js/faker';
  */
 export default Factory.extend({
   type: 'static',
-  name: () => faker.random.words(),
   description: () => faker.random.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
