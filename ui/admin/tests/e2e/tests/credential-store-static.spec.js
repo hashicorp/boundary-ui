@@ -20,6 +20,7 @@ const {
   createNewHostSet,
   createNewHostInHostSet,
   createNewTarget,
+  addBrokeredCredentialsToTarget,
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
 
@@ -120,31 +121,7 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
 
-  await page
-    .getByRole('navigation', { name: 'Resources' })
-    .getByRole('link', { name: 'Targets' })
-    .click();
-  await page.getByRole('link', { name: targetName }).click();
-  await page
-    .getByRole('link', { name: 'Brokered Credentials', exact: true })
-    .click();
-  await page
-    .getByRole('article')
-    .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
-    .click();
-  await page
-    .getByRole('cell', { name: credentialName })
-    .locator('..')
-    .getByRole('checkbox')
-    .click({ force: true });
-  await page
-    .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
-    .click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+  await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
   await authenticateBoundaryCli();
   const orgs = JSON.parse(execSync('boundary scopes list -format json'));
@@ -199,31 +176,7 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
 
-  await page
-    .getByRole('navigation', { name: 'Resources' })
-    .getByRole('link', { name: 'Targets' })
-    .click();
-  await page.getByRole('link', { name: targetName }).click();
-  await page
-    .getByRole('link', { name: 'Brokered Credentials', exact: true })
-    .click();
-  await page
-    .getByRole('article')
-    .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
-    .click();
-  await page
-    .getByRole('cell', { name: credentialName })
-    .locator('..')
-    .getByRole('checkbox')
-    .click({ force: true });
-  await page
-    .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
-    .click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+  await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
   await authenticateBoundaryCli();
   const orgs = JSON.parse(execSync('boundary scopes list -format json'));
@@ -276,31 +229,7 @@ test('Static Credential Store (JSON)', async ({ page }) => {
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
 
-  await page
-    .getByRole('navigation', { name: 'Resources' })
-    .getByRole('link', { name: 'Targets' })
-    .click();
-  await page.getByRole('link', { name: targetName }).click();
-  await page
-    .getByRole('link', { name: 'Brokered Credentials', exact: true })
-    .click();
-  await page
-    .getByRole('article')
-    .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
-    .click();
-  await page
-    .getByRole('cell', { name: credentialName })
-    .locator('..')
-    .getByRole('checkbox')
-    .click({ force: true });
-  await page
-    .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
-    .click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+  await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
   await authenticateBoundaryCli();
   const orgs = JSON.parse(execSync('boundary scopes list -format json'));
