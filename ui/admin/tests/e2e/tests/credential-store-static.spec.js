@@ -205,7 +205,12 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
     );
   }
   if (testPassword != retrievedPassword) {
-    throw new Error('Stored Password does not match');
+    throw new Error(
+      'Stored Password does not match. EXPECTED: ' +
+        testPassword +
+        ', ACTUAL: ' +
+        retrievedPassword
+    );
   }
 });
 
@@ -262,9 +267,19 @@ test('Static Credential Store (JSON)', async ({ page }) => {
     );
   }
   if (testPassword != retrievedPassword) {
-    throw new Error('Stored Password does not match');
+    throw new Error(
+      'Stored Password does not match. EXPECTED: ' +
+        testPassword +
+        ', ACTUAL: ' +
+        retrievedPassword
+    );
   }
   if (testId != retrievedId) {
-    throw new Error('Stored ID does not match');
+    throw new Error(
+      'Stored ID does not match. EXPECTED: ' +
+        testId +
+        ', ACTUAL: ' +
+        retrievedId
+    );
   }
 });
