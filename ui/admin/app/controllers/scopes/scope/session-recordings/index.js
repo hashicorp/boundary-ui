@@ -6,7 +6,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
    * @type {boolean}
    */
   get hasSessionRecordings() {
-    return this.model.sessionRecordings.length > 0;
+    return this.model?.sessionRecordings?.length;
   }
 
   /**
@@ -14,6 +14,6 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
    * @type {boolean}
    */
   get hasSessionRecordingsConfigured() {
-    return this.model.storageBuckets.length > 0;
+    return this.model?.storageBuckets?.length;
   }
 }

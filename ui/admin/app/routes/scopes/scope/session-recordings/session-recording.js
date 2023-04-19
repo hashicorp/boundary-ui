@@ -26,12 +26,17 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
       'session-recording',
       session_recording_id
     );
-    if (sessionRecording.target?.storage_bucket_id) {
-      const { storage_bucket_id } = sessionRecording.target;
-      storageBucket = await this.store.findRecord(
-        'storage-bucket',
-        storage_bucket_id
-      );
+
+    try {
+      if (sessionRecording.target?.storage_bucket_id) {
+        const { storage_bucket_id } = sessionRecording.target;
+        storageBucket = await this.store.findRecord(
+          'storage-bucket',
+          storage_bucket_id
+        );
+      }
+    } catch (e) {
+      // no op
     }
     const sortedConnections = sessionRecording.connection_recordings
       .sortBy('start_time')

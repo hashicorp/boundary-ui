@@ -23,18 +23,28 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
    * @return {{sessionRecordings: Array, storageBuckets: Array}}
    */
   async model() {
+    let storageBuckets;
+
     const scope = this.modelFor('scopes.scope');
-    // if (this.can.can('list session-recording', scope, { collection: 'session-recordings' })) {
     const { id: scope_id } = scope;
 
+    // if (this.can.can('list session-recording', scope, { collection: 'session-recordings' })) {
     const sessionRecordings = await this.store.query('session-recording', {
       scope_id,
       recursive: true,
     });
-    const storageBuckets = await this.store.query('storage-bucket', {
-      scope_id,
-      recursive: true,
-    });
+
+    // Storage buckets could fail for a number of reasons, including that
+    // the user isn't authorized to access them.
+    try {
+      storageBuckets = await this.store.query('storage-bucket', {
+        scope_id,
+        recursive: true,
+      });
+    } catch (e) {
+      // no op
+    }
+
     return {
       sessionRecordings,
       storageBuckets,
