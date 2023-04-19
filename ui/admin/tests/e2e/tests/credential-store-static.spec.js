@@ -219,8 +219,11 @@ test('Static Credential Store (JSON)', async ({ page }) => {
   await page.getByText('{}').click();
   const testName = 'name-json';
   const testPassword = 'password-json';
+  const testId = 'id-json';
   await page.keyboard.type(
-    `"username": "${testName}", "password": "${testPassword}"`
+    `"username": "${testName}",
+    "password": "${testPassword}",
+    "id": "${testId}"`
   );
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
@@ -248,6 +251,7 @@ test('Static Credential Store (JSON)', async ({ page }) => {
   );
   const retrievedUser = session.item.credentials[0].credential.username;
   const retrievedPassword = session.item.credentials[0].credential.password;
+  const retrievedId = session.item.credentials[0].credential.id;
 
   if (testName != retrievedUser) {
     throw new Error(
@@ -259,5 +263,8 @@ test('Static Credential Store (JSON)', async ({ page }) => {
   }
   if (testPassword != retrievedPassword) {
     throw new Error('Stored Password does not match');
+  }
+  if (testId != retrievedId) {
+    throw new Error('Stored ID does not match');
   }
 });
