@@ -26,7 +26,11 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
     const scope = this.modelFor('scopes.scope');
     // if (this.can.can('list session-recording', scope, { collection: 'session-recordings' })) {
     const { id: scope_id } = scope;
-    const sessionRecordings = await this.store.findAll('session-recording');
+
+    const sessionRecordings = await this.store.query('session-recording', {
+      scope_id,
+      recursive: true,
+    });
     const storageBuckets = await this.store.query('storage-bucket', {
       scope_id,
       recursive: true,

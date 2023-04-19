@@ -706,7 +706,18 @@ function routes() {
   );
 
   // session recordings
-  this.get('/session-recordings');
+  this.get(
+    '/session-recordings',
+    (
+      { sessionRecordings },
+      { queryParams: { scope_id: scopeId, recursive } }
+    ) => {
+      if (recursive && scopeId === 'global') {
+        return sessionRecordings.all();
+      }
+      return sessionRecordings.where({ scopeId });
+    }
+  );
   this.get(
     '/session-recordings/:idMethod',
     async ({ sessionRecordings }, { params: { idMethod } }) => {
