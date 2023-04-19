@@ -36,9 +36,9 @@ export default factory.extend({
       target.id = 'deleted_target';
 
       sessionRecording.update({
-        user,
-        target,
-        session,
+        user: user.attrs,
+        target: target.attrs,
+        sessionId: session.id,
       });
     },
   }),
@@ -52,9 +52,9 @@ export default factory.extend({
       );
 
       sessionRecording.update({
-        user,
-        target,
-        session,
+        user: user.attrs,
+        target: target.attrs,
+        sessionId: session.id,
       });
     },
   }),

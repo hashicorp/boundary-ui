@@ -7,8 +7,5 @@ import { belongsTo, hasMany, Model } from 'miragejs';
 
 export default Model.extend({
   scope: belongsTo(),
-  user: belongsTo(),
-  session: belongsTo(),
-  target: belongsTo(),
   connection_recordings: hasMany(),
 });
