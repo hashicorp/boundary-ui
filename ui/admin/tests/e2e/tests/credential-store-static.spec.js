@@ -5,13 +5,13 @@
 
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
 const { readFile } = require('fs/promises');
 const { nanoid } = require('nanoid');
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
+  getSessionCli,
 } = require('../helpers/boundary-cli');
 const {
   createNewOrg,
@@ -98,20 +98,7 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
   await authenticateBoundaryCli();
-  const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-  const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-  const projects = JSON.parse(
-    execSync(`boundary scopes list -format json -scope-id ${org.id}`)
-  );
-  const project = projects.items.filter((obj) => obj.name == projectName)[0];
-  const targets = JSON.parse(
-    execSync(`boundary targets list -format json -scope-id ${project.id}`)
-  );
-  const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
-  const session = JSON.parse(
-    execSync(`boundary targets authorize-session -id ${target.id} -format json`)
-  );
+  const session = await getSessionCli(orgName, projectName, targetName);
   const retrievedUser = session.item.credentials[0].credential.username;
   const retrievedKey = session.item.credentials[0].credential.private_key;
 
@@ -153,20 +140,7 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
   await authenticateBoundaryCli();
-  const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-  const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-  const projects = JSON.parse(
-    execSync(`boundary scopes list -format json -scope-id ${org.id}`)
-  );
-  const project = projects.items.filter((obj) => obj.name == projectName)[0];
-  const targets = JSON.parse(
-    execSync(`boundary targets list -format json -scope-id ${project.id}`)
-  );
-  const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
-  const session = JSON.parse(
-    execSync(`boundary targets authorize-session -id ${target.id} -format json`)
-  );
+  const session = await getSessionCli(orgName, projectName, targetName);
   const retrievedUser = session.item.credentials[0].credential.username;
   const retrievedPassword = session.item.credentials[0].credential.password;
 
@@ -214,20 +188,7 @@ test('Static Credential Store (JSON)', async ({ page }) => {
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
   await authenticateBoundaryCli();
-  const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-  const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-  const projects = JSON.parse(
-    execSync(`boundary scopes list -format json -scope-id ${org.id}`)
-  );
-  const project = projects.items.filter((obj) => obj.name == projectName)[0];
-  const targets = JSON.parse(
-    execSync(`boundary targets list -format json -scope-id ${project.id}`)
-  );
-  const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
-  const session = JSON.parse(
-    execSync(`boundary targets authorize-session -id ${target.id} -format json`)
-  );
+  const session = await getSessionCli(orgName, projectName, targetName);
   const retrievedUser = session.item.credentials[0].credential.username;
   const retrievedPassword = session.item.credentials[0].credential.password;
   const retrievedId = session.item.credentials[0].credential.id;
