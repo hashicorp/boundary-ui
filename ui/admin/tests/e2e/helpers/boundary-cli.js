@@ -77,3 +77,34 @@ exports.deleteOrg = async (orgId) => {
     console.log(`${e.stderr}`);
   }
 };
+
+/**
+ * Uses the boundary CLI to get a session created for the specified target
+ * @param {string} orgName Name of the organization with the specified project
+ * @param {string} projectName Name of project with the specified target
+ * @param {string} targetName Name of the target that the anticipated session is created for
+ * @returns An object representing an active session created for the specified target
+ */
+exports.getSessionCli = async (orgName, projectName, targetName) => {
+  let session;
+  try {
+    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+    const projects = JSON.parse(
+      execSync(`boundary scopes list -format json -scope-id ${org.id}`)
+    );
+    const project = projects.items.filter((obj) => obj.name == projectName)[0];
+    const targets = JSON.parse(
+      execSync(`boundary targets list -format json -scope-id ${project.id}`)
+    );
+    const target = targets.items.filter((obj) => obj.name == targetName)[0];
+    session = JSON.parse(
+      execSync(
+        `boundary targets authorize-session -id ${target.id} -format json`
+      )
+    );
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+  return session;
+};
