@@ -249,3 +249,37 @@ exports.waitForSessionToBeVisible = async (page, targetName) => {
     throw new Error('Session is not visible');
   }
 };
+
+/**
+ * Uses the UI to navigate to the specified Target and add the Brokered Credentials to it.
+ * @param {Page} page Playwright page object
+ * @param {string} targetName Name of the target associated with the session
+ * @param {string} credentialName Name of the credentials to be added to the target
+ */
+exports.addBrokeredCredentialsToTarget = async (page, targetName, credentialName) => {
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: targetName }).click();
+  await page
+    .getByRole('link', { name: 'Brokered Credentials', exact: true })
+    .click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
+    .click();
+  await page
+    .getByRole('cell', { name: credentialName })
+    .locator('..')
+    .getByRole('checkbox')
+    .click({ force: true });
+  await page
+    .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
+    .click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+}
