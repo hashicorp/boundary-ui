@@ -17,8 +17,9 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
   }
 
   /**
-   * Load session recording and related storage bucket if present
-   * @return {SessionRecordingModel, ?StorageBucketModel}
+   * Load session recording, sorted connections and channels,
+   * and related storage bucket if present
+   * @return {SessionRecordingModel, [ConnectionRecordingModel] ?StorageBucketModel}
    */
   async model({ session_recording_id }) {
     let storageBucket = null;
@@ -38,13 +39,23 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
     } catch (e) {
       // no op
     }
+
     const sortedConnections = sessionRecording.connection_recordings
       .sortBy('start_time')
-      .reverse();
-    sessionRecording.connection_recordings = sortedConnections;
+      .reverse()
+      .map((connection) => {
+        const sortedChannels = connection.channel_recordings
+          .sortBy('start_time')
+          .reverse();
+        return {
+          connection,
+          channels: sortedChannels,
+        };
+      });
 
     return {
       sessionRecording,
+      sortedConnections,
       storageBucket,
     };
   }

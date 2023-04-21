@@ -11,18 +11,15 @@
     <div class='channels-by-connection'>
       <Layout::Sidebar as |sb|>
         <sb.Body>
-          {{#each
-            @model.sessionRecording.connection_recordings
-            as |connection|
-          }}
+          {{#each @model.sortedConnections as |connection|}}
             <div class='channels-by-connection-connection-header'>
               <p class='hds-typography-display-300 hds-font-weight-semibold'>
                 {{t 'resources.session-recording.connection.title'}}
-                {{connection.id}}
+                {{connection.connection.id}}
               </p>
             </div>
             <Hds::Table
-              @model={{connection.channel_recordings}}
+              @model={{connection.channels}}
               @density='tall'
               @columns={{array
                 (hash
