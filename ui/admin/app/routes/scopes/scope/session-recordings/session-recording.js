@@ -19,7 +19,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
   /**
    * Load session recording, sorted connections and channels,
    * and related storage bucket if present
-   * @return {SessionRecordingModel, [ConnectionRecordingModel] ?StorageBucketModel}
+   * @return {{sessionRecording: SessionRecordingModel, sortedConnections: [ConnectionRecordingModel], storageBucket: ?StorageBucketModel}}
    */
   async model({ session_recording_id }) {
     let storageBucket = null;
