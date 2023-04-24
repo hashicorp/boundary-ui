@@ -40,22 +40,8 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
       // no op
     }
 
-    const sortedConnections = sessionRecording.connection_recordings
-      .sortBy('start_time')
-      .reverse()
-      .map((connection) => {
-        const sortedChannels = connection.channel_recordings
-          .sortBy('start_time')
-          .reverse();
-        return {
-          connection,
-          channels: sortedChannels,
-        };
-      });
-
     return {
       sessionRecording,
-      sortedConnections,
       storageBucket,
     };
   }
