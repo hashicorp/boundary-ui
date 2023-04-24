@@ -25,7 +25,9 @@
             {{! Time }}
             <B.Td>
               <span class='hds-foreground-faint'>
-                {{format-date B.data.start_time format='mmddyyhhmm'}}
+                <time datetime={{format-date-iso B.data.start_time}}>
+                  {{format-date-iso-human B.data.start_time}}
+                </time>
               </span>
             </B.Td>
             {{! User }}

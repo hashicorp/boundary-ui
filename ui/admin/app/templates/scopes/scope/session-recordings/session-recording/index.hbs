@@ -77,7 +77,14 @@
             <MetadataList @orientation='vertical' as |list|>
               {{! Start time }}
               <list.Item @icon='calendar' @color='faint'>
-                {{@model.sessionRecording.start_time}}
+                {{t 'form.started.label'}}
+                <time
+                  datetime={{format-date-iso
+                    @model.sessionRecording.start_time
+                  }}
+                >
+                  {{format-date-iso-human @model.sessionRecording.start_time}}
+                </time>
               </list.Item>
               {{! Duration }}
               <list.Item @icon='clock' @color='faint'>
