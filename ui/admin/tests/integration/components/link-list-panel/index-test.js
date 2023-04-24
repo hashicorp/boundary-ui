@@ -47,4 +47,86 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
     assert.dom('.link-list-item__text').hasText('Storage Bucket');
     assert.dom('li.link-list-item > a').doesNotExist();
   });
+
+  test('it renders link correctly supplying a single model', async function (assert) {
+    assert.expect(2);
+
+    // ScopeId global
+    this.modelA = { scopeId: 'global' };
+    await render(hbs`
+      <LinkListPanel as |P|>
+        <P.Item @route='scopes.scope.users' @model={{this.modelA.scopeId}}></P.Item>
+      </LinkListPanel>
+    `);
+    assert
+      .dom('li.link-list-item > a')
+      .hasAttribute('href', `/scopes/${this.modelA.scopeId}/users`);
+
+    // ScopeId org
+    this.modelB = { scopeId: 's_id6ozx3wue' };
+    await render(hbs`
+      <LinkListPanel as |P|>
+        <P.Item @route='scopes.scope.users' @model={{this.modelB.scopeId}}></P.Item>
+      </LinkListPanel>
+    `);
+    assert
+      .dom('li.link-list-item > a')
+      .hasAttribute('href', `/scopes/${this.modelB.scopeId}/users`);
+  });
+
+  test('it renders a link correctly supplying multiple models', async function (assert) {
+    assert.expect(2);
+    // ScopeId global
+    this.modelA = { scopeId: 'global', id: 'u_umasjqde46' };
+    await render(hbs`
+      <LinkListPanel as |P|>
+        <P.Item @route='scopes.scope.users.user' @model={{array this.modelA.scopeId this.modelA.id}}></P.Item>
+      </LinkListPanel>
+    `);
+    assert
+      .dom('li.link-list-item > a')
+      .hasAttribute(
+        'href',
+        `/scopes/${this.modelA.scopeId}/users/${this.modelA.id}`
+      );
+
+    // ScopeId org
+    this.modelB = { scopeId: 's_id6ozx3wue', id: 'u_umasjqde46' };
+    await render(hbs`
+      <LinkListPanel as |P|>
+        <P.Item @route='scopes.scope.users.user' @model={{array this.modelB.scopeId this.modelB.id}}></P.Item>
+      </LinkListPanel>
+    `);
+    assert
+      .dom('li.link-list-item > a')
+      .hasAttribute(
+        'href',
+        `/scopes/${this.modelB.scopeId}/users/${this.modelB.id}`
+      );
+  });
+
+  test('it renders multiple links correctly supplying a combination of single and multiple models', async function (assert) {
+    this.modelA = { scopeId: 's_id6ozx3wue' };
+    this.modelB = { scopeId: 's_id6ozx3wue', id: 'u_umasjqde46' };
+    this.modelC = { scopeId: 'global' };
+    await render(hbs`
+      <LinkListPanel as |P|>
+        <P.Item @route='scopes.scope.users' @model={{array this.modelA.scopeId}}></P.Item>
+        <P.Item @route='scopes.scope.users.user' @model={{array this.modelB.scopeId this.modelB.id}}></P.Item>
+        <P.Item @route='scopes.scope.users' @model={{array this.modelC.scopeId}}></P.Item>
+      </LinkListPanel>
+    `);
+    assert
+      .dom('li.link-list-item:nth-child(1) > a')
+      .hasAttribute('href', `/scopes/${this.modelA.scopeId}/users`);
+    assert
+      .dom('li.link-list-item:nth-child(2) > a')
+      .hasAttribute(
+        'href',
+        `/scopes/${this.modelB.scopeId}/users/${this.modelB.id}`
+      );
+    assert
+      .dom('li.link-list-item:nth-child(3) > a')
+      .hasAttribute('href', `/scopes/${this.modelC.scopeId}/users`);
+  });
 });

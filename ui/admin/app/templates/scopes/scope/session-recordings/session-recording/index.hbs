@@ -93,26 +93,55 @@
               </list.Item>
             </MetadataList>
           </div>
-          {{! Related }}
+
+          {{! Related information }}
           <div>
             <h3>{{t 'resources.session-recording.related'}}</h3>
-            {{! User name }}
-            <p>
-              <FlightIcon @name='user' />
+            <LinkListPanel as |list|>
+              {{! User name }}
               {{#if @model.sessionRecording.user}}
-                {{@model.sessionRecording.userDisplayName}}
+                <list.Item
+                  @icon='user'
+                  @color='boundary'
+                  @route='scopes.scope.users.user'
+                  @model={{array
+                    @model.sessionRecording.user.scopeId
+                    @model.sessionRecording.user.id
+                  }}
+                  @text={{@model.sessionRecording.userDisplayName}}
+                />
               {{/if}}
-            </p>
-            {{! Target name }}
-            <p>
-              <FlightIcon @name='target' />
-              {{@model.sessionRecording.target.name}}
-            </p>
-            {{! Bucket name }}
-            <p>
-              <FlightIcon @name='cloud-check' />
-              {{@model.storageBucket.name}}
-            </p>
+              {{! Target name }}
+              {{#if @model.sessionRecording.target}}
+                <list.Item
+                  @icon='target'
+                  @color='boundary'
+                  @route='scopes.scope.targets.target'
+                  @model={{array
+                    @model.sessionRecording.target.scopeId
+                    @model.sessionRecording.target.id
+                  }}
+                  @text={{@model.sessionRecording.target.name}}
+                >
+                  {{#if @model.sessionRecording.target.type}}
+                    <Hds::Badge @text={{@model.sessionRecording.target.type}} />
+                  {{/if}}
+                </list.Item>
+              {{/if}}
+              {{! Bucket name }}
+              {{#if @model.storageBucket}}
+                <list.Item
+                  @icon='cloud-check'
+                  @color='boundary'
+                  @route='scopes.scope.storage-buckets.storage-bucket'
+                  @model={{array
+                    @model.storageBucket.scope.id
+                    @model.storageBucket.id
+                  }}
+                  @text={{@model.storageBucket.name}}
+                />
+              {{/if}}
+            </LinkListPanel>
           </div>
         </sb.Sidebar>
       </Layout::Sidebar>
