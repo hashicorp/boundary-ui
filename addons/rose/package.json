@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@embroider/test-setup": "^0.48.1",
-    "@hashicorp/design-system-components": "^1.5.1",
+    "@hashicorp/design-system-components": "^2.1.0",
     "codemirror": "5.65.7",
     "ember-auto-import": "^2.4.2",
     "ember-cli-babel": "^7.26.10",

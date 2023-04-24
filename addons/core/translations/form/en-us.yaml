@@ -3,9 +3,15 @@
 
 id:
   label: ID
+external_id:
+  label: External ID
+  help: A read-only ID given by the plugin host catalog provider
 name:
   label: Name
   help: Name for identification purposes
+external_name:
+  label: External Name
+  help: A read-only name given by the plugin host catalog provider
 description:
   label: Description
   help: Description for identification purposes
@@ -153,10 +159,12 @@ disable_credential_rotation:
   help: Azure host catalogs do not yet support credential rotation.
 dns_names:
   label: Latest DNS Names
+  help: Read-only DNS names given by the plugin host catalog provider
 host:
   label: Host
 ip_addresses:
   label: Latest IP Addresses
+  help: Read-only public and private IP addresses given by the plugin host catalog provider
 sync-interval:
   label: Sync Interval
   help: Optional. Number of seconds between the time Boundary syncs hosts in this set.
