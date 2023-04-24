@@ -5,8 +5,7 @@
 
 import ApplicationSerializer from './application';
 import ConnectionRecordingSerializer from './connection-recording';
-import UserSerializer from './user';
-import TargetSerializer from './target';
+import ScopeSerializer from './scope';
 
 export default ApplicationSerializer.extend({
   modelName: 'session-recording',
@@ -15,7 +14,7 @@ export default ApplicationSerializer.extend({
       this,
       arguments
     );
-    const { connectionRecordings, users, targets } = this.schema;
+    const { connectionRecordings, scopes } = this.schema;
 
     // Manually map our models to the actual embedded json representation
     if (model.connectionRecordingIds) {
@@ -27,17 +26,17 @@ export default ApplicationSerializer.extend({
         );
       });
     }
-    if (model.userId) {
-      const user = users.find(model.userId);
-      json.user = UserSerializer.prototype._hashForModel.apply(this, [user]);
-    }
-    if (model.targetId) {
-      const target = targets.find(model.targetId);
-      json.target = TargetSerializer.prototype._hashForModel.apply(this, [
-        target,
+    if (model.user?.scopeId) {
+      const scope = scopes.find(model.user.scopeId);
+      json.user.scope = ScopeSerializer.prototype._hashForModel.apply(this, [
+        scope,
       ]);
-      json.target.scope.name = model.target.scope.name;
-      json.target.scope.description = model.target.scope.description;
+    }
+    if (model.target?.scopeId) {
+      const scope = scopes.find(model.target.scopeId);
+      json.target.scope = ScopeSerializer.prototype._hashForModel.apply(this, [
+        scope,
+      ]);
     }
 
     json.session_id = model.sessionId;
