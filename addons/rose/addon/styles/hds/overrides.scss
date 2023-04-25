@@ -19,7 +19,7 @@
 
 // removes field bottom margin (for tables with checkbox and badge in a cell)
 .hds-table__td {
-  .hds-form-field--layout-flag {
+  [class^=hds-form-field], [class^=hds-form-group] {
     margin-bottom: 0;
   }
 }
