@@ -24,22 +24,25 @@
         (hash label=(t 'resources.scope.title'))
         (hash label=(t 'form.description.label'))
       }}
+      @valign='middle'
     >
       <:body as |B|>
         <B.Tr>
           <B.Td>
-            <Hds::Form::Checkbox::Field
-              {{on 'change' (fn this.toggleMember B.data)}}
-              as |F|
-            >
-              <F.Label>{{B.data.displayName}}</F.Label>
-              {{#if B.data.accountName}}
-                <F.HelperText>
-                  <Hds::Badge @text={{B.data.accountName}} />
-                </F.HelperText>
-              {{/if}}
-            </Hds::Form::Checkbox::Field>
-
+            <div class='checkbox-badge-valign-middle'>
+              <Hds::Form::Checkbox::Field
+                class='hds-form-field--layout-vertical'
+                {{on 'change' (fn this.toggleMember B.data)}}
+                as |F|
+              >
+                <F.Label>{{B.data.displayName}}</F.Label>
+                {{#if B.data.accountName}}
+                  <F.HelperText>
+                    <Hds::Badge @text={{B.data.accountName}} />
+                  </F.HelperText>
+                {{/if}}
+              </Hds::Form::Checkbox::Field>
+            </div>
           </B.Td>
           <B.Td><code>{{B.data.id}}</code></B.Td>
           <B.Td><ScopeBadge @scope={{B.data.scopeModel}} /></B.Td>

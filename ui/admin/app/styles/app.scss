@@ -685,3 +685,11 @@
   }
   /* stylelint-enable selector-class-pattern */
 }
+
+// removes default margin-bottom from hds-form-field to allow checkbox and badge align vertically property
+.checkbox-badge-valign-middle {
+  [class^='hds-form-field'],
+  [class^='hds-form-field-group'] {
+    margin-bottom: 0;
+  }
+}
