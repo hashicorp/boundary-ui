@@ -168,6 +168,36 @@ exports.createNewTarget = async (page) => {
 };
 
 /**
+ * Uses the UI to create a new target with address. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the target
+ */
+exports.createNewTargetWithAddress = async (page) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_IP);
+  await page.getByLabel('Default Port').fill(process.env.E2E_SSH_PORT);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByRole('link', { name: targetName })
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
  * Uses the UI to add a host source to a target. Assume you have selected the desired target.
  * @param {Page} page Playwright page object
  * @param {string} hostSourceName Name of host source that will be attached to the target
@@ -190,3 +220,66 @@ exports.addHostSourceToTarget = async (page, hostSourceName) => {
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: hostSourceName })).toBeVisible();
 };
+
+/**
+ * Uses the UI to navigate to Sessions and waits for the session to appear.
+ * @param {Page} page Playwright page object
+ * @param {string} targetName Name of the target associated with the session
+ */
+exports.waitForSessionToBeVisible = async (page, targetName) => {
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Sessions' })
+    .click();
+  let i = 0;
+  let sessionIsVisible = false;
+  do {
+    i = i + 1;
+    sessionIsVisible = await page
+      .getByRole('cell', { name: targetName })
+      .isVisible();
+    if (sessionIsVisible) {
+      break;
+    }
+    await page.getByRole('button', { name: 'Refresh' }).click();
+    await expect(page.getByRole('button', { name: 'Refresh' })).toBeEnabled();
+  } while (i < 5);
+
+  if (!sessionIsVisible) {
+    throw new Error('Session is not visible');
+  }
+};
+
+/**
+ * Uses the UI to navigate to the specified Target and add the Brokered Credentials to it.
+ * @param {Page} page Playwright page object
+ * @param {string} targetName Name of the target associated with the session
+ * @param {string} credentialName Name of the credentials to be added to the target
+ */
+exports.addBrokeredCredentialsToTarget = async (page, targetName, credentialName) => {
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: targetName }).click();
+  await page
+    .getByRole('link', { name: 'Brokered Credentials', exact: true })
+    .click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
+    .click();
+  await page
+    .getByRole('cell', { name: credentialName })
+    .locator('..')
+    .getByRole('checkbox')
+    .click({ force: true });
+  await page
+    .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
+    .click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+}

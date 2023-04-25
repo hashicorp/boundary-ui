@@ -149,6 +149,7 @@ host-set:
 host:
   title: Host
   title_plural: Hosts
+  no_name_title: Unnamed Host
   description: A host is a resource that may be accessed by a Boundary target.
   messages:
     welcome:

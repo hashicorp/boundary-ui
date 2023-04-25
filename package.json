@@ -49,9 +49,6 @@
     "lint-staged": "^13.0.2"
   },
   "resolutions": {
-    "bl": "~1.2.3",
-    "tough-cookie": "~2.3.3",
-    "npm": "~6.14.6",
     "npm-registry-fetch": "~8.1.1",
     "request": "^2.88.0",
     "tunnel-agent": "~0.6.0",
@@ -72,7 +69,6 @@
     "trim": "~1.0.1",
     "browserslist": "^4.16.5",
     "ws": "^7.4.6",
-    "css-what": "^5.0.1",
     "trim-newlines": "^3.0.1",
     "clean-css": "^4.1.11",
     "mem": "^4.0.0",
@@ -106,7 +102,8 @@
     "got": "^11.8.5",
     "loader-utils": "^2.0.4",
     "**/@storybook/**/minimatch": "^3.0.5",
-    "**/ember-electron/**/minimatch": "^3.0.5"
+    "**/ember-electron/**/minimatch": "^3.0.5",
+    "**/babel-core/json5": "^2.2.2"
   },
   "config": {
     "commitizen": {

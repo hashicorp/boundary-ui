@@ -19,7 +19,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   let getStorageBucketCount;
 
   const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DELETE_DROPDOWN_SELECTOR = '.hds-dropdown-list [type="button"]';
+  const DELETE_DROPDOWN_SELECTOR = '.hds-dropdown-list-item [type="button"]';
   const DIALOG_DELETE_BTN_SELECTOR = '.rose-dialog .rose-button-primary';
   const DIALOG_CANCEL_BTN_SELECTOR = '.rose-dialog .rose-button-secondary';
   const DIALOG_MESSAGE_SELECTOR = '.rose-dialog-body';
