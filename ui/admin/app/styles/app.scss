@@ -675,12 +675,6 @@
         width: 1%;
         white-space: nowrap;
       }
-
-      // Reset field margins to rely instead on cell paddings
-      .hds-form-field--layout-vertical,
-      .hds-form-text-input {
-        margin: 0;
-      }
     }
   }
   /* stylelint-enable selector-class-pattern */
