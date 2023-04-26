@@ -17,10 +17,17 @@
   }
 }
 
-// removes field bottom margin (for tables with input elements in cell)
 .hds-table {
+  border-collapse: revert;
+
   [class^='hds-form-field'],
   [class^='hds-form-group'] {
     margin-bottom: 0;
+  }
+}
+
+.hds-dropdown {
+  .hds-dropdown-toggle-icon {
+    color: inherit;
   }
 }
