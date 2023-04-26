@@ -4,9 +4,11 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionChannelRoute extends Route {
   // =services
   @service store;
+  @service can;
 
   // =methods
   async model({ channel_id }) {
+    let asciicast;
     const { sessionRecording, storageBucket } = await this.modelFor(
       'scopes.scope.session-recordings.session-recording'
     );
@@ -14,7 +16,10 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       'channel-recording',
       channel_id
     );
-    const asciicast = await channelRecording.getAsciicast();
+
+    if (this.can.can('getAsciicast channel-recording', channelRecording)) {
+      asciicast = await channelRecording.getAsciicast();
+    }
 
     return {
       channelRecording,

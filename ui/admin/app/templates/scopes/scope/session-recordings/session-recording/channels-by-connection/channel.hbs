@@ -13,11 +13,55 @@
   <page.body>
     <Layout::Sidebar as |sb|>
       <sb.Body>
-        <SessionRecording::Player
-          @asciiCast={{@model.asciicast}}
-          @route='scopes.scope.session-recordings.session-recording'
-          @model={{@model.sessionRecording.id}}
-        />
+        {{#if @model.asciicast}}
+          <SessionRecording::Player
+            @asciiCast={{@model.asciicast}}
+            @route='scopes.scope.session-recordings.session-recording'
+            @model={{@model.sessionRecording.id}}
+          />
+        {{else}}
+          <Hds::ApplicationState as |A|>
+            {{#if
+              (can 'getAsciicast channel-recording' @model.channelRecording)
+            }}
+              {{! Was not able to downlaod asciicast }}
+              <A.Header
+                @title={{t
+                  'resources.session-recording.channel.messages.missing.title'
+                }}
+              />
+              <A.Body
+                @text={{t
+                  'resources.session-recording.channel.messages.missing.description'
+                }}
+              />
+              <A.Footer as |F|>
+                <F.Link::Standalone
+                  @icon='learn-link'
+                  @text={{t
+                    'resources.session-recording.channel.messages.missing.link'
+                  }}
+                  @href='/'
+                />
+              </A.Footer>
+            {{else}}
+              {{! Not authorized to downlaod asciicast }}
+              <A.Header
+                @title={{t
+                  'resources.session-recording.channel.messages.none.title'
+                }}
+              />
+              <A.Body
+                @text={{t
+                  'descriptions.cannot-download'
+                  resource=(t
+                    'resources.session-recording.channel.title_plural'
+                  )
+                }}
+              />
+            {{/if}}
+          </Hds::ApplicationState>
+        {{/if}}
       </sb.Body>
 
       <sb.Sidebar>

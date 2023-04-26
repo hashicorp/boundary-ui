@@ -60,6 +60,41 @@ module(
       assert.strictEqual(currentURL(), urls.connectionRecording);
     });
 
+    test('user can view recording with proper authorization', async function (assert) {
+      assert.expect(1);
+
+      // Visit channel
+      await visit(urls.connectionRecording);
+
+      // if authorized player will render
+      assert.dom('.session-recording-player').exists();
+    });
+
+    test('user cannot view recording without proper authorization: channel mime_types', async function (assert) {
+      assert.expect(1);
+      instances.channelRecording.mime_types = [];
+
+      // Visit channel
+      await visit(urls.connectionRecording);
+
+      // if unauthorized player will not render
+      assert.dom('.session-recording-player').doesNotExist();
+    });
+
+    test('user cannot view recording without proper authorization: session recording download action', async function (assert) {
+      assert.expect(1);
+      instances.sessionRecording.authorized_actions =
+        instances.sessionRecording.authorized_actions.filter(
+          (item) => item !== 'download'
+        );
+
+      // Visit channel
+      await visit(urls.connectionRecording);
+
+      // if unauthorized player will not render
+      assert.dom('.session-recording-player').doesNotExist();
+    });
+
     test('user can navigate back to session recording screen', async function (assert) {
       assert.expect(1);
       // Visit channel
