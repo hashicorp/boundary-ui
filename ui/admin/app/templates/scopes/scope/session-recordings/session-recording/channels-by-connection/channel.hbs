@@ -35,15 +35,6 @@
                   'resources.session-recording.channel.messages.missing.description'
                 }}
               />
-              <A.Footer as |F|>
-                <F.Link::Standalone
-                  @icon='learn-link'
-                  @text={{t
-                    'resources.session-recording.channel.messages.missing.link'
-                  }}
-                  @href='/'
-                />
-              </A.Footer>
             {{else}}
               {{! Not authorized to downlaod asciicast }}
               <A.Header
