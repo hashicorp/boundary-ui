@@ -18,8 +18,14 @@
             <div class='channels-by-connection-connection-header'>
               <p class='hds-typography-display-300 hds-font-weight-semibold'>
                 {{t 'resources.session-recording.connection.title'}}
-                {{connection.id}}
               </p>
+              <Copyable
+                @text={{connection.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{connection.id}}</code>
+              </Copyable>
             </div>
             <Hds::Table
               @model={{connection.sortedChannelsByStartTimeDesc}}
@@ -35,6 +41,7 @@
                     'resources.session-recording.connection.form.summary.label'
                   )
                 )
+                (hash label=(t 'form.id.label'))
                 (hash label='' align='right')
               }}
             >
@@ -58,6 +65,15 @@
                         {{format-time-duration B.data.duration}}
                       </list.Item>
                     </MetadataList>
+                  </B.Td>
+                  <B.Td>
+                    <Copyable
+                      @text={{B.data.id}}
+                      @buttonText={{t 'actions.copy-to-clipboard'}}
+                      @acknowledgeText={{t 'states.copied'}}
+                    >
+                      <code>{{B.data.id}}</code>
+                    </Copyable>
                   </B.Td>
                   <B.Td align='right'>
                     <Hds::Button
