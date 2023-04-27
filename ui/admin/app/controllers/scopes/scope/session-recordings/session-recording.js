@@ -10,6 +10,6 @@ export default class ScopesScopeSessionRecordingsSessionRecordingController exte
    * Session recording breadcrumb
    */
   get breadCrumb() {
-    return this.model.sessionRecording.displayName;
+    return this.model.displayName;
   }
 }

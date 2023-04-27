@@ -17,32 +17,15 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
   }
 
   /**
-   * Load session recording, sorted connections and channels,
-   * and related storage bucket if present
-   * @return {{sessionRecording: SessionRecordingModel, sortedConnections: [ConnectionRecordingModel], storageBucket: ?StorageBucketModel}}
+   * Load session recording.
+   * @return {sessionRecording: SessionRecordingModel}
    */
   async model({ session_recording_id }) {
-    let storageBucket = null;
     const sessionRecording = await this.store.findRecord(
       'session-recording',
       session_recording_id
     );
 
-    try {
-      if (sessionRecording.target?.storage_bucket_id) {
-        const { storage_bucket_id } = sessionRecording.target;
-        storageBucket = await this.store.findRecord(
-          'storage-bucket',
-          storage_bucket_id
-        );
-      }
-    } catch (e) {
-      // no op
-    }
-
-    return {
-      sessionRecording,
-      storageBucket,
-    };
+    return sessionRecording;
   }
 }

@@ -48,8 +48,8 @@ module(
       });
       urls.globalScope = `/scopes/global`;
       urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
-      urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}`;
-      urls.connectionRecording = `${urls.sessionRecording}/channels-by-connection/${instances.channelRecording.id}`;
+      urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}/channels-by-connection`;
+      urls.connectionRecording = `${urls.sessionRecording}/${instances.channelRecording.id}`;
       authenticateSession({});
     });
 

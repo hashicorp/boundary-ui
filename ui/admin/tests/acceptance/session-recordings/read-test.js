@@ -50,8 +50,8 @@ module('Acceptance | session recordings | read', function (hooks) {
     });
     urls.globalScope = `/scopes/global`;
     urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
-    urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}`;
-    urls.channelRecording = `${urls.sessionRecording}/channels-by-connection/${instances.channelRecording.id}`;
+    urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}/channels-by-connection`;
+    urls.channelRecording = `${urls.sessionRecording}/${instances.channelRecording.id}`;
     authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });

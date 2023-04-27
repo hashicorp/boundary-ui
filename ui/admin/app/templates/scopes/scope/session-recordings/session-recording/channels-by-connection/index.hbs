@@ -1,0 +1,160 @@
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t 'resources.session-recording.session.title'}}</h2>
+  </page.header>
+
+  <page.body>
+    <div class='channels-by-connection'>
+      <Layout::Sidebar as |sb|>
+        <sb.Body>
+          {{#each
+            @model.sessionRecording.sortedConnectionsByStartTimeDesc
+            as |connection|
+          }}
+            <div class='channels-by-connection-connection-header'>
+              <p class='hds-typography-display-300 hds-font-weight-semibold'>
+                {{t 'resources.session-recording.connection.title'}}
+                {{connection.id}}
+              </p>
+            </div>
+            <Hds::Table
+              @model={{connection.sortedChannelsByStartTimeDesc}}
+              @density='tall'
+              @columns={{array
+                (hash
+                  label=(t
+                    'resources.session-recording.connection.form.channel.label'
+                  )
+                )
+                (hash
+                  label=(t
+                    'resources.session-recording.connection.form.summary.label'
+                  )
+                )
+                (hash label='' align='right')
+              }}
+            >
+              <:body as |B|>
+                <B.Tr>
+                  <B.Td>
+                    <span>{{B.data.id}}</span>
+                  </B.Td>
+                  <B.Td>
+                    <MetadataList as |list|>
+                      {{! Bytes up }}
+                      <list.Item @icon='arrow-up' @color='success'>
+                        {{format-bytes-size B.data.bytes_up}}
+                      </list.Item>
+                      {{! Bytes down }}
+                      <list.Item @icon='arrow-down' @color='action'>
+                        {{format-bytes-size B.data.bytes_down}}
+                      </list.Item>
+                      {{! Duration }}
+                      <list.Item @icon='clock' @color='faint'>
+                        {{format-time-duration B.data.duration}}
+                      </list.Item>
+                    </MetadataList>
+                  </B.Td>
+                  <B.Td align='right'>
+                    <Hds::Button
+                      @icon='play'
+                      @color='secondary'
+                      @text='Play'
+                      @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+                      @model={{B.data.id}}
+                    />
+                  </B.Td>
+                </B.Tr>
+              </:body>
+            </Hds::Table>
+          {{/each}}
+        </sb.Body>
+        <sb.Sidebar>
+          <div>
+            <h3>{{t 'resources.session-recording.details'}}</h3>
+
+            <MetadataList @orientation='vertical' as |list|>
+              {{! Start time }}
+              <list.Item @icon='calendar' @color='faint'>
+                {{t 'form.started.label'}}
+                <time
+                  datetime={{format-date-iso
+                    @model.sessionRecording.start_time
+                  }}
+                >
+                  {{format-date-iso-human @model.sessionRecording.start_time}}
+                </time>
+              </list.Item>
+              {{! Duration }}
+              <list.Item @icon='clock' @color='faint'>
+                {{format-time-duration @model.sessionRecording.duration}}
+              </list.Item>
+              {{! Bytes up }}
+              <list.Item @icon='arrow-up' @color='success'>
+                {{format-bytes-size @model.sessionRecording.bytes_up}}
+              </list.Item>
+              {{! Bytes down }}
+              <list.Item @icon='arrow-down' @color='action'>
+                {{format-bytes-size @model.sessionRecording.bytes_down}}
+              </list.Item>
+            </MetadataList>
+          </div>
+
+          {{! Related information }}
+          <div>
+            <h3>{{t 'resources.session-recording.related'}}</h3>
+            <LinkListPanel as |list|>
+              {{! User name }}
+              {{#if @model.sessionRecording.user}}
+                <list.Item
+                  @icon='user'
+                  @color='boundary'
+                  @route='scopes.scope.users.user'
+                  @model={{array
+                    @model.sessionRecording.user.scopeId
+                    @model.sessionRecording.user.id
+                  }}
+                  @text={{@model.sessionRecording.userDisplayName}}
+                />
+              {{/if}}
+              {{! Target name }}
+              {{#if @model.sessionRecording.target}}
+                <list.Item
+                  @icon='target'
+                  @color='boundary'
+                  @route='scopes.scope.targets.target'
+                  @model={{array
+                    @model.sessionRecording.target.scopeId
+                    @model.sessionRecording.target.id
+                  }}
+                  @text={{@model.sessionRecording.target.name}}
+                >
+                  {{#if @model.sessionRecording.target.type}}
+                    <Hds::Badge @text={{@model.sessionRecording.target.type}} />
+                  {{/if}}
+                </list.Item>
+              {{/if}}
+              {{! Bucket name }}
+              {{#if @model.storageBucket}}
+                <list.Item
+                  @icon='cloud-check'
+                  @color='boundary'
+                  @route='scopes.scope.storage-buckets.storage-bucket'
+                  @model={{array
+                    @model.storageBucket.scope.id
+                    @model.storageBucket.id
+                  }}
+                  @text={{@model.storageBucket.name}}
+                />
+              {{/if}}
+            </LinkListPanel>
+          </div>
+        </sb.Sidebar>
+      </Layout::Sidebar>
+    </div>
+  </page.body>
+</Rose::Layout::Page>
