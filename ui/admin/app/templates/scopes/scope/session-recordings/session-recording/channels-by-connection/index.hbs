@@ -168,7 +168,11 @@
                 />
               {{/if}}
               {{! Session Recording ID }}
-              <list.Item @icon='film' @color='boundary' @text='Session'>
+              <list.Item
+                @icon='film'
+                @color='boundary'
+                @text={{t 'resources.session-recording.title'}}
+              >
                 <Copyable
                   @text={{@model.sessionRecording.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
