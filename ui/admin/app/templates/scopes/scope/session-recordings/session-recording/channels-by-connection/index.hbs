@@ -91,7 +91,7 @@
         </sb.Body>
         <sb.Sidebar>
           <div>
-            <h3>{{t 'resources.session-recording.details'}}</h3>
+            <h2>{{t 'resources.session-recording.details'}}</h2>
 
             <MetadataList @orientation='vertical' as |list|>
               {{! Start time }}
@@ -122,7 +122,7 @@
 
           {{! Related information }}
           <div>
-            <h3>{{t 'resources.session-recording.related'}}</h3>
+            <h2>{{t 'resources.session-recording.related'}}</h2>
             <LinkListPanel as |list|>
               {{! User name }}
               {{#if @model.sessionRecording.user}}
@@ -167,6 +167,16 @@
                   @text={{@model.storageBucket.name}}
                 />
               {{/if}}
+              {{! Session Recording ID }}
+              <list.Item @icon='film' @color='boundary' @text='Session'>
+                <Copyable
+                  @text={{@model.sessionRecording.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{@model.sessionRecording.id}}</code>
+                </Copyable>
+              </list.Item>
             </LinkListPanel>
           </div>
         </sb.Sidebar>

@@ -918,6 +918,15 @@
   }
 }
 
+// Channel
+.channel-header {
+  margin-bottom: 1rem;
+
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
 // Metadata List
 .metadata-list {
   display: flex;
@@ -932,6 +941,7 @@
 
   .metadata-list-item {
     display: flex;
+    align-items: center;
     column-gap: 0.3rem;
   }
 }

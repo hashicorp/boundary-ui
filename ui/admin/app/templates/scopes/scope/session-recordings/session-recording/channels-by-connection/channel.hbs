@@ -5,9 +5,15 @@
     <BreadCrumbs />
   </page.breadcrumbs>
 
-  <page.header>
-    <h2>{{t 'resources.session-recording.channel.title'}}
-      {{@model.channelRecording.id}}</h2>
+  <page.header class='channel-header'>
+    <h2>{{t 'resources.session-recording.channel.title'}}</h2>
+    <Copyable
+      @text={{@model.channelRecording.id}}
+      @buttonText={{t 'actions.copy-to-clipboard'}}
+      @acknowledgeText={{t 'states.copied'}}
+    >
+      <code>{{@model.channelRecording.id}}</code>
+    </Copyable>
   </page.header>
 
   <page.body>
@@ -58,7 +64,7 @@
       <sb.Sidebar>
         {{! Channel details information }}
         <div>
-          <h3>{{t 'resources.session-recording.channel.details'}}</h3>
+          <h2>{{t 'resources.session-recording.channel.details'}}</h2>
           <MetadataList @orientation='vertical' as |list|>
             {{! Start time }}
             <list.Item @icon='calendar' @color='faint'>
@@ -86,7 +92,7 @@
 
         {{! Related information }}
         <div>
-          <h3>{{t 'resources.session-recording.related'}}</h3>
+          <h2>{{t 'resources.session-recording.related'}}</h2>
           <LinkListPanel as |list|>
             {{! User name }}
             {{#if @model.sessionRecording.user}}
@@ -131,6 +137,26 @@
                 @text={{@model.storageBucket.name}}
               />
             {{/if}}
+            {{! Session Recording ID }}
+            <list.Item @icon='film' @color='boundary' @text='Session'>
+              <Copyable
+                @text={{@model.sessionRecording.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{@model.sessionRecording.id}}</code>
+              </Copyable>
+            </list.Item>
+            {{! Connection Recording ID }}
+            <list.Item @icon='connection' @color='boundary' @text='Connection'>
+              <Copyable
+                @text={{@model.channelRecording.connection_recording.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{@model.channelRecording.connection_recording.id}}</code>
+              </Copyable>
+            </list.Item>
           </LinkListPanel>
         </div>
       </sb.Sidebar>
