@@ -19,6 +19,11 @@
 
 .hds-table {
   border-collapse: revert;
+
+  [class^='hds-form-field'],
+  [class^='hds-form-group'] {
+    margin-bottom: 0;
+  }
 }
 
 .hds-dropdown {
