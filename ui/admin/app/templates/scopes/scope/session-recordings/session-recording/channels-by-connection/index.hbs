@@ -17,7 +17,11 @@
           }}
             <div class='channels-by-connection-connection-header'>
               <p class='hds-typography-display-300 hds-font-weight-semibold'>
-                {{t 'resources.session-recording.connection.title'}}
+                {{indexed-display-name
+                  'resources.session-recording.connection.title_index'
+                  @model.sessionRecording.sortedConnectionsByStartTimeDesc
+                  connection
+                }}
               </p>
               <Copyable
                 @text={{connection.id}}

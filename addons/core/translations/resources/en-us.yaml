@@ -219,6 +219,7 @@ session-recording:
   related: Related
   connection:
     title: Connection
+    title_index: Connection {index}
     title_plural: Connections
     form:
       channel:
