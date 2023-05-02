@@ -33,7 +33,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "@embroider/test-setup": "^0.48.1",
+    "@embroider/test-setup": "^2.1.1",
     "@hashicorp/design-system-components": "^2.1.0",
     "codemirror": "5.65.7",
     "ember-auto-import": "^2.4.2",
