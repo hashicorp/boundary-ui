@@ -217,6 +217,9 @@ session-recording:
   title_plural: Session Recordings
   details: Session details
   related: Related
+  up: '{bytes} up'
+  down: '{bytes} down'
+  duration: '{time} duration'
   connection:
     title: Connection
     title_index: Connection {index}

@@ -69,7 +69,7 @@
 
       <sb.Sidebar>
         {{! Channel details information }}
-        <div>
+        <div class='layout-sidebar-sidebar-details'>
           <h2>{{t 'resources.session-recording.channel.details'}}</h2>
           <MetadataList @orientation='vertical' as |list|>
             {{! Start time }}
@@ -83,15 +83,24 @@
             </list.Item>
             {{! Duration }}
             <list.Item @icon='clock' @color='faint'>
-              {{format-time-duration @model.channelRecording.duration}}
+              {{t
+                'resources.session-recording.duration'
+                time=(format-time-duration @model.channelRecording.duration)
+              }}
             </list.Item>
             {{! Bytes up }}
             <list.Item @icon='arrow-up' @color='success'>
-              {{format-bytes-size @model.channelRecording.bytes_up}}
+              {{t
+                'resources.session-recording.up'
+                bytes=(format-bytes-size @model.channelRecording.bytes_up)
+              }}
             </list.Item>
             {{! Bytes down }}
             <list.Item @icon='arrow-down' @color='action'>
-              {{format-bytes-size @model.channelRecording.bytes_down}}
+              {{t
+                'resources.session-recording.down'
+                bytes=(format-bytes-size @model.channelRecording.bytes_down)
+              }}
             </list.Item>
           </MetadataList>
         </div>

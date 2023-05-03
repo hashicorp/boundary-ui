@@ -882,6 +882,10 @@
 
   .layout-sidebar-sidebar {
     grid-area: sidebar;
+
+    &-details {
+      margin-bottom: 3rem;
+    }
   }
 }
 
