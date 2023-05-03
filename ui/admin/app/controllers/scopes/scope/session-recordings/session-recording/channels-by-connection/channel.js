@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { indexedDisplayName } from 'core/helpers/indexed-display-name';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionChannelController extends Controller {
   // =services
@@ -10,6 +11,12 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
    * Session recording channel breadcrumb
    */
   get breadCrumb() {
-    return this.model.channelRecording.id;
+    return indexedDisplayName(
+      this.intl,
+      'resources.session-recording.channel.title_index',
+      this.model.channelRecording.connection_recording
+        .sortedChannelsByStartTimeDesc,
+      this.model.channelRecording
+    );
   }
 }

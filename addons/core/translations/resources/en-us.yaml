@@ -230,6 +230,7 @@ session-recording:
     title: Channels by connection
   channel:
     title: Channel
+    title_index: Channel {index}
     title_plural: Channels
     details: Channel details
     messages:

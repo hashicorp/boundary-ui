@@ -1,7 +1,14 @@
 import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
 
-export default class extends Helper {
+export function indexedDisplayName(intl, translation, array, item) {
+  let index = array.indexOf(item) + 1;
+  if (index === 0) index = null;
+
+  return intl.t(translation, { index });
+}
+
+export default class IndexedDisplayName extends Helper {
   // =services
   @service intl;
 
@@ -15,10 +22,6 @@ export default class extends Helper {
    * @returns localized name for resource with indexed position. For example, "Channel 1" for first item in a list.
    */
   compute([translation, array, item]) {
-    let index = array.indexOf(item) + 1;
-    if (index === 0) {
-      index = null;
-    }
-    return this.intl.t(translation, { index });
+    return indexedDisplayName(this.intl, translation, array, item);
   }
 }

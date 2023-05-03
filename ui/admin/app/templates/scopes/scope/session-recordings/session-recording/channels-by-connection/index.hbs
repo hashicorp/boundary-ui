@@ -52,7 +52,13 @@
               <:body as |B|>
                 <B.Tr>
                   <B.Td>
-                    <span>{{B.data.id}}</span>
+                    <span>
+                      {{indexed-display-name
+                        'resources.session-recording.channel.title_index'
+                        connection.sortedChannelsByStartTimeDesc
+                        B.data
+                      }}
+                    </span>
                   </B.Td>
                   <B.Td>
                     <MetadataList as |list|>
