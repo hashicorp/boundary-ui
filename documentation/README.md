@@ -4,7 +4,7 @@
 
 We use [ember-intl](https://ember-intl.github.io/ember-intl/) to manage i18n. All the code related to i18n lives within [the core addon](https://github.com/hashicorp/boundary-ui/tree/main/addons/core).
 
-All the features provided by emebr-intl are available to use, on top of that, the Boundary team [provides some custom helpers](https://github.com/hashicorp/boundary-ui/tree/main/addons/core/addon/helpers).
+All the features provided by ember-intl are available to use, on top of that, the Boundary team [provides some custom helpers](https://github.com/hashicorp/boundary-ui/tree/main/addons/core/addon/helpers).
 
 ### Dates & Time
 
