@@ -14,7 +14,7 @@ The desired date format for the Boundary teams is: `YYYY-MM-DD HH-MM-SS TZ`
 
 ### Strings
 
-Plain text strings must be avoided, we use a rules [(`no-bare-strings`)](https://github.com/ember-template-lint/ember-template-lint/blob/master/docs/rule/no-bare-strings.md) within our linter to avoid committing plain text strings.
+Plain text strings must be avoided, we use a rule [(`no-bare-strings`)](https://github.com/ember-template-lint/ember-template-lint/blob/master/docs/rule/no-bare-strings.md) within our linter to avoid committing plain text strings.
 
 To learn how to add a translation, [check documentation](https://ember-intl.github.io/ember-intl/docs/quickstart#2-add-your-first-translation).
 
