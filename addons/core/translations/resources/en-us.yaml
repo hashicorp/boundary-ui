@@ -279,7 +279,7 @@ storage-bucket:
   form:
     scope:
       label: Scope
-      help: You will be able to associate this storage bucket with any target.
+      help: This storage bucket can be associated with targets in this scope.
     provider:
       label: Provider
       help: Boundary currently only supports Amazon S3 storage.
