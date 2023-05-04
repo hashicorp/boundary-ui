@@ -271,7 +271,7 @@ storage-bucket:
       link: Add a new storage bucket
   titles:
     new: New Storage Bucket
-    aws: AWS
+    amazon_s3: Amazon S3
   actions:
     delete: Delete Storage Bucket
   types:
