@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 account:
   title: Account
   title_plural: Accounts
@@ -147,6 +150,7 @@ host-set:
 host:
   title: Host
   title_plural: Hosts
+  no_name_title: Unnamed Host
   description: A host is a resource that may be accessed by a Boundary target.
   messages:
     welcome:
@@ -319,6 +323,9 @@ target:
     target-address:
       label: Target Address
       help: Must be a valid IP address or DNS name. We recommend leaving this blank and using host catalogs and host sets instead if you want to use this target on multiple hosts.
+    worker_filter:
+      label: Worker Filter
+      help: Deprecated. Boolean expression to filter the workers that are allowed to satisfy this request.
   questions:
     delete-host-sources:
       title: Remove associated host sources?
@@ -446,6 +453,9 @@ credential-store:
       help: A PEM-encoded private key matching the client certificate from Client Certificate.
     client_certificate_key_hmac:
       label: Client Certificate Key HMAC
+    worker_filter:
+      label: Worker Filter
+      help: A filter used to control which PKI workers can handle Vault requests, allowing the use of private Vault instances with Boundary.
 credential-library:
   title: Credential Library
   title_plural: Credential Libraries

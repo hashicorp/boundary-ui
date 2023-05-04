@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';

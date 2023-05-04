@@ -1,3 +1,8 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
 {{page-title (app-name)}}
 
 <Rose::Layout::Global as |layout|>
@@ -28,7 +33,7 @@
 
             <dropdown.separator />
 
-            <dropdown.section @title={{t 'titles.toggle-color-theme'}}>
+            <dropdown.section @title={{t 'actions.toggle-color-theme'}}>
               <Rose::Form as |form|>
                 <form.radioGroup
                   @name='theme'
@@ -62,6 +67,53 @@
             </dropdown.section>
 
           </utilities.dropdown>
+
+          {{#if (feature-flag 'dev-edition-toggle')}}
+            <utilities.dropdown
+              data-test-dev-edition-toggle
+              @text={{t
+                'titles.feature-edition'
+                edition=this.featureEdition.edition
+              }}
+              @icon='flight-icons/svg/layers-16'
+              as |dropdown|
+            >
+              <dropdown.section @title={{t 'actions.toggle-feature-edition'}}>
+                <Rose::Form as |form|>
+                  <form.radioGroup
+                    @name='edition'
+                    @selectedValue={{this.featureEdition.edition}}
+                    @changed={{route-action 'toggleEdition'}}
+                    as |radioGroup|
+                  >
+                    {{#each this.featureEdition.editions as |edition|}}
+                      <dropdown.item>
+                        <radioGroup.radio
+                          @label={{edition}}
+                          @value={{edition}}
+                        />
+                      </dropdown.item>
+                    {{/each}}
+                  </form.radioGroup>
+                </Rose::Form>
+              </dropdown.section>
+              <dropdown.separator />
+              <dropdown.section @title={{t 'actions.toggle-licensed-features'}}>
+                <Rose::Form as |form|>
+                  {{#each this.featureEdition.licensedFeatures as |feature|}}
+                    <dropdown.item>
+                      <form.checkbox
+                        @label={{feature}}
+                        @checked={{feature-flag feature}}
+                        @onChange={{route-action 'toggleFeature' feature}}
+                      />
+                    </dropdown.item>
+                  {{/each}}
+                </Rose::Form>
+              </dropdown.section>
+            </utilities.dropdown>
+          {{/if}}
+
         </header.utilities>
 
       {{/if}}

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import { visit, click, currentURL, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -80,7 +85,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('cannot navigate to vault ssh cert form when feature is not enabled', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
@@ -89,10 +94,9 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     await visit(
       `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
     );
-    const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-certificate');
     await visit(urls.credentialLibraries);
-
+    const featuresService = this.owner.lookup('service:features');
+    assert.false(featuresService.isEnabled('ssh-target'));
     assert.dom('.rose-table-body tr:nth-of-type(2) a').doesNotExist();
   });
 

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import {
   visit,
@@ -18,6 +23,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let featuresService;
   let getCredentialLibraryCount;
 
   const instances = {
@@ -71,6 +77,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
     authenticateSession({});
+    featuresService = this.owner.lookup('service:features');
   });
   test('visiting credential libraries', async function (assert) {
     assert.expect(2);
@@ -93,6 +100,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   test('can create a new credential library of type vault ssh cert', async function (assert) {
     assert.expect(12);
+    featuresService.enable('ssh-target');
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
     await click('[value="vault-ssh-certificate"]');
@@ -151,6 +159,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   test('ecdsa and rsa key types bring up a key bits field', async function (assert) {
     assert.expect(3);
+    featuresService.enable('ssh-target');
     await visit(urls.newCredentialLibrary);
     await click('[value="vault-ssh-certificate"]');
     await select('[name="key_type"]', 'ed25519');
@@ -219,11 +228,9 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
-    const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('credential-library-vault-ssh-certificate');
-    assert.expect(1);
+    assert.expect(2);
     await visit(urls.newCredentialLibrary);
-
+    assert.false(featuresService.isEnabled('ssh-target'));
     assert.dom('[value="vault-ssh-certificate"]').doesNotExist();
   });
 });

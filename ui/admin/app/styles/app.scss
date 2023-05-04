@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 @use 'rose/variables/sizing';
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
@@ -669,12 +674,6 @@
         // Shrink last cell to minimum possible width
         width: 1%;
         white-space: nowrap;
-      }
-
-      // Reset field margins to rely instead on cell paddings
-      .hds-form-field--layout-vertical,
-      .hds-form-text-input {
-        margin: 0;
       }
     }
   }

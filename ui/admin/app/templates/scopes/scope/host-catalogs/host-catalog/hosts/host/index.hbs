@@ -1,3 +1,8 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
     <BreadCrumbs />
@@ -12,7 +17,7 @@
   </page.actions>
 
   <page.navigation>
-    <HostCatalogs::HostCatalog::Hosts::Host::Navigation @model={{@model}} />
+    <HostCatalogs::HostCatalog::Hosts::Host::Navigation />
   </page.navigation>
 
   <page.body>

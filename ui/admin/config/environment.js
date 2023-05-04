@@ -1,40 +1,31 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 'use strict';
+
+const v8 = require('v8');
+const {
+  defaultEdition,
+  featureEditions,
+  licensedFeatures,
+} = require('./features');
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
-const EDITION = process.env.EDITION || 'oss'; // Default edition is OSS
 
-// Object that defines edition features.
-const featureEditions = {
-  oss: {
-    'static-credentials': true,
-    'json-credentials': true,
-    byow: true,
-    'byow-pki-hcp-cluster-id': false,
-    'byow-pki-upstream': true,
-    'vault-worker-filter': false,
-    'target-worker-filters-v2': true,
-    'target-worker-filters-v2-ingress': false,
-    'target-worker-filters-v2-hcp': false,
-    'target-network-address': true,
-    'credential-library-vault-ssh-certificate': false,
-  },
-};
-featureEditions.enterprise = {
-  ...featureEditions.oss,
-  'ssh-target': true,
-  'vault-worker-filter': true,
-  'target-worker-filters-v2-ingress': true,
-  'credential-library-vault-ssh-certificate': true,
-};
-featureEditions.hcp = {
-  ...featureEditions.enterprise,
-  'byow-pki-hcp-cluster-id': true,
-  'byow-pki-upstream': false,
-  'target-worker-filters-v2-hcp': true,
-};
+const clone = (obj) => v8.deserialize(v8.serialize(obj));
 
 module.exports = function (environment) {
+  // Start with a fresh copy of the features config every run, since it
+  // could be modified by an environment.
+  const features = {
+    defaultEdition,
+    featureEditions: clone(featureEditions),
+    licensedFeatures: clone(licensedFeatures),
+  };
+
   let ENV = {
     modulePrefix: 'admin',
     environment,
@@ -122,7 +113,8 @@ module.exports = function (environment) {
       timeout: 4000,
     },
 
-    featureFlags: featureEditions[EDITION],
+    features: features,
+    featureFlags: {},
   };
 
   if (environment === 'development') {
@@ -146,16 +138,17 @@ module.exports = function (environment) {
       },
     };
 
-    // Enable features in development
-    ENV.featureFlags['static-credentials'] = true;
-    ENV.featureFlags['json-credentials'] = true;
-    ENV.featureFlags['ssh-target'] = true;
-    ENV.featureFlags['vault-worker-filter'] = true;
-    ENV.featureFlags['target-worker-filters-v2'] = true;
-    ENV.featureFlags['target-worker-filters-v2-ingress'] = true;
-    ENV.featureFlags['target-worker-filters-v2-hcp'] = true;
-    ENV.featureFlags['target-network-address'] = true;
-    ENV.featureFlags['credential-library-vault-ssh-certificate'] = true;
+    // Default edition in development
+    ENV.features.defaultEdition = 'enterprise';
+    // Enable development-only features
+    ENV.features.featureEditions.oss['dev-edition-toggle'] = true;
+    ENV.features.featureEditions.enterprise['dev-edition-toggle'] = true;
+    ENV.features.featureEditions.hcp['dev-edition-toggle'] = true;
+    // Enable licensed features by default in enterprise and hcp
+    Object.keys(ENV.features.licensedFeatures).forEach((feature) => {
+      ENV.features.featureEditions.enterprise[feature] = true;
+      ENV.features.featureEditions.hcp[feature] = true;
+    });
   }
 
   if (environment === 'test') {
@@ -173,15 +166,6 @@ module.exports = function (environment) {
     ENV.flashMessageDefaults.timeout = 0;
 
     ENV.enableConfirmService = false;
-
-    // Enable tests for development features
-    ENV.featureFlags['json-credentials'] = true;
-    ENV.featureFlags['static-credentials'] = true;
-    ENV.featureFlags['ssh-target'] = true;
-    ENV.featureFlags['vault-worker-filter'] = true;
-    ENV.featureFlags['target-worker-filters-v2'] = true;
-    ENV.featureFlags['target-network-address'] = true;
-    ENV.featureFlags['credential-library-vault-ssh-certificate'] = true;
   }
 
   if (environment === 'production') {

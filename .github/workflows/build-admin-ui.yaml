@@ -9,15 +9,15 @@ jobs:
     name: Install dependencies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
         id: node-modules-cache
         with:
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           node-version: 16
       - run: yarn install
@@ -26,8 +26,8 @@ jobs:
     needs: [dependencies]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
         id: node-modules-cache
         with:
           path: '**/node_modules'
@@ -35,17 +35,17 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           node-version: 16
       - run: yarn run build:ui:admin:oss
       - name: Upload artifact admin-ui
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         with:
           name: admin-ui
           path: ./ui/admin/dist/
       - name: Upload artifact OSS admin UI
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         with:
           name: admin-ui-oss
           path: ./ui/admin/dist/
@@ -54,8 +54,8 @@ jobs:
     needs: [dependencies]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
         id: node-modules-cache
         with:
           path: '**/node_modules'
@@ -63,12 +63,12 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           node-version: 16
       - run: yarn run build:ui:admin:enterprise
       - name: Upload artifact enterprise admin UI
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         with:
           name: admin-ui-ent
           path: ./ui/admin/dist/
@@ -77,8 +77,8 @@ jobs:
     needs: [dependencies]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
         id: node-modules-cache
         with:
           path: '**/node_modules'
@@ -86,12 +86,12 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           node-version: 16
       - run: yarn run build:ui:admin:hcp
       - name: Upload artifact HCP admin UI
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         with:
           name: admin-ui-hcp
           path: ./ui/admin/dist/

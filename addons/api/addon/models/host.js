@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedHostModel from '../generated/models/host';
 import { attr } from '@ember-data/model';
 
@@ -23,6 +28,12 @@ export default class HostModel extends GeneratedHostModel {
     readOnly: true,
   })
   external_id;
+
+  @attr('string', {
+    description: 'The external facing name for the plugin based host.',
+    readOnly: true,
+  })
+  external_name;
 
   // Aws specific
   @attr({
@@ -83,5 +94,10 @@ export default class HostModel extends GeneratedHostModel {
       this.type = 'plugin';
       this.plugin = { name: type };
     }
+  }
+
+  // Plugin hosts can support an external name
+  get displayName() {
+    return this.name || this.external_name || this.id;
   }
 }

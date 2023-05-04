@@ -1,4 +1,8 @@
-{{! template-lint-disable no-whitespace-for-layout  }}
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
 {{#if this.availableUsers}}
   <Rose::Form
     class='full-width'
@@ -12,45 +16,38 @@
       @submitText={{t 'resources.group.actions.add-members'}}
       @cancelText={{t 'actions.cancel'}}
     />
-
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          <row.headerCell>{{t 'resources.scope.title'}}</row.headerCell>
-          <row.headerCell>{{t 'form.description.label'}}</row.headerCell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each this.availableUsers as |user|}}
-          <body.row as |row|>
-            <row.headerCell>
-              <form.checkbox
-                @label={{user.displayName}}
-                @onChange={{fn this.toggleMember user}}
-              />
-              {{#if user.accountName}}
-                {{!
-                  The following is a formatting hack since we don't have a great
-                  way to manage micro-whitespace or alignment among separate
-                  components without resorting to heavy-handed grids
-                  or contextualization.  This is a one-off.
-                }}
-                <br />
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-                <Hds::Badge @text={{user.accountName}} />
+    <Hds::Table
+      @model={{this.availableUsers}}
+      @columns={{array
+        (hash label=(t 'form.name.label'))
+        (hash label=(t 'form.id.label'))
+        (hash label=(t 'resources.scope.title'))
+        (hash label=(t 'form.description.label'))
+      }}
+      @valign='middle'
+    >
+      <:body as |B|>
+        <B.Tr>
+          <B.Td>
+            <Hds::Form::Checkbox::Field
+              {{on 'change' (fn this.toggleMember B.data)}}
+              as |F|
+            >
+              <F.Label>{{B.data.displayName}}</F.Label>
+              {{#if B.data.accountName}}
+                <F.HelperText>
+                  <Hds::Badge @text={{B.data.accountName}} />
+                </F.HelperText>
               {{/if}}
-            </row.headerCell>
-            <row.cell><code>{{user.id}}</code></row.cell>
-            <row.cell>
-              <ScopeBadge @scope={{user.scopeModel}} />
-            </row.cell>
-            <row.cell>{{user.description}}</row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
+            </Hds::Form::Checkbox::Field>
+          </B.Td>
+          <B.Td><code>{{B.data.id}}</code></B.Td>
+          <B.Td><ScopeBadge @scope={{B.data.scopeModel}} /></B.Td>
+          <B.Td>{{B.data.description}}</B.Td>
+        </B.Tr>
+
+      </:body>
+    </Hds::Table>
 
   </Rose::Form>
 {{/if}}

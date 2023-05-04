@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 'use strict';
 
 module.exports = {
@@ -32,6 +37,7 @@ module.exports = {
         './.eslintrc.js',
         './.prettierrc.js',
         './.template-lintrc.js',
+        '.stylelintrc.js',
         './ember-cli-build.js',
         './testem.js',
         './testem-electron.js',

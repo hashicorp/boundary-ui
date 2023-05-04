@@ -25,6 +25,7 @@
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "lint:sass": "stylelint '**/*.scss'",
+    "lint:sass:fix": "stylelint '**/*.scss' --fix",
     "lint:electron": "electronegativity -r -i ./electron-app",
     "format": "npm-run-all format:*",
     "format:hbs": "prettier --write 'app/**/*.hbs'",
@@ -113,10 +114,10 @@
     "rose": "*",
     "sass": "^1.55.0",
     "sinon": "^14.0.0",
-    "stylelint": "^13.13.1",
-    "stylelint-config-prettier": "^9.0.3",
-    "stylelint-config-sass-guidelines": "^8.0.0",
-    "webpack": "^5.72.1"
+    "stylelint": "^14.14.0",
+    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-standard-scss": "^7.0.1",
+    "webpack": "^5.76.0"
   },
   "engines": {
     "node": "12.* || 14.* || 16.*"

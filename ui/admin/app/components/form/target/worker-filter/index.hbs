@@ -1,7 +1,12 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
 <div class='target-worker-filter' data-test-filter={{@name}}>
 
   <Hds::Form::Toggle::Field
-    name='target-worker-filter-toggle'
+    name={{concat 'target-worker-filter-toggle-' @name}}
     checked={{@toggleEnabled}}
     disabled={{@disabled}}
     @isOptional={{true}}

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import RESTAdapter from '@ember-data/adapter/rest';
 /* eslint-disable-next-line ember/no-mixins */
 import AdapterBuildURLMixin from 'api/mixins/adapter-build-url';

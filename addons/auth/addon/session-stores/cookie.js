@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import BaseSessionStore from 'ember-simple-auth/session-stores/base';
 import { resolve, reject } from 'rsvp';
 import { get } from '@ember/object';

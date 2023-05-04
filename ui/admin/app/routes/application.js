@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
@@ -15,6 +20,8 @@ export default class ApplicationRoute extends Route {
   @service confirm;
   @service router;
   @service intl;
+  @service features;
+  @service featureEdition;
 
   // =attributes
 
@@ -119,6 +126,20 @@ export default class ApplicationRoute extends Route {
       default:
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
+    }
+  }
+
+  @action
+  toggleEdition(edition) {
+    this.featureEdition.setEdition(edition);
+  }
+
+  @action
+  toggleFeature(feature) {
+    if (this.features.isEnabled(feature)) {
+      this.features.disable(feature);
+    } else {
+      this.features.enable(feature);
     }
   }
 }

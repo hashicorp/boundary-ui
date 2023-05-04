@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import {
@@ -31,13 +36,7 @@ module('Unit | Serializer | credential library', function (hooks) {
       attributes: {
         path: '/vault/path',
         http_method: 'GET',
-        critical_options: null,
-        extensions: null,
-        key_bits: null,
-        key_id: null,
-        key_type: null,
-        ttl: null,
-        username: null,
+        http_request_body: null,
       },
     });
   });
@@ -71,41 +70,54 @@ module('Unit | Serializer | credential library', function (hooks) {
       attributes: {
         path: '/vault/path',
         http_method: 'GET',
-        critical_options: null,
-        extensions: null,
-        key_bits: null,
-        key_id: null,
-        key_type: null,
-        ttl: null,
-        username: null,
+        http_request_body: null,
       },
       version: 1,
     });
   });
 
   test('it serializes empty strings to null', function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     const store = this.owner.lookup('service:store');
-    const record = store.createRecord('credential-library', {
+    const vaultGenericRecord = store.createRecord('credential-library', {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       http_method: '',
       path: null,
     });
-    let serializedRecord = record.serialize();
-    assert.deepEqual(serializedRecord, {
+    const vaultSSHCertificateRecord = store.createRecord('credential-library', {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+      http_method: '',
+      path: null,
+    });
+    let serializedVaultGenericRecord = vaultGenericRecord.serialize();
+    let serializedVaultSSHCertificateRecord =
+      vaultSSHCertificateRecord.serialize();
+    assert.deepEqual(serializedVaultGenericRecord, {
       attributes: {
         path: null,
+        http_method: null,
+        http_request_body: null,
+      },
+      credential_store_id: null,
+      description: null,
+      name: null,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+    });
+    assert.deepEqual(serializedVaultSSHCertificateRecord, {
+      attributes: {
         critical_options: null,
         extensions: null,
         key_bits: null,
         key_id: null,
         key_type: null,
+        path: null,
         ttl: null,
         username: null,
       },
       credential_store_id: null,
       description: null,
       name: null,
-      type: null,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
   });
 
@@ -123,14 +135,8 @@ module('Unit | Serializer | credential library', function (hooks) {
       {
         attributes: {
           http_method: 'GET',
+          http_request_body: null,
           path: null,
-          critical_options: null,
-          extensions: null,
-          key_bits: null,
-          key_id: null,
-          key_type: null,
-          ttl: null,
-          username: null,
         },
         credential_store_id: null,
         description: null,
@@ -149,13 +155,6 @@ module('Unit | Serializer | credential library', function (hooks) {
           http_method: 'POST',
           http_request_body: 'body',
           path: null,
-          critical_options: null,
-          extensions: null,
-          key_bits: null,
-          key_id: null,
-          key_type: null,
-          ttl: null,
-          username: null,
         },
         credential_store_id: null,
         description: null,

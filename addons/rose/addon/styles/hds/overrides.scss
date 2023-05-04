@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 // field bottom margin (HDS leaves this to implementers)
 [class^='hds-form-field'],
 [class^='hds-form-group'] {
@@ -9,5 +14,20 @@
     .hds-form-label {
       font-weight: var(--token-typography-font-weight-semibold);
     }
+  }
+}
+
+.hds-table {
+  border-collapse: revert;
+
+  [class^='hds-form-field'],
+  [class^='hds-form-group'] {
+    margin-bottom: 0;
+  }
+}
+
+.hds-dropdown {
+  .hds-dropdown-toggle-icon {
+    color: inherit;
   }
 }

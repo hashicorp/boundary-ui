@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -31,7 +36,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
 
     // Set the type to generic vault if feature flag isn't enabled in cases where
     // user sets the query parameter manually
-    if (!this.features.isEnabled('credential-library-vault-ssh-certificate')) {
+    if (!this.features.isEnabled('ssh-target')) {
       type = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
     }
 

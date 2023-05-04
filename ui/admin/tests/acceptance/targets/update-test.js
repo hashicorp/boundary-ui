@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -34,7 +39,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   hooks.beforeEach(function () {
     featuresService = this.owner.lookup('service:features');
-    featuresService.disable('target-worker-filters-v2');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -91,10 +95,9 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('updating a target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
-    featuresService.disable('target-worker-filters-v2');
-    assert.expect(1);
+    assert.expect(2);
     await visit(urls.target);
-
+    assert.false(featuresService.isEnabled('target-worker-filters-v2'));
     assert.dom('.hds-alert').doesNotExist();
   });
 
@@ -159,16 +162,21 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('hide filter input field when the `egress_worker_filter` toggled is off', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
+    featuresService.enable('target-worker-filters-v2-ingress');
     assert.expect(1);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     assert.dom('[name=egress_worker_filter]').isNotVisible();
   });
 
   test('clear `egress_worker_field` value from a target when the toggle is off and form is saved', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
+    featuresService.enable('target-worker-filters-v2-ingress');
     assert.expect(5);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
@@ -181,7 +189,10 @@ module('Acceptance | targets | update', function (hooks) {
       'random filter string'
     );
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await click('.hds-form-toggle__control', 'Egress worker filter');
+    await click(
+      '[name="target-worker-filter-toggle-egress_worker_filter"]',
+      'Egress toggle'
+    );
     await click('.rose-form-actions [type="submit"]');
     //clear egress_worker_filter when the toggle is off
     assert.strictEqual(currentURL(), urls.target);
@@ -353,6 +364,8 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('saving address with existing host sources brings up confirmation modal and removes host sources', async function (assert) {
     assert.expect(4);
+    featuresService.enable('ssh-target');
+    featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     this.server.createList(
@@ -397,6 +410,8 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('saving address with existing host sources brings up confirmation modal and can cancel', async function (assert) {
     assert.expect(4);
+    featuresService.enable('ssh-target');
+    featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     this.server.createList(

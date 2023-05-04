@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -53,6 +58,10 @@ module('Acceptance | clusterUrl', function (hooks) {
     projects: null,
     targets: null,
   };
+  const setupMockIpc = (test) => {
+    test.owner.register('service:browser/window', WindowMockIPC);
+    mockIPC = test.owner.lookup('service:browser/window').mockIPC;
+  };
 
   hooks.beforeEach(function () {
     invalidateSession();
@@ -91,10 +100,6 @@ module('Acceptance | clusterUrl', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
-
-    // Mock the postMessage interface used by IPC.
-    this.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = this.owner.lookup('service:browser/window').mockIPC;
   });
 
   hooks.afterEach(function () {
@@ -110,6 +115,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('visiting index without a clusterUrl specified redirects to clusterUrl route', async function (assert) {
     assert.expect(2);
+    setupMockIpc(this);
     await visit(urls.index);
     await a11yAudit();
     assert.notOk(mockIPC.clusterUrl);
@@ -118,6 +124,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('can set clusterUrl', async function (assert) {
     assert.expect(3);
+    setupMockIpc(this);
     assert.notOk(mockIPC.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
@@ -128,6 +135,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('can reset clusterUrl before authentication', async function (assert) {
     assert.expect(4);
+    setupMockIpc(this);
     assert.notOk(mockIPC.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
@@ -140,6 +148,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('captures error on clusterUrl update', async function (assert) {
     assert.expect(2);
+    setupMockIpc(this);
     assert.notOk(mockIPC.clusterUrl);
     sinon
       .stub(this.owner.lookup('service:clusterUrl'), 'setClusterUrl')

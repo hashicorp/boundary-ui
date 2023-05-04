@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'admin/tests/helpers';
 import { render } from '@ember/test-helpers';
@@ -11,13 +16,11 @@ module(
     setupIntl(hooks);
 
     let featuresService;
-    const targetWorkerFilterIngress = 'target-worker-filters-v2-ingress';
     const targetWorkerFilterHCP = 'target-worker-filters-v2-hcp';
 
     hooks.beforeEach(function () {
       featuresService = this.owner.lookup('service:features');
       featuresService.enable(targetWorkerFilterHCP);
-      featuresService.disable(targetWorkerFilterIngress);
     });
 
     test('it renders the correct diagram when egress and ingress filter is false', async function (assert) {

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import { visit, fillIn, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -42,7 +47,6 @@ module('Acceptance | workers | create', function (hooks) {
     assert.expect(2);
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
-    featuresService.disable('byow-pki-upstream');
     await visit(newWorkerURL);
     const labels = findAll('label.rose-form-label');
     assert.dom(labels[0]).hasText('Boundary Cluster ID');
@@ -50,24 +54,31 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('byow-pki-hcp-cluster-id');
-    featuresService.enable('byow-pki-upstream');
     await visit(newWorkerURL);
     const labels = findAll('label.rose-form-label');
+    assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');
     assert.dom(labels[2]).hasText('Initial Upstreams');
   });
 
   test('download and install step shows correct oss instructions', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const featuresService = this.owner.lookup('service:features');
-    featuresService.disable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
     const createSection = findAll('.worker-create-section');
-    assert.dom(createSection[1]).includesText('curl -fsSL');
-    assert.dom(createSection[1]).doesNotIncludeText('wget -q');
+    assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
+    assert
+      .dom(createSection[1])
+      .includesText(
+        'curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;'
+      );
+    assert
+      .dom(createSection[1])
+      .doesNotIncludeText(
+        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary-worker/latest?license_class=hcp"'
+      );
   });
 
   test('download and install step shows correct hcp instructions', async function (assert) {
@@ -76,8 +87,16 @@ module('Acceptance | workers | create', function (hooks) {
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
     const createSection = findAll('.worker-create-section');
-    assert.dom(createSection[1]).includesText('wget -q');
-    assert.dom(createSection[1]).doesNotIncludeText('curl -fsSL');
+    assert
+      .dom(createSection[1])
+      .includesText(
+        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary-worker/latest?license_class=hcp"'
+      );
+    assert
+      .dom(createSection[1])
+      .doesNotIncludeText(
+        'curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;'
+      );
   });
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {

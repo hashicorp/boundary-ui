@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import ModelAbility from 'api/abilities/model';
 
 export default class OverrideModelAbility extends ModelAbility {

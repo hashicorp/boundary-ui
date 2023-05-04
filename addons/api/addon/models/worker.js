@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedWorkerModel from '../generated/models/worker';
 import { attr } from '@ember-data/model';
 

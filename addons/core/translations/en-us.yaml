@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 auth:
   titles:
     no-scopes: No Scopes Available
@@ -25,7 +28,6 @@ titles:
   actions: Actions
   documentation: Documentation
   abandon-confirm: Discard unsaved changes?
-  toggle-color-theme: Toggle Color Theme
   welcome-to-boundary: Welcome to Boundary
   label: Label
   value: Value
@@ -35,6 +37,7 @@ titles:
   success: Success
   create-resources: Create Resources
   choose-an-option: Choose an option
+  feature-edition: 'Edition: {edition}'
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   cluster-url-initialization: To get started, please enter your cluster URL
