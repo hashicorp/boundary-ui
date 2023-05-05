@@ -42,13 +42,18 @@
             {{! Target }}
             <B.Td>
               <div
-                class='session-recording-list-cell-item hds-font-weight-semibold'
+                class='session-recording-list-cell-item target-column hds-font-weight-semibold'
               >
-                <span><FlightIcon @name='grid' /></span>
-                <span>{{B.data.targetScopeDisplayName}}</span>
-                <span class='hds-foreground-faint'>/</span>
-                <span><FlightIcon @name='target' /></span>
-                <span>{{B.data.target.name}}</span>
+                <span>
+                  <FlightIcon @name='target' />
+                  {{B.data.target.name}}
+                </span>
+                <span>
+                  <Hds::Badge
+                    @text={{B.data.targetScopeDisplayName}}
+                    @icon='grid'
+                  />
+                </span>
               </div>
             </B.Td>
             {{! Duration }}

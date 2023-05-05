@@ -901,11 +901,19 @@
 // Session recording - List
 .session-recording-list-cell-item {
   display: flex;
-  gap: sizing.rems(xs);
+  gap: 0.5rem;
 
   span {
     display: flex;
     align-items: center;
+  }
+}
+
+.session-recording-list-cell-item.target-column {
+  flex-direction: column;
+
+  span {
+    gap: 0.5rem;
   }
 }
 

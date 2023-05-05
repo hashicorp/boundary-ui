@@ -39,8 +39,12 @@ module('Acceptance | session recordings | read', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.global,
+    });
     instances.sessionRecording = this.server.create('session-recording', {
       scope: instances.scopes.global,
+      target: instances.target.attrs,
     });
     instances.connectionRecording = this.server.create('connection-recording', {
       session_recording: instances.sessionRecording,
