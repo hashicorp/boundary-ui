@@ -872,7 +872,7 @@
 .layout-sidebar {
   display: grid;
   grid-template-areas: 'body body sidebar';
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: auto auto 300px;
   grid-template-rows: auto 1fr;
   gap: 2rem;
 
@@ -891,10 +891,14 @@
 
 @media (max-width: media.width(large)) {
   .layout-sidebar {
-    grid-template-columns: 1fr;
     grid-template-areas:
       'body'
       'sidebar';
+    grid-template-columns: auto;
+
+    .layout-sidebar-sidebar {
+      max-width: 300px;
+    }
   }
 }
 
