@@ -38,7 +38,10 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
    * @type {string}
    */
   get targetScopeDisplayName() {
-    return this.target?.scope?.name || this.target?.scope?.id;
+    return (
+      this.create_time_values?.target?.scope?.name ||
+      this.create_time_values?.target?.scope?.id
+    );
   }
 
   /**
@@ -46,6 +49,8 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
    * @type {string}
    */
   get userDisplayName() {
-    return this.user?.name || this.user?.id;
+    return (
+      this.create_time_values?.user?.name || this.create_time_values?.user?.id
+    );
   }
 }

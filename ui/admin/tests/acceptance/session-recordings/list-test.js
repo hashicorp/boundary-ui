@@ -38,7 +38,9 @@ module('Acceptance | session recordings | list', function (hooks) {
       scope: instances.scopes.global,
     });
     instances.sessionRecording = this.server.create('session-recording', {
-      target: instances.scopes.targetModel.attrs,
+      create_time_values: {
+        target: instances.scopes.targetModel.attrs,
+      },
     });
     urls.globalScope = `/scopes/global`;
     urls.sessionRecordings = `${urls.globalScope}/session-recordings`;

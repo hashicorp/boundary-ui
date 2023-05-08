@@ -84,13 +84,22 @@ module('Unit | Model | session-recording', function (hooks) {
     const fakeId = 's_123456789';
 
     const modelA = store.createRecord('session-recording', {
-      target: {
-        scope: { name: fakeName, id: fakeId },
+      create_time_values: {
+        target: {
+          scope: {
+            name: fakeName,
+            id: fakeId,
+          },
+        },
       },
     });
     const modelB = store.createRecord('session-recording', {
-      target: {
-        scope: { id: fakeId },
+      create_time_values: {
+        target: {
+          scope: {
+            id: fakeId,
+          },
+        },
       },
     });
 
@@ -105,11 +114,20 @@ module('Unit | Model | session-recording', function (hooks) {
     const fakeUserId = 'userid';
 
     const userModelA = store.createRecord('session-recording', {
-      user: { name: fakeUserName, id: fakeUserId },
+      create_time_values: {
+        user: {
+          name: fakeUserName,
+          id: fakeUserId,
+        },
+      },
     });
 
     const userModelB = store.createRecord('session-recording', {
-      user: { id: fakeUserId },
+      create_time_values: {
+        user: {
+          id: fakeUserId,
+        },
+      },
     });
 
     assert.strictEqual(userModelA.userDisplayName, fakeUserName);

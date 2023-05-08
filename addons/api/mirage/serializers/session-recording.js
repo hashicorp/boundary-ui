@@ -26,18 +26,19 @@ export default ApplicationSerializer.extend({
         );
       });
     }
-    if (model.user?.scopeId) {
-      const scope = scopes.find(model.user.scopeId);
-      json.user.scope = ScopeSerializer.prototype._hashForModel.apply(this, [
-        scope,
-      ]);
+    const userScopeId = model.create_time_values?.user?.scopeId;
+    if (userScopeId) {
+      const scope = scopes.find(userScopeId);
+      json.create_time_values.user.scope =
+        ScopeSerializer.prototype._hashForModel.apply(this, [scope]);
     }
-    if (model.target?.scopeId) {
-      const scope = scopes.find(model.target.scopeId);
-      json.target.scope = ScopeSerializer.prototype._hashForModel.apply(this, [
-        scope,
-      ]);
+    const targetScopeId = model.create_time_values?.target?.scopeId;
+    if (targetScopeId) {
+      const scope = scopes.find(targetScopeId);
+      json.create_time_values.target.scope =
+        ScopeSerializer.prototype._hashForModel.apply(this, [scope]);
     }
+    delete json.create_time_values?.target?.storage_bucket_id;
 
     json.session_id = model.sessionId;
     return json;

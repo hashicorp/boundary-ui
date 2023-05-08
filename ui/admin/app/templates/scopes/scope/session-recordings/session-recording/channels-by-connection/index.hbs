@@ -150,32 +150,34 @@
             <h2>{{t 'resources.session-recording.related'}}</h2>
             <LinkListPanel as |list|>
               {{! User name }}
-              {{#if @model.sessionRecording.user}}
+              {{#if @model.sessionRecording.create_time_values.user}}
                 <list.Item
                   @icon='user'
                   @color='boundary'
                   @route='scopes.scope.users.user'
                   @model={{array
-                    @model.sessionRecording.user.scopeId
-                    @model.sessionRecording.user.id
+                    @model.sessionRecording.create_time_values.user.scope.id
+                    @model.sessionRecording.create_time_values.user.id
                   }}
                   @text={{@model.sessionRecording.userDisplayName}}
                 />
               {{/if}}
               {{! Target name }}
-              {{#if @model.sessionRecording.target}}
+              {{#if @model.sessionRecording.create_time_values.target}}
                 <list.Item
                   @icon='target'
                   @color='boundary'
                   @route='scopes.scope.targets.target'
                   @model={{array
-                    @model.sessionRecording.target.scopeId
-                    @model.sessionRecording.target.id
+                    @model.sessionRecording.create_time_values.target.scope.id
+                    @model.sessionRecording.create_time_values.target.id
                   }}
-                  @text={{@model.sessionRecording.target.name}}
+                  @text={{@model.sessionRecording.create_time_values.target.name}}
                 >
-                  {{#if @model.sessionRecording.target.type}}
-                    <Hds::Badge @text={{@model.sessionRecording.target.type}} />
+                  {{#if @model.sessionRecording.create_time_values.target.type}}
+                    <Hds::Badge
+                      @text={{@model.sessionRecording.create_time_values.target.type}}
+                    />
                   {{/if}}
                 </list.Item>
               {{/if}}

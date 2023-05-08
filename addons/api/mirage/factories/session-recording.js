@@ -36,9 +36,12 @@ export default factory.extend({
       target.id = 'deleted_target';
 
       sessionRecording.update({
-        user: user.attrs,
-        target: target.attrs,
         sessionId: session.id,
+        storage_bucket_id: target.storage_bucket_id,
+        create_time_values: {
+          user: user.attrs,
+          target: target.attrs,
+        },
       });
     },
   }),
@@ -52,9 +55,12 @@ export default factory.extend({
       );
 
       sessionRecording.update({
-        user: user.attrs,
-        target: target.attrs,
         sessionId: session.id,
+        storage_bucket_id: target.storage_bucket_id,
+        create_time_values: {
+          user: user.attrs,
+          target: target.attrs,
+        },
       });
     },
   }),

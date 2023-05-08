@@ -19,22 +19,24 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
   type;
 
   @attr({
-    description: 'The user who created the session.',
+    description:
+      'Contains the values of related fields at the time this Session Recording was created',
     readOnly: true,
   })
-  user;
-
-  @attr({
-    description: 'The target the session connected to.',
-    readOnly: true,
-  })
-  target;
+  create_time_values;
 
   @attr('string', {
     description: 'The ID of the Session which this Session Recording recorded.',
     readOnly: true,
   })
   session_id;
+
+  @attr('string', {
+    description:
+      'The ID of the Storage Bucket for the Target of this Session Recording',
+    readOnly: true,
+  })
+  storage_bucket_id;
 
   @attr('string', {
     description:

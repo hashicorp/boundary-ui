@@ -44,7 +44,9 @@ module('Acceptance | session recordings | read', function (hooks) {
     });
     instances.sessionRecording = this.server.create('session-recording', {
       scope: instances.scopes.global,
-      target: instances.target.attrs,
+      create_time_values: {
+        target: instances.target.attrs,
+      },
     });
     instances.connectionRecording = this.server.create('connection-recording', {
       session_recording: instances.sessionRecording,

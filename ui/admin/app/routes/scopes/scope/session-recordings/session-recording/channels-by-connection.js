@@ -27,8 +27,8 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
     );
 
     try {
-      if (sessionRecording.target?.storage_bucket_id) {
-        const { storage_bucket_id } = sessionRecording.target;
+      if (sessionRecording.storage_bucket_id) {
+        const { storage_bucket_id } = sessionRecording;
         storageBucket = await this.store.findRecord(
           'storage-bucket',
           storage_bucket_id
