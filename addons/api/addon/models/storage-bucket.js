@@ -3,7 +3,7 @@ import GeneratedStorageBucketModel from '../generated/models/storage-bucket';
 export const TYPE_STORAGE_BUCKET_PLUGIN = 'plugin';
 export const TYPES_STORAGE_BUCKET = Object.freeze([TYPE_STORAGE_BUCKET_PLUGIN]);
 
-export const TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 = 'aws_s3';
+export const TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 = 'aws';
 export const TYPES_STORAGE_BUCKET_PLUGIN = Object.freeze([
   TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
 ]);
@@ -14,7 +14,7 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {boolean}
    */
   get isPlugin() {
-    return this.type === 'plugin';
+    return this.type === TYPE_STORAGE_BUCKET_PLUGIN;
   }
 
   /**
@@ -34,7 +34,7 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {boolean}
    */
   get isAWS() {
-    return this.compositeType === 'aws_s3';
+    return this.compositeType === TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3;
   }
 
   /**
@@ -51,7 +51,7 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * Sets `type` to `plugin` and `plugin.name` to the specified type.
    */
   set compositeType(type) {
-    this.type = 'plugin';
+    this.type = TYPE_STORAGE_BUCKET_PLUGIN;
     this.plugin = { name: type };
   }
 }
