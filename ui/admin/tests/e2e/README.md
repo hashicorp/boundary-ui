@@ -63,6 +63,18 @@ Login to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP 
 
 **Token awareness:** Copy your token from the box and save it in a secure location. Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
 
+### Setup Enos:
+
+Enos needs some configuration variables to run the scenario successfully. [See the configuration file](https://github.com/hashicorp/boundary/blob/main/enos/enos.vars.hcl). The file has comments per each variable, but some awareness:
+
+- `aws_region`: very important as mentioned within the EC2 Setup.
+- `tfc_api_token`: you need to provide the previously created token in Terraform cloud, there is no shared token within Boundary team.
+- `e2e_debug_no_run`: make sure this is set to true.
+- `enos_user`: leave it to `enos`.
+
+More documentation about [scenario variables](https://github.com/hashicorp/boundary/tree/main/enos#scenarios-variables).
+
+## Run tests:
 
 Run tests...
 ```bash
