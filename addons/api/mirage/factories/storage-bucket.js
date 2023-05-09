@@ -50,6 +50,7 @@ export default factory.extend({
               max: 9,
             }
           )}`,
+          disable_credential_rotation: faker.datatype.boolean(),
         };
     }
   },

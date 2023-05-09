@@ -85,4 +85,10 @@ export default class GeneratedStorageBucketModel extends BaseModel {
     description: 'The secret access key to use.',
   })
   secret_access_key;
+
+  @attr('boolean', {
+    isNestedAttribute: true,
+    description: '',
+  })
+  disable_credential_rotation;
 }

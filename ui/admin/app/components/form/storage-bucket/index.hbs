@@ -301,6 +301,15 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
+  <Hds::Form::Checkbox::Field
+    name='disable_credential_rotation'
+    checked={{@model.disable_credential_rotation}}
+    {{on 'change' this.toggleDisableCredentialRotation}}
+    as |F|
+  >
+    <F.Label>{{t 'form.disable_credential_rotation.label'}}</F.Label>
+  </Hds::Form::Checkbox::Field>
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

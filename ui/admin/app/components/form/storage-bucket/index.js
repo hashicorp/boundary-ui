@@ -27,4 +27,10 @@ export default class FormStorageBucketComponent extends Component {
       set(this.args.model, currentAttr, oldVal);
     }
   }
+
+  @action
+  toggleDisableCredentialRotation() {
+    this.args.model.disable_credential_rotation =
+      !this.args.model.disable_credential_rotation;
+  }
 }

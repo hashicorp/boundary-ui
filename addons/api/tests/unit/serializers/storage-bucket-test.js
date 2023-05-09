@@ -31,6 +31,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       access_key_id: 'foobars',
       secret_access_key: 'testing',
       secrets_hmac: 'hmac',
+      disable_credential_rotation: true,
     });
     const expectedResult = {
       name: 'AWS',
@@ -41,6 +42,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       worker_filter: 'workerfilter',
       attributes: {
         region: 'eu-west-1',
+        disable_credential_rotation: true,
       },
       secrets: {
         access_key_id: 'foobars',
@@ -66,6 +68,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       worker_filter: 'workerfilter',
       attributes: {
         region: 'eu-west-1',
+        disable_credential_rotation: true,
       },
       secrets_hmac: 'this is secret',
     };
@@ -90,6 +93,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
           worker_filter: 'workerfilter',
           secrets_hmac: 'this is secret',
           region: 'eu-west-1',
+          disable_credential_rotation: true,
         },
         type: 'storage-bucket',
         relationships: {},
