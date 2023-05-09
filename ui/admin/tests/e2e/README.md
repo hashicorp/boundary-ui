@@ -57,6 +57,13 @@ You need to provide an SSH Key pair for the EC2 instance. We recommend creating 
 
 [How to create EC2 SSH key pair](https://docs.aws.amazon.com/ground-station/latest/ug/create-ec2-ssh-key-pair.html).
 
+### Setup HCP Terraform (Terraform cloud):
+
+Login to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens).
+
+**Token awareness:** Copy your token from the box and save it in a secure location. Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
+
+
 Run tests...
 ```bash
 export BOUNDARY_ADDR=
