@@ -47,9 +47,15 @@ cd boundary-ui/ui/admin
 yarn install
 npx playwright install # this installs the browsers used by Playwright
 ```
-### SSH Key pair
+### Setup EC2 instance:
 
-The AWS EC2 instance we need to setup later requires providing SSH Key pair. We recommend creating specific e2e SSH keys and not re-use existing ones. To differentiate them, we recommend adding `enos` to the name, i.e: `name_enos`.
+**Region awareness:** take note of the AWS region you are setting up because we will need it later to configure enos. [More information about AWS regions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html).
+
+**SSH Key pair:**
+
+You need to provide an SSH Key pair for the EC2 instance. We recommend creating specific e2e SSH keys and not re-use existing ones. To differentiate them, we recommend adding `enos` to the name, i.e: `name_enos`.
+
+[How to create EC2 SSH key pair](https://docs.aws.amazon.com/ground-station/latest/ug/create-ec2-ssh-key-pair.html).
 
 Run tests...
 ```bash
