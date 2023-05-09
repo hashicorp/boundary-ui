@@ -7,14 +7,19 @@ import fetch from 'fetch';
 
 async function autoInitializeFeatureEdition(owner) {
   const service = owner.lookup('service:feature-edition');
-  const url = '/metadata.json';
+  const adapter = owner.lookup('adapter:application');
+
   let edition;
   let features;
 
   // Attempt to load edition for the metadata JSON
   try {
+    const { host } = adapter;
+    const path = '/metadata.json';
+    const url = `${host}${path}`;
     const response = await fetch(url);
     const json = await response.json();
+
     edition = json?.license?.edition;
     features = json?.license?.features;
   } catch (e) {
