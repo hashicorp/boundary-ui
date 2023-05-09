@@ -9,6 +9,11 @@ import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 export default class ScopesScopeAuthenticateMethodRoute extends Route {
   // =services
@@ -62,7 +67,8 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     const authenticatorName = `authenticator:${authMethod.type}`;
     const requestCookies = false;
     switch (authMethod.type) {
-      case 'password':
+      case TYPE_AUTH_METHOD_PASSWORD:
+      case TYPE_AUTH_METHOD_LDAP:
         await this.session.authenticate(
           authenticatorName,
           creds,
@@ -71,7 +77,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
         );
         this.router.transitionTo('index');
         break;
-      case 'oidc':
+      case TYPE_AUTH_METHOD_OIDC:
         await this.startOIDCAuthentication(authenticatorName, {
           scope,
           authMethod,
