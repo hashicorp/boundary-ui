@@ -6,6 +6,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 module('Unit | Model | auth method', function (hooks) {
   setupTest(hooks);
@@ -38,7 +43,7 @@ module('Unit | Model | auth method', function (hooks) {
         id: '123abc',
         type: 'auth-method',
         attributes: {
-          type: 'oidc',
+          type: TYPE_AUTH_METHOD_OIDC,
           state: 'foobar',
           version: 1,
           scope: {
@@ -50,5 +55,44 @@ module('Unit | Model | auth method', function (hooks) {
     });
     const model = store.peekRecord('auth-method', '123abc');
     await model.changeState('foobar');
+  });
+
+  test('it has isPassword property and returns the expected values', async function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const modelA = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
+    const modelB = store.createRecord('auth-method', {
+      type: 'no-such-type',
+    });
+    assert.true(modelA.isPassword);
+    assert.false(modelB.isPassword);
+  });
+
+  test('it has isOIDC property and returns the expected values', async function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const modelA = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    const modelB = store.createRecord('auth-method', {
+      type: 'no-such-type',
+    });
+    assert.true(modelA.isOIDC);
+    assert.false(modelB.isOIDC);
+  });
+
+  test('it has isLDAP property and returns the expected values', async function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const modelA = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    const modelB = store.createRecord('auth-method', {
+      type: 'no-such-type',
+    });
+    assert.true(modelA.isLDAP);
+    assert.false(modelB.isLDAP);
   });
 });
