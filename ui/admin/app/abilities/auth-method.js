@@ -7,10 +7,12 @@ import ModelAbility from 'api/abilities/model';
 
 export default class OverrideAuthMethodAbility extends ModelAbility {
   /**
-   * This override ensures that
+   * These override abilities are temporary and just part of Phase 1
+   * of LDAP auth method implementation.
    */
+
   get canRead() {
-    return super.canRead && !this.model.isLDAP;
+    return !this.model.isLDAP && super.canRead;
   }
 
   get canMakePrimary() {

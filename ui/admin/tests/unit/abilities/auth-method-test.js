@@ -46,6 +46,17 @@ module('Unit | Abilities | auth-method', function (hooks) {
     assert.true(canService.can('read auth-method', authMethod));
   });
 
+  test('cannot read non-LDAP auth-method when unauthorized', function (assert) {
+    assert.expect(1);
+    const canService = this.owner.lookup('service:can');
+    const store = this.owner.lookup('service:store');
+    const authMethod = store.createRecord('auth-method', {
+      authorized_actions: [],
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    assert.false(canService.can('read auth-method', authMethod));
+  });
+
   test('cannot make LDAP auth-method primary', function (assert) {
     assert.expect(1);
     const canService = this.owner.lookup('service:can');
