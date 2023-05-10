@@ -3,39 +3,4 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Rose::Form
-  class='full-width'
-  @onSubmit={{fn
-    this.submit
-    @submit
-    (hash identification=this.identification password=this.password)
-  }}
-  @disabled={{@disabled}}
-  as |form|
->
-  <Hds::Form::TextInput::Field
-    name='identification'
-    @value={{this.identification}}
-    @type='text'
-    {{on 'input' (set-from-event this 'identification')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.login_name.label'}}</F.Label>
-  </Hds::Form::TextInput::Field>
-
-  <Hds::Form::TextInput::Field
-    name='password'
-    @value={{this.password}}
-    @type='password'
-    {{on 'input' (set-from-event this 'password')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.password.label'}}</F.Label>
-  </Hds::Form::TextInput::Field>
-
-  <form.actions
-    @submitText={{t 'actions.authenticate'}}
-    @showCancel={{false}}
-  />
-
-</Rose::Form>
+<Form::Authenticate::Details @onSubmit={{@submit}} @onDisabled={{@disabled}} />
