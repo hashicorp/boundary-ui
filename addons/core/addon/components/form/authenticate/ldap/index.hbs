@@ -1,3 +1,8 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
 <Rose::Form
   class='full-width'
   @onSubmit={{fn
@@ -5,24 +10,28 @@
     @submit
     (hash identification=this.identification password=this.password)
   }}
-  @cancel={{false}}
   @disabled={{@disabled}}
   as |form|
 >
-
-  <form.input
-    @name='identification'
-    @type='text'
+  <Hds::Form::TextInput::Field
+    name='identification'
     @value={{this.identification}}
-    @label={{t 'form.login_name.label'}}
-  />
+    @type='text'
+    {{on 'input' (set-from-event this 'identification')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.login_name.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='password'
-    @type='password'
+  <Hds::Form::TextInput::Field
+    name='password'
     @value={{this.password}}
-    @label={{t 'form.password.label'}}
-  />
+    @type='password'
+    {{on 'input' (set-from-event this 'password')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.password.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
 
   <form.actions
     @submitText={{t 'actions.authenticate'}}
