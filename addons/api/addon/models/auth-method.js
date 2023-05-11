@@ -74,6 +74,13 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
   /**
    * @type {boolean}
    */
+  get isUnknown() {
+    return !TYPES_AUTH_METHOD.includes(this.type);
+  }
+
+  /**
+   * @type {boolean}
+   */
   get isInactive() {
     return this.state === 'inactive';
   }

@@ -120,7 +120,7 @@
           {{#each @model as |authMethod|}}
             <body.row as |row|>
               <row.headerCell>
-                {{#if (can 'read authMethod' authMethod)}}
+                {{#if (can 'read auth-method' authMethod)}}
                   <LinkTo
                     @route='scopes.scope.auth-methods.auth-method'
                     @model={{authMethod.id}}
@@ -154,7 +154,7 @@
                 {{/if}}
               </row.cell>
               <row.cell>
-                {{#if (can 'makePrimary authMethod' authMethod)}}
+                {{#if (can 'makePrimary auth-method' authMethod)}}
                   <Rose::Dropdown
                     @text={{t 'actions.manage'}}
                     @dropdownRight={{true}}

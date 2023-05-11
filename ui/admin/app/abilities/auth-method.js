@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import ModelAbility from 'api/abilities/model';
+import AuthMethodAbility from 'api/abilities/auth-method';
 
-export default class OverrideAuthMethodAbility extends ModelAbility {
+export default class OverrideAuthMethodAbility extends AuthMethodAbility {
   /**
    * These override abilities are temporary and just part of Phase 1
    * of LDAP auth method implementation.

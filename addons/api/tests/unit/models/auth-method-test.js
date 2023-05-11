@@ -16,8 +16,13 @@ module('Unit | Model | auth method', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
+  let store;
+
+  hooks.beforeEach(function () {
+    store = this.owner.lookup('service:store');
+  });
+
   test('it exists', function (assert) {
-    let store = this.owner.lookup('service:store');
     let model = store.createRecord('auth-method', {});
     assert.ok(model);
   });
@@ -37,7 +42,6 @@ module('Unit | Model | auth method', function (hooks) {
         return { id: '123abc' };
       }
     );
-    const store = this.owner.lookup('service:store');
     store.push({
       data: {
         id: '123abc',
@@ -59,7 +63,6 @@ module('Unit | Model | auth method', function (hooks) {
 
   test('it has isPassword property and returns the expected values', async function (assert) {
     assert.expect(3);
-    const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
@@ -76,7 +79,6 @@ module('Unit | Model | auth method', function (hooks) {
 
   test('it has isOIDC property and returns the expected values', async function (assert) {
     assert.expect(3);
-    const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
@@ -93,7 +95,6 @@ module('Unit | Model | auth method', function (hooks) {
 
   test('it has isLDAP property and returns the expected values', async function (assert) {
     assert.expect(3);
-    const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
@@ -106,5 +107,25 @@ module('Unit | Model | auth method', function (hooks) {
     assert.true(modelA.isLDAP);
     assert.false(modelB.isLDAP);
     assert.false(modelC.isLDAP);
+  });
+
+  test('it has isUnknown property and returns the expected values', async function (assert) {
+    assert.expect(4);
+    const modelA = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    const modelB = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
+    const modelC = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    const modelD = store.createRecord('auth-method', {
+      type: 'no-such-type',
+    });
+    assert.false(modelA.isUnknown);
+    assert.false(modelB.isUnknown);
+    assert.false(modelC.isUnknown);
+    assert.true(modelD.isUnknown);
   });
 });
