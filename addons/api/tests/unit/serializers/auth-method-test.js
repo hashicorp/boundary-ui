@@ -7,6 +7,11 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+} from 'api/models/auth-method';
+
 module('Unit | Serializer | auth method', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
@@ -21,7 +26,9 @@ module('Unit | Serializer | auth method', function (hooks) {
   test('it serializes password records', function (assert) {
     assert.expect(2);
     let store = this.owner.lookup('service:store');
-    let record = store.createRecord('auth-method', { type: 'password' });
+    let record = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
 
     let serializedRecord = record.serialize();
 
@@ -36,7 +43,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.expect(1);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
       name: 'OIDC Auth Method',
       state: 'foo',
       account_claim_maps: [{ from: 'foo', to: 'bar' }],
@@ -62,7 +69,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     let serializedRecord = record.serialize();
 
     assert.deepEqual(serializedRecord, {
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
       name: 'OIDC Auth Method',
       description: null,
       attributes: {
@@ -87,7 +94,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('auth-method');
     const record = store.createRecord('auth-method', {
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
       attributes: {
         state: 'foo',
       },
@@ -175,7 +182,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         max_age: maxAge,
       },
       version: 1,
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
       id: 'oidc123',
     }));
 

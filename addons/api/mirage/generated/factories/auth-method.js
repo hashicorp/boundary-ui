@@ -6,11 +6,16 @@
 import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+} from 'api/models/auth-method';
+
 /**
  * GeneratedAuthMethodModelFactory
  */
 export default Factory.extend({
-  type: 'password',
+  type: TYPE_AUTH_METHOD_PASSWORD,
   name: () => faker.random.words(),
   description: () => faker.random.words(),
   created_time: () => faker.date.recent(),
@@ -20,7 +25,7 @@ export default Factory.extend({
   attributes: function () {
     let attrs;
     switch (this.type) {
-      case 'oidc':
+      case TYPE_AUTH_METHOD_OIDC:
         attrs = {
           api_url_prefix: 'http://127.0.0.1:9200',
           callback_url:
