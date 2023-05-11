@@ -70,6 +70,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
     const requestCookies = false;
     switch (authMethod.type) {
       case 'password':
+      case 'ldap':
         await this.session.authenticate(
           authenticatorName,
           creds,

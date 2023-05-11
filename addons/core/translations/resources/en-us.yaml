@@ -47,6 +47,7 @@ auth-method:
   types:
     password: Password
     oidc: OIDC
+    ldap: LDAP
   actions:
     create: Create Auth Method
     delete: Delete Auth Method
