@@ -10,6 +10,7 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import { TYPES_AUTH_METHOD } from 'api/models/auth-method';
 
 export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
@@ -23,7 +24,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
 
   // =attributes
 
-  @resourceFilter({ allowed: ['password', 'oidc'] }) type;
+  @resourceFilter({ allowed: TYPES_AUTH_METHOD }) type;
 
   // =methods
 
