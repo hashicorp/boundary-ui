@@ -4,6 +4,8 @@
  */
 
 import ApplicationSerializer from './application';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+
 export default class AuthMethodSerializer extends ApplicationSerializer {
   // =methods
 
@@ -15,7 +17,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     switch (snapshot.record.type) {
-      case 'oidc':
+      case TYPE_AUTH_METHOD_OIDC:
         return this.serializeOIDC(...arguments);
       default:
         return this.serializeDefault(...arguments);

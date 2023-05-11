@@ -120,7 +120,7 @@
           {{#each @model as |authMethod|}}
             <body.row as |row|>
               <row.headerCell>
-                {{#if (can 'read model' authMethod)}}
+                {{#if (can 'read auth-method' authMethod)}}
                   <LinkTo
                     @route='scopes.scope.auth-methods.auth-method'
                     @model={{authMethod.id}}
@@ -154,29 +154,34 @@
                 {{/if}}
               </row.cell>
               <row.cell>
-                <Rose::Dropdown
-                  @text={{t 'actions.manage'}}
-                  @dropdownRight={{true}}
-                  @iconOnly={{true}}
-                  @showCaret={{false}}
-                  @icon='flight-icons/svg/more-horizontal-16'
-                  as |dropdown|
-                >
-                  {{#unless authMethod.isPrimary}}
-                    <dropdown.button
-                      {{on 'click' (route-action 'makePrimary' authMethod)}}
-                    >
-                      {{t 'resources.auth-method.actions.make-primary'}}
-                    </dropdown.button>
-                  {{/unless}}
-                  {{#if authMethod.isPrimary}}
-                    <dropdown.button
-                      {{on 'click' (route-action 'removeAsPrimary' authMethod)}}
-                    >
-                      {{t 'resources.auth-method.actions.remove-as-primary'}}
-                    </dropdown.button>
-                  {{/if}}
-                </Rose::Dropdown>
+                {{#if (can 'makePrimary auth-method' authMethod)}}
+                  <Rose::Dropdown
+                    @text={{t 'actions.manage'}}
+                    @dropdownRight={{true}}
+                    @iconOnly={{true}}
+                    @showCaret={{false}}
+                    @icon='flight-icons/svg/more-horizontal-16'
+                    as |dropdown|
+                  >
+                    {{#unless authMethod.isPrimary}}
+                      <dropdown.button
+                        {{on 'click' (route-action 'makePrimary' authMethod)}}
+                      >
+                        {{t 'resources.auth-method.actions.make-primary'}}
+                      </dropdown.button>
+                    {{/unless}}
+                    {{#if authMethod.isPrimary}}
+                      <dropdown.button
+                        {{on
+                          'click'
+                          (route-action 'removeAsPrimary' authMethod)
+                        }}
+                      >
+                        {{t 'resources.auth-method.actions.remove-as-primary'}}
+                      </dropdown.button>
+                    {{/if}}
+                  </Rose::Dropdown>
+                {{/if}}
               </row.cell>
             </body.row>
           {{/each}}
