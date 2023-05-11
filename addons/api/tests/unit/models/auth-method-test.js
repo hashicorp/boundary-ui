@@ -58,41 +58,53 @@ module('Unit | Model | auth method', function (hooks) {
   });
 
   test('it has isPassword property and returns the expected values', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
     const modelB = store.createRecord('auth-method', {
-      type: 'no-such-type',
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    const modelC = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_LDAP,
     });
     assert.true(modelA.isPassword);
     assert.false(modelB.isPassword);
+    assert.false(modelC.isPassword);
   });
 
   test('it has isOIDC property and returns the expected values', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
     const modelB = store.createRecord('auth-method', {
-      type: 'no-such-type',
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
+    const modelC = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_LDAP,
     });
     assert.true(modelA.isOIDC);
     assert.false(modelB.isOIDC);
+    assert.false(modelC.isOIDC);
   });
 
   test('it has isLDAP property and returns the expected values', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
     const modelB = store.createRecord('auth-method', {
-      type: 'no-such-type',
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
+    const modelC = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_OIDC,
     });
     assert.true(modelA.isLDAP);
     assert.false(modelB.isLDAP);
+    assert.false(modelC.isLDAP);
   });
 });

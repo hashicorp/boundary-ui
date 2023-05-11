@@ -14,7 +14,11 @@ import {
   //   //currentSession,
   //   //invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
+import {
+  TYPE_AUTH_METHOD_LDAP,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_PASSWORD,
+} from 'api/models/auth-method';
 
 module('Acceptance | auth methods | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -36,15 +40,18 @@ module('Acceptance | auth methods | read', function (hooks) {
       global: null,
       org: null,
     },
-    authMethod: null,
+    passwordAuthMethodOrg: null,
+    oidcAuthMethodGlobal: null,
     ldapAuthMethod: null,
   };
 
   const urls = {
+    globalScope: null,
     orgScope: null,
-    authMethods: null,
-    newAuthMethod: null,
-    authMethod: null,
+    orgAuthMethods: null,
+    globalAuthMethods: null,
+    passwordAuthMethodOrg: null,
+    oidcAuthMethodGlobal: null,
   };
 
   hooks.beforeEach(function () {
@@ -55,31 +62,48 @@ module('Acceptance | auth methods | read', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    instances.authMethod = this.server.create('auth-method', {
+    instances.passwordAuthMethodOrg = this.server.create('auth-method', {
       scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
+    instances.oidcAuthMethodGlobal = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+      type: TYPE_AUTH_METHOD_OIDC,
     });
     // Generate route URLs for resources
+    urls.globalScope = `/scopes/global`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
-    urls.newAuthMethod = `${urls.authMethods}/new?type=password`;
-    urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
+    urls.orgAuthMethods = `${urls.orgScope}/auth-methods`;
+    urls.globalAuthMethods = `${urls.globalScope}/auth-methods`;
+    urls.passwordAuthMethodOrg = `${urls.orgAuthMethods}/${instances.passwordAuthMethodOrg.id}`;
+    urls.oidcAuthMethodGlobal = `${urls.globalAuthMethods}/${instances.oidcAuthMethodGlobal.id}`;
   });
 
-  test('visiting auth methods', async function (assert) {
+  test('visiting auth methods in org scope', async function (assert) {
     assert.expect(1);
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(`[href="${urls.orgAuthMethods}"]`);
     await a11yAudit();
 
-    assert.strictEqual(currentURL(), urls.authMethods);
+    assert.strictEqual(currentURL(), urls.orgAuthMethods);
   });
 
-  test('can navigate to an auth method form', async function (assert) {
+  test('visiting auth methods in global scope', async function (assert) {
+    assert.expect(1);
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.globalAuthMethods}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.globalAuthMethods);
+  });
+
+  test('can navigate to an auth method form in org scope', async function (assert) {
     assert.expect(3);
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(`[href="${urls.orgAuthMethods}"]`);
 
     assert.dom(AUTH_TYPE_SELECTOR).hasText('Password');
     assert.dom(AUTH_ACTIONS_SELECTOR).exists();
@@ -87,21 +111,66 @@ module('Acceptance | auth methods | read', function (hooks) {
     await click(AUTH_LINK_SELECTOR);
     await a11yAudit();
 
-    assert.strictEqual(currentURL(), urls.authMethod);
+    assert.strictEqual(currentURL(), urls.passwordAuthMethodOrg);
   });
 
-  test('cannot navigate to an auth method form without proper authorization', async function (assert) {
+  test('can navigate to an auth method form in global scope', async function (assert) {
+    assert.expect(3);
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.globalAuthMethods}"]`);
+
+    assert.dom(AUTH_TYPE_SELECTOR).hasText('OIDC');
+    assert.dom(AUTH_ACTIONS_SELECTOR).exists();
+
+    await click(AUTH_LINK_SELECTOR);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.oidcAuthMethodGlobal);
+  });
+
+  test('cannot navigate to an auth method form without proper authorization in org scope', async function (assert) {
     assert.expect(1);
-    instances.authMethod.authorized_actions =
-      instances.authMethod.authorized_actions.filter((item) => item !== 'read');
+    instances.passwordAuthMethodOrg.authorized_actions =
+      instances.passwordAuthMethodOrg.authorized_actions.filter(
+        (item) => item !== 'read'
+      );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(`[href="${urls.orgAuthMethods}"]`);
 
     assert.dom(AUTH_LINK_SELECTOR).doesNotExist();
   });
 
-  test('cannot navigate to an ldap auth method form', async function (assert) {
+  test('cannot navigate to an auth method form without proper authorization in global scope', async function (assert) {
+    assert.expect(1);
+    instances.oidcAuthMethodGlobal.authorized_actions =
+      instances.oidcAuthMethodGlobal.authorized_actions.filter(
+        (item) => item !== 'read'
+      );
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.globalAuthMethods}"]`);
+
+    assert.dom(AUTH_LINK_SELECTOR).doesNotExist();
+  });
+
+  test('cannot navigate to an ldap auth method form in global scope', async function (assert) {
+    assert.expect(3);
+    instances.ldapAuthMethod = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.globalAuthMethods}"]`);
+
+    assert.dom(LDAP_AUTH_LINK_SELECTOR).doesNotExist();
+    assert.dom(LDAP_AUTH_TYPE_SELECTOR).hasText('LDAP');
+    assert.dom(LDAP_AUTH_ACTIONS_SELECTOR).doesNotExist();
+  });
+
+  test('cannot navigate to an ldap auth method form in org scope', async function (assert) {
     assert.expect(3);
     instances.ldapAuthMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
@@ -109,7 +178,7 @@ module('Acceptance | auth methods | read', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(`[href="${urls.orgAuthMethods}"]`);
 
     assert.dom(LDAP_AUTH_LINK_SELECTOR).doesNotExist();
     assert.dom(LDAP_AUTH_TYPE_SELECTOR).hasText('LDAP');
