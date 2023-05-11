@@ -13,10 +13,16 @@ import {
 module('Unit | Abilities | auth-method', function (hooks) {
   setupTest(hooks);
 
+  let canService;
+  let store;
+
+  hooks.beforeEach(function () {
+    canService = this.owner.lookup('service:can');
+    store = this.owner.lookup('service:store');
+  });
+
   test('cannot read LDAP auth-method when authorized', function (assert) {
     assert.expect(1);
-    const canService = this.owner.lookup('service:can');
-    const store = this.owner.lookup('service:store');
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_LDAP,
@@ -26,8 +32,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
 
   test('cannot read LDAP auth-method when unauthorized', function (assert) {
     assert.expect(1);
-    const canService = this.owner.lookup('service:can');
-    const store = this.owner.lookup('service:store');
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_LDAP,
@@ -37,8 +41,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
 
   test('can read non-LDAP auth-method when authorized', function (assert) {
     assert.expect(1);
-    const canService = this.owner.lookup('service:can');
-    const store = this.owner.lookup('service:store');
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -48,8 +50,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
 
   test('cannot read non-LDAP auth-method when unauthorized', function (assert) {
     assert.expect(1);
-    const canService = this.owner.lookup('service:can');
-    const store = this.owner.lookup('service:store');
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -59,8 +59,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
 
   test('cannot make LDAP auth-method primary', function (assert) {
     assert.expect(1);
-    const canService = this.owner.lookup('service:can');
-    const store = this.owner.lookup('service:store');
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
@@ -69,8 +67,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
 
   test('can make non-LDAP auth-method primary', function (assert) {
     assert.expect(1);
-    const canService = this.owner.lookup('service:can');
-    const store = this.owner.lookup('service:store');
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
