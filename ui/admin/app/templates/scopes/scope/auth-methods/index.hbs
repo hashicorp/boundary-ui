@@ -49,14 +49,15 @@
           @color='warning'
           as |A|
         >
-          <A.Title>{{t
-              'resources.auth-method.messages.no-primary-auth-method.title'
-            }}</A.Title>
-          <A.Description>{{t
+          <A.Title>
+            {{t 'resources.auth-method.messages.no-primary-auth-method.title'}}
+          </A.Title>
+          <A.Description>
+            {{t
               'resources.auth-method.messages.no-primary-auth-method.description'
-            }}</A.Description>
+            }}
+          </A.Description>
         </Hds::Alert>
-        <br />
       {{/unless}}
     {{/if}}
     {{#if
