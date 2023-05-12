@@ -93,12 +93,7 @@
 
     {{#if @model}}
       {{#unless this.hasPrimaryAuthMethod}}
-        <Hds::Toast
-          @color='warning'
-          @icon='alert-circle'
-          @onDismiss={{this.yourOnDismissFunction}}
-          as |T|
-        >
+        <Hds::Toast @color='warning' @icon='alert-circle' as |T|>
           <T.Title>
             {{t
               'resources.auth-method.messages.no-primary-auth-method.title'
