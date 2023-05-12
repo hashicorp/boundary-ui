@@ -25,7 +25,7 @@ import {
 module('Acceptance | auth-methods | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  const DROPDOWN_SELECTOR =
+  const DROPDOWN_SELECTOR_ICON =
     'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_SELECTOR_OPTION =
     '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
@@ -265,7 +265,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await visit(urls.authMethods);
 
-    await click(DROPDOWN_SELECTOR);
+    await click(DROPDOWN_SELECTOR_ICON);
     assert.dom(DROPDOWN_SELECTOR_OPTION).exists();
     await click(DROPDOWN_SELECTOR_OPTION);
 
@@ -276,7 +276,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.authMethod.id,
       'Primary auth method is set.'
     );
-    await click(DROPDOWN_SELECTOR);
+    await click(DROPDOWN_SELECTOR_ICON);
     await click(DROPDOWN_SELECTOR_OPTION);
 
     scope = this.server.schema.scopes.find(instances.orgScope.id);

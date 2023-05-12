@@ -95,13 +95,13 @@
       {{#unless this.hasPrimaryAuthMethod}}
         <Hds::Toast @color='warning' @icon='alert-circle' as |T|>
           <T.Title>
+            {{t 'resources.auth-method.messages.no-primary-auth-method.title'}}
+          </T.Title>
+          <T.Description>
             {{t
-              'resources.auth-method.messages.no-primary-auth-method.title'
-            }}</T.Title>
-          <T.Description>{{t
               'resources.auth-method.messages.no-primary-auth-method.description'
-            }}</T.Description>
-
+            }}
+          </T.Description>
         </Hds::Toast>
       {{/unless}}
 
@@ -134,7 +134,8 @@
             <B.Td>
               <Hds::Badge
                 @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
-              /></B.Td>
+              />
+            </B.Td>
             <B.Td>
               <Copyable
                 @text={{B.data.id}}
