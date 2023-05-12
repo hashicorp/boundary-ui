@@ -6,6 +6,7 @@
 import Component from '@glimmer/component';
 import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
+import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
 
 export default class FormUserAddAccountsComponent extends Component {
   // =properties
@@ -35,7 +36,8 @@ export default class FormUserAddAccountsComponent extends Component {
     // Get IDs for accounts already added to the current user
     const alreadyAddedAccountIDs = this.args.model.account_ids;
     const notAddedAccounts = this.args.accounts.filter(
-      ({ id }) => !alreadyAddedAccountIDs.includes(id)
+      ({ id, type }) =>
+        !alreadyAddedAccountIDs.includes(id) && type !== TYPE_AUTH_METHOD_LDAP
     );
     return notAddedAccounts;
   }
