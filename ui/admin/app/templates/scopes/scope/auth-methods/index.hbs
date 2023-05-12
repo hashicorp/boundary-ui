@@ -41,6 +41,24 @@
 
   <page.body>
 
+    {{#if @model}}
+      {{#unless this.hasPrimaryAuthMethod}}
+        <Hds::Alert
+          class='auth-methods-list-alert'
+          @type='inline'
+          @color='warning'
+          as |A|
+        >
+          <A.Title>{{t
+              'resources.auth-method.messages.no-primary-auth-method.title'
+            }}</A.Title>
+          <A.Description>{{t
+              'resources.auth-method.messages.no-primary-auth-method.description'
+            }}</A.Description>
+        </Hds::Alert>
+        <br />
+      {{/unless}}
+    {{/if}}
     {{#if
       (or
         @model
@@ -92,21 +110,8 @@
     {{/if}}
 
     {{#if @model}}
-      {{#unless this.hasPrimaryAuthMethod}}
-        <Hds::Toast @color='warning' @icon='alert-circle' as |T|>
-          <T.Title>
-            {{t 'resources.auth-method.messages.no-primary-auth-method.title'}}
-          </T.Title>
-          <T.Description>
-            {{t
-              'resources.auth-method.messages.no-primary-auth-method.description'
-            }}
-          </T.Description>
-        </Hds::Toast>
-      {{/unless}}
-
       <Hds::Table
-        class='auth-method-list'
+        class='auth-method-list-table'
         @model={{@model}}
         @columns={{array
           (hash label=(t 'form.name.label'))
@@ -130,6 +135,7 @@
               {{else}}
                 {{B.data.displayName}}
               {{/if}}
+              <p>{{B.data.description}}</p>
             </B.Td>
             <B.Td>
               <Hds::Badge
