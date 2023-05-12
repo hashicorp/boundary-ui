@@ -686,9 +686,4 @@
 
 .auth-methods-list-table {
   margin-top: 1rem;
-  /* stylelint-disable selector-class-pattern */
-  .hds-table__td p {
-    color: var(--ui-gray-subtler-1);
-  }
-  /* stylelint-enable selector-class-pattern */
 }
