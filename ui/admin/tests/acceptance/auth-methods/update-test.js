@@ -22,6 +22,7 @@ import {
   //   //currentSession,
   //   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
 module('Acceptance | auth methods | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -73,7 +74,7 @@ module('Acceptance | auth methods | update', function (hooks) {
     assert.expect(12);
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
     });
     await visit(`${urls.authMethods}/${instances.authMethod.id}`);
     await click('form [type="button"]:not(:disabled)', 'Activate edit mode');
