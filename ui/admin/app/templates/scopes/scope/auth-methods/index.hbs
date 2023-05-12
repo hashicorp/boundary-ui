@@ -93,100 +93,95 @@
 
     {{#if @model}}
       {{#unless this.hasPrimaryAuthMethod}}
-        <Rose::Notification
-          @style='warning'
-          @heading={{t
-            'resources.auth-method.messages.no-primary-auth-method.title'
-          }}
+        <Hds::Toast
+          @color='warning'
+          @icon='alert-circle'
+          @onDismiss={{this.yourOnDismissFunction}}
+          as |T|
         >
-          {{t
-            'resources.auth-method.messages.no-primary-auth-method.description'
-          }}
-        </Rose::Notification>
+          <T.Title>
+            {{t
+              'resources.auth-method.messages.no-primary-auth-method.title'
+            }}</T.Title>
+          <T.Description>{{t
+              'resources.auth-method.messages.no-primary-auth-method.description'
+            }}</T.Description>
+
+        </Hds::Toast>
       {{/unless}}
 
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            <row.cell />
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-
-        <table.body as |body|>
-          {{#each @model as |authMethod|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (can 'read auth-method' authMethod)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method'
-                    @model={{authMethod.id}}
-                  >
-                    {{authMethod.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{authMethod.displayName}}
-                {{/if}}
-                <p>{{authMethod.description}}</p>
-              </row.headerCell>
-              <row.cell>
-                <Hds::Badge
-                  @text={{t
-                    (concat 'resources.auth-method.types.' authMethod.type)
-                  }}
-                />
-              </row.cell>
-              <row.cell>
-                <Copyable
-                  @text={{authMethod.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
+      <Hds::Table
+        class='auth-method-list'
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label='')
+          (hash label=(t 'titles.actions'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'read auth-method' B.data)}}
+                <LinkTo
+                  @route='scopes.scope.auth-methods.auth-method'
+                  @model={{B.data.id}}
                 >
-                  <code>{{authMethod.id}}</code>
-                </Copyable>
-              </row.cell>
-              <row.cell>
-                {{#if authMethod.isPrimary}}
-                  <Hds::Badge @text={{t 'states.primary'}} @color='success' />
-                {{/if}}
-              </row.cell>
-              <row.cell>
-                {{#if (can 'makePrimary auth-method' authMethod)}}
-                  <Rose::Dropdown
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <Hds::Badge
+                @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
+              /></B.Td>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{B.data.id}}</code>
+              </Copyable>
+            </B.Td>
+            <B.Td>
+              {{#if B.data.isPrimary}}
+                <Hds::Badge @text={{t 'states.primary'}} @color='success' />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if (can 'makePrimary auth-method' B.data)}}
+                <Hds::Dropdown as |dd|>
+                  <dd.ToggleIcon
+                    @icon='more-horizontal'
                     @text={{t 'actions.manage'}}
-                    @dropdownRight={{true}}
-                    @iconOnly={{true}}
-                    @showCaret={{false}}
-                    @icon='flight-icons/svg/more-horizontal-16'
-                    as |dropdown|
-                  >
-                    {{#unless authMethod.isPrimary}}
-                      <dropdown.button
-                        {{on 'click' (route-action 'makePrimary' authMethod)}}
-                      >
-                        {{t 'resources.auth-method.actions.make-primary'}}
-                      </dropdown.button>
-                    {{/unless}}
-                    {{#if authMethod.isPrimary}}
-                      <dropdown.button
-                        {{on
-                          'click'
-                          (route-action 'removeAsPrimary' authMethod)
-                        }}
-                      >
-                        {{t 'resources.auth-method.actions.remove-as-primary'}}
-                      </dropdown.button>
-                    {{/if}}
-                  </Rose::Dropdown>
-                {{/if}}
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+                    @hasChevron={{false}}
+                  />
+                  {{#unless B.data.isPrimary}}
+                    <dd.Interactive
+                      @text={{t 'resources.auth-method.actions.make-primary'}}
+                      {{on 'click' (route-action 'makePrimary' B.data)}}
+                    />
+                  {{/unless}}
+                  {{#if B.data.isPrimary}}
+                    <dd.Interactive
+                      @text={{t
+                        'resources.auth-method.actions.remove-as-primary'
+                      }}
+                      {{on 'click' (route-action 'removeAsPrimary' B.data)}}
+                    />
+                  {{/if}}
+                </Hds::Dropdown>
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
 
     {{else if (has-resource-filter-selections
       'scopes.scope.auth-methods' 'type'

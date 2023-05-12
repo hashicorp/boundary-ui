@@ -22,10 +22,13 @@ import {
   //   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | auth-methods | create ', function (hooks) {
+module('Acceptance | auth-methods | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
+  const DROPDOWN_SELECTOR =
+    'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown-toggle-icon';
+  const DROPDOWN_SELECTOR_OPTION =
+    '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
   let getAuthMethodsCount;
   const instances = {
     scopes: {
@@ -255,24 +258,27 @@ module('Acceptance | auth-methods | create ', function (hooks) {
   });
 
   test('user can make and remove primary auth methods from index', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     assert.notOk(
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.'
     );
     await visit(urls.authMethods);
-    await click(
-      '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
-    );
+
+    await click(DROPDOWN_SELECTOR);
+    assert.dom(DROPDOWN_SELECTOR_OPTION).exists();
+    await click(DROPDOWN_SELECTOR_OPTION);
+
     let scope = this.server.schema.scopes.find(instances.orgScope.id);
+
     assert.strictEqual(
       scope.primaryAuthMethodId,
       instances.authMethod.id,
       'Primary auth method is set.'
     );
-    await click(
-      '.rose-table-body .rose-table-row:first-child .rose-dropdown-content [type="button"]:first-child'
-    );
+    await click(DROPDOWN_SELECTOR);
+    await click(DROPDOWN_SELECTOR_OPTION);
+
     scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
   });

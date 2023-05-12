@@ -23,17 +23,16 @@ import {
 module('Acceptance | auth methods | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  const AUTH_LINK_SELECTOR =
-    'main tbody .rose-table-header-cell:nth-child(1) a';
+  const AUTH_LINK_SELECTOR = 'main tbody .hds-table__td:nth-child(1) a';
   const AUTH_TYPE_SELECTOR =
-    'tbody .rose-table-row:nth-child(1) .rose-table-cell';
+    'tbody .hds-table__tr:nth-child(1) .hds-table__td:nth-child(2)';
   const AUTH_ACTIONS_SELECTOR =
-    'tbody .rose-table-row:nth-child(1) .rose-table-cell:last-child .rose-dropdown';
-  const LDAP_AUTH_LINK_SELECTOR = 'tbody .rose-table-row:nth-child(2) a';
+    'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown';
+  const LDAP_AUTH_LINK_SELECTOR = 'tbody .hds-table__tr:nth-child(2) a';
   const LDAP_AUTH_TYPE_SELECTOR =
-    'tbody .rose-table-row:nth-child(2) .rose-table-cell';
+    'tbody .hds-table__tr:nth-child(2) .hds-table__td:nth-child(2)';
   const LDAP_AUTH_ACTIONS_SELECTOR =
-    'tbody .rose-table-row:nth-child(2) .rose-table-cell:last-child .rose-dropdown';
+    'tbody .hds-table__tr:nth-child(2) .hds-table__td:last-child .hds-dropdown';
 
   const instances = {
     scopes: {
