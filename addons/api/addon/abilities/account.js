@@ -12,6 +12,14 @@ export default class AccountAbility extends ModelAbility {
   // =permissions
 
   /**
+   * Only "known" account types may be read.
+   * @type {boolean}
+   */
+  get canRead() {
+    return !this.model.isUnknown && this.hasAuthorizedAction('read');
+  }
+
+  /**
    * @type {boolean}
    */
   get canSetPassword() {

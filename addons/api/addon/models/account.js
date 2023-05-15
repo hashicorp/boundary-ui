@@ -9,6 +9,7 @@ import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
+  TYPES_AUTH_METHOD,
 } from './auth-method';
 
 export default class AccountModel extends GeneratedAccountModel {
@@ -33,6 +34,13 @@ export default class AccountModel extends GeneratedAccountModel {
    */
   get isLDAP() {
     return this.type === TYPE_AUTH_METHOD_LDAP;
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isUnknown() {
+    return !TYPES_AUTH_METHOD.includes(this.type);
   }
 
   /**

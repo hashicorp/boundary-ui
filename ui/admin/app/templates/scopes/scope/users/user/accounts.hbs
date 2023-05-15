@@ -61,7 +61,8 @@
               <row.cell>
                 {{#if
                   (and
-                    (not account.isLDAP) (can 'removeAccounts user' @model.user)
+                    (can 'removeAccount account' account)
+                    (can 'removeAccounts user' @model.user)
                   )
                 }}
                   <Rose::Dropdown

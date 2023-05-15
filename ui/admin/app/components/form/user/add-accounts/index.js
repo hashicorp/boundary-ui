@@ -6,9 +6,12 @@
 import Component from '@glimmer/component';
 import { computed, action } from '@ember/object';
 import { A } from '@ember/array';
-import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
+import { inject as service } from '@ember/service';
 
 export default class FormUserAddAccountsComponent extends Component {
+  //service
+  @service can;
+
   // =properties
 
   /**
@@ -31,13 +34,14 @@ export default class FormUserAddAccountsComponent extends Component {
    * Accounts not already added to the user.
    * @type {[AccountModel]}
    */
-  @computed('args.{accounts.[],model.account_ids.[]}')
+  @computed('args.{accounts.[],model.account_ids.[]}', 'can')
   get filteredAccounts() {
     // Get IDs for accounts already added to the current user
     const alreadyAddedAccountIDs = this.args.model.account_ids;
     const notAddedAccounts = this.args.accounts.filter(
-      ({ id, type }) =>
-        !alreadyAddedAccountIDs.includes(id) && type !== TYPE_AUTH_METHOD_LDAP
+      (account) =>
+        this.can.can('addAccount account', account) &&
+        !alreadyAddedAccountIDs.includes(account.id)
     );
     return notAddedAccounts;
   }
