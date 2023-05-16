@@ -9,7 +9,7 @@ The test suite uses the [Playwright](https://playwright.dev/) framework.
 
 ## Prerequisites:
 
-Most likely, you will need [Hombrebrew](https://brew.sh/) install.
+You will need [Hombrebrew](https://brew.sh/) install. For secure persisting your SSH keys and tokens we recommend using 1Password
 
 ### Accesses
 
@@ -61,20 +61,31 @@ You need to provide an SSH Key pair for the EC2 instance. We recommend creating 
 
 Login to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens).
 
-**Token awareness:** Copy your token from the box and save it in a secure location. Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
+**Token awareness:** Copy your token from the box and save it in a secure location (we re). Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
 
 ### Setup Enos:
 
 Enos needs some configuration variables to run the scenario successfully. [See the configuration file](https://github.com/hashicorp/boundary/blob/main/enos/enos.vars.hcl). The file has comments per each variable, but some awareness:
 
-- `aws_region`: very important as mentioned within the EC2 Setup.
+- `aws_region`: The AWS region you are using. Very important as mentioned within the EC2 Setup.
+- `aws_ssh_keypair_name`: The name of the AWS keypair.
+- `aws_ssh_private_key_path`: The path to the private key associated with your keypair.
+- `enos_user`: the user name to use for Boundary.
 - `tfc_api_token`: you need to provide the previously created token in Terraform cloud, there is no shared token within Boundary team.
+- `local_boundary_dir`: The directory that contains Boundary binary.
+- `local_boundary_ui_dir`: The directory that contains the copy of boundary-ui you want to use for UI tests.
 - `e2e_debug_no_run`: make sure this is set to true.
-- `enos_user`: leave it to `enos`.
 
 More documentation about [scenario variables](https://github.com/hashicorp/boundary/tree/main/enos#scenarios-variables).
 
 ## Run tests:
+
+### Run Enos Scenario
+
+Before running the test, make sure you followed all the steps within the [Getting started section](#getting-started).
+### Execute Enos scenario
+
+
 
 Run tests...
 ```bash
