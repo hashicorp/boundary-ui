@@ -22,6 +22,7 @@ module('Acceptance | users | accounts', function (hooks) {
   setupMirage(hooks);
 
   let accountsCount;
+  let features;
 
   const ACCOUNTS_ACTION_SELECTOR =
     'tbody .rose-table-row:nth-child(1) .rose-table-cell:last-child .rose-dropdown';
@@ -29,7 +30,6 @@ module('Acceptance | users | accounts', function (hooks) {
     'tbody .rose-table-row:nth-child(1) .rose-table-cell';
   const ADD_ACCOUNTS_ACTION_SELECTOR = '.rose-layout-page-actions a';
   const ERROR_MSG_SELECTOR = '[role="alert"]';
-  const TABLE_SELECTOR = '.rose-table';
   const TABLE_ROWS_SELECTOR = 'tbody tr';
   const CHECKBOX_SELECTOR = 'tbody label';
   const SUBMIT_BTN_SELECTOR = 'form [type="submit"]';
@@ -42,16 +42,12 @@ module('Acceptance | users | accounts', function (hooks) {
       org: null,
     },
     user: null,
-    globalUser: null,
   };
 
   const urls = {
-    globalScope: null,
     users: null,
     user: null,
-    globalUser: null,
     accounts: null,
-    ldapAccounts: null,
     addAccounts: null,
   };
 
@@ -69,26 +65,14 @@ module('Acceptance | users | accounts', function (hooks) {
       },
       'withAccountsAndUsersAndManagedGroups'
     );
-    this.server.create(
-      'auth-method',
-      {
-        scope: instances.scopes.global,
-        type: TYPE_AUTH_METHOD_LDAP,
-      },
-      'withAccountsAndUsersAndManagedGroups'
-    );
     instances.user = this.server.schema.users.first();
-    instances.globalUser = this.server.schema.users.findBy({
-      scopeId: 'global',
-    });
     accountsCount = instances.user.accountIds.length;
-    urls.globalScope = `/scopes/global`;
     urls.users = `/scopes/${instances.scopes.org.id}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
-    urls.globalUser = `${urls.globalScope}/users/${instances.globalUser.id}`;
     urls.accounts = `${urls.user}/accounts`;
-    urls.ldapAccounts = `${urls.globalUser}/accounts`;
     urls.addAccounts = `${urls.user}/add-accounts`;
+
+    features = this.owner.lookup('service:features');
   });
 
   test('visiting user accounts', async function (assert) {
@@ -125,13 +109,44 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.dom(REMOVE_ACTION_SELECTOR).doesNotExist();
   });
 
-  test('cannot remove an ldap account', async function (assert) {
+  test('cannot remove an ldap account when feature flag disabled', async function (assert) {
     assert.expect(2);
-    await visit(urls.globalUser);
+    const authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    const { id } = this.server.create('account', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+      authMethod,
+    });
+    instances.user.update({ accountIds: [id] });
+    await visit(urls.user);
 
-    await click(`[href="${urls.ldapAccounts}"]`);
+    await click(`[href="${urls.accounts}"]`);
 
     assert.dom(ACCOUNTS_ACTION_SELECTOR).doesNotExist();
+    assert.dom(ACCOUNTS_TYPE_SELECTOR).hasText('LDAP');
+  });
+
+  test('can remove an ldap account when feature flag enabled', async function (assert) {
+    assert.expect(2);
+    features.enable('ldap-auth-methods');
+    const authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    const { id } = this.server.create('account', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+      authMethod,
+    });
+    instances.user.update({ accountIds: [id] });
+    await visit(urls.user);
+
+    await click(`[href="${urls.accounts}"]`);
+
+    assert.dom(ACCOUNTS_ACTION_SELECTOR).exists();
     assert.dom(ACCOUNTS_TYPE_SELECTOR).hasText('LDAP');
   });
 
@@ -188,14 +203,51 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.dom(ADD_ACCOUNTS_ACTION_SELECTOR).doesNotExist();
   });
 
-  test('cannot add ldap accounts to user since they were filtered out', async function (assert) {
+  test('cannot add ldap accounts to user when feature flag is disabled', async function (assert) {
     assert.expect(1);
-    await visit(urls.globalUser);
+    const accountsAvailableCount =
+      this.server.schema.accounts.all().length -
+      instances.user.accountIds.length;
+    const authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    this.server.create('account', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+      authMethod,
+    });
+    await visit(urls.user);
 
-    await click(`[href="${urls.ldapAccounts}"]`);
+    await click(`[href="${urls.accounts}"]`);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
 
-    assert.dom(TABLE_SELECTOR).doesNotExist();
+    assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsAvailableCount });
+  });
+
+  test('can add ldap accounts to user when feature flag is enabled', async function (assert) {
+    assert.expect(1);
+    features.enable('ldap-auth-methods');
+    const accountsAvailableCount =
+      this.server.schema.accounts.all().length -
+      instances.user.accountIds.length;
+    const authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    this.server.create('account', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+      authMethod,
+    });
+    await visit(urls.user);
+
+    await click(`[href="${urls.accounts}"]`);
+    await click(ADD_ACCOUNTS_ACTION_SELECTOR);
+
+    assert
+      .dom(TABLE_ROWS_SELECTOR)
+      .exists({ count: accountsAvailableCount + 1 });
   });
 
   test('select and save accounts to add', async function (assert) {
