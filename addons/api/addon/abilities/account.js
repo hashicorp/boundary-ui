@@ -12,6 +12,30 @@ export default class AccountAbility extends ModelAbility {
   // =permissions
 
   /**
+   * Only "known" account types may be read.
+   * @type {boolean}
+   */
+  get canRead() {
+    return !this.model.isUnknown && this.hasAuthorizedAction('read');
+  }
+
+  /**
+   * Only "known" account types may be updated.
+   * @type {boolean}
+   */
+  get canUpdate() {
+    return !this.model.isUnknown && this.hasAuthorizedAction('update');
+  }
+
+  /**
+   * Only "known" account types may be deleted.
+   * @type {boolean}
+   */
+  get canDelete() {
+    return !this.model.isUnknown && this.hasAuthorizedAction('delete');
+  }
+
+  /**
    * @type {boolean}
    */
   get canSetPassword() {
