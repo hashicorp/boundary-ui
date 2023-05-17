@@ -9,7 +9,7 @@ The test suite uses the [Playwright](https://playwright.dev/) framework.
 
 ## Prerequisites:
 
-You will need [Hombrebrew](https://brew.sh/) install. For secure persisting your SSH keys and tokens we recommend using 1Password
+You will need [Hombrebrew](https://brew.sh/) install. For secure persisting your SSH keys and tokens we recommend using 1Password.
 
 ### Accesses
 
@@ -25,8 +25,11 @@ If you are missing any acccess, requested [through the IT service catalog](https
 - Github CLI: [documentation how to install](https://cli.github.com/manual/installation).
 - Install Enos: [documentation how to install using homebrew](https://github.com/hashicorp/Enos-Docs/blob/main/installation.md), also binaries available [here](https://github.com/hashicorp/enos/releases).
 - Install Doormat CLI: [documentation how to install](https://docs.prod.secops.hashicorp.services/doormat/cli/).
+- Install AWS CLI (Optional): [documentation how to install](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
 ## Getting Started
+
+we will cover everything you need to setup before be able to run Enos + the tests.
 
 ### Setup Boundary CLI
 
@@ -80,23 +83,38 @@ More documentation about [scenario variables](https://github.com/hashicorp/bound
 
 ## Run tests:
 
+Before running the e2e test locally, we need to launch Enos Scenario, make sure you followed all the steps within the [Getting started section](#getting-started).
+
+It is not necessary, but from this point we recommend having 2 terminals open. 
+- Terminal 1: Will be use to run enos (Boundary).
+- Terminal 2: Will be use to run e2e UI tests (Boundary UI).
+
 ### Run Enos Scenario
 
-Before running the test, make sure you followed all the steps within the [Getting started section](#getting-started).
-### Execute Enos scenario
+Using Terminal 1: 
+- `$ cd boundary/enos`.
+- `$ doormat login`. Login with Doormat.
+- `$ eval "$(doormat aws export --account boundary_team_acctest_dev)"`. Exporting AWS env variables from doormat to your terminal.
+- `$ enos scenario launch e2e_ui builder:local`. Launch enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal.
+- `$ bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are need within Boundary UI to run the test against the enos scenario.
+
+### Run tests
+
+Using Terminal 2:
+- Set the env varibales `test_e2e_env.sh` script output within this terminal.
+- `$ cd boundary-ui/ui/admin`.
+- `$ yarn run e2e`
+
+
+Missing:
+- Destroy enos scenario.
+- Clean up AWS.
 
 
 
-Run tests...
-```bash
-export BOUNDARY_ADDR=
-export E2E_PASSWORD_ADMIN_LOGIN_NAME=
-export E2E_PASSWORD_ADMIN_PASSWORD=
-export E2E_PASSWORD_AUTH_METHOD_ID=
-... # Tests may have additional variables that it needs
-cd boundary-ui/ui/admin
-yarn run e2e
-```
+
+
+
 
 Here are some additional commands to assist with debugging.
 ```bash
