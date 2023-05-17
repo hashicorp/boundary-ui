@@ -4,8 +4,12 @@
  */
 
 import GeneratedAccountModel from '../generated/models/account';
-import { computed } from '@ember/object';
-import { equal } from '@ember/object/computed';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+  TYPES_AUTH_METHOD,
+} from './auth-method';
 
 export default class AccountModel extends GeneratedAccountModel {
   // =attributes
@@ -13,18 +17,35 @@ export default class AccountModel extends GeneratedAccountModel {
   /**
    * @type {boolean}
    */
-  @equal('type', 'password') isPassword;
+  get isPassword() {
+    return this.type === TYPE_AUTH_METHOD_PASSWORD;
+  }
 
   /**
    * @type {boolean}
    */
-  @equal('type', 'oidc') isOIDC;
+  get isOIDC() {
+    return this.type === TYPE_AUTH_METHOD_OIDC;
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isLDAP() {
+    return this.type === TYPE_AUTH_METHOD_LDAP;
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isUnknown() {
+    return !TYPES_AUTH_METHOD.includes(this.type);
+  }
 
   /**
    * Convenience for getting username in account.
    * @type {string}
    */
-  @computed('{email,full_name,login_name}')
   get accountName() {
     const { email, full_name, login_name } = this;
     return email || full_name || login_name;
