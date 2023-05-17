@@ -77,12 +77,6 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
   })
   updated_time;
 
-  @attr('date', {
-    description: 'The time that the Session recording will be deleted.',
-    readOnly: true,
-  })
-  delete_on;
-
   @attr({
     description: 'The array of mime types that this recording will support.',
     readOnly: true,
@@ -94,4 +88,18 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
     readOnly: true,
   })
   duration;
+
+  @attr('string', {
+    description:
+      'The current state of the session recording. One of "started", "available" and "unknown".',
+    readOnly: true,
+  })
+  state;
+
+  @attr('string', {
+    description:
+      'Any error seen during the closing of the session recording. Currently only set if state is "unknown".',
+    readOnly: true,
+  })
+  error_details;
 }

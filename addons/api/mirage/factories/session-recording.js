@@ -8,14 +8,33 @@ import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 import { faker } from '@faker-js/faker';
 import { trait } from 'miragejs';
-import { TYPES_SESSION_RECORDING as types } from 'api/models/session-recording';
+import {
+  TYPES_SESSION_RECORDING as types,
+  STATE_SESSION_RECORDING_STARTED,
+  STATE_SESSION_RECORDING_AVAILABLE,
+  STATE_SESSION_RECORDING_UNKNOWN,
+} from 'api/models/session-recording';
 
+const states = [
+  STATE_SESSION_RECORDING_STARTED,
+  STATE_SESSION_RECORDING_AVAILABLE,
+  STATE_SESSION_RECORDING_UNKNOWN,
+];
 const pickRandomElement = (arr) => faker.helpers.arrayElement(arr);
 export default factory.extend({
   id: () => generateId('sr_'),
 
   // Cycle through available types
   type: (i) => types[i % types.length],
+
+  state: (i) => states[i % states.length],
+
+  start_time(i) {
+    return i % 4 === 3 ? null : faker.date.recent(3, this.end_time);
+  },
+  end_time(i) {
+    return i % 4 === 3 ? null : faker.date.recent(1, this.updated_time);
+  },
 
   authorized_actions: () =>
     permissions.authorizedActionsFor('session-recording') || [

@@ -8,6 +8,10 @@ export const TYPES_SESSION_RECORDING = Object.freeze([
   TYPE_SESSION_RECORDING_SSH,
 ]);
 
+export const STATE_SESSION_RECORDING_STARTED = 'started';
+export const STATE_SESSION_RECORDING_AVAILABLE = 'available';
+export const STATE_SESSION_RECORDING_UNKNOWN = 'unknown';
+
 export default class SessionRecordingModel extends GeneratedSessionRecordingModel {
   @hasMany('connection-recording', { async: false }) connection_recordings;
 
