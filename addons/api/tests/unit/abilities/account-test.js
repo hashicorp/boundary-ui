@@ -32,47 +32,93 @@ module('Unit | Abilities | Account', function (hooks) {
     assert.false(canService.can('setPassword account', account));
   });
 
-  test('can read OIDC account type depending on authorization', function (assert) {
-    assert.expect(2);
+  test('can read known account types when authorized', function (assert) {
+    assert.expect(4);
     const account = store.createRecord('account', {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
     assert.true(canService.can('read account', account));
-    account.authorized_actions = [];
-    assert.false(canService.can('read account', account));
-  });
-
-  test('can read password account type depending on authoriztion', function (assert) {
-    assert.expect(2);
-    const account = store.createRecord('account', {
-      authorized_actions: ['read'],
-      type: TYPE_AUTH_METHOD_PASSWORD,
-    });
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
     assert.true(canService.can('read account', account));
-    account.authorized_actions = [];
-    assert.false(canService.can('read account', account));
-  });
-
-  test('can read LDAP account type depending on authorization', function (assert) {
-    assert.expect(2);
-    const account = store.createRecord('account', {
-      authorized_actions: ['read'],
-      type: TYPE_AUTH_METHOD_LDAP,
-    });
+    account.type = TYPE_AUTH_METHOD_LDAP;
     assert.true(canService.can('read account', account));
-    account.authorized_actions = [];
+    account.type = 'no-such-type';
     assert.false(canService.can('read account', account));
   });
 
-  test('cannot read unknown account types depending on authorization', function (assert) {
-    assert.expect(2);
+  test('cannot read accounts when unauthorized', function (assert) {
+    assert.expect(4);
     const account = store.createRecord('account', {
-      authorized_actions: ['read'],
-      type: 'no-such-type',
+      authorized_actions: [],
+      type: TYPE_AUTH_METHOD_OIDC,
     });
     assert.false(canService.can('read account', account));
-    account.authorized_actions = [];
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
     assert.false(canService.can('read account', account));
+    account.type = TYPE_AUTH_METHOD_LDAP;
+    assert.false(canService.can('read account', account));
+    account.type = 'no-such-type';
+    assert.false(canService.can('read account', account));
+  });
+
+  test('can delete known account types when authorized', function (assert) {
+    assert.expect(4);
+    const account = store.createRecord('account', {
+      authorized_actions: ['delete'],
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    assert.true(canService.can('delete account', account));
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
+    assert.true(canService.can('delete account', account));
+    account.type = TYPE_AUTH_METHOD_LDAP;
+    assert.true(canService.can('delete account', account));
+    account.type = 'no-such-type';
+    assert.false(canService.can('delete account', account));
+  });
+
+  test('cannot delete accounts when unauthorized', function (assert) {
+    assert.expect(4);
+    const account = store.createRecord('account', {
+      authorized_actions: ['delete'],
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    assert.true(canService.can('delete account', account));
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
+    assert.true(canService.can('delete account', account));
+    account.type = TYPE_AUTH_METHOD_LDAP;
+    assert.true(canService.can('delete account', account));
+    account.type = 'no-such-type';
+    assert.false(canService.can('delete account', account));
+  });
+
+  test('can update known account types when authorized', function (assert) {
+    assert.expect(4);
+    const account = store.createRecord('account', {
+      authorized_actions: ['update'],
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    assert.true(canService.can('update account', account));
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
+    assert.true(canService.can('update account', account));
+    account.type = TYPE_AUTH_METHOD_LDAP;
+    assert.true(canService.can('update account', account));
+    account.type = 'no-such-type';
+    assert.false(canService.can('update account', account));
+  });
+
+  test('cannot update accounts when unauthorized', function (assert) {
+    assert.expect(4);
+    const account = store.createRecord('account', {
+      authorized_actions: [],
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    assert.false(canService.can('update account', account));
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
+    assert.false(canService.can('update account', account));
+    account.type = TYPE_AUTH_METHOD_LDAP;
+    assert.false(canService.can('update account', account));
+    account.type = 'no-such-type';
+    assert.false(canService.can('update account', account));
   });
 });
