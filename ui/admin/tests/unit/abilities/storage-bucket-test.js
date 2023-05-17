@@ -18,10 +18,10 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
   let store;
 
   hooks.beforeEach(function () {
+    store = this.owner.lookup('service:store');
+    canService = this.owner.lookup('service:can');
     features = this.owner.lookup('service:features');
     features.enable('session-recording');
-    canService = this.owner.lookup('service:can');
-    store = this.owner.lookup('service:store');
   });
 
   test('can read storage bucket when authorized and feature is enabled', function (assert) {
@@ -84,7 +84,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      canService.can('list storage-bucket', scopeModel, {
+      canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
@@ -100,13 +100,13 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.false(
-      canService.can('list storage-bucket', scopeModel, {
+      canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
   });
 
-  test('cannot list storage bucket when authorized and in org scope', function (assert) {
+  test('can list storage bucket when authorized and in org scope', function (assert) {
     assert.expect(1);
 
     const scopeModel = store.createRecord('scope', {
@@ -115,8 +115,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
       id: 'o_123',
     });
 
-    assert.false(
-      canService.can('list storage-bucket', scopeModel, {
+    assert.true(
+      canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
@@ -132,7 +132,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      canService.can('create storage-bucket', scopeModel, {
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
@@ -148,13 +148,13 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      canService.can('create storage-bucket', scopeModel, {
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
   });
 
-  test('cannot create storage bucket when authorized and in project scope', function (assert) {
+  test('can create storage bucket when authorized and in project scope', function (assert) {
     assert.expect(1);
 
     const scopeModel = store.createRecord('scope', {
@@ -163,8 +163,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
       id: 'p_123',
     });
 
-    assert.false(
-      canService.can('create storage-bucket', scopeModel, {
+    assert.true(
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
@@ -180,7 +180,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.false(
-      canService.can('create storage-bucket', scopeModel, {
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
@@ -196,7 +196,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      canService.can('navigate storage-bucket', scopeModel, {
+      canService.can('navigate scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );
@@ -212,8 +212,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
       id: 'global',
     });
 
-    assert.true(
-      canService.can('navigate storage-bucket', scopeModel, {
+    assert.false(
+      canService.can('navigate scope', scopeModel, {
         collection: 'storage-buckets',
       })
     );

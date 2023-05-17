@@ -18,14 +18,7 @@ export default class SessionRecordingAbility extends ModelAbility {
    * @type {boolean}
    */
   get canRead() {
-    return !this.model.isUnknown && this.hasAuthorizedAction('read');
-  }
-
-  get canList() {
-    return (
-      this.hasAuthorizedCollectionAction('list') &&
-      (this.model.isGlobal || this.model.isOrg)
-    );
+    return !this.model.isUnknown && super.canRead;
   }
 
   get canDownload() {

@@ -18,24 +18,22 @@ export default class StorageBucketAbility extends ModelAbility {
    * @type {boolean}
    */
   get canRead() {
-    return !this.model.isUnknown && this.hasAuthorizedAction('read');
+    return !this.model.isUnknown && super.canRead;
   }
 
   /**
-   * Storage buckets can only exist within global and org scopes.
+   * Only "known" storage bucket types may be updated.
    * @type {boolean}
    */
-  get canCreate() {
-    return (
-      this.hasAuthorizedCollectionAction('create') &&
-      (this.model.isGlobal || this.model.isOrg)
-    );
+  get canUpdate() {
+    return !this.model.isUnknown && super.canUpdate;
   }
 
-  get canList() {
-    return (
-      this.hasAuthorizedCollectionAction('list') &&
-      (this.model.isGlobal || this.model.isOrg)
-    );
+  /**
+   * Only "known" storage bucket types may be deleted.
+   * @type {boolean}
+   */
+  get canDelete() {
+    return !this.model.isUnknown && super.canDelete;
   }
 }

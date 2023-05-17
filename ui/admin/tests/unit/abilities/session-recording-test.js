@@ -89,22 +89,18 @@ module('Unit | Abilities | session-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can('list session-recording', scopeModelWithAuthorizedAction, {
+      canService.can('list scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
       })
     );
     assert.false(
-      canService.can(
-        'list session-recording',
-        scopeModelWithoutAuthorizedAction,
-        {
-          collection: 'session-recordings',
-        }
-      )
+      canService.can('list scope', scopeModelWithoutAuthorizedAction, {
+        collection: 'session-recordings',
+      })
     );
   });
 
-  test('cannot list session recording when in org scope', function (assert) {
+  test('can list session recording when in org scope when authorized', function (assert) {
     assert.expect(2);
 
     const scopeModelWithAuthorizedAction = store.createRecord('scope', {
@@ -118,19 +114,15 @@ module('Unit | Abilities | session-recording', function (hooks) {
       id: 'second',
     });
 
-    assert.false(
-      canService.can('list session-recording', scopeModelWithAuthorizedAction, {
+    assert.true(
+      canService.can('list scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
       })
     );
     assert.false(
-      canService.can(
-        'list session-recording',
-        scopeModelWithoutAuthorizedAction,
-        {
-          collection: 'session-recordings',
-        }
-      )
+      canService.can('list scope', scopeModelWithoutAuthorizedAction, {
+        collection: 'session-recordings',
+      })
     );
   });
 
@@ -149,22 +141,14 @@ module('Unit | Abilities | session-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can(
-        'navigate session-recording',
-        scopeModelWithAuthorizedAction,
-        {
-          collection: 'session-recordings',
-        }
-      )
+      canService.can('navigate scope', scopeModelWithAuthorizedAction, {
+        collection: 'session-recordings',
+      })
     );
     assert.false(
-      canService.can(
-        'navigate session-recording',
-        scopeModelWithoutAuthorizedAction,
-        {
-          collection: 'session-recordings',
-        }
-      )
+      canService.can('navigate scope', scopeModelWithoutAuthorizedAction, {
+        collection: 'session-recordings',
+      })
     );
   });
 
@@ -184,22 +168,14 @@ module('Unit | Abilities | session-recording', function (hooks) {
     });
 
     assert.false(
-      canService.can(
-        'navigate session-recording',
-        scopeModelWithAuthorizedAction,
-        {
-          collection: 'session-recordings',
-        }
-      )
+      canService.can('navigate scope', scopeModelWithAuthorizedAction, {
+        collection: 'session-recordings',
+      })
     );
     assert.false(
-      canService.can(
-        'navigate session-recording',
-        scopeModelWithoutAuthorizedAction,
-        {
-          collection: 'session-recordings',
-        }
-      )
+      canService.can('navigate scope', scopeModelWithoutAuthorizedAction, {
+        collection: 'session-recordings',
+      })
     );
   });
 });

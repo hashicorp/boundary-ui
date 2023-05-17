@@ -29,7 +29,7 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
     const { id: scope_id } = scope;
 
     if (
-      this.can.can('list session-recording', scope, {
+      this.can.can('list scope', scope, {
         collection: 'session-recordings',
       })
     ) {

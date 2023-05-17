@@ -17,9 +17,7 @@
   </page.header>
 
   <page.actions>
-    {{#if
-      (can 'create storage-bucket' this.scope collection='storage-buckets')
-    }}
+    {{#if (can 'create scope' this.scope collection='storage-buckets')}}
       {{#if @model}}
         <Hds::Button
           @route='scopes.scope.storage-buckets.new'
@@ -89,28 +87,41 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              {{!TODO: add dropdown for delete actions}}
-              <Hds::Dropdown as |dd|>
-                <dd.ToggleIcon
-                  @icon='more-horizontal'
-                  @text='Overflow Options'
-                  @hasChevron={{false}}
-                  @size='small'
-                />
-                <dd.Interactive
-                  @route='scopes.scope.storage-buckets.storage-bucket'
-                  @model={{B.data.id}}
-                  @text={{t 'actions.edit'}}
-                />
-                {{#if (can 'delete model' B.data)}}
-                  <dd.Separator />
-                  <dd.Interactive
-                    @text={{t 'resources.storage-bucket.actions.delete'}}
-                    @color='critical'
-                    {{on 'click' (route-action 'delete' B.data)}}
-                  />
+              {{#let
+                (hash
+                  canRead=(can 'read storage-bucket' B.data)
+                  canDelete=(can 'delete storage-bucket' B.data)
+                )
+                as |perms|
+              }}
+                {{#if (or perms.canRead perms.canDelete)}}
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text='Overflow Options'
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    {{#if perms.canRead}}
+                      <dd.Interactive
+                        @route='scopes.scope.storage-buckets.storage-bucket'
+                        @model={{B.data.id}}
+                        @text={{t 'actions.edit'}}
+                      />
+                    {{/if}}
+                    {{#if (and perms.canRead perms.canDelete)}}
+                      <dd.Separator />
+                    {{/if}}
+                    {{#if perms.canDelete}}
+                      <dd.Interactive
+                        @text={{t 'resources.storage-bucket.actions.delete'}}
+                        @color='critical'
+                        {{on 'click' (route-action 'delete' B.data)}}
+                      />
+                    {{/if}}
+                  </Hds::Dropdown>
                 {{/if}}
-              </Hds::Dropdown>
+              {{/let}}
             </B.Td>
           </B.Tr>
         </:body>
@@ -122,14 +133,10 @@
           as |message|
         >
           <message.description>
-            {{#if
-              (can
-                'list storage-bucket' this.scope collection='storage-buckets'
-              )
-            }}
+            {{#if (can 'list scope' this.scope collection='storage-buckets')}}
               {{t 'resources.storage-bucket.messages.none.description'}}
             {{else if (can
-              'create storage-bucket' this.scope collection='storage-buckets'
+              'create scope' this.scope collection='storage-buckets'
             )}}
               {{t
                 'descriptions.create-but-not-list'
@@ -142,11 +149,7 @@
               }}
             {{/if}}
           </message.description>
-          {{#if
-            (can
-              'create storage-bucket' this.scope collection='storage-buckets'
-            )
-          }}
+          {{#if (can 'create scope' this.scope collection='storage-buckets')}}
             <Hds::Link::Standalone
               @icon='plus-circle'
               @iconPosition='leading'

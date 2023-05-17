@@ -19,16 +19,22 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
   }
 
   /**
-   * This override ensures that storage buckets can only be presented in the global scope
-   * and if the session-recording feature flag is enabled.
+   * This override ensures that storage buckets may be updated only if the
+   * session-recording feature flag is enabled.
    */
-  get canList() {
+  get canUpdate() {
     return this.features.isEnabled('session-recording')
-      ? this.hasAuthorizedCollectionAction('list') && this.model.isGlobal
+      ? super.canUpdate
       : false;
   }
 
-  get canNavigate() {
-    return this.canCreate || this.canList;
+  /**
+   * This override ensures that storage buckets may be deleted only if the
+   * session-recording feature flag is enabled.
+   */
+  get canDelete() {
+    return this.features.isEnabled('session-recording')
+      ? super.canDelete
+      : false;
   }
 }

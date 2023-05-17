@@ -28,22 +28,14 @@
           </nav.link>
           {{#if (feature-flag 'session-recording')}}
             {{#if
-              (can
-                'navigate session-recording'
-                @model
-                collection='session-recordings'
-              )
+              (can 'navigate scope' @model collection='session-recordings')
             }}
               <nav.link @route='scopes.scope.session-recordings'>
                 <Rose::Icon @name='flight-icons/svg/film-16' @size='medium' />
                 {{t 'resources.session-recording.title_plural'}}
               </nav.link>
             {{/if}}
-            {{#if
-              (can
-                'navigate storage-bucket' @model collection='storage-buckets'
-              )
-            }}
+            {{#if (can 'navigate scope' @model collection='storage-buckets')}}
               <nav.link @route='scopes.scope.storage-buckets'>
                 <Rose::Icon
                   @name='flight-icons/svg/cloud-upload-16'

@@ -35,7 +35,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     if (
-      this.can.can('list storage-bucket', scope, {
+      this.can.can('list scope', scope, {
         collection: 'storage-buckets',
       })
     ) {
