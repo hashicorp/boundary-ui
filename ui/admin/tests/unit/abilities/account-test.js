@@ -8,6 +8,7 @@ import { setupTest } from 'ember-qunit';
 import {
   TYPE_AUTH_METHOD_LDAP,
   TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_PASSWORD,
 } from 'api/models/auth-method';
 
 module('Unit | Abilities | account', function (hooks) {
@@ -33,10 +34,12 @@ module('Unit | Abilities | account', function (hooks) {
   });
 
   test('can add non-ldap account to user', function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     const account = store.createRecord('account', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
+    assert.true(canService.can('addAccount account', account));
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
     assert.true(canService.can('addAccount account', account));
   });
 
@@ -66,10 +69,12 @@ module('Unit | Abilities | account', function (hooks) {
   });
 
   test('can remove non-ldap account from user', function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     const account = store.createRecord('account', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
+    assert.true(canService.can('removeAccount account', account));
+    account.type = TYPE_AUTH_METHOD_PASSWORD;
     assert.true(canService.can('removeAccount account', account));
   });
 });

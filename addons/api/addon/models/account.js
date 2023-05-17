@@ -4,7 +4,6 @@
  */
 
 import GeneratedAccountModel from '../generated/models/account';
-import { computed } from '@ember/object';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
@@ -47,7 +46,6 @@ export default class AccountModel extends GeneratedAccountModel {
    * Convenience for getting username in account.
    * @type {string}
    */
-  @computed('{email,full_name,login_name}')
   get accountName() {
     const { email, full_name, login_name } = this;
     return email || full_name || login_name;
