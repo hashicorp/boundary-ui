@@ -7,6 +7,11 @@ import factory from '../generated/factories/account';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -22,9 +27,10 @@ export default factory.extend({
 
   attributes() {
     switch (this.type) {
-      case 'password':
+      case TYPE_AUTH_METHOD_PASSWORD:
+      case TYPE_AUTH_METHOD_LDAP:
         return { login_name: faker.random.words() };
-      case 'oidc':
+      case TYPE_AUTH_METHOD_OIDC:
         return {
           issuer: faker.internet.ip(),
           subject: 'sub',

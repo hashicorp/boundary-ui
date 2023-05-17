@@ -17,4 +17,18 @@ export default class AuthMethodAbility extends ModelAbility {
   get canRead() {
     return !this.model.isUnknown && this.hasAuthorizedAction('read');
   }
+
+  /**
+   * Only "known" auth method types may be updated.
+   */
+  get canUpdate() {
+    return !this.model.isUnknown && this.hasAuthorizedAction('update');
+  }
+
+  /**
+   * Only "known" auth method types may be deleted.
+   */
+  get canDelete() {
+    return !this.model.isUnknown && this.hasAuthorizedAction('delete');
+  }
 }

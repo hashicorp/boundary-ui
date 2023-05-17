@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import AuthMethodAbility from 'api/abilities/auth-method';
+import AccountAbility from 'api/abilities/account';
 import { inject as service } from '@ember/service';
 
-export default class OverrideAuthMethodAbility extends AuthMethodAbility {
-  //service
+export default class OverrideAccountAbility extends AccountAbility {
+  // =service
   @service features;
 
   /**
@@ -15,13 +15,11 @@ export default class OverrideAuthMethodAbility extends AuthMethodAbility {
    * of LDAP auth method implementation.
    */
 
-  get canRead() {
-    return this.features.isEnabled('ldap-auth-methods') || !this.model.isLDAP
-      ? super.canRead
-      : false;
+  get canAddAccount() {
+    return this.features.isEnabled('ldap-auth-methods') || !this.model.isLDAP;
   }
 
-  get canMakePrimary() {
+  get canRemoveAccount() {
     return this.features.isEnabled('ldap-auth-methods') || !this.model.isLDAP;
   }
 }
