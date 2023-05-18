@@ -6,12 +6,8 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import { inject as service } from '@ember/service';
 
 export default class FormUserAddAccountsComponent extends Component {
-  //service
-  @service can;
-
   // =properties
 
   /**
