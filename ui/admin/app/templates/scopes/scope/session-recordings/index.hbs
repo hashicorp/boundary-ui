@@ -24,11 +24,13 @@
           <B.Tr>
             {{! Time }}
             <B.Td>
-              <span class='hds-foreground-faint'>
-                <time datetime={{format-date-iso B.data.start_time}}>
-                  {{format-date-iso-human B.data.start_time}}
-                </time>
-              </span>
+              {{#if B.data.start_time}}
+                <span class='hds-foreground-faint'>
+                  <time datetime={{format-date-iso B.data.start_time}}>
+                    {{format-date-iso-human B.data.start_time}}
+                  </time>
+                </span>
+              {{/if}}
             </B.Td>
             {{! User }}
             <B.Td>
@@ -58,14 +60,16 @@
             </B.Td>
             {{! Duration }}
             <B.Td>
-              <div
-                class='session-recording-list-cell-item hds-foreground-faint'
-              >
-                <span><FlightIcon @name='clock' /></span>
-                <span>
-                  {{format-time-duration B.data.duration}}
-                </span>
-              </div>
+              {{#if B.data.duration}}
+                <div
+                  class='session-recording-list-cell-item hds-foreground-faint'
+                >
+                  <span><FlightIcon @name='clock' /></span>
+                  <span>
+                    {{format-time-duration B.data.duration}}
+                  </span>
+                </div>
+              {{/if}}
             </B.Td>
             <B.Td align='right'>
               {{#if (can 'read session-recording' B.data)}}

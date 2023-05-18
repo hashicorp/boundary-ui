@@ -77,9 +77,11 @@
                         }}
                       </list.Item>
                       {{! Duration }}
-                      <list.Item @icon='clock' @color='faint'>
-                        {{format-time-duration B.data.duration}}
-                      </list.Item>
+                      {{#if B.data.duration}}
+                        <list.Item @icon='clock' @color='faint'>
+                          {{format-time-duration B.data.duration}}
+                        </list.Item>
+                      {{/if}}
                     </MetadataList>
                   </B.Td>
                   <B.Td>
@@ -111,23 +113,27 @@
 
             <MetadataList @orientation='vertical' as |list|>
               {{! Start time }}
-              <list.Item @icon='calendar' @color='faint'>
-                {{t 'form.started.label'}}
-                <time
-                  datetime={{format-date-iso
-                    @model.sessionRecording.start_time
-                  }}
-                >
-                  {{format-date-iso-human @model.sessionRecording.start_time}}
-                </time>
-              </list.Item>
+              {{#if @model.sessionRecording.start_time}}
+                <list.Item @icon='calendar' @color='faint'>
+                  {{t 'form.started.label'}}
+                  <time
+                    datetime={{format-date-iso
+                      @model.sessionRecording.start_time
+                    }}
+                  >
+                    {{format-date-iso-human @model.sessionRecording.start_time}}
+                  </time>
+                </list.Item>
+              {{/if}}
               {{! Duration }}
-              <list.Item @icon='clock' @color='faint'>
-                {{t
-                  'resources.session-recording.duration'
-                  time=(format-time-duration @model.sessionRecording.duration)
-                }}
-              </list.Item>
+              {{#if @model.sessionRecording.duration}}
+                <list.Item @icon='clock' @color='faint'>
+                  {{t
+                    'resources.session-recording.duration'
+                    time=(format-time-duration @model.sessionRecording.duration)
+                  }}
+                </list.Item>
+              {{/if}}
               {{! Bytes up }}
               <list.Item @icon='arrow-up' @color='success'>
                 {{t

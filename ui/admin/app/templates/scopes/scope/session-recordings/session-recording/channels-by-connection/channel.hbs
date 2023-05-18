@@ -73,21 +73,27 @@
           <h2>{{t 'resources.session-recording.channel.details'}}</h2>
           <MetadataList @orientation='vertical' as |list|>
             {{! Start time }}
-            <list.Item @icon='calendar' @color='faint'>
-              {{t 'form.started.label'}}
-              <time
-                datetime={{format-date-iso @model.channelRecording.start_time}}
-              >
-                {{format-date-iso-human @model.channelRecording.start_time}}
-              </time>
-            </list.Item>
+            {{#if @model.channelRecording.start_time}}
+              <list.Item @icon='calendar' @color='faint'>
+                {{t 'form.started.label'}}
+                <time
+                  datetime={{format-date-iso
+                    @model.channelRecording.start_time
+                  }}
+                >
+                  {{format-date-iso-human @model.channelRecording.start_time}}
+                </time>
+              </list.Item>
+            {{/if}}
             {{! Duration }}
-            <list.Item @icon='clock' @color='faint'>
-              {{t
-                'resources.session-recording.duration'
-                time=(format-time-duration @model.channelRecording.duration)
-              }}
-            </list.Item>
+            {{#if @model.channelRecording.duration}}
+              <list.Item @icon='clock' @color='faint'>
+                {{t
+                  'resources.session-recording.duration'
+                  time=(format-time-duration @model.channelRecording.duration)
+                }}
+              </list.Item>
+            {{/if}}
             {{! Bytes up }}
             <list.Item @icon='arrow-up' @color='success'>
               {{t
