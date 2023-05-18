@@ -35,6 +35,8 @@ module('Acceptance | users | accounts', function (hooks) {
   const SUBMIT_BTN_SELECTOR = 'form [type="submit"]';
   const CANCEL_BTN_SELECTOR = 'form [type="button"]';
   const REMOVE_ACTION_SELECTOR = 'tbody tr .rose-dropdown-button-danger';
+  const LDAP_ACCOUNT_CHECKBOX_SELECTOR =
+    'tbody .rose-table-row:last-child .hds-form-checkbox';
 
   const instances = {
     scopes: {
@@ -204,10 +206,7 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot add ldap accounts to user when feature flag is disabled', async function (assert) {
-    assert.expect(1);
-    const accountsAvailableCount =
-      this.server.schema.accounts.all().length -
-      instances.user.accountIds.length;
+    assert.expect(2);
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -217,20 +216,21 @@ module('Acceptance | users | accounts', function (hooks) {
       type: TYPE_AUTH_METHOD_LDAP,
       authMethod,
     });
+    const accountsAvailableCount =
+      this.server.schema.accounts.all().length -
+      instances.user.accountIds.length;
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
 
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsAvailableCount });
+    assert.dom(LDAP_ACCOUNT_CHECKBOX_SELECTOR).isDisabled();
   });
 
   test('can add ldap accounts to user when feature flag is enabled', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     features.enable('ldap-auth-methods');
-    const accountsAvailableCount =
-      this.server.schema.accounts.all().length -
-      instances.user.accountIds.length;
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -240,14 +240,16 @@ module('Acceptance | users | accounts', function (hooks) {
       type: TYPE_AUTH_METHOD_LDAP,
       authMethod,
     });
+    const accountsAvailableCount =
+      this.server.schema.accounts.all().length -
+      instances.user.accountIds.length;
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
 
-    assert
-      .dom(TABLE_ROWS_SELECTOR)
-      .exists({ count: accountsAvailableCount + 1 });
+    assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsAvailableCount });
+    assert.dom(LDAP_ACCOUNT_CHECKBOX_SELECTOR).isNotDisabled();
   });
 
   test('select and save accounts to add', async function (assert) {
