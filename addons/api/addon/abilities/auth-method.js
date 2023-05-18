@@ -4,15 +4,14 @@
  */
 
 import ModelAbility from './model';
-
 /**
- * Provides abilities for accounts.
+ * Provides abilities for auth method.
  */
-export default class AccountAbility extends ModelAbility {
+export default class AuthMethodAbility extends ModelAbility {
   // =permissions
 
   /**
-   * Only "known" account types may be read.
+   * Only "known" auth method types may be read.
    * @type {boolean}
    */
   get canRead() {
@@ -20,25 +19,16 @@ export default class AccountAbility extends ModelAbility {
   }
 
   /**
-   * Only "known" account types may be updated.
-   * @type {boolean}
+   * Only "known" auth method types may be updated.
    */
   get canUpdate() {
     return !this.model.isUnknown && this.hasAuthorizedAction('update');
   }
 
   /**
-   * Only "known" account types may be deleted.
-   * @type {boolean}
+   * Only "known" auth method types may be deleted.
    */
   get canDelete() {
     return !this.model.isUnknown && this.hasAuthorizedAction('delete');
-  }
-
-  /**
-   * @type {boolean}
-   */
-  get canSetPassword() {
-    return this.hasAuthorizedAction('set-password');
   }
 }

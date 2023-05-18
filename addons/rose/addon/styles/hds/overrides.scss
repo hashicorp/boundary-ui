@@ -24,6 +24,10 @@
   [class^='hds-form-group'] {
     margin-bottom: 0;
   }
+
+  .hds-table__td p {
+    color: var(--token-form-indicator-optional-color);
+  }
 }
 
 .hds-dropdown {
