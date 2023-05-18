@@ -4,7 +4,7 @@
  */
 
 import Component from '@glimmer/component';
-import { computed, action } from '@ember/object';
+import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 
@@ -25,7 +25,6 @@ export default class FormUserAddAccountsComponent extends Component {
    * @param {[AccountModel]} filteredAccounts
    * @type {boolean}
    */
-  @computed('filteredAccounts.length')
   get hasAvailableAccounts() {
     return this.filteredAccounts.length > 0;
   }
@@ -34,10 +33,10 @@ export default class FormUserAddAccountsComponent extends Component {
    * Accounts not already added to the user.
    * @type {[AccountModel]}
    */
-  @computed('args.{accounts.[],model.account_ids.[]}', 'can')
   get filteredAccounts() {
     // Get IDs for accounts already added to the current user
     const alreadyAddedAccountIDs = this.args.model.account_ids;
+    // TODO: Remove the addAccount ability check during Phase 2
     const notAddedAccounts = this.args.accounts.filter(
       (account) =>
         this.can.can('addAccount account', account) &&
