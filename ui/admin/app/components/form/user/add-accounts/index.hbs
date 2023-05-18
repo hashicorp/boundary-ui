@@ -32,7 +32,7 @@
             <row.cell>
               {{!TODO: Remove the addAccount ability check during Phase 2}}
               <Hds::Form::Checkbox::Field
-                disabled={{if (can 'addAccount account' account) false true}}
+                disabled={{not (can 'addAccount account' account)}}
                 {{on 'change' (fn this.toggleAccount account)}}
                 as |F|
               >
