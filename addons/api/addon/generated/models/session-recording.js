@@ -18,6 +18,19 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
   })
   type;
 
+  @attr('date', {
+    description:
+      'The time the Session Recording was created in the controller.',
+    readOnly: true,
+  })
+  created_time;
+
+  @attr('date', {
+    description: 'The time of the most recent update to the Session Recording.',
+    readOnly: true,
+  })
+  updated_time;
+
   @attr({
     description:
       'Contains the values of related fields at the time this Session Recording was created',
@@ -70,12 +83,6 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
     readOnly: true,
   })
   end_time;
-
-  @attr('date', {
-    description: 'The time the Session recording was last updated.',
-    readOnly: true,
-  })
-  updated_time;
 
   @attr({
     description: 'The array of mime types that this recording will support.',
