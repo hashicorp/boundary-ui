@@ -1,3 +1,25 @@
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+# Admin UI e2e tests
+
+- [Admin UI e2e tests](#admin-ui-e2e-tests)
+  - [Prerequisites:](#prerequisites)
+    - [Accesses](#accesses)
+    - [Software](#software)
+  - [Getting Started](#getting-started)
+    - [Setup Boundary CLI](#setup-boundary-cli)
+    - [Setup Boundary UI](#setup-boundary-ui)
+    - [Setup EC2 instance:](#setup-ec2-instance)
+    - [Setup HCP Terraform (Terraform cloud):](#setup-hcp-terraform-terraform-cloud)
+    - [Setup Enos:](#setup-enos)
+  - [Run tests:](#run-tests)
+    - [Run Enos Scenario](#run-enos-scenario)
+    - [Run tests](#run-tests)
+    - [Destroy Enos Scenario](#destroy-enos-scenario)
+  - [Developing Tests](#developing-tests)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 # Admin UI e2e tests
 
 This test suite tests the Boundary Admin UI in an end-to-end setting. It was designed to be run in a
@@ -89,7 +111,7 @@ It is not necessary, but from this point we recommend having 2 terminals open. 
 - Terminal 1: Will be use to run enos (Boundary).
 - Terminal 2: Will be use to run e2e UI tests (Boundary UI).
 
-### Run Enos Scenario
+### Launch Enos Scenario
 
 Using Terminal 1: 
 - `$ cd boundary/enos`.
@@ -98,23 +120,14 @@ Using Terminal 1:
 - `$ enos scenario launch e2e_ui builder:local`. Launch enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal.
 - `$ bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are need within Boundary UI to run the test against the enos scenario.
 
+*Be aware once the scenario is launch you will create and run resources within AWS, once you are done using the scenario, [you should destroy it](#destroy-enos-scenario).*
+
 ### Run tests
 
 Using Terminal 2:
 - Set the env varibales `test_e2e_env.sh` script output within this terminal.
 - `$ cd boundary-ui/ui/admin`.
-- `$ yarn run e2e`
-
-
-Missing:
-- Destroy enos scenario.
-- Clean up AWS.
-
-
-
-
-
-
+- `$ yarn run e2e`.
 
 Here are some additional commands to assist with debugging.
 ```bash
@@ -122,6 +135,16 @@ PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.co
 PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.config.js login.spec.js:13 --debug
 PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.config.js login.spec.js --debug
 ```
+
+[Playwright documentation about running tests](https://playwright.dev/docs/running-tests).
+
+### Destroy Enos Scenario
+
+Using Terminal 1:
+- `$ enos scenario destroy`.
+- After all the steps pass, you should see a `Enos operations finished!`.
+
+
 
 ## Developing Tests
 
