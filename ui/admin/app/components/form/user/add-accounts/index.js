@@ -36,11 +36,8 @@ export default class FormUserAddAccountsComponent extends Component {
   get filteredAccounts() {
     // Get IDs for accounts already added to the current user
     const alreadyAddedAccountIDs = this.args.model.account_ids;
-    // TODO: Remove the addAccount ability check during Phase 2
     const notAddedAccounts = this.args.accounts.filter(
-      (account) =>
-        this.can.can('addAccount account', account) &&
-        !alreadyAddedAccountIDs.includes(account.id)
+      ({ id }) => !alreadyAddedAccountIDs.includes(id)
     );
     return notAddedAccounts;
   }

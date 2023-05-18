@@ -30,11 +30,15 @@
         {{#each this.filteredAccounts as |account|}}
           <body.row as |row|>
             <row.cell>
-              <form.checkbox
-                @label={{account.id}}
-                @description={{account.description}}
-                @onChange={{fn this.toggleAccount account}}
-              />
+              {{!TODO: Remove the addAccount ability check during Phase 2}}
+              <Hds::Form::Checkbox::Field
+                disabled={{if (can 'addAccount account' account) false true}}
+                {{on 'change' (fn this.toggleAccount account)}}
+                as |F|
+              >
+                <F.Label>{{account.id}}</F.Label>
+                <F.HelperText>{{account.description}}</F.HelperText>
+              </Hds::Form::Checkbox::Field>
             </row.cell>
             <row.cell>{{account.accountName}}</row.cell>
             <row.cell>
