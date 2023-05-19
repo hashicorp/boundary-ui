@@ -31,7 +31,7 @@ The test suite uses the [Playwright](https://playwright.dev/) framework.
 
 ## Prerequisites:
 
-You will need [Hombrebrew](https://brew.sh/) install. For secure persisting your SSH keys and tokens we recommend using 1Password.
+You will need [Homebrew](https://brew.sh/) install. For secure persisting your SSH keys and tokens we recommend using 1Password.
 
 ### Accesses
 
@@ -51,9 +51,9 @@ If you are missing any acccess, requested [through the IT service catalog](https
 
 ## Getting Started
 
-we will cover everything you need to setup before be able to run Enos + the tests.
+We will cover everything you need to set up before being able to run Enos + the tests.
 
-### Setup Boundary CLI
+### Set up Boundary CLI
 
 Ensure the `boundary` CLI is available on the path. You can validate this by making sure this
 command returns something.
@@ -84,9 +84,9 @@ You need to provide an SSH Key pair for the EC2 instance. We recommend creating 
 
 ### Setup HCP Terraform (Terraform cloud):
 
-Login to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens).
+Log in to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens).
 
-**Token awareness:** Copy your token from the box and save it in a secure location (we re). Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
+**Token awareness:** Copy your token from the box and save it in a secure location. Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
 
 ### Setup Enos:
 
@@ -95,7 +95,7 @@ Enos needs some configuration variables to run the scenario successfully. [See t
 - `aws_region`: The AWS region you are using. Very important as mentioned within the EC2 Setup.
 - `aws_ssh_keypair_name`: The name of the AWS keypair.
 - `aws_ssh_private_key_path`: The path to the private key associated with your keypair.
-- `enos_user`: the user name to use for Boundary.
+- `enos_user`: The user name to use for Boundary.
 - `tfc_api_token`: you need to provide the previously created token in Terraform cloud, there is no shared token within Boundary team.
 - `local_boundary_dir`: The directory that contains Boundary binary.
 - `local_boundary_ui_dir`: The directory that contains the copy of boundary-ui you want to use for UI tests.
