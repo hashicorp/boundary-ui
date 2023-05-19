@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "npm-user-validate": "^1.0.1",
     "caniuse-lite": "^1.0.30001157",
     "immer": "^9.0.6",
     "node-notifier": "^8.0.1",
