@@ -121,10 +121,10 @@
                 {{else}}
                   {{model.displayName}}
                 {{/if}}
-                {{#if model.target.description}}
-                  <p>{{model.target.description}}</p>
+                {{#if model.description}}
+                  <p>{{model.description}}</p>
                 {{/if}}
-                {{#if model.target.isActive}}
+                {{#if model.isActive}}
                   <Hds::Badge
                     @text={{t 'states.active'}}
                     @color='success'
