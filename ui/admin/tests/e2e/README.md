@@ -8,13 +8,13 @@
     - [Accesses](#accesses)
     - [Software](#software)
   - [Getting Started](#getting-started)
-    - [Setup Boundary CLI](#setup-boundary-cli)
+    - [Set up Boundary CLI](#set-up-boundary-cli)
     - [Setup Boundary UI](#setup-boundary-ui)
-    - [Setup EC2 instance:](#setup-ec2-instance)
+    - [Setup AWS:](#setup-aws)
     - [Setup HCP Terraform (Terraform cloud):](#setup-hcp-terraform-terraform-cloud)
     - [Setup Enos:](#setup-enos)
   - [Run tests:](#run-tests)
-    - [Run Enos Scenario](#run-enos-scenario)
+    - [Launch Enos Scenario](#launch-enos-scenario)
     - [Run tests](#run-tests)
     - [Destroy Enos Scenario](#destroy-enos-scenario)
   - [Developing Tests](#developing-tests)
@@ -72,7 +72,7 @@ cd boundary-ui/ui/admin
 yarn install
 npx playwright install # this installs the browsers used by Playwright
 ```
-### Setup EC2 instance:
+### Setup AWS:
 
 **Region awareness:** take note of the AWS region you are setting up because we will need it later to configure enos. [More information about AWS regions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html).
 
