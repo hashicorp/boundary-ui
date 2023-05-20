@@ -24,4 +24,20 @@ export default class UserAbility extends ModelAbility {
   get canRemoveAccounts() {
     return this.hasAuthorizedAction('remove-accounts');
   }
+
+  /**
+   * @type {boolean}
+   */
+  get canAddAccount() {
+    const { account, canAddAccounts } = this;
+    return canAddAccounts && !account.isUnknown;
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get canRemoveAccount() {
+    const { account, canRemoveAccounts } = this;
+    return canRemoveAccounts && !account.isUnknown;
+  }
 }
