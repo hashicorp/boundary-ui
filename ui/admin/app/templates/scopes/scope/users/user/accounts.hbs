@@ -59,13 +59,7 @@
                 </Copyable>
               </row.cell>
               <row.cell>
-                {{!TODO: Remove the removeAccount ability check during Phase 2}}
-                {{#if
-                  (and
-                    (can 'removeAccount account' account)
-                    (can 'removeAccounts user' @model.user)
-                  )
-                }}
+                {{#if (can 'removeAccount user' @model.user account=account)}}
                   <Rose::Dropdown
                     @icon='flight-icons/svg/more-horizontal-16'
                     @iconOnly={{true}}
