@@ -13,7 +13,7 @@ const devFeatures = {
 const licensedFeatures = {
   'multi-hop-sessions': false,
   'ssh-target': false,
-  'session-recording': false,
+  'ssh-session-recording': false,
 };
 // Base edition declares available features, disabled by default.
 const baseEdition = {

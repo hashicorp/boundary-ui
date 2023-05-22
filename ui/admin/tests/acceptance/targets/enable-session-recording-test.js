@@ -93,14 +93,14 @@ module('Acceptance | targets | enable session recording', function (hooks) {
 
   test('cannot enable session recording for a target without proper authorization', async function (assert) {
     assert.expect(2);
-    assert.false(featuresService.isEnabled('session-recording'));
+    assert.false(featuresService.isEnabled('ssh-session-recording'));
     await visit(urls.target);
     await a11yAudit();
     assert.dom('.target-sidebar a').doesNotExist();
   });
 
   test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(2);
     await visit(urls.target);
     assert.dom(SETTINGS_LINK_SELECTOR).doesNotExist();
@@ -109,7 +109,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('users can click on settings link in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(1);
     instances.target.update({
       storageBucketId: storageBucketOne.id,
@@ -120,7 +120,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('users can click on associated storage bucket card on an ssh target', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(1);
     instances.target.update({ storageBucketId: storageBucketOne.id });
     await visit(urls.target);
@@ -129,7 +129,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('toggle should be enabled and storage buckets list should be shown when enable session recording button is clicked', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(3);
     await visit(urls.target);
     await click(ENABLE_BUTTON_SELECTOR);
@@ -139,7 +139,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('storage buckets list is hidden when toggle is disabled', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(4);
     await visit(urls.target);
     await click(ENABLE_BUTTON_SELECTOR);
@@ -151,7 +151,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('link to add new storage bucket should be displayed and redirect to new storage buckets form', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(3);
     await visit(urls.target);
     await click(ENABLE_BUTTON_SELECTOR);
@@ -162,7 +162,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('retain last selected dropdown list value when the toggle is off', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(3);
     instances.target.update({
       storageBucketId: storageBucketOne.id,
@@ -184,7 +184,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('can assign a storage bucket for the target', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(5);
     await visit(urls.target);
     await click(ENABLE_BUTTON_SELECTOR);
@@ -205,7 +205,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   });
 
   test('can cancel changes to an exisiting storage bucket selection', async function (assert) {
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     assert.expect(3);
     instances.target.update({
       storageBucketId: storageBucketOne.id,

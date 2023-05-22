@@ -3,11 +3,12 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { enableFeature } from 'ember-feature-flags/test-support';
 
 module('Acceptance | session recordings | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  let featuresService;
 
   // Selectors
   const SESSION_RECORDING_TITLE = 'Session Recordings';
@@ -45,7 +46,10 @@ module('Acceptance | session recordings | list', function (hooks) {
     urls.globalScope = `/scopes/global`;
     urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
     urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}`;
-    enableFeature('session-recording');
+
+    featuresService = this.owner.lookup('service:features');
+    featuresService.enable('ssh-session-recording');
+
     authenticateSession({});
   });
 

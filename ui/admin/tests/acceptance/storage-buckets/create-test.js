@@ -46,7 +46,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
       this.server.schema.storageBuckets.all().models.length;
 
     features = this.owner.lookup('service:features');
-    features.enable('session-recording');
+    features.enable('ssh-session-recording');
     authenticateSession({});
   });
 

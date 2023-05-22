@@ -53,7 +53,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
 
   test('users can navigate to storage-buckets with proper authorization', async function (assert) {
     assert.expect(5);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     await visit(urls.globalScope);
 
     assert.true(
@@ -80,7 +80,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   test('user cannot navigate to index without either list or create actions', async function (assert) {
     assert.expect(5);
     featuresService.enable('byow');
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
 
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       [];
@@ -114,7 +114,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
 
   test('user can navigate to index with only create action', async function (assert) {
     assert.expect(5);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
 
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       instances.scopes.global.authorized_collection_actions[
@@ -148,7 +148,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
 
   test('user can navigate to index with only list action', async function (assert) {
     assert.expect(5);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
 
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       instances.scopes.global.authorized_collection_actions[
@@ -182,7 +182,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     assert.expect(2);
     featuresService.enable('byow');
     await visit(urls.globalScope);
-    assert.false(featuresService.isEnabled('session-recording'));
+    assert.false(featuresService.isEnabled('ssh-session-recording'));
     assert
       .dom('[title="General"] a:nth-of-type(2)')
       .doesNotIncludeText(STORAGE_BUCKET_TITLE);
@@ -190,7 +190,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
 
   test('edit action in table directs user to appropriate page', async function (assert) {
     assert.expect(3);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     await visit(urls.globalScope);
     instances.storageBucket = this.server.create('storage-bucket', {
       scope: instances.scopes.global,

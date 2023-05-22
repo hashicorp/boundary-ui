@@ -15,7 +15,9 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
    * session-recording feature flag is enabled.
    */
   get canRead() {
-    return this.features.isEnabled('session-recording') ? super.canRead : false;
+    return this.features.isEnabled('ssh-session-recording')
+      ? super.canRead
+      : false;
   }
 
   /**
@@ -23,7 +25,7 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
    * session-recording feature flag is enabled.
    */
   get canUpdate() {
-    return this.features.isEnabled('session-recording')
+    return this.features.isEnabled('ssh-session-recording')
       ? super.canUpdate
       : false;
   }
@@ -33,7 +35,7 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
    * session-recording feature flag is enabled.
    */
   get canDelete() {
-    return this.features.isEnabled('session-recording')
+    return this.features.isEnabled('ssh-session-recording')
       ? super.canDelete
       : false;
   }

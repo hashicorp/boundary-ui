@@ -49,7 +49,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
     urls.unknownStorageBucket = `${urls.storageBuckets}/foo`;
 
     features = this.owner.lookup('service:features');
-    features.enable('session-recording');
+    features.enable('ssh-session-recording');
     authenticateSession({});
   });
 

@@ -15,6 +15,8 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
    * session-recording feature flag is enabled.
    */
   get canRead() {
-    return this.features.isEnabled('session-recording') ? super.canRead : false;
+    return this.features.isEnabled('ssh-session-recording')
+      ? super.canRead
+      : false;
   }
 }

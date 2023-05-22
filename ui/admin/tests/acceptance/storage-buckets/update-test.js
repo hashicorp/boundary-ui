@@ -52,7 +52,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     urls.storageBucket = `${urls.storageBuckets}/${instances.storageBucket.id}`;
 
     features = this.owner.lookup('service:features');
-    features.enable('session-recording');
+    features.enable('ssh-session-recording');
     authenticateSession({});
   });
 

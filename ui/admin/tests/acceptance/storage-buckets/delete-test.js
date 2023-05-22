@@ -57,7 +57,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     authenticateSession({});
     intl = this.owner.lookup('service:intl');
     features = this.owner.lookup('service:features');
-    features.enable('session-recording');
+    features.enable('ssh-session-recording');
   });
 
   test('user can delete a storage bucket', async function (assert) {

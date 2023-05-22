@@ -64,7 +64,7 @@ module('Acceptance | session recordings | read', function (hooks) {
 
   test('visiting a session recording', async function (assert) {
     assert.expect(1);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     // Visit session recordings
     await visit(urls.sessionRecordings);
     await a11yAudit();
@@ -76,7 +76,7 @@ module('Acceptance | session recordings | read', function (hooks) {
 
   test('user can navigate to a session recording with proper authorization', async function (assert) {
     assert.expect(3);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     // Visit session recordings
     await visit(urls.sessionRecordings);
     assert.true(instances.sessionRecording.authorized_actions.includes('read'));
@@ -88,7 +88,7 @@ module('Acceptance | session recordings | read', function (hooks) {
 
   test('user cannot navigate to a session recording without the read action', async function (assert) {
     assert.expect(1);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     instances.sessionRecording.authorized_actions =
       instances.sessionRecording.authorized_actions.filter(
         (item) => item !== 'read'
@@ -100,7 +100,7 @@ module('Acceptance | session recordings | read', function (hooks) {
 
   test('user can navigate to a channel recording', async function (assert) {
     assert.expect(2);
-    featuresService.enable('session-recording');
+    featuresService.enable('ssh-session-recording');
     // Visit session recording
     await visit(urls.sessionRecording);
     assert.dom('table').hasClass('hds-table');

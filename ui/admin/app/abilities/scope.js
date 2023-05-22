@@ -21,7 +21,9 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
   get canCreate() {
     switch (this.collection) {
       case 'storage-buckets':
-        return this.features.isEnabled('session-recording') && super.canCreate;
+        return (
+          this.features.isEnabled('ssh-session-recording') && super.canCreate
+        );
       default:
         return super.canCreate;
     }
@@ -36,7 +38,9 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
     switch (this.collection) {
       case 'session-recordings':
       case 'storage-buckets':
-        return this.features.isEnabled('session-recording') && super.canList;
+        return (
+          this.features.isEnabled('ssh-session-recording') && super.canList
+        );
       default:
         return super.canList;
     }

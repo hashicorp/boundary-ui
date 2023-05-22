@@ -33,7 +33,7 @@
       {{#if
         (and
           (can 'setStorageBucket target' @model)
-          (feature-flag 'session-recording')
+          (feature-flag 'ssh-session-recording')
         )
       }}
         <sb.Sidebar>

@@ -26,25 +26,23 @@
             <Rose::Icon @name='flight-icons/svg/org-16' @size='medium' />
             {{t 'resources.org.title_plural'}}
           </nav.link>
-          {{#if (feature-flag 'session-recording')}}
-            {{#if
-              (can 'navigate scope' @model collection='session-recordings')
-            }}
-              <nav.link @route='scopes.scope.session-recordings'>
-                <Rose::Icon @name='flight-icons/svg/film-16' @size='medium' />
-                {{t 'resources.session-recording.title_plural'}}
-              </nav.link>
-            {{/if}}
-            {{#if (can 'navigate scope' @model collection='storage-buckets')}}
-              <nav.link @route='scopes.scope.storage-buckets'>
-                <Rose::Icon
-                  @name='flight-icons/svg/cloud-upload-16'
-                  @size='medium'
-                />
-                {{t 'resources.storage-bucket.title_plural'}}
-              </nav.link>
-            {{/if}}
+
+          {{#if (can 'navigate scope' @model collection='session-recordings')}}
+            <nav.link @route='scopes.scope.session-recordings'>
+              <Rose::Icon @name='flight-icons/svg/film-16' @size='medium' />
+              {{t 'resources.session-recording.title_plural'}}
+            </nav.link>
           {{/if}}
+          {{#if (can 'navigate scope' @model collection='storage-buckets')}}
+            <nav.link @route='scopes.scope.storage-buckets'>
+              <Rose::Icon
+                @name='flight-icons/svg/cloud-upload-16'
+                @size='medium'
+              />
+              {{t 'resources.storage-bucket.title_plural'}}
+            </nav.link>
+          {{/if}}
+
           {{#if
             (and
               (can 'navigate worker' @model collection='workers')

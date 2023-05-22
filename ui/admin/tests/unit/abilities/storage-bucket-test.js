@@ -21,11 +21,12 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     store = this.owner.lookup('service:store');
     canService = this.owner.lookup('service:can');
     features = this.owner.lookup('service:features');
-    features.enable('session-recording');
   });
 
   test('can read storage bucket when authorized and feature is enabled', function (assert) {
     assert.expect(1);
+
+    features.enable('ssh-session-recording');
 
     const storageBucket = store.createRecord('storage-bucket', {
       authorized_actions: ['read'],
@@ -39,6 +40,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
   test('cannot read storage bucket when unauthorized and feature is enabled', function (assert) {
     assert.expect(1);
 
+    features.enable('ssh-session-recording');
+
     const storageBucket = store.createRecord('storage-bucket', {
       authorized_actions: [],
       type: TYPE_STORAGE_BUCKET_PLUGIN,
@@ -50,7 +53,6 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
 
   test('cannot read storage bucket when authorized and feature is disabled', function (assert) {
     assert.expect(1);
-    features.disable('session-recording');
 
     const storageBucket = store.createRecord('storage-bucket', {
       authorized_actions: ['read'],
@@ -63,7 +65,6 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
 
   test('cannot read storage bucket when unauthorized and feature is disabled', function (assert) {
     assert.expect(1);
-    features.disable('session-recording');
 
     const storageBucket = store.createRecord('storage-bucket', {
       authorized_actions: [],
@@ -76,6 +77,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
 
   test('can list storage bucket when authorized and in global scope', function (assert) {
     assert.expect(1);
+
+    features.enable('ssh-session-recording');
 
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': ['list'] },
@@ -93,6 +96,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
   test('cannot list storage bucket when unauthorized and in global scope', function (assert) {
     assert.expect(1);
 
+    features.enable('ssh-session-recording');
+
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': [] },
       type: 'global',
@@ -108,6 +113,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
 
   test('can list storage bucket when authorized and in org scope', function (assert) {
     assert.expect(1);
+
+    features.enable('ssh-session-recording');
 
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': ['list'] },
@@ -125,6 +132,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
   test('can create storage bucket when authorized and in global scope', function (assert) {
     assert.expect(1);
 
+    features.enable('ssh-session-recording');
+
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': ['create'] },
       type: 'global',
@@ -140,6 +149,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
 
   test('can create storage bucket when authorized and in org scope', function (assert) {
     assert.expect(1);
+
+    features.enable('ssh-session-recording');
 
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': ['create'] },
@@ -157,6 +168,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
   test('can create storage bucket when authorized and in project scope', function (assert) {
     assert.expect(1);
 
+    features.enable('ssh-session-recording');
+
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': ['create'] },
       type: 'project',
@@ -172,6 +185,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
 
   test('cannot create storage bucket when unauthorized', function (assert) {
     assert.expect(1);
+
+    features.enable('ssh-session-recording');
 
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': [] },
@@ -189,6 +204,8 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
   test('can navigate to storage bucket when authorized', function (assert) {
     assert.expect(1);
 
+    features.enable('ssh-session-recording');
+
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': ['create'] },
       type: 'global',
@@ -204,7 +221,6 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
 
   test('cannot navigate to storage bucket when authorized and feature is disabled', function (assert) {
     assert.expect(1);
-    features.disable('session-recording');
 
     const scopeModel = store.createRecord('scope', {
       authorized_collection_actions: { 'storage-buckets': ['create'] },
