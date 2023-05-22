@@ -1,18 +1,15 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class FormEnableSessionRecordingIndexComponent extends Component {
-  // =attributes
-  @tracked toggleEnabled = true;
-
   //actions
   /**
    * toggle to enable session recording for the target
    */
   @action
   toggleSessionRecording() {
-    this.toggleEnabled = !this.toggleEnabled;
+    this.args.model.enable_session_recording =
+      !this.args.model.enable_session_recording;
   }
 
   @action

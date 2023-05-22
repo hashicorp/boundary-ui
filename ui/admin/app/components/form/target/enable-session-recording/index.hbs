@@ -6,7 +6,7 @@
   <div class='enable-session-recording-toggle'>
     <Hds::Form::Toggle::Field
       name='target-enable-session-recording'
-      checked={{this.toggleEnabled}}
+      checked={{@model.enable_session_recording}}
       {{on 'change' this.toggleSessionRecording}}
       as |F|
     >
@@ -14,7 +14,7 @@
           'resources.target.enable-session-recording.form.filter.label'
         }}</F.Label>
     </Hds::Form::Toggle::Field>
-    {{#if this.toggleEnabled}}
+    {{#if @model.enable_session_recording}}
       <Hds::Form::Select::Field
         @isRequired={{true}}
         @isInvalid={{@model.errors.storage_bucket_id}}

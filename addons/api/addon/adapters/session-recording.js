@@ -38,7 +38,7 @@ export default class SessionRecordingAdapter extends ApplicationAdapter {
       mime_type: mimeType,
     });
 
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: this.headers });
     return response.text();
   }
 

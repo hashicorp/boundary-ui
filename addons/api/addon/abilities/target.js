@@ -53,18 +53,4 @@ export default class TargetAbility extends ModelAbility {
   get canRemoveCredentialSources() {
     return this.hasAuthorizedAction('remove-credential-sources');
   }
-
-  /**
-   * @type {boolean}
-   */
-  get canSetStorageBucket() {
-    return this.model.isSSH && this.hasAuthorizedAction('set-storage-bucket');
-  }
-
-  /**
-   * @type {boolean}
-   */
-  get canRemoveStorageBucket() {
-    return this.hasAuthorizedAction('remove-storage-bucket');
-  }
 }

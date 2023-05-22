@@ -101,13 +101,5 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     }
   }
 
-  if (method === 'set-storage-bucket') {
-    updatedAttrs.storage_bucket_id = attrs.storageBucketId;
-  }
-
-  if (method === 'remove-storage-bucket') {
-    updatedAttrs.storage_bucket_id = null;
-  }
-
   return target.update(updatedAttrs);
 }

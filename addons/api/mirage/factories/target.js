@@ -74,7 +74,10 @@ export default factory.extend({
       );
 
       if (randomlySelectedStorageBucket && target.type === TYPE_TARGET_SSH) {
-        target.update({ storage_bucket_id: randomlySelectedStorageBucket.id });
+        target.update({
+          storage_bucket_id: randomlySelectedStorageBucket.id,
+          enable_session_recording: true,
+        });
       }
 
       target.update({

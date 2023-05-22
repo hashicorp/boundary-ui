@@ -1,9 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { set } from '@ember/object';
 
 export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends Route {
   // =services
@@ -45,37 +42,15 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends
   }
 
   // =actions
-  /**
-   * Add storage bucket to target if the toggle is enabled, else remove it
-   * @param {TargetModel} target
-   * @param {boolean} isToggleEnabled
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async save(target, isToggleEnabled) {
-    const { id } = target;
-    if (isToggleEnabled) {
-      await target.setStorageBucket();
-    } else {
-      await target.removeStorageBucket();
-    }
-    this.router.replaceWith('scopes.scope.targets.target', id);
-  }
 
   /**
-   * reset the selected storage bucket and redirect to target
+   * Reset the selected storage bucket and redirect to target
    * @param {TargetModel} target
    */
   @action
   cancel(target) {
     const { id } = target;
-    const changedAttributes = target.changedAttributes();
-    if (Object.keys(changedAttributes).length) {
-      const existingAttributes = changedAttributes?.['storage_bucket_id']?.[0];
-      set(target, 'storage_bucket_id', existingAttributes);
-    }
+    target.rollbackAttributes();
     this.router.replaceWith('scopes.scope.targets.target', id);
   }
 }

@@ -95,46 +95,4 @@ module('Unit | Abilities | Target', function (hooks) {
       )
     );
   });
-
-  test('it reflects when a given ssh target may set a storage bucket', function (assert) {
-    assert.expect(3);
-    const model = {
-      authorized_actions: ['set-storage-bucket'],
-      isSSH: true,
-    };
-    const modelWithoutAuthorizedActions = {
-      authorized_actions: [],
-      isSSH: true,
-    };
-    const modelWithoutSSHType = {
-      authorized_actions: ['set-storage-bucket'],
-    };
-
-    assert.true(canService.can('setStorageBucket target', model));
-    assert.false(
-      canService.can('setStorageBucket target', modelWithoutAuthorizedActions)
-    );
-    assert.false(
-      canService.can('setStorageBucket target', modelWithoutSSHType)
-    );
-  });
-
-  test('it reflects when a given target may remove a storage bucket', function (assert) {
-    assert.expect(2);
-    const model = {
-      authorized_actions: ['remove-storage-bucket'],
-    };
-    const modelWithoutAuthorizedActions = {
-      authorized_actions: [],
-      isSSH: true,
-    };
-
-    assert.true(canService.can('removeStorageBucket target', model));
-    assert.false(
-      canService.can(
-        'removeStorageBucket target',
-        modelWithoutAuthorizedActions
-      )
-    );
-  });
 });

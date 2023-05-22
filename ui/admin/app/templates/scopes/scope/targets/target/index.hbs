@@ -30,19 +30,14 @@
           @cancel={{route-action 'cancel' @model}}
         />
       </sb.Body>
-      {{#if
-        (and
-          (can 'setStorageBucket target' @model)
-          (feature-flag 'ssh-session-recording')
-        )
-      }}
+      {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
         <sb.Sidebar>
           <div class='target-sidebar'>
             <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
             <p class='description'>
               {{t 'resources.target.form.sidebar.help'}}
             </p>
-            {{#if @model.storage_bucket_id}}
+            {{#if @model.enable_session_recording}}
               <LinkListPanel as |P|>
                 <P.Item
                   @icon='cloud-upload'

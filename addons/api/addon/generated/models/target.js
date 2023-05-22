@@ -86,6 +86,13 @@ export default class GeneratedTargetModel extends BaseModel {
 
   @attr('string', {
     description: 'The storage bucket associated with this target.',
+    isNestedAttribute: true,
   })
   storage_bucket_id;
+
+  @attr('boolean', {
+    description: 'Whether session recording is enabled on the target.',
+    isNestedAttribute: true,
+  })
+  enable_session_recording;
 }
