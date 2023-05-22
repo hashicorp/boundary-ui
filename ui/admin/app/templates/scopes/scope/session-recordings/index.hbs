@@ -24,10 +24,10 @@
           <B.Tr>
             {{! Time }}
             <B.Td>
-              {{#if B.data.start_time}}
+              {{#if B.data.created_time}}
                 <span class='hds-foreground-faint'>
-                  <time datetime={{format-date-iso B.data.start_time}}>
-                    {{format-date-iso-human B.data.start_time}}
+                  <time datetime={{format-date-iso B.data.created_time}}>
+                    {{format-date-iso-human B.data.created_time}}
                   </time>
                 </span>
               {{/if}}
