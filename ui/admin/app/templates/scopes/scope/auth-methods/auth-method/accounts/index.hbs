@@ -41,7 +41,7 @@
             {{#each @model.accounts as |account|}}
               <body.row as |row|>
                 <row.headerCell scope='row'>
-                  {{#if (can 'read model' account)}}
+                  {{#if (can 'read account' account)}}
                     <LinkTo
                       @route='scopes.scope.auth-methods.auth-method.accounts.account'
                       @model={{account.id}}
@@ -95,7 +95,7 @@
             {{#each @model.accounts as |account|}}
               <body.row as |row|>
                 <row.headerCell>
-                  {{#if (can 'read model' account)}}
+                  {{#if (can 'read account' account)}}
                     <LinkTo
                       @route='scopes.scope.auth-methods.auth-method.accounts.account'
                       @model={{account.id}}

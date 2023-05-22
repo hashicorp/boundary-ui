@@ -30,11 +30,13 @@
         {{#each this.filteredAccounts as |account|}}
           <body.row as |row|>
             <row.cell>
-              <form.checkbox
-                @label={{account.id}}
-                @description={{account.description}}
-                @onChange={{fn this.toggleAccount account}}
-              />
+              <Hds::Form::Checkbox::Field
+                {{on 'change' (fn this.toggleAccount account)}}
+                as |F|
+              >
+                <F.Label>{{account.id}}</F.Label>
+                <F.HelperText>{{account.description}}</F.HelperText>
+              </Hds::Form::Checkbox::Field>
             </row.cell>
             <row.cell>{{account.accountName}}</row.cell>
             <row.cell>
