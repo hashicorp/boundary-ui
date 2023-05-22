@@ -11,7 +11,7 @@
     @isRequired={{@isRequired}}
     @isInvalid={{@isInvalid}}
     @value={{@value}}
-    @type={{@type}}
+    @type={{(or @type 'password')}}
     name={{@name}}
     disabled={{or @isDisabled (not this.isEditing)}}
     ...attributes

@@ -174,7 +174,7 @@
       @isRequired={{true}}
       @value={{@model.access_key_id}}
       @isInvalid={{@model.errors.access_key_id}}
-      @type='text'
+      @type='password'
       name='access_key_id'
       {{on 'input' (set-from-event @model 'access_key_id')}}
       as |F|
@@ -198,7 +198,7 @@
       @isRequired={{true}}
       @value={{@model.secret_access_key}}
       @isInvalid={{@model.errors.secret_access_key}}
-      @type='text'
+      @type='password'
       name='secret_access_key'
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'secret_access_key')}}
@@ -223,7 +223,6 @@
       @isRequired={{true}}
       @value={{@model.access_key_id}}
       @isInvalid={{@model.errors.access_key_id}}
-      @type='text'
       @name='access_key_id'
       @isDisabled={{form.disabled}}
       @showEditButton={{true}}
@@ -250,7 +249,6 @@
       @isRequired={{true}}
       @value={{@model.secret_access_key}}
       @isInvalid={{@model.errors.secret_access_key}}
-      @type='text'
       @name='secret_access_key'
       @isDisabled={{form.disabled}}
       @showEditButton={{true}}
