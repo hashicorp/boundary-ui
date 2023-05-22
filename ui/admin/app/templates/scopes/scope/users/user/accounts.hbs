@@ -59,7 +59,7 @@
                 </Copyable>
               </row.cell>
               <row.cell>
-                {{#if (can 'removeAccounts user' @model.user)}}
+                {{#if (can 'removeAccount user' @model.user account=account)}}
                   <Rose::Dropdown
                     @icon='flight-icons/svg/more-horizontal-16'
                     @iconOnly={{true}}
