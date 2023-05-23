@@ -301,6 +301,7 @@
 
   <Hds::Form::Checkbox::Field
     name='disable_credential_rotation'
+    disabled={{form.disabled}}
     checked={{@model.disable_credential_rotation}}
     {{on 'change' this.toggleDisableCredentialRotation}}
     as |F|

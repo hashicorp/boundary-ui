@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import { module, test } from 'qunit';
+// TODO: Un-skip tests once delete storage bucket action is enabled.
+
+import { module, skip } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -60,7 +62,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     features.enable('ssh-session-recording');
   });
 
-  test('user can delete a storage bucket', async function (assert) {
+  skip('user can delete a storage bucket', async function (assert) {
     assert.expect(2);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.globalScope);
@@ -73,7 +75,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
   });
 
-  test('user can accept delete storage bucket via dialog', async function (assert) {
+  skip('user can accept delete storage bucket via dialog', async function (assert) {
     assert.expect(4);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -95,7 +97,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
   });
 
-  test('user can cancel delete storage bucket via dialog', async function (assert) {
+  skip('user can cancel delete storage bucket via dialog', async function (assert) {
     assert.expect(4);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -125,7 +127,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount);
   });
 
-  test('user cannot delete storage bucket without proper authorization', async function (assert) {
+  skip('user cannot delete storage bucket without proper authorization', async function (assert) {
     assert.expect(1);
     await visit(urls.globalScope);
     instances.storageBucket.authorized_actions =
@@ -139,7 +141,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
   });
 
-  test('deleting a storage bucket which errors displays error messages', async function (assert) {
+  skip('deleting a storage bucket which errors displays error messages', async function (assert) {
     assert.expect(1);
     await visit(urls.globalScope);
     this.server.del('/storage-buckets/:id', () => {

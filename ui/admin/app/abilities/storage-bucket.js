@@ -31,12 +31,14 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
   }
 
   /**
-   * This override ensures that storage buckets may be deleted only if the
+   * TODO: Ensure that storage buckets may be deleted only if the
    * session-recording feature flag is enabled.
+   * For now a storage bucket cannot be deleted.
    */
   get canDelete() {
-    return this.features.isEnabled('ssh-session-recording')
-      ? super.canDelete
-      : false;
+    return false;
+    // return this.features.isEnabled('ssh-session-recording')
+    //   ? super.canDelete
+    //   : false;
   }
 }
