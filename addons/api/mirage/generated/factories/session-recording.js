@@ -17,5 +17,4 @@ export default Factory.extend({
   errors: () => faker.datatype.number({ max: 10 }),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
-  duration: () => `${faker.datatype.number()}s`,
 });

@@ -15,5 +15,4 @@ export default Factory.extend({
   bytes_down: () =>
     faker.random.numeric(faker.datatype.number({ min: 1, max: 12 })),
   errors: () => faker.datatype.number({ max: 10 }),
-  duration: () => `${faker.datatype.number()}s`,
 });

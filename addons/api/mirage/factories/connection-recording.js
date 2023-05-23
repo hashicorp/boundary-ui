@@ -14,4 +14,5 @@ export default factory.extend({
     return i % 3 === 2 ? null : faker.date.recent(3, this.end_time);
   },
   end_time: (i) => (i % 3 === 2 ? null : faker.date.recent()),
+  duration: (i) => (i % 3 === 2 ? null : `${faker.datatype.number()}s`),
 });

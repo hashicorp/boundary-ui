@@ -16,8 +16,8 @@ import {
 } from 'api/models/session-recording';
 
 const states = [
-  STATE_SESSION_RECORDING_STARTED,
   STATE_SESSION_RECORDING_AVAILABLE,
+  STATE_SESSION_RECORDING_STARTED,
   STATE_SESSION_RECORDING_UNKNOWN,
 ];
 const pickRandomElement = (arr) => faker.helpers.arrayElement(arr);
@@ -26,14 +26,21 @@ export default factory.extend({
 
   // Cycle through available types
   type: (i) => types[i % types.length],
-
   state: (i) => states[i % states.length],
-
-  start_time(i) {
-    return i % 4 === 3 ? null : faker.date.recent(3, this.end_time);
+  start_time() {
+    return this.state === STATE_SESSION_RECORDING_AVAILABLE
+      ? faker.date.recent(3, this.end_time)
+      : null;
   },
-  end_time(i) {
-    return i % 4 === 3 ? null : faker.date.recent(1, this.updated_time);
+  end_time() {
+    return this.state === STATE_SESSION_RECORDING_AVAILABLE
+      ? faker.date.recent(1, this.updated_time)
+      : null;
+  },
+  duration() {
+    return this.state === STATE_SESSION_RECORDING_AVAILABLE
+      ? `${faker.datatype.number()}s`
+      : null;
   },
 
   authorized_actions: () =>
