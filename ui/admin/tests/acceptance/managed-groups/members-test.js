@@ -14,6 +14,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
 module('Acceptance | managed-groups | members', function (hooks) {
   setupApplicationTest(hooks);
@@ -47,7 +48,7 @@ module('Acceptance | managed-groups | members', function (hooks) {
       'auth-method',
       {
         scope: instances.scopes.org,
-        type: 'oidc',
+        type: TYPE_AUTH_METHOD_OIDC,
       },
       'withAccountsAndUsersAndManagedGroups'
     );

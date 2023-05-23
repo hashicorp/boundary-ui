@@ -30,7 +30,7 @@ module('Unit | Model | account', function (hooks) {
     assert.expect(2);
     store = this.owner.lookup('service:store');
     let model = store.createRecord('account', {
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
     });
     assert.notOk(model.accountName);
     model.login_name = 'foobar';

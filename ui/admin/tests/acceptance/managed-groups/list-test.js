@@ -8,6 +8,7 @@ import { visit, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
 module('Acceptance | managed-groups | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -38,7 +39,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
     });
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
     });
     instances.managedGroup = this.server.create('managed-group', {
       scope: instances.scopes.org,
