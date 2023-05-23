@@ -51,32 +51,6 @@ module('Unit | Model | session-recording', function (hooks) {
     assert.strictEqual(connection_recordings.length, 1);
   });
 
-  test('it has sortedConnectionsByStartTimeDesc property and returns the expected values', async function (assert) {
-    assert.expect(3);
-    const store = this.owner.lookup('service:store');
-    const newestConnection = store.createRecord('connection-recording', {
-      start_time: new Date('2023-01-02T00:00:00.999Z'),
-    });
-    const oldestConnection = store.createRecord('connection-recording', {
-      start_time: new Date('2023-01-01T00:00:00.999Z'),
-    });
-    const model = store.createRecord('session-recording', {
-      type: TYPE_SESSION_RECORDING_SSH,
-      connection_recordings: [oldestConnection, newestConnection],
-    });
-
-    const sortedConnections = await model.sortedConnectionsByStartTimeDesc;
-    assert.strictEqual(sortedConnections.length, 2);
-    assert.strictEqual(
-      sortedConnections[0].start_time,
-      newestConnection.start_time
-    );
-    assert.strictEqual(
-      sortedConnections[1].start_time,
-      oldestConnection.start_time
-    );
-  });
-
   test('it has targetScopeDisplayName and returns the expected values', async function (assert) {
     assert.expect(2);
     const store = this.owner.lookup('service:store');

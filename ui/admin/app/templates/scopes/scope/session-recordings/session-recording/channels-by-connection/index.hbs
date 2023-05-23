@@ -12,14 +12,14 @@
       <Layout::Sidebar as |sb|>
         <sb.Body>
           {{#each
-            @model.sessionRecording.sortedConnectionsByStartTimeDesc
+            @model.sessionRecording.connection_recordings
             as |connection|
           }}
             <div class='channels-by-connection-connection-header'>
               <p class='hds-typography-display-300 hds-font-weight-semibold'>
                 {{indexed-display-name
                   'resources.session-recording.connection.title_index'
-                  @model.sessionRecording.sortedConnectionsByStartTimeDesc
+                  @model.sessionRecording.connection_recordings
                   connection
                 }}
               </p>
@@ -32,7 +32,7 @@
               </Copyable>
             </div>
             <Hds::Table
-              @model={{connection.sortedChannelsByStartTimeDesc}}
+              @model={{connection.channel_recordings}}
               @density='tall'
               @columns={{array
                 (hash
@@ -55,7 +55,7 @@
                     <span>
                       {{indexed-display-name
                         'resources.session-recording.channel.title_index'
-                        connection.sortedChannelsByStartTimeDesc
+                        connection.channel_recordings
                         B.data
                       }}
                     </span>

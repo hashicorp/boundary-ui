@@ -1,7 +1,6 @@
 import GeneratedSessionRecordingModel from '../generated/models/session-recording';
 import { hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { sort } from '@ember/object/computed';
 
 export const TYPE_SESSION_RECORDING_SSH = 'ssh';
 export const TYPES_SESSION_RECORDING = Object.freeze([
@@ -16,10 +15,6 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
   @hasMany('connection-recording', { async: false }) connection_recordings;
 
   @service store;
-
-  startTimeSortingDesc = ['start_time:desc'];
-  @sort('connection_recordings', 'startTimeSortingDesc')
-  sortedConnectionsByStartTimeDesc;
 
   /**
    * True if the session recording type is `ssh`.
