@@ -8,6 +8,11 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 module('Integration | Component | form | authenticate', function (hooks) {
   setupRenderingTest(hooks);
@@ -18,7 +23,9 @@ module('Integration | Component | form | authenticate', function (hooks) {
 
     const store = this.owner.lookup('service:store');
 
-    this.model = store.createRecord('auth-method', { type: 'ldap' });
+    this.model = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
     this.submit = () => {};
     this.disabled = () => {};
 
@@ -39,7 +46,9 @@ module('Integration | Component | form | authenticate', function (hooks) {
 
     const store = this.owner.lookup('service:store');
 
-    this.model = store.createRecord('auth-method', { type: 'password' });
+    this.model = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
     this.submit = () => {};
     this.disabled = () => {};
 
@@ -60,7 +69,9 @@ module('Integration | Component | form | authenticate', function (hooks) {
 
     const store = this.owner.lookup('service:store');
 
-    this.model = store.createRecord('auth-method', { type: 'oidc' });
+    this.model = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
     this.submit = () => {};
     this.disabled = () => {};
 
