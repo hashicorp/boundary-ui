@@ -10,6 +10,7 @@ import { hash, all } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
@@ -75,12 +76,12 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     const oidcAuthMethods = scopeIDs?.length
       ? await this.resourceFilterStore.queryBy(
           'auth-method',
-          { scope_id: scopeIDs, type: 'oidc' },
+          { scope_id: scopeIDs, type: TYPE_AUTH_METHOD_OIDC },
           { scope_id: 'global', recursive: true }
         )
       : await this.resourceFilterStore.queryBy(
           'auth-method',
-          { type: 'oidc' },
+          { type: TYPE_AUTH_METHOD_OIDC },
           { scope_id: 'global', recursive: true }
         );
     //extract oidc authMethod IDs

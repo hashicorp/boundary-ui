@@ -25,6 +25,10 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import Service from '@ember/service';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+} from 'api/models/auth-method';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -76,15 +80,15 @@ module('Acceptance | authentication', function (hooks) {
     scope = { id: orgScope.id, type: orgScope.type };
     globalAuthMethod = this.server.create('auth-method', {
       scope: globalScope,
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
     });
     authMethod = this.server.create('auth-method', {
       scope: orgScope,
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
     });
     authMethodOIDC = this.server.create('auth-method', {
       scope: orgScope,
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
     });
     orgScopeID = orgScope.id;
     globalAuthMethodID = globalAuthMethod.id;
