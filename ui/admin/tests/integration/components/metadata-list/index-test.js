@@ -42,4 +42,20 @@ module('Integration | Component | metadata-list/item', function (hooks) {
     assert.dom('li.metadata-list-item').hasClass('hds-foreground-action');
     assert.dom('li.metadata-list-item').hasText('Sample text 2');
   });
+
+  test('it renders no icon if @icon not provided', async function (assert) {
+    assert.expect(2);
+    await render(hbs`
+      <MetadataList as |list|>
+        <list.Item
+          @color='action'
+        >
+          Sample text 3
+        </list.Item>
+      </MetadataList>
+    `);
+
+    assert.dom('.flight-icon').isNotVisible();
+    assert.dom('li.metadata-list-item').hasText('Sample text 3');
+  });
 });

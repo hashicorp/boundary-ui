@@ -114,6 +114,12 @@
             <h2>{{t 'resources.session-recording.details'}}</h2>
 
             <MetadataList @orientation='vertical' as |list|>
+              {{! Session Recording Status }}
+              <list.Item>
+                <SessionRecording::Status
+                  @status={{@model.sessionRecording.state}}
+                />
+              </list.Item>
               {{! Start time }}
               {{#if @model.sessionRecording.start_time}}
                 <list.Item @icon='calendar' @color='faint'>

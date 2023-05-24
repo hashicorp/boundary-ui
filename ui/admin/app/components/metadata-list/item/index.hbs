@@ -1,4 +1,6 @@
 <li class='metadata-list-item {{(concat "hds-foreground-" @color)}}'>
-  <FlightIcon @name={{@icon}} />
+  {{#if @icon}}
+    <FlightIcon @name={{@icon}} />
+  {{/if}}
   {{yield}}
 </li>
