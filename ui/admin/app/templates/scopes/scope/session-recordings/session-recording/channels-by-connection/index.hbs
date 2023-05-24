@@ -94,13 +94,15 @@
                     </Copyable>
                   </B.Td>
                   <B.Td align='right'>
-                    <Hds::Button
-                      @icon='play'
-                      @color='secondary'
-                      @text='Play'
-                      @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
-                      @model={{B.data.id}}
-                    />
+                    {{#if @model.sessionRecording.isAvailable}}
+                      <Hds::Button
+                        @icon='play'
+                        @color='secondary'
+                        @text={{t 'actions.play'}}
+                        @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+                        @model={{B.data.id}}
+                      />
+                    {{/if}}
                   </B.Td>
                 </B.Tr>
               </:body>

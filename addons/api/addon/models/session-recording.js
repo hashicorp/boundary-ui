@@ -33,6 +33,14 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
   }
 
   /**
+   * True if the session recording is in an available state.
+   * @type {boolean}
+   */
+  get isAvailable() {
+    return this.state === STATE_SESSION_RECORDING_AVAILABLE;
+  }
+
+  /**
    * Returns scope name or scope id from the target that belongs to the session recording.
    * @type {string}
    */

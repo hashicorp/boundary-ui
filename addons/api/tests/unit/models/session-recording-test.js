@@ -2,6 +2,11 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { TYPE_SESSION_RECORDING_SSH } from 'api/models/session-recording';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import {
+  STATE_SESSION_RECORDING_AVAILABLE,
+  STATE_SESSION_RECORDING_STARTED,
+  STATE_SESSION_RECORDING_UNKNOWN,
+} from 'api/models/session-recording';
 
 module('Unit | Model | session-recording', function (hooks) {
   setupTest(hooks);
@@ -37,6 +42,23 @@ module('Unit | Model | session-recording', function (hooks) {
     });
     assert.true(modelA.isSSH);
     assert.false(modelB.isSSH);
+  });
+
+  test('it has isAvailable property and returns the expected values', async function (assert) {
+    assert.expect(3);
+    const store = this.owner.lookup('service:store');
+    const modelA = store.createRecord('session-recording', {
+      state: STATE_SESSION_RECORDING_AVAILABLE,
+    });
+    const modelB = store.createRecord('session-recording', {
+      state: STATE_SESSION_RECORDING_STARTED,
+    });
+    const modelC = store.createRecord('session-recording', {
+      state: STATE_SESSION_RECORDING_UNKNOWN,
+    });
+    assert.true(modelA.isAvailable);
+    assert.false(modelB.isAvailable);
+    assert.false(modelC.isAvailable);
   });
 
   test('it has connections as a relationship', async function (assert) {
