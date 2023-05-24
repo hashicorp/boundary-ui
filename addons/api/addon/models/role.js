@@ -7,6 +7,7 @@ import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { all, resolve } from 'rsvp';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
 export default class RoleModel extends GeneratedRoleModel {
   // =services
@@ -133,7 +134,7 @@ export default class RoleModel extends GeneratedRoleModel {
       // Collect all auth methods.
       const authMethods = this.resourceFilterStore.queryBy(
         'auth-method',
-        { type: 'oidc' },
+        { type: TYPE_AUTH_METHOD_OIDC },
         { scope_id: 'global', recursive: true }
       );
 

@@ -27,8 +27,8 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
   }
 
   /**
-   * Returns the current target, all host catalogs, and all host sets.
-   * @return {{target: TargetModel, hostCatalogs: [HostCatalogModel], hostSets: [HostSetModel]}}
+   * Returns the current user, all auth methods, and all accounts.
+   * @return {{user: UserModel, authMethods: [AuthMethodModel], accounts: [AccountModel]}}
    */
   async model() {
     const user = this.modelFor('scopes.scope.users.user');

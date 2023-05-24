@@ -10,7 +10,7 @@
     "test": "tests"
   },
   "scripts": {
-    "doc:toc": "doctoc README.md",
+    "doc:toc": "doctoc README.md tests/e2e/README.md",
     "build:development": "ember build",
     "build": "ember build --environment=production",
     "build:oss": "EDITION=oss ember build --environment=production",

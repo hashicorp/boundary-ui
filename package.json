@@ -50,9 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "cryptiles": "~4.1.2",
-    "prismjs": "^1.27.0",
-    "npm-user-validate": "^1.0.1",
     "caniuse-lite": "^1.0.30001157",
     "immer": "^9.0.6",
     "node-notifier": "^8.0.1",
@@ -101,7 +98,8 @@
     "loader-utils": "^2.0.4",
     "**/@storybook/**/minimatch": "^3.0.5",
     "**/ember-electron/**/minimatch": "^3.0.5",
-    "**/babel-core/json5": "^2.2.2"
+    "**/babel-core/json5": "^2.2.2",
+    "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0"
   },
   "config": {
     "commitizen": {

@@ -6,6 +6,16 @@
 import GeneratedAuthMethodModel from '../generated/models/auth-method';
 import { equal } from '@ember/object/computed';
 
+export const TYPE_AUTH_METHOD_PASSWORD = 'password';
+export const TYPE_AUTH_METHOD_OIDC = 'oidc';
+export const TYPE_AUTH_METHOD_LDAP = 'ldap';
+
+export const TYPES_AUTH_METHOD = Object.freeze([
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+]);
+
 /**
  * Enum options per auth method type and field.
  */
@@ -44,14 +54,28 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
    * @type {boolean}
    */
   get isPassword() {
-    return this.type === 'password';
+    return this.type === TYPE_AUTH_METHOD_PASSWORD;
   }
 
   /**
    * @type {boolean}
    */
   get isOIDC() {
-    return this.type === 'oidc';
+    return this.type === TYPE_AUTH_METHOD_OIDC;
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isLDAP() {
+    return this.type === TYPE_AUTH_METHOD_LDAP;
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isUnknown() {
+    return !TYPES_AUTH_METHOD.includes(this.type);
   }
 
   /**
