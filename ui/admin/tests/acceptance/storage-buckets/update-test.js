@@ -111,10 +111,8 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(SAVE_BUTTON_SELECTOR, 'Click save');
 
     assert.dom(SECRET_FIELD_BUTTON_SELECTOR).isDisabled();
-    assert.dom(ACCESS_KEY_ID_FIELD_SELECTOR).hasValue(ACCESS_KEY_ID_FIELD_TEXT);
-    assert
-      .dom(SECRET_ACCESS_KEY_FIELD_SELECTOR)
-      .hasValue(SECRET_ACCESS_KEY_FIELD_TEXT);
+    assert.dom(ACCESS_KEY_ID_FIELD_SELECTOR).hasNoValue();
+    assert.dom(SECRET_ACCESS_KEY_FIELD_SELECTOR).hasNoValue();
   });
 
   test('can cancel changes to access key fields', async function (assert) {
