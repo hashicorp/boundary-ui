@@ -5,6 +5,10 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+} from 'api/models/auth-method';
 
 module('Unit | Serializer | account', function (hooks) {
   setupTest(hooks);
@@ -14,7 +18,7 @@ module('Unit | Serializer | account', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
@@ -27,7 +31,7 @@ module('Unit | Serializer | account', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
@@ -48,7 +52,7 @@ module('Unit | Serializer | account', function (hooks) {
         id: '1',
         type: 'account',
         attributes: {
-          type: 'oidc',
+          type: TYPE_AUTH_METHOD_OIDC,
           name: 'Name',
           auth_method_id: '1',
           description: 'Description',
@@ -65,7 +69,7 @@ module('Unit | Serializer | account', function (hooks) {
     const serializedRecord = serializer.serialize(snapshot);
     assert.notOk(serializedRecord.attributes);
     assert.deepEqual(serializedRecord, {
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
@@ -78,7 +82,7 @@ module('Unit | Serializer | account', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
@@ -88,7 +92,7 @@ module('Unit | Serializer | account', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
@@ -104,7 +108,7 @@ module('Unit | Serializer | account', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
@@ -117,7 +121,7 @@ module('Unit | Serializer | account', function (hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
       auth_method_id: '1',
       description: 'Description',
@@ -138,7 +142,7 @@ module('Unit | Serializer | account', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
       description: 'Description',
       login_name: 'Login Name',
@@ -162,7 +166,7 @@ module('Unit | Serializer | account', function (hooks) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
-      type: 'password',
+      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
       description: 'Description',
       login_name: 'Login Name',

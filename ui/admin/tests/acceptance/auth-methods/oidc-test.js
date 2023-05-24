@@ -23,6 +23,8 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+
 module('Acceptance | auth methods | oidc', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -49,7 +51,7 @@ module('Acceptance | auth methods | oidc', function (hooks) {
     });
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
-      type: 'oidc',
+      type: TYPE_AUTH_METHOD_OIDC,
     });
 
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;

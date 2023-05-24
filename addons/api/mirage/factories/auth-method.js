@@ -8,7 +8,10 @@ import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
-const types = ['password', 'oidc'];
+import {
+  TYPE_AUTH_METHOD_OIDC,
+  TYPES_AUTH_METHOD,
+} from 'api/models/auth-method';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -29,7 +32,7 @@ export default factory.extend({
   id: () => generateId('am_'),
 
   // Cycle through available types
-  type: (i) => types[i % types.length],
+  type: (i) => TYPES_AUTH_METHOD[i % TYPES_AUTH_METHOD.length],
 
   /**
    * Adds accounts (with associated users) to auth method and managed groups.
@@ -43,7 +46,7 @@ export default factory.extend({
         user.update({ accountIds: [id] });
       });
 
-      if (type === 'oidc') {
+      if (type === TYPE_AUTH_METHOD_OIDC) {
         server
           .createList('managed-group', 2, { scope, authMethod })
           .map((managedGroup) => {

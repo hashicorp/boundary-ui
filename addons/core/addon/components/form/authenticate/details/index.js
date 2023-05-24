@@ -8,7 +8,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { run } from '@ember/runloop';
 
-export default class FormAuthenticatePasswordComponent extends Component {
+export default class FormAuthenticateDetailsComponent extends Component {
   // =properties
 
   /**
