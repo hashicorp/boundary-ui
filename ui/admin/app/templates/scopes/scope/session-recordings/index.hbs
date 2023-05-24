@@ -14,6 +14,7 @@
         @density='tall'
         @columns={{array
           (hash label=(t 'resources.session-recording.form.time.label'))
+          (hash label=(t 'resources.session-recording.form.status.label'))
           (hash label=(t 'resources.session-recording.form.user.label'))
           (hash label=(t 'resources.session-recording.form.target.label'))
           (hash label=(t 'resources.session-recording.form.duration.label'))
@@ -31,6 +32,10 @@
                   </time>
                 </span>
               {{/if}}
+            </B.Td>
+            {{! Status }}
+            <B.Td class='status-column'>
+              <SessionRecording::Status @status={{B.data.state}} />
             </B.Td>
             {{! User }}
             <B.Td>

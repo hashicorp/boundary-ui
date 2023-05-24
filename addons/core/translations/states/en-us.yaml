@@ -11,3 +11,6 @@ primary: Primary
 inactive: Inactive
 active-private: Private
 active-public: Public
+recording: Recording
+completed: Completed
+failed: Failed

@@ -256,6 +256,8 @@ session-recording:
       label: Target
     duration:
       label: Duration
+    status:
+      label: Status
   messages:
     none:
       title: Welcome to session recording

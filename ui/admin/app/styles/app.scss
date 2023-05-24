@@ -913,6 +913,16 @@
   }
 }
 
+// overwrites recording badge icon to red
+.status-column {
+  /* stylelint-disable selector-class-pattern */
+  div.hds-badge__icon {
+    svg.flight-icon-circle-dot {
+      color: var(--token-color-palette-red-200);
+    }
+  }
+}
+
 .session-recording-list-cell-item.target-column {
   flex-direction: column;
 
