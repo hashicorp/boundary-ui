@@ -23,7 +23,11 @@
         @helperText={{t 'form.cluster-url.description'}}
         {{autofocus}}
       />
-      <form.actions @submitText={{t 'actions.submit'}} @showCancel={{false}} />
+      <form.actions
+        @submitText={{t 'actions.submit'}}
+        @showCancel={{false}}
+        @submitIsFullWidth={{true}}
+      />
     </Rose::Form>
   </BrandedCard>
 </main>

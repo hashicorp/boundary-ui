@@ -3,7 +3,12 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Rose::Form class='full-width' @cancel={{@cancel}} @onSubmit={{this.submit}}>
+<Rose::Form
+  class='full-width'
+  @cancel={{@cancel}}
+  @onSubmit={{this.submit}}
+  as |form|
+>
   <div class='create-resources-form'>
     <Hds::Form::TextInput::Field
       name='targetAddress'
@@ -55,14 +60,8 @@
     <F.Control><Image @name='ssh-target-creation' /></F.Control>
   </Hds::Form::Fieldset>
 
-  <Hds::ButtonSet>
-    <Hds::Button @text='{{t "actions.save"}}' type='submit' />
-    <Hds::Button
-      @text='{{t "actions.do-this-later"}}'
-      @color='secondary'
-      name='cancel'
-      {{on 'click' @cancel}}
-    />
-  </Hds::ButtonSet>
-
+  <form.actions
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.do-this-later'}}
+  />
 </Rose::Form>

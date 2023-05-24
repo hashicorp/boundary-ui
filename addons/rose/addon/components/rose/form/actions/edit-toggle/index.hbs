@@ -3,8 +3,9 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<div class='rose-form-actions' ...attributes>
-  <Rose::Button @style='secondary' {{on 'click' @enableEdit}}>
-    {{@enableEditText}}
-  </Rose::Button>
-</div>
+<Hds::Button
+  @text={{@enableEditText}}
+  @color='secondary'
+  {{on 'click' @enableEdit}}
+  type='button'
+/>
