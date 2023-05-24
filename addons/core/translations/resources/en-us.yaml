@@ -452,7 +452,7 @@ target:
     title: Enable Session Recording
     messages:
       add:
-        title: Enable session recording for target
+        title: Enable Session Recording for Target
     form:
       filter:
         label: Record sessions for this target

@@ -9,14 +9,6 @@
     <h2>{{t 'resources.target.enable-session-recording.messages.add.title'}}
       <DocLink @doc='target.enable-session-recording' @iconSize='large' />
     </h2>
-
-    <Copyable
-      @text={{@model.target.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.target.id}}</code>
-    </Copyable>
   </page.header>
 
   <page.body>
