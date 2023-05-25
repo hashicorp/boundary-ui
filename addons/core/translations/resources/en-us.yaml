@@ -232,6 +232,8 @@ session-recording:
         label: Summary
   channels-by-connection:
     title: Channels by connection
+    messages:
+      no-channels: There are no channels for this connection
   channel:
     title: Channel
     title_index: Channel {index}
