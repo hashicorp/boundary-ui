@@ -64,19 +64,23 @@
                     <B.Td>
                       <MetadataList as |list|>
                         {{! Bytes up }}
-                        <list.Item @icon='arrow-up' @color='success'>
-                          {{t
-                            'resources.session-recording.up'
-                            bytes=(format-bytes-size B.data.bytes_up)
-                          }}
-                        </list.Item>
+                        {{#if B.data.bytes_up}}
+                          <list.Item @icon='arrow-up' @color='success'>
+                            {{t
+                              'resources.session-recording.up'
+                              bytes=(format-bytes-size B.data.bytes_up)
+                            }}
+                          </list.Item>
+                        {{/if}}
                         {{! Bytes down }}
-                        <list.Item @icon='arrow-down' @color='action'>
-                          {{t
-                            'resources.session-recording.down'
-                            bytes=(format-bytes-size B.data.bytes_down)
-                          }}
-                        </list.Item>
+                        {{#if B.data.bytes_down}}
+                          <list.Item @icon='arrow-down' @color='action'>
+                            {{t
+                              'resources.session-recording.down'
+                              bytes=(format-bytes-size B.data.bytes_down)
+                            }}
+                          </list.Item>
+                        {{/if}}
                         {{! Duration }}
                         {{#if B.data.duration}}
                           <list.Item @icon='clock' @color='faint'>
@@ -127,11 +131,13 @@
 
             <MetadataList @orientation='vertical' as |list|>
               {{! Session Recording Status }}
-              <list.Item>
-                <SessionRecording::Status
-                  @status={{@model.sessionRecording.state}}
-                />
-              </list.Item>
+              {{#if @model.sessionRecording.state}}
+                <list.Item>
+                  <SessionRecording::Status
+                    @status={{@model.sessionRecording.state}}
+                  />
+                </list.Item>
+              {{/if}}
               {{! Start time }}
               {{#if @model.sessionRecording.start_time}}
                 <list.Item @icon='calendar' @color='faint'>
@@ -155,19 +161,23 @@
                 </list.Item>
               {{/if}}
               {{! Bytes up }}
-              <list.Item @icon='arrow-up' @color='success'>
-                {{t
-                  'resources.session-recording.up'
-                  bytes=(format-bytes-size @model.sessionRecording.bytes_up)
-                }}
-              </list.Item>
+              {{#if @model.sessionRecording.bytes_up}}
+                <list.Item @icon='arrow-up' @color='success'>
+                  {{t
+                    'resources.session-recording.up'
+                    bytes=(format-bytes-size @model.sessionRecording.bytes_up)
+                  }}
+                </list.Item>
+              {{/if}}
               {{! Bytes down }}
-              <list.Item @icon='arrow-down' @color='action'>
-                {{t
-                  'resources.session-recording.down'
-                  bytes=(format-bytes-size @model.sessionRecording.bytes_down)
-                }}
-              </list.Item>
+              {{#if @model.sessionRecording.bytes_down}}
+                <list.Item @icon='arrow-down' @color='action'>
+                  {{t
+                    'resources.session-recording.down'
+                    bytes=(format-bytes-size @model.sessionRecording.bytes_down)
+                  }}
+                </list.Item>
+              {{/if}}
             </MetadataList>
           </div>
 

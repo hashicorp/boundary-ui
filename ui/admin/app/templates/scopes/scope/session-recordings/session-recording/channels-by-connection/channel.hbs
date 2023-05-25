@@ -95,19 +95,23 @@
               </list.Item>
             {{/if}}
             {{! Bytes up }}
-            <list.Item @icon='arrow-up' @color='success'>
-              {{t
-                'resources.session-recording.up'
-                bytes=(format-bytes-size @model.channelRecording.bytes_up)
-              }}
-            </list.Item>
+            {{#if @model.channelRecording.bytes_up}}
+              <list.Item @icon='arrow-up' @color='success'>
+                {{t
+                  'resources.session-recording.up'
+                  bytes=(format-bytes-size @model.channelRecording.bytes_up)
+                }}
+              </list.Item>
+            {{/if}}
             {{! Bytes down }}
-            <list.Item @icon='arrow-down' @color='action'>
-              {{t
-                'resources.session-recording.down'
-                bytes=(format-bytes-size @model.channelRecording.bytes_down)
-              }}
-            </list.Item>
+            {{#if @model.channelRecording.bytes_down}}
+              <list.Item @icon='arrow-down' @color='action'>
+                {{t
+                  'resources.session-recording.down'
+                  bytes=(format-bytes-size @model.channelRecording.bytes_down)
+                }}
+              </list.Item>
+            {{/if}}
           </MetadataList>
         </div>
 
