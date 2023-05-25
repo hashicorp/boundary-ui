@@ -10,12 +10,19 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends
   // =methods
 
   /**
-   * Returns the current target and all storage buckets.
-   * @return {{target: TargetModel, storageBuckets: [StorageBucketModel]}}
+   * Returns the current target
+   * @return {TargetModel}
    */
 
-  async model() {
-    const target = this.modelFor('scopes.scope.targets.target');
+  model() {
+    return this.modelFor('scopes.scope.targets.target');
+  }
+
+  /**
+   * Load storage buckets from target's project scope and global scope
+   * @param {Model} model
+   */
+  async afterModel() {
     const { scopeID: scope_id } = this.modelFor('scopes.scope');
 
     //fetch storage buckets from global scope
@@ -27,20 +34,13 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends
     const orgScopeStorageBuckets = await this.store.query('storage-bucket', {
       scope_id,
     });
-
-    //merge results from both global and target's org scope
-    //into one list for the dropdown
     const storageBucketList = [
       ...globalScopeStorageBuckets.toArray(),
       ...orgScopeStorageBuckets.toArray(),
     ];
 
-    return {
-      target,
-      storageBucketList,
-    };
+    this.storageBucketList = storageBucketList;
   }
-
   // =actions
 
   /**
@@ -52,5 +52,14 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends
     const { id } = target;
     target.rollbackAttributes();
     this.router.replaceWith('scopes.scope.targets.target', id);
+  }
+
+  /**
+   * Adds `storageBucketList` to the context.
+   * @param {Controller} controller
+   */
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.set('storageBucketList', this.storageBucketList);
   }
 }

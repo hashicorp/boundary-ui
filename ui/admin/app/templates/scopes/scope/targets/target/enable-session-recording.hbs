@@ -13,10 +13,10 @@
 
   <page.body>
     <Form::Target::EnableSessionRecording
-      @model={{@model.target}}
-      @storageBucketList={{@model.storageBucketList}}
-      @submit={{route-action 'save' @model.target}}
-      @cancel={{route-action 'cancel' @model.target}}
+      @model={{@model}}
+      @storageBucketList={{this.storageBucketList}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
     />
   </page.body>
 

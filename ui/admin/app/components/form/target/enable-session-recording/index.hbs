@@ -1,8 +1,4 @@
-<Rose::Form
-  @onSubmit={{fn @submit this.toggleEnabled}}
-  @cancel={{@cancel}}
-  as |form|
->
+<Rose::Form @onSubmit={{@submit}} @cancel={{@cancel}} as |form|>
   <div class='enable-session-recording-toggle'>
     <Hds::Form::Toggle::Field
       name='target-enable-session-recording'
