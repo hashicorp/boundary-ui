@@ -19,6 +19,8 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   const ALERT_TEXT_SELECTOR = '[role="alert"] div';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
+  const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
+  const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
 
   const instances = {
     scopes: {
@@ -51,13 +53,19 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with global scope', async function (assert) {
-    assert.expect(3);
+    assert.expect(7);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
     await click('[value="global"]');
+
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
+    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+
     await click(SAVE_BTN_SELECTOR);
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: NAME_FIELD_TEXT,
@@ -69,13 +77,19 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with org scope', async function (assert) {
-    assert.expect(3);
+    assert.expect(7);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
     await click(`[value="${instances.scopes.org.scope.id}"]`);
+
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
+    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+
     await click(SAVE_BTN_SELECTOR);
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: NAME_FIELD_TEXT,

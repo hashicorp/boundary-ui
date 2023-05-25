@@ -50,7 +50,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  {{#if (or @model.isNew form.isEditable)}}
+  {{#if @model.isNew}}
     <Hds::Form::Select::Field
       @isRequired={{true}}
       @width='100%'
@@ -74,7 +74,7 @@
         {{/each}}
       </F.Options>
     </Hds::Form::Select::Field>
-  {{else if @model.scope}}
+  {{else}}
     <InfoField
       @value={{@model.scopeModel.displayName}}
       @icon={{if @model.scopeModel.isGlobal 'globe' 'org'}}
@@ -107,6 +107,7 @@
     @type='text'
     name='bucket_name'
     disabled={{form.disabled}}
+    readOnly={{not @model.isNew}}
     {{on 'input' (set-from-event @model 'bucket_name')}}
     as |F|
   >
@@ -130,6 +131,7 @@
     @type='text'
     name='bucket_prefix'
     disabled={{form.disabled}}
+    readOnly={{not @model.isNew}}
     {{on 'input' (set-from-event @model 'bucket_prefix')}}
     as |F|
   >

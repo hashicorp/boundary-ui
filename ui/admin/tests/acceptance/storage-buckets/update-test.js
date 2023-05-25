@@ -28,6 +28,8 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   const NAME_FIELD_TEXT = 'Updated storage-bucket name';
   const ACCESS_KEY_ID_FIELD_TEXT = 'Updated access key id';
   const SECRET_ACCESS_KEY_FIELD_TEXT = 'Update secret access key';
+  const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
+  const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
 
   const instances = {
     scopes: {
@@ -170,5 +172,22 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
     assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Region is required.');
+  });
+
+  test('user cannot edit bucket name and bucket prefix fields in a storage bucket form', async function (assert) {
+    assert.expect(6);
+    await visit(urls.storageBuckets);
+
+    await click(`[href="${urls.storageBucket}"]`);
+
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).isDisabled();
+    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isDisabled();
+
+    await click(BUTTON_SELECTOR, 'Click edit mode');
+
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).hasAttribute('readOnly');
+    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).hasAttribute('readOnly');
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
+    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
   });
 });
