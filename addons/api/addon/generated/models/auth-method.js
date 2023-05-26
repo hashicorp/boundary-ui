@@ -61,7 +61,7 @@ export default class GeneratedAuthMethodModel extends BaseModel {
 
   @attr('string', { isNestedAttribute: true }) client_id;
 
-  @attr('string', { isNestedAttribute: true }) client_secret;
+  @attr('string', { isNestedAttribute: true, isSecret: true }) client_secret;
 
   @attr('string', { readOnly: true, isNestedAttribute: true })
   client_secret_hmac;
