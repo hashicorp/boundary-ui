@@ -805,46 +805,45 @@
       background-color: var(--player-background-color);
     }
 
-    .asciinema-terminal {
+    pre.ap-terminal {
       background-color: var(--player-background-color);
       border-color: var(--player-background-color);
-      border-width: 1rem;
     }
 
-    .asciinema-player {
+    .ap-player {
       border-radius: 0.75rem;
 
       // hides large play icon overlay
-      .start-prompt {
+      .ap-overlay {
         display: none;
       }
     }
 
-    .asciinema-player-wrapper {
-      &.hud .control-bar {
+    .ap-wrapper {
+      &.ap-hud .ap-control-bar {
         bottom: 0;
       }
 
-      .control-bar {
+      .ap-control-bar {
         bottom: -3.625rem;
         background: var(--player-background-color);
         border-top: var(--player-divider) 0.125rem solid;
         height: 3.625rem;
 
-        .playback-button {
+        .ap-playback-button {
           background: var(--player-play-button);
           border: var(--player-play-button-border) 0.063rem solid;
           border-radius: 0.313rem;
           margin: 0.75rem;
           padding: 0.625rem 1rem;
 
-          .icon path {
+          .ap-icon path {
             fill: var(--player-white);
           }
         }
       }
 
-      .timer {
+      .ap-timer {
         font-family: var(--token-typography-body-base-font-family);
         font-size: var(--token-typography-body-base-font-size);
         line-height: var(--token-typography-body-base-line-height);
@@ -853,10 +852,10 @@
         top: 40%;
       }
 
-      .progressbar {
+      .ap-progressbar {
         padding-top: 0.875rem;
 
-        .bar .gutter {
+        .ap-bar .ap-gutter {
           background-color: var(--player-control-bar-buffer);
 
           span {
@@ -865,10 +864,10 @@
         }
       }
 
-      .fullscreen-button {
+      .ap-fullscreen-button {
         padding-top: 1.5rem;
 
-        .icon path {
+        .ap-icon path {
           fill: var(--player-white);
         }
       }

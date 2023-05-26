@@ -32,6 +32,6 @@ module('Integration | Component | session-recording/player', function (hooks) {
     `);
 
     assert.dom('.session-recording-player-header').hasText('Back to channels');
-    assert.dom('.control-bar .timer').hasText('--:----:--');
+    assert.dom('.ap-control-bar .ap-timer').hasText('--:----:--');
   });
 });

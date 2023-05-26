@@ -4713,11 +4713,11 @@
   resolved "https://registry.yarnpkg.com/@hashicorp/design-system-tokens/-/design-system-tokens-1.4.1.tgz#461ee2ff7ccc46eb83098c30c20c6bba33e49cd0"
   integrity sha512-e5bolI2Ch1+AW2/tQrkHG6QPx4g1oONum36CfhBmX4gDChpAVoBbTG2BT+XnlBJOM5vk1uuL39ysM5QSn/BZYQ==
 
-"@hashicorp/ember-asciinema-player@https://github.com/hashicorp/ember-asciinema-player.git#144eeec053fc5ccf1f0afc244b0afed4b72835b4":
+"@hashicorp/ember-asciinema-player@https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a":
   version "0.0.0"
-  resolved "https://github.com/hashicorp/ember-asciinema-player.git#144eeec053fc5ccf1f0afc244b0afed4b72835b4"
+  resolved "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a"
   dependencies:
-    asciinema-player "^3.0.1"
+    asciinema-player "^3.4.0"
     ember-auto-import "^2.5.0"
     ember-cli-babel "^7.26.11"
     ember-cli-htmlbars "^6.1.1"
@@ -8516,10 +8516,10 @@ asar@^3.1.0:
   optionalDependencies:
     "@types/glob" "^7.1.1"
 
-asciinema-player@^3.0.1:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/asciinema-player/-/asciinema-player-3.3.0.tgz#45616fa8dc3950c2be12b51d0a365ea2b9a845c2"
-  integrity sha512-4uyCGe83+5gZ06jgIGyV4vl0TS3egBgW0NXyCpDuDDvmzDGHEG8OICChrTecmTvajgLyq8YQet9nI7SYkVt8vQ==
+asciinema-player@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/asciinema-player/-/asciinema-player-3.4.0.tgz#8664e0b305ac03acd94d0ab1ff0be0e8ca4dcff8"
+  integrity sha512-dX6jt5S3K6daItsVWzyY9mRDK+ivC2QgqCxFkdSiNslo0vY/ZqA4upcTzqIKZqBtxppovOZk44ltg9VnHG9QVg==
   dependencies:
     "@babel/runtime" "^7.21.0"
     solid-js "^1.3.0"
