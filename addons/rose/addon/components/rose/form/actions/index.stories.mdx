@@ -17,7 +17,6 @@ support actions. The cancel button supports a cancel action.
   @showCancel={{true}}
   @submitDisabled={{false}}
   @cancel={{@cancel}}
-  @submitIsFullWidth={{false}}
 />
 ```
 
@@ -28,7 +27,6 @@ export const Template = (args) => ({
         @cancelText={{cancelText}}
         @showCancel={{showCancel}}
         @submitDisabled={{submitDisabled}}
-        @submitIsFullWidth={{submitIsFullWidth}}
         @cancel={{onCancel}} />`,
   context: args,
 });
@@ -41,7 +39,6 @@ export const Template = (args) => ({
       cancelText: 'Cancel',
       showCancel: true,
       submitDisabled: false,
-      submitIsFullWidth: false,
     }}
     argTypes={{
       onCancel: { action: 'cancel' },
