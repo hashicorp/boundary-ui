@@ -89,6 +89,55 @@ module('Unit | Serializer | auth method', function (hooks) {
     });
   });
 
+  test("it doesn't serialize client secrets when not set", function (assert) {
+    assert.expect(1);
+    let store = this.owner.lookup('service:store');
+    let record = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_OIDC,
+      name: 'OIDC Auth Method',
+      state: 'foo',
+      account_claim_maps: [{ from: 'foo', to: 'bar' }],
+      claims_scopes: [{ value: 'profile' }, { value: 'email' }],
+      signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
+      allowed_audiences: [
+        { value: 'www.alice.com' },
+        { value: 'www.alice.com/admin' },
+      ],
+      idp_ca_certs: [
+        { value: 'certificate-1234' },
+        { value: 'certificate-5678' },
+      ],
+      api_url_prefix: 'protocol://host:port/foo',
+      client_id: 'id123',
+      client_secret: null,
+      disable_discovered_config_validation: true,
+      dry_run: true,
+      issuer: 'http://www.example.net',
+      max_age: 500,
+    });
+
+    let serializedRecord = record.serialize();
+
+    assert.deepEqual(serializedRecord, {
+      type: TYPE_AUTH_METHOD_OIDC,
+      name: 'OIDC Auth Method',
+      description: null,
+      attributes: {
+        account_claim_maps: ['foo=bar'],
+        claims_scopes: ['profile', 'email'],
+        signing_algorithms: ['RS256', 'RS384'],
+        allowed_audiences: ['www.alice.com', 'www.alice.com/admin'],
+        idp_ca_certs: ['certificate-1234', 'certificate-5678'],
+        api_url_prefix: 'protocol://host:port/foo',
+        client_id: 'id123',
+        disable_discovered_config_validation: true,
+        dry_run: true,
+        issuer: 'http://www.example.net',
+        max_age: 500,
+      },
+    });
+  });
+
   test('it serializes OIDC records with only state and version when `adapterOptions.state` is passed', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
