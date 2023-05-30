@@ -168,16 +168,18 @@
                   />
                 </list.Item>
               {{/if}}
-              {{! Start time }}
-              {{#if @model.sessionRecording.start_time}}
+              {{! Created time }}
+              {{#if @model.sessionRecording.created_time}}
                 <list.Item @icon='calendar' @color='faint'>
-                  {{t 'form.started.label'}}
+                  {{t 'form.created.label'}}
                   <time
                     datetime={{format-date-iso
-                      @model.sessionRecording.start_time
+                      @model.sessionRecording.created_time
                     }}
                   >
-                    {{format-date-iso-human @model.sessionRecording.start_time}}
+                    {{format-date-iso-human
+                      @model.sessionRecording.created_time
+                    }}
                   </time>
                 </list.Item>
               {{/if}}
