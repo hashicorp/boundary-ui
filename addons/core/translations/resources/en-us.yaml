@@ -234,6 +234,12 @@ session-recording:
     title: Channels by connection
     messages:
       no-channels: There are no channels for this connection
+      started-no-connections:
+        title: Session Recording In Progress
+        description: The Session has started but no connections have been made.
+      unknown-no-connections:
+        title: Session Recording Failure
+        description: This Session cannot be played back because no connections were established, and the Session has failed.
   channel:
     title: Channel
     title_index: Channel {index}

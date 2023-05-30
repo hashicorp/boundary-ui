@@ -30,7 +30,7 @@ module('Integration | Component | session-recording/status', function (hooks) {
     assert.dom(BADGE_TEXT_SELECTOR).hasText('Completed');
   });
 
-  test('it renders an in-progress status badge', async function (assert) {
+  test('it renders an in progress status badge', async function (assert) {
     assert.expect(2);
     this.status = STATE_SESSION_RECORDING_STARTED;
 
