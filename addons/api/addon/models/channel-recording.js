@@ -11,7 +11,7 @@ export default class ChannelRecordingModel extends GeneratedChannelRecordingMode
    * @type {boolean}
    */
   get isAsciicast() {
-    return this.mime_types.includes(MIME_TYPE_ASCIICAST);
+    return this.mime_types?.includes(MIME_TYPE_ASCIICAST) ?? false;
   }
 
   /**
