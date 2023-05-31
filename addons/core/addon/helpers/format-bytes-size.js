@@ -1,5 +1,5 @@
 import { helper } from '@ember/component/helper';
-import filesize from 'file-size';
+import { filesize } from 'filesize';
 
 /**
  * Takes a int expressing file size in bytes and returns a conversion
@@ -8,5 +8,5 @@ import filesize from 'file-size';
  */
 export default helper(function formatBytesSize([sizeInBytes]) {
   const numberOfBytes = Number(sizeInBytes);
-  return filesize(numberOfBytes).human('si');
+  return filesize(numberOfBytes);
 });

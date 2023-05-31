@@ -7,7 +7,17 @@ module('Integration | Helper | format-bytes-size', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders file size in human-readable string', async function (assert) {
-    assert.expect(16);
+    assert.expect(18);
+    // Size to B
+    const expectedSizeB = '1 B';
+    this.set('inputNumberSizeB', 1);
+    this.set('inputStringSizeB', '1');
+
+    await render(hbs`{{format-bytes-size this.inputNumberSizeB}}`);
+    assert.dom(this.element).hasText(expectedSizeB);
+    await render(hbs`{{format-bytes-size this.inputStringSizeB}}`);
+    assert.dom(this.element).hasText(expectedSizeB);
+
     // Size to kB
     const expectedSizeKb = '108.93 kB';
     this.set('inputNumberSizeKb', 108930);
