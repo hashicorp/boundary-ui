@@ -31,6 +31,7 @@ module('Unit | Serializer | target', function (hooks) {
         type: 'org',
       },
       default_port: 1234,
+      default_client_port: 4321,
       version: 1,
       type: TYPE_TARGET_TCP,
       address: '0.0.0.0',
@@ -51,6 +52,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
+        default_client_port: 4321,
       },
       address: '0.0.0.0',
     });
@@ -157,6 +159,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
+        default_client_port: null,
       },
       address: null,
     });
@@ -192,6 +195,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
+        default_client_port: null,
       },
       address: null,
     });
@@ -227,6 +231,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: 'ingress worker',
       attributes: {
         default_port: 1234,
+        default_client_port: null,
       },
       address: null,
     });
