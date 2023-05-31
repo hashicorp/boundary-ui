@@ -36,7 +36,7 @@
             {{#if
               (can 'getAsciicast channel-recording' @model.channelRecording)
             }}
-              {{! Was not able to downlaod asciicast }}
+              {{! Was not able to download asciicast }}
               <A.Header
                 @title={{t
                   'resources.session-recording.channel.messages.missing.title'
@@ -48,20 +48,34 @@
                 }}
               />
             {{else}}
-              {{! Not authorized to downlaod asciicast }}
-              <A.Header
-                @title={{t
-                  'resources.session-recording.channel.messages.none.title'
-                }}
-              />
-              <A.Body
-                @text={{t
-                  'descriptions.cannot-download'
-                  resource=(t
-                    'resources.session-recording.channel.title_plural'
-                  )
-                }}
-              />
+              {{#if @model.channelRecording.isAsciicast}}
+                {{! Not authorized to download asciicast }}
+                <A.Header
+                  @title={{t
+                    'resources.session-recording.channel.messages.none.title'
+                  }}
+                />
+                <A.Body
+                  @text={{t
+                    'descriptions.cannot-download'
+                    resource=(t
+                      'resources.session-recording.channel.title_plural'
+                    )
+                  }}
+                />
+              {{else}}
+                {{! Playback not supported }}
+                <A.Header
+                  @title={{t
+                    'resources.session-recording.channel.messages.not-supported.title'
+                  }}
+                />
+                <A.Body
+                  @text={{t
+                    'resources.session-recording.channel.messages.not-supported.description'
+                  }}
+                />
+              {{/if}}
             {{/if}}
           </Hds::ApplicationState>
         {{/if}}

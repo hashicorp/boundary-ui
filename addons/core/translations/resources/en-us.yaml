@@ -252,6 +252,9 @@ session-recording:
         title: We can't play back this channel because the file is missing
         description: This likely means the connected storage bucket is misconfigured or the file was deleted.
         link: Retrieving lost session recordings
+      not-supported:
+        title: Playback is not supported for this channel
+        description: The contents of this channel cannot be replayed.
     player:
       back-navigation: Back to channels
   session:
