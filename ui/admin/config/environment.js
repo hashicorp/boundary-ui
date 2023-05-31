@@ -104,6 +104,7 @@ module.exports = function (environment) {
         'worker.manage-workers': '/workers/manage-workers-on-hcp',
         'worker-filters': '/worker-filters',
         'storage-bucket': '/storage-buckets',
+        'session-recording': '/session-recordings',
       },
     },
 

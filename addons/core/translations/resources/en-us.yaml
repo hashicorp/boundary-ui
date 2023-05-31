@@ -718,6 +718,14 @@ worker:
     worker_tags:
       label: Worker Tags
       help: Boundary can use tags to define key-value pairs which targets can use to determine where they should route connections.
+    local_session_recording_storage:
+      label: Local Session Recording Storage
+      help: To record sessions using this worker, specify a local storage path and ensure that it is provisioned with sufficient capacity. In progress recordings are stored locally until they complete, and then moved to the remote storage bucket associated with their target.
+    enable_recording_storage_path:
+      label: Enable Recording Storage
+    recording_storage_path:
+      label: Recording Storage Path
+      help: Local path on the worker node for temporary file storage.
     steps:
       1:
         title: 1. Configure your new worker
