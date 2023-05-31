@@ -71,32 +71,6 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-
-    {{#if @model.isPlugin}}
-
-      <Hds::Form::RadioCard::Group @name='type' as |G|>
-        <G.Legend>{{t 'titles.provider'}}</G.Legend>
-        <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
-        <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
-
-        {{#each-in this.mapResourceTypeWithIcon as |pluginType|}}
-          <G.RadioCard
-            @value={{pluginType}}
-            @checked={{eq pluginType @model.type}}
-            @maxWidth='20rem'
-            {{on 'input' (fn @changeType pluginType)}}
-            as |R|
-          >
-            <R.Label>{{t
-                (concat 'resources.host-catalog.types.' pluginType)
-              }}</R.Label>
-            <R.Description>{{t
-                (concat 'resources.host-catalog.help.' pluginType)
-              }}</R.Description>
-          </G.RadioCard>
-        {{/each-in}}
-      </Hds::Form::RadioCard::Group>
-    {{/if}}
   {{/if}}
 
   {{#if (can 'save model' @model)}}
