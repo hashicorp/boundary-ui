@@ -85,24 +85,7 @@
             {{t 'resources.project.title_plural'}}
           </nav.link>
         </Rose::Nav::Sidebar>
-        {{! TODO:  after scope awareness refactor, update groups and roles
-                     to support project scopes }}
-        {{!--
-        <Rose::Nav::Sidebar @title={{t "titles.iam"}} as |nav|>
-          <nav.link @route="scopes.scope.groups">
-            <Rose::Icon
-              @name="flight-icons/svg/folder-users-16"
-              @size="medium" />
-            {{t "resources.group.title_plural"}}
-          </nav.link>
-          <nav.link @route="scopes.scope.roles">
-            <Rose::Icon
-              @name="flight-icons/svg/identity-user-16"
-              @size="medium" />
-            {{t "resources.role.title_plural"}}
-          </nav.link>
-        </Rose::Nav::Sidebar>
-        --}}
+
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
           {{#if (can 'navigate model' @model collection='sessions')}}
             <nav.link @route='scopes.scope.sessions'>
