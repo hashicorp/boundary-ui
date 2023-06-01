@@ -1,0 +1,9 @@
+<SessionRecording::Player
+  @route='scopes.scope.session-recordings.session-recording'
+  @model={{@model.sessionRecording.id}}
+>
+  <div class='session-recording-player-loading'>
+    <FlightIcon @name='loading' @size='24' />
+    <span>{{t 'resources.session-recording.channel.player.loading'}}</span>
+  </div>
+</SessionRecording::Player>

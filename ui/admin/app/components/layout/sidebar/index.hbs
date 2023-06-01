@@ -1,0 +1,8 @@
+<div ...attributes class='layout-sidebar'>
+  {{yield
+    (hash
+      Body=(component 'layout/sidebar/body')
+      Sidebar=(component 'layout/sidebar/sidebar')
+    )
+  }}
+</div>

@@ -21,4 +21,12 @@ module('Integration | Helper | format-date-iso', function (hooks) {
       '2020-01-01T00:00:00.999Z'
     );
   });
+
+  test('it renders when null', async function (assert) {
+    this.set('inputValue', null);
+
+    await render(hbs`{{format-date-iso this.inputValue}}`);
+
+    assert.strictEqual(this.element.textContent.trim(), '');
+  });
 });

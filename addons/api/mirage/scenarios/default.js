@@ -94,6 +94,10 @@ export default function (server) {
     role.update({ managedGroups });
   });
 
+  // Storage Buckets
+  server.createList('storage-bucket', 3, { scope: globalScope });
+  server.createList('storage-bucket', 2, { scope: orgScope });
+
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 8, { scope }, 'withChildren');
@@ -109,4 +113,26 @@ export default function (server) {
 
   // Workers
   server.createList('worker', 3, { scope: globalScope });
+
+  // Session Recordings
+  server.createList(
+    'session-recording',
+    3,
+    { scope: globalScope },
+    'withConnectionAndChannels',
+    'withExistingUserAndTarget'
+  );
+  server.create(
+    'session-recording',
+    { scope: globalScope },
+    'withConnectionAndChannels',
+    'withNonExistingUserAndTarget'
+  );
+  server.createList(
+    'session-recording',
+    2,
+    { scope: orgScope },
+    'withConnectionAndChannels',
+    'withExistingUserAndTarget'
+  );
 }

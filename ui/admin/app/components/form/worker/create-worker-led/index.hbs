@@ -51,12 +51,12 @@
       />
     {{/if}}
 
-    <Rose::Form::Fieldset>
-      <:title>{{t 'resources.worker.form.worker_tags.label'}}</:title>
-      <:description>{{t
+    <Hds::Form::Fieldset as |F|>
+      <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
+      <F.HelperText>{{t
           'resources.worker.form.worker_tags.help'
-        }}</:description>
-      <:body>
+        }}</F.HelperText>
+      <F.Control>
         <Rose::Table @style='condensed' as |table|>
           <table.body as |body|>
             {{#each this.workerTags as |tag index|}}
@@ -108,8 +108,46 @@
             </body.row>
           </table.body>
         </Rose::Table>
-      </:body>
-    </Rose::Form::Fieldset>
+      </F.Control>
+    </Hds::Form::Fieldset>
+
+    {{#if (feature-flag 'ssh-session-recording')}}
+      <Hds::Form::Fieldset as |F|>
+        <F.Legend>{{t
+            'resources.worker.form.local_session_recording_storage.label'
+          }}</F.Legend>
+        <F.HelperText>
+          {{t 'resources.worker.form.local_session_recording_storage.help'}}
+          <Hds::Link::Inline @href={{doc-url 'session-recording'}}>{{t
+              'actions.learn-more'
+            }}</Hds::Link::Inline>
+        </F.HelperText>
+        <F.Control>
+          <Hds::Form::Toggle::Field
+            name='enableRecordingStoragePath'
+            checked={{this.enableRecordingStoragePath}}
+            {{on 'change' this.toggleEnableRecordingStoragePath}}
+            as |F|
+          >
+            <F.Label>{{t
+                'resources.worker.form.enable_recording_storage_path.label'
+              }}</F.Label>
+          </Hds::Form::Toggle::Field>
+        </F.Control>
+        {{#if this.enableRecordingStoragePath}}
+          <F.Control>
+            <form.input
+              @name='recording_storage_path'
+              @value={{this.recording_storage_path}}
+              @label={{t 'resources.worker.form.recording_storage_path.label'}}
+              @helperText={{t
+                'resources.worker.form.recording_storage_path.help'
+              }}
+            />
+          </F.Control>
+        {{/if}}
+      </Hds::Form::Fieldset>
+    {{/if}}
 
     <Rose::CodeEditor @codeValue={{this.createConfigText}} as |c|>
       <c.toolbar>

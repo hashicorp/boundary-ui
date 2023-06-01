@@ -8,7 +8,7 @@ import { trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-import { TYPES_TARGET } from 'api/models/target';
+import { TYPES_TARGET, TYPE_TARGET_SSH } from 'api/models/target';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const hostSetChance = 0.3;
@@ -26,6 +26,8 @@ export default factory.extend({
       'remove-host-sources',
       'add-credential-sources',
       'remove-credential-sources',
+      'set-storage-bucket',
+      'remove-storage-bucket',
     ],
   id: () => generateId('t_'),
 
@@ -66,6 +68,18 @@ export default factory.extend({
         .where((credential) => credential.scopeId === target.scope.id)
         .models.filter(() => randomBoolean())
         .map((cred) => cred.id);
+
+      const randomlySelectedStorageBucket = faker.helpers.arrayElement(
+        server.schema.storageBuckets.all().models
+      );
+
+      if (randomlySelectedStorageBucket && target.type === TYPE_TARGET_SSH) {
+        target.update({
+          storage_bucket_id: randomlySelectedStorageBucket.id,
+          enable_session_recording: true,
+        });
+      }
+
       target.update({
         hostSets: randomlySelectedHostSets,
         brokeredCredentialSourceIds: [

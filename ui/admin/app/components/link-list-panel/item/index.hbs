@@ -1,0 +1,46 @@
+<li class='link-list-item'>
+  {{#if @route}}
+    {{#if (is-array @model)}}
+      <LinkTo @route={{@route}} @models={{@model}}>
+        <div class='link-list-item__info'>
+          {{#if @icon}}
+            <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
+          {{/if}}
+
+          <div>
+            <p class='link-list-item__text'>{{@text}}</p>
+            {{yield}}
+          </div>
+        </div>
+
+        <FlightIcon @name='arrow-right' />
+      </LinkTo>
+    {{else}}
+      <LinkTo @route={{@route}} @model={{@model}}>
+        <div class='link-list-item__info'>
+          {{#if @icon}}
+            <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
+          {{/if}}
+
+          <div>
+            <p class='link-list-item__text'>{{@text}}</p>
+            {{yield}}
+          </div>
+        </div>
+
+        <FlightIcon @name='arrow-right' />
+      </LinkTo>
+    {{/if}}
+  {{else}}
+    <div class='link-list-item__info'>
+      {{#if @icon}}
+        <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
+      {{/if}}
+
+      <div>
+        <p class='link-list-item__text'>{{@text}}</p>
+        {{yield}}
+      </div>
+    </div>
+  {{/if}}
+</li>

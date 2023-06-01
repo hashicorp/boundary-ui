@@ -85,6 +85,7 @@ Router.map(function () {
           this.route('injected-application-credential-sources');
           this.route('add-brokered-credential-sources');
           this.route('add-injected-application-credential-sources');
+          this.route('enable-session-recording');
         });
         this.route('new');
       });
@@ -136,6 +137,25 @@ Router.map(function () {
       this.route('workers', function () {
         this.route('new');
         this.route('worker', { path: ':worker_id' }, function () {});
+      });
+      this.route('session-recordings', function () {
+        this.route(
+          'session-recording',
+          { path: ':session_recording_id' },
+          function () {
+            this.route('channels-by-connection', function () {
+              this.route('channel', { path: ':channel_id' }, function () {});
+            });
+          }
+        );
+      });
+      this.route('storage-buckets', function () {
+        this.route('new');
+        this.route(
+          'storage-bucket',
+          { path: ':storage_bucket_id' },
+          function () {}
+        );
       });
     });
   });
