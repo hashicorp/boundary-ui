@@ -17,5 +17,6 @@ export default Factory.extend({
   updated_time: () => faker.date.recent(),
   disabled: () => faker.datatype.boolean(),
   default_port: () => faker.datatype.number(),
+  default_client_port: () => faker.datatype.number(),
   version: () => faker.datatype.number(),
 });
