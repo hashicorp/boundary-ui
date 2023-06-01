@@ -84,6 +84,19 @@ export default class GeneratedTargetModel extends BaseModel {
   })
   address;
 
+  @attr('number', {
+    isNestedAttribute: true,
+    description: 'The default port a target should use if present.',
+  })
+  default_port;
+
+  @attr('number', {
+    isNestedAttribute: true,
+    description:
+      "The default port that will be listened on by the client's local proxy.",
+  })
+  default_client_port;
+
   @attr('string', {
     description: 'The storage bucket associated with this target.',
     isNestedAttribute: true,

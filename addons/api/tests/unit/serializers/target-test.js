@@ -31,6 +31,7 @@ module('Unit | Serializer | target', function (hooks) {
         type: 'org',
       },
       default_port: 1234,
+      default_client_port: 4321,
       version: 1,
       type: TYPE_TARGET_TCP,
       address: '0.0.0.0',
@@ -51,6 +52,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
+        default_client_port: 4321,
         enable_session_recording: false,
         storage_bucket_id: null,
       },
@@ -160,6 +162,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
+        default_client_port: null,
         enable_session_recording: true,
         storage_bucket_id: 'bucketID',
       },
@@ -197,6 +200,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
+        default_client_port: null,
         enable_session_recording: false,
         storage_bucket_id: null,
       },
@@ -234,6 +238,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: null,
       attributes: {
         default_port: 1234,
+        default_client_port: null,
         enable_session_recording: false,
         storage_bucket_id: null,
       },
@@ -271,6 +276,7 @@ module('Unit | Serializer | target', function (hooks) {
       ingress_worker_filter: 'ingress worker',
       attributes: {
         default_port: 1234,
+        default_client_port: null,
         enable_session_recording: false,
         storage_bucket_id: null,
       },

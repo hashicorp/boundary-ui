@@ -123,12 +123,35 @@
     as |F|
   >
     <F.Label data-test-default-port-label>{{t
-        'form.default_port.label'
+        'resources.target.form.default_port.label'
       }}</F.Label>
-    <F.HelperText>{{t 'form.default_port.help'}}</F.HelperText>
+    <F.HelperText>{{t 'resources.target.form.default_port.help'}}</F.HelperText>
     {{#if @model.errors.default_port}}
       <F.Error as |E|>
         {{#each @model.errors.default_port as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.default_client_port}}
+    @isInvalid={{@model.errors.default_client_port}}
+    @type='text'
+    name='default_client_port'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'default_client_port')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.target.form.default_client_port.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.target.form.default_client_port.help'
+      }}</F.HelperText>
+    {{#if @model.errors.default_client_port}}
+      <F.Error as |E|>
+        {{#each @model.errors.default_client_port as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>

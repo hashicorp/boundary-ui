@@ -18,12 +18,6 @@ export default class TargetModel extends GeneratedTargetModel {
 
   // =attributes
 
-  @attr('number', {
-    isNestedAttribute: true,
-    description: 'The default port a target should use if present.',
-  })
-  default_port;
-
   /**
    * @type Array
    */
