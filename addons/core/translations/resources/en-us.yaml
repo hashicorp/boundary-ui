@@ -216,6 +216,7 @@ org:
 session-recording:
   title: Session Recording
   title_plural: Session Recordings
+  description: Protocol-aware recordings capture data and actions during user sessions.  Operators may review recordings for auditing and analysis.
   details: Session details
   related: Related
   up: '{bytes} up'
@@ -279,6 +280,7 @@ session-recording:
 storage-bucket:
   title: Storage Bucket
   title_plural: Storage Buckets
+  description: External services store data from session recordings.
   messages:
     none:
       title: No storage buckets yet
