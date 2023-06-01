@@ -7,7 +7,6 @@ import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
 import { A } from '@ember/array';
 
 /**
@@ -73,17 +72,6 @@ export default class ApplicationRoute extends Route {
   @action
   invalidateSession() {
     this.session.invalidate();
-  }
-
-  /**
-   * Hooks into ember-loading to kick off loading indicator in the
-   * application template.
-   * @return {boolean} always returns true
-   */
-  @action
-  @loading
-  loading() {
-    return true;
   }
 
   /**

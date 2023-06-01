@@ -257,6 +257,7 @@ session-recording:
         description: The contents of this channel cannot be replayed.
     player:
       back-navigation: Back to channels
+      loading: Loading recording…
   session:
     title: Session Playback
   form:

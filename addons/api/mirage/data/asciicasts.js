@@ -1,4 +1,4 @@
-export const asciiCast1 = `{"version": 2, "width": 124, "height": 36, "timestamp": 1670352594, "env": {"SHELL": "/bin/zsh", "TERM": "xterm-256color"}}
+export const asciicast1 = `{"version": 2, "width": 124, "height": 36, "timestamp": 1670352594, "env": {"SHELL": "/bin/zsh", "TERM": "xterm-256color"}}
 [2.138652, "o", "\\u001b[1m\\u001b[7m%\\u001b[27m\\u001b[1m\\u001b[0m                                                                                                                           \\r \\r\\u001b]2;ember-asciinema-player\\u0007\\u001b]1;..iinema-player\\u0007"]
 [2.220877, "o", "\\r\\u001b[0m\\u001b[27m\\u001b[24m\\u001b[J\\u001b[33member-asciinema-player\\u001b[00m \\u001b[32mgit\\u001b[00m:\\u001b[36m(main*)\\u001b[00m $ \\u001b[K"]
 [2.221019, "o", "\\u001b[?1h\\u001b="]
@@ -68,7 +68,7 @@ export const asciiCast1 = `{"version": 2, "width": 124, "height": 36, "timestamp
 [16.52863, "o", "\\u001b[?2004h"]
 [19.078794, "o", "\\u001b[?2004l\\r\\r\\n"]`;
 
-export const asciiCast2 = `{"version": 2, "width": 112, "height": 30, "timestamp": 1672793720, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}}
+export const asciicast2 = `{"version": 2, "width": 112, "height": 30, "timestamp": 1672793720, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}}
 [0.036928, "o", "\\u001b[?2004h\\u001b[1;32m[\\u001b]0;johan@nixos: ~/src/hashicorp/boundary-enterprise\\u0007johan@nixos:~/src/hashicorp/boundary-enterprise]$\\u001b[0m "]
 [2.827983, "o", "b"]
 [2.9386, "o", "o"]
@@ -148,4 +148,4 @@ export const asciiCast2 = `{"version": 2, "width": 112, "height": 30, "timestamp
 [21.303896, "o", "\\r\\n"]
 [21.307902, "o", "\\u001b[?2004l\\rexit\\r\\n"]`;
 
-export const asciiCasts = [asciiCast1, asciiCast2];
+export const asciicasts = [asciicast1, asciicast2];

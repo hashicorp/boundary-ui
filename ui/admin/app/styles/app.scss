@@ -800,6 +800,15 @@
     }
   }
 
+  &-loading {
+    color: var(--token-color-palette-neutral-400);
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+  }
+
   &-theme {
     .asciinema-theme-asciinema {
       background-color: var(--player-background-color);

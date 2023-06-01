@@ -15,7 +15,7 @@ import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
-import { asciiCasts } from './data/asciicasts';
+import { asciicasts } from './data/asciicasts';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -725,7 +725,7 @@ function routes() {
       const method = idMethod.split(':')[1];
 
       if (method === 'download') {
-        return faker.helpers.arrayElement(asciiCasts);
+        return faker.helpers.arrayElement(asciicasts);
       } else {
         return sessionRecordings.find(id);
       }
