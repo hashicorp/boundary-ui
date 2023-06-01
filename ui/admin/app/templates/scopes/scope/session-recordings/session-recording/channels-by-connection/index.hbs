@@ -177,9 +177,7 @@
                       @model.sessionRecording.created_time
                     }}
                   >
-                    {{format-date-iso-human
-                      @model.sessionRecording.created_time
-                    }}
+                    {{format-date-iso @model.sessionRecording.created_time}}
                   </time>
                 </list.Item>
               {{/if}}
