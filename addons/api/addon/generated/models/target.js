@@ -83,4 +83,17 @@ export default class GeneratedTargetModel extends BaseModel {
       'An IP address or DNS name for the session to connect to. Cannot be used in conjunction with host sources.',
   })
   address;
+
+  @attr('number', {
+    isNestedAttribute: true,
+    description: 'The default port a target should use if present.',
+  })
+  default_port;
+
+  @attr('number', {
+    isNestedAttribute: true,
+    description:
+      "The default port that will be listened on by the client's local proxy.",
+  })
+  default_client_port;
 }
