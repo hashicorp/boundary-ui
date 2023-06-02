@@ -23,7 +23,10 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
   async model({ session_recording_id }) {
     const sessionRecording = await this.store.findRecord(
       'session-recording',
-      session_recording_id
+      session_recording_id,
+      // Set reload to true to always force an API call. The downstream peekRecord
+      // for channels will resolve before the session recording is returned otherwise.
+      { reload: true }
     );
 
     return sessionRecording;
