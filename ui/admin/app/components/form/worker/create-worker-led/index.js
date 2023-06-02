@@ -130,10 +130,10 @@ sudo apt-get update && sudo apt-get install boundary ;\\
 boundary server -config="${configPath}/pki-worker.hcl"`;
 
     const hcpContent = `sudo apt-get update && sudo apt-get install jq unzip ;\\
-wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary-worker/latest?license_class=hcp" \
+wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary/latest?license_class=enterprise" \
 | jq -r '.builds[] | select(.arch == "amd64" and .os == "linux") | .url')" ;\\
 unzip *.zip ;\\
-./boundary-worker server -config="${configPath}/pki-worker.hcl"`;
+./boundary server -config="${configPath}/pki-worker.hcl"`;
 
     return this.features.isEnabled('byow-pki-hcp-cluster-id')
       ? hcpContent
