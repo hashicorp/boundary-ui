@@ -26,8 +26,6 @@ export default factory.extend({
       'remove-host-sources',
       'add-credential-sources',
       'remove-credential-sources',
-      'set-storage-bucket',
-      'remove-storage-bucket',
     ],
   id: () => generateId('t_'),
 

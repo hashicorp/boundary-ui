@@ -4,6 +4,7 @@
  */
 
 import ApplicationSerializer from './application';
+import { TYPE_TARGET_SSH } from '../models/target';
 
 export default class TargetSerializer extends ApplicationSerializer {
   // =methods
@@ -22,6 +23,7 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
+    const { type } = snapshot.record;
     const hostSourceIDs = snapshot?.adapterOptions?.hostSetIDs;
     if (hostSourceIDs) {
       serialized = this.serializeWithHostSources(snapshot, hostSourceIDs);
@@ -42,15 +44,11 @@ export default class TargetSerializer extends ApplicationSerializer {
         injectedApplicationCredentialSourceIDs
       );
 
-    if (snapshot?.adapterOptions?.method === 'set-storage-bucket') {
-      serialized = this.serializeWithStorageBucket(snapshot);
+    // Delete session recording related fields from non-SSH targets
+    if (type !== TYPE_TARGET_SSH) {
+      delete serialized?.attributes?.storage_bucket_id;
+      delete serialized?.attributes?.enable_session_recording;
     }
-    if (snapshot?.adapterOptions?.method === 'remove-storage-bucket') {
-      return {
-        version: snapshot.attr('version'),
-      };
-    }
-
     return serialized;
   }
 

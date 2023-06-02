@@ -10,7 +10,7 @@ import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 module('Unit | Serializer | target', function (hooks) {
   setupTest(hooks);
 
-  test('it serializes targets normally, without host sets or credential libraries', function (assert) {
+  test('it serializes TCP targets normally, without host sets or credential libraries or session recording fields in the attributes', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
@@ -35,6 +35,8 @@ module('Unit | Serializer | target', function (hooks) {
       version: 1,
       type: TYPE_TARGET_TCP,
       address: '0.0.0.0',
+      enable_session_recording: false,
+      storage_bucket_id: null,
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -44,6 +46,56 @@ module('Unit | Serializer | target', function (hooks) {
       description: 'Description',
       version: 1,
       type: TYPE_TARGET_TCP,
+      scope_id: 'org_1',
+      session_max_seconds: 28800,
+      session_connection_limit: null,
+      worker_filter: null,
+      egress_worker_filter: null,
+      ingress_worker_filter: null,
+      attributes: {
+        default_port: 1234,
+        default_client_port: 4321,
+      },
+      address: '0.0.0.0',
+    });
+  });
+
+  test('it serializes SSH targets normally with session recording fields in the attributes but without host sets or credential libraries', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'User',
+      description: 'Description',
+      host_sources: [
+        { host_source_id: '1', host_catalog_id: '2' },
+        { host_source_id: '3', host_catalog_id: '4' },
+      ],
+      brokered_credential_source_ids: [{ value: '1' }, { value: '2' }],
+      injected_application_credential_source_ids: [
+        { value: '4' },
+        { value: '5' },
+      ],
+      scope: {
+        scope_id: 'org_1',
+        type: 'org',
+      },
+      default_port: 1234,
+      default_client_port: 4321,
+      version: 1,
+      type: TYPE_TARGET_SSH,
+      enable_session_recording: false,
+      storage_bucket_id: null,
+      address: '0.0.0.0',
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {};
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      name: 'User',
+      description: 'Description',
+      version: 1,
+      type: TYPE_TARGET_SSH,
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,
