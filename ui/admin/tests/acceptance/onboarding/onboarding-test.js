@@ -42,7 +42,7 @@ module('Acceptance | onboarding', function (hooks) {
   test('redirect user to orgs screen when click do this later', async function (assert) {
     assert.expect(1);
     await visit(urls.onboarding);
-    await click('[name="cancel"]');
+    await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.orgs);
   });
 });
