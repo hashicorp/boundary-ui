@@ -8,7 +8,7 @@ module('Integration | Helper | indexed-display-name', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
 
-  test('it renders the resource name with its position in parent array', async function (assert) {
+  test('it renders the resource name with its position in parent array reversed', async function (assert) {
     this.set('array', ['Boundary', 'is', 'cool!']);
 
     await render(hbs`{{indexed-display-name
@@ -17,7 +17,7 @@ module('Integration | Helper | indexed-display-name', function (hooks) {
       'Boundary'
     }}`);
 
-    assert.dom(this.element).hasText('Connection 1');
+    assert.dom(this.element).hasText('Connection 3');
 
     await render(hbs`{{indexed-display-name
       'resources.session-recording.connection.title_index'
@@ -33,7 +33,7 @@ module('Integration | Helper | indexed-display-name', function (hooks) {
       'cool!'
     }}`);
 
-    assert.dom(this.element).hasText('Connection 3');
+    assert.dom(this.element).hasText('Connection 1');
   });
 
   test('it does not render the position if the index cannot be found', async function (assert) {
