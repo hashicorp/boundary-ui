@@ -308,7 +308,15 @@
     {{on 'change' this.toggleDisableCredentialRotation}}
     as |F|
   >
-    <F.Label>{{t 'form.disable_credential_rotation.label'}}</F.Label>
+    <F.Label>{{t
+        'resources.storage-bucket.form.disable_credential_rotation.label'
+      }}</F.Label>
+    <F.HelperText>
+      {{t 'resources.storage-bucket.form.disable_credential_rotation.help'}}
+      <Hds::Link::Inline @href={{doc-url 'storage-bucket'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
   </Hds::Form::Checkbox::Field>
 
   {{#if (can 'save model' @model)}}

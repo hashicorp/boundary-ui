@@ -318,6 +318,9 @@ storage-bucket:
     worker_filter:
       label: Worker filter
       help: Filter for Boundary workers that have network access to your storage. Boolean expression.
+    disable_credential_rotation:
+      label: Disable credential rotation
+      help: Disabling credential rotation could allow entities outside of Boundary to know the client secret in use.
   questions:
     delete-storage-bucket:
       title: Delete associated recordings?
