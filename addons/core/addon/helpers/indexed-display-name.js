@@ -2,8 +2,10 @@ import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
 
 export function indexedDisplayName(intl, translation, array, item) {
-  let index = array.indexOf(item) + 1;
-  if (index === 0) index = null;
+  const length = array.length;
+
+  let index = length - array.indexOf(item);
+  if (index > length) index = null;
 
   return intl.t(translation, { index });
 }
