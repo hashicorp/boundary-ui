@@ -4,7 +4,9 @@
 }}
 
 <div class='rose-form-actions' ...attributes>
-  <Rose::Button @style='secondary' {{on 'click' @enableEdit}}>
-    {{@enableEditText}}
-  </Rose::Button>
+  <Hds::Button
+    @text={{@enableEditText}}
+    @color='secondary'
+    {{on 'click' @enableEdit}}
+  />
 </div>
