@@ -77,7 +77,7 @@ module('Acceptance | workers | create', function (hooks) {
     assert
       .dom(createSection[1])
       .doesNotIncludeText(
-        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary-worker/latest?license_class=hcp"'
+        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary/latest?license_class=enterprise"'
       );
   });
 
@@ -90,7 +90,7 @@ module('Acceptance | workers | create', function (hooks) {
     assert
       .dom(createSection[1])
       .includesText(
-        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary-worker/latest?license_class=hcp"'
+        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary/latest?license_class=enterprise"'
       );
     assert
       .dom(createSection[1])
