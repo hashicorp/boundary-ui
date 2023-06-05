@@ -28,8 +28,8 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   const TOGGLE_SELECTOR = '[name=target-enable-session-recording]';
   const LINK_TO_NEW_STORAGE_BUCKET =
     '.enable-session-recording-toggle .hds-link-standalone';
-  const SAVE_BTN_SELECTOR = '.rose-form-actions .rose-button-primary';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions .rose-button-secondary';
+  const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
+  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
 
   // Instances
   const instances = {
