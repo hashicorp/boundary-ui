@@ -247,7 +247,7 @@
                   {{/if}}
                 </list.Item>
               {{/if}}
-              {{! Bucket name }}
+              {{! Bucket name or ID}}
               {{#if @model.storageBucket}}
                 <list.Item
                   @icon='cloud-check'
@@ -257,7 +257,7 @@
                     @model.storageBucket.scope.id
                     @model.storageBucket.id
                   }}
-                  @text={{@model.storageBucket.name}}
+                  @text={{@model.storageBucket.displayName}}
                 />
               {{/if}}
               {{! Session Recording ID }}
