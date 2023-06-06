@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - chore-0a76111-artifacts
 
 jobs:
   dependencies:
