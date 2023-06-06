@@ -4,14 +4,14 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
-module('Integration | Helper | indexed-display-name', function (hooks) {
+module('Integration | Helper | reverse-indexed-display-name', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
 
   test('it renders the resource name with its position in parent array reversed', async function (assert) {
     this.set('array', ['Boundary', 'is', 'cool!']);
 
-    await render(hbs`{{indexed-display-name
+    await render(hbs`{{reverse-indexed-display-name
       'resources.session-recording.connection.title_index'
       this.array
       'Boundary'
@@ -19,7 +19,7 @@ module('Integration | Helper | indexed-display-name', function (hooks) {
 
     assert.dom(this.element).hasText('Connection 3');
 
-    await render(hbs`{{indexed-display-name
+    await render(hbs`{{reverse-indexed-display-name
       'resources.session-recording.connection.title_index'
       this.array
       'is'
@@ -27,7 +27,7 @@ module('Integration | Helper | indexed-display-name', function (hooks) {
 
     assert.dom(this.element).hasText('Connection 2');
 
-    await render(hbs`{{indexed-display-name
+    await render(hbs`{{reverse-indexed-display-name
       'resources.session-recording.connection.title_index'
       this.array
       'cool!'
@@ -39,7 +39,7 @@ module('Integration | Helper | indexed-display-name', function (hooks) {
   test('it does not render the position if the index cannot be found', async function (assert) {
     this.set('array', ['Boundary', 'is', 'cool!']);
 
-    await render(hbs`{{indexed-display-name
+    await render(hbs`{{reverse-indexed-display-name
       'resources.session-recording.connection.title_index'
       this.array
       'Watchtower'

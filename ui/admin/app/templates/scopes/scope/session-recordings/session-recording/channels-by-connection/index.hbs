@@ -46,7 +46,7 @@
             }}
               <div class='channels-by-connection-connection-header'>
                 <p class='hds-typography-display-300 hds-font-weight-semibold'>
-                  {{indexed-display-name
+                  {{reverse-indexed-display-name
                     'resources.session-recording.connection.title_index'
                     @model.sessionRecording.connection_recordings
                     connection
@@ -83,7 +83,7 @@
                     <B.Tr>
                       <B.Td>
                         <span>
-                          {{indexed-display-name
+                          {{reverse-indexed-display-name
                             'resources.session-recording.channel.title_index'
                             connection.channel_recordings
                             B.data
