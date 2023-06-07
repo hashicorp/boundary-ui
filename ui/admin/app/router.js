@@ -85,7 +85,9 @@ Router.map(function () {
           this.route('injected-application-credential-sources');
           this.route('add-brokered-credential-sources');
           this.route('add-injected-application-credential-sources');
-          this.route('enable-session-recording');
+          this.route('enable-session-recording', function () {
+            this.route('create-storage-bucket');
+          });
         });
         this.route('new');
       });

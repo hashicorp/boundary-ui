@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends Route {
+export default class ScopesScopeTargetsTargetEnableSessionRecordingIndexRoute extends Route {
   // =services
   @service store;
   @service router;
@@ -19,7 +19,7 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends
   }
 
   /**
-   * Load storage buckets from target's project scope and global scope
+   * Load storage buckets from target's parent's scope and global scope
    * @param {Model} model
    */
   async afterModel() {
@@ -30,15 +30,15 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends
       scope_id: 'global',
     });
 
-    //fetch storage buckets from target's org scope
+    //fetch storage buckets from target's parent's scope
     const orgScopeStorageBuckets = await this.store.query('storage-bucket', {
       scope_id,
     });
+
     const storageBucketList = [
       ...globalScopeStorageBuckets.toArray(),
       ...orgScopeStorageBuckets.toArray(),
     ];
-
     this.storageBucketList = storageBucketList;
   }
   // =actions
