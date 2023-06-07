@@ -19,7 +19,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   const BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const SAVE_BUTTON_SELECTOR = '.rose-form-actions [type="submit"]';
   const NAME_FIELD_SELECTOR = '[name="name"]';
-  const REGION_FIELD_SELECTOR = '[name="region"]';
   const ALERT_TEXT_SELECTOR = '[role="alert"] div';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const SECRET_FIELD_BUTTON_SELECTOR = '.secret-input [type="button"]';
@@ -30,6 +29,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   const SECRET_ACCESS_KEY_FIELD_TEXT = 'Update secret access key';
   const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
   const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
+  const WORKER_FILTER = '[name="worker_filter"]';
 
   const instances = {
     scopes: {
@@ -156,8 +156,8 @@ module('Acceptance | storage-buckets | update', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'region',
-                description: 'Region is required.',
+                name: 'worker_filter',
+                description: 'Worker filter is required.',
               },
             ],
           },
@@ -167,11 +167,11 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(`[href="${urls.storageBucket}"]`);
     await click(BUTTON_SELECTOR, 'Activate edit mode');
-    await fillIn(REGION_FIELD_SELECTOR, 'random string');
+    await fillIn(WORKER_FILTER, 'random string');
     await click(SAVE_BUTTON_SELECTOR);
 
     assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Region is required.');
+    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Worker filter is required.');
   });
 
   test('user cannot edit bucket name and bucket prefix fields in a storage bucket form', async function (assert) {

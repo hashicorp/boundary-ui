@@ -155,6 +155,7 @@
     @type='text'
     name='region'
     disabled={{form.disabled}}
+    readOnly={{not @model.isNew}}
     {{on 'input' (set-from-event @model 'region')}}
     as |F|
   >
