@@ -61,14 +61,14 @@
     >
       <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
       <F.HelperText>
-        {{t 'resources.storage-bucket.form.scope.help'}}
+        {{this.scopeFieldDescription}}
       </F.HelperText>
       <F.Options>
+        <option disabled hidden selected value=''>
+          {{t 'titles.choose-an-option'}}
+        </option>
         {{#each @scopes as |scope|}}
-          <option
-            value={{scope.model.id}}
-            selected={{eq @model.scopeModel.id scope.model.id}}
-          >
+          <option value={{scope.model.id}}>
             {{scope.model.displayName}}
           </option>
         {{/each}}
@@ -82,9 +82,13 @@
       as |F|
     >
       <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.scope.help'
-        }}</F.HelperText>
+      <F.HelperText>
+        {{#if @model.scopeModel.isGlobal}}
+          {{t 'resources.storage-bucket.form.scope.help_global'}}
+        {{else}}
+          {{t 'resources.storage-bucket.form.scope.help_org'}}
+        {{/if}}
+      </F.HelperText>
     </InfoField>
   {{/if}}
 
