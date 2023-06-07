@@ -128,11 +128,20 @@
                         </Copyable>
                       </B.Td>
                       <B.Td align='right'>
-                        {{#if @model.sessionRecording.isAvailable}}
+                        {{#if (can 'play channel-recording' B.data)}}
                           <Hds::Button
                             @icon='play'
                             @color='secondary'
                             @text={{t 'actions.play'}}
+                            @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+                            @model={{B.data.id}}
+                          />
+                        {{else if (can 'viewOnly channel-recording' B.data)}}
+                          <Hds::Button
+                            @icon='arrow-right'
+                            @iconPosition='trailing'
+                            @color='secondary'
+                            @text={{t 'actions.view'}}
                             @route='scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
                             @model={{B.data.id}}
                           />
