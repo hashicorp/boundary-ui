@@ -5,7 +5,6 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
-import { later, _cancelTimers } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -169,31 +168,19 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(2);
     const hostsCount = this.server.schema.hosts.all().models.length;
-    // This later/cancelTimers technique allows us to test a page with
-    // active polling.  Normally an acceptance test waits for all runloop timers
-    // to stop before returning from an awaited test, but polling means that
-    // runloop timers exist indefinitely.  We thus schedule a cancelation before
-    // proceeding with our tests.
-    later(async () => {
-      _cancelTimers();
-      // await a11yAudit();
-      assert.strictEqual(currentURL(), urls.hosts);
-      assert.strictEqual(findAll('tbody tr').length, hostsCount);
-    }, 750);
     await visit(urls.hosts);
+    assert.strictEqual(currentURL(), urls.hosts);
+    assert.strictEqual(findAll('tbody tr').length, hostsCount);
   });
 
   test('visiting empty hosts', async function (assert) {
     assert.expect(1);
     instances.target.update({ hostSets: [] });
-    later(async () => {
-      _cancelTimers();
-      assert.ok(
-        find('.rose-message-title').textContent.trim(),
-        'No Hosts Available'
-      );
-    }, 750);
     await visit(urls.hosts);
+    assert.ok(
+      find('.rose-message-title').textContent.trim(),
+      'No Hosts Available'
+    );
   });
 
   test('connecting to a host', async function (assert) {
@@ -208,24 +195,21 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.dialog-detail'), 'Success dialog');
-      assert.strictEqual(
-        find('.rose-dialog-footer .rose-button-secondary').textContent.trim(),
-        'Close',
-        'Cannot retry'
-      );
-      assert.strictEqual(
-        find('.rose-dialog-body .copyable-content').textContent.trim(),
-        'a_123:p_123'
-      );
-    }, 750);
     await visit(urls.hosts);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.dialog-detail'), 'Success dialog');
+    assert.strictEqual(
+      find('.rose-dialog-footer .rose-button-secondary').textContent.trim(),
+      'Close',
+      'Cannot retry'
+    );
+    assert.strictEqual(
+      find('.rose-dialog-body .copyable-content').textContent.trim(),
+      'a_123:p_123'
+    );
   });
 
   test('handles cli error on connect', async function (assert) {
@@ -234,27 +218,24 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(
-        dialogButtons[0].textContent.trim(),
-        'Retry',
-        'Can retry'
-      );
-      assert.strictEqual(
-        dialogButtons[1].textContent.trim(),
-        'Cancel',
-        'Can cancel'
-      );
-    }, 750);
     await visit(urls.hosts);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 
   test('handles connect error', async function (assert) {
@@ -264,27 +245,24 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(
-        dialogButtons[0].textContent.trim(),
-        'Retry',
-        'Can retry'
-      );
-      assert.strictEqual(
-        dialogButtons[1].textContent.trim(),
-        'Cancel',
-        'Can cancel'
-      );
-    }, 750);
     await visit(urls.hosts);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 
   test('can retry on error', async function (assert) {
@@ -293,17 +271,14 @@ module('Acceptance | projects | targets | hosts', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      const firstErrorDialog = find('.rose-dialog');
-      await click('.rose-dialog footer .rose-button-primary', 'Retry');
-      const secondErrorDialog = find('.rose-dialog');
-      assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
-    }, 750);
     await visit(urls.hosts);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    const firstErrorDialog = find('.rose-dialog');
+    await click('.rose-dialog footer .rose-button-primary', 'Retry');
+    const secondErrorDialog = find('.rose-dialog');
+    assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
   });
 });
