@@ -4,7 +4,6 @@
  */
 
 import Component from '@glimmer/component';
-import { computed } from '@ember/object';
 
 /**
  * A set of two form action buttons for submit and cancel.
@@ -22,7 +21,6 @@ export default class RoseFormActionsComponent extends Component {
   /**
    * @type {boolean}
    */
-  @computed('args.showCancel')
   get showCancel() {
     return this.args.showCancel ?? true;
   }

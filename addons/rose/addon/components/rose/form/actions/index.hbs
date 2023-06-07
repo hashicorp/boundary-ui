@@ -3,19 +3,18 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<div class='rose-form-actions' ...attributes>
-  {{! template-lint-disable no-passed-in-event-handlers }}
-  <Rose::Button @disabled={{@submitDisabled}} @submit={{true}} @style='primary'>
-    {{@submitText}}
-  </Rose::Button>
-
+<Hds::ButtonSet class='rose-form-actions' ...attributes>
+  <Hds::Button
+    @text={{@submitText}}
+    disabled={{@submitDisabled}}
+    type='submit'
+  />
   {{#if this.showCancel}}
-    <Rose::Button
-      @disabled={{@cancelDisabled}}
-      @style='secondary'
+    <Hds::Button
+      @text={{@cancelText}}
+      @color='secondary'
+      disabled={{@cancelDisabled}}
       {{on 'click' @cancel}}
-    >
-      {{@cancelText}}
-    </Rose::Button>
+    />
   {{/if}}
-</div>
+</Hds::ButtonSet>
