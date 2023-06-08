@@ -6,12 +6,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import config from '../../../../config/environment';
-
-const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeProjectsSessionsRoute extends Route {
   // =services
@@ -47,32 +43,42 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   }
 
   /**
-   * Loads all sessions under the current scope and encapsulates them into
-   * an array of objects filtering to current user
-   * @return {Promise{SessionModel[]}}
+   * Loads all sessions under current scope for the current user.
+   *
+   * NOTE:  previously, sessions were filtered only with API filter queries.
+   *        In an effort to offload processing from the controller, sessions
+   *        are now filtered on the client by projects and status,
+   *        while user_id filtering remains server side.
+   *
+   * @return {Promise{[SessionModel]}}
    */
   async model() {
-    const { status } = this;
     const { id: scope_id } = this.modelFor('scopes.scope');
-    const { user_id } = this.session.data.authenticated;
-    const projects = this.project || [];
-    const filters = {
-      user_id,
-      status,
-      scope_id: projects.map(({ id }) => id),
-    };
-    const options = {
-      recursive: true,
+    const queryOptions = {
       scope_id,
-      include_terminated: filters.status?.includes('terminated'),
+      recursive: true,
+      include_terminated: this.status?.includes('terminated'),
     };
-    await this.store.query('target', { recursive: true, scope_id });
-    return await this.resourceFilterStore.queryBy('session', filters, options);
-  }
 
-  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
-  poller() {
-    return this.refresh();
+    // Recursively query sessions within the current scope for the current user
+    let sessions = await this.resourceFilterStore.queryBy(
+      'session',
+      { user_id: this.session.data.authenticated.user_id },
+      queryOptions
+    );
+
+    // If project filters are selected, filter sessions by the selected projects
+    if (this.project?.length) {
+      const projectIDs = this.project.map((p) => p?.id);
+      sessions = sessions.filter((s) => projectIDs.includes(s?.scopeID));
+    }
+
+    // If status filters are selected, filter sessions by the selected statuses
+    if (this.status?.length) {
+      sessions = sessions.filter((s) => this.status.includes(s?.status));
+    }
+
+    return sessions;
   }
 
   // =actions

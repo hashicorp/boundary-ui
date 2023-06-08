@@ -26,12 +26,18 @@ export default factory.extend({
   withAssociations: trait({
     afterCreate(record, server) {
       const scopeId = record.scopeId;
-      if (record.scope.type === 'project') {
-        const orgScopeId = record.scope?.scope.id;
-        const user = server.schema.users.where({ scopeId: orgScopeId })
-          .models[0];
+
+      // Assign a user to this session if not already assigned.
+      if (record.scope && !record.user) {
+        const scopeId =
+          record.scope.type === 'project'
+            ? record.scope?.scope.id
+            : record.scope.id;
+        const user = server.schema.users.where({ scopeId }).models[0];
         if (user) record.update({ user });
       }
+
+      // Assign target and host set to this session, if not already assigned.
       const target = server.schema.targets.where({ scopeId }).models[0];
       if (target) {
         record.update({ target });

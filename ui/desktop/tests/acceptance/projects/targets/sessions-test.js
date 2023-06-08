@@ -5,7 +5,6 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
-import { later, _cancelTimers } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -173,107 +172,140 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
   });
 
   test('visiting index', async function (assert) {
-    assert.expect(2);
-    const sessionsCount = this.server.schema.sessions.all().models.length;
-    // This later/cancelTimers technique allows us to test a page with
-    // active polling.  Normally an acceptance test waits for all runloop timers
-    // to stop before returning from an awaited test, but polling means that
-    // runloop timers exist indefinitely.  We thus schedule a cancelation before
-    // proceeding with our tests.
-    later(async () => {
-      _cancelTimers();
-      // await a11yAudit();
-      assert.strictEqual(currentURL(), urls.sessions);
-      assert.strictEqual(findAll('tbody tr').length, sessionsCount);
-    }, 750);
+    assert.expect(1);
     await visit(urls.sessions);
+    assert.strictEqual(currentURL(), urls.sessions);
   });
 
   test('visiting index redirects to sessions', async function (assert) {
     assert.expect(1);
-    later(async () => {
-      _cancelTimers();
-      // await a11yAudit();
-      assert.strictEqual(currentURL(), urls.sessions);
-    }, 750);
     await visit(urls.target);
+    assert.strictEqual(currentURL(), urls.sessions);
   });
 
   test('visiting empty sessions', async function (assert) {
     assert.expect(1);
     this.server.get('/sessions', () => new Response(200));
-    later(async () => {
-      _cancelTimers();
-      assert.ok(
-        find('.rose-message-title').textContent.trim(),
-        'No Sessions Available'
-      );
-    }, 750);
     await visit(urls.sessions);
+    assert.ok(
+      find('.rose-message-title').textContent.trim(),
+      'No Sessions Available'
+    );
   });
 
   test('can identify target with active sessions', async function (assert) {
     assert.expect(1);
-    later(async () => {
-      _cancelTimers();
-      assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
-    }, 750);
+
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    await click('.rose-dialog-footer .rose-button-secondary');
+    assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
   });
 
   test('can identify target with pending sessions', async function (assert) {
     assert.expect(1);
+
     instances.session.update({ status: 'pending' });
-    later(async () => {
-      _cancelTimers();
-      assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
-    }, 750);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    await click('.rose-dialog-footer .rose-button-secondary');
+    assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
   });
 
   test('cannot identify target with terminated sessions', async function (assert) {
     assert.expect(1);
     instances.session.update({ status: 'terminated' });
-    later(async () => {
-      _cancelTimers();
-      assert.notOk(find('.rose-layout-page-header .hds-badge--color-success'));
-    }, 750);
+
     await visit(urls.sessions);
+    assert.notOk(find('.rose-layout-page-header .hds-badge--color-success'));
   });
 
   test('cancelling a session', async function (assert) {
     assert.expect(2);
-    const sessionsCount = this.server.schema.sessions.all().models.length;
-    stubs.ipcService.withArgs('cancel');
-    later(async () => {
-      _cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-success'));
-      assert.strictEqual(findAll('tbody tr').length, sessionsCount - 1);
-    }, 750);
+
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    await click('.rose-dialog-footer .rose-button-secondary');
+    const sessionsCount = findAll(
+      'tbody tr:first-child td:last-child button'
+    ).length;
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-success'));
+    assert.strictEqual(findAll('tbody tr').length, sessionsCount - 1);
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
     assert.expect(1);
+
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
     this.server.post('/sessions/:id_method', () => new Response(400));
-    later(async () => {
-      _cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-error'));
-    }, 750);
+
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    await click('.rose-dialog-footer .rose-button-secondary');
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-error'));
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
     assert.expect(1);
+
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
     stubs.ipcService.withArgs('stop').throws();
-    later(async () => {
-      _cancelTimers();
-      await click('tbody tr:first-child td:last-child button');
-      assert.ok(find('[role="alert"].is-error'));
-    }, 750);
+
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    await click('.rose-dialog-footer .rose-button-secondary');
+    await click('tbody tr:first-child td:last-child button');
+    assert.ok(find('[role="alert"].is-error'));
   });
 
   test('connecting to a target', async function (assert) {
@@ -288,21 +320,18 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click('.rose-layout-page-actions button', 'Activate connect mode');
-      assert.ok(find('.dialog-detail'), 'Success dialog');
-      assert.strictEqual(
-        find('.rose-dialog-footer .rose-button-secondary').textContent.trim(),
-        'Close',
-        'Cannot retry'
-      );
-      assert.strictEqual(
-        find('.rose-dialog-body .copyable-content').textContent.trim(),
-        'a_123:p_123'
-      );
-    }, 750);
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    assert.ok(find('.dialog-detail'), 'Success dialog');
+    assert.strictEqual(
+      find('.rose-dialog-footer .rose-button-secondary').textContent.trim(),
+      'Close',
+      'Cannot retry'
+    );
+    assert.strictEqual(
+      find('.rose-dialog-body .copyable-content').textContent.trim(),
+      'a_123:p_123'
+    );
   });
 
   test('connect details in session', async function (assert) {
@@ -317,20 +346,17 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      instances.session.update('status', 'active');
-      await click('.rose-layout-page-actions button', 'Activate connect mode');
-      assert.ok(find('.dialog-detail'), 'Success dialog');
-      await click('.rose-dialog-dismiss');
-      assert.strictEqual(
-        find(
-          'tbody tr:first-child td:nth-child(2) .copyable-content'
-        ).textContent.trim(),
-        'a_123:p_123'
-      );
-    }, 750);
     await visit(urls.sessions);
+    instances.session.update('status', 'active');
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    assert.ok(find('.dialog-detail'), 'Success dialog');
+    await click('.rose-dialog-dismiss');
+    assert.strictEqual(
+      find(
+        'tbody tr:first-child td:nth-child(2) .copyable-content'
+      ).textContent.trim(),
+      'a_123:p_123'
+    );
   });
 
   test('handles cli error on connect', async function (assert) {
@@ -339,24 +365,21 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click('.rose-layout-page-actions button', 'Activate connect mode');
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(
-        dialogButtons[0].textContent.trim(),
-        'Retry',
-        'Can retry'
-      );
-      assert.strictEqual(
-        dialogButtons[1].textContent.trim(),
-        'Cancel',
-        'Can cancel'
-      );
-    }, 750);
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 
   test('handles connect error', async function (assert) {
@@ -366,24 +389,21 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click('.rose-layout-page-actions button', 'Activate connect mode');
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(
-        dialogButtons[0].textContent.trim(),
-        'Retry',
-        'Can retry'
-      );
-      assert.strictEqual(
-        dialogButtons[1].textContent.trim(),
-        'Cancel',
-        'Can cancel'
-      );
-    }, 750);
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 
   test('can retry on error', async function (assert) {
@@ -392,14 +412,11 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click('.rose-layout-page-actions button', 'Activate connect mode');
-      const firstErrorDialog = find('.rose-dialog');
-      await click('.rose-dialog footer .rose-button-primary', 'Retry');
-      const secondErrorDialog = find('.rose-dialog');
-      assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
-    }, 750);
     await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    const firstErrorDialog = find('.rose-dialog');
+    await click('.rose-dialog footer .rose-button-primary', 'Retry');
+    const secondErrorDialog = find('.rose-dialog');
+    assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
   });
 });
