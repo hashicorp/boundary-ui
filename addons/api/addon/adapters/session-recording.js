@@ -39,7 +39,15 @@ export default class SessionRecordingAdapter extends ApplicationAdapter {
     });
 
     const response = await fetch(url, { headers: this.headers });
-    return response.text();
+    if (response?.ok) {
+      return response.text();
+    } else {
+      throw this.handleResponse(
+        response.status,
+        response.headers,
+        await response.text()
+      );
+    }
   }
 
   /**

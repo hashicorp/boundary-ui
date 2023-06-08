@@ -3,6 +3,7 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { Response } from 'miragejs';
 
 module(
   'Acceptance | session recordings | session recording | channels by connection | channel',
@@ -93,6 +94,32 @@ module(
 
       // if unauthorized player will not render
       assert.dom('.session-recording-player').doesNotExist();
+    });
+
+    test('user cannot view recording if asciicast download errors out', async function (assert) {
+      assert.expect(2);
+      this.server.get(
+        `/session-recordings/${instances.channelRecording.id}:download`,
+        () =>
+          new Response(
+            500,
+            {},
+            {
+              status: 500,
+              code: 'api_error',
+              message: 'rpc error: code = Unknown',
+            }
+          )
+      );
+
+      // Visit channel
+      await visit(urls.connectionRecording);
+
+      // if there was an error player will not render
+      assert.dom('.session-recording-player').doesNotExist();
+      assert
+        .dom('.hds-application-state__title')
+        .hasText("We can't play back this channel because the file is missing");
     });
 
     test('user can navigate back to session recording screen', async function (assert) {

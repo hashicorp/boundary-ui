@@ -16,7 +16,11 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
     );
 
     if (this.can.can('getAsciicast channel-recording', channelRecording)) {
-      asciicast = await channelRecording.getAsciicast();
+      try {
+        asciicast = await channelRecording.getAsciicast();
+      } catch (e) {
+        // no op
+      }
     }
 
     return {
