@@ -5,7 +5,8 @@
 
 // field bottom margin (HDS leaves this to implementers)
 [class^='hds-form-field'],
-[class^='hds-form-group'] {
+[class^='hds-form-group'],
+[class^='hds-button-set'] {
   margin-bottom: 1.5rem;
 }
 /* stylelint-disable selector-class-pattern */
