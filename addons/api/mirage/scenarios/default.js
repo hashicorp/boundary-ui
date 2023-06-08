@@ -106,6 +106,9 @@ export default function (server) {
     server.create('target', { scope, address: '0.0.0.0' });
     // Sessions have target data. Create it after targets.
     server.createList('session', 4, { scope }, 'withAssociations');
+    // Also create sessions for "authenticateduser" for Desktop,
+    // which filters user_id by the currently authenticated user.
+    server.createList('session', 1, { scope, user }, 'withAssociations');
     // Create IAM resources for project
     server.createList('group', 3, { scope });
     server.createList('role', 3, { scope });
