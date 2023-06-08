@@ -5,7 +5,6 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
-import { later, _cancelTimers } from '@ember/runloop';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -173,28 +172,17 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(2);
     const targetsCount = this.server.schema.targets.all().models.length;
-    // This later/cancelTimers technique allows us to test a page with
-    // active polling.  Normally an acceptance test waits for all runloop timers
-    // to stop before returning from an awaited test, but polling means that
-    // runloop timers exist indefinitely.  We thus schedule a cancelation before
-    // proceeding with our tests.
-    later(async () => {
-      _cancelTimers();
-      await a11yAudit();
-      assert.strictEqual(currentURL(), urls.targets);
-      assert.strictEqual(findAll('tbody tr').length, targetsCount);
-    }, 750);
+
     await visit(urls.targets);
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(findAll('tbody tr').length, targetsCount);
   });
 
   test('visiting global scope', async function (assert) {
     assert.expect(1);
-    later(async () => {
-      _cancelTimers();
-      await a11yAudit();
-      assert.strictEqual(currentURL(), urls.globalTargets);
-    }, 750);
     await visit(urls.scopes.global);
+    await a11yAudit();
+    assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
   // TODO: this probably shouldn't be the case, but was setup to enable
@@ -208,43 +196,28 @@ module('Acceptance | scopes', function (hooks) {
       const response = id === 'global' ? new Response(404) : scope;
       return response;
     });
-    later(async () => {
-      _cancelTimers();
-      await a11yAudit();
-      assert.strictEqual(currentURL(), urls.globalTargets);
-    }, 750);
     await visit(urls.scopes.global);
+    await a11yAudit();
+    assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
   test('visiting org scope', async function (assert) {
     assert.expect(1);
-    later(async () => {
-      _cancelTimers();
-      await a11yAudit();
-      assert.strictEqual(currentURL(), urls.targets);
-    }, 750);
     await visit(urls.scopes.org);
+    await a11yAudit();
+    assert.strictEqual(currentURL(), urls.targets);
   });
 
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
-    await later(async () => _cancelTimers(), 750);
     await visit(urls.targets);
-    await later(
-      async () => assert.strictEqual(currentURL(), urls.targets),
-      750
-    );
+
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
-    await later(
-      async () => assert.strictEqual(currentURL(), urls.org2Targets),
-      750
-    );
+    assert.strictEqual(currentURL(), urls.targets);
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
-    later(
-      async () => assert.strictEqual(currentURL(), urls.globalTargets),
-      750
-    );
+    assert.strictEqual(currentURL(), urls.org2Targets);
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
+    assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -258,25 +231,19 @@ module('Acceptance | scopes', function (hooks) {
 
   test('visiting a target', async function (assert) {
     assert.expect(1);
-    later(async () => {
-      _cancelTimers();
-      await click('tbody tr th a');
-      assert.strictEqual(currentURL(), urls.targetSessions);
-    }, 750);
     await visit(urls.targets);
+    await click('tbody tr th a');
+    assert.strictEqual(currentURL(), urls.targetSessions);
   });
 
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
-    later(async () => {
-      _cancelTimers();
-      assert.ok(
-        find('.rose-message-title').textContent.trim(),
-        'No Targets Available'
-      );
-    }, 750);
     await visit(urls.targets);
+    assert.ok(
+      find('.rose-message-title').textContent.trim(),
+      'No Targets Available'
+    );
   });
 
   test('connecting to a target', async function (assert) {
@@ -291,21 +258,18 @@ module('Acceptance | scopes', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.dialog-detail'), 'Success dialog');
-      assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
-      assert.strictEqual(
-        find('.rose-dialog-footer button').textContent.trim(),
-        'Close',
-        'Cannot retry'
-      );
-    }, 750);
     await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.dialog-detail'), 'Success dialog');
+    assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
+    assert.strictEqual(
+      find('.rose-dialog-footer button').textContent.trim(),
+      'Close',
+      'Cannot retry'
+    );
   });
 
   test('handles cli error on connect', async function (assert) {
@@ -314,27 +278,24 @@ module('Acceptance | scopes', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(
-        dialogButtons[0].textContent.trim(),
-        'Retry',
-        'Can retry'
-      );
-      assert.strictEqual(
-        dialogButtons[1].textContent.trim(),
-        'Cancel',
-        'Can cancel'
-      );
-    }, 750);
     await visit(urls.scopes.global);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 
   test('handles connect error', async function (assert) {
@@ -344,26 +305,23 @@ module('Acceptance | scopes', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
-    later(async () => {
-      _cancelTimers();
-      await click(
-        'tbody tr:first-child td:last-child button',
-        'Activate connect mode'
-      );
-      assert.ok(find('.rose-dialog-error'), 'Error dialog');
-      const dialogButtons = findAll('.rose-dialog-footer button');
-      assert.strictEqual(dialogButtons.length, 2);
-      assert.strictEqual(
-        dialogButtons[0].textContent.trim(),
-        'Retry',
-        'Can retry'
-      );
-      assert.strictEqual(
-        dialogButtons[1].textContent.trim(),
-        'Cancel',
-        'Can cancel'
-      );
-    }, 750);
     await visit(urls.targets);
+    await click(
+      'tbody tr:first-child td:last-child button',
+      'Activate connect mode'
+    );
+    assert.ok(find('.rose-dialog-error'), 'Error dialog');
+    const dialogButtons = findAll('.rose-dialog-footer button');
+    assert.strictEqual(dialogButtons.length, 2);
+    assert.strictEqual(
+      dialogButtons[0].textContent.trim(),
+      'Retry',
+      'Can retry'
+    );
+    assert.strictEqual(
+      dialogButtons[1].textContent.trim(),
+      'Cancel',
+      'Can cancel'
+    );
   });
 });
