@@ -180,7 +180,7 @@
     <Hds::Form::TextInput::Field
       @isRequired={{true}}
       @value={{@model.access_key_id}}
-      @isInvalid={{@model.errors.access_key_id}}
+      @isInvalid={{@model.errors.secrets}}
       @type='password'
       name='access_key_id'
       {{on 'input' (set-from-event @model 'access_key_id')}}
@@ -192,9 +192,9 @@
       <F.HelperText>{{t
           'resources.storage-bucket.form.access_key_id.help'
         }}</F.HelperText>
-      {{#if @model.errors.access_key_id}}
+      {{#if @model.errors.secrets}}
         <F.Error as |E|>
-          {{#each @model.errors.access_key_id as |error|}}
+          {{#each @model.errors.secrets as |error|}}
             <E.Message>{{error.message}}</E.Message>
           {{/each}}
         </F.Error>
@@ -204,7 +204,7 @@
     <Hds::Form::TextInput::Field
       @isRequired={{true}}
       @value={{@model.secret_access_key}}
-      @isInvalid={{@model.errors.secret_access_key}}
+      @isInvalid={{@model.errors.secrets}}
       @type='password'
       name='secret_access_key'
       disabled={{form.disabled}}
@@ -217,9 +217,9 @@
       <F.HelperText>{{t
           'resources.storage-bucket.form.secret_access_key.help'
         }}</F.HelperText>
-      {{#if @model.errors.secret_access_key}}
+      {{#if @model.errors.secrets}}
         <F.Error as |E|>
-          {{#each @model.errors.secret_access_key as |error|}}
+          {{#each @model.errors.secrets as |error|}}
             <E.Message>{{error.message}}</E.Message>
           {{/each}}
         </F.Error>
@@ -243,13 +243,6 @@
       <F.HelperText>{{t
           'resources.storage-bucket.form.access_key_id.help'
         }}</F.HelperText>
-      {{#if @model.errors.access_key_id}}
-        <F.Error as |E|>
-          {{#each @model.errors.access_key_id as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
     </Form::Field::SecretInput>
 
     <Form::Field::SecretInput
@@ -269,13 +262,6 @@
       <F.HelperText>{{t
           'resources.storage-bucket.form.secret_access_key.help'
         }}</F.HelperText>
-      {{#if @model.errors.secret_access_key}}
-        <F.Error as |E|>
-          {{#each @model.errors.secret_access_key as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
     </Form::Field::SecretInput>
   {{/if}}
 
