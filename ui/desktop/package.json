@@ -45,9 +45,9 @@
   },
   "cross-os": {
     "prebuild:desktop": {
-      "darwin": "cp -r dist/ electron-app/ember-dist/",
-      "linux": "cp -r dist/ electron-app/ember-dist/",
-      "win32": "(robocopy dist electron-app\\ember-dist /MIR) ^& exit 0"
+      "darwin": "rm -rf electron-app/ember-dist/ && cp -r dist/ electron-app/ember-dist/",
+      "linux": "rm -rf electron-app/ember-dist/ && cp -r dist/ electron-app/ember-dist/",
+      "win32": "rmdir electron-app/ember-dist/ && (robocopy dist electron-app\\ember-dist /MIR) ^& exit 0"
     }
   },
   "dependencies": {
