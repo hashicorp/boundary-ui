@@ -47,6 +47,13 @@ export default class ScopesScopeWorkersRoute extends Route {
     return super.refresh(...arguments);
   }
 
+  @action
+  cancel(worker) {
+    const { isNew } = worker;
+    if (isNew) worker.rollbackAttributes();
+    this.router.replaceWith('scopes.scope.workers');
+    this.refresh();
+  }
   /**
    * Save a worker in current scope.
    * @param {WorkerModel} worker
