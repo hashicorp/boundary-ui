@@ -191,11 +191,16 @@
     {{/unless}}
   </div>
 
-  <Rose::LinkButton
-    @route='scopes.scope.workers'
-    @style='secondary'
-    {{on 'click' @refresh}}
-  >
-    {{t 'actions.done'}}
-  </Rose::LinkButton>
+  {{#unless @model.isNew}}
+    {{#if this.generatedWorkerAuthToken}}
+      <Rose::LinkButton
+        @route='scopes.scope.workers'
+        @style='secondary'
+        {{on 'click' @refresh}}
+      >
+        {{t 'actions.done'}}
+      </Rose::LinkButton>
+    {{/if}}
+  {{/unless}}
+
 </Rose::Form>
