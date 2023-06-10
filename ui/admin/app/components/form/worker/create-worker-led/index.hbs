@@ -193,6 +193,6 @@
   <Hds::Button
     @color='secondary'
     @text={{if @model.isNew (t 'actions.cancel') (t 'actions.done')}}
-    {{on 'click' (fn @cancel @model)}}
+    {{on 'click' @cancel}}
   />
 </Rose::Form>
