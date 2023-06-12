@@ -2,6 +2,17 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.6.0 [CLI 0.13.0] (2023.06.12)
+
+### New
+- Upgrade CLI to v0.13.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/1712))
+- Display external names when listing dynamic hosts ([PR](https://github.com/hashicorp/boundary-ui/pull/1664))
+- Add support for LDAP authentication ([PR](https://github.com/hashicorp/boundary-ui/pull/1645))
+
+### Bug Fixes
+- Optimized API Queries ([PR](https://github.com/hashicorp/boundary-ui/pull/1707))
+
+
 ## v1.5.1 [CLI 0.12.0] (2023.02.13)
 
 ### New
