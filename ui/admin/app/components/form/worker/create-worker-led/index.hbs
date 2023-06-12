@@ -190,12 +190,9 @@
       </div>
     {{/unless}}
   </div>
-
-  <Rose::LinkButton
-    @route='scopes.scope.workers'
-    @style='secondary'
-    {{on 'click' @refresh}}
-  >
-    {{t 'actions.done'}}
-  </Rose::LinkButton>
+  <Hds::Button
+    @color='secondary'
+    @text={{if @model.isNew (t 'actions.cancel') (t 'actions.done')}}
+    {{on 'click' @cancel}}
+  />
 </Rose::Form>
