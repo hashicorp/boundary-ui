@@ -28,12 +28,12 @@ module(
       const guid = v1();
       this.model = {};
       this.submit = () => {};
-      this.refresh = () => {};
+      this.cancel = () => {};
 
       windowService.location.hostname = `${guid}.boundary.hcp.dev`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @refresh={{this.refresh}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
       );
 
       assert.dom('[name="cluster_id"]').hasValue(guid);
@@ -44,12 +44,12 @@ module(
       const guid = v1();
       this.model = {};
       this.submit = () => {};
-      this.refresh = () => {};
+      this.cancel = () => {};
 
       windowService.location.hostname = `${guid}.boundary.hcp.to`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @refresh={{this.refresh}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
       );
 
       assert.dom('[name="cluster_id"]').hasValue(guid);
@@ -60,12 +60,12 @@ module(
       const guid = v1();
       this.model = {};
       this.submit = () => {};
-      this.refresh = () => {};
+      this.cancel = () => {};
 
       windowService.location.hostname = `${guid}.boundary.hashicorp.cloud`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @refresh={{this.refresh}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
       );
 
       assert.dom('[name="cluster_id"]').hasValue(guid);
@@ -75,12 +75,12 @@ module(
       const windowService = this.owner.lookup('service:browser/window');
       this.model = {};
       this.submit = () => {};
-      this.refresh = () => {};
+      this.cancel = () => {};
 
       windowService.location.hostname = `personal.website.com`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @refresh={{this.refresh}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
       );
 
       assert.dom('[name="cluster_id"]').hasNoValue();
