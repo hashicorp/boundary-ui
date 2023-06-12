@@ -20,8 +20,8 @@
   <page.body>
     <Form::Worker::CreateWorkerLed
       @model={{@model}}
+      @cancel={{route-action 'cancel' @model}}
       @submit={{route-action 'createWorkerLed' @model}}
-      @refresh={{route-action 'refresh'}}
     />
   </page.body>
 
