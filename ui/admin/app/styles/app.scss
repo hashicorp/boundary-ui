@@ -808,21 +808,21 @@
       background-color: var(--player-background-color);
     }
 
+    // hides large play icon overlay
+    .ap-overlay {
+      display: none;
+    }
+
     pre.ap-terminal {
       background-color: var(--player-background-color);
       border-color: var(--player-background-color);
     }
 
-    .ap-player {
-      border-radius: 0.75rem;
-
-      // hides large play icon overlay
-      .ap-overlay {
-        display: none;
-      }
-    }
-
     .ap-wrapper {
+      .ap-player {
+        border-radius: 0.75rem;
+      }
+
       &.ap-hud .ap-control-bar {
         bottom: 0;
       }
