@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "elliptic": "~6.5.4",
     "yargs-parser": "~20.2.7",
     "merge": "^2.1.1",
     "xmlhttprequest-ssl": "^1.6.2",
