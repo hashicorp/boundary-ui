@@ -278,10 +278,9 @@
     <F.Label>{{t 'resources.storage-bucket.form.worker_filter.label'}}</F.Label>
     <F.HelperText>
       {{t 'resources.storage-bucket.form.worker_filter.help'}}
-      {{! TODO: Link to the correct url for worker-filters }}
-      <Hds::Link::Inline @href={{doc-url 'worker-filters'}}>{{t
-          'actions.learn-more'
-        }}</Hds::Link::Inline>
+      <Hds::Link::Inline @href={{doc-url 'storage-bucket.worker-filter'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
     </F.HelperText>
     {{#if @model.errors.worker_filter}}
       <F.Error as |E|>
@@ -304,7 +303,9 @@
       }}</F.Label>
     <F.HelperText>
       {{t 'resources.storage-bucket.form.disable_credential_rotation.help'}}
-      <Hds::Link::Inline @href={{doc-url 'storage-bucket'}}>
+      <Hds::Link::Inline
+        @href={{doc-url 'storage-bucket.disable-credential-rotation'}}
+      >
         {{t 'actions.learn-more'}}
       </Hds::Link::Inline>
     </F.HelperText>

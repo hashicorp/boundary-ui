@@ -104,7 +104,13 @@ module.exports = function (environment) {
         'worker.manage-workers': '/workers/manage-workers-on-hcp',
         'worker-filters': '/worker-filters',
         'storage-bucket': '/storage-buckets',
+        'storage-bucket.new': '/storage-buckets/new',
+        'storage-bucket.worker-filter': '/storage-buckets/worker-filter',
+        'storage-bucket.disable-credential-rotation':
+          '/storage-buckets/disable-credential-rotation',
         'session-recording': '/session-recordings',
+        'session-recording.retrieve-lost-session-recordings':
+          '/session-recordings/retrieve-lost-session-recordings',
       },
     },
 
