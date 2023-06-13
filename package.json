@@ -50,9 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "caniuse-lite": "^1.0.30001157",
-    "immer": "^9.0.6",
-    "node-notifier": "^8.0.1",
     "highlight.js": "^10.4.1",
     "hoek": "~4.2.0",
     "elliptic": "~6.5.4",
@@ -99,7 +96,8 @@
     "**/@storybook/**/minimatch": "^3.0.5",
     "**/ember-electron/**/minimatch": "^3.0.5",
     "**/babel-core/json5": "^2.2.2",
-    "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0"
+    "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0",
+    "**/@storybook/**/immer": "^9.0.6"
   },
   "config": {
     "commitizen": {
