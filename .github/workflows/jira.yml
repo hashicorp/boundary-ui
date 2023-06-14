@@ -2,7 +2,7 @@ on:
   issues:
     types: [opened, closed, deleted, reopened]
   pull_request: # temp change for testing
-    types: [opened, closed, reopened]
+    #types: [opened, closed, reopened]
   issue_comment: # Also triggers when commenting on a PR from the conversation view
     types: [created]
   workflow_dispatch:
