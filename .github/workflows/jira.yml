@@ -1,7 +1,7 @@
 on:
   issues:
     types: [opened, closed, deleted, reopened]
-  pull_request_target:
+  pull_request: # temp change for testing
     types: [opened, closed, reopened]
   issue_comment: # Also triggers when commenting on a PR from the conversation view
     types: [created]
@@ -19,6 +19,8 @@ jobs:
       id: boundary-team-role
       run: |
         TEAM=boundary
+        TEST="$(hub api orgs/hashicorp/teams/${TEAM}/memberships/${{ github.actor }})"
+        echo "${TEST}"
         ROLE="$(hub api orgs/hashicorp/teams/${TEAM}/memberships/${{ github.actor }} | jq -r '.role | select(.!=null)')"
         if [[ -n ${ROLE} ]]; then
           echo "Actor ${{ github.actor }} is a ${TEAM} team member, skipping ticket creation"
