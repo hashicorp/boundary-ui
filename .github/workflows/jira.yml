@@ -15,7 +15,7 @@ jobs:
     name: Jira sync
     steps:
     - name: Check if community user
-      if: github.event.action == 'opened'
+      #if: github.event.action == 'opened' #testing
       id: boundary-team-role
       run: |
         TEAM=boundary
