@@ -50,9 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "highlight.js": "^10.4.1",
-    "hoek": "~4.2.0",
-    "elliptic": "~6.5.4",
     "underscore": "^1.12.1",
     "hosted-git-info": "^3.0.8",
     "trim": "~1.0.1",
