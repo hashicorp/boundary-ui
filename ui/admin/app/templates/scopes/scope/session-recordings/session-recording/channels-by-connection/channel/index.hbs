@@ -18,6 +18,15 @@
           'resources.session-recording.channel.messages.missing.description'
         }}
       />
+      <A.Footer as |F|>
+        <F.Link::Standalone
+          @icon='learn-link'
+          @text={{t
+            'resources.session-recording.channel.messages.missing.link'
+          }}
+          @href={{doc-url 'session-recording.retrieve-lost-session-recordings'}}
+        />
+      </A.Footer>
     {{else}}
       {{#if @model.channelRecording.isAsciicast}}
         {{! Not authorized to download asciicast }}
