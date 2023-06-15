@@ -26,8 +26,6 @@ jobs:
           echo "Actor ${{ github.actor }} is not a ${TEAM} team member"
         fi
         echo "role=${ROLE}" >> $GITHUB_OUTPUT
-        echo "role value is ${{ steps.boundary-team-role.outputs.role }}"
-        gh api orgs/hashicorp/teams/${TEAM}/memberships/${{ github.actor }}
       env:
         GITHUB_TOKEN: ${{ secrets.JIRA_SYNC_GITHUB_TOKEN }}
 
@@ -39,7 +37,7 @@ jobs:
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
     - name: Set ticket type
-      if: github.event.action == 'opened' && !steps.boundary-team-role.outputs.role
+      #if: github.event.action == 'opened' && !steps.boundary-team-role.outputs.role
       id: set-ticket-type
       run: |
         if [[ "${{ github.event_name }}" == "pull_request_target" ]]; then
@@ -47,7 +45,12 @@ jobs:
         else
           echo "type=ISS" >> $GITHUB_OUTPUT
         fi
-
+        
+    - name: Test outputs
+      run: |
+        echo "role value is ${{ steps.boundary-team-role.outputs.role }}"
+        echo "ticket type ${{ steps.set-ticket-type.outputs.type }}"
+        
     - name: Create ticket
       if: github.event.action == 'opened' && !steps.boundary-team-role.outputs.role
       uses: tomhjp/gh-action-jira-create@3ed1789cad3521292e591a7cfa703215ec1348bf # v0.2.1
