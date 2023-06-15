@@ -53,7 +53,6 @@
     "underscore": "^1.12.1",
     "hosted-git-info": "^3.0.8",
     "trim": "~1.0.1",
-    "browserslist": "^4.16.5",
     "ws": "^7.4.6",
     "trim-newlines": "^3.0.1",
     "clean-css": "^4.1.11",
@@ -91,7 +90,8 @@
     "**/ember-electron/**/minimatch": "^3.0.5",
     "**/babel-core/json5": "^2.2.2",
     "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0",
-    "**/@storybook/**/immer": "^9.0.6"
+    "**/@storybook/**/immer": "^9.0.6",
+    "**/react-dev-utils/browserslist": "^4.16.5"
   },
   "config": {
     "commitizen": {
