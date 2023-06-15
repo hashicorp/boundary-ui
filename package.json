@@ -91,7 +91,7 @@
     "**/@storybook/**/immer": "^9.0.6",
     "**/nomnom/underscore": "^1.12.1",
     "**/normalize-package-data/hosted-git-info": "^3.0.8",
-    "**/remark-parse/trim": "~1.0.1"
+    "**/remark-parse/trim": "^1.0.1"
   },
   "config": {
     "commitizen": {
