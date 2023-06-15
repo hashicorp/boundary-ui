@@ -18,4 +18,12 @@ module('Integration | Helper | format-date-iso-human', function (hooks) {
 
     assert.strictEqual(this.element.textContent.trim(), '2020-01-01 00:00:00');
   });
+
+  test('it renders when null', async function (assert) {
+    this.set('inputValue', null);
+
+    await render(hbs`{{format-date-iso-human this.inputValue }}`);
+
+    assert.strictEqual(this.element.textContent.trim(), '');
+  });
 });

@@ -1,0 +1,57 @@
+{{#if @model.asciicast}}
+  <SessionRecording::Player
+    @asciicast={{@model.asciicast}}
+    @route='scopes.scope.session-recordings.session-recording'
+    @model={{@model.sessionRecording.id}}
+  />
+{{else}}
+  <Hds::ApplicationState as |A|>
+    {{#if (can 'getAsciicast channel-recording' @model.channelRecording)}}
+      {{! Was not able to download asciicast }}
+      <A.Header
+        @title={{t
+          'resources.session-recording.channel.messages.missing.title'
+        }}
+      />
+      <A.Body
+        @text={{t
+          'resources.session-recording.channel.messages.missing.description'
+        }}
+      />
+      <A.Footer as |F|>
+        <F.Link::Standalone
+          @icon='learn-link'
+          @text={{t
+            'resources.session-recording.channel.messages.missing.link'
+          }}
+          @href={{doc-url 'session-recording.retrieve-lost-session-recordings'}}
+        />
+      </A.Footer>
+    {{else}}
+      {{#if @model.channelRecording.isAsciicast}}
+        {{! Not authorized to download asciicast }}
+        <A.Header
+          @title={{t 'resources.session-recording.channel.messages.none.title'}}
+        />
+        <A.Body
+          @text={{t
+            'descriptions.cannot-download'
+            resource=(t 'resources.session-recording.channel.title_plural')
+          }}
+        />
+      {{else}}
+        {{! Playback not supported }}
+        <A.Header
+          @title={{t
+            'resources.session-recording.channel.messages.not-supported.title'
+          }}
+        />
+        <A.Body
+          @text={{t
+            'resources.session-recording.channel.messages.not-supported.description'
+          }}
+        />
+      {{/if}}
+    {{/if}}
+  </Hds::ApplicationState>
+{{/if}}

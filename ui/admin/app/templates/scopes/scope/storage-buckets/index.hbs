@@ -1,0 +1,164 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.storage-bucket.title_plural'}}
+      <DocLink @doc='storage-bucket' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.storage-bucket.description'}}</p>
+  </page.header>
+
+  <page.actions>
+    {{#if (can 'create scope' this.scope collection='storage-buckets')}}
+      {{#if @model}}
+        <Hds::Button
+          @route='scopes.scope.storage-buckets.new'
+          @text={{t 'resources.storage-bucket.titles.new'}}
+        />
+      {{/if}}
+    {{/if}}
+  </page.actions>
+
+  <page.body>
+    {{#if @model}}
+      <Hds::Table
+        @valign='middle'
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'resources.storage-bucket.form.provider.label'))
+          (hash label=(t 'resources.storage-bucket.form.scope.label'))
+          (hash label='')
+        }}
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'read storage-bucket' B.data)}}
+                <LinkTo
+                  @route='scopes.scope.storage-buckets.storage-bucket'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+              {{#if B.data.description}}
+                <p>{{B.data.description}}</p>
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{B.data.id}}</code>
+              </Copyable>
+            </B.Td>
+            <B.Td>
+              {{#if B.data.isAWS}}
+                <Hds::Badge
+                  @text={{t 'resources.storage-bucket.titles.amazon_s3'}}
+                  @icon='aws-color'
+                />
+              {{else}}
+                {{B.data.plugin.name}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.scopeModel.isGlobal}}
+                <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
+              {{else}}
+                <Hds::Badge
+                  @text={{B.data.scopeModel.displayName}}
+                  @icon='org'
+                />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#let
+                (hash
+                  canRead=(can 'read storage-bucket' B.data)
+                  canDelete=(can 'delete storage-bucket' B.data)
+                )
+                as |perms|
+              }}
+                {{#if (or perms.canRead perms.canDelete)}}
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text='Overflow Options'
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    {{#if perms.canRead}}
+                      <dd.Interactive
+                        @route='scopes.scope.storage-buckets.storage-bucket'
+                        @model={{B.data.id}}
+                        @text={{t 'actions.edit'}}
+                      />
+                    {{/if}}
+                    {{#if (and perms.canRead perms.canDelete)}}
+                      <dd.Separator />
+                    {{/if}}
+                    {{#if perms.canDelete}}
+                      <dd.Interactive
+                        @text={{t 'resources.storage-bucket.actions.delete'}}
+                        @color='critical'
+                        {{on 'click' (route-action 'delete' B.data)}}
+                      />
+                    {{/if}}
+                  </Hds::Dropdown>
+                {{/if}}
+              {{/let}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.storage-bucket.messages.none.title'}}
+          as |message|
+        >
+          <message.description>
+            {{#if (can 'list scope' this.scope collection='storage-buckets')}}
+              {{t 'resources.storage-bucket.messages.none.description'}}
+            {{else if (can
+              'create scope' this.scope collection='storage-buckets'
+            )}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.storage-bucket.title_plural')
+              }}
+            {{else}}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.storage-bucket.title_plural')
+              }}
+            {{/if}}
+          </message.description>
+          {{#if (can 'create scope' this.scope collection='storage-buckets')}}
+            <Hds::Link::Standalone
+              @icon='plus-circle'
+              @iconPosition='leading'
+              @route='scopes.scope.storage-buckets.new'
+              @text={{t 'resources.storage-bucket.messages.none.link'}}
+            />
+          {{/if}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/if}}
+  </page.body>
+</Rose::Layout::Page>

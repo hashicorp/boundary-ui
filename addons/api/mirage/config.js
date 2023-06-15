@@ -14,6 +14,8 @@ import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
+import { faker } from '@faker-js/faker';
+import { asciicasts } from './data/asciicasts';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -33,6 +35,7 @@ export default function (mirageConfig) {
 function routes() {
   initializeMockIPC(this, environmentConfig);
 
+  this.passthrough();
   // make this `http://localhost:8080`, for example, if your API is on a different server
   // this.urlPrefix = '';
 
@@ -649,8 +652,7 @@ function routes() {
   this.patch('/managed-groups/:id');
   this.del('/managed-groups/:id');
 
-  // worker
-
+  // workers
   this.get(
     '/workers',
     ({ workers }, { queryParams: { scope_id: scopeId } }) => {
@@ -670,6 +672,65 @@ function routes() {
     });
     return workers.create(newWorker.attrs);
   });
+
+  // storage-buckets
+  this.get(
+    '/storage-buckets',
+    ({ storageBuckets }, { queryParams: { scope_id: scopeId, recursive } }) => {
+      if (recursive && scopeId === 'global') {
+        return storageBuckets.all();
+      }
+      return storageBuckets.where({ scopeId });
+    }
+  );
+  this.get('/storage-buckets/:id');
+  this.del('/storage-buckets/:id');
+  this.patch('/storage-buckets/:id');
+  this.post(
+    '/storage-buckets',
+    function ({ storageBuckets }, { queryParams: { plugin_name } }) {
+      const attrs = this.normalizedRequestAttrs();
+      if (plugin_name) {
+        attrs.type = 'plugin';
+        attrs.plugin = {
+          name: plugin_name,
+        };
+      }
+
+      // Remove the secrets and add the hmac in the response
+      delete attrs.secrets;
+      attrs.secrets_hmac = faker.git.commitSha();
+
+      return storageBuckets.create(attrs);
+    }
+  );
+
+  // session recordings
+  this.get(
+    '/session-recordings',
+    (
+      { sessionRecordings },
+      { queryParams: { scope_id: scopeId, recursive } }
+    ) => {
+      if (recursive && scopeId === 'global') {
+        return sessionRecordings.all();
+      }
+      return sessionRecordings.where({ scopeId });
+    }
+  );
+  this.get(
+    '/session-recordings/:idMethod',
+    async ({ sessionRecordings }, { params: { idMethod } }) => {
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+
+      if (method === 'download') {
+        return faker.helpers.arrayElement(asciicasts);
+      } else {
+        return sessionRecordings.find(id);
+      }
+    }
+  );
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.

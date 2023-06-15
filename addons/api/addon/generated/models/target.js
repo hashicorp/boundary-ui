@@ -96,4 +96,16 @@ export default class GeneratedTargetModel extends BaseModel {
       "The default port that will be listened on by the client's local proxy.",
   })
   default_client_port;
+
+  @attr('string', {
+    description: 'The storage bucket associated with this target.',
+    isNestedAttribute: true,
+  })
+  storage_bucket_id;
+
+  @attr('boolean', {
+    description: 'Whether session recording is enabled on the target.',
+    isNestedAttribute: true,
+  })
+  enable_session_recording;
 }

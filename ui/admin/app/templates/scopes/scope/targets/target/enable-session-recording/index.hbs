@@ -1,0 +1,23 @@
+{{page-title (t 'resources.target.actions.enable-session-recording')}}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t 'resources.target.enable-session-recording.messages.add.title'}}
+      <DocLink @doc='target.enable-session-recording' @iconSize='large' />
+    </h2>
+  </page.header>
+
+  <page.body>
+    <Form::Target::EnableSessionRecording
+      @model={{@model}}
+      @storageBucketList={{this.storageBucketList}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>

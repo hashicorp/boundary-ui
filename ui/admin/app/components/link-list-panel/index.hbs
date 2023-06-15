@@ -1,0 +1,16 @@
+<Hds::Card::Container @level='mid' @hasBorder={{true}}>
+  <ul>
+    {{yield
+      (hash
+        Item=(component
+          'link-list-panel/item'
+          icon=@icon
+          color=@color
+          text=@text
+          route=@route
+          model=@model
+        )
+      )
+    }}
+  </ul>
+</Hds::Card::Container>

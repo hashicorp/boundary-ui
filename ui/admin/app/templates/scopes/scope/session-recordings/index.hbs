@@ -1,0 +1,126 @@
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>{{t 'resources.session-recording.title_plural'}}
+      <DocLink @doc='session-recording' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.session-recording.description'}}</p>
+  </page.header>
+
+  <page.body>
+    {{#if this.hasSessionRecordings}}
+      <Hds::Table
+        @model={{@model.sessionRecordings}}
+        @density='tall'
+        @columns={{array
+          (hash label=(t 'resources.session-recording.form.time.label'))
+          (hash label=(t 'resources.session-recording.form.status.label'))
+          (hash label=(t 'resources.session-recording.form.user.label'))
+          (hash label=(t 'resources.session-recording.form.target.label'))
+          (hash label=(t 'resources.session-recording.form.duration.label'))
+          (hash label='' align='right')
+        }}
+      >
+        <:body as |B|>
+          <B.Tr>
+            {{! Created Time }}
+            <B.Td>
+              {{#if B.data.created_time}}
+                <span class='hds-foreground-faint'>
+                  <time datetime={{format-date-iso B.data.created_time}}>
+                    {{format-date-iso B.data.created_time}}
+                  </time>
+                </span>
+              {{/if}}
+            </B.Td>
+            {{! Status }}
+            <B.Td>
+              <SessionRecording::Status @status={{B.data.state}} />
+            </B.Td>
+            {{! User }}
+            <B.Td>
+              <div
+                class='session-recording-list-cell-item hds-font-weight-semibold'
+              >
+                <span><FlightIcon @name='user' /></span>
+                <span>{{B.data.userDisplayName}}</span>
+              </div>
+            </B.Td>
+            {{! Target }}
+            <B.Td>
+              <div
+                class='session-recording-list-cell-item target-column hds-font-weight-semibold'
+              >
+                <span>
+                  <FlightIcon @name='target' />
+                  {{B.data.create_time_values.target.name}}
+                </span>
+                <span>
+                  <Hds::Badge
+                    @text={{B.data.targetScopeDisplayName}}
+                    @icon='grid'
+                  />
+                </span>
+              </div>
+            </B.Td>
+            {{! Duration }}
+            <B.Td>
+              {{#if B.data.duration}}
+                <div
+                  class='session-recording-list-cell-item hds-foreground-faint'
+                >
+                  <span><FlightIcon @name='clock' /></span>
+                  <span>
+                    {{format-time-duration B.data.duration}}
+                  </span>
+                </div>
+              {{/if}}
+            </B.Td>
+            <B.Td align='right'>
+              {{#if (can 'read session-recording' B.data)}}
+                <Hds::Button
+                  @icon='arrow-right'
+                  @iconPosition='trailing'
+                  @color='secondary'
+                  @text={{t 'actions.view'}}
+                  @route='scopes.scope.session-recordings.session-recording.channels-by-connection'
+                  @model={{B.data.id}}
+                />
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.session-recording.messages.none.title'}}
+          as |message|
+        >
+          <message.description>
+            {{#if this.hasSessionRecordingsConfigured}}
+              {{! storage buckets exist but no recordings }}
+              {{t 'resources.session-recording.messages.none.description'}}
+            {{else}}
+              {{! No storage buckets exist }}
+              {{t
+                'resources.session-recording.messages.none.no-storage-bucket-description'
+              }}
+            {{/if}}
+          </message.description>
+          {{#unless this.hasSessionRecordingsConfigured}}
+            <Hds::Link::Standalone
+              @icon='plus-circle'
+              @iconPosition='leading'
+              @route='scopes.scope.storage-buckets.new'
+              @text={{t 'resources.storage-bucket.messages.none.link'}}
+            />
+          {{/unless}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/if}}
+  </page.body>
+</Rose::Layout::Page>

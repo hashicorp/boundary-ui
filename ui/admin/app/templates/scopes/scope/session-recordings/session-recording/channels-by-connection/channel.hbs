@@ -1,0 +1,159 @@
+{{page-title (t 'resources.session-recording.channel.title')}}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <BreadCrumbs />
+  </page.breadcrumbs>
+
+  <page.header class='channel-header'>
+    <h2>
+      {{reverse-indexed-display-name
+        'resources.session-recording.channel.title_index'
+        @model.channelRecording.connection_recording.channel_recordings
+        @model.channelRecording
+      }}
+    </h2>
+    <Copyable
+      @text={{@model.channelRecording.id}}
+      @buttonText={{t 'actions.copy-to-clipboard'}}
+      @acknowledgeText={{t 'states.copied'}}
+    >
+      <code>{{@model.channelRecording.id}}</code>
+    </Copyable>
+  </page.header>
+
+  <page.body>
+    <Layout::Sidebar as |sb|>
+      <sb.Body>
+        {{outlet}}
+      </sb.Body>
+
+      <sb.Sidebar>
+        {{! Channel details information }}
+        <div class='layout-sidebar-sidebar-details'>
+          <h2>{{t 'resources.session-recording.channel.details'}}</h2>
+          <MetadataList @orientation='vertical' as |list|>
+            {{! Start time }}
+            {{#if @model.channelRecording.start_time}}
+              <list.Item @icon='calendar' @color='faint'>
+                {{t 'form.started.label'}}
+                <time
+                  datetime={{format-date-iso
+                    @model.channelRecording.start_time
+                  }}
+                >
+                  {{format-date-iso @model.channelRecording.start_time}}
+                </time>
+              </list.Item>
+            {{/if}}
+            {{! Duration }}
+            {{#if @model.channelRecording.duration}}
+              <list.Item @icon='clock' @color='faint'>
+                {{t
+                  'resources.session-recording.duration'
+                  time=(format-time-duration @model.channelRecording.duration)
+                }}
+              </list.Item>
+            {{/if}}
+            {{! Bytes up }}
+            {{#if @model.channelRecording.bytes_up}}
+              <list.Item @icon='arrow-up' @color='success'>
+                {{t
+                  'resources.session-recording.up'
+                  bytes=(format-bytes-size @model.channelRecording.bytes_up)
+                }}
+              </list.Item>
+            {{/if}}
+            {{! Bytes down }}
+            {{#if @model.channelRecording.bytes_down}}
+              <list.Item @icon='arrow-down' @color='action'>
+                {{t
+                  'resources.session-recording.down'
+                  bytes=(format-bytes-size @model.channelRecording.bytes_down)
+                }}
+              </list.Item>
+            {{/if}}
+          </MetadataList>
+        </div>
+
+        {{! Related information }}
+        <div>
+          <h2>{{t 'resources.session-recording.related'}}</h2>
+          <LinkListPanel as |list|>
+            {{! User name }}
+            {{#if @model.sessionRecording.create_time_values.user}}
+              <list.Item
+                @icon='user'
+                @color='boundary'
+                @route='scopes.scope.users.user'
+                @model={{array
+                  @model.sessionRecording.create_time_values.user.scope.id
+                  @model.sessionRecording.create_time_values.user.id
+                }}
+                @text={{@model.sessionRecording.userDisplayName}}
+              />
+            {{/if}}
+            {{! Target name }}
+            {{#if @model.sessionRecording.create_time_values.target}}
+              <list.Item
+                @icon='target'
+                @color='boundary'
+                @route='scopes.scope.targets.target'
+                @model={{array
+                  @model.sessionRecording.create_time_values.target.scope.id
+                  @model.sessionRecording.create_time_values.target.id
+                }}
+                @text={{@model.sessionRecording.create_time_values.target.name}}
+              >
+                {{#if @model.sessionRecording.target.type}}
+                  <Hds::Badge @text={{@model.sessionRecording.target.type}} />
+                {{/if}}
+              </list.Item>
+            {{/if}}
+            {{! Bucket name or ID}}
+            {{#if @model.storageBucket}}
+              <list.Item
+                @icon='cloud-check'
+                @color='boundary'
+                @route='scopes.scope.storage-buckets.storage-bucket'
+                @model={{array
+                  @model.storageBucket.scope.id
+                  @model.storageBucket.id
+                }}
+                @text={{@model.storageBucket.displayName}}
+              />
+            {{/if}}
+            {{! Session Recording ID }}
+            <list.Item
+              @icon='film'
+              @color='boundary'
+              @text={{t 'resources.session-recording.title'}}
+            >
+              <Copyable
+                @text={{@model.sessionRecording.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{@model.sessionRecording.id}}</code>
+              </Copyable>
+            </list.Item>
+            {{! Connection Recording ID }}
+            <list.Item
+              @icon='connection'
+              @color='boundary'
+              @text={{t 'resources.session-recording.connection.title'}}
+            >
+              <Copyable
+                @text={{@model.channelRecording.connection_recording.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{@model.channelRecording.connection_recording.id}}</code>
+              </Copyable>
+            </list.Item>
+          </LinkListPanel>
+        </div>
+      </sb.Sidebar>
+    </Layout::Sidebar>
+  </page.body>
+</Rose::Layout::Page>
