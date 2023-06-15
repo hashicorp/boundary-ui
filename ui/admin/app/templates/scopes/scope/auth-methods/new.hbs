@@ -5,27 +5,34 @@
 
 {{page-title (t 'titles.new')}}
 
-<Rose::Layout::Page as |page|>
-  <page.header>
-    <h2>
-      {{t 'resources.auth-method.titles.new'}}
-      <DocLink @doc='auth-method' @iconSize='large' />
-    </h2>
-    <p>{{t 'resources.auth-method.description'}}</p>
-  </page.header>
+<BreadCrumbs />
 
-  <page.breadcrumbs>
-    <BreadCrumbs />
-  </page.breadcrumbs>
+<Hds::PageHeader as |PH|>
+  <PH.Title>
+    {{t 'resources.auth-method.titles.new'}}
+    <DocLink @doc='auth-method' @iconSize='large' @hds={{true}} />
+  </PH.Title>
 
-  <page.body>
-    <Form::AuthMethod
-      @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
-      @addStringItem={{route-action 'addStringItem' @model}}
-      @addAccountClaimMapItem={{route-action 'addAccountClaimMapItem' @model}}
-    />
-  </page.body>
-</Rose::Layout::Page>
+  {{#if @model.isPrimary}}
+    <PH.Badges>
+      <Hds::Badge
+        @text={{t 'states.primary'}}
+        @icon='verified'
+        @color='success'
+      />
+    </PH.Badges>
+  {{/if}}
+
+  <PH.Description>
+    {{t 'resources.auth-method.description'}}
+  </PH.Description>
+</Hds::PageHeader>
+
+<Form::AuthMethod
+  @model={{@model}}
+  @submit={{route-action 'save' @model}}
+  @cancel={{route-action 'cancel' @model}}
+  @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
+  @addStringItem={{route-action 'addStringItem' @model}}
+  @addAccountClaimMapItem={{route-action 'addAccountClaimMapItem' @model}}
+/>

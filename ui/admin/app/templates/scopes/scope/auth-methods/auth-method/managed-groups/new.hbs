@@ -3,26 +3,17 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Rose::Layout::Page as |page|>
+<BreadCrumbs />
 
-  <page.breadcrumbs>
-    <BreadCrumbs />
-  </page.breadcrumbs>
+<Hds::PageHeader as |PH|>
+  <PH.Title>
+    {{t 'titles.new'}}
+    <DocLink @doc='account.new' @iconSize='large' @hds={{true}} />
+  </PH.Title>
+</Hds::PageHeader>
 
-  <page.header>
-    <h2>
-      {{t 'titles.new'}}
-      {{! TODO: change the icon link }}
-      <DocLink @doc='account.new' @iconSize='large' />
-    </h2>
-  </page.header>
-
-  <page.body>
-    <Form::ManagedGroup
-      @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-    />
-  </page.body>
-
-</Rose::Layout::Page>
+<Form::ManagedGroup
+  @model={{@model}}
+  @submit={{route-action 'save' @model}}
+  @cancel={{route-action 'cancel' @model}}
+/>

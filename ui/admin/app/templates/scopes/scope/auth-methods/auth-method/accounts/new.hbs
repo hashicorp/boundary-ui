@@ -3,27 +3,21 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Rose::Layout::Page as |page|>
+<BreadCrumbs />
 
-  <page.breadcrumbs>
-    <BreadCrumbs />
-  </page.breadcrumbs>
+<Hds::PageHeader as |PH|>
+  <PH.Title>
+    {{t 'resources.account.titles.new'}}
+    <DocLink @doc='account.new' @iconSize='large' @hds={{true}} />
+  </PH.Title>
 
-  <page.header>
-    <h2>
-      {{t 'resources.account.titles.new'}}
-      <DocLink @doc='account.new' @iconSize='large' />
-    </h2>
-    <p>{{t 'resources.auth-method.description'}}</p>
-  </page.header>
+  <PH.Description>
+    {{t 'resources.auth-method.description'}}
+  </PH.Description>
+</Hds::PageHeader>
 
-  <page.body>
-    <Form::Account
-      @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-    />
-
-  </page.body>
-
-</Rose::Layout::Page>
+<Form::Account
+  @model={{@model}}
+  @submit={{route-action 'save' @model}}
+  @cancel={{route-action 'cancel' @model}}
+/>

@@ -3,20 +3,38 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<h2>
-  {{t 'resources.auth-method.title'}}
+<Hds::PageHeader as |PH|>
+
+  <PH.Title>
+    {{t 'resources.auth-method.title'}}
+    <DocLink @doc='auth-method' @iconSize='large' @hds={{true}} />
+  </PH.Title>
+
+  <PH.IconTile @icon='lock' />
+
   {{#if @model.isPrimary}}
-    &nbsp;
-    <Hds::Badge @text={{t 'states.primary'}} @color='success' />
-    &nbsp;
+    <PH.Badges>
+      <Hds::Badge
+        @text={{t 'states.primary'}}
+        @icon='verified'
+        @color='success'
+      />
+    </PH.Badges>
   {{/if}}
-  <DocLink @doc='auth-method' @iconSize='large' />
-</h2>
-<p>{{t 'resources.auth-method.description'}}</p>
-<Copyable
-  @text={{@model.id}}
-  @buttonText={{t 'actions.copy-to-clipboard'}}
-  @acknowledgeText={{t 'states.copied'}}
->
-  <code>{{@model.id}}</code>
-</Copyable>
+  <PH.Description>
+    {{t 'resources.auth-method.description'}}
+  </PH.Description>
+
+  <PH.Generic>
+    <Copyable
+      @text={{@model.id}}
+      @buttonText={{t 'actions.copy-to-clipboard'}}
+      @acknowledgeText={{t 'states.copied'}}
+    >
+      <code>{{@model.id}}</code>
+    </Copyable>
+  </PH.Generic>
+
+  {{yield (hash Actions=PH.Actions)}}
+
+</Hds::PageHeader>

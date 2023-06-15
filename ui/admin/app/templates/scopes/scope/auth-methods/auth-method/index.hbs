@@ -3,34 +3,22 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Rose::Layout::Page as |page|>
+<BreadCrumbs />
 
-  <page.breadcrumbs>
-    <BreadCrumbs />
-  </page.breadcrumbs>
-
-  <page.header>
-    <AuthMethods::AuthMethod::Header @model={{@model}} />
-  </page.header>
-
-  <page.navigation>
-    <AuthMethods::AuthMethod::Nav @model={{@model}} />
-  </page.navigation>
-
-  <page.actions>
+<AuthMethods::AuthMethod::Header @model={{@model}} as |PH|>
+  <PH.Actions>
     <AuthMethods::AuthMethod::Actions @model={{@model}} />
-  </page.actions>
+  </PH.Actions>
+</AuthMethods::AuthMethod::Header>
 
-  <page.body>
-    <Form::AuthMethod
-      @model={{@model}}
-      @edit={{route-action 'edit' @model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
-      @addStringItem={{route-action 'addStringItem' @model}}
-      @addAccountClaimMapItem={{route-action 'addAccountClaimMapItem' @model}}
-    />
-  </page.body>
+<AuthMethods::AuthMethod::Nav @model={{@model}} />
 
-</Rose::Layout::Page>
+<Form::AuthMethod
+  @model={{@model}}
+  @edit={{route-action 'edit' @model}}
+  @submit={{route-action 'save' @model}}
+  @cancel={{route-action 'cancel' @model}}
+  @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
+  @addStringItem={{route-action 'addStringItem' @model}}
+  @addAccountClaimMapItem={{route-action 'addAccountClaimMapItem' @model}}
+/>

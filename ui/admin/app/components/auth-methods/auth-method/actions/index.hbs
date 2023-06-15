@@ -4,6 +4,13 @@
 }}
 
 {{#if @model.isOIDC}}
+  {{!
+    State change dropdown employs a true form and radio fields,
+    which are not directly support by HDS dropdown.  The cost of building
+    custom support in HDS dropdown for this case outweights the benefit.
+    Aesthetically, this dropdown is suitable for use next to its HDS
+    couterpart and does not appear out of place.
+  }}
   <Rose::Dropdown
     @text={{t (concat 'states.' @model.state)}}
     @icon={{if
@@ -40,55 +47,57 @@
   </Rose::Dropdown>
 {{/if}}
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
-  {{#if @model.isPrimary}}
-    <dropdown.button
-      @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'removeAsPrimary' @model)}}
-    >
-      {{t 'resources.auth-method.actions.remove-as-primary'}}
-    </dropdown.button>
-  {{else}}
-    <dropdown.button
-      @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'makePrimary' @model)}}
-    >
-      {{t 'resources.auth-method.actions.make-primary'}}
-    </dropdown.button>
-  {{/if}}
-  {{#if (can 'create model' @model collection='accounts')}}
+<Hds::Dropdown as |dd|>
 
-    <dropdown.link
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+
+  {{#if @model.isPrimary}}
+    <dd.Interactive
+      disabled={{@model.canSave}}
+      @text={{t 'resources.auth-method.actions.remove-as-primary'}}
+      @icon='x'
+      {{on 'click' (route-action 'removeAsPrimary' @model)}}
+    />
+  {{else}}
+    <dd.Interactive
+      disabled={{@model.canSave}}
+      @text={{t 'resources.auth-method.actions.make-primary'}}
+      @icon='verified'
+      {{on 'click' (route-action 'makePrimary' @model)}}
+    />
+  {{/if}}
+
+  {{#if (can 'create model' @model collection='accounts')}}
+    <dd.Interactive
+      disabled={{@model.canSave}}
+      @text={{t 'resources.account.actions.create'}}
+      @icon='user-plus'
       @route='scopes.scope.auth-methods.auth-method.accounts.new'
       @model={{@model}}
-    >
-      {{t 'resources.account.actions.create'}}
-    </dropdown.link>
+    />
   {{/if}}
 
   {{#if (can 'create model' @model collection='managed-groups')}}
     {{#if @model.isOIDC}}
-      <dropdown.link
+      <dd.Interactive
+        disabled={{@model.canSave}}
+        @text={{t 'resources.managed-group.actions.create'}}
+        @icon='folder-plus'
         @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
         @model={{@model}}
-      >
-        {{t 'resources.managed-group.actions.create'}}
-      </dropdown.link>
+      />
     {{/if}}
   {{/if}}
 
   {{#if (can 'delete auth-method' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
-      @disabled={{@model.canSave}}
+    <dd.Separator />
+    <dd.Interactive
+      disabled={{@model.canSave}}
+      @text={{t 'resources.auth-method.actions.delete'}}
+      @color='critical'
+      @icon='trash'
       {{on 'click' (route-action 'delete' @model)}}
-    >
-      {{t 'resources.auth-method.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+
+</Hds::Dropdown>
