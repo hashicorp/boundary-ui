@@ -19,7 +19,6 @@ jobs:
       id: boundary-team-role
       run: |
         TEAM=boundary
-        TEST="$(hub api orgs/hashicorp/teams/${TEAM}/memberships/${{ github.actor }})"
         ROLE="$(hub api orgs/hashicorp/teams/${TEAM}/memberships/${{ github.actor }} | jq -r '.role | select(.!=null)')"
         if [[ -n ${ROLE} ]]; then
           echo "Actor ${{ github.actor }} is a ${TEAM} team member, skipping ticket creation"
@@ -27,7 +26,8 @@ jobs:
           echo "Actor ${{ github.actor }} is not a ${TEAM} team member"
         fi
         echo "role=${ROLE}" >> $GITHUB_OUTPUT
-        echo "API cmd output: ${TEST}"
+        echo "role value is ${{ steps.boundary-team-role.outputs.role }}"
+        hub api orgs/hashicorp/teams/${TEAM}/memberships/${{ github.actor }}
       env:
         GITHUB_TOKEN: ${{ secrets.JIRA_SYNC_GITHUB_TOKEN }}
 
