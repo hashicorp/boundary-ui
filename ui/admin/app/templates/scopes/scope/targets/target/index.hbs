@@ -22,11 +22,54 @@
   </page.actions>
 
   <page.body>
-    <Form::Target
-      @model={{@model}}
-      @submit={{route-action 'saveWithAddress' @model}}
-      @cancel={{route-action 'cancel' @model}}
-    />
+    <Layout::Sidebar as |sb|>
+      <sb.Body>
+        <Form::Target
+          @model={{@model}}
+          @submit={{route-action 'saveWithAddress' @model}}
+          @cancel={{route-action 'cancel' @model}}
+        />
+      </sb.Body>
+      {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
+        <sb.Sidebar>
+          <div class='target-sidebar'>
+            <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
+            <p class='description'>
+              {{t 'resources.target.form.sidebar.help'}}
+            </p>
+            {{#if @model.enable_session_recording}}
+              <LinkListPanel as |P|>
+                <P.Item
+                  @icon='cloud-upload'
+                  @color='boundary'
+                  @text={{this.storage_bucket_name}}
+                  @route='scopes.scope.storage-buckets.storage-bucket'
+                  @model={{@model.storage_bucket_id}}
+                >
+                  <Hds::Badge
+                    @text={{t 'resources.storage-bucket.types.aws_s3'}}
+                    @icon='aws'
+                  />
+                </P.Item>
+              </LinkListPanel>
+              <Hds::Link::Standalone
+                @icon='arrow-right'
+                @iconPosition='trailing'
+                @text={{t 'resources.target.form.sidebar.link'}}
+                @route='scopes.scope.targets.target.enable-session-recording'
+              />
+            {{else}}
+              <Hds::Button
+                @text={{t 'resources.target.actions.enable-recording'}}
+                @color='secondary'
+                @route='scopes.scope.targets.target.enable-session-recording'
+              />
+            {{/if}}
+          </div>
+        </sb.Sidebar>
+      {{/if}}
+    </Layout::Sidebar>
+
   </page.body>
 
 </Rose::Layout::Page>

@@ -60,6 +60,7 @@ module('Acceptance | targets | read', function (hooks) {
       type: TYPE_TARGET_TCP,
       scope: instances.scopes.project,
     });
+
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
