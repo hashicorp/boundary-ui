@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-// field bottom margin (HDS leaves this to implementers)
-[class^='hds-form-field'],
-[class^='hds-form-group'],
-[class^='hds-button-set'] {
+// field and button bottom margin (HDS leaves this to implementers)
+[class*='hds-form-field--layout'],
+[class*='hds-form-group--layout'],
+.hds-button-set {
   margin-bottom: 1.5rem;
 }
+
 /* stylelint-disable selector-class-pattern */
 .hds-form-group__control-fields-wrapper {
   .hds-form-group__legend ~ & {
