@@ -3,6 +3,7 @@
 
 add: Add
 cancel: Cancel
+edit: Edit
 delete: Delete
 remove: Remove
 discard: Discard
@@ -18,7 +19,9 @@ deny: Deny
 help: Need help?
 next: Next
 back: Back
+view: View
 retry: Retry
+play: Play
 get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
 copy-error-detail-to-clipboard: Copy error detail to clipboard

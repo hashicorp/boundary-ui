@@ -43,6 +43,7 @@ descriptions:
   cluster-url-initialization: To get started, please enter your cluster URL
   create-but-not-list: You do not have permission to list {resource}, but you can create new instances.
   neither-list-nor-create: You do not have permission to list or create {resource}.
+  cannot-download: You do not have permission to download and playback {resource}.
   no-results: We found no matching records.
   choose-a-provider: There are several built-in plugins for the most common providers. You can choose from one of the included plugins or use a custom plugin.
   provider: This is the provider for this host catalog. The format of the host set filters are specific to each provider.

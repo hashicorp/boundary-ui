@@ -100,5 +100,6 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
         removedCredentialSources;
     }
   }
+
   return target.update(updatedAttrs);
 }

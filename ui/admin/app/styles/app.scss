@@ -9,6 +9,7 @@
 
 @import 'rose';
 @import 'notify';
+@import '@hashicorp/ember-asciinema-player';
 
 .rose-layout-global {
   .rose-layout-global-body {
@@ -636,6 +637,64 @@
   }
 }
 
+.enable-session-recording-toggle {
+  width: 50%;
+  margin-top: 1.5rem;
+
+  .hds-form-field--layout-vertical,
+  .hds-link-standalone {
+    margin-left: 2.5rem;
+  }
+
+  .hds-link-standalone {
+    margin-top: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// target sidebar
+.target-sidebar {
+  .description {
+    color: var(--token-form-helper-text-color);
+    font-weight: var(--token-typography-font-weight-normal);
+    font-size: var(--token-typography-body-200-font-size);
+  }
+
+  .hds-link-standalone {
+    margin-top: 1rem;
+  }
+}
+
+.link-list-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+
+  a {
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+    width: 100%;
+  }
+
+  &__info {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-left: 0.25rem;
+    gap: 0.75rem;
+  }
+
+  &__text {
+    color: var(--token-color-foreground-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .flight-icon-arrow-right {
+    color: var(--token-color-foreground-faint);
+  }
+}
+
 .key-value-list {
   border: 0;
 
@@ -680,4 +739,248 @@
 
 .auth-methods-list-table {
   margin-top: 1rem;
+}
+
+// secret input field
+.secret-input {
+  display: flex;
+  align-items: flex-end;
+  column-gap: 0.5rem;
+  position: relative;
+
+  .overlay {
+    width: 60%;
+    height: 1rem;
+    position: absolute;
+    bottom: 2.15rem;
+    left: 0.5rem;
+    border-radius: 0.25rem;
+    background-color: var(--token-color-palette-neutral-200);
+  }
+
+  .hds-button {
+    margin-bottom: 1.5rem;
+    flex-basis: 6rem;
+  }
+}
+
+// session recording player
+.session-recording-player {
+  --player-background-color: #252937;
+  --player-divider: #656a761a;
+  --player-white: #fff;
+  --player-control-bar-buffer: #656a76;
+  --player-play-button: #1060ff;
+  --player-play-button-border: #0c56e9;
+
+  background-color: var(--player-background-color);
+  border-radius: 0.75rem;
+
+  &-header {
+    border-bottom: var(--player-divider) 0.125rem solid;
+
+    // override of button styles to allow for
+    // static colors in light and dark mode
+    a {
+      color: var(--player-white);
+      padding: 1rem;
+    }
+
+    .hds-button--color-tertiary:hover,
+    .hds-button--color-tertiary:active {
+      color: var(--player-white);
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  &-loading {
+    color: var(--token-color-palette-neutral-400);
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+  }
+
+  &-theme {
+    .asciinema-theme-asciinema {
+      background-color: var(--player-background-color);
+    }
+
+    // hides large play icon overlay
+    .ap-overlay {
+      display: none;
+    }
+
+    pre.ap-terminal {
+      background-color: var(--player-background-color);
+      border-color: var(--player-background-color);
+    }
+
+    .ap-wrapper {
+      .ap-player {
+        border-radius: 0.75rem;
+      }
+
+      &.ap-hud .ap-control-bar {
+        bottom: 0;
+      }
+
+      .ap-control-bar {
+        bottom: -3.625rem;
+        background: var(--player-background-color);
+        border-top: var(--player-divider) 0.125rem solid;
+        height: 3.625rem;
+
+        .ap-playback-button {
+          background: var(--player-play-button);
+          border: var(--player-play-button-border) 0.063rem solid;
+          border-radius: 0.313rem;
+          margin: 0.75rem;
+          padding: 0.625rem 1rem;
+
+          .ap-icon path {
+            fill: var(--player-white);
+          }
+        }
+      }
+
+      .ap-timer {
+        font-family: var(--token-typography-body-base-font-family);
+        font-size: var(--token-typography-body-base-font-size);
+        line-height: var(--token-typography-body-base-line-height);
+        color: var(--player-white);
+        position: relative;
+        top: 40%;
+      }
+
+      .ap-progressbar {
+        padding-top: 0.875rem;
+
+        .ap-bar .ap-gutter {
+          background-color: var(--player-control-bar-buffer);
+
+          span {
+            background-color: var(--player-white);
+          }
+        }
+      }
+
+      .ap-fullscreen-button {
+        padding-top: 1.5rem;
+
+        .ap-icon path {
+          fill: var(--player-white);
+        }
+      }
+    }
+  }
+}
+
+// Layout - Sidebar
+.layout-sidebar {
+  display: grid;
+  grid-template-areas: 'body body sidebar';
+  grid-template-columns: 1fr 1fr 300px;
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+
+  .layout-sidebar-body {
+    grid-area: body;
+  }
+
+  .layout-sidebar-sidebar {
+    grid-area: sidebar;
+
+    &-details {
+      margin-bottom: 3rem;
+    }
+  }
+}
+
+@media (max-width: media.width(large)) {
+  .layout-sidebar {
+    grid-template-areas:
+      'body'
+      'sidebar';
+    grid-template-columns: auto;
+
+    .layout-sidebar-body {
+      min-width: 0;
+    }
+
+    .layout-sidebar-sidebar {
+      max-width: 300px;
+    }
+  }
+}
+
+// Session recording - List
+.session-recording-list-cell-item {
+  display: flex;
+  gap: 0.5rem;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.session-recording-list-cell-item.target-column {
+  flex-direction: column;
+
+  span {
+    gap: 0.5rem;
+  }
+}
+
+// Channels by Connection
+.channels-by-connection {
+  &-connection-header {
+    padding: 0.875rem 1rem;
+  }
+
+  .no-channels-message {
+    padding: 0 1rem;
+  }
+}
+
+// Channel
+.channel-header {
+  margin-bottom: 1rem;
+
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
+// Metadata List
+.metadata-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &.vertical {
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
+  .metadata-list-item {
+    display: flex;
+    align-items: center;
+    column-gap: 0.3rem;
+  }
+}
+
+// Session Recording Status
+// overwrites recording badge icon to red
+.session-recording-status-badge {
+  /* stylelint-disable selector-class-pattern */
+  div.hds-badge__icon {
+    svg.flight-icon-circle-dot {
+      color: var(--token-color-palette-red-200);
+    }
+  }
 }

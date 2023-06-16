@@ -256,7 +256,11 @@ exports.waitForSessionToBeVisible = async (page, targetName) => {
  * @param {string} targetName Name of the target associated with the session
  * @param {string} credentialName Name of the credentials to be added to the target
  */
-exports.addBrokeredCredentialsToTarget = async (page, targetName, credentialName) => {
+exports.addBrokeredCredentialsToTarget = async (
+  page,
+  targetName,
+  credentialName
+) => {
   await page
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
@@ -282,4 +286,4 @@ exports.addBrokeredCredentialsToTarget = async (page, targetName, credentialName
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
-}
+};
