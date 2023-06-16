@@ -1,0 +1,18 @@
+<div class='session-recording-player'>
+  <div class='session-recording-player-header'>
+    <Hds::Button
+      @icon='arrow-left'
+      @text={{t 'resources.session-recording.channel.player.back-navigation'}}
+      @color='tertiary'
+      @route={{@route}}
+      @model={{@model}}
+    />
+  </div>
+  {{#if (has-block)}}
+    {{yield}}
+  {{else}}
+    <div class='session-recording-player-theme'>
+      <Heap::Player @data={{@asciicast}} @poster='npt:1:30' />
+    </div>
+  {{/if}}
+</div>
