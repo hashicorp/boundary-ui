@@ -84,7 +84,6 @@
     "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0",
     "**/@storybook/**/immer": "^9.0.6",
     "**/nomnom/underscore": "^1.12.1",
-    "**/normalize-package-data/hosted-git-info": "^3.0.8",
     "**/remark-parse/trim": "^1.0.1",
     "**/react-dev-utils/browserslist": "^4.16.5",
     "**/@storybook/cli/puppeteer-core/ws": "^7.4.6",
