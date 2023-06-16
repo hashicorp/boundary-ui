@@ -50,12 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "browserslist": "^4.16.5",
-    "ws": "^7.4.6",
-    "trim-newlines": "^3.0.1",
-    "clean-css": "^4.1.11",
-    "mem": "^4.0.0",
-    "minimist": "^1.2.6",
     "normalize-url": "^4.5.1",
     "glob-parent": "^5.1.2",
     "tar": "^6.1.9",
@@ -91,7 +85,13 @@
     "**/@storybook/**/immer": "^9.0.6",
     "**/nomnom/underscore": "^1.12.1",
     "**/normalize-package-data/hosted-git-info": "^3.0.8",
-    "**/remark-parse/trim": "^1.0.1"
+    "**/remark-parse/trim": "^1.0.1",
+    "**/react-dev-utils/browserslist": "^4.16.5",
+    "**/@storybook/cli/puppeteer-core/ws": "^7.4.6",
+    "**/pretty-bytes/meow/trim-newlines": "^3.0.1",
+    "**/ember-cli/**/clean-css-promise/clean-css": "^4.1.11",
+    "**/bower-config/minimist": "^1.2.6",
+    "**/commitizen/minimist": "^1.2.6"
   },
   "config": {
     "commitizen": {
