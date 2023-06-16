@@ -25,4 +25,5 @@ module.exports = {
   features: {
     postcss: false,
   },
+  staticDirs: ['../dist'],
 };
