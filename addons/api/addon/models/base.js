@@ -57,7 +57,7 @@ export default class BaseModel extends Model {
 
   get scopeModel() {
     const id = this.scopeID;
-    return this.store.peekRecord('scope', id);
+    return id ? this.store.peekRecord('scope', id) : null;
   }
 
   // Ember seems to have a bug with its internals and can't correctly set

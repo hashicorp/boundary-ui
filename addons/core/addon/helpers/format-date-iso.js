@@ -10,5 +10,5 @@ import { helper } from '@ember/component/helper';
  * e.g. "2020-01-01T00:00:00.999Z".
  */
 export default helper(function formatDateIso(params /*, hash*/) {
-  return params[0].toISOString();
+  return params[0]?.toISOString();
 });

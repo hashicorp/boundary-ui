@@ -1,0 +1,24 @@
+name: OSS → ENT Merge
+on:
+  repository_dispatch:
+    types: [ oss-merge ]
+jobs:
+  oss-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        with:
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+      - run: |
+          git fetch --prune --unshallow
+          ./.github/scripts/merge.sh "${BASE_BRANCH}" "${MERGE_BRANCH}"
+        env:
+          BASE_BRANCH: ${{ github.event.client_payload.git-ref }}
+          OSS_BRANCH:  oss-remote/${{ github.event.client_payload.git-ref }}
+          OSS_LOCAL_BRANCH:  oss/${{ github.event.client_payload.git-ref }}-${{ github.event.client_payload.git-sha }}
+          MERGE_BRANCH: oss/merge-${{ github.event.client_payload.git-ref }}-${{github.event.client_payload.git-sha}}
+          GITHUB_TOKEN: ${{secrets.ELEVATED_GITHUB_TOKEN }}
+          MERGE_APPROVE_TOKEN: ${{secrets.ELEVATED_GITHUB_TOKEN }}
+          ACTOR: ${{ github.event.client_payload.git-actor }}
+          SHA: ${{github.event.client_payload.git-sha}}

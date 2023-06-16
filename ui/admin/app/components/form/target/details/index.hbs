@@ -4,6 +4,7 @@
 }}
 
 <Rose::Form
+  class={{unless @model.isNew 'full-width'}}
   @onSubmit={{@submit}}
   @cancel={{this.cancel}}
   @disabled={{@model.isSaving}}

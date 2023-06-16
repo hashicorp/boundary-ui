@@ -93,6 +93,7 @@ module.exports = function (environment) {
         target: '/targets',
         'target.new': '/targets/new',
         'target.add-host-sources': '/targets/add-host-sets',
+        'target.enable-session-recording': '/targets/enable-session-recording',
         'target.worker-filters': '/targets/worker-filters',
         user: '/users',
         downloads: '/downloads',
@@ -102,6 +103,14 @@ module.exports = function (environment) {
         worker: '/workers',
         'worker.manage-workers': '/workers/manage-workers-on-hcp',
         'worker-filters': '/worker-filters',
+        'storage-bucket': '/storage-buckets',
+        'storage-bucket.new': '/storage-buckets/new',
+        'storage-bucket.worker-filter': '/storage-buckets/worker-filter',
+        'storage-bucket.disable-credential-rotation':
+          '/storage-buckets/disable-credential-rotation',
+        'session-recording': '/session-recordings',
+        'session-recording.retrieve-lost-session-recordings':
+          '/session-recordings/retrieve-lost-session-recordings',
       },
     },
 

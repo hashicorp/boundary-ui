@@ -37,6 +37,12 @@ export default factory.extend({
       collectionActions.workers = ['create:worker-led', 'list'];
     }
 
+    // Session recording resources are only available on global or org scope
+    if (this.type === 'global' || this.type === 'org') {
+      collectionActions['storage-buckets'] = ['create', 'list'];
+      collectionActions['session-recordings'] = ['list'];
+    }
+
     return collectionActions;
   },
 
