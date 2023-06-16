@@ -317,6 +317,7 @@ export default class TargetModel extends GeneratedTargetModel {
       options
     );
   }
+
   /**
    * True if the target type is tcp.
    * @type {boolean}

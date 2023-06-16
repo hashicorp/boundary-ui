@@ -33,6 +33,8 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked workerTags = A([]);
   @tracked newWorkerKey;
   @tracked newWorkerValue;
+  @tracked enableRecordingStoragePath = false;
+  @tracked recording_storage_path = '';
 
   get clusterIDFromURL() {
     const hostname = this.window?.location?.hostname;
@@ -53,6 +55,14 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   get createConfigText() {
     return `mkdir ${this.configFilePath || '<path>'}/ ;
 touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
+  }
+
+  get recordingStoragePathText() {
+    const path = this.recording_storage_path || '<recording_storage_path>';
+    return this.features.isEnabled('ssh-session-recording') &&
+      this.enableRecordingStoragePath
+      ? `\n  recording_storage_path = "${path}"`
+      : '';
   }
 
   /**
@@ -93,7 +103,7 @@ worker {
     this.features.isEnabled('byow-pki-hcp-cluster-id')
       ? `${tagsText}`
       : `${tagsText}${upstreamText}`
-  }
+  }${this.recordingStoragePathText}
 }`;
 
     if (this.features.isEnabled('byow-pki-hcp-cluster-id')) {
@@ -186,5 +196,10 @@ unzip *.zip ;\\
   @action
   removeWorkerTagByIndex(index) {
     this.workerTags.removeAt(index);
+  }
+
+  @action
+  toggleEnableRecordingStoragePath() {
+    this.enableRecordingStoragePath = !this.enableRecordingStoragePath;
   }
 }
