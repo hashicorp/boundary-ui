@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "normalize-url": "^4.5.1",
     "glob-parent": "^5.1.2",
     "tar": "^6.1.9",
     "path-parse": "^1.0.7",
