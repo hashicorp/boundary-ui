@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedChannelRecordingModel from '../generated/models/channel-recording';
 import { belongsTo } from '@ember-data/model';
 

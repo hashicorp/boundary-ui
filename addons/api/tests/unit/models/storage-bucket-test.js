@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 } from 'api/models/storage-bucket';
