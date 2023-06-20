@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import CanHelper from 'ember-can/helpers/can';
 import { inject as service } from '@ember/service';
 import config from 'admin/config/environment';

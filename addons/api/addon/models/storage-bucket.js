@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedStorageBucketModel from '../generated/models/storage-bucket';
 
 export const TYPE_STORAGE_BUCKET_PLUGIN = 'plugin';
