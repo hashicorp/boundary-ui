@@ -18,7 +18,10 @@ export const Template = (args) => ({
         as |form|
       >
         <form.input @label='Label' @helperText='Helper text' @value='Text' />
-        <form.textarea @label='Label' @helperText='Helper text' @value='Text' />
+        <Hds::Form::Textarea::Field @value="This is my description" as |F|>
+          <F.Label>Short description</F.Label>
+          <F.HelperText>Add a short description about the workspace you are creating.</F.HelperText>
+        </Hds::Form::Textarea::Field>
         <Hds::Form::Select::Field
           @value={{selectedValue}}
           @isInvalid={{false}}
@@ -78,8 +81,10 @@ export const Template = (args) => ({
   as |form|
 >
   <form.input @label='Label' @helperText='Helper text' @value='Text' />
-  <form.textarea @label='Label' @helperText='Helper text' @value='Text' />
-
+  <Hds::Form::Textarea::Field @value='This is my description' as |F|>
+    <F.Label>Short description</F.Label>
+    <F.HelperText>Add a short description about the workspace you are creating.</F.HelperText>
+  </Hds::Form::Textarea::Field>
   <Hds::Form::Select::Field
     @value={{selectedValue}}
     @isInvalid={{false}}

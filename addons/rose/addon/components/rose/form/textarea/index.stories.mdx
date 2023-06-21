@@ -1,39 +1,26 @@
 import { Meta, Story, Preview } from '@storybook/addon-docs';
 import { hbs } from 'ember-cli-htmlbars';
 
-<Meta title="Rose/Form/Textarea" component="Form/Textarea" />
+<Meta title="Rose/Form/Textarea (removed)" component="Form/Textarea" />
 
-# Form Textarea
+# Textarea (removed)
 
-Renders a simple form textarea.
+Rose/Form/Textarea has been removed in favor of
+[HDS::Form::Textarea](https://design-system-components-hashicorp.vercel.app/components/form/textarea).
 
 ```handlebars
-<Rose::Form::Textarea
-  @name='field'
-  @value='Descriptive content'
-  @label='Description'
-  @helperText='Enter a description'
-  @error={{false}}
-  @disabled={{false}}
-  readonly={{false}}
-  @link='www.example.net'
-  @linkText='link text goes here'
-/>
+<Hds::Form::Textarea::Field @value='This is my description' as |F|>
+  <F.Label>Short description</F.Label>
+  <F.HelperText>Add a short description about the workspace you are creating.</F.HelperText>
+</Hds::Form::Textarea::Field>
 ```
 
 export const Template = (args) => ({
   template: hbs`
-      <Rose::Form::Textarea
-        @name='field'
-        @value={{value}}
-        @label={{label}}
-        @helperText={{helperText}}
-        @error={{false}}
-        @disabled={{disabled}}
-        readonly={{read-only}}
-        @link='www.example.net'
-        @linkText='link text goes here'
-      />`,
+    <Hds::Form::Textarea::Field name="field" @value={{value}} @isOptional={{isOptional}} disabled={{disabled}} as |F|>
+      <F.Label>{{label}}</F.Label>
+      <F.HelperText>{{helperText}}</F.HelperText>
+    </Hds::Form::Textarea::Field>`,
   context: args,
 });
 
@@ -45,74 +32,10 @@ export const Template = (args) => ({
       value: 'Value',
       label: 'Label',
       helperText: 'Helper text',
-      link: 'link',
-      linkText: 'link text goes here',
       disabled: false,
-      'read-only': false,
+      isOptional: true,
     }}
   >
     {Template.bind({})}
   </Story>
-</Preview>
-
-export const ErrorTemplate = (args) => ({
-  template: hbs`
-      <Rose::Form::Textarea
-        @name='field'
-        @value={{value}}
-        @label={{label}}
-        @helperText={{helperText}}
-        @error={{true}}
-        @disabled={{disabled}}
-        readonly={{read-only}}
-        as |field|
-      >
-        <field.errors as |errors|>
-          <errors.message>An error occurred.</errors.message>
-        </field.errors>
-      </Rose::Form::Textarea>`,
-  context: args,
-});
-
-<Preview>
-  <Story
-    name="Textarea with Errors"
-    height="10rem"
-    args={{
-      value: 'Value',
-      label: 'Label',
-      helperText: 'Helper text',
-      disabled: false,
-      'read-only': false,
-    }}
-  >
-    {ErrorTemplate.bind({})}
-  </Story>
-</Preview>
-
-export const ContextualTemplate = (args) => ({
-  template: hbs`
-      <Rose::Form::Textarea
-        @value='Text'
-        @error={{true}}
-        @contextual={{true}}
-        as |field|
-      >
-        <hr />
-        <field.label>Label</field.label>
-        <hr />
-        <field.helperText>Help</field.helperText>
-        <hr />
-        <field.field />
-        <hr />
-        <field.errors as |errors|>
-          <errors.message>An error occurred.</errors.message>
-        </field.errors>
-        <hr />
-      </Rose::Form::Textarea>`,
-  context: args,
-});
-
-<Preview>
-  <Story name="Fully Contextual Textarea">{ContextualTemplate.bind({})}</Story>
 </Preview>

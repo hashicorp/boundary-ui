@@ -46,7 +46,10 @@ module('Integration | Component | rose/form', function (hooks) {
         as |form|
       >
         <form.input @label="Input" @name="input-field" />
-        <form.textarea @label="Textarea" @name="textarea-field" />
+        <Hds::Form::Textarea::Field @value="This is my description" name="textarea-field" as |F|>
+          <F.Label>Short description</F.Label>
+          <F.HelperText>Add a short description about the workspace you are creating.</F.HelperText>
+        </Hds::Form::Textarea::Field>
 
         <Hds::Form::Select::Field
           @isInvalid={{false}}
