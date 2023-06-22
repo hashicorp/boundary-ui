@@ -41,9 +41,7 @@ module('Integration | Component | info-field', function (hooks) {
     );
     assert.dom('.info-field').isVisible();
     assert.dom('.info-field .hds-form-label').hasText('Type');
-    assert
-      .dom('.info-field .hds-form-helper-text:last-of-type')
-      .hasText('Description');
+    assert.dom('.info-field .hds-form-helper-text').hasText('Description');
     assert.dom('[data-test-icon="apple"]').isVisible();
     assert.dom('.info-field .hds-form-text-input').isVisible();
   });

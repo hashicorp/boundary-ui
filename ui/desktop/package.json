@@ -14,7 +14,7 @@
     "build": "yarn build:production && yarn build:desktop",
     "build:production": "cross-env EMBER_CLI_ELECTRON=true ember build --environment=production",
     "build:development": "ember build",
-    "prebuild:desktop": "cross-os prebuild:desktop",
+    "prebuild:desktop": "shx rm -rf electron-app/ember-dist && shx cp -r dist/ electron-app/ember-dist/",
     "build:desktop": "yarn build:desktop:install && yarn --cwd electron-app make",
     "build:desktop:debianOnMacOS": "yarn build:desktop:install && BUILD_DEBIAN=true yarn --cwd electron-app make --platform linux --arch x64",
     "build:desktop:install": "yarn install --cwd electron-app",
@@ -43,13 +43,6 @@
     "postinstall": "cd electron-app && yarn install",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
-  "cross-os": {
-    "prebuild:desktop": {
-      "darwin": "cp -r dist/ electron-app/ember-dist/",
-      "linux": "cp -r dist/ electron-app/ember-dist/",
-      "win32": "(robocopy dist electron-app\\ember-dist /MIR) ^& exit 0"
-    }
-  },
   "dependencies": {
     "ember-named-blocks-polyfill": "^0.2.5"
   },
@@ -69,7 +62,6 @@
     "clipboard": "^2.0.8",
     "core": "*",
     "cross-env": "^7.0.3",
-    "cross-os": "^1.5.0",
     "doctoc": "^2.2.0",
     "ember-a11y-testing": "^4.2.0",
     "ember-auto-import": "^2.4.2",
@@ -113,6 +105,7 @@
     "qunit-dom": "^2.0.0",
     "rose": "*",
     "sass": "^1.55.0",
+    "shx": "^0.3.4",
     "sinon": "^14.0.0",
     "stylelint": "^14.14.0",
     "stylelint-config-prettier-scss": "^0.0.1",

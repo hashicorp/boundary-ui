@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 export const asciicast1 = `{"version": 2, "width": 124, "height": 36, "timestamp": 1670352594, "env": {"SHELL": "/bin/zsh", "TERM": "xterm-256color"}}
 [2.138652, "o", "\\u001b[1m\\u001b[7m%\\u001b[27m\\u001b[1m\\u001b[0m                                                                                                                           \\r \\r\\u001b]2;ember-asciinema-player\\u0007\\u001b]1;..iinema-player\\u0007"]
 [2.220877, "o", "\\r\\u001b[0m\\u001b[27m\\u001b[24m\\u001b[J\\u001b[33member-asciinema-player\\u001b[00m \\u001b[32mgit\\u001b[00m:\\u001b[36m(main*)\\u001b[00m $ \\u001b[K"]
