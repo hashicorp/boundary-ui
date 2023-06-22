@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "path-parse": "^1.0.7",
     "nth-check": "^2.0.1",
     "tmpl": "^1.0.5",
     "set-value": "^4.0.1",
