@@ -1,0 +1,23 @@
+diff --git a/node_modules/ember-intl/lib/broccoli/translation-reducer/utils/wrap-with-namespace-if-needed.js b/node_modules/ember-intl/lib/broccoli/translation-reducer/utils/wrap-with-namespace-if-needed.js
+index 3782ed5..37506d4 100644
+--- a/node_modules/ember-intl/lib/broccoli/translation-reducer/utils/wrap-with-namespace-if-needed.js
++++ b/node_modules/ember-intl/lib/broccoli/translation-reducer/utils/wrap-with-namespace-if-needed.js
+@@ -16,12 +16,16 @@ const enums = require('../../enums');
+  * @private
+  */
+ function wrapWithNamespaceIfNeeded(object, filepath, inputPath, addonNames) {
+-  let dirname = path.dirname(filepath).replace(inputPath, '');
++  const normalizedFilePath = path.normalize(filepath);
++  const normalizedInputPath = path.normalize(inputPath);
++  const normalizedAddonNames = addonNames.map(path.normalize);
++
++  let dirname = path.dirname(normalizedFilePath).replace(normalizedInputPath, '');
+ 
+   if (dirname) {
+     let prefix = path.sep;
+ 
+-    for (let addon of addonNames) {
++    for (let addon of normalizedAddonNames) {
+       let addonPrefix = `${path.sep}${enums.addonNamespace}${path.sep}${addon}`;
+ 
+       if (dirname.startsWith(addonPrefix)) {
