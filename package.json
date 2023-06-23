@@ -50,9 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "path-parse": "^1.0.7",
-    "nth-check": "^2.0.1",
-    "tmpl": "^1.0.5",
     "set-value": "^4.0.1",
     "ansi-regex": "^5.0.1",
     "ember-cli-babel": "^7.26.8",
@@ -91,7 +88,8 @@
     "**/@storybook/builder-webpack4/@storybook/core-common/glob-base/glob-parent": "^5.1.2",
     "**/@storybook/addon-docs/@storybook/core/@storybook/core-server/cpy/globby/fast-glob/glob-parent": "^5.1.2",
     "**/ember-intl/broccoli-merge-files/fast-glob/glob-parent": "^5.1.2",
-    "**/watchpack/watchpack-chokidar2/chokidar/glob-parent": "^5.1.2"
+    "**/watchpack/watchpack-chokidar2/chokidar/glob-parent": "^5.1.2",
+    "**/core/ember-inline-svg/**/nth-check": "^2.0.1"
   },
   "config": {
     "commitizen": {
