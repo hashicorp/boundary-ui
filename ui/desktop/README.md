@@ -188,7 +188,7 @@ Steps:
 
 We are aware of an issue of the desktop client not being able to start correctly when running as web app within development mode. This issue reproduces when the developer is enabling/disabling Mirage ([more info](#environment-variables) about environment variables).
 
-The workaround to fix this issue is to reset/clear reset cookies and data (local storage and session storage).
+The workaround to fix this issue is to reset/clear cookies and data (local storage and session storage).
 ### Deploying
 
 TBD
