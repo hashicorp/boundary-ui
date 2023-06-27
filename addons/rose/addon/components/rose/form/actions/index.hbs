@@ -4,17 +4,28 @@
 }}
 
 <Hds::ButtonSet class='rose-form-actions' ...attributes>
-  <Hds::Button
-    @text={{@submitText}}
-    disabled={{@submitDisabled}}
-    type='submit'
-  />
-  {{#if this.showCancel}}
+  {{#if (has-block 'actions')}}
+    {{yield
+      (hash
+        submitDisabled=@submitDisabled
+        cancelDisabled=@cancelDisabled
+        cancel=@cancel
+      )
+      to='actions'
+    }}
+  {{else}}
     <Hds::Button
-      @text={{@cancelText}}
-      @color='secondary'
-      disabled={{@cancelDisabled}}
-      {{on 'click' @cancel}}
+      @text={{@submitText}}
+      disabled={{@submitDisabled}}
+      type='submit'
     />
+    {{#if this.showCancel}}
+      <Hds::Button
+        @text={{@cancelText}}
+        @color='secondary'
+        disabled={{@cancelDisabled}}
+        {{on 'click' @cancel}}
+      />
+    {{/if}}
   {{/if}}
 </Hds::ButtonSet>
