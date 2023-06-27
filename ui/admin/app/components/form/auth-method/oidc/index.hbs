@@ -575,6 +575,7 @@
               <row.cell>
                 <Hds::Form::Textarea::Field
                   @value={{cert.value}}
+                  @isOptional={{true}}
                   @isInvalid={{@model.errors.idp_ca_certs}}
                   as |F|
                 >
@@ -608,7 +609,11 @@
 
           <body.row as |row|>
             <row.cell>
-              <Hds::Form::Textarea::Field @value={{this.newCertificate}} as |F|>
+              <Hds::Form::Textarea::Field
+                @value={{this.newCertificate}}
+                @isOptional={{true}}
+                as |F|
+              >
                 <F.Label>{{t
                     'resources.auth-method.titles.new-certificate'
                   }}</F.Label>

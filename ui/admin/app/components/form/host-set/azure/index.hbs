@@ -162,6 +162,7 @@
 
   <Hds::Form::Textarea::Field
     @value={{@model.filter_string}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.filter_string}}
     name='filter'
     disabled={{form.disabled}}
@@ -180,26 +181,6 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <form.textarea
-    @name='filter'
-    @type='filter'
-    @value={{@model.filter_string}}
-    @label={{t 'resources.host-set.form.filter.label'}}
-    @helperText={{t 'resources.host-set.form.filter.azure.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @error={{@model.errors.filter_string}}
-    disabled={{@model.isSaving}}
-    readonly={{false}}
-    as |field|
-  >
-    {{#if @model.errors.filter_string}}
-      <field.errors as |errors|>
-        {{#each @model.errors.filter_string as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.textarea>
   <form.input
     @name='sync_interval_seconds'
     @type='number'

@@ -222,6 +222,7 @@
   <Hds::Form::Textarea::Field
     @value={{@model.client_certificate}}
     @isInvalid={{@model.errors.client_certificate}}
+    @isOptional={{true}}
     name='client_certificate'
     disabled={{form.disabled}}
     as |F|
@@ -243,6 +244,7 @@
 
   <Hds::Form::Textarea::Field
     @value={{@model.client_certificate_key}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.client_certificate_key}}
     name='client_certificate_key'
     disabled={{form.disabled}}
@@ -276,6 +278,7 @@
 
   <Hds::Form::Textarea::Field
     @value={{@model.ca_cert}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.ca_cert}}
     @name='ca_cert'
     disabled={{form.disabled}}
