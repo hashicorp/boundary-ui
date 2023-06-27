@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import GeneratedSessionRecordingModel from '../generated/models/session-recording';
 import { hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';

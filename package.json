@@ -38,7 +38,8 @@
     "test:ui-desktop": "yarn --cwd ui/desktop test",
     "compliance:licenses": "license-checker --onlyAllow 'Apache*;Apache License, Version 2.0;Apache-2.0;Apache 2.0;Artistic-2.0;BSD;BSD-3-Clause;CC-BY-3.0;CC-BY-4.0;CC0-1.0;ISC;MIT;MPL-2.0;Public Domain;Python-2.0;Unicode-TOU;Unlicense;WTFPL' --excludePackages 'boundary-ui;admin@0.0.0;desktop@0.0.0;base64-js@0.0.2;cycle@1.0.3;cldr-core@41.0.0;make-plural@7.2.0;@hashicorp/ember-asciinema-player@0.0.0'",
     "doc:toc": "doctoc README.md",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.1.0",
@@ -46,16 +47,12 @@
     "git-cz": "^4.8.0",
     "husky": "^8.0.0",
     "license-checker": "^25.0.1",
-    "lint-staged": "^13.0.2"
+    "lint-staged": "^13.0.2",
+    "patch-package": "^7.0.0",
+    "postinstall-postinstall": "^2.1.0"
   },
   "resolutions": {
     "request": "^2.88.0",
-    "normalize-url": "^4.5.1",
-    "glob-parent": "^5.1.2",
-    "tar": "^6.1.9",
-    "path-parse": "^1.0.7",
-    "nth-check": "^2.0.1",
-    "tmpl": "^1.0.5",
     "set-value": "^4.0.1",
     "ansi-regex": "^5.0.1",
     "ember-cli-babel": "^7.26.8",
@@ -84,14 +81,18 @@
     "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0",
     "**/@storybook/**/immer": "^9.0.6",
     "**/nomnom/underscore": "^1.12.1",
-    "**/normalize-package-data/hosted-git-info": "^3.0.8",
     "**/remark-parse/trim": "^1.0.1",
     "**/react-dev-utils/browserslist": "^4.16.5",
     "**/@storybook/cli/puppeteer-core/ws": "^7.4.6",
     "**/pretty-bytes/meow/trim-newlines": "^3.0.1",
     "**/ember-cli/**/clean-css-promise/clean-css": "^4.1.11",
     "**/bower-config/minimist": "^1.2.6",
-    "**/commitizen/minimist": "^1.2.6"
+    "**/commitizen/minimist": "^1.2.6",
+    "**/@storybook/builder-webpack4/@storybook/core-common/glob-base/glob-parent": "^5.1.2",
+    "**/@storybook/addon-docs/@storybook/core/@storybook/core-server/cpy/globby/fast-glob/glob-parent": "^5.1.2",
+    "**/ember-intl/broccoli-merge-files/fast-glob/glob-parent": "^5.1.2",
+    "**/watchpack/watchpack-chokidar2/chokidar/glob-parent": "^5.1.2",
+    "**/core/ember-inline-svg/**/nth-check": "^2.0.1"
   },
   "config": {
     "commitizen": {
