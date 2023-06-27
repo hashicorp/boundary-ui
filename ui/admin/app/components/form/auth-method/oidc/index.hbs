@@ -579,7 +579,6 @@
                   @isInvalid={{@model.errors.idp_ca_certs}}
                   as |F|
                 >
-                  <F.Label>{{t 'form.certificate.label'}}</F.Label>
                   {{#if @model.errors.idp_ca_certs}}
                     <F.Error as |E|>
                       {{#each @model.errors.idp_ca_certs as |error|}}
@@ -612,12 +611,7 @@
               <Hds::Form::Textarea::Field
                 @value={{this.newCertificate}}
                 @isOptional={{true}}
-                as |F|
-              >
-                <F.Label>{{t
-                    'resources.auth-method.titles.new-certificate'
-                  }}</F.Label>
-              </Hds::Form::Textarea::Field>
+              />
             </row.cell>
             <row.cell @shrink={{true}}>
               <Rose::Button
