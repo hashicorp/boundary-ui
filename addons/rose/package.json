@@ -63,7 +63,7 @@
     "@storybook/addon-docs": "~6.4.0",
     "@storybook/addons": "^6.4.0",
     "@storybook/api": "^6.3.12",
-    "@storybook/cli": "^6.3.10",
+    "@storybook/cli": "^6.4.0",
     "@storybook/components": "^6.3.12",
     "@storybook/core-events": "^6.3.0",
     "@storybook/core-server": "^7.0.24",
