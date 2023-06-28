@@ -55,7 +55,7 @@ that best suit you and your personal style.
 
 * [VS Code][vscode]
 * [Warp][warp]:  Terminal application for macOS
-* [Homebrew][homebrew]:  The missing package manager for macOS
+* [Homebrew][homebrew]:  The missing package manager for macOS and Linux
 * [Ember Inspector][ember-inspector]:  Understand and debug Ember applications
 * [Postman][postman]:  Test and inspect APIs
 
