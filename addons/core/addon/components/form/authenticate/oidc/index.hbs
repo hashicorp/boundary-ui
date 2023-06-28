@@ -10,11 +10,11 @@
   as |form|
 >
   <form.actions>
-    <:actions as |A|>
+    <:actions>
       <Hds::Button
         @text={{t 'actions.authenticate'}}
         @isFullWidth={{true}}
-        disabled={{A.submitDisabled}}
+        disabled={{form.disabled}}
         type='submit'
       />
     </:actions>

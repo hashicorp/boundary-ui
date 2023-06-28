@@ -5,14 +5,7 @@
 
 <Hds::ButtonSet class='rose-form-actions' ...attributes>
   {{#if (has-block 'actions')}}
-    {{yield
-      (hash
-        submitDisabled=@submitDisabled
-        cancelDisabled=@cancelDisabled
-        cancel=@cancel
-      )
-      to='actions'
-    }}
+    {{yield to='actions'}}
   {{else}}
     <Hds::Button
       @text={{@submitText}}

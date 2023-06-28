@@ -5,7 +5,7 @@
 
 <Hds::ButtonSet class='rose-form-actions' ...attributes>
   {{#if (has-block 'edit')}}
-    {{yield (hash enableEdit=@enableEdit) to='edit'}}
+    {{yield to='edit'}}
   {{else}}
     <Hds::Button
       @text={{@enableEditText}}
