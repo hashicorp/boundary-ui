@@ -577,6 +577,7 @@
                   @value={{cert.value}}
                   @isOptional={{true}}
                   @isInvalid={{@model.errors.idp_ca_certs}}
+                  disabled={{form.disabled}}
                   as |F|
                 >
                   {{#if @model.errors.idp_ca_certs}}
@@ -611,6 +612,7 @@
               <Hds::Form::Textarea::Field
                 @value={{this.newCertificate}}
                 @isOptional={{true}}
+                disabled={{form.disabled}}
               />
             </row.cell>
             <row.cell @shrink={{true}}>
