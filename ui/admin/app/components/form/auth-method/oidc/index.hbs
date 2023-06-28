@@ -578,6 +578,7 @@
                   @isOptional={{true}}
                   @isInvalid={{@model.errors.idp_ca_certs}}
                   disabled={{form.disabled}}
+                  aria-label={{t 'form.certificate.label'}}
                   as |F|
                 >
                   {{#if @model.errors.idp_ca_certs}}
@@ -613,6 +614,7 @@
                 @value={{this.newCertificate}}
                 @isOptional={{true}}
                 disabled={{form.disabled}}
+                aria-label={{t 'resources.auth-method.titles.new-certificate'}}
               />
             </row.cell>
             <row.cell @shrink={{true}}>
