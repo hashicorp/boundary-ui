@@ -53,7 +53,7 @@ Our team finds the following applications useful in day-to-day development
 workflows.  These are merely recommendations.  We encourage you to use the tools
 that best suit you and your personal style.
 
-* [VS Code][vscode]
+* [VS Code][vscode]: Code editor for building and debugging web applications
 * [Warp][warp]:  Terminal application for macOS
 * [Homebrew][homebrew]:  The missing package manager for macOS and Linux
 * [Ember Inspector][ember-inspector]:  Understand and debug Ember applications
