@@ -81,7 +81,6 @@
     "**/nomnom/underscore": "^1.12.1",
     "**/remark-parse/trim": "^1.0.1",
     "**/react-dev-utils/browserslist": "^4.16.5",
-    "**/@storybook/cli/puppeteer-core/ws": "^7.4.6",
     "**/pretty-bytes/meow/trim-newlines": "^3.0.1",
     "**/ember-cli/**/clean-css-promise/clean-css": "^4.1.11",
     "**/bower-config/minimist": "^1.2.6",
