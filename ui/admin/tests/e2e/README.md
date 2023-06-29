@@ -141,7 +141,7 @@ PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.co
 ### Destroy Enos Scenario
 
 Using Terminal 1:
-- `$ enos scenario destroy`.
+- `$ enos scenario destroy e2e_ui builder:local`
 - After all the steps pass, you should see a `Enos operations finished!`.
 
 
