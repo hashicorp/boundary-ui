@@ -17,6 +17,8 @@ The desktop client UI for Boundary.
       - [Environment Variables](#environment-variables-1)
     - [Running Tests](#running-tests)
     - [Running end to end Tests](#running-end-to-end-tests)
+    - [Troubleshooting](#troubleshooting)
+      - [Blank screen and/or hang browser tab when running as web app](#blank-screen-andor-hang-browser-tab-when-running-as-web-app)
     - [Deploying](#deploying)
   - [Debug desktop client](#debug-desktop-client)
     - [Debug `renderer` process](#debug-renderer-process)
@@ -179,6 +181,14 @@ Steps:
 - Run `$ yarn run e2e` and tests will start run.
 - You can check the screenshots the tests take: `desktop/tests/end2end/screenshots`.
 
+
+### Troubleshooting
+
+#### Blank screen and/or hang browser tab when running as web app
+
+We are aware of an issue of the desktop client not being able to start correctly when running as web app within development mode. This issue reproduces when the developer is enabling/disabling Mirage ([more info](#environment-variables) about environment variables).
+
+The workaround to fix this issue is to reset/clear cookies and data (local storage and session storage).
 ### Deploying
 
 TBD
