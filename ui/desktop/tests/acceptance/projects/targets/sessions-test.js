@@ -193,6 +193,53 @@ module('Acceptance | projects | targets | sessions', function (hooks) {
     );
   });
 
+  test('can identify target with active sessions', async function (assert) {
+    assert.expect(1);
+
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    await click('.rose-dialog-footer .rose-button-secondary');
+    assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
+  });
+
+  test('can identify target with pending sessions', async function (assert) {
+    assert.expect(1);
+
+    instances.session.update({ status: 'pending' });
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.sessions);
+    await click('.rose-layout-page-actions button', 'Activate connect mode');
+    await click('.rose-dialog-footer .rose-button-secondary');
+    assert.ok(find('.rose-layout-page-header .hds-badge--color-success'));
+  });
+
+  test('cannot identify target with terminated sessions', async function (assert) {
+    assert.expect(1);
+    instances.session.update({ status: 'terminated' });
+
+    await visit(urls.sessions);
+    assert.notOk(find('.rose-layout-page-header .hds-badge--color-success'));
+  });
+
   test('cancelling a session', async function (assert) {
     assert.expect(2);
 

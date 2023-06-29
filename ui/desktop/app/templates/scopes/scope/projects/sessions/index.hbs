@@ -122,6 +122,7 @@
             <row.headerCell>{{t 'resources.target.title'}}</row.headerCell>
             <row.headerCell>{{t 'form.proxy.label'}}</row.headerCell>
             <row.headerCell>{{t 'form.started.label'}}</row.headerCell>
+            <row.headerCell>{{t 'form.status.label'}}</row.headerCell>
             <row.headerCell />
           </header.row>
         </table.header>
@@ -171,6 +172,9 @@
                 <time datetime={{format-date-iso model.created_time}}>
                   {{format-date-iso-human model.created_time}}
                 </time>
+              </row.cell>
+              <row.cell>
+                <SessionStatus @model={{model}} />
               </row.cell>
               <row.cell>
                 {{#if model.isCancelable}}
