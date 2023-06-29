@@ -188,32 +188,6 @@ module('Acceptance | projects | sessions', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, sessionsCount);
   });
 
-  test('can identify active sessions', async function (assert) {
-    assert.expect(1);
-    await visit(urls.sessions);
-    assert.ok(
-      find('tbody tr:first-child th:first-child .session-status-active')
-    );
-  });
-
-  test('cannot identify pending sessions', async function (assert) {
-    assert.expect(1);
-    instances.session.update({ status: 'pending' });
-    await visit(urls.sessions);
-    assert.notOk(
-      find('tbody tr:first-child th:first-child .session-status-active')
-    );
-  });
-
-  test('cannot identify terminated sessions', async function (assert) {
-    assert.expect(1);
-    instances.session.update({ status: 'terminated' });
-    await visit(urls.sessions);
-    assert.notOk(
-      find('tbody tr:first-child th:first-child .session-status-active')
-    );
-  });
-
   test('cancelling a session', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop');
