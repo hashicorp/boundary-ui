@@ -4,9 +4,13 @@
 }}
 
 <Hds::ButtonSet class='rose-form-actions' ...attributes>
-  <Hds::Button
-    @text={{@enableEditText}}
-    @color='secondary'
-    {{on 'click' @enableEdit}}
-  />
+  {{#if (has-block 'edit')}}
+    {{yield to='edit'}}
+  {{else}}
+    <Hds::Button
+      @text={{@enableEditText}}
+      @color='secondary'
+      {{on 'click' @enableEdit}}
+    />
+  {{/if}}
 </Hds::ButtonSet>
