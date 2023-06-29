@@ -4,6 +4,7 @@
 # Admin UI e2e tests
 
 - [Admin UI e2e tests](#admin-ui-e2e-tests)
+- [Admin UI e2e tests](#admin-ui-e2e-tests-1)
   - [Prerequisites:](#prerequisites)
     - [Accesses](#accesses)
     - [Software](#software)
@@ -15,7 +16,7 @@
     - [Setup Enos:](#setup-enos)
   - [Run tests:](#run-tests)
     - [Launch Enos Scenario](#launch-enos-scenario)
-    - [Run tests](#run-tests)
+    - [Run tests](#run-tests-1)
     - [Destroy Enos Scenario](#destroy-enos-scenario)
   - [Developing Tests](#developing-tests)
 
@@ -141,7 +142,7 @@ PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.co
 ### Destroy Enos Scenario
 
 Using Terminal 1:
-- `$ enos scenario destroy`.
+- `$ enos scenario destroy e2e_ui builder:local`
 - After all the steps pass, you should see a `Enos operations finished!`.
 
 
