@@ -280,7 +280,7 @@ module(
         .dom('.rose-notification-body')
         .hasText('Error in provided request.');
       assert
-        .dom('.rose-form-error-message')
+        .dom('.hds-form-error__message')
         .hasText('Field required for creating a username-key-pair credential.');
     });
 

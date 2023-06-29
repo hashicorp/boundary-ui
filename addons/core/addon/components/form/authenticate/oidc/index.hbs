@@ -9,10 +9,14 @@
   @disabled={{@disabled}}
   as |form|
 >
-
-  <form.actions
-    @submitText={{t 'actions.authenticate'}}
-    @showCancel={{false}}
-  />
-
+  <form.actions>
+    <:actions>
+      <Hds::Button
+        @text={{t 'actions.authenticate'}}
+        @isFullWidth={{true}}
+        disabled={{form.disabled}}
+        type='submit'
+      />
+    </:actions>
+  </form.actions>
 </Rose::Form>
