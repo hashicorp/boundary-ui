@@ -53,7 +53,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "ansi-regex": "^5.0.1",
     "ember-cli-babel": "^7.26.8",
     "jsonpointer": "5.0.0",
     "json-schema": "^0.4.0",
@@ -92,7 +91,8 @@
     "**/ember-intl/broccoli-merge-files/fast-glob/glob-parent": "^5.1.2",
     "**/watchpack/watchpack-chokidar2/chokidar/glob-parent": "^5.1.2",
     "**/core/ember-inline-svg/**/nth-check": "^2.0.1",
-    "**/snapdragon/base/cache-base/**/set-value": "^4.0.1"
+    "**/snapdragon/base/cache-base/**/set-value": "^4.0.1",
+    "**/@storybook/**/ansi-regex": "^5.0.1"
   },
   "config": {
     "commitizen": {
