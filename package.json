@@ -53,7 +53,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "follow-redirects": "^1.14.8",
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5",
     "ember-template-recast": "^6.0.0",
