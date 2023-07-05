@@ -10,10 +10,6 @@
   <page.header>
     <h2>
       {{@model.displayName}}
-      {{#if @model.isActive}}
-        &nbsp;
-        <Hds::Badge @color='success' @text={{t 'states.active'}} />
-      {{/if}}
     </h2>
     <p>{{@model.description}}</p>
     <p>
