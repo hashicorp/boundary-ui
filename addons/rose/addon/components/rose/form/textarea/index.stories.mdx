@@ -9,7 +9,11 @@ Rose/Form/Textarea has been removed in favor of
 [HDS::Form::Textarea](https://design-system-components-hashicorp.vercel.app/components/form/textarea).
 
 ```handlebars
-<Hds::Form::Textarea::Field @value='This is my description' as |F|>
+<Hds::Form::Textarea::Field
+  @value='This is my description'
+  disabled={{form.disabled}}
+  as |F|
+>
   <F.Label>Short description</F.Label>
   <F.HelperText>Add a short description about the workspace you are creating.</F.HelperText>
 </Hds::Form::Textarea::Field>
