@@ -81,15 +81,24 @@
     {{/if}}
   </form.input>
 
-  <form.checkbox
-    @label={{t 'form.disable_discovered_config_validation.label'}}
-    @helperText={{t 'form.disable_discovered_config_validation.help'}}
-    @checked={{@model.disable_discovered_config_validation}}
-    @onChange={{fn
-      (mut @model.disable_discovered_config_validation)
-      (if @model.disable_discovered_config_validation false true)
+  <Hds::Form::Checkbox::Field
+    name='disable_discovered_config_validation'
+    checked={{@model.disable_discovered_config_validation}}
+    disabled={{form.disabled}}
+    {{on
+      'change'
+      (fn
+        (mut @model.disable_discovered_config_validation)
+        (if @model.disable_discovered_config_validation false true)
+      )
     }}
-  />
+    as |F|
+  >
+    <F.Label>{{t 'form.disable_discovered_config_validation.label'}}</F.Label>
+    <F.HelperText>{{t
+        'form.disable_discovered_config_validation.help'
+      }}</F.HelperText>
+  </Hds::Form::Checkbox::Field>
 
   <form.input
     @name='client_id'

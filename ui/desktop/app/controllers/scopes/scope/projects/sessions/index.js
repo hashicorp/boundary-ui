@@ -4,6 +4,7 @@
  */
 
 import Controller from '@ember/controller';
+import { A } from '@ember/array';
 
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
   // =attributes
@@ -15,7 +16,8 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    */
   get sorted() {
     const sessions = this.model;
-    const sortedSessions = sessions
+    if (sessions.length <= 1) return sessions;
+    const sortedSessions = A(sessions)
       // sort by created time
       .sortBy('session.created_time')
       .reverse();
