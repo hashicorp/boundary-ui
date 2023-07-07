@@ -124,13 +124,6 @@
                 {{#if model.description}}
                   <p>{{model.description}}</p>
                 {{/if}}
-                {{#if model.isActive}}
-                  <Hds::Badge
-                    @text={{t 'states.active'}}
-                    @color='success'
-                    @icon='check'
-                  />
-                {{/if}}
               </row.headerCell>
               <row.cell>
                 <Copyable
