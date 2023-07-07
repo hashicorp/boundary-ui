@@ -16,7 +16,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    */
   get sorted() {
     const sessions = this.model;
-    if (sessions.length <= 1) return sessions;
+    if (!sessions.length) return sessions;
     const sortedSessions = A(sessions)
       // sort by created time
       .sortBy('session.created_time')
