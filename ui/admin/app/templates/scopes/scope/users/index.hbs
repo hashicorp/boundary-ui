@@ -70,43 +70,6 @@
         </:body>
       </Hds::Table>
 
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model as |user|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (can 'read model' user)}}
-                  <LinkTo @route='scopes.scope.users.user' @model={{user.id}}>
-                    {{user.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{user.displayName}}
-                {{/if}}
-                {{#if user.accountName}}
-                  <br /><Hds::Badge @text={{user.accountName}} />
-                {{/if}}
-                <p>{{user.description}}</p>
-              </row.headerCell>
-              <row.cell>
-                <Copyable
-                  @text={{user.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{user.id}}</code>
-                </Copyable>
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
-
     {{else}}
 
       <Rose::Layout::Centered>
