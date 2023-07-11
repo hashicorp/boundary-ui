@@ -18,24 +18,26 @@
 
   <page.actions>
     {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
-      <Rose::Dropdown
-        @text={{t 'titles.new'}}
-        @dropdownRight={{true}}
-        as |dropdown|
-      >
-        <dropdown.link
+      <Hds::Dropdown as |dd|>
+        <dd.ToggleButton @text={{t 'titles.new'}} @color='secondary' />
+        <dd.Interactive
+          @text={{t 'resources.auth-method.types.password'}}
           @route='scopes.scope.auth-methods.new'
           @query={{hash type='password'}}
-        >
-          {{t 'resources.auth-method.types.password'}}
-        </dropdown.link>
-        <dropdown.link
+        />
+        <dd.Interactive
+          @text={{t 'resources.auth-method.types.oidc'}}
           @route='scopes.scope.auth-methods.new'
           @query={{hash type='oidc'}}
-        >
-          {{t 'resources.auth-method.types.oidc'}}
-        </dropdown.link>
-      </Rose::Dropdown>
+        />
+        {{#if (feature-flag 'ldap-auth-methods')}}
+          <dd.Interactive
+            @text={{t 'resources.auth-method.types.ldap'}}
+            @route='scopes.scope.auth-methods.new'
+            @query={{hash type='ldap'}}
+          />
+        {{/if}}
+      </Hds::Dropdown>
     {{/if}}
   </page.actions>
 
