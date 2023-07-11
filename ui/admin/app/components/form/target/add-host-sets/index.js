@@ -52,12 +52,16 @@ export default class FormTargetAddHostSetsComponent extends Component {
 
   // =actions
 
+  /**
+   * Add/Remove host set to current selection
+   * @param {string} hostSetId
+   */
   @action
-  toggleHostSet(hostSet) {
-    if (!this.selectedHostSetIDs.includes(hostSet.id)) {
-      this.selectedHostSetIDs.addObject(hostSet.id);
+  toggleHostSet(hostSetId) {
+    if (!this.selectedHostSetIDs.includes(hostSetId)) {
+      this.selectedHostSetIDs.addObject(hostSetId);
     } else {
-      this.selectedHostSetIDs.removeObject(hostSet.id);
+      this.selectedHostSetIDs.removeObject(hostSetId);
     }
   }
 
