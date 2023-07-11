@@ -41,14 +41,14 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
 
   /**
    * Toggle host selection
-   * @param {HostModel} host
+   * @param {string} hostId
    */
   @action
-  toggleHost(host) {
-    if (!this.selectedHostIDs.includes(host.id)) {
-      this.selectedHostIDs.addObject(host.id);
+  toggleHost(hostId) {
+    if (!this.selectedHostIDs.includes(hostId)) {
+      this.selectedHostIDs.addObject(hostId);
     } else {
-      this.selectedHostIDs.removeObject(host.id);
+      this.selectedHostIDs.removeObject(hostId);
     }
   }
 

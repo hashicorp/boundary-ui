@@ -13,8 +13,14 @@ subproject, e.g. running or testing.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Projects](#projects)
+  - [Core (addons/core):](#core-addonscore)
+  - [API (addons/api):](#api-addonsapi)
+  - [Auth (addons/auth):](#auth-addonsauth)
+  - [Rose (addons/rose)](#rose-addonsrose)
+  - [Admin (ui/admin)](#admin-uiadmin)
+  - [Desktop Client (ui/desktop)](#desktop-client-uidesktop)
 - [Prerequisites](#prerequisites)
 - [Optional Tooling](#optional-tooling)
 - [Installation](#installation)
@@ -32,6 +38,27 @@ subproject, e.g. running or testing.
     - [License Checking](#license-checking)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Projects
+
+This monorepo contains multiple projects.
+### Core (addons/core):
+Core features use by Boundary UI's, i.e i18n, helpers or components. [Project Readme](addons/core).
+
+### API (addons/api):
+The API data access layer for Boundary and all the related mocks. [Project Readme](addons/api).
+
+### Auth (addons/auth):
+Authentication layer for Boundary. [Project Readme](addons/auth).
+
+### Rose (addons/rose)
+Common styles and components shared by Boundary UIs. [Project Readme](addons/rose).
+
+### Admin (ui/admin)
+The Admin UI for Boundary. [Project Readme](ui/admin).
+
+### Desktop Client (ui/desktop)
+The desktop client UI for Boundary. [Project Readme](ui/desktop).
 
 ## Prerequisites
 

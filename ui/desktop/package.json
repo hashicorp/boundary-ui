@@ -107,7 +107,7 @@
     "sass": "^1.55.0",
     "shx": "^0.3.4",
     "sinon": "^14.0.0",
-    "stylelint": "^14.14.0",
+    "stylelint": "^15.10.1",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^7.0.1",
     "webpack": "^5.76.0"
