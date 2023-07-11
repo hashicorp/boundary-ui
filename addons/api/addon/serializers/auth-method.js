@@ -4,7 +4,28 @@
  */
 
 import ApplicationSerializer from './application';
-import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
+
+const fieldsByType = {
+  oidc: [
+    'state',
+    'issuer',
+    'client_id',
+    'client_secret',
+    'client_secret_mac',
+    'max_age',
+    'api_url_prefix',
+    'callback_url',
+    'disable_discovered_config_validation',
+    'dry_run',
+    'claims_scopes',
+    'signing_algorithms',
+    'allowed_audiences',
+    'idp_ca_certs',
+    'account_claim_maps',
+  ],
+  ldap: [],
+};
 
 export default class AuthMethodSerializer extends ApplicationSerializer {
   // =methods
@@ -17,11 +38,27 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     switch (snapshot.record.type) {
-      case TYPE_AUTH_METHOD_OIDC:
-        return this.serializeOIDC(...arguments);
-      default:
+      case TYPE_AUTH_METHOD_PASSWORD:
         return this.serializeDefault(...arguments);
+      default:
+        return this.serializeAuthMethod(...arguments);
     }
+  }
+
+  serializeAttribute(snapshot, json, key, attribute) {
+    const value = super.serializeAttribute(...arguments);
+    const { type } = snapshot.record;
+    const { options } = attribute;
+
+    if (type != 'password' && options.isNestedAttribute && json.attributes) {
+      if (!fieldsByType[type].includes(key)) delete json.attributes[key];
+    }
+
+    if (options.isNestedSecret && json.secrets) {
+      if (!fieldsByType[type].includes(key)) delete json.secrets[key];
+    }
+
+    return value;
   }
 
   /**
@@ -40,11 +77,11 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @param {Snapshot} snapshot
    * @return {object}
    */
-  serializeOIDC(snapshot) {
+  serializeAuthMethod(snapshot) {
     let serialized = super.serialize(...arguments);
     const state = snapshot?.adapterOptions?.state;
     if (state) {
-      serialized = this.serializeOIDCWithState(snapshot, state);
+      serialized = this.serializeAuthMethodWithState(snapshot, state);
     } else {
       delete serialized.attributes.state;
     }
@@ -57,7 +94,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @param {string} state
    * @return {object}
    */
-  serializeOIDCWithState(snapshot, state) {
+  serializeAuthMethodWithState(snapshot, state) {
     return {
       version: snapshot.attr('version'),
       attributes: { state },
