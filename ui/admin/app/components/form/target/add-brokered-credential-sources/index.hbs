@@ -15,30 +15,29 @@
     @cancelText={{t 'actions.cancel'}}
   />
 
-  <Rose::Table as |table|>
-    <table.header as |header|>
-      <header.row as |row|>
-        <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-        <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-      </header.row>
-    </table.header>
-    <table.body as |body|>
-      {{#each @filteredCredentialSources as |credentialSource|}}
-        <body.row as |row|>
-          <row.headerCell>
-            <form.checkbox
-              @label={{credentialSource.id}}
-              @description={{credentialSource.description}}
-              @onChange={{fn this.toggleCredentialSource credentialSource.id}}
-            />
-          </row.headerCell>
-          <row.cell>{{credentialSource.name}}</row.cell>
-          <row.cell>
-            <CredSourceTypeBadge @model={{credentialSource}} />
-          </row.cell>
-        </body.row>
-      {{/each}}
-    </table.body>
-  </Rose::Table>
+  <Hds::Table
+    @model={{@filteredCredentialSources}}
+    @columns={{array
+      (hash label=(t 'form.id.label'))
+      (hash label=(t 'form.name.label'))
+      (hash label=(t 'form.type.label'))
+    }}
+    @valign='middle'
+  >
+    <:body as |B|>
+      <B.Tr>
+        <B.Td>
+          <Hds::Form::Checkbox::Field
+            {{on 'change' (fn this.toggleCredentialSource B.data.id)}}
+            as |F|
+          >
+            <F.Label>{{B.data.id}}</F.Label>
+            <F.HelperText>{{B.data.description}}</F.HelperText>
+          </Hds::Form::Checkbox::Field>
+        </B.Td>
+        <B.Td>{{B.data.name}}</B.Td>
+        <B.Td><CredSourceTypeBadge @model={{B.data}} /></B.Td>
+      </B.Tr>
+    </:body>
+  </Hds::Table>
 </Rose::Form>
