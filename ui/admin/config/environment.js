@@ -158,6 +158,9 @@ module.exports = function (environment) {
       ENV.features.featureEditions.enterprise[feature] = true;
       ENV.features.featureEditions.hcp[feature] = true;
     });
+    ENV.features.featureEditions.oss['ldap-auth-methods'] = true;
+    ENV.features.featureEditions.enterprise['ldap-auth-methods'] = true;
+    ENV.features.featureEditions.hcp['ldap-auth-methods'] = true;
   }
 
   if (environment === 'test') {
