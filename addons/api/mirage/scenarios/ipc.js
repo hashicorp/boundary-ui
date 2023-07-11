@@ -172,10 +172,12 @@ export default function initializeMockIPC(server, config) {
     /**
      * Do nothing when attempting to minimize, toggle fullscreen,
      * and close a browser window
+     * * Do nothing when canceling a session invokes the stop method
      */
     minimizeWindow() {}
     closeWindow() {}
     toggleFullscreenWindow() {}
+    stop() {}
   }
 
   /**

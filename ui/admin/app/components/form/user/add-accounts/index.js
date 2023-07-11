@@ -43,12 +43,16 @@ export default class FormUserAddAccountsComponent extends Component {
 
   // =actions
 
+  /**
+   * Toggle account selection
+   * @param {string} accountId
+   */
   @action
-  toggleAccount(account) {
-    if (!this.selectedAccountIDs.includes(account.id)) {
-      this.selectedAccountIDs.addObject(account.id);
+  toggleAccount(accountId) {
+    if (!this.selectedAccountIDs.includes(accountId)) {
+      this.selectedAccountIDs.addObject(accountId);
     } else {
-      this.selectedAccountIDs.removeObject(account.id);
+      this.selectedAccountIDs.removeObject(accountId);
     }
   }
 

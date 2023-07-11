@@ -17,41 +17,37 @@
       @cancelText={{t 'actions.cancel'}}
     />
 
-    <Rose::Table as |table|>
-      <table.header as |header|>
-        <header.row as |row|>
-          <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-          <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-          <row.headerCell>{{t 'resources.auth-method.title'}}</row.headerCell>
-        </header.row>
-      </table.header>
-      <table.body as |body|>
-        {{#each this.filteredAccounts as |account|}}
-          <body.row as |row|>
-            <row.cell>
-              <Hds::Form::Checkbox::Field
-                {{on 'change' (fn this.toggleAccount account)}}
-                as |F|
-              >
-                <F.Label>{{account.id}}</F.Label>
-                <F.HelperText>{{account.description}}</F.HelperText>
-              </Hds::Form::Checkbox::Field>
-            </row.cell>
-            <row.cell>{{account.accountName}}</row.cell>
-            <row.cell>
-              <Hds::Badge
-                @text={{t (concat 'resources.auth-method.types.' account.type)}}
-              />
-            </row.cell>
-            <row.cell>
-              <code>{{account.auth_method_id}}</code>
-            </row.cell>
-          </body.row>
-        {{/each}}
-      </table.body>
-    </Rose::Table>
-
+    <Hds::Table
+      @model={{this.filteredAccounts}}
+      @columns={{array
+        (hash label=(t 'form.id.label'))
+        (hash label=(t 'form.name.label'))
+        (hash label=(t 'form.type.label'))
+        (hash label=(t 'resources.auth-method.title'))
+      }}
+      @valign='middle'
+    >
+      <:body as |B|>
+        <B.Tr>
+          <B.Td>
+            <Hds::Form::Checkbox::Field
+              {{on 'change' (fn this.toggleAccount B.data.id)}}
+              as |F|
+            >
+              <F.Label>{{B.data.id}}</F.Label>
+              <F.HelperText>{{B.data.description}}</F.HelperText>
+            </Hds::Form::Checkbox::Field>
+          </B.Td>
+          <B.Td>{{B.data.accountName}}</B.Td>
+          <B.Td>
+            <Hds::Badge
+              @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
+            />
+          </B.Td>
+          <B.Td><code>{{B.data.auth_method_id}}</code></B.Td>
+        </B.Tr>
+      </:body>
+    </Hds::Table>
   </Rose::Form>
 {{/if}}
 

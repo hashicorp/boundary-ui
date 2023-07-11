@@ -199,25 +199,30 @@
     {{/if}}
   </form.input>
 
-  <form.checkbox
-    @label={{t 'resources.credential-store.form.tls_skip_verify.label'}}
-    @helperText={{t 'resources.credential-store.form.tls_skip_verify.help'}}
-    @checked={{@model.tls_skip_verify}}
-    @onChange={{fn
-      (mut @model.tls_skip_verify)
-      (if @model.tls_skip_verify false true)
+  <Hds::Form::Checkbox::Field
+    name='tls_skip_verify'
+    checked={{@model.tls_skip_verify}}
+    disabled={{form.disabled}}
+    {{on
+      'change'
+      (fn (mut @model.tls_skip_verify) (if @model.tls_skip_verify false true))
     }}
-    @error={{@model.errors.tls_skip_verify}}
-    as |field|
+    as |F|
   >
+    <F.Label>{{t
+        'resources.credential-store.form.tls_skip_verify.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.credential-store.form.tls_skip_verify.help'
+      }}</F.HelperText>
     {{#if @model.errors.tls_skip_verify}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.tls_skip_verify as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.checkbox>
+  </Hds::Form::Checkbox::Field>
 
   <Hds::Form::Textarea::Field
     @value={{@model.client_certificate}}
