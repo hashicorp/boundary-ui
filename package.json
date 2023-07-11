@@ -53,11 +53,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "jsonpointer": "5.0.0",
-    "json-schema": "^0.4.0",
-    "follow-redirects": "^1.14.8",
-    "node-fetch": "^2.6.7",
-    "shelljs": "^0.8.5",
     "ember-template-recast": "^6.0.0",
     "markdown-it": "^12.3.2",
     "mout": "^1.2.4",
@@ -91,7 +86,8 @@
     "**/watchpack/watchpack-chokidar2/chokidar/glob-parent": "^5.1.2",
     "**/core/ember-inline-svg/**/nth-check": "^2.0.1",
     "**/snapdragon/base/cache-base/**/set-value": "^4.0.1",
-    "**/@storybook/**/ansi-regex": "^5.0.1"
+    "**/@storybook/**/ansi-regex": "^5.0.1",
+    "**/jsprim/json-schema": "^0.4.0"
   },
   "config": {
     "commitizen": {

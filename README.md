@@ -15,22 +15,51 @@ subproject, e.g. running or testing.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
-- [Contributing](#contributing)
-  - [Branching](#branching)
-  - [Building ToC](#building-toc)
-  - [Building Admin UI for Production](#building-admin-ui-for-production)
-    - [Building with a Container](#building-with-a-container)
-  - [Building Desktop UI for Production](#building-desktop-ui-for-production)
-  - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
-    - [For admin](#for-admin)
-    - [For desktop](#for-desktop)
-  - [Committing](#committing)
-    - [License Checking](#license-checking)
+- [Boundary UI Monorepo](#boundary-ui-monorepo)
+  - [Projects](#projects)
+    - [Core (addons/core):](#core-addonscore)
+    - [API (addons/api):](#api-addonsapi)
+    - [Auth (addons/auth):](#auth-addonsauth)
+    - [Rose (addons/rose)](#rose-addonsrose)
+    - [Admin (ui/admin)](#admin-uiadmin)
+    - [Desktop Client (ui/desktop)](#desktop-client-uidesktop)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Yarn Commands](#yarn-commands)
+  - [Contributing](#contributing)
+    - [Branching](#branching)
+    - [Building ToC](#building-toc)
+    - [Building Admin UI for Production](#building-admin-ui-for-production)
+      - [Building with a Container](#building-with-a-container)
+    - [Building Desktop UI for Production](#building-desktop-ui-for-production)
+    - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
+      - [For admin](#for-admin)
+      - [For desktop](#for-desktop)
+    - [Committing](#committing)
+      - [License Checking](#license-checking)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Projects
+
+This monorepo contains multiple projects.
+### Core (addons/core):
+Core features use by Boundary UI's, i.e i18n, helpers or components. [Project Readme](addons/core).
+
+### API (addons/api):
+The API data access layer for Boundary and all the related mocks. [Project Readme](addons/api).
+
+### Auth (addons/auth):
+Authentication layer for Boundary. [Project Readme](addons/auth).
+
+### Rose (addons/rose)
+Common styles and components shared by Boundary UIs. [Project Readme](addons/rose).
+
+### Admin (ui/admin)
+The Admin UI for Boundary. [Project Readme](ui/admin).
+
+### Desktop Client (ui/desktop)
+The desktop client UI for Boundary. [Project Readme](ui/desktop).
 
 ## Prerequisites
 
