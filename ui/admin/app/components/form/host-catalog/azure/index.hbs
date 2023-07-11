@@ -147,13 +147,15 @@
     readonly={{false}}
   />
 
-  <form.checkbox
-    @name='disable_credential_rotation'
-    @checked={{@model.disable_credential_rotation}}
-    @helperText={{t 'form.disable_credential_rotation.help'}}
-    @label={{t 'form.disable_credential_rotation.label'}}
-    @disabled={{true}}
-  />
+  <Hds::Form::Checkbox::Field
+    name='disable_credential_rotation'
+    checked={{@model.disable_credential_rotation}}
+    disabled={{true}}
+    as |F|
+  >
+    <F.Label>{{t 'form.disable_credential_rotation.label'}}</F.Label>
+    <F.HelperText>{{t 'form.disable_credential_rotation.help'}}</F.HelperText>
+  </Hds::Form::Checkbox::Field>
 
   {{#if (can 'save model' @model)}}
     <form.actions
