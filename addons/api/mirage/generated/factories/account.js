@@ -12,6 +12,7 @@ import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
  */
 export default Factory.extend({
   type: TYPE_AUTH_METHOD_PASSWORD,
+  description: () => faker.random.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   version: () => faker.datatype.number(),
