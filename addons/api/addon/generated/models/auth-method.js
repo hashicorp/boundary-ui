@@ -106,4 +106,74 @@ export default class GeneratedAuthMethodModel extends BaseModel {
     isNestedAttribute: true,
   })
   account_claim_maps;
+
+  @attr('boolean', { isNestedAttribute: true }) start_tls;
+
+  @attr('boolean', { isNestedAttribute: true }) insecure_tls;
+
+  @attr('boolean', { isNestedAttribute: true }) discover_dn;
+
+  @attr('boolean', { isNestedAttribute: true }) anon_group_search;
+
+  @attr('string', { isNestedAttribute: true }) upn_domain;
+
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  urls;
+
+  @attr('string', { isNestedAttribute: true }) user_dn;
+
+  @attr('string', { isNestedAttribute: true }) user_attr;
+
+  @attr('string', { isNestedAttribute: true }) user_filter;
+
+  @attr('boolean', { isNestedAttribute: true }) enable_groups;
+
+  @attr('string', { isNestedAttribute: true }) group_dn;
+
+  @attr('string', { isNestedAttribute: true }) group_attr;
+
+  @attr('string', { isNestedAttribute: true }) group_filter;
+
+  @attr('string-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  certificates;
+
+  @attr('string', { isNestedAttribute: true }) client_certificate;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    isSecret: true,
+  })
+  client_certificate_key;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    readOnly: true,
+  })
+  client_certificate_key_hmac;
+
+  @attr('string', { isNestedAttribute: true }) bind_dn;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    isSecret: true,
+  })
+  bind_password;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    readOnly: true,
+  })
+  bind_password_hmac;
+
+  @attr('account-attribute-map-array', {
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  account_attribute_maps;
 }
