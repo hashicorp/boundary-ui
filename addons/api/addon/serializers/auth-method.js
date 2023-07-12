@@ -30,7 +30,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
     const { options } = attribute;
 
     // If an attribute has a `for` option, it must match the
-    // record's `type`, else the attribute is excludedOptional user-set description for identification purposes
+    // record's `type`, else the attribute excluded
     // from serialization.
     if (options?.for && options.for !== type) {
       if (options.isNestedAttribute) {
