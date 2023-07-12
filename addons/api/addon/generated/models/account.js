@@ -49,9 +49,9 @@ export default class GeneratedAccountModel extends BaseModel {
   })
   version;
 
-  // =attributes (password)
+  // =attributes (password and LDAP)
   @attr('string', {
-    for: 'password',
+    for: ['password', 'ldap'],
     isNestedAttribute: true,
     description: 'The account login name',
   })
@@ -60,8 +60,27 @@ export default class GeneratedAccountModel extends BaseModel {
   // =attributes (OIDC)
   @attr('string', { for: 'oidc', isNestedAttribute: true }) subject;
   @attr('string', { for: 'oidc', isNestedAttribute: true }) issuer;
-  @attr('string', { for: 'oidc', isNestedAttribute: true, readOnly: true })
+
+  // =attributes (OIDC and LDAP)
+  @attr('string', {
+    for: ['oidc', 'ldap'],
+    isNestedAttribute: true,
+    readOnly: true,
+  })
   email;
-  @attr('string', { for: 'oidc', isNestedAttribute: true, readOnly: true })
+  @attr('string', {
+    for: ['oidc', 'ldap'],
+    isNestedAttribute: true,
+    readOnly: true,
+  })
   full_name;
+
+  // =attributes (LDAP)
+  @attr('string', { for: 'ldap', isNestedAttribute: true, readOnly: true }) dn;
+  @attr('string-array', {
+    for: 'ldap',
+    isNestedAttribute: true,
+    readOnly: true,
+  })
+  member_of_groups;
 }
