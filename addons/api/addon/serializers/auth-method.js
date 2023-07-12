@@ -73,7 +73,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @param {string} state
    * @return {object}
    */
-  serializeDefaultWithState(snapshot, state) {
+  serializeWithState(snapshot, state) {
     return {
       version: snapshot.attr('version'),
       attributes: { state },
