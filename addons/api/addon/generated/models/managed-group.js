@@ -58,4 +58,13 @@ export default class GeneratedManagedGroupModel extends BaseModel {
       'The boolean expression filter to use to determine membership. Comes in from API as "filter".',
   })
   filter_string;
+
+  // =attributes (LDAP)
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+    description: 'The list of groups that make up the ManagedGroup',
+  })
+  group_names;
 }
