@@ -6,27 +6,6 @@
 import ApplicationSerializer from './application';
 import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
-const fieldsByType = {
-  oidc: [
-    'state',
-    'issuer',
-    'client_id',
-    'client_secret',
-    'client_secret_mac',
-    'max_age',
-    'api_url_prefix',
-    'callback_url',
-    'disable_discovered_config_validation',
-    'dry_run',
-    'claims_scopes',
-    'signing_algorithms',
-    'allowed_audiences',
-    'idp_ca_certs',
-    'account_claim_maps',
-  ],
-  ldap: [],
-};
-
 export default class AuthMethodSerializer extends ApplicationSerializer {
   // =methods
 
@@ -46,21 +25,20 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
   }
 
   serializeAttribute(snapshot, json, key, attribute) {
-    const value = super.serializeAttribute(...arguments);
+    super.serializeAttribute(...arguments);
     const { type } = snapshot.record;
     const { options } = attribute;
 
-    // This deletes any fields that don't belong to the record type
-    if (type != 'password' && options.isNestedAttribute && json.attributes) {
-      if (!fieldsByType[type].includes(key)) delete json.attributes[key];
+    // If an attribute has a `for` option, it must match the
+    // record's `type`, else the attribute is excludedOptional user-set description for identification purposes
+    // from serialization.
+    if (options?.for && options.for !== type) {
+      if (options.isNestedAttribute) {
+        delete json.attributes[key];
+      } else {
+        delete json[key];
+      }
     }
-
-    // This deletes any secret fields that don't belong to the record type
-    if (options.isNestedSecret && json.secrets) {
-      if (!fieldsByType[type].includes(key)) delete json.secrets[key];
-    }
-
-    return value;
   }
 
   /**
