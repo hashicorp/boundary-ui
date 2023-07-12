@@ -45,7 +45,6 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    */
   serializePassword() {
     let serialized = super.serialize(...arguments);
-    console.log(serialized);
     delete serialized.attributes;
     return serialized;
   }
