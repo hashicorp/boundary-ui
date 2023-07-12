@@ -58,6 +58,7 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   // =attributes(oidc, ldap)
 
   @attr('string', {
+    for: ['oidc', 'ldap'],
     readOnly: true,
     isNestedAttribute: true,
   })

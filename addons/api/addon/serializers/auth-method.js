@@ -32,21 +32,20 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
     // If an attribute has a `for` option, it must match the
     // record's `type`, else the attribute excluded
     // from serialization.
-    if (options?.for && options.for !== type) {
+    if (options?.for && options.for !== type && !options.for.includes(type)) {
       if (options.isNestedAttribute) {
         delete json.attributes[key];
-      } else {
-        delete json[key];
       }
     }
   }
 
   /**
-   * Default serialization omits `attributes`.
+   * Password serialization omits `attributes`.
    * @return {object}
    */
   serializePassword() {
     let serialized = super.serialize(...arguments);
+    console.log(serialized);
     delete serialized.attributes;
     return serialized;
   }
