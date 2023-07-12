@@ -39,9 +39,9 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     switch (snapshot.record.type) {
       case TYPE_AUTH_METHOD_PASSWORD:
-        return this.serializeDefault(...arguments);
-      default:
         return this.serializeAuthMethod(...arguments);
+      default:
+        return this. serializeDefault(...arguments);
     }
   }
 
