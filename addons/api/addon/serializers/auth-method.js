@@ -39,9 +39,9 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     switch (snapshot.record.type) {
       case TYPE_AUTH_METHOD_PASSWORD:
-        return this.serializeAuthMethod(...arguments);
+        return this.serializePassword(...arguments);
       default:
-        return this. serializeDefault(...arguments);
+        return this.serializeDefault(...arguments);
     }
   }
 
@@ -50,10 +50,12 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
     const { type } = snapshot.record;
     const { options } = attribute;
 
+    // This deletes any fields that don't belong to the record type
     if (type != 'password' && options.isNestedAttribute && json.attributes) {
       if (!fieldsByType[type].includes(key)) delete json.attributes[key];
     }
 
+    // This deletes any secret fields that don't belong to the record type
     if (options.isNestedSecret && json.secrets) {
       if (!fieldsByType[type].includes(key)) delete json.secrets[key];
     }
@@ -65,7 +67,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * Default serialization omits `attributes`.
    * @return {object}
    */
-  serializeDefault() {
+  serializePassword() {
     let serialized = super.serialize(...arguments);
     delete serialized.attributes;
     return serialized;
@@ -77,7 +79,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @param {Snapshot} snapshot
    * @return {object}
    */
-  serializeAuthMethod(snapshot) {
+  serializeDefault(snapshot) {
     let serialized = super.serialize(...arguments);
     const state = snapshot?.adapterOptions?.state;
     if (state) {
@@ -94,7 +96,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @param {string} state
    * @return {object}
    */
-  serializeAuthMethodWithState(snapshot, state) {
+  serializeDefaultWithState(snapshot, state) {
     return {
       version: snapshot.attr('version'),
       attributes: { state },

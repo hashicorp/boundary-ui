@@ -55,7 +55,11 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   version;
 
+  // =attributes(oidc, ldap)
+
   @attr('string', { readOnly: true, isNestedAttribute: true }) state;
+
+  // =attributes(oidc)
 
   @attr('string', { isNestedAttribute: true }) issuer;
 
@@ -106,6 +110,8 @@ export default class GeneratedAuthMethodModel extends BaseModel {
     isNestedAttribute: true,
   })
   account_claim_maps;
+
+  // =attributes(ldap)
 
   @attr('boolean', { isNestedAttribute: true }) start_tls;
 
