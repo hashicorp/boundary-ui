@@ -60,7 +60,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
     let serialized = super.serialize(...arguments);
     const state = snapshot?.adapterOptions?.state;
     if (state) {
-      serialized = this.serializeDefaultWithState(snapshot, state);
+      serialized = this.serializeWithState(snapshot, state);
     } else {
       delete serialized.attributes.state;
     }
