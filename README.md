@@ -13,30 +13,29 @@ subproject, e.g. running or testing.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Boundary UI Monorepo](#boundary-ui-monorepo)
-  - [Projects](#projects)
-    - [Core (addons/core):](#core-addonscore)
-    - [API (addons/api):](#api-addonsapi)
-    - [Auth (addons/auth):](#auth-addonsauth)
-    - [Rose (addons/rose)](#rose-addonsrose)
-    - [Admin (ui/admin)](#admin-uiadmin)
-    - [Desktop Client (ui/desktop)](#desktop-client-uidesktop)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Yarn Commands](#yarn-commands)
-  - [Contributing](#contributing)
-    - [Branching](#branching)
-    - [Building ToC](#building-toc)
-    - [Building Admin UI for Production](#building-admin-ui-for-production)
-      - [Building with a Container](#building-with-a-container)
-    - [Building Desktop UI for Production](#building-desktop-ui-for-production)
-    - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
-      - [For admin](#for-admin)
-      - [For desktop](#for-desktop)
-    - [Committing](#committing)
-      - [License Checking](#license-checking)
+- [Projects](#projects)
+  - [Core (addons/core):](#core-addonscore)
+  - [API (addons/api):](#api-addonsapi)
+  - [Auth (addons/auth):](#auth-addonsauth)
+  - [Rose (addons/rose)](#rose-addonsrose)
+  - [Admin (ui/admin)](#admin-uiadmin)
+  - [Desktop Client (ui/desktop)](#desktop-client-uidesktop)
+- [Prerequisites](#prerequisites)
+- [Optional Tooling](#optional-tooling)
+- [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
+- [Contributing](#contributing)
+  - [Branching](#branching)
+  - [Building ToC](#building-toc)
+  - [Building Admin UI for Production](#building-admin-ui-for-production)
+    - [Building with a Container](#building-with-a-container)
+  - [Building Desktop UI for Production](#building-desktop-ui-for-production)
+  - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
+    - [For admin](#for-admin)
+    - [For desktop](#for-desktop)
+  - [Committing](#committing)
+    - [License Checking](#license-checking)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -74,12 +73,19 @@ You will need the following things properly installed on your computer.
 * [Google Chrome][chrome]
 * [Firefox][firefox]
 
-[git]: https://git-scm.com/
-[node]: https://nodejs.org/
-[yarn]: https://classic.yarnpkg.com/lang/en/
-[chrome]: https://google.com/chrome/
-[firefox]: https://firefox.com/
-[yarn-workspaces]: https://classic.yarnpkg.com/en/docs/workspaces/
+
+## Optional Tooling
+
+Our team finds the following applications useful in day-to-day development
+workflows.  These are merely recommendations.  We encourage you to use the tools
+that best suit you and your personal style.
+
+* [VS Code][vscode]: Code editor for building and debugging web applications
+* [Warp][warp]:  Terminal application for macOS
+* [Homebrew][homebrew]:  The missing package manager for macOS and Linux
+* [Ember Inspector][ember-inspector]:  Understand and debug Ember applications
+* [Postman][postman]:  Test and inspect APIs
+
 
 ## Installation
 
@@ -154,7 +160,7 @@ In windows, UI is generated using docker to provide a stable UI across platforms
 
 ```cmd
 yarn install
-docker-compose -f docker-compose-embedding.yml run build-desktop-production 
+docker-compose -f docker-compose-embedding.yml run build-desktop-production
 yarn build:ui:desktop:app
 ```
 
@@ -209,3 +215,15 @@ The change will be verified upon PR.  GPL variants and UNLICENSED dependencies
 will not be accepted.
 
 [github-flow]: https://guides.github.com/introduction/flow/
+
+[git]: https://git-scm.com/
+[node]: https://nodejs.org/
+[yarn]: https://classic.yarnpkg.com/lang/en/
+[chrome]: https://google.com/chrome/
+[firefox]: https://firefox.com/
+[yarn-workspaces]: https://classic.yarnpkg.com/en/docs/workspaces/
+[homebrew]: https://brew.sh
+[warp]: https://www.warp.dev
+[vscode]: https://code.visualstudio.com/
+[ember-inspector]: https://guides.emberjs.com/release/ember-inspector/
+[postman]: https://www.postman.com/downloads/
