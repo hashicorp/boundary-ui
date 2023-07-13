@@ -42,6 +42,7 @@ export default class ApplicationSerializer extends RESTSerializer {
    */
   serializeAttribute(snapshot, json, key, attribute) {
     const { type, options } = attribute;
+    const { type: recordType } = snapshot.record;
     let value = super.serializeAttribute(...arguments);
     // Remove secret attributes that are null or empty
     if (options.isSecret) {
@@ -71,6 +72,16 @@ export default class ApplicationSerializer extends RESTSerializer {
         json.secrets[key] = json[key];
       }
       delete json[key];
+    }
+    // If an attribute has a `for` option, it must match the
+    // record's `type`, else the attribute is excluded
+    // from serialization.
+    if (options?.for && !options.for.includes(recordType)) {
+      if (options.isNestedAttribute) {
+        delete json?.attributes?.[key];
+      } else {
+        delete json[key];
+      }
     }
     return value;
   }
