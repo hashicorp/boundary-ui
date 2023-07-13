@@ -65,10 +65,10 @@ export default Factory.extend({
           anon_group_search: false,
           user_dn: 'dc=example,dc=com',
           user_attr: 'uid',
-          user_filter: 'uid={username}',
+          user_filter: 'uid=username',
           group_dn: 'dc=example,dc=com',
           group_attr: 'cn',
-          group_filter: 'member={dn}',
+          group_filter: 'member=dn',
           account_attribute_maps: [
             'preferredName=fullName',
             'preferredEmail=email',
