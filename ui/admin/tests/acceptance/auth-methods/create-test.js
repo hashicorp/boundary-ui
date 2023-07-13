@@ -29,7 +29,11 @@ module('Acceptance | auth-methods | create', function (hooks) {
     'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_SELECTOR_OPTION =
     '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
+  const NEW_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+
   let getAuthMethodsCount;
+  let featuresService;
+
   const instances = {
     scopes: {
       global: null,
@@ -44,6 +48,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     orgScope: null,
     authMethods: null,
     newAuthMethod: null,
+    newLdapAuthMethod: null,
     authMethod: null,
   };
 
@@ -71,9 +76,12 @@ module('Acceptance | auth-methods | create', function (hooks) {
     urls.orgScope = `/scopes/${instances.orgScope.id}`;
     urls.authMethods = `${urls.orgScope}/auth-methods`;
     urls.newAuthMethod = `${urls.authMethods}/new?type=password`;
+    urls.newLdapAuthMethod = `${urls.authMethods}/new?type=ldap`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     getAuthMethodsCount = () =>
       this.server.schema.authMethods.all().models.length;
+
+    featuresService = this.owner.lookup('service:features');
   });
 
   test('Users can create new auth method', async function (assert) {
@@ -139,25 +147,77 @@ module('Acceptance | auth-methods | create', function (hooks) {
       'create',
       'list',
     ];
-    await visit(urls.authMethods);
-    assert.ok(
+
+    await visit(urls.orgScope);
+    await click(`[href="${urls.authMethods}"]`);
+
+    assert.true(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'create'
       )
     );
-    assert.ok(find(`[href="${urls.newAuthMethod}"]`));
+
+    await click(NEW_DROPDOWN_SELECTOR);
+
+    assert.dom(`[href="${urls.newAuthMethod}"]`).exists();
   });
 
   test('Users cannot navigate to new auth-methods route without proper authorization', async function (assert) {
     assert.expect(2);
-    instances.orgScope.authorized_collection_actions['auth-methods'] = [];
-    await visit(urls.authMethods);
-    assert.notOk(
+    instances.orgScope.authorized_collection_actions['auth-methods'] = ['list'];
+
+    await visit(urls.orgScope);
+    await click(`[href="${urls.authMethods}"]`);
+
+    assert.false(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'create'
       )
     );
-    assert.notOk(find(`[href="${urls.newAuthMethod}"]`));
+    assert.dom(NEW_DROPDOWN_SELECTOR).doesNotExist();
+  });
+
+  test('Users can navigate to new ldap auth-method route with proper authorization and feature flag enabled', async function (assert) {
+    assert.expect(2);
+    instances.orgScope.authorized_collection_actions['auth-methods'] = [
+      'create',
+      'list',
+    ];
+    featuresService.enable('ldap-auth-methods');
+
+    await visit(urls.orgScope);
+    await click(`[href="${urls.authMethods}"]`);
+
+    assert.true(
+      instances.orgScope.authorized_collection_actions['auth-methods'].includes(
+        'create'
+      )
+    );
+
+    await click(NEW_DROPDOWN_SELECTOR);
+
+    assert.dom(`[href="${urls.newLdapAuthMethod}"]`).exists();
+  });
+
+  test('Users cannot navigate to new ldap auth-method route when feature flag disabled', async function (assert) {
+    assert.expect(2);
+    instances.orgScope.authorized_collection_actions['auth-methods'] = [
+      'create',
+      'list',
+    ];
+
+    await visit(urls.orgScope);
+    await click(`[href="${urls.authMethods}"]`);
+
+    assert.true(
+      instances.orgScope.authorized_collection_actions['auth-methods'].includes(
+        'create'
+      )
+    );
+
+    await click(NEW_DROPDOWN_SELECTOR);
+
+    assert.dom(`[href="${urls.newLdapAuthMethod}"]`).doesNotExist();
   });
 
   test('can cancel new auth method creation', async function (assert) {
