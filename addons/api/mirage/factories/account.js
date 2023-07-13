@@ -17,8 +17,9 @@ import {
 export default factory.extend({
   authorized_actions() {
     let authorizedActions = ['no-op', 'read', 'update', 'delete'];
-    if (this.type === TYPE_AUTH_METHOD_PASSWORD)
+    if (this.type === TYPE_AUTH_METHOD_PASSWORD) {
       authorizedActions.push('set-password');
+    }
     return permissions.authorizedActionsFor('account') || authorizedActions;
   },
 
@@ -27,32 +28,30 @@ export default factory.extend({
   type: (i) => TYPES_AUTH_METHOD[i % TYPES_AUTH_METHOD.length],
 
   attributes() {
-    if (this.type === TYPE_AUTH_METHOD_PASSWORD) {
-      return { login_name: faker.internet.userName() };
-    }
-
-    if (this.type === TYPE_AUTH_METHOD_LDAP) {
-      const groupsAmount = faker.datatype.number({ min: 1, max: 3 });
-      let groups = [];
-      for (let i = 0; i < groupsAmount; i++) {
-        groups.push(faker.random.word());
+    switch (this.type) {
+      case TYPE_AUTH_METHOD_PASSWORD:
+        return { login_name: faker.internet.userName() };
+      case TYPE_AUTH_METHOD_LDAP: {
+        const groupsAmount = faker.datatype.number({ min: 1, max: 3 });
+        let groups = [];
+        for (let i = 0; i < groupsAmount; i++) {
+          groups.push(faker.random.word());
+        }
+        return {
+          login_name: faker.internet.userName(),
+          email: faker.internet.email(),
+          full_name: faker.random.words(),
+          dn: faker.random.words(),
+          member_of_groups: groups,
+        };
       }
-      return {
-        login_name: faker.internet.userName(),
-        email: faker.internet.email(),
-        full_name: faker.random.words(),
-        dn: faker.random.words(),
-        member_of_groups: groups,
-      };
-    }
-
-    if (this.type === TYPE_AUTH_METHOD_OIDC) {
-      return {
-        issuer: faker.internet.ip(),
-        subject: 'sub',
-        email: faker.internet.email(),
-        full_name: faker.random.words(),
-      };
+      case TYPE_AUTH_METHOD_OIDC:
+        return {
+          issuer: faker.internet.ip(),
+          subject: 'sub',
+          email: faker.internet.email(),
+          full_name: faker.random.words(),
+        };
     }
   },
 });
