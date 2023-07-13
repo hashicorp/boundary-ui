@@ -7,12 +7,13 @@ import factory from '../generated/factories/managed-group';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-
-const types = ['oidc'];
+import {
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+  TYPES_AUTH_METHOD,
+} from 'api/models/auth-method';
 
 export default factory.extend({
-  type: (i) => types[i % types.length],
-
   authorized_actions: () =>
     permissions.authorizedActionsFor('managed-group') || [
       'no-op',
@@ -23,11 +24,17 @@ export default factory.extend({
 
   id: () => generateId('mg_'),
 
+  type: (i) => TYPES_AUTH_METHOD[i % TYPES_AUTH_METHOD.length],
+
   attributes() {
     switch (this.type) {
-      case 'oidc':
+      case TYPE_AUTH_METHOD_OIDC:
         return {
           filter: faker.random.words(),
+        };
+      case TYPE_AUTH_METHOD_LDAP:
+        return {
+          group_names: [faker.internet.userName({ min: 1, max: 5 })],
         };
     }
   },
