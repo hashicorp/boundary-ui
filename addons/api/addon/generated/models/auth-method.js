@@ -55,55 +55,241 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   version;
 
-  @attr('string', { readOnly: true, isNestedAttribute: true }) state;
+  // =attributes(oidc, ldap)
 
-  @attr('string', { isNestedAttribute: true }) issuer;
+  @attr('string', {
+    for: ['oidc', 'ldap'],
+    readOnly: true,
+    isNestedAttribute: true,
+  })
+  state;
 
-  @attr('string', { isNestedAttribute: true }) client_id;
+  // =attributes(oidc)
 
-  @attr('string', { isNestedAttribute: true, isSecret: true }) client_secret;
+  @attr('string', {
+    for: 'oidc',
+    isNestedAttribute: true,
+  })
+  issuer;
 
-  @attr('string', { readOnly: true, isNestedAttribute: true })
+  @attr('string', {
+    for: 'oidc',
+    isNestedAttribute: true,
+  })
+  client_id;
+
+  @attr('string', {
+    for: 'oidc',
+    isNestedAttribute: true,
+    isSecret: true,
+  })
+  client_secret;
+
+  @attr('string', {
+    for: 'oidc',
+    readOnly: true,
+    isNestedAttribute: true,
+  })
   client_secret_hmac;
 
-  @attr('number', { isNestedAttribute: true }) max_age;
+  @attr('number', {
+    for: 'oidc',
+    isNestedAttribute: true,
+  })
+  max_age;
 
-  @attr('string', { isNestedAttribute: true }) api_url_prefix;
+  @attr('string', {
+    for: 'oidc',
+    isNestedAttribute: true,
+  })
+  api_url_prefix;
 
-  @attr('string', { readOnly: true, isNestedAttribute: true }) callback_url;
+  @attr('string', {
+    for: 'oidc',
+    readOnly: true,
+    isNestedAttribute: true,
+  })
+  callback_url;
 
-  @attr('boolean', { isNestedAttribute: true })
+  @attr('boolean', {
+    for: 'oidc',
+    isNestedAttribute: true,
+  })
   disable_discovered_config_validation;
 
-  @attr('boolean', { isNestedAttribute: true }) dry_run;
+  @attr('boolean', {
+    for: 'oidc',
+    isNestedAttribute: true,
+  })
+  dry_run;
 
   @attr('string-array', {
+    for: 'oidc',
     emptyArrayIfMissing: true,
     isNestedAttribute: true,
   })
   claims_scopes;
 
   @attr('string-array', {
+    for: 'oidc',
     emptyArrayIfMissing: true,
     isNestedAttribute: true,
   })
   signing_algorithms;
 
   @attr('string-array', {
+    for: 'oidc',
     emptyArrayIfMissing: true,
     isNestedAttribute: true,
   })
   allowed_audiences;
 
   @attr('string-array', {
+    for: 'oidc',
     emptyArrayIfMissing: true,
     isNestedAttribute: true,
   })
   idp_ca_certs;
 
-  @attr('account-claim-map-array', {
+  @attr('account-value-map-array', {
+    for: 'oidc',
     emptyArrayIfMissing: true,
     isNestedAttribute: true,
   })
   account_claim_maps;
+
+  // =attributes(ldap)
+
+  @attr('boolean', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  start_tls;
+
+  @attr('boolean', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  insecure_tls;
+
+  @attr('boolean', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  discover_dn;
+
+  @attr('boolean', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  anon_group_search;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  upn_domain;
+
+  @attr('string-array', {
+    for: 'ldap',
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  urls;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  user_dn;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  user_attr;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  user_filter;
+
+  @attr('boolean', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  enable_groups;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  group_dn;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  group_attr;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  group_filter;
+
+  @attr('string-array', {
+    for: 'ldap',
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  certificates;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  client_certificate;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+    isSecret: true,
+  })
+  client_certificate_key;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+    readOnly: true,
+  })
+  client_certificate_key_hmac;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  bind_dn;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+    isSecret: true,
+  })
+  bind_password;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+    readOnly: true,
+  })
+  bind_password_hmac;
+
+  @attr('account-value-map-array', {
+    for: 'ldap',
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  account_attribute_maps;
 }
