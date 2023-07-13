@@ -47,7 +47,7 @@ export default Factory.extend({
       case TYPE_AUTH_METHOD_LDAP:
         attrs = {
           state: 'active-public',
-          urls: ['ldap://ldap.forumsys.com'],
+          urls: [`ldap://${faker.internet.domainName()}`],
           certificates: [faker.random.alphaNumeric(50)],
           client_certificate: faker.random.alphaNumeric(50),
           certificate_key: `---Begin Certificate --- ${faker.random.alphaNumeric(
