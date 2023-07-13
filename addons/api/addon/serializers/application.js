@@ -76,7 +76,11 @@ export default class ApplicationSerializer extends RESTSerializer {
     // If an attribute has a `for` option, it must match the
     // record's `type`, else the attribute is excluded
     // from serialization.
-    if (options?.for && !options.for.includes(recordType)) {
+    if (
+      options?.for &&
+      options.for !== recordType &&
+      !options.for.includes(recordType)
+    ) {
       if (options.isNestedAttribute) {
         delete json?.attributes?.[key];
       } else {
