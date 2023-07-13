@@ -26,13 +26,12 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
 
   serializeAttribute(snapshot, json, key, attribute) {
     super.serializeAttribute(...arguments);
-    const { type } = snapshot.record;
     const { options } = attribute;
 
     // If an attribute has a `for` option, it must match the
     // record's `type`, else the attribute is excluded
     // from serialization.
-    if (type !== 'password' && options?.for && !options.for.includes(type)) {
+    if (options?.for && !options.for.includes('oidc', 'ldap')) {
       if (options.isNestedAttribute) {
         delete json.attributes[key];
       }

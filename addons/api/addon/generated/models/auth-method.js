@@ -273,6 +273,7 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   bind_dn;
 
   @attr('string', {
+    for: 'ldap',
     isNestedAttribute: true,
     isSecret: true,
   })
