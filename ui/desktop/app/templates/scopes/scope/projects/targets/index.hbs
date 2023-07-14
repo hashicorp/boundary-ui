@@ -155,12 +155,11 @@
               </row.cell>
               <row.cell>
                 {{#if (can 'connect target' model)}}
-                  <Rose::Button
-                    @style='secondary'
+                  <Hds::Button
+                    @text={{t 'resources.session.actions.connect'}}
+                    @color='secondary'
                     {{on 'click' (route-action 'connect' model)}}
-                  >
-                    {{t 'resources.session.actions.connect'}}
-                  </Rose::Button>
+                  />
                 {{/if}}
               </row.cell>
             </body.row>
