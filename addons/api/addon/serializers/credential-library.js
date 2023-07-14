@@ -32,23 +32,6 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
     }
   }
 
-  serializeAttribute(snapshot, json, key, attribute) {
-    super.serializeAttribute(...arguments);
-    const { options } = attribute;
-    const { type } = snapshot.record;
-
-    // If an attribute has a `for` option, it must match the
-    // record's `type`, else the attribute is excluded
-    // from serialization.
-    if (options?.for && options.for !== type) {
-      if (options.isNestedAttribute) {
-        delete json.attributes[key];
-      } else {
-        delete json[key];
-      }
-    }
-  }
-
   serializeVaultGeneric() {
     const serialized = super.serialize(...arguments);
     if (serialized.attributes) {
