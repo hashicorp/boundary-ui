@@ -178,12 +178,11 @@
               </row.cell>
               <row.cell>
                 {{#if model.isCancelable}}
-                  <Rose::Button
-                    @style='secondary'
+                  <Hds::Button
+                    @text={{t 'actions.cancel'}}
+                    @color='secondary'
                     {{on 'click' (route-action 'cancelSession' model)}}
-                  >
-                    {{t 'actions.cancel'}}
-                  </Rose::Button>
+                  />
                 {{/if}}
               </row.cell>
             </body.row>
