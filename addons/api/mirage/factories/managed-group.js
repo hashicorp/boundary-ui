@@ -32,10 +32,16 @@ export default factory.extend({
         return {
           filter: faker.random.words(),
         };
-      case TYPE_AUTH_METHOD_LDAP:
+      case TYPE_AUTH_METHOD_LDAP: {
+        const num = faker.datatype.number({ min: 2, max: 4 });
+        let names = [];
+        for (let i = 0; i < num; i++) {
+          names.push(faker.random.word());
+        }
         return {
-          group_names: [faker.internet.userName({ min: 1, max: 5 })],
+          group_names: names,
         };
+      }
     }
   },
 });
