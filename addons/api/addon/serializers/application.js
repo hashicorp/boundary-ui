@@ -76,6 +76,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     // If an attribute has a `for` option, it must match the
     // record's `type`, else the attribute is excluded
     // from serialization.
+    //note: This doesn't handle secrets yet, we can add support for them if needed.
     if (
       options?.for &&
       options.for !== recordType &&
