@@ -8,6 +8,7 @@ import { setupTest } from 'ember-qunit';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 
 module('Unit | Serializer | account', function (hooks) {
@@ -183,6 +184,70 @@ module('Unit | Serializer | account', function (hooks) {
     assert.deepEqual(serializedRecord, {
       current_password: 'Current',
       new_password: 'New',
+      version: 1,
+    });
+  });
+
+  test('it serializes LDAP-type with only login_name in `attributes` on create', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('account');
+    const record = store.createRecord('account', {
+      type: TYPE_AUTH_METHOD_LDAP,
+      name: 'Name',
+      auth_method_id: '1',
+      description: 'Description',
+      login_name: 'Login Name',
+      full_name: 'Full Nname',
+      email: 'Email',
+      dn: 'dn',
+      member_of_groups: ['Group'],
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      type: TYPE_AUTH_METHOD_LDAP,
+      name: 'Name',
+      auth_method_id: '1',
+      description: 'Description',
+      version: 1,
+      attributes: {
+        login_name: 'Login Name',
+      },
+    });
+  });
+
+  test('it serializes LDAP-type without `attributes`', function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('account');
+    store.push({
+      data: {
+        id: '1',
+        type: 'account',
+        attributes: {
+          type: TYPE_AUTH_METHOD_LDAP,
+          name: 'Name',
+          auth_method_id: '1',
+          description: 'Description',
+          login_name: 'Login Name',
+          full_name: 'Full Nname',
+          email: 'Email',
+          dn: 'dn',
+          member_of_groups: ['Group'],
+          version: 1,
+        },
+      },
+    });
+    const record = store.peekRecord('account', '1');
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      type: TYPE_AUTH_METHOD_LDAP,
+      name: 'Name',
+      auth_method_id: '1',
+      description: 'Description',
       version: 1,
     });
   });

@@ -4,6 +4,11 @@
  */
 
 import ApplicationSerializer from './application';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 export default class AccountSerializer extends ApplicationSerializer {
   // =properties
@@ -26,11 +31,29 @@ export default class AccountSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     switch (snapshot.record.type) {
-      case 'password':
+      case TYPE_AUTH_METHOD_PASSWORD:
         return this.serializePassword(...arguments);
-      case 'oidc':
+      case TYPE_AUTH_METHOD_OIDC:
         return this.serializeOIDC(...arguments);
+      case TYPE_AUTH_METHOD_LDAP:
+        return this.serializeLDAP(...arguments);
     }
+  }
+
+  /**
+   * LDAP serialization limits the `attributes` posted on create and omits
+   * `attributes` entirely on update.
+   */
+  serializeLDAP(snapshot) {
+    const { isNew } = snapshot?.record || {};
+    let serialized = super.serialize(...arguments);
+    delete serialized.attributes;
+    if (isNew) {
+      serialized.attributes = {};
+      const { login_name } = snapshot.record;
+      if (login_name) serialized.attributes.login_name = login_name;
+    }
+    return serialized;
   }
 
   /**
