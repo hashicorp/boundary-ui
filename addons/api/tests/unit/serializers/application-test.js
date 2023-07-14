@@ -5,6 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
 module('Unit | Serializer | application', function (hooks) {
   setupTest(hooks);
@@ -136,6 +137,56 @@ module('Unit | Serializer | application', function (hooks) {
       name: 'Name',
       description: 'Description',
       version: 1,
+    });
+  });
+
+  test('it serializes attributes with `for` option containing array or string correctly', function (assert) {
+    assert.expect(1);
+    let store = this.owner.lookup('service:store');
+    let record = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_OIDC, //has both string and array `for` option
+      name: 'OIDC Auth Method',
+      state: 'foo',
+      account_claim_maps: [{ from: 'foo', to: 'bar' }],
+      claims_scopes: [{ value: 'profile' }, { value: 'email' }],
+      signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
+      allowed_audiences: [
+        { value: 'www.alice.com' },
+        { value: 'www.alice.com/admin' },
+      ],
+      idp_ca_certs: [
+        { value: 'certificate-1234' },
+        { value: 'certificate-5678' },
+      ],
+      api_url_prefix: 'protocol://host:port/foo',
+      client_id: 'id123',
+      client_secret: 'secret456',
+      disable_discovered_config_validation: true,
+      dry_run: true,
+      issuer: 'http://www.example.net',
+      max_age: 500,
+    });
+
+    let serializedRecord = record.serialize();
+
+    assert.deepEqual(serializedRecord, {
+      type: TYPE_AUTH_METHOD_OIDC,
+      name: 'OIDC Auth Method',
+      description: null,
+      attributes: {
+        account_claim_maps: ['foo=bar'],
+        claims_scopes: ['profile', 'email'],
+        signing_algorithms: ['RS256', 'RS384'],
+        allowed_audiences: ['www.alice.com', 'www.alice.com/admin'],
+        idp_ca_certs: ['certificate-1234', 'certificate-5678'],
+        api_url_prefix: 'protocol://host:port/foo',
+        client_id: 'id123',
+        client_secret: 'secret456',
+        disable_discovered_config_validation: true,
+        dry_run: true,
+        issuer: 'http://www.example.net',
+        max_age: 500,
+      },
     });
   });
 
