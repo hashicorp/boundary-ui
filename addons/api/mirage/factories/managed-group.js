@@ -34,7 +34,7 @@ export default factory.extend({
         };
       case TYPE_AUTH_METHOD_LDAP: {
         const num = faker.datatype.number({ min: 2, max: 4 });
-        let names = [];
+        const names = [];
         for (let i = 0; i < num; i++) {
           names.push(faker.random.word());
         }
