@@ -191,7 +191,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   }
 
   /**
-   * Adds an account claim map fragment to the passed OIDC `authMethod`.
+   * Adds an account map fragment to the passed `authMethod`.
    * @param {AuthMethodModel} authMethod
    * @param {string} field
    * @param {string} from
