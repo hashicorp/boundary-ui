@@ -9,6 +9,7 @@ import { faker } from '@faker-js/faker';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 
 /**
@@ -41,6 +42,37 @@ export default Factory.extend({
           signing_algorithms: ['RS256', 'RS384'],
           allowed_audiences: ['www.alice.com', 'www.alice.com/admin'],
           idp_ca_certs: ['certificate-1234', 'certificate-5678'],
+        };
+        break;
+      case TYPE_AUTH_METHOD_LDAP:
+        attrs = {
+          state: 'active-public',
+          urls: [`ldap://${faker.internet.domainName()}`],
+          certificates: [faker.random.alphaNumeric(50)],
+          client_certificate: faker.random.alphaNumeric(50),
+          certificate_key: `---Begin Certificate --- ${faker.random.alphaNumeric(
+            170
+          )} ---End Certificate ---`,
+          certificate_key_hmac: faker.random.alphaNumeric(50),
+          enable_groups: true,
+          start_tls: false,
+          insecure_tls: false,
+          bind_dn: 'cn=read-only-admin,dc=example,dc=com',
+          bind_password: 'password',
+          bind_password_hmac: faker.random.alphaNumeric(50),
+          upn_domain: 'example.com',
+          discover_dn: false,
+          anon_group_search: false,
+          user_dn: 'dc=example,dc=com',
+          user_attr: 'uid',
+          user_filter: '({{.UserAttr}}={{.Username}})',
+          group_dn: 'dc=example,dc=com',
+          group_attr: 'cn',
+          group_filter: '(|(memberUid={{.Username}})',
+          account_attribute_maps: [
+            'preferredName=fullName',
+            'preferredEmail=email',
+          ],
         };
         break;
     }
