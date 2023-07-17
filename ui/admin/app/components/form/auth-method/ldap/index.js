@@ -72,6 +72,9 @@ export default class FormAuthMethodLdapComponent extends Component {
     this.args.model.set('urls', array);
   }
 
+  /**
+   * @returns {string}
+   */
   parseUrlsArray() {
     return (this.args.model.urls || []).map((item) => item.value).toString();
   }
