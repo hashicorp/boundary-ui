@@ -10,7 +10,6 @@ import generateId from '../helpers/id';
 import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
-  TYPES_AUTH_METHOD,
 } from 'api/models/auth-method';
 
 export default factory.extend({
@@ -24,7 +23,9 @@ export default factory.extend({
 
   id: () => generateId('mg_'),
 
-  type: (i) => TYPES_AUTH_METHOD[i % TYPES_AUTH_METHOD.length],
+  type() {
+    return this.authMethod?.type;
+  },
 
   attributes() {
     switch (this.type) {
