@@ -73,6 +73,17 @@ module('Acceptance | accounts | update', function (hooks) {
     assert.strictEqual(this.server.db.accounts[0].name, 'update name');
   });
 
+  test('can update resource and save LDAP account changes', async function (assert) {
+    assert.expect(2);
+    await visit(urls.account);
+    await click('form [type="button"]', 'Activate edit mode');
+    await fillIn('[name="name"]', 'updated name');
+    await fillIn('[name="description"]', 'updated desc');
+    await click('form [type="submit"]:not(:disabled)');
+    assert.strictEqual(this.server.db.accounts[0].name, 'updated name');
+    assert.strictEqual(this.server.db.accounts[0].description, 'updated desc');
+  });
+
   test('cannot update resource without proper authorization', async function (assert) {
     assert.expect(1);
     instances.account.authorized_actions =
