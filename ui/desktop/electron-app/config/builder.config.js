@@ -1,7 +1,7 @@
 const config = require('./config.js');
 const { isMac } = require('../src/helpers/platform');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
 
 /**
  * @type {import('electron-builder').Configuration}
@@ -12,6 +12,7 @@ module.exports = {
   buildVersion: config.releaseVersion,
   productName: config.productName,
   copyright: config.copyright,
+  removePackageScripts: true,
   asar: false,
 
   // afterAllArtifactBuild: (buildResult) => {
@@ -40,8 +41,26 @@ module.exports = {
   //
   // })
   // },
+
+  beforeBuild: async (context) => {
+    // console.log(context);
+
+    // Copy over the arch specific mac binaries before we build for the universal build
+    // as we can't specify which files are arch specific
+    try {
+      if (context.arch === 'arm64') {
+        await fs.copyFile('cli/darwin_arm64/boundary', 'cli/boundary');
+      } else {
+        await fs.copyFile('cli/darwin_amd64/boundary', 'cli/boundary');
+      }
+    } catch (e) {
+      console.error('ERROR: Failed in copying over CLI.', e);
+      process.exit(1);
+    }
+  },
+
   beforePack: async (context) => {
-    // console.log('beforeBuild', context);
+    // console.log('beforePack', context);
     console.log(`\n[package] Release commit: ${config.releaseCommit}`);
     console.log(`[package] Release version: ${config.releaseVersion}`);
 
@@ -57,27 +76,41 @@ module.exports = {
       );
   },
 
+  afterPack: (context) => {
+    console.log('afterPack', context);
+  },
+
   directories: {
     // app: '.',
     output: 'out',
     buildResources: './assets/app-icons',
   },
-  files: ['!**/tests/*'],
+  files: ['!**/tests/*', '!cli', '!config/**'],
 
   win: {
-    target: [{ target: 'zip', arch: 'arm64' }],
+    target: [{ target: 'zip', arch: 'x64' }],
+    files: [
+      {
+        from: 'cli/windows_amd64',
+        to: 'cli',
+      },
+    ],
   },
 
   mac: {
     target: [
-      { target: 'dmg', arch: 'arm64' },
-      { target: 'zip', arch: 'arm64' },
+      // { target: 'dmg', arch: 'arm64' },
+      // { target: 'zip', arch: ['arm64', 'x64'], },
+      { target: 'zip', arch: 'universal' },
+      { target: 'dmg', arch: 'universal' },
     ],
+    files: [{ from: 'cli', to: 'cli', filter: 'boundary' }],
     hardenedRuntime: true,
     identity: process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY,
     entitlements: './assets/macos/entitlements.plist',
     entitlementsInherit: './assets/macos/entitlements.plist',
-    // mergeASARs: false,
+    // mergeASARs: true,
+    // x64ArchFiles: 'Contents/Resources/app/cli/boundary',
   },
   dmg: {
     icon: './assets/macos/disk.icns',
@@ -99,8 +132,14 @@ module.exports = {
 
   linux: {
     target: [
-      { target: 'deb', arch: 'arm64' },
-      { target: 'zip', arch: 'arm64' },
+      { target: 'deb', arch: 'x64' },
+      { target: 'zip', arch: 'x64' },
+    ],
+    files: [
+      {
+        from: 'cli/linux_amd64',
+        to: 'cli',
+      },
     ],
   },
   deb: {

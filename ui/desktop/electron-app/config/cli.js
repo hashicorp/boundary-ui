@@ -11,28 +11,49 @@ const decompress = require('decompress');
 const { isMac, isWindows, isLinux } = require('../src/helpers/platform.js');
 
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
+const allPlatforms = [
+  {
+    name: 'darwin',
+    arch: 'amd64',
+  },
+  {
+    name: 'darwin',
+    arch: 'arm64',
+  },
+  {
+    name: 'linux',
+    arch: 'amd64',
+  },
+  {
+    name: 'windows',
+    arch: 'amd64',
+  },
+];
 
-const downloadArtifact = (version) => {
-  const archivePlatform = {};
-  if (isMac()) {
-    archivePlatform.name = 'darwin';
-    let arch = os.arch();
-    // Map x64 to amd64 cli artifact
-    if (arch.match(/(x64)/i)) arch = 'amd64';
-    archivePlatform.arch = arch;
-  }
+const downloadArtifact = (version, archivePlatformToDownload) => {
+  const archivePlatform = archivePlatformToDownload ?? {};
 
-  if (isWindows()) {
-    archivePlatform.name = 'windows';
-    archivePlatform.arch = 'amd64';
-  }
+  if (!archivePlatformToDownload) {
+    if (isMac()) {
+      archivePlatform.name = 'darwin';
+      let arch = os.arch();
+      // Map x64 to amd64 cli artifact
+      if (arch.match(/(x64)/i)) arch = 'amd64';
+      archivePlatform.arch = arch;
+    }
 
-  if (isLinux()) {
-    let arch = os.arch();
-    // Map x64 to amd64 cli artifact
-    if (arch.match(/(x64)/i)) arch = 'amd64';
-    archivePlatform.name = os.platform();
-    archivePlatform.arch = arch;
+    if (isWindows()) {
+      archivePlatform.name = 'windows';
+      archivePlatform.arch = 'amd64';
+    }
+
+    if (isLinux()) {
+      let arch = os.arch();
+      // Map x64 to amd64 cli artifact
+      if (arch.match(/(x64)/i)) arch = 'amd64';
+      archivePlatform.name = os.platform();
+      archivePlatform.arch = arch;
+    }
   }
 
   // Set cli artifact to linux-amd64 when building debian artifacts on macOS
@@ -67,7 +88,9 @@ const downloadArtifact = (version) => {
 };
 
 const extract = (artifactPath, destination) => {
-  if (!fs.existsSync(destination)) fs.mkdirSync(destination);
+  if (!fs.existsSync(destination)) {
+    fs.mkdirSync(destination, { recursive: true });
+  }
   console.log('Extract artifact to: ', destination);
   return decompress(artifactPath, destination);
 };
@@ -85,6 +108,32 @@ module.exports = {
       );
       const artifactPath = await downloadArtifact(artifactVersion.trim());
       await extract(artifactPath, artifactDestination);
+    } catch (e) {
+      console.error('ERROR: Failed setting up CLI.', e);
+      process.exit(1);
+    }
+  },
+  setupAllArtifacts: async () => {
+    try {
+      const artifactVersion = await fs.promises.readFile(
+        path.resolve(__dirname, 'cli', 'VERSION'),
+        'utf8'
+      );
+
+      const artifactPromises = allPlatforms.map(async (platform) => {
+        const artifactPath = await downloadArtifact(artifactVersion, platform);
+        return extract(
+          artifactPath,
+          path.resolve(
+            __dirname,
+            '..',
+            'cli',
+            `${platform.name}_${platform.arch}`
+          )
+        );
+      });
+
+      await Promise.all(artifactPromises);
     } catch (e) {
       console.error('ERROR: Failed setting up CLI.', e);
       process.exit(1);
