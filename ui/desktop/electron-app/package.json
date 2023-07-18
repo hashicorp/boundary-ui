@@ -16,13 +16,12 @@
     "package": "electron-forge package",
     "premake": "yarn build:cli && yarn build:config",
     "make": "electron-forge make",
+    "premakeAllArtifacts": "yarn build:allCli && yarn build:config",
+    "makeAllArtifacts": "shx rm -rf out && electron-builder build -c config/builder.config.js -mwl",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
   "keywords": [],
-  "config": {
-    "forge": "config/forge.config.js"
-  },
   "dependencies": {
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",

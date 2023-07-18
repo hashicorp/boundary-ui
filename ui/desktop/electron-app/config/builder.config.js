@@ -76,10 +76,6 @@ module.exports = {
       );
   },
 
-  afterPack: (context) => {
-    console.log('afterPack', context);
-  },
-
   directories: {
     // app: '.',
     output: 'out',
