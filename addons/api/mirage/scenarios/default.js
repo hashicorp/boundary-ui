@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+
 export default function (server) {
   // Scope resources
 
@@ -66,7 +68,7 @@ export default function (server) {
   globalScopeRoles.forEach((role) => {
     const { scope } = role;
     const oidcAuthMethod = globalAuthMethods.filter(
-      (auth) => auth.type === 'oidc'
+      (auth) => auth.type === TYPE_AUTH_METHOD_OIDC
     )[0];
     const { type } = oidcAuthMethod;
     const managedGroups = server.createList('managed-group', 2, {
@@ -87,7 +89,7 @@ export default function (server) {
   orgScopeRoles.forEach((role) => {
     const { scope } = role;
     const oidcAuthMethod = orgAuthMethods.filter(
-      (auth) => auth.type === 'oidc'
+      (auth) => auth.type === TYPE_AUTH_METHOD_OIDC
     )[0];
     const { type } = oidcAuthMethod;
     const managedGroups = server.createList('managed-group', 2, {
