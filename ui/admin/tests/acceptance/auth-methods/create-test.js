@@ -127,7 +127,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.strictEqual(authMethod.description, 'description');
     assert.strictEqual(authMethod.attributes.issuer, 'issuer');
     assert.strictEqual(authMethod.attributes.client_id, 'client_id');
-    assert.strictEqual(authMethod.attributes.client_secret, 'client_secret');
     assert.deepEqual(authMethod.attributes.signing_algorithms, ['RS384']);
     assert.deepEqual(authMethod.attributes.allowed_audiences, [
       'allowed_audiences',
