@@ -68,9 +68,11 @@ export default function (server) {
     const oidcAuthMethod = globalAuthMethods.filter(
       (auth) => auth.type === 'oidc'
     )[0];
+    const { type } = oidcAuthMethod;
     const managedGroups = server.createList('managed-group', 2, {
       scope,
       authMethodId: oidcAuthMethod.id,
+      type,
     });
     role.update({ managedGroups });
   });
@@ -87,9 +89,11 @@ export default function (server) {
     const oidcAuthMethod = orgAuthMethods.filter(
       (auth) => auth.type === 'oidc'
     )[0];
+    const { type } = oidcAuthMethod;
     const managedGroups = server.createList('managed-group', 2, {
       scope,
       authMethodId: oidcAuthMethod.id,
+      type,
     });
     role.update({ managedGroups });
   });
