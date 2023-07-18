@@ -221,6 +221,12 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   enable_groups;
 
+  @attr('boolean', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  use_token_groups;
+
   @attr('string', {
     for: 'ldap',
     isNestedAttribute: true,
