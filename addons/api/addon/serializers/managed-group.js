@@ -4,22 +4,37 @@
  */
 
 import ApplicationSerializer from './application';
+import {
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
+
 export default class ManagedGroupSerializer extends ApplicationSerializer {
   // =properties
 
   /**
-   * @type {boolean}
+   * Delegates to a type-specific serialization, or default.
+   * @override
+   * @param {Snapshot} snapshot
+   * @return {object}
    */
-  serializeScopeID = false;
 
-  serialize() {
+  serialize(snapshot) {
+    switch (snapshot.record.type) {
+      case TYPE_AUTH_METHOD_OIDC:
+        return this.serializeOIDC(...arguments);
+      case TYPE_AUTH_METHOD_LDAP:
+      default:
+        return super.serialize(...arguments);
+    }
+  }
+
+  serializeOIDC() {
     const serialized = super.serialize(...arguments);
-
     if (serialized.attributes.filter_string !== undefined) {
       serialized.attributes.filter = serialized.attributes.filter_string;
     }
     delete serialized.attributes.filter_string;
-
     return serialized;
   }
 
