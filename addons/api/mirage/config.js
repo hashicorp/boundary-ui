@@ -125,7 +125,7 @@ function routes() {
     '/auth-methods/:id',
     function ({ authMethods }, { params: { id } }) {
       const attrs = this.normalizedRequestAttrs();
-      if (attrs.type === 'oidc') {
+      if (attrs.type === 'oidc' || attrs.type === 'ldap') {
         attrs.attributes.state = 'active-public';
       }
 

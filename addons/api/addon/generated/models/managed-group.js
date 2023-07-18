@@ -53,9 +53,19 @@ export default class GeneratedManagedGroupModel extends BaseModel {
   // =attributes (OIDC)
 
   @attr('string', {
+    for: 'oidc',
     isNestedAttribute: true,
     description:
       'The boolean expression filter to use to determine membership. Comes in from API as "filter".',
   })
   filter_string;
+
+  // =attributes (LDAP)
+
+  @attr('string-array', {
+    for: 'ldap',
+    isNestedAttribute: true,
+    description: 'The list of groups that make up the ManagedGroup',
+  })
+  group_names;
 }
