@@ -93,7 +93,7 @@ module('Acceptance | accounts | create', function (hooks) {
     await fillIn('[name="description"]', 'description');
     await fillIn('[name="login_name"]', 'username');
     await click('form [type="submit"]:not(:disabled)');
-    assert.strictEqual(this.server.db.accounts.length, accountsCount + 1);
+    assert.strictEqual(this.server.schema.accounts.all().models.length, accountsCount + 1);
   });
 
   test('Users cannot create a new account without proper authorization', async function (assert) {
