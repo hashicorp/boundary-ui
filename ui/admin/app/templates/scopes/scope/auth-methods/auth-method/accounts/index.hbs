@@ -81,51 +81,47 @@
             {{/each}}
           </table.body>
         </Rose::Table>
-      {{else}}
-        <Rose::Table as |table|>
-          <table.header as |header|>
-            <header.row as |row|>
-              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            </header.row>
-          </table.header>
-          <table.body as |body|>
-            {{#each @model.accounts as |account|}}
-              <body.row as |row|>
-                <row.headerCell>
-                  {{#if (can 'read account' account)}}
-                    <LinkTo
-                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                      @model={{account.id}}
-                    >
-                      {{account.accountName}}
-                    </LinkTo>
-                  {{else}}
-                    {{account.accountName}}
-                  {{/if}}
-                  <p>{{account.description}}</p>
-                </row.headerCell>
-                <row.cell>
-                  {{account.login_name}}
-                </row.cell>
-                <row.cell>
-                  <Hds::Badge @text={{account.type}} />
-                </row.cell>
-                <row.cell>
-                  <Copyable
-                    @text={{account.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
+      {{else if @model.accounts.firstObject.isLDAP}}
+        <Hds::Table
+          @model={{@model.accounts}}
+          @columns={{array
+            (hash label=(t 'resources.account.form.login_name.label'))
+            (hash label=(t 'resources.account.form.email.label'))
+            (hash label=(t 'resources.account.form.full_name.label'))
+            (hash label=(t 'resources.account.form.dn.label'))
+            (hash label=(t 'resources.account.form.member_of_groups.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read account' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                    @model={{B.data.id}}
                   >
-                    <code>{{account.id}}</code>
-                  </Copyable>
-                </row.cell>
-              </body.row>
-            {{/each}}
-          </table.body>
-        </Rose::Table>
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{B.data.email}}
+              </B.Td>
+              <B.Td>{{B.data.full_name}}</B.Td>
+
+              <B.Td>{{B.data.dn}}</B.Td>
+              <B.Td>
+                <div class='truncated-list'>
+                  {{truncated-list B.data.member_of_groups}}
+                </div>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
       {{/if}}
     {{else}}
 

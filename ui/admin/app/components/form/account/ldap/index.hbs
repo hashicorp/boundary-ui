@@ -72,12 +72,40 @@
         </F.Error>
       {{/if}}
     </Hds::Form::TextInput::Field>
-  {{else}}
-    <InfoField @value={{@model.login_name}} as |F|>
-      <F.Label>{{t 'form.login_name.label'}}</F.Label>
-      <F.HelperText>{{t 'form.login_name.help'}}</F.HelperText>
-    </InfoField>
   {{/if}}
+
+  {{#unless @model.isNew}}
+    <Hds::Form::Fieldset as |F|>
+      <F.Legend>Read only Fields</F.Legend>
+      <F.HelperText>{{t 'resources.account.form.member_of_groups.help'}}
+      </F.HelperText>
+      <F.Control>
+        <InfoField @value={{@model.login_name}} as |F|>
+          <F.Label>{{t 'form.login_name.label'}}</F.Label>
+        </InfoField>
+        <InfoField @value={{@model.email}} as |F|>
+          <F.Label>{{t 'resources.account.form.email.label'}}</F.Label>
+        </InfoField>
+        <InfoField @value={{@model.full_name}} as |F|>
+          <F.Label>{{t 'resources.account.form.full_name.label'}}</F.Label>
+        </InfoField>
+        <InfoField @value={{@model.dn}} as |F|>
+          <F.Label>{{t 'resources.account.form.dn.label'}}</F.Label>
+        </InfoField>
+        <p class='hds-font-weight-semibold'>{{t
+            'resources.account.form.member_of_groups.label'
+          }}</p>
+
+        {{#each @model.member_of_groups as |group|}}
+          <Hds::Form::TextInput::Base
+            @value={{group.value}}
+            disabled={{true}}
+            @width='unset'
+          />
+        {{/each}}
+      </F.Control>
+    </Hds::Form::Fieldset>
+  {{/unless}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

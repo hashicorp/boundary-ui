@@ -14,11 +14,28 @@ account:
   types:
     password: Password
     oidc: OIDC
+    ldap: LDAP
   titles:
     new: New Account
   actions:
     create: Create Account
     delete: Delete Account
+  form:
+    login_name:
+      label: Login Name
+      help: This information is provided by the server and cannot be edited in Boundary
+    email:
+      label: Email
+      help: This information is provided by the server and cannot be edited in Boundary
+    dn:
+      label: Dn
+      help: This information is provided by the server and cannot be edited in Boundary
+    member_of_groups:
+      label: Group Names
+      help: This information is provided by the server and cannot be edited in Boundary
+    full_name:
+      label: Full Name
+      help: This information is provided by the server and cannot be edited in Boundary
 auth-method:
   title: Auth Method
   title_plural: Auth Methods
