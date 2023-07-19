@@ -18,9 +18,6 @@ export default ApplicationSerializer.extend({
     const isPrimary =
       model.scope && model.scope.primaryAuthMethodId === model.id;
     json.is_primary = isPrimary;
-    delete json.attributes?.client_secret;
-    delete json.attributes?.client_certificate_key;
-    delete json.attributes?.bind_password;
     return json;
   },
 });
