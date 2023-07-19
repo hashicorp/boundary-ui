@@ -99,6 +99,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       state: 'baz',
       account_attribute_maps: [{ from: 'foo', to: 'bar' }],
       urls: [{ value: 'ldap://ldap.example.com' }],
+      use_token_groups: false,
       start_tls: true,
       insecrure_tls: false,
       discover_dn: true,
@@ -129,6 +130,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       attributes: {
         account_attribute_maps: ['foo=bar'],
         urls: ['ldap://ldap.example.com'],
+        use_token_groups: false,
         start_tls: true,
         insecure_tls: false,
         discover_dn: true,
@@ -207,6 +209,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       state: 'baz',
       account_attribute_maps: [{ from: 'foo', to: 'bar' }],
       urls: [{ value: 'ldap://ldap.example.com' }],
+      use_token_groups: false,
       start_tls: true,
       insecrure_tls: false,
       discover_dn: true,
@@ -237,6 +240,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       attributes: {
         account_attribute_maps: ['foo=bar'],
         urls: ['ldap://ldap.example.com'],
+        use_token_groups: false,
         start_tls: true,
         insecure_tls: false,
         discover_dn: true,
@@ -326,19 +330,34 @@ module('Unit | Serializer | auth method', function (hooks) {
           {
             id: '2',
             type: 'auth-method',
-            attributes: { is_primary: true },
+            attributes: {
+              is_primary: true,
+              bind_password: '',
+              client_certificate_key: '',
+              client_secret: '',
+            },
             relationships: {},
           },
           {
             id: '1',
             type: 'auth-method',
-            attributes: { is_primary: false },
+            attributes: {
+              is_primary: false,
+              bind_password: '',
+              client_certificate_key: '',
+              client_secret: '',
+            },
             relationships: {},
           },
           {
             id: '3',
             type: 'auth-method',
-            attributes: { is_primary: false },
+            attributes: {
+              is_primary: false,
+              bind_password: '',
+              client_certificate_key: '',
+              client_secret: '',
+            },
             relationships: {},
           },
         ],
@@ -352,7 +371,6 @@ module('Unit | Serializer | auth method', function (hooks) {
 
     const apiUrlPrefix = 'protocol://host:port/foo';
     const clientId = 'id123';
-    const clientSecret = 'secret456';
     const disableDiscoveredConfigValidation = true;
     const dryRun = true;
     const issuer = 'http://www.example.net';
@@ -366,7 +384,6 @@ module('Unit | Serializer | auth method', function (hooks) {
         idp_ca_certs: ['certificate-1234', 'certificate-5678'],
         api_url_prefix: apiUrlPrefix,
         client_id: clientId,
-        client_secret: clientSecret,
         disable_discovered_config_validation: disableDiscoveredConfigValidation,
         dry_run: dryRun,
         issuer: issuer,
@@ -404,7 +421,6 @@ module('Unit | Serializer | auth method', function (hooks) {
     ]);
     assert.strictEqual(record.api_url_prefix, apiUrlPrefix);
     assert.strictEqual(record.client_id, clientId);
-    assert.strictEqual(record.client_secret, clientSecret);
     assert.strictEqual(
       record.disable_discovered_config_validation,
       disableDiscoveredConfigValidation
@@ -420,7 +436,6 @@ module('Unit | Serializer | auth method', function (hooks) {
     const ldapUrl = 'ldap://ldap.example.com';
     const certificates = ['certificate-1234', 'certificate-5678'];
     const clientCerticate = 'certificate-1234';
-    const clientCertificateKey = 'secret456';
     const startTls = true;
     const insecureTls = false;
     this.server.get('/v1/auth-methods/ldap123', () => ({
@@ -442,7 +457,6 @@ module('Unit | Serializer | auth method', function (hooks) {
         group_filter: '(member={{.UserDN}})',
         certificates: certificates,
         client_certificate: clientCerticate,
-        client_certificate_key: clientCertificateKey,
       },
       version: 1,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -478,6 +492,5 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.strictEqual(record.group_attr, 'cn');
     assert.strictEqual(record.group_filter, '(member={{.UserDN}})');
     assert.strictEqual(record.client_certificate, clientCerticate);
-    assert.strictEqual(record.client_certificate_key, clientCertificateKey);
   });
 });
