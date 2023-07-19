@@ -71,7 +71,7 @@ module('Acceptance | auth methods | update', function (hooks) {
   });
 
   test('can update an oidc auth method and save changes', async function (assert) {
-    assert.expect(12);
+    assert.expect(11);
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_OIDC,
