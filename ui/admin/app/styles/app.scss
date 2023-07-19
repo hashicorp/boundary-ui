@@ -976,3 +976,13 @@
     }
   }
 }
+
+// ldap form sections
+.ldap-section {
+  margin-top: 4rem;
+
+  .hds-form-helper-text {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
