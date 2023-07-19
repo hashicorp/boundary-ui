@@ -10,6 +10,7 @@ import generateId from '../helpers/id';
 
 import {
   TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
   TYPES_AUTH_METHOD,
 } from 'api/models/auth-method';
 
@@ -46,7 +47,7 @@ export default factory.extend({
         user.update({ accountIds: [id] });
       });
 
-      if (type === TYPE_AUTH_METHOD_OIDC) {
+      if (type === TYPE_AUTH_METHOD_OIDC || type === TYPE_AUTH_METHOD_LDAP) {
         server
           .createList('managed-group', 2, { scope, authMethod })
           .map((managedGroup) => {

@@ -73,6 +73,7 @@ export default Factory.extend({
             'preferredName=fullName',
             'preferredEmail=email',
           ],
+          use_token_groups: false,
         };
         break;
     }

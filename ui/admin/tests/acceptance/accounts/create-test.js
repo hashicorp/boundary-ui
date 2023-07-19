@@ -85,6 +85,17 @@ module('Acceptance | accounts | create', function (hooks) {
     assert.strictEqual(this.server.db.accounts.length, accountsCount + 1);
   });
 
+  test('can create a new LDAP account', async function (assert) {
+    assert.expect(1);
+    const accountsCount = this.server.db.accounts.length;
+    await visit(urls.newAccount);
+    await fillIn('[name="name"]', 'Account name');
+    await fillIn('[name="description"]', 'description');
+    await fillIn('[name="login_name"]', 'username');
+    await click('form [type="submit"]:not(:disabled)');
+    assert.strictEqual(this.server.schema.accounts.all().models.length, accountsCount + 1);
+  });
+
   test('Users cannot create a new account without proper authorization', async function (assert) {
     assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts = [];
@@ -121,6 +132,16 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can cancel a new account creation', async function (assert) {
+    assert.expect(2);
+    const accountsCount = this.server.db.accounts.length;
+    await visit(urls.newAccount);
+    await fillIn('[name="name"]', 'Account name');
+    await click('form button:not([type="submit"])');
+    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    assert.strictEqual(currentURL(), urls.accounts);
+  });
+
+  test('can cancel a new LDAP account creation', async function (assert) {
     assert.expect(2);
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
