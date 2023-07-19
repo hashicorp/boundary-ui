@@ -14,6 +14,9 @@ const list = [
   { key: 3, value: 'packer' },
   { key: 4, value: 'vault' },
 ];
+
+const listWithNoItem = [];
+
 const listWithOneItem = [{ key: 1, value: 'boundary' }];
 module('Integration | Helper | truncate-list', function (hooks) {
   setupRenderingTest(hooks);
@@ -35,5 +38,13 @@ module('Integration | Helper | truncate-list', function (hooks) {
 
     await render(hbs`{{truncate-list this.inputValue}}`);
     assert.strictEqual(this.element.textContent.trim(), 'boundary');
+  });
+
+  test('it renders correctly when the list is empty', async function (assert) {
+    assert.expect(1);
+    this.set('inputValue', listWithNoItem);
+
+    await render(hbs`{{truncate-list this.inputValue}}`);
+    assert.strictEqual(this.element.textContent.trim(), '');
   });
 });

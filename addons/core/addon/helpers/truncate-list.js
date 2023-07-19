@@ -11,14 +11,16 @@ import { helper } from '@ember/component/helper';
  */
 
 export default helper(function truncateList(params /*, hash*/) {
-  const list = params[0];
-  const numberOfItems = Object.keys(list).length;
-  const items = list.map(({ value }) => value);
+  const list = params?.[0];
+  if (list) {
+    const numberOfItems = Object.keys(list).length;
+    const items = list.map(({ value }) => value);
 
-  if (numberOfItems > 3) {
-    const remainingItems = items.splice(3).length;
-    return items.join(', ') + `, +${remainingItems} more`;
-  } else {
-    return items.join(', ');
+    if (numberOfItems > 3) {
+      const remainingItems = items.splice(3).length;
+      return items.join(', ') + `, +${remainingItems} more`;
+    } else {
+      return items.join(', ');
+    }
   }
 });
