@@ -37,67 +37,63 @@
   <page.body>
     {{#if @model.principals}}
 
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'resources.scope.title'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.principals as |principal|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (can 'readPrincipal role' principal)}}
-                  <LinkToPrincipal @model={{principal}} />
-                {{else}}
-                  {{principal.displayName}}
-                {{/if}}
-                {{#if principal.accountName}}
-                  <br /><Hds::Badge @text={{principal.accountName}} />
-                {{/if}}
-              </row.headerCell>
-              <row.cell>
-                <Copyable
-                  @text={{principal.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{principal.id}}</code>
-                </Copyable>
-              </row.cell>
-              <row.cell>
-                <PrincipalTypeBadge @model={{principal}} />
-              </row.cell>
-              <row.cell>
-                <ScopeBadge @scope={{principal.scopeModel}} />
-              </row.cell>
-              <row.cell>
-                {{#if (can 'removePrincipals role' @model.role)}}
-                  <Rose::Dropdown
-                    @icon='flight-icons/svg/more-horizontal-16'
-                    @iconOnly={{true}}
-                    @showCaret={{false}}
-                    @dropdownRight={{true}}
+      <Hds::Table
+        @model={{@model.principals}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'resources.scope.title'))
+          (hash label=(t 'titles.actions'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'readPrincipal role' B.data)}}
+                <LinkToPrincipal @model={{B.data}} />
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+              {{#if B.data.accountName}}
+                <br /><Hds::Badge @text={{B.data.accountName}} />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{B.data.id}}</code>
+              </Copyable>
+            </B.Td>
+            <B.Td>
+              <PrincipalTypeBadge @model={{B.data}} />
+            </B.Td>
+            <B.Td>
+              <ScopeBadge @scope={{B.data.scopeModel}} />
+            </B.Td>
+            <B.Td>
+              {{#if (can 'removePrincipals role' @model.role)}}
+                <Hds::Dropdown as |dd|>
+                  <dd.ToggleIcon
+                    @icon='more-horizontal'
                     @text={{t 'actions.manage'}}
-                    as |dropdown|
-                  >
-                    <dropdown.button
-                      @style='danger'
-                      {{on 'click' (route-action 'removePrincipal' principal)}}
-                    >
-                      {{t 'actions.remove'}}
-                    </dropdown.button>
-                  </Rose::Dropdown>
-                {{/if}}
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+                    @hasChevron={{false}}
+                  />
+                  <dd.Interactive
+                    @color='critical'
+                    @text={{t 'actions.remove'}}
+                    {{on 'click' (route-action 'removePrincipal' B.data)}}
+                  />
+                </Hds::Dropdown>
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
 
     {{else}}
 
