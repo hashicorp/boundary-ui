@@ -96,7 +96,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can create new oidc auth method', async function (assert) {
-    assert.expect(13);
+    assert.expect(12);
     const count = getAuthMethodsCount();
 
     await visit(`${urls.authMethods}/new?type=oidc`);
