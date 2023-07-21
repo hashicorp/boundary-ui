@@ -12,13 +12,13 @@
 
   {{yield F}}
 
-  {{#let (unique-id) (unique-id) as |keyHeaderID labelHeaderID|}}
+  {{#let (unique-id) (unique-id) as |keyHeaderID valueHeaderID|}}
     <F.Control>
       <Hds::Table class='key-value-list' name={{@name}}>
         <:head as |H|>
           <H.Tr>
             <H.Th id={{keyHeaderID}}>{{t 'form.key.label'}}</H.Th>
-            <H.Th id={{labelHeaderID}}>{{t 'form.value.label'}}</H.Th>
+            <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
             <H.Th>
               {{#if @removeOptionByIndex}}
                 {{t 'titles.actions'}}
@@ -44,7 +44,7 @@
                   @value={{option.value}}
                   @type='text'
                   disabled={{@disabled}}
-                  aria-labelledby={{labelHeaderID}}
+                  aria-labelledby={{valueHeaderID}}
                   {{on 'input' (set-from-event option 'value')}}
                 />
               </B.Td>
@@ -78,7 +78,7 @@
                 @value={{this.newOptionValue}}
                 @type='text'
                 disabled={{@disabled}}
-                aria-labelledby={{labelHeaderID}}
+                aria-labelledby={{valueHeaderID}}
                 {{on 'input' (set-from-event this 'newOptionValue')}}
               />
             </B.Td>
