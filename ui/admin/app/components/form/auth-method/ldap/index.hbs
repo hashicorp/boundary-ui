@@ -1,0 +1,662 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Rose::Form
+  @edit={{@edit}}
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+
+  <Hds::Form::TextInput::Field
+    @type='text'
+    @value={{@model.type}}
+    name='type'
+    disabled={{true}}
+    as |F|
+  >
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.name}}
+    @isInvalid={{@model.errors.name}}
+    @type='text'
+    name='name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    {{#if @model.errors.name}}
+      <F.Error as |E|>
+        {{#each @model.errors.name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @isOptional={{true}}
+    @value={{@model.description}}
+    @isInvalid={{@model.errors.description}}
+    name='description'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
+
+  <div class='ldap-section'>
+    <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
+        'resources.auth-method.section.connection.title'
+      }}</p>
+    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+        'resources.auth-method.section.connection.help'
+      }}</Hds::Form::HelperText>
+  </div>
+
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{this.urlsArrayString}}
+    @isInvalid={{@model.errors.urls}}
+    @type='url'
+    name='urls'
+    disabled={{form.disabled}}
+    {{on 'input' this.setUrls}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.urls.label'}}</F.Label>
+    <F.HelperText>{{t 'resources.auth-method.form.urls.help'}}</F.HelperText>
+    {{#if @model.errors.urls}}
+      <F.Error as |E|>
+        {{#each @model.errors.urls as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Fieldset @isOptional={{true}} as |F|>
+    <F.Legend>{{t 'resources.auth-method.form.certificates.label'}}</F.Legend>
+    <F.HelperText>{{t
+        'resources.auth-method.form.certificates.help'
+      }}</F.HelperText>
+    {{#let (unique-id) as |valueHeaderID|}}
+      <F.Control>
+        <Hds::Table class='key-value-list' name='certificates'>
+          <:head as |H|>
+            <H.Tr>
+              <H.Th id={{valueHeaderID}}>{{t 'titles.value'}}</H.Th>
+              <H.Th>{{t 'titles.actions'}}</H.Th>
+            </H.Tr>
+          </:head>
+          <:body as |B|>
+            {{#each @model.certificates as |cert i|}}
+              <B.Tr>
+                <B.Td>
+                  <Hds::Form::Textarea::Field
+                    @value={{cert.value}}
+                    @isOptional={{true}}
+                    disabled={{form.disabled}}
+                    aria-labelledby={{valueHeaderID}}
+                  />
+                </B.Td>
+                <B.Td>
+                  <Hds::Button
+                    @text={{t 'actions.remove'}}
+                    @color='critical'
+                    @icon='trash'
+                    @isIconOnly={{true}}
+                    disabled={{form.disabled}}
+                    {{on 'click' (fn @removeItemByIndex 'certificates' i)}}
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
+            <B.Tr>
+              <B.Td>
+                <Hds::Form::Textarea::Field
+                  @value={{this.newCertificate}}
+                  @isOptional={{true}}
+                  disabled={{form.disabled}}
+                  aria-labelledby={{valueHeaderID}}
+                />
+              </B.Td>
+              <B.Td>
+                <Hds::Button
+                  @text={{t 'actions.add'}}
+                  @color='secondary'
+                  disabled={{or form.disabled (not this.newCertificate)}}
+                  {{on 'click' this.addCertificate}}
+                />
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      </F.Control>
+    {{/let}}
+    {{#if @model.errors.certificates}}
+      <F.Error as |E|>
+        {{#each @model.errors.certificates as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Fieldset>
+
+  {{#if @model.isNew}}
+    <Hds::Form::TextInput::Field
+      @isOptional={{true}}
+      @value={{@model.client_certificate}}
+      @isInvalid={{@model.errors.client_certificate}}
+      @type='password'
+      name='client_certificate'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'client_certificate')}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.auth-method.form.client_certificate.label'
+        }}</F.Label>
+      <F.HelperText>{{t
+          'resources.auth-method.form.client_certificate.help'
+        }}</F.HelperText>
+      {{#if @model.errors.client_certificate}}
+        <F.Error as |E|>
+          {{#each @model.errors.client_certificate as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
+    <Hds::Form::TextInput::Field
+      @isOptional={{true}}
+      @value={{@model.client_certificate_key}}
+      @isInvalid={{@model.errors.client_certificate_key}}
+      @type='password'
+      name='client_certificate_key'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'client_certificate_key')}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.auth-method.form.client_certificate_key.label'
+        }}</F.Label>
+      <F.HelperText>{{t
+          'resources.auth-method.form.client_certificate_key.help'
+        }}</F.HelperText>
+      {{#if @model.errors.client_certificate_key}}
+        <F.Error as |E|>
+          {{#each @model.errors.client_certificate_key as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
+
+  <Hds::Form::Toggle::Field
+    name='start_tls'
+    checked={{@model.start_tls}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.start_tls.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.start_tls.help'
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <Hds::Form::Toggle::Field
+    name='insecure_tls'
+    checked={{@model.insecure_tls}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.insecure_tls.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.insecure_tls.help'
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <div class='ldap-section'>
+    <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
+        'resources.auth-method.section.authenticated-search.title'
+      }}</p>
+    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+        'resources.auth-method.section.authenticated-search.help'
+      }}</Hds::Form::HelperText>
+  </div>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.bind_dn}}
+    @isInvalid={{@model.errors.bind_dn}}
+    @type='text'
+    name='bind_dn'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'bind_dn')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.bind_dn.label'}}</F.Label>
+    <F.HelperText>{{t 'resources.auth-method.form.bind_dn.help'}}</F.HelperText>
+    {{#if @model.errors.bind_dn}}
+      <F.Error as |E|>
+        {{#each @model.errors.bind_dn as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  {{#if @model.isNew}}
+    <Hds::Form::TextInput::Field
+      @isOptional={{true}}
+      @value={{@model.bind_password}}
+      @isInvalid={{@model.errors.bind_password}}
+      @type='password'
+      name='bind_password'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'bind_password')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.auth-method.form.bind_password.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.auth-method.form.bind_password.help'
+        }}</F.HelperText>
+      {{#if @model.errors.bind_password}}
+        <F.Error as |E|>
+          {{#each @model.errors.bind_password as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.upn_domain}}
+    @isInvalid={{@model.errors.upn_domain}}
+    @type='text'
+    name='upn_domain'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'upn_domain')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.upn_domain.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.upn_domain.help'
+      }}</F.HelperText>
+    {{#if @model.errors.upn_domain}}
+      <F.Error as |E|>
+        {{#each @model.errors.upn_domain as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <div class='ldap-section'>
+    <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
+        'resources.auth-method.section.anonymous-search.title'
+      }}</p>
+    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+        'resources.auth-method.section.anonymous-search.help'
+      }}</Hds::Form::HelperText>
+  </div>
+
+  <Hds::Form::Toggle::Field
+    name='discover_dn'
+    checked={{@model.discover_dn}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.discover_dn.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.discover_dn.help'
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <Hds::Form::Toggle::Field
+    name='anon_group_search'
+    checked={{@model.anon_group_search}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.auth-method.form.anon_group_search.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.anon_group_search.help'
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <div class='ldap-section'>
+    <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
+        'resources.auth-method.section.user-entries.title'
+      }}</p>
+    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+        'resources.auth-method.section.user-entries.help'
+      }}</Hds::Form::HelperText>
+  </div>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.user_dn}}
+    @isInvalid={{@model.errors.user_dn}}
+    @type='text'
+    name='user_dn'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'user_dn')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.user_dn.label'}}</F.Label>
+    <F.HelperText>{{t 'resources.auth-method.form.user_dn.help'}}</F.HelperText>
+    {{#if @model.errors.user_dn}}
+      <F.Error as |E|>
+        {{#each @model.errors.user_dn as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.user_attr}}
+    @isInvalid={{@model.errors.user_attr}}
+    @type='text'
+    name='user_attr'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'user_attr')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.user_attr.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.user_attr.help'
+      }}</F.HelperText>
+    {{#if @model.errors.user_attr}}
+      <F.Error as |E|>
+        {{#each @model.errors.user_attr as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.user_filter}}
+    @isInvalid={{@model.errors.user_filter}}
+    @type='text'
+    name='user_filter'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'user_filter')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.user_filter.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.user_filter.help'
+      }}</F.HelperText>
+    {{#if @model.errors.user_filter}}
+      <F.Error as |E|>
+        {{#each @model.errors.user_filter as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Fieldset @isOptional={{true}} as |F|>
+    <F.Legend>{{t
+        'resources.auth-method.form.account_attribute_maps.label'
+      }}</F.Legend>
+    <F.HelperText>{{t
+        'resources.auth-method.form.account_attribute_maps.help'
+      }}</F.HelperText>
+    {{#let (unique-id) (unique-id) as |fromHeaderID toHeaderID|}}
+      <F.Control>
+        <Hds::Table class='key-value-list' name='account_attribute_maps'>
+          <:head as |H|>
+            <H.Tr>
+              <H.Th id={{fromHeaderID}}>{{t
+                  'resources.auth-method.titles.from-attr'
+                }}</H.Th>
+              <H.Th id={{toHeaderID}}>{{t
+                  'resources.auth-method.titles.to-attr'
+                }}</H.Th>
+              <H.Th>{{t 'titles.actions'}}</H.Th>
+            </H.Tr>
+          </:head>
+          <:body as |B|>
+            {{#each @model.account_attribute_maps as |attrMap i|}}
+              <B.Tr>
+                <B.Td>
+                  <Hds::Form::TextInput::Field
+                    @value={{attrMap.from}}
+                    @type='text'
+                    disabled={{form.disabled}}
+                    aria-labelledby={{fromHeaderID}}
+                    {{on 'input' (set-from-event attrMap 'from')}}
+                  />
+                </B.Td>
+                <B.Td>
+                  <Hds::Form::Select::Field
+                    @value={{attrMap.to}}
+                    @width='100%'
+                    disabled={{form.disabled}}
+                    aria-labelledby={{toHeaderID}}
+                    {{on 'change' (set-from-event attrMap 'to')}}
+                    as |F|
+                  >
+                    <F.Options>
+                      {{#each this.toAttributes as |toAttrOption|}}
+                        <option
+                          value={{toAttrOption}}
+                          selected={{eq toAttrOption attrMap.to}}
+                        >{{toAttrOption}}</option>
+                      {{/each}}
+                    </F.Options>
+                  </Hds::Form::Select::Field>
+                </B.Td>
+                <B.Td>
+                  <Hds::Button
+                    @text={{t 'actions.remove'}}
+                    @color='critical'
+                    @icon='trash'
+                    @isIconOnly={{true}}
+                    disabled={{form.disabled}}
+                    {{on
+                      'click'
+                      (fn @removeItemByIndex 'account_attribute_maps' i)
+                    }}
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
+            <B.Tr>
+              <B.Td>
+                <Hds::Form::TextInput::Field
+                  @value={{this.newFromAttribute}}
+                  @type='text'
+                  @isOptional={{true}}
+                  disabled={{form.disabled}}
+                  aria-labelledby={{fromHeaderID}}
+                  {{on 'input' (set-from-event this 'newFromAttribute')}}
+                />
+              </B.Td>
+              <B.Td>
+                <Hds::Form::Select::Field
+                  @value={{this.newToAttribute}}
+                  @width='100%'
+                  disabled={{form.disabled}}
+                  aria-labelledby={{toHeaderID}}
+                  {{on 'change' (set-from-event this 'newToAttribute')}}
+                  as |F|
+                >
+                  <F.Options>
+                    {{#each this.toAttributes as |toAttrOption|}}
+                      <option
+                        value={{toAttrOption}}
+                        selected={{eq toAttrOption this.newToAttribute}}
+                      >{{toAttrOption}}</option>
+                    {{/each}}
+                  </F.Options>
+                </Hds::Form::Select::Field>
+              </B.Td>
+              <B.Td>
+                <Hds::Button
+                  @text={{t 'actions.add'}}
+                  @color='secondary'
+                  disabled={{or form.disabled (not this.newFromAttribute)}}
+                  {{on 'click' this.addAttributeMap}}
+                />
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      </F.Control>
+    {{/let}}
+    {{#if @model.errors.account_attribute_maps}}
+      <F.Error as |E|>
+        {{#each @model.errors.account_attribute_maps as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Fieldset>
+
+  <div class='ldap-section'>
+    <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
+        'resources.auth-method.section.group-entries.title'
+      }}</p>
+    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+        'resources.auth-method.section.group-entries.help'
+      }}</Hds::Form::HelperText>
+  </div>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.group_dn}}
+    @isInvalid={{@model.errors.group_dn}}
+    @type='text'
+    name='group_dn'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'group_dn')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.group_dn.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.group_dn.help'
+      }}</F.HelperText>
+    {{#if @model.errors.group_dn}}
+      <F.Error as |E|>
+        {{#each @model.errors.group_dn as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.group_attr}}
+    @isInvalid={{@model.errors.group_attr}}
+    @type='text'
+    name='group_attr'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'group_attr')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.group_attr.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.group_attr.help'
+      }}</F.HelperText>
+    {{#if @model.errors.group_attr}}
+      <F.Error as |E|>
+        {{#each @model.errors.group_attr as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.group_filter}}
+    @isInvalid={{@model.errors.group_filter}}
+    @type='text'
+    name='group_filter'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'group_filter')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.group_filter.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.group_filter.help'
+      }}</F.HelperText>
+    {{#if @model.errors.group_filter}}
+      <F.Error as |E|>
+        {{#each @model.errors.group_filter as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Toggle::Field
+    name='enable_groups'
+    checked={{@model.enable_groups}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.enable_groups.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.enable_groups.help'
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <Hds::Form::Toggle::Field
+    name='use_token_groups'
+    checked={{@model.use_token_groups}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.auth-method.form.use_token_groups.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.use_token_groups.help'
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+</Rose::Form>

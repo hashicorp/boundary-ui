@@ -70,7 +70,7 @@ module('Acceptance | roles | read', function (hooks) {
   test('can navigate to a role form', async function (assert) {
     assert.expect(1);
     await visit(urls.roles);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await click('main tbody .hds-table__tr:nth-child(1) a');
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.role);
   });
@@ -80,6 +80,6 @@ module('Acceptance | roles | read', function (hooks) {
     instances.role.authorized_actions =
       instances.role.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.roles);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    assert.notOk(find('main tbody .hds-table__tr:nth-child(1) a'));
   });
 });

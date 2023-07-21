@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'admin/tests/helpers';
-import { render, waitUntil } from '@ember/test-helpers';
+import { render, waitUntil, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
@@ -37,6 +37,9 @@ module('Integration | Component | session-recording/player', function (hooks) {
     `);
 
     assert.dom('.session-recording-player-header').hasText('Back to channels');
-    await waitUntil(() => assert.dom('.ap-player').includesText('yarn test'));
+    const result = await waitUntil(() =>
+      find('.ap-player').textContent.includes('yarn test')
+    );
+    assert.true(result);
   });
 });

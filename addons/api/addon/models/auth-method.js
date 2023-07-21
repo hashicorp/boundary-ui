@@ -38,6 +38,12 @@ export const options = {
       to: ['sub', 'name', 'email'],
     },
   },
+  ldap: {
+    account_attribute_maps: {
+      to: ['fullName', 'email'],
+    },
+    state: ['inactive', 'active-private', 'active-public'],
+  },
 };
 
 export default class AuthMethodModel extends GeneratedAuthMethodModel {
@@ -102,9 +108,9 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
   // =methods
 
   /**
-   * Change the active and visibility state of an OIDC auth method
+   * Change the active and visibility state of an OIDC and LDAP auth method
    * given its ID.
-   * For OIDC auth methods only.
+   * For OIDC and LDAP auth methods only.
    * @param {[string]} state
    * @param {object} options
    * @param {object} options.adapterOptions

@@ -71,7 +71,8 @@ module('Acceptance | roles | principals', function (hooks) {
     assert.expect(2);
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
   });
 
@@ -82,7 +83,7 @@ module('Acceptance | roles | principals', function (hooks) {
     );
     instances.role.update({ authorized_actions });
     await visit(urls.rolePrincipals);
-    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
+    assert.notOk(find('tbody tr .hds-dropdown-list-item button'));
   });
 
   test('shows error message on principal remove', async function (assert) {
@@ -101,7 +102,8 @@ module('Acceptance | roles | principals', function (hooks) {
     });
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.ok(find('[role="alert"]'));
   });
 
@@ -136,7 +138,8 @@ module('Acceptance | roles | principals', function (hooks) {
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
     // Remove a principal to populate association view
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
     await click('.rose-layout-page-actions a');
     assert.strictEqual(currentURL(), urls.addPrincipals);
