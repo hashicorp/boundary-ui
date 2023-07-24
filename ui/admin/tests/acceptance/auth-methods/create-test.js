@@ -186,14 +186,11 @@ module('Acceptance | auth-methods | create', function (hooks) {
       ldapAuthMethod.attributes.client_certificate,
       'client cert'
     );
-    assert.strictEqual(
-      ldapAuthMethod.attributes.client_certificate_key,
-      'client cert key'
-    );
+    assert.notOk(ldapAuthMethod.attributes.client_certificate_key);
     assert.true(ldapAuthMethod.attributes.start_tls);
     assert.true(ldapAuthMethod.attributes.insecure_tls);
     assert.strictEqual(ldapAuthMethod.attributes.bind_dn, 'bind dn');
-    assert.strictEqual(ldapAuthMethod.attributes.bind_password, 'password');
+    assert.notOk(ldapAuthMethod.attributes.bind_password);
     assert.strictEqual(ldapAuthMethod.attributes.upn_domain, 'upn domain');
     assert.true(ldapAuthMethod.attributes.discover_dn);
     assert.true(ldapAuthMethod.attributes.anon_group_search);
