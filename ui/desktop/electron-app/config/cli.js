@@ -15,18 +15,22 @@ const allPlatforms = [
   {
     name: 'darwin',
     arch: 'amd64',
+    displayArchName: 'x64',
   },
   {
     name: 'darwin',
     arch: 'arm64',
+    displayArchName: 'arm64',
   },
   {
     name: 'linux',
     arch: 'amd64',
+    displayArchName: 'x64',
   },
   {
     name: 'windows',
     arch: 'amd64',
+    displayArchName: 'x64',
   },
 ];
 
@@ -128,7 +132,7 @@ module.exports = {
             __dirname,
             '..',
             'cli',
-            `${platform.name}_${platform.arch}`
+            `${platform.name}_${platform.displayArchName}`
           )
         );
       });
