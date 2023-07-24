@@ -27,16 +27,13 @@ export default class extends Helper {
    * @return string
    */
 
-  compute([list, limit = 3]) {
+  compute([translation, list, limit = 3]) {
     if (list) {
       const numberOfItems = Object.keys(list).length;
       const items = list.map(({ value }) => value);
       if (numberOfItems > limit) {
         const remainingItems = items.splice(limit).length;
-        return (
-          items.join(', ') +
-          `, +${remainingItems} ${this.intl.t('actions.more')}`
-        );
+        return items.join(', ') + this.intl.t(translation, { remainingItems });
       } else {
         return items.join(', ');
       }

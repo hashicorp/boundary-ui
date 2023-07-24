@@ -19,15 +19,18 @@ const list = [
 const listWithNoItem = [];
 
 const listWithOneItem = [{ key: 1, value: 'boundary' }];
+const limit = 3;
 module('Integration | Helper | truncate-list', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
 
-  test('it renders correctly', async function (assert) {
+  test('it renders correctly when there is list with more than the limit specificed', async function (assert) {
     assert.expect(1);
     this.set('inputValue', list);
-
-    await render(hbs`{{truncate-list this.inputValue}}`);
+    this.set('limit', limit);
+    await render(
+      hbs`{{truncate-list 'actions.more' this.inputValue this.limit}}`
+    );
     assert.strictEqual(
       this.element.textContent.trim(),
       'boundary, consul, packer, +1 more'
@@ -38,7 +41,7 @@ module('Integration | Helper | truncate-list', function (hooks) {
     assert.expect(1);
     this.set('inputValue', listWithOneItem);
 
-    await render(hbs`{{truncate-list this.inputValue}}`);
+    await render(hbs`{{truncate-list 'actions.more' this.inputValue}}`);
     assert.strictEqual(this.element.textContent.trim(), 'boundary');
   });
 
@@ -46,7 +49,7 @@ module('Integration | Helper | truncate-list', function (hooks) {
     assert.expect(1);
     this.set('inputValue', listWithNoItem);
 
-    await render(hbs`{{truncate-list this.inputValue}}`);
+    await render(hbs`{{truncate-list 'actions.more' this.inputValue}}`);
     assert.strictEqual(this.element.textContent.trim(), '');
   });
 });
