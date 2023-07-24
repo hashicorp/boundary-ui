@@ -388,6 +388,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         dry_run: dryRun,
         issuer: issuer,
         max_age: maxAge,
+        client_secret: '',
       },
       version: 1,
       type: TYPE_AUTH_METHOD_OIDC,
@@ -428,6 +429,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.strictEqual(record.dry_run, dryRun);
     assert.strictEqual(record.issuer, issuer);
     assert.strictEqual(record.max_age, maxAge);
+    assert.strictEqual(record.client_secret, '');
   });
 
   test('it normalizes LDAP records', async function (assert) {
@@ -447,6 +449,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         discover_dn: true,
         anon_group_search: true,
         bind_dn: 'cn=users,dc=example,dc=com',
+        bind_password: '',
         upn_domain: 'example.com',
         user_dn: 'cn=users,dc=example,dc=com',
         user_attr: 'uid',
@@ -457,6 +460,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         group_filter: '(member={{.UserDN}})',
         certificates: certificates,
         client_certificate: clientCerticate,
+        client_certificate_key: '',
       },
       version: 1,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -492,5 +496,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.strictEqual(record.group_attr, 'cn');
     assert.strictEqual(record.group_filter, '(member={{.UserDN}})');
     assert.strictEqual(record.client_certificate, clientCerticate);
+    assert.strictEqual(record.client_certificate_key, '');
+    assert.strictEqual(record.bind_password, '');
   });
 });
