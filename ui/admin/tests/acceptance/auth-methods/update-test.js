@@ -4,14 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  click,
-  find,
-  fillIn,
-  select,
-  findAll,
-} from '@ember/test-helpers';
+import { visit, click, fillIn, select, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -37,6 +30,8 @@ module('Acceptance | auth methods | update', function (hooks) {
   const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
+  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
   const instances = {
     scopes: {
@@ -81,11 +76,17 @@ module('Acceptance | auth methods | update', function (hooks) {
 
   test('can update an auth method and save changes', async function (assert) {
     assert.expect(1);
-    await visit(urls.authMethod);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.strictEqual(this.server.db.authMethods[0].name, 'update name');
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethod}"]`);
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'update name');
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(
+      this.server.schema.authMethods.first().name,
+      'update name'
+    );
   });
 
   test('can update an oidc auth method and save changes', async function (assert) {
@@ -94,11 +95,13 @@ module('Acceptance | auth methods | update', function (hooks) {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    await visit(`${urls.authMethods}/${instances.authMethod.id}`);
-    await click('form [type="button"]:not(:disabled)', 'Activate edit mode');
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethods}/${instances.authMethod.id}"]`);
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
     const name = 'oidc name';
-    await fillIn('[name="name"]', name);
-    await fillIn('[name="description"]', 'description');
+    await fillIn(NAME_INPUT_SELECTOR, name);
+    await fillIn(DESC_INPUT_SELECTOR, 'description');
     await fillIn('[name="issuer"]', 'issuer');
     await fillIn('[name="client_id"]', 'client_id');
     await fillIn('[name="client_secret"]', 'client_secret');
@@ -232,10 +235,12 @@ module('Acceptance | auth methods | update', function (hooks) {
   test('can update an auth method and cancel changes', async function (assert) {
     assert.expect(1);
     await visit(urls.authMethod);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
-    await click('form button:not([type="submit"])');
-    assert.notEqual(this.server.db.authMethods[0].name, 'update name');
+
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'update name');
+    await click(BUTTON_SELECTOR, 'Cancel');
+
+    assert.notEqual(this.server.schema.authMethods.first().name, 'update name');
   });
 
   test('can update an ldap auth method and cancel changes', async function (assert) {
@@ -266,8 +271,25 @@ module('Acceptance | auth methods | update', function (hooks) {
       instances.authMethod.authorized_actions.filter(
         (item) => item !== 'update'
       );
-    await visit(urls.authMethod);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethod}"]`);
+
+    assert.dom(BUTTON_SELECTOR).doesNotExist();
+  });
+
+  test('cannot make changes to an existing ldap auth method without proper authorization', async function (assert) {
+    assert.expect(1);
+    featuresService.enable('ldap-auth-methods');
+    instances.ldapAuthMethod.authorized_actions =
+      instances.ldapAuthMethod.authorized_actions.filter(
+        (item) => item !== 'update'
+      );
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.ldapAuthMethod}"]`);
+
+    assert.dom(BUTTON_SELECTOR).doesNotExist();
   });
 
   test('saving an existing auth method with invalid fields displays error messages', async function (assert) {
@@ -291,20 +313,47 @@ module('Acceptance | auth methods | update', function (hooks) {
         }
       );
     });
-    await visit(urls.authMethod);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'existing auth method');
-    await click('form [type="submit"]');
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethod}"]`);
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'existing auth method');
+    await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.'
-    );
-    assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.'
-    );
+    assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
+    assert.dom('.rose-form-error-message').hasText('Name is required.');
+  });
+
+  test('saving an existing ldap auth method with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    featuresService.enable('ldap-auth-methods');
+    this.server.patch('/auth-methods/:id', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.ldapAuthMethod}"]`);
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'existing auth method');
+    await click(SAVE_BTN_SELECTOR);
+    await a11yAudit();
+    assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
+    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
 });
