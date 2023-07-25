@@ -20,6 +20,7 @@ export const TYPES_AUTH_METHOD = Object.freeze([
  * Enum options per auth method type and field.
  */
 export const options = {
+  state: ['inactive', 'active-private', 'active-public'],
   oidc: {
     signing_algorithms: [
       'RS256',
@@ -33,7 +34,6 @@ export const options = {
       'PS512',
       'EdDSA',
     ],
-    state: ['inactive', 'active-private', 'active-public'],
     account_claim_maps: {
       to: ['sub', 'name', 'email'],
     },
@@ -42,7 +42,6 @@ export const options = {
     account_attribute_maps: {
       to: ['fullName', 'email'],
     },
-    state: ['inactive', 'active-private', 'active-public'],
   },
 };
 
@@ -118,9 +117,11 @@ export default class AuthMethodModel extends GeneratedAuthMethodModel {
    */
   changeState(state, options = { adapterOptions: {} }) {
     const defaultAdapterOptions = {
-      method: 'change-state',
       state,
     };
+    if (this.isOIDC) {
+      defaultAdapterOptions.method = 'change-state';
+    }
     return this.save({
       ...options,
       adapterOptions: {
