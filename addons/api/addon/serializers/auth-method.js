@@ -4,7 +4,11 @@
  */
 
 import ApplicationSerializer from './application';
-import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 export default class AuthMethodSerializer extends ApplicationSerializer {
   // =methods
@@ -19,8 +23,10 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
     switch (snapshot.record.type) {
       case TYPE_AUTH_METHOD_PASSWORD:
         return this.serializePassword(...arguments);
-      default:
-        return this.serializeDefault(...arguments);
+      case TYPE_AUTH_METHOD_OIDC:
+        return this.serializeOIDC(...arguments);
+      case TYPE_AUTH_METHOD_LDAP:
+        return this.serializeLDAP(...arguments);
     }
   }
 
@@ -40,8 +46,34 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @param {Snapshot} snapshot
    * @return {object}
    */
-  serializeDefault(snapshot) {
+  serializeOIDC(snapshot) {
     let serialized = super.serialize(...arguments);
+    const state = snapshot?.adapterOptions?.state;
+    if (state) {
+      serialized = this.serializeWithState(snapshot, state);
+    } else {
+      delete serialized.attributes.state;
+    }
+    return serialized;
+  }
+
+  /**
+   * If `adapterOptions.state` is set, the serialization should
+   * include **only state** and version.  Normally, this is not serialized.
+   * Some attributes are removed if they are not in a 'dirty' state because
+   * the API expects a corresponding field to also be updated.
+   * @param {Snapshot} snapshot
+   * @return {object}
+   */
+  serializeLDAP(snapshot) {
+    let serialized = super.serialize(...arguments);
+    const { bind_dn, client_certificate } = snapshot.changedAttributes();
+    if (!bind_dn) {
+      delete serialized.attributes.bind_dn;
+    }
+    if (!client_certificate) {
+      delete serialized.attributes.client_certificate;
+    }
     const state = snapshot?.adapterOptions?.state;
     if (state) {
       serialized = this.serializeWithState(snapshot, state);
