@@ -84,7 +84,7 @@
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^3.2.7",
     "ember-page-title": "^7.0.0",
-    "ember-pollster": "^0.0.1-beta.2",
+    "ember-pollster": "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539",
     "ember-qunit": "^6.0.0",
     "ember-resolver": "^8.0.3",
     "ember-source": "~4.4.0",
