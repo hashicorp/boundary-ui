@@ -65,6 +65,7 @@ module.exports = function (environment) {
     featureFlags: {
       search: false,
       filter: true,
+      'post-connection-workflow': false,
     },
   };
 
@@ -85,6 +86,7 @@ module.exports = function (environment) {
       : true;
 
     // Enable features in development
+    ENV.featureFlags['post-connection-workflow'] = true;
   }
 
   if (environment === 'test') {
