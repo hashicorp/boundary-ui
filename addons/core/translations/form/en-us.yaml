@@ -175,3 +175,4 @@ created:
   label: Created
 other_fields:
   label: Other Fields
+  help: This information is provided by the server and cannot be edited in Boundary

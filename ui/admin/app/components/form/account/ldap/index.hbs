@@ -77,7 +77,7 @@
   {{#unless @model.isNew}}
     <Hds::Form::Fieldset as |F|>
       <F.Legend>{{t 'form.other_fields.label'}}</F.Legend>
-      <F.HelperText>{{t 'resources.account.form.member_of_groups.help'}}
+      <F.HelperText>{{t 'form.other_fields.help'}}
       </F.HelperText>
       <F.Control>
         <InfoField @value={{@model.login_name}} as |F|>
