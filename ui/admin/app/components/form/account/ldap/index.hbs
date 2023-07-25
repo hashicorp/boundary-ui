@@ -76,7 +76,7 @@
 
   {{#unless @model.isNew}}
     <Hds::Form::Fieldset as |F|>
-      <F.Legend>Read only Fields</F.Legend>
+      <F.Legend>{{t 'form.other_fields.label'}}</F.Legend>
       <F.HelperText>{{t 'resources.account.form.member_of_groups.help'}}
       </F.HelperText>
       <F.Control>
@@ -95,7 +95,6 @@
         <p class='hds-font-weight-semibold'>{{t
             'resources.account.form.member_of_groups.label'
           }}</p>
-
         {{#each @model.member_of_groups as |group|}}
           <Hds::Form::TextInput::Base
             @value={{group.value}}

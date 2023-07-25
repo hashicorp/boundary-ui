@@ -191,16 +191,17 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   }
 
   /**
-   * Adds an account claim map fragment to the passed OIDC `authMethod`.
+   * Adds an account map fragment to the passed `authMethod`.
    * @param {AuthMethodModel} authMethod
+   * @param {string} field
    * @param {string} from
    * @param {string} to
    */
   @action
-  async addAccountClaimMapItem(authMethod, from, to) {
-    const existingArray = authMethod.account_claim_maps ?? [];
+  async addAccountMapItem(authMethod, field, from, to) {
+    const existingArray = authMethod[field] ?? [];
     const array = [...existingArray, { from, to }];
-    authMethod.set('account_claim_maps', array);
+    authMethod.set(field, array);
   }
 
   /**

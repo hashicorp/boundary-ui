@@ -61,6 +61,8 @@ auth-method:
     new-from-claim: New From Claim
     new-to-claim: New To Claim
     new-certificate: New Certificate
+    from-attr: From Attribute
+    to-attr: To Attribute
   types:
     password: Password
     oidc: OIDC
@@ -79,6 +81,83 @@ auth-method:
     make-primary-confirm: 'A primary auth method auto-creates users on their first authentication attempt if needed.  Note:  if you change the primary auth method, the previous primary will no longer auto-create users.'
     remove-as-primary-confirm: Removing the primary auth method may lead to authentication failures for this scope.
     no-see-window: Don't see the new window?
+  form:
+    urls:
+      label: Server address (URL and port)
+      help: 'The domain name or IP address of the LDAP server. (Example: ldap.example.com:389)'
+    certificates:
+      label: Certificates
+      help: PEM encoded x509 certificates in ASN.1 DER form that can be used as trust anchors when connecting to an LDAP provider.
+    client_certificate:
+      label: Client TLS Certificate
+      help: Used to provide to the LDAP server for mTLS connections. Must be x509 PEM encoded.
+    client_certificate_key:
+      label: Client TLS Key
+      help: Used with the ClientTLSCert for mTLS connections to the LDAP server. Must be x509 PEM encoded.
+    start_tls:
+      label: Use StartTLS
+      help: Use StartTLS to create a secure connection.
+    insecure_tls:
+      label: Skip SSL Verification
+      help: Skip SSL certificate verification for LDAP server. Use with caution!
+    bind_dn:
+      label: Bind DN
+      help: Distinguished name of entry to bind when performing user and group search.
+    bind_password:
+      label: Bind Password
+      help: Password to use with BindDN when searching for user.
+    upn_domain:
+      label: UPN Domain
+      help: Add this domain to the username when authenticating.
+    discover_dn:
+      label: Discover DN
+      help: Use anonymous bind to discover the bind DN of a user.
+    anon_group_search:
+      label: Anonymous Group Search
+      help: Use anonymous binds when searching for LDAP groups.
+    user_dn:
+      label: User DN
+      help: Base DN for user search.
+    user_attr:
+      label: User Attribute
+      help: Attribute on user entry matching the username passed during authentication.
+    user_filter:
+      label: User Filter
+      help: Go template used to filter users based on LDAP attributes.
+    group_dn:
+      label: Group DN
+      help: LDAP search base to use for group membership search.
+    group_attr:
+      label: Group Attribute
+      help: LDAP attribute to follow to enumerate user group membership. Default is “cn”.
+    group_filter:
+      label: Group Filter
+      help: Template used when constructing the group membership query.
+    enable_groups:
+      label: Enable Groups
+      help: Find an authenticated user's groups during authentication.
+    use_token_groups:
+      label: Use Token Groups
+      help: Active Directory only. Uses a user's tokenGroups attribute to find their group memberships.
+    account_attribute_maps:
+      label: Account Attribute Maps
+      help: Attribute maps from custom attributes to the standard fullname and email account attributes. These maps are represented as key=value where the key equals the from_attribute, and the value equals the to_attribute. For example, "preferredName=fullName".
+  section:
+    connection:
+      title: Connection
+      help: This group includes inputs for configuring the LDAP server itself, such as the server name, port, and authentication settings.
+    authenticated-search:
+      title: Authenticated search
+      help: Used when Boundary authenticates to the LDAP server.
+    anonymous-search:
+      title: Anonymous search
+      help: Allows you to bind anonymously to the directory when searching for user entries.
+    user-entries:
+      title: User entries
+      help: Before authenticating an end user, Boundary must first find the end user’s entry in the directory.
+    group-entries:
+      title: Group entries
+      help: After authenticating an end user, we need to find out which groups the user is a member of. The configuration for this can vary depending on your LDAP server and your directory schema.
 group:
   title: Group
   title_plural: Groups

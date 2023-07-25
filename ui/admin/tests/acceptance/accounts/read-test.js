@@ -66,7 +66,8 @@ module('Acceptance | accounts | read', function (hooks) {
   test('can navigate to an account form', async function (assert) {
     assert.expect(1);
     await visit(urls.accounts);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await click('main tbody .hds-table__td:nth-child(1) a');
+
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.account);
   });
@@ -76,6 +77,6 @@ module('Acceptance | accounts | read', function (hooks) {
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.accounts);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    assert.notOk(find('main tbody .hds-table__tr:nth-child(1) a'));
   });
 });

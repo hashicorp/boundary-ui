@@ -24,17 +24,15 @@ module('Acceptance | users | accounts', function (hooks) {
   let accountsCount;
   let features;
 
-  const ACCOUNTS_ACTION_SELECTOR =
-    'tbody .rose-table-row:nth-child(1) .rose-table-cell:last-child .rose-dropdown';
-  const ACCOUNTS_TYPE_SELECTOR =
-    'tbody .rose-table-row:nth-child(1) .rose-table-cell';
+  const ACCOUNTS_TYPE_SELECTOR = 'tbody tr .hds-badge__text';
   const ADD_ACCOUNTS_ACTION_SELECTOR = '.rose-layout-page-actions a';
   const ERROR_MSG_SELECTOR = '[role="alert"]';
   const TABLE_ROWS_SELECTOR = 'tbody tr';
   const CHECKBOX_SELECTOR = 'tbody label';
   const SUBMIT_BTN_SELECTOR = 'form [type="submit"]';
   const CANCEL_BTN_SELECTOR = 'form [type="button"]';
-  const REMOVE_ACTION_SELECTOR = 'tbody tr .rose-dropdown-button-danger';
+  const REMOVE_ACTION_SELECTOR = 'tbody tr .hds-dropdown-list-item button';
+  const ACCOUNTS_ACTION_SELECTOR = '.hds-dropdown-toggle-icon';
 
   const instances = {
     scopes: {
@@ -92,6 +90,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(`[href="${urls.accounts}"]`);
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount });
+    await click(ACCOUNTS_ACTION_SELECTOR);
     await click(REMOVE_ACTION_SELECTOR);
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount - 1 });
   });
@@ -168,6 +167,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(`[href="${urls.accounts}"]`);
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount });
+    await click(ACCOUNTS_ACTION_SELECTOR);
     await click(REMOVE_ACTION_SELECTOR);
     assert.dom(ERROR_MSG_SELECTOR).isVisible();
   });
@@ -276,6 +276,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(`[href="${urls.accounts}"]`);
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount });
+    await click(ACCOUNTS_ACTION_SELECTOR);
     await click(REMOVE_ACTION_SELECTOR);
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount - 1 });
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);

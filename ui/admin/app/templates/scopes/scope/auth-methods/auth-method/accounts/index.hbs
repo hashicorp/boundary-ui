@@ -25,6 +25,61 @@
     {{#if @model.accounts}}
       {{! OIDC accounts display more fields }}
       {{#if @model.accounts.firstObject.isOIDC}}
+        <Hds::Table
+          @model={{@model.accounts}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.issuer.label'))
+            (hash label=(t 'form.subject.label'))
+            (hash label=(t 'form.email.label'))
+            (hash label=(t 'form.full_name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read account' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.accountName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.accountName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{B.data.issuer}}
+              </B.Td>
+              <B.Td>
+                {{B.data.subject}}
+              </B.Td>
+              <B.Td>
+                {{B.data.email}}
+              </B.Td>
+              <B.Td>
+                {{B.data.full_name}}
+              </B.Td>
+              <B.Td>
+                <Hds::Badge @text={{B.data.type}} />
+              </B.Td>
+              <B.Td>
+                <Copyable
+                  @text={{B.data.account.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{B.data.account.id}}</code>
+                </Copyable>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
         <Rose::Table as |table|>
           <table.header as |header|>
             <header.row as |row|>
@@ -116,15 +171,58 @@
               <B.Td>{{B.data.dn}}</B.Td>
               <B.Td>
                 <div class='truncated-list'>
-                  {{truncated-list B.data.member_of_groups}}
+                  {{truncate-list 'actions.more' B.data.member_of_groups 3}}
                 </div>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{else}}
+        <Hds::Table
+          @model={{@model.accounts}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.login_name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read account' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.accountName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.accountName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{B.data.login_name}}
+              </B.Td>
+              <B.Td>
+                <Hds::Badge @text={{B.data.type}} />
+              </B.Td>
+              <B.Td>
+                <Copyable
+                  @text={{B.data.account.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{B.data.account.id}}</code>
+                </Copyable>
               </B.Td>
             </B.Tr>
           </:body>
         </Hds::Table>
       {{/if}}
     {{else}}
-
       <Rose::Layout::Centered>
         <Rose::Message
           @title={{t 'resources.account.messages.welcome.title'}}

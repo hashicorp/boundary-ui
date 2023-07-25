@@ -26,64 +26,67 @@
   <page.body>
     {{#if @model.accounts}}
 
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.accounts as |account|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{account.accountName}}
-                <p>{{account.description}}</p>
-              </row.headerCell>
-              <row.cell>
-                <Hds::Badge
-                  @text={{t
-                    (concat 'resources.auth-method.types.' account.type)
-                  }}
-                />
-              </row.cell>
-              <row.cell>
-                <Copyable
-                  @text={{account.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{account.id}}</code>
-                </Copyable>
-              </row.cell>
-              <row.cell>
-                {{#if (can 'removeAccount user' @model.user account=account)}}
-                  <Rose::Dropdown
-                    @icon='flight-icons/svg/more-horizontal-16'
-                    @iconOnly={{true}}
-                    @showCaret={{false}}
-                    @dropdownRight={{true}}
-                    @text={{t 'actions.manage'}}
-                    as |dropdown|
-                  >
-                    <dropdown.button
-                      @style='danger'
-                      {{on
-                        'click'
-                        (route-action 'removeAccount' @model.user account)
-                      }}
-                    >
-                      {{t 'actions.remove'}}
-                    </dropdown.button>
-                  </Rose::Dropdown>
+      <Hds::Table
+        @model={{@model.accounts}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'titles.actions'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <span class='hds-font-weight-semibold'>{{#if
+                  (can 'read accounts' B.data)
+                }}
+                  {{B.data.accountName}}
+                {{else}}
+                  {{B.data.displayName}}
                 {{/if}}
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+              </span>
+
+              <p>{{B.data.description}}</p>
+            </B.Td>
+            <B.Td>
+              <Hds::Badge
+                @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
+              />
+            </B.Td>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{B.data.id}}</code>
+              </Copyable>
+            </B.Td>
+            <B.Td>
+
+              {{#if (can 'removeAccount user' @model.user account=B.data)}}
+                <Hds::Dropdown as |dd|>
+                  <dd.ToggleIcon
+                    @icon='more-horizontal'
+                    @text={{t 'actions.manage'}}
+                    @hasChevron={{false}}
+                  />
+                  <dd.Interactive
+                    @color='critical'
+                    @text={{t 'actions.remove'}}
+                    {{on
+                      'click'
+                      (route-action 'removeAccount' @model.user B.data)
+                    }}
+                  />
+                </Hds::Dropdown>
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
 
     {{else}}
 
