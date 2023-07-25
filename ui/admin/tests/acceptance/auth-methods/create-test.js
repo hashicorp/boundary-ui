@@ -4,14 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  click,
-  find,
-  fillIn,
-  select,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -30,6 +23,14 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const DROPDOWN_SELECTOR_OPTION =
     '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
   const NEW_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+  const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
+  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
+  const NAME_INPUT_SELECTOR = '[name="name"]';
+  const DESC_INPUT_SELECTOR = '[name="description"]';
+  const MAKE_PRIMARY_SELECTOR =
+    '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child';
+  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
   let getAuthMethodsCount;
   let featuresService;
@@ -89,9 +90,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
     const count = getAuthMethodsCount();
 
     await visit(urls.newAuthMethod);
-    await fillIn('[name="name"]', 'AuthMethod name');
-    await fillIn('[name="description"]', 'description');
-    await click('form [type="submit"]:not(:disabled)');
+    await fillIn(NAME_INPUT_SELECTOR, 'AuthMethod name');
+    await fillIn(DESC_INPUT_SELECTOR, 'description');
+    await click(SAVE_BTN_SELECTOR);
     assert.strictEqual(getAuthMethodsCount(), count + 1);
   });
 
@@ -101,8 +102,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     await visit(`${urls.authMethods}/new?type=oidc`);
     const name = 'oidc name';
-    await fillIn('[name="name"]', name);
-    await fillIn('[name="description"]', 'description');
+    await fillIn(NAME_INPUT_SELECTOR, name);
+    await fillIn(DESC_INPUT_SELECTOR, 'description');
     await fillIn('[name="issuer"]', 'issuer');
     await fillIn('[name="client_id"]', 'client_id');
     await fillIn('[name="client_secret"]', 'client_secret');
@@ -119,7 +120,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await click('form fieldset:nth-of-type(5) [title="Add"]');
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
-    await click('form [type="submit"]:not(:disabled)');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getAuthMethodsCount(), count + 1);
     const authMethod = this.server.schema.authMethods.findBy({ name });
@@ -138,6 +139,73 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
     assert.strictEqual(authMethod.attributes.max_age, 5);
     assert.strictEqual(authMethod.attributes.api_url_prefix, 'api_url_prefix');
+  });
+
+  test('Users can create a new ldap auth method', async function (assert) {
+    assert.expect(23);
+    featuresService.enable('ldap-auth-methods');
+    const authMethodsCount = getAuthMethodsCount();
+    const name = 'ldap auth method';
+    await visit(urls.authMethods);
+
+    await click(NEW_DROPDOWN_SELECTOR);
+    await click(`[href="${urls.newLdapAuthMethod}"]`);
+    await fillIn(NAME_INPUT_SELECTOR, name);
+    await fillIn(DESC_INPUT_SELECTOR, 'description');
+    await fillIn('[name="urls"]', 'url1,url2');
+    await fillIn('[name="certificates"] textarea', 'certificate');
+    await click('[name="certificates"] button');
+    await fillIn('[name="client_certificate"]', 'client cert');
+    await fillIn('[name="client_certificate_key"]', 'client cert key');
+    await click('[name="start_tls"]');
+    await click('[name="insecure_tls"]');
+    await fillIn('[name="bind_dn"]', 'bind dn');
+    await fillIn('[name="bind_password"]', 'password');
+    await fillIn('[name="upn_domain"]', 'upn domain');
+    await click('[name="discover_dn"]');
+    await click('[name="anon_group_search"]');
+    await fillIn('[name="user_dn"]', 'user dn');
+    await fillIn('[name="user_attr"]', 'user attr');
+    await fillIn('[name="user_filter"]', 'user filter');
+    await fillIn('[name="account_attribute_maps"] input', 'attribute');
+    await select('[name="account_attribute_maps"] select', 'email');
+    await click('[name="account_attribute_maps"] button');
+    await fillIn('[name="group_dn"]', 'group dn');
+    await fillIn('[name="group_attr"]', 'group attr');
+    await fillIn('[name="group_filter"]', 'group filter');
+    await click('[name="enable_groups"]');
+    await click('[name="use_token_groups"]');
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(getAuthMethodsCount(), authMethodsCount + 1);
+    const ldapAuthMethod = this.server.schema.authMethods.findBy({ name });
+    assert.strictEqual(ldapAuthMethod.name, name);
+    assert.strictEqual(ldapAuthMethod.description, 'description');
+    assert.deepEqual(ldapAuthMethod.attributes.urls, ['url1', 'url2']);
+    assert.deepEqual(ldapAuthMethod.attributes.certificates, ['certificate']);
+    assert.strictEqual(
+      ldapAuthMethod.attributes.client_certificate,
+      'client cert'
+    );
+    assert.notOk(ldapAuthMethod.attributes.client_certificate_key);
+    assert.true(ldapAuthMethod.attributes.start_tls);
+    assert.true(ldapAuthMethod.attributes.insecure_tls);
+    assert.strictEqual(ldapAuthMethod.attributes.bind_dn, 'bind dn');
+    assert.notOk(ldapAuthMethod.attributes.bind_password);
+    assert.strictEqual(ldapAuthMethod.attributes.upn_domain, 'upn domain');
+    assert.true(ldapAuthMethod.attributes.discover_dn);
+    assert.true(ldapAuthMethod.attributes.anon_group_search);
+    assert.strictEqual(ldapAuthMethod.attributes.user_dn, 'user dn');
+    assert.strictEqual(ldapAuthMethod.attributes.user_attr, 'user attr');
+    assert.strictEqual(ldapAuthMethod.attributes.user_filter, 'user filter');
+    assert.deepEqual(ldapAuthMethod.attributes.account_attribute_maps, [
+      'attribute=email',
+    ]);
+    assert.strictEqual(ldapAuthMethod.attributes.group_dn, 'group dn');
+    assert.strictEqual(ldapAuthMethod.attributes.group_attr, 'group attr');
+    assert.strictEqual(ldapAuthMethod.attributes.group_filter, 'group filter');
+    assert.true(ldapAuthMethod.attributes.enable_groups);
+    assert.true(ldapAuthMethod.attributes.use_token_groups);
   });
 
   test('Users can navigate to new auth-methods route with proper authorization', async function (assert) {
@@ -222,10 +290,14 @@ module('Acceptance | auth-methods | create', function (hooks) {
   test('can cancel new auth method creation', async function (assert) {
     assert.expect(2);
     const count = getAuthMethodsCount();
-    await visit(urls.newAuthMethod);
-    await fillIn('[name="name"]', 'AuthMethod name');
-    await fillIn('[name="description"]', 'description');
-    await click('form button:not([type="submit"])');
+    await visit(urls.authMethods);
+
+    await click(NEW_DROPDOWN_SELECTOR);
+    await click(`[href="${urls.newAuthMethod}"]`);
+    await fillIn(NAME_INPUT_SELECTOR, 'AuthMethod name');
+    await fillIn(DESC_INPUT_SELECTOR, 'description');
+    await click(CANCEL_BTN_SELECTOR);
+
     assert.strictEqual(getAuthMethodsCount(), count);
     assert.strictEqual(currentURL(), urls.authMethods);
   });
@@ -237,9 +309,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       'Primary auth method is not yet set.'
     );
     await visit(urls.authMethod);
-    await click(
-      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
-    );
+    await click(MAKE_PRIMARY_SELECTOR);
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.strictEqual(
       scope.primaryAuthMethodId,
@@ -266,10 +336,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
       'Primary auth method is not yet set.'
     );
     await visit(urls.authMethod);
-    await click(
-      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
-    );
-    assert.ok(find('.rose-notification'));
+    await click(MAKE_PRIMARY_SELECTOR);
+    assert.dom(ERROR_MSG_SELECTOR).exists();
   });
 
   test('user can remove as primary an auth method', async function (assert) {
@@ -282,9 +350,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       'Primary auth method is set.'
     );
     await visit(urls.authMethod);
-    await click(
-      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
-    );
+    await click(MAKE_PRIMARY_SELECTOR);
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
   });
@@ -305,15 +371,16 @@ module('Acceptance | auth-methods | create', function (hooks) {
     instances.orgScope.update({
       primaryAuthMethodId: instances.authMethod.id,
     });
-    assert.ok(
+
+    assert.strictEqual(
       instances.orgScope.primaryAuthMethodId,
-      'Primary auth method is set.'
+      instances.authMethod.id
     );
+
     await visit(urls.authMethod);
-    await click(
-      '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child'
-    );
-    assert.ok(find('.rose-notification'));
+    await click(MAKE_PRIMARY_SELECTOR);
+
+    assert.dom(ERROR_MSG_SELECTOR).hasText('Sorry!');
   });
 
   test('user can make and remove primary auth methods from index', async function (assert) {
@@ -340,5 +407,38 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
+  });
+
+  test('saving a new ldap auth method with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    featuresService.enable('ldap-auth-methods');
+    this.server.post('/auth-methods', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.authMethods);
+
+    await click(NEW_DROPDOWN_SELECTOR);
+    await click(`[href="${urls.newLdapAuthMethod}"]`);
+    await fillIn(NAME_INPUT_SELECTOR, 'new account');
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
+    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
 });
