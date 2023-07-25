@@ -12635,10 +12635,9 @@ ember-page-title@^7.0.0:
   dependencies:
     ember-cli-babel "^7.26.6"
 
-ember-pollster@^0.0.1-beta.2:
+"ember-pollster@https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539":
   version "0.0.1-beta.2"
-  resolved "https://registry.yarnpkg.com/ember-pollster/-/ember-pollster-0.0.1-beta.2.tgz#07b8a49683cfb04e33a60713fb044e07a0a8f330"
-  integrity sha512-vnWBzPIJ0NU6065OLgLd84Snalfxi5Z606wiDSMnW1oSl20D3cAsGEwmpujZsfzlof7Y2McE/ghNjMBKYveyIQ==
+  resolved "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539"
   dependencies:
     ember-cli-babel "^7.26.8"
     ember-cli-htmlbars "^6.0.1"
