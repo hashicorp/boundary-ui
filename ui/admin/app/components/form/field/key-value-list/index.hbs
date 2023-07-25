@@ -9,95 +9,92 @@
   @isOptional={{@isOptional}}
   as |F|
 >
-  {{yield F}}
-  <F.Control>
-    <Hds::Table class='key-value-list' name={{@name}}>
-      <:head as |H|>
-        <H.Tr>
-          <H.Th>{{t 'form.key.label'}}</H.Th>
-          <H.Th>{{t 'form.value.label'}}</H.Th>
-          <H.Th>
-            {{#if @removeOptionByIndex}}
-              {{t 'titles.actions'}}
-            {{/if}}
-          </H.Th>
-        </H.Tr>
-      </:head>
-      <:body as |B|>
 
-        {{#each @options as |option index|}}
+  {{yield F}}
+
+  {{#let (unique-id) (unique-id) as |keyHeaderID valueHeaderID|}}
+    <F.Control>
+      <Hds::Table class='key-value-list' name={{@name}}>
+        <:head as |H|>
+          <H.Tr>
+            <H.Th id={{keyHeaderID}}>{{t 'form.key.label'}}</H.Th>
+            <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
+            <H.Th>
+              {{#if @removeOptionByIndex}}
+                {{t 'titles.actions'}}
+              {{/if}}
+            </H.Th>
+          </H.Tr>
+        </:head>
+        <:body as |B|>
+
+          {{#each @options as |option index|}}
+            <B.Tr>
+              <B.Td>
+                <Hds::Form::TextInput::Field
+                  @value={{option.key}}
+                  @type='text'
+                  disabled={{@disabled}}
+                  aria-labelledby={{keyHeaderID}}
+                  {{on 'input' (set-from-event option 'key')}}
+                />
+              </B.Td>
+              <B.Td>
+                <Hds::Form::TextInput::Field
+                  @value={{option.value}}
+                  @type='text'
+                  disabled={{@disabled}}
+                  aria-labelledby={{valueHeaderID}}
+                  {{on 'input' (set-from-event option 'value')}}
+                />
+              </B.Td>
+              <B.Td>
+                {{#if @removeOptionByIndex}}
+                  <Hds::Button
+                    @text={{t 'actions.remove'}}
+                    @color='critical'
+                    @icon='trash'
+                    @isIconOnly={{true}}
+                    disabled={{@disabled}}
+                    {{on 'click' (fn @removeOptionByIndex index)}}
+                  />
+                {{/if}}
+              </B.Td>
+            </B.Tr>
+          {{/each}}
+
           <B.Tr>
             <B.Td>
               <Hds::Form::TextInput::Field
-                @value={{option.key}}
+                @value={{this.newOptionKey}}
                 @type='text'
                 disabled={{@disabled}}
-                {{on 'input' (set-from-event option 'key')}}
-                as |F|
-              >
-                <F.Label class='sr-only'>{{t 'form.key.label'}}</F.Label>
-              </Hds::Form::TextInput::Field>
+                aria-labelledby={{keyHeaderID}}
+                {{on 'input' (set-from-event this 'newOptionKey')}}
+              />
             </B.Td>
             <B.Td>
               <Hds::Form::TextInput::Field
-                @value={{option.value}}
+                @value={{this.newOptionValue}}
                 @type='text'
                 disabled={{@disabled}}
-                {{on 'input' (set-from-event option 'value')}}
-                as |F|
-              >
-                <F.Label class='sr-only'>{{t 'form.value.label'}}</F.Label>
-              </Hds::Form::TextInput::Field>
+                aria-labelledby={{valueHeaderID}}
+                {{on 'input' (set-from-event this 'newOptionValue')}}
+              />
             </B.Td>
             <B.Td>
-              {{#if @removeOptionByIndex}}
-                <Hds::Button
-                  @text={{t 'actions.remove'}}
-                  @color='critical'
-                  @icon='trash'
-                  @isIconOnly={{true}}
-                  disabled={{@disabled}}
-                  {{on 'click' (fn @removeOptionByIndex index)}}
-                />
-              {{/if}}
+              <Hds::Button
+                @text={{t 'actions.add'}}
+                @color='secondary'
+                type='button'
+                disabled={{or @disabled (not this.newOptionKey)}}
+                {{on 'click' this.addOption}}
+              />
             </B.Td>
           </B.Tr>
-        {{/each}}
 
-        <B.Tr>
-          <B.Td>
-            <Hds::Form::TextInput::Field
-              @value={{this.newOptionKey}}
-              @type='text'
-              disabled={{@disabled}}
-              {{on 'input' (set-from-event this 'newOptionKey')}}
-              as |F|
-            >
-              <F.Label class='sr-only'>{{t 'form.key.label'}}</F.Label>
-            </Hds::Form::TextInput::Field></B.Td>
-          <B.Td>
-            <Hds::Form::TextInput::Field
-              @value={{this.newOptionValue}}
-              @type='text'
-              disabled={{@disabled}}
-              {{on 'input' (set-from-event this 'newOptionValue')}}
-              as |F|
-            >
-              <F.Label class='sr-only'>{{t 'form.value.label'}}</F.Label>
-            </Hds::Form::TextInput::Field>
-          </B.Td>
-          <B.Td>
-            <Hds::Button
-              @text={{t 'actions.add'}}
-              @color='secondary'
-              type='button'
-              disabled={{or @disabled (not this.newOptionKey)}}
-              {{on 'click' this.addOption}}
-            />
-          </B.Td>
-        </B.Tr>
-
-      </:body>
-    </Hds::Table>
-  </F.Control>
+        </:body>
+      </Hds::Table>
+    </F.Control>
+  {{/let}}
 </Hds::Form::Fieldset>
