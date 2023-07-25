@@ -29,6 +29,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const DESC_INPUT_SELECTOR = '[name="description"]';
   const MAKE_PRIMARY_SELECTOR =
     '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child';
+  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
   let getAuthMethodsCount;
   let featuresService;
@@ -336,7 +338,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await visit(urls.authMethod);
     await click(MAKE_PRIMARY_SELECTOR);
-    assert.dom('.rose-notification').exists();
+    assert.dom(ERROR_MSG_SELECTOR).exists();
   });
 
   test('user can remove as primary an auth method', async function (assert) {
@@ -370,13 +372,16 @@ module('Acceptance | auth-methods | create', function (hooks) {
     instances.orgScope.update({
       primaryAuthMethodId: instances.authMethod.id,
     });
-    assert.ok(
+
+    assert.strictEqual(
       instances.orgScope.primaryAuthMethodId,
-      'Primary auth method is set.'
+      instances.authMethod.id
     );
+
     await visit(urls.authMethod);
     await click(MAKE_PRIMARY_SELECTOR);
-    assert.dom('.rose-notification').exists();
+
+    assert.dom(ERROR_MSG_SELECTOR).hasText('Sorry!');
   });
 
   test('user can make and remove primary auth methods from index', async function (assert) {
@@ -403,5 +408,38 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
+  });
+
+  test('saving a new ldap auth method with invalid fields displays error messages', async function (assert) {
+    assert.expect(2);
+    featuresService.enable('ldap-auth-methods');
+    this.server.post('/auth-methods', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        }
+      );
+    });
+    await visit(urls.authMethods);
+
+    await click(NEW_DROPDOWN_SELECTOR);
+    await click(`[href="${urls.newLdapAuthMethod}"]`);
+    await fillIn(NAME_INPUT_SELECTOR, 'new account');
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
+    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
 });
