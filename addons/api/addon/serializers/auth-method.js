@@ -92,15 +92,14 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    */
   normalize(typeClass, hash, ...rest) {
     let normalizedHash = structuredClone(hash);
-    // switch (normalizedHash.type) {
-    //   case 'oidc':
-    //     normalizedHash = this.normalizeOIDC(normalizedHash);
-    //     break;
-    // }
     const normalized = super.normalize(typeClass, normalizedHash, ...rest);
     if (!normalized.data.attributes.is_primary) {
       normalized.data.attributes.is_primary = false;
     }
+    // Remove secret fields as we don't track them after being created/updated
+    normalized.data.attributes.client_certificate_key = '';
+    normalized.data.attributes.bind_password = '';
+    normalized.data.attributes.client_secret = '';
     return normalized;
   }
 }
