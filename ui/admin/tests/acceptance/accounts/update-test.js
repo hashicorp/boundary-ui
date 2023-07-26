@@ -80,8 +80,14 @@ module('Acceptance | accounts | update', function (hooks) {
     await fillIn('[name="name"]', 'updated name');
     await fillIn('[name="description"]', 'updated desc');
     await click('form [type="submit"]:not(:disabled)');
-    assert.strictEqual(this.server.db.accounts[0].name, 'updated name');
-    assert.strictEqual(this.server.db.accounts[0].description, 'updated desc');
+    assert.strictEqual(
+      this.server.schema.accounts.all().models[0].name,
+      'updated name'
+    );
+    assert.strictEqual(
+      this.server.schema.accounts.all().models[0].description,
+      'updated desc'
+    );
   });
 
   test('cannot update resource without proper authorization', async function (assert) {
