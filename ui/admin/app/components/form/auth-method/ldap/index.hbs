@@ -62,15 +62,6 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <div class='ldap-section'>
-    <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
-        'resources.auth-method.section.connection.title'
-      }}</p>
-    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
-        'resources.auth-method.section.connection.help'
-      }}</Hds::Form::HelperText>
-  </div>
-
   <Hds::Form::TextInput::Field
     @isRequired={{true}}
     @value={{this.urlsArrayString}}
