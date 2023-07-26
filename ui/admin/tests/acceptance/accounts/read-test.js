@@ -78,6 +78,6 @@ module('Acceptance | accounts | read', function (hooks) {
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.accounts);
-    assert.notOk(find(ACCOUNT_SELECTOR));
+    assert.dom(ACCOUNT_SELECTOR).doesNotExist();
   });
 });
