@@ -75,7 +75,7 @@
   {{/if}}
 
   {{#unless @model.isNew}}
-    <Hds::Form::Fieldset as |F|>
+    <Hds::Form::Fieldset class='ldap-read-only-fields' as |F|>
 
       <F.Control>
         <div class='ldap-section'>
@@ -102,10 +102,9 @@
             'resources.account.form.member_of_groups.label'
           }}</p>
         {{#each @model.member_of_groups as |group|}}
-          <Hds::Form::TextInput::Base
+          <Hds::Form::TextInput::Field
             @value={{group.value}}
             disabled={{true}}
-            @width='unset'
           />
         {{/each}}
       </F.Control>
