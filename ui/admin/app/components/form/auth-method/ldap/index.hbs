@@ -160,7 +160,7 @@
     {{/if}}
   </Hds::Form::Fieldset>
 
-  {{#if (or @model.isNew form.isEditable)}}
+  {{#if @model.isNew}}
     <Hds::Form::TextInput::Field
       @isOptional={{true}}
       @value={{@model.client_certificate}}
@@ -171,12 +171,12 @@
       {{on 'input' (set-from-event @model 'client_certificate')}}
       as |F|
     >
-      <F.Label>{{t
-          'resources.auth-method.form.client_certificate.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.auth-method.form.client_certificate.help'
-        }}</F.HelperText>
+      <F.Label>
+        {{t 'resources.auth-method.form.client_certificate.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.client_certificate.help'}}
+      </F.HelperText>
       {{#if @model.errors.client_certificate}}
         <F.Error as |E|>
           {{#each @model.errors.client_certificate as |error|}}
@@ -196,12 +196,12 @@
       {{on 'input' (set-from-event @model 'client_certificate_key')}}
       as |F|
     >
-      <F.Label>{{t
-          'resources.auth-method.form.client_certificate_key.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.auth-method.form.client_certificate_key.help'
-        }}</F.HelperText>
+      <F.Label>
+        {{t 'resources.auth-method.form.client_certificate_key.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.client_certificate_key.help'}}
+      </F.HelperText>
       {{#if @model.errors.client_certificate_key}}
         <F.Error as |E|>
           {{#each @model.errors.client_certificate_key as |error|}}
@@ -211,19 +211,6 @@
       {{/if}}
     </Hds::Form::TextInput::Field>
   {{/if}}
-
-  {{#unless @model.isNew}}
-    <Hds::Form::TextInput::Field
-      @value={{@model.client_certificate_key_hmac}}
-      name='client_certificate_key_hmac'
-      disabled={{true}}
-      as |F|
-    >
-      <F.Label>
-        {{t 'resources.auth-method.form.client_certificate_key_hmac.label'}}
-      </F.Label>
-    </Hds::Form::TextInput::Field>
-  {{/unless}}
 
   <Hds::Form::Toggle::Field
     name='start_tls'
@@ -281,7 +268,7 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  {{#if (or @model.isNew form.isEditable)}}
+  {{#if @model.isNew}}
     <Hds::Form::TextInput::Field
       @isOptional={{true}}
       @value={{@model.bind_password}}
@@ -293,9 +280,9 @@
       as |F|
     >
       <F.Label>{{t 'resources.auth-method.form.bind_password.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.auth-method.form.bind_password.help'
-        }}</F.HelperText>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.bind_password.help'}}
+      </F.HelperText>
       {{#if @model.errors.bind_password}}
         <F.Error as |E|>
           {{#each @model.errors.bind_password as |error|}}
@@ -305,19 +292,6 @@
       {{/if}}
     </Hds::Form::TextInput::Field>
   {{/if}}
-
-  {{#unless @model.isNew}}
-    <Hds::Form::TextInput::Field
-      @value={{@model.bind_password_hmac}}
-      name='bind_password_hmac'
-      disabled={{true}}
-      as |F|
-    >
-      <F.Label>
-        {{t 'resources.auth-method.form.bind_password_hmac.label'}}
-      </F.Label>
-    </Hds::Form::TextInput::Field>
-  {{/unless}}
 
   <Hds::Form::TextInput::Field
     @isOptional={{true}}
