@@ -60,13 +60,12 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
   /**
    * If `adapterOptions.state` is set, the serialization should
    * include **only state** and version.  Normally, this is not serialized.
-   * Some attributes are removed if they are not in a 'dirty' state because
-   * the API expects a corresponding field to also be updated.
    * @param {Snapshot} snapshot
    * @return {object}
    */
   serializeLDAP(snapshot) {
     let serialized = super.serialize(...arguments);
+    // Deleting these attributes is a temporary fix.
     const { bind_dn, client_certificate } = snapshot.changedAttributes();
     if (!bind_dn) {
       delete serialized.attributes.bind_dn;

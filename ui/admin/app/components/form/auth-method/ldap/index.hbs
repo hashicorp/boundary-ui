@@ -208,6 +208,32 @@
         </F.Error>
       {{/if}}
     </Hds::Form::TextInput::Field>
+  {{else}}
+    <Form::Field::SecretInput
+      @isOptional={{true}}
+      @value={{@model.client_certificate_key}}
+      @isInvalid={{@model.errors.client_certificate_key}}
+      @name='client_certificate_key'
+      @isDisabled={{form.disabled}}
+      @showEditButton={{true}}
+      @cancel={{fn this.rollbackSecretAttrs 'client_certificate_key'}}
+      {{on 'input' (set-from-event @model 'client_certificate_key')}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.auth-method.form.client_certificate_key.label'
+        }}</F.Label>
+      <F.HelperText>{{t
+          'resources.auth-method.form.client_certificate_key.help'
+        }}</F.HelperText>
+      {{#if @model.errors.client_certificate_key}}
+        <F.Error as |E|>
+          {{#each @model.errors.client_certificate_key as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Form::Field::SecretInput>
   {{/if}}
 
   <Hds::Form::Toggle::Field
@@ -289,6 +315,30 @@
         </F.Error>
       {{/if}}
     </Hds::Form::TextInput::Field>
+  {{else}}
+    <Form::Field::SecretInput
+      @isOptional={{true}}
+      @value={{@model.bind_password}}
+      @isInvalid={{@model.errors.bind_password}}
+      @name='bind_password'
+      @isDisabled={{form.disabled}}
+      @showEditButton={{true}}
+      @cancel={{fn this.rollbackSecretAttrs 'bind_password'}}
+      {{on 'input' (set-from-event @model 'bind_password')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.auth-method.form.bind_password.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.auth-method.form.bind_password.help'
+        }}</F.HelperText>
+      {{#if @model.errors.bind_password}}
+        <F.Error as |E|>
+          {{#each @model.errors.bind_password as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Form::Field::SecretInput>
   {{/if}}
 
   <Hds::Form::TextInput::Field
