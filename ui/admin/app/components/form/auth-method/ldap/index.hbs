@@ -160,32 +160,30 @@
     {{/if}}
   </Hds::Form::Fieldset>
 
-  {{#if @model.isNew}}
-    <Hds::Form::TextInput::Field
-      @isOptional={{true}}
-      @value={{@model.client_certificate}}
-      @isInvalid={{@model.errors.client_certificate}}
-      @type='password'
-      name='client_certificate'
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'client_certificate')}}
-      as |F|
-    >
-      <F.Label>{{t
-          'resources.auth-method.form.client_certificate.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.auth-method.form.client_certificate.help'
-        }}</F.HelperText>
-      {{#if @model.errors.client_certificate}}
-        <F.Error as |E|>
-          {{#each @model.errors.client_certificate as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </Hds::Form::TextInput::Field>
+  <Hds::Form::Textarea::Field
+    @isOptional={{true}}
+    @value={{@model.client_certificate}}
+    @isInvalid={{@model.errors.client_certificate}}
+    name='client_certificate'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.auth-method.form.client_certificate.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.client_certificate.help'
+      }}</F.HelperText>
+    {{#if @model.errors.client_certificate}}
+      <F.Error as |E|>
+        {{#each @model.errors.client_certificate as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
 
+  {{#if @model.isNew}}
     <Hds::Form::TextInput::Field
       @isOptional={{true}}
       @value={{@model.client_certificate_key}}
