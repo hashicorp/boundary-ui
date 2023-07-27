@@ -31,53 +31,73 @@
 
   <page.body>
     {{#if @model.members}}
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.issuer.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.subject.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.email.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.full_name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.members as |member|}}
-            <body.row as |row|>
-              <row.headerCell scope='row'>
-                {{member.accountName}}
-                <p>{{member.description}}</p>
-              </row.headerCell>
-              <row.cell>
-                <code>{{member.issuer}}</code>
-              </row.cell>
-              <row.cell>
-                <code>{{member.subject}}</code>
-              </row.cell>
-              <row.cell>
-                <code>{{member.email}}</code>
-              </row.cell>
-              <row.cell>
-                {{member.full_name}}
-              </row.cell>
-              <row.cell>
-                <Hds::Badge @text={{member.type}} />
-              </row.cell>
-              <row.cell>
+      {{#if @model.members.firstObject.isOIDC}}
+        <Hds::Table
+          @model={{@model.members}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.issuer.label'))
+            (hash label=(t 'form.subject.label'))
+            (hash label=(t 'form.email.label'))
+            (hash label=(t 'form.full_name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{B.data.accountName}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>{{B.data.issuer}}</B.Td>
+              <B.Td>{{B.data.subject}}</B.Td>
+              <B.Td>{{B.data.email}}</B.Td>
+              <B.Td>{{B.data.full_name}}</B.Td>
+              <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
+              <B.Td>
                 <Copyable
-                  @text={{member.id}}
+                  @text={{B.data.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{member.id}}</code>
+                  <code>{{B.data.id}}</code>
                 </Copyable>
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{else}}
+        <Hds::Table
+          @model={{@model.members}}
+          @columns={{array
+            (hash label=(t 'resources.account.form.login_name.label'))
+            (hash label=(t 'resources.account.form.email.label'))
+            (hash label=(t 'resources.account.form.full_name.label'))
+            (hash label=(t 'resources.account.form.dn.label'))
+            (hash label=(t 'resources.account.form.member_of_groups.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{B.data.login_name}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>{{B.data.email}}</B.Td>
+              <B.Td>{{B.data.full_name}}</B.Td>
+              <B.Td>{{B.data.dn}}</B.Td>
+              <B.Td>{{truncate-list
+                  'actions.more'
+                  B.data.member_of_groups
+                  3
+                }}</B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{/if}}
     {{else}}
       <Rose::Layout::Centered>
         <Rose::Message
