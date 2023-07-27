@@ -40,14 +40,14 @@ export default factory.extend({
       case 'vault':
         return {
           address: faker.internet.ip(),
-          namespace: faker.random.word(),
+          namespace: faker.word.words(1),
           ca_cert: 'ca-cert-123',
           tls_server_name: faker.internet.domainName(),
-          tls_skip_verify: faker.datatype.boolean(),
+          tls_skip_verify: faker.helpers.arrayElement(['true', 'false']),
           token_hmac: 'token-hmac-abcde0987654321',
           client_certificate: 'client-cert-123',
           client_certificate_key_hmac: 'client-cert-key-hmac-abcde0987654321',
-          worker_filter: faker.random.words(),
+          worker_filter: faker.word.words(),
         };
     }
   },

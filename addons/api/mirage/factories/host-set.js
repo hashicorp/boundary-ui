@@ -27,7 +27,7 @@ export default factory.extend({
   },
   preferred_endpoints() {
     if (this.type === 'plugin') {
-      const enpointsAmount = faker.datatype.number({ min: 1, max: 5 });
+      const enpointsAmount = faker.number.int({ min: 1, max: 5 });
       let result = [];
       for (let i = 0; i < enpointsAmount; ++i) {
         result.push(faker.internet.ip());
@@ -37,7 +37,7 @@ export default factory.extend({
   },
   sync_interval_seconds() {
     if (this.type === 'plugin') {
-      return faker.datatype.number();
+      return faker.number.int();
     }
   },
 

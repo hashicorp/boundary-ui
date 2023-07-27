@@ -43,7 +43,7 @@ export default factory.extend({
       return {
         id: `plugin-id-${i}`,
         name: pluginTypes[pluginTypeCounter++ % pluginTypes.length],
-        description: faker.random.words(),
+        description: faker.word.words(),
       };
     }
   },
@@ -52,15 +52,23 @@ export default factory.extend({
     switch (this.plugin?.name) {
       case 'aws':
         return {
-          disable_credential_rotation: faker.datatype.boolean(),
-          region: faker.address.state(),
+          disable_credential_rotation: faker.helpers.arrayElement([
+            'true',
+            'false',
+          ]),
+          region: `us-${faker.location.cardinalDirection()}-${faker.number.int(
+            9
+          )}`,
         };
       case 'azure':
         return {
-          disable_credential_rotation: faker.datatype.boolean(),
-          tenant_id: faker.datatype.hexadecimal(6),
-          client_id: faker.datatype.hexadecimal(6),
-          subscription_id: faker.datatype.hexadecimal(8),
+          disable_credential_rotation: faker.helpers.arrayElement([
+            'true',
+            'false',
+          ]),
+          tenant_id: faker.string.uuid(),
+          client_id: faker.string.uuid(),
+          subscription_id: faker.string.uuid(),
         };
     }
   },
@@ -69,13 +77,13 @@ export default factory.extend({
     switch (this.plugin?.name) {
       case 'aws':
         return {
-          access_key_id: faker.datatype.hexadecimal(8),
-          secret_access_key: faker.datatype.string(12),
+          access_key_id: faker.string.nanoid(),
+          secret_access_key: faker.string.nanoid(),
         };
       case 'azure':
         return {
-          secret_id: faker.datatype.hexadecimal(6),
-          secret_value: faker.datatype.string(12),
+          secret_id: faker.string.nanoid(),
+          secret_value: faker.string.nanoid(),
         };
     }
   },
