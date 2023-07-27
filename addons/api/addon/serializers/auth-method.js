@@ -4,11 +4,7 @@
  */
 
 import ApplicationSerializer from './application';
-import {
-  TYPE_AUTH_METHOD_PASSWORD,
-  TYPE_AUTH_METHOD_OIDC,
-  TYPE_AUTH_METHOD_LDAP,
-} from 'api/models/auth-method';
+import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 export default class AuthMethodSerializer extends ApplicationSerializer {
   // =methods
@@ -23,10 +19,8 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
     switch (snapshot.record.type) {
       case TYPE_AUTH_METHOD_PASSWORD:
         return this.serializePassword(...arguments);
-      case TYPE_AUTH_METHOD_OIDC:
-        return this.serializeOIDC(...arguments);
-      case TYPE_AUTH_METHOD_LDAP:
-        return this.serializeLDAP(...arguments);
+      default:
+        return this.serializeDefault(...arguments);
     }
   }
 
@@ -46,33 +40,8 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
    * @param {Snapshot} snapshot
    * @return {object}
    */
-  serializeOIDC(snapshot) {
+  serializeDefault(snapshot) {
     let serialized = super.serialize(...arguments);
-    const state = snapshot?.adapterOptions?.state;
-    if (state) {
-      serialized = this.serializeWithState(snapshot, state);
-    } else {
-      delete serialized.attributes.state;
-    }
-    return serialized;
-  }
-
-  /**
-   * If `adapterOptions.state` is set, the serialization should
-   * include **only state** and version.  Normally, this is not serialized.
-   * @param {Snapshot} snapshot
-   * @return {object}
-   */
-  serializeLDAP(snapshot) {
-    let serialized = super.serialize(...arguments);
-    // Deleting these attributes is a temporary fix.
-    const { bind_dn, client_certificate } = snapshot.changedAttributes();
-    if (!bind_dn) {
-      delete serialized.attributes.bind_dn;
-    }
-    if (!client_certificate) {
-      delete serialized.attributes.client_certificate;
-    }
     const state = snapshot?.adapterOptions?.state;
     if (state) {
       serialized = this.serializeWithState(snapshot, state);
