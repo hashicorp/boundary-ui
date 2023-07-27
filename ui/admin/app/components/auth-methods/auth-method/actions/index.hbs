@@ -71,7 +71,7 @@
   {{/if}}
 
   {{#if (can 'create model' @model collection='managed-groups')}}
-    {{#if @model.isOIDC}}
+    {{#if (or @model.isOIDC @model.isLDAP)}}
       <dropdown.link
         @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
         @model={{@model}}
