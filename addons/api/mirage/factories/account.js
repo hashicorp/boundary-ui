@@ -32,7 +32,7 @@ export default factory.extend({
       case TYPE_AUTH_METHOD_PASSWORD:
         return { login_name: faker.internet.userName() };
       case TYPE_AUTH_METHOD_LDAP: {
-        const groupsAmount = faker.datatype.number({ min: 1, max: 3 });
+        const groupsAmount = faker.datatype.number({ min: 3, max: 5 });
         let groups = [];
         for (let i = 0; i < groupsAmount; i++) {
           groups.push(faker.random.word());

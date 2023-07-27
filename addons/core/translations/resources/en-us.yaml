@@ -14,11 +14,23 @@ account:
   types:
     password: Password
     oidc: OIDC
+    ldap: LDAP
   titles:
     new: New Account
   actions:
     create: Create Account
     delete: Delete Account
+  form:
+    login_name:
+      label: Login Name
+    email:
+      label: Email
+    dn:
+      label: Dn
+    member_of_groups:
+      label: Group Names
+    full_name:
+      label: Full Name
 auth-method:
   title: Auth Method
   title_plural: Auth Methods
