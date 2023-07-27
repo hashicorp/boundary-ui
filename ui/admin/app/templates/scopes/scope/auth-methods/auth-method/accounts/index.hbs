@@ -25,110 +25,148 @@
     {{#if @model.accounts}}
       {{! OIDC accounts display more fields }}
       {{#if @model.accounts.firstObject.isOIDC}}
-        <Rose::Table as |table|>
-          <table.header as |header|>
-            <header.row as |row|>
-              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.issuer.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.subject.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.email.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.full_name.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            </header.row>
-          </table.header>
-          <table.body as |body|>
-            {{#each @model.accounts as |account|}}
-              <body.row as |row|>
-                <row.headerCell scope='row'>
-                  {{#if (can 'read account' account)}}
-                    <LinkTo
-                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                      @model={{account.id}}
-                    >
-                      {{account.accountName}}
-                    </LinkTo>
-                  {{else}}
-                    {{account.accountName}}
-                  {{/if}}
-                  <p>{{account.description}}</p>
-                </row.headerCell>
-                <row.cell>
-                  <code>{{account.issuer}}</code>
-                </row.cell>
-                <row.cell>
-                  <code>{{account.subject}}</code>
-                </row.cell>
-                <row.cell>
-                  <code>{{account.email}}</code>
-                </row.cell>
-                <row.cell>
-                  {{account.full_name}}
-                </row.cell>
-                <row.cell>
-                  <Hds::Badge @text={{account.type}} />
-                </row.cell>
-                <row.cell>
-                  <Copyable
-                    @text={{account.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
+        <Hds::Table
+          @model={{@model.accounts}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.issuer.label'))
+            (hash label=(t 'form.subject.label'))
+            (hash label=(t 'form.email.label'))
+            (hash label=(t 'form.full_name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read account' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                    @model={{B.data.id}}
                   >
-                    <code>{{account.id}}</code>
-                  </Copyable>
-                </row.cell>
-              </body.row>
-            {{/each}}
-          </table.body>
-        </Rose::Table>
+                    {{B.data.accountName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.accountName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{B.data.issuer}}
+              </B.Td>
+              <B.Td>
+                {{B.data.subject}}
+              </B.Td>
+              <B.Td>
+                {{B.data.email}}
+              </B.Td>
+              <B.Td>
+                {{B.data.full_name}}
+              </B.Td>
+              <B.Td>
+                <Hds::Badge @text={{B.data.type}} />
+              </B.Td>
+              <B.Td>
+                <Copyable
+                  @text={{B.data.account.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{B.data.account.id}}</code>
+                </Copyable>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{else if @model.accounts.firstObject.isLDAP}}
+        <Hds::Table
+          @model={{@model.accounts}}
+          @columns={{array
+            (hash label=(t 'resources.account.form.login_name.label'))
+            (hash label=(t 'resources.account.form.email.label'))
+            (hash label=(t 'resources.account.form.full_name.label'))
+            (hash label=(t 'resources.account.form.dn.label'))
+            (hash label=(t 'resources.account.form.member_of_groups.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read account' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{B.data.email}}
+              </B.Td>
+              <B.Td>{{B.data.full_name}}</B.Td>
+
+              <B.Td>{{B.data.dn}}</B.Td>
+              <B.Td>
+                <div class='truncated-list'>
+                  {{truncate-list 'actions.more' B.data.member_of_groups 3}}
+                </div>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
       {{else}}
-        <Rose::Table as |table|>
-          <table.header as |header|>
-            <header.row as |row|>
-              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.login_name.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-              <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            </header.row>
-          </table.header>
-          <table.body as |body|>
-            {{#each @model.accounts as |account|}}
-              <body.row as |row|>
-                <row.headerCell>
-                  {{#if (can 'read account' account)}}
-                    <LinkTo
-                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                      @model={{account.id}}
-                    >
-                      {{account.accountName}}
-                    </LinkTo>
-                  {{else}}
-                    {{account.accountName}}
-                  {{/if}}
-                  <p>{{account.description}}</p>
-                </row.headerCell>
-                <row.cell>
-                  {{account.login_name}}
-                </row.cell>
-                <row.cell>
-                  <Hds::Badge @text={{account.type}} />
-                </row.cell>
-                <row.cell>
-                  <Copyable
-                    @text={{account.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
+        <Hds::Table
+          @model={{@model.accounts}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.login_name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read account' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                    @model={{B.data.id}}
                   >
-                    <code>{{account.id}}</code>
-                  </Copyable>
-                </row.cell>
-              </body.row>
-            {{/each}}
-          </table.body>
-        </Rose::Table>
+                    {{B.data.accountName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.accountName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{B.data.login_name}}
+              </B.Td>
+              <B.Td>
+                <Hds::Badge @text={{B.data.type}} />
+              </B.Td>
+              <B.Td>
+                <Copyable
+                  @text={{B.data.account.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{B.data.account.id}}</code>
+                </Copyable>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
       {{/if}}
     {{else}}
-
       <Rose::Layout::Centered>
         <Rose::Message
           @title={{t 'resources.account.messages.welcome.title'}}
