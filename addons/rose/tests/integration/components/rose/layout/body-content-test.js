@@ -15,13 +15,13 @@ module('Integration | Component | rose/layout/body-content', function (hooks) {
     await render(hbs`<Rose::Layout::BodyContent />`);
 
     assert.dom('div').exists();
-    assert.dom('.rose-layout-body-content').exists();
+    assert.dom('.rose-layout-body-content').isVisible();
   });
 
   test('it renders with attributes', async function (assert) {
     await render(hbs`<Rose::Layout::BodyContent id="body-content"/>`);
 
-    assert.dom('#body-content').exists();
+    assert.dom('#body-content').isVisible();
   });
 
   test('it renders with content', async function (assert) {
@@ -30,7 +30,10 @@ module('Integration | Component | rose/layout/body-content', function (hooks) {
       <bc.Sidebar><p id="details">Resource Details</p></bc.Sidebar>
     </Rose::Layout::BodyContent>`);
 
-    assert.dom('.rose-layout-body-content-body #button').exists();
-    assert.dom('.rose-layout-body-content-sidebar #details').exists();
+    assert.dom('.rose-layout-body-content-body #button').isVisible();
+    assert.dom('.rose-layout-body-content-sidebar #details').isVisible();
+    assert
+      .dom('.rose-layout-body-content-sidebar #details')
+      .hasText('Resource Details');
   });
 });

@@ -870,25 +870,9 @@
   }
 }
 
-// Layout - Sidebar
-.layout-sidebar {
-  display: grid;
-  grid-template-areas: 'body body sidebar';
-  grid-template-columns: 1fr 1fr 300px;
-  grid-template-rows: auto 1fr;
-  gap: 2rem;
-
-  .layout-sidebar-body {
-    grid-area: body;
-  }
-
-  .layout-sidebar-sidebar {
-    grid-area: sidebar;
-
-    &-details {
-      margin-bottom: 3rem;
-    }
-  }
+// Session Recording sidebar details
+.rose-layout-body-content-sidebar .section-details {
+  margin-bottom: 3rem;
 }
 
 @media (max-width: media.width(large)) {
