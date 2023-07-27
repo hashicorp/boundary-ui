@@ -18,6 +18,7 @@ import {
 module('Acceptance | accounts | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  const ACCOUNT_SELECTOR = 'main tbody .hds-table__td:nth-child(1) a';
 
   const instances = {
     scopes: {
@@ -66,7 +67,8 @@ module('Acceptance | accounts | read', function (hooks) {
   test('can navigate to an account form', async function (assert) {
     assert.expect(1);
     await visit(urls.accounts);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await click(ACCOUNT_SELECTOR);
+
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.account);
   });
@@ -76,6 +78,6 @@ module('Acceptance | accounts | read', function (hooks) {
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.accounts);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    assert.dom(ACCOUNT_SELECTOR).doesNotExist();
   });
 });
