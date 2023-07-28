@@ -59,10 +59,18 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
         authMethod.account_claim_maps
       );
     }
+    if (authMethod.certificates) {
+      authMethod.certificates = structuredClone(authMethod.certificates);
+    }
+    if (authMethod.account_attribute_maps) {
+      authMethod.account_attribute_maps = structuredClone(
+        authMethod.account_attribute_maps
+      );
+    }
   }
 
   /**
-   * Update state of OIDC auth method
+   * Update state of OIDC or LDAP auth method
    * @param {string} state
    */
   @action

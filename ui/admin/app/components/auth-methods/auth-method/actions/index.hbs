@@ -3,7 +3,7 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-{{#if @model.isOIDC}}
+{{#if (or @model.isOIDC @model.isLDAP)}}
   <Rose::Dropdown
     @text={{t (concat 'states.' @model.state)}}
     @icon={{if
@@ -26,7 +26,7 @@
           @changed={{route-action 'changeState'}}
           as |radioGroup|
         >
-          {{#each @model.options.oidc.state as |state|}}
+          {{#each @model.options.state as |state|}}
             <dropdown.item>
               <radioGroup.radio
                 @label={{t (concat 'states.' state)}}
