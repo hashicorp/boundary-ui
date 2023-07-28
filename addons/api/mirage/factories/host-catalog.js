@@ -52,20 +52,14 @@ export default factory.extend({
     switch (this.plugin?.name) {
       case 'aws':
         return {
-          disable_credential_rotation: faker.helpers.arrayElement([
-            'true',
-            'false',
-          ]),
+          disable_credential_rotation: faker.datatype.boolean(),
           region: `us-${faker.location.cardinalDirection()}-${faker.number.int(
             9
           )}`,
         };
       case 'azure':
         return {
-          disable_credential_rotation: faker.helpers.arrayElement([
-            'true',
-            'false',
-          ]),
+          disable_credential_rotation: faker.datatype.boolean(),
           tenant_id: faker.string.uuid(),
           client_id: faker.string.uuid(),
           subscription_id: faker.string.uuid(),

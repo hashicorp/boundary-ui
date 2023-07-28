@@ -11,6 +11,8 @@ import generateId from '../helpers/id';
 import { TYPES_TARGET, TYPE_TARGET_SSH } from 'api/models/target';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
+const randomFilter = () =>
+  `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`;
 const hostSetChance = 0.3;
 const types = [...TYPES_TARGET];
 
@@ -33,10 +35,10 @@ export default factory.extend({
    * -1 means "unlimited" and we want to generate these on occasion.
    */
   session_connection_limit: () =>
-    faker.helpers.arrayElement([-1, faker.datatype.number()]),
-  worker_filter: (i) => (i % 2 === 0 ? faker.random.words() : null),
-  egress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
-  ingress_worker_filter: (i) => (i % 2 !== 0 ? faker.random.words() : null),
+    faker.helpers.arrayElement([-1, faker.number.int()]),
+  worker_filter: (i) => (i % 2 === 0 ? randomFilter() : null),
+  egress_worker_filter: (i) => (i % 2 !== 0 ? randomFilter() : null),
+  ingress_worker_filter: (i) => (i % 2 !== 0 ? randomFilter() : null),
   type: (i) => types[i % types.length],
 
   /**

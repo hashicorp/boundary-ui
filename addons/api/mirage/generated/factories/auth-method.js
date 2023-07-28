@@ -17,8 +17,8 @@ import {
  */
 export default Factory.extend({
   type: TYPE_AUTH_METHOD_PASSWORD,
-  name: () => faker.random.words(),
-  description: () => faker.random.words(),
+  name: () => faker.word.words(),
+  description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   disabled: () => faker.datatype.boolean(),
@@ -48,18 +48,18 @@ export default Factory.extend({
         attrs = {
           state: 'active-public',
           urls: [`ldap://${faker.internet.domainName()}`],
-          certificates: [faker.random.alphaNumeric(50)],
-          client_certificate: faker.random.alphaNumeric(50),
-          certificate_key: `---Begin Certificate --- ${faker.random.alphaNumeric(
+          certificates: [faker.string.alphanumeric(50)],
+          client_certificate: faker.string.alphanumeric(50),
+          certificate_key: `---Begin Certificate --- ${faker.string.alphanumeric(
             170
           )} ---End Certificate ---`,
-          certificate_key_hmac: faker.random.alphaNumeric(50),
+          certificate_key_hmac: faker.string.alphanumeric(50),
           enable_groups: true,
           start_tls: false,
           insecure_tls: false,
           bind_dn: 'cn=read-only-admin,dc=example,dc=com',
           bind_password: 'password',
-          bind_password_hmac: faker.random.alphaNumeric(50),
+          bind_password_hmac: faker.string.alphanumeric(50),
           upn_domain: 'example.com',
           discover_dn: false,
           anon_group_search: false,

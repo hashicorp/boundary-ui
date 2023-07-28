@@ -44,10 +44,10 @@ export default factory.extend({
   attributes() {
     // AWS specific
     if (this.plugin?.name === 'aws') {
-      const filtersAmount = faker.datatype.number({ min: 1, max: 5 });
+      const filtersAmount = faker.number.int({ min: 1, max: 5 });
       let filters = [];
       for (let i = 0; i < filtersAmount; ++i) {
-        filters.push(`${faker.datatype.string(3)}=${faker.datatype.string(8)}`);
+        filters.push(`${faker.word.words(1)}=${faker.word.words(1)}`);
       }
       return {
         filters,
