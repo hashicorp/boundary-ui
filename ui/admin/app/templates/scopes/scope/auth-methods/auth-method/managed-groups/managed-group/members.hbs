@@ -72,7 +72,7 @@
         <Hds::Table
           @model={{@model.members}}
           @columns={{array
-            (hash label=(t 'resources.account.form.login_name.label'))
+            (hash label=(t 'form.name.label'))
             (hash label=(t 'resources.account.form.email.label'))
             (hash label=(t 'resources.account.form.full_name.label'))
             (hash label=(t 'resources.account.form.dn.label'))
@@ -83,7 +83,7 @@
           <:body as |B|>
             <B.Tr>
               <B.Td>
-                {{B.data.login_name}}
+                {{B.data.displayName}}
                 <p>{{B.data.description}}</p>
               </B.Td>
               <B.Td>{{B.data.email}}</B.Td>
