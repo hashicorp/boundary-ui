@@ -69,9 +69,11 @@ export default factory.extend({
         .models.filter(() => randomBoolean())
         .map((cred) => cred.id);
 
-      const randomlySelectedStorageBucket = faker.helpers.arrayElement(
-        server.schema.storageBuckets.all().models
-      );
+      const storageBuckets = server.schema.storageBuckets.all().models;
+      const randomlySelectedStorageBucket =
+        storageBuckets.length === 0
+          ? undefined
+          : faker.helpers.arrayElement(storageBuckets);
 
       if (randomlySelectedStorageBucket && target.type === TYPE_TARGET_SSH) {
         target.update({

@@ -66,7 +66,7 @@ export default function initializeMockIPC(server, config) {
       const raw = btoa(JSON.stringify(decoded));
       return {
         address: window.location.hostname,
-        port: faker.datatype.number(),
+        port: faker.internet.port(),
         protocol: type,
         session_id: newSession.id,
         credentials: [
