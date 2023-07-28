@@ -23,48 +23,89 @@
 
   <page.body>
     {{#if @model.managedGroups}}
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.description.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          </header.row>
-        </table.header>
-
-        <table.body as |body|>
-          {{#each @model.managedGroups as |managed-group|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (can 'read model' managed-group)}}
+      {{#if @model.managedGroups.firstObject.isOIDC}}
+        <Hds::Table
+          @model={{@model.managedGroups}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.description.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read model' B.data)}}
                   <LinkTo
                     @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
-                    @model={{managed-group.id}}
+                    @model={{B.data.id}}
                   >
-                    {{managed-group.displayName}}
+                    {{B.data.displayName}}
                   </LinkTo>
                 {{else}}
-                  {{managed-group.displayName}}
+                  {{B.data.displayName}}
                 {{/if}}
-              </row.headerCell>
-              <row.cell>{{managed-group.description}}</row.cell>
-              <row.cell>
-                <Hds::Badge @text={{managed-group.type}} />
-              </row.cell>
-              <row.cell>
+              </B.Td>
+              <B.Td>{{B.data.description}}</B.Td>
+              <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
+              <B.Td>
                 <Copyable
-                  @text={{managed-group.id}}
+                  @text={{B.data.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{managed-group.id}}</code>
+                  <code>{{B.data.id}}</code>
                 </Copyable>
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{else}}
+        <Hds::Table
+          @model={{@model.managedGroups}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.description.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+            (hash label=(t 'resources.managed-group.form.group_names.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read model' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+              </B.Td>
+              <B.Td>{{B.data.description}}</B.Td>
+              <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
+              <B.Td>
+                <Copyable
+                  @text={{B.data.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{B.data.id}}</code>
+                </Copyable>
+              </B.Td>
+              <B.Td>
+                {{truncate-list 'actions.more' B.data.group_names 3}}
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{/if}}
     {{else}}
       <Rose::Layout::Centered>
         <Rose::Message

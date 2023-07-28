@@ -6,6 +6,7 @@
 import GeneratedManagedGroupModel from '../generated/models/managed-group';
 import { attr } from '@ember-data/model';
 import { A } from '@ember/array';
+import { TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP } from './auth-method';
 
 export default class ManagedGroupModel extends GeneratedManagedGroupModel {
   // =attributes
@@ -20,4 +21,18 @@ export default class ManagedGroupModel extends GeneratedManagedGroupModel {
     emptyArrayIfMissing: true,
   })
   member_ids;
+
+  /**
+   * @type {boolean}
+   */
+  get isOIDC() {
+    return this.type === TYPE_AUTH_METHOD_OIDC;
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get isLDAP() {
+    return this.type === TYPE_AUTH_METHOD_LDAP;
+  }
 }
