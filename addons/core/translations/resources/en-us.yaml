@@ -88,7 +88,7 @@ auth-method:
       help: Used to provide to the LDAP server for mTLS connections. Must be x509 PEM encoded.
     client_certificate_key:
       label: Client TLS Key
-      help: Used with the ClientTLSCert for mTLS connections to the LDAP server. Must be x509 PEM encoded.
+      help: Used with the ClientTLSCert for mTLS connections to the LDAP server. Must be x509 PEM encoded. We will not show this data after it is saved, but you can replace it.
     start_tls:
       label: Use StartTLS
       help: Use StartTLS to create a secure connection.
@@ -100,7 +100,7 @@ auth-method:
       help: Distinguished name of entry to bind when performing user and group search.
     bind_password:
       label: Bind Password
-      help: Password to use with BindDN when searching for user.
+      help: Password to use with BindDN when searching for user. We will not show this data after it is saved, but you can replace it.
     upn_domain:
       label: UPN Domain
       help: Add this domain to the username when authenticating.
