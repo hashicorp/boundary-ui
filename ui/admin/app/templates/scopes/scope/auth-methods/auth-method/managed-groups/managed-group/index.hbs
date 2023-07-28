@@ -30,8 +30,11 @@
   <page.body>
     <Form::ManagedGroup
       @model={{@model}}
+      @edit={{route-action 'edit' @model}}
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
+      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
+      @addStringItem={{route-action 'addStringItem' @model}}
     />
   </page.body>
 
