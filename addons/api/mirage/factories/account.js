@@ -32,7 +32,7 @@ export default factory.extend({
       case TYPE_AUTH_METHOD_PASSWORD:
         return { login_name: faker.internet.userName() };
       case TYPE_AUTH_METHOD_LDAP: {
-        const randomNum = faker.number.int({ min: 1, max: 3 });
+        const randomNum = faker.datatype.number({ min: 3, max: 5 });
         let member_of_groups = [];
         const login_name = faker.internet.userName();
         let dn = `uid=${login_name}`;

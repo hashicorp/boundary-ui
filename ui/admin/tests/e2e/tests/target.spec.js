@@ -4,7 +4,7 @@
  */
 
 /* eslint-disable no-undef */
-const { test } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
@@ -117,5 +117,39 @@ test('Verify session created to target with address, then cancel the session', a
     if (connect) {
       connect.kill('SIGTERM');
     }
+  }
+});
+
+test('Verify TCP target is updated', async ({ page }) => {
+  await page.goto('/');
+  let orgName;
+  try {
+    orgName = await createNewOrg(page);
+    await createNewProject(page);
+    await createNewTargetWithAddress(page);
+
+    // Update target
+    await page.getByRole('button', { name: 'Edit Form' }).click();
+    await page.getByLabel('Name').fill('New target name');
+    await page.getByLabel('Description').fill('New description');
+    await page.getByLabel('Target Address').fill('127.0.0.1');
+    await page.getByLabel('Default Port').fill('10');
+    await page.getByLabel('Default Client Port').fill('10');
+    await page.getByLabel('Maximum Duration').fill('1000');
+    await page.getByLabel('Maximum Connections').fill('10');
+    await page.getByLabel('Egress worker filter').click();
+    await page
+      .getByRole('textbox', { name: 'Filter', exact: true })
+      .fill('"dev" in "/tags/type"');
+    await page.getByRole('button', { name: 'Save' }).click();
+
+    await expect(
+      page.getByRole('alert').getByText('Success', { exact: true })
+    ).toBeVisible();
+  } finally {
+    await authenticateBoundaryCli();
+    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+    const org = orgs.items.filter((obj) => obj.name === orgName)[0];
+    await deleteOrg(org.id);
   }
 });

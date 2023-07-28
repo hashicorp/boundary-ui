@@ -50,10 +50,10 @@ export default Factory.extend({
           urls: [`ldap://${faker.internet.domainName()}`],
           certificates: [faker.string.alphanumeric(50)],
           client_certificate: faker.string.alphanumeric(50),
-          certificate_key: `---Begin Certificate --- ${faker.string.alphanumeric(
+          client_certificate_key: `---Begin Certificate --- ${faker.string.alphanumeric(
             170
           )} ---End Certificate ---`,
-          certificate_key_hmac: faker.string.alphanumeric(50),
+          client_certificate_key_hmac: faker.string.alphanumeric(50),
           enable_groups: true,
           start_tls: false,
           insecure_tls: false,
