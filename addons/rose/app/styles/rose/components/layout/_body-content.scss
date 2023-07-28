@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
+@use '../../variables/media';
+
 .rose-layout-body-content {
   display: grid;
   grid-template-areas: 'body body sidebar';
@@ -16,5 +18,22 @@
 
   &-sidebar {
     grid-area: sidebar;
+  }
+}
+
+@media (max-width: media.width(large)) {
+  .rose-layout-body-content {
+    grid-template-areas:
+      'body'
+      'sidebar';
+    grid-template-columns: auto;
+
+    &-body {
+      min-width: 0;
+    }
+
+    &-sidebar {
+      max-width: 300px;
+    }
   }
 }

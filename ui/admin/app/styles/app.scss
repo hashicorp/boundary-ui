@@ -875,23 +875,6 @@
   margin-bottom: 3rem;
 }
 
-@media (max-width: media.width(large)) {
-  .layout-sidebar {
-    grid-template-areas:
-      'body'
-      'sidebar';
-    grid-template-columns: auto;
-
-    .layout-sidebar-body {
-      min-width: 0;
-    }
-
-    .layout-sidebar-sidebar {
-      max-width: 300px;
-    }
-  }
-}
-
 .ldap-read-only-fields .hds-form-field--layout-vertical {
   margin-bottom: 0.5rem;
 }
