@@ -131,7 +131,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   test('can navigate to a vault type credential library', async function (assert) {
     assert.expect(1);
     await visit(urls.brokeredCredentialSources);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await click('main tbody tr .hds-table__td:nth-child(1) a');
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
@@ -142,7 +142,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
     await visit(urls.brokeredCredentialSources);
-    await click('main tbody .rose-table-header-cell:nth-child(1) a');
+    await click('main tbody tr .hds-table__td:nth-child(1) a');
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credential);
   });
@@ -155,9 +155,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     });
     await visit(urls.brokeredCredentialSources);
     assert.false(featuresService.isEnabled('json-credentials'));
-    assert
-      .dom('.rose-table-row:nth-child(3)')
-      .includesText(jsonCredential.name);
+    assert.dom('.hds-table__tr:nth-child(3)').includesText(jsonCredential.name);
     assert.dom(`[href="${urls.jsonCredential}"]`).doesNotExist();
   });
 
@@ -328,7 +326,8 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const availableCredentialsCount = getCredentialCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount - 1);
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
@@ -346,7 +345,8 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const availableCredentialsCount = getCredentialLibraryCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialCount);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
@@ -362,7 +362,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         (item) => item !== 'remove-credential-sources'
       );
     await visit(urls.brokeredCredentialSources);
-    assert.dom('tbody tr .rose-dropdown-button-danger').doesNotExist();
+    assert.dom('tbody tr .hds-dropdown-list-item button').doesNotExist();
   });
 
   test('removing a target credential library which errors displays error messages', async function (assert) {
@@ -385,7 +385,8 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const count = getCredentialLibraryCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.dom('[role="alert"]').isVisible();
   });
 
@@ -409,7 +410,8 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const count = getCredentialCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.dom('[role="alert"]').isVisible();
   });
 });

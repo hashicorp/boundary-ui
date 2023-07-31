@@ -7,6 +7,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { options } from 'api/models/auth-method';
+import { set } from '@ember/object';
 
 export default class FormAuthMethodLdapComponent extends Component {
   // =attributes
@@ -82,5 +83,17 @@ export default class FormAuthMethodLdapComponent extends Component {
    */
   parseUrlsArray() {
     return (this.args.model.urls || []).map((item) => item.value).toString();
+  }
+
+  /**
+   * @param {string} currentAttr
+   */
+  @action
+  rollbackSecretAttrs(currentAttr) {
+    const changedAttrs = this.args.model.changedAttributes();
+    if (currentAttr in changedAttrs) {
+      const [oldVal] = changedAttrs[currentAttr];
+      set(this.args.model, currentAttr, oldVal);
+    }
   }
 }

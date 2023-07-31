@@ -1,0 +1,134 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Rose::Form
+  @edit={{@edit}}
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @showEditToggle={{if @model.isNew false true}}
+  as |form|
+>
+  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </InfoField>
+
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    name='name'
+    @value={{@model.name}}
+    @isInvalid={{@model.errors.name}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    {{#if @model.errors.name}}
+      <F.Error as |E|>
+        {{#each @model.errors.name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @isOptional={{true}}
+    @value={{@model.description}}
+    @isInvalid={{@model.errors.description}}
+    name='description'
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
+
+  <Hds::Form::Fieldset @isRequired={{true}} as |F|>
+    <F.Legend>{{t 'resources.managed-group.form.group_names.label'}}</F.Legend>
+    <F.HelperText>{{t
+        'resources.managed-group.form.group_names.help'
+      }}</F.HelperText>
+    {{#let (unique-id) as |valueHeaderID|}}
+      <F.Control>
+        <Hds::Table class='key-value-list' name='group_names'>
+          <:head as |H|>
+            <H.Tr>
+              <H.Th id={{valueHeaderID}}>{{t 'titles.value'}}</H.Th>
+              <H.Th>{{t 'titles.actions'}}</H.Th>
+            </H.Tr>
+          </:head>
+          <:body as |B|>
+            {{#each @model.group_names as |group i|}}
+              <B.Tr>
+                <B.Td>
+                  <Hds::Form::TextInput::Field
+                    @value={{group.value}}
+                    disabled={{form.disabled}}
+                    aria-labelledby={{valueHeaderID}}
+                    {{on 'input' (set-from-event group 'value')}}
+                  />
+                </B.Td>
+                <B.Td>
+                  <Hds::Button
+                    @text={{t 'actions.remove'}}
+                    @color='critical'
+                    @icon='trash'
+                    @isIconOnly={{true}}
+                    disabled={{form.disabled}}
+                    {{on 'click' (fn @removeItemByIndex 'group_names' i)}}
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
+            <B.Tr>
+              <B.Td>
+                <Hds::Form::TextInput::Field
+                  @value={{this.newGroup}}
+                  @type='text'
+                  disabled={{form.disabled}}
+                  aria-labelledby={{valueHeaderID}}
+                  {{on 'input' (set-from-event this 'newGroup')}}
+                />
+              </B.Td>
+              <B.Td>
+                <Hds::Button
+                  @text={{t 'actions.add'}}
+                  @color='secondary'
+                  disabled={{or form.disabled (not this.newGroup)}}
+                  {{on 'click' this.addGroupName}}
+                />
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      </F.Control>
+    {{/let}}
+    {{#if @model.errors.group_names}}
+      <F.Error as |E|>
+        {{#each @model.errors.group_names as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Fieldset>
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @enableEditText={{t 'actions.edit-form'}}
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+
+</Rose::Form>

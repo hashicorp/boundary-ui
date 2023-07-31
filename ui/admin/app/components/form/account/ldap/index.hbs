@@ -52,27 +52,64 @@
       </F.Error>
     {{/if}}
   </Hds::Form::Textarea::Field>
+  {{#if @model.isNew}}
+    <Hds::Form::TextInput::Field
+      @isRequired={{true}}
+      name='login_name'
+      @value={{@model.login_name}}
+      @isInvalid={{@model.errors.login_name}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'login_name')}}
+      as |F|
+    >
+      <F.Label>{{t 'form.login_name.label'}}</F.Label>
+      <F.HelperText>{{t 'form.login_name.help'}}</F.HelperText>
+      {{#if @model.errors.login_name}}
+        <F.Error as |E|>
+          {{#each @model.errors.login_name as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
 
-  <Hds::Form::TextInput::Field
-    @isRequired={{true}}
-    name='login_name'
-    @value={{@model.login_name}}
-    @isInvalid={{@model.errors.login_name}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'login_name')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.login_name.label'}}</F.Label>
-    <F.HelperText>{{t 'form.login_name.help'}}</F.HelperText>
-    {{#if @model.errors.login_name}}
-      <F.Error as |E|>
-        {{#each @model.errors.login_name as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+  {{#unless @model.isNew}}
+    <Hds::Form::Fieldset class='ldap-read-only-fields' as |F|>
+
+      <F.Control>
+        <div class='ldap-section'>
+          <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
+              'form.other_fields.label'
+            }}</p>
+          <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+              'form.other_fields.help'
+            }}</Hds::Form::HelperText>
+        </div>
+        <InfoField @value={{@model.login_name}} as |F|>
+          <F.Label>{{t 'form.login_name.label'}}</F.Label>
+        </InfoField>
+        <InfoField @value={{@model.email}} as |F|>
+          <F.Label>{{t 'resources.account.form.email.label'}}</F.Label>
+        </InfoField>
+        <InfoField @value={{@model.full_name}} as |F|>
+          <F.Label>{{t 'resources.account.form.full_name.label'}}</F.Label>
+        </InfoField>
+        <InfoField @value={{@model.dn}} as |F|>
+          <F.Label>{{t 'resources.account.form.dn.label'}}</F.Label>
+        </InfoField>
+        <p class='hds-font-weight-semibold'>{{t
+            'resources.account.form.member_of_groups.label'
+          }}</p>
+        {{#each @model.member_of_groups as |group|}}
+          <Hds::Form::TextInput::Field
+            @value={{group.value}}
+            disabled={{true}}
+          />
         {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
-
+      </F.Control>
+    </Hds::Form::Fieldset>
+  {{/unless}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

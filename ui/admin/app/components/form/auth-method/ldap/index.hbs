@@ -66,7 +66,7 @@
     <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
         'resources.auth-method.section.connection.title'
       }}</p>
-    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+    <Hds::Form::HelperText @controlId='for-connection'>{{t
         'resources.auth-method.section.connection.help'
       }}</Hds::Form::HelperText>
   </div>
@@ -160,30 +160,32 @@
     {{/if}}
   </Hds::Form::Fieldset>
 
-  <Hds::Form::Textarea::Field
-    @isOptional={{true}}
-    @value={{@model.client_certificate}}
-    @isInvalid={{@model.errors.client_certificate}}
-    name='client_certificate'
-    disabled={{form.disabled}}
-    as |F|
-  >
-    <F.Label>{{t
-        'resources.auth-method.form.client_certificate.label'
-      }}</F.Label>
-    <F.HelperText>{{t
-        'resources.auth-method.form.client_certificate.help'
-      }}</F.HelperText>
-    {{#if @model.errors.client_certificate}}
-      <F.Error as |E|>
-        {{#each @model.errors.client_certificate as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Textarea::Field>
-
   {{#if @model.isNew}}
+    <Hds::Form::TextInput::Field
+      @isOptional={{true}}
+      @value={{@model.client_certificate}}
+      @isInvalid={{@model.errors.client_certificate}}
+      @type='password'
+      name='client_certificate'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'client_certificate')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.auth-method.form.client_certificate.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.client_certificate.help'}}
+      </F.HelperText>
+      {{#if @model.errors.client_certificate}}
+        <F.Error as |E|>
+          {{#each @model.errors.client_certificate as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
     <Hds::Form::TextInput::Field
       @isOptional={{true}}
       @value={{@model.client_certificate_key}}
@@ -191,6 +193,32 @@
       @type='password'
       name='client_certificate_key'
       disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'client_certificate_key')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.auth-method.form.client_certificate_key.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.client_certificate_key.help'}}
+      </F.HelperText>
+      {{#if @model.errors.client_certificate_key}}
+        <F.Error as |E|>
+          {{#each @model.errors.client_certificate_key as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{else}}
+    <Form::Field::SecretInput
+      @isOptional={{true}}
+      @value={{@model.client_certificate_key}}
+      @isInvalid={{@model.errors.client_certificate_key}}
+      @name='client_certificate_key'
+      @isDisabled={{form.disabled}}
+      @showEditButton={{true}}
+      @cancel={{fn this.rollbackSecretAttrs 'client_certificate_key'}}
       {{on 'input' (set-from-event @model 'client_certificate_key')}}
       as |F|
     >
@@ -207,7 +235,7 @@
           {{/each}}
         </F.Error>
       {{/if}}
-    </Hds::Form::TextInput::Field>
+    </Form::Field::SecretInput>
   {{/if}}
 
   <Hds::Form::Toggle::Field
@@ -240,7 +268,7 @@
     <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
         'resources.auth-method.section.authenticated-search.title'
       }}</p>
-    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+    <Hds::Form::HelperText @controlId='for-authenticated-search'>{{t
         'resources.auth-method.section.authenticated-search.help'
       }}</Hds::Form::HelperText>
   </div>
@@ -278,6 +306,30 @@
       as |F|
     >
       <F.Label>{{t 'resources.auth-method.form.bind_password.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.bind_password.help'}}
+      </F.HelperText>
+      {{#if @model.errors.bind_password}}
+        <F.Error as |E|>
+          {{#each @model.errors.bind_password as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{else}}
+    <Form::Field::SecretInput
+      @isOptional={{true}}
+      @value={{@model.bind_password}}
+      @isInvalid={{@model.errors.bind_password}}
+      @name='bind_password'
+      @isDisabled={{form.disabled}}
+      @showEditButton={{true}}
+      @cancel={{fn this.rollbackSecretAttrs 'bind_password'}}
+      {{on 'input' (set-from-event @model 'bind_password')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.auth-method.form.bind_password.label'}}</F.Label>
       <F.HelperText>{{t
           'resources.auth-method.form.bind_password.help'
         }}</F.HelperText>
@@ -288,7 +340,7 @@
           {{/each}}
         </F.Error>
       {{/if}}
-    </Hds::Form::TextInput::Field>
+    </Form::Field::SecretInput>
   {{/if}}
 
   <Hds::Form::TextInput::Field
@@ -318,7 +370,7 @@
     <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
         'resources.auth-method.section.anonymous-search.title'
       }}</p>
-    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+    <Hds::Form::HelperText @controlId='for-anonymous-search'>{{t
         'resources.auth-method.section.anonymous-search.help'
       }}</Hds::Form::HelperText>
   </div>
@@ -355,7 +407,7 @@
     <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
         'resources.auth-method.section.user-entries.title'
       }}</p>
-    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+    <Hds::Form::HelperText @controlId='for-user-entries'>{{t
         'resources.auth-method.section.user-entries.help'
       }}</Hds::Form::HelperText>
   </div>
@@ -550,7 +602,7 @@
     <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
         'resources.auth-method.section.group-entries.title'
       }}</p>
-    <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
+    <Hds::Form::HelperText @controlId='for-group-entries'>{{t
         'resources.auth-method.section.group-entries.help'
       }}</Hds::Form::HelperText>
   </div>
