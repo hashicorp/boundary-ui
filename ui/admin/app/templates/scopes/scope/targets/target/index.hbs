@@ -22,16 +22,16 @@
   </page.actions>
 
   <page.body>
-    <Layout::Sidebar as |sb|>
-      <sb.Body>
+    <Rose::Layout::BodyContent as |bc|>
+      <bc.Body>
         <Form::Target
           @model={{@model}}
           @submit={{route-action 'saveWithAddress' @model}}
           @cancel={{route-action 'cancel' @model}}
         />
-      </sb.Body>
+      </bc.Body>
       {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
-        <sb.Sidebar>
+        <bc.Sidebar>
           <div class='target-sidebar'>
             <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
             <p class='description'>
@@ -66,9 +66,9 @@
               />
             {{/if}}
           </div>
-        </sb.Sidebar>
+        </bc.Sidebar>
       {{/if}}
-    </Layout::Sidebar>
+    </Rose::Layout::BodyContent>
 
   </page.body>
 

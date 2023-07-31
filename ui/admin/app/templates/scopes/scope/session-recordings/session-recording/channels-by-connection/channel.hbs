@@ -28,14 +28,14 @@
   </page.header>
 
   <page.body>
-    <Layout::Sidebar as |sb|>
-      <sb.Body>
+    <Rose::Layout::BodyContent as |bc|>
+      <bc.Body>
         {{outlet}}
-      </sb.Body>
+      </bc.Body>
 
-      <sb.Sidebar>
+      <bc.Sidebar>
         {{! Channel details information }}
-        <div class='layout-sidebar-sidebar-details'>
+        <div class='section-details'>
           <h2>{{t 'resources.session-recording.channel.details'}}</h2>
           <MetadataList @orientation='vertical' as |list|>
             {{! Start time }}
@@ -158,7 +158,7 @@
             </list.Item>
           </LinkListPanel>
         </div>
-      </sb.Sidebar>
-    </Layout::Sidebar>
+      </bc.Sidebar>
+    </Rose::Layout::BodyContent>
   </page.body>
 </Rose::Layout::Page>
