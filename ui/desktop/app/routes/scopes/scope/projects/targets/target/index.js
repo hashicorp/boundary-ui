@@ -12,11 +12,4 @@ export default class ScopesScopeProjectsTargetsTargetIndexRoute extends Route {
   @service router;
 
   // =methods
-
-  /**
-   * Navigate to hosts within a target.
-   */
-  afterModel() {
-    this.router.transitionTo('scopes.scope.projects.targets.target.sessions');
-  }
 }
