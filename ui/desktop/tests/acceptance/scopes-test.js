@@ -63,7 +63,6 @@ module('Acceptance | scopes', function (hooks) {
     org2Targets: null,
     globalTargets: null,
     target: null,
-    targetSessions: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -129,7 +128,6 @@ module('Acceptance | scopes', function (hooks) {
     urls.org2Targets = `${urls.org2Projects}/targets`;
     urls.globalTargets = `${urls.globalProjects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.targetSessions = `${urls.target}/sessions`;
 
     class MockIPC {
       clusterUrl = null;

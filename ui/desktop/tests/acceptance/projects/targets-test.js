@@ -34,7 +34,6 @@ module('Acceptance | projects | targets', function (hooks) {
       global: null,
     },
     target: null,
-    session: null,
   };
 
   const stubs = {
@@ -118,7 +117,6 @@ module('Acceptance | projects | targets', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.sessions = `${urls.target}/sessions`;
 
     class MockIPC {
       clusterUrl = null;
