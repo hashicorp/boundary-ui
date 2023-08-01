@@ -29,17 +29,17 @@ export default factory.extend({
   state: (i) => states[i % states.length],
   start_time() {
     return this.state === STATE_SESSION_RECORDING_AVAILABLE
-      ? faker.date.recent(3, this.end_time)
+      ? faker.date.recent({ days: 3, refDate: this.end_time })
       : null;
   },
   end_time() {
     return this.state === STATE_SESSION_RECORDING_AVAILABLE
-      ? faker.date.recent(1, this.updated_time)
+      ? faker.date.recent({ days: 1, refDate: this.updated_time })
       : null;
   },
   duration() {
     return this.state === STATE_SESSION_RECORDING_AVAILABLE
-      ? `${faker.datatype.number()}s`
+      ? `${faker.number.int()}s`
       : null;
   },
 

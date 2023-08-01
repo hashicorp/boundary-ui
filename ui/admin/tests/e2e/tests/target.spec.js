@@ -138,7 +138,9 @@ test('Verify TCP target is updated', async ({ page }) => {
     await page.getByLabel('Maximum Duration').fill('1000');
     await page.getByLabel('Maximum Connections').fill('10');
     await page.getByLabel('Egress worker filter').click();
-    await page.getByRole('textbox', { name: 'Filter', exact: true }).fill('"dev" in "/tags/type"');
+    await page
+      .getByRole('textbox', { name: 'Filter', exact: true })
+      .fill('"dev" in "/tags/type"');
     await page.getByRole('button', { name: 'Save' }).click();
 
     await expect(

@@ -10,12 +10,13 @@ import { faker } from '@faker-js/faker';
  * GeneratedStorageBucketModelFactory
  */
 export default Factory.extend({
-  name: () => faker.random.words(),
-  description: () => faker.random.words(),
+  name: () => faker.word.words(),
+  description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
-  version: () => faker.datatype.number(),
+  version: () => faker.number.int(),
   bucket_name: () => faker.internet.domainWord(),
   bucket_prefix: () => faker.system.directoryPath(),
-  worker_filter: () => faker.random.words(),
+  worker_filter: () =>
+    `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`,
 });
