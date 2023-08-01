@@ -1,0 +1,15 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<div ...attributes class='rose-layout-body-content'>
+  {{yield
+    (hash
+      Body=(component 'rose/anonymous' class='rose-layout-body-content-body')
+      Sidebar=(component
+        'rose/anonymous' class='rose-layout-body-content-sidebar'
+      )
+    )
+  }}
+</div>
