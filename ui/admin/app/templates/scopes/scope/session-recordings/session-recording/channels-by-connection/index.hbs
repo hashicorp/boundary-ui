@@ -14,8 +14,8 @@
 
   <page.body>
     <div class='channels-by-connection'>
-      <Layout::Sidebar as |sb|>
-        <sb.Body>
+      <Rose::Layout::BodyContent as |bc|>
+        <bc.Body>
           {{#if this.isSessionInprogressWithNoConnections}}
             <Hds::ApplicationState as |A|>
               {{! Session recording in progress with no connections }}
@@ -168,9 +168,9 @@
               {{/if}}
             {{/each}}
           {{/if}}
-        </sb.Body>
-        <sb.Sidebar>
-          <div class='layout-sidebar-sidebar-details'>
+        </bc.Body>
+        <bc.Sidebar>
+          <div class='section-details'>
             <h2>{{t 'resources.session-recording.details'}}</h2>
 
             <MetadataList @orientation='vertical' as |list|>
@@ -290,8 +290,8 @@
               </list.Item>
             </LinkListPanel>
           </div>
-        </sb.Sidebar>
-      </Layout::Sidebar>
+        </bc.Sidebar>
+      </Rose::Layout::BodyContent>
     </div>
   </page.body>
 </Rose::Layout::Page>

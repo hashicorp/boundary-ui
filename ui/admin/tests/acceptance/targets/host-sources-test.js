@@ -128,7 +128,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetHostSources}"]`);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
 
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount - 1);
     assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
@@ -165,7 +166,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetHostSources}"]`);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
 
     assert.dom('tbody tr').exists({ count: targetHostSetCount });
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
@@ -217,7 +219,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.dom('tbody tr').exists({ count: targetHostSetCount });
 
     // first, remove a target host set (otherwise none would be available to add)
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
     assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
 
     await click('.rose-layout-page-actions a');
