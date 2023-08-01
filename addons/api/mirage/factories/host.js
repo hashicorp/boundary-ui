@@ -11,7 +11,7 @@ import generateId from '../helpers/id';
 export default factory.extend({
   id: () => generateId('h_'),
   name() {
-    if (this.type === 'static') return faker.random.words();
+    if (this.type === 'static') return faker.word.words();
   },
   type() {
     return this.hostCatalog?.type || factory.attrs.type;
@@ -39,7 +39,7 @@ export default factory.extend({
   // Return external fields only for plugins
   external_id() {
     if (this.type === 'plugin') {
-      return faker.datatype.uuid();
+      return faker.string.uuid();
     }
   },
   external_name(i) {

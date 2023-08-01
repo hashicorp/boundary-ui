@@ -84,7 +84,7 @@
         <Hds::Table
           @model={{@model.accounts}}
           @columns={{array
-            (hash label=(t 'resources.account.form.login_name.label'))
+            (hash label=(t 'form.name.label'))
             (hash label=(t 'resources.account.form.email.label'))
             (hash label=(t 'resources.account.form.full_name.label'))
             (hash label=(t 'resources.account.form.dn.label'))
@@ -155,11 +155,11 @@
               </B.Td>
               <B.Td>
                 <Copyable
-                  @text={{B.data.account.id}}
+                  @text={{B.data.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{B.data.account.id}}</code>
+                  <code>{{B.data.id}}</code>
                 </Copyable>
               </B.Td>
             </B.Tr>

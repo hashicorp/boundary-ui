@@ -30,14 +30,13 @@ export default factory.extend({
       case TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC:
         return {
           http_method: 'GET',
-          http_request_body: faker.random.word(),
+          http_request_body: faker.word.words(1),
           path: faker.system.directoryPath(),
         };
       case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE:
         return {
-          username: faker.random.word(),
-          key_type: faker.random.word(),
-          key_bits: faker.datatype.number(999),
+          username: faker.internet.userName(),
+          key_bits: faker.number.int(999),
           path: faker.system.directoryPath(),
         };
     }

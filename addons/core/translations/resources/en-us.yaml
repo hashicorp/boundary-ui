@@ -794,6 +794,10 @@ managed-group:
     messages:
       title: Welcome to Members
       description: No members in this managed group.
+  form:
+    group_names:
+      label: Group Names
+      help: The list of groups that this Managed Group belongs to.
 worker:
   title: Worker
   title_pki: New PKI Worker

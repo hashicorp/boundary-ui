@@ -15,7 +15,7 @@
   {{/if}}
 
   {{#if (can 'navigate model' @model collection='managed-groups')}}
-    {{#if @model.isOIDC}}
+    {{#if (or @model.isOIDC @model.isLDAP)}}
       <nav.link @route='scopes.scope.auth-methods.auth-method.managed-groups'>
         {{t 'resources.managed-group.title_plural'}}
       </nav.link>

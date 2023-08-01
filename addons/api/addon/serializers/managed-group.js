@@ -11,6 +11,10 @@ import {
 
 export default class ManagedGroupSerializer extends ApplicationSerializer {
   // =properties
+  /**
+   * @type {boolean}
+   */
+  serializeScopeID = false;
 
   /**
    * Delegates to a type-specific serialization, or default.

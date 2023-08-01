@@ -12,8 +12,7 @@
   <page.header>
     <h2>
       {{t 'titles.new'}}
-      {{! TODO: change the icon link }}
-      <DocLink @doc='account.new' @iconSize='large' />
+      <DocLink @doc='managed-groups' @iconSize='large' />
     </h2>
   </page.header>
 
@@ -22,6 +21,8 @@
       @model={{@model}}
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
+      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
+      @addStringItem={{route-action 'addStringItem' @model}}
     />
   </page.body>
 
