@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "markdown-it": "^12.3.2",
     "mout": "^1.2.4",
     "nanoid": "^3.1.31",
     "plist": "^3.0.5",
@@ -83,7 +82,9 @@
     "**/core/ember-inline-svg/**/nth-check": "^2.0.1",
     "**/snapdragon/base/cache-base/**/set-value": "^4.0.1",
     "**/@storybook/**/ansi-regex": "^5.0.1",
-    "**/jsprim/json-schema": "^0.4.0"
+    "**/jsprim/json-schema": "^0.4.0",
+    "**/@storybook/**/yuidocjs/markdown-it": "^12.3.2",
+    "**/ember-cli/markdown-it-terminal/markdown-it": "^12.3.2"
   },
   "config": {
     "commitizen": {
