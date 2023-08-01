@@ -165,7 +165,7 @@ app.on('ready', async () => {
   // Register custom protocol
   // This file protocol is the exclusive protocol for this application.  All
   // other protocols are disabled.
-  ses.protocol.handle(emberAppProtocol, (request, callback) => {
+  ses.protocol.handle(emberAppProtocol, (request) => {
     /* eng-disable PROTOCOL_HANDLER_JS_CHECK */
     const isDir = request.url.endsWith('/');
     const absolutePath = request.url.substr(emberAppURL.length);
