@@ -5,6 +5,7 @@
 
 /* eslint-disable no-console */
 const path = require('path');
+const { net } = require('electron');
 const {
   default: installExtension,
   EMBER_INSPECTOR,
@@ -164,7 +165,7 @@ app.on('ready', async () => {
   // Register custom protocol
   // This file protocol is the exclusive protocol for this application.  All
   // other protocols are disabled.
-  ses.protocol.registerFileProtocol(emberAppProtocol, (request, callback) => {
+  ses.protocol.handle(emberAppProtocol, (request, callback) => {
     /* eng-disable PROTOCOL_HANDLER_JS_CHECK */
     const isDir = request.url.endsWith('/');
     const absolutePath = request.url.substr(emberAppURL.length);
@@ -173,8 +174,7 @@ app.on('ready', async () => {
       : path.normalize(`${emberAppDir}${absolutePath}`);
 
     if (isDev) console.log('[serving]', request.url);
-
-    callback({ path: normalizedPath });
+    return net.fetch(`file:///${normalizedPath}`);
   });
 
   // Disallow all permissions requests,
