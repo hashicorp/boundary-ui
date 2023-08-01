@@ -26,7 +26,7 @@ export default factory.extend({
     }
     if (i % 2 === 0) {
       return {
-        type: [faker.random.word(), faker.random.word()],
+        type: [faker.word.words(1), faker.word.words(1)],
         os: ['ubuntu'],
         env: ['dev', 'local'],
       };
@@ -39,7 +39,7 @@ export default factory.extend({
     }
     if (i % 2 === 0) {
       return {
-        type: [faker.random.word(), faker.random.word()],
+        type: [faker.word.words(1), faker.word.words(1)],
         os: ['ubuntu'],
         env: ['dev', 'local'],
       };

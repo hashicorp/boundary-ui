@@ -11,8 +11,8 @@ import { faker } from '@faker-js/faker';
  * User contains all fields related to a User resource
  */
 export default Factory.extend({
-  name: () => faker.random.words(),
-  description: () => faker.random.words(),
+  name: () => faker.word.words(),
+  description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   disabled: () => faker.datatype.boolean(),

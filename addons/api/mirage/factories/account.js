@@ -32,17 +32,20 @@ export default factory.extend({
       case TYPE_AUTH_METHOD_PASSWORD:
         return { login_name: faker.internet.userName() };
       case TYPE_AUTH_METHOD_LDAP: {
-        const groupsAmount = faker.datatype.number({ min: 3, max: 5 });
-        let groups = [];
-        for (let i = 0; i < groupsAmount; i++) {
-          groups.push(faker.random.word());
+        const randomNum = faker.number.int({ min: 3, max: 5 });
+        let member_of_groups = [];
+        const login_name = faker.internet.userName();
+        let dn = `uid=${login_name}`;
+        for (let i = 0; i < randomNum; i++) {
+          member_of_groups.push(faker.word.noun());
+          dn += `,dc=${faker.internet.domainSuffix()}`;
         }
         return {
-          login_name: faker.internet.userName(),
+          login_name,
+          dn,
+          member_of_groups,
           email: faker.internet.email(),
-          full_name: faker.random.words(),
-          dn: faker.random.words(),
-          member_of_groups: groups,
+          full_name: faker.person.fullName(),
         };
       }
       case TYPE_AUTH_METHOD_OIDC:
@@ -50,7 +53,7 @@ export default factory.extend({
           issuer: faker.internet.ip(),
           subject: 'sub',
           email: faker.internet.email(),
-          full_name: faker.random.words(),
+          full_name: faker.person.fullName(),
         };
     }
   },
