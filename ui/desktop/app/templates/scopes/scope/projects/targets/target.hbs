@@ -33,7 +33,11 @@
   </page.actions>
 
   <page.body>
-    {{outlet}}
+    <div class='copy-url-container'>{{t 'actions.copy-to-clipboard'}}</div>
+    <Rose::Layout::BodyContent as |bc|>
+      <bc.Body class='target-details-body'>{{@model.displayName}}</bc.Body>
+      <bc.Sidebar class='target-details-sidebar'>{{@model.id}}</bc.Sidebar>
+    </Rose::Layout::BodyContent>
   </page.body>
 
 </Rose::Layout::Page>
