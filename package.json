@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "mout": "^1.2.4",
     "nanoid": "^3.1.31",
     "plist": "^3.0.5",
     "lzma-native": "^8.0.6",
