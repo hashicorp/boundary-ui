@@ -174,7 +174,7 @@ app.on('ready', async () => {
       : path.normalize(`${emberAppDir}${absolutePath}`);
 
     if (isDev) console.log('[serving]', request.url);
-    return net.fetch(`file:///${normalizedPath}`);
+    return net.fetch(`file://${normalizedPath}`);
   });
 
   // Disallow all permissions requests,
