@@ -97,75 +97,79 @@
     {{/if}}
 
     {{#if @model}}
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'resources.project.title'}}</row.headerCell>
-            <row.headerCell />
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model as |model|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (can 'read model' model)}}
+
+      <Hds::Table
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'resources.project.title'))
+          (hash label='')
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <span class='hds-font-weight-semibold'>{{#if
+                  (can 'read model' B.data)
+                }}
                   <LinkTo
                     @route='scopes.scope.projects.targets.target'
-                    @model={{model.id}}
+                    @model={{B.data.id}}
                   >
-                    {{model.displayName}}
+                    {{B.data.displayName}}
                   </LinkTo>
                 {{else}}
-                  {{model.displayName}}
+                  {{B.data.displayName}}
                 {{/if}}
-                {{#if model.description}}
-                  <p>{{model.description}}</p>
+                {{#if B.data.description}}
+                  <p>{{B.data.description}}</p>
                 {{/if}}
-              </row.headerCell>
-              <row.cell>
+              </span>
+            </B.Td>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{B.data.id}}</code>
+              </Copyable>
+            </B.Td>
+            <B.Td>
+              {{#if B.data.type}}
+                <Hds::Badge
+                  @text={{t (concat 'resources.target.types.' B.data.type)}}
+                />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <div>
                 <Copyable
-                  @text={{model.id}}
+                  @text={{B.data.project.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{model.id}}</code>
+                  <code>{{B.data.project.id}}</code>
                 </Copyable>
-              </row.cell>
-              <row.cell>
-                {{#if model.type}}
-                  <Hds::Badge
-                    @text={{t (concat 'resources.target.types.' model.type)}}
-                  />
-                {{/if}}
-              </row.cell>
-              <row.cell>
-                <div>
-                  <Copyable
-                    @text={{model.project.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    <code>{{model.project.id}}</code>
-                  </Copyable>
-                </div>
-                <Hds::Badge @color='neutral' @text={{model.project.name}} />
-              </row.cell>
-              <row.cell>
-                {{#if (can 'connect target' model)}}
-                  <Hds::Button
-                    @text={{t 'resources.session.actions.connect'}}
-                    @color='secondary'
-                    {{on 'click' (route-action 'connect' model)}}
-                  />
-                {{/if}}
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+              </div>
+              <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
+            </B.Td>
+            <B.Td>
+              {{#if (can 'connect target' B.data)}}
+                <Hds::Button
+                  @text={{t 'resources.session.actions.connect'}}
+                  @color='secondary'
+                  {{on 'click' (route-action 'connect' B.data)}}
+                />
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+
     {{else}}
 
       <Rose::Layout::Centered>
