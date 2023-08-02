@@ -112,9 +112,8 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              <span class='hds-font-weight-semibold'>{{#if
-                  (can 'read model' B.data)
-                }}
+              <span class='hds-font-weight-semibold'>
+                {{#if (can 'read model' B.data)}}
                   <LinkTo
                     @route='scopes.scope.projects.targets.target'
                     @model={{B.data.id}}
