@@ -29,6 +29,7 @@ module('Acceptance | auth methods | update', function (hooks) {
   const BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
+  const URLS_INPUT_SELECTOR = '[name="urls"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
@@ -338,8 +339,8 @@ module('Acceptance | auth methods | update', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'urls',
+                description: 'scheme in url "" is not either ldap or ldaps',
               },
             ],
           },
@@ -350,10 +351,12 @@ module('Acceptance | auth methods | update', function (hooks) {
 
     await click(`[href="${urls.ldapAuthMethod}"]`);
     await click(BUTTON_SELECTOR, 'Activate edit mode');
-    await fillIn(NAME_INPUT_SELECTOR, 'existing auth method');
+    await fillIn(URLS_INPUT_SELECTOR, '');
     await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
     assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert
+      .dom(FIELD_ERROR_TEXT_SELECTOR)
+      .hasText('scheme in url "" is not either ldap or ldaps');
   });
 });
