@@ -31,7 +31,7 @@ export default factory.extend({
     ],
   attributes() {
     return {
-      username: faker.random.word(),
+      username: faker.internet.userName(),
     };
   },
 });

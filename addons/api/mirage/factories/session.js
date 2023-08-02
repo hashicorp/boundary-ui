@@ -16,7 +16,7 @@ export const pickRandomStatusString = () =>
 export default factory.extend({
   id: () => generateId('ss_'),
 
-  status: pickRandomStatusString,
+  status: pickRandomStatusString(),
 
   /**
    * Sessions generated with this trait will automatically form
