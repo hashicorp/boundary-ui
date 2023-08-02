@@ -10,13 +10,13 @@ import { faker } from '@faker-js/faker';
  * GeneratedTargetModelFactory
  */
 export default Factory.extend({
-  name: () => faker.random.words(),
-  session_max_seconds: () => faker.datatype.number(),
-  description: () => faker.random.words(),
+  name: () => faker.word.words(),
+  session_max_seconds: () => faker.number.int(),
+  description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   disabled: () => faker.datatype.boolean(),
-  default_port: () => faker.datatype.number(),
-  default_client_port: () => faker.datatype.number(),
-  version: () => faker.datatype.number(),
+  default_port: () => faker.internet.port(),
+  default_client_port: () => faker.internet.port(),
+  version: () => faker.number.int(),
 });
