@@ -36,7 +36,7 @@ export default factory.extend({
       return {
         id: `plugin-id-${i}`,
         name: pluginTypes[i % pluginTypes.length],
-        description: faker.random.words(),
+        description: faker.word.words(),
       };
     }
   },
@@ -45,10 +45,8 @@ export default factory.extend({
     switch (this.plugin?.name) {
       case TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3:
         return {
-          region: `us-${faker.address.cardinalDirection()}-${faker.datatype.number(
-            {
-              max: 9,
-            }
+          region: `us-${faker.location.cardinalDirection()}-${faker.number.int(
+            9
           )}`,
           disable_credential_rotation: faker.datatype.boolean(),
         };
