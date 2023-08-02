@@ -11,17 +11,17 @@ import { faker } from '@faker-js/faker';
  * Worker contains all fields related to a Worker resource
  */
 export default Factory.extend({
-  name: () => faker.random.words(),
-  description: () => faker.random.words(),
+  name: () => faker.word.words(),
+  description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
-  version: () => faker.datatype.number({ max: 4 }),
+  version: () => faker.number.int(),
   address: () =>
-    `${faker.datatype.uuid()}.proxy.boundary.hashicorp.cloud:${faker.internet.port()}`,
+    `${faker.string.uuid()}.proxy.boundary.hashicorp.cloud:${faker.internet.port()}`,
   last_status_time: () => faker.date.recent(),
-  active_connection_count: () => faker.datatype.number({ max: 10 }),
+  active_connection_count: () => faker.number.int(10),
   release_version: () =>
-    `Boundary v${faker.datatype.number({ max: 11 })}.${faker.datatype.number({
-      max: 50,
-    })}.${faker.datatype.number({ max: 12 })}`,
+    `Boundary v${faker.number.int(11)}.${faker.number.int(
+      50
+    )}.${faker.number.int(12)}`,
 });

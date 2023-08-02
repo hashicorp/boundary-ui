@@ -31,13 +31,13 @@ export default factory.extend({
     switch (this.type) {
       case TYPE_AUTH_METHOD_OIDC:
         return {
-          filter: faker.random.words(),
+          filter: `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`,
         };
       case TYPE_AUTH_METHOD_LDAP: {
-        const num = faker.datatype.number({ min: 2, max: 4 });
+        const num = faker.number.int({ min: 2, max: 4 });
         const names = [];
         for (let i = 0; i < num; i++) {
-          names.push(faker.random.word());
+          names.push(faker.word.noun());
         }
         return {
           group_names: names,

@@ -11,10 +11,10 @@ import { faker } from '@faker-js/faker';
  */
 export default Factory.extend({
   type: 'static',
-  description: () => faker.random.words(),
+  description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
-  version: () => faker.datatype.number(),
+  version: () => faker.number.int(),
   attributes: () => {
     return { address: faker.internet.ipv6() };
   },
