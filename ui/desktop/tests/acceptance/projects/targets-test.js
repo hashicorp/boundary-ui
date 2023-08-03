@@ -179,7 +179,7 @@ module('Acceptance | projects | targets', function (hooks) {
   test('visiting a target', async function (assert) {
     assert.expect(1);
     await visit(urls.targets);
-    await click('tbody tr th a');
+    await click('tbody tr td span a');
     assert.strictEqual(currentURL(), urls.sessions);
   });
 
