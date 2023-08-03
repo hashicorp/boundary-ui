@@ -8,28 +8,19 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <h2>
+    <h1 class='target-details-header'>
+      <Hds::IconTile @color='boundary' @icon='target' />
       {{@model.displayName}}
-    </h2>
-    <p>{{@model.description}}</p>
-    <p>
-      <Copyable
-        @text={{@model.id}}
-        @buttonText={{t 'actions.copy-to-clipboard'}}
-        @acknowledgeText={{t 'states.copied'}}
-      >
-        <code>{{@model.id}}</code>
-      </Copyable>
-    </p>
+    </h1>
   </page.header>
 
   <page.actions>
-    <Rose::Button
-      @style='primary'
+    <Hds::Button
+      @text={{t 'resources.session.actions.connect'}}
+      @icon='entry-point'
+      @iconPosition='trailing'
       {{on 'click' (route-action 'connect' @model)}}
-    >
-      {{t 'resources.session.actions.connect'}}
-    </Rose::Button>
+    />
   </page.actions>
 
   <page.body>
