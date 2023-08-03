@@ -535,6 +535,9 @@ target:
       title: Target Connection Details
     proxy_url:
       title: Proxy URL
+    connect-more-info:
+      title: Connect for more info
+      description: Additional information for this target will be provided here after your session is established.
   titles:
     new: New Target
   actions:
