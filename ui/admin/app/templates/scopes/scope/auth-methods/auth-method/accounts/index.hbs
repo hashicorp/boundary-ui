@@ -46,10 +46,10 @@
                     @route='scopes.scope.auth-methods.auth-method.accounts.account'
                     @model={{B.data.id}}
                   >
-                    {{B.data.accountName}}
+                    {{B.data.displayName}}
                   </LinkTo>
                 {{else}}
-                  {{B.data.accountName}}
+                  {{B.data.displayName}}
                 {{/if}}
                 <p>{{B.data.description}}</p>
               </B.Td>
