@@ -260,7 +260,6 @@
   <Hds::Form::TextInput::Field
     @isOptional={{true}}
     @value={{@model.bind_dn}}
-    @isInvalid={{@model.errors.bind_dn}}
     @type='text'
     name='bind_dn'
     disabled={{form.disabled}}
@@ -269,20 +268,12 @@
   >
     <F.Label>{{t 'resources.auth-method.form.bind_dn.label'}}</F.Label>
     <F.HelperText>{{t 'resources.auth-method.form.bind_dn.help'}}</F.HelperText>
-    {{#if @model.errors.bind_dn}}
-      <F.Error as |E|>
-        {{#each @model.errors.bind_dn as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
   </Hds::Form::TextInput::Field>
 
   {{#if @model.isNew}}
     <Hds::Form::TextInput::Field
       @isOptional={{true}}
       @value={{@model.bind_password}}
-      @isInvalid={{@model.errors.bind_password}}
       @type='password'
       name='bind_password'
       disabled={{form.disabled}}
@@ -293,13 +284,6 @@
       <F.HelperText>
         {{t 'resources.auth-method.form.bind_password.help'}}
       </F.HelperText>
-      {{#if @model.errors.bind_password}}
-        <F.Error as |E|>
-          {{#each @model.errors.bind_password as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
     </Hds::Form::TextInput::Field>
   {{else}}
     <Form::Field::SecretInput
