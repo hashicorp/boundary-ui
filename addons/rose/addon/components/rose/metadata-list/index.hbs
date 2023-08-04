@@ -1,0 +1,10 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<ul class='rose-metadata-list {{@orientation}}'>
+  {{yield
+    (hash Item=(component 'rose/metadata-list/item' icon=@icon color=@color))
+  }}
+</ul>

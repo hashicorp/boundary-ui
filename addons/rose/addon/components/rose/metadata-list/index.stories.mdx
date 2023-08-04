@@ -1,0 +1,50 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs';
+import { hbs } from 'ember-cli-htmlbars';
+
+<Meta title="Rose/MetadataList" component="MetadataList" />
+
+# MetadataList
+
+A page section component that allows for a list of metadata items.
+
+```handlebars
+<Rose::MetadataList @orientation='vertical' as |list|>
+  <list.Item @icon='arrow-up' @color='success'>
+    Text Here
+  </list.Item>
+</Rose::MetadataList>
+```
+
+<Preview>
+  <Story name="MetadataList">
+    {{
+      template: hbs`
+    <Rose::MetadataList as |list|>
+      <list.Item @icon='clock' @color='success'>
+        Time Started: xx:xx:xx
+      </list.Item>
+      <list.Item @icon='clock' @color='critical'>
+        Time Ended: xx:xx:xx
+      </list.Item>
+    </Rose::MetadataList>
+    `,
+    }}
+  </Story>
+</Preview>
+
+<Preview>
+  <Story name="MetadataList vertical">
+    {{
+      template: hbs`
+    <Rose::MetadataList @orientation='vertical' as |list|>
+      <list.Item @icon='clock' @color='success'>
+        Time Started: xx:xx:xx
+      </list.Item>
+      <list.Item @icon='clock' @color='critical'>
+        Time Ended: xx:xx:xx
+      </list.Item>
+    </Rose::MetadataList>
+    `,
+    }}
+  </Story>
+</Preview>
