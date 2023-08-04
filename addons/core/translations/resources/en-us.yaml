@@ -290,6 +290,7 @@ session:
       description: No active sessions available to display yet.
   actions:
     connect: Connect
+    end: End session
   credential:
     title: Credential
     title_plural: Credentials
