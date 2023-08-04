@@ -13,11 +13,13 @@ export default class GeneratedAccountModel extends BaseModel {
   // =attributes
 
   @attr('string', {
+    readOnly: true,
     description: 'The type of the resource, to help differentiate schemas',
   })
   type;
 
   @attr('string', {
+    readOnly: true,
     description: 'The owning auth method ID.',
   })
   auth_method_id;
