@@ -192,7 +192,7 @@ module('Acceptance | projects | sessions', function (hooks) {
     assert.expect(1);
     await visit(urls.sessions);
     assert.ok(
-      find('tbody tr:first-child th:first-child .session-status-active')
+      find('tbody tr:first-child td:first-child .session-status-active')
     );
   });
 
