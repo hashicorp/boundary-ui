@@ -1,0 +1,35 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+{{page-title @model.displayName}}
+
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <h1 class='session-details-header'>
+      <Hds::IconTile @color='boundary' @icon='terminal' />
+      {{@model.displayName}}
+    </h1>
+  </page.header>
+
+  <page.actions>
+    <Hds::Button
+      @text={{t 'resources.session.actions.end'}}
+      @icon='x'
+      @color='secondary'
+      {{on 'click' (route-action 'cancelSession' @model)}}
+    />
+  </page.actions>
+
+  <page.body>
+    <div class='copy-url-container'>{{t 'actions.copy-to-clipboard'}}</div>
+    <Rose::Layout::BodyContent as |bc|>
+      <bc.Body class='session-details-body'>
+        {{t 'resources.session.description'}}
+      </bc.Body>
+      <bc.Sidebar class='session-details-sidebar'>{{@model.id}}</bc.Sidebar>
+    </Rose::Layout::BodyContent>
+  </page.body>
+
+</Rose::Layout::Page>
