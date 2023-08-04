@@ -87,28 +87,28 @@
             }}</Hds::Form::HelperText>
         </div>
 
-        {{#if (not-eq @model.login_name undefined)}}
+        {{#if @model.login_name}}
           <InfoField @value={{@model.login_name}} as |F|>
             <F.Label>{{t 'form.login_name.label'}}</F.Label>
           </InfoField>
         {{/if}}
-        {{#if (not-eq @model.email undefined)}}
+        {{#if @model.email}}
           <InfoField @value={{@model.email}} as |F|>
             <F.Label>{{t 'resources.account.form.email.label'}}</F.Label>
           </InfoField>
         {{/if}}
-        {{#if (not-eq @model.full_name undefined)}}
+        {{#if @model.full_name}}
           <InfoField @value={{@model.full_name}} as |F|>
             <F.Label>{{t 'resources.account.form.full_name.label'}}</F.Label>
           </InfoField>
         {{/if}}
-        {{#if (not-eq @model.first_name undefined)}}
+        {{#if @model.first_name}}
           <InfoField @value={{@model.dn}} as |F|>
             <F.Label>{{t 'resources.account.form.dn.label'}}</F.Label>
           </InfoField>
         {{/if}}
 
-        {{#if (not-eq @model.member_of_groups undefined)}}
+        {{#if @model.member_of_groups}}
           <p class='hds-font-weight-semibold'>
             {{t 'resources.account.form.member_of_groups.label'}}
           </p>
