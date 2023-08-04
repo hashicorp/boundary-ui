@@ -37,7 +37,7 @@
         {{! Channel details information }}
         <div class='section-details'>
           <h2>{{t 'resources.session-recording.channel.details'}}</h2>
-          <MetadataList @orientation='vertical' as |list|>
+          <Rose::MetadataList @orientation='vertical' as |list|>
             {{! Start time }}
             {{#if @model.channelRecording.start_time}}
               <list.Item @icon='calendar' @color='faint'>
@@ -78,7 +78,7 @@
                 }}
               </list.Item>
             {{/if}}
-          </MetadataList>
+          </Rose::MetadataList>
         </div>
 
         {{! Related information }}

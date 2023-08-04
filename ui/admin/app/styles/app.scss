@@ -918,25 +918,6 @@
   }
 }
 
-// Metadata List
-.metadata-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  &.vertical {
-    flex-direction: column;
-    row-gap: 1rem;
-  }
-
-  .metadata-list-item {
-    display: flex;
-    align-items: center;
-    column-gap: 0.3rem;
-  }
-}
-
 // Session Recording Status
 // overwrites recording badge icon to red
 .session-recording-status-badge {
