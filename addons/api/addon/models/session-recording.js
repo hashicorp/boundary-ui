@@ -17,7 +17,8 @@ export const STATE_SESSION_RECORDING_AVAILABLE = 'available';
 export const STATE_SESSION_RECORDING_UNKNOWN = 'unknown';
 
 export default class SessionRecordingModel extends GeneratedSessionRecordingModel {
-  @hasMany('connection-recording', { async: false }) connection_recordings;
+  @hasMany('connection-recording', { async: false, inverse: null })
+  connection_recordings;
 
   @service store;
 

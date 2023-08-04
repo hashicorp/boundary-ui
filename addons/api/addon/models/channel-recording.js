@@ -9,7 +9,8 @@ import { belongsTo } from '@ember-data/model';
 export const MIME_TYPE_ASCIICAST = 'application/x-asciicast';
 
 export default class ChannelRecordingModel extends GeneratedChannelRecordingModel {
-  @belongsTo('connection-recording', { async: false }) connection_recording;
+  @belongsTo('connection-recording', { async: false, inverse: null })
+  connection_recording;
 
   /**
    * True if the channel supports asciicast.
