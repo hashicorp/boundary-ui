@@ -1,0 +1,17 @@
+.rose-metadata-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &.vertical {
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
+  .rose-metadata-list-item {
+    display: flex;
+    align-items: center;
+    column-gap: 0.3rem;
+  }
+}
