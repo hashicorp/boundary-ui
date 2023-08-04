@@ -52,6 +52,10 @@ export default class AccountSerializer extends ApplicationSerializer {
       serialized.attributes = {};
       const { login_name } = snapshot.record;
       if (login_name) serialized.attributes.login_name = login_name;
+    } else {
+      // LDAP does not support updating the readonly auth method ID or type attributes.
+      delete serialized.auth_method_id;
+      delete serialized.type;
     }
     return serialized;
   }
@@ -69,6 +73,10 @@ export default class AccountSerializer extends ApplicationSerializer {
       const { issuer, subject } = snapshot.record;
       if (issuer) serialized.attributes.issuer = issuer;
       if (subject) serialized.attributes.subject = subject;
+    } else {
+      // OIDC does not support updating the readonly auth method ID or type attributes.
+      delete serialized.auth_method_id;
+      delete serialized.type;
     }
     return serialized;
   }

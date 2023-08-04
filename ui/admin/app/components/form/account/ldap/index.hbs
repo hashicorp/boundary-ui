@@ -86,27 +86,40 @@
               'form.other_fields.help'
             }}</Hds::Form::HelperText>
         </div>
-        <InfoField @value={{@model.login_name}} as |F|>
-          <F.Label>{{t 'form.login_name.label'}}</F.Label>
-        </InfoField>
-        <InfoField @value={{@model.email}} as |F|>
-          <F.Label>{{t 'resources.account.form.email.label'}}</F.Label>
-        </InfoField>
-        <InfoField @value={{@model.full_name}} as |F|>
-          <F.Label>{{t 'resources.account.form.full_name.label'}}</F.Label>
-        </InfoField>
-        <InfoField @value={{@model.dn}} as |F|>
-          <F.Label>{{t 'resources.account.form.dn.label'}}</F.Label>
-        </InfoField>
-        <p class='hds-font-weight-semibold'>{{t
-            'resources.account.form.member_of_groups.label'
-          }}</p>
-        {{#each @model.member_of_groups as |group|}}
-          <Hds::Form::TextInput::Field
-            @value={{group.value}}
-            disabled={{true}}
-          />
-        {{/each}}
+
+        {{#if @model.login_name}}
+          <InfoField @value={{@model.login_name}} as |F|>
+            <F.Label>{{t 'form.login_name.label'}}</F.Label>
+          </InfoField>
+        {{/if}}
+        {{#if @model.email}}
+          <InfoField @value={{@model.email}} as |F|>
+            <F.Label>{{t 'resources.account.form.email.label'}}</F.Label>
+          </InfoField>
+        {{/if}}
+        {{#if @model.full_name}}
+          <InfoField @value={{@model.full_name}} as |F|>
+            <F.Label>{{t 'resources.account.form.full_name.label'}}</F.Label>
+          </InfoField>
+        {{/if}}
+        {{#if @model.dn}}
+          <InfoField @value={{@model.dn}} as |F|>
+            <F.Label>{{t 'resources.account.form.dn.label'}}</F.Label>
+          </InfoField>
+        {{/if}}
+
+        {{#if @model.member_of_groups}}
+          <p class='hds-font-weight-semibold'>
+            {{t 'resources.account.form.member_of_groups.label'}}
+          </p>
+          {{#each @model.member_of_groups as |group|}}
+            <Hds::Form::TextInput::Field
+              @value={{group.value}}
+              disabled={{true}}
+            />
+          {{/each}}
+        {{/if}}
+
       </F.Control>
     </Hds::Form::Fieldset>
   {{/unless}}
