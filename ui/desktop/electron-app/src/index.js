@@ -168,7 +168,7 @@ app.on('ready', async () => {
   ses.protocol.handle(emberAppProtocol, (request) => {
     /* eng-disable PROTOCOL_HANDLER_JS_CHECK */
     const isDir = request.url.endsWith('/');
-    const absolutePath = request.url.substr(emberAppURL.length);
+    const absolutePath = request.url.substring(emberAppURL.length);
     const normalizedPath = isDir
       ? path.normalize(`${emberAppDir}/index.html`)
       : path.normalize(`${emberAppDir}${absolutePath}`);
