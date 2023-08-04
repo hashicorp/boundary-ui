@@ -53,6 +53,11 @@ export default class AccountSerializer extends ApplicationSerializer {
       const { login_name } = snapshot.record;
       if (login_name) serialized.attributes.login_name = login_name;
     }
+    // LDAP does not support updating the auth method ID or type.
+    if (!snapshot.record.isNew) {
+      delete serialized.auth_method_id;
+      delete serialized.type;
+    }
     return serialized;
   }
 
@@ -69,6 +74,11 @@ export default class AccountSerializer extends ApplicationSerializer {
       const { issuer, subject } = snapshot.record;
       if (issuer) serialized.attributes.issuer = issuer;
       if (subject) serialized.attributes.subject = subject;
+    }
+    // OIDC does not support updating the auth method ID or type.
+    if (!snapshot.record.isNew) {
+      delete serialized.auth_method_id;
+      delete serialized.type;
     }
     return serialized;
   }
