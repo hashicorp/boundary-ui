@@ -4,9 +4,11 @@
 COMMIT_MSG_FILE=$1
 COMMIT_SOURCE=$2
 SHA1=$3
+# Gets the current branch name but if we're in a detached head state, return "HEAD"
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
-# Don't run commitizen for merge or squash commits
-if [ "${COMMIT_SOURCE}" = merge ] || [ "${COMMIT_SOURCE}" = squash ];then
+# Don't run commitizen for merge or squash commits, as well as when rebasing
+if [ "${COMMIT_SOURCE}" = merge ] || [ "${COMMIT_SOURCE}" = squash ] || [ "${COMMIT_SOURCE}" = "message" -a "${BRANCH_NAME}" = "HEAD" ];then
     exit 0
 fi
 
