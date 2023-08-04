@@ -26,6 +26,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
+  const URLS_INPUT_SELECTOR = '[name="urls"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
   const MAKE_PRIMARY_SELECTOR =
     '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child';
@@ -423,8 +424,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'urls',
+                description: 'At least one URL is required.',
               },
             ],
           },
@@ -435,10 +436,12 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     await click(NEW_DROPDOWN_SELECTOR);
     await click(`[href="${urls.newLdapAuthMethod}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, 'new account');
+    await fillIn(URLS_INPUT_SELECTOR, '');
     await click(SAVE_BTN_SELECTOR);
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert
+      .dom(FIELD_ERROR_TEXT_SELECTOR)
+      .hasText('At least one URL is required.');
   });
 });
