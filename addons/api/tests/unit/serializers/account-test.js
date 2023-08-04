@@ -32,9 +32,7 @@ module('Unit | Serializer | account', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: TYPE_AUTH_METHOD_OIDC,
       name: 'Name',
-      auth_method_id: '1',
       description: 'Description',
       version: 1,
       attributes: {
@@ -70,9 +68,7 @@ module('Unit | Serializer | account', function (hooks) {
     const serializedRecord = serializer.serialize(snapshot);
     assert.notOk(serializedRecord.attributes);
     assert.deepEqual(serializedRecord, {
-      type: TYPE_AUTH_METHOD_OIDC,
       name: 'Name',
-      auth_method_id: '1',
       description: 'Description',
       version: 1,
     });
@@ -93,9 +89,7 @@ module('Unit | Serializer | account', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
-      auth_method_id: '1',
       description: 'Description',
       attributes: {
         login_name: 'Login Name',
@@ -122,9 +116,7 @@ module('Unit | Serializer | account', function (hooks) {
     };
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: TYPE_AUTH_METHOD_PASSWORD,
       name: 'Name',
-      auth_method_id: '1',
       description: 'Description',
       attributes: {
         login_name: 'Login Name',
@@ -207,9 +199,7 @@ module('Unit | Serializer | account', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: TYPE_AUTH_METHOD_LDAP,
       name: 'Name',
-      auth_method_id: '1',
       description: 'Description',
       version: 1,
       attributes: {
@@ -244,9 +234,8 @@ module('Unit | Serializer | account', function (hooks) {
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
-      type: TYPE_AUTH_METHOD_LDAP,
       name: 'Name',
-      auth_method_id: '1',
+
       description: 'Description',
       version: 1,
     });
