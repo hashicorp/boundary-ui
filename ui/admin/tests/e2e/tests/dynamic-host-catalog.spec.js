@@ -220,6 +220,7 @@ test.describe('AWS', async () => {
           ', ACTUAL: ' +
           rowCount
       );
+      await page.getByRole('link', { name: 'Hosts' }).click();
     }
   });
 });
