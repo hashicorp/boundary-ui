@@ -96,7 +96,7 @@
                         </span>
                       </B.Td>
                       <B.Td>
-                        <MetadataList as |list|>
+                        <Rose::MetadataList as |list|>
                           {{! Bytes up }}
                           {{#if B.data.bytes_up}}
                             <list.Item @icon='arrow-up' @color='success'>
@@ -121,7 +121,7 @@
                               {{format-time-duration B.data.duration}}
                             </list.Item>
                           {{/if}}
-                        </MetadataList>
+                        </Rose::MetadataList>
                       </B.Td>
                       <B.Td>
                         <Copyable
@@ -173,7 +173,7 @@
           <div class='section-details'>
             <h2>{{t 'resources.session-recording.details'}}</h2>
 
-            <MetadataList @orientation='vertical' as |list|>
+            <Rose::MetadataList @orientation='vertical' as |list|>
               {{! Session Recording Status }}
               {{#if @model.sessionRecording.state}}
                 <list.Item>
@@ -222,7 +222,7 @@
                   }}
                 </list.Item>
               {{/if}}
-            </MetadataList>
+            </Rose::MetadataList>
           </div>
 
           {{! Related information }}
