@@ -31,6 +31,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "@hashicorp/design-system-components": "^2.9.0",
     "api": "*",
     "auth": "*",
     "ember-auto-import": "^2.4.2",
