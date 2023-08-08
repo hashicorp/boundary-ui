@@ -4827,31 +4827,6 @@
   resolved "https://registry.yarnpkg.com/@handlebars/parser/-/parser-2.0.0.tgz#5e8b7298f31ff8f7b260e6b7363c7e9ceed7d9c5"
   integrity sha512-EP9uEDZv/L5Qh9IWuMUGJRfwhXJ4h1dqKTT4/3+tY0eu7sPis7xh23j61SYUnNF4vqCQvvUXpDo9Bh/+q1zASA==
 
-"@hashicorp/design-system-components@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-components/-/design-system-components-2.8.0.tgz#e30e5208707c1596f40f98cb75e8c472116aa816"
-  integrity sha512-1W1hbIxVMtQ4Lwe0pcIUwdi8I8HDw25/Xf70OVFV+OVLEN/fgTzhYtjm1ezDiX6yZYmFj/dys/CTpwet1/GqZA==
-  dependencies:
-    "@ember/render-modifiers" "^2.0.5"
-    "@hashicorp/design-system-tokens" "^1.6.0"
-    "@hashicorp/ember-flight-icons" "^3.0.7"
-    dialog-polyfill "^0.5.6"
-    ember-a11y-refocus "^3.0.2"
-    ember-auto-import "^2.6.3"
-    ember-cached-decorator-polyfill "^0.1.4"
-    ember-cli-babel "^7.26.11"
-    ember-cli-htmlbars "^6.2.0"
-    ember-cli-sass "^10.0.1"
-    ember-composable-helpers "^4.5.0"
-    ember-focus-trap "^1.0.2"
-    ember-keyboard "^8.2.0"
-    ember-named-blocks-polyfill "^0.2.5"
-    ember-stargate "^0.4.3"
-    ember-style-modifier "^0.8.0"
-    ember-truth-helpers "^3.1.1"
-    sass "^1.62.1"
-    tippy.js "^6.3.7"
-
 "@hashicorp/design-system-components@^2.9.0":
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/@hashicorp/design-system-components/-/design-system-components-2.9.0.tgz#ae0c3516e31b0c35fbae622337d1a9edfe23c06c"
@@ -4879,11 +4854,6 @@
     sass "^1.62.1"
     tippy.js "^6.3.7"
 
-"@hashicorp/design-system-tokens@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-tokens/-/design-system-tokens-1.6.0.tgz#69dacdab6b1bf4a302503fc9c8863b90b5d379c2"
-  integrity sha512-yiv5rzjzkN0Fa6sBzK1a0enm/WOQXj/bQ+p5BIzj4YmpsDjw7uLSyrnlhDYkYvColvistXHtjMGDuhAyTXDQ/A==
-
 "@hashicorp/design-system-tokens@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@hashicorp/design-system-tokens/-/design-system-tokens-1.7.0.tgz#13fb242f641712729b8ce10d83da38ce1ef8b249"
@@ -4898,16 +4868,6 @@
     ember-cli-babel "^7.26.11"
     ember-cli-htmlbars "^6.1.1"
 
-"@hashicorp/ember-flight-icons@^3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@hashicorp/ember-flight-icons/-/ember-flight-icons-3.0.7.tgz#82b8fba5cad30ba026a2bac294b1350d3f4b57c7"
-  integrity sha512-3cH6k9Fr0PfeCk28tmff9lwEPSd+EUWaQTBaXbY84DJ3ZaYMRRjtaFbwbqY4eRT6FJhD/7JcEF7jtbNnB0tRhg==
-  dependencies:
-    "@hashicorp/flight-icons" "^2.15.0"
-    ember-auto-import "^2.6.3"
-    ember-cli-babel "^7.26.11"
-    ember-cli-htmlbars "^6.2.0"
-
 "@hashicorp/ember-flight-icons@^3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@hashicorp/ember-flight-icons/-/ember-flight-icons-3.0.9.tgz#9c56b3624c06489c06712fc6f190aa88b7f0d809"
@@ -4917,11 +4877,6 @@
     ember-auto-import "^2.6.3"
     ember-cli-babel "^7.26.11"
     ember-cli-htmlbars "^6.2.0"
-
-"@hashicorp/flight-icons@^2.15.0":
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/@hashicorp/flight-icons/-/flight-icons-2.15.0.tgz#a38bcac586aa655289d183aff5ff2b0fd0408230"
-  integrity sha512-CNn63zs0Ya20uwQ/uJLdItG/gX36LKTL3l8HRODZOzE0xUT8ZI6ea++zIEhp5ElkL2blh8BYDDedUF2jid0s0g==
 
 "@hashicorp/flight-icons@^2.17.0":
   version "2.17.0"
@@ -13046,14 +13001,6 @@ ember-stargate@^0.4.3:
     "@glimmer/component" "^1.1.2"
     ember-resources "^5.0.1"
     tracked-maps-and-sets "^3.0.1"
-
-ember-style-modifier@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/ember-style-modifier/-/ember-style-modifier-0.8.0.tgz#ef46b3f288e63e3d850418ea8dc6f7b12edde721"
-  integrity sha512-I7M+oZ+poYYOP7n521rYv7kkYZbxotL8VbtHYxLQ3tasRZYQJ21qfu3vVjydSjwyE3w7EZRgKngBoMhKSAEZnw==
-  dependencies:
-    ember-cli-babel "^7.26.6"
-    ember-modifier "^3.2.7"
 
 ember-style-modifier@^3.0.1:
   version "3.0.1"
