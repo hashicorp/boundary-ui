@@ -515,3 +515,22 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     margin-right: 1rem;
   }
 }
+
+.target-details-sidebar {
+  background-color: var(--token-color-palette-neutral-50);
+  border-radius: 0.313rem;
+  padding: 1.5rem 2.5rem;
+
+  .title {
+    color: var(--token-color-palette-neutral-600);
+    margin-bottom: 0.75rem;
+  }
+
+  .resource-type {
+    text-transform: capitalize;
+  }
+
+  .copyable-button {
+    background-color: var(--token-color-palette-neutral-50);
+  }
+}
