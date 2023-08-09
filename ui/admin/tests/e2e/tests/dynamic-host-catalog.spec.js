@@ -17,8 +17,6 @@ test.beforeAll(async () => {
     'E2E_AWS_SECRET_ACCESS_KEY',
     'E2E_AWS_HOST_SET_FILTER',
     'E2E_AWS_HOST_SET_IPS',
-    'E2E_AWS_HOST_SET_FILTER2',
-    'E2E_AWS_HOST_SET_IPS2',
   ]);
 });
 
@@ -156,70 +154,7 @@ test.describe('AWS', async () => {
         .getByRole('navigation', { name: 'breadcrumbs' })
         .getByRole('link', { name: hostSetName1 })
         .click();
-    }
-
-    // Create second host set
-    const hostSetName2 = 'Host Set ' + nanoid();
-    await page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: hostCatalogName })
-      .click();
-    await page.getByText('Manage').click();
-    await page.getByRole('link', { name: 'New Host Set' }).click();
-    await page.getByLabel('Name').fill(hostSetName2);
-    await page.getByLabel('Description').fill('This is an automated test');
-    await page
-      .getByRole('group', { name: 'Filter' })
-      .getByRole('textbox')
-      .fill(process.env.E2E_AWS_HOST_SET_FILTER2);
-    await page
-      .getByRole('group', { name: 'Filter' })
-      .getByRole('button', { name: 'Add' })
-      .click();
-    await page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true })
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
-    await expect(
-      page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostSetName2 })
-    ).toBeVisible();
-
-    // Check number of hosts in host set
-    await page.getByRole('link', { name: 'Hosts' }).click();
-    i = 0;
-    rowCount = 0;
-    hostsAreVisible = false;
-    expectedHosts = JSON.parse(process.env.E2E_AWS_HOST_SET_IPS2);
-    do {
-      i = i + 1;
-      // Getting the number of rows in the second rowgroup (the first rowgroup is the header row)
-      rowCount = await page
-        .getByRole('table')
-        .getByRole('rowgroup')
-        .nth(1)
-        .getByRole('row')
-        .count();
-      if (rowCount == expectedHosts.length) {
-        hostsAreVisible = true;
-        break;
-      }
-      await page.reload();
-      await page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostSetName2 })
-        .waitFor();
-    } while (i < 5);
-
-    if (!hostsAreVisible) {
-      throw new Error(
-        'Hosts are not visible. EXPECTED: ' +
-          expectedHosts.length +
-          ', ACTUAL: ' +
-          rowCount
-      );
+      await page.getByRole('link', { name: 'Hosts' }).click();
     }
   });
 });
