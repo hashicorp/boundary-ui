@@ -5,6 +5,12 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+  STATUS_SESSION_TERMINATED,
+} from 'api/models/session';
 
 module('Unit | Ability | session', function (hooks) {
   setupTest(hooks);
@@ -27,7 +33,7 @@ module('Unit | Ability | session', function (hooks) {
 
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
-      status: 'active',
+      status: STATUS_SESSION_ACTIVE,
     });
 
     assert.true(canService.can('read session', session));
@@ -38,7 +44,7 @@ module('Unit | Ability | session', function (hooks) {
 
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
-      status: 'pending',
+      status: STATUS_SESSION_PENDING,
     });
 
     assert.true(canService.can('read session', session));
@@ -49,19 +55,19 @@ module('Unit | Ability | session', function (hooks) {
 
     const activeSession = store.createRecord('session', {
       authorized_actions: [],
-      status: 'active',
+      status: STATUS_SESSION_ACTIVE,
     });
     const pendingSession = store.createRecord('session', {
       authorized_actions: [],
-      status: 'pending',
+      status: STATUS_SESSION_PENDING,
     });
     const cancelingSession = store.createRecord('session', {
       authorized_actions: [],
-      status: 'canceling',
+      status: STATUS_SESSION_CANCELING,
     });
     const terminatedSession = store.createRecord('session', {
       authorized_actions: [],
-      status: 'terminated',
+      status: STATUS_SESSION_TERMINATED,
     });
 
     assert.false(canService.can('read session', activeSession));
@@ -75,7 +81,7 @@ module('Unit | Ability | session', function (hooks) {
 
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
-      status: 'canceling',
+      status: STATUS_SESSION_CANCELING,
     });
 
     assert.false(canService.can('read session', session));
@@ -86,7 +92,7 @@ module('Unit | Ability | session', function (hooks) {
 
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
-      status: 'terminated',
+      status: STATUS_SESSION_TERMINATED,
     });
 
     assert.false(canService.can('read session', session));
