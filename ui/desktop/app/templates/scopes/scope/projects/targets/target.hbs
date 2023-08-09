@@ -37,7 +37,49 @@
           />
         </Hds::ApplicationState>
       </bc.Body>
-      <bc.Sidebar class='target-details-sidebar'>{{@model.id}}</bc.Sidebar>
+      <bc.Sidebar>
+        <div class='target-details-sidebar'>
+          <div
+            class='title hds-typography-display-200 hds-font-weight-semibold'
+          >
+            {{t 'resources.target.details'}}
+          </div>
+          <Rose::MetadataList @orientation='vertical' as |list|>
+            {{! Target name }}
+            <list.Item @icon='target' @color='faint'>
+              {{@model.name}}
+            </list.Item>
+            {{! Project name }}
+            <list.Item @icon='grid' @color='faint'>
+              {{@model.project.displayName}}
+            </list.Item>
+            {{! Target description }}
+            {{#if @model.description}}
+              <list.Item @icon='message-circle-fill' @color='faint'>
+                {{@model.description}}
+              </list.Item>
+            {{/if}}
+            {{! Target type }}
+            <list.Item class='resource-type' @icon='terminal' @color='faint'>
+              {{#if @model.isSSH}}
+                {{t 'resources.target.types.ssh'}}
+              {{else}}
+                {{t 'resources.target.types.tcp'}}
+              {{/if}}
+            </list.Item>
+            {{! Target ID }}
+            <list.Item @icon='hash' @color='faint'>
+              <Copyable
+                @text={{@model.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                {{@model.id}}
+              </Copyable>
+            </list.Item>
+          </Rose::MetadataList>
+        </div>
+      </bc.Sidebar>
     </Rose::Layout::BodyContent>
   </page.body>
 

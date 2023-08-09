@@ -231,7 +231,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(1);
     await visit(urls.targets);
     await click('tbody tr td span a');
-    assert.strictEqual(currentURL(), urls.targetSessions);
+    assert.strictEqual(currentURL(), urls.target);
   });
 
   test('visiting empty targets', async function (assert) {

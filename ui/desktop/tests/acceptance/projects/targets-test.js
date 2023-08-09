@@ -178,7 +178,7 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.expect(1);
     await visit(urls.targets);
     await click('tbody tr td span a');
-    assert.strictEqual(currentURL(), urls.sessions);
+    assert.strictEqual(currentURL(), urls.target);
   });
 
   test('visiting empty targets', async function (assert) {
