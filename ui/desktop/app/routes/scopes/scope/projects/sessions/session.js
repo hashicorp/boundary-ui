@@ -17,7 +17,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
    * Load a session
    * @param {object} params
    * @param {string} params.session_id
-   * @return {TargetModel}
+   * @return {SessionModel}
    */
   model({ session_id }) {
     return this.store.findRecord('session', session_id, { reload: true });
