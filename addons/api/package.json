@@ -11,8 +11,6 @@
     "build:development": "ember build",
     "build": "ember build --environment=production",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
-    "lint:css": "stylelint \"**/*.css\"",
-    "lint:css:fix": "concurrently \"npm:lint:css -- --fix\"",
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
@@ -69,9 +67,6 @@
     "prettier": "^2.8.7",
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
-    "stylelint": "^15.4.0",
-    "stylelint-config-standard": "^32.0.0",
-    "stylelint-prettier": "^3.0.0",
     "webpack": "^5.78.0"
   },
   "peerDependencies": {
