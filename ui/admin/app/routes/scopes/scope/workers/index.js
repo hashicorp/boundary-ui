@@ -18,7 +18,6 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     allowed: (route) => {
       const configTags = route
         .modelFor('scopes.scope.workers')
-        .toArray()
         .flatMap((worker) => worker.getConfigTagList())
         .filter(Boolean);
 
