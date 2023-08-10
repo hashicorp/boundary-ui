@@ -17,7 +17,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
    * Load a session
    * @param {object} params
    * @param {string} params.session_id
-   * @return {{session: SessionModel, target: TargetModel}
+   * @return {{session: SessionModel, target: TargetModel}}
    */
   async model({ session_id }) {
     let target = null;
