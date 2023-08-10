@@ -130,31 +130,38 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              {{#if (can 'read model' B.data)}}
-                {{#if B.data.isActive}}
-                  <Hds::Badge
-                    @text={{t 'resources.session.title'}}
-                    @icon='entry-point'
-                    @isIconOnly={{true}}
-                    @color='success'
-                    {{! there are plans to remove this class. It is here to make the test 
-                    pass. This is going to change later so Cameron suggested it's ok to
-                    have it for now.}}
-                    class='session-status-active'
-                  />
-                {{else}}
-                  <Hds::Badge
-                    @text={{t 'resources.session.title'}}
-                    @icon='entry-point'
-                    @isIconOnly={{true}}
-                  />
-                {{/if}}
+              {{#if (can 'read session' B.data)}}
+                <Hds::Badge
+                  @text={{t 'resources.session.title'}}
+                  @icon='entry-point'
+                  @isIconOnly={{true}}
+                  @color='success'
+                />
                 <Copyable
                   @text={{B.data.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{B.data.id}}</code>
+                  <LinkTo
+                    @route='scopes.scope.projects.sessions.session'
+                    @model={{B.data.id}}
+                    data-test-session-detail-link
+                  >
+                    <code>{{B.data.id}}</code>
+                  </LinkTo>
+                </Copyable>
+              {{else}}
+                <Hds::Badge
+                  @text={{t 'resources.session.title'}}
+                  @icon='entry-point'
+                  @isIconOnly={{true}}
+                />
+                <Copyable
+                  @text={{B.data.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code data-test-session-id-copy>{{B.data.id}}</code>
                 </Copyable>
               {{/if}}
             </B.Td>

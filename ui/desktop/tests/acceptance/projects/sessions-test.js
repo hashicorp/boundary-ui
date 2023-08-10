@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -15,6 +15,12 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import sinon from 'sinon';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+  STATUS_SESSION_TERMINATED,
+} from 'api/models/session';
 
 module('Acceptance | projects | sessions', function (hooks) {
   setupApplicationTest(hooks);
@@ -57,6 +63,7 @@ module('Acceptance | projects | sessions', function (hooks) {
     },
     projects: null,
     sessions: null,
+    session: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -99,7 +106,7 @@ module('Acceptance | projects | sessions', function (hooks) {
       {
         scope: instances.scopes.project,
         target: instances.target,
-        status: 'active',
+        status: STATUS_SESSION_ACTIVE,
         user: instances.user,
       },
       'withAssociations'
@@ -111,6 +118,7 @@ module('Acceptance | projects | sessions', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.sessions = `${urls.projects}/sessions`;
+    urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
     class MockIPC {
       clusterUrl = null;
@@ -153,8 +161,10 @@ module('Acceptance | projects | sessions', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
     assert.expect(2);
+
     await visit(urls.sessions);
     await a11yAudit();
+
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
@@ -162,79 +172,130 @@ module('Acceptance | projects | sessions', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(2);
     const sessionsCount = this.server.schema.sessions.all().models.length;
+
     await visit(urls.sessions);
+
     assert.strictEqual(currentURL(), urls.sessions);
-    assert.strictEqual(findAll('tbody tr').length, sessionsCount);
+    assert.dom('tbody tr').exists({ count: sessionsCount });
   });
 
   test('visiting empty sessions', async function (assert) {
     assert.expect(1);
     this.server.get('/sessions', () => new Response(200));
+
     await visit(urls.sessions);
+    await click('button.rose-button-inline-link-action'); // clear all filters
     await a11yAudit();
-    assert.ok(
-      find('.rose-message-title').textContent.trim(),
-      'No Sessions Available'
-    );
+
+    assert.dom('.rose-message-title').hasText('No Sessions Available');
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
     assert.expect(2);
     instances.session.update({ targetId: undefined });
     const sessionsCount = this.server.schema.sessions.all().models.length;
+
     await visit(urls.sessions);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.sessions);
-    assert.strictEqual(findAll('tbody tr').length, sessionsCount);
+    assert.dom('tbody tr').exists({ count: sessionsCount });
   });
 
-  test('can identify active sessions', async function (assert) {
+  test('visiting a session', async function (assert) {
     assert.expect(1);
+
     await visit(urls.sessions);
-    assert.ok(
-      find('tbody tr:first-child td:first-child .session-status-active')
-    );
+    await click('[data-test-session-detail-link]');
+
+    assert.strictEqual(currentURL(), urls.session);
   });
 
-  test('cannot identify pending sessions', async function (assert) {
+  test('can link to an active session', async function (assert) {
     assert.expect(1);
-    instances.session.update({ status: 'pending' });
+
     await visit(urls.sessions);
-    assert.notOk(
-      find('tbody tr:first-child th:first-child .session-status-active')
-    );
+
+    assert
+      .dom(
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+      )
+      .isVisible();
   });
 
-  test('cannot identify terminated sessions', async function (assert) {
+  test('can link to a pending session', async function (assert) {
     assert.expect(1);
-    instances.session.update({ status: 'terminated' });
+    instances.session.update({ status: STATUS_SESSION_PENDING });
+
     await visit(urls.sessions);
-    assert.notOk(
-      find('tbody tr:first-child th:first-child .session-status-active')
-    );
+
+    assert
+      .dom(
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+      )
+      .isVisible();
+  });
+
+  test('cannot link to a canceling session', async function (assert) {
+    assert.expect(2);
+    instances.session.update({ status: STATUS_SESSION_CANCELING });
+
+    await visit(urls.sessions);
+
+    assert
+      .dom(
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+      )
+      .doesNotExist();
+    assert
+      .dom('tbody tr:first-child td:first-child [data-test-session-id-copy]')
+      .isVisible();
+  });
+
+  test('cannot link to a terminated session', async function (assert) {
+    assert.expect(2);
+    instances.session.update({ status: STATUS_SESSION_TERMINATED });
+
+    await visit(urls.sessions);
+    await click('button.rose-button-inline-link-action'); // clear all filters
+
+    assert
+      .dom(
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+      )
+      .doesNotExist();
+    assert
+      .dom('tbody tr:first-child td:first-child [data-test-session-id-copy]')
+      .isVisible();
   });
 
   test('cancelling a session', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop');
+
     await visit(urls.sessions);
     await click('tbody tr:first-child td:last-child button');
-    assert.ok(find('[role="alert"].is-success'));
+
+    assert.dom('[role="alert"].is-success').isVisible();
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
     assert.expect(1);
     this.server.post('/sessions/:id_method', () => new Response(400));
+
     await visit(urls.sessions);
     await click('tbody tr:first-child td:last-child button');
-    assert.ok(find('[role="alert"].is-error'));
+
+    assert.dom('[role="alert"].is-error').isVisible();
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop').throws();
+
     await visit(urls.sessions);
     await click('tbody tr:first-child td:last-child button');
-    assert.ok(find('[role="alert"].is-error'));
+
+    assert.dom('[role="alert"].is-error').isVisible();
   });
 });
