@@ -10,7 +10,16 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 
-export const statusTypes = ['active', 'pending', 'canceling', 'terminated'];
+export const STATUS_SESSION_ACTIVE = 'active';
+export const STATUS_SESSION_PENDING = 'pending';
+export const STATUS_SESSION_CANCELING = 'canceling';
+export const STATUS_SESSION_TERMINATED = 'terminated';
+export const statusTypes = [
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+  STATUS_SESSION_TERMINATED,
+];
 
 /**
  *
@@ -103,8 +112,8 @@ export default class SessionModel extends GeneratedSessionModel {
   @tracked proxy_port;
   credentials = A();
 
-  @equal('status', 'active') isActive;
-  @equal('status', 'pending') isPending;
+  @equal('status', STATUS_SESSION_ACTIVE) isActive;
+  @equal('status', STATUS_SESSION_PENDING) isPending;
 
   /**
    * True if status is an unknown string.
