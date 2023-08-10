@@ -75,8 +75,8 @@ List of available project commands.  `yarn run <command-name>`
 
 To run as web app:
 * `yarn start`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+* Visit your app at [http://localhost:4201](http://localhost:4201).
+* Visit your tests at [http://localhost:4201/tests](http://localhost:4201/tests).
 
 To run as a desktop app:
 * `yarn start:desktop`
