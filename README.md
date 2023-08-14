@@ -14,28 +14,29 @@ subproject, e.g. running or testing.
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Projects](#projects)
-  - [Core (addons/core):](#core-addonscore)
-  - [API (addons/api):](#api-addonsapi)
-  - [Auth (addons/auth):](#auth-addonsauth)
-  - [Rose (addons/rose)](#rose-addonsrose)
-  - [Admin (ui/admin)](#admin-uiadmin)
-  - [Desktop Client (ui/desktop)](#desktop-client-uidesktop)
-- [Prerequisites](#prerequisites)
-- [Optional Tooling](#optional-tooling)
-- [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
-- [Contributing](#contributing)
-  - [Branching](#branching)
-  - [Building ToC](#building-toc)
-  - [Building Admin UI for Production](#building-admin-ui-for-production)
-    - [Building with a Container](#building-with-a-container)
-  - [Building Desktop UI for Production](#building-desktop-ui-for-production)
-  - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
-    - [For admin](#for-admin)
-    - [For desktop](#for-desktop)
-  - [Committing](#committing)
-    - [License Checking](#license-checking)
+- [Boundary UI Monorepo](#boundary-ui-monorepo)
+  - [Projects](#projects)
+    - [Core (addons/core):](#core-addonscore)
+    - [API (addons/api):](#api-addonsapi)
+    - [Auth (addons/auth):](#auth-addonsauth)
+    - [Rose (addons/rose)](#rose-addonsrose)
+    - [Admin (ui/admin)](#admin-uiadmin)
+    - [Desktop Client (ui/desktop)](#desktop-client-uidesktop)
+  - [Prerequisites](#prerequisites)
+  - [Optional Tooling](#optional-tooling)
+  - [Installation](#installation)
+  - [Yarn Commands](#yarn-commands)
+  - [Contributing](#contributing)
+    - [Branching](#branching)
+    - [Building ToC](#building-toc)
+    - [Building Admin UI for Production](#building-admin-ui-for-production)
+      - [Building with a Container](#building-with-a-container)
+    - [Building Desktop UI for Production](#building-desktop-ui-for-production)
+    - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
+      - [For admin](#for-admin)
+      - [For desktop](#for-desktop)
+    - [Committing](#committing)
+      - [License Checking](#license-checking)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -66,9 +67,7 @@ You will need the following things properly installed on your computer.
 
 * [Git][git]
 * [Node.js][node]
-  * Supported versions:`v12`, `v14` and `v16`.
-  * **Apple Silicon Users**:  if you experience problems building or running
-    Boundary UIs, try Node v14.
+  * Supported versions:`v14`, `v16` and `v18`.
 * [Yarn][yarn] installed globally
 * [Google Chrome][chrome]
 * [Firefox][firefox]
