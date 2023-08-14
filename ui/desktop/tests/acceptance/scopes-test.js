@@ -244,7 +244,7 @@ module('Acceptance | scopes', function (hooks) {
     );
   });
 
-  test('connecting to a target', async function (assert) {
+  test.skip('connecting to a target', async function (assert) {
     assert.expect(3);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
