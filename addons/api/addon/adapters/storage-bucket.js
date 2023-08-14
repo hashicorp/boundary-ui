@@ -19,7 +19,12 @@ export default class StorageBucketAdapter extends ApplicationAdapter {
    */
   buildURL(modelName, id, snapshot, requestType) {
     let url = super.buildURL(...arguments);
-    const pluginName = snapshot?.attr('plugin')?.name;
+    let pluginName;
+    try {
+      pluginName = snapshot?.attr('plugin')?.name;
+    } catch (e) {
+      // Ignore any adapter errors here
+    }
     if (requestType === 'createRecord' && pluginName) {
       url = `${url}?plugin_name=${pluginName}`;
     }
