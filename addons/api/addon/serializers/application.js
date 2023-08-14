@@ -209,9 +209,9 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {object}
    */
   normalizeMissingArrays(store, primaryModelClass, payload) {
-    const attrDefs = store._attributesDefinitionFor(
-      primaryModelClass.modelName
-    );
+    const attrDefs = store
+      .getSchemaDefinitionService()
+      .attributesDefinitionFor({ type: primaryModelClass.modelName });
     if (attrDefs) {
       Object.keys(attrDefs).forEach((key) => {
         if (!payload[key] && attrDefs[key]?.options?.emptyArrayIfMissing) {
