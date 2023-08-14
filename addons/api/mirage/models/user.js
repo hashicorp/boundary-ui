@@ -8,5 +8,5 @@ import Model from './base';
 
 export default Model.extend({
   scope: belongsTo(),
-  accounts: hasMany('account', { inverse: null }),
+  accounts: hasMany('account'),
 });
