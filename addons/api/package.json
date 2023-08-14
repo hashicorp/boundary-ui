@@ -11,15 +11,13 @@
     "build:development": "ember build",
     "build": "ember build --environment=production",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
-    "lint:css": "stylelint \"**/*.css\"",
-    "lint:css:fix": "concurrently \"npm:lint:css -- --fix\"",
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "format": "yarn run format:js",
     "format:js": "prettier --write '{addon,app,config,stories,tests,mirage}/**/*.js' *.js",
     "start": "ember serve",
-    "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
+    "test": "ember exam --test-port 0 --split=4 --parallel=1 --random",
     "test:ember-compatibility": "ember try:each",
     "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
@@ -28,7 +26,7 @@
     "ember-can": "^4.2.0",
     "ember-cli-babel": "^7.26.10",
     "ember-cli-htmlbars": "^6.2.0",
-    "ember-cli-mirage": "^v3.0.0-alpha.3",
+    "ember-cli-mirage": "^2.4.0",
     "ember-data": "~4.12.0",
     "ember-fetch": "^8.1.1"
   },
@@ -69,9 +67,6 @@
     "prettier": "^2.8.7",
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
-    "stylelint": "^15.4.0",
-    "stylelint-config-standard": "^32.0.0",
-    "stylelint-prettier": "^3.0.0",
     "webpack": "^5.78.0"
   },
   "peerDependencies": {
