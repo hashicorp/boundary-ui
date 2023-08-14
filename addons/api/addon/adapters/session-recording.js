@@ -20,7 +20,12 @@ export default class SessionRecordingAdapter extends ApplicationAdapter {
    */
   buildURL(modelName, id, snapshot, requestType, query) {
     let url = super.buildURL(...arguments);
-    const method = snapshot?.adapterOptions?.method;
+    let method;
+    try {
+      method = snapshot?.adapterOptions?.method;
+    } catch (e) {
+      // Ignore any adapter errors here
+    }
     if (method === 'download') {
       const queryParams = new URLSearchParams(query).toString();
       if (queryParams) url = `${url}?${queryParams}`;

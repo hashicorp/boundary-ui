@@ -22,7 +22,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =attributes
 
   @resourceFilter({
-    allowed: (route) => route.store.peekAll('scope').toArray(),
+    allowed: (route) => route.store.peekAll('scope'),
     serialize: ({ id }) => id,
     findBySerialized: ({ id }, value) => id === value,
   })
@@ -48,8 +48,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
     // filter out projects, since the user resource exists only on org and above
     const scopes = this.store
       .peekAll('scope')
-      .filter((scope) => !scope.isProject)
-      .toArray();
+      .filter((scope) => !scope.isProject);
     const scopeIDs = this.scope?.map((scope) => scope.id);
     const users = scopeIDs?.length
       ? this.resourceFilterStore.queryBy(

@@ -20,8 +20,12 @@ export default class HostCatalogAdapter extends ApplicationAdapter {
   buildURL(modelName, id, snapshot, requestType) {
     let url = super.buildURL(...arguments);
     if (requestType === 'createRecord') {
-      const pluginName = snapshot.attr('plugin')?.name;
-      if (pluginName) url = `${url}?plugin_name=${pluginName}`;
+      try {
+        const pluginName = snapshot.attr('plugin')?.name;
+        if (pluginName) url = `${url}?plugin_name=${pluginName}`;
+      } catch (e) {
+        // Ignore any adapter errors here
+      }
     }
     return url;
   }

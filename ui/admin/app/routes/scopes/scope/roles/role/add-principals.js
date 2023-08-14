@@ -23,7 +23,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =attributes
 
   @resourceFilter({
-    allowed: (route) => route.store.peekAll('scope').toArray(),
+    allowed: (route) => route.store.peekAll('scope'),
     serialize: ({ id }) => id,
     findBySerialized: ({ id }, value) => id === value,
   })

@@ -85,7 +85,7 @@ module('Unit | Model | base', function (hooks) {
     });
     this.server.patch('/v1/users/1', () => {
       assert.ok(true, 'Correctly scoped update record URL was requested.');
-      return {};
+      return { id: 1 };
     });
     const model = store.peekRecord('user', '1');
     assert.false(model.canSave);
@@ -117,19 +117,18 @@ module('Unit | Model | base', function (hooks) {
     const model = store.createRecord('user', { scopeID: 'o_123' });
     this.server.post('/v1/users', () => {
       assert.ok(true, 'Correctly scoped create record URL was requested.');
-      return {};
+      return { id: 'u_123' };
     });
     await model.save();
-    this.server.patch('/v1/users', () => {
+    this.server.patch('/v1/users/u_123', () => {
       assert.ok(true, 'Correctly scoped update record URL was requested.');
-      return {};
+      return { id: 'u_123' };
     });
     await model.save();
     this.server.delete('/v1/users/u_123', () => {
       assert.ok(true, 'Correctly scoped delete record URL was requested.');
       return {};
     });
-    model.id = 'u_123';
     await model.destroyRecord();
   });
 
@@ -141,19 +140,18 @@ module('Unit | Model | base', function (hooks) {
     const model = store.createRecord('user', { scope });
     this.server.post('/v1/users', () => {
       assert.ok(true, 'Correctly scoped create record URL was requested.');
-      return {};
+      return { id: 'u_123' };
     });
     await model.save({ adapterOptions: { scopeID: customScopeID } });
-    this.server.patch('/v1/users', () => {
+    this.server.patch('/v1/users/u_123', () => {
       assert.ok(true, 'Correctly scoped update record URL was requested.');
-      return {};
+      return { id: 'u_123' };
     });
     await model.save({ adapterOptions: { scopeID: customScopeID } });
     this.server.delete('/v1/users/u_123', () => {
       assert.ok(true, 'Correctly scoped delete record URL was requested.');
       return {};
     });
-    model.id = 'u_123';
     await model.destroyRecord({ adapterOptions: { scopeID: customScopeID } });
   });
 
@@ -165,7 +163,7 @@ module('Unit | Model | base', function (hooks) {
     const model = store.createRecord('user', { scope });
     this.server.post(`/v1/users:${method}`, () => {
       assert.ok(true, 'Correctly scoped create record URL was requested.');
-      return {};
+      return { id: 'u_123' };
     });
     await model.save({ adapterOptions: { method } });
   });
