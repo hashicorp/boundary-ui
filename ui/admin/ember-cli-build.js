@@ -26,6 +26,10 @@ module.exports = function (defaults) {
     svg: {
       paths: ['../../addons/core/public'],
     },
+    // TODO: Update to 4.12 when deprecations are resolved
+    emberData: {
+      compatWith: '4.4',
+    },
   });
 
   // Only import when in development or test mode

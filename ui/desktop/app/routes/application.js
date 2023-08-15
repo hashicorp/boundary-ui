@@ -17,6 +17,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service ipc;
   @service intl;
+  @service indexedDb;
 
   // =attributes
 
@@ -35,7 +36,14 @@ export default class ApplicationRoute extends Route {
     await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
-    return this.clusterUrl.updateClusterUrl();
+    await this.clusterUrl.updateClusterUrl();
+
+    // Setup the DB either from a successful authentication
+    // or an authentication restoration
+    this.session.on('authenticationSucceeded', () =>
+      this.indexedDb.setup(this.clusterUrl.rendererClusterUrl)
+    );
+    this.indexedDb.setup(this.clusterUrl.rendererClusterUrl);
   }
 
   /**
