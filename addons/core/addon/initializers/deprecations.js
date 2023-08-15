@@ -7,6 +7,7 @@ import { registerDeprecationHandler } from '@ember/debug';
 
 export function initialize() {
   registerDeprecationHandler((message, options, next) => {
+    // TODO: fix `deprecate-early-static` warning before ember 5 upgrade
     //silence deprecate-early-static warnings till we find a way to
     //fix ember-cli-mirage discoverEmberDataModels
     if (options?.id === 'ember-data:deprecate-early-static') {
