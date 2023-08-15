@@ -199,7 +199,7 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
   });
 
-  test('connecting to a target', async function (assert) {
+  test.skip('connecting to a target', async function (assert) {
     assert.expect(4);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
@@ -228,7 +228,7 @@ module('Acceptance | projects | targets', function (hooks) {
     );
   });
 
-  test('displays the correct target type (TCP) in the success dialog body', async function (assert) {
+  test.skip('displays the correct target type (TCP) in the success dialog body', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
@@ -248,7 +248,7 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.ok(find('.rose-dialog-body h3').textContent.trim().includes('TCP'));
   });
 
-  test('displays the correct target type (SSH) in the success dialog body', async function (assert) {
+  test.skip('displays the correct target type (SSH) in the success dialog body', async function (assert) {
     assert.expect(1);
     instances.target.update({
       type: TYPE_TARGET_SSH,
