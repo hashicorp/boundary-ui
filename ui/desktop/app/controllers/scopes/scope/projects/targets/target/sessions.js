@@ -5,7 +5,7 @@
 
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
-import { A } from '@ember/array';
+import sortBy from 'lodash/sortBy';
 
 export default class ScopesScopeProjectsTargetsTargetSessionsController extends Controller {
   // =services
@@ -34,7 +34,7 @@ export default class ScopesScopeProjectsTargetsTargetSessionsController extends 
     );
 
     // Sort sessions
-    const sortedSessions = A(filteredSessions).sortBy('created_time').reverse();
+    const sortedSessions = sortBy(filteredSessions, 'created_time').reverse();
 
     return sortedSessions;
   }
