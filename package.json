@@ -83,7 +83,8 @@
     "**/jsprim/json-schema": "^0.4.0",
     "**/@storybook/**/yuidocjs/markdown-it": "^12.3.2",
     "**/ember-cli/markdown-it-terminal/markdown-it": "^12.3.2",
-    "**/ember-cli-mirage/@embroider/macros": "^1.0.0"
+    "**/ember-cli-mirage/@embroider/macros": "^1.0.0",
+    "**/ember-arg-types/prop-types": "^15.8.1"
   },
   "config": {
     "commitizen": {
