@@ -20,7 +20,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
    * @return {SessionModel}
    */
   model({ session_id }) {
-    return this.store.peekRecord('session', session_id, {
+    return this.store.findRecord('session', session_id, {
       reload: true,
     });
   }
