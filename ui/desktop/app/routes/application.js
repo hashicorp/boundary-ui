@@ -89,7 +89,7 @@ export default class ApplicationRoute extends Route {
    */
   @action
   error(e) {
-    const isUnauthenticated = A(e?.errors)?.firstObject?.isUnauthenticated;
+    const isUnauthenticated = A(e?.errors)?.[0]?.isUnauthenticated;
     if (isUnauthenticated) {
       this.session.invalidate();
       return false;

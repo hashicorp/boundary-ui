@@ -24,7 +24,7 @@
   <page.body>
     {{#if @model.accounts}}
       {{! OIDC accounts display more fields }}
-      {{#if @model.accounts.firstObject.isOIDC}}
+      {{#if (get @model.accounts '0.isOIDC')}}
         <Hds::Table
           @model={{@model.accounts}}
           @columns={{array
@@ -80,7 +80,7 @@
             </B.Tr>
           </:body>
         </Hds::Table>
-      {{else if @model.accounts.firstObject.isLDAP}}
+      {{else if (get @model.accounts '0.isLDAP')}}
         <Hds::Table
           @model={{@model.accounts}}
           @columns={{array
