@@ -2,14 +2,14 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
 }}
-{{page-title @model.session.displayName}}
+{{page-title @model.displayName}}
 
 <Rose::Layout::Page as |page|>
 
   <page.header>
     <h1 class='session-details-header'>
       <Hds::IconTile @color='boundary' @icon='terminal' />
-      {{@model.session.displayName}}
+      {{@model.displayName}}
     </h1>
   </page.header>
 
@@ -18,7 +18,7 @@
       @text={{t 'resources.session.actions.end'}}
       @icon='x'
       @color='secondary'
-      {{on 'click' (route-action 'cancelSession' @model.session)}}
+      {{on 'click' (route-action 'cancelSession' @model)}}
     />
   </page.actions>
 

@@ -110,6 +110,11 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
       if (credentials) {
         credentials.forEach((cred) => session.addCredential(cred));
       }
+
+      await this.router.transitionTo(
+        'scopes.scope.projects.sessions.session',
+        session
+      );
     } catch (e) {
       this.confirm
         .confirm(e.message, { isConnectError: true })
