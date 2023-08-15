@@ -12,7 +12,7 @@ import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeSessionsRoute extends Route {
