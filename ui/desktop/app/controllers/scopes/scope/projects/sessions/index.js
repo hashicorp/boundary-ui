@@ -4,7 +4,7 @@
  */
 
 import Controller from '@ember/controller';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
   // =attributes

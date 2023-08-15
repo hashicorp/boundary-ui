@@ -6,7 +6,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 export default class ScopesScopeWorkersIndexRoute extends Route {
   // =attributes

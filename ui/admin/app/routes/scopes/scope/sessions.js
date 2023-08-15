@@ -7,7 +7,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { all, hash } from 'rsvp';
-import { A } from '@ember/array';
 import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
@@ -81,7 +80,7 @@ export default class ScopesScopeSessionsRoute extends Route {
     );
     // Sort sessions by time created...
     let sortedSessionAggregates = sortBy(
-      A(sessionAggregates),
+      sessionAggregates,
       'session.created_time'
     ).reverse();
     // Then move active sessions to the top...
