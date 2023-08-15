@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import sortBy from 'lodash/sortBy';
 
 export default class ScopesScopeWorkersIndexRoute extends Route {
   // =attributes
@@ -42,7 +43,10 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   // =methods
 
   model() {
-    const workers = this.modelFor('scopes.scope.workers').sortBy('displayName');
+    const workers = sortBy(
+      this.modelFor('scopes.scope.workers'),
+      'displayName'
+    );
 
     if (this.tags?.length) {
       // Return workers that have config tags that have at

@@ -23,7 +23,7 @@
 
   <page.body>
     {{#if @model.managedGroups}}
-      {{#if @model.managedGroups.firstObject.isOIDC}}
+      {{#if (get @model.managedGroups '0.isOIDC')}}
         <Hds::Table
           @model={{@model.managedGroups}}
           @columns={{array
