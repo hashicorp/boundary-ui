@@ -67,7 +67,7 @@ You will need the following things properly installed on your computer.
 
 * [Git][git]
 * [Node.js][node]
-  * Supported versions:`v14`, `v16` and `v18`.
+  * Supported versions: `v16` and `v18`.
 * [Yarn][yarn] installed globally
 * [Google Chrome][chrome]
 * [Firefox][firefox]
