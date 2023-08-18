@@ -71,22 +71,22 @@
       margin-bottom: sizing.rems(l);
     }
 
-    .rose-message-link {
-      @include type.type(s, semibold);
+    // .rose-message-link {
+    //   @include type.type(s, semibold);
 
-      grid-area: left-link;
-      color: var(--action);
-      text-decoration: none;
+    //   grid-area: left-link;
+    //   color: var(--action);
+    //   text-decoration: none;
 
-      & + .rose-message-link {
-        grid-area: right-link;
-        text-align: right;
-        color: var(--message-color);
-      }
+    //   & + .rose-message-link {
+    //     grid-area: right-link;
+    //     text-align: right;
+    //     color: var(--message-color);
+    //   }
 
-      &:hover {
-        text-decoration: underline;
-      }
-    }
+    //   &:hover {
+    //     text-decoration: underline;
+    //   }
+    // }
   }
 }
