@@ -13,14 +13,12 @@ module('Integration | Component | rose/message', function (hooks) {
 
   test('it renders', async function (assert) {
     assert.expect(5);
-    console.log('in here');
     await render(hbs`
       <Rose::Message @title="Title" @subtitle="Subtitle" as |message|>
         <message.description>Description</message.description>
         <message.link @route="index">Link</message.link>
       </Rose::Message>
     `);
-    console.log(find('.rose-message'), 'ferf');
 
     assert.ok(find('.rose-message'));
     assert.strictEqual(find('.rose-message-title').textContent.trim(), 'Title');
