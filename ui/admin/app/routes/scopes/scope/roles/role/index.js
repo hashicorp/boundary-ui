@@ -22,7 +22,9 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
       : (await this.store.query('scope', { scope_id: currentScope.id })).map(
           (scope) => ({
             model: scope,
-            subScopes: this.store.query('scope', { scope_id: scope.id }),
+            subScopes: this.store
+              .query('scope', { scope_id: scope.id })
+              .then((models) => models.map((model) => model)),
           })
         );
     const grantScopes = [
