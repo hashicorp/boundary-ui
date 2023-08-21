@@ -11,6 +11,8 @@ const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
 const { isMac } = require('../helpers/platform.js');
+// const { Terminal } = require('xterm');
+// const { FitAddon } = require('xterm-addon-fit');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -108,3 +110,15 @@ handle('toggleFullscreenWindow', () => {
  * Quit app
  */
 handle('closeWindow', () => app.quit());
+
+/**
+ * Terminal
+ */
+handle('terminalCarlos', ({ container }) => {
+  console.log('Handle terminal in container: ', container);
+  console.log(window);
+  // console.log(window.carlos)
+  // console.log(window.carlos.Terminal);
+  // const { Terminal } = require('xterm');
+  // const { FitAddon } = require('xterm-addon-fit');
+});

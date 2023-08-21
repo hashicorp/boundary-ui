@@ -19,8 +19,11 @@ const {
   Menu,
   MenuItem,
   shell,
+  ipcMain,
 } = require('electron');
 require('./ipc/handlers.js');
+const os = require('node:os');
+const pty = require('node-pty');
 
 const runtimeSettings = require('./services/runtime-settings.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
@@ -64,10 +67,10 @@ const createWindow = (partition, closeWindowCB) => {
     titleBarStyle: showWindowChrome ? 'hiddenInset' : 'none',
     webPreferences: {
       partition,
-      sandbox: true,
+      // sandbox: true, // TODO check why xterm does not work when sandbox, perhaps when move to preload?
       webSecurity: true,
       contextIsolation: true,
-      nodeIntegration: false,
+      nodeIntegration: true, // TODO: check if we can make it work without nodeIntegration.
       allowRunningInsecureContent: false,
       // The preload script establishes the message-based IPC pathway without
       // exposing new modules to the renderer.
@@ -88,6 +91,25 @@ const createWindow = (partition, closeWindowCB) => {
     );
 
   const browserWindow = new BrowserWindow(browserWindowOptions);
+
+  // Terminal
+  const shell2 = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
+  const ptyProcess = pty.spawn(shell2, [], {
+    name: 'xterm-color',
+    cols: 80,
+    rows: 30,
+    cwd: process.env.HOME,
+    env: process.env,
+  });
+
+  ptyProcess.on('data', function (data) {
+    mainWindow.webContents.send('terminal.incomingData', data);
+    console.log('Data sent');
+  });
+
+  ipcMain.on('terminal.keystroke', (event, key) => {
+    ptyProcess.write(key);
+  });
 
   // If the user-specified cluster URL changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
