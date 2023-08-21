@@ -29,7 +29,9 @@
     "node-pty": "^1.0.0",
     "semver": "^7.5.3",
     "shell-quote": "^1.7.3",
-    "tree-kill": "^1.2.2"
+    "tree-kill": "^1.2.2",
+    "xterm": "^5.2.1",
+    "xterm-addon-fit": "^0.7.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
