@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { all } from 'rsvp';
 
 export default class ScopesScopeRolesRoleIndexRoute extends Route {
   // =services
@@ -24,7 +23,7 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
     let subScopes = [];
     //await the store query to fix ember's proxy promise deprecation warning
     if (!currentScope.isProject) {
-      subScopes = await all(
+      subScopes = await Promise.all(
         scopes.map(async (scope) => ({
           model: scope,
           subScopes: await this.store.query('scope', { scope_id: scope.id }),
