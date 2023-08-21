@@ -530,3 +530,110 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     background-color: var(--token-color-palette-neutral-50);
   }
 }
+
+.session-details {
+  .rose-layout-body-content {
+    margin-top: 1.5rem;
+  }
+}
+
+.credential-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+
+  .title {
+    font-weight: var(--token-typography-font-weight-bold);
+  }
+
+  /* stylelint-disable selector-class-pattern */
+  .hds-form-field--layout-flag {
+    margin-bottom: 0;
+  }
+}
+
+.credential-section-body {
+  border: 0.063rem solid var(--token-color-border-primary);
+  border-radius: 0.313rem;
+  display: flex;
+  margin-top: 0.75rem;
+
+  .credential-info-header {
+    padding: 1.5rem;
+    width: 33%;
+  }
+}
+
+.credential-secret {
+  width: 66%;
+  margin: 0.75rem;
+
+  .secret-container {
+    margin: 0.75rem 0.5rem;
+    border-bottom: 0.0625rem solid var(--token-color-border-primary);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    .secret-key {
+      font-weight: var(--token-typography-font-weight-semibold);
+    }
+
+    .hidden-secret {
+      margin-top: 0.25rem;
+
+      .rose-button-ghost {
+        margin-bottom: 0;
+        color: var(--ui-gray-subtler-2);
+      }
+    }
+  }
+}
+
+.credential-source-name {
+  font-weight: var(--token-typography-font-weight-semibold);
+}
+
+.credential-section-body-raw {
+  $border-width: 0.063rem;
+
+  border: 0.063rem solid var(--token-color-border-primary);
+  border-radius: 0.313rem;
+  display: block;
+  margin-top: 0.75rem;
+
+  .credential-info-header-raw {
+    padding: 1.5rem 1.5rem 0.75rem;
+  }
+
+  .credential-info-title-raw {
+    display: flex;
+    justify-content: space-between;
+
+    .hds-copy-button {
+      padding: 0;
+      background: unset;
+      border: unset;
+      box-shadow: unset;
+      min-height: unset;
+
+      .hds-button__icon {
+        color: var(--ui-gray-subtler-2);
+      }
+    }
+  }
+
+  .secret-raw .rose-codemirror-container {
+    position: relative;
+    right: $border-width;
+    top: $border-width;
+    width: calc(100% + (2 * $border-width));
+  }
+
+  .secret-raw .CodeMirror {
+    border-bottom-left-radius: 0.313rem;
+    border-bottom-right-radius: 0.313rem;
+  }
+}

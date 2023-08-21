@@ -15,6 +15,7 @@
 
   <page.actions>
     <Hds::Button
+      data-test-session-detail-cancel-button
       @text={{t 'resources.session.actions.end'}}
       @icon='x'
       @color='secondary'
@@ -22,11 +23,114 @@
     />
   </page.actions>
 
-  <page.body>
+  <page.body class='session-details'>
     <div class='copy-url-container'>{{t 'actions.copy-to-clipboard'}}</div>
     <Rose::Layout::BodyContent as |bc|>
       <bc.Body class='session-details-body'>
-        {{t 'resources.session.description'}}
+        {{#if @model.credentials}}
+          <div class='credential-section-header'>
+            <div class='title hds-typography-display-400'>
+              {{t 'resources.session.credential.title_plural'}}
+            </div>
+            <Hds::Form::Toggle::Field
+              {{on 'change' this.toggleCredentials}}
+              as |F|
+            >
+              <F.Label>
+                {{t 'resources.session.credential.actions.raw-api.show'}}
+              </F.Label>
+            </Hds::Form::Toggle::Field>
+          </div>
+          <div class='hds-typography-body-200'>
+            {{t 'resources.session.credential.description'}}
+          </div>
+          {{#each @model.credentials as |credential|}}
+            {{#if this.isRawApiVisible}}
+              <div class='credential-section-body-raw'>
+                <div class='credential-info-header-raw'>
+                  <div class='credential-info-title-raw'>
+                    <div
+                      class='credential-source-name hds-typography-display-200'
+                    >
+                      {{#if credential.source.name}}
+                        {{credential.source.name}}
+                      {{else}}
+                        {{credential.source.id}}
+                      {{/if}}
+                    </div>
+                    <Hds::Copy::Button
+                      @text='Copy'
+                      @isIconOnly={{true}}
+                      @textToCopy={{raw-json credential.rawCredential}}
+                    />
+                  </div>
+                  <div class='hds-typography-body-100'>
+                    {{credential.source.description}}
+                  </div>
+                </div>
+
+                <div class='secret-raw'>
+                  <Rose::CodeEditor
+                    @codeValue={{raw-json credential.rawCredential}}
+                    as |c|
+                  >
+                    <c.fieldEditor
+                      class='rose-autosize'
+                      @options={{hash
+                        mode='application/json'
+                        readOnly=true
+                        lineNumbers=false
+                        cursorBlinkRate=-1
+                        styleActiveLine=false
+                        autoRefresh=true
+                      }}
+                    />
+                  </Rose::CodeEditor>
+                </div>
+              </div>
+            {{else}}
+              <div class='credential-section-body'>
+                <div class='credential-info-header'>
+                  <div
+                    class='credential-source-name hds-typography-display-200'
+                  >
+                    {{#if credential.source.name}}
+                      {{credential.source.name}}
+                    {{else}}
+                      {{credential.source.id}}
+                    {{/if}}
+                  </div>
+                  <div class='hds-typography-body-100'>
+                    {{credential.source.description}}
+                  </div>
+                </div>
+
+                <span class='credential-secret'>
+                  {{#if credential.secrets}}
+                    {{#each credential.secrets as |secret|}}
+                      <div class='secret-container'>
+                        <div class='secret-key'>{{secret.key}}</div>
+                        <HiddenSecret @secret={{secret.value}} />
+                      </div>
+                    {{/each}}
+                  {{/if}}
+                </span>
+              </div>
+            {{/if}}
+          {{/each}}
+        {{else}}
+          <Hds::ApplicationState data-test-no-credentials as |A|>
+            <A.Header
+              @title={{t 'resources.session.messages.connected.title'}}
+            />
+            <A.Body
+              @text={{t
+                'resources.session.messages.connected.description'
+                targetDisplayName=@model.target.displayName
+              }}
+            />
+          </Hds::ApplicationState>
+        {{/if}}
       </bc.Body>
       <bc.Sidebar>
         <div class='details-sidebar-target-details'>

@@ -12,6 +12,11 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   @service store;
 
   // =methods
+  resetController(controller, isExiting, transition) {
+    if (isExiting && transition.targetName !== 'error') {
+      controller.set('isRawApiVisible', false);
+    }
+  }
 
   /**
    * Load a session
