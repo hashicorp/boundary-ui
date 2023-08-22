@@ -13,7 +13,6 @@ project {
     "**/node_modules/**",
     "**/dist/**",
     "**/coverage/**",
-    "addons/rose/.storybook/preview-head.html",
     "ui/desktop/electron-app/out/**",
     "ui/desktop/electron-app/ember-dist/**",
   ]
