@@ -174,8 +174,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await click('[data-test-target-detail-connect-button]');
 
     assert.strictEqual(currentURL(), urls.session);
-    assert.dom('credential-section-header').doesNotExist();
-    assert.dom('credential-section-body').doesNotExist();
+    assert.dom('credential-panel-header').doesNotExist();
+    assert.dom('credential-panel-body').doesNotExist();
     assert
       .dom('[data-test-no-credentials]')
       .hasText(`Connected You can now access ${instances.target.name}`);

@@ -537,7 +537,8 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-.credential-section-header {
+// Session Details - Credentials Panel
+.credential-panel-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -553,13 +554,13 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-.credential-section-body {
+.credential-panel-body {
   border: 0.063rem solid var(--token-color-border-primary);
   border-radius: 0.313rem;
   display: flex;
   margin-top: 0.75rem;
 
-  .credential-info-header {
+  .credential-header {
     padding: 1.5rem;
     width: 33%;
   }
@@ -582,7 +583,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     }
 
     .hidden-secret {
-      margin-top: 0.25rem;
+      margin: 0.25rem 0;
 
       .rose-button-ghost {
         margin-bottom: 0;
@@ -592,11 +593,11 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-.credential-source-name {
+.credential-name {
   font-weight: var(--token-typography-font-weight-semibold);
 }
 
-.credential-section-body-raw {
+.raw-credential-panel-body {
   $border-width: 0.063rem;
 
   border: 0.063rem solid var(--token-color-border-primary);
@@ -604,11 +605,11 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   display: block;
   margin-top: 0.75rem;
 
-  .credential-info-header-raw {
+  .raw-credential-header {
     padding: 1.5rem 1.5rem 0.75rem;
   }
 
-  .credential-info-title-raw {
+  .raw-credential-title {
     display: flex;
     justify-content: space-between;
 

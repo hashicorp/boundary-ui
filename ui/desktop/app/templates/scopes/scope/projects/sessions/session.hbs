@@ -26,9 +26,9 @@
   <page.body class='details-screen-body'>
     <div class='copy-url-container'>{{t 'actions.copy-to-clipboard'}}</div>
     <Rose::Layout::BodyContent as |bc|>
-      <bc.Body class='session-details-body'>
+      <bc.Body>
         {{#if @model.credentials}}
-          <div class='credential-section-header'>
+          <div class='credential-panel-header'>
             <div class='title hds-typography-display-400'>
               {{t 'resources.session.credential.title_plural'}}
             </div>
@@ -47,12 +47,10 @@
           </div>
           {{#each @model.credentials as |credential|}}
             {{#if this.isRawApiVisible}}
-              <div class='credential-section-body-raw'>
-                <div class='credential-info-header-raw'>
-                  <div class='credential-info-title-raw'>
-                    <div
-                      class='credential-source-name hds-typography-display-200'
-                    >
+              <div class='raw-credential-panel-body'>
+                <div class='raw-credential-header'>
+                  <div class='raw-credential-title'>
+                    <div class='credential-name hds-typography-display-200'>
                       {{#if credential.source.name}}
                         {{credential.source.name}}
                       {{else}}
@@ -90,11 +88,9 @@
                 </div>
               </div>
             {{else}}
-              <div class='credential-section-body'>
-                <div class='credential-info-header'>
-                  <div
-                    class='credential-source-name hds-typography-display-200'
-                  >
+              <div class='credential-panel-body'>
+                <div class='credential-header'>
+                  <div class='credential-name hds-typography-display-200'>
                     {{#if credential.source.name}}
                       {{credential.source.name}}
                     {{else}}
@@ -106,16 +102,16 @@
                   </div>
                 </div>
 
-                <span class='credential-secret'>
+                <ul class='credential-secret'>
                   {{#if credential.secrets}}
                     {{#each credential.secrets as |secret|}}
-                      <div class='secret-container'>
-                        <div class='secret-key'>{{secret.key}}</div>
+                      <li class='secret-container'>
+                        <span class='secret-key'>{{secret.key}}</span>
                         <HiddenSecret @secret={{secret.value}} />
-                      </div>
+                      </li>
                     {{/each}}
                   {{/if}}
-                </span>
+                </ul>
               </div>
             {{/if}}
           {{/each}}
