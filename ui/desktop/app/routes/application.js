@@ -38,12 +38,10 @@ export default class ApplicationRoute extends Route {
     this.toggleTheme(theme);
     await this.clusterUrl.updateClusterUrl();
 
-    // Setup the DB either from a successful authentication
-    // or an authentication restoration
-    this.session.on('authenticationSucceeded', () =>
-      this.indexedDb.setup(this.clusterUrl.rendererClusterUrl)
-    );
-    this.indexedDb.setup(this.clusterUrl.rendererClusterUrl);
+    // Setup the DB from a successful authentication restoration
+    if (this.session.isAuthenticated) {
+      this.indexedDb.setup(this.clusterUrl.rendererClusterUrl);
+    }
   }
 
   /**

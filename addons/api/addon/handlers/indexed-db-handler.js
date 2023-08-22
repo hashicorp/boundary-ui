@@ -16,7 +16,8 @@ const IndexedDbHandler = {
         //  requests and cache population requests
 
         // Go through normal flow if we don't yet support the model
-        if (!supportedModels.includes(type)) {
+        // or if we don't have an indexedDb instance
+        if (!supportedModels.includes(type) || !this.indexedDb.db) {
           break;
         }
 
