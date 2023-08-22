@@ -10,6 +10,11 @@ const { FitAddon } = require('xterm-addon-fit');
 // Messages must originate from this origin
 const emberAppOrigin = window.location.origin;
 
+/**
+ * Exposing terminal creation to an isolated context (Ember)
+ * More information about contextBridge https://www.electronjs.org/docs/latest/api/context-bridge
+ * usage example: window.terminal.open('terminal-container');
+ */
 contextBridge.exposeInMainWorld('terminal', {
   open: function (container) {
     const term = new Terminal();
@@ -21,15 +26,18 @@ contextBridge.exposeInMainWorld('terminal', {
     // Open the terminal in container
     term.open(document.getElementById(container));
 
-    // Move this out of here?
+    // Move this out of here? this should be implemented as ipc handler
+    // This writes on xterm whatever comes from the host terminal.
     ipcRenderer.on('terminal.incomingData', (event, data) => {
       term.write(data);
     });
-
+    // Move this out of here? this should be implemented as ipc handler
+    // This sends to host terminal whatever is wrote on xterm.
     term.onData((e) => {
       ipcRenderer.send('terminal.keystroke', e);
     });
 
+    // Applies fit addon
     fitAddon.fit();
   },
 });
@@ -54,28 +62,4 @@ process.once('loaded', () => {
       event.ports[0].postMessage(response);
     }
   });
-
-  // function carlo() {
-  //   console.log('Carlo function has been invoked!');
-  // }
-  // window.addEventListener('DOMContentLoaded', () => {
-  //   // Terminal
-  //   const term = new Terminal();
-  //   const fitAddon = new FitAddon();
-  //   term.loadAddon(fitAddon);
-
-  //   // Open the terminal in #terminal-container
-  //   term.open(document.getElementById('terminal-container'));
-
-  //   ipcRenderer.on("terminal.incomingData", (event, data) => {
-  //     term.write(data);
-  //   });
-
-  //   term.onData(e => {
-  //     ipcRenderer.send("terminal.keystroke", e);
-  //   });
-
-  //   // Make the terminal's size and geometry fit the size of #terminal-container
-  //   fitAddon.fit();
-  // });
 });

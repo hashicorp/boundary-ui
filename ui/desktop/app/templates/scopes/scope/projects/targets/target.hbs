@@ -22,12 +22,6 @@
       @iconPosition='trailing'
       {{on 'click' (route-action 'preConnect' @model)}}
     />
-    <Hds::Button
-      @text='Open terminal'
-      @icon='entry-point'
-      @iconPosition='trailing'
-      {{on 'click' (route-action 'openTerminal' @model)}}
-    />
   </page.actions>
 
   <page.body class='details-screen-body'>
@@ -87,7 +81,6 @@
           </Rose::MetadataList>
         </div>
       </bc.Sidebar>
-      <div id='terminal-container'></div>
     </Rose::Layout::BodyContent>
   </page.body>
 

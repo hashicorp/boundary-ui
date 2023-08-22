@@ -110,15 +110,3 @@ handle('toggleFullscreenWindow', () => {
  * Quit app
  */
 handle('closeWindow', () => app.quit());
-
-/**
- * Terminal
- */
-handle('terminalCarlos', ({ container }) => {
-  console.log('Handle terminal in container: ', container);
-  console.log(window);
-  // console.log(window.carlos)
-  // console.log(window.carlos.Terminal);
-  // const { Terminal } = require('xterm');
-  // const { FitAddon } = require('xterm-addon-fit');
-});
