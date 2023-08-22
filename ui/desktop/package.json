@@ -31,7 +31,7 @@
     "format:hbs": "prettier --write 'app/**/*.hbs'",
     "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
-    "start": "ember serve",
+    "start": "ember serve --port 4201",
     "prestart:desktop": "cd electron-app && yarn premake",
     "start:desktop": "ember electron",
     "clean:coverage": "rm -rf coverage_*",
