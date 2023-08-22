@@ -33,6 +33,7 @@
               {{t 'resources.session.credential.title_plural'}}
             </div>
             <Hds::Form::Toggle::Field
+              @value={{this.isRawApiVisible}}
               {{on 'change' this.toggleCredentials}}
               as |F|
             >
