@@ -151,9 +151,4 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
   async refreshTargets() {
     return this.refresh();
   }
-
-  @action
-  async openTerminal() {
-    window.terminal.open('terminal-container');
-  }
 }

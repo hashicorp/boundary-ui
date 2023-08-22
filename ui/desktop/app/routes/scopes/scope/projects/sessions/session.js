@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =services
@@ -23,5 +24,12 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
     return this.store.findRecord('session', session_id, {
       reload: true,
     });
+  }
+
+  // =actions
+
+  @action
+  async openTerminal() {
+    window.terminal.open('terminal-container');
   }
 }
