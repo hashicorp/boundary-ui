@@ -39,7 +39,7 @@ export default factory.extend({
   },
   duration() {
     return this.state === STATE_SESSION_RECORDING_AVAILABLE
-      ? `${faker.number.int()}s`
+      ? `${faker.number.int({ max: 100000 })}s`
       : null;
   },
 
