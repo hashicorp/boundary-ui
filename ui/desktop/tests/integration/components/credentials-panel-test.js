@@ -51,7 +51,7 @@ module('Integration | Component | credentials-panel', function (hooks) {
     assert.dom('.credential-name').hasText('Credential Library 1');
   });
 
-  test('it code editor when toggle clicked', async function (assert) {
+  test('it shows code editor when toggle clicked', async function (assert) {
     assert.expect(1);
     this.set('credentials', [credential]);
     await render(hbs`
