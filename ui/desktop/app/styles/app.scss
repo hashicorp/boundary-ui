@@ -555,8 +555,8 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 }
 
 .credential-panel-body {
-  border: 0.063rem solid var(--token-color-border-primary);
-  border-radius: 0.313rem;
+  border: 1px solid var(--token-color-border-primary);
+  border-radius: 5px;
   display: flex;
   margin-top: 0.75rem;
 
@@ -572,7 +572,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
   .secret-container {
     margin: 0.75rem 0.5rem;
-    border-bottom: 0.0625rem solid var(--token-color-border-primary);
+    border-bottom: 1px solid var(--token-color-border-primary);
 
     &:last-child {
       border-bottom: 0;
@@ -598,10 +598,10 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 }
 
 .raw-credential-panel-body {
-  $border-width: 0.063rem;
+  $border-width: 1px;
 
-  border: 0.063rem solid var(--token-color-border-primary);
-  border-radius: 0.313rem;
+  border: $border-width solid var(--token-color-border-primary);
+  border-radius: 5px;
   display: block;
   margin-top: 0.75rem;
 
@@ -634,7 +634,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 
   .raw-secret .CodeMirror {
-    border-bottom-left-radius: 0.313rem;
-    border-bottom-right-radius: 0.313rem;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 }
