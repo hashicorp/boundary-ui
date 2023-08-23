@@ -19,12 +19,13 @@ contextBridge.exposeInMainWorld('terminal', {
   open: function (container) {
     const term = new Terminal();
     const fitAddon = new FitAddon();
+    const termContainer = document.getElementById(container);
 
     // load Addon
     term.loadAddon(fitAddon);
 
     // Open the terminal in container
-    term.open(document.getElementById(container));
+    term.open(termContainer);
 
     // Move this out of here? this should be implemented as ipc handler
     // This writes on xterm whatever comes from the host terminal.
@@ -39,6 +40,10 @@ contextBridge.exposeInMainWorld('terminal', {
 
     // Applies fit addon
     fitAddon.fit();
+  },
+  openSsh: function (address, port) {
+    ipcRenderer.send('terminal.keystroke', `ssh ${address} -p ${port}\r`);
+    // `string text ${expression} string text`
   },
 });
 

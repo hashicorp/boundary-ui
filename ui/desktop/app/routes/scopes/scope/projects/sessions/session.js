@@ -29,7 +29,11 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =actions
 
   @action
-  async openTerminal() {
+  async openTerminal(model) {
+    const { proxy_address, proxy_port } = model;
+    // Window is exposed by contextBridge within preload script.
     window.terminal.open('terminal-container');
+    // Send command
+    window.terminal.openSsh(proxy_address, proxy_port);
   }
 }
