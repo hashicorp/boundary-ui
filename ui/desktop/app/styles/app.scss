@@ -537,7 +537,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-// Session Details - Credentials Panel
+// Credentials Panel
 .credential-panel-header {
   display: flex;
   justify-content: space-between;
@@ -598,43 +598,22 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 }
 
 .raw-credential-panel-body {
-  $border-width: 1px;
-
-  border: $border-width solid var(--token-color-border-primary);
-  border-radius: 5px;
   display: block;
   margin-top: 0.75rem;
 
   .raw-credential-header {
+    border: 1px solid var(--token-color-border-primary);
+    border-radius: 5px 5px 0 0;
+    border-bottom: none;
     padding: 1.5rem 1.5rem 0.75rem;
   }
 
   .raw-credential-title {
     display: flex;
     justify-content: space-between;
-
-    .hds-copy-button {
-      padding: 0;
-      background: unset;
-      border: unset;
-      box-shadow: unset;
-      min-height: unset;
-
-      .hds-button__icon {
-        color: var(--ui-gray-subtler-2);
-      }
-    }
-  }
-
-  .raw-secret.rose-codemirror-container {
-    position: relative;
-    right: $border-width;
-    top: $border-width;
-    width: calc(100% + (2 * $border-width));
   }
 
   .raw-secret .CodeMirror {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 0 0 5px 5px;
   }
 }
