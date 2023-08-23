@@ -102,11 +102,14 @@ const createWindow = (partition, closeWindowCB) => {
     env: process.env,
   });
 
+  // This sends to the main window (the listener is on preload.js) and xterm
+  // whatever the ptyProcess (host terminal) outputs.
   ptyProcess.on('data', function (data) {
     mainWindow.webContents.send('terminal.incomingData', data);
     console.log('Data sent');
   });
 
+  // This writes into ptyProcess (host terminal) whatever we write through xterm.
   ipcMain.on('terminal.keystroke', (event, key) => {
     ptyProcess.write(key);
   });
