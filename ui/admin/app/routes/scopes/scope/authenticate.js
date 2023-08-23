@@ -52,7 +52,8 @@ export default class ScopesScopeAuthenticateRoute extends Route {
     // and filter out any that have no auth methods
     const scopes = this.modelFor('scopes').filter(
       ({ id: scope_id, isOrg }) =>
-        isOrg && authMethodsForAllScopes.filterBy('scopeID', scope_id).length
+        isOrg &&
+        authMethodsForAllScopes.filter((i) => i.scopeID === scope_id).length
     );
     return hash({
       scope: this.modelFor('scopes.scope'),
