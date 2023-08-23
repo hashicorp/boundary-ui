@@ -43,7 +43,6 @@ contextBridge.exposeInMainWorld('terminal', {
   },
   openSsh: function (address, port) {
     ipcRenderer.send('terminal.keystroke', `ssh ${address} -p ${port}\r`);
-    // `string text ${expression} string text`
   },
 });
 
