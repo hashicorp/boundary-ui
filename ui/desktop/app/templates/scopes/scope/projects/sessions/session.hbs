@@ -21,6 +21,12 @@
       @color='secondary'
       {{on 'click' (route-action 'cancelSession' @model)}}
     />
+    <Hds::Button
+      @text='Open Terminal'
+      @icon='x'
+      @color='secondary'
+      {{on 'click' (route-action 'openTerminal' @model)}}
+    />
   </page.actions>
 
   <page.body class='details-screen-body'>
