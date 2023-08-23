@@ -68,24 +68,22 @@
                   </div>
                 </div>
 
-                <div class='secret-raw'>
-                  <Rose::CodeEditor
-                    @codeValue={{raw-json credential.rawCredential}}
-                    as |c|
-                  >
-                    <c.fieldEditor
-                      class='rose-autosize'
-                      @options={{hash
-                        mode='application/json'
-                        readOnly=true
-                        lineNumbers=false
-                        cursorBlinkRate=-1
-                        styleActiveLine=false
-                        autoRefresh=true
-                      }}
-                    />
-                  </Rose::CodeEditor>
-                </div>
+                <Rose::CodeEditor
+                  @codeValue={{raw-json credential.rawCredential}}
+                  as |c|
+                >
+                  <c.fieldEditor
+                    class='rose-autosize raw-secret'
+                    @options={{hash
+                      mode='application/json'
+                      readOnly=true
+                      lineNumbers=false
+                      cursorBlinkRate=-1
+                      styleActiveLine=false
+                      autoRefresh=true
+                    }}
+                  />
+                </Rose::CodeEditor>
               </div>
             {{else}}
               <div class='credential-panel-body'>

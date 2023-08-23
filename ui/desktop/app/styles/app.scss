@@ -626,14 +626,14 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     }
   }
 
-  .secret-raw .rose-codemirror-container {
+  .raw-secret.rose-codemirror-container {
     position: relative;
     right: $border-width;
     top: $border-width;
     width: calc(100% + (2 * $border-width));
   }
 
-  .secret-raw .CodeMirror {
+  .raw-secret .CodeMirror {
     border-bottom-left-radius: 0.313rem;
     border-bottom-right-radius: 0.313rem;
   }
