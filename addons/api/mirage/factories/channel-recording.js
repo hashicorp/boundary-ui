@@ -16,6 +16,7 @@ export default factory.extend({
       : faker.date.recent({ days: 3, refDate: this.end_time });
   },
   end_time: (i) => (i % 3 === 2 ? null : faker.date.recent()),
-  duration: (i) => (i % 3 === 2 ? null : `${faker.number.int()}s`),
+  duration: (i) =>
+    i % 3 === 2 ? null : `${faker.number.int({ max: 100000 })}s`,
   mime_types: (i) => (i % 3 === 2 ? null : [MIME_TYPE_ASCIICAST]),
 });
