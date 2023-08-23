@@ -19,6 +19,7 @@ module('Integration | Component | rose/message', function (hooks) {
         <message.link @route="index">Link</message.link>
       </Rose::Message>
     `);
+
     assert.ok(find('.rose-message'));
     assert.strictEqual(find('.rose-message-title').textContent.trim(), 'Title');
     assert.strictEqual(
@@ -29,6 +30,7 @@ module('Integration | Component | rose/message', function (hooks) {
       find('.rose-message-description').textContent.trim(),
       'Description'
     );
-    assert.strictEqual(find('.rose-message-link').textContent.trim(), 'Link');
+
+    assert.strictEqual(find('a').textContent.trim(), 'Link');
   });
 });

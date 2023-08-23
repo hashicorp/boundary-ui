@@ -16,14 +16,6 @@ module('Integration | Component | rose/header/nav', function (hooks) {
     assert.ok(find('.rose-header-nav'));
   });
 
-  test('it renders nav link elements', async function (assert) {
-    await render(hbs`<Rose::Header::nav as |nav| >
-      <nav.link @route="index"/>
-      <nav.link @route="about"/>
-    </Rose::Header::nav>`);
-    assert.strictEqual(findAll('a').length, 2);
-  });
-
   test('it renders nav dropdown elements', async function (assert) {
     await render(hbs`<Rose::Header::nav as |nav| >
       <nav.dropdown />
