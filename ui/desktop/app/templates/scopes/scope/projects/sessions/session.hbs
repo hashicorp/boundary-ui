@@ -15,6 +15,7 @@
 
   <page.actions>
     <Hds::Button
+      data-test-session-detail-cancel-button
       @text={{t 'resources.session.actions.end'}}
       @icon='x'
       @color='secondary'
@@ -22,11 +23,25 @@
     />
   </page.actions>
 
-  <page.body>
+  <page.body class='details-screen-body'>
     <div class='copy-url-container'>{{t 'actions.copy-to-clipboard'}}</div>
     <Rose::Layout::BodyContent as |bc|>
-      <bc.Body class='session-details-body'>
-        {{t 'resources.session.description'}}
+      <bc.Body>
+        {{#if @model.credentials}}
+          <CredentialsPanel @credentials={{@model.credentials}} />
+        {{else}}
+          <Hds::ApplicationState data-test-no-credentials as |A|>
+            <A.Header
+              @title={{t 'resources.session.messages.connected.title'}}
+            />
+            <A.Body
+              @text={{t
+                'resources.session.messages.connected.description'
+                targetDisplayName=@model.target.displayName
+              }}
+            />
+          </Hds::ApplicationState>
+        {{/if}}
       </bc.Body>
       <bc.Sidebar>
         <div class='details-sidebar-target-details'>
