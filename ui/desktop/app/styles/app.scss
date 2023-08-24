@@ -564,32 +564,31 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     padding: 1.5rem;
     width: 33%;
   }
-}
 
-.credential-secret {
-  width: 66%;
-  margin: 0.75rem;
+  .credential-secret {
+    width: 66%;
+    margin: 0.75rem;
 
-  .secret-container {
-    margin: 0.75rem 0.5rem;
-    border-bottom: 1px solid var(--token-color-border-primary);
+    .secret-container {
+      margin: 0.75rem 0.5rem;
+      border-bottom: 1px solid var(--token-color-border-primary);
 
-    &:last-child {
-      border-bottom: 0;
-    }
+      &:last-child {
+        border-bottom: 0;
+      }
 
-    .secret-key {
-      font-weight: var(--token-typography-font-weight-semibold);
-    }
+      .secret-key {
+        font-weight: var(--token-typography-font-weight-semibold);
+      }
 
-    .hidden-secret {
-      margin: 0.25rem 0;
-
-      .rose-button-ghost {
-        margin-bottom: 0;
-        color: var(--ui-gray-subtler-2);
+      .hidden-secret {
+        margin: 0.25rem 0;
       }
     }
+  }
+
+  .rose-button-ghost {
+    margin-bottom: 0;
   }
 }
 
