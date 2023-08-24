@@ -1,0 +1,88 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<div class='credential-panel-header'>
+  <div class='title hds-typography-display-400'>
+    {{t 'resources.session.credential.title_plural'}}
+  </div>
+  <Hds::Form::Toggle::Field
+    data-test-toggle-credentials
+    @value={{this.isRawApiVisible}}
+    {{on 'change' this.toggleCredentials}}
+    as |F|
+  >
+    <F.Label>
+      {{t 'resources.session.credential.actions.raw-api.show'}}
+    </F.Label>
+  </Hds::Form::Toggle::Field>
+</div>
+<div class='hds-typography-body-200'>
+  {{t 'resources.session.credential.description'}}
+</div>
+{{#each @credentials as |credential|}}
+  {{#if this.isRawApiVisible}}
+    <div class='raw-credential-panel-body'>
+      <div class='raw-credential-header'>
+        <div class='raw-credential-title'>
+          <div class='credential-name hds-typography-display-200'>
+            {{#if credential.source.name}}
+              {{credential.source.name}}
+            {{else}}
+              {{credential.source.id}}
+            {{/if}}
+          </div>
+          <Hds::Copy::Button
+            @text='Copy'
+            @isIconOnly={{true}}
+            @textToCopy={{raw-json credential.rawCredential}}
+          />
+        </div>
+        <div class='hds-typography-body-100'>
+          {{credential.source.description}}
+        </div>
+      </div>
+
+      <Rose::CodeEditor @codeValue={{raw-json credential.rawCredential}} as |c|>
+        <c.fieldEditor
+          class='rose-autosize raw-secret'
+          @options={{hash
+            mode='application/json'
+            readOnly=true
+            lineNumbers=false
+            cursorBlinkRate=-1
+            styleActiveLine=false
+            autoRefresh=true
+          }}
+        />
+      </Rose::CodeEditor>
+    </div>
+  {{else}}
+    <div class='credential-panel-body'>
+      <div class='credential-header'>
+        <div class='credential-name hds-typography-display-200'>
+          {{#if credential.source.name}}
+            {{credential.source.name}}
+          {{else}}
+            {{credential.source.id}}
+          {{/if}}
+        </div>
+        <div class='hds-typography-body-100'>
+          {{credential.source.description}}
+        </div>
+      </div>
+
+      <ul class='credential-secret'>
+        {{#if credential.secrets}}
+          {{#each credential.secrets as |secret|}}
+            <li class='secret-container'>
+              <span class='secret-key'>{{secret.key}}</span>
+              <HiddenSecret @secret={{secret.value}} />
+            </li>
+          {{/each}}
+        {{/if}}
+      </ul>
+    </div>
+  {{/if}}
+{{/each}}

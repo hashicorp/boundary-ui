@@ -8,7 +8,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { A } from '@ember/array';
 
 export default class ScopesScopeProjectsSessionsRoute extends Route {
   // =services
@@ -79,7 +78,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
       sessions = sessions.filter((s) => this.status.includes(s?.status));
     }
 
-    return A(sessions);
+    return sessions;
   }
 
   // =actions
