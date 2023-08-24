@@ -529,6 +529,10 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   .copyable-button {
     background-color: var(--token-color-palette-neutral-50);
   }
+
+  .flight-icon {
+    flex-shrink: 0;
+  }
 }
 
 .details-screen-body {
