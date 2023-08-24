@@ -37,10 +37,14 @@ module('Integration | Component | rose/header', function (hooks) {
   test('it renders with nav elements', async function (assert) {
     await render(hbs`<Rose::Header as |header| >
       <header.nav as |nav|>
-        <nav.link @route="about"/>
+        <nav.dropdown @text='org-name' as |dropdown|>
+          <dropdown.link @route='index'>Menu item</dropdown.link>
+          <dropdown.link @route='about'>Menu item</dropdown.link>
+          <dropdown.button>Button menu item</dropdown.button>
+        </nav.dropdown>
       </header.nav>
     </Rose::Header>`);
-    assert.ok(find('.rose-header-nav-link'));
+    assert.ok(find('.rose-dropdown'));
   });
 
   test('it renders with utilities', async function (assert) {

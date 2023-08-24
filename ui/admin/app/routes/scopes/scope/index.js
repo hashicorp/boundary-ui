@@ -23,8 +23,9 @@ export default class ScopesScopeIndexRoute extends Route {
    * If authenticated but no orgs exist, redirect into onboarding.
    */
   redirect(model) {
-    const hasOrgs = this.store.peekAll('scope').filterBy('type', 'org').length;
-
+    const hasOrgs = this.store
+      .peekAll('scope')
+      .filter((scope) => scope.type === 'org').length;
     // Must authenticate before proceeding anywhere else
     if (!this.session.isAuthenticated) {
       return this.router.transitionTo('scopes.scope.authenticate');
