@@ -73,7 +73,7 @@ export default function initializeMockIPC(server, config) {
           {
             credential_source: {
               id: 'clvlt_4cvscMTl0N',
-              name: 'Source Name',
+              name: 'Credential Library 1',
               description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
@@ -116,7 +116,7 @@ export default function initializeMockIPC(server, config) {
           {
             credential_source: {
               id: 'clvlt_4cvscMTl0N',
-              name: 'Source Name',
+              name: 'Credential Library 2',
               description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
@@ -129,7 +129,7 @@ export default function initializeMockIPC(server, config) {
           {
             credential_source: {
               id: 'clvlt_9KWscxpcY7',
-              name: 'Source Name',
+              name: 'Credential Library 3',
               description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',
@@ -141,7 +141,7 @@ export default function initializeMockIPC(server, config) {
           {
             credential_source: {
               id: 'clvlt_9KWscxpcY7',
-              name: 'Source Name',
+              name: 'Credential Library 4',
               description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
               type: 'vault',

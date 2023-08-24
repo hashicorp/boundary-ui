@@ -530,3 +530,89 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     background-color: var(--token-color-palette-neutral-50);
   }
 }
+
+.details-screen-body {
+  .rose-layout-body-content {
+    margin-top: 1.5rem;
+  }
+}
+
+// Credentials Panel
+.credential-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+
+  .title {
+    font-weight: var(--token-typography-font-weight-bold);
+  }
+
+  /* stylelint-disable selector-class-pattern */
+  .hds-form-field--layout-flag {
+    margin-bottom: 0;
+  }
+}
+
+.credential-panel-body {
+  border: 1px solid var(--token-color-border-primary);
+  border-radius: 5px;
+  display: flex;
+  margin-top: 0.75rem;
+
+  .credential-header {
+    padding: 1.5rem;
+    width: 33%;
+  }
+
+  .credential-secret {
+    width: 66%;
+    margin: 0.75rem;
+
+    .secret-container {
+      margin: 0.75rem 0.5rem;
+      border-bottom: 1px solid var(--token-color-border-primary);
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      .secret-key {
+        font-weight: var(--token-typography-font-weight-semibold);
+      }
+
+      .hidden-secret {
+        margin: 0.25rem 0;
+      }
+    }
+  }
+
+  .rose-button-ghost {
+    margin-bottom: 0;
+  }
+}
+
+.credential-name {
+  font-weight: var(--token-typography-font-weight-semibold);
+}
+
+.raw-credential-panel-body {
+  display: block;
+  margin-top: 0.75rem;
+
+  .raw-credential-header {
+    border: 1px solid var(--token-color-border-primary);
+    border-radius: 5px 5px 0 0;
+    border-bottom: none;
+    padding: 1.5rem 1.5rem 0.75rem;
+  }
+
+  .raw-credential-title {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .raw-secret .CodeMirror {
+    border-radius: 0 0 5px 5px;
+  }
+}

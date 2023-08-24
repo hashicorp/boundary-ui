@@ -278,20 +278,24 @@ session:
     none-active-friendly:
       title: No Active Sessions Available
       description: No active sessions available to display yet.
+    connected:
+      title: Connected
+      description: You can now access {targetDisplayName}
   actions:
     connect: Connect
     end: End session
   credential:
     title: Credential
     title_plural: Credentials
+    description: These credentials have been provided for services on this server.
     secret:
       label: Secret
     credential_source:
       title: Credential Source
     actions:
       raw-api:
-        show: View raw API output
-        hide: Hide raw API output
+        show: View API output
+        hide: Hide API output
 org:
   title: Org
   title_plural: Orgs
