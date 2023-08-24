@@ -11,13 +11,15 @@ const IndexedDbHandler = {
         const { store, data } = context.request;
         const { type, query } = data;
         const supportedModels = Object.keys(modelIndexes);
+        const { db: indexedDb } = this.indexedDb ?? {};
 
         // TODO: Differentiate between user initiated paginated
         //  requests and cache population requests
 
         // Go through normal flow if we don't yet support the model
         // or if we don't have an indexedDb instance
-        if (!supportedModels.includes(type) || !this.indexedDb.db) {
+        if (!supportedModels.includes(type) || !indexedDb) {
+          // console.log(this.indexedDb.db);
           break;
         }
 
@@ -34,14 +36,15 @@ const IndexedDbHandler = {
           'query'
         );
 
+        // eslint-disable-next-line no-unused-vars
         const { data: payloadData } = normalizedPayload;
 
         // TODO: Just to show how to add data to indexedDb
-        await this.indexedDb.db[type].bulkPut(payloadData);
-        await this.indexedDb.db[type]
-          .where('attributes.type')
-          .equals('ssh')
-          .toArray();
+        // await this.indexedDb.db[type].bulkPut(payloadData);
+        // await this.indexedDb.db[type]
+        //   .where('attributes.type')
+        //   .equals('ssh')
+        //   .toArray();
 
         // TODO: Manually insert the normalized data into ember data store and don't call next()
         //  Also investigate to see if we can return cache first and make API request in background
