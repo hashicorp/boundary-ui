@@ -11,6 +11,9 @@ export const modelIndexes = {
   session: '&id, attributes.type',
 };
 
+export const formatDbName = (userId, clusterUrl) =>
+  `boundary-${userId}-${clusterUrl}`;
+
 /**
  * Service to encapsulate the IndexedDB implementation. To use this service, call
  * `setup` from the application root and
@@ -25,15 +28,13 @@ export default class IndexedDbService extends Service {
     return this.#db;
   }
 
-  setup(clusterUrl) {
-    if (!this.#db) {
-      const userId = this.session.get('data.authenticated.user_id');
-      if (!userId || !clusterUrl) {
-        return;
-      }
-
-      this.#db = new Dexie(`boundary-${userId}-${clusterUrl}`);
-      this.#db.version(1).stores(modelIndexes);
+  setup(dbName) {
+    // Don't run setup again if we already have one or if we didn't get a name
+    if (this.#db || !dbName) {
+      return;
     }
+
+    this.#db = new Dexie(dbName);
+    this.#db.version(1).stores(modelIndexes);
   }
 }

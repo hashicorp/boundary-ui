@@ -1,5 +1,6 @@
 import { inject as service } from '@ember/service';
 import BaseSessionService from 'ember-simple-auth/services/session';
+import { formatDbName } from 'api/services/indexed-db';
 
 export default class SessionService extends BaseSessionService {
   @service indexedDb;
@@ -12,6 +13,10 @@ export default class SessionService extends BaseSessionService {
   handleAuthentication() {
     super.handleAuthentication(...arguments);
 
-    this.indexedDb.setup(this.clusterUrl.rendererClusterUrl);
+    const userId = this.data?.authenticated?.user_id;
+    const clusterUrl = this.clusterUrl.rendererClusterUrl;
+    if (userId && clusterUrl) {
+      this.indexedDb.setup(formatDbName(userId, clusterUrl));
+    }
   }
 }
