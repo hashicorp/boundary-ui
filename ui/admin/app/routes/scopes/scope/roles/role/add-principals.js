@@ -46,7 +46,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    */
   async model() {
     const role = this.modelFor('scopes.scope.roles.role');
-    const scopes = this.store.peekAll('scope').toArray();
+    const scopes = this.store.peekAll('scope');
     const scopeIDs = this.scope?.map((scope) => scope.id);
     const users = scopeIDs?.length
       ? this.resourceFilterStore.queryBy(
