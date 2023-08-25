@@ -93,6 +93,12 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   async cancelSession(session) {
     await session.cancelSession();
     await this.ipc.invoke('stop', { session_id: session.id });
+    if (
+      this.router.currentRoute.name ===
+      'scopes.scope.projects.sessions.session.index'
+    ) {
+      await this.router.replaceWith('scopes.scope.projects.targets');
+    }
   }
 
   /**

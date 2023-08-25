@@ -53,6 +53,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     },
     projects: null,
+    targets: null,
     target: null,
     sessions: null,
     session: null,
@@ -109,7 +110,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
-    urls.target = `${urls.projects}/targets/${instances.target.id}`;
+    urls.targets = `${urls.projects}/targets`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
     urls.sessions = `${urls.projects}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
@@ -181,7 +183,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       .hasText(`Connected You can now access ${instances.target.name}`);
   });
 
-  test('cancelling a session', async function (assert) {
+  test('cancelling a session shows success alert', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop');
 
@@ -189,6 +191,16 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await click('[data-test-session-detail-cancel-button]');
 
     assert.dom('[role="alert"].is-success').isVisible();
+  });
+
+  test('cancelling a session takes you to the targets list screen', async function (assert) {
+    assert.expect(1);
+    stubs.ipcService.withArgs('stop');
+
+    await visit(urls.session);
+    await click('[data-test-session-detail-cancel-button]');
+
+    assert.strictEqual(currentURL(), urls.targets);
   });
 
   test('cancelling a session with error shows notification', async function (assert) {

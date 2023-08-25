@@ -269,7 +269,7 @@ module('Acceptance | projects | sessions', function (hooks) {
       .isVisible();
   });
 
-  test('cancelling a session', async function (assert) {
+  test('cancelling a session shows success alert', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop');
 
@@ -277,6 +277,16 @@ module('Acceptance | projects | sessions', function (hooks) {
     await click('tbody tr:first-child td:last-child button');
 
     assert.dom('[role="alert"].is-success').isVisible();
+  });
+
+  test('cancelling a session keeps you on the sessions list screen', async function (assert) {
+    assert.expect(1);
+    stubs.ipcService.withArgs('stop');
+
+    await visit(urls.sessions);
+    await click('tbody tr:first-child td:last-child button');
+
+    assert.strictEqual(currentURL(), urls.sessions);
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
