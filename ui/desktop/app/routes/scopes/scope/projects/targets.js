@@ -7,6 +7,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import { loading } from 'ember-loading';
 
 export default class ScopesScopeProjectsTargetsRoute extends Route {
   // =services
@@ -79,6 +80,7 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
    * @param {HostModel} host
    */
   @action
+  @loading
   async connect(model, host) {
     // TODO: Connect: move this logic into the target model
     try {
