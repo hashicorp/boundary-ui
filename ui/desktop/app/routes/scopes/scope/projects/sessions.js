@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
+import { loading } from 'ember-loading';
 
 export default class ScopesScopeProjectsSessionsRoute extends Route {
   // =services
@@ -88,6 +89,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
    * @param {SessionModel}
    */
   @action
+  @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.canceled-success')
   async cancelSession(session) {
