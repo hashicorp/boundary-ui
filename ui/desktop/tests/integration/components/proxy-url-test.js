@@ -7,9 +7,11 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'desktop/tests/helpers';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | proxy-url', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks);
 
   test('it renders', async function (assert) {
     assert.expect(2);
