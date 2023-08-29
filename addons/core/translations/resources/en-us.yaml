@@ -296,6 +296,9 @@ session:
       raw-api:
         show: View API output
         hide: Hide API output
+  proxy-url:
+    address-port: Address & port
+    ssh: SSH
 org:
   title: Org
   title_plural: Orgs
