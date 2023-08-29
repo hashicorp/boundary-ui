@@ -28,11 +28,12 @@
       @isTruncated={{true}}
     />
     <Hds::Copy::Snippet class='copy-port' @textToCopy={{@proxyPort}} />
-  {{else if this.isSSH}}
+  {{/if}}
+  {{#unless this.isAddressAndPort}}
     <Hds::Copy::Snippet
       class='copy-ssh-command'
       @textToCopy={{this.sshCommand}}
       @isTruncated={{true}}
     />
-  {{/if}}
+  {{/unless}}
 </div>
