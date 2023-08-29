@@ -24,12 +24,6 @@ export default class SessionProxyUrlComponent extends Component {
     );
   }
 
-  get isSSH() {
-    return (
-      this.selectedValue === this.intl.t('resources.session.proxy-url.ssh')
-    );
-  }
-
   get sshCommand() {
     return `ssh ${this.args.proxyAddress} -p ${this.args.proxyPort}`;
   }
