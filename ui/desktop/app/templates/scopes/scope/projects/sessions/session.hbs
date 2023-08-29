@@ -24,7 +24,13 @@
   </page.actions>
 
   <page.body class='details-screen-body'>
-    <div class='copy-url-container'>{{t 'actions.copy-to-clipboard'}}</div>
+    {{#if (and @model.proxy_address @model.proxy_port)}}
+      <Session::ProxyUrl
+        @proxyAddress={{@model.proxy_address}}
+        @proxyPort={{@model.proxy_port}}
+        @targetType={{@model.target.type}}
+      />
+    {{/if}}
     <Rose::Layout::BodyContent as |bc|>
       <bc.Body>
         {{#if @model.credentials}}
