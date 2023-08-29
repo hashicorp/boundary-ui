@@ -28,6 +28,7 @@
       <ProxyUrl
         @proxyAddress={{@model.proxy_address}}
         @proxyPort={{@model.proxy_port}}
+        @targetType={{@model.target.type}}
       />
     {{/if}}
     <Rose::Layout::BodyContent as |bc|>
