@@ -9,20 +9,25 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 
-export default class ProxyUrlComponent extends Component {
+export default class SessionProxyUrlComponent extends Component {
   @service intl;
 
   @tracked selectedValue =
     this.args.targetType === TYPE_TARGET_SSH
-      ? this.intl.t('proxy-url.options.ssh')
-      : this.intl.t('proxy-url.options.address-port');
+      ? this.intl.t('resources.session.proxy-url.ssh')
+      : this.intl.t('resources.session.proxy-url.address-port');
 
   get isAddressAndPort() {
-    return this.selectedValue === this.intl.t('proxy-url.options.address-port');
+    return (
+      this.selectedValue ===
+      this.intl.t('resources.session.proxy-url.address-port')
+    );
   }
 
   get isSSH() {
-    return this.selectedValue === this.intl.t('proxy-url.options.ssh');
+    return (
+      this.selectedValue === this.intl.t('resources.session.proxy-url.ssh')
+    );
   }
 
   get sshCommand() {

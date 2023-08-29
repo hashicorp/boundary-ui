@@ -2,18 +2,22 @@
   <Hds::Dropdown @listPosition='bottom-left' as |dd|>
     <dd.ToggleButton @color='secondary' @text={{this.selectedValue}} />
     <dd.Interactive
-      @text={{t 'proxy-url.options.address-port'}}
+      @text={{t 'resources.session.proxy-url.address-port'}}
       {{on
         'click'
-        (fn this.updateContent (t 'proxy-url.options.address-port') dd.close)
+        (fn
+          this.updateContent
+          (t 'resources.session.proxy-url.address-port')
+          dd.close
+        )
       }}
     />
     <dd.Interactive
       data-test-ssh-option
-      @text={{t 'proxy-url.options.ssh'}}
+      @text={{t 'resources.session.proxy-url.ssh'}}
       {{on
         'click'
-        (fn this.updateContent (t 'proxy-url.options.ssh') dd.close)
+        (fn this.updateContent (t 'resources.session.proxy-url.ssh') dd.close)
       }}
     />
   </Hds::Dropdown>

@@ -10,7 +10,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
-module('Integration | Component | proxy-url', function (hooks) {
+module('Integration | Component | session/proxy-url', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
 
@@ -22,7 +22,7 @@ module('Integration | Component | proxy-url', function (hooks) {
 
     await render(
       hbs`
-        <ProxyUrl
+        <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
           @targetType={{this.targetType}}
@@ -42,7 +42,7 @@ module('Integration | Component | proxy-url', function (hooks) {
 
     await render(
       hbs`
-        <ProxyUrl
+        <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
           @targetType={{this.targetType}}
@@ -66,7 +66,7 @@ module('Integration | Component | proxy-url', function (hooks) {
 
     await render(
       hbs`
-        <ProxyUrl
+        <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
           @targetType={{this.targetType}}
@@ -86,7 +86,7 @@ module('Integration | Component | proxy-url', function (hooks) {
 
     await render(
       hbs`
-        <ProxyUrl
+        <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
           @targetType={{this.targetType}}
