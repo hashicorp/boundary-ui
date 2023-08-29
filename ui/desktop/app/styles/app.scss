@@ -541,6 +541,29 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
+// Proxy URL
+.proxy-url-container {
+  display: flex;
+  gap: 1.75rem;
+  justify-content: flex-start;
+
+  .hds-dropdown-toggle-button {
+    width: 9.375rem;
+  }
+
+  .hds-copy-snippet {
+    width: auto;
+  }
+
+  .copy-address {
+    max-width: 70%;
+  }
+
+  .copy-ssh-command {
+    max-width: 90%;
+  }
+}
+
 // Credentials Panel
 .credential-panel-header {
   display: flex;
