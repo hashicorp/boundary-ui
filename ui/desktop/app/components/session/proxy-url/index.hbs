@@ -1,0 +1,39 @@
+<div class='proxy-url-container'>
+  <Hds::Dropdown @listPosition='bottom-left' as |dd|>
+    <dd.ToggleButton @color='secondary' @text={{this.selectedValue}} />
+    <dd.Interactive
+      @text={{t 'resources.session.proxy-url.address-port'}}
+      {{on
+        'click'
+        (fn
+          this.updateContent
+          (t 'resources.session.proxy-url.address-port')
+          dd.close
+        )
+      }}
+    />
+    <dd.Interactive
+      data-test-ssh-option
+      @text={{t 'resources.session.proxy-url.ssh'}}
+      {{on
+        'click'
+        (fn this.updateContent (t 'resources.session.proxy-url.ssh') dd.close)
+      }}
+    />
+  </Hds::Dropdown>
+  {{#if this.isAddressAndPort}}
+    <Hds::Copy::Snippet
+      class='copy-address'
+      @textToCopy={{@proxyAddress}}
+      @isTruncated={{true}}
+    />
+    <Hds::Copy::Snippet class='copy-port' @textToCopy={{@proxyPort}} />
+  {{/if}}
+  {{#unless this.isAddressAndPort}}
+    <Hds::Copy::Snippet
+      class='copy-ssh-command'
+      @textToCopy={{this.sshCommand}}
+      @isTruncated={{true}}
+    />
+  {{/unless}}
+</div>
