@@ -4,8 +4,6 @@
  */
 
 const { ipcRenderer, contextBridge } = require('electron');
-const { Terminal } = require('xterm');
-const { FitAddon } = require('xterm-addon-fit');
 
 // Messages must originate from this origin
 const emberAppOrigin = window.location.origin;
@@ -13,36 +11,17 @@ const emberAppOrigin = window.location.origin;
 /**
  * Exposing terminal creation to an isolated context (Ember)
  * More information about contextBridge https://www.electronjs.org/docs/latest/api/context-bridge
- * usage example: window.terminal.open('terminal-container');
+ * usage example: window.terminal.send(data);
  */
 contextBridge.exposeInMainWorld('terminal', {
-  open: function (container) {
-    const term = new Terminal();
-    const fitAddon = new FitAddon();
-    const termContainer = document.getElementById(container);
-
-    // load Addon
-    term.loadAddon(fitAddon);
-
-    // Open the terminal in container
-    term.open(termContainer);
-
-    // Move this out of here? this should be implemented as ipc handler
-    // This writes on xterm whatever comes from the host terminal.
-    ipcRenderer.on('terminal.incomingData', (event, data) => {
-      term.write(data);
-    });
-    // Move this out of here? this should be implemented as ipc handler
-    // This sends to host terminal whatever is wrote on xterm.
-    term.onData((e) => {
-      ipcRenderer.send('terminal.keystroke', e);
-    });
-
-    // Applies fit addon
-    fitAddon.fit();
+  // We could've sent data through our established postMessage pattern
+  // but we don't need a response back so we can make it include it here
+  // to make it simpler. This keeps sending and receiving handlers symmetrical.
+  send: (data) => {
+    ipcRenderer.send('terminalKeystroke', data);
   },
-  openSsh: function (address, port) {
-    ipcRenderer.send('terminal.keystroke', `ssh ${address} -p ${port}\r`);
+  receive: (callback) => {
+    ipcRenderer.on('terminalIncomingData', callback);
   },
 });
 
