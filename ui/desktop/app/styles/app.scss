@@ -539,6 +539,11 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   .rose-layout-body-content {
     margin-top: 1.5rem;
   }
+
+/* stylelint-disable selector-class-pattern */
+  .hds-tabs__panel {
+    margin-top: 1.5rem;
+  }
 }
 
 // Proxy URL
@@ -546,6 +551,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   display: flex;
   gap: 1.75rem;
   justify-content: flex-start;
+  margin-bottom: 1.75rem;
 
   .hds-dropdown-toggle-button {
     width: 9.375rem;
