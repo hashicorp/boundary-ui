@@ -28,7 +28,7 @@
       <Session::ProxyUrl
         @proxyAddress={{@model.proxy_address}}
         @proxyPort={{@model.proxy_port}}
-        @targetType={{@model.target.type}}
+        @isSSHTarget={{@model.target.isSSH}}
       />
     {{/if}}
     <Rose::Layout::BodyContent as |bc|>

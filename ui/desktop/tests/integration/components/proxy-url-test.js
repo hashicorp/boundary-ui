@@ -8,7 +8,6 @@ import { setupRenderingTest } from 'desktop/tests/helpers';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Integration | Component | session/proxy-url', function (hooks) {
   setupRenderingTest(hooks);
@@ -18,14 +17,13 @@ module('Integration | Component | session/proxy-url', function (hooks) {
     assert.expect(2);
     this.set('proxyAddress', 'http://localhost');
     this.set('proxyPort', '1234');
-    this.set('targetType', TYPE_TARGET_TCP);
 
     await render(
       hbs`
         <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
-          @targetType={{this.targetType}}
+          @isSSHTarget={{false}}
         />
       `
     );
@@ -38,14 +36,13 @@ module('Integration | Component | session/proxy-url', function (hooks) {
     assert.expect(2);
     this.set('proxyAddress', 'http://localhost');
     this.set('proxyPort', '1234');
-    this.set('targetType', TYPE_TARGET_TCP);
 
     await render(
       hbs`
         <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
-          @targetType={{this.targetType}}
+          @isSSHTarget={{false}}
         />
       `
     );
@@ -62,14 +59,13 @@ module('Integration | Component | session/proxy-url', function (hooks) {
     assert.expect(2);
     this.set('proxyAddress', 'http://localhost');
     this.set('proxyPort', '1234');
-    this.set('targetType', TYPE_TARGET_TCP);
 
     await render(
       hbs`
         <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
-          @targetType={{this.targetType}}
+          @isSSHTarget={{false}}
         />
       `
     );
@@ -82,14 +78,13 @@ module('Integration | Component | session/proxy-url', function (hooks) {
     assert.expect(2);
     this.set('proxyAddress', 'http://localhost');
     this.set('proxyPort', '1234');
-    this.set('targetType', TYPE_TARGET_SSH);
 
     await render(
       hbs`
         <Session::ProxyUrl
           @proxyAddress={{this.proxyAddress}}
           @proxyPort={{this.proxyPort}}
-          @targetType={{this.targetType}}
+          @isSSHTarget={{true}}
         />
       `
     );
