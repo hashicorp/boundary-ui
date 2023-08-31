@@ -9,6 +9,7 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { getOwner } from '@ember/application';
 import { loading } from 'ember-loading';
+import { formatDbName } from 'api/services/indexed-db';
 
 export default class ApplicationRoute extends Route {
   // =services
@@ -17,6 +18,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service ipc;
   @service intl;
+  @service indexedDb;
 
   // =attributes
 
@@ -35,7 +37,16 @@ export default class ApplicationRoute extends Route {
     await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
-    return this.clusterUrl.updateClusterUrl();
+    await this.clusterUrl.updateClusterUrl();
+
+    // Setup the DB from a successful authentication restoration
+    if (this.session.isAuthenticated) {
+      const userId = this.session.data?.authenticated?.user_id;
+      const clusterUrl = this.clusterUrl.rendererClusterUrl;
+      if (userId && clusterUrl) {
+        this.indexedDb.setup(formatDbName(userId, clusterUrl));
+      }
+    }
   }
 
   /**
