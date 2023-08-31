@@ -107,7 +107,6 @@ const createWindow = (partition, closeWindowCB) => {
   // This sends to the renderer and xterm whatever the ptyProcess (host terminal) outputs.
   ptyProcess.on('data', function (data) {
     mainWindow.webContents.send('terminalIncomingData', data);
-    console.log('Data sent');
   });
 
   // This writes into ptyProcess (host terminal) whatever we write through xterm.
