@@ -30,7 +30,12 @@
       <bc.Body>
         <Hds::Tabs as |T|>
           <T.Tab>{{t 'titles.details'}}</T.Tab>
-          <T.Tab>{{t 'titles.shell'}}</T.Tab>
+          <T.Tab
+            @icon='terminal'
+            {{on 'click' (route-action 'openTerminal' @model)}}
+          >
+            {{t 'actions.new-shell'}}
+          </T.Tab>
           <T.Panel>
             {{#if (and @model.proxy_address @model.proxy_port)}}
               <Session::ProxyUrl
@@ -56,15 +61,7 @@
             {{/if}}</T.Panel>
           <T.Panel>
             {{! TODO: Add a boolean check to hide btn if a shell is open }}
-            <Hds::Button
-              @text={{t 'actions.new-shell'}}
-              @icon='x'
-              @color='secondary'
-              {{on 'click' (route-action 'openSSH' @model)}}
-            />
-
             <div id='terminal-container'></div>
-
           </T.Panel>
         </Hds::Tabs>
 

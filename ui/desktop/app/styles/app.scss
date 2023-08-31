@@ -516,6 +516,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   background-color: var(--token-color-palette-neutral-50);
   border-radius: 0.313rem;
   padding: 1.5rem 2.5rem;
+  margin-top: 3.5rem;
 
   .title {
     color: var(--token-color-palette-neutral-600);
@@ -540,7 +541,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     margin-top: 1.5rem;
   }
 
-/* stylelint-disable selector-class-pattern */
+  /* stylelint-disable selector-class-pattern */
   .hds-tabs__panel {
     margin-top: 1.5rem;
   }
