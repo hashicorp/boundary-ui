@@ -95,10 +95,7 @@ const createWindow = (partition, closeWindowCB) => {
   // TODO: Figure out how to spawn more than one terminal process in a browser window
   //       while keeping track of handlers
   // Terminal
-  const shell2 =
-    os.platform() === 'win32'
-      ? 'powershell.exe'
-      : process.env.SHELL || '/bin/bash';
+  const shell2 = os.platform() === 'win32' ? 'powershell.exe' : '/bin/bash';
   const ptyProcess = pty.spawn(shell2, [], {
     name: 'xterm-color',
     cols: 80,
