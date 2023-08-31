@@ -19,6 +19,7 @@ const {
   setPasswordToAccount,
   createNewUser,
   addAccountToUser,
+  makeAuthMethodPrimary,
 } = require('../helpers/boundary-ui');
 
 test.use({ storageState: authenticatedState });
@@ -46,6 +47,7 @@ test('Verify new auth-method can be created and assigned to users', async ({
       'password'
     );
     await setPasswordToAccount(page, 'password2');
+    await makeAuthMethodPrimary(page);
     await createNewUser(page, 'UI Test User');
     await addAccountToUser(page);
   } finally {

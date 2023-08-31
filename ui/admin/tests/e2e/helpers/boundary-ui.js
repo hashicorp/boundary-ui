@@ -314,6 +314,25 @@ exports.createNewAuthMethod = async (page, authMethodName) => {
 };
 
 /**
+ * Uses the UI to make the first available auth method primary.
+ * Assumes you have created new auth method.
+ * @param {Page} page Playwright page object
+ */
+exports.makeAuthMethodPrimary = async (page) => {
+  await page
+    .getByRole('navigation', { name: 'IAM' })
+    .getByRole('link', { name: 'Auth Methods' })
+    .click();
+  await page.click('[aria-label="Manage"]');
+  await page.getByText('Make Primary', { exact: true }).click();
+  await page.getByText('OK', { exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+};
+
+/**
  * Uses the UI to create new Account. Assumes you have selected the desired Auth Method
  * which the account will be created for.
  * @param {Page} page Playwright page object
