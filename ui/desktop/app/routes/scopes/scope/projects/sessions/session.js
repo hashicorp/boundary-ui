@@ -6,6 +6,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
 
 export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =services
@@ -30,10 +32,26 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
 
   @action
   async openTerminal(model) {
-    const { proxy_address, proxy_port } = model;
-    // Window is exposed by contextBridge within preload script.
-    window.terminal.open('terminal-container');
-    // Send command
-    window.terminal.openSsh(proxy_address, proxy_port);
+    const xterm = new Terminal();
+    const fitAddon = new FitAddon();
+    const termContainer = document.getElementById('terminal-container');
+
+    // TODO: Do we need the fit addon?
+    xterm.loadAddon(fitAddon);
+    xterm.open(termContainer);
+    fitAddon.fit();
+
+    // Terminal is exposed by contextBridge within the preload script.
+    xterm.onData((data) => window.terminal.send(data));
+    window.terminal.receive((event, value) => {
+      xterm.write(value);
+    });
+
+    if (model.target?.isSSH) {
+      const { proxy_address, proxy_port } = model;
+
+      // Send an SSH command immediately
+      window.terminal.send(`ssh ${proxy_address} -p ${proxy_port}\r`);
+    }
   }
 }

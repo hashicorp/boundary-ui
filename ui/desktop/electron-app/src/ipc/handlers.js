@@ -11,8 +11,6 @@ const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
 const { isMac } = require('../helpers/platform.js');
-// const { Terminal } = require('xterm');
-// const { FitAddon } = require('xterm-addon-fit');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
