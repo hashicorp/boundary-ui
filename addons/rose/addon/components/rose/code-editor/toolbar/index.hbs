@@ -22,8 +22,8 @@
       ></div>
     {{/if}}
     <CopyButton
-      @clipboardText={{@copyText}}
-      @success={{this.copied}}
+      @text={{@copyText}}
+      @onSuccess={{this.copied}}
       class='rose-code-editor-toolbar__copy-button'
       data-test-code-editor-toolbar-copy-button
     >

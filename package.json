@@ -60,28 +60,21 @@
     "jpeg-js": "^0.4.4",
     "got": "^11.8.5",
     "loader-utils": "^2.0.4",
-    "**/@storybook/**/minimatch": "^3.0.5",
     "**/ember-electron/**/minimatch": "^3.0.5",
     "**/babel-core/json5": "^2.2.2",
     "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0",
-    "**/@storybook/**/immer": "^9.0.6",
     "**/nomnom/underscore": "^1.12.1",
     "**/remark-parse/trim": "^1.0.1",
     "**/react-dev-utils/browserslist": "^4.16.5",
-    "**/@storybook/cli/puppeteer-core/ws": "^7.4.6",
     "**/pretty-bytes/meow/trim-newlines": "^3.0.1",
     "**/ember-cli/**/clean-css-promise/clean-css": "^4.1.11",
     "**/bower-config/minimist": "^1.2.6",
     "**/commitizen/minimist": "^1.2.6",
-    "**/@storybook/builder-webpack4/@storybook/core-common/glob-base/glob-parent": "^5.1.2",
-    "**/@storybook/addon-docs/@storybook/core/@storybook/core-server/cpy/globby/fast-glob/glob-parent": "^5.1.2",
     "**/ember-intl/broccoli-merge-files/fast-glob/glob-parent": "^5.1.2",
     "**/watchpack/watchpack-chokidar2/chokidar/glob-parent": "^5.1.2",
     "**/core/ember-inline-svg/**/nth-check": "^2.0.1",
     "**/snapdragon/base/cache-base/**/set-value": "^4.0.1",
-    "**/@storybook/**/ansi-regex": "^5.0.1",
     "**/jsprim/json-schema": "^0.4.0",
-    "**/@storybook/**/yuidocjs/markdown-it": "^12.3.2",
     "**/ember-cli/markdown-it-terminal/markdown-it": "^12.3.2",
     "**/ember-cli-mirage/@embroider/macros": "^1.0.0"
   },
@@ -91,6 +84,6 @@
     }
   },
   "engines": {
-    "node": "12.* || 14.* || 16.*"
+    "node": "16.* || 18.*"
   }
 }

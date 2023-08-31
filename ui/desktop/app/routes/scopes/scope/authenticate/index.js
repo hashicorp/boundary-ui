@@ -20,7 +20,7 @@ export default class ScopesScopeAuthenticateIndexRoute extends Route {
    * @param {[AuthMethodModel]} model.authMethods
    */
   redirect({ authMethods }) {
-    const firstAuthMethod = authMethods.firstObject;
+    const firstAuthMethod = authMethods[0];
     if (firstAuthMethod) {
       this.router.replaceWith(
         'scopes.scope.authenticate.method',

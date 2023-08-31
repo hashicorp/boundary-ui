@@ -31,7 +31,7 @@
     "format:hbs": "prettier --write 'app/**/*.hbs'",
     "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
-    "start": "ember serve",
+    "start": "ember serve --port 4201",
     "prestart:desktop": "cd electron-app && yarn premake",
     "start:desktop": "ember electron",
     "clean:coverage": "rm -rf coverage_*",
@@ -110,10 +110,11 @@
     "stylelint": "^15.10.1",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^7.0.1",
-    "webpack": "^5.76.0"
+    "webpack": "^5.76.0",
+     "lodash": "4.17.21"
   },
   "engines": {
-    "node": "12.* || 14.* || 16.*"
+    "node": "16.* || 18.*"
   },
   "ember": {
     "edition": "octane"

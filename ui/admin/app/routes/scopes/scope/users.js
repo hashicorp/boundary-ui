@@ -14,7 +14,6 @@ export default class ScopesScopeUsersRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
   @service session;
   @service can;
   @service router;
@@ -32,7 +31,7 @@ export default class ScopesScopeUsersRoute extends Route {
    * Load all users under current scope.
    * @return {Promise{[UserModel]}}
    */
-  async model() {
+  model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     if (this.can.can('list model', scope, { collection: 'users' })) {

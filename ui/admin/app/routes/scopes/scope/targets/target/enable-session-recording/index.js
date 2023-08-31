@@ -41,8 +41,8 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingIndexRoute ex
     });
 
     const storageBucketList = [
-      ...globalScopeStorageBuckets.toArray(),
-      ...orgScopeStorageBuckets.toArray(),
+      ...globalScopeStorageBuckets,
+      ...orgScopeStorageBuckets,
     ];
     this.storageBucketList = storageBucketList;
   }

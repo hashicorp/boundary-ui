@@ -5,7 +5,6 @@
 # compiled output
 /dist/
 /tmp/
-/storybook-static/
 
 # dependencies
 /bower_components/
@@ -18,3 +17,10 @@ main.js
 .eslintcache
 
 index.js
+# ember-try
+/.node_modules.ember-try/
+/bower.json.ember-try
+/npm-shrinkwrap.json.ember-try
+/package.json.ember-try
+/package-lock.json.ember-try
+/yarn.lock.ember-try

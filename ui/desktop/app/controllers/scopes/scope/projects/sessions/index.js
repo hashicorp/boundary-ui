@@ -4,6 +4,7 @@
  */
 
 import Controller from '@ember/controller';
+import sortBy from 'lodash/sortBy';
 
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
   // =attributes
@@ -15,10 +16,8 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    */
   get sorted() {
     const sessions = this.model;
-    const sortedSessions = sessions
-      // sort by created time
-      .sortBy('session.created_time')
-      .reverse();
+    // sort by created time
+    const sortedSessions = sortBy(sessions, 'session.created_time').reverse();
     return [
       // then move active sessions to the top
       ...sortedSessions.filter((session) => session.isCancelable),

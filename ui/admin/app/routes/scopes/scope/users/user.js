@@ -19,7 +19,7 @@ export default class ScopesScopeUsersUserRoute extends Route {
    * @param {string} params.user_id
    * @return {UserModel}
    */
-  async model({ user_id }) {
+  model({ user_id }) {
     return this.store.findRecord('user', user_id);
   }
 }
