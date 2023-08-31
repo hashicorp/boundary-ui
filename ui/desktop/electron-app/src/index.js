@@ -92,28 +92,6 @@ const createWindow = (partition, closeWindowCB) => {
 
   const browserWindow = new BrowserWindow(browserWindowOptions);
 
-  // TODO: Figure out how to spawn more than one terminal process in a browser window
-  //       while keeping track of handlers
-  // Terminal
-  const shell2 = os.platform() === 'win32' ? 'powershell.exe' : '/bin/bash';
-  const ptyProcess = pty.spawn(shell2, [], {
-    name: 'xterm-color',
-    cols: 80,
-    rows: 30,
-    cwd: process.env.HOME,
-    env: process.env,
-  });
-
-  // This sends to the renderer and xterm whatever the ptyProcess (host terminal) outputs.
-  ptyProcess.on('data', function (data) {
-    mainWindow.webContents.send('terminalIncomingData', data);
-  });
-
-  // This writes into ptyProcess (host terminal) whatever we write through xterm.
-  ipcMain.on('terminalKeystroke', (event, value) => {
-    ptyProcess.write(value);
-  });
-
   // If the user-specified cluster URL changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
   runtimeSettings.onClusterUrlChange(() => browserWindow.loadURL(emberAppURL));

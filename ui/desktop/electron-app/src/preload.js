@@ -17,11 +17,14 @@ contextBridge.exposeInMainWorld('terminal', {
   // We could've sent data through our established postMessage pattern
   // but we don't need a response back so we can make it include it here
   // to make it simpler. This keeps sending and receiving handlers symmetrical.
-  send: (data) => {
-    ipcRenderer.send('terminalKeystroke', data);
+  send: (data, id) => {
+    ipcRenderer.send(`terminalKeystroke-${id}`, data);
   },
-  receive: (callback) => {
-    ipcRenderer.on('terminalIncomingData', callback);
+  receive: (callback, id) => {
+    ipcRenderer.on(`terminalIncomingData-${id}`, callback);
+  },
+  create: (vars) => {
+    ipcRenderer.send('createTerminal', vars);
   },
 });
 

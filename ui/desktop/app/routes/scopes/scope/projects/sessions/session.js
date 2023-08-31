@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =services
@@ -41,11 +42,15 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
     xterm.open(termContainer);
     fitAddon.fit();
 
+    // Generate a UUID to have the terminal handlers be unique
+    const id = uuidv4();
+
     // Terminal is exposed by contextBridge within the preload script.
-    xterm.onData((data) => window.terminal.send(data));
+    window.terminal.create({ id });
+    xterm.onData((data) => window.terminal.send(data, id));
     window.terminal.receive((event, value) => {
       xterm.write(value);
-    });
+    }, id);
 
     if (model.target?.isSSH) {
       const { proxy_address, proxy_port } = model;
