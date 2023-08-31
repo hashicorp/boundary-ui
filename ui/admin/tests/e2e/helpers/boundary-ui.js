@@ -293,7 +293,7 @@ exports.addBrokeredCredentialsToTarget = async (
  * @param {Page} page Playwright page object
  * @param {string} authMethodName Name of new auth method
  */
-exports.createNewAuthMethod = async (page, authMethodName) => {
+exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
@@ -323,7 +323,7 @@ exports.makeAuthMethodPrimary = async (page) => {
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
     .click();
-  await page.click('[aria-label="Manage"]');
+  await page.getByRole('button', { name: 'Manage' }).click()
   await page.getByText('Make Primary', { exact: true }).click();
   await page.getByText('OK', { exact: true }).click();
   await expect(

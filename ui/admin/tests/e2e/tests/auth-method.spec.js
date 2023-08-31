@@ -14,7 +14,7 @@ const {
 } = require('../helpers/boundary-cli');
 const {
   createNewOrg,
-  createNewAuthMethod,
+  createNewPasswordAuthMethod,
   addAccountToAuthMethod,
   setPasswordToAccount,
   createNewUser,
@@ -38,8 +38,7 @@ test('Verify new auth-method can be created and assigned to users', async ({
     await authenticateBoundaryCli();
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
-
-    await createNewAuthMethod(page, 'UI Test Auth Method');
+    await createNewPasswordAuthMethod(page, 'UI Test Auth Method');
     await addAccountToAuthMethod(
       page,
       'UI Test Account',
