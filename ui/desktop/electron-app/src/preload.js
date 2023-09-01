@@ -27,7 +27,7 @@ contextBridge.exposeInMainWorld('terminal', {
     ipcRenderer.send('createTerminal', vars);
   },
   remove: (callback, id) => {
-    ipcRenderer.removeListener(`remove-${id}`, callback);
+    ipcRenderer.removeListener(`removeTerminal-${id}`, callback);
   },
 });
 
