@@ -50,7 +50,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @action
   @loading
   async preConnect(target) {
-    console.log('preconnect called');
     if (target.address) {
       this.connect(target);
     }
@@ -66,10 +65,8 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   async connect(model, host) {
     // TODO: Connect: move this logic into the target model
     try {
-      console.log(model);
       // Check for CLI
       const cliExists = await this.ipc.invoke('cliExists');
-      console.log(cliExists);
       if (!cliExists) throw new Error('Cannot find Boundary CLI.');
 
       const options = {
@@ -81,12 +78,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
 
       // Create target session
       const connectionDetails = await this.ipc.invoke('connect', options);
-      console.log(connectionDetails);
 
       // Associate the connection details with the session
       const { session_id, address, port, credentials } = connectionDetails;
       const session = await this.store.findRecord('session', session_id);
-      console.log(session);
 
       // Flag the session has been open in the desktop client
       session.started_desktop_client = true;
