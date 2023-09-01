@@ -34,7 +34,7 @@ jobs:
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@85c77f1dfc42a47cc98299e8779c151d2159b120 # codeql-bundle-v2.14.0
+      uses: github/codeql-action/init@f9a7c6738f28efb36e31d49c53a201a9c5d6a476 # codeql-bundle-v2.14.2
       with:
         languages: ${{ matrix.language }}
         # If you wish to specify custom queries, you can do so here or in a config file.
@@ -54,4 +54,4 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@85c77f1dfc42a47cc98299e8779c151d2159b120 # codeql-bundle-v2.14.0
+      uses: github/codeql-action/analyze@f9a7c6738f28efb36e31d49c53a201a9c5d6a476 # codeql-bundle-v2.14.2
