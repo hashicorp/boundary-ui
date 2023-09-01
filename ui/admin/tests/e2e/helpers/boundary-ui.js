@@ -287,3 +287,117 @@ exports.addBrokeredCredentialsToTarget = async (
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
 };
+
+/**
+ * Uses the UI to create a new group. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @param {string} groupName Name of the new group
+ */
+exports.createNewGroup = async (page, groupName) => {
+  await page
+    .getByRole('navigation', { name: 'IAM' })
+    .getByRole('link', { name: 'Groups' })
+    .click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'New', exact: true })
+    .click();
+  await page.getByLabel('Name').fill(groupName);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByRole('link', { name: groupName })
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to add a user to the group. Assumes you have selected the desired group.
+ * @param {Page} page Playwright page object
+ * @param {string} userName Name of the user that will be added to the group
+ */
+exports.addMemberToGroup = async (page, userName) => {
+  await page.getByRole('link', { name: 'Members', exact: true }).click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'Add Members', exact: true })
+    .click();
+  await page.getByRole('checkbox', { name: userName }).click();
+  await page.getByRole('button', { name: 'Add Members', exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(page.getByRole('table').getByText(userName)).toBeVisible();
+};
+
+/**
+ * Uses the UI to create a new role. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @param {string} roleName Name of the new role
+ */
+exports.createNewRole = async (page, roleName) => {
+  await page
+    .getByRole('navigation', { name: 'IAM' })
+    .getByRole('link', { name: 'Roles' })
+    .click();
+  await page.getByRole('link', { name: 'New Role' }).click();
+  await page.getByLabel('Name').fill(roleName);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByRole('link', { name: roleName })
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to add a principal to the role. Assumes you have selected the desired role.
+ * @param {Page} page Playwright page object
+ * @param {string} principalName Name of the principal that will be added to the role
+ */
+exports.addPrincipalToRole = async (page, principalName) => {
+  await page.getByRole('link', { name: 'Principals', exact: true }).click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'Add Principals', exact: true })
+    .click();
+  await page.getByRole('checkbox', { name: principalName }).click();
+  await page
+    .getByRole('button', { name: 'Add Principals', exact: true })
+    .click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('table').getByRole('link', { name: principalName })
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to add a grants to the role. Assumes you have selected the desired role.
+ * @param {Page} page Playwright page object
+ * @param {string} grants grants that will be given to the role
+ */
+exports.addGrantsToGroup = async (page, grants) => {
+  await page.getByRole('link', { name: 'Grants', exact: true }).click();
+  await page.getByRole('textbox', { name: 'New Grant' }).fill(grants);
+  await page.getByRole('button', { name: 'Add', exact: true }).click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('textbox', { name: 'Grant', exact: true })
+  ).toHaveValue(grants);
+};
