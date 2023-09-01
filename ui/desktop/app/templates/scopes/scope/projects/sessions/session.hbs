@@ -28,43 +28,7 @@
 
     <Rose::Layout::BodyContent as |bc|>
       <bc.Body>
-        <Hds::Tabs as |T|>
-          <T.Tab>{{t 'titles.details'}}</T.Tab>
-          <T.Tab
-            @icon='terminal'
-            {{on 'click' (route-action 'openTerminal' @model)}}
-          >
-            {{t 'actions.new-shell'}}
-          </T.Tab>
-          <T.Panel>
-            {{#if (and @model.proxy_address @model.proxy_port)}}
-              <Session::ProxyUrl
-                @proxyAddress={{@model.proxy_address}}
-                @proxyPort={{@model.proxy_port}}
-                @isSSHTarget={{@model.target.isSSH}}
-              />
-            {{/if}}
-            {{#if @model.credentials}}
-              <CredentialsPanel @credentials={{@model.credentials}} />
-            {{else}}
-              <Hds::ApplicationState data-test-no-credentials as |A|>
-                <A.Header
-                  @title={{t 'resources.session.messages.connected.title'}}
-                />
-                <A.Body
-                  @text={{t
-                    'resources.session.messages.connected.description'
-                    targetDisplayName=@model.target.displayName
-                  }}
-                />
-              </Hds::ApplicationState>
-            {{/if}}</T.Panel>
-          <T.Panel>
-            {{! TODO: Add a boolean check to hide btn if a shell is open }}
-            <div id='terminal-container'></div>
-          </T.Panel>
-        </Hds::Tabs>
-
+        <Session::TerminalTabs @model={{@model}} />
       </bc.Body>
       <bc.Sidebar>
         <div class='details-sidebar-target-details'>
