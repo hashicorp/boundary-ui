@@ -28,10 +28,10 @@ test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await checkEnv([
-    'E2E_TARGET_IP',
     'E2E_SSH_USER',
     'E2E_SSH_KEY_PATH',
-    'E2E_SSH_PORT',
+    'E2E_TARGET_ADDRESS',
+    'E2E_TARGET_PORT',
   ]);
 
   await checkBoundaryCli();

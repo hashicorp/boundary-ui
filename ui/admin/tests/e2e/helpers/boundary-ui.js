@@ -127,7 +127,7 @@ exports.createNewHostInHostSet = async (page) => {
   await page.getByRole('link', { name: 'Create and Add Host' }).click();
   await page.getByLabel('Name').fill(hostName);
   await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByLabel('Address').fill(process.env.E2E_TARGET_IP);
+  await page.getByLabel('Address').fill(process.env.E2E_TARGET_ADDRESS);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true })
@@ -152,7 +152,7 @@ exports.createNewTarget = async (page) => {
   await page.getByRole('link', { name: 'New' }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByLabel('Default Port').fill(process.env.E2E_SSH_PORT);
+  await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true })
@@ -181,8 +181,8 @@ exports.createNewTargetWithAddress = async (page) => {
   await page.getByRole('link', { name: 'New' }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_IP);
-  await page.getByLabel('Default Port').fill(process.env.E2E_SSH_PORT);
+  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
+  await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true })
@@ -323,7 +323,7 @@ exports.makeAuthMethodPrimary = async (page) => {
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
     .click();
-  await page.getByRole('button', { name: 'Manage' }).click()
+  await page.getByRole('button', { name: 'Manage' }).click();
   await page.getByText('Make Primary', { exact: true }).click();
   await page.getByText('OK', { exact: true }).click();
   await expect(
