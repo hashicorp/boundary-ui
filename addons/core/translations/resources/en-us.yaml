@@ -299,6 +299,7 @@ session:
   proxy-url:
     address-port: Address & port
     ssh: SSH
+  shell: Shell
 org:
   title: Org
   title_plural: Orgs
