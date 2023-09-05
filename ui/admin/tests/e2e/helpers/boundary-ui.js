@@ -287,3 +287,140 @@ exports.addBrokeredCredentialsToTarget = async (
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
 };
+
+/**
+ * Uses the UI to create new Auth Method. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @param {string} authMethodName Name of new auth method
+ */
+exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
+  await page
+    .getByRole('navigation', { name: 'IAM' })
+    .getByRole('link', { name: 'Auth Methods' })
+    .click();
+  await page.getByTitle('New', { exact: true }).click();
+  await page.getByText('Password', { exact: true }).click();
+  await page.getByLabel('Name').fill(authMethodName);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByRole('link', { name: authMethodName })
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to make the first available auth method primary.
+ * Assumes you have created new auth method.
+ * @param {Page} page Playwright page object
+ */
+exports.makeAuthMethodPrimary = async (page) => {
+  await page
+    .getByRole('navigation', { name: 'IAM' })
+    .getByRole('link', { name: 'Auth Methods' })
+    .click();
+  await page.getByRole('button', { name: 'Manage' }).click()
+  await page.getByText('Make Primary', { exact: true }).click();
+  await page.getByText('OK', { exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+};
+
+/**
+ * Uses the UI to create new Account. Assumes you have selected the desired Auth Method
+ * which the account will be created for.
+ * @param {Page} page Playwright page object
+ * @param {string} accountName Name of new account
+ * @param {string} login Login of new account
+ * @param {string} password Password of new account
+ */
+exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
+  await page.getByRole('link', { name: 'Accounts' }).click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'Create Account', exact: true })
+    .click();
+  await page.getByLabel('Name', { exact: true }).fill(accountName);
+  await page.getByLabel('Login Name').fill(login);
+  await page.getByLabel('Password').fill(password);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByRole('link', { name: accountName })
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to set a new password to an account.
+ * Assumes you have selected the desired Account.
+ * @param {Page} page Playwright page object
+ * @param {string} password New password of the account
+ */
+exports.setPasswordToAccount = async (page, password) => {
+  await page.getByRole('link', { name: 'Set Password' }).click();
+  await page.getByLabel('Password').fill(password);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+};
+
+/**
+ * Uses the UI to create a new user.
+ * @param {Page} page Playwright page object
+ * @param {string} userName Name of new user
+ */
+exports.createNewUser = async (page, userName) => {
+  await page
+    .getByRole('navigation', { name: 'IAM' })
+    .getByRole('link', { name: 'Users' })
+    .click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'New', exact: true })
+    .click();
+  await page.getByLabel('Name').fill(userName);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByRole('link', { name: userName })
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to add the first available account to a user.
+ * Assumes you have selected the desired user.
+ * Assumes you have created new account.
+ * @param {Page} page Playwright page object
+ */
+exports.addAccountToUser = async (page) => {
+  await page.getByRole('link', { name: 'Accounts', exact: true }).click();
+  await page
+    .getByRole('article')
+    .getByRole('link', { name: 'Add Accounts', exact: true })
+    .click();
+
+  await page.getByRole('checkbox').click();
+  await page.getByRole('button', { name: 'Add Accounts', exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+};
