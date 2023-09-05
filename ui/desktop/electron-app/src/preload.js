@@ -29,6 +29,9 @@ contextBridge.exposeInMainWorld('terminal', {
   remove: (id) => {
     ipcRenderer.send(`removeTerminal-${id}`);
   },
+  resize: (size, id) => {
+    ipcRenderer.send(`resize-${id}`, size);
+  },
 });
 
 process.once('loaded', () => {
