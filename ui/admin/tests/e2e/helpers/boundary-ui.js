@@ -521,7 +521,7 @@ exports.addPrincipalToRole = async (page, principalName) => {
 };
 
 /**
- * Uses the UI to add a grants to the role. Assumes you have selected the desired role.
+ * Uses the UI to add a grant to the role. Assumes you have selected the desired role.
  * @param {Page} page Playwright page object
  * @param {string} grants grants that will be given to the role
  */
