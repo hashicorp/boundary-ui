@@ -17,7 +17,7 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
-      - uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3.7.0
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: 16
       - run: yarn install
@@ -35,7 +35,7 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3.7.0
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: 16
       - run: yarn run build:ui:admin:oss
@@ -63,7 +63,7 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3.7.0
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: 16
       - run: yarn run build:ui:admin:enterprise
@@ -86,7 +86,7 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3.7.0
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: 16
       - run: yarn run build:ui:admin:hcp
