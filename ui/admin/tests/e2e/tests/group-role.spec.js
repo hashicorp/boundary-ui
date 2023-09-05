@@ -42,7 +42,7 @@ test('Verify a new role can be created and associated with a group', async ({
     await addMemberToGroup(page, 'admin');
     await createNewRole(page, 'test-role');
     await addPrincipalToRole(page, groupName);
-    await addGrantsToGroup(page, 'id=*;type=*;actions=read,list');
+    await addGrantsToGroup(page, 'ids=*;type=*;actions=read,list');
   } finally {
     await deleteOrg(org.id);
   }
