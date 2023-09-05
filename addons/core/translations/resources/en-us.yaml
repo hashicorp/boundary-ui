@@ -299,7 +299,6 @@ session:
   proxy-url:
     address-port: Address & port
     ssh: SSH
-  #  shell: Shell {shellCount, plural, one {} other {#}}
   shell: Shell
 org:
   title: Org
