@@ -14,6 +14,7 @@ export default class SessionTerminalTabsComponent extends Component {
 
   id;
   terminal;
+  removeListener;
 
   // =actions
 
@@ -35,51 +36,51 @@ export default class SessionTerminalTabsComponent extends Component {
     xterm.focus();
 
     // Generate a UUID to have the terminal handlers be unique
-    const id = uuidv4();
-    this.id = id;
-
-    setupTerminal(fitAddon, xterm, id);
+    this.id = uuidv4();
+    this.#setupTerminal(fitAddon, xterm);
 
     const { model } = this.args;
     if (model.target?.isSSH) {
       const { proxy_address, proxy_port } = model;
 
       // Send an SSH command immediately
-      window.terminal.send(`ssh ${proxy_address} -p ${proxy_port}\r`, id);
+      window.terminal.send(`ssh ${proxy_address} -p ${proxy_port}\r`, this.id);
     }
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
 
-    // Clean up event listeners
-    window.onresize = null;
+    // Kill terminal and clean up event listeners
     if (this.terminal) {
       this.terminal.dispose();
     }
+    window.terminal?.remove(this.id);
+    window.onresize = null;
+    if (this.removeListener) {
+      this.removeListener();
+    }
+  }
 
-    // TODO: Cleanup underlying terminal
+  #setupTerminal(fitAddon, xterm) {
+    // Terminal is exposed by contextBridge within the preload script
+    window.terminal.create({ id: this.id, cols: xterm.cols, rows: xterm.rows });
+    xterm.onData((data) => window.terminal.send(data, this.id));
+    this.removeListener = window.terminal.receive((event, value) => {
+      xterm.write(value);
+    }, this.id);
+
+    // Handle resizing terminal windows. We debounce the resizing as we
+    // don't want to resize xterm and the pty process before the previous
+    // one has finished
+    const debouncedFit = debounce(() => {
+      fitAddon.fit();
+    }, 150);
+    window.onresize = () => {
+      debouncedFit();
+    };
+    xterm.onResize((size) => {
+      window.terminal.resize(size, this.id);
+    });
   }
 }
-
-const setupTerminal = (fitAddon, xterm, id) => {
-  // Terminal is exposed by contextBridge within the preload script
-  window.terminal.create({ id, cols: xterm.cols, rows: xterm.rows });
-  xterm.onData((data) => window.terminal.send(data, id));
-  window.terminal.receive((event, value) => {
-    xterm.write(value);
-  }, id);
-
-  // Handle resizing terminal windows. We debounce the resizing as we
-  // don't want to resize xterm and the pty process before the previous
-  // one has finished
-  const debouncedFit = debounce(() => {
-    fitAddon.fit();
-  }, 150);
-  window.onresize = () => {
-    debouncedFit();
-  };
-  xterm.onResize((size) => {
-    window.terminal.resize(size, id);
-  });
-};

@@ -127,19 +127,36 @@ ipcMain.on('createTerminal', (event, payload) => {
     cwd: process.env.HOME,
     env: process.env,
   });
+  const incomingDataChannel = `terminalIncomingData-${id}`;
+  const keystrokeChannel = `terminalKeystroke-${id}`;
+  const resizeChannel = `resize-${id}`;
+  const removeChannel = `removeTerminal-${id}`;
 
   // This sends to the renderer and xterm whatever the ptyProcess (host terminal) outputs.
   ptyProcess.on('data', function (data) {
-    sender.send(`terminalIncomingData-${id}`, data);
+    sender.send(incomingDataChannel, data);
   });
 
   // This writes into ptyProcess (host terminal) whatever we write through xterm.
-  ipcMain.on(`terminalKeystroke-${id}`, (event, value) => {
+  ipcMain.on(keystrokeChannel, (event, value) => {
     ptyProcess.write(value);
   });
 
-  // Resize the number of columns and rows received from xterm
-  ipcMain.on(`resize-${id}`, (event, { cols, rows }) => {
+  // Resize the number of columns and rows received from xterm.
+  ipcMain.on(resizeChannel, (event, { cols, rows }) => {
     ptyProcess.resize(cols, rows);
+  });
+
+  // We use `ipcMain.once` as we want this listener cleaned up
+  // after killing the ptyProcess as well.
+  ipcMain.once(removeChannel, () => {
+    // Just let the error bubble up since we can't do anything
+    try {
+      ptyProcess.kill();
+    } finally {
+      // Remove listeners
+      ipcMain.removeAllListeners(keystrokeChannel);
+      ipcMain.removeAllListeners(resizeChannel);
+    }
   });
 });

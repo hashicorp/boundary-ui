@@ -21,7 +21,13 @@ contextBridge.exposeInMainWorld('terminal', {
     ipcRenderer.send(`terminalKeystroke-${id}`, data);
   },
   receive: (callback, id) => {
-    ipcRenderer.on(`terminalIncomingData-${id}`, callback);
+    const incomingDataChannel = `terminalIncomingData-${id}`;
+    ipcRenderer.on(incomingDataChannel, callback);
+
+    // Return a function for the caller to handle cleaning up the listener
+    return () => {
+      return ipcRenderer.removeListener(incomingDataChannel, callback);
+    };
   },
   create: (vars) => {
     ipcRenderer.send('createTerminal', vars);
