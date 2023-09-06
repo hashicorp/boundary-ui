@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const { app, shell, BrowserWindow } = require('electron');
+const { app, shell, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const handle = require('./ipc-handler.js');
 const boundaryCli = require('../cli/index.js');
@@ -11,6 +11,8 @@ const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
 const { isMac } = require('../helpers/platform.js');
+const os = require('node:os');
+const pty = require('node-pty');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -108,3 +110,53 @@ handle('toggleFullscreenWindow', () => {
  * Quit app
  */
 handle('closeWindow', () => app.quit());
+
+/**
+ * Handler to help create terminal windows. We don't use the helper `handle` method
+ * as we need access to the event and don't need to be using `ipcMain.handle`.
+ */
+ipcMain.on('createTerminal', (event, payload) => {
+  const { id, cols, rows } = payload;
+  const { sender } = event;
+  const terminalShell =
+    os.platform() === 'win32' ? 'powershell.exe' : '/bin/bash';
+  const ptyProcess = pty.spawn(terminalShell, [], {
+    name: 'xterm-color',
+    cols,
+    rows,
+    cwd: process.env.HOME,
+    env: process.env,
+  });
+  const incomingDataChannel = `terminalIncomingData-${id}`;
+  const keystrokeChannel = `terminalKeystroke-${id}`;
+  const resizeChannel = `resize-${id}`;
+  const removeChannel = `removeTerminal-${id}`;
+
+  // This sends to the renderer and xterm whatever the ptyProcess (host terminal) outputs.
+  ptyProcess.on('data', function (data) {
+    sender.send(incomingDataChannel, data);
+  });
+
+  // This writes into ptyProcess (host terminal) whatever we write through xterm.
+  ipcMain.on(keystrokeChannel, (event, value) => {
+    ptyProcess.write(value);
+  });
+
+  // Resize the number of columns and rows received from xterm.
+  ipcMain.on(resizeChannel, (event, { cols, rows }) => {
+    ptyProcess.resize(cols, rows);
+  });
+
+  // We use `ipcMain.once` as we want this listener cleaned up
+  // after killing the ptyProcess as well.
+  ipcMain.once(removeChannel, () => {
+    // Just let the error bubble up since we can't do anything
+    try {
+      ptyProcess.kill();
+    } finally {
+      // Remove listeners
+      ipcMain.removeAllListeners(keystrokeChannel);
+      ipcMain.removeAllListeners(resizeChannel);
+    }
+  });
+});
