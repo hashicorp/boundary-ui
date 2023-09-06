@@ -17,12 +17,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @service router;
   @service session;
 
-  queryParams = {
-    isConnecting: {
-      refreshModel: true,
-    },
-  };
-
   // =methods
 
   /**
@@ -38,20 +32,21 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     });
 
     if (isConnecting) {
-      this.preConnect(target);
+      await this.preConnect(target);
     }
+
     return target;
   }
 
   /**
-   * Determine if connection workflow based on target attributes.
+   * Determine if we show host modal or quick connect based on target attributes.
    * @param {TargetModel} model
    */
   @action
   @loading
   async preConnect(target) {
     if (target.address) {
-      this.connect(target);
+      await this.connect(target);
     }
   }
 
