@@ -115,8 +115,10 @@
               <span class='hds-font-weight-semibold'>
                 {{#if (can 'read model' B.data)}}
                   <LinkTo
+                    data-test-visit-target
                     @route='scopes.scope.projects.targets.target'
                     @model={{B.data.id}}
+                    @query={{hash isConnecting=false}}
                   >
                     {{B.data.displayName}}
                   </LinkTo>
@@ -159,9 +161,12 @@
             <B.Td>
               {{#if (can 'connect target' B.data)}}
                 <Hds::Button
+                  data-test-targets-connect-button
                   @text={{t 'resources.session.actions.connect'}}
                   @color='secondary'
-                  {{on 'click' (route-action 'connect' B.data)}}
+                  @route='scopes.scope.projects.targets.target'
+                  @model={{B.data.id}}
+                  @query={{hash isConnecting=true}}
                 />
               {{/if}}
             </B.Td>
