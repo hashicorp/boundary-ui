@@ -116,14 +116,14 @@ handle('closeWindow', () => app.quit());
  * as we need access to the event and don't need to be using `ipcMain.handle`.
  */
 ipcMain.on('createTerminal', (event, payload) => {
-  const { id } = payload;
+  const { id, cols, rows } = payload;
   const { sender } = event;
   const terminalShell =
     os.platform() === 'win32' ? 'powershell.exe' : '/bin/bash';
   const ptyProcess = pty.spawn(terminalShell, [], {
     name: 'xterm-color',
-    cols: 80,
-    rows: 30,
+    cols,
+    rows,
     cwd: process.env.HOME,
     env: process.env,
   });
@@ -136,5 +136,10 @@ ipcMain.on('createTerminal', (event, payload) => {
   // This writes into ptyProcess (host terminal) whatever we write through xterm.
   ipcMain.on(`terminalKeystroke-${id}`, (event, value) => {
     ptyProcess.write(value);
+  });
+
+  // Resize the number of columns and rows received from xterm
+  ipcMain.on(`resize-${id}`, (event, { cols, rows }) => {
+    ptyProcess.resize(cols, rows);
   });
 });
