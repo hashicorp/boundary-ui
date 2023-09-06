@@ -19,11 +19,8 @@ const {
   Menu,
   MenuItem,
   shell,
-  ipcMain,
 } = require('electron');
 require('./ipc/handlers.js');
-const os = require('node:os');
-const pty = require('node-pty');
 
 const runtimeSettings = require('./services/runtime-settings.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
