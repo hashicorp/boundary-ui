@@ -195,19 +195,6 @@ app.on('ready', async () => {
     });
   });
 
-  if (isDev) {
-    try {
-      require('devtron').install();
-    } catch (err) {
-      console.log('Failed to install Devtron: ', err);
-    }
-    try {
-      await installExtension(EMBER_INSPECTOR);
-    } catch (err) {
-      console.log('Failed to install Ember Inspector: ', err);
-    }
-  }
-
   // Configure dev tools menu
   const menuTemplate = Menu.buildFromTemplate(menu.generateMenuTemplate());
   if (isDev) {
