@@ -103,7 +103,7 @@ module('Acceptance | scopes', function (hooks) {
     );
     instances.target = this.server.create(
       'target',
-      { scope: instances.scopes.project },
+      { scope: instances.scopes.project, address: 'localhost' },
       'withAssociations'
     );
 
@@ -172,14 +172,17 @@ module('Acceptance | scopes', function (hooks) {
     const targetsCount = this.server.schema.targets.all().models.length;
 
     await visit(urls.targets);
+
     assert.strictEqual(currentURL(), urls.targets);
     assert.strictEqual(findAll('tbody tr').length, targetsCount);
   });
 
   test('visiting global scope', async function (assert) {
     assert.expect(1);
+
     await visit(urls.scopes.global);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
@@ -194,15 +197,19 @@ module('Acceptance | scopes', function (hooks) {
       const response = id === 'global' ? new Response(404) : scope;
       return response;
     });
+
     await visit(urls.scopes.global);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
   test('visiting org scope', async function (assert) {
     assert.expect(1);
+
     await visit(urls.scopes.org);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.targets);
   });
 
@@ -212,8 +219,10 @@ module('Acceptance | scopes', function (hooks) {
 
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
     assert.strictEqual(currentURL(), urls.targets);
+
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
     assert.strictEqual(currentURL(), urls.org2Targets);
+
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
@@ -221,23 +230,29 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
     assert.expect(2);
+
     await visit(urls.targets);
     await a11yAudit();
+
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting a target', async function (assert) {
     assert.expect(1);
+
     await visit(urls.targets);
-    await click('tbody tr td span a');
+    await click('[data-test-visit-target]');
+
     assert.strictEqual(currentURL(), urls.target);
   });
 
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
+
     await visit(urls.targets);
+
     assert.ok(
       find('.rose-message-title').textContent.trim(),
       'No Targets Available'
@@ -257,10 +272,8 @@ module('Acceptance | scopes', function (hooks) {
     confirmService.enabled = true;
 
     await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
+    await click('[data-test-targets-connect-button]');
+
     assert.ok(find('.dialog-detail'), 'Success dialog');
     assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
     assert.strictEqual(
@@ -277,10 +290,8 @@ module('Acceptance | scopes', function (hooks) {
     confirmService.enabled = true;
 
     await visit(urls.scopes.global);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
+    await click('[data-test-targets-connect-button]');
+
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
     assert.strictEqual(dialogButtons.length, 2);
@@ -304,10 +315,8 @@ module('Acceptance | scopes', function (hooks) {
     confirmService.enabled = true;
 
     await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
+    await click('[data-test-targets-connect-button]');
+
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
     assert.strictEqual(dialogButtons.length, 2);

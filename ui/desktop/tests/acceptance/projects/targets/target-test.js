@@ -4,20 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import { visit, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
-import {
-  currentSession,
-  authenticateSession,
-  invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 
-module('Acceptance | projects | targets', function (hooks) {
+module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -97,6 +91,7 @@ module('Acceptance | projects | targets', function (hooks) {
       'target',
       {
         scope: instances.scopes.project,
+        address: 'localhost',
       },
       'withAssociations'
     );
@@ -154,49 +149,6 @@ module('Acceptance | projects | targets', function (hooks) {
 
   hooks.afterEach(function () {
     window.removeEventListener('message', messageHandler);
-  });
-
-  test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
-    invalidateSession();
-    assert.expect(2);
-    await visit(urls.targets);
-    await a11yAudit();
-    assert.notOk(currentSession().isAuthenticated);
-    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
-  });
-
-  test('visiting index', async function (assert) {
-    assert.expect(2);
-    const targetsCount = this.server.schema.targets.all().models.length;
-    await visit(urls.targets);
-    await a11yAudit();
-    assert.strictEqual(currentURL(), urls.targets);
-    assert.strictEqual(findAll('tbody tr').length, targetsCount);
-  });
-
-  test('visiting a target', async function (assert) {
-    assert.expect(1);
-    await visit(urls.targets);
-    await click('tbody tr td span a');
-    assert.strictEqual(currentURL(), urls.target);
-  });
-
-  test('visiting empty targets', async function (assert) {
-    assert.expect(1);
-    this.server.get('/targets', () => new Response(200));
-    await visit(urls.targets);
-    assert.strictEqual(
-      find('.rose-message-title').textContent.trim(),
-      'No Targets Available'
-    );
-  });
-
-  test('cannot navigate to a target without proper authorization', async function (assert) {
-    assert.expect(1);
-    instances.target.authorized_actions =
-      instances.target.authorized_actions.filter((item) => item !== 'read');
-    await visit(urls.targets);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
   });
 
   test.skip('connecting to a target', async function (assert) {
@@ -271,35 +223,15 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.ok(find('.rose-dialog-body h3').textContent.trim().includes('SSH'));
   });
 
-  // Skipping because this test doesn't make sense.  Users will never even see
-  // targets for which they do not have authorize-session.  The only reason this
-  // test ever passed was because filtering in target mocks wasn't previously
-  // implemented.
-  test.skip('cannot connect to a target without proper authorization', async function (assert) {
-    assert.expect(3);
-    instances.target.update({
-      authorized_actions: instances.target.authorized_actions.filter(
-        (action) => action != 'authorize-session'
-      ),
-    });
-    assert.notOk(
-      instances.target.authorized_actions.includes('authorize-session')
-    );
-    await visit(urls.targets);
-    assert.ok(find('tbody tr:first-child'));
-    assert.notOk(find('tbody tr:first-child td:last-child button'));
-  });
-
   test('handles cli error on connect', async function (assert) {
     assert.expect(4);
     stubs.ipcService.withArgs('cliExists').returns(true);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
+
+    await visit(urls.target);
+    await click('[data-test-target-detail-connect-button]');
+
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
     assert.strictEqual(dialogButtons.length, 2);
@@ -321,11 +253,10 @@ module('Acceptance | projects | targets', function (hooks) {
     stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
+
+    await visit(urls.target);
+    await click('[data-test-target-detail-connect-button]');
+
     assert.ok(find('.rose-dialog-error'), 'Error dialog');
     const dialogButtons = findAll('.rose-dialog-footer button');
     assert.strictEqual(dialogButtons.length, 2);
@@ -346,14 +277,13 @@ module('Acceptance | projects | targets', function (hooks) {
     stubs.ipcService.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
+
+    await visit(urls.target);
+    await click('[data-test-target-detail-connect-button]');
     const firstErrorDialog = find('.rose-dialog');
     await click('.rose-dialog footer .rose-button-primary', 'Retry');
     const secondErrorDialog = find('.rose-dialog');
+
     assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
   });
 });

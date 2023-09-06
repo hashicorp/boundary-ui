@@ -4,16 +4,19 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import sinon from 'sinon';
-import { STATUS_SESSION_ACTIVE } from 'api/models/session';
+import {
+  currentSession,
+  authenticateSession,
+  invalidateSession,
+} from 'ember-simple-auth/test-support';
 
-module('Acceptance | projects | sessions | session', function (hooks) {
+module('Acceptance | projects | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -29,14 +32,13 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     authMethods: {
       global: null,
     },
-    user: null,
-    session: null,
+    target: null,
   };
 
   const stubs = {
     global: null,
     org: null,
-    ipcService: null,
+    ipsService: null,
   };
 
   const urls = {
@@ -56,7 +58,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     targets: null,
     target: null,
     sessions: null,
-    session: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -66,11 +67,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    instances.user = this.server.create('user', {
-      scope: instances.scopes.global,
-    });
-
-    authenticateSession({ user_id: instances.user.id });
+    authenticateSession();
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -89,18 +86,25 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
     });
+
+    instances.hostCatalog = this.server.create(
+      'host-catalog',
+      { scope: instances.scopes.project },
+      'withChildren'
+    );
     instances.target = this.server.create(
       'target',
-      { scope: instances.scopes.project, address: 'localhost' },
+      {
+        scope: instances.scopes.project,
+      },
       'withAssociations'
     );
+
     instances.session = this.server.create(
       'session',
       {
         scope: instances.scopes.project,
-        target: instances.target,
-        status: STATUS_SESSION_ACTIVE,
-        user: instances.user,
+        status: 'active',
       },
       'withAssociations'
     );
@@ -112,8 +116,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.sessions = `${urls.projects}/sessions`;
-    urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
     class MockIPC {
       clusterUrl = null;
@@ -153,73 +155,46 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     window.removeEventListener('message', messageHandler);
   });
 
-  test('visiting session detail', async function (assert) {
-    assert.expect(1);
-
-    await visit(urls.session);
+  test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
+    invalidateSession();
+    assert.expect(2);
+    await visit(urls.targets);
     await a11yAudit();
-
-    assert.strictEqual(currentURL(), urls.session);
+    assert.notOk(currentSession().isAuthenticated);
+    assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
-  test('visiting session with no credentials', async function (assert) {
-    assert.expect(4);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
-      session_id: instances.session.id,
-      address: 'a_123',
-      port: 'p_123',
-      protocol: 'tcp',
-    });
-
-    await visit(urls.target);
-    await click('[data-test-target-detail-connect-button]');
-
-    assert.strictEqual(currentURL(), urls.session);
-    assert.dom('credential-panel-header').doesNotExist();
-    assert.dom('credential-panel-body').doesNotExist();
-    assert
-      .dom('[data-test-no-credentials]')
-      .hasText(`Connected You can now access ${instances.target.name}`);
-  });
-
-  test('cancelling a session shows success alert', async function (assert) {
-    assert.expect(1);
-    stubs.ipcService.withArgs('stop');
-
-    await visit(urls.session);
-    await click('[data-test-session-detail-cancel-button]');
-
-    assert.dom('[role="alert"].is-success').isVisible();
-  });
-
-  test('cancelling a session takes you to the targets list screen', async function (assert) {
-    assert.expect(1);
-    stubs.ipcService.withArgs('stop');
-
-    await visit(urls.session);
-    await click('[data-test-session-detail-cancel-button]');
-
+  test('visiting index', async function (assert) {
+    assert.expect(2);
+    const targetsCount = this.server.schema.targets.all().models.length;
+    await visit(urls.targets);
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(findAll('tbody tr').length, targetsCount);
   });
 
-  test('cancelling a session with error shows notification', async function (assert) {
+  test('visiting a target', async function (assert) {
     assert.expect(1);
-    this.server.post('/sessions/:id_method', () => new Response(400));
-
-    await visit(urls.session);
-    await click('[data-test-session-detail-cancel-button]');
-
-    assert.dom('[role="alert"].is-error').isVisible();
+    await visit(urls.targets);
+    await click('tbody tr td span a');
+    assert.strictEqual(currentURL(), urls.target);
   });
 
-  test('cancelling a session with ipc error shows notification', async function (assert) {
+  test('visiting empty targets', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('stop').throws();
+    this.server.get('/targets', () => new Response(200));
+    await visit(urls.targets);
+    assert.strictEqual(
+      find('.rose-message-title').textContent.trim(),
+      'No Targets Available'
+    );
+  });
 
-    await visit(urls.session);
-    await click('[data-test-session-detail-cancel-button]');
-
-    assert.dom('[role="alert"].is-error').isVisible();
+  test('cannot navigate to a target without proper authorization', async function (assert) {
+    assert.expect(1);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter((item) => item !== 'read');
+    await visit(urls.targets);
+    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
   });
 });
