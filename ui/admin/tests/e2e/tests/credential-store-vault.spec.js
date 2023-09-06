@@ -36,7 +36,7 @@ test.beforeAll(async () => {
     'VAULT_ADDR', // Address used by Vault CLI
     'VAULT_TOKEN',
     'E2E_VAULT_ADDR', // Address used by Boundary Server (could be different from VAULT_ADDR depending on network config (i.e. docker network))
-    'E2E_TARGET_IP',
+    'E2E_TARGET_ADDRESS',
     'E2E_SSH_USER',
     'E2E_SSH_KEY_PATH',
   ]);
