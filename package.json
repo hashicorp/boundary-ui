@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "plist": "^3.0.5",
     "lzma-native": "^8.0.6",
     "ansi-html": "^0.0.8",
     "shell-quote": "^1.7.3",
