@@ -4556,15 +4556,15 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.3.0.tgz#8368869dcb735be2e7f5cb7647de78e167a251fb"
   integrity sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==
 
-"@hashicorp/design-system-components@^2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-components/-/design-system-components-2.10.0.tgz#d91feafd916bfd119880e10005b0dc740e92ec38"
-  integrity sha512-HSj36aKXY+cBgIkq9o2lU917T2PPXr+zveKELgH9w3UUtcG5tRcugros2rO7ouOxjcebYfc89M7BrUkg1MMLxw==
+"@hashicorp/design-system-components@^2.11.0":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-components/-/design-system-components-2.11.0.tgz#d7b77a484f9c4a316d33921e76dd00dd8bbcfdf0"
+  integrity sha512-7yDJQEDEfzW8tNVRHbqes90lzIhEm+UuEsne1oBxM0SjzVX6+mvDT7WO+LO2j0wSPmsAcVbnmlOuNxkueUMZwQ==
   dependencies:
     "@ember/render-modifiers" "^2.0.5"
     "@ember/test-waiters" "^3.0.2"
     "@hashicorp/design-system-tokens" "^1.7.0"
-    "@hashicorp/ember-flight-icons" "^3.1.0"
+    "@hashicorp/ember-flight-icons" "^3.1.1"
     dialog-polyfill "^0.5.6"
     ember-a11y-refocus "^3.0.2"
     ember-auto-import "^2.6.3"
@@ -4576,7 +4576,6 @@
     ember-composable-helpers "^4.5.0"
     ember-focus-trap "^1.0.2"
     ember-keyboard "^8.2.0"
-    ember-named-blocks-polyfill "^0.2.5"
     ember-stargate "^0.4.3"
     ember-style-modifier "^3.0.1"
     ember-truth-helpers "^3.1.1"
@@ -4597,20 +4596,20 @@
     ember-cli-babel "^7.26.11"
     ember-cli-htmlbars "^6.1.1"
 
-"@hashicorp/ember-flight-icons@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@hashicorp/ember-flight-icons/-/ember-flight-icons-3.1.0.tgz#d470bd1139814ec8a479752540e3d01882f1906f"
-  integrity sha512-FuIbPHnOqleVFlCrkVXa3Su3uX/hfxb5ndCBAiwrWkYQyNkpjxamFC+ZEOUbbC3y5gk2Vmo4rbtx37p8rWjSiw==
+"@hashicorp/ember-flight-icons@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@hashicorp/ember-flight-icons/-/ember-flight-icons-3.1.1.tgz#c38f02d1eb3f754753658f20d99548026d22e71a"
+  integrity sha512-Fy3CP/ZRgYYHwPKqXELNPnJ5fkCzhuGWx/DSE4PhVORRE8+QPSXx8zNcaitpzaKVHafcBPMVYcAVRc/2Ecsklw==
   dependencies:
-    "@hashicorp/flight-icons" "^2.17.0"
+    "@hashicorp/flight-icons" "^2.18.0"
     ember-auto-import "^2.6.3"
     ember-cli-babel "^7.26.11"
     ember-cli-htmlbars "^6.2.0"
 
-"@hashicorp/flight-icons@^2.17.0":
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/@hashicorp/flight-icons/-/flight-icons-2.17.0.tgz#789e5dedb0b100f49173ca219ee19b2481de827c"
-  integrity sha512-1S+M/c8Qrzhqj3igM3bw3MkLT2mDABLzwkjZPgsIC0kneaW2k0rlHios9/+XUtLanQElqSVTxMuygnokZjhXjw==
+"@hashicorp/flight-icons@^2.18.0":
+  version "2.18.0"
+  resolved "https://registry.yarnpkg.com/@hashicorp/flight-icons/-/flight-icons-2.18.0.tgz#73fe35e9c4b96495176795eb3f5207a81467b9ba"
+  integrity sha512-uYZ+lVP0buxl1HKO59YX2+ivBwecwNZUF5/bf1oAsUjD+vStM6W+NFrs32uwA+fbyCZ6Zz/dC7MdatuidPezAg==
 
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
@@ -15639,9 +15638,9 @@ lines-and-columns@^1.1.6:
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
 linkify-it@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-3.0.2.tgz#f55eeb8bc1d3ae754049e124ab3bb56d97797fb8"
-  integrity sha512-gDBO4aHNZS6coiZCKVhSNh43F9ioIL4JwRjLZPkoLIY4yZFwg264Y5lu2x6rb1Js42Gh6Yqm2f6L2AJcnkzinQ==
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-3.0.3.tgz#a98baf44ce45a550efb4d49c769d07524cc2fa2e"
+  integrity sha512-ynTsyrFSdE5oZ/O9GEf00kPngmOfVwazR5GKDq6EYfhlpFug3J2zybX56a2PRRpc9P+FuSoGNAwjlbDs9jJBPQ==
   dependencies:
     uc.micro "^1.0.1"
 
@@ -21048,9 +21047,9 @@ terser-webpack-plugin@^5.3.7:
     terser "^5.16.8"
 
 terser@^4.1.2, terser@^5.14.2, terser@^5.16.8, terser@^5.3.0, terser@^5.7.2:
-  version "5.19.2"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-5.19.2.tgz#bdb8017a9a4a8de4663a7983f45c506534f9234e"
-  integrity sha512-qC5+dmecKJA4cpYxRa5aVkKehYsQKc+AHeKl0Oe62aYjBL8ZA33tTljktDHJSaxxMnbI5ZYw+o/S2DxxLu8OfA==
+  version "5.19.4"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.19.4.tgz#941426fa482bf9b40a0308ab2b3cd0cf7c775ebd"
+  integrity sha512-6p1DjHeuluwxDXcuT9VR8p64klWJKo1ILiy19s6C9+0Bh2+NWTX6nD9EPppiER4ICkHDVB1RkVpin/YW2nQn/g==
   dependencies:
     "@jridgewell/source-map" "^0.3.3"
     acorn "^8.8.2"
