@@ -21,33 +21,14 @@
       @color='secondary'
       {{on 'click' (route-action 'cancelSession' @model)}}
     />
+
   </page.actions>
 
   <page.body class='details-screen-body'>
-    {{#if (and @model.proxy_address @model.proxy_port)}}
-      <Session::ProxyUrl
-        @proxyAddress={{@model.proxy_address}}
-        @proxyPort={{@model.proxy_port}}
-        @isSSHTarget={{@model.target.isSSH}}
-      />
-    {{/if}}
+
     <Rose::Layout::BodyContent as |bc|>
       <bc.Body>
-        {{#if @model.credentials}}
-          <CredentialsPanel @credentials={{@model.credentials}} />
-        {{else}}
-          <Hds::ApplicationState data-test-no-credentials as |A|>
-            <A.Header
-              @title={{t 'resources.session.messages.connected.title'}}
-            />
-            <A.Body
-              @text={{t
-                'resources.session.messages.connected.description'
-                targetDisplayName=@model.target.displayName
-              }}
-            />
-          </Hds::ApplicationState>
-        {{/if}}
+        <Session::Tabs @model={{@model}} />
       </bc.Body>
       <bc.Sidebar>
         <div class='details-sidebar-target-details'>
