@@ -52,4 +52,3 @@ toggle-color-theme: Toggle Color Theme
 toggle-feature-edition: Toggle Feature Edition
 toggle-licensed-features: Toggle Licensed Features
 more: ', +{remainingItems} more'
-new-shell: New Shell
