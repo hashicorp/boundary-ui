@@ -23,19 +23,44 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
    * Load a target
    * @param {object} params
    * @param {string} params.target_id
-   * @param {bool} params.isConnecting
    * @return {TargetModel}
    */
-  async model({ target_id, isConnecting }) {
-    const target = await this.store.findRecord('target', target_id, {
+  model({ target_id }) {
+    return this.store.findRecord('target', target_id, {
       reload: true,
     });
+  }
 
-    if (isConnecting) {
-      await this.preConnect(target);
+  async afterModel(model, transition) {
+    const { isConnecting } = transition.to.queryParams;
+
+    if (isConnecting && model.address) {
+      await this.connect(model);
+    } else {
+      const hostSets = await Promise.all(
+        model.host_sources.map(({ host_source_id }) =>
+          this.store.findRecord('host-set', host_source_id)
+        )
+      );
+
+      // Extract host ids from all host sets
+      const hostIds = hostSets.map(({ host_ids }) => host_ids);
+
+      // Load unique hosts
+      const uniqueHostIds = new Set(hostIds.flat());
+
+      const hosts = await Promise.all(
+        [...uniqueHostIds].map(
+          async (hostId) => await this.store.findRecord('host', hostId)
+        )
+      );
+
+      if (isConnecting && hosts.length < 2) {
+        await this.connect(model);
+      }
+
+      model.set('hosts', hosts);
     }
-
-    return target;
   }
 
   /**
@@ -45,7 +70,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @action
   @loading
   async preConnect(target) {
-    if (target.address) {
+    if (target.address || target.hosts.length < 2) {
       await this.connect(target);
     }
   }
