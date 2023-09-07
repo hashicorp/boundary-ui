@@ -44,18 +44,18 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       );
 
       // Extract host ids from all host sets
-      const hostIds = hostSets.map(({ host_ids }) => host_ids);
+      const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
 
       // Load unique hosts
-      const uniqueHostIds = new Set(hostIds.flat());
+      const uniqueHostIds = new Set(hostIds);
 
       const hosts = await Promise.all(
-        [...uniqueHostIds].map(
-          async (hostId) => await this.store.findRecord('host', hostId)
+        [...uniqueHostIds].map((hostId) =>
+          this.store.findRecord('host', hostId)
         )
       );
 
-      if (isConnecting && hosts.length < 2) {
+      if (isConnecting && hosts.length === 1) {
         await this.connect(model);
       }
 
@@ -70,7 +70,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @action
   @loading
   async preConnect(target) {
-    if (target.address || target.hosts.length < 2) {
+    if (target.address || target.hosts.length === 1) {
       await this.connect(target);
     }
   }
