@@ -23,22 +23,18 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
    * Load a target
    * @param {object} params
    * @param {string} params.target_id
-   * @return {TargetModel}
+   * @return {{ target: TargetModel, hosts: [HostModel] }}
    */
-  model({ target_id }) {
-    return this.store.findRecord('target', target_id, {
+  async model({ target_id }) {
+    let hosts = [];
+
+    const target = await this.store.findRecord('target', target_id, {
       reload: true,
     });
-  }
 
-  async afterModel(model, transition) {
-    const { isConnecting } = transition.to.queryParams;
-
-    if (isConnecting && model.address) {
-      await this.connect(model);
-    } else {
+    if (target.host_sources) {
       const hostSets = await Promise.all(
-        model.host_sources.map(({ host_source_id }) =>
+        target.host_sources.map(({ host_source_id }) =>
           this.store.findRecord('host-set', host_source_id)
         )
       );
@@ -49,17 +45,23 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       // Load unique hosts
       const uniqueHostIds = new Set(hostIds);
 
-      const hosts = await Promise.all(
+      hosts = await Promise.all(
         [...uniqueHostIds].map((hostId) =>
           this.store.findRecord('host', hostId)
         )
       );
+    }
 
-      if (isConnecting && hosts.length === 1) {
-        await this.connect(model);
+    return { target, hosts };
+  }
+
+  async afterModel(model, transition) {
+    const { isConnecting } = transition.to.queryParams;
+
+    if (isConnecting) {
+      if (model.target.address || model.hosts.length === 1) {
+        await this.connect(model.target);
       }
-
-      model.set('hosts', hosts);
     }
   }
 
@@ -69,9 +71,9 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
    */
   @action
   @loading
-  async preConnect(target) {
-    if (target.address || target.hosts.length === 1) {
-      await this.connect(target);
+  async preConnect(model) {
+    if (model.target.address || model.hosts.length === 1) {
+      await this.connect(model.target);
     }
   }
 
