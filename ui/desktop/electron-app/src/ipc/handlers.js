@@ -118,6 +118,8 @@ handle('closeWindow', () => app.quit());
 ipcMain.on('createTerminal', (event, payload) => {
   const { id, cols, rows } = payload;
   const { sender } = event;
+  console.log('Carlos');
+  console.log(process.env.SHELL);
   const terminalShell =
     os.platform() === 'win32' ? 'powershell.exe' : '/bin/bash';
   const ptyProcess = pty.spawn(terminalShell, [], {
