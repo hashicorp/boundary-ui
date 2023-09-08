@@ -22,7 +22,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
     assert.ok(serializedRecord);
   });
 
-  test('it serializes a new aws plugin as expected', async function (assert) {
+  test('it serializes a new static aws plugin as expected', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('storage-bucket', {
@@ -37,6 +37,10 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       secret_access_key: 'testing',
       secrets_hmac: 'hmac',
       disable_credential_rotation: true,
+      role_arn: null,
+      role_external_id: null,
+      role_session_name: null,
+      role_tags: [],
     });
     const expectedResult = {
       name: 'AWS',
@@ -48,6 +52,10 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       attributes: {
         region: 'eu-west-1',
         disable_credential_rotation: true,
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: [],
       },
       secrets: {
         access_key_id: 'foobars',
@@ -57,6 +65,44 @@ module('Unit | Serializer | storage bucket', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
+  test('it serializes a new dynamic aws plugin as expected', async function (assert) {
+    assert.expect(1);
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('storage-bucket', {
+      compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+      name: 'AWS',
+      description: 'this has an aws plugin',
+      bucket_name: 'bucketname',
+      bucket_prefix: 'bucketprefix',
+      worker_filter: 'workerfilter',
+      region: 'eu-west-1',
+      access_key_id: '',
+      secret_access_key: '',
+      secrets_hmac: 'hmac',
+      disable_credential_rotation: true,
+      role_arn: 'arn',
+      role_external_id: null,
+      role_session_name: null,
+      role_tags: [],
+    });
+    const expectedResult = {
+      name: 'AWS',
+      description: 'this has an aws plugin',
+      type: TYPE_STORAGE_BUCKET_PLUGIN,
+      bucket_name: 'bucketname',
+      bucket_prefix: 'bucketprefix',
+      worker_filter: 'workerfilter',
+      attributes: {
+        region: 'eu-west-1',
+        disable_credential_rotation: true,
+        role_arn: 'arn',
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: [],
+      },
+    };
+    assert.deepEqual(record.serialize(), expectedResult);
+  });
   test('it serializes when updating correctly', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
@@ -79,6 +125,10 @@ module('Unit | Serializer | storage bucket', function (hooks) {
           secrets_hmac: 'hmac',
           disable_credential_rotation: true,
           version: 1,
+          role_arn: null,
+          role_external_id: null,
+          role_session_name: null,
+          role_tags: [],
         },
       },
     });
@@ -94,6 +144,10 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       attributes: {
         region: 'eu-west-1',
         disable_credential_rotation: true,
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: [],
       },
       secrets: {
         access_key_id: 'foobars',
