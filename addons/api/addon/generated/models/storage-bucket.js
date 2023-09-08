@@ -119,7 +119,7 @@ export default class GeneratedStorageBucketModel extends BaseModel {
 
   @attr('key-value-map-array', {
     isNestedAttribute: true,
-    description: '',
+    description: 'The role tags to use.',
   })
   role_tags;
 }
