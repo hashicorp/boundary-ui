@@ -110,6 +110,7 @@ export default class SessionModel extends GeneratedSessionModel {
   @tracked started_desktop_client;
   @tracked proxy_address;
   @tracked proxy_port;
+  @tracked host;
   credentials = A();
 
   @equal('status', STATUS_SESSION_ACTIVE) isActive;
@@ -157,6 +158,14 @@ export default class SessionModel extends GeneratedSessionModel {
    */
   addCredential(cred) {
     this.credentials.pushObject(new SessionCredential(cred));
+  }
+
+  /**
+   * Adds associated host to session if host present
+   * @param {HostModel} host
+   */
+  addHost(host) {
+    this.host = host;
   }
 
   /**

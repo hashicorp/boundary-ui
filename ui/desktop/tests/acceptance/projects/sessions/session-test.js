@@ -85,7 +85,13 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       scope: stubs.org,
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
-
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+    });
+    instances.host = this.server.create('host', {
+      scope: instances.scopes.project,
+      hostCatalog: instances.hostCatalog,
+    });
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
     });
