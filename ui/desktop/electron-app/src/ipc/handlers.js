@@ -119,7 +119,7 @@ ipcMain.on('createTerminal', (event, payload) => {
   const { id, cols, rows } = payload;
   const { sender } = event;
   const terminalShell =
-    os.platform() === 'win32' ? 'powershell.exe' : process.env.SHELL;
+    os.platform() === 'win32' ? 'powershell.exe' : process.env.SHELL || '/bin/bash';
   const ptyProcess = pty.spawn(terminalShell, [], {
     name: 'xterm-color',
     cols,
