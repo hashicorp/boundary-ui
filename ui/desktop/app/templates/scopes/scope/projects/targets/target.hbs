@@ -39,46 +39,48 @@
         </Hds::ApplicationState>
       </bc.Body>
       <bc.Sidebar>
-        <div class='details-sidebar-target-details'>
-          <div
-            class='title hds-typography-display-200 hds-font-weight-semibold'
-          >
-            {{t 'resources.target.details'}}
-          </div>
-          <Rose::MetadataList @orientation='vertical' as |list|>
-            {{! Target name }}
-            <list.Item @icon='target' @color='faint'>
-              {{@model.target.name}}
-            </list.Item>
-            {{! Project name }}
-            <list.Item @icon='grid' @color='faint'>
-              {{@model.target.project.displayName}}
-            </list.Item>
-            {{! Target description }}
-            {{#if @model.target.description}}
-              <list.Item @icon='message-circle-fill' @color='faint'>
-                {{@model.target.description}}
+        <div class='details-sidebar'>
+          <div>
+            <div
+              class='title hds-typography-display-200 hds-font-weight-semibold'
+            >
+              {{t 'resources.target.details'}}
+            </div>
+            <Rose::MetadataList @orientation='vertical' as |list|>
+              {{! Target name }}
+              <list.Item @icon='target' @color='faint'>
+                {{@model.target.name}}
               </list.Item>
-            {{/if}}
-            {{! Target type }}
-            <list.Item class='resource-type' @icon='terminal' @color='faint'>
-              {{#if @model.target.isSSH}}
-                {{t 'resources.target.types.ssh'}}
-              {{else}}
-                {{t 'resources.target.types.tcp'}}
+              {{! Project name }}
+              <list.Item @icon='grid' @color='faint'>
+                {{@model.target.project.displayName}}
+              </list.Item>
+              {{! Target description }}
+              {{#if @model.target.description}}
+                <list.Item @icon='message-circle-fill' @color='faint'>
+                  {{@model.target.description}}
+                </list.Item>
               {{/if}}
-            </list.Item>
-            {{! Target ID }}
-            <list.Item @icon='hash' @color='faint'>
-              <Copyable
-                @text={{@model.target.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                {{@model.target.id}}
-              </Copyable>
-            </list.Item>
-          </Rose::MetadataList>
+              {{! Target type }}
+              <list.Item class='resource-type' @icon='terminal' @color='faint'>
+                {{#if @model.target.isSSH}}
+                  {{t 'resources.target.types.ssh'}}
+                {{else}}
+                  {{t 'resources.target.types.tcp'}}
+                {{/if}}
+              </list.Item>
+              {{! Target ID }}
+              <list.Item @icon='hash' @color='faint'>
+                <Copyable
+                  @text={{@model.target.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  {{@model.target.id}}
+                </Copyable>
+              </list.Item>
+            </Rose::MetadataList>
+          </div>
         </div>
       </bc.Sidebar>
     </Rose::Layout::BodyContent>
