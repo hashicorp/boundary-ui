@@ -512,11 +512,15 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-.details-sidebar-target-details {
+.details-sidebar {
   background-color: var(--token-color-palette-neutral-50);
   border-radius: 0.313rem;
   padding: 1.5rem 2.5rem;
   margin-top: 3.5rem;
+
+  .detail-group:first-child {
+    margin-bottom: 2.25rem;
+  }
 
   .title {
     color: var(--token-color-palette-neutral-600);
