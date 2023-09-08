@@ -3,14 +3,14 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-{{page-title @model.displayName}}
+{{page-title @model.target.displayName}}
 
 <Rose::Layout::Page as |page|>
 
   <page.header>
     <h1 class='target-details-header'>
       <Hds::IconTile @color='boundary' @icon='target' />
-      {{@model.displayName}}
+      {{@model.target.displayName}}
     </h1>
   </page.header>
 
@@ -48,21 +48,21 @@
           <Rose::MetadataList @orientation='vertical' as |list|>
             {{! Target name }}
             <list.Item @icon='target' @color='faint'>
-              {{@model.name}}
+              {{@model.target.name}}
             </list.Item>
             {{! Project name }}
             <list.Item @icon='grid' @color='faint'>
-              {{@model.project.displayName}}
+              {{@model.target.project.displayName}}
             </list.Item>
             {{! Target description }}
-            {{#if @model.description}}
+            {{#if @model.target.description}}
               <list.Item @icon='message-circle-fill' @color='faint'>
-                {{@model.description}}
+                {{@model.target.description}}
               </list.Item>
             {{/if}}
             {{! Target type }}
             <list.Item class='resource-type' @icon='terminal' @color='faint'>
-              {{#if @model.isSSH}}
+              {{#if @model.target.isSSH}}
                 {{t 'resources.target.types.ssh'}}
               {{else}}
                 {{t 'resources.target.types.tcp'}}
@@ -71,11 +71,11 @@
             {{! Target ID }}
             <list.Item @icon='hash' @color='faint'>
               <Copyable
-                @text={{@model.id}}
+                @text={{@model.target.id}}
                 @buttonText={{t 'actions.copy-to-clipboard'}}
                 @acknowledgeText={{t 'states.copied'}}
               >
-                {{@model.id}}
+                {{@model.target.id}}
               </Copyable>
             </list.Item>
           </Rose::MetadataList>
