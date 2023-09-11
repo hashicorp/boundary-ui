@@ -79,6 +79,13 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   })
   secrets_hmac;
 
+  @attr('boolean', {
+    isNestedAttribute: true,
+    description: 'If set to `true`, credential rotation is not performed.',
+  })
+  disable_credential_rotation;
+
+  // =attributes (static credentials)
   @attr('string', {
     isNestedSecret: true,
     description: 'The AWS access key ID to use.',
@@ -91,9 +98,29 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   })
   secret_access_key;
 
-  @attr('boolean', {
+  // =attributes (dynamic credentials)
+  @attr('string', {
     isNestedAttribute: true,
-    description: '',
+    description: 'The role ARN to use.',
   })
-  disable_credential_rotation;
+  role_arn;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The role external ID to use.',
+  })
+  role_external_id;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The role session to use.',
+  })
+  role_session_name;
+
+  @attr('object-as-array', {
+    isNestedAttribute: true,
+    description: 'The role tags to use.',
+    useLabels: true,
+  })
+  role_tags;
 }
