@@ -44,7 +44,10 @@ export default class SessionTerminalTabsComponent extends Component {
       const { proxy_address, proxy_port } = model;
 
       // Send an SSH command immediately
-      window.terminal.send(`ssh ${proxy_address} -p ${proxy_port}\r`, this.id);
+      window.terminal.send(
+        `ssh ${proxy_address} -p ${proxy_port} -o NoHostAuthenticationForLocalhost=yes\r`,
+        this.id
+      );
     }
   }
 
