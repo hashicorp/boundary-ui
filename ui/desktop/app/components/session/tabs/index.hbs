@@ -9,15 +9,15 @@
     {{t 'resources.session.shell'}}
   </T.Tab>
   <T.Panel>
+    {{#if (and @model.proxy_address @model.proxy_port)}}
+      <Session::ProxyUrl
+        @proxyAddress={{@model.proxy_address}}
+        @proxyPort={{@model.proxy_port}}
+        @isSSHTarget={{@model.target.isSSH}}
+      />
+    {{/if}}
     <Rose::Layout::BodyContent as |bc|>
       <bc.Body>
-        {{#if (and @model.proxy_address @model.proxy_port)}}
-          <Session::ProxyUrl
-            @proxyAddress={{@model.proxy_address}}
-            @proxyPort={{@model.proxy_port}}
-            @isSSHTarget={{@model.target.isSSH}}
-          />
-        {{/if}}
         {{#if @model.credentials}}
           <CredentialsPanel @credentials={{@model.credentials}} />
         {{else}}
