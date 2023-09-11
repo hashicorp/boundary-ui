@@ -98,6 +98,16 @@
                   {{t 'resources.target.types.tcp'}}
                 {{/if}}
               </list.Item>
+              {{! Target address }}
+              {{#if @model.target.address}}
+                <list.Item
+                  class='resource-type'
+                  @icon='network-alt'
+                  @color='faint'
+                >
+                  {{@model.target.address}}
+                </list.Item>
+              {{/if}}
               {{! Target ID }}
               <list.Item @icon='hash' @color='faint'>
                 <Copyable
