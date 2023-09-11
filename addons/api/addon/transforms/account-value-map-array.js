@@ -5,17 +5,17 @@
 
 import Transform from '@ember-data/serializer/transform';
 
-export default class KeyValueMapArrayTransform extends Transform {
+export default class AccountValueMapArrayTransform extends Transform {
   deserialize(serialized) {
-    const keyValues = serialized || [];
-    return keyValues.map((keyValueString) => ({
-      from: keyValueString.split('=')[0],
-      to: keyValueString.split('=')[1],
+    const accountValues = serialized || [];
+    return accountValues.map((accountValueString) => ({
+      from: accountValueString.split('=')[0],
+      to: accountValueString.split('=')[1],
     }));
   }
 
   serialize(deserialized) {
-    const keyValues = deserialized || [];
-    return keyValues.map(({ from, to }) => `${from}=${to}`);
+    const accountValues = deserialized || [];
+    return accountValues.map(({ from, to }) => `${from}=${to}`);
   }
 }
