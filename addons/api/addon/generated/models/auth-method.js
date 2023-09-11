@@ -151,7 +151,7 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   idp_ca_certs;
 
-  @attr('key-value-map-array', {
+  @attr('account-value-map-array', {
     for: 'oidc',
     emptyArrayIfMissing: true,
     isNestedAttribute: true,
@@ -292,7 +292,7 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   bind_password_hmac;
 
-  @attr('key-value-map-array', {
+  @attr('account-value-map-array', {
     for: 'ldap',
     emptyArrayIfMissing: true,
     isNestedAttribute: true,

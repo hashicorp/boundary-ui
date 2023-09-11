@@ -40,7 +40,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       role_arn: null,
       role_external_id: null,
       role_session_name: null,
-      role_tags: [],
+      role_tags: null,
     });
     const expectedResult = {
       name: 'AWS',
@@ -55,7 +55,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
         role_arn: null,
         role_external_id: null,
         role_session_name: null,
-        role_tags: [],
+        role_tags: null,
       },
       secrets: {
         access_key_id: 'foobars',
@@ -81,9 +81,12 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       secrets_hmac: 'hmac',
       disable_credential_rotation: true,
       role_arn: 'arn',
-      role_external_id: null,
-      role_session_name: null,
-      role_tags: [],
+      role_external_id: 'Example987',
+      role_session_name: 'my-session',
+      role_tags: [
+        { key: 'Project', value: 'Automation' },
+        { key: 'foo', value: 'bar' },
+      ],
     });
     const expectedResult = {
       name: 'AWS',
@@ -96,9 +99,9 @@ module('Unit | Serializer | storage bucket', function (hooks) {
         region: 'eu-west-1',
         disable_credential_rotation: true,
         role_arn: 'arn',
-        role_external_id: null,
-        role_session_name: null,
-        role_tags: [],
+        role_external_id: 'Example987',
+        role_session_name: 'my-session',
+        role_tags: { Project: 'Automation', foo: 'bar' },
       },
     };
     assert.deepEqual(record.serialize(), expectedResult);
@@ -147,7 +150,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
         role_arn: null,
         role_external_id: null,
         role_session_name: null,
-        role_tags: [],
+        role_tags: null,
       },
       secrets: {
         access_key_id: 'foobars',
