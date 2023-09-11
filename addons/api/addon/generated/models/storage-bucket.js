@@ -81,7 +81,7 @@ export default class GeneratedStorageBucketModel extends BaseModel {
 
   @attr('boolean', {
     isNestedAttribute: true,
-    description: '',
+    description: 'If set to `true`, credential rotation is not performed.',
   })
   disable_credential_rotation;
 
@@ -107,7 +107,7 @@ export default class GeneratedStorageBucketModel extends BaseModel {
 
   @attr('string', {
     isNestedAttribute: true,
-    description: '',
+    description: 'The role external ID to use.',
   })
   role_external_id;
 
