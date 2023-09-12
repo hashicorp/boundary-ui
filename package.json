@@ -50,15 +50,12 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "plist": "^3.0.5",
-    "lzma-native": "^8.0.6",
     "ansi-html": "^0.0.8",
     "shell-quote": "^1.7.3",
     "hawk": "^9.0.1",
     "async": "^2.6.4",
     "terser": "^5.14.2",
     "jpeg-js": "^0.4.4",
-    "got": "^11.8.5",
     "loader-utils": "^2.0.4",
     "**/ember-electron/**/minimatch": "^3.0.5",
     "**/babel-core/json5": "^2.2.2",
@@ -76,7 +73,8 @@
     "**/snapdragon/base/cache-base/**/set-value": "^4.0.1",
     "**/jsprim/json-schema": "^0.4.0",
     "**/ember-cli/markdown-it-terminal/markdown-it": "^12.3.2",
-    "**/ember-cli-mirage/@embroider/macros": "^1.0.0"
+    "**/ember-cli-mirage/@embroider/macros": "^1.0.0",
+    "**/ember-electron/**/got": "^11.8.6"
   },
   "config": {
     "commitizen": {
