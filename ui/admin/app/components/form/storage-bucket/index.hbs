@@ -158,7 +158,6 @@
       <G.RadioCard
         @name={{credentialType}}
         @value={{credentialType}}
-        @maxWidth='20rem'
         @checked={{eq credentialType this.selectedCredentialType}}
         @disabled={{form.disabled}}
         {{on 'input' (fn this.updateTypeSelection credentialType)}}
