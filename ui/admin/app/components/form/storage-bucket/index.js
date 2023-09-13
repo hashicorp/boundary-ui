@@ -22,12 +22,15 @@ export default class FormStorageBucketComponent extends Component {
     'resources.storage-bucket.form.scope.help'
   );
 
-  //set static as the default type
   @tracked selectedCredentialType = this.args.model.credentialType;
 
   @tracked showDynamicCredentials =
     this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC;
 
+  /**
+   * returns an array of available credential types
+   * @type {object}
+   */
   get credentials() {
     return TYPES_CREDENTIALS;
   }

@@ -96,6 +96,10 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
     await storageBucket.destroyRecord();
   }
 
+  /**
+   * Updates type of credential
+   * @param {string} type
+   */
   @action
   changeType(type) {
     this.model.credentialType = type;

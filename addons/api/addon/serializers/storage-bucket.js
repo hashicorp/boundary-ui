@@ -8,8 +8,8 @@ import ApplicationSerializer from './application';
 export default class StorageBucketSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     const serialized = super.serialize(...arguments);
-    //Dynamic credentials do not allow credential rotation, and the API requires this field to be sent along
-    //with the dynamic credential fields
+    //Dynamic credentials do not allow credential rotation, and the API requires this field to be
+    //sent along with the dynamic credential fields
     if (serialized.attributes.role_arn) {
       serialized.attributes.disable_credential_rotation = true;
     }
