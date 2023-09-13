@@ -18,6 +18,13 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
   @service can;
   @service router;
 
+  // =attributes
+
+  queryParams = {
+    type: {
+      refreshModel: true,
+    },
+  };
   // =methods
 
   /**
@@ -87,5 +94,11 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(storageBucket) {
     await storageBucket.destroyRecord();
+  }
+
+  @action
+  changeType(type) {
+    this.model.credentialType = type;
+    this.router.replaceWith({ queryParams: { type } });
   }
 }

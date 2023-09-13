@@ -13,6 +13,14 @@ export const TYPES_STORAGE_BUCKET_PLUGIN = Object.freeze([
   TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
 ]);
 
+export const TYPE_CREDENTIAL_STATIC = 'static';
+export const TYPE_CREDENTIAL_DYNAMIC = 'dynamic';
+
+export const TYPES_CREDENTIALS = Object.freeze([
+  TYPE_CREDENTIAL_STATIC,
+  TYPE_CREDENTIAL_DYNAMIC,
+]);
+
 export default class StorageBucketModel extends GeneratedStorageBucketModel {
   /**
    * True if the storage bucket is a plugin.
@@ -20,6 +28,19 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    */
   get isPlugin() {
     return this.type === TYPE_STORAGE_BUCKET_PLUGIN;
+  }
+
+  /**
+   * If the storage bucket has role_arn, return dynamic
+   * otherwise return the default static type.
+   * @type {string}
+   */
+  get credentialType() {
+    if (this.role_arn) {
+      return TYPE_CREDENTIAL_DYNAMIC;
+    } else {
+      return TYPE_CREDENTIAL_STATIC;
+    }
   }
 
   /**

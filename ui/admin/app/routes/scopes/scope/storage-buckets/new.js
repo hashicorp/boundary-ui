@@ -15,6 +15,13 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
 
   @service store;
 
+  // =attributes
+
+  queryParams = {
+    type: {
+      refreshModel: true,
+    },
+  };
   // =methods
 
   /**
