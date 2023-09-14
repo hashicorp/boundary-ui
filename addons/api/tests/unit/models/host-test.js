@@ -48,6 +48,28 @@ module('Unit | Model | host', function (hooks) {
     assert.false(modelStatic.isPlugin);
   });
 
+  test('it has isUnknown and returns the expected values', async function (assert) {
+    assert.expect(4);
+    const store = this.owner.lookup('service:store');
+    const modelAws = store.createRecord('host', {
+      type: 'plugin',
+      plugin: { name: 'aws' },
+    });
+    const modelAzure = store.createRecord('host', {
+      type: 'plugin',
+      plugin: { name: 'azure' },
+    });
+    const modelRandom = store.createRecord('host', {
+      type: 'plugin',
+      plugin: { name: 'random' },
+    });
+
+    assert.strictEqual(typeof modelRandom.isUnknown, 'boolean');
+    assert.true(modelRandom.isUnknown);
+    assert.false(modelAws.isUnknown);
+    assert.false(modelAzure.isUnknown);
+  });
+
   test('it has isAWS and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');

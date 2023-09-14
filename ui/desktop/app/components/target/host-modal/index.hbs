@@ -1,0 +1,73 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+{{#if @showModal}}
+  <Hds::Modal data-test-host-modal @onClose={{@toggle}} as |M|>
+    <M.Header @tagline={{@target.displayName}}>
+      {{t 'resources.session.actions.host'}}
+    </M.Header>
+    <M.Body>
+      <ul class='host-list-container'>
+        {{#each @hosts as |host|}}
+          <li class='host-container'>
+            <button
+              data-test-host-connect
+              type='button'
+              {{on 'click' (fn @connect @target host)}}
+            >
+              <div class='host-info-container'>
+                <Hds::IconTile
+                  @color='boundary'
+                  @icon='network-alt'
+                  @size='small'
+                />
+                <div class='host-info'>
+                  <p
+                    class='hds-typography-body-200 hds-font-weight-semibold hds-foreground-primary'
+                  >
+                    {{host.displayName}}
+                  </p>
+                  {{#if host.isStatic}}
+                    <p class='hds-typography-body-100 hds-foreground-faint'>
+                      {{host.address}}
+                    </p>
+                  {{/if}}
+                  {{#if host.isPlugin}}
+                    {{#if host.isUnknown}}
+                      <Hds::Badge
+                        @text={{t 'resources.host-catalog.types.unknown'}}
+                      />
+                    {{else}}
+                      <Hds::Badge
+                        @text={{t 'resources.host-catalog.types.plugin'}}
+                        @icon={{host.plugin.name}}
+                      />
+                    {{/if}}
+                  {{/if}}
+                  {{#if host.description}}
+                    <p class='hds-typography-body-100 hds-foreground-faint'>
+                      {{host.description}}
+                    </p>
+                  {{/if}}
+                </div>
+              </div>
+              <FlightIcon class='host-arrow' @name='arrow-right' />
+            </button>
+          </li>
+        {{/each}}
+      </ul>
+    </M.Body>
+    <M.Footer>
+      <Hds::Button
+        data-test-host-quick-connect
+        type='button'
+        @icon='entry-point'
+        @iconPosition='trailing'
+        @text={{t 'resources.session.actions.quick-connect'}}
+        {{on 'click' (fn @connect @target)}}
+      />
+    </M.Footer>
+  </Hds::Modal>
+{{/if}}
