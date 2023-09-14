@@ -152,6 +152,30 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
+  <Hds::Form::TextInput::Field
+    @isRequired={{true}}
+    @value={{@model.region}}
+    @isInvalid={{@model.errors.region}}
+    @type='text'
+    name='region'
+    disabled={{form.disabled}}
+    readOnly={{not @model.isNew}}
+    {{on 'input' (set-from-event @model 'region')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.storage-bucket.form.region.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.storage-bucket.form.region.help'
+      }}</F.HelperText>
+    {{#if @model.errors.region}}
+      <F.Error as |E|>
+        {{#each @model.errors.region as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
   <Hds::Form::RadioCard::Group @name='type' as |G|>
     <G.Legend>{{t 'resources.storage-bucket.types.credential'}}</G.Legend>
     {{#each this.credentials as |credentialType|}}
@@ -177,29 +201,6 @@
   </Hds::Form::RadioCard::Group>
 
   {{#unless this.showDynamicCredentials}}
-    <Hds::Form::TextInput::Field
-      @isRequired={{true}}
-      @value={{@model.region}}
-      @isInvalid={{@model.errors.region}}
-      @type='text'
-      name='region'
-      disabled={{form.disabled}}
-      readOnly={{not @model.isNew}}
-      {{on 'input' (set-from-event @model 'region')}}
-      as |F|
-    >
-      <F.Label>{{t 'resources.storage-bucket.form.region.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.region.help'
-        }}</F.HelperText>
-      {{#if @model.errors.region}}
-        <F.Error as |E|>
-          {{#each @model.errors.region as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </Hds::Form::TextInput::Field>
 
     {{#if @model.isNew}}
       <Hds::Form::TextInput::Field

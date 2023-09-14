@@ -32,9 +32,9 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
    */
   model() {
     const scopeModel = this.store.peekRecord('scope', 'global');
-    let name, description, scope, bucket_name, bucket_prefix;
+    let name, description, scope, bucket_name, bucket_prefix, region;
     if (this.currentModel?.isNew) {
-      ({ name, description, scope, bucket_name, bucket_prefix } =
+      ({ name, description, scope, bucket_name, bucket_prefix, region } =
         this.currentModel);
       this.currentModel.rollbackAttributes();
     }
@@ -46,6 +46,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       scope,
       bucket_name,
       bucket_prefix,
+      region,
     });
     record.scopeModel = scopeModel;
     return record;
