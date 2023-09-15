@@ -15,8 +15,6 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
 
   @service store;
 
-  // =attributes
-
   // =methods
 
   /**

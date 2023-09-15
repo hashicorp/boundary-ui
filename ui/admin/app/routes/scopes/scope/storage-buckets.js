@@ -20,6 +20,11 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
 
   // =attributes
 
+  queryParams = {
+    credentialType: {
+      refreshModel: true,
+    },
+  };
   // =methods
 
   /**
