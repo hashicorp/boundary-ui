@@ -8,25 +8,26 @@ import ApplicationSerializer from './application';
 export default class StorageBucketSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     const serialized = super.serialize(...arguments);
-    //Dynamic credentials do not allow credential rotation, and the API requires this field to be
-    //sent along with the dynamic credential fields
-    if (serialized.attributes.role_arn) {
-      serialized.attributes.disable_credential_rotation = true;
-    }
     if (!snapshot.record.isNew) {
       delete serialized.bucket_name;
       delete serialized.bucket_prefix;
+    }
+    const { credentialType } = snapshot.record;
+
+    if (credentialType === 'dynamic') {
+      serialized.attributes.disable_credential_rotation = true;
     }
     return serialized;
   }
 
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = structuredClone(hash);
-    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
-
+    // const normalized = super.normalize(typeClass, normalizedHash, ...rest);
     // Remove secret fields so we don't track them after creating/updating
-    normalized.data.attributes.access_key_id = null;
-    normalized.data.attributes.secret_access_key = null;
-    return normalized;
+    if (normalizedHash?.secrets?.access_key_id) {
+      delete normalizedHash.secrets.access_key_id;
+      delete normalizedHash.secrets.secret_access_key;
+    }
+    return super.normalize(typeClass, normalizedHash, ...rest);
   }
 }

@@ -60,7 +60,13 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess('notifications.save-success')
-  async save(storageBucket) {
+  async save(storageBucket, type) {
+    if (type === 'static') {
+      storageBucket.role_arn = null;
+      storageBucket.role_tags = null;
+      storageBucket.role_session_name = null;
+      storageBucket.role_external_id = null;
+    }
     await storageBucket.save();
     await this.router.transitionTo(
       'scopes.scope.storage-buckets.storage-bucket',
@@ -101,7 +107,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
    * @param {string} credentialType
    */
   @action
-  changeType(credentialType) {
-    this.router.replaceWith({ queryParams: { credentialType } });
+  changeType(type) {
+    this.router.replaceWith({ queryParams: { type } });
   }
 }

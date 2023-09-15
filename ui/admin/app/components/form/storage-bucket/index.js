@@ -113,4 +113,17 @@ export default class FormStorageBucketComponent extends Component {
     this.args.model.disable_credential_rotation =
       !this.args.model.disable_credential_rotation;
   }
+
+  /**
+   * Call passed cancel function.
+   * Unset selected credentials.
+   */
+  @action
+  cancel() {
+    this.args.cancel();
+    // Reset the tracked variable after rollback
+    this.selectedCredentialType = this.args.model.credentialType;
+    this.showDynamicCredentials =
+      this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC;
+  }
 }

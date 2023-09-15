@@ -14,12 +14,12 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
   // =methods
 
   /**
-   * Load a user in current scope.
+   * Load a storage bucket in current scope.
    * @param {object} params
    * @param {string} params.storage_bucket_id
    * @return {StorageBucketModel}
    */
-  async model({ storage_bucket_id }) {
+  model({ storage_bucket_id }) {
     return this.store.findRecord('storage-bucket', storage_bucket_id);
   }
 }

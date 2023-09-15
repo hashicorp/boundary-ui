@@ -696,10 +696,8 @@ function routes() {
           name: plugin_name,
         };
       }
-
-      // Remove the secrets and add the hmac in the response
+      // Remove the secrets
       delete attrs.secrets;
-      attrs.secrets_hmac = faker.git.commitSha();
 
       return storageBuckets.create(attrs);
     }
