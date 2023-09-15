@@ -93,7 +93,12 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.canceled-success')
   async cancelSession(session) {
-    await session.cancelSession();
+    // fetch session from API to verify we have most up to date record
+    const updatedSession = await this.store.findRecord('session', session.id, {
+      reload: true,
+    });
+    await updatedSession.cancelSession();
+
     await this.ipc.invoke('stop', { session_id: session.id });
     if (
       this.router.currentRoute.name ===
