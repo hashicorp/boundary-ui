@@ -4,7 +4,13 @@
  */
 
 import GeneratedHostSetModel from '../generated/models/host-set';
-import { pluginTypes } from './host-catalog';
+import {
+  TYPE_HOST_CATALOG_STATIC,
+  TYPE_HOST_CATALOG_PLUGIN,
+  TYPE_PLUGIN_AWS,
+  TYPE_PLUGIN_AZURE,
+  pluginTypes,
+} from './host-catalog';
 
 export default class HostSetModel extends GeneratedHostSetModel {
   // =attributes
@@ -14,7 +20,7 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isStatic() {
-    return this.type === 'static';
+    return this.type === TYPE_HOST_CATALOG_STATIC;
   }
 
   /**
@@ -22,7 +28,7 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isPlugin() {
-    return this.type === 'plugin';
+    return this.type === TYPE_HOST_CATALOG_PLUGIN;
   }
 
   /**
@@ -38,14 +44,14 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isAWS() {
-    return this.compositeType === 'aws';
+    return this.compositeType === TYPE_PLUGIN_AWS;
   }
 
   /**
    * Return if a host-set plugin is Azure or not.
    */
   get isAzure() {
-    return this.compositeType === 'azure';
+    return this.compositeType === TYPE_PLUGIN_AZURE;
   }
 
   /**
@@ -56,17 +62,17 @@ export default class HostSetModel extends GeneratedHostSetModel {
   get compositeType() {
     if (this.isUnknown) return 'unknown';
     if (this.isPlugin) return this.plugin.name;
-    return 'static';
+    return TYPE_HOST_CATALOG_STATIC;
   }
 
   /**
    * Sets type, if type is different than static, set plugin name to type
    */
   set compositeType(type) {
-    if (type === 'static') {
-      this.type = 'static';
+    if (type === TYPE_HOST_CATALOG_STATIC) {
+      this.type = TYPE_HOST_CATALOG_STATIC;
     } else {
-      this.type = 'plugin';
+      this.type = TYPE_HOST_CATALOG_PLUGIN;
       this.plugin = { name: type };
     }
   }

@@ -6,6 +6,12 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import {
+  TYPE_HOST_CATALOG_STATIC,
+  TYPE_HOST_CATALOG_PLUGIN,
+  TYPE_PLUGIN_AWS,
+  TYPE_PLUGIN_AZURE,
+} from 'api/models/host-catalog';
 
 module('Unit | Model | host set', function (hooks) {
   setupTest(hooks);
@@ -138,8 +144,12 @@ module('Unit | Model | host set', function (hooks) {
   test('it has isStatic and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const modelA = store.createRecord('host-set', { type: 'static' });
-    const modelB = store.createRecord('host-set', { type: 'plugin' });
+    const modelA = store.createRecord('host-set', {
+      type: TYPE_HOST_CATALOG_STATIC,
+    });
+    const modelB = store.createRecord('host-set', {
+      type: TYPE_HOST_CATALOG_PLUGIN,
+    });
     assert.strictEqual(typeof modelA.isStatic, 'boolean');
     assert.true(modelA.isStatic);
     assert.false(modelB.isStatic);
@@ -148,8 +158,12 @@ module('Unit | Model | host set', function (hooks) {
   test('it has isPlugin and returns the expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
-    const modelPlugin = store.createRecord('host-set', { type: 'plugin' });
-    const modelStatic = store.createRecord('host-set', { type: 'static' });
+    const modelPlugin = store.createRecord('host-set', {
+      type: TYPE_HOST_CATALOG_PLUGIN,
+    });
+    const modelStatic = store.createRecord('host-set', {
+      type: TYPE_HOST_CATALOG_STATIC,
+    });
     assert.strictEqual(typeof modelPlugin.isPlugin, 'boolean');
     assert.true(modelPlugin.isPlugin);
     assert.false(modelStatic.isPlugin);
@@ -159,8 +173,8 @@ module('Unit | Model | host set', function (hooks) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('host-set', {
-      type: 'plugin',
-      plugin: { name: 'aws' },
+      type: TYPE_HOST_CATALOG_PLUGIN,
+      plugin: { name: TYPE_PLUGIN_AWS },
     });
     const modelRandom = store.createRecord('host-set', {
       plugin: { name: 'random' },
@@ -174,8 +188,8 @@ module('Unit | Model | host set', function (hooks) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAzure = store.createRecord('host-set', {
-      type: 'plugin',
-      plugin: { name: 'azure' },
+      type: TYPE_HOST_CATALOG_PLUGIN,
+      plugin: { name: TYPE_PLUGIN_AZURE },
     });
     const modelRandom = store.createRecord('host-set', {
       plugin: { name: 'random' },
@@ -189,33 +203,33 @@ module('Unit | Model | host set', function (hooks) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin1 = store.createRecord('host-set', {
-      type: 'plugin',
-      plugin: { name: 'aws' },
+      type: TYPE_HOST_CATALOG_PLUGIN,
+      plugin: { name: TYPE_PLUGIN_AWS },
     });
     const modelPlugin2 = store.createRecord('host-set', {
-      type: 'plugin',
+      type: TYPE_HOST_CATALOG_PLUGIN,
       plugin: { name: 'Test name' },
     });
     const modelStatic = store.createRecord('host-set', {
-      type: 'static',
+      type: TYPE_HOST_CATALOG_STATIC,
     });
-    assert.strictEqual(modelPlugin1.compositeType, 'aws');
+    assert.strictEqual(modelPlugin1.compositeType, TYPE_PLUGIN_AWS);
     assert.strictEqual(modelPlugin2.compositeType, 'unknown');
-    assert.strictEqual(modelStatic.compositeType, 'static');
+    assert.strictEqual(modelStatic.compositeType, TYPE_HOST_CATALOG_STATIC);
   });
 
   test('set compositeType sets expected values', async function (assert) {
     assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host-set', {
-      compositeType: 'aws',
+      compositeType: TYPE_PLUGIN_AWS,
     });
     const modelStatic = store.createRecord('host-set', {
-      compositeType: 'static',
+      compositeType: TYPE_HOST_CATALOG_STATIC,
     });
 
-    assert.strictEqual(modelPlugin.type, 'plugin');
-    assert.strictEqual(modelPlugin.plugin.name, 'aws');
-    assert.strictEqual(modelStatic.type, 'static');
+    assert.strictEqual(modelPlugin.type, TYPE_HOST_CATALOG_PLUGIN);
+    assert.strictEqual(modelPlugin.plugin.name, TYPE_PLUGIN_AWS);
+    assert.strictEqual(modelStatic.type, TYPE_HOST_CATALOG_STATIC);
   });
 });

@@ -5,8 +5,12 @@
 
 import GeneratedHostCatalogModel from '../generated/models/host-catalog';
 
-export const types = ['static', 'plugin'];
-export const pluginTypes = ['aws', 'azure'];
+export const TYPE_HOST_CATALOG_STATIC = 'static';
+export const TYPE_HOST_CATALOG_PLUGIN = 'plugin';
+export const types = [TYPE_HOST_CATALOG_STATIC, TYPE_HOST_CATALOG_PLUGIN];
+export const TYPE_PLUGIN_AWS = 'aws';
+export const TYPE_PLUGIN_AZURE = 'azure';
+export const pluginTypes = [TYPE_PLUGIN_AWS, TYPE_PLUGIN_AZURE];
 
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   // =attributes
@@ -16,7 +20,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isStatic() {
-    return this.type === 'static';
+    return this.type === TYPE_HOST_CATALOG_STATIC;
   }
 
   /**
@@ -24,7 +28,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isPlugin() {
-    return this.type === 'plugin';
+    return this.type === TYPE_HOST_CATALOG_PLUGIN;
   }
 
   /**
@@ -40,7 +44,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isAWS() {
-    return this.compositeType === 'aws';
+    return this.compositeType === TYPE_PLUGIN_AWS;
   }
 
   /**
@@ -48,7 +52,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isAzure() {
-    return this.compositeType === 'azure';
+    return this.compositeType === TYPE_PLUGIN_AZURE;
   }
 
   /**
@@ -59,7 +63,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
   get compositeType() {
     if (this.isUnknown) return 'unknown';
     if (this.isPlugin) return this.plugin.name;
-    return 'static';
+    return TYPE_HOST_CATALOG_STATIC;
   }
 
   /**
@@ -67,10 +71,10 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * and `plugin.name` to the specified type.
    */
   set compositeType(type) {
-    if (type === 'static') {
-      this.type = 'static';
+    if (type === TYPE_HOST_CATALOG_STATIC) {
+      this.type = TYPE_HOST_CATALOG_STATIC;
     } else {
-      this.type = 'plugin';
+      this.type = TYPE_HOST_CATALOG_PLUGIN;
       this.plugin = { name: type };
     }
   }

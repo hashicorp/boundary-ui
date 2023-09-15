@@ -5,6 +5,12 @@
 
 import GeneratedHostModel from '../generated/models/host';
 import { attr } from '@ember-data/model';
+import {
+  TYPE_HOST_CATALOG_STATIC,
+  TYPE_HOST_CATALOG_PLUGIN,
+  TYPE_PLUGIN_AWS,
+  TYPE_PLUGIN_AZURE,
+} from './host-catalog';
 
 export default class HostModel extends GeneratedHostModel {
   // =attributes
@@ -47,7 +53,7 @@ export default class HostModel extends GeneratedHostModel {
    * @type {boolean}
    */
   get isStatic() {
-    return this.type === 'static';
+    return this.type === TYPE_HOST_CATALOG_STATIC;
   }
 
   /**
@@ -63,7 +69,7 @@ export default class HostModel extends GeneratedHostModel {
    * @type {boolean}
    */
   get isAWS() {
-    return this.compositeType === 'aws';
+    return this.compositeType === TYPE_PLUGIN_AWS;
   }
 
   /**
@@ -71,7 +77,7 @@ export default class HostModel extends GeneratedHostModel {
    * @type {boolean}
    */
   get isAzure() {
-    return this.compositeType === 'azure';
+    return this.compositeType === TYPE_PLUGIN_AZURE;
   }
 
   /**
@@ -88,10 +94,10 @@ export default class HostModel extends GeneratedHostModel {
    * and `plugin.name` to the specified type.
    */
   set compositeType(type) {
-    if (type === 'static') {
-      this.type = 'static';
+    if (type === TYPE_HOST_CATALOG_STATIC) {
+      this.type = TYPE_HOST_CATALOG_STATIC;
     } else {
-      this.type = 'plugin';
+      this.type = TYPE_HOST_CATALOG_PLUGIN;
       this.plugin = { name: type };
     }
   }
