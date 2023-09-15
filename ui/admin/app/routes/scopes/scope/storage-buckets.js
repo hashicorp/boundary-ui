@@ -60,13 +60,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess('notifications.save-success')
-  async save(storageBucket, type) {
-    if (type === 'static') {
-      storageBucket.role_arn = null;
-      storageBucket.role_tags = null;
-      storageBucket.role_session_name = null;
-      storageBucket.role_external_id = null;
-    }
+  async save(storageBucket) {
     await storageBucket.save();
     await this.router.transitionTo(
       'scopes.scope.storage-buckets.storage-bucket',

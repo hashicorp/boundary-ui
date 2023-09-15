@@ -43,6 +43,9 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
     }
   }
 
+  /**
+   * Sets `credentialType` to the specified type.
+   */
   set credentialType(type) {
     this.credentialType = type;
   }

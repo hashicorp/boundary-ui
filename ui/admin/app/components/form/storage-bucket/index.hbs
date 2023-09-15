@@ -4,7 +4,7 @@
 }}
 
 <Rose::Form
-  @onSubmit={{fn @submit this.selectedCredentialType}}
+  @onSubmit={{@submit}}
   @cancel={{this.cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
