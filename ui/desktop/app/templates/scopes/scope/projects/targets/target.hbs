@@ -20,12 +20,19 @@
       @text={{t 'resources.session.actions.connect'}}
       @icon='entry-point'
       @iconPosition='trailing'
-      {{on 'click' (route-action 'preConnect' @model)}}
+      {{on 'click' (route-action 'preConnect' @model this.toggle)}}
     />
   </page.actions>
 
   <page.body class='details-screen-body'>
     <Rose::Layout::BodyContent as |bc|>
+      <Target::HostModal
+        @showModal={{this.isConnecting}}
+        @toggle={{this.toggle}}
+        @connect={{route-action 'connect'}}
+        @hosts={{@model.hosts}}
+        @target={{@model.target}}
+      />
       <bc.Body class='target-details-body'>
         <Hds::ApplicationState as |A|>
           <A.Header
