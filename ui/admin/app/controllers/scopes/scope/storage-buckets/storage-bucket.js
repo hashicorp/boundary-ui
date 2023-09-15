@@ -7,7 +7,7 @@ import Controller from '@ember/controller';
 
 export default class ScopesScopeStorageBucketsStorageBucketController extends Controller {
   // =attributes
-  queryParams = ['type'];
+  queryParams = ['credentialType'];
   /**
    * A storage-bucket breadcrumb
    * @type {string}

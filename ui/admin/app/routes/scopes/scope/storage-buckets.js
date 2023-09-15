@@ -20,11 +20,6 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
 
   // =attributes
 
-  queryParams = {
-    type: {
-      refreshModel: true,
-    },
-  };
   // =methods
 
   /**
@@ -98,11 +93,10 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
 
   /**
    * Updates type of credential
-   * @param {string} type
+   * @param {string} credentialType
    */
   @action
-  changeType(type) {
-    this.model.credentialType = type;
-    this.router.replaceWith({ queryParams: { type } });
+  changeType(credentialType) {
+    this.router.replaceWith({ queryParams: { credentialType } });
   }
 }

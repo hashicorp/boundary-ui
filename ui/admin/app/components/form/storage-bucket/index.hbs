@@ -176,7 +176,7 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::RadioCard::Group @name='type' as |G|>
+  <Hds::Form::RadioCard::Group @name='credential_type' as |G|>
     <G.Legend>{{t 'resources.storage-bucket.types.credential'}}</G.Legend>
     {{#each this.credentials as |credentialType|}}
       <G.RadioCard

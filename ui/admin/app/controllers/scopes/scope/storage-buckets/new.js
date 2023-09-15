@@ -10,7 +10,7 @@ export default class ScopesScopeStorageBucketsNewController extends Controller {
   // =services
 
   @service intl;
-  queryParams = ['type'];
+  queryParams = ['credentialType'];
 
   /**
    * Breadcrumb for new route
