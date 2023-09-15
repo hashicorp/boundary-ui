@@ -4,11 +4,20 @@
  */
 
 import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 export default class ScopesScopeProjectsTargetsTargetController extends Controller {
   // =attributes
 
   queryParams = [{ isConnecting: { type: 'boolean' } }];
 
-  isConnecting = false;
+  @tracked isConnecting = false;
+
+  // =methods
+
+  @action
+  toggle() {
+    this.isConnecting = !this.isConnecting;
+  }
 }

@@ -5,6 +5,7 @@
 
 import GeneratedHostModel from '../generated/models/host';
 import { attr } from '@ember-data/model';
+import { pluginTypes } from './host-catalog';
 
 export default class HostModel extends GeneratedHostModel {
   // =attributes
@@ -56,6 +57,14 @@ export default class HostModel extends GeneratedHostModel {
    */
   get isPlugin() {
     return this.type === 'plugin';
+  }
+
+  /**
+   * True if the host catalog is an unknown type.
+   * @type {boolean}
+   */
+  get isUnknown() {
+    return this.isPlugin && !pluginTypes.includes(this.plugin?.name);
   }
 
   /**
