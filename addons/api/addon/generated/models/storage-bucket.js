@@ -73,12 +73,6 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   })
   region;
 
-  @attr('string', {
-    readOnly: true,
-    isNestedAttribute: true,
-  })
-  secrets_hmac;
-
   @attr('boolean', {
     isNestedAttribute: true,
     description: 'If set to `true`, credential rotation is not performed.',
@@ -120,7 +114,6 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   @attr('object-as-array', {
     isNestedAttribute: true,
     description: 'The role tags to use.',
-    useLabels: true,
   })
   role_tags;
 }

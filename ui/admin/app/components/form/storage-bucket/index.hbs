@@ -5,7 +5,7 @@
 
 <Rose::Form
   @onSubmit={{@submit}}
-  @cancel={{@cancel}}
+  @cancel={{this.cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
