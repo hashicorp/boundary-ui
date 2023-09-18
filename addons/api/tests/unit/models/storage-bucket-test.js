@@ -5,7 +5,11 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 } from 'api/models/storage-bucket';
+import {
+  TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+  TYPE_CREDENTIAL_DYNAMIC,
+  TYPE_CREDENTIAL_STATIC,
+} from 'api/models/storage-bucket';
 
 module('Unit | Model | storage bucket', function (hooks) {
   setupTest(hooks);
@@ -39,6 +43,21 @@ module('Unit | Model | storage bucket', function (hooks) {
     });
     assert.false(modelA.isUnknown);
     assert.true(modelB.isUnknown);
+  });
+
+  test('it has credentialType property and returns the expected values', async function (assert) {
+    assert.expect(2);
+    const store = this.owner.lookup('service:store');
+    const modelA = store.createRecord('storage-bucket', {
+      role_arn: 'test-role-arn',
+      access_key_id: null,
+    });
+    const modelB = store.createRecord('storage-bucket', {
+      role_arn: null,
+      access_key_id: 'test-access-key-id',
+    });
+    assert.strictEqual(modelA.credentialType, TYPE_CREDENTIAL_DYNAMIC);
+    assert.strictEqual(modelB.credentialType, TYPE_CREDENTIAL_STATIC);
   });
 
   test('it has isAWS property and returns the expected values', async function (assert) {

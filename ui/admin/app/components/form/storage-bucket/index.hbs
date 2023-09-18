@@ -176,93 +176,220 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  {{#if @model.isNew}}
-    <Hds::Form::TextInput::Field
-      @isRequired={{true}}
-      @value={{@model.access_key_id}}
-      @isInvalid={{@model.errors.secrets}}
-      @type='password'
-      name='access_key_id'
-      {{on 'input' (set-from-event @model 'access_key_id')}}
-      as |F|
-    >
-      <F.Label>{{t
-          'resources.storage-bucket.form.access_key_id.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.access_key_id.help'
-        }}</F.HelperText>
-      {{#if @model.errors.secrets}}
-        <F.Error as |E|>
-          {{#each @model.errors.secrets as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </Hds::Form::TextInput::Field>
+  <Hds::Form::RadioCard::Group @name='credential_type' as |G|>
+    <G.Legend>{{t 'resources.storage-bucket.types.credential'}}</G.Legend>
+    {{#each this.credentials as |credentialType|}}
+      <G.RadioCard
+        @name={{credentialType}}
+        @value={{credentialType}}
+        @checked={{eq credentialType this.selectedCredentialType}}
+        @disabled={{form.disabled}}
+        {{on 'input' (fn this.updateTypeSelection credentialType)}}
+        as |R|
+      >
+        <R.Label>{{t
+            (concat 'resources.storage-bucket.types.' credentialType '.title')
+          }}</R.Label>
+        <R.Description>{{t
+            (concat
+              'resources.storage-bucket.types.' credentialType '.description'
+            )
+          }}</R.Description>
+      </G.RadioCard>
 
+    {{/each}}
+  </Hds::Form::RadioCard::Group>
+
+  {{#unless this.showDynamicCredentials}}
+
+    {{#if @model.isNew}}
+      <Hds::Form::TextInput::Field
+        @isRequired={{true}}
+        @value={{@model.access_key_id}}
+        @isInvalid={{@model.errors.secrets}}
+        @type='password'
+        name='access_key_id'
+        {{on 'input' (set-from-event @model 'access_key_id')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.storage-bucket.form.access_key_id.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.storage-bucket.form.access_key_id.help'
+          }}</F.HelperText>
+        {{#if @model.errors.secrets}}
+          <F.Error as |E|>
+            {{#each @model.errors.secrets as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+
+      <Hds::Form::TextInput::Field
+        @isRequired={{true}}
+        @value={{@model.secret_access_key}}
+        @isInvalid={{@model.errors.secrets}}
+        @type='password'
+        name='secret_access_key'
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event @model 'secret_access_key')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.storage-bucket.form.secret_access_key.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.storage-bucket.form.secret_access_key.help'
+          }}</F.HelperText>
+        {{#if @model.errors.secrets}}
+          <F.Error as |E|>
+            {{#each @model.errors.secrets as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+    {{else}}
+      <Form::Field::SecretInput
+        @isRequired={{true}}
+        @value={{@model.access_key_id}}
+        @isInvalid={{@model.errors.access_key_id}}
+        @name='access_key_id'
+        @isDisabled={{form.disabled}}
+        @showEditButton={{true}}
+        @cancel={{fn this.rollbackSecretAttrs 'access_key_id'}}
+        {{on 'input' (set-from-event @model 'access_key_id')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.storage-bucket.form.access_key_id.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.storage-bucket.form.access_key_id.help'
+          }}</F.HelperText>
+      </Form::Field::SecretInput>
+
+      <Form::Field::SecretInput
+        @isRequired={{true}}
+        @value={{@model.secret_access_key}}
+        @isInvalid={{@model.errors.secret_access_key}}
+        @name='secret_access_key'
+        @isDisabled={{form.disabled}}
+        @showEditButton={{true}}
+        @cancel={{fn this.rollbackSecretAttrs 'secret_access_key'}}
+        {{on 'input' (set-from-event @model 'secret_access_key')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.storage-bucket.form.secret_access_key.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.storage-bucket.form.secret_access_key.help'
+          }}</F.HelperText>
+      </Form::Field::SecretInput>
+    {{/if}}
+  {{/unless}}
+
+  {{#if this.showDynamicCredentials}}
     <Hds::Form::TextInput::Field
       @isRequired={{true}}
-      @value={{@model.secret_access_key}}
-      @isInvalid={{@model.errors.secrets}}
-      @type='password'
-      name='secret_access_key'
+      @value={{@model.role_arn}}
+      @isInvalid={{@model.errors.role_arn}}
+      @type='text'
+      name='role_arn'
       disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'secret_access_key')}}
+      {{on 'input' (set-from-event @model 'role_arn')}}
       as |F|
     >
-      <F.Label>{{t
-          'resources.storage-bucket.form.secret_access_key.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.secret_access_key.help'
-        }}</F.HelperText>
-      {{#if @model.errors.secrets}}
+      <F.Label>{{t 'resources.storage-bucket.form.role_arn.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.role_arn.help'}}
+      </F.HelperText>
+      {{#if @model.errors.role_arn}}
         <F.Error as |E|>
-          {{#each @model.errors.secrets as |error|}}
+          {{#each @model.errors.role_arn as |error|}}
             <E.Message>{{error.message}}</E.Message>
           {{/each}}
         </F.Error>
       {{/if}}
     </Hds::Form::TextInput::Field>
-  {{else}}
-    <Form::Field::SecretInput
-      @isRequired={{true}}
-      @value={{@model.access_key_id}}
-      @isInvalid={{@model.errors.access_key_id}}
-      @name='access_key_id'
-      @isDisabled={{form.disabled}}
-      @showEditButton={{true}}
-      @cancel={{fn this.rollbackSecretAttrs 'access_key_id'}}
-      {{on 'input' (set-from-event @model 'access_key_id')}}
-      as |F|
-    >
-      <F.Label>{{t
-          'resources.storage-bucket.form.access_key_id.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.access_key_id.help'
-        }}</F.HelperText>
-    </Form::Field::SecretInput>
 
-    <Form::Field::SecretInput
-      @isRequired={{true}}
-      @value={{@model.secret_access_key}}
-      @isInvalid={{@model.errors.secret_access_key}}
-      @name='secret_access_key'
-      @isDisabled={{form.disabled}}
-      @showEditButton={{true}}
-      @cancel={{fn this.rollbackSecretAttrs 'secret_access_key'}}
-      {{on 'input' (set-from-event @model 'secret_access_key')}}
+    <Hds::Form::TextInput::Field
+      @isOptional={{true}}
+      @value={{@model.role_external_id}}
+      @isInvalid={{@model.errors.role_external_id}}
+      @type='text'
+      name='role_external_id'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'role_external_id')}}
       as |F|
     >
-      <F.Label>{{t
-          'resources.storage-bucket.form.secret_access_key.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'resources.storage-bucket.form.secret_access_key.help'
-        }}</F.HelperText>
-    </Form::Field::SecretInput>
+      <F.Label>
+        {{t 'resources.storage-bucket.form.role_external_id.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.role_external_id.help'}}
+      </F.HelperText>
+      {{#if @model.errors.role_external_id}}
+        <F.Error as |E|>
+          {{#each @model.errors.role_external_id as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
+    <Hds::Form::TextInput::Field
+      @isOptional={{true}}
+      @value={{@model.role_session_name}}
+      @isInvalid={{@model.errors.role_session_name}}
+      @type='text'
+      name='role_session_name'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'role_session_name')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.storage-bucket.form.role_session_name.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.role_session_name.help'}}
+      </F.HelperText>
+      {{#if @model.errors.role_session_name}}
+        <F.Error as |E|>
+          {{#each @model.errors.role_session_name as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
+    <Form::Field::KeyValueList
+      @layout='horizontal'
+      @isOptional={{true}}
+      @name='role_tags'
+      @options={{@model.role_tags}}
+      @addOption={{fn this.addOption 'role_tags'}}
+      @removeOptionByIndex={{fn this.removeOptionByIndex 'role_tags'}}
+      @disabled={{form.disabled}}
+      as |M|
+    >
+      <M.Legend>
+        {{t 'resources.storage-bucket.form.role_tags.label'}}
+      </M.Legend>
+      <M.HelperText>
+        {{t 'resources.storage-bucket.form.role_tags.help'}}
+      </M.HelperText>
+      {{#if @model.errors.role_tags}}
+        <M.Error as |E|>
+          {{#each @model.errors.role_tags as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </M.Error>
+      {{/if}}
+    </Form::Field::KeyValueList>
   {{/if}}
 
   <Hds::Form::TextInput::Field
@@ -291,26 +418,27 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::Checkbox::Field
-    name='disable_credential_rotation'
-    disabled={{form.disabled}}
-    checked={{@model.disable_credential_rotation}}
-    {{on 'change' this.toggleDisableCredentialRotation}}
-    as |F|
-  >
-    <F.Label>{{t
-        'resources.storage-bucket.form.disable_credential_rotation.label'
-      }}</F.Label>
-    <F.HelperText>
-      {{t 'resources.storage-bucket.form.disable_credential_rotation.help'}}
-      <Hds::Link::Inline
-        @href={{doc-url 'storage-bucket.disable-credential-rotation'}}
-      >
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-  </Hds::Form::Checkbox::Field>
-
+  {{#unless this.showDynamicCredentials}}
+    <Hds::Form::Checkbox::Field
+      name='disable_credential_rotation'
+      disabled={{form.disabled}}
+      checked={{@model.disable_credential_rotation}}
+      {{on 'change' this.toggleDisableCredentialRotation}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.storage-bucket.form.disable_credential_rotation.label'
+        }}</F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.disable_credential_rotation.help'}}
+        <Hds::Link::Inline
+          @href={{doc-url 'storage-bucket.disable-credential-rotation'}}
+        >
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+    </Hds::Form::Checkbox::Field>
+  {{/unless}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

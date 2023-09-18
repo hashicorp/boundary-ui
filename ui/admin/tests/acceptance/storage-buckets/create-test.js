@@ -26,7 +26,9 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   const NAME_FIELD_TEXT = 'random string';
   const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
   const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
-
+  const STATIC_CREDENTIAL_SELECTOR = '[value="static"]';
+  const DYNAMIC_CREDENTIAL_SELECTOR = '[value="dynamic"]';
+  const ROLE_ARN_SELECTOR = '[name="role_arn"]';
   const instances = {
     scopes: {
       global: null,
@@ -102,6 +104,44 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
     assert.strictEqual(storageBucket.scopeId, instances.scopes.org.scope.id);
+    assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
+  });
+
+  test('users can create a new storage bucket with dynamic credentials', async function (assert) {
+    assert.expect(3);
+    const storageBucketCount = getStorageBucketCount();
+    await visit(urls.storageBuckets);
+
+    await click(`[href="${urls.newStorageBucket}"]`);
+    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    assert.dom('.hds-form-radio-card').exists({ count: 2 });
+
+    await click(DYNAMIC_CREDENTIAL_SELECTOR);
+    await fillIn(ROLE_ARN_SELECTOR, 'test-arn-id');
+    await click(SAVE_BTN_SELECTOR);
+    const storageBucket = this.server.schema.storageBuckets.findBy({
+      name: NAME_FIELD_TEXT,
+    });
+    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
+  });
+
+  test('users can create a new storage bucket with static credentials', async function (assert) {
+    assert.expect(3);
+    const storageBucketCount = getStorageBucketCount();
+    await visit(urls.storageBuckets);
+
+    await click(`[href="${urls.newStorageBucket}"]`);
+    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    assert.dom('.hds-form-radio-card').exists({ count: 2 });
+
+    await click(STATIC_CREDENTIAL_SELECTOR);
+    await click(SAVE_BTN_SELECTOR);
+
+    const storageBucket = this.server.schema.storageBuckets.findBy({
+      name: NAME_FIELD_TEXT,
+    });
+    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 

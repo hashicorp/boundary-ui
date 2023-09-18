@@ -19,13 +19,27 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
 
   /**
    * Creates a new unsaved storage bucket.
+   * Also rollback/destroy any new, unsaved instances from this route before
+   * creating another, but reuse name/description/other fields if available.
    * @return {StorageBucket}
    */
   model() {
     const scopeModel = this.store.peekRecord('scope', 'global');
+    let name, description, scope, bucket_name, bucket_prefix, region;
+    if (this.currentModel?.isNew) {
+      ({ name, description, scope, bucket_name, bucket_prefix, region } =
+        this.currentModel);
+      this.currentModel.rollbackAttributes();
+    }
     const record = this.store.createRecord('storage-bucket', {
       type: TYPE_STORAGE_BUCKET_PLUGIN,
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+      name,
+      description,
+      scope,
+      bucket_name,
+      bucket_prefix,
+      region,
     });
     record.scopeModel = scopeModel;
     return record;
