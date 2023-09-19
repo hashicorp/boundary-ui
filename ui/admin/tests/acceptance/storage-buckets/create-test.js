@@ -29,6 +29,8 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   const STATIC_CREDENTIAL_SELECTOR = '[value="static"]';
   const DYNAMIC_CREDENTIAL_SELECTOR = '[value="dynamic"]';
   const ROLE_ARN_SELECTOR = '[name="role_arn"]';
+  const ACCESS_KEY_SELECTOR = '[name="access_key_id"]';
+  const SECRET_KEY_SELECTOR = '[name="secret_access_key"]';
   const instances = {
     scopes: {
       global: null,
@@ -108,7 +110,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with dynamic credentials', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -118,16 +120,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     await click(DYNAMIC_CREDENTIAL_SELECTOR);
     await fillIn(ROLE_ARN_SELECTOR, 'test-arn-id');
+
     await click(SAVE_BTN_SELECTOR);
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: NAME_FIELD_TEXT,
     });
+
     assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    //for static credentials, there should be no secret field
+    assert.notOk(storageBucket.secret);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
   test('users can create a new storage bucket with static credentials', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -136,12 +142,18 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.dom('.hds-form-radio-card').exists({ count: 2 });
 
     await click(STATIC_CREDENTIAL_SELECTOR);
+    await fillIn(ACCESS_KEY_SELECTOR, 'access_key_id');
+    await fillIn(SECRET_KEY_SELECTOR, 'secret_access_key');
+
     await click(SAVE_BTN_SELECTOR);
 
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: NAME_FIELD_TEXT,
     });
+
     assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    //for static credentials, role_arn should be null
+    assert.strictEqual(storageBucket.attributes.role_arn, null);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
