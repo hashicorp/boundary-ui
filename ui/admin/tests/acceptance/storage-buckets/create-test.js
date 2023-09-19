@@ -127,7 +127,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     });
 
     assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
-    //for static credentials, there should be no secret field
+    //for dynamic credentials, there should be no secret field
     assert.notOk(storageBucket.secret);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
