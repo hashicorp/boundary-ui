@@ -167,6 +167,10 @@
                   @route='scopes.scope.projects.targets.target'
                   @model={{B.data.id}}
                   @query={{hash isConnecting=true}}
+                  disabled={{and
+                    (not B.data.address)
+                    (not B.data.host_sources)
+                  }}
                 />
               {{/if}}
             </B.Td>
