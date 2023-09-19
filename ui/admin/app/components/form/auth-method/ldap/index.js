@@ -21,6 +21,8 @@ export default class FormAuthMethodLdapComponent extends Component {
    */
   newToAttribute = options.ldap.account_attribute_maps.to[0];
 
+  dereferenceAliasesList = options.ldap.dereference_aliases;
+
   /**
    * @type {string}
    */
@@ -45,6 +47,16 @@ export default class FormAuthMethodLdapComponent extends Component {
   toggleField(event) {
     const { name: field } = event.target;
     this.args.model[field] = !this.args.model[field];
+  }
+
+  @action
+  updateScope(event) {
+    const selectedScopeId = event.target.value;
+    // const selectedScopeModel = this.args.model.scopes.find(
+    //   (element) => element.model.id === selectedScopeId
+    // ).model;
+    this.args.model.dereference_aliases = selectedScopeId;
+    this.updateScopeFieldDescription();
   }
 
   @action

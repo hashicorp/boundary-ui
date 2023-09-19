@@ -119,6 +119,8 @@ module('Unit | Serializer | auth method', function (hooks) {
       ],
       client_certificate: 'certificate-1234',
       client_certificate_key: 'secret456',
+      maximum_page_size: 100,
+      dereference_aliases: 'NeverDerefAliases',
     });
 
     let serializedRecord = record.serialize();
@@ -147,6 +149,8 @@ module('Unit | Serializer | auth method', function (hooks) {
         certificates: ['certificate-1234', 'certificate-5678'],
         client_certificate: 'certificate-1234',
         client_certificate_key: 'secret456',
+        maximum_page_size: 100,
+        dereference_aliases: 'NeverDerefAliases',
       },
     });
   });
@@ -229,6 +233,8 @@ module('Unit | Serializer | auth method', function (hooks) {
       ],
       client_certificate: 'certificate-1234',
       client_certificate_key: null,
+      maximum_page_size: 100,
+      dereference_aliases: 'NeverDerefAliases',
     });
 
     let serializedRecord = record.serialize();
@@ -256,6 +262,8 @@ module('Unit | Serializer | auth method', function (hooks) {
         group_filter: '(member={{.UserDN}})',
         certificates: ['certificate-1234', 'certificate-5678'],
         client_certificate: 'certificate-1234',
+        maximum_page_size: 100,
+        dereference_aliases: 'NeverDerefAliases',
       },
     });
   });

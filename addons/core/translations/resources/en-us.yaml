@@ -58,6 +58,10 @@ auth-method:
     new-certificate: New Certificate
     from-attr: From Attribute
     to-attr: To Attribute
+    never: Never
+    searching: Searching
+    finding: Finding
+    always: Always
   types:
     password: Password
     oidc: OIDC
@@ -134,6 +138,12 @@ auth-method:
     use_token_groups:
       label: Use Token Groups
       help: Active Directory only. Uses a user's tokenGroups attribute to find their group memberships.
+    maximum_page_size:
+      label: Maximum Page Size
+      help: Maximum search result size to use when retrieving the authenticated user's groups
+    dereference_aliases:
+      label: Deference Aliases
+      help: Control how aliases are dereferenced when performing the search
     account_attribute_maps:
       label: Account Attribute Maps
       help: Attribute maps from custom attributes to the standard fullname and email account attributes. These maps are represented as key=value where the key equals the from_attribute, and the value equals the to_attribute. For example, "preferredName=fullName".
