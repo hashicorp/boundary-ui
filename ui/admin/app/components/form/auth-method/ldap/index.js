@@ -50,16 +50,6 @@ export default class FormAuthMethodLdapComponent extends Component {
   }
 
   @action
-  updateScope(event) {
-    const selectedScopeId = event.target.value;
-    // const selectedScopeModel = this.args.model.scopes.find(
-    //   (element) => element.model.id === selectedScopeId
-    // ).model;
-    this.args.model.dereference_aliases = selectedScopeId;
-    this.updateScopeFieldDescription();
-  }
-
-  @action
   addCertificate() {
     if (this.newCertificate) {
       this.args.addStringItem('certificates', this.newCertificate);
