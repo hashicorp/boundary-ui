@@ -228,7 +228,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
     assert.deepEqual(serializedRecord, expectedResult);
   });
 
-  test.skip('it normalizes correctly', function (assert) {
+  test('it normalizes correctly', function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('storage-bucket');
