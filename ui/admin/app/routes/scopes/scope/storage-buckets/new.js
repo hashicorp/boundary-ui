@@ -9,7 +9,6 @@ import {
   TYPE_STORAGE_BUCKET_PLUGIN,
   TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
 } from 'api/models/storage-bucket';
-import { action } from '@ember/object';
 
 export default class ScopesScopeStorageBucketsNewRoute extends Route {
   // =services
@@ -79,14 +78,5 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.set('scopes', this.scopes);
-  }
-
-  /**
-   * Updates type of credential
-   * @param {string} credentialType
-   */
-  @action
-  changeType(storageBucket, credentialType) {
-    storageBucket.credentialType = credentialType;
   }
 }
