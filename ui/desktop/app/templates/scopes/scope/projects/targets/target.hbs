@@ -20,7 +20,7 @@
       @text={{t 'resources.session.actions.connect'}}
       @icon='entry-point'
       @iconPosition='trailing'
-      disabled={{and (not @model.target.address) (not @model.hosts)}}
+      disabled={{not @model.target.isConnectable}}
       {{on 'click' (route-action 'preConnect' @model this.toggle)}}
     />
   </page.actions>
@@ -36,7 +36,16 @@
       />
       <bc.Body class='target-details-body'>
         <Hds::ApplicationState as |A|>
-          {{#if (and (not @model.target.address) (not @model.hosts))}}
+          {{#if @model.target.isConnectable}}
+            <A.Header
+              @title={{t 'resources.target.messages.connect-more-info.title'}}
+            />
+            <A.Body
+              @text={{t
+                'resources.target.messages.connect-more-info.description'
+              }}
+            />
+          {{else}}
             <A.Header
               @title={{t
                 'resources.target.messages.cannot-connect.title'
@@ -45,15 +54,6 @@
             />
             <A.Body
               @text={{t 'resources.target.messages.cannot-connect.description'}}
-            />
-          {{else}}
-            <A.Header
-              @title={{t 'resources.target.messages.connect-more-info.title'}}
-            />
-            <A.Body
-              @text={{t
-                'resources.target.messages.connect-more-info.description'
-              }}
             />
           {{/if}}
         </Hds::ApplicationState>

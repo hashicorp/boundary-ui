@@ -333,4 +333,8 @@ export default class TargetModel extends GeneratedTargetModel {
   get isSSH() {
     return this.type === TYPE_TARGET_SSH;
   }
+
+  get isConnectable() {
+    return this.address || this.host_sources?.length;
+  }
 }

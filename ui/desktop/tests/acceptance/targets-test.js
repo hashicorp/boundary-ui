@@ -135,7 +135,7 @@ module('Acceptance | targets', function (hooks) {
     assert.expect(3);
     await visit(urls.targets);
 
-    assert.dom(LAST_TARGET_TABLE_CONNECT_BUTTON).hasAttribute('disabled');
+    assert.dom(LAST_TARGET_TABLE_CONNECT_BUTTON).doesNotExist();
 
     await click(`[href="${urls.emptyTarget}"]`);
 
@@ -147,7 +147,7 @@ module('Acceptance | targets', function (hooks) {
     assert.expect(3);
     await visit(urls.targets);
 
-    assert.dom(FIRST_TARGET_TABLE_CONNECT_BUTTON).lacksAttribute('disabled');
+    assert.dom(FIRST_TARGET_TABLE_CONNECT_BUTTON).exists();
 
     await click(`[href="${urls.target}"]`);
 
