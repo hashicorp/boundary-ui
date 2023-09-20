@@ -49,17 +49,22 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
         json.attributes[key] = null;
     }
 
+    //json.secrets is only present, if there are any updates to the secret fields
+    if (options.isNestedSecret && json.secrets) {
+      if (!fieldsByCredentialType[credentialType].includes(key)) {
+        delete json.secrets;
+      }
+    }
     return value;
   }
 
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = structuredClone(hash);
+    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
 
     // Remove secret fields so we don't track them after creating/updating
-    if (normalizedHash?.secrets?.access_key_id) {
-      delete normalizedHash.secrets.access_key_id;
-      delete normalizedHash.secrets.secret_access_key;
-    }
-    return super.normalize(typeClass, normalizedHash, ...rest);
+    normalized.data.attributes.access_key_id = null;
+    normalized.data.attributes.secret_access_key = null;
+    return normalized;
   }
 }

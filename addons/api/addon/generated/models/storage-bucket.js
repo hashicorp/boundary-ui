@@ -73,6 +73,13 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   })
   region;
 
+  //this field is not used in the UI, but this is kept here to replicate the API
+  @attr('string', {
+    readOnly: true,
+    isNestedAttribute: true,
+  })
+  secrets_hmac;
+
   @attr('boolean', {
     isNestedAttribute: true,
     description: 'If set to `true`, credential rotation is not performed.',

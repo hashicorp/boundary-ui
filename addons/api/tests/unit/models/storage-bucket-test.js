@@ -51,10 +51,12 @@ module('Unit | Model | storage bucket', function (hooks) {
     const modelA = store.createRecord('storage-bucket', {
       role_arn: 'test-role-arn',
       access_key_id: null,
+      credentialType: TYPE_CREDENTIAL_DYNAMIC,
     });
     const modelB = store.createRecord('storage-bucket', {
       role_arn: null,
       access_key_id: 'test-access-key-id',
+      credentialType: TYPE_CREDENTIAL_STATIC,
     });
     assert.strictEqual(modelA.credentialType, TYPE_CREDENTIAL_DYNAMIC);
     assert.strictEqual(modelB.credentialType, TYPE_CREDENTIAL_STATIC);
