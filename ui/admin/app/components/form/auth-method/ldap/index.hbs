@@ -622,6 +622,49 @@
       }}</F.HelperText>
   </Hds::Form::Toggle::Field>
 
+  <Hds::Form::TextInput::Field
+    @isOptional={{true}}
+    @value={{@model.maximum_page_size}}
+    @type='text'
+    name='maximum_page_size'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'maximum_page_size')}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.auth-method.form.maximum_page_size.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.maximum_page_size.help'
+      }}</F.HelperText>
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Select::Field
+    @isOptional={{true}}
+    @width='100%'
+    disabled={{form.disabled}}
+    name='dereference_aliases'
+    {{on 'change' (set-from-event @model 'dereference_aliases')}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.auth-method.form.dereference_aliases.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.auth-method.form.dereference_aliases.help'
+      }}</F.HelperText>
+    <F.Options>
+      <option disabled hidden selected value=''>
+        {{t 'titles.choose-an-option'}}
+      </option>
+      {{#each-in this.dereferenceAliasesList as |key value|}}
+        <option value={{key}} selected={{eq key @model.dereference_aliases}}>
+          {{t (concat 'resources.auth-method.titles.' value)}}
+        </option>
+      {{/each-in}}
+    </F.Options>
+  </Hds::Form::Select::Field>
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

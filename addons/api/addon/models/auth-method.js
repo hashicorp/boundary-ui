@@ -42,6 +42,12 @@ export const options = {
     account_attribute_maps: {
       to: ['fullName', 'email'],
     },
+    dereference_aliases: {
+      NeverDerefAliases: 'never',
+      DerefInSearching: 'searching',
+      DerefFindingBaseObj: 'finding',
+      DerefAlways: 'always',
+    },
   },
 };
 

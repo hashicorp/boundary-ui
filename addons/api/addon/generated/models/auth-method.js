@@ -298,4 +298,16 @@ export default class GeneratedAuthMethodModel extends BaseModel {
     isNestedAttribute: true,
   })
   account_attribute_maps;
+
+  @attr('number', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  maximum_page_size;
+
+  @attr('string', {
+    for: 'ldap',
+    isNestedAttribute: true,
+  })
+  dereference_aliases;
 }
