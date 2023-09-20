@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -19,6 +19,13 @@ module('Acceptance | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const LAST_TARGET_TABLE_CONNECT_BUTTON =
+    'tbody tr:last-child [data-test-targets-connect-button]';
+  const FIRST_TARGET_TABLE_CONNECT_BUTTON =
+    'tbody tr:first-child [data-test-targets-connect-button]';
+  const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
+  const APP_STATE_TITLE = '.hds-application-state__title';
+
   const instances = {
     scopes: {
       global: null,
@@ -29,6 +36,7 @@ module('Acceptance | targets', function (hooks) {
       global: null,
     },
     target: null,
+    emptyTarget: null,
   };
 
   const stubs = {
@@ -49,6 +57,8 @@ module('Acceptance | targets', function (hooks) {
     },
     projects: null,
     targets: null,
+    target: null,
+    emptyTarget: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -85,9 +95,12 @@ module('Acceptance | targets', function (hooks) {
     );
     instances.target = this.server.create(
       'target',
-      { scope: instances.scopes.project },
+      { scope: instances.scopes.project, address: '127.0.0.1' },
       'withAssociations'
     );
+    instances.emptyTarget = this.server.create('target', {
+      scope: instances.scopes.project,
+    });
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
@@ -95,6 +108,8 @@ module('Acceptance | targets', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.emptyTarget = `${urls.targets}/${instances.emptyTarget.id}`;
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
@@ -114,5 +129,29 @@ module('Acceptance | targets', function (hooks) {
     assert.expect(1);
     await visit(urls.targets);
     assert.strictEqual(currentURL(), urls.targets);
+  });
+
+  test('cannot connect to a target without an address and no host sources', async function (assert) {
+    assert.expect(3);
+    await visit(urls.targets);
+
+    assert.dom(LAST_TARGET_TABLE_CONNECT_BUTTON).hasAttribute('disabled');
+
+    await click(`[href="${urls.emptyTarget}"]`);
+
+    assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
+    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
+  });
+
+  test('can connect to a target with an address', async function (assert) {
+    assert.expect(3);
+    await visit(urls.targets);
+
+    assert.dom(FIRST_TARGET_TABLE_CONNECT_BUTTON).lacksAttribute('disabled');
+
+    await click(`[href="${urls.target}"]`);
+
+    assert.dom(TARGET_CONNECT_BUTTON).isEnabled();
+    assert.dom(APP_STATE_TITLE).includesText('Connect for more info');
   });
 });

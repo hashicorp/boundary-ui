@@ -51,7 +51,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         )
       );
     }
-    console.log('TESTING', hosts);
+
     return { target, hosts };
   }
 
