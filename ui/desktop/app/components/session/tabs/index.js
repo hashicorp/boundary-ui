@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
+import { CanvasAddon } from 'xterm-addon-canvas';
 import { v4 as uuidv4 } from 'uuid';
 import debounce from 'lodash/debounce';
 
@@ -36,6 +37,7 @@ export default class SessionTerminalTabsComponent extends Component {
     const termContainer = document.getElementById(`terminal-container`);
 
     xterm.loadAddon(fitAddon);
+    xterm.loadAddon(new CanvasAddon());
     xterm.open(termContainer);
     fitAddon.fit();
     xterm.focus();
