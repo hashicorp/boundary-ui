@@ -172,8 +172,6 @@ module('Unit | Serializer | storage bucket', function (hooks) {
     assert.deepEqual(serializedRecord, expectedResult);
   });
 
-  //secrets(access_key_id, secret_access_key) should not be included, unless they are updated
-  //BE will throw an error if both secrets and dynamic cred fields have values
   test('it serializes when updating a static type credential storage bucket with dynamic credentials correctly', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
