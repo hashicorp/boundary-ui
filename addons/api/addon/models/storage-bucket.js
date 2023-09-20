@@ -38,7 +38,6 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {string}
    */
   get credentialType() {
-    console.log(this.#credentialType, 'crdential type');
     if (!this.#credentialType) return 'static';
     return this.#credentialType;
   }
@@ -48,7 +47,6 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {string}
    */
   set credentialType(type) {
-    console.log(type, 'TYPEE');
     this.#credentialType = type;
   }
   /**
