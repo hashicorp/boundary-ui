@@ -11,6 +11,20 @@ const terminalOptions = {
   cursorBlink: true,
 };
 
+// This dynamically sets the terminal container's height inline so we have an accurate
+// height for the terminal container. This is necessary because we don't have an
+// intrinsic height from our parent containers and we don't have any content yet from
+// the terminal to have a usable height for the container. This means that calling `.fit()`
+// doesn't get an accurate representation of what the container size can actually be
+const calculateTerminalContainerHeight = (termContainer) => {
+  const viewportHeight = window.innerHeight;
+  // Calculate the height by getting the viewport height, subtracting what
+  // the top offset from the container is, and leaving a small padding to
+  // also prevent any overflow scrolling on the container
+  const height = viewportHeight - termContainer.offsetTop - 24;
+  termContainer.style.height = `${height}px`;
+};
+
 export default class SessionTerminalTabsComponent extends Component {
   // =services
 
@@ -35,6 +49,7 @@ export default class SessionTerminalTabsComponent extends Component {
     this.terminal = xterm;
     const fitAddon = new FitAddon();
     const termContainer = document.getElementById(`terminal-container`);
+    calculateTerminalContainerHeight(termContainer);
 
     xterm.loadAddon(fitAddon);
     xterm.loadAddon(new CanvasAddon());
@@ -44,7 +59,7 @@ export default class SessionTerminalTabsComponent extends Component {
 
     // Generate a UUID to have the terminal handlers be unique
     this.id = uuidv4();
-    this.#setupTerminal(fitAddon, xterm);
+    this.#setupTerminal(fitAddon, xterm, termContainer);
 
     const { isWindows } = await this.ipc.invoke('checkOS');
     const { model } = this.args;
@@ -75,7 +90,7 @@ export default class SessionTerminalTabsComponent extends Component {
     }
   }
 
-  #setupTerminal(fitAddon, xterm) {
+  #setupTerminal(fitAddon, xterm, termContainer) {
     // Terminal is exposed by contextBridge within the preload script
     window.terminal.create({ id: this.id, cols: xterm.cols, rows: xterm.rows });
     xterm.onData((data) => window.terminal.send(data, this.id));
@@ -88,6 +103,7 @@ export default class SessionTerminalTabsComponent extends Component {
     // Handle resizing terminal windows. We debounce the resizing as we don't want
     // to resize xterm and the pty process before the previous one has finished
     const debouncedFit = debounce(() => {
+      calculateTerminalContainerHeight(termContainer);
       fitAddon.fit();
     }, 150);
     window.onresize = () => {
