@@ -52,7 +52,7 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
     //json.secrets is only present, if there are any updates to the secret fields
     if (options.isNestedSecret && json.secrets) {
       if (!fieldsByCredentialType[credentialType].includes(key)) {
-        delete json.secrets[key];
+        delete json.secrets;
       }
     }
     return value;

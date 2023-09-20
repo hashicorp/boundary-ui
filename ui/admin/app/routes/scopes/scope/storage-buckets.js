@@ -101,7 +101,8 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
    * @param {string} credentialType
    */
   @action
-  changeType(credentialType) {
+  changeType(storageBucket, credentialType) {
+    storageBucket.credentialType = credentialType;
     this.router.replaceWith({ queryParams: { credentialType } });
   }
 }

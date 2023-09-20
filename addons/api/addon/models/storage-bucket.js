@@ -22,6 +22,9 @@ export const TYPES_CREDENTIALS = Object.freeze([
 ]);
 
 export default class StorageBucketModel extends GeneratedStorageBucketModel {
+  // attributes
+
+  #credentialType;
   /**
    * True if the storage bucket is a plugin.
    * @type {boolean}
@@ -31,18 +34,23 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
   }
 
   /**
-   * If the storage bucket has role_arn, return dynamic
-   * otherwise return the default static type.
+   * Gets a value from credentialType
    * @type {string}
    */
   get credentialType() {
-    if (this.role_arn && !this.access_key_id) {
-      return TYPE_CREDENTIAL_DYNAMIC;
-    } else {
-      return TYPE_CREDENTIAL_STATIC;
-    }
+    console.log(this.#credentialType, 'crdential type');
+    if (!this.#credentialType) return 'static';
+    return this.#credentialType;
   }
 
+  /**
+   * Sets a value to credentialType
+   * @type {string}
+   */
+  set credentialType(type) {
+    console.log(type, 'TYPEE');
+    this.#credentialType = type;
+  }
   /**
    * True if the storage bucket is an unknown type.
    * @type {boolean}
