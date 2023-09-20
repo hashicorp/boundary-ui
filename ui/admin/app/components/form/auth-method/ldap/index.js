@@ -21,6 +21,8 @@ export default class FormAuthMethodLdapComponent extends Component {
    */
   newToAttribute = options.ldap.account_attribute_maps.to[0];
 
+  dereferenceAliasesList = options.ldap.dereference_aliases;
+
   /**
    * @type {string}
    */
