@@ -10,7 +10,7 @@ const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
-const { isMac } = require('../helpers/platform.js');
+const { isLinux, isMac, isWindows } = require('../helpers/platform.js');
 const os = require('node:os');
 const pty = require('node-pty');
 
@@ -112,6 +112,15 @@ handle('toggleFullscreenWindow', () => {
 handle('closeWindow', () => app.quit());
 
 /**
+ * Return an object containing helper fields for determining what OS we're running on
+ */
+handle('checkOS', () => ({
+  isLinux: isLinux(),
+  isMac: isMac(),
+  isWindows: isWindows(),
+}));
+
+/**
  * Handler to help create terminal windows. We don't use the helper `handle` method
  * as we need access to the event and don't need to be using `ipcMain.handle`.
  */
@@ -119,7 +128,9 @@ ipcMain.on('createTerminal', (event, payload) => {
   const { id, cols, rows } = payload;
   const { sender } = event;
   const terminalShell =
-    os.platform() === 'win32' ? 'powershell.exe' : process.env.SHELL || '/bin/bash';
+    os.platform() === 'win32'
+      ? 'powershell.exe'
+      : process.env.SHELL || '/bin/bash';
   const ptyProcess = pty.spawn(terminalShell, [], {
     name: 'xterm-color',
     cols,
@@ -152,6 +163,7 @@ ipcMain.on('createTerminal', (event, payload) => {
   ipcMain.once(removeChannel, () => {
     // Just let the error bubble up since we can't do anything
     try {
+      //  TODO: Should we be killing entire process tree in windows with its pid?
       ptyProcess.kill();
     } finally {
       // Remove listeners
