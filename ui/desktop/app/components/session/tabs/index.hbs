@@ -46,7 +46,7 @@
               <Rose::MetadataList @orientation='vertical' as |list|>
                 {{! Host name }}
                 {{#if @model.host.name}}
-                  <list.Item @icon='network-alt' @color='faint'>
+                  <list.Item @icon='monitor' @color='faint'>
                     {{@model.host.name}}
                   </list.Item>
                 {{/if}}
@@ -54,6 +54,12 @@
                 {{#if @model.host.description}}
                   <list.Item @icon='message-circle-fill' @color='faint'>
                     {{@model.host.description}}
+                  </list.Item>
+                {{/if}}
+                {{! Host address }}
+                {{#if @model.host.address}}
+                  <list.Item @icon='network-alt' @color='faint'>
+                    {{@model.host.address}}
                   </list.Item>
                 {{/if}}
                 {{! Host ID }}
