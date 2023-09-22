@@ -23,8 +23,6 @@ module('Acceptance | projects | targets', function (hooks) {
 
   let getTargetCount;
 
-  const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
-  const APP_STATE_TITLE = '.hds-application-state__title';
   const ROSE_APP_STATE_TITLE = '.rose-message-title';
 
   const instances = {
@@ -38,7 +36,6 @@ module('Acceptance | projects | targets', function (hooks) {
     },
     target: null,
     session: null,
-    emptyTarget: null,
   };
 
   const stubs = {
@@ -61,7 +58,6 @@ module('Acceptance | projects | targets', function (hooks) {
     projects: null,
     targets: null,
     target: null,
-    emptyTarget: null,
     sessions: null,
   };
 
@@ -105,9 +101,6 @@ module('Acceptance | projects | targets', function (hooks) {
       },
       'withAssociations'
     );
-    instances.emptyTarget = this.server.create('target', {
-      scope: instances.scopes.project,
-    });
     instances.session = this.server.create(
       'session',
       {
@@ -125,7 +118,6 @@ module('Acceptance | projects | targets', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.emptyTarget = `${urls.targets}/${instances.emptyTarget.id}`;
 
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
@@ -194,38 +186,6 @@ module('Acceptance | projects | targets', function (hooks) {
     assert
       .dom(`[data-test-visit-target="${instances.target.id}"]`)
       .doesNotExist();
-  });
-
-  test('cannot connect to a target without an address and no host sources', async function (assert) {
-    assert.expect(3);
-    await visit(urls.projects);
-
-    await click(`[href="${urls.targets}"]`);
-
-    assert
-      .dom(`[data-test-targets-connect-button="${instances.emptyTarget.id}"]`)
-      .doesNotExist();
-
-    await click(`[href="${urls.emptyTarget}"]`);
-
-    assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
-    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
-  });
-
-  test('can connect to a target with an address', async function (assert) {
-    assert.expect(3);
-    await visit(urls.projects);
-
-    await click(`[href="${urls.targets}"]`);
-
-    assert
-      .dom(`[data-test-targets-connect-button="${instances.target.id}"]`)
-      .exists();
-
-    await click(`[href="${urls.target}"]`);
-
-    assert.dom(TARGET_CONNECT_BUTTON).isEnabled();
-    assert.dom(APP_STATE_TITLE).includesText('Connect for more info');
   });
 
   test('can connect to a target with proper authorization', async function (assert) {

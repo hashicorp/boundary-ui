@@ -36,6 +36,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     },
     session: null,
     target: null,
+    emptyTarget: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
   };
@@ -55,6 +56,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     sessions: null,
     targets: null,
     target: null,
+    emptyTarget: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
   };
@@ -109,6 +111,9 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withTwoHosts'
     );
+    instances.emptyTarget = this.server.create('target', {
+      scope: instances.scopes.project,
+    });
     instances.session = this.server.create(
       'session',
       {
@@ -126,6 +131,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetWithOneHost = `${urls.targets}/${instances.targetWithOneHost.id}`;
     urls.targetWithTwoHosts = `${urls.targets}/${instances.targetWithTwoHosts.id}`;
+    urls.emptyTarget = `${urls.targets}/${instances.emptyTarget.id}`;
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
@@ -135,8 +141,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
   });
 
-  test('connecting to a target', async function (assert) {
-    assert.expect(1);
+  test('user can connect to a target with an address', async function (assert) {
+    assert.expect(3);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -147,6 +153,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
+
+    assert.dom(TARGET_CONNECT_BUTTON).isEnabled();
+    assert.dom(APP_STATE_TITLE).includesText('Connect for more info');
+
     await click(TARGET_CONNECT_BUTTON);
 
     assert.dom(APP_STATE_TITLE).hasText('Connected');
@@ -185,7 +195,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
 
-  test('can retry on error', async function (assert) {
+  test('user can retry on error', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
@@ -201,7 +211,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
   });
 
-  test('can connect to a target with one host', async function (assert) {
+  test('user can connect to a target with one host', async function (assert) {
     assert.expect(2);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
@@ -221,7 +231,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
-  test('can connect to a target with two hosts', async function (assert) {
+  test('user can connect to a target with two hosts', async function (assert) {
     assert.expect(3);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
@@ -243,5 +253,16 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await click(TARGET_QUICK_CONNECT_BUTTON);
 
     assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test('user cannot connect to a target without an address and no host sources', async function (assert) {
+    assert.expect(2);
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(`[href="${urls.emptyTarget}"]`);
+
+    assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
+    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
   });
 });

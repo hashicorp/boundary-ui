@@ -161,7 +161,7 @@
             <B.Td>
               {{#if (can 'connect target' B.data)}}
                 <Hds::Button
-                  data-test-targets-connect-button
+                  data-test-targets-connect-button={{B.data.id}}
                   @text={{t 'resources.session.actions.connect'}}
                   @color='secondary'
                   @route='scopes.scope.projects.targets.target'
