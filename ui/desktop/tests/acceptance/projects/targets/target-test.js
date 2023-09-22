@@ -36,7 +36,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
     },
     session: null,
     target: null,
-    emptyTarget: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
   };
@@ -56,7 +55,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
     sessions: null,
     targets: null,
     target: null,
-    emptyTarget: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
   };
@@ -111,9 +109,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withTwoHosts'
     );
-    instances.emptyTarget = this.server.create('target', {
-      scope: instances.scopes.project,
-    });
     instances.session = this.server.create(
       'session',
       {
@@ -131,7 +126,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetWithOneHost = `${urls.targets}/${instances.targetWithOneHost.id}`;
     urls.targetWithTwoHosts = `${urls.targets}/${instances.targetWithTwoHosts.id}`;
-    urls.emptyTarget = `${urls.targets}/${instances.emptyTarget.id}`;
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
@@ -231,7 +225,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
-  test('user can connect to a target with two hosts', async function (assert) {
+  test('user can connect to a target with two hosts using host modal', async function (assert) {
     assert.expect(3);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
@@ -257,10 +251,11 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
   test('user cannot connect to a target without an address and no host sources', async function (assert) {
     assert.expect(2);
-    await visit(urls.projects);
+    instances.target.address = '';
+    instances.target.update({ address: '', hostSets: [] });
+    await visit(urls.targets);
 
-    await click(`[href="${urls.targets}"]`);
-    await click(`[href="${urls.emptyTarget}"]`);
+    await click(`[href="${urls.target}"]`);
 
     assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
     assert.dom(APP_STATE_TITLE).includesText('Cannot connect');

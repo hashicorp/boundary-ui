@@ -4,7 +4,12 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  currentRouteName,
+  click,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -24,6 +29,9 @@ module('Acceptance | projects | targets', function (hooks) {
   let getTargetCount;
 
   const ROSE_APP_STATE_TITLE = '.rose-message-title';
+  const APP_STATE_TITLE = '.hds-application-state__title';
+  const TARGET_DETAILS_ROUTE_NAME =
+    'scopes.scope.projects.targets.target.index';
 
   const instances = {
     scopes: {
@@ -175,7 +183,7 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.dom(ROSE_APP_STATE_TITLE).hasText('No Targets Available');
   });
 
-  test('cannot navigate to a target without proper authorization', async function (assert) {
+  test('user cannot navigate to a target without proper authorization', async function (assert) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
@@ -188,7 +196,7 @@ module('Acceptance | projects | targets', function (hooks) {
       .doesNotExist();
   });
 
-  test('can connect to a target with proper authorization', async function (assert) {
+  test('user can connect to a target with proper authorization', async function (assert) {
     assert.expect(2);
     await visit(urls.projects);
 
@@ -202,7 +210,7 @@ module('Acceptance | projects | targets', function (hooks) {
       .exists();
   });
 
-  test('cannot connect to a target without proper authorization', async function (assert) {
+  test('user cannot connect to a target without proper authorization', async function (assert) {
     assert.expect(2);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
@@ -218,5 +226,18 @@ module('Acceptance | projects | targets', function (hooks) {
     assert
       .dom(`[data-test-targets-connect-button="${instances.target.id}"]`)
       .doesNotExist();
+  });
+
+  test('user is redirected to target details page when unable to connect from list view', async function (assert) {
+    assert.expect(2);
+    instances.target.address = '';
+    instances.target.update({ address: '', hostSets: [] });
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
+
+    assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
+    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
   });
 });
