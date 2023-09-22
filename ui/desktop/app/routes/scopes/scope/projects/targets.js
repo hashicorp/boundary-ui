@@ -52,14 +52,6 @@ export default class ScopesScopeProjectsTargetsRoute extends Route {
     // Recursively query all targets within the current scope
     let targets = await this.store.query('target', queryOptions);
 
-    // Load all targets in order to populate host_sources field.
-    // This is meant to be a temporary solution.
-    await Promise.all(
-      targets.map(async ({ id: target_id }) => {
-        await this.store.findRecord('target', target_id);
-      })
-    );
-
     // Filter out targets to which users do not have the connect ability
     targets = targets.filter((t) => this.can.can('connect target', t));
 

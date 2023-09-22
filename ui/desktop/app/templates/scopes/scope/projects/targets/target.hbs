@@ -15,28 +15,32 @@
   </page.header>
 
   <page.actions>
-    <Hds::Button
-      data-test-target-detail-connect-button
-      @text={{t 'resources.session.actions.connect'}}
-      @icon='entry-point'
-      @iconPosition='trailing'
-      disabled={{not @model.target.isConnectable}}
-      {{on 'click' (route-action 'preConnect' @model this.toggle)}}
-    />
+    {{#if (can 'connect target' @model.target)}}
+      <Hds::Button
+        data-test-target-detail-connect-button
+        @text={{t 'resources.session.actions.connect'}}
+        @icon='entry-point'
+        @iconPosition='trailing'
+        disabled={{not (can 'initiateConnection target' @model.target)}}
+        {{on 'click' (route-action 'preConnect' @model this.toggle)}}
+      />
+    {{/if}}
   </page.actions>
 
   <page.body class='details-screen-body'>
     <Rose::Layout::BodyContent as |bc|>
-      <Target::HostModal
-        @showModal={{this.isConnecting}}
-        @toggle={{this.toggle}}
-        @connect={{route-action 'connect'}}
-        @hosts={{@model.hosts}}
-        @target={{@model.target}}
-      />
+      {{#if (can 'initiateConnection target' @model.target)}}
+        <Target::HostModal
+          @showModal={{this.isConnecting}}
+          @toggle={{this.toggle}}
+          @connect={{route-action 'connect'}}
+          @hosts={{@model.hosts}}
+          @target={{@model.target}}
+        />
+      {{/if}}
       <bc.Body class='target-details-body'>
         <Hds::ApplicationState as |A|>
-          {{#if @model.target.isConnectable}}
+          {{#if (can 'initiateConnection target' @model.target)}}
             <A.Header
               @title={{t 'resources.target.messages.connect-more-info.title'}}
             />

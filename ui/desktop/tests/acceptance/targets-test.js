@@ -19,10 +19,6 @@ module('Acceptance | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const LAST_TARGET_TABLE_CONNECT_BUTTON =
-    'tbody tr:last-child [data-test-targets-connect-button]';
-  const FIRST_TARGET_TABLE_CONNECT_BUTTON =
-    'tbody tr:first-child [data-test-targets-connect-button]';
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
   const APP_STATE_TITLE = '.hds-application-state__title';
 
@@ -135,8 +131,6 @@ module('Acceptance | targets', function (hooks) {
     assert.expect(3);
     await visit(urls.targets);
 
-    assert.dom(LAST_TARGET_TABLE_CONNECT_BUTTON).doesNotExist();
-
     await click(`[href="${urls.emptyTarget}"]`);
 
     assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
@@ -146,8 +140,6 @@ module('Acceptance | targets', function (hooks) {
   test('can connect to a target with an address', async function (assert) {
     assert.expect(3);
     await visit(urls.targets);
-
-    assert.dom(FIRST_TARGET_TABLE_CONNECT_BUTTON).exists();
 
     await click(`[href="${urls.target}"]`);
 

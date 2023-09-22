@@ -160,16 +160,14 @@
             </B.Td>
             <B.Td>
               {{#if (can 'connect target' B.data)}}
-                {{#if B.data.isConnectable}}
-                  <Hds::Button
-                    data-test-targets-connect-button
-                    @text={{t 'resources.session.actions.connect'}}
-                    @color='secondary'
-                    @route='scopes.scope.projects.targets.target'
-                    @model={{B.data.id}}
-                    @query={{hash isConnecting=true}}
-                  />
-                {{/if}}
+                <Hds::Button
+                  data-test-targets-connect-button
+                  @text={{t 'resources.session.actions.connect'}}
+                  @color='secondary'
+                  @route='scopes.scope.projects.targets.target'
+                  @model={{B.data.id}}
+                  @query={{hash isConnecting=true}}
+                />
               {{/if}}
             </B.Td>
           </B.Tr>
