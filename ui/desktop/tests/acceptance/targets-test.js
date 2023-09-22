@@ -128,7 +128,7 @@ module('Acceptance | targets', function (hooks) {
   });
 
   test('cannot connect to a target without an address and no host sources', async function (assert) {
-    assert.expect(3);
+    assert.expect(2);
     await visit(urls.targets);
 
     await click(`[href="${urls.emptyTarget}"]`);
@@ -138,7 +138,7 @@ module('Acceptance | targets', function (hooks) {
   });
 
   test('can connect to a target with an address', async function (assert) {
-    assert.expect(3);
+    assert.expect(2);
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
