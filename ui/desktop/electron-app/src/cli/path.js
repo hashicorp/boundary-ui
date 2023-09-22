@@ -10,6 +10,6 @@ module.exports = {
   // Returns boundary cli path
   path: () => {
     const name = isWindows() ? 'boundary.exe' : 'boundary';
-    return path.resolve(__dirname, '..', '..', 'cli', name);
+    return path.resolve(process.resourcesPath, 'cli', name);
   },
 };
