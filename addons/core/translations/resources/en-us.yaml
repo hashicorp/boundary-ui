@@ -524,7 +524,7 @@ target:
       description: Additional information for this target will be provided here after your session is established.
     cannot-connect:
       title: Cannot connect to {targetDisplayName}
-      description: There aren't any host sources and no address configured for this target.
+      description: There are no host sources and no address configured for this target.
   titles:
     new: New Target
   actions:
