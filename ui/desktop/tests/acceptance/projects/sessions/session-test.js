@@ -11,14 +11,12 @@ import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import sinon from 'sinon';
+import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let mockIPC;
-  let messageHandler;
 
   const instances = {
     scopes: {
@@ -40,17 +38,9 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   };
 
   const urls = {
-    index: '/',
-    clusterUrl: '/cluster-url',
     scopes: {
       global: null,
       org: null,
-    },
-    authenticate: {
-      global: null,
-      methods: {
-        global: null,
-      },
     },
     projects: null,
     targets: null,
@@ -113,50 +103,18 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
-    urls.authenticate.global = `${urls.scopes.global}/authenticate`;
-    urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.sessions = `${urls.projects}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
-    class MockIPC {
-      clusterUrl = null;
-
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getClusterUrl() {
-        return this.clusterUrl;
-      }
-
-      setClusterUrl(clusterUrl) {
-        this.clusterUrl = clusterUrl;
-        return this.clusterUrl;
-      }
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    // Mock the postMessage interface used by IPC.
+    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
   });
 
   test('visiting session detail', async function (assert) {

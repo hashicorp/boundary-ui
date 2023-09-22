@@ -95,4 +95,44 @@ export default factory.extend({
       });
     },
   }),
+
+  withTwoHosts: trait({
+    afterCreate(target, server) {
+      const { scope } = target;
+      const hostCatalog = server.create('host-catalog', { scope });
+      const hosts = server.createList('host', 2, {
+        scope,
+        hostCatalog,
+        type: hostCatalog.type,
+      });
+      const hostSets = [
+        server.create('host-set', {
+          scope,
+          hostCatalog,
+          hosts,
+          type: hostCatalog.type,
+        }),
+      ];
+      target.update({ hostSets });
+    },
+  }),
+
+  withOneHost: trait({
+    afterCreate(target, server) {
+      const { scope } = target;
+      const hostCatalog = server.create('host-catalog', { scope });
+      const hosts = [
+        server.create('host', { scope, hostCatalog, type: hostCatalog.type }),
+      ];
+      const hostSets = [
+        server.create('host-set', {
+          scope,
+          hostCatalog,
+          hosts,
+          type: hostCatalog.type,
+        }),
+      ];
+      target.update({ hostSets });
+    },
+  }),
 });
