@@ -20,7 +20,14 @@ module.exports = {
       'entitlements-inherit': './assets/macos/entitlements.plist',
       'signature-flags': 'library',
     },
+    asar: true,
   },
+  plugins: [
+    {
+      name: '@electron-forge/plugin-auto-unpack-natives',
+      config: {},
+    },
+  ],
   makers: [
     {
       name: '@electron-forge/maker-zip',
@@ -83,17 +90,37 @@ module.exports = {
           fs.mkdirSync(destination, { recursive: true });
         // Copy artifacts
         artifacts.forEach(async (artifact) => {
-          const name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(artifact)}`;
+          const name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(
+            artifact
+          )}`;
           const artifactDestination = path.join(destination, name);
           console.log(`[release] Found artifact: ${artifact}`);
           try {
             await fs.promises.copyFile(artifact, artifactDestination);
-            console.log(`[release] Copied artifact: ${path.resolve(artifactDestination)}`);
+            console.log(
+              `[release] Copied artifact: ${path.resolve(artifactDestination)}`
+            );
           } catch (e) {
             console.warn(`[release] Could not copy ${artifact}`, e);
           }
         });
       });
+    },
+    packageAfterPrune: async (_, buildPath) => {
+      // This is needed to delete temporary sym links when creating an asar during
+      // building for native node modules.
+
+      // TODO: This issue was fixed and merged in a recent PR as noted here
+      //  https://github.com/nodejs/node-gyp/issues/2713 so we should update node-gyp
+      //  when it gets released and remove this workaround
+      const gypPath = path.join(
+        buildPath,
+        'node_modules',
+        'node-pty',
+        'build',
+        'node_gyp_bins'
+      );
+      await fs.promises.rm(gypPath, { recursive: true, force: true });
     },
   },
 };
