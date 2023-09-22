@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
   currentSession,
   authenticateSession,
@@ -25,9 +26,6 @@ import {
 module('Acceptance | projects | sessions', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let mockIPC;
-  let messageHandler;
 
   const instances = {
     scopes: {
@@ -49,8 +47,6 @@ module('Acceptance | projects | sessions', function (hooks) {
   };
 
   const urls = {
-    index: '/',
-    clusterUrl: '/cluster-url',
     scopes: {
       global: null,
       org: null,
@@ -120,42 +116,12 @@ module('Acceptance | projects | sessions', function (hooks) {
     urls.sessions = `${urls.projects}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
-    class MockIPC {
-      clusterUrl = null;
-
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getClusterUrl() {
-        return this.clusterUrl;
-      }
-
-      setClusterUrl(clusterUrl) {
-        this.clusterUrl = clusterUrl;
-        return this.clusterUrl;
-      }
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    // Mock the postMessage interface used by IPC.
+    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {

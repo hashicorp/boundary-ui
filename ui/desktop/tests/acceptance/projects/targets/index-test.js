@@ -4,24 +4,28 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
+import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
-  currentSession,
   authenticateSession,
   invalidateSession,
+  currentSession,
 } from 'ember-simple-auth/test-support';
 
 module('Acceptance | projects | targets', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let mockIPC;
-  let messageHandler;
+  let getTargetCount;
+
+  const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
+  const APP_STATE_TITLE = '.hds-application-state__title';
+  const ROSE_APP_STATE_TITLE = '.rose-message-title';
 
   const instances = {
     scopes: {
@@ -33,17 +37,17 @@ module('Acceptance | projects | targets', function (hooks) {
       global: null,
     },
     target: null,
+    session: null,
+    emptyTarget: null,
   };
 
   const stubs = {
     global: null,
     org: null,
-    ipsService: null,
+    ipcService: null,
   };
 
   const urls = {
-    index: '/',
-    clusterUrl: '/cluster-url',
     scopes: {
       global: null,
       org: null,
@@ -57,6 +61,7 @@ module('Acceptance | projects | targets', function (hooks) {
     projects: null,
     targets: null,
     target: null,
+    emptyTarget: null,
     sessions: null,
   };
 
@@ -69,7 +74,7 @@ module('Acceptance | projects | targets', function (hooks) {
   hooks.beforeEach(function () {
     authenticateSession();
 
-    // create scopes
+    // Generate scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     stubs.global = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
@@ -83,10 +88,10 @@ module('Acceptance | projects | targets', function (hooks) {
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
+    // Generate resources
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
     });
-
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
@@ -96,10 +101,13 @@ module('Acceptance | projects | targets', function (hooks) {
       'target',
       {
         scope: instances.scopes.project,
+        address: '127.0.0.1',
       },
       'withAssociations'
     );
-
+    instances.emptyTarget = this.server.create('target', {
+      scope: instances.scopes.project,
+    });
     instances.session = this.server.create(
       'session',
       {
@@ -109,6 +117,7 @@ module('Acceptance | projects | targets', function (hooks) {
       'withAssociations'
     );
 
+    // Generate route URLs for resources
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
@@ -116,43 +125,17 @@ module('Acceptance | projects | targets', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.emptyTarget = `${urls.targets}/${instances.emptyTarget.id}`;
 
-    class MockIPC {
-      clusterUrl = null;
+    // Generate resource counter
+    getTargetCount = () => this.server.schema.targets.all().models.length;
 
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getClusterUrl() {
-        return this.clusterUrl;
-      }
-
-      setClusterUrl(clusterUrl) {
-        this.clusterUrl = clusterUrl;
-        return this.clusterUrl;
-      }
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    // Mock the postMessage interface used by IPC.
+    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -160,41 +143,120 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.expect(2);
     await visit(urls.targets);
     await a11yAudit();
+
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
-  test('visiting index', async function (assert) {
+  test('visiting targets index', async function (assert) {
     assert.expect(2);
-    const targetsCount = this.server.schema.targets.all().models.length;
-    await visit(urls.targets);
+    const targetsCount = getTargetCount();
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.targets);
-    assert.strictEqual(findAll('tbody tr').length, targetsCount);
+    assert.strictEqual(getTargetCount(), targetsCount);
   });
 
   test('visiting a target', async function (assert) {
-    assert.expect(1);
-    await visit(urls.targets);
-    await click('tbody tr td span a');
+    assert.expect(2);
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.dom(`[data-test-visit-target="${instances.target.id}"]`).exists();
+
+    await click(`[href="${urls.target}"]`);
+
     assert.strictEqual(currentURL(), urls.target);
   });
 
-  test('visiting empty targets', async function (assert) {
+  test('visiting targets list view with no targets', async function (assert) {
     assert.expect(1);
     this.server.get('/targets', () => new Response(200));
-    await visit(urls.targets);
-    assert.strictEqual(
-      find('.rose-message-title').textContent.trim(),
-      'No Targets Available'
-    );
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.dom(ROSE_APP_STATE_TITLE).hasText('No Targets Available');
   });
 
   test('cannot navigate to a target without proper authorization', async function (assert) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    await visit(urls.targets);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert
+      .dom(`[data-test-visit-target="${instances.target.id}"]`)
+      .doesNotExist();
+  });
+
+  test('cannot connect to a target without an address and no host sources', async function (assert) {
+    assert.expect(3);
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert
+      .dom(`[data-test-targets-connect-button="${instances.emptyTarget.id}"]`)
+      .doesNotExist();
+
+    await click(`[href="${urls.emptyTarget}"]`);
+
+    assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
+    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
+  });
+
+  test('can connect to a target with an address', async function (assert) {
+    assert.expect(3);
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert
+      .dom(`[data-test-targets-connect-button="${instances.target.id}"]`)
+      .exists();
+
+    await click(`[href="${urls.target}"]`);
+
+    assert.dom(TARGET_CONNECT_BUTTON).isEnabled();
+    assert.dom(APP_STATE_TITLE).includesText('Connect for more info');
+  });
+
+  test('can connect to a target with proper authorization', async function (assert) {
+    assert.expect(2);
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.true(
+      instances.target.authorized_actions.includes('authorize-session')
+    );
+    assert
+      .dom(`[data-test-targets-connect-button="${instances.target.id}"]`)
+      .exists();
+  });
+
+  test('cannot connect to a target without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter(
+        (item) => item !== 'authorize-session'
+      );
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.false(
+      instances.target.authorized_actions.includes('authorize-session')
+    );
+    assert
+      .dom(`[data-test-targets-connect-button="${instances.target.id}"]`)
+      .doesNotExist();
   });
 });

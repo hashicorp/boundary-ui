@@ -4,19 +4,26 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find, findAll } from '@ember/test-helpers';
+import { visit, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_SSH } from 'api/models/target';
+import WindowMockIPC from '../../../helpers/window-mock-ipc';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let mockIPC;
-  let messageHandler;
+  const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
+  const TARGET_QUICK_CONNECT_BUTTON = '[data-test-host-quick-connect]';
+  const TARGET_HOST_CONNECT_BUTTON = '[data-test-host-connect]';
+  const APP_STATE_TITLE = '.hds-application-state__title';
+  const ROSE_DIALOG_MODAL = '.rose-dialog-error';
+  const ROSE_DIALOG_MODAL_BUTTONS = '.rose-dialog-footer button';
+  const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
+  const ROSE_DIALOG_CANCEL_BUTTON =
+    '.rose-dialog footer .rose-button-secondary';
 
   const instances = {
     scopes: {
@@ -27,32 +34,29 @@ module('Acceptance | projects | targets | target', function (hooks) {
     authMethods: {
       global: null,
     },
+    session: null,
     target: null,
+    targetWithOneHost: null,
+    targetWithTwoHosts: null,
   };
 
   const stubs = {
     global: null,
     org: null,
-    ipsService: null,
+    ipcService: null,
   };
 
   const urls = {
-    index: '/',
-    clusterUrl: '/cluster-url',
     scopes: {
       global: null,
       org: null,
     },
-    authenticate: {
-      global: null,
-      methods: {
-        global: null,
-      },
-    },
     projects: null,
+    sessions: null,
     targets: null,
     target: null,
-    sessions: null,
+    targetWithOneHost: null,
+    targetWithTwoHosts: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -64,7 +68,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   hooks.beforeEach(function () {
     authenticateSession();
 
-    // create scopes
+    // Generate scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     stubs.global = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
@@ -78,10 +82,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
+    // Generate resources
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
     });
-
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
@@ -95,7 +99,16 @@ module('Acceptance | projects | targets | target', function (hooks) {
       },
       'withAssociations'
     );
-
+    instances.targetWithOneHost = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withOneHost'
+    );
+    instances.targetWithTwoHosts = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withTwoHosts'
+    );
     instances.session = this.server.create(
       'session',
       {
@@ -105,82 +118,24 @@ module('Acceptance | projects | targets | target', function (hooks) {
       'withAssociations'
     );
 
+    // Generate route URLs for resources
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
-    urls.authenticate.global = `${urls.scopes.global}/authenticate`;
-    urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.targetWithOneHost = `${urls.targets}/${instances.targetWithOneHost.id}`;
+    urls.targetWithTwoHosts = `${urls.targets}/${instances.targetWithTwoHosts.id}`;
 
-    class MockIPC {
-      clusterUrl = null;
-
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getClusterUrl() {
-        return this.clusterUrl;
-      }
-
-      setClusterUrl(clusterUrl) {
-        this.clusterUrl = clusterUrl;
-        return this.clusterUrl;
-      }
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    // Mock the postMessage interface used by IPC.
+    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
   });
 
-  hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
-  });
-
-  test.skip('connecting to a target', async function (assert) {
-    assert.expect(4);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
-      session_id: instances.session.id,
-      address: 'a_123',
-      port: 'p_123',
-      protocol: 'tcp',
-    });
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
-    assert.ok(find('.dialog-detail'), 'Success dialog');
-    assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
-    assert.strictEqual(
-      find('.rose-dialog-footer button').textContent.trim(),
-      'Close',
-      'Cannot retry'
-    );
-    assert.strictEqual(
-      find('.rose-dialog-body .copyable-content').textContent.trim(),
-      'a_123:p_123'
-    );
-  });
-
-  test.skip('displays the correct target type (TCP) in the success dialog body', async function (assert) {
+  test('connecting to a target', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
@@ -189,38 +144,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
       port: 'p_123',
       protocol: 'tcp',
     });
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
     await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
 
-    assert.ok(find('.rose-dialog-body h3').textContent.trim().includes('TCP'));
-  });
+    await click(`[href="${urls.target}"]`);
+    await click(TARGET_CONNECT_BUTTON);
 
-  test.skip('displays the correct target type (SSH) in the success dialog body', async function (assert) {
-    assert.expect(1);
-    instances.target.update({
-      type: TYPE_TARGET_SSH,
-    });
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
-      session_id: instances.session.id,
-      address: 'a_123',
-      port: 'p_123',
-      protocol: 'ssh',
-    });
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    await visit(urls.targets);
-    await click(
-      'tbody tr:first-child td:last-child button',
-      'Activate connect mode'
-    );
-
-    assert.ok(find('.rose-dialog-body h3').textContent.trim().includes('SSH'));
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
   test('handles cli error on connect', async function (assert) {
@@ -228,23 +157,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService.withArgs('cliExists').returns(true);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    await visit(urls.targets);
 
-    await visit(urls.target);
-    await click('[data-test-target-detail-connect-button]');
+    await click(`[href="${urls.target}"]`);
+    await click(TARGET_CONNECT_BUTTON);
 
-    assert.ok(find('.rose-dialog-error'), 'Error dialog');
-    const dialogButtons = findAll('.rose-dialog-footer button');
-    assert.strictEqual(dialogButtons.length, 2);
-    assert.strictEqual(
-      dialogButtons[0].textContent.trim(),
-      'Retry',
-      'Can retry'
-    );
-    assert.strictEqual(
-      dialogButtons[1].textContent.trim(),
-      'Cancel',
-      'Can cancel'
-    );
+    assert.dom(ROSE_DIALOG_MODAL).exists();
+    assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
+    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
+    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
 
   test('handles connect error', async function (assert) {
@@ -253,23 +174,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    await visit(urls.targets);
 
-    await visit(urls.target);
-    await click('[data-test-target-detail-connect-button]');
+    await click(`[href="${urls.target}"]`);
+    await click(TARGET_CONNECT_BUTTON);
 
-    assert.ok(find('.rose-dialog-error'), 'Error dialog');
-    const dialogButtons = findAll('.rose-dialog-footer button');
-    assert.strictEqual(dialogButtons.length, 2);
-    assert.strictEqual(
-      dialogButtons[0].textContent.trim(),
-      'Retry',
-      'Can retry'
-    );
-    assert.strictEqual(
-      dialogButtons[1].textContent.trim(),
-      'Cancel',
-      'Can cancel'
-    );
+    assert.dom(ROSE_DIALOG_MODAL).exists();
+    assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
+    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
+    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
 
   test('can retry on error', async function (assert) {
@@ -277,13 +190,58 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    await visit(urls.targets);
 
-    await visit(urls.target);
-    await click('[data-test-target-detail-connect-button]');
-    const firstErrorDialog = find('.rose-dialog');
-    await click('.rose-dialog footer .rose-button-primary', 'Retry');
-    const secondErrorDialog = find('.rose-dialog');
+    await click(`[href="${urls.target}"]`);
+    await click(TARGET_CONNECT_BUTTON);
+    const firstErrorDialog = find(ROSE_DIALOG_MODAL);
+    await click(ROSE_DIALOG_RETRY_BUTTON, 'Retry');
+    const secondErrorDialog = find(ROSE_DIALOG_MODAL);
 
     assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
+  });
+
+  test('can connect to a target with one host', async function (assert) {
+    assert.expect(2);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connect for more info');
+
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test('can connect to a target with two hosts', async function (assert) {
+    assert.expect(3);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithTwoHosts}"]`);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connect for more info');
+
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.dom(TARGET_HOST_CONNECT_BUTTON).exists({ count: 2 });
+
+    await click(TARGET_QUICK_CONNECT_BUTTON);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 });
