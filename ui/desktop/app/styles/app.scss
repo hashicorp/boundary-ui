@@ -689,13 +689,3 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     color: var(--token-color-foreground-faint);
   }
 }
-
-#terminal-container {
-  .xterm .xterm-viewport {
-    border-radius: 8px;
-  }
-
-  .xterm .xterm-screen canvas {
-    margin-left: 0.5rem;
-  }
-}
