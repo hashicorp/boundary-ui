@@ -20,14 +20,22 @@ module.exports = {
       'entitlements-inherit': './assets/macos/entitlements.plist',
       'signature-flags': 'library',
     },
-    asar: true,
-  },
-  plugins: [
-    {
-      name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {},
+    asar: {
+      // We need to unpack node-pty helpers so we have them available
+      // outside of the ASAR when they are called
+      unpack: '**/node_modules/node-pty/build/Release/*',
     },
-  ],
+    beforeAsar: [
+      async (buildPath, electronVersion, platform, arch, done) => {
+        // Delete the boundary CLI before we build the ASAR as it gets copied outside
+        // in the resources folder
+        const cliPath = path.join(buildPath, 'cli');
+        await fs.promises.rm(cliPath, { recursive: true, force: true });
+        done();
+      },
+    ],
+    extraResource: ['./cli'],
+  },
   makers: [
     {
       name: '@electron-forge/maker-zip',
