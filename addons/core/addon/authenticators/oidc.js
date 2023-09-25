@@ -34,6 +34,18 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
   }
 
   /**
+   * Generates a scope URL with which to deauthenticate.
+   * @override
+   * @param {object} options
+   * @param {string} scopeID
+   * @return {string}
+   */
+  buildDeauthEndpointURL({ id }) {
+    const adapter = this.store.adapterFor('application');
+    return adapter.buildURL('auth-token', id, {}, 'findRecord');
+  }
+
+  /**
    * Generates an auth token validation URL used to check tokens on restoration.
    * @override
    * @param {string} tokenID
