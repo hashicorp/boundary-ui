@@ -9,9 +9,6 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 - Update Connection workflow ([PR](https://github.com/hashicorp/boundary-ui/pull/1919))
 - Add Embedded Terminal ([PR](https://github.com/hashicorp/boundary-ui/pull/1884))
 
-### Bug Fixes
-- Update Electron to v26.x ([PR](https://github.com/hashicorp/boundary-ui/pull/1904))
-
 
 ## v1.6.0 [CLI 0.13.0] (2023.06.12)
 
