@@ -433,7 +433,7 @@ storage-bucket:
       help: The ARN (Assume Role Name) used by this instance that the worker runs on
     role_external_id:
       label: Role external ID
-      help: Used to provide access to access this account if you have this configured
+      help: Used to provide access to this account if you have this configured
     role_tags:
       label: Role tags
       help: Attributes to pass to AWS
