@@ -26,6 +26,13 @@ module.exports = function (defaults) {
     svg: {
       paths: ['../../addons/core/public'],
     },
+    '@embroider/macros': {
+      setConfig: {
+        '@ember-data/store': {
+          polyfillUUID: true,
+        },
+      },
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated
