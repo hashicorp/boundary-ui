@@ -18,7 +18,7 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
   async afterModel() {
     const currentScope = this.modelFor('scopes.scope');
     const scopes = await this.store.query('scope', {
-      scope_id: currentScope.id,
+      scope_id: 'global',
     });
     let subScopes = [];
     //await the store query to fix ember's proxy promise deprecation warning
