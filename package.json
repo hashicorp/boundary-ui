@@ -51,7 +51,6 @@
   "resolutions": {
     "request": "^2.88.0",
     "ansi-html": "^0.0.8",
-    "terser": "^5.14.2",
     "jpeg-js": "^0.4.4",
     "loader-utils": "^2.0.4",
     "**/ember-electron/**/minimatch": "^3.0.5",
