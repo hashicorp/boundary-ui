@@ -39,7 +39,7 @@ featureEditions.oss = {
   'static-credentials': true,
   'target-worker-filters-v2': true,
   'target-network-address': true,
-  'ldap-auth-methods': false,
+  'ldap-auth-methods': true,
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,

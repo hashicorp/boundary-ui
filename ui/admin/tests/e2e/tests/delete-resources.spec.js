@@ -14,13 +14,13 @@ const {
   createNewProjectCli,
   createNewControllerLedWorkerCli,
   createNewPasswordAuthMethodCli,
-  makeAuthMethodPrimary,
+  makeAuthMethodPrimaryCli,
   createNewPasswordAccountCli,
   createNewRoleCli,
   createNewGroupCli,
   createNewUserCli,
   createNewStaticHostCatalogCli,
-  createDynamicAWSHostCatalogCli,
+  createDynamicAwsHostCatalogCli,
   createNewStaticHostCli,
   createNewHostSetCli,
   createNewStaticCredentialStoreCli,
@@ -72,7 +72,7 @@ test('Verify resources can be deleted', async ({ page }) => {
     let projectId = await createNewProjectCli(orgId);
     let workerId = await createNewControllerLedWorkerCli();
     let authMethodId = await createNewPasswordAuthMethodCli(orgId);
-    await makeAuthMethodPrimary(orgId, authMethodId);
+    await makeAuthMethodPrimaryCli(orgId, authMethodId);
     let passwordAccountId = await createNewPasswordAccountCli(authMethodId);
     let projectScopeRoleId = await createNewRoleCli(projectId);
     let orgScopeRoleId = await createNewRoleCli(orgId);
@@ -80,11 +80,11 @@ test('Verify resources can be deleted', async ({ page }) => {
     let groupId = await createNewGroupCli(orgId);
     let userId = await createNewUserCli(orgId);
     let staticHostCatalogId = await createNewStaticHostCatalogCli(projectId);
-    let dynamicAwsHostCatalogId = await createDynamicAWSHostCatalogCli(
+    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(
       projectId
     );
-    let staticHost = await createNewStaticHostCli(staticHostCatalogId);
-    let staticHostSet = await createNewHostSetCli(staticHostCatalogId);
+    let staticHostId = await createNewStaticHostCli(staticHostCatalogId);
+    let staticHostSetId = await createNewHostSetCli(staticHostCatalogId);
     let staticCredentialStoreId = await createNewStaticCredentialStoreCli(
       projectId
     );
@@ -93,7 +93,7 @@ test('Verify resources can be deleted', async ({ page }) => {
       secretPolicyName,
       boundaryPolicyName
     );
-    let usernamePasswordCredential =
+    let usernamePasswordCredentialId =
       await createNewUsernamePasswordCredentialCli(staticCredentialStoreId);
     let tcpTargetId = await createNewTcpTarget(projectId);
     let sshTargetId = await createNewSshTarget(projectId);
@@ -108,7 +108,7 @@ test('Verify resources can be deleted', async ({ page }) => {
 
     // Delete username-password credentials
     await page.goto(
-      `/scopes/${projectId}/credential-stores/${vaultCredentialStoreId}/credentials/${usernamePasswordCredential}`
+      `/scopes/${projectId}/credential-stores/${vaultCredentialStoreId}/credentials/${usernamePasswordCredentialId}`
     );
     await deleteResource(page);
 
@@ -126,13 +126,13 @@ test('Verify resources can be deleted', async ({ page }) => {
 
     // Delete static host set
     await page.goto(
-      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/host-sets/${staticHostSet}`
+      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/host-sets/${staticHostSetId}`
     );
     await deleteResource(page);
 
     // Delete static host
     await page.goto(
-      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/hosts/${staticHost}`
+      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/hosts/${staticHostId}`
     );
     await deleteResource(page);
 

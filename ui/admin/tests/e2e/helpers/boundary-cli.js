@@ -174,7 +174,7 @@ exports.createNewPasswordAuthMethodCli = async (scopeId) => {
  * @param {string} authMethodId ID of the auth method that will be made primary.
  * @returns {object} make auth method primary response.
  */
-exports.makeAuthMethodPrimary = async (scopeId, authMethodId) => {
+exports.makeAuthMethodPrimaryCli = async (scopeId, authMethodId) => {
   let makeAuthMethodPrimaryResponse;
   try {
     makeAuthMethodPrimaryResponse = JSON.parse(
@@ -313,7 +313,7 @@ exports.createNewStaticHostCatalogCli = async (projectId) => {
  * @param {string} projectId ID of the project under which the host catalog will be created.
  * @returns {string} new host catalog's ID
  */
-exports.createDynamicAWSHostCatalogCli = async (projectId) => {
+exports.createDynamicAwsHostCatalogCli = async (projectId) => {
   const hostCatalogName = 'dynamic-aws-host-catalog-' + nanoid();
   let hostCatalog;
   try {
