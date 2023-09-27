@@ -38,7 +38,13 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {string}
    */
   get credentialType() {
-    if (!this.#credentialType) return 'static';
+    if (!this.#credentialType) {
+      if (this.role_arn) {
+        this.#credentialType = TYPE_CREDENTIAL_DYNAMIC;
+      } else {
+        this.#credentialType = TYPE_CREDENTIAL_STATIC;
+      }
+    }
     return this.#credentialType;
   }
 
