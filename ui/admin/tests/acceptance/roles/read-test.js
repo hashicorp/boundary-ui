@@ -83,14 +83,17 @@ module('Acceptance | roles | read', function (hooks) {
     assert.notOk(find('main tbody .hds-table__tr:nth-child(1) a'));
   });
 
-  test('can navigate to a role and fetches scopes correctly', async function (assert) {
+  test('can navigate to a roles and fetches scopes correctly', async function (assert) {
     assert.expect(1);
+    this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
+      const scope = scopes.find(id);
+      const response = scope.type === 'project' ? new Response(400) : scope;
+      return response;
+    });
+
     await visit(urls.roles);
     await click('main tbody .hds-table__tr:nth-child(1) a');
     await a11yAudit();
-    const { type: type } = this.server.schema.roles.findBy({
-      id: instances.role.id,
-    }).scope;
-    assert.strictEqual(type, 'org');
+    assert.strictEqual(currentURL(), urls.role);
   });
 });
