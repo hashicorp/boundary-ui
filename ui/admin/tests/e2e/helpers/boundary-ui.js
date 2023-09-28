@@ -298,7 +298,7 @@ exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
     .click();
-  await page.getByTitle('New', { exact: true }).click();
+  await page.getByRole('button', { name: 'New' }).click();
   await page.getByText('Password', { exact: true }).click();
   await page.getByLabel('Name').fill(authMethodName);
   await page.getByRole('button', { name: 'Save' }).click();
