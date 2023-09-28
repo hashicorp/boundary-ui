@@ -7,6 +7,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
+import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   // =services
@@ -16,6 +17,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @service ipc;
   @service router;
   @service session;
+
+  // =attributes
+
+  @tracked connectionError = false;
 
   // =methods
 
@@ -63,6 +68,18 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         await this.connect(model.target);
       }
     }
+  }
+
+  @action
+  didTransition() {
+    if (this.connectionError) {
+      /* eslint-disable-next-line ember/no-controller-access-in-routes */
+      const controller = this.controllerFor(
+        'scopes.scope.projects.targets.target'
+      );
+      controller.set('isConnecting', false);
+    }
+    return true;
   }
 
   /**
@@ -127,6 +144,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         session
       );
     } catch (e) {
+      this.connectionError = true;
       this.confirm
         .confirm(e.message, { isConnectError: true })
         // Retry
