@@ -88,9 +88,9 @@ module('Acceptance | roles | read', function (hooks) {
     await visit(urls.roles);
     await click('main tbody .hds-table__tr:nth-child(1) a');
     await a11yAudit();
-    const { type } = this.server.schema.scopes.findBy({
-      id: instances.scopes.org.id,
-    });
+    const { type: type } = this.server.schema.roles.findBy({
+      id: instances.role.id,
+    }).scope;
     assert.strictEqual(type, 'org');
   });
 });
