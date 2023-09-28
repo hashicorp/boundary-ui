@@ -17,16 +17,18 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
    */
   async afterModel() {
     const currentScope = this.modelFor('scopes.scope');
-    const scopes = await this.store.query('scope', {
-      scope_id: currentScope.id,
-    });
     let subScopes = [];
     //await the store query to fix ember's proxy promise deprecation warning
     if (!currentScope.isProject) {
+      const scopes = await this.store.query('scope', {
+        scope_id: currentScope.id,
+      });
       subScopes = await Promise.all(
         scopes.map(async (scope) => ({
           model: scope,
-          subScopes: await this.store.query('scope', { scope_id: scope.id }),
+          subScopes: !scope.isProject
+            ? await this.store.query('scope', { scope_id: scope.id })
+            : [],
         }))
       );
     }
