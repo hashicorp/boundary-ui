@@ -136,6 +136,11 @@ PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.co
 PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.config.js login.spec.js --debug
 ```
 
+To run the tests with a specific tag (e.g. @enterprise), use these commands.
+```bash
+PWDEBUG=console yarn playwright test --grep @enterprise --headed --config ./tests/e2e/playwright.config.js delete-resources.spec.js
+```
+
 [Playwright documentation about running tests](https://playwright.dev/docs/running-tests).
 
 ### Destroy Enos Scenario
