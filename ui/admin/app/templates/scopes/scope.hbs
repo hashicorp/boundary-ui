@@ -6,6 +6,17 @@
 {{#if @model.isOrg}}
   {{page-title (t 'resources.org.title_plural')}}
   {{page-title @model.displayName}}
+  <Breadcrumbs::Item
+    @text={{t 'resources.org.title_plural'}}
+    @icon='org'
+    @route='scopes.scope.scopes'
+    @model='global'
+  />
+  <Breadcrumbs::Item
+    @text={{@model.displayName}}
+    @route='scopes.scope.edit'
+    @model={{@model.id}}
+  />
 {{/if}}
 
 {{#if @model.isProject}}
@@ -13,6 +24,28 @@
   {{page-title this.scopes.selectedOrg.displayName}}
   {{page-title (t 'resources.project.title_plural')}}
   {{page-title @model.displayName}}
+  <Breadcrumbs::Item
+    @text={{t 'resources.org.title_plural'}}
+    @icon='org'
+    @route='scopes.scope.scopes'
+    @model='global'
+  />
+  <Breadcrumbs::Item
+    @text={{this.scopes.selectedOrg.displayName}}
+    @route='scopes.scope.edit'
+    @model={{this.scopes.selectedOrg.id}}
+  />
+  <Breadcrumbs::Item
+    @text={{t 'resources.project.title_plural'}}
+    @icon='grid'
+    @route='scopes.scope.scopes'
+    @model={{this.scopes.selectedOrg.id}}
+  />
+  <Breadcrumbs::Item
+    @text={{@model.displayName}}
+    @route='scopes.scope.edit'
+    @model={{@model.id}}
+  />
 {{/if}}
 
 <Rose::Layout::Sidebar as |sidebarLayout|>
