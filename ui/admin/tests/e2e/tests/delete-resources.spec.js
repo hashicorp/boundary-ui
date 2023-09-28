@@ -96,11 +96,6 @@ test('Verify resources can be deleted', async ({ page }) => {
     let usernamePasswordCredentialId =
       await createNewUsernamePasswordCredentialCli(staticCredentialStoreId);
     let tcpTargetId = await createNewTcpTarget(projectId);
-    let sshTargetId = await createNewSshTarget(projectId);
-
-    // Delete SSH target
-    await page.goto(`/scopes/${projectId}/targets/${sshTargetId}`);
-    await deleteResource(page);
 
     // Delete TCP target
     await page.goto(`/scopes/${projectId}/targets/${tcpTargetId}`);
@@ -108,7 +103,7 @@ test('Verify resources can be deleted', async ({ page }) => {
 
     // Delete username-password credentials
     await page.goto(
-      `/scopes/${projectId}/credential-stores/${vaultCredentialStoreId}/credentials/${usernamePasswordCredentialId}`
+      `/scopes/${projectId}/credential-stores/${staticCredentialStoreId}/credentials/${usernamePasswordCredentialId}`
     );
     await deleteResource(page);
 
@@ -195,3 +190,22 @@ test('Verify resources can be deleted', async ({ page }) => {
     await deleteOrgCli(orgId);
   }
 });
+
+test('Verify enterprise resources can be deleted @enterprise', async ({ page }) => {
+  let orgId;
+  try {
+    orgId = await createNewOrgCli();
+    let projectId = await createNewProjectCli(orgId);
+
+    // Create enterprise boundary resources using CLI
+    let sshTargetId = await createNewSshTarget(projectId);
+
+    // Delete SSH target
+    await page.goto(`/scopes/${projectId}/targets/${sshTargetId}`);
+    await deleteResource(page);
+  } finally {
+    // Delete org in case the test failed before deleting the org using UI
+    await deleteOrgCli(orgId);
+  }
+});
+
