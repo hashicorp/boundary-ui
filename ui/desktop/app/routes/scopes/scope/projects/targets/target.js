@@ -70,6 +70,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     }
   }
 
+  /**
+   * Sets the 'isConnecting' queryParam to false if connection failed.
+   * @returns {boolean}
+   */
   @action
   didTransition() {
     if (this.connectionError) {
