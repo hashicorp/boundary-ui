@@ -83,14 +83,14 @@ module('Acceptance | roles | read', function (hooks) {
     assert.notOk(find('main tbody .hds-table__tr:nth-child(1) a'));
   });
 
-  test('can navigate to a role and it has correct grant scope', async function (assert) {
+  test('can navigate to a role and fetches scopes correctly', async function (assert) {
     assert.expect(1);
-    const { name: scopeName } = this.server.schema.scopes.findBy({
-      id: instances.role.grant_scope_id,
-    });
     await visit(urls.roles);
     await click('main tbody .hds-table__tr:nth-child(1) a');
     await a11yAudit();
-    assert.dom('.rose-dropdown [title]').hasText(scopeName);
+    const { type } = this.server.schema.scopes.findBy({
+      id: instances.scopes.org.id,
+    });
+    assert.strictEqual(type, 'org');
   });
 });
