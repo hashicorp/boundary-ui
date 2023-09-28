@@ -204,7 +204,6 @@ test('Verify enterprise resources can be deleted @enterprise', async ({ page }) 
     await page.goto(`/scopes/${projectId}/targets/${sshTargetId}`);
     await deleteResource(page);
   } finally {
-    // Delete org in case the test failed before deleting the org using UI
     await deleteOrgCli(orgId);
   }
 });
