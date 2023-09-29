@@ -17,7 +17,7 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
   // =methods
 
   @action
-  toggle(value) {
+  toggleModal(value) {
     this.isConnecting = value;
   }
 }

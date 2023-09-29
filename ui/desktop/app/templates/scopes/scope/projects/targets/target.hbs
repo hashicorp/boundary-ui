@@ -22,7 +22,7 @@
         @icon='entry-point'
         @iconPosition='trailing'
         disabled={{not (can 'initiateConnection target' @model.target)}}
-        {{on 'click' (route-action 'preConnect' @model this.toggle)}}
+        {{on 'click' (route-action 'preConnect' @model this.toggleModal)}}
       />
     {{/if}}
   </page.actions>
@@ -32,7 +32,7 @@
       {{#if (can 'initiateConnection target' @model.target)}}
         <Target::HostModal
           @showModal={{this.isConnecting}}
-          @toggle={{this.toggle}}
+          @toggleModal={{this.toggleModal}}
           @connect={{route-action 'hostConnect'}}
           @hosts={{@model.hosts}}
           @target={{@model.target}}
