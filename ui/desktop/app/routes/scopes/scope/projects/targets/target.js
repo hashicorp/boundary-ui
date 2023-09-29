@@ -87,6 +87,25 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
+   * Establish a session to current target.
+   * @param {TargetModel} target
+   * @param {HostModel} host
+   * hostConnect is only called when making a connection with a host and ensures that the host modal is automatically closed in the case of a connection error.
+   */
+  @action
+  async hostConnect(target, host) {
+    await this.connect(target, host);
+    if (this.isConnectionError) {
+      /* eslint-disable-next-line ember/no-controller-access-in-routes */
+      const controller = this.controllerFor(
+        'scopes.scope.projects.targets.target'
+      );
+      controller.set('isConnecting', false);
+      this.isConnectionError = false;
+    }
+  }
+
+  /**
    * Determine if we show host modal or quick connect based on target attributes.
    * @param {TargetModel} model
    */
@@ -96,7 +115,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     if (model.target.address || model.hosts.length === 1) {
       await this.connect(model.target);
     } else {
-      toggleModal();
+      toggleModal(true);
     }
   }
 
@@ -152,7 +171,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       this.confirm
         .confirm(e.message, { isConnectError: true })
         // Retry
-        .then(() => this.connect(model))
+        .then(() => this.connect(model, host))
         .catch(() => null /* no op */);
     }
   }
