@@ -46,7 +46,7 @@ exports.createNewProject = async (page) => {
     .getByRole('navigation', { name: 'General' })
     .getByRole('link', { name: 'Projects' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(projectName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
@@ -74,7 +74,7 @@ exports.createNewHostCatalog = async (page) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Host Catalogs' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(hostCatalogName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
@@ -149,7 +149,7 @@ exports.createNewTarget = async (page) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
@@ -178,7 +178,7 @@ exports.createNewTargetWithAddress = async (page) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
@@ -298,7 +298,7 @@ exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
     .click();
-  await page.getByTitle('New', { exact: true }).click();
+  await page.getByRole('button', { name: 'New' }).click();
   await page.getByText('Password', { exact: true }).click();
   await page.getByLabel('Name').fill(authMethodName);
   await page.getByRole('button', { name: 'Save' }).click();
