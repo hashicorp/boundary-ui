@@ -46,7 +46,7 @@ module('Unit | Model | storage bucket', function (hooks) {
   });
 
   test('it has credentialType property and returns the expected values', async function (assert) {
-    assert.expect(2);
+    assert.expect(4);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('storage-bucket', {
       role_arn: 'test-role-arn',
@@ -58,8 +58,18 @@ module('Unit | Model | storage bucket', function (hooks) {
       access_key_id: 'test-access-key-id',
       credentialType: TYPE_CREDENTIAL_STATIC,
     });
+    const modelC = store.createRecord('storage-bucket', {
+      role_arn: null,
+      access_key_id: 'test-access-key-id',
+    });
+    const modelD = store.createRecord('storage-bucket', {
+      role_arn: 'test-role-arn',
+      access_key_id: null,
+    });
     assert.strictEqual(modelA.credentialType, TYPE_CREDENTIAL_DYNAMIC);
     assert.strictEqual(modelB.credentialType, TYPE_CREDENTIAL_STATIC);
+    assert.strictEqual(modelC.credentialType, TYPE_CREDENTIAL_STATIC);
+    assert.strictEqual(modelD.credentialType, TYPE_CREDENTIAL_DYNAMIC);
   });
 
   test('it has isAWS property and returns the expected values', async function (assert) {
