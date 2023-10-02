@@ -7,7 +7,10 @@ import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { all, resolve } from 'rsvp';
-import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import {
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 export default class RoleModel extends GeneratedRoleModel {
   // =services
@@ -134,7 +137,7 @@ export default class RoleModel extends GeneratedRoleModel {
       // Collect all auth methods.
       const authMethods = this.resourceFilterStore.queryBy(
         'auth-method',
-        { type: TYPE_AUTH_METHOD_OIDC },
+        { type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP] },
         { scope_id: 'global', recursive: true }
       );
 
@@ -153,7 +156,6 @@ export default class RoleModel extends GeneratedRoleModel {
         // The result is an array of arrays of model instances (grouped by
         // auth methods), so these must be flattened.
         .then((grouped) => grouped.flat());
-
       return managedGroups;
     }
 
