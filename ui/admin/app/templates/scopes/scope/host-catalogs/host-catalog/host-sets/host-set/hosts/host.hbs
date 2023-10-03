@@ -4,5 +4,10 @@
 }}
 
 {{page-title @model.displayName}}
+<Breadcrumbs::Item
+  @text={{@model.displayName}}
+  @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host'
+  @model={{@model}}
+/>
 
 {{outlet}}

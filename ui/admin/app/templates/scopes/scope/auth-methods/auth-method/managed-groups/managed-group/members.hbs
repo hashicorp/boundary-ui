@@ -4,11 +4,16 @@
 }}
 
 {{page-title (t 'resources.managed-group.member.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.managed-group.member.title_plural'}}
+  @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group.members'
+/>
 
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>

@@ -4,5 +4,10 @@
 }}
 
 {{page-title (t 'resources.target.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.target.title_plural'}}
+  @icon='target'
+  @route='scopes.scope.targets'
+/>
 
 {{outlet}}

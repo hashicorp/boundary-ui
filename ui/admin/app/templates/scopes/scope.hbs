@@ -131,10 +131,7 @@
           {{/if}}
           {{#if (can 'navigate model' @model collection='targets')}}
             <nav.link @route='scopes.scope.targets'>
-              <Rose::Icon
-                @name='flight-icons/svg/crosshair-16'
-                @size='medium'
-              />
+              <Rose::Icon @name='flight-icons/svg/target-16' @size='medium' />
               {{t 'resources.target.title_plural'}}
             </nav.link>
           {{/if}}

@@ -4,5 +4,10 @@
 }}
 
 {{page-title (t 'resources.storage-bucket.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.storage-bucket.title_plural'}}
+  @icon='cloud-upload'
+  @route='scopes.scope.storage-buckets'
+/>
 
 {{outlet}}

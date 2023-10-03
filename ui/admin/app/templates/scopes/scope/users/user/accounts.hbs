@@ -4,11 +4,16 @@
 }}
 
 {{page-title (t 'resources.user.messages.accounts.title')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.user.messages.accounts.title'}}
+  @route='scopes.scope.users.user.accounts'
+/>
 
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>

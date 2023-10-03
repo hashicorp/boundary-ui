@@ -4,11 +4,16 @@
 }}
 
 {{page-title (t 'resources.role.grant.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.role.grant.title_plural'}}
+  @route='scopes.scope.roles.role.grants'
+/>
 
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>

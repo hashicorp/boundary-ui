@@ -4,10 +4,15 @@
 }}
 
 {{page-title (t 'resources.host-set.actions.add-hosts')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.host-set.actions.add-hosts'}}
+  @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.add-hosts'
+/>
 
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>

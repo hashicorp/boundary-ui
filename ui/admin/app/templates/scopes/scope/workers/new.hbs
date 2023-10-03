@@ -4,16 +4,21 @@
 }}
 
 {{page-title (t 'titles.new')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.worker.titles.new'}}
+  @route='scopes.scope.workers.new'
+/>
 
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>
     <h2>
-      {{t 'resources.worker.title_pki'}}
+      {{t 'resources.worker.titles.new'}}
       <DocLink @doc='worker' @iconSize='large' />
     </h2>
   </page.header>

@@ -4,5 +4,9 @@
 }}
 
 {{page-title (t 'resources.managed-group.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.managed-group.title_plural'}}
+  @route='scopes.scope.auth-methods.auth-method.managed-groups'
+/>
 
 {{outlet}}

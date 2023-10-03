@@ -4,11 +4,23 @@
 }}
 
 {{page-title (t 'titles.new')}}
+{{#if @model.isOrg}}
+  <Breadcrumbs::Item
+    @text={{t 'resources.org.titles.new'}}
+    @route='scopes.scope.scopes.new'
+  />
+{{else if @model.isProject}}
+  <Breadcrumbs::Item
+    @text={{t 'resources.project.titles.new'}}
+    @route='scopes.scope.scopes.new'
+  />
+{{/if}}
 
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>

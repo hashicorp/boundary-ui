@@ -3,17 +3,25 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
+{{page-title (t 'titles.new')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.managed-group.titles.new'}}
+  @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
+/>
+
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>
     <h2>
-      {{t 'titles.new'}}
+      {{t 'resources.managed-group.titles.new'}}
       <DocLink @doc='managed-groups' @iconSize='large' />
     </h2>
+    <p>{{t 'resources.managed-group.description'}}</p>
   </page.header>
 
   <page.body>

@@ -4,11 +4,16 @@
 }}
 
 {{page-title (t 'resources.role.principal.actions.add-principals')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.role.principal.actions.add-principals'}}
+  @route='scopes.scope.roles.role.add-principals'
+/>
 
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>
