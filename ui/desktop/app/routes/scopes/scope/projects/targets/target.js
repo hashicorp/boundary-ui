@@ -172,7 +172,11 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         .confirm(e.message, { isConnectError: true })
         // Retry
         .then(() => this.connect(model, host))
-        .catch(() => null /* no op */);
+        .catch(() => {
+          // Reset the flag as this was user initiated and we're not
+          // in a transition or have a host modal open
+          this.isConnectionError = false;
+        });
     }
   }
 }
