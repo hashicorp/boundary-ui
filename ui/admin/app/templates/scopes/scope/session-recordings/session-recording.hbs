@@ -4,4 +4,10 @@
 }}
 
 {{page-title @model.displayName}}
+<Breadcrumbs::Item
+  @text={{@model.displayName}}
+  @route='scopes.scope.session-recordings.session-recording'
+  @model={{@model}}
+/>
+
 {{outlet}}

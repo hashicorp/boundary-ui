@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class ScopesScopeTargetsTargetEnableSessionRecordingIndexRoute extends Route {
   // =services
@@ -13,15 +12,6 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingIndexRoute ex
   @service router;
 
   // =methods
-
-  /**
-   * Returns the current target
-   * @return {TargetModel}
-   */
-
-  model() {
-    return this.modelFor('scopes.scope.targets.target');
-  }
 
   /**
    * Load storage buckets from target's parent's scope and global scope
@@ -45,18 +35,6 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingIndexRoute ex
       ...orgScopeStorageBuckets,
     ];
     this.storageBucketList = storageBucketList;
-  }
-  // =actions
-
-  /**
-   * Reset the selected storage bucket and redirect to target
-   * @param {TargetModel} target
-   */
-  @action
-  cancel(target) {
-    const { id } = target;
-    target.rollbackAttributes();
-    this.router.replaceWith('scopes.scope.targets.target', id);
   }
 
   /**

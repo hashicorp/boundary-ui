@@ -4,11 +4,16 @@
 }}
 
 {{page-title (t 'resources.target.host-source.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.target.host-source.title_plural'}}
+  @route='scopes.scope.targets.target.host-sources'
+/>
 
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
     <BreadCrumbs />
+    <Breadcrumbs::Container />
   </page.breadcrumbs>
 
   <page.header>
