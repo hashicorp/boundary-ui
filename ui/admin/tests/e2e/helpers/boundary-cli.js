@@ -172,23 +172,18 @@ exports.createNewPasswordAuthMethodCli = async (scopeId) => {
  * Uses the boundary CLI to make an auth-method primary.
  * @param {string} scopeId ID of the scope that the auth-method belongs to.
  * @param {string} authMethodId ID of the auth method that will be made primary.
- * @returns {object} make auth method primary response.
  */
 exports.makeAuthMethodPrimaryCli = async (scopeId, authMethodId) => {
-  let makeAuthMethodPrimaryResponse;
   try {
-    makeAuthMethodPrimaryResponse = JSON.parse(
-      execSync(
-        `boundary scopes update \
-         -id=${scopeId} \
-         -primary-auth-method-id ${authMethodId} \
-         -format json`
-      )
-    ).item;
+    execSync(
+      `boundary scopes update \
+        -id=${scopeId} \
+        -primary-auth-method-id ${authMethodId} \
+        -format json`
+    );
   } catch (e) {
     console.log(`${e.stderr}`);
   }
-  return makeAuthMethodPrimaryResponse;
 };
 
 /**
