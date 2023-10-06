@@ -18,13 +18,13 @@ module('Integration | Component | target/host-modal', function (hooks) {
   let hostA;
   let hostB;
   let connect;
-  let toggle;
+  let toggleModal;
 
   hooks.beforeEach(function () {
     connect = () => {
       this.set('called', true);
     };
-    toggle = () => {
+    toggleModal = () => {
       this.set('called', true);
     };
     store = this.owner.lookup('service:store');
@@ -47,13 +47,13 @@ module('Integration | Component | target/host-modal', function (hooks) {
   test('it renders', async function (assert) {
     assert.expect(1);
     this.set('connect', connect);
-    this.set('toggle', toggle);
+    this.set('toggleModal', toggleModal);
     this.set('hosts', [hostA, hostB]);
     this.set('target', target);
 
     await render(hbs`<Target::HostModal
       @showModal={{true}}
-      @toggle={{this.toggle}}
+      @toggleModal={{this.toggleModal}}
       @connect={{this.connect}}
       @hosts={{this.hosts}}
       @target={{this.target}} />`);
@@ -67,14 +67,14 @@ module('Integration | Component | target/host-modal', function (hooks) {
       this.set('showModal', false);
     };
     this.set('connect', connect);
-    this.set('toggle', toggleModal);
+    this.set('toggleModal', toggleModal);
     this.set('showModal', true);
     this.set('hosts', [hostA, hostB]);
     this.set('target', target);
 
     await render(hbs`<Target::HostModal
       @showModal={{this.showModal}}
-      @toggle={{this.toggle}}
+      @toggleModal={{this.toggleModal}}
       @connect={{this.connect}}
       @hosts={{this.hosts}}
       @target={{this.target}} />`);
@@ -89,13 +89,13 @@ module('Integration | Component | target/host-modal', function (hooks) {
   test('it calls connect when Quick Connect button clicked', async function (assert) {
     assert.expect(1);
     this.set('connect', connect);
-    this.set('toggle', toggle);
+    this.set('toggleModal', toggleModal);
     this.set('hosts', [hostA, hostB]);
     this.set('target', target);
 
     await render(hbs`<Target::HostModal
       @showModal={{true}}
-      @toggle={{this.toggle}}
+      @toggleModal={{this.toggleModal}}
       @connect={{this.connect}}
       @hosts={{this.hosts}}
       @target={{this.target}} />`);
@@ -108,13 +108,13 @@ module('Integration | Component | target/host-modal', function (hooks) {
   test('it calls connect when host item is clicked', async function (assert) {
     assert.expect(1);
     this.set('connect', connect);
-    this.set('toggle', toggle);
+    this.set('toggleModal', toggleModal);
     this.set('hosts', [hostA, hostB]);
     this.set('target', target);
 
     await render(hbs`<Target::HostModal
       @showModal={{true}}
-      @toggle={{this.toggle}}
+      @toggleModal={{this.toggleModal}}
       @connect={{this.connect}}
       @hosts={{this.hosts}}
       @target={{this.target}} />`);

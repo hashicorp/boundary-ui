@@ -10,7 +10,7 @@ const { authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
-  deleteOrg,
+  deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
   createNewOrg,
@@ -44,6 +44,6 @@ test('Verify a new role can be created and associated with a group', async ({
     await addPrincipalToRole(page, groupName);
     await addGrantsToGroup(page, 'ids=*;type=*;actions=read,list');
   } finally {
-    await deleteOrg(org.id);
+    await deleteOrgCli(org.id);
   }
 });
