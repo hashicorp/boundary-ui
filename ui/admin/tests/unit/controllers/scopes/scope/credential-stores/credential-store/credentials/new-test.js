@@ -7,14 +7,13 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 module(
-  'Unit | Controller | scopes/scope/credential-stores/credential-store/credential-libraries',
+  'Unit | Controller | scopes/scope/credential-stores/credential-store/credentials/new',
   function (hooks) {
     setupTest(hooks);
 
-    // TODO: Replace this with your real tests.
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:scopes/scope/credential-stores/credential-store/credential-libraries'
+        'controller:scopes/scope/credential-stores/credential-store/credentials/new'
       );
       assert.ok(controller);
     });
