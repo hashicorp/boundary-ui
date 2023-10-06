@@ -30,6 +30,13 @@
   .hds-table__td p {
     color: var(--token-form-indicator-optional-color);
   }
+
+  // TODO: This is a temporary hack to fix an issue causing weird whitespace
+  //   and scrollbars from an accessible class in HDS. We have to use !important
+  //   as they already forced it with !important and we can't override it otherwise
+  .sr-only {
+    position: unset !important;
+  }
 }
 
 .hds-dropdown {
