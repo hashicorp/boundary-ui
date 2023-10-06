@@ -14,10 +14,8 @@ export default class BreadcrumbsItemComponent extends Component {
   }
 
   get current() {
-    //const crumbs = this.breadcrumbsService.containers[0].element.children;
-    // const lastCrumb = crumbs[crumbs.length - 1];
-    // returning false for testing purposes
-    // return lastCrumb.isEqualNode(this.element);
-    return false;
+    const crumbs = this.breadcrumbsService.containers[0].element.children;
+    const lastCrumb = crumbs[crumbs.length - 1];
+    return lastCrumb.isEqualNode(this.element);
   }
 }
