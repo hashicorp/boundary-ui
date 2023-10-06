@@ -198,6 +198,36 @@ exports.createNewTargetWithAddress = async (page) => {
 };
 
 /**
+ * Uses the UI to delete a Boundary resource. Assume you have selected the desired resource.
+ * Note: For a resource to be deleted using this method,
+ * the resource page should allow to delete the resource using the Manage button.
+ * @param {Page} page Playwright page object
+ */
+exports.deleteResource = async (page) => {
+  await page.getByTitle('Manage').click();
+  await page.getByRole('button', { name: /^(Delete|Remove Worker)/ }).click();
+  await page.getByText('OK', { exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+};
+
+/**
+ * Uses the UI to remove auth method as primary. Assume you have selected the desired auth method.
+ * @param {Page} page Playwright page object
+ */
+exports.removeAuthMethodAsPrimary = async (page) => {
+  await page.getByTitle('Manage').click();
+  await page.getByRole('button', { name: 'Remove as primary' }).click();
+  await page.getByText('OK', { exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+};
+
+/**
  * Uses the UI to add a host source to a target. Assume you have selected the desired target.
  * @param {Page} page Playwright page object
  * @param {string} hostSourceName Name of host source that will be attached to the target
