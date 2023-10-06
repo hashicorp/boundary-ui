@@ -38,7 +38,7 @@
     "@electron-forge/maker-squirrel": "^6.1.1",
     "@electron-forge/maker-zip": "^6.1.1",
     "decompress": "^4.2.1",
-    "electron": "26.2.1"
+    "electron": "26.2.4"
   },
   "resolutions": {
     "highlight.js": "^10.4.1",

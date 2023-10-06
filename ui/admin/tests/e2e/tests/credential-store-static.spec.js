@@ -57,7 +57,7 @@ test.beforeEach(async ({ page }) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Credential Stores' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();

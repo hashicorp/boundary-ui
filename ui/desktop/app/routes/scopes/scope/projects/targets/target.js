@@ -17,6 +17,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @service router;
   @service session;
 
+  // =attributes
+
+  isConnectionError = false;
+
   // =methods
 
   /**
@@ -66,6 +70,42 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
+   * Sets the 'isConnecting' queryParam to false if connection failed.
+   * @returns {boolean}
+   */
+  @action
+  didTransition() {
+    if (this.isConnectionError) {
+      /* eslint-disable-next-line ember/no-controller-access-in-routes */
+      const controller = this.controllerFor(
+        'scopes.scope.projects.targets.target'
+      );
+      controller.set('isConnecting', false);
+      this.isConnectionError = false;
+    }
+    return true;
+  }
+
+  /**
+   * Establish a session to current target.
+   * @param {TargetModel} target
+   * @param {HostModel} host
+   * hostConnect is only called when making a connection with a host and ensures that the host modal is automatically closed in the case of a connection error.
+   */
+  @action
+  async hostConnect(target, host) {
+    await this.connect(target, host);
+    if (this.isConnectionError) {
+      /* eslint-disable-next-line ember/no-controller-access-in-routes */
+      const controller = this.controllerFor(
+        'scopes.scope.projects.targets.target'
+      );
+      controller.set('isConnecting', false);
+      this.isConnectionError = false;
+    }
+  }
+
+  /**
    * Determine if we show host modal or quick connect based on target attributes.
    * @param {TargetModel} model
    */
@@ -75,7 +115,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     if (model.target.address || model.hosts.length === 1) {
       await this.connect(model.target);
     } else {
-      toggleModal();
+      toggleModal(true);
     }
   }
 
@@ -127,11 +167,16 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         session
       );
     } catch (e) {
+      this.isConnectionError = true;
       this.confirm
         .confirm(e.message, { isConnectError: true })
         // Retry
-        .then(() => this.connect(model))
-        .catch(() => null /* no op */);
+        .then(() => this.connect(model, host))
+        .catch(() => {
+          // Reset the flag as this was user initiated and we're not
+          // in a transition or have a host modal open
+          this.isConnectionError = false;
+        });
     }
   }
 }

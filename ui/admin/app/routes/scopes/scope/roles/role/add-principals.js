@@ -10,7 +10,10 @@ import { hash, all } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import {
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
@@ -73,22 +76,25 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
         )
       : this.store.query('group', { scope_id: 'global', recursive: true });
     //query authmethods from all the scopes
-    const oidcAuthMethods = scopeIDs?.length
+    const authMethods = scopeIDs?.length
       ? await this.resourceFilterStore.queryBy(
           'auth-method',
-          { scope_id: scopeIDs, type: TYPE_AUTH_METHOD_OIDC },
+          {
+            scope_id: scopeIDs,
+            type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP],
+          },
           { scope_id: 'global', recursive: true }
         )
       : await this.resourceFilterStore.queryBy(
           'auth-method',
-          { type: TYPE_AUTH_METHOD_OIDC },
+          { type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP] },
           { scope_id: 'global', recursive: true }
         );
-    //extract oidc authMethod IDs
-    const oidcAuthMethodIDs = oidcAuthMethods.map(({ id }) => id);
+    //extract oidc and ldap authMethod IDs
+    const authMethodIDs = authMethods.map(({ id }) => id);
     //query all the managed groups for each auth method id
     const managedGroups = await all(
-      oidcAuthMethodIDs.map((auth_method_id) =>
+      authMethodIDs.map((auth_method_id) =>
         this.store.query('managed-group', { auth_method_id })
       )
     );
