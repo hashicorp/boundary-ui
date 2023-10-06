@@ -5,7 +5,8 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ## v1.7.0 [CLI 0.14.0] (2023.10.09)
 
 ### New
-- Upgrade CLI to v0.14.0 ([PR]())
+
+- Upgrade CLI to v0.14.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/1923))
 - Update Connection workflow ([PR](https://github.com/hashicorp/boundary-ui/pull/1919))
 - Add Embedded Terminal ([PR](https://github.com/hashicorp/boundary-ui/pull/1884))
 
@@ -13,20 +14,24 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ## v1.6.0 [CLI 0.13.0] (2023.06.12)
 
 ### New
+
 - Upgrade CLI to v0.13.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/1712))
 - Display external names when listing dynamic hosts ([PR](https://github.com/hashicorp/boundary-ui/pull/1664))
 - Add support for LDAP authentication ([PR](https://github.com/hashicorp/boundary-ui/pull/1645))
 
 ### Bug Fixes
+
 - Optimized API Queries ([PR](https://github.com/hashicorp/boundary-ui/pull/1707))
 
 
 ## v1.5.1 [CLI 0.12.0] (2023.02.13)
 
 ### New
+
 - Upgrade CLI to v0.12.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/1625))
 
 ### Bug Fixes
+
 - Fix raw API output not displaying until clicked ([PR](https://github.com/hashicorp/boundary-ui/pull/1354))
 - Fix complex secrets not displaying correctly ([PR](https://github.com/hashicorp/boundary-ui/pull/1551))
 
@@ -34,6 +39,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ## v1.5.0 [CLI 0.11.0] (2022.09.27)
 
 ### New
+
 - Add syntax highlighting when viewing raw API output for credentials ([PR](https://github.com/hashicorp/boundary-ui/pull/1271))
 
 
@@ -53,6 +59,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 - Display auth method names in auth form ([PR](https://github.com/hashicorp/boundary-ui/pull/1113)) 
 
 ### Bug Fixes
+
 -  Unavailable controller url should result in a friendlier error workflow  ([PR](https://github.com/hashicorp/boundary-ui/pull/1107))
 -  fix target connection details overlay to show credential sources ([PR](https://github.com/hashicorp/boundary-ui/pull/1146))
 
