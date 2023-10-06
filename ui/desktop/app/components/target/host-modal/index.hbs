@@ -4,7 +4,7 @@
 }}
 
 {{#if @showModal}}
-  <Hds::Modal data-test-host-modal @onClose={{@toggle}} as |M|>
+  <Hds::Modal data-test-host-modal @onClose={{fn @toggleModal false}} as |M|>
     <M.Header @tagline={{@target.displayName}}>
       {{t 'resources.session.actions.host'}}
     </M.Header>

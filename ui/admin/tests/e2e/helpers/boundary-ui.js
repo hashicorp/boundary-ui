@@ -46,7 +46,7 @@ exports.createNewProject = async (page) => {
     .getByRole('navigation', { name: 'General' })
     .getByRole('link', { name: 'Projects' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(projectName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
@@ -74,7 +74,7 @@ exports.createNewHostCatalog = async (page) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Host Catalogs' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(hostCatalogName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
@@ -149,7 +149,7 @@ exports.createNewTarget = async (page) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
@@ -178,7 +178,7 @@ exports.createNewTargetWithAddress = async (page) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
-  await page.getByRole('link', { name: 'New' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
@@ -195,6 +195,36 @@ exports.createNewTargetWithAddress = async (page) => {
   ).toBeVisible();
 
   return targetName;
+};
+
+/**
+ * Uses the UI to delete a Boundary resource. Assume you have selected the desired resource.
+ * Note: For a resource to be deleted using this method,
+ * the resource page should allow to delete the resource using the Manage button.
+ * @param {Page} page Playwright page object
+ */
+exports.deleteResource = async (page) => {
+  await page.getByTitle('Manage').click();
+  await page.getByRole('button', { name: /^(Delete|Remove Worker)/ }).click();
+  await page.getByText('OK', { exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+};
+
+/**
+ * Uses the UI to remove auth method as primary. Assume you have selected the desired auth method.
+ * @param {Page} page Playwright page object
+ */
+exports.removeAuthMethodAsPrimary = async (page) => {
+  await page.getByTitle('Manage').click();
+  await page.getByRole('button', { name: 'Remove as primary' }).click();
+  await page.getByText('OK', { exact: true }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
 };
 
 /**
@@ -298,7 +328,7 @@ exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
     .click();
-  await page.getByTitle('New', { exact: true }).click();
+  await page.getByRole('button', { name: 'New' }).click();
   await page.getByText('Password', { exact: true }).click();
   await page.getByLabel('Name').fill(authMethodName);
   await page.getByRole('button', { name: 'Save' }).click();

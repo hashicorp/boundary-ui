@@ -36,7 +36,7 @@ test.describe('AWS', async () => {
       .getByRole('navigation', { name: 'Resources' })
       .getByRole('link', { name: 'Host Catalogs' })
       .click();
-    await page.getByRole('link', { name: 'New' }).click();
+    await page.getByRole('link', { name: 'New', exact: true }).click();
     await page.getByLabel('Name').fill(hostCatalogName);
     await page.getByLabel('Description').fill('This is an automated test');
     await page

@@ -10,7 +10,7 @@ const { authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
-  deleteOrg,
+  deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
   createNewOrg,
@@ -50,6 +50,6 @@ test('Verify new auth-method can be created and assigned to users', async ({
     await createNewUser(page, 'UI Test User');
     await addAccountToUser(page);
   } finally {
-    await deleteOrg(org.id);
+    await deleteOrgCli(org.id);
   }
 });
