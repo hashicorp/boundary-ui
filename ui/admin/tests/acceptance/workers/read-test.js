@@ -24,6 +24,7 @@ module('Acceptance | workers | read', function (hooks) {
   const instances = {
     scopes: {
       global: null,
+      org: null,
     },
     worker: null,
   };
@@ -37,6 +38,10 @@ module('Acceptance | workers | read', function (hooks) {
   hooks.beforeEach(function () {
     //Generate the resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.org = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
     });
@@ -46,12 +51,12 @@ module('Acceptance | workers | read', function (hooks) {
     urls.worker = `${urls.workers}/${instances.worker.id}`;
 
     featuresService = this.owner.lookup('service:features');
+    featuresService.enable('byow');
     authenticateSession({});
   });
 
   test('visiting worker', async function (assert) {
     assert.expect(1);
-    featuresService.enable('byow');
     await visit(urls.workers);
     await a11yAudit();
 
@@ -65,7 +70,6 @@ module('Acceptance | workers | read', function (hooks) {
     assert.expect(1);
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter((itm) => itm !== 'read');
-    featuresService.enable('byow');
     await visit(urls.globalScope);
 
     await click(`[href="${urls.workers}"]`);
@@ -77,7 +81,6 @@ module('Acceptance | workers | read', function (hooks) {
 
   test('can navigate to an worker form with proper authorization', async function (assert) {
     assert.expect(1);
-    featuresService.enable('byow');
     await visit(urls.globalScope);
 
     await click(`[href="${urls.workers}"]`);
