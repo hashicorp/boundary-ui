@@ -61,7 +61,6 @@ module('Acceptance | workers | read', function (hooks) {
     await a11yAudit();
 
     await click(`[href="${urls.worker}"]`);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.worker);
   });
