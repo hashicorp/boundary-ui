@@ -9,21 +9,13 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders', async function (assert) {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.set('myAction', function(val) { ... });
+      assert.expect(2);
+      await render(
+        hbs` <Breadcrumbs::Item @text='Orgs' @icon='org' @route='scopes.scope.scopes' @model='global' /> <Breadcrumbs::Container />`
+      );
 
-      await render(hbs`<Breadcrumbs::Container::Index />`);
-
-      assert.dom(this.element).hasText('');
-
-      // Template block usage:
-      await render(hbs`
-      <Breadcrumbs::Container::Index>
-        template block text
-      </Breadcrumbs::Container::Index>
-    `);
-
-      assert.dom(this.element).hasText('template block text');
+      assert.dom('.hds-breadcrumb__text').hasText('Orgs');
+      assert.dom('.hds-breadcrumb__icon').exists();
     });
   }
 );

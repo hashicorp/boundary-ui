@@ -101,7 +101,7 @@ module('Acceptance | workers | create', function (hooks) {
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
     assert.expect(2);
-    await visit(newWorkerURL);
+    await visit(workersURL);
     assert.ok(
       globalScope.authorized_collection_actions.workers.includes(
         'create:worker-led'

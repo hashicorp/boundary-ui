@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -18,6 +18,8 @@ import {
 module('Acceptance | workers | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  let featuresService;
 
   const instances = {
     scopes: {
@@ -42,22 +44,32 @@ module('Acceptance | workers | read', function (hooks) {
     urls.globalScope = '/scopes/global';
     urls.workers = `${urls.globalScope}/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
+
+    featuresService = this.owner.lookup('service:features');
     authenticateSession({});
   });
 
-  test('visiting workers', async function (assert) {
+  test('visiting worker', async function (assert) {
     assert.expect(1);
+    featuresService.enable('byow');
     await visit(urls.workers);
     await a11yAudit();
-    assert.dom(`[href="${urls.workers}"]`).isVisible();
+
+    await click(`[href="${urls.worker}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.worker);
   });
 
   test('cannot navigate to an worker form without proper authorization', async function (assert) {
     assert.expect(1);
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter((itm) => itm !== 'read');
-    await visit(urls.workers);
-    await a11yAudit();
+    featuresService.enable('byow');
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.workers}"]`);
+
     assert
       .dom('main tbody .rose-table-header-cell:nth-child(1) a')
       .isNotVisible();
@@ -65,8 +77,11 @@ module('Acceptance | workers | read', function (hooks) {
 
   test('can navigate to an worker form with proper authorization', async function (assert) {
     assert.expect(1);
-    await visit(urls.workers);
-    await a11yAudit();
+    featuresService.enable('byow');
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.workers}"]`);
+
     assert.dom('main tbody .rose-table-header-cell:nth-child(1) a').isVisible();
   });
 });
