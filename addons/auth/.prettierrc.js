@@ -4,6 +4,13 @@
  */
 
 module.exports = {
-  singleQuote: true,
-  printWidth: 80,
+  overrides: [
+    {
+      files: '*.{js,ts}',
+      options: {
+        singleQuote: true,
+        printWidth: 80,
+      },
+    },
+  ],
 };
