@@ -9,7 +9,7 @@ module.exports = {
   root: true,
   parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module',
     // This is specific babel-config. If grows consider creating a babel config file
     requireConfigFile: false,
@@ -52,7 +52,7 @@ module.exports = {
         node: true,
       },
       plugins: ['node'],
-      extends: ['plugin:node/recommended'],
+      extends: ['plugin:n/recommended'],
     },
     {
       // Test files:
