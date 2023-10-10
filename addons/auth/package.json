@@ -8,8 +8,8 @@
     "ember-addon"
   ],
   "scripts": {
-    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
-    "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
+    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "format": "yarn run format:js",
@@ -36,6 +36,7 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
+    "concurrently": "^8.0.1",
     "doctoc": "^2.2.0",
     "ember-auto-import": "^2.6.3",
     "ember-cli": "^4.12.2",
