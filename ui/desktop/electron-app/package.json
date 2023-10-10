@@ -28,6 +28,7 @@
     "node-html-parser": "^5.3.3",
     "node-pty": "^1.0.0",
     "semver": "^7.5.3",
+    "shell-env": "^3.0.1",
     "shell-quote": "^1.7.3",
     "tree-kill": "^1.2.2"
   },
