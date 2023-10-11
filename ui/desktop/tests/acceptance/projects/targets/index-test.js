@@ -32,6 +32,8 @@ module('Acceptance | projects | targets', function (hooks) {
   const APP_STATE_TITLE = '.hds-application-state__title';
   const TARGET_DETAILS_ROUTE_NAME =
     'scopes.scope.projects.targets.target.index';
+  const ROSE_DIALOG_MODAL = '.rose-dialog-error';
+  const CHOOSE_HOST_MODAL = '[data-test-host-modal]';
 
   const instances = {
     scopes: {
@@ -239,5 +241,18 @@ module('Acceptance | projects | targets', function (hooks) {
 
     assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
     assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
+  });
+
+  test('choose host modal does not render when there is a connect error', async function (assert) {
+    assert.expect(2);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
+
+    assert.dom(ROSE_DIALOG_MODAL).exists();
+    assert.dom(CHOOSE_HOST_MODAL).doesNotExist();
   });
 });

@@ -11,7 +11,7 @@ const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   connectToTarget,
-  deleteOrg,
+  deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
   createNewOrg,
@@ -73,7 +73,7 @@ test('Verify session created to target with host, then cancel the session', asyn
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    await deleteOrg(org.id);
+    await deleteOrgCli(org.id);
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
@@ -112,7 +112,7 @@ test('Verify session created to target with address, then cancel the session', a
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    await deleteOrg(org.id);
+    await deleteOrgCli(org.id);
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
@@ -139,7 +139,7 @@ test('Verify TCP target is updated', async ({ page }) => {
     await page.getByLabel('Maximum Connections').fill('10');
     await page.getByLabel('Egress worker filter').click();
     await page
-      .getByRole('textbox', { name: 'Filter', exact: true })
+      .getByRole('textbox', { name: /^Filter/, exact: true })
       .fill('"dev" in "/tags/type"');
     await page.getByRole('button', { name: 'Save' }).click();
 
@@ -150,6 +150,6 @@ test('Verify TCP target is updated', async ({ page }) => {
     await authenticateBoundaryCli();
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     const org = orgs.items.filter((obj) => obj.name === orgName)[0];
-    await deleteOrg(org.id);
+    await deleteOrgCli(org.id);
   }
 });
