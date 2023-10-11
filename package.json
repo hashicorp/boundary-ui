@@ -50,7 +50,6 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "ansi-html": "^0.0.8",
     "loader-utils": "^2.0.4",
     "**/ember-electron/**/minimatch": "^3.0.5",
     "**/babel-core/json5": "^2.2.2",
@@ -70,6 +69,7 @@
     "**/ember-cli/markdown-it-terminal/markdown-it": "^12.3.2",
     "**/ember-cli-mirage/@embroider/macros": "^1.0.0",
     "**/ember-electron/**/got": "^11.8.6",
+    "**/ember-cli/**/ansi-html": "^0.0.9",
     "**/ember-cli/testem/fireworm/async": "^2.6.4",
     "**/desktop/@doyensec/electronegativity/winston/async": "^2.6.4"
   },
