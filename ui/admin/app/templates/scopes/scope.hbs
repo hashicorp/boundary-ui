@@ -8,7 +8,6 @@
   {{page-title @model.displayName}}
   <Breadcrumbs::Item
     @text={{t 'resources.org.title_plural'}}
-    @icon='org'
     @route='scopes.scope.scopes'
     @model='global'
   />
@@ -26,7 +25,6 @@
   {{page-title @model.displayName}}
   <Breadcrumbs::Item
     @text={{t 'resources.org.title_plural'}}
-    @icon='org'
     @route='scopes.scope.scopes'
     @model='global'
   />
@@ -37,7 +35,6 @@
   />
   <Breadcrumbs::Item
     @text={{t 'resources.project.title_plural'}}
-    @icon='grid'
     @route='scopes.scope.scopes'
     @model={{this.scopes.selectedOrg.id}}
   />
