@@ -14,7 +14,7 @@ module('Integration | Helper | format-date-iso-human', function (hooks) {
   test('it renders', async function (assert) {
     this.set('inputValue', new Date('2020-01-01T00:00:00.999Z'));
 
-    await render(hbs`{{format-date-iso-human this.inputValue }}`);
+    await render(hbs`{{format-date-iso-human this.inputValue}}`);
 
     assert.strictEqual(this.element.textContent.trim(), '2020-01-01 00:00:00');
   });
@@ -22,7 +22,7 @@ module('Integration | Helper | format-date-iso-human', function (hooks) {
   test('it renders when null', async function (assert) {
     this.set('inputValue', null);
 
-    await render(hbs`{{format-date-iso-human this.inputValue }}`);
+    await render(hbs`{{format-date-iso-human this.inputValue}}`);
 
     assert.strictEqual(this.element.textContent.trim(), '');
   });
