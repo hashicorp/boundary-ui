@@ -71,7 +71,7 @@
     "ember-a11y-testing": "^4.2.0",
     "ember-auto-import": "^2.4.2",
     "ember-autofocus-modifier": "^4.0.1",
-    "ember-cli": "^4.4.1",
+    "ember-cli": "^4.12.2",
     "ember-cli-app-version": "^5.0.0",
     "ember-cli-babel": "^7.26.11",
     "ember-cli-code-coverage": "^1.0.3",
