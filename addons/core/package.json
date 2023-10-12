@@ -25,8 +25,7 @@
     "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "format:hbs": "prettier --write '{addon,app,tests}/**/*.hbs'",
     "start": "ember serve",
-    "test": "concurrently \"npm:lint\" \"npm:test:ember\" --names \"lint,test:\"",
-    "test:ember": "ember test",
+    "test": "ember test --test-port 0",
     "test:ember-compatibility": "ember try:each",
     "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
