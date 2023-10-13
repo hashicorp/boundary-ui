@@ -213,9 +213,11 @@
         </:body>
       </Hds::Table>
 
-    {{else if (has-resource-filter-selections
-      'scopes.scope.projects.sessions' 'status' 'project'
-    )}}
+    {{else if
+      (has-resource-filter-selections
+        'scopes.scope.projects.sessions' 'status' 'project'
+      )
+    }}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
           <message.description>
