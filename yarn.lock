@@ -10352,7 +10352,7 @@ ember-cli@^4.12.1:
     workerpool "^6.4.0"
     yam "^1.0.0"
 
-ember-cli@^4.12.2:
+ember-cli@^4.12.2, ember-cli@~4.12.2:
   version "4.12.2"
   resolved "https://registry.yarnpkg.com/ember-cli/-/ember-cli-4.12.2.tgz#a9d2dd191093fcf18122732fae8999c9ca873447"
   integrity sha512-990UglceEsB3nd/pTI08wL+hbApICrd6P4BO88486rSf9r3XjZ7LBcD318N8I1AGe5IUDkbccMrOQxoHge6zNg==

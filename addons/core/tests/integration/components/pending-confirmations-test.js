@@ -15,22 +15,18 @@ module('Integration | Component | pending-confirmations', function (hooks) {
     assert.expect(2);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
-    await render(hbs`
-      <PendingConfirmations as |confirmations|>
-        <div class="pending">Pending</div>
-      </PendingConfirmations>
-    `);
+    await render(hbs`<PendingConfirmations as |confirmations|>
+  <div class='pending'>Pending</div>
+</PendingConfirmations>`);
     assert.strictEqual(
       findAll('.pending').length,
       0,
       'No pending confirmations'
     );
     service.confirm();
-    await render(hbs`
-      <PendingConfirmations as |confirmations|>
-        <div class="pending">Pending</div>
-      </PendingConfirmations>
-    `);
+    await render(hbs`<PendingConfirmations as |confirmations|>
+  <div class='pending'>Pending</div>
+</PendingConfirmations>`);
     assert.strictEqual(
       findAll('.pending').length,
       1,
@@ -44,11 +40,9 @@ module('Integration | Component | pending-confirmations', function (hooks) {
     service.enabled = true;
     const confirmation = service.confirm();
     confirmation.then(() => assert.ok(true, 'confirmation.then was called'));
-    await render(hbs`
-      <PendingConfirmations as |confirmations confirm|>
-        <button {{on "click" confirm}}>Confirm</button>
-      </PendingConfirmations>
-    `);
+    await render(hbs`<PendingConfirmations as |confirmations confirm|>
+  <button type='button' {{on 'click' confirm}}>Confirm</button>
+</PendingConfirmations>`);
     assert.notOk(confirmation.done, 'Confirmation is not done');
     await click('button');
     assert.ok(confirmation.done, 'Confirmation is done');
@@ -60,11 +54,9 @@ module('Integration | Component | pending-confirmations', function (hooks) {
     service.enabled = true;
     const confirmation = service.confirm();
     confirmation.catch(() => assert.ok(true, 'confirmation.catch was called'));
-    await render(hbs`
-      <PendingConfirmations as |confirmations confirm dismiss|>
-        <button {{on "click" dismiss}}>Dismiss</button>
-      </PendingConfirmations>
-    `);
+    await render(hbs`<PendingConfirmations as |confirmations confirm dismiss|>
+  <button type='button' {{on 'click' dismiss}}>Dismiss</button>
+</PendingConfirmations>`);
     assert.notOk(confirmation.done, 'Confirmation is not done');
     await click('button');
     assert.ok(confirmation.done, 'Confirmation is done');
