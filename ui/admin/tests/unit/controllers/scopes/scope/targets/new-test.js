@@ -10,7 +10,7 @@ module('Unit | Controller | scopes/scope/targets/new', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let controller = this.owner.lookup('controller:scopes/scope/targets/new');
+    const controller = this.owner.lookup('controller:scopes/scope/targets/new');
     assert.ok(controller);
   });
 });

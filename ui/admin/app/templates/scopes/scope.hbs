@@ -7,12 +7,8 @@
   {{page-title (t 'resources.org.title_plural')}}
   {{page-title @model.displayName}}
   <Breadcrumbs::Item
-    @text={{t 'resources.org.title_plural'}}
-    @route='scopes.scope.scopes'
-    @model='global'
-  />
-  <Breadcrumbs::Item
     @text={{@model.displayName}}
+    @icon='org'
     @route='scopes.scope.edit'
     @model={{@model.id}}
   />
@@ -24,22 +20,14 @@
   {{page-title (t 'resources.project.title_plural')}}
   {{page-title @model.displayName}}
   <Breadcrumbs::Item
-    @text={{t 'resources.org.title_plural'}}
-    @route='scopes.scope.scopes'
-    @model='global'
-  />
-  <Breadcrumbs::Item
     @text={{this.scopes.selectedOrg.displayName}}
+    @icon='org'
     @route='scopes.scope.edit'
     @model={{this.scopes.selectedOrg.id}}
   />
   <Breadcrumbs::Item
-    @text={{t 'resources.project.title_plural'}}
-    @route='scopes.scope.scopes'
-    @model={{this.scopes.selectedOrg.id}}
-  />
-  <Breadcrumbs::Item
     @text={{@model.displayName}}
+    @icon='grid'
     @route='scopes.scope.edit'
     @model={{@model.id}}
   />

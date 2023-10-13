@@ -12,7 +12,7 @@ module(
     setupTest(hooks);
 
     test('it exists', function (assert) {
-      let controller = this.owner.lookup(
+      const controller = this.owner.lookup(
         'controller:scopes/scope/targets/target/add-injected-application-credential-sources'
       );
       assert.ok(controller);

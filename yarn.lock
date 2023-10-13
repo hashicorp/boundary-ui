@@ -3381,19 +3381,6 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
-"@bagaar/ember-breadcrumbs@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@bagaar/ember-breadcrumbs/-/ember-breadcrumbs-4.1.0.tgz#3c61a4571c286e7d52f50ad7c33a464e48bf4abe"
-  integrity sha512-GV8hgVldlAdxHbTSUSArDDlx8vQIv7YcY25AWd8qk8hAeOvFYMzHOVmFtflH8DLA+t5Ar+DDcdqI0vOIm3zlGQ==
-  dependencies:
-    "@glimmer/component" "^1.1.2"
-    "@glimmer/tracking" "^1.1.2"
-    ember-auto-import "^2.6.1"
-    ember-cli-babel "^7.26.11"
-    ember-cli-htmlbars "^6.1.1"
-    ember-cli-typescript "^5.1.1"
-    ember-modifier "^3.2.7 || ^4.0.0"
-
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"

@@ -12,7 +12,7 @@ module(
     setupTest(hooks);
 
     test('it exists', function (assert) {
-      let controller = this.owner.lookup(
+      const controller = this.owner.lookup(
         'controller:scopes/scope/targets/target/add-brokered-credential-sources'
       );
       assert.ok(controller);
