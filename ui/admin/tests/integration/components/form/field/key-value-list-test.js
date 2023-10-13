@@ -46,4 +46,19 @@ module('Integration | Component | key-value-list', function (hooks) {
 
     assert.dom('tbody tr').exists({ count: 3 });
   });
+
+  test('it renders multiple options with only keys', async function (assert) {
+    this.options = [{ key: 'one' }, { key: 'three' }];
+
+    // Template block usage:
+    await render(hbs`
+        <Form::Field::KeyValueList
+            @options={{this.options}}
+            @hasNoValue={{true}}
+        />
+    `);
+
+    assert.dom('tbody tr:first-child td').exists({ count: 2 });
+    assert.dom('tbody tr').exists({ count: 3 });
+  });
 });
