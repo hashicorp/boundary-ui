@@ -135,9 +135,9 @@
           <message.description>
             {{#if (can 'list scope' this.scope collection='storage-buckets')}}
               {{t 'resources.storage-bucket.messages.none.description'}}
-            {{else if (can
-              'create scope' this.scope collection='storage-buckets'
-            )}}
+            {{else if
+              (can 'create scope' this.scope collection='storage-buckets')
+            }}
               {{t
                 'descriptions.create-but-not-list'
                 resource=(t 'resources.storage-bucket.title_plural')

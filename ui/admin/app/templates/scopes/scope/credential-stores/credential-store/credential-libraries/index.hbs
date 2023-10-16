@@ -94,11 +94,13 @@
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.credential-library.description'}}
 
-            {{else if (can
-              'create model'
-              this.credentialStore
-              collection='credential-libraries'
-            )}}
+            {{else if
+              (can
+                'create model'
+                this.credentialStore
+                collection='credential-libraries'
+              )
+            }}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t
                 'descriptions.create-but-not-list'

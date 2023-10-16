@@ -178,9 +178,9 @@
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.account.description'}}
 
-            {{else if (can
-              'create model' this.authMethod collection='accounts'
-            )}}
+            {{else if
+              (can 'create model' this.authMethod collection='accounts')
+            }}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t
                 'descriptions.create-but-not-list'

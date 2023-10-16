@@ -188,9 +188,9 @@
         </:body>
       </Hds::Table>
 
-    {{else if (has-resource-filter-selections
-      'scopes.scope.auth-methods' 'type'
-    )}}
+    {{else if
+      (has-resource-filter-selections 'scopes.scope.auth-methods' 'type')
+    }}
 
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
@@ -211,9 +211,9 @@
             {{#if (can 'list model' this.scopeModel collection='auth-methods')}}
               {{! can list (at least):  show default welcome message}}
               {{t 'resources.auth-method.messages.welcome.description'}}
-            {{else if (can
-              'create model' this.scopeModel collection='auth-methods'
-            )}}
+            {{else if
+              (can 'create model' this.scopeModel collection='auth-methods')
+            }}
               {{! can create (only):  show create-but-not-list welcome message}}
               {{t
                 'descriptions.create-but-not-list'
