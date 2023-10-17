@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 
 /*
   The `containers` property from the `breadcrumbsService` is tracked
-  so registering and unregistering a container is was causes the DOM
+  so registering or unregistering a container will cause the DOM
   to re-render a container with the correct breadcrumbs.
 */
 
