@@ -18,7 +18,9 @@
         <:head as |H|>
           <H.Tr>
             <H.Th id={{keyHeaderID}}>{{t 'form.key.label'}}</H.Th>
-            <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
+            {{#unless @hasNoValue}}
+              <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
+            {{/unless}}
             <H.Th>
               {{#if @removeOptionByIndex}}
                 {{t 'titles.actions'}}
@@ -39,15 +41,18 @@
                   {{on 'input' (set-from-event option 'key')}}
                 />
               </B.Td>
-              <B.Td>
-                <Hds::Form::TextInput::Field
-                  @value={{option.value}}
-                  @type='text'
-                  disabled={{@disabled}}
-                  aria-labelledby={{valueHeaderID}}
-                  {{on 'input' (set-from-event option 'value')}}
-                />
-              </B.Td>
+              {{#unless @hasNoValue}}
+                <B.Td>
+                  <Hds::Form::TextInput::Field
+                    @value={{option.value}}
+                    @type='text'
+                    disabled={{@disabled}}
+                    aria-labelledby={{valueHeaderID}}
+                    {{on 'input' (set-from-event option 'value')}}
+                  />
+                </B.Td>
+              {{/unless}}
+
               <B.Td>
                 {{#if @removeOptionByIndex}}
                   <Hds::Button
@@ -73,15 +78,17 @@
                 {{on 'input' (set-from-event this 'newOptionKey')}}
               />
             </B.Td>
-            <B.Td>
-              <Hds::Form::TextInput::Field
-                @value={{this.newOptionValue}}
-                @type='text'
-                disabled={{@disabled}}
-                aria-labelledby={{valueHeaderID}}
-                {{on 'input' (set-from-event this 'newOptionValue')}}
-              />
-            </B.Td>
+            {{#unless @hasNoValue}}
+              <B.Td>
+                <Hds::Form::TextInput::Field
+                  @value={{this.newOptionValue}}
+                  @type='text'
+                  disabled={{@disabled}}
+                  aria-labelledby={{valueHeaderID}}
+                  {{on 'input' (set-from-event this 'newOptionValue')}}
+                />
+              </B.Td>
+            {{/unless}}
             <B.Td>
               <Hds::Button
                 @text={{t 'actions.add'}}
