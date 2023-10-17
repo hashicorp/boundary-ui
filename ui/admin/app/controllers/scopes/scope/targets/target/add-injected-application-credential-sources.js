@@ -4,12 +4,9 @@
  */
 
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 
 export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSourcesController extends Controller {
   // =services
-
-  @service intl;
 
   // =attributes
 
@@ -39,15 +36,5 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
       ({ id, type }) => !currentCredentialSourceIDs.has(id) && type !== 'json'
     );
     return [...notAddedCredentialLibraries, ...notAddedCredentials];
-  }
-
-  /**
-   * Translated roles breadcrumb
-   * @type {string}
-   */
-  get breadCrumb() {
-    return this.intl.t(
-      'resources.target.actions.add-injected-application-credential-sources'
-    );
   }
 }
