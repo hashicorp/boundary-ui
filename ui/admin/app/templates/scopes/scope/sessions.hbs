@@ -4,5 +4,9 @@
 }}
 
 {{page-title (t 'resources.session.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.session.title_plural'}}
+  @route='scopes.scope.sessions'
+/>
 
 {{outlet}}

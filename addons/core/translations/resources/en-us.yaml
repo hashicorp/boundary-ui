@@ -828,6 +828,8 @@ scope:
 managed-group:
   title: Managed Group
   title_plural: Managed Groups
+  titles:
+    new: New Managed Group
   description: A managed group represents a collection of accounts.
   actions:
     delete: Delete Managed Group
@@ -848,8 +850,9 @@ managed-group:
       help: The list of groups that this Managed Group belongs to.
 worker:
   title: Worker
-  title_pki: New PKI Worker
   title_plural: Workers
+  titles:
+    new: New PKI Worker
   description: Workers are the server components that perform the session handling.
   actions:
     register: Register Worker

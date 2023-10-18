@@ -4,12 +4,9 @@
  */
 
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 
 export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesController extends Controller {
   // =services
-
-  @service intl;
 
   // =attributes
 
@@ -40,15 +37,5 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
       ({ id }) => !currentCredentialSourceIDs.has(id)
     );
     return [...notAddedCredentialLibraries, ...notAddedCredentials];
-  }
-
-  /**
-   * Translated roles breadcrumb
-   * @type {string}
-   */
-  get breadCrumb() {
-    return this.intl.t(
-      'resources.target.actions.add-brokered-credential-sources'
-    );
   }
 }

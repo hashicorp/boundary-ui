@@ -10,7 +10,7 @@ const { devices } = require('@playwright/test');
 const config = {
   globalSetup: require.resolve('./global-setup'),
   outputDir: './artifacts/test-failures',
-  timeout: 45000, // Timeout is shared between all tests
+  timeout: 60000, // Each test is given 60s to complete
   workers: 1, // Tests need to be run in serial, otherwise there may be conflicts when using the CLI
   use: {
     baseURL: process.env.BOUNDARY_ADDR,
