@@ -554,6 +554,9 @@ target:
     cannot-connect:
       title: Cannot connect to {targetDisplayName}
       description: There are no host sources and no address configured for this target.
+    could-not-connect:
+      title: Could not connect
+      try-again: Please try again.
   titles:
     new: New Target
   actions:

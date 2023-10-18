@@ -40,26 +40,54 @@
       {{/if}}
       <bc.Body class='target-details-body'>
         <Hds::ApplicationState as |A|>
-          {{#if (can 'initiateConnection target' @model.target)}}
+          {{#if @model.target.errors.connect}}
             <A.Header
-              @title={{t 'resources.target.messages.connect-more-info.title'}}
+              @icon='skip'
+              @title={{t 'resources.target.messages.could-not-connect.title'}}
             />
-            <A.Body
-              @text={{t
-                'resources.target.messages.connect-more-info.description'
-              }}
-            />
-          {{else}}
-            <A.Header
-              @title={{t
-                'resources.target.messages.cannot-connect.title'
-                targetDisplayName=@model.target.displayName
-              }}
-            />
-            <A.Body
-              @text={{t 'resources.target.messages.cannot-connect.description'}}
-            />
+            <A.Body>
+              {{#each @model.target.errors.connect as |error|}}
+                <p data-test-target-details-connect-error>{{error.message}}</p>
+              {{/each}}
+              <p>{{t
+                  'resources.target.messages.could-not-connect.try-again'
+                }}</p>
+              <Hds::Button
+                data-test-target-details-connect-error-refresh
+                @text='Refresh'
+                @color='tertiary'
+                @icon='reload'
+                {{on
+                  'click'
+                  (route-action 'preConnect' @model this.toggleModal)
+                }}
+              />
+            </A.Body>
           {{/if}}
+          {{#unless @model.target.errors.connect}}
+            {{#if (can 'initiateConnection target' @model.target)}}
+              <A.Header
+                @title={{t 'resources.target.messages.connect-more-info.title'}}
+              />
+              <A.Body
+                @text={{t
+                  'resources.target.messages.connect-more-info.description'
+                }}
+              />
+            {{else}}
+              <A.Header
+                @title={{t
+                  'resources.target.messages.cannot-connect.title'
+                  targetDisplayName=@model.target.displayName
+                }}
+              />
+              <A.Body
+                @text={{t
+                  'resources.target.messages.cannot-connect.description'
+                }}
+              />
+            {{/if}}
+          {{/unless}}
         </Hds::ApplicationState>
       </bc.Body>
       <bc.Sidebar>

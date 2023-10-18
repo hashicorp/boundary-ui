@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import sinon from 'sinon';
@@ -19,11 +19,9 @@ module('Acceptance | projects | targets | target', function (hooks) {
   const TARGET_QUICK_CONNECT_BUTTON = '[data-test-host-quick-connect]';
   const TARGET_HOST_CONNECT_BUTTON = '[data-test-host-connect]';
   const APP_STATE_TITLE = '.hds-application-state__title';
-  const ROSE_DIALOG_MODAL = '.rose-dialog-error';
-  const ROSE_DIALOG_MODAL_BUTTONS = '.rose-dialog-footer button';
-  const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
-  const ROSE_DIALOG_CANCEL_BUTTON =
-    '.rose-dialog footer .rose-button-secondary';
+  const TARGET_CONNECT_ERROR = '[data-test-target-details-connect-error]';
+  const TARGET_CONNECT_ERROR_REFRESH_BUTTON =
+    '[data-test-target-details-connect-error-refresh]';
 
   const instances = {
     scopes: {
@@ -144,9 +142,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
       port: 'p_123',
       protocol: 'tcp',
     });
-    await visit(urls.targets);
-
-    await click(`[href="${urls.target}"]`);
+    await visit(urls.target);
 
     assert.dom(TARGET_CONNECT_BUTTON).isEnabled();
     assert.dom(APP_STATE_TITLE).includesText('Connect for more info');
@@ -157,52 +153,43 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('handles cli error on connect', async function (assert) {
-    assert.expect(4);
+    assert.expect(2);
     stubs.ipcService.withArgs('cliExists').returns(true);
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    await visit(urls.targets);
+    await visit(urls.target);
 
-    await click(`[href="${urls.target}"]`);
     await click(TARGET_CONNECT_BUTTON);
 
-    assert.dom(ROSE_DIALOG_MODAL).exists();
-    assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
-    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
-    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+    assert.dom(TARGET_CONNECT_ERROR).exists();
+    assert.dom(TARGET_CONNECT_ERROR_REFRESH_BUTTON).hasText('Refresh');
   });
 
   test('handles connect error', async function (assert) {
-    assert.expect(4);
+    assert.expect(2);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').rejects();
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
     await click(TARGET_CONNECT_BUTTON);
 
-    assert.dom(ROSE_DIALOG_MODAL).exists();
-    assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
-    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
-    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+    assert.dom(TARGET_CONNECT_ERROR).exists();
+    assert.dom(TARGET_CONNECT_ERROR_REFRESH_BUTTON).hasText('Refresh');
   });
 
   test('user can retry on error', async function (assert) {
+    // this assert.expect(1) only checks for asserts from qunit, not sinon
     assert.expect(1);
-    stubs.ipcService.withArgs('cliExists').rejects();
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    await visit(urls.targets);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').rejects();
+    await visit(urls.target);
 
-    await click(`[href="${urls.target}"]`);
     await click(TARGET_CONNECT_BUTTON);
-    const firstErrorDialog = find(ROSE_DIALOG_MODAL);
-    await click(ROSE_DIALOG_RETRY_BUTTON, 'Retry');
-    const secondErrorDialog = find(ROSE_DIALOG_MODAL);
 
-    assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
+    assert.dom(TARGET_CONNECT_ERROR).exists();
+
+    await click(TARGET_CONNECT_ERROR_REFRESH_BUTTON);
+
+    sinon.assert.calledTwice(stubs.ipcService.withArgs('connect'));
   });
 
   test('user can connect to a target with one host', async function (assert) {

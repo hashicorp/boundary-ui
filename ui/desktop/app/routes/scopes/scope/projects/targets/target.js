@@ -12,7 +12,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   // =services
 
   @service store;
-  @service confirm;
   @service ipc;
   @service router;
   @service session;
@@ -81,6 +80,26 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         'scopes.scope.projects.targets.target'
       );
       controller.set('isConnecting', false);
+      this.isConnectionError = false;
+    }
+    return true;
+  }
+
+  /**
+   * Removes any errors from target model when transitioning away
+   * from this route and sets isConnectionError to false if true.
+   * @returns {boolean}
+   */
+  @action
+  willTransition() {
+    /* eslint-disable-next-line ember/no-controller-access-in-routes */
+    const controller = this.controllerFor(
+      'scopes.scope.projects.targets.target'
+    );
+    const model = controller.get('model');
+    const targetErrors = model.target.get('errors');
+    targetErrors.remove('connect');
+    if (this.isConnectionError) {
       this.isConnectionError = false;
     }
     return true;
@@ -167,16 +186,16 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         session
       );
     } catch (e) {
+      const targetErrors = model.get('errors');
+      targetErrors.add('connect', e.message);
+
+      /* eslint-disable-next-line ember/no-controller-access-in-routes */
+      const controller = this.controllerFor(
+        'scopes.scope.projects.targets.target'
+      );
+      controller.set('isConnecting', false);
+
       this.isConnectionError = true;
-      this.confirm
-        .confirm(e.message, { isConnectError: true })
-        // Retry
-        .then(() => this.connect(model, host))
-        .catch(() => {
-          // Reset the flag as this was user initiated and we're not
-          // in a transition or have a host modal open
-          this.isConnectionError = false;
-        });
     }
   }
 }
