@@ -154,17 +154,14 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       // we don't have to manually persist the proxy details.
       session.proxy_address = address;
       session.proxy_port = port;
+      // Add retrieved credentials to the session
       if (credentials) {
         credentials.forEach((cred) => session.addCredential(cred));
-      }
-      if (session.host_id) {
-        const host = await this.store.findRecord('host', session.host_id);
-        session.addHost(host);
       }
 
       await this.router.transitionTo(
         'scopes.scope.projects.sessions.session',
-        session
+        session_id
       );
     } catch (e) {
       this.isConnectionError = true;
