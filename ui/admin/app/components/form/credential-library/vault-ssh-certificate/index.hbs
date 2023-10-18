@@ -236,7 +236,7 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Form::Field::KeyValueList
+  <Form::Field::ListWrapper
     @layout='horizontal'
     @isOptional={{true}}
     @name='critical_options'
@@ -244,6 +244,7 @@
     @addOption={{fn this.addOption 'critical_options'}}
     @removeOptionByIndex={{fn this.removeOptionByIndex 'critical_options'}}
     @disabled={{form.disabled}}
+    @hasKeyValuePair={{true}}
     as |M|
   >
     <M.Legend>
@@ -259,9 +260,9 @@
         {{/each}}
       </M.Error>
     {{/if}}
-  </Form::Field::KeyValueList>
+  </Form::Field::ListWrapper>
 
-  <Form::Field::KeyValueList
+  <Form::Field::ListWrapper
     @layout='horizontal'
     @isOptional={{true}}
     @name='extensions'
@@ -269,6 +270,7 @@
     @addOption={{fn this.addOption 'extensions'}}
     @removeOptionByIndex={{fn this.removeOptionByIndex 'extensions'}}
     @disabled={{form.disabled}}
+    @hasKeyValuePair={{true}}
     as |M|
   >
     <M.Legend>
@@ -284,7 +286,7 @@
         {{/each}}
       </M.Error>
     {{/if}}
-  </Form::Field::KeyValueList>
+  </Form::Field::ListWrapper>
 
   {{#if (can 'save model' @model)}}
     <form.actions

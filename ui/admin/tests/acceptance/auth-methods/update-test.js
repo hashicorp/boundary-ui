@@ -122,6 +122,7 @@ module('Acceptance | auth methods | update', function (hooks) {
     );
     await fillIn('[name="allowed_audiences"]', 'allowed_audiences');
     await click('form fieldset:nth-of-type(2) [title="Add"]');
+
     // Remove all claims scopes
     await Promise.all(
       findAll('form fieldset:nth-of-type(3) [title="Remove"]').map((element) =>

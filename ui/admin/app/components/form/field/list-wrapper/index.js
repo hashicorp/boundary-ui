@@ -16,6 +16,8 @@ export default class MappingListComponent extends Component {
    */
   @tracked newOptionKey = '';
 
+  @tracked newRow = '';
+
   /**
    * @type {string}
    */
@@ -30,7 +32,7 @@ export default class MappingListComponent extends Component {
   @action
   addOption() {
     assert(
-      '[boundary-admin-key-value-list-field] `@addOption` is required.',
+      '[boundary-admin-list-wrapper-field] `@addOption` is required.',
       this.args.addOption
     );
 
@@ -43,5 +45,26 @@ export default class MappingListComponent extends Component {
 
     this.newOptionKey = '';
     this.newOptionValue = '';
+  }
+
+  /**
+   * If a new input is entered and an addRow method was specified,
+   * calls addRow with the new input.  Resets previous value.
+   */
+
+  @action
+  addRow() {
+    assert(
+      '[boundary-admin-list-of-text-field] `@addRow` is required.',
+      this.args.addRow
+    );
+
+    if (this.newRow) {
+      this.args.addRow({
+        value: this.newRow,
+      });
+    }
+
+    this.newRow = '';
   }
 }

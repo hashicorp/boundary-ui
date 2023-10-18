@@ -101,17 +101,24 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     );
     const name = 'aws host set';
     await fillIn('[name="name"]', name);
-    await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
-    await fillIn('[name="filters"]', 'filter');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
+    await fillIn(
+      '[name="preferred_endpoints"] tbody td:nth-of-type(1) input',
+      'endpoint'
+    );
+    await click('[name="preferred_endpoints"] button');
+    await fillIn(
+      '[name="filters"] tbody td:nth-of-type(1) input',
+      'filter_test'
+    );
+    await click('[name="filters"] button');
+
     await fillIn('[name="sync_interval_seconds"]', 10);
     await click('[type="submit"]');
 
     assert.strictEqual(getHostSetCount(), count + 1);
     const hostSet = this.server.schema.hostSets.findBy({ name });
     assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
-    assert.deepEqual(hostSet.attributes.filters, ['filter']);
+    assert.deepEqual(hostSet.attributes.filters, ['filter_test']);
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
@@ -132,8 +139,11 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     );
     const name = 'azure host set';
     await fillIn('[name="name"]', name);
-    await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    await fillIn(
+      '[name="preferred_endpoints"] tbody td:nth-of-type(1) input',
+      'endpoint'
+    );
+    await click('[name="preferred_endpoints"] button');
     await fillIn('[name="filter"]', 'filter');
     await fillIn('[name="sync_interval_seconds"]', 10);
     await click('[type="submit"]');

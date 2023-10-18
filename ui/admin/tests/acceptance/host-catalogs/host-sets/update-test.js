@@ -33,6 +33,10 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       project: null,
       hostCatalog: null,
       host: null,
+      awsHostCatalog: null,
+      awsHostSet: null,
+      azureHostCatalog: null,
+      azureHostSet: null,
     },
   };
   const urls = {
@@ -45,6 +49,8 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     hostSet: null,
     unknownHostSet: null,
     newHostSet: null,
+    awshostSet: null,
+    azureHostSet: null,
   };
 
   hooks.beforeEach(function () {
@@ -61,9 +67,35 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
+
     instances.hostSet = this.server.create('host-set', {
       scope: instances.scopes.project,
       hostCatalog: instances.hostCatalog,
+    });
+    instances.awsHostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'aws',
+      },
+    });
+    instances.awsHostSet = this.server.create('host-set', {
+      scope: instances.scopes.project,
+      hostCatalog: instances.awsHostCatalog,
+    });
+
+    instances.azureHostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'azure',
+      },
+    });
+    instances.azureHostSet = this.server.create('host-set', {
+      scope: instances.scopes.project,
+      hostCatalog: instances.azureHostCatalog,
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
@@ -75,6 +107,8 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.unknownHostSet = `${urls.hostSets}/foo`;
     urls.newHostSet = `${urls.hostSets}/new`;
+    urls.awshostSet = `${urls.hostCatalogs}/${instances.awsHostCatalog.id}/host-sets/${instances.awsHostSet.id}`;
+    urls.azureHostSet = `${urls.hostCatalogs}/${instances.azureHostCatalog.id}/host-sets/${instances.azureHostSet.id}`;
     // Generate resource couner
     authenticateSession({});
   });
@@ -127,21 +161,9 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('can save changes to an existing aws host-set', async function (assert) {
-    assert.expect(5);
-    instances.hostCatalog = this.server.create('host-catalog', {
-      scope: instances.scopes.project,
-      type: 'plugin',
-      plugin: {
-        id: `plugin-id-1`,
-        name: 'aws',
-      },
-    });
-    instances.hostSet = this.server.create('host-set', {
-      scope: instances.scopes.project,
-      hostCatalog: instances.hostCatalog,
-    });
-    urls.hostSet = `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}`;
-    await visit(urls.hostSet);
+    assert.expect(7);
+
+    await visit(urls.awshostSet);
 
     await click(
       'form .rose-form-actions [type="button"]',
@@ -150,49 +172,51 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
 
     const name = 'aws host set';
     await fillIn('[name="name"]', name);
-    // Remove all the preferred endpoints
+
     await Promise.all(
-      findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
-        click(element)
+      findAll('[name="preferred_endpoints"] [data-test="remove-button"]').map(
+        (element) => click(element)
       )
     );
-    await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    assert.strictEqual(
+      findAll('[name="preferred_endpoints"] [data-test="remove-button"]')
+        .length,
+      0
+    );
+
+    await fillIn('[name="preferred_endpoints"] input', 'sample endpoint');
+    await click('[name="preferred_endpoints"] button');
+
     // Remove all the filters
     await Promise.all(
-      findAll('form fieldset:nth-of-type(2) [title="Remove"]').map((element) =>
+      findAll('[name="filters"] [data-test="remove-button"]').map((element) =>
         click(element)
       )
     );
-    await fillIn('[name="filters"]', 'filter');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
+
+    assert.strictEqual(
+      findAll('[name="filters"] [data-test="remove-button"]').length,
+      0
+    );
+    await fillIn('[name="filters"] input', 'sample filters');
+    await click('[name="filters"] button');
+
     await fillIn('[name="sync_interval_seconds"]', 10);
+
     await click('.rose-form-actions [type="submit"]');
 
-    assert.strictEqual(currentURL(), urls.hostSet);
+    assert.strictEqual(currentURL(), urls.awshostSet);
     const hostSet = this.server.schema.hostSets.findBy({ name });
     assert.strictEqual(hostSet.name, name);
-    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
-    assert.deepEqual(hostSet.attributes.filters, ['filter']);
+    assert.deepEqual(hostSet.preferredEndpoints, ['sample endpoint']);
+    assert.deepEqual(hostSet.attributes.filters, ['sample filters']);
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
   test('can save changes to an existing azure host-set', async function (assert) {
-    assert.expect(5);
-    instances.hostCatalog = this.server.create('host-catalog', {
-      scope: instances.scopes.project,
-      type: 'plugin',
-      plugin: {
-        id: `plugin-id-1`,
-        name: 'azure',
-      },
-    });
-    instances.hostSet = this.server.create('host-set', {
-      scope: instances.scopes.project,
-      hostCatalog: instances.hostCatalog,
-    });
-    urls.hostSet = `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}`;
-    await visit(urls.hostSet);
+    assert.expect(6);
+
+    await visit(urls.azureHostSet);
 
     await click(
       'form .rose-form-actions [type="button"]',
@@ -203,20 +227,26 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await fillIn('[name="name"]', name);
     // Remove all the preferred endpoints
     await Promise.all(
-      findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
-        click(element)
+      findAll('[name="preferred_endpoints"] [data-test="remove-button"]').map(
+        (element) => click(element)
       )
     );
-    await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    assert.strictEqual(
+      findAll('[name="preferred_endpoints"] [data-test="remove-button"]')
+        .length,
+      0
+    );
+    await fillIn('[name="preferred_endpoints"] input', 'sample endpoints');
+    await click('[name="preferred_endpoints"] button');
+
     await fillIn('[name="filter"]', 'filter');
     await fillIn('[name="sync_interval_seconds"]', 10);
     await click('.rose-form-actions [type="submit"]');
 
-    assert.strictEqual(currentURL(), urls.hostSet);
+    assert.strictEqual(currentURL(), urls.azureHostSet);
     const hostSet = this.server.schema.hostSets.findBy({ name });
     assert.strictEqual(hostSet.name, name);
-    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
+    assert.deepEqual(hostSet.preferredEndpoints, ['sample endpoints']);
     assert.deepEqual(hostSet.attributes.filter, 'filter');
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
