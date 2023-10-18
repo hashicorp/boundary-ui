@@ -6,6 +6,12 @@
 {{#if @model.isOrg}}
   {{page-title (t 'resources.org.title_plural')}}
   {{page-title @model.displayName}}
+  <Breadcrumbs::Item
+    @text={{@model.displayName}}
+    @icon='org'
+    @route='scopes.scope.edit'
+    @model={{@model.id}}
+  />
 {{/if}}
 
 {{#if @model.isProject}}
@@ -13,6 +19,18 @@
   {{page-title this.scopes.selectedOrg.displayName}}
   {{page-title (t 'resources.project.title_plural')}}
   {{page-title @model.displayName}}
+  <Breadcrumbs::Item
+    @text={{this.scopes.selectedOrg.displayName}}
+    @icon='org'
+    @route='scopes.scope.edit'
+    @model={{this.scopes.selectedOrg.id}}
+  />
+  <Breadcrumbs::Item
+    @text={{@model.displayName}}
+    @icon='grid'
+    @route='scopes.scope.edit'
+    @model={{@model.id}}
+  />
 {{/if}}
 
 <Rose::Layout::Sidebar as |sidebarLayout|>
@@ -98,10 +116,7 @@
           {{/if}}
           {{#if (can 'navigate model' @model collection='targets')}}
             <nav.link @route='scopes.scope.targets'>
-              <Rose::Icon
-                @name='flight-icons/svg/crosshair-16'
-                @size='medium'
-              />
+              <Rose::Icon @name='flight-icons/svg/target-16' @size='medium' />
               {{t 'resources.target.title_plural'}}
             </nav.link>
           {{/if}}

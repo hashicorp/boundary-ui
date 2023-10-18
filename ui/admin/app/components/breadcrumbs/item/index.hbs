@@ -1,0 +1,16 @@
+{{#each this.breadcrumbsService.containers as |container|}}
+  {{#in-element container.element insertBefore=null}}
+    <Hds::Breadcrumb::Item
+      @text={{@text}}
+      @icon={{@icon}}
+      @route={{@route}}
+      @models={{@models}}
+      @query={{@query}}
+      @model={{@model}}
+      @current={{this.current}}
+      ...attributes
+      {{did-insert this.registerSelf}}
+      data-test-breadcrumbs-item
+    />
+  {{/in-element}}
+{{/each}}

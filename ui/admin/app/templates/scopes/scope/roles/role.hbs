@@ -4,5 +4,9 @@
 }}
 
 {{page-title @model.displayName}}
+<Breadcrumbs::Item
+  @text={{@model.displayName}}
+  @route='scopes.scope.roles.role'
+/>
 
 {{outlet}}

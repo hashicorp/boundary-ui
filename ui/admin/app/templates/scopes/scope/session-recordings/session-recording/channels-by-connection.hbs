@@ -3,6 +3,10 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-{{page-title (t 'resources.session-recording.channel.title_plural')}}
+{{page-title (t 'resources.session-recording.channels-by-connection.title')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.session-recording.channels-by-connection.title'}}
+  @route='scopes.scope.session-recordings.session-recording.channels-by-connection'
+/>
 
 {{outlet}}
