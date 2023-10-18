@@ -431,9 +431,16 @@ function routes() {
       return hostSets.where({ hostCatalogId });
     }
   );
+
   this.post('/host-sets', function ({ hostCatalogs, hostSets }) {
     const attrs = this.normalizedRequestAttrs();
     const hostCatalog = hostCatalogs.find(attrs.hostCatalogId);
+    if (hostCatalog.plugin) {
+      attrs.type = 'plugin';
+      attrs.plugin = {
+        name: hostCatalog.plugin.name,
+      };
+    }
     attrs.scopeId = hostCatalog.scope.id;
     return hostSets.create(attrs);
   });

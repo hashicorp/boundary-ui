@@ -85,6 +85,9 @@
     </M.Legend>
     <M.HelperText>
       {{t 'resources.host-set.form.preferred_endpoints.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-set.preferred-endpoints'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
     </M.HelperText>
     {{#if @model.errors.preferred_endpoints}}
       <M.Error as |E|>

@@ -13,10 +13,9 @@ export default class FormHostSetComponent extends Component {
   // =actions
 
   /**
-   * Adds a key/value option object. We recreate a new array after adding
+   * Adds a string to the array. We recreate a new array after adding
    * so that ember is aware that the array has been modified.
    * @param field {string}
-   * @param key {string}
    * @param value {string}
    */
   @action
