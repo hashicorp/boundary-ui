@@ -191,7 +191,9 @@ test('Verify resources can be deleted', async ({ page }) => {
   }
 });
 
-test('Verify enterprise resources can be deleted @enterprise', async ({ page }) => {
+test('Verify enterprise resources can be deleted @enterprise', async ({
+  page,
+}) => {
   let orgId;
   try {
     orgId = await createNewOrgCli();
@@ -207,4 +209,3 @@ test('Verify enterprise resources can be deleted @enterprise', async ({ page }) 
     await deleteOrgCli(orgId);
   }
 });
-

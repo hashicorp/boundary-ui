@@ -29,6 +29,7 @@ const sessionManager = require('./services/session-manager.js');
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
 const { isMac, isLinux } = require('./helpers/platform.js');
+const fixPath = require('./utils/fixPath');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -47,6 +48,10 @@ protocol.registerSchemesAsPrivileged([
     },
   },
 ]);
+
+// This is to correctly set the process.env.PATH as electron does not
+// correctly inherit the path variable in production
+fixPath();
 
 const createWindow = (partition, closeWindowCB) => {
   /**

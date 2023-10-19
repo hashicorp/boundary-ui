@@ -52,24 +52,24 @@ if ! errors=$(git merge -m "Merge Boundary UI OSS branch '${BRANCH}' at commit $
     git checkout "${OSS_BRANCH}"
     git checkout -b "${OSS_LOCAL_BRANCH}"
     git push -f --set-upstream origin "${OSS_LOCAL_BRANCH}"
-    hub pull-request \
+    gh pr create \
       --draft \
-      --no-edit \
-      --labels "oss-merge" \
-      -b "${BASE_BRANCH}" \
-      -h "${OSS_LOCAL_BRANCH}" \
+      --fill-first \
+      --label "oss-merge" \
+      -B "${BASE_BRANCH}" \
+      -H "${OSS_LOCAL_BRANCH}" \
       -a "${ACTOR}" \
-      -m "[${BASE_BRANCH/oss\/release\//}] OSS to ENT merge of (${SHA::7})" \
-      -m "${BASE_BRANCH/oss\//} upstream merge of (${SHA::7})" \
-      -m "Merge failed, Please fix the conflicts using github UI or using the following commands:" \
-      -m "\`\`\`bash" \
-      -m "git checkout ${BASE_BRANCH}" \
-      -m "git pull" \
-      -m "git checkout ${OSS_LOCAL_BRANCH}" \
-      -m "git merge ${BASE_BRANCH}" \
-      -m "# fix conflicts and commit" \
-      -m "git push origin ${OSS_LOCAL_BRANCH}" \
-      -m "\`\`\`"
+      -t "[${BASE_BRANCH/oss\/release\//}] OSS to ENT merge of (${SHA::7})" \
+      -b "${BASE_BRANCH/oss\//} upstream merge of (${SHA::7})
+      Merge failed, Please fix the conflicts using github UI or using the following commands:
+      \`\`\`bash
+      git checkout ${BASE_BRANCH}
+      git pull
+      git checkout ${OSS_LOCAL_BRANCH}
+      git merge ${BASE_BRANCH}
+      # fix conflicts and commit
+      git push origin ${OSS_LOCAL_BRANCH}
+      \`\`\`"
     exit 0
   fi
 fi
@@ -81,14 +81,14 @@ if (git diff ${BRANCH} --exit-code > /dev/null); then
   exit 0
 fi
 git push origin "${git_merge_branch}"
-hub pull-request \
-  --no-edit \
-  --labels "oss-merge" \
-  -b "${BASE_BRANCH}" \
-  -h "${MERGE_BRANCH}" \
+gh pr create \
+  --fill-first \
+  --label "oss-merge" \
+  -B "${BASE_BRANCH}" \
+  -H "${MERGE_BRANCH}" \
   -a ${ACTOR} \
-  -m "[${BASE_BRANCH/oss\/release\//}] OSS to ENT merge of (${SHA::7})" \
-  -m "${BASE_BRANCH/oss\//} upstream merge of (${SHA::7})"
+  -t "[${BASE_BRANCH/oss\/release\//}] OSS to ENT merge of (${SHA::7})" \
+  -b "${BASE_BRANCH/oss\//} upstream merge of (${SHA::7})"
 gh pr merge --auto --merge
 
 # This PR will be need to be approved manually
