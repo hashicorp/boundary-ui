@@ -10,6 +10,8 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =attributes
 
@@ -20,6 +22,17 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
   };
 
   // =methods
+
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create model', scopeModel, {
+        collection: 'auth-methods',
+      })
+    ) {
+      this.router.transitionTo('scopes.scope.auth-methods', scopeModel.id);
+    }
+  }
 
   /**
    * Create a new unsaved auth-method.

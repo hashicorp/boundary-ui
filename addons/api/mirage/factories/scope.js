@@ -22,14 +22,8 @@ export default factory.extend({
   authorized_collection_actions() {
     const collectionActions = {
       scopes: ['create', 'list'],
-      users: ['create', 'list'],
-      sessions: ['list'],
       groups: ['create', 'list'],
       roles: ['create', 'list'],
-      targets: ['create', 'list'],
-      'credential-stores': ['create', 'list'],
-      'auth-methods': ['create', 'list'],
-      'host-catalogs': ['create', 'list'],
     };
 
     // Worker permissions only available on the global scope
@@ -41,6 +35,15 @@ export default factory.extend({
     if (this.type === 'global' || this.type === 'org') {
       collectionActions['storage-buckets'] = ['create', 'list'];
       collectionActions['session-recordings'] = ['list'];
+      collectionActions.users = ['create', 'list'];
+      collectionActions['auth-methods'] = ['create', 'list'];
+    }
+
+    if (this.type === 'project') {
+      collectionActions['credential-stores'] = ['create', 'list'];
+      collectionActions['host-catalogs'] = ['create', 'list'];
+      collectionActions.sessions = ['list'];
+      collectionActions.targets = ['create', 'list'];
     }
 
     return collectionActions;

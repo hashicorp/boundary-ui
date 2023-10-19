@@ -11,6 +11,8 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -20,10 +22,27 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
    * @param {string} params.managed_group_id
    * @returns {ManagedGroupModel}
    */
-  model({ managed_group_id }) {
+  async model({ managed_group_id }) {
     return this.store.findRecord('managed-group', managed_group_id, {
       reload: true,
     });
+  }
+
+  redirect(managedGroup, transition) {
+    const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
+    const { auth_method_id } = managedGroup;
+    if (
+      this.can.cannot('read managed-group', managedGroup, {
+        resource_id: auth_method_id,
+        collection_id: authMethod.id,
+      })
+    ) {
+      this.router.transitionTo(
+        transition.to.name,
+        auth_method_id,
+        managedGroup.id
+      );
+    }
   }
 
   /**

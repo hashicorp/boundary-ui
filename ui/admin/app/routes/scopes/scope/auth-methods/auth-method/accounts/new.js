@@ -10,8 +10,23 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
+
+  beforeModel() {
+    const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
+    if (
+      this.can.cannot('create model', authMethod, { collection: 'accounts' })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.auth-methods.auth-method.accounts',
+        authMethod.scopeID,
+        authMethod.id
+      );
+    }
+  }
 
   /**
    * Creates a new unsaved account in current scope.

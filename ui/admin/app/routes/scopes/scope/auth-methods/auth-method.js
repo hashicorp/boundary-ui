@@ -7,10 +7,14 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { inject as service } from '@ember/service';
+import { paramValueFinder } from 'admin/utils/route-info';
+
 export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -22,6 +26,24 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
    */
   async model({ auth_method_id }) {
     return this.store.findRecord('auth-method', auth_method_id);
+  }
+
+  redirect(authMethod, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read auth-method', authMethod, {
+        resource_id: authMethod.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      let paramValues = paramValueFinder('auth-method', transition.to.parent);
+      this.router.transitionTo(
+        transition.to.name,
+        authMethod.scopeID,
+        authMethod.id,
+        ...paramValues
+      );
+    }
   }
 
   // =actions
