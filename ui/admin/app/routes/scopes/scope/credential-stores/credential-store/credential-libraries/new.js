@@ -14,6 +14,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @service store;
   @service router;
   @service features;
+  @service can;
 
   // =attributes
 
@@ -24,6 +25,23 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   };
 
   // =methods
+
+  beforeModel() {
+    const credentialStore = this.modelFor(
+      'scopes.scope.credential-stores.credential-store'
+    );
+    if (
+      this.can.cannot('create model', credentialStore, {
+        collection: 'credential-libraries',
+      })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.credential-stores.credential-store.credential-libraries',
+        credentialStore.scopeID,
+        credentialStore.id
+      );
+    }
+  }
 
   /**
    * Creates a new unsaved credential library in current credential store.

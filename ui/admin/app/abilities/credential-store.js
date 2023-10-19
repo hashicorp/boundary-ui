@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import ModelAbility from './model';
+import CredentialStoreAbility from 'api/abilities/credential-store';
 import { inject as service } from '@ember/service';
 /**
  * Provides abilities for credential store.
  */
-export default class CredentialStoreAbility extends ModelAbility {
+export default class OverrideCredentialStoreAbility extends CredentialStoreAbility {
   // =services
 
   @service features;
@@ -20,10 +20,8 @@ export default class CredentialStoreAbility extends ModelAbility {
    * @type {boolean}
    */
   get canRead() {
-    const readAbility = this.hasAuthorizedAction('read');
-    if (this.resource_id) {
-      return readAbility && this.resource_id === this.collection_id;
-    }
-    return readAbility;
+    return this.features.isEnabled('static-credentials') || !this.model.isStatic
+      ? super.canRead
+      : false;
   }
 }

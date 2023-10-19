@@ -13,6 +13,7 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
   @service store;
   @service router;
   @service features;
+  @service can;
 
   // =attributes
 
@@ -23,6 +24,18 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
   };
 
   // =methods
+
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create model', scopeModel, {
+        collection: 'credential-stores',
+      })
+    ) {
+      this.router.transitionTo('scopes.scope.credential-stores', scopeModel.id);
+    }
+  }
+
   /**
    * Creates a new unsaved credential-store
    * Also rollback/destroy any new, unsaved instances from this route before

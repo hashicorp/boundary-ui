@@ -12,6 +12,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
 
   @service store;
   @service router;
+  @service can;
 
   // =attributes
 
@@ -22,6 +23,23 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
   };
 
   // =methods
+
+  beforeModel() {
+    const credentialStore = this.modelFor(
+      'scopes.scope.credential-stores.credential-store'
+    );
+    if (
+      this.can.cannot('create model', credentialStore, {
+        collection: 'credentials',
+      })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.credential-stores.credential-store.credentials',
+        credentialStore.scopeID,
+        credentialStore.id
+      );
+    }
+  }
 
   /**
    * Creates a new unsaved credential in current credential store.

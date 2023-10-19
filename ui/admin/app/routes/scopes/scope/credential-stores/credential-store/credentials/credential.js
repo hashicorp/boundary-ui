@@ -10,6 +10,8 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsCreden
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -23,5 +25,24 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsCreden
     return this.store.findRecord('credential', credential_id, {
       reload: true,
     });
+  }
+
+  redirect(credential) {
+    const credentialStore = this.modelFor(
+      'scopes.scope.credential-stores.credential-store'
+    );
+    const { credential_store_id } = credential;
+    if (
+      this.can.cannot('read credential', credential, {
+        resource_id: credential_store_id,
+        collection_id: credentialStore.id,
+      })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.credential-stores.credential-store.credentials.credential',
+        credential_store_id,
+        credential.id
+      );
+    }
   }
 }

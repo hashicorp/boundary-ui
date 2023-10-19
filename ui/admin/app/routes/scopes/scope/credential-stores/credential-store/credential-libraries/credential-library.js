@@ -11,6 +11,8 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -24,6 +26,25 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     return this.store.findRecord('credential-library', credential_library_id, {
       reload: true,
     });
+  }
+
+  redirect(credentialLibrary) {
+    const credentialStore = this.modelFor(
+      'scopes.scope.credential-stores.credential-store'
+    );
+    const { credential_store_id } = credentialLibrary;
+    if (
+      this.can.cannot('read credential-library', credentialLibrary, {
+        resource_id: credential_store_id,
+        collection_id: credentialStore.id,
+      })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.credential-stores.credential-store.credential-libraries.credential-library',
+        credential_store_id,
+        credentialLibrary.id
+      );
+    }
   }
 
   /**
