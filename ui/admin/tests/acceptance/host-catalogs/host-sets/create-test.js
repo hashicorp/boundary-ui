@@ -222,7 +222,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     await visit(urls.newHostSet);
 
     assert.false(
-      instances.hostCatalog.authorized_collection_actions.hosts.includes(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'create'
       )
     );
