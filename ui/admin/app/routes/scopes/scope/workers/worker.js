@@ -10,6 +10,8 @@ export default class ScopesScopeWorkersWorkerRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -19,7 +21,23 @@ export default class ScopesScopeWorkersWorkerRoute extends Route {
    * @param {string} params.worker_id
    * @return {WorkerModel}
    */
-  model({ worker_id }) {
+  async model({ worker_id }) {
     return this.store.findRecord('worker', worker_id);
+  }
+
+  redirect(worker) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read worker', worker, {
+        resource_id: worker.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.workers.worker',
+        worker.scopeID,
+        worker.id
+      );
+    }
   }
 }

@@ -13,8 +13,21 @@ export default class ScopesScopeWorkersNewRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
+
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create worker led worker', scopeModel, {
+        collection: 'workers',
+      })
+    ) {
+      this.router.transitionTo('scopes.scope.workers', scopeModel.id);
+    }
+  }
 
   /**
    * Creates a new unsaved worker.
