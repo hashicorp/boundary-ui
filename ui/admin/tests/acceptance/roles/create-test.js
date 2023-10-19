@@ -27,7 +27,6 @@ module('Acceptance | roles | create', function (hooks) {
       project: null,
     },
     role: null,
-    orgScope: null,
   };
   const urls = {
     roles: null,
@@ -38,7 +37,7 @@ module('Acceptance | roles | create', function (hooks) {
 
   hooks.beforeEach(function () {
     authenticateSession({});
-    instances.orgScope = this.server.create(
+    instances.scopes.org = this.server.create(
       'scope',
       {
         type: 'org',
@@ -52,19 +51,19 @@ module('Acceptance | roles | create', function (hooks) {
     // mechanism.
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: { id: instances.orgScope.id, type: instances.orgScope.type },
+      scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
     });
     instances.role = this.server.create(
       'role',
       {
-        scope: instances.orgScope,
+        scope: instances.scopes.org,
       },
       'withPrincipals'
     );
-    urls.roles = `/scopes/${instances.orgScope.id}/roles`;
+    urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.newRole = `${urls.roles}/new`;
-    urls.orgScope = `/scopes/${instances.orgScope.id}`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
   });
 
   test('can create new role', async function (assert) {
@@ -80,17 +79,21 @@ module('Acceptance | roles | create', function (hooks) {
     assert.expect(2);
     await visit(urls.roles);
     assert.ok(
-      instances.orgScope.authorized_collection_actions.roles.includes('create')
+      instances.scopes.org.authorized_collection_actions.roles.includes(
+        'create'
+      )
     );
     assert.ok(find(`[href="${urls.newRole}"]`));
   });
 
   test('Users cannot navigate to new roles route without proper authorization', async function (assert) {
     assert.expect(2);
-    instances.orgScope.authorized_collection_actions.roles = [];
+    instances.scopes.org.authorized_collection_actions.roles = [];
     await visit(urls.roles);
     assert.notOk(
-      instances.orgScope.authorized_collection_actions.roles.includes('create')
+      instances.scopes.org.authorized_collection_actions.roles.includes(
+        'create'
+      )
     );
     assert.notOk(find(`[href="${urls.newRole}"]`));
   });
@@ -132,5 +135,22 @@ module('Acceptance | roles | create', function (hooks) {
     await a11yAudit();
     assert.ok(find('[role="alert"]'));
     assert.ok(find('.hds-form-error__message'));
+  });
+
+  test('users cannot directly navigate to new role route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.org.authorized_collection_actions.roles =
+      instances.scopes.org.authorized_collection_actions.roles.filter(
+        (item) => item !== 'create'
+      );
+
+    await visit(urls.newRole);
+
+    assert.false(
+      instances.scopes.org.authorized_collection_actions.roles.includes(
+        'create'
+      )
+    );
+    assert.strictEqual(currentURL(), urls.roles);
   });
 });

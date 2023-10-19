@@ -11,6 +11,8 @@ export default class ScopesScopeRolesRoleRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -20,12 +22,24 @@ export default class ScopesScopeRolesRoleRoute extends Route {
    * @param {string} params.role_id
    * @return {RoleModel}
    */
-  model({ role_id }) {
+  async model({ role_id }) {
     const { id: scopeID } = this.modelFor('scopes.scope');
     return this.store.findRecord('role', role_id, {
       reload: true,
       adapterOptions: { scopeID },
     });
+  }
+
+  redirect(role, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read role', role, {
+        resource_id: role.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      this.router.transitionTo(transition.to.name, role.scopeID, role.id);
+    }
   }
 
   // =actions
