@@ -10,6 +10,8 @@ export default class ScopesScopeUsersUserRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -19,7 +21,19 @@ export default class ScopesScopeUsersUserRoute extends Route {
    * @param {string} params.user_id
    * @return {UserModel}
    */
-  model({ user_id }) {
+  async model({ user_id }) {
     return this.store.findRecord('user', user_id);
+  }
+
+  redirect(user, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read user', user, {
+        resource_id: user.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      this.router.transitionTo(transition.to.name, user.scopeID, user.id);
+    }
   }
 }

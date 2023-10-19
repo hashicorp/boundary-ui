@@ -40,4 +40,15 @@ export default class UserAbility extends ModelAbility {
     const { account, canRemoveAccounts } = this;
     return canRemoveAccounts && !account.isUnknown;
   }
+
+  /**
+   * @type {boolean}
+   */
+  get canRead() {
+    const readAbility = this.hasAuthorizedAction('read');
+    if (this.resource_id) {
+      return readAbility && this.resource_id === this.collection_id;
+    }
+    return readAbility;
+  }
 }
