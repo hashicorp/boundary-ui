@@ -55,7 +55,7 @@ export default class GeneratedHostModel extends BaseModel {
   })
   plugin;
 
-  @attr('string-array', {
+  @attr({
     emptyArrayIfMissing: true,
     readOnly: true,
   })
