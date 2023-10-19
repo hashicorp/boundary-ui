@@ -62,4 +62,22 @@ module('Acceptance | groups | read', function (hooks) {
     await visit(urls.group);
     assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
   });
+
+  test('users can navigate to group and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const orgScope = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    const group = this.server.create('group', {
+      scope: orgScope,
+    });
+    const incorrectUrl = `${urls.groups}/${group.id}/members`;
+    const correctUrl = `/scopes/${orgScope.id}/groups/${group.id}/members`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

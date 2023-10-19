@@ -10,6 +10,8 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -19,7 +21,19 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
    * @param {string} params.group_id
    * @return {groupModel}
    */
-  model({ group_id }) {
+  async model({ group_id }) {
     return this.store.findRecord('group', group_id, { reload: true });
+  }
+
+  redirect(group, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read group', group, {
+        resource_id: group.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      this.router.transitionTo(transition.to.name, group.scopeID, group.id);
+    }
   }
 }
