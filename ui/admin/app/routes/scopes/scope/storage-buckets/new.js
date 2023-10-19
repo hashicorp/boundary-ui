@@ -14,8 +14,21 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
+
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create scope', scopeModel, {
+        collection: 'storage-buckets',
+      })
+    ) {
+      this.router.transitionTo('scopes.scope.storage-buckets', scopeModel.id);
+    }
+  }
 
   /**
    * Creates a new unsaved storage bucket.

@@ -200,4 +200,21 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
     assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
+
+  test('users cannot directly navigate to new storage bucket route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.global.authorized_collection_actions['storage-buckets'] =
+      instances.scopes.global.authorized_collection_actions[
+        'storage-buckets'
+      ].filter((item) => item !== 'create');
+
+    await visit(urls.newStorageBucket);
+
+    assert.false(
+      instances.scopes.global.authorized_collection_actions[
+        'storage-buckets'
+      ].includes('create')
+    );
+    assert.strictEqual(currentURL(), urls.storageBuckets);
+  });
 });

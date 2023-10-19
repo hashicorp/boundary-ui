@@ -49,6 +49,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
     target: null,
     enableSessionRecording: null,
     storageBuckets: null,
+    storageBucket: null,
     newStorageBucket: null,
   };
 
@@ -78,13 +79,13 @@ module('Acceptance | targets | enable session recording', function (hooks) {
     storageBucketTwo = instances.storageBucket[1];
 
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
+    urls.globalScope = `/scopes/global`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.enableSessionRecording = `${urls.target}/enable-session-recording`;
-    urls.storageBuckets = `${urls.projectScope}/storage-buckets`;
+    urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
     urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
     urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
 

@@ -10,6 +10,8 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -19,7 +21,23 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
    * @param {string} params.storage_bucket_id
    * @return {StorageBucketModel}
    */
-  model({ storage_bucket_id }) {
+  async model({ storage_bucket_id }) {
     return this.store.findRecord('storage-bucket', storage_bucket_id);
+  }
+
+  redirect(storageBucket) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read storage-bucket', storageBucket, {
+        resource_id: storageBucket.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.storage-buckets.storage-bucket',
+        storageBucket.scopeID,
+        storageBucket.id
+      );
+    }
   }
 }

@@ -87,4 +87,14 @@ module('Acceptance | storage-buckets | read', function (hooks) {
 
     assert.dom(MESSAGE_SELECTOR).hasText('Error 404');
   });
+
+  test('users can navigate to storage bucket and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const incorrectUrl = `/scopes/${instances.scopes.org.id}/storage-buckets/${instances.storageBucket.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), urls.storageBucket);
+  });
 });
