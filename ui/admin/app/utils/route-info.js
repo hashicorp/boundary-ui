@@ -1,5 +1,5 @@
 export function paramValueFinder(resourceName, parentInfo) {
-  if (parentInfo.localName === resourceName) {
+  if (!parentInfo || parentInfo.localName === resourceName) {
     return [];
   }
   if (parentInfo.params) {
