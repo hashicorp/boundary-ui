@@ -5,12 +5,14 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { paramValueFinder } from 'admin/utils/route-info';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends Route {
   // =services
   @service store;
   @service session;
   @service router;
+  @service can;
 
   // =methods
 
@@ -35,5 +37,26 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
     );
 
     return sessionRecording;
+  }
+
+  redirect(sessionRecording, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read session-recording', sessionRecording, {
+        resource_id: sessionRecording.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      const paramValues = paramValueFinder(
+        'session-recording',
+        transition.to.parent
+      );
+      this.router.transitionTo(
+        transition.to.name,
+        sessionRecording.scopeID,
+        sessionRecording.id,
+        ...paramValues
+      );
+    }
   }
 }
