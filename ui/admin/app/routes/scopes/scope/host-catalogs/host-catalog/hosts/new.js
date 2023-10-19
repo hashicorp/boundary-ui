@@ -10,8 +10,23 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsNewRoute extends Rou
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
+
+  beforeModel() {
+    const hostCatalog = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog'
+    );
+    if (this.can.cannot('create model', hostCatalog, { collection: 'hosts' })) {
+      this.router.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.hosts',
+        hostCatalog.scopeID,
+        hostCatalog.id
+      );
+    }
+  }
 
   /**
    * Creates a new unsaved host in current host catalog scope.

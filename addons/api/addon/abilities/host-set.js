@@ -29,6 +29,11 @@ export default class HostSetAbility extends ModelAbility {
    * @type {boolean}
    */
   get canRead() {
-    return !this.model.isUnknown && this.hasAuthorizedAction('read');
+    const readAbility =
+      !this.model.isUnknown && this.hasAuthorizedAction('read');
+    if (this.resource_id) {
+      return readAbility && this.resource_id === this.collection_id;
+    }
+    return readAbility;
   }
 }

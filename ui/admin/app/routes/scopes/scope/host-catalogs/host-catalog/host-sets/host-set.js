@@ -6,10 +6,14 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { paramValueFinder } from 'admin/utils/route-info';
+
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -21,6 +25,27 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
    */
   async model({ host_set_id }) {
     return this.store.findRecord('host-set', host_set_id, { reload: true });
+  }
+
+  redirect(hostSet, transition) {
+    const hostCatalog = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog'
+    );
+    const { host_catalog_id } = hostSet;
+    if (
+      this.can.cannot('read host-set', hostSet, {
+        resource_id: host_catalog_id,
+        collection_id: hostCatalog.id,
+      })
+    ) {
+      let paramValues = paramValueFinder('host-set', transition.to.parent);
+      this.router.transitionTo(
+        transition.to.name,
+        host_catalog_id,
+        hostSet.id,
+        ...paramValues
+      );
+    }
   }
 
   /**

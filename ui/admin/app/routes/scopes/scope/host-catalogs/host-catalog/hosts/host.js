@@ -10,6 +10,8 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -21,5 +23,24 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
    */
   async model({ host_id }) {
     return this.store.findRecord('host', host_id, { reload: true });
+  }
+
+  redirect(host) {
+    const hostCatalog = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog'
+    );
+    const { host_catalog_id } = host;
+    if (
+      this.can.cannot('read host', host, {
+        resource_id: host_catalog_id,
+        collection_id: hostCatalog.id,
+      })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.hosts.host',
+        host_catalog_id,
+        host.id
+      );
+    }
   }
 }

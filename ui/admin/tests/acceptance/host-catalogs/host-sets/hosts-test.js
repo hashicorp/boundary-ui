@@ -278,4 +278,29 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await click('form [type="submit"]');
     assert.ok(find('[role="alert"]'));
   });
+
+  test('users can navigate to host and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: { name: 'aws' },
+    });
+    const hostSet = this.server.create('host-set', {
+      scope: instances.scopes.project,
+      hostCatalog,
+    });
+    const host = this.server.create('host', {
+      scope: instances.scopes.project,
+      hostCatalog,
+      hostSetIds: [hostSet.id],
+    });
+    const incorrectUrl = `${urls.hostCatalogs}/${hostCatalog.id}/host-sets/${instances.hostSet.id}/hosts/${host.id}`;
+    const correctUrl = `${urls.hostCatalogs}/${hostCatalog.id}/host-sets/${hostSet.id}/hosts/${host.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

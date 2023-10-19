@@ -12,8 +12,25 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
 
   @service store;
   @service router;
+  @service can;
 
   // =methods
+
+  beforeModel() {
+    const hostCatalog = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog'
+    );
+    if (
+      this.can.cannot('create model', hostCatalog, { collection: 'host-sets' })
+    ) {
+      this.router.transitionTo(
+        'scopes.scope.host-catalogs.host-catalog.host-sets',
+        hostCatalog.scopeID,
+        hostCatalog.id
+      );
+    }
+  }
+
   /**
    * Creates a new unsaved host set in current host catalog scope.
    * @return {HostSetModel}

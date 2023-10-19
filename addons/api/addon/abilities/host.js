@@ -6,13 +6,12 @@
 import ModelAbility from './model';
 
 /**
- * Provides abilities for host catalogs.
+ * Provides abilities for host sets.
  */
-export default class HostCatalogAbility extends ModelAbility {
+export default class HostAbility extends ModelAbility {
   // =permissions
 
   /**
-   * Only "known" host catalog types may be read.
    * @type {boolean}
    */
   get canRead() {
@@ -20,6 +19,9 @@ export default class HostCatalogAbility extends ModelAbility {
       !this.model.isUnknown && this.hasAuthorizedAction('read');
     if (this.resource_id) {
       return readAbility && this.resource_id === this.collection_id;
+    }
+    if (this.resource_ids) {
+      return readAbility && this.resource_ids.includes(this.collection_id);
     }
     return readAbility;
   }
