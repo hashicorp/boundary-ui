@@ -10,6 +10,8 @@ export default class ScopesScopeTargetsTargetRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -21,5 +23,17 @@ export default class ScopesScopeTargetsTargetRoute extends Route {
    */
   async model({ target_id }) {
     return this.store.findRecord('target', target_id, { reload: true });
+  }
+
+  redirect(target, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('read target', target, {
+        resource_id: target.scopeID,
+        collection_id: scope.id,
+      })
+    ) {
+      this.router.transitionTo(transition.to.name, target.scopeID, target.id);
+    }
   }
 }

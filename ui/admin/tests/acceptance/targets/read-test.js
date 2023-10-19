@@ -193,4 +193,14 @@ module('Acceptance | targets | read', function (hooks) {
       .dom(`[href="https://boundaryproject.io/help/admin-ui/targets"]`)
       .exists();
   });
+
+  test('users can navigate to target and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const incorrectUrl = `/scopes/${instances.scopes.org.id}/targets/${instances.sshTarget.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), urls.sshTarget);
+  });
 });
