@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - "releases/**"
+      - "release/**"
 
 jobs:
   dependencies:
