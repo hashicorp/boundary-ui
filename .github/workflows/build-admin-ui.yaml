@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - "releases/**"
 
 jobs:
   dependencies:
@@ -13,7 +14,7 @@ jobs:
       - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         id: node-modules-cache
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
@@ -30,7 +31,7 @@ jobs:
       - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         id: node-modules-cache
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
@@ -58,7 +59,7 @@ jobs:
       - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         id: node-modules-cache
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
@@ -81,7 +82,7 @@ jobs:
       - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         id: node-modules-cache
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
