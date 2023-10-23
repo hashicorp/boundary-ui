@@ -14,9 +14,7 @@ module.exports = {
     requireConfigFile: false,
     // This is specific babel-config. If grows consider creating a babel config file
     babelOptions: {
-      plugins: [
-        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
-      ],
+      plugins: [['@babel/plugin-proposal-decorators', { version: '2023-05' }]],
     },
     // end of babel-config
   },
