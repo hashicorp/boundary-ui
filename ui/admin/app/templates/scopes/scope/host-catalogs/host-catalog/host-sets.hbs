@@ -4,5 +4,9 @@
 }}
 
 {{page-title (t 'resources.host-set.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.host-set.title_plural'}}
+  @route='scopes.scope.host-catalogs.host-catalog.host-sets'
+/>
 
 {{outlet}}

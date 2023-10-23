@@ -4,22 +4,11 @@
  */
 
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRolesRoleAddPrincipalsController extends Controller {
   // =services
 
-  @service intl;
-
   // =attributes
-
-  /**
-   * Translated roles breadcrumb
-   * @type {string}
-   */
-  get breadCrumb() {
-    return this.intl.t('resources.role.principal.actions.add-principals');
-  }
 
   /**
    * Returns a flat array of scopes, sorted and "grouped by" parent scope,
