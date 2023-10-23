@@ -36,24 +36,36 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       reload: true,
     });
 
-    if (target.host_sources) {
-      const hostSets = await Promise.all(
-        target.host_sources.map(({ host_source_id }) =>
-          this.store.findRecord('host-set', host_source_id)
-        )
-      );
+    if (target.host_sources.length >= 1) {
+      let hostSets = [];
+      for (let i = 0; i < target.host_sources.length; i++) {
+        const { host_source_id } = target.host_sources[i];
+        try {
+          const response = await this.store.findRecord(
+            'host-set',
+            host_source_id
+          );
+          hostSets.push(response);
+        } catch (e) {
+          if (e.errors[0].isForbidden) {
+            break;
+          }
+        }
+      }
 
-      // Extract host ids from all host sets
-      const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
+      if (hostSets.length > 1) {
+        // Extract host ids from all host sets
+        const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
 
-      // Load unique hosts
-      const uniqueHostIds = new Set(hostIds);
+        // Load unique hosts
+        const uniqueHostIds = new Set(hostIds);
 
-      hosts = await Promise.all(
-        [...uniqueHostIds].map((hostId) =>
-          this.store.findRecord('host', hostId)
-        )
-      );
+        hosts = await Promise.all(
+          [...uniqueHostIds].map((hostId) =>
+            this.store.findRecord('host', hostId)
+          )
+        );
+      }
     }
 
     return { target, hosts };
@@ -63,7 +75,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     const { isConnecting } = transition.to.queryParams;
 
     if (isConnecting) {
-      if (model.target.address || model.hosts.length === 1) {
+      if (model.target.address || model.hosts.length <= 1) {
         await this.connect(model.target);
       }
     }
@@ -112,7 +124,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @action
   @loading
   async preConnect(model, toggleModal) {
-    if (model.target.address || model.hosts.length === 1) {
+    if (model.target.address || model.hosts.length <= 1) {
       await this.connect(model.target);
     } else {
       toggleModal(true);
