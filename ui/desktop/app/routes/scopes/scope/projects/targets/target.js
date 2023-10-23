@@ -38,12 +38,12 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
 
     if (target.host_sources.length >= 1) {
       let hostSets = [];
-      for (let i = 0; i < target.host_sources.length; i++) {
-        const { host_source_id } = target.host_sources[i];
+
+      for (const hostSource of target.host_sources) {
         try {
           const response = await this.store.findRecord(
             'host-set',
-            host_source_id
+            hostSource.host_source_id
           );
           hostSets.push(response);
         } catch (e) {
