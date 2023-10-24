@@ -25,17 +25,16 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsHostR
     return this.store.findRecord('host', host_id, { reload: true });
   }
 
+  /**
+   * Redirects to route with correct host-catalog id if incorrect.
+   * @param {HostModel} host
+   */
   redirect(host) {
     const hostSet = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
     );
-    if (
-      this.can.cannot('read host', host, {
-        resource_ids: host.host_set_ids,
-        collection_id: hostSet.id,
-      })
-    ) {
-      this.router.transitionTo(
+    if (host.host_set_ids !== hostSet.id) {
+      this.router.replaceWith(
         'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host',
         host.host_set_ids[0],
         host.id

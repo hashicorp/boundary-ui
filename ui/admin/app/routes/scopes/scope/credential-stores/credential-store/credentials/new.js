@@ -24,6 +24,9 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
 
   // =methods
 
+  /**
+   * Redirect to parent route when credential-store does not have create authorized action.
+   */
   beforeModel() {
     const credentialStore = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
@@ -33,10 +36,8 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
         collection: 'credentials',
       })
     ) {
-      this.router.transitionTo(
-        'scopes.scope.credential-stores.credential-store.credentials',
-        credentialStore.scopeID,
-        credentialStore.id
+      this.router.replaceWith(
+        'scopes.scope.credential-stores.credential-store.credentials'
       );
     }
   }

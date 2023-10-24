@@ -22,18 +22,18 @@ export default class ScopesScopeUsersUserRoute extends Route {
    * @return {UserModel}
    */
   async model({ user_id }) {
-    return this.store.findRecord('user', user_id);
+    return this.store.findRecord('user', user_id, { reload: true });
   }
 
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {UserModel} user
+   * @param {object} transition
+   */
   redirect(user, transition) {
     const scope = this.modelFor('scopes.scope');
-    if (
-      this.can.cannot('read user', user, {
-        resource_id: user.scopeID,
-        collection_id: scope.id,
-      })
-    ) {
-      this.router.transitionTo(transition.to.name, user.scopeID, user.id);
+    if (user.scopeID !== scope.id) {
+      this.router.replaceWith(transition.to.name, user.scopeID, user.id);
     }
   }
 }

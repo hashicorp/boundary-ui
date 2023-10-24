@@ -19,6 +19,9 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
 
   // =methods
 
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
@@ -26,7 +29,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
         collection: 'storage-buckets',
       })
     ) {
-      this.router.transitionTo('scopes.scope.storage-buckets', scopeModel.id);
+      this.router.replaceWith('scopes.scope.storage-buckets');
     }
   }
 

@@ -30,15 +30,15 @@ export default class ScopesScopeRolesRoleRoute extends Route {
     });
   }
 
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {RoleModel} role
+   * @param {object} transition
+   */
   redirect(role, transition) {
     const scope = this.modelFor('scopes.scope');
-    if (
-      this.can.cannot('read role', role, {
-        resource_id: role.scopeID,
-        collection_id: scope.id,
-      })
-    ) {
-      this.router.transitionTo(transition.to.name, role.scopeID, role.id);
+    if (role.scopeID !== scope.id) {
+      this.router.replaceWith(transition.to.name, role.scopeID, role.id);
     }
   }
 

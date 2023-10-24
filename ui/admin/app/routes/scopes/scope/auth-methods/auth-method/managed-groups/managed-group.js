@@ -28,16 +28,16 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
     });
   }
 
+  /**
+   * Redirects to route with correct auth-method id if incorrect.
+   * @param {ManagedGroupModel} managedGroup
+   * @param {object} transition
+   */
   redirect(managedGroup, transition) {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     const { auth_method_id } = managedGroup;
-    if (
-      this.can.cannot('read managed-group', managedGroup, {
-        resource_id: auth_method_id,
-        collection_id: authMethod.id,
-      })
-    ) {
-      this.router.transitionTo(
+    if (auth_method_id !== authMethod.id) {
+      this.router.replaceWith(
         transition.to.name,
         auth_method_id,
         managedGroup.id

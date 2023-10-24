@@ -25,15 +25,15 @@ export default class ScopesScopeTargetsTargetRoute extends Route {
     return this.store.findRecord('target', target_id, { reload: true });
   }
 
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {TargetModel} target
+   * @param {object} transition
+   */
   redirect(target, transition) {
     const scope = this.modelFor('scopes.scope');
-    if (
-      this.can.cannot('read target', target, {
-        resource_id: target.scopeID,
-        collection_id: scope.id,
-      })
-    ) {
-      this.router.transitionTo(transition.to.name, target.scopeID, target.id);
+    if (target.scopeID !== scope.id) {
+      this.router.replaceWith(transition.to.name, target.scopeID, target.id);
     }
   }
 }

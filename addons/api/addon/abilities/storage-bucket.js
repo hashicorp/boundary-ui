@@ -18,15 +18,7 @@ export default class StorageBucketAbility extends ModelAbility {
    * @type {boolean}
    */
   get canRead() {
-    const readAbility = !this.model.isUnknown && super.canRead;
-    if (this.resource_id) {
-      return (
-        readAbility &&
-        ('global' === this.collection_id ||
-          this.resource_id === this.collection_id)
-      );
-    }
-    return readAbility;
+    return !this.model.isUnknown && super.canRead;
   }
 
   /**

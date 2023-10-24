@@ -18,6 +18,9 @@ export default class ScopesScopeWorkersNewRoute extends Route {
 
   // =methods
 
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
@@ -25,7 +28,7 @@ export default class ScopesScopeWorkersNewRoute extends Route {
         collection: 'workers',
       })
     ) {
-      this.router.transitionTo('scopes.scope.workers', scopeModel.id);
+      this.router.replaceWith('scopes.scope.workers');
     }
   }
 

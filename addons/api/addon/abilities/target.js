@@ -53,15 +53,4 @@ export default class TargetAbility extends ModelAbility {
   get canRemoveCredentialSources() {
     return this.hasAuthorizedAction('remove-credential-sources');
   }
-
-  /**
-   * @type {boolean}
-   */
-  get canRead() {
-    const readAbility = this.hasAuthorizedAction('read');
-    if (this.resource_id) {
-      return readAbility && this.resource_id === this.collection_id;
-    }
-    return readAbility;
-  }
 }

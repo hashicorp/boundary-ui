@@ -22,18 +22,19 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
    * @return {StorageBucketModel}
    */
   async model({ storage_bucket_id }) {
-    return this.store.findRecord('storage-bucket', storage_bucket_id);
+    return this.store.findRecord('storage-bucket', storage_bucket_id, {
+      reload: true,
+    });
   }
 
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {StorageBucketModel} storageBucket
+   */
   redirect(storageBucket) {
     const scope = this.modelFor('scopes.scope');
-    if (
-      this.can.cannot('read storage-bucket', storageBucket, {
-        resource_id: storageBucket.scopeID,
-        collection_id: scope.id,
-      })
-    ) {
-      this.router.transitionTo(
+    if (storageBucket.scopeID !== scope.id) {
+      this.router.replaceWith(
         'scopes.scope.storage-buckets.storage-bucket',
         storageBucket.scopeID,
         storageBucket.id

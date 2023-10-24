@@ -25,16 +25,16 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountRoute extend
     return this.store.findRecord('account', account_id, { reload: true });
   }
 
+  /**
+   * Redirects to route with correct auth-method id if incorrect.
+   * @param {AccountModel} account
+   * @param {object} transition
+   */
   redirect(account, transition) {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     const { auth_method_id } = account;
-    if (
-      this.can.cannot('read account', account, {
-        resource_id: auth_method_id,
-        collection_id: authMethod.id,
-      })
-    ) {
-      this.router.transitionTo(transition.to.name, auth_method_id, account.id);
+    if (auth_method_id !== authMethod.id) {
+      this.router.replaceWith(transition.to.name, auth_method_id, account.id);
     }
   }
 }

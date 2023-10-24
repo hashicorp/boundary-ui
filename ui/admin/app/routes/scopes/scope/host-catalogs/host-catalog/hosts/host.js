@@ -25,18 +25,17 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
     return this.store.findRecord('host', host_id, { reload: true });
   }
 
+  /**
+   * Redirects to route with correct host-catalog id if incorrect.
+   * @param {HostModel} host
+   */
   redirect(host) {
     const hostCatalog = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog'
     );
     const { host_catalog_id } = host;
-    if (
-      this.can.cannot('read host', host, {
-        resource_id: host_catalog_id,
-        collection_id: hostCatalog.id,
-      })
-    ) {
-      this.router.transitionTo(
+    if (host_catalog_id !== hostCatalog.id) {
+      this.router.replaceWith(
         'scopes.scope.host-catalogs.host-catalog.hosts.host',
         host_catalog_id,
         host.id

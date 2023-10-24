@@ -19,22 +19,24 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
    * @return {CredentialStoreModel}
    */
   async model({ credential_store_id }) {
-    return this.store.findRecord('credential-store', credential_store_id);
+    return this.store.findRecord('credential-store', credential_store_id, {
+      reload: true,
+    });
   }
 
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {CredentialStoreModel} credentialStore
+   * @param {object} transition
+   */
   redirect(credentialStore, transition) {
     const scope = this.modelFor('scopes.scope');
-    if (
-      this.can.cannot('read credential-store', credentialStore, {
-        resource_id: credentialStore.scopeID,
-        collection_id: scope.id,
-      })
-    ) {
+    if (credentialStore.scopeID !== scope.id) {
       let paramValues = paramValueFinder(
         'credential-store',
         transition.to.parent
       );
-      this.router.transitionTo(
+      this.router.replaceWith(
         transition.to.name,
         credentialStore.scopeID,
         credentialStore.id,

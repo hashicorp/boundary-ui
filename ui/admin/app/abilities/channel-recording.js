@@ -27,11 +27,4 @@ export default class OverrideChannelRecordingAbility extends ChannelRecordingAbi
     const { session_recording } = this.model.connection_recording;
     return session_recording.isAvailable && !this.model.isAsciicast;
   }
-
-  get canRead() {
-    return (
-      (this.canPlay || this.canViewOnly) &&
-      this.resource_id === this.collection_id
-    );
-  }
 }

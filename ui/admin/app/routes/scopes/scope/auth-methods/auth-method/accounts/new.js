@@ -15,16 +15,15 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
 
   // =methods
 
+  /**
+   * Redirect to parent route when auth-method does not have create authorized action.
+   */
   beforeModel() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     if (
       this.can.cannot('create model', authMethod, { collection: 'accounts' })
     ) {
-      this.router.transitionTo(
-        'scopes.scope.auth-methods.auth-method.accounts',
-        authMethod.scopeID,
-        authMethod.id
-      );
+      this.router.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
     }
   }
 

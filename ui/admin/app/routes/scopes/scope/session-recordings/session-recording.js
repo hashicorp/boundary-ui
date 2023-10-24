@@ -39,19 +39,19 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
     return sessionRecording;
   }
 
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {SessionRecordingModel} sessionRecording
+   * @param {object} transition
+   */
   redirect(sessionRecording, transition) {
     const scope = this.modelFor('scopes.scope');
-    if (
-      this.can.cannot('read session-recording', sessionRecording, {
-        resource_id: sessionRecording.scopeID,
-        collection_id: scope.id,
-      })
-    ) {
+    if (sessionRecording.scopeID !== scope.id) {
       const paramValues = paramValueFinder(
         'session-recording',
         transition.to.parent
       );
-      this.router.transitionTo(
+      this.router.replaceWith(
         transition.to.name,
         sessionRecording.scopeID,
         sessionRecording.id,

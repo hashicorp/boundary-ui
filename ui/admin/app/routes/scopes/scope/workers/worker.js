@@ -22,18 +22,17 @@ export default class ScopesScopeWorkersWorkerRoute extends Route {
    * @return {WorkerModel}
    */
   async model({ worker_id }) {
-    return this.store.findRecord('worker', worker_id);
+    return this.store.findRecord('worker', worker_id, { reload: true });
   }
 
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {WorkerModel} worker
+   */
   redirect(worker) {
     const scope = this.modelFor('scopes.scope');
-    if (
-      this.can.cannot('read worker', worker, {
-        resource_id: worker.scopeID,
-        collection_id: scope.id,
-      })
-    ) {
-      this.router.transitionTo(
+    if (worker.scopeID !== scope.id) {
+      this.router.replaceWith(
         'scopes.scope.workers.worker',
         worker.scopeID,
         worker.id

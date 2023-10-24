@@ -20,10 +20,8 @@ export default class CredentialStoreAbility extends ModelAbility {
    * @type {boolean}
    */
   get canRead() {
-    const readAbility = this.hasAuthorizedAction('read');
-    if (this.resource_id) {
-      return readAbility && this.resource_id === this.collection_id;
-    }
-    return readAbility;
+    return this.features.isEnabled('static-credentials')
+      ? this.hasAuthorizedAction('read')
+      : !this.model.isStatic && this.hasAuthorizedAction('read');
   }
 }

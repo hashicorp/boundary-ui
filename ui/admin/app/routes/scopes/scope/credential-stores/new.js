@@ -25,6 +25,9 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
 
   // =methods
 
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
@@ -32,7 +35,7 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
         collection: 'credential-stores',
       })
     ) {
-      this.router.transitionTo('scopes.scope.credential-stores', scopeModel.id);
+      this.router.replaceWith('scopes.scope.credential-stores');
     }
   }
 

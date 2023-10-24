@@ -27,18 +27,17 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsCreden
     });
   }
 
+  /**
+   * Redirects to route with correct credential-store id if incorrect.
+   * @param {CredentialModel} credential
+   */
   redirect(credential) {
     const credentialStore = this.modelFor(
       'scopes.scope.credential-stores.credential-store'
     );
     const { credential_store_id } = credential;
-    if (
-      this.can.cannot('read credential', credential, {
-        resource_id: credential_store_id,
-        collection_id: credentialStore.id,
-      })
-    ) {
-      this.router.transitionTo(
+    if (credential_store_id !== credentialStore.id) {
+      this.router.replaceWith(
         'scopes.scope.credential-stores.credential-store.credentials.credential',
         credential_store_id,
         credential.id

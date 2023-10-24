@@ -15,6 +15,9 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsNewRoute exten
 
   // =methods
 
+  /**
+   * Redirect to parent route when auth-method does not have create authorized action.
+   */
   beforeModel() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     if (
@@ -22,10 +25,8 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsNewRoute exten
         collection: 'managed-groups',
       })
     ) {
-      this.router.transitionTo(
-        'scopes.scope.auth-methods.auth-method.managed-groups',
-        authMethod.scopeID,
-        authMethod.id
+      this.router.replaceWith(
+        'scopes.scope.auth-methods.auth-method.managed-groups'
       );
     }
   }

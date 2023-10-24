@@ -15,10 +15,13 @@ export default class ScopesScopeUsersNewRoute extends Route {
 
   // =methods
 
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (this.can.cannot('create model', scopeModel, { collection: 'users' })) {
-      this.router.transitionTo('scopes.scope.users', scopeModel.id);
+      this.router.replaceWith('scopes.scope.users');
     }
   }
 

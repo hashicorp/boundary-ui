@@ -34,17 +34,16 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
     };
   }
 
+  /**
+   * Redirects to route with correct session-recording id if incorrect.
+   * @param {channelRecording: Object, sessionRecording: Object, storageBucket: Object} model
+   */
   redirect(model) {
     const { channelRecording, sessionRecording } = model;
     const session_recording_id =
       channelRecording.connection_recording.session_recording.id;
-    if (
-      this.can.cannot('read channel-recording', channelRecording, {
-        resource_id: session_recording_id,
-        collection_id: sessionRecording.id,
-      })
-    ) {
-      this.router.transitionTo(
+    if (session_recording_id !== sessionRecording.id) {
+      this.router.replaceWith(
         'scopes.scope.session-recordings.session-recording.channels-by-connection.channel',
         session_recording_id,
         channelRecording.id

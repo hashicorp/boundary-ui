@@ -24,6 +24,9 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
 
   // =methods
 
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
@@ -31,7 +34,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
         collection: 'host-catalogs',
       })
     ) {
-      this.router.transitionTo('scopes.scope.host-catalogs', scopeModel.id);
+      this.router.replaceWith('scopes.scope.host-catalogs');
     }
   }
 
