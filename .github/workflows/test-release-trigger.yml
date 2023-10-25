@@ -38,5 +38,8 @@ jobs:
           gh workflow run test-release.yml \
           --repo hashicorp/boundary-ui-releases \
           --ref labWeek/update-release-workflow \
-          -f TAG="${{ inputs.branch }}", PRODUCT_VERSION="${{ inputs.product_version }}", CHANNEL="${{ inputs.channel }}", COMMIT="${{ inputs.commit }}"
+          -f TAG="${{ inputs.branch }}" \
+          -f PRODUCT_VERSION="${{ inputs.product_version }}" \
+          -f CHANNEL="${{ inputs.channel }}" \
+          -f COMMIT="${{ inputs.commit }}" \
 
