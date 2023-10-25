@@ -169,14 +169,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       if (credentials) {
         credentials.forEach((cred) => session.addCredential(cred));
       }
-      if (session.host_id) {
-        const host = await this.store.findRecord('host', session.host_id);
-        session.addHost(host);
-      }
 
       await this.router.transitionTo(
         'scopes.scope.projects.sessions.session',
-        session
+        session_id
       );
     } catch (e) {
       this.isConnectionError = true;
