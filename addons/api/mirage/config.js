@@ -435,6 +435,7 @@ function routes() {
   this.post('/host-sets', function ({ hostCatalogs, hostSets }) {
     const attrs = this.normalizedRequestAttrs();
     const hostCatalog = hostCatalogs.find(attrs.hostCatalogId);
+    //this needs to be attached while creating a plugin type host set to mimic API
     if (hostCatalog.plugin) {
       attrs.type = 'plugin';
       attrs.plugin = {
