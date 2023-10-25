@@ -18,8 +18,8 @@ jobs:
       - name: Trigger Release workflow in boundary-ui-releases
         run: |
           export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
-          gh workflow run release.yml \
+          gh workflow run test-release.yml \
           --repo hashicorp/boundary-ui-releases \
-          --ref main \
+          --ref labWeek/update-release-workflow \
           -f TAG="${{ github.event.inputs.branch }}"
 
