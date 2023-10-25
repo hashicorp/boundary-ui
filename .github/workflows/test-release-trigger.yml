@@ -6,6 +6,23 @@ on:
       branch:
         description: Please use tag-like format n.n.n-someword (1.111.11-beta)
         required: true
+      product_version:
+        required: true
+        type: string
+        description: The version number belonging to the oss binary to be used
+      channel:
+        required: true
+        type: choice
+        description: The Artifactory repo from which to download the release assets
+        default: staging
+        options:
+          - dev
+          - stable
+          - staging
+      commit:
+        required: true
+        type: string
+        description: The git SHA of the oss artifacts to be used
 
 jobs:
   trigger-gha-release:
@@ -21,5 +38,5 @@ jobs:
           gh workflow run test-release.yml \
           --repo hashicorp/boundary-ui-releases \
           --ref labWeek/update-release-workflow \
-          -f TAG="${{ github.event.inputs.branch }}"
+          -f TAG="${{ inputs.branch }}", PRODUCT_VERSION="${{ inputs.product_version }}", CHANNEL="${{ inputs.channel }}", COMMIT="${{ inputs.commit }}"
 
