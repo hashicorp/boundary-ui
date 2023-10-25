@@ -24,6 +24,56 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   // =methods
 
   /**
+   * Given an array of hostSources returns an array of host sets
+   * @param {array} hostSources
+   * @returns {[HostSetModel]} hostSets
+   */
+  async getTargetHostSets(hostSources) {
+    let hostSets = [];
+
+    for (const hostSource of hostSources) {
+      const { host_source_id } = hostSource;
+      try {
+        const hostSet = await this.store.findRecord('host-set', host_source_id);
+        hostSets.push(hostSet);
+      } catch (e) {
+        // IF error is a lack of permissions, stop fetching host-sets.
+        if (e.errors[0].isForbidden) {
+          break;
+        }
+      }
+    }
+    return hostSets;
+  }
+
+  /**
+   * Given an array of hostSets returns an array of all the hosts within the
+   * host-set
+   * @param {array} hostSets
+   * @returns {[HostModel]} hosts
+   */
+  async getHostsFromHostSets(hostSets) {
+    const hosts = [];
+
+    if (hostSets.length > 1) {
+      const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
+
+      for (const hostId of hostIds) {
+        try {
+          const host = await this.store.findRecord('host', hostId);
+          hosts.push(host);
+        } catch (e) {
+          // IF error is a lack of permissions, stop fetching hosts.
+          if (e.errors[0].isForbidden) {
+            break;
+          }
+        }
+      }
+    }
+    return hosts;
+  }
+
+  /**
    * Load a target
    * @param {object} params
    * @param {string} params.target_id
@@ -37,35 +87,8 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     });
 
     if (target.host_sources.length >= 1) {
-      let hostSets = [];
-
-      for (const hostSource of target.host_sources) {
-        try {
-          const response = await this.store.findRecord(
-            'host-set',
-            hostSource.host_source_id
-          );
-          hostSets.push(response);
-        } catch (e) {
-          if (e.errors[0].isForbidden) {
-            break;
-          }
-        }
-      }
-
-      if (hostSets.length > 1) {
-        // Extract host ids from all host sets
-        const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
-
-        // Load unique hosts
-        const uniqueHostIds = new Set(hostIds);
-
-        hosts = await Promise.all(
-          [...uniqueHostIds].map((hostId) =>
-            this.store.findRecord('host', hostId)
-          )
-        );
-      }
+      const hostSets = await this.getTargetHostSets(target.host_sources);
+      hosts = await this.getHostsFromHostSets(hostSets);
     }
 
     return { target, hosts };
