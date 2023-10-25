@@ -69,15 +69,14 @@
     </F.HelperText>
   </InfoField>
 
-  <Form::Field::ListWrapper
+  <Form::Field::ListWrapper::TextInput
     @layout='horizontal'
     @isOptional={{true}}
     @name='preferred_endpoints'
     @options={{@model.preferred_endpoints}}
-    @addRow={{fn @addRow 'preferred_endpoints'}}
+    @addOption={{fn @addOption 'preferred_endpoints'}}
     @removeOptionByIndex={{fn @removeOptionByIndex 'preferred_endpoints'}}
     @disabled={{form.disabled}}
-    @hasSingleTextInputField={{true}}
     as |M|
   >
     <M.Legend>
@@ -96,7 +95,7 @@
         {{/each}}
       </M.Error>
     {{/if}}
-  </Form::Field::ListWrapper>
+  </Form::Field::ListWrapper::TextInput>
 
   <Hds::Form::Textarea::Field
     @value={{@model.filter_string}}

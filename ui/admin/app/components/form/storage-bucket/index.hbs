@@ -366,7 +366,7 @@
       {{/if}}
     </Hds::Form::TextInput::Field>
 
-    <Form::Field::ListWrapper
+    <Form::Field::ListWrapper::KeyValue
       @layout='horizontal'
       @isOptional={{true}}
       @name='role_tags'
@@ -374,7 +374,6 @@
       @addOption={{fn this.addOption 'role_tags'}}
       @removeOptionByIndex={{fn this.removeOptionByIndex 'role_tags'}}
       @disabled={{form.disabled}}
-      @hasKeyValuePair={{true}}
       as |M|
     >
       <M.Legend>
@@ -390,7 +389,7 @@
           {{/each}}
         </M.Error>
       {{/if}}
-    </Form::Field::ListWrapper>
+    </Form::Field::ListWrapper::KeyValue>
   {{/if}}
 
   <Hds::Form::TextInput::Field

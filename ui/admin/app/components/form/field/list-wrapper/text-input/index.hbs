@@ -1,0 +1,65 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Hds::Form::Fieldset
+  @layout={{@layout}}
+  @isRequired={{@isRequired}}
+  @isOptional={{@isOptional}}
+  name={{@name}}
+  as |F|
+>
+
+  {{yield F}}
+
+  <F.Control>
+
+    {{#each @options as |option index|}}
+
+      <Hds::SegmentedGroup class='list-wrapper-input' as |S|>
+        <S.TextInput
+          @value={{option.value}}
+          @type='text'
+          disabled={{@disabled}}
+          aria-describedby={{F.ariaDescribedBy}}
+          {{on 'input' (set-from-event option 'value')}}
+        />
+
+        {{#if @removeOptionByIndex}}
+          <S.Button
+            data-test-remove-button
+            @text={{t 'actions.remove'}}
+            @color='critical'
+            @icon='trash'
+            @isIconOnly={{true}}
+            disabled={{@disabled}}
+            {{on 'click' (fn @removeOptionByIndex index)}}
+          />
+        {{/if}}
+      </Hds::SegmentedGroup>
+
+    {{/each}}
+
+    <Hds::SegmentedGroup class='list-wrapper-input' as |S|>
+      <S.TextInput
+        @value={{this.newOptionValue}}
+        @type='text'
+        disabled={{@disabled}}
+        aria-describedby={{F.ariaDescribedBy}}
+        aria-label={{@name}}
+        {{on 'input' (set-from-event this 'newOptionValue')}}
+      />
+
+      <S.Button
+        @text={{t 'actions.add'}}
+        @color='secondary'
+        type='button'
+        disabled={{or @disabled (not this.newOptionValue)}}
+        {{on 'click' this.addOption}}
+      />
+    </Hds::SegmentedGroup>
+
+  </F.Control>
+
+</Hds::Form::Fieldset>

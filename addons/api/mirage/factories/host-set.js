@@ -27,10 +27,11 @@ export default factory.extend({
   },
   preferred_endpoints() {
     if (this.type === 'plugin') {
+      const enpointsAmount = faker.number.int({ min: 1, max: 5 });
       let result = [];
-
-      result.push(faker.internet.ip());
-
+      for (let i = 0; i < enpointsAmount; ++i) {
+        result.push(faker.internet.ip());
+      }
       return result;
     }
   },
@@ -43,10 +44,11 @@ export default factory.extend({
   attributes() {
     // AWS specific
     if (this.plugin?.name === 'aws') {
+      const filtersAmount = faker.number.int({ min: 1, max: 5 });
       let filters = [];
-
-      filters.push(`${faker.word.words(1)}=${faker.word.words(1)}`);
-
+      for (let i = 0; i < filtersAmount; ++i) {
+        filters.push(`${faker.word.words(1)}=${faker.word.words(1)}`);
+      }
       return {
         filters,
       };

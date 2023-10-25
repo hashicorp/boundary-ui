@@ -69,15 +69,14 @@
     </F.HelperText>
   </InfoField>
 
-  <Form::Field::ListWrapper
+  <Form::Field::ListWrapper::TextInput
     @layout='horizontal'
     @isOptional={{true}}
     @name='preferred_endpoints'
     @options={{@model.preferred_endpoints}}
-    @addRow={{fn @addRow 'preferred_endpoints'}}
+    @addOption={{fn @addOption 'preferred_endpoints'}}
     @removeOptionByIndex={{fn @removeOptionByIndex 'preferred_endpoints'}}
     @disabled={{form.disabled}}
-    @hasSingleTextInputField={{true}}
     as |M|
   >
     <M.Legend>
@@ -96,17 +95,15 @@
         {{/each}}
       </M.Error>
     {{/if}}
-  </Form::Field::ListWrapper>
+  </Form::Field::ListWrapper::TextInput>
 
-  <Form::Field::ListWrapper
+  <Form::Field::ListWrapper::TextInput
     @layout='horizontal'
-    @isOptional={{true}}
     @name='filters'
     @options={{@model.filters}}
-    @addRow={{fn @addRow 'filters'}}
+    @addOption={{fn @addOption 'filters'}}
     @removeOptionByIndex={{fn @removeOptionByIndex 'filters'}}
     @disabled={{form.disabled}}
-    @hasSingleTextInputField={{true}}
     as |M|
   >
     <M.Legend>
@@ -114,6 +111,7 @@
     </M.Legend>
     <M.HelperText>
       {{t 'resources.host-set.form.filter.aws.help'}}
+
     </M.HelperText>
     {{#if @model.errors.filters}}
       <M.Error as |E|>
@@ -122,7 +120,7 @@
         {{/each}}
       </M.Error>
     {{/if}}
-  </Form::Field::ListWrapper>
+  </Form::Field::ListWrapper::TextInput>
 
   <form.input
     @name='sync_interval_seconds'

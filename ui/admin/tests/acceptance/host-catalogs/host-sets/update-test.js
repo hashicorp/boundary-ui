@@ -26,6 +26,20 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR =
+    '[name="preferred_endpoints"] input';
+  const PREFERRED_ENDPOINT_BUTTON_SELECTOR =
+    '[name="preferred_endpoints"] button';
+  const PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR =
+    '[name="preferred_endpoints"] [data-test-remove-button]';
+  const FILTER_TEXT_INPUT_SELECTOR = '[name="filters"] input';
+  const FILTER_BUTTON_SELECTOR = '[name="filters"] button';
+  const FILTER_REMOVE_BUTTON_SELECTOR =
+    '[name="filters"] [data-test-remove-button]';
+  const SYNC_INTERVAL_SELECTOR = '[name="sync_interval_seconds"]';
+  const SUBMIT_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
+  const AZURE_FILTER_SELECTOR = '[name="filter"]';
+  const EDIT_BUTTON_SELECTOR = 'form .rose-form-actions [type="button"]';
   const instances = {
     scopes: {
       global: null,
@@ -135,7 +149,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       );
     });
     await visit(urls.newHostSet);
-    await click('[type="submit"]');
+    await click(SUBMIT_BTN_SELECTOR);
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'The request was invalid.'
@@ -150,9 +164,9 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     assert.expect(3);
     assert.notEqual(instances.hostSet.name, 'random string');
     await visit(urls.hostSet);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
+    await click(SUBMIT_BTN_SELECTOR);
     assert.strictEqual(currentURL(), urls.hostSet);
     assert.strictEqual(
       this.server.schema.hostSets.first().name,
@@ -165,45 +179,42 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
 
     await visit(urls.awshostSet);
 
-    await click(
-      'form .rose-form-actions [type="button"]',
-      'Activate edit mode'
-    );
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
 
     const name = 'aws host set';
     await fillIn('[name="name"]', name);
 
-    await Promise.all(
-      findAll('[name="preferred_endpoints"] [data-test="remove-button"]').map(
-        (element) => click(element)
-      )
+    const endpointList = await Promise.all(
+      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR)
     );
+
+    for (const element of endpointList) {
+      await click(element);
+    }
+
     assert.strictEqual(
-      findAll('[name="preferred_endpoints"] [data-test="remove-button"]')
-        .length,
+      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR).length,
       0
     );
 
-    await fillIn('[name="preferred_endpoints"] input', 'sample endpoint');
-    await click('[name="preferred_endpoints"] button');
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'sample endpoint');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
 
     // Remove all the filters
-    await Promise.all(
-      findAll('[name="filters"] [data-test="remove-button"]').map((element) =>
-        click(element)
-      )
+    const filterList = await Promise.all(
+      findAll(FILTER_REMOVE_BUTTON_SELECTOR)
     );
+    for (const element of filterList) {
+      await click(element);
+    }
 
-    assert.strictEqual(
-      findAll('[name="filters"] [data-test="remove-button"]').length,
-      0
-    );
-    await fillIn('[name="filters"] input', 'sample filters');
-    await click('[name="filters"] button');
+    assert.strictEqual(findAll(FILTER_REMOVE_BUTTON_SELECTOR).length, 0);
+    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'sample filters');
+    await click(FILTER_BUTTON_SELECTOR);
 
-    await fillIn('[name="sync_interval_seconds"]', 10);
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
 
-    await click('.rose-form-actions [type="submit"]');
+    await click(SUBMIT_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.awshostSet);
     const hostSet = this.server.schema.hostSets.findBy({ name });
@@ -218,30 +229,30 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
 
     await visit(urls.azureHostSet);
 
-    await click(
-      'form .rose-form-actions [type="button"]',
-      'Activate edit mode'
-    );
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
 
     const name = 'azure host set';
     await fillIn('[name="name"]', name);
     // Remove all the preferred endpoints
-    await Promise.all(
-      findAll('[name="preferred_endpoints"] [data-test="remove-button"]').map(
-        (element) => click(element)
-      )
+
+    const endpointList = await Promise.all(
+      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR)
     );
+
+    for (const element of endpointList) {
+      await click(element);
+    }
+
     assert.strictEqual(
-      findAll('[name="preferred_endpoints"] [data-test="remove-button"]')
-        .length,
+      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR).length,
       0
     );
-    await fillIn('[name="preferred_endpoints"] input', 'sample endpoints');
-    await click('[name="preferred_endpoints"] button');
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'sample endpoints');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
 
-    await fillIn('[name="filter"]', 'filter');
-    await fillIn('[name="sync_interval_seconds"]', 10);
-    await click('.rose-form-actions [type="submit"]');
+    await fillIn(AZURE_FILTER_SELECTOR, 'filter');
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
+    await click(SUBMIT_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.azureHostSet);
     const hostSet = this.server.schema.hostSets.findBy({ name });
@@ -262,7 +273,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   test('can cancel changes to existing host-set', async function (assert) {
     assert.expect(2);
     await visit(urls.hostSet);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(instances.hostSet.name, 'random string');
@@ -291,9 +302,9 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       );
     });
     await visit(urls.hostSet);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+    await click(SUBMIT_BTN_SELECTOR);
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'The request was invalid.'
@@ -310,7 +321,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     confirmService.enabled = true;
     assert.notEqual(instances.hostSet.name, 'random string');
     await visit(urls.hostSet);
-    await click('form [type="button"]', 'Activate edit mode');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.hostSet);
     try {

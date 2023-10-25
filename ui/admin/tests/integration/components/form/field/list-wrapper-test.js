@@ -15,13 +15,13 @@ module('Integration | Component | list-wrapper', function (hooks) {
 
   test('it renders fields', async function (assert) {
     await render(hbs`
-        <Form::Field::ListWrapper  @hasKeyValuePair={{true}} as |M|>
+    <Form::Field::ListWrapper::KeyValue as |M|>
           <M.Legend>Label</M.Legend>
           <M.HelperText>Help</M.HelperText>
           <M.Error as |E|>
             <E.Message>Error!</E.Message>
           </M.Error>
-        </Form::Field::ListWrapper>
+        </Form::Field::ListWrapper::KeyValue>
     `);
 
     assert.dom('tbody tr').exists({ count: 1 });
@@ -37,11 +37,9 @@ module('Integration | Component | list-wrapper', function (hooks) {
       { key: 'three', value: 'four' },
     ];
 
-    // Template block usage:
     await render(hbs`
-        <Form::Field::ListWrapper
+        <Form::Field::ListWrapper::KeyValue
             @options={{this.options}}
-            @hasKeyValuePair={{true}}
         />
     `);
 
@@ -50,15 +48,18 @@ module('Integration | Component | list-wrapper', function (hooks) {
 
   test('it renders multiple options with a single text field', async function (assert) {
     this.options = [{ value: 'one' }, { value: 'three' }];
+    this.fn = () => {};
 
-    // Template block usage:
     await render(hbs`
-        <Form::Field::ListWrapper
+        <Form::Field::ListWrapper::TextInput
             @options={{this.options}}
-            @hasSingleTextInputField={{true}}
+            @removeOptionByIndex={{this.fn}}
         />
     `);
-    assert.dom('tbody tr:first-child td').exists({ count: 2 });
-    assert.dom('tbody tr').exists({ count: 3 });
+
+    assert
+      .dom('.list-wrapper-input [data-test-remove-button]')
+      .exists({ count: 2 });
+    assert.dom('.list-wrapper-input').exists({ count: 3 });
   });
 });

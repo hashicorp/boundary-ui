@@ -19,7 +19,7 @@ export default class FormHostSetComponent extends Component {
    * @param value {string}
    */
   @action
-  addRow(field, { value }) {
+  addOption(field, { value }) {
     const existingArray = this.args.model[field] ?? [];
     const newArray = [...existingArray, { value }];
     set(this.args.model, field, newArray);
