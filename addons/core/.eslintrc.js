@@ -9,12 +9,14 @@ module.exports = {
   root: true,
   parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module',
     // This is specific babel-config. If grows consider creating a babel config file
     requireConfigFile: false,
     babelOptions: {
-      plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
+      ],
     },
     // end of babel-config
   },
