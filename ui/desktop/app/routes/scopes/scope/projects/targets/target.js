@@ -55,7 +55,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   async getHostsFromHostSets(hostSets) {
     const hosts = [];
 
-    if (hostSets.length > 1) {
+    if (hostSets) {
       const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
 
       for (const hostId of hostIds) {
