@@ -138,7 +138,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @action
   @loading
   async preConnect(model, toggleModal) {
-    if (model.target.address || model.hosts.length <= 1) {
+    if (model.hosts.length <= 1) {
       await this.connect(model.target);
     } else {
       toggleModal(true);
