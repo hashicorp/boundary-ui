@@ -36,7 +36,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         return await this.store.findRecord('host-set', host_source_id);
       })
     ).catch(() => {
-      // no op with err
+      // no op with error
     });
     return hostSets;
   }
@@ -48,22 +48,18 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
    * @returns {[HostModel]} hosts
    */
   async getHostsFromHostSets(hostSets) {
-    const hosts = [];
+    let hosts = [];
 
     if (hostSets) {
       const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
 
-      for (const hostId of hostIds) {
-        try {
-          const host = await this.store.findRecord('host', hostId);
-          hosts.push(host);
-        } catch (e) {
-          // IF error is a lack of permissions, stop fetching hosts.
-          if (e.errors[0].isForbidden) {
-            break;
-          }
-        }
-      }
+      hosts = Promise.all(
+        hostIds.map(async (hostId) => {
+          return await this.store.findRecord('host', hostId);
+        })
+      ).catch(() => {
+        // no op with error
+      });
     }
     return hosts;
   }
