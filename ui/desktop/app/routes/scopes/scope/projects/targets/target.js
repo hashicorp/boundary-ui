@@ -31,18 +31,13 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   async getTargetHostSets(hostSources) {
     let hostSets = [];
 
-    for (const hostSource of hostSources) {
-      const { host_source_id } = hostSource;
-      try {
-        const hostSet = await this.store.findRecord('host-set', host_source_id);
-        hostSets.push(hostSet);
-      } catch (e) {
-        // IF error is a lack of permissions, stop fetching host-sets.
-        if (e.errors[0].isForbidden) {
-          break;
-        }
-      }
-    }
+    hostSets = Promise.all(
+      hostSources.map(async ({ host_source_id }) => {
+        return await this.store.findRecord('host-set', host_source_id);
+      })
+    ).catch(() => {
+      // no op with err
+    });
     return hostSets;
   }
 
