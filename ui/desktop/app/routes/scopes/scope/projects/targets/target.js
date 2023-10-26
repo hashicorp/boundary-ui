@@ -89,7 +89,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     const { isConnecting } = transition.to.queryParams;
 
     if (isConnecting) {
-      if (model.target.address || model.hosts.length <= 1) {
+      if (model.hosts.length <= 1) {
         await this.connect(model.target);
       }
     }
