@@ -19,8 +19,8 @@ export default class MappingListTextInputComponent extends Component {
   // =actions
 
   /**
-   * If a new input is entered and an addRow method was specified,
-   * calls addRow with the new input.  Resets previous value.
+   * If a new input is entered and an addOption method was specified,
+   * calls addOption with the new input.  Resets previous value.
    */
 
   @action
