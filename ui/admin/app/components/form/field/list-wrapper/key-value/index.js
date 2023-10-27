@@ -30,7 +30,7 @@ export default class MappingListComponent extends Component {
   @action
   addOption() {
     assert(
-      '[boundary-admin-list-wrapper-field] `@addOption` is required.',
+      '[boundary-admin-list-wrapper] `@addOption` is required.',
       this.args.addOption
     );
 

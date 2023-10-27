@@ -3,63 +3,64 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Hds::Form::Fieldset
-  @layout={{@layout}}
-  @isRequired={{@isRequired}}
-  @isOptional={{@isOptional}}
-  name={{@name}}
-  as |F|
->
+{{#let (unique-id) as |valueHeaderID|}}
 
-  {{yield F}}
+  <Hds::Table class='list-wrapper-field' name={{@name}}>
 
-  <F.Control>
+    <:body as |B|>
 
-    {{#each @options as |option index|}}
+      {{#each @options as |option index|}}
+        <B.Tr>
+          <B.Td>
+            <Hds::Form::TextInput::Field
+              @value={{option.value}}
+              @type='text'
+              disabled={{@disabled}}
+              aria-labelledby={{valueHeaderID}}
+              {{on 'input' (set-from-event option 'value')}}
+            />
+          </B.Td>
 
-      <Hds::SegmentedGroup class='list-wrapper-input' as |S|>
-        <S.TextInput
-          @value={{option.value}}
-          @type='text'
-          disabled={{@disabled}}
-          aria-describedby={{F.ariaDescribedBy}}
-          {{on 'input' (set-from-event option 'value')}}
-        />
+          <B.Td>
+            {{#if @removeOptionByIndex}}
+              <Hds::Button
+                data-test-remove-button
+                @text={{t 'actions.remove'}}
+                @color='critical'
+                @icon='trash'
+                @isIconOnly={{true}}
+                disabled={{@disabled}}
+                {{on 'click' (fn @removeOptionByIndex index)}}
+              />
+            {{/if}}
+          </B.Td>
+        </B.Tr>
+      {{/each}}
 
-        {{#if @removeOptionByIndex}}
-          <S.Button
-            data-test-remove-button
-            @text={{t 'actions.remove'}}
-            @color='critical'
-            @icon='trash'
-            @isIconOnly={{true}}
+      <B.Tr>
+
+        <B.Td>
+          <Hds::Form::TextInput::Field
+            @value={{this.newOptionValue}}
+            @type='text'
             disabled={{@disabled}}
-            {{on 'click' (fn @removeOptionByIndex index)}}
+            aria-labelledby={{valueHeaderID}}
+            {{on 'input' (set-from-event this 'newOptionValue')}}
           />
-        {{/if}}
-      </Hds::SegmentedGroup>
+        </B.Td>
 
-    {{/each}}
+        <B.Td>
+          <Hds::Button
+            @text={{t 'actions.add'}}
+            @color='secondary'
+            type='button'
+            disabled={{or @disabled (not this.newOptionValue)}}
+            {{on 'click' this.addOption}}
+          />
+        </B.Td>
+      </B.Tr>
 
-    <Hds::SegmentedGroup class='list-wrapper-input' as |S|>
-      <S.TextInput
-        @value={{this.newOptionValue}}
-        @type='text'
-        disabled={{@disabled}}
-        aria-describedby={{F.ariaDescribedBy}}
-        aria-label={{@name}}
-        {{on 'input' (set-from-event this 'newOptionValue')}}
-      />
+    </:body>
+  </Hds::Table>
 
-      <S.Button
-        @text={{t 'actions.add'}}
-        @color='secondary'
-        type='button'
-        disabled={{or @disabled (not this.newOptionValue)}}
-        {{on 'click' this.addOption}}
-      />
-    </Hds::SegmentedGroup>
-
-  </F.Control>
-
-</Hds::Form::Fieldset>
+{{/let}}

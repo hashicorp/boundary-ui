@@ -2,11 +2,31 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
 }}
-<div ...attributes>
-  {{yield
-    (hash
-      KeyValue=(component 'list-wrapper/key-value')
-      TextInput=(component 'list-wrapper/text-input')
-    )
-  }}
-</div>
+
+<Hds::Form::Fieldset
+  @layout={{@layout}}
+  @isRequired={{@isRequired}}
+  @isOptional={{@isOptional}}
+  as |F|
+>
+  <F.Legend>{{@label}}</F.Legend>
+  <F.HelperText>{{@helper}}</F.HelperText>
+
+  <F.Control>
+    {{yield
+      (hash
+        KeyValue=(component 'form/field/list-wrapper/key-value')
+        TextInput=(component 'form/field/list-wrapper/text-input')
+      )
+      to='field'
+    }}
+  </F.Control>
+
+  {{#if @error}}
+    <F.Error as |E|>
+      {{#each @error as |error|}}
+        <E.Message>{{error.message}}</E.Message>
+      {{/each}}
+    </F.Error>
+  {{/if}}
+</Hds::Form::Fieldset>

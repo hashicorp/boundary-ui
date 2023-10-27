@@ -69,33 +69,23 @@
     </F.HelperText>
   </InfoField>
 
-  <Form::Field::ListWrapper::TextInput
+  <Form::Field::ListWrapper
     @layout='horizontal'
     @isOptional={{true}}
-    @name='preferred_endpoints'
-    @options={{@model.preferred_endpoints}}
-    @addOption={{fn @addOption 'preferred_endpoints'}}
-    @removeOptionByIndex={{fn @removeOptionByIndex 'preferred_endpoints'}}
-    @disabled={{form.disabled}}
-    as |M|
+    @label={{t 'resources.host-set.form.preferred_endpoints.label'}}
+    @helper={{t 'resources.host-set.form.preferred_endpoints.help'}}
+    @error={{@model.errors.preferred_endpoints}}
   >
-    <M.Legend>
-      {{t 'resources.host-set.form.preferred_endpoints.label'}}
-    </M.Legend>
-    <M.HelperText>
-      {{t 'resources.host-set.form.preferred_endpoints.help'}}
-      <Hds::Link::Inline @href={{doc-url 'host-set.preferred-endpoints'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </M.HelperText>
-    {{#if @model.errors.preferred_endpoints}}
-      <M.Error as |E|>
-        {{#each @model.errors.preferred_endpoints as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </M.Error>
-    {{/if}}
-  </Form::Field::ListWrapper::TextInput>
+    <:field as |F|>
+      <F.TextInput
+        @name='preferred_endpoints'
+        @options={{@model.preferred_endpoints}}
+        @addOption={{fn @addOption 'preferred_endpoints'}}
+        @removeOptionByIndex={{fn @removeOptionByIndex 'preferred_endpoints'}}
+        @disabled={{form.disabled}}
+      />
+    </:field>
+  </Form::Field::ListWrapper>
 
   <Hds::Form::Textarea::Field
     @value={{@model.filter_string}}

@@ -14,19 +14,24 @@ module('Integration | Component | list-wrapper', function (hooks) {
   setupIntl(hooks);
 
   test('it renders fields', async function (assert) {
+    this.error = [
+      {
+        message: 'Error!',
+      },
+    ];
     await render(hbs`
-    <Form::Field::ListWrapper::KeyValue as |M|>
-          <M.Legend>Label</M.Legend>
-          <M.HelperText>Help</M.HelperText>
-          <M.Error as |E|>
-            <E.Message>Error!</E.Message>
-          </M.Error>
-        </Form::Field::ListWrapper::KeyValue>
+    <Form::Field::ListWrapper @label='Label' @helper='Help' @error={{this.error}}>
+      <:field as |F|>
+        <F.KeyValue>
+        </F.KeyValue>
+        </:field>
+    </Form::Field::ListWrapper>
     `);
 
     assert.dom('tbody tr').exists({ count: 1 });
     assert.dom('legend').exists().hasText('Label');
     assert.dom('.hds-form-helper-text').exists().hasText('Help');
+
     assert.dom('.hds-form-error__message').exists().hasText('Error!');
     assert.dom('button').exists().hasText('Add');
   });
@@ -38,9 +43,13 @@ module('Integration | Component | list-wrapper', function (hooks) {
     ];
 
     await render(hbs`
-        <Form::Field::ListWrapper::KeyValue
-            @options={{this.options}}
-        />
+        <Form::Field::ListWrapper>
+          <:field as |F|>
+            <F.KeyValue  @options={{this.options}}></F.KeyValue>
+          </:field>
+
+           
+        </Form::Field::ListWrapper>
     `);
 
     assert.dom('tbody tr').exists({ count: 3 });
@@ -51,15 +60,21 @@ module('Integration | Component | list-wrapper', function (hooks) {
     this.fn = () => {};
 
     await render(hbs`
-        <Form::Field::ListWrapper::TextInput
-            @options={{this.options}}
-            @removeOptionByIndex={{this.fn}}
-        />
+    
+    <Form::Field::ListWrapper>
+      <:field as |F|>
+        <F.TextInput 
+          @options={{this.options}}  
+          @removeOptionByIndex={{this.fn}}>
+        </F.TextInput>
+        </:field>
+    </Form::Field::ListWrapper>
     `);
 
     assert
-      .dom('.list-wrapper-input [data-test-remove-button]')
+      .dom('.list-wrapper-field [data-test-remove-button]')
       .exists({ count: 2 });
-    assert.dom('.list-wrapper-input').exists({ count: 3 });
+
+    assert.dom('tbody tr').exists({ count: 3 });
   });
 });

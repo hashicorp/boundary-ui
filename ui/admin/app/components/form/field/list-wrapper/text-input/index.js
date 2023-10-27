@@ -26,7 +26,7 @@ export default class MappingListTextInputComponent extends Component {
   @action
   addOption() {
     assert(
-      '[boundary-admin-list-of-text-field] `@addOption` is required.',
+      '[boundary-admin-list-wrapper] `@addOption` is required.',
       this.args.addOption
     );
 
