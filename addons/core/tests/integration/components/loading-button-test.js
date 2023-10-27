@@ -18,7 +18,7 @@ module('Integration | Component | loading-button', function (hooks) {
   test('it executes a function on refresh button click', async function (assert) {
     assert.expect(2);
     this.onClick = () => assert.ok(true, 'refresh was clicked');
-    await render(hbs`<LoadingButton @onClick={{this.onClick}}/>`);
+    await render(hbs`<LoadingButton @onClick={{this.onClick}} />`);
     assert.ok(find('.loading-button'));
     await click('button');
   });

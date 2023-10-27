@@ -29,15 +29,16 @@ module('Integration | Component | form | authenticate', function (hooks) {
     this.submit = () => {};
     this.disabled = () => {};
 
-    await render(hbs`<Form::Authenticate   
-    @model={{this.model}}
-    @submit={{this.submit}}
-    @disabled={{this.disabled}}/>`);
+    await render(hbs`<Form::Authenticate
+  @model={{this.model}}
+  @onSubmit={{this.submit}}
+  @disabled={{this.disabled}}
+/>`);
     assert.ok(find('.full-width'));
     assert.ok(find('.hds-form-text-input'));
     assert.strictEqual(
       find('button[type="submit"]').textContent.trim(),
-      'Sign In'
+      'Sign In',
     );
   });
 
@@ -52,15 +53,16 @@ module('Integration | Component | form | authenticate', function (hooks) {
     this.submit = () => {};
     this.disabled = () => {};
 
-    await render(hbs`<Form::Authenticate   
-    @model={{this.model}}
-    @submit={{this.submit}}
-    @disabled={{this.disabled}}/>`);
+    await render(hbs`<Form::Authenticate
+  @model={{this.model}}
+  @onSubmit={{this.submit}}
+  @disabled={{this.disabled}}
+/>`);
     assert.ok(find('.full-width'));
     assert.ok(find('.hds-form-text-input'));
     assert.strictEqual(
       find('button[type="submit"]').textContent.trim(),
-      'Sign In'
+      'Sign In',
     );
   });
 
@@ -75,15 +77,16 @@ module('Integration | Component | form | authenticate', function (hooks) {
     this.submit = () => {};
     this.disabled = () => {};
 
-    await render(hbs`<Form::Authenticate   
-    @model={{this.model}}
-    @submit={{this.submit}}
-    @disabled={{this.disabled}}/>`);
+    await render(hbs`<Form::Authenticate
+  @model={{this.model}}
+  @onSubmit={{this.submit}}
+  @disabled={{this.disabled}}
+/>`);
     assert.ok(find('.full-width'));
     assert.notOk(find('.hds-form-text-input'));
     assert.strictEqual(
       find('button[type="submit"]').textContent.trim(),
-      'Sign In'
+      'Sign In',
     );
   });
 });
