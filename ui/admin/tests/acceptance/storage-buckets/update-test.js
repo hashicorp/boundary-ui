@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, findAll, find } from '@ember/test-helpers';
+import { visit, click, fillIn, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -96,7 +96,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-    console.log(find(SECRET_FIELD_BUTTON_SELECTOR), 'SECRE');
 
     assert.dom(SECRET_FIELD_BUTTON_SELECTOR).exists({ count: 2 });
 
