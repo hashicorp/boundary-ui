@@ -13,6 +13,7 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
   queryParams = [{ isConnecting: { type: 'boolean' } }];
 
   @tracked isConnecting = false;
+  @tracked connectError;
 
   // =methods
 

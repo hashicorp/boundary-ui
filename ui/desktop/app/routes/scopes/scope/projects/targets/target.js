@@ -96,9 +96,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     const controller = this.controllerFor(
       'scopes.scope.projects.targets.target'
     );
-    const model = controller.get('model');
-    const targetErrors = model.target.get('errors');
-    targetErrors.remove('connect');
+    controller.set('connectError', '');
     if (this.isConnectionError) {
       this.isConnectionError = false;
     }
@@ -186,14 +184,12 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         session
       );
     } catch (e) {
-      const targetErrors = model.get('errors');
-      targetErrors.add('connect', e.message);
-
       /* eslint-disable-next-line ember/no-controller-access-in-routes */
       const controller = this.controllerFor(
         'scopes.scope.projects.targets.target'
       );
       controller.set('isConnecting', false);
+      controller.set('connectError', e.message);
 
       this.isConnectionError = true;
     }

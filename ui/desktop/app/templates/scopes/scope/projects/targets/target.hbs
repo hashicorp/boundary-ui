@@ -40,15 +40,15 @@
       {{/if}}
       <bc.Body class='target-details-body'>
         <Hds::ApplicationState as |A|>
-          {{#if @model.target.errors.connect}}
+          {{#if this.connectError}}
             <A.Header
               @icon='skip'
               @title={{t 'resources.target.messages.could-not-connect.title'}}
             />
             <A.Body>
-              {{#each @model.target.errors.connect as |error|}}
-                <p data-test-target-details-connect-error>{{error.message}}</p>
-              {{/each}}
+              <p
+                data-test-target-details-connect-error
+              >{{this.connectError}}</p>
               <p>{{t
                   'resources.target.messages.could-not-connect.try-again'
                 }}</p>
@@ -64,7 +64,7 @@
               />
             </A.Body>
           {{/if}}
-          {{#unless @model.target.errors.connect}}
+          {{#unless this.connectError}}
             {{#if (can 'initiateConnection target' @model.target)}}
               <A.Header
                 @title={{t 'resources.target.messages.connect-more-info.title'}}
