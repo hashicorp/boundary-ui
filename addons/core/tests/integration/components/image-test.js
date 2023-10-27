@@ -13,7 +13,7 @@ module('Integration | Component | Image', function (hooks) {
 
   test('it renders', async function (assert) {
     assert.expect(1);
-    await render(hbs`<Image @name="logo-app" />`);
+    await render(hbs`<Image @name='logo-app' />`);
     assert.ok(find('.image-container'));
   });
 });

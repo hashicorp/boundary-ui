@@ -17,26 +17,26 @@ module('Integration | Helper | reverse-indexed-display-name', function (hooks) {
     this.set('array', ['Boundary', 'is', 'cool!']);
 
     await render(hbs`{{reverse-indexed-display-name
-      'resources.session-recording.connection.title_index'
-      this.array
-      'Boundary'
-    }}`);
+  'resources.session-recording.connection.title_index'
+  this.array
+  'Boundary'
+}}`);
 
     assert.dom(this.element).hasText('Connection 3');
 
     await render(hbs`{{reverse-indexed-display-name
-      'resources.session-recording.connection.title_index'
-      this.array
-      'is'
-    }}`);
+  'resources.session-recording.connection.title_index'
+  this.array
+  'is'
+}}`);
 
     assert.dom(this.element).hasText('Connection 2');
 
     await render(hbs`{{reverse-indexed-display-name
-      'resources.session-recording.connection.title_index'
-      this.array
-      'cool!'
-    }}`);
+  'resources.session-recording.connection.title_index'
+  this.array
+  'cool!'
+}}`);
 
     assert.dom(this.element).hasText('Connection 1');
   });
@@ -45,10 +45,10 @@ module('Integration | Helper | reverse-indexed-display-name', function (hooks) {
     this.set('array', ['Boundary', 'is', 'cool!']);
 
     await render(hbs`{{reverse-indexed-display-name
-      'resources.session-recording.connection.title_index'
-      this.array
-      'Watchtower'
-    }}`);
+  'resources.session-recording.connection.title_index'
+  this.array
+  'Watchtower'
+}}`);
 
     assert.dom(this.element).hasText('Connection');
   });
