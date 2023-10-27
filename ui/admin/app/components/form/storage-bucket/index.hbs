@@ -366,13 +366,23 @@
       {{/if}}
     </Hds::Form::TextInput::Field>
 
-    <Form::Field::ListWrapper
-      @layout='horizontal'
-      @isOptional={{true}}
-      @label={{t 'resources.storage-bucket.form.role_tags.label'}}
-      @helper={{t 'resources.storage-bucket.form.role_tags.help'}}
-      @error={{@model.errors.role_tags}}
-    >
+    <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+      <:fieldset as |F|>
+        <F.Legend>
+          {{t 'resources.storage-bucket.form.role_tags.label'}}
+        </F.Legend>
+        <F.HelperText>
+          {{t 'resources.storage-bucket.form.role_tags.label'}}
+        </F.HelperText>
+
+        {{#if @model.errors.role_tags}}
+          <F.Error as |E|>
+            {{#each @model.errors.role_tags as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </:fieldset>
       <:field as |F|>
         <F.TextInput
           @name='role_tags'

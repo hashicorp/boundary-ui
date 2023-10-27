@@ -9,24 +9,21 @@
   @isOptional={{@isOptional}}
   as |F|
 >
-  <F.Legend>{{@label}}</F.Legend>
-  <F.HelperText>{{@helper}}</F.HelperText>
+
+  {{yield F to='fieldset'}}
 
   <F.Control>
     {{yield
       (hash
-        KeyValue=(component 'form/field/list-wrapper/key-value')
-        TextInput=(component 'form/field/list-wrapper/text-input')
+        KeyValue=(component
+          'form/field/list-wrapper/key-value' disabled=@disabled
+        )
+        TextInput=(component
+          'form/field/list-wrapper/text-input' disabled=@disabled
+        )
       )
       to='field'
     }}
   </F.Control>
 
-  {{#if @error}}
-    <F.Error as |E|>
-      {{#each @error as |error|}}
-        <E.Message>{{error.message}}</E.Message>
-      {{/each}}
-    </F.Error>
-  {{/if}}
 </Hds::Form::Fieldset>

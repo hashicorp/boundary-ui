@@ -20,7 +20,18 @@ module('Integration | Component | list-wrapper', function (hooks) {
       },
     ];
     await render(hbs`
-    <Form::Field::ListWrapper @label='Label' @helper='Help' @error={{this.error}}>
+    <Form::Field::ListWrapper>
+      <:fieldset as |F|>
+        <F.Legend>
+          Label
+        </F.Legend>
+        <F.HelperText>
+          Help
+        </F.HelperText>
+        <F.Error as |E|>
+          <E.Message>Error!</E.Message>  
+        </F.Error>
+      </:fieldset>
       <:field as |F|>
         <F.KeyValue>
         </F.KeyValue>

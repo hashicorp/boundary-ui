@@ -69,13 +69,23 @@
     </F.HelperText>
   </InfoField>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
-    @label={{t 'resources.host-set.form.preferred_endpoints.label'}}
-    @helper={{t 'resources.host-set.form.preferred_endpoints.help'}}
-    @error={{@model.errors.preferred_endpoints}}
-  >
+  <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.host-set.form.preferred_endpoints.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.host-set.form.preferred_endpoints.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.preferred_endpoints}}
+        <F.Error as |E|>
+          {{#each @model.errors.preferred_endpoints as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
     <:field as |F|>
       <F.TextInput
         @name='preferred_endpoints'
@@ -87,12 +97,23 @@
     </:field>
   </Form::Field::ListWrapper>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @label={{t 'resources.host-set.form.filter.label'}}
-    @helper={{t 'resources.host-set.form.filter.aws.help'}}
-    @error={{@model.errors.filters}}
-  >
+  <Form::Field::ListWrapper @layout='horizontal'>
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.host-set.form.filter.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.host-set.form.filter.aws.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.filters}}
+        <F.Error as |E|>
+          {{#each @model.errors.filters as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
     <:field as |F|>
       <F.TextInput
         @name='filters'

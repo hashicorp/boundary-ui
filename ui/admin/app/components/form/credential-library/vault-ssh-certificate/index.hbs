@@ -236,13 +236,24 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
-    @label={{t 'resources.credential-library.form.critical_options.label'}}
-    @helper={{t 'resources.credential-library.form.critical_options.help'}}
-    @error={{@model.errors.critical_options}}
-  >
+  <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.credential-library.form.critical_options.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.credential-library.form.critical_options.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.critical_options}}
+        <F.Error as |E|>
+          {{#each @model.errors.critical_options as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+
     <:field as |F|>
       <F.KeyValue
         @name='critical_options'
@@ -255,13 +266,23 @@
 
   </Form::Field::ListWrapper>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
-    @label={{t 'resources.credential-library.form.extensions.label'}}
-    @helper={{t 'resources.credential-library.form.extensions.help'}}
-    @error={{@model.errors.extensions}}
-  >
+  <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.credential-library.form.extensions.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.credential-library.form.extensions.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.extensions}}
+        <F.Error as |E|>
+          {{#each @model.errors.extensions as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
     <:field as |F|>
       <F.KeyValue
         @name='extensions'
