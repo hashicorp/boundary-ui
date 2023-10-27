@@ -152,6 +152,7 @@
       @type='password'
       name='client_certificate'
       disabled={{form.disabled}}
+      @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'client_certificate')}}
       as |F|
     >
@@ -177,6 +178,7 @@
       @type='password'
       name='client_certificate_key'
       disabled={{form.disabled}}
+      @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'client_certificate_key')}}
       as |F|
     >
@@ -277,6 +279,7 @@
       @type='password'
       name='bind_password'
       disabled={{form.disabled}}
+      @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'bind_password')}}
       as |F|
     >

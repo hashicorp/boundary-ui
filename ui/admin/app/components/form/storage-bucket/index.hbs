@@ -209,6 +209,7 @@
         @isInvalid={{@model.errors.secrets}}
         @type='password'
         name='access_key_id'
+        @hasVisibilityToggle={{false}}
         {{on 'input' (set-from-event @model 'access_key_id')}}
         as |F|
       >
@@ -234,6 +235,7 @@
         @type='password'
         name='secret_access_key'
         disabled={{form.disabled}}
+        @hasVisibilityToggle={{false}}
         {{on 'input' (set-from-event @model 'secret_access_key')}}
         as |F|
       >
