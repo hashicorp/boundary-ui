@@ -24,47 +24,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   // =methods
 
   /**
-   * Given an array of hostSources returns an array of host sets
-   * @param {array} hostSources
-   * @returns {[HostSetModel]} hostSets
-   */
-  async getTargetHostSets(hostSources) {
-    let hostSets = [];
-
-    hostSets = Promise.all(
-      hostSources.map(async ({ host_source_id }) => {
-        return await this.store.findRecord('host-set', host_source_id);
-      })
-    ).catch(() => {
-      // no op with error
-    });
-    return hostSets;
-  }
-
-  /**
-   * Given an array of hostSets returns an array of all the hosts within the
-   * host-set
-   * @param {array} hostSets
-   * @returns {[HostModel]} hosts
-   */
-  async getHostsFromHostSets(hostSets) {
-    let hosts = [];
-
-    if (hostSets) {
-      const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
-
-      hosts = Promise.all(
-        hostIds.map(async (hostId) => {
-          return await this.store.findRecord('host', hostId);
-        })
-      ).catch(() => {
-        // no op with error
-      });
-    }
-    return hosts;
-  }
-
-  /**
    * Load a target
    * @param {object} params
    * @param {string} params.target_id
@@ -78,8 +37,30 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     });
 
     if (target.host_sources.length >= 1) {
-      const hostSets = await this.getTargetHostSets(target.host_sources);
-      hosts = await this.getHostsFromHostSets(hostSets);
+      // if user does not have permissions to fetch host-sets or hosts
+      // this will catch the error and return an empty array
+      // from the model hook for hosts
+      try {
+        const hostSets = await Promise.all(
+          target.host_sources.map(({ host_source_id }) =>
+            this.store.findRecord('host-set', host_source_id)
+          )
+        );
+
+        // Extract host ids from all host sets
+        const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
+
+        // Load unique hosts
+        const uniqueHostIds = new Set(hostIds);
+
+        hosts = await Promise.all(
+          [...uniqueHostIds].map((hostId) =>
+            this.store.findRecord('host', hostId)
+          )
+        );
+      } catch (error) {
+        // no operation
+      }
     }
 
     return { target, hosts };
@@ -88,10 +69,11 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   async afterModel(model, transition) {
     const { isConnecting } = transition.to.queryParams;
 
-    if (isConnecting) {
-      if (model.hosts.length <= 1) {
-        await this.connect(model.target);
-      }
+    // if connecting and hosts length is 1 or less we will try to
+    // connect, even if there is no address on the target and
+    // rely on the CLI to give the user the proper error
+    if (isConnecting && model.hosts.length <= 1) {
+      await this.connect(model.target);
     }
   }
 
@@ -138,6 +120,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @action
   @loading
   async preConnect(model, toggleModal) {
+    // if hosts length is 1 or less we will try to
+    // connect, even if there is no address on the target and
+    // rely on the CLI to give the user the proper error or if
+    // there are 2 or more hosts we show the modal for host selection
     if (model.hosts.length <= 1) {
       await this.connect(model.target);
     } else {
