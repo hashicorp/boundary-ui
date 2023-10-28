@@ -383,7 +383,7 @@ module('Acceptance | targets | update', function (hooks) {
     const target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withOneHost'
     );
     assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
 
@@ -429,7 +429,7 @@ module('Acceptance | targets | update', function (hooks) {
     const target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withOneHost'
     );
     assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
 
