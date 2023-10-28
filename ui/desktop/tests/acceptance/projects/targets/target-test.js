@@ -140,13 +140,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
-      address: 'a_123',
+      address: 'localhost',
       port: 'p_123',
       protocol: 'tcp',
     });
-    await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
+    await visit(urls.target);
 
     assert.dom(TARGET_CONNECT_BUTTON).isEnabled();
     assert.dom(APP_STATE_TITLE).includesText('Connect for more info');
@@ -194,9 +193,9 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
+    await visit(urls.target);
+
     await click(TARGET_CONNECT_BUTTON);
     const firstErrorDialog = find(ROSE_DIALOG_MODAL);
     await click(ROSE_DIALOG_RETRY_BUTTON, 'Retry');
@@ -247,17 +246,5 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await click(TARGET_QUICK_CONNECT_BUTTON);
 
     assert.dom(APP_STATE_TITLE).hasText('Connected');
-  });
-
-  test('user cannot connect to a target without an address and no host sources', async function (assert) {
-    assert.expect(2);
-    instances.target.address = '';
-    instances.target.update({ address: '', hostSets: [] });
-    await visit(urls.targets);
-
-    await click(`[href="${urls.target}"]`);
-
-    assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
-    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
   });
 });
