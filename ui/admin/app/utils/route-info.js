@@ -9,5 +9,5 @@ export function paramValueFinder(resourceName, parentInfo) {
       ...otherParam,
     ];
   }
-  return [paramValueFinder(resourceName, parentInfo.parent)];
+  return paramValueFinder(resourceName, parentInfo.parent);
 }
