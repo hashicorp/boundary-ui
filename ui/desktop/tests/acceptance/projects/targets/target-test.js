@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import sinon from 'sinon';
@@ -240,6 +240,66 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(TARGET_HOST_CONNECT_BUTTON).exists({ count: 2 });
 
     await click(TARGET_QUICK_CONNECT_BUTTON);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test('user can visit target details screen without read permissions for host-set', async function (assert) {
+    assert.expect(1);
+    this.server.get('/host-sets/:id', () => new Response(403));
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetWithOneHost);
+  });
+
+  test('user can visit target details screen without read permissions for host', async function (assert) {
+    assert.expect(1);
+    this.server.get('/hosts/:id', () => new Response(403));
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetWithOneHost);
+  });
+
+  test('user can connect to a target without read permissions for host-set', async function (assert) {
+    assert.expect(1);
+    this.server.get('/host-sets/:id', () => new Response(403));
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test('user can connect to a target without read permissions for host', async function (assert) {
+    assert.expect(1);
+    this.server.get('/host-sets/:id', () => new Response(403));
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+    await click(TARGET_CONNECT_BUTTON);
 
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
