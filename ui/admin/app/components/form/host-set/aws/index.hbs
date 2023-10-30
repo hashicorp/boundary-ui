@@ -69,7 +69,11 @@
     </F.HelperText>
   </InfoField>
 
-  <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
     <:fieldset as |F|>
       <F.Legend>
         {{t 'resources.host-set.form.preferred_endpoints.label'}}
@@ -97,7 +101,7 @@
     </:field>
   </Form::Field::ListWrapper>
 
-  <Form::Field::ListWrapper @layout='horizontal'>
+  <Form::Field::ListWrapper @layout='horizontal' @disabled={{form.disabled}}>
     <:fieldset as |F|>
       <F.Legend>
         {{t 'resources.host-set.form.filter.label'}}

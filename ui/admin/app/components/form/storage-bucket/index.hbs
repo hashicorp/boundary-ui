@@ -366,7 +366,11 @@
       {{/if}}
     </Hds::Form::TextInput::Field>
 
-    <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+    <Form::Field::ListWrapper
+      @layout='horizontal'
+      @isOptional={{true}}
+      @disabled={{form.disabled}}
+    >
       <:fieldset as |F|>
         <F.Legend>
           {{t 'resources.storage-bucket.form.role_tags.label'}}

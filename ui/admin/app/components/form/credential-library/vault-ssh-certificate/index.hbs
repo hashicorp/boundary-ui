@@ -236,7 +236,11 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
     <:fieldset as |F|>
       <F.Legend>
         {{t 'resources.credential-library.form.critical_options.label'}}
@@ -266,7 +270,11 @@
 
   </Form::Field::ListWrapper>
 
-  <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
     <:fieldset as |F|>
       <F.Legend>
         {{t 'resources.credential-library.form.extensions.label'}}
