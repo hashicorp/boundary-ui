@@ -147,6 +147,24 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       .hasText(`Connected You can now access ${instances.target.name}`);
   });
 
+  test('visiting a session that does not have permissions to read a host', async function (assert) {
+    assert.expect(1);
+    this.server.get('/hosts/:id', () => new Response(403));
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+
+    await visit(urls.target);
+    await click('[data-test-target-detail-connect-button]');
+
+    assert.strictEqual(currentURL(), urls.session);
+  });
+
   test('cancelling a session shows success alert', async function (assert) {
     assert.expect(1);
     stubs.ipcService.withArgs('stop');

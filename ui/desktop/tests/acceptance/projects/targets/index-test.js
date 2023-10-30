@@ -29,7 +29,6 @@ module('Acceptance | projects | targets', function (hooks) {
   let getTargetCount;
 
   const ROSE_APP_STATE_TITLE = '.rose-message-title';
-  const APP_STATE_TITLE = '.hds-application-state__title';
   const TARGET_DETAILS_ROUTE_NAME =
     'scopes.scope.projects.targets.target.index';
   const ROSE_DIALOG_MODAL = '.rose-dialog-error';
@@ -103,14 +102,10 @@ module('Acceptance | projects | targets', function (hooks) {
       { scope: instances.scopes.project },
       'withChildren'
     );
-    instances.target = this.server.create(
-      'target',
-      {
-        scope: instances.scopes.project,
-        address: '127.0.0.1',
-      },
-      'withAssociations'
-    );
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.project,
+      address: '127.0.0.1',
+    });
     instances.session = this.server.create(
       'session',
       {
@@ -231,28 +226,18 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('user is redirected to target details page when unable to connect from list view', async function (assert) {
-    assert.expect(2);
-    instances.target.address = '';
-    instances.target.update({ address: '', hostSets: [] });
-    await visit(urls.projects);
-
-    await click(`[href="${urls.targets}"]`);
-    await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
-
-    assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
-    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
-  });
-
-  test('choose host modal does not render when there is a connect error', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    await visit(urls.projects);
 
-    await click(`[href="${urls.targets}"]`);
+    await visit(urls.targets);
+
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
     assert.dom(ROSE_DIALOG_MODAL).exists();
     assert.dom(CHOOSE_HOST_MODAL).doesNotExist();
+    assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
   });
 });

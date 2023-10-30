@@ -551,9 +551,6 @@ target:
     connect-more-info:
       title: Connect for more info
       description: Additional information for this target will be provided here after your session is established.
-    cannot-connect:
-      title: Cannot connect to {targetDisplayName}
-      description: There are no host sources and no address configured for this target.
   titles:
     new: New Target
   actions:
