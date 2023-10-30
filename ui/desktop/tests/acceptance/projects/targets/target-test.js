@@ -287,7 +287,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
   test('user can connect to a target without read permissions for host', async function (assert) {
     assert.expect(1);
-    this.server.get('/host-sets/:id', () => new Response(403));
+    this.server.get('/hosts/:id', () => new Response(403));
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
