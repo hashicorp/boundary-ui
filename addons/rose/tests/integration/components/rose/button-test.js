@@ -22,7 +22,7 @@ module('Integration | Component | rose/button', function (hooks) {
   });
 
   test('it is type="submit" when @submit={{true}}', async function (assert) {
-    await render(hbs`<Rose::Button @submit={{true}} />`);
+    await render(hbs`<Rose::Button @onSubmit={{true}} />`);
     assert.strictEqual(find('button').type, 'submit');
   });
 
@@ -40,18 +40,18 @@ module('Integration | Component | rose/button', function (hooks) {
 
   test('it supports left and right icons', async function (assert) {
     await render(
-      hbs`<Rose::Button @iconLeft="flight-icons/svg/chevron-left-16" />`
+      hbs`<Rose::Button @iconLeft="flight-icons/svg/chevron-left-16" />`,
     );
     assert.ok(find('.has-icon-left .rose-icon'));
     await render(
-      hbs`<Rose::Button @iconRight="flight-icons/svg/chevron-left-16" />`
+      hbs`<Rose::Button @iconRight="flight-icons/svg/chevron-left-16" />`,
     );
     assert.ok(find('.has-icon-right .rose-icon'));
   });
 
   test('it supports an icon-only type', async function (assert) {
     await render(
-      hbs`<Rose::Button @iconOnly="flight-icons/svg/chevron-left-16" />`
+      hbs`<Rose::Button @iconOnly="flight-icons/svg/chevron-left-16" />`,
     );
     assert.ok(find('.has-icon-only .rose-icon'));
   });

@@ -13,9 +13,9 @@ module('Integration | Component | rose/anonymous', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`
-      {{#rose/anonymous tagName='main'}}
+      <Rose::Anonymous @tagName="main">
         template block text
-      {{/rose/anonymous}}
+      </Rose::Anonymous>
     `);
     assert.ok(find('main'));
     assert.strictEqual(this.element.textContent.trim(), 'template block text');
