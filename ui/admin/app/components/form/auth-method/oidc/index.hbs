@@ -122,6 +122,7 @@
     @helperText={{t 'form.client_secret.help'}}
     @error={{@model.errors.client_secret}}
     readonly={{false}}
+    @hasVisibilityToggle={{false}}
     as |field|
   >
     {{#if @model.errors.client_secret}}
