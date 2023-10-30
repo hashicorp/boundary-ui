@@ -8,13 +8,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { assert } from '@ember/debug';
 
-export default class MappingListComponent extends Component {
+export default class MappingListTextInputComponent extends Component {
   // =attributes
-
-  /**
-   * @type {string}
-   */
-  @tracked newOptionKey = '';
 
   /**
    * @type {string}
@@ -24,24 +19,23 @@ export default class MappingListComponent extends Component {
   // =actions
 
   /**
-   * If a new key value is entered and an addOption method was specified,
-   * calls addOption with the new key and value.  Resets key and value.
+   * If a new input is entered and an addOption method was specified,
+   * calls addOption with the new input.  Resets previous value.
    */
+
   @action
   addOption() {
     assert(
-      '[boundary-admin-key-value-list-field] `@addOption` is required.',
+      '[boundary-admin-list-wrapper] `@addOption` is required.',
       this.args.addOption
     );
 
-    if (this.newOptionKey) {
+    if (this.newOptionValue) {
       this.args.addOption({
-        key: this.newOptionKey,
         value: this.newOptionValue,
       });
     }
 
-    this.newOptionKey = '';
     this.newOptionValue = '';
   }
 }

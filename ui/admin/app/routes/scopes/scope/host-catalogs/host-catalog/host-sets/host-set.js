@@ -44,29 +44,4 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
       hostSet.filters = structuredClone(hostSet.filters);
     }
   }
-
-  /**
-   * Adds a string item `{ value }` to array `property` on passed `hostSet`.
-   * @param {hostSetModel} hostSet
-   * @param {string} property
-   * @param {string} value
-   */
-  @action
-  async addStringItem(hostSet, property, value) {
-    const array = [...hostSet.get(property), { value }];
-    hostSet.set(property, array);
-  }
-
-  /**
-   * Removes an item from array `property` at `index` on the
-   * passed `hostSet`.
-   * @param {hostSetModel} hostSet
-   * @param {string} property
-   * @param {number} index
-   */
-  @action
-  async removeItemByIndex(hostSet, property, index) {
-    const array = hostSet.get(property).filter((item, i) => i !== index);
-    hostSet.set(property, array);
-  }
 }
