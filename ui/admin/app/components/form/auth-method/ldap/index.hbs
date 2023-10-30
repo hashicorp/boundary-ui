@@ -83,7 +83,7 @@
       }}</F.HelperText>
     {{#let (unique-id) as |valueHeaderID|}}
       <F.Control>
-        <Hds::Table class='key-value-list' name='certificates'>
+        <Hds::Table class='list-wrapper-field' name='certificates'>
           <:head as |H|>
             <H.Tr>
               <H.Th id={{valueHeaderID}}>{{t 'titles.value'}}</H.Th>
@@ -427,7 +427,7 @@
       }}</F.HelperText>
     {{#let (unique-id) (unique-id) as |fromHeaderID toHeaderID|}}
       <F.Control>
-        <Hds::Table class='key-value-list' name='account_attribute_maps'>
+        <Hds::Table class='list-wrapper-field' name='account_attribute_maps'>
           <:head as |H|>
             <H.Tr>
               <H.Th id={{fromHeaderID}}>{{t
