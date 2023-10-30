@@ -9,7 +9,7 @@ const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 const { maybeEmbroider } = require('@embroider/test-setup');
 
 module.exports = function (defaults) {
-  let app = new EmberAddon(defaults, {
+  const app = new EmberAddon(defaults, {
     // Add options here
     'ember-simple-auth': {
       useSessionSetupMethod: true,
