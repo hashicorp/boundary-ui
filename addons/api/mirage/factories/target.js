@@ -13,6 +13,7 @@ import { TYPES_TARGET, TYPE_TARGET_SSH } from 'api/models/target';
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const randomFilter = () =>
   `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`;
+const hostSetChance = 0.3;
 const types = [...TYPES_TARGET];
 
 export default factory.extend({
@@ -45,7 +46,17 @@ export default factory.extend({
    */
   withAssociations: trait({
     afterCreate(target, server) {
-      let randomlySelectedCredentialLibraries, randomlySelectedCredentials;
+      let randomlySelectedHostSets,
+        randomlySelectedCredentialLibraries,
+        randomlySelectedCredentials;
+      randomlySelectedHostSets = server.schema.hostSets
+        // BLERG:  fun fact, for no reason at all, the element passed
+        // into a where function is not a full model instance, as you might
+        // expect at this level of abstraction, but appears to be a serialized
+        // representation of the model instance.  It's very confusing since
+        // the result set of `where` _is a collection of model instances_.
+        .where((hostSet) => hostSet.scopeId === target.scope.id)
+        .models.filter(() => randomBoolean(hostSetChance));
 
       randomlySelectedCredentialLibraries = server.schema.credentialLibraries
         .where(
@@ -72,7 +83,7 @@ export default factory.extend({
       }
 
       target.update({
-        address: 'localhost',
+        hostSets: randomlySelectedHostSets,
         brokeredCredentialSourceIds: [
           ...randomlySelectedCredentialLibraries,
           ...randomlySelectedCredentials,

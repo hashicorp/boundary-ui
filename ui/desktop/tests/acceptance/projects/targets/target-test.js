@@ -91,14 +91,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withChildren'
     );
-    instances.target = this.server.create(
-      'target',
-      {
-        scope: instances.scopes.project,
-        address: 'localhost',
-      },
-      'withAssociations'
-    );
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.project,
+      address: 'localhost',
+    });
     instances.targetWithOneHost = this.server.create(
       'target',
       { scope: instances.scopes.project },

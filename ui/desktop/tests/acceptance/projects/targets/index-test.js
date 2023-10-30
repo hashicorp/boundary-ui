@@ -102,14 +102,10 @@ module('Acceptance | projects | targets', function (hooks) {
       { scope: instances.scopes.project },
       'withChildren'
     );
-    instances.target = this.server.create(
-      'target',
-      {
-        scope: instances.scopes.project,
-        address: '127.0.0.1',
-      },
-      'withAssociations'
-    );
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.project,
+      address: '127.0.0.1',
+    });
     instances.session = this.server.create(
       'session',
       {
