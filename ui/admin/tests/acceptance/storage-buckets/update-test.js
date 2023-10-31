@@ -98,6 +98,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(`[href="${urls.storageBucket}"]`);
 
     assert.dom(SECRET_FIELD_BUTTON_SELECTOR).exists({ count: 2 });
+
     assert.dom(SECRET_FIELD_BUTTON_SELECTOR).isDisabled();
 
     await click(BUTTON_SELECTOR, 'Click edit mode');

@@ -103,7 +103,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     await visit(urls.changePassword);
     await fillIn('[name="currentPassword"]', 'current password');
     await fillIn('[name="newPassword"]', 'new password');
-    await click('form button:not([type="submit"])');
+    await click('.hds-button--color-secondary');
     assert.notEqual(currentURL(), urls.changePassword);
   });
 
