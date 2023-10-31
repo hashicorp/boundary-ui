@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
+/* global QUnit */
+
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -17,6 +19,8 @@ import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
 
   const instances = {
     scopes: {
@@ -137,7 +141,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     await visit(urls.target);
-    await click('[data-test-target-detail-connect-button]');
+    await click(TARGET_CONNECT_BUTTON);
 
     assert.strictEqual(currentURL(), urls.session);
     assert.dom('credential-panel-header').doesNotExist();
@@ -160,7 +164,29 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     await visit(urls.target);
-    await click('[data-test-target-detail-connect-button]');
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.session);
+  });
+
+  test('visiting a session that does not have read permissions but a successful connect', async function (assert) {
+    assert.expect(2);
+    // verifies second call to sessions/:id is also a 403
+    QUnit.onUncaughtException = (err) => {
+      assert.true(err.errors[0].isForbidden);
+    };
+    this.server.get('/sessions/:id', () => new Response(403));
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+
+    await visit(urls.target);
+    await click(TARGET_CONNECT_BUTTON);
 
     assert.strictEqual(currentURL(), urls.session);
   });
