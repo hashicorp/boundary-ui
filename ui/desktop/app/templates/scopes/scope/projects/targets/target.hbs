@@ -21,7 +21,6 @@
         @text={{t 'resources.session.actions.connect'}}
         @icon='entry-point'
         @iconPosition='trailing'
-        disabled={{not (can 'initiateConnection target' @model.target)}}
         {{on 'click' (route-action 'preConnect' @model this.toggleModal)}}
       />
     {{/if}}
@@ -29,37 +28,23 @@
 
   <page.body class='details-screen-body'>
     <Rose::Layout::BodyContent as |bc|>
-      {{#if (can 'initiateConnection target' @model.target)}}
-        <Target::HostModal
-          @showModal={{this.isConnecting}}
-          @toggleModal={{this.toggleModal}}
-          @connect={{route-action 'hostConnect'}}
-          @hosts={{@model.hosts}}
-          @target={{@model.target}}
-        />
-      {{/if}}
+      <Target::HostModal
+        @showModal={{this.isConnecting}}
+        @toggleModal={{this.toggleModal}}
+        @connect={{route-action 'hostConnect'}}
+        @hosts={{@model.hosts}}
+        @target={{@model.target}}
+      />
       <bc.Body class='target-details-body'>
         <Hds::ApplicationState as |A|>
-          {{#if (can 'initiateConnection target' @model.target)}}
-            <A.Header
-              @title={{t 'resources.target.messages.connect-more-info.title'}}
-            />
-            <A.Body
-              @text={{t
-                'resources.target.messages.connect-more-info.description'
-              }}
-            />
-          {{else}}
-            <A.Header
-              @title={{t
-                'resources.target.messages.cannot-connect.title'
-                targetDisplayName=@model.target.displayName
-              }}
-            />
-            <A.Body
-              @text={{t 'resources.target.messages.cannot-connect.description'}}
-            />
-          {{/if}}
+          <A.Header
+            @title={{t 'resources.target.messages.connect-more-info.title'}}
+          />
+          <A.Body
+            @text={{t
+              'resources.target.messages.connect-more-info.description'
+            }}
+          />
         </Hds::ApplicationState>
       </bc.Body>
       <bc.Sidebar>

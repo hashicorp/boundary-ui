@@ -30,7 +30,8 @@
     "semver": "^7.5.3",
     "shell-env": "^3.0.1",
     "shell-quote": "^1.7.3",
-    "tree-kill": "^1.2.2"
+    "tree-kill": "^1.2.2",
+    "which": "^4.0.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",

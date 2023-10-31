@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import sinon from 'sinon';
@@ -91,14 +91,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withChildren'
     );
-    instances.target = this.server.create(
-      'target',
-      {
-        scope: instances.scopes.project,
-        address: 'localhost',
-      },
-      'withAssociations'
-    );
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.project,
+      address: 'localhost',
+    });
     instances.targetWithOneHost = this.server.create(
       'target',
       { scope: instances.scopes.project },
@@ -140,13 +136,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
-      address: 'a_123',
+      address: 'localhost',
       port: 'p_123',
       protocol: 'tcp',
     });
-    await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
+    await visit(urls.target);
 
     assert.dom(TARGET_CONNECT_BUTTON).isEnabled();
     assert.dom(APP_STATE_TITLE).includesText('Connect for more info');
@@ -194,9 +189,9 @@ module('Acceptance | projects | targets | target', function (hooks) {
     stubs.ipcService.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
+    await visit(urls.target);
+
     await click(TARGET_CONNECT_BUTTON);
     const firstErrorDialog = find(ROSE_DIALOG_MODAL);
     await click(ROSE_DIALOG_RETRY_BUTTON, 'Retry');
@@ -249,15 +244,63 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
-  test('user cannot connect to a target without an address and no host sources', async function (assert) {
-    assert.expect(2);
-    instances.target.address = '';
-    instances.target.update({ address: '', hostSets: [] });
+  test('user can visit target details screen without read permissions for host-set', async function (assert) {
+    assert.expect(1);
+    this.server.get('/host-sets/:id', () => new Response(403));
+
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
+    await click(`[href="${urls.targetWithOneHost}"]`);
 
-    assert.dom(TARGET_CONNECT_BUTTON).isDisabled();
-    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
+    assert.strictEqual(currentURL(), urls.targetWithOneHost);
+  });
+
+  test('user can visit target details screen without read permissions for host', async function (assert) {
+    assert.expect(1);
+    this.server.get('/hosts/:id', () => new Response(403));
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetWithOneHost);
+  });
+
+  test('user can connect to a target without read permissions for host-set', async function (assert) {
+    assert.expect(1);
+    this.server.get('/host-sets/:id', () => new Response(403));
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test('user can connect to a target without read permissions for host', async function (assert) {
+    assert.expect(1);
+    this.server.get('/hosts/:id', () => new Response(403));
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 });
