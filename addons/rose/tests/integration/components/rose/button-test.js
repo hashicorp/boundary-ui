@@ -21,7 +21,7 @@ module('Integration | Component | rose/button', function (hooks) {
     assert.strictEqual(find('button').type, 'button');
   });
 
-  test('it is type="submit" when @submit={{true}}', async function (assert) {
+  test('it is type="submit" when @onSubmit={{true}}', async function (assert) {
     await render(hbs`<Rose::Button @onSubmit={{true}} />`);
     assert.strictEqual(find('button').type, 'submit');
   });
