@@ -14,6 +14,7 @@
     @type={{(or @type 'password')}}
     name={{@name}}
     disabled={{or @isDisabled (not this.isEditing)}}
+    @hasVisibilityToggle={{false}}
     ...attributes
     as |F|
   >

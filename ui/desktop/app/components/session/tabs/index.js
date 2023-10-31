@@ -66,17 +66,17 @@ export default class SessionTerminalTabsComponent extends Component {
     this.id = uuidv4();
     this.#setupTerminal(fitAddon, xterm, termContainer);
 
-    const { isWindows } = await this.ipc.invoke('checkOS');
+    const isSSHCommandAvailable = await this.ipc.invoke('checkCommand', 'ssh');
     const { model } = this.args;
 
     const { proxy_address, proxy_port, started_desktop_client, target } = model;
 
-    // Only send the command on certain scenarios:
+    // Only send the command in certain scenarios:
     // 1. Only for SSH targets
-    // 2. Don't connect for windows as most users won't have an openSSH client installed
-    // 3. Don't connect if the session wasn't initiated in the desktop client
+    // 2. Don't connect if the session wasn't initiated in the desktop client
     //    which means we won't have proxy information
-    if (target?.isSSH && started_desktop_client && !isWindows) {
+    // 3. Only connect if the user has an SSH client available in their path
+    if (target?.isSSH && started_desktop_client && isSSHCommandAvailable) {
       // Send an SSH command immediately
       window.terminal.send(
         `ssh ${proxy_address} -p ${proxy_port} -o NoHostAuthenticationForLocalhost=yes\r`,
