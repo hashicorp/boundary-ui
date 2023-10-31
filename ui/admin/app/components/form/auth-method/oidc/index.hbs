@@ -255,176 +255,75 @@
   </Rose::Form::Fieldset>
 
   {{! Allowed Audiences }}
-  <Rose::Form::Fieldset>
-    <:title>{{t 'form.allowed_audiences.label'}}</:title>
-    <:description>{{t 'form.allowed_audiences.help'}}</:description>
-    <:body>
-      {{#if @model.errors.allowed_audiences}}
-        <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.allowed_audiences as |error|}}
-            <errors.message>{{error.message}}</errors.message>
-          {{/each}}
-        </Rose::Form::Errors>
-      {{/if}}
-      <Rose::Table @style='condensed' as |table|>
-        <table.header as |header|>
-          <header.row @hidden={{true}} as |row|>
-            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.allowed_audiences as |audience i|}}
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @name='allowed_audiences'
-                  @value={{audience.value}}
-                  @error={{@model.errors.allowed_audiences}}
-                  @contextual={{true}}
-                  as |field|
-                >
-                  <field.label>{{t 'form.claim.label'}}</field.label>
-                  <field.field />
-                </form.input>
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='warning'
-                  @iconOnly='flight-icons/svg/trash-16'
-                  title={{t 'actions.remove'}}
-                  @disabled={{if
-                    @model.isNew
-                    false
-                    (if form.isEditable false true)
-                  }}
-                  {{on 'click' (fn @removeItemByIndex 'allowed_audiences' i)}}
-                >
-                  {{t 'actions.remove'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          {{/each}}
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.allowed_audiences.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.allowed_audiences.help'}}
+      </F.HelperText>
 
-          <body.row as |row|>
-            <row.cell>
-              <form.input
-                @type='text'
-                @name='allowed_audiences'
-                @value={{this.newAllowedAudience}}
-                @label={{t 'resources.auth-method.titles.new-allowed-audience'}}
-              />
-            </row.cell>
-            <row.cell @shrink={{true}}>
-              <Rose::Button
-                @style='secondary'
-                title={{t 'actions.add'}}
-                @disabled={{if
-                  @model.isNew
-                  false
-                  (if form.isEditable false true)
-                }}
-                {{on
-                  'click'
-                  (fn
-                    @addStringItem 'allowed_audiences' this.newAllowedAudience
-                  )
-                }}
-              >
-                {{t 'actions.add'}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </Rose::Form::Fieldset>
+      {{#if @model.errors.allowed_audiences}}
+        <F.Error as |E|>
+          {{#each @model.errors.allowed_audiences as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+
+    <:field as |F|>
+      <F.TextInput
+        @name='critical_options'
+        @options={{@model.critical_options}}
+        @addOption={{fn @addOption 'allowed_audiences'}}
+        @removeOptionByIndex={{fn @removeOptionByIndex 'allowed_audiences'}}
+        @disabled={{form.disabled}}
+      />
+    </:field>
+
+  </Form::Field::ListWrapper>
 
   {{! Claims Scopes }}
-  <Rose::Form::Fieldset>
-    <:title>{{t 'form.claims_scopes.label'}}</:title>
-    <:description>{{t 'form.claims_scopes.help'}}</:description>
-    <:body>
-      {{#if @model.errors.claims_scopes}}
-        <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.claims_scopes as |error|}}
-            <errors.message>{{error.message}}</errors.message>
-          {{/each}}
-        </Rose::Form::Errors>
-      {{/if}}
-      <Rose::Table @style='condensed' as |table|>
-        <table.header as |header|>
-          <header.row @hidden={{true}} as |row|>
-            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
-            <row.headerCell />
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.claims_scopes as |claimsScope i|}}
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @name='claims_scopes'
-                  @value={{claimsScope.value}}
-                  @error={{@model.errors.claims_scopes}}
-                  @contextual={{true}}
-                  as |field|
-                >
-                  <field.label>{{t 'form.claims_scope.label'}}</field.label>
-                  <field.field />
-                </form.input>
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='warning'
-                  @iconOnly='flight-icons/svg/trash-16'
-                  title={{t 'actions.remove'}}
-                  @disabled={{if
-                    @model.isNew
-                    false
-                    (if form.isEditable false true)
-                  }}
-                  {{on 'click' (fn @removeItemByIndex 'claims_scopes' i)}}
-                >
-                  {{t 'actions.remove'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          {{/each}}
 
-          <body.row as |row|>
-            <row.cell>
-              <form.input
-                @type='text'
-                @name='claims_scopes'
-                @value={{this.newClaimsScope}}
-                @label={{t 'resources.auth-method.titles.new-claims-scope'}}
-              />
-            </row.cell>
-            <row.cell @shrink={{true}}>
-              <Rose::Button
-                @style='secondary'
-                title={{t 'actions.add'}}
-                @disabled={{if
-                  @model.isNew
-                  false
-                  (if form.isEditable false true)
-                }}
-                {{on
-                  'click'
-                  (fn @addStringItem 'claims_scopes' this.newClaimsScope)
-                }}
-              >
-                {{t 'actions.add'}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </Rose::Form::Fieldset>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.claims_scopes.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.claims_scopes.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.claims_scopes}}
+        <F.Error as |E|>
+          {{#each @model.errors.claims_scopes as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+
+    <:field as |F|>
+      <F.TextInput
+        @name='claims_scopes'
+        @options={{@model.claims_scopes}}
+        @addOption={{fn @addOption 'claims_scopes'}}
+        @removeOptionByIndex={{fn @removeOptionByIndex 'claims_scopes'}}
+        @disabled={{form.disabled}}
+      />
+    </:field>
+
+  </Form::Field::ListWrapper>
 
   {{! Account Claim Maps }}
   <Rose::Form::Fieldset>

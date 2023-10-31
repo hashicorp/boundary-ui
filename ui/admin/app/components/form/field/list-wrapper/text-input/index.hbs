@@ -4,7 +4,6 @@
 }}
 
 {{#let (unique-id) as |valueHeaderID|}}
-
   <Hds::Table class='list-wrapper-field' name={{@name}}>
 
     <:body as |B|>
@@ -16,7 +15,7 @@
               @value={{option.value}}
               @type='text'
               disabled={{@disabled}}
-              aria-labelledby={{valueHeaderID}}
+              aria-label={{valueHeaderID}}
               {{on 'input' (set-from-event option 'value')}}
             />
           </B.Td>
@@ -44,7 +43,7 @@
             @value={{this.newOptionValue}}
             @type='text'
             disabled={{@disabled}}
-            aria-labelledby={{valueHeaderID}}
+            aria-label={{valueHeaderID}}
             {{on 'input' (set-from-event this 'newOptionValue')}}
           />
         </B.Td>
