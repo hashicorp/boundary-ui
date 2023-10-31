@@ -172,7 +172,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
          * information returned from the connect command to allow the user
          * to still continue their work with the information they need
          */
-        this.store.pushPayload({
+        this.store.pushPayload('session', {
           sessions: [
             {
               id: session_id,
@@ -181,7 +181,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
             },
           ],
         });
-        session = await this.store.peekRecord('session', session_id);
+        session = this.store.peekRecord('session', session_id);
       }
 
       // Flag the session has been open in the desktop client
