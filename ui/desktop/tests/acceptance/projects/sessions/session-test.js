@@ -59,6 +59,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
+  let originalUncaughtException = QUnit.onUncaughtException;
+
   hooks.beforeEach(function () {
     instances.user = this.server.create('user', {
       scope: instances.scopes.global,
@@ -130,6 +132,11 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.strictEqual(currentURL(), urls.session);
   });
 
+  hooks.afterEach(function () {
+    // reset onUncaughtException to original state
+    QUnit.onUncaughtException = originalUncaughtException;
+  });
+
   test('visiting session with no credentials', async function (assert) {
     assert.expect(4);
     stubs.ipcService.withArgs('cliExists').returns(true);
@@ -175,6 +182,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     QUnit.onUncaughtException = (err) => {
       assert.true(err.errors[0].isForbidden);
     };
+
     this.server.get('/sessions/:id', () => new Response(403));
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').returns({
