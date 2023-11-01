@@ -201,11 +201,12 @@
               <SessionStatus @model={{B.data}} />
             </B.Td>
             <B.Td>
-              {{#if B.data.isAvailable}}
+              {{#if (can 'cancel session' B.data)}}
                 <Hds::Button
                   @text={{t 'actions.cancel'}}
                   @color='secondary'
                   {{on 'click' (route-action 'cancelSession' B.data)}}
+                  data-test-session-cancel-button
                 />
               {{/if}}
             </B.Td>

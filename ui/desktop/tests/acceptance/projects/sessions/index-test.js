@@ -191,14 +191,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   test('can link to an active session with read:self permissions', async function (assert) {
     assert.expect(1);
-    this.server.schema.sessions.all().destroy();
-    this.server.create('session', {
-      authorized_actions: ['read:self'],
-      scope: instances.scopes.project,
-      target: instances.target,
-      status: STATUS_SESSION_ACTIVE,
-      user: instances.user,
-    });
+    instances.session.update({ authorized_actions: ['read:self'] });
 
     await visit(urls.sessions);
 
@@ -212,6 +205,19 @@ module('Acceptance | projects | sessions', function (hooks) {
   test('can link to a pending session', async function (assert) {
     assert.expect(1);
     instances.session.update({ status: STATUS_SESSION_PENDING });
+
+    await visit(urls.sessions);
+
+    assert
+      .dom(
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+      )
+      .isVisible();
+  });
+
+  test('can link to session even without read permissions', async function (assert) {
+    assert.expect(1);
+    instances.session.update({ authorized_actions: [] });
 
     await visit(urls.sessions);
 
@@ -253,6 +259,38 @@ module('Acceptance | projects | sessions', function (hooks) {
     assert
       .dom('tbody tr:first-child td:first-child [data-test-session-id-copy]')
       .isVisible();
+  });
+
+  test('can cancel an active session with cancel permissions', async function (assert) {
+    assert.expect(1);
+
+    await visit(urls.sessions);
+
+    assert
+      .dom('tbody tr:first-child [data-test-session-cancel-button]')
+      .isVisible();
+  });
+
+  test('can cancel an active session with cancel:self permissions', async function (assert) {
+    assert.expect(1);
+    instances.session.update({ authorized_actions: ['cancel:self'] });
+
+    await visit(urls.sessions);
+
+    assert
+      .dom('tbody tr:first-child [data-test-session-cancel-button]')
+      .isVisible();
+  });
+
+  test('cannot click cancel button without cancel permissions', async function (assert) {
+    assert.expect(1);
+    instances.session.update({ authorized_actions: [] });
+
+    await visit(urls.sessions);
+
+    assert
+      .dom('tbody tr:first-child [data-test-session-cancel-button]')
+      .isNotVisible();
   });
 
   test('cancelling a session shows success alert', async function (assert) {

@@ -18,6 +18,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   @service session;
   @service resourceFilterStore;
   @service router;
+  @service can;
 
   // =attributes
 
@@ -85,6 +86,28 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   // =actions
 
   /**
+   * A hack to force a refresh when coming from a child route back to the list route.
+   * This is needed because these model hooks are on the `sessions` route which is a
+   * parent to the `sessions.session` route so we never leave the route which means
+   * the model hooks won't rerun when going back to the list route.
+   *
+   * This could be alternatively solved by moving all the model fetching to
+   * `sessions.index` which would make the children routes siblings to the list route
+   * and transitions between them would also force a refresh.
+   * @param transition
+   * @returns {boolean}
+   */
+  @action
+  willTransition(transition) {
+    // This event only will execute when "leaving" this route (which includes any children)
+    // Checking for this really means are we leaving from a child to this parent route.
+    if (transition.to.name === 'scopes.scope.projects.sessions.index') {
+      this.refresh();
+    }
+    return true;
+  }
+
+  /**
    * Cancels the specified session and notifies user of success or error.
    * @param {SessionModel}
    */
@@ -93,10 +116,14 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.canceled-success')
   async cancelSession(session) {
+    let updatedSession = session;
     // fetch session from API to verify we have most up to date record
-    const updatedSession = await this.store.findRecord('session', session.id, {
-      reload: true,
-    });
+    if (this.can.can('read session', session)) {
+      updatedSession = await this.store.findRecord('session', session.id, {
+        reload: true,
+      });
+    }
+
     await updatedSession.cancelSession();
 
     await this.ipc.invoke('stop', { session_id: session.id });
