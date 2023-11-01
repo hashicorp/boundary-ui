@@ -97,4 +97,15 @@ module('Unit | Ability | session', function (hooks) {
 
     assert.false(canService.can('read session', session));
   });
+
+  test('can read a session that has read:self', function (assert) {
+    assert.expect(1);
+
+    const session = store.createRecord('session', {
+      authorized_actions: ['read:self'],
+      status: STATUS_SESSION_ACTIVE,
+    });
+
+    assert.true(canService.can('read session', session));
+  });
 });
