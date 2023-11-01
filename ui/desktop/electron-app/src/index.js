@@ -186,7 +186,7 @@ app.on('ready', async () => {
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
     /* eng-disable PERMISSION_REQUEST_HANDLER_JS_CHECK */
-    //we need to allow this for the hds clipboard action to not fail
+    // We need to allow this for native clipboard usage
     if (permission === 'clipboard-sanitized-write') {
       // Approves the permissions request
       return callback(true);
