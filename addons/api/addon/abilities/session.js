@@ -18,6 +18,9 @@ export default class SessionAbility extends ModelAbility {
    * @type {boolean}
    */
   get canRead() {
-    return (this.model.isActive || this.model.isPending) && super.canRead;
+    return (
+      (this.model.isActive || this.model.isPending) &&
+      (this.hasAuthorizedAction('read:self') || super.canRead)
+    );
   }
 }

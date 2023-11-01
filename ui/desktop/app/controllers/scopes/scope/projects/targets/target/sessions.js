@@ -30,7 +30,7 @@ export default class ScopesScopeProjectsTargetsTargetSessionsController extends 
     const sessions = this.sessions;
     const userId = this.session.data.authenticated.user_id;
     const filteredSessions = sessions.filter(
-      (session) => session.isCancelable && session.user_id === userId
+      (session) => session.isAvailable && session.user_id === userId
     );
 
     // Sort sessions
