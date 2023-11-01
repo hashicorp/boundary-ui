@@ -13,7 +13,7 @@ module('Unit | Model | session', function (hooks) {
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {});
     assert.ok(model);
-    assert.notOk(model.isCancelable);
+    assert.notOk(model.isAvailable);
   });
 
   test('it allows cancellation of an active session', function (assert) {
@@ -21,7 +21,7 @@ module('Unit | Model | session', function (hooks) {
     let model = store.createRecord('session', {
       status: 'active',
     });
-    assert.ok(model.isCancelable);
+    assert.ok(model.isAvailable);
   });
 
   test('it allows cancellation of a pending session', function (assert) {
@@ -29,7 +29,7 @@ module('Unit | Model | session', function (hooks) {
     let model = store.createRecord('session', {
       status: 'pending',
     });
-    assert.ok(model.isCancelable);
+    assert.ok(model.isAvailable);
   });
 
   test('it computes isActive', function (assert) {

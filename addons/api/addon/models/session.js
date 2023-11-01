@@ -128,7 +128,7 @@ export default class SessionModel extends GeneratedSessionModel {
    * @type {boolean}
    */
   @computed('isActive', 'isPending')
-  get isCancelable() {
+  get isAvailable() {
     return this.isActive || this.isPending;
   }
 

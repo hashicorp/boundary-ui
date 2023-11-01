@@ -37,45 +37,43 @@
       <bc.Sidebar>
         <div class='details-sidebar'>
           {{#if @model.host}}
-            <div>
-              <div
-                class='title hds-typography-display-200 hds-font-weight-semibold'
-              >
-                {{t 'resources.host.details'}}
-              </div>
-              <Rose::MetadataList @orientation='vertical' as |list|>
-                {{! Host name }}
-                {{#if @model.host.name}}
-                  <list.Item @icon='monitor' @color='faint'>
-                    {{@model.host.name}}
-                  </list.Item>
-                {{/if}}
-                {{! Host description }}
-                {{#if @model.host.description}}
-                  <list.Item @icon='message-circle-fill' @color='faint'>
-                    {{@model.host.description}}
-                  </list.Item>
-                {{/if}}
-                {{! Host address }}
-                {{#if @model.host.address}}
-                  <list.Item @icon='network-alt' @color='faint'>
-                    {{@model.host.address}}
-                  </list.Item>
-                {{/if}}
-                {{! Host ID }}
-                <list.Item @icon='hash' @color='faint'>
-                  <Copyable
-                    @text={{@model.host.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    {{@model.host.id}}
-                  </Copyable>
-                </list.Item>
-              </Rose::MetadataList>
+            <div
+              class='title hds-typography-display-200 hds-font-weight-semibold'
+            >
+              {{t 'resources.host.details'}}
             </div>
+            <Rose::MetadataList @orientation='vertical' as |list|>
+              {{! Host name }}
+              {{#if @model.host.name}}
+                <list.Item @icon='monitor' @color='faint'>
+                  {{@model.host.name}}
+                </list.Item>
+              {{/if}}
+              {{! Host description }}
+              {{#if @model.host.description}}
+                <list.Item @icon='message-circle-fill' @color='faint'>
+                  {{@model.host.description}}
+                </list.Item>
+              {{/if}}
+              {{! Host address }}
+              {{#if @model.host.address}}
+                <list.Item @icon='network-alt' @color='faint'>
+                  {{@model.host.address}}
+                </list.Item>
+              {{/if}}
+              {{! Host ID }}
+              <list.Item @icon='hash' @color='faint'>
+                <Copyable
+                  @text={{@model.host.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  {{@model.host.id}}
+                </Copyable>
+              </list.Item>
+            </Rose::MetadataList>
           {{/if}}
-          <div>
+          {{#if @model.target}}
             <div
               class='title hds-typography-display-200 hds-font-weight-semibold'
             >
@@ -125,7 +123,7 @@
                 </Copyable>
               </list.Item>
             </Rose::MetadataList>
-          </div>
+          {{/if}}
         </div>
       </bc.Sidebar>
     </Rose::Layout::BodyContent>
