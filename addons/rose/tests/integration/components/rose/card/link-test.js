@@ -25,7 +25,7 @@ module('Integration | Component | rose/card/link', function (hooks) {
     assert.strictEqual(find('a').title, 'card title');
     assert.strictEqual(
       find('.rose-card-link-title').textContent.trim(),
-      'card title'
+      'card title',
     );
   });
 
@@ -33,7 +33,7 @@ module('Integration | Component | rose/card/link', function (hooks) {
     await render(hbs`<Rose::Card::Link @description="card description" />`);
     assert.strictEqual(
       find('.rose-card-link-body').textContent.trim(),
-      'card description'
+      'card description',
     );
   });
 
@@ -41,13 +41,13 @@ module('Integration | Component | rose/card/link', function (hooks) {
     await render(hbs`<Rose::Card::Link @id="card_id" />`);
     assert.strictEqual(
       find('.rose-card-link-footer-id').textContent.trim(),
-      'card_id'
+      'card_id',
     );
   });
 
   test('it renders with @icon', async function (assert) {
     await render(
-      hbs`<Rose::Card::Link @title="foo" @icon="flight-icons/svg/alert-circle-16" />`
+      hbs`<Rose::Card::Link @title="foo" @icon="flight-icons/svg/alert-circle-16" />`,
     );
     assert.ok(find('.rose-icon'));
   });
@@ -59,7 +59,7 @@ module('Integration | Component | rose/card/link', function (hooks) {
 
   test('it renders with content', async function (assert) {
     await render(hbs`<Rose::Card::Link>
-      <button/>
+      <button type="button" />
     </Rose::Card::Link>`);
     assert.ok(find('button'));
   });
