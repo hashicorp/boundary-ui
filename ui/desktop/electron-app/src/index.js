@@ -268,7 +268,6 @@ app.on('before-quit', (event) => {
 // resources (e.g. file descriptors, handles, etc) before shutting down the process. It is
 // not safe to resume normal operation after 'uncaughtException'.
 process.on('uncaughtException', (err) => {
-  console.log(err, 'what the err');
   console.log('An exception in the main thread was not handled.');
   console.log(
     'This is a serious issue that needs to be handled and/or debugged.'
