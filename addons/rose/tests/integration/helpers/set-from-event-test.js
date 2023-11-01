@@ -25,7 +25,7 @@ module('Integration | Helper | set-from-event', function (hooks) {
     assert.expect(2);
     this.set('inputValue', '1234');
     await render(
-      hbs`<button value="foobar" {{on 'click' (set-from-event this 'inputValue')}} />`
+      hbs`<button value="foobar" type="button" {{on 'click' (set-from-event this 'inputValue')}} />`,
     );
     assert.deepEqual(this.inputValue, '1234');
     await click('button');

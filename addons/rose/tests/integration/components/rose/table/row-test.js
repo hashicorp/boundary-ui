@@ -44,7 +44,7 @@ module('Integration | Component | rose/table/row', function (hooks) {
 
   test('it can be hidden', async function (assert) {
     assert.expect(1);
-    await render(hbs`<Rose::Table::Row @hidden=true />`);
+    await render(hbs`<Rose::Table::Row @hidden={{true}} />`);
     assert.ok(find('.rose-table-row-visually-hidden'));
   });
 });

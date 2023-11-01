@@ -15,7 +15,13 @@ module('Integration | Component | rose/form/actions', function (hooks) {
     assert.expect(2);
     this.cancel = () => {};
     await render(
-      hbs`{{rose/form/actions cancel=this.cancel submitText='Save' cancelText='Cancel'}}`
+      hbs`
+        <Rose::Form::Actions
+          @cancel={{this.cancel}}
+          @submitText='Save'
+          @cancelText='Cancel'
+        />
+      `,
     );
     assert.ok(find('[type="submit"]'));
     assert.ok(find('button:not([type="submit"])'));
@@ -25,7 +31,15 @@ module('Integration | Component | rose/form/actions', function (hooks) {
     assert.expect(2);
     this.cancel = () => {};
     await render(
-      hbs`{{rose/form/actions cancel=this.cancel submitDisabled=true cancelDisabled=true submitText='Save' cancelText='Cancel'}}`
+      hbs`
+        <Rose::Form::Actions
+          @cancel={{this.cancel}}
+          @submitText='Save'
+          @cancelText='Cancel'
+          @submitDisabled={{true}}
+          @cancelDisabled={{true}}
+        />
+      `,
     );
     assert.ok(find('[type="submit"]:disabled'));
     assert.ok(find('button:not([type="submit"]):disabled'));
@@ -33,7 +47,9 @@ module('Integration | Component | rose/form/actions', function (hooks) {
 
   test('it optionally does not render the cancel button', async function (assert) {
     assert.expect(2);
-    await render(hbs`{{rose/form/actions submitText='Save' showCancel=false}}`);
+    await render(hbs`
+        <Rose::Form::Actions @submitText='Save' @showCancel={{false}} />
+    `);
     assert.ok(find('[type="submit"]'));
     assert.notOk(find('button:not([type="submit"])'));
   });
@@ -42,7 +58,13 @@ module('Integration | Component | rose/form/actions', function (hooks) {
     assert.expect(1);
     this.cancel = () => assert.ok(true, 'cancel was clicked');
     await render(
-      hbs`{{rose/form/actions cancel=this.cancel submitText='Save' cancelText='Cancel'}}`
+      hbs`
+        <Rose::Form::Actions
+          @cancel={{this.cancel}}
+          @submitText='Save'
+          @cancelText='Cancel'
+        />
+      `,
     );
     await click('button:not([type="submit"])');
   });
